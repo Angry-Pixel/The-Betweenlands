@@ -1,7 +1,7 @@
 package thebetweenlands.creativetabs;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import thebetweenlands.blocks.BLBlockRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -13,7 +13,7 @@ public class TabBlocks extends CreativeTabBetweenlands {
 
 	@Override
 	public Item getTabIconItem() {
-		return Item.getItemFromBlock(Blocks.stone);
+		return Item.getItemFromBlock(BLBlockRegistry.betweenstone);
 	}
 
 	@Override

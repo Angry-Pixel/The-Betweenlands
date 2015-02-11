@@ -31,7 +31,6 @@ public class TheBetweenlands
 		//BL Registry
 		BLItemRegistry.init();
 		BLBlockRegistry.init();
-		BLBlockRegistry.registerTileEntities();
 		BLEntityRegistry.init();
 
 		// ConfigHandler.init(event.getSuggestedConfigurationFile()); -- Leave those there, we may need them.
@@ -40,7 +39,7 @@ public class TheBetweenlands
 	@EventHandler
 	public static void init(FMLInitializationEvent event) {
 		//BL Registry
-		BLBlockRegistry.addNames();
+		proxy.registerTileEntities();
 
 		//Reciepes.init();
 		// For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
