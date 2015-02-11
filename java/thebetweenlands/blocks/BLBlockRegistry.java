@@ -23,7 +23,6 @@ public class BLBlockRegistry {
 	// WOOD
 	
 	// DOUBLE PLANTS
-	
 
 	// SMALL PLANTS
 
