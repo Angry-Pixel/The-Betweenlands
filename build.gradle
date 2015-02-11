@@ -1,0 +1,89 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "1.7.10-1.0.0-alpha.1"
+group = "net.angrypixel"
+archivesBaseName = 'TheBetweenlands'
+
+minecraft {
+	version = "1.7.10-10.13.2.1286"
+    runDir = "eclipse"
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+sourceSets {
+    main {
+		output.resourcesDir = output.classesDir
+        java { srcDir 'java' }
+        resources { srcDir 'resources' }
+    }
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    appendix = 'src'
+    archiveName = "${baseName}-${version}-${appendix}.jar"
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    appendix = 'deobf'
+    archiveName = "${baseName}-${version}-${appendix}.jar"
+}
+
+configurations {
+    deployDev
+}
+
+artifacts {
+    archives deobfJar
+    archives sourceJar
+    archives jar
+    deployDev deobfJar
+}
+
+project.ext {
+    releaseRepoUrl = "file://${project(':').projectDir}/maven-repo/"
+}
+
+uploadDeployDev {
+    dependsOn("deobfJar")
+    configuration = configurations.deployDev
+    repositories.mavenDeployer {
+        pom.artifactId = project.name
+        pom.version = project.version + '-deobf'
+        repository(url: project.releaseRepoUrl)
+    }
+}
