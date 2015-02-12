@@ -1,2 +1,6 @@
 {
+"darkdruidhit": {"category": "hostile","sounds": ["darkdruidhit"]},
+"darkdruiddie": {"category": "hostile", "sounds": ["darkdruiddie"]},
+"darkdruidliving1": {"category": "hostile", "sounds":["darkdruidliving1"]},
+"darkdruidliving2": {"category": "hostile", "sounds":["darkdruidliving2"]}
 }

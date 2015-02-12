@@ -6,6 +6,12 @@ tile.thebetweenlands.betweenstone_1.name=Corrupt Betweenstone
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s
 
+item.thebetweenlands.swampTalisman.0.name=Swamp Talisman
+item.thebetweenlands.swampTalisman.1.name=Swamp Talisman Piece 1
+item.thebetweenlands.swampTalisman.2.name=Swamp Talisman Piece 2
+item.thebetweenlands.swampTalisman.3.name=Swamp Talisman Piece 3
+item.thebetweenlands.swampTalisman.3.name=Swamp Talisman Piece 4
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 

@@ -12,7 +12,7 @@ public class BLItemRegistry {
 
 		// BASIC MATERIALS
 		public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");;
-		
+		public static final Item swampTalisman = new SwampTalisman();
 		// MISC WEAPONS
 
 		// MISC ARMOR
@@ -27,6 +27,7 @@ public class BLItemRegistry {
 		}
 
 		private static void initCreativeTabs() {
+			ModCreativeTabs.items.setTab(swampTalisman);
 			ModCreativeTabs.specials.setTab(spawnEggs);
 			ModCreativeTabs.gears.setTab(testItem);
 			

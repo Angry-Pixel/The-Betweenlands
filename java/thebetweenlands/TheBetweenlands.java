@@ -1,8 +1,6 @@
 package thebetweenlands;
 
-import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.sound.BLSoundRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -25,7 +23,6 @@ public class TheBetweenlands
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		MinecraftForge.EVENT_BUS.register(new BLSoundRegistry());
 
 		//BL Registry
 		BLItemRegistry.init();
