@@ -123,10 +123,6 @@ public class EntityDarkDruid extends EntityMob {
 				-Math.cos(-rotationYaw * Math.PI / 180) + pZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 
-		System.out.println();
-		System.out.println(-Math.sin(-rotationYaw * Math.PI / 180) + pX);
-		System.out.println(-Math.cos(-rotationYaw * Math.PI / 180) + pZ);
-
 		pX = Math.random() * 0.25 - 0.125;
 		pY = Math.random() * 0.25 - 0.125;
 		pZ = Math.random() * 0.25 - 0.125;
