@@ -25,7 +25,6 @@ public class TheBetweenlands
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		proxy.initRenderers();
 		MinecraftForge.EVENT_BUS.register(new BLSoundRegistry());
 
 		//BL Registry
@@ -37,10 +36,10 @@ public class TheBetweenlands
 	}
 
 	@EventHandler
-	public static void init(FMLInitializationEvent event) {
+	public void init(FMLInitializationEvent event) {
 		//BL Registry
 		proxy.registerTileEntities();
-
+		proxy.registerRenderInformation();
 		//Reciepes.init();
 		// For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
 		//
