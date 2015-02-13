@@ -48,20 +48,13 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 						return false;
 
 		//circle
-		for (int yy = y; height + y >= yy; ++yy)
 			for (int xx = baseRadius * -1; xx <= baseRadius; ++xx)
 				for (int zz = baseRadius * -1; zz <= baseRadius; ++zz) {
 					double dSq = xx * xx + zz * zz;
-						if (Math.round(Math.sqrt(dSq)) == baseRadius && xx % 2 == 0 && zz % 2 == 0) {
-							int randDirection = rand.nextInt(4);
-							if(rand.nextBoolean())
-								world.setBlock(x + xx, yy, z + zz, getRandomBlock(rand), randDirection, 3);
-							else
-								world.setBlock(x + xx, yy, z + zz, Blocks.stone);
-						}
-						else
-							world.setBlock(x + xx, yy, z + zz, Blocks.air);
-						
+						if (Math.round(Math.sqrt(dSq)) == baseRadius && xx % 2 == 0 && zz % 2 == 0)
+							placePillar(world, x + xx, y, z + zz, rand);
+						else if (Math.round(Math.sqrt(dSq)) == baseRadius && xx % 2 != 0 && zz % 2 != 0)
+							placeAir(world, x + xx, y, z + zz);						
 						if (Math.round(Math.sqrt(dSq)) <= baseRadius)
 							world.setBlock(x + xx, y - 1, z + zz, Blocks.grass);
 					}
@@ -70,9 +63,50 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 		return true;
 	}
 
+	private void placeAir(World world, int x, int y, int z) {
+		for (int yy = y; height + y >= yy; ++yy)
+			world.setBlock(x, yy, z, Blocks.air);
+	}
+
+	private void placePillar(World world, int x, int y, int z, Random rand) {
+		int randHeight = rand.nextInt(3) + 3;
+		for (int yy = y; randHeight + y >= yy; ++yy) {
+			int randDirection = rand.nextInt(4);
+			if (rand.nextBoolean())
+				world.setBlock(x, yy, z, getRandomBlock(rand), randDirection, 3);
+			else {
+				world.setBlock(x, yy, z, Blocks.stone);
+				for(int vineCount = 0; vineCount < 4; vineCount++ )
+					setRandomFoliage(world, x, yy, z, rand);
+			}
+		}
+	}
+
+	private void setRandomFoliage(World world, int x, int y, int z, Random rand) {
+		int randSide = rand.nextInt(4);
+		switch (randSide) {
+		case 0:
+			if (world.getBlock(x + 1, y, z) == Blocks.air)
+				world.setBlock(x + 1, y, z, Blocks.vine, 2, 3);
+			break;
+		case 1:
+			if (world.getBlock(x - 1, y, z) == Blocks.air)
+				world.setBlock(x - 1, y, z, Blocks.vine, 8, 3);
+			break;
+		case 2:
+			if (world.getBlock(x, y, z + 1) == Blocks.air)
+				world.setBlock(x, y, z + 1, Blocks.vine, 4, 3);
+			break;
+		case 3:
+			if (world.getBlock(x, y, z - 1) == Blocks.air)
+				world.setBlock(x, y, z - 1, Blocks.vine, 1, 3);
+			break;
+		}
+	}
+
 	private Block getRandomBlock(Random rand) {
 		int randBlock = rand.nextInt(5);
-		switch(randBlock) {
+		switch (randBlock) {
 		case 0:
 			return BLBlockRegistry.druidStone1;
 		case 1:
@@ -83,7 +117,8 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 			return BLBlockRegistry.druidStone4;
 		case 4:
 			return BLBlockRegistry.druidStone5;
-		default: return Blocks.stone;
+		default:
+			return Blocks.stone;
 		}
 	}
 
