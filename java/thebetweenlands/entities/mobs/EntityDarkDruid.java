@@ -61,6 +61,11 @@ public class EntityDarkDruid extends EntityMob {
 	}
 	
 	@Override
+	public boolean canDespawn() {
+		return false;
+	}
+	
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		EntityPlayer tar = worldObj.getClosestVulnerablePlayerToEntity(this, 64.0D);
