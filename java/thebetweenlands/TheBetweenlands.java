@@ -5,12 +5,14 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.CommonProxy;
+import world.feature.structure.WorlGenDruidCircle;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION)
 public class TheBetweenlands
@@ -28,6 +30,8 @@ public class TheBetweenlands
 		BLItemRegistry.init();
 		BLBlockRegistry.init();
 		BLEntityRegistry.init();
+		
+		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 
 		// ConfigHandler.init(event.getSuggestedConfigurationFile()); -- Leave those there, we may need them.
 	}
