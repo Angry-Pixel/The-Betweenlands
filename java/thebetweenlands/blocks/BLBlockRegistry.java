@@ -17,6 +17,11 @@ public class BLBlockRegistry {
 
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
+	public static final Block druidStone1 = new BlockDruidStone("druidStone1");
+	public static final Block druidStone2 = new BlockDruidStone("druidStone2");
+	public static final Block druidStone3 = new BlockDruidStone("druidStone3");
+	public static final Block druidStone4 = new BlockDruidStone("druidStone4");
+	public static final Block druidStone5 = new BlockDruidStone("druidStone5");
 
 	// ORES
 

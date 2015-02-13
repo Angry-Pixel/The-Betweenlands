@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
+import thebetweenlands.blocks.BLBlockRegistry;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorlGenDruidCircle implements IWorldGenerator {
@@ -51,16 +52,39 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 			for (int xx = baseRadius * -1; xx <= baseRadius; ++xx)
 				for (int zz = baseRadius * -1; zz <= baseRadius; ++zz) {
 					double dSq = xx * xx + zz * zz;
-						if (Math.round(Math.sqrt(dSq)) == baseRadius && xx % 2 == 0 && zz % 2 == 0)
-							world.setBlock(x + xx, yy, z + zz, Blocks.stone);
+						if (Math.round(Math.sqrt(dSq)) == baseRadius && xx % 2 == 0 && zz % 2 == 0) {
+							int randDirection = rand.nextInt(4);
+							if(rand.nextBoolean())
+								world.setBlock(x + xx, yy, z + zz, getRandomBlock(rand), randDirection, 3);
+							else
+								world.setBlock(x + xx, yy, z + zz, Blocks.stone);
+						}
 						else
 							world.setBlock(x + xx, yy, z + zz, Blocks.air);
+						
 						if (Math.round(Math.sqrt(dSq)) <= baseRadius)
 							world.setBlock(x + xx, y - 1, z + zz, Blocks.grass);
 					}
 
 		System.out.println("Added DruidCircle at: " + x + " " + z);
 		return true;
+	}
+
+	private Block getRandomBlock(Random rand) {
+		int randBlock = rand.nextInt(5);
+		switch(randBlock) {
+		case 0:
+			return BLBlockRegistry.druidStone1;
+		case 1:
+			return BLBlockRegistry.druidStone2;
+		case 2:
+			return BLBlockRegistry.druidStone3;
+		case 3:
+			return BLBlockRegistry.druidStone4;
+		case 4:
+			return BLBlockRegistry.druidStone5;
+		default: return Blocks.stone;
+		}
 	}
 
 }
