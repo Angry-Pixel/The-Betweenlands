@@ -26,7 +26,6 @@ public class RenderDarkDruid extends RenderLiving {
 	protected int setDruidEyeBrightness(EntityDarkDruid entity, int pass, float partialTickTime) {
 		if (pass == 1) {
 			bindTexture(eyeTexture);
-			float var4 = 1.0F;
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -35,7 +34,6 @@ public class RenderDarkDruid extends RenderLiving {
 			int var7 = var5 / 65536;
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var6 / 1.0F, var7 / 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 			return 1;
 		}
 		if (pass == 2) {
