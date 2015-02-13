@@ -44,7 +44,7 @@ public class BlockDruidStone extends Block {
 	
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
-		int rot = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rot = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 2.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, rot, 3);
 	}
 
@@ -53,13 +53,13 @@ public class BlockDruidStone extends Block {
 	public IIcon getIcon(int side, int meta) {
 		switch(meta) {
 		case 0:
-			return side == 2 ? sideIcon : blockIcon;
-		case 1:
-			return side == 5 ? sideIcon : blockIcon;
-		case 2:
 			return side == 3 ? sideIcon : blockIcon;
-		case 3:
+		case 1:
 			return side == 4 ? sideIcon : blockIcon;
+		case 2:
+			return side == 2 ? sideIcon : blockIcon;
+		case 3:
+			return side == 5 ? sideIcon : blockIcon;
 		default :
 			return blockIcon;		
 		}
