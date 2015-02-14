@@ -1,4 +1,4 @@
-{
+{"druidchant": {"category": "block","sounds":["druidchant"]},
 "darkdruidhit": {"category": "hostile","sounds": ["darkdruidhit"]},
 "darkdruiddie": {"category": "hostile", "sounds": ["darkdruiddie"]},
 "darkdruidliving1": {"category": "hostile", "sounds":["darkdruidliving1"]},
