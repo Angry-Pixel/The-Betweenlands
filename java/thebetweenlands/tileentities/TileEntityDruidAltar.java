@@ -63,8 +63,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				setInventorySlotContents(4, null);
 				setInventorySlotContents(0, stack);
 			}
-			else
-				setInventorySlotContents(0, null);
 		}
 	}
 
