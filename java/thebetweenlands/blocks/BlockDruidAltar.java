@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.relauncher.Side;
@@ -44,12 +45,11 @@ public class BlockDruidAltar extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		TileEntityDruidAltar tile = (TileEntityDruidAltar) world.getTileEntity(x, y, z);
-		if (tile == null)
-			return false;
-
-
-		return false;
+		if (world.isRemote)
+			return true;
+		if (world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar)
+			player.openGui(TheBetweenlands.instance, TheBetweenlands.proxy.GUI_DRUID_ALTAR, world, x, y, z);
+		return true;
 	}
 
 	@Override

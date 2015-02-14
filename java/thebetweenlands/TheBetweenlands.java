@@ -12,6 +12,7 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION)
@@ -32,7 +33,7 @@ public class TheBetweenlands
 		BLEntityRegistry.init();
 		
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		// ConfigHandler.init(event.getSuggestedConfigurationFile()); -- Leave those there, we may need them.
 	}
 
@@ -43,8 +44,6 @@ public class TheBetweenlands
 		proxy.registerRenderInformation();
 		//Reciepes.init();
 		// For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
-		//
-		// new GuiHandler();
 
 		// DimensionManager.registerProviderType(Universe.dimensionId, WorldProviderUniverse.class, false);
 		// DimensionManager.registerDimension(Universe.dimensionId, Universe.dimensionId);
