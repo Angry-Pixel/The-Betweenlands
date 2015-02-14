@@ -17,7 +17,6 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class ChunkProviderBetweenlands implements IChunkProvider {
-
 	//TODO: Everything
 
 	//The world
@@ -45,16 +44,16 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 	//Noise at any Y value in the current XZ stack
 	private double[] noiseXZ;
 
-	//Holds the octave noised at the current XZ stack
-	double[] noise3;
+	//Holds the octave noise at the current XZ stack
 	double[] noise1;
 	double[] noise2;
+	double[] noise3;
 	double[] baseNoise;
 
 	//Holds the biome height gradient at the current XZ stack
 	private float[] parabolicField;
 
-	//Holds the biomes in the current XZ stack
+	//Holds the biomes in the current XZ stack and around
 	private BiomeGenBase[] biomesForGeneration;
 
 	//Base block. Vanilla: stone
@@ -140,6 +139,10 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 
 	}
 
+	/**
+	 * Initializes the noise generators
+	 * @param seed long
+	 */
 	private void initializeNoiseGen(long seed) {
 		//Generate seeded RNG
 		this.rand = new Random(seed);
@@ -157,7 +160,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		//Used in replaceBlocksForBiome
 		this.stoneNoiseGen = new NoiseGeneratorPerlin(this.rand, 4);
 
-		//Holds the generated noise at any (x|z) coordinate
+		//Holds the generated noise XZ stack
 		this.noiseXZ = new double[825];
 
 		//Holds the biome height gradient
@@ -182,6 +185,12 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
         this.noiseGen6 = (NoiseGeneratorOctaves)noiseGens[5];*/
 	}
 
+	/**
+	 * Generates the XZ noise stack
+	 * @param noiseArray double[]
+	 * @param x int
+	 * @param z int
+	 */
 	private void generateNoiseXZStack(double[] noiseArray, int x, int z) {
 		//Generate noise XZ components
 		this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
@@ -189,27 +198,22 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		this.noise1 = this.noiseOctave1.generateNoiseOctaves(this.noise1, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
 		this.noise2 = this.noiseOctave2.generateNoiseOctaves(this.noise2, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
 
+		int noiseIndex = 0;
+		int baseNoiseIndex = 0;
 
-		int l = 0;
-		int i1 = 0;
+		for (int bxo = 0; bxo < 5; ++bxo) {
+			for (int bzo = 0; bzo < 5; ++bzo) {
+				float averageHeightVariation = 0.0F;
+				float averageRootHeight = 0.0F;
+				float averageHeightGradient = 0.0F;
+				
+				//The current biome
+				BiomeGenBase currentBiome = this.biomesForGeneration[bxo + 2 + (bzo + 2) * 10];
 
-		for (int j1 = 0; j1 < 5; ++j1)
-		{
-			for (int k1 = 0; k1 < 5; ++k1)
-			{
-				float f = 0.0F;
-				float f1 = 0.0F;
-				float f2 = 0.0F;
-				byte b0 = 2;
-				BiomeGenBase biomegenbase = this.biomesForGeneration[j1 + 2 + (k1 + 2) * 10];
-
-				for (int l1 = -b0; l1 <= b0; ++l1)
-				{
-					for (int i2 = -b0; i2 <= b0; ++i2)
-					{
-						BiomeGenBase biomegenbase1 = this.biomesForGeneration[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
-						float f3 = biomegenbase1.rootHeight;
-						float f4 = biomegenbase1.heightVariation;
+				//Gets the biomes in a 5x5 area around the current XZ stack to average the height
+				for (int sbbxo = -2; sbbxo <= 2; ++sbbxo) {
+					for (int sbbzo = -2; sbbzo <= 2; ++sbbzo) {
+						BiomeGenBase surroundingBiome = this.biomesForGeneration[bxo + sbbxo + 2 + (bzo + sbbzo + 2) * 10];
 
 						//No amplified terrain in the BL
 						/*if (this.field_147435_p == WorldType.AMPLIFIED && f3 > 0.0F)
@@ -218,93 +222,90 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
                             f4 = 1.0F + f4 * 4.0F;
                         }*/
 
-						float f5 = this.parabolicField[l1 + 2 + (i2 + 2) * 5] / (f3 + 2.0F);
+						float heightGradient = this.parabolicField[sbbxo + 2 + (sbbzo + 2) * 5] / (surroundingBiome.rootHeight + 2.0F);
 
-						if (biomegenbase1.rootHeight > biomegenbase.rootHeight)
-						{
-							f5 /= 2.0F;
+						//Use shallow gradient if the surrounding biome has a higher root height than the current biome
+						if (surroundingBiome.rootHeight > currentBiome.rootHeight) {
+							heightGradient /= 2.0F;
 						}
 
-						f += f4 * f5;
-						f1 += f3 * f5;
-						f2 += f5;
+						averageHeightVariation += surroundingBiome.heightVariation * heightGradient;
+						averageRootHeight += surroundingBiome.rootHeight * heightGradient;
+						averageHeightGradient += heightGradient;
 					}
 				}
 
-				f /= f2;
-				f1 /= f2;
-				f = f * 0.9F + 0.1F;
-				f1 = (f1 * 4.0F - 1.0F) / 8.0F;
-				double d12 = this.baseNoise[i1] / 8000.0D;
+				//Calculate average root height and height variation
+				averageHeightVariation /= averageHeightGradient;
+				averageRootHeight /= averageHeightGradient;
+				averageHeightVariation = averageHeightVariation * 0.9F + 0.1F;
+				averageRootHeight = (averageRootHeight * 4.0F - 1.0F) / 8.0F;
+				
+				double fineBaseNoise = this.baseNoise[baseNoiseIndex] / 8000.0D;
 
-				if (d12 < 0.0D)
-				{
-					d12 = -d12 * 0.3D;
+				//Calculate fine noise
+				if (fineBaseNoise < 0.0D) {
+					fineBaseNoise = -fineBaseNoise * 0.3D;
 				}
+				fineBaseNoise = fineBaseNoise * 3.0D - 2.0D;
+				if (fineBaseNoise < 0.0D) {
+					fineBaseNoise /= 2.0D;
 
-				d12 = d12 * 3.0D - 2.0D;
-
-				if (d12 < 0.0D)
-				{
-					d12 /= 2.0D;
-
-					if (d12 < -1.0D)
-					{
-						d12 = -1.0D;
+					if (fineBaseNoise < -1.0D) {
+						fineBaseNoise = -1.0D;
 					}
 
-					d12 /= 1.4D;
-					d12 /= 2.0D;
-				}
-				else
-				{
-					if (d12 > 1.0D)
-					{
-						d12 = 1.0D;
+					fineBaseNoise /= 1.4D;
+					fineBaseNoise /= 2.0D;
+				} else {
+					if (fineBaseNoise > 1.0D) {
+						fineBaseNoise = 1.0D;
 					}
 
-					d12 /= 8.0D;
+					fineBaseNoise /= 8.0D;
 				}
 
-				++i1;
-				double d13 = (double)f1;
-				double d14 = (double)f;
-				d13 += d12 * 0.2D;
-				d13 = d13 * 8.5D / 8.0D;
-				double d5 = 8.5D + d13 * 4.0D;
+				++baseNoiseIndex;
+				double cAvgRootHeight = (double)averageRootHeight;
+				double cAvgHeightVariation = (double)averageHeightVariation;
+				cAvgRootHeight += fineBaseNoise * 0.2D;
+				cAvgRootHeight = cAvgRootHeight * 8.5D / 8.0D;
+				//double d5 = 8.5D + cAvgRootHeight * 4.0D;
+				cAvgRootHeight = 8.5D + cAvgRootHeight * 4.0D;
 
-				for (int j2 = 0; j2 < 33; ++j2)
-				{
-					double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / d14;
-
-					if (d6 < 0.0D)
-					{
+				for (int j2 = 0; j2 < 33; ++j2) {
+					//double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
+					double d6 = ((double)j2 - cAvgRootHeight) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
+					
+					if (d6 < 0.0D) {
 						d6 *= 4.0D;
 					}
 
-					double d7 = this.noise1[l] / 512.0D;
-					double d8 = this.noise2[l] / 512.0D;
-					double d9 = (this.noise3[l] / 10.0D + 1.0D) / 2.0D;
-					double d10 = MathHelper.denormalizeClamp(d7, d8, d9) - d6;
+					double octaveNoise1 = this.noise1[noiseIndex] / 512.0D;
+					double octaveNoise2 = this.noise2[noiseIndex] / 512.0D;
+					double octaveNouse3 = (this.noise3[noiseIndex] / 10.0D + 1.0D) / 2.0D;
+					double finalNoise = MathHelper.denormalizeClamp(octaveNoise1, octaveNoise2, octaveNouse3) - d6;
 
-					if (j2 > 29)
-					{
+					if (j2 > 29) {
 						double d11 = (double)((float)(j2 - 29) / 3.0F);
-						d10 = d10 * (1.0D - d11) + -10.0D * d11;
+						finalNoise = finalNoise * (1.0D - d11) + -10.0D * d11;
 					}
 
 					//this.field_147434_q[l] = d10;
-					noiseArray[l] = d10;
-					++l;
+					noiseArray[noiseIndex] = finalNoise;
+					++noiseIndex;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Generates the base terrain with baseBlock and layerBlock
+	 * @param x int
+	 * @param z int
+	 * @param chunkBlocks Block[]
+	 */
 	private void generateBaseTerrain(int x, int z, Block[] chunkBlocks) {
-		//Water layer height
-		byte waterLayerHeight = 63;
-
 		//BiomeGenBase[] at the X and Z coordinates
 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, x * 4 - 2, z * 4 - 2, 10, 10);
 
@@ -368,7 +369,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 							//Generate base blocks, changed later on in replaceBlocksForBiome
 							if ((mainSubSubNoise += fineSubSubNoise) > 0.0D) {
 								chunkBlocks[cHeight += maxHeight] = this.baseBlock;
-							} else if (k2 * 8 + subOctaveIT < waterLayerHeight) {
+							} else if (k2 * 8 + subOctaveIT < this.layerHeight) {
 								chunkBlocks[cHeight += maxHeight] = this.layerBlock;
 							} else {
 								chunkBlocks[cHeight += maxHeight] = null;
