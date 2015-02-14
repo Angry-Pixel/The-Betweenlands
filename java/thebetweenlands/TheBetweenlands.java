@@ -5,7 +5,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.CommonProxy;
-import world.feature.structure.WorlGenDruidCircle;
+import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;

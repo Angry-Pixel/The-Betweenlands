@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
-import world.feature.structure.WorlGenDruidCircle;
+import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 
 public class TestItem extends ItemSword {
 

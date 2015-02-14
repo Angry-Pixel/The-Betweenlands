@@ -1,4 +1,4 @@
-package world.feature.structure;
+package thebetweenlands.world.feature.structure;
 
 import java.util.Random;
 
