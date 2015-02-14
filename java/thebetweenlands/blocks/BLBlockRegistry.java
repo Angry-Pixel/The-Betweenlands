@@ -36,6 +36,7 @@ public class BLBlockRegistry {
 	// DECORATIONS AND UTILITIES
 	
 	// ALTARS
+	public static final Block druidAltar = new BlockDruidAltar();
 
 	// STAIRS, SLABS, WALLS
 	

@@ -1,4 +1,4 @@
-package thebetweenlands.entities.render;
+package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.client.model.entity.ModelDarkDruid;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
-import thebetweenlands.entities.mobs.models.ModelDarkDruid;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
