@@ -19,7 +19,7 @@ public class BlockDruidAltar extends BlockContainer {
 		setResistance(100.0F);
 		setStepSound(soundTypeStone);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("erebus.craftingAltar");
+		setBlockName("thebetweenlands.druidAltar");
 	}
 
 	@Override
