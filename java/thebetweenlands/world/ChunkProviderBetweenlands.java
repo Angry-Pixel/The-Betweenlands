@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
@@ -15,10 +15,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
 
 public class ChunkProviderBetweenlands implements IChunkProvider {
-	//TODO: Everything
-
 	//The world
 	private World worldObj;
 
@@ -36,10 +35,10 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 	//5th octave not used
 	//private NoiseGeneratorOctaves octave5;
 
-	//Generates a stone noise. At a certain threshold of this noise, the baseBlock will be the top most block and the fillerBlock and topBlock of the Biome are ignored.
-	private NoiseGeneratorPerlin stoneNoiseGen;
-	//Stone noise at any Y value in the current XZ stack
-	private double[] stoneNoise = new double[256];
+	//Generates a base block noise. At a certain threshold of this noise, the baseBlock will be the top most block and the fillerBlock and topBlock of the Biome are ignored.
+	private NoiseGeneratorPerlin baseBlockNoiseGen;
+	//Base block noise at any Y value in the current XZ stack
+	private double[] baseBlockNoise = new double[256];
 
 	//Noise at any Y value in the current XZ stack
 	private double[] noiseXZ;
@@ -57,9 +56,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 	private BiomeGenBase[] biomesForGeneration;
 
 	//Base block. Vanilla: stone
-	private final Block baseBlock;
+	public final Block baseBlock;
 	//Layer block generated below layerHeight. Vanilla: water
-	private final Block layerBlock;
+	public final Block layerBlock;
 	//layerBlock generates below this height
 	private final int layerHeight;
 
@@ -126,7 +125,27 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 
 	@Override
 	public Chunk provideChunk(int x, int z) {
-		return null;
+		//Set RNG seed
+		this.rand.setSeed(x * 341873128712L + z * 132897987541L);
+		
+		Block[] chunkBlocks = new Block[65536];
+		byte[] blockMeta = new byte[65536];
+		
+		//Get biomes for generation
+		this.biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, x * 16, z * 16, 16, 16);
+		
+		//Gnerate base terrain
+		this.generateNoiseXZStack(this.noiseXZ, x, z);
+		
+		//Replace blocks for biome
+		this.replaceBlocksForBiome(x, z, this.rand, chunkBlocks, blockMeta, this.biomesForGeneration);
+		
+		//Generate chunk
+		Chunk chunk = new Chunk(this.worldObj, chunkBlocks, blockMeta, x, z);
+		chunk.generateSkylightMap();
+		chunk.resetRelightChecks();
+		
+		return chunk;
 	}
 
 	@Override
@@ -136,7 +155,22 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 
 	@Override
 	public void populate(IChunkProvider cp, int x, int z) {
-
+		BlockFalling.fallInstantly = true;
+		
+		int blockX = x * 16;
+		int blockZ = z * 16;
+		
+		BiomeGenBase biome = worldObj.getBiomeGenForCoords(blockX + 16, blockZ + 16);
+		
+		if(biome instanceof BiomeGenBaseBetweenlands) {
+			BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands)biome;
+			this.rand.setSeed(this.worldObj.getSeed());
+			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
+			bgbb.populate(this.worldObj, this.rand, blockX, blockZ);
+			bgbb.decorate(this.worldObj, this.rand, blockX, blockZ);
+		}
+		
+		BlockFalling.fallInstantly = false;
 	}
 
 	/**
@@ -156,9 +190,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		//5th octave not used
 		//this.octave5 = new NoiseGeneratorOctaves(this.rand, 10);
 
-		//Generates a stone noise. At a certain threshold of this noise, the baseBlock will be the top most block and the fillerBlock and topBlock of the Biome are ignored.
+		//Generates a base block noise. At a certain threshold of this noise, the baseBlock will be the top most block and the fillerBlock and topBlock of the Biome are ignored.
 		//Used in replaceBlocksForBiome
-		this.stoneNoiseGen = new NoiseGeneratorPerlin(this.rand, 4);
+		this.baseBlockNoiseGen = new NoiseGeneratorPerlin(this.rand, 4);
 
 		//Holds the generated noise XZ stack
 		this.noiseXZ = new double[825];
@@ -369,7 +403,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 							//Generate base blocks, changed later on in replaceBlocksForBiome
 							if ((mainSubSubNoise += fineSubSubNoise) > 0.0D) {
 								chunkBlocks[cHeight += maxHeight] = this.baseBlock;
-							} else if (k2 * 8 + subOctaveIT < this.layerHeight) {
+							} else if (k2 * 8 + subOctaveIT <= this.layerHeight) {
 								chunkBlocks[cHeight += maxHeight] = this.layerBlock;
 							} else {
 								chunkBlocks[cHeight += maxHeight] = null;
@@ -385,6 +419,36 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 						mainNoise3 += fineNoise3;
 						mainNoise4 += fineNoise4;
 					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Replaces the blocks generated by ChunkProviderBetweenlands#generateBaseTerrain
+	 * with the according biome blocks.
+	 * @param chunkX int
+	 * @param chunkZ int
+	 * @param rng Random
+	 * @param chunkBlocks Block[]
+	 * @param blockMeta byte[]
+	 * @param biomesForGeneration BiomeGenBase[]
+	 */
+	public void replaceBlocksForBiome(int chunkX, int chunkZ, Random rng, Block[] chunkBlocks, byte[] blockMeta, BiomeGenBase[] biomesForGeneration) {
+		//Scaling factor for base block noise
+		double baseBlockNoiseVariationFactor = 0.03125D;
+		
+		//Generate base block noise
+		this.baseBlockNoise = this.baseBlockNoiseGen.func_151599_a(this.baseBlockNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, baseBlockNoiseVariationFactor * 2.0D, baseBlockNoiseVariationFactor * 2.0D, 1.0D);
+		
+		//Iterate through all stacks (16x16) and replace the blocks according to the biome
+		for(int bx = 0; bx < 16; ++bx) {
+			for(int bz = 0; bz < 16; ++bz) {
+				BiomeGenBase biome = biomesForGeneration[bz + bx * 16];
+				if(biome instanceof BiomeGenBaseBetweenlands == false) {
+					biome.genTerrainBlocks(this.worldObj, this.rand, chunkBlocks, blockMeta, chunkX * 16 + bx, chunkZ * 16 + bz, this.baseBlockNoise[bz + bx * 16]);
+				} else {
+					((BiomeGenBaseBetweenlands)biome).replaceStackBlocks(chunkX * 16 + bx, chunkZ * 16 + bz, this.baseBlockNoise[bz + bx * 16], rng, chunkBlocks, blockMeta, this, ((BiomeGenBaseBetweenlands)biome), biomesForGeneration);
 				}
 			}
 		}
