@@ -1,12 +1,11 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIBreakDoor;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -24,8 +23,8 @@ public class EntityDarkDruid extends EntityMob {
 	private int forgetTimer = 40;
 	private int forgetCounter = 0;
 	private byte isCasting;
-	private EntityLivingBase lastAttackTarget = null;
-	private EntityLivingBase currentAttackTarget = null;
+	private Entity lastAttackTarget = null;
+	//private EntityLivingBase getEnityToAttack() = null;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false); 
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 	
@@ -38,7 +37,7 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.23F));
 		tasks.addTask(4, wanderAI);
 		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 24.0F));
-		tasks.addTask(6, new EntityAILookIdle(this));
+		//tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24, true));
 		setSize(1.1F, 1.7F);
@@ -61,22 +60,17 @@ public class EntityDarkDruid extends EntityMob {
 	}
 	
 	@Override
-	public boolean canDespawn() {
-		return false;
-	}
-	
-	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		EntityPlayer tar = worldObj.getClosestVulnerablePlayerToEntity(this, 64.0D);
 		if (tar == null)
-			currentAttackTarget = null;
+			setTarget(null);
 
-		if (tar != currentAttackTarget)
+		if (tar != getEntityToAttack())
 			if (getDistanceToEntity(tar) <= 8.0F)
-				currentAttackTarget = tar;
+				setTarget(tar);
 
-		if (currentAttackTarget != null && currentAttackTarget != lastAttackTarget && getEntitySenses().canSee(currentAttackTarget)) {
+		if (getEntityToAttack() != null && getEntityToAttack() != lastAttackTarget && getEntitySenses().canSee(getEntityToAttack())) {
 			if (attackCounter == 0) {
 				attackCounter++;
 				tasks.removeTask(meleeAI);
@@ -84,15 +78,13 @@ public class EntityDarkDruid extends EntityMob {
 			else if (attackCounter < attackTimer) {
 				attackCounter++;
 				isCasting = 1;
-				chargeSpell(currentAttackTarget);
-				spawnParticles();
+				chargeSpell(getEntityToAttack());
 			}
 			else {
 				attackCounter = 0;
 				isCasting = 0;
-				castSpell(currentAttackTarget);
-				lastAttackTarget = currentAttackTarget;
-				currentAttackTarget = null;
+				castSpell(getEntityToAttack());
+				lastAttackTarget = getEntityToAttack();
 				tasks.addTask(2, meleeAI);
 				forgetCounter = forgetTimer;
 			}
@@ -100,11 +92,18 @@ public class EntityDarkDruid extends EntityMob {
 		else {
 			attackCounter = 0;
 			isCasting = 0;
-			currentAttackTarget = null;
+			setTarget(null);
 			if (forgetCounter <= 0)
 				lastAttackTarget = null;
 			else
 				forgetCounter--;
+		}
+		
+        if (getEntityToAttack() != null)
+            faceEntity(getEntityToAttack(), 100.0F, 100.0F);
+		
+		if (worldObj.isRemote && isCasting == 1) {
+			spawnParticles();
 		}
 		
 		//Update data watcher
@@ -112,46 +111,29 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	public void spawnParticles() {
-		double pX = Math.random() * 0.25 - 0.125;
+		double a = Math.toRadians(renderYawOffset);
+		double offSetX = -Math.sin(a) * 0.5D;
+		double offSetZ = Math.cos(a) * 0.5D;
+		
+		double pX = -Math.sin(a) * Math.random() * 0.25;
 		double pY = Math.random() * 0.25 - 0.125;
-		double pZ = Math.random() * 0.25 - 0.125;
+		double pZ = Math.cos(a) * Math.random() * 0.25;
 
-		double pPosX = posX + Math.sin(-rotationYaw * Math.PI / 180);
-		double pPosZ = posZ + Math.cos(-rotationYaw * Math.PI / 180);
-
-		EntityDruidCastingFX particle = new EntityDruidCastingFX(worldObj, 
-				pPosX + Math.sin(-rotationYaw * Math.PI / 180 - Math.PI / 2) / 2.5 + pX, 
-				posY + 1.4 + pY, 
-				pPosZ + Math.cos(-rotationYaw * Math.PI / 180 - Math.PI / 2) / 2.5 + pZ,
-				-Math.sin(-rotationYaw * Math.PI / 180) + pX,
-				pY,
-				-Math.cos(-rotationYaw * Math.PI / 180) + pZ);
+		EntityDruidCastingFX particle = new EntityDruidCastingFX(worldObj, posX + offSetX, posY + 1.3, posZ + offSetZ, pX, pY, pZ);
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 
-		pX = Math.random() * 0.25 - 0.125;
-		pY = Math.random() * 0.25 - 0.125;
-		pZ = Math.random() * 0.25 - 0.125;
-
-		EntityDruidCastingFX particle2 = new EntityDruidCastingFX(worldObj, 
-				pPosX + Math.sin(-rotationYaw * Math.PI / 180 + Math.PI / 2) / 2.5 + pX, 
-				posY + 1.4 + pY, 
-				pPosZ + Math.cos(-rotationYaw * Math.PI / 180 + Math.PI / 2) / 2.5 + pZ,
-				-Math.sin(-rotationYaw * Math.PI / 180) + pX,
-				pY,
-				-Math.cos(-rotationYaw * Math.PI / 180) + pZ);
-		Minecraft.getMinecraft().effectRenderer.addEffect(particle2);
 	}
 
-	public void chargeSpell(EntityLivingBase currentAttackTarget2) {
-		currentAttackTarget2.motionX *= 0.0D;
-		currentAttackTarget2.motionZ *= 0.0D;
-		currentAttackTarget2.motionY = 0.05D;
+	public void chargeSpell(Entity entity) {
+		entity.motionX *= 0.0D;
+		entity.motionZ *= 0.0D;
+		entity.motionY = 0.05D;
 	}
 
-	public void castSpell(EntityLivingBase currentAttackTarget2) {
-		currentAttackTarget2.motionX = 2.0D * Math.signum(currentAttackTarget2.posX - posX);
-		currentAttackTarget2.motionZ = 2.0D * Math.signum(currentAttackTarget2.posZ - posZ);
-		currentAttackTarget2.motionY = 1.5D;
+	public void castSpell(Entity entity) {
+		entity.motionX = 2.0D * Math.signum(entity.posX - posX);
+		entity.motionZ = 2.0D * Math.signum(entity.posZ - posZ);
+		entity.motionY = 1.5D;
 	}
 
 	//TODO: Fix

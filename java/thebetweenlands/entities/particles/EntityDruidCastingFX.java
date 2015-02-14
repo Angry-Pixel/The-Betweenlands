@@ -9,24 +9,18 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityDruidCastingFX extends EntityFX {
 	private float portalParticleScale;
-	private double portalPosX;
-	private double portalPosY;
-	private double portalPosZ;
 
 	public EntityDruidCastingFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12) {
 		super(par1World, par2, par4, par6, par8, par10, par12);
 		this.motionX = par8;
 		this.motionY = par10;
 		this.motionZ = par12;
-		this.portalPosX = this.posX = par2;
-		this.portalPosY = this.posY = par4;
-		this.portalPosZ = this.posZ = par6;
 		float f = this.rand.nextFloat() * 0.3F;
-		this.portalParticleScale = this.particleScale = this.rand.nextFloat() * 0.2F + 0.5F;
+		this.portalParticleScale = this.particleScale = this.rand.nextFloat() * 0.5F + 0.5F;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * f;
 		this.particleMaxAge = (int)(Math.random() * 10.0D) + 40;
 		this.noClip = true;
-		this.setParticleTextureIndex((int)(Math.random() * 8.0D));
+		this.setParticleTextureIndex((int)(Math.random() * 26.0D + 1.0D + 224.0D));
 	}
 
 	@Override
@@ -57,9 +51,6 @@ public class EntityDruidCastingFX extends EntityFX {
 		return j | k << 16;
 	}
 
-	/**
-	 * Gets how bright this entity is.
-	 */
 	 @Override
 	 public float getBrightness(float par1) {
 		float f1 = super.getBrightness(par1);
@@ -68,24 +59,19 @@ public class EntityDruidCastingFX extends EntityFX {
 		return f1 * (1.0F - f2) + f2;
 	 }
 
-	 /**
-	  * Called to update the entity's position/logic.
-	  */
-	 @Override
-	 public void onUpdate() {
-		 this.prevPosX = this.posX;
-		 this.prevPosY = this.posY;
-		 this.prevPosZ = this.posZ;
-		 float f = (float)this.particleAge / (float)this.particleMaxAge;
-		 f = -f + f * f * 2.0F;
-		 f = 1.0F - f;
-		 this.posX = this.portalPosX + this.motionX * (double)f;
-		 this.posY = this.portalPosY + this.motionY * (double)f;
-		 this.posZ = this.portalPosZ + this.motionZ * (double)f;
+	@Override
+	public void onUpdate() {
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 
-		 if (this.particleAge++ >= this.particleMaxAge)
-		 {
-			 this.setDead();
-		 }
-	 }
+		if (this.particleAge++ >= this.particleMaxAge) {
+			this.setDead();
+		}
+
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.8599999785423279D;
+		this.motionY *= 0.2599999785423279D;
+		this.motionZ *= 0.8599999785423279D;
+	}
 }
