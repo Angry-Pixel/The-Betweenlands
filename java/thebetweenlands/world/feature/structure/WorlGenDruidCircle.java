@@ -58,7 +58,7 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 						if (Math.round(Math.sqrt(dSq)) <= baseRadius)
 							world.setBlock(x + xx, y - 1, z + zz, Blocks.grass);
 					}
-			world.setBlock(x , y, z, Blocks.gold_block); // proxy block for altar until it is added
+			world.setBlock(x , y, z, BLBlockRegistry.druidAltar); // proxy block for altar until it is added
 
 		System.out.println("Added DruidCircle at: " + x + " " + z);
 		return true;

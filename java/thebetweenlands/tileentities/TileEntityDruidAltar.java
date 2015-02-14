@@ -13,7 +13,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	public float rotation;
 	@SideOnly(Side.CLIENT)
-	private static final float ROTATION_SPEED = 0.5F;
+	private static final float ROTATION_SPEED = 2.0F;
 	
 	public TileEntityDruidAltar() {
 		super(5, "druidAltar");

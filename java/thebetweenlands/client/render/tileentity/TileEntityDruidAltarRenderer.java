@@ -19,9 +19,9 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 	private final ModelAltar model = new ModelAltar();
 	private final ModelStone4 stone4 = new ModelStone4();
 
-	private final ResourceLocation ACTIVE = new ResourceLocation("betweenlands:textures/tiles/druidAltarActive.png");
-	private final ResourceLocation NORMAL = new ResourceLocation("betweenlands:textures/tiles/druidAltar.png");
-	private final ResourceLocation GLOW = new ResourceLocation("betweenlands:textures/tiles/druidAltarGlow.png");
+	private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarActive.png");
+	private final ResourceLocation NORMAL = new ResourceLocation("thebetweenlands:textures/tiles/druidAltar.png");
+	private final ResourceLocation GLOW = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarGlow.png");
 
 	public static TileEntityDruidAltarRenderer instance;
 
