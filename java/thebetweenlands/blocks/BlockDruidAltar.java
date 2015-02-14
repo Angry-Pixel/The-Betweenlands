@@ -53,11 +53,6 @@ public class BlockDruidAltar extends BlockContainer {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride() {
-		return true;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
 		return BLBlockRegistry.betweenstone.getIcon(side, meta);
