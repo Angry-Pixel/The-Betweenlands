@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.inventory.slot.SlotDruidAltar;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
@@ -15,11 +16,11 @@ public class ContainerDruidAltar extends Container {
 		super();
 		int i = (numRows - 4) * 18;
 		
-		addSlotToContainer(new Slot(tile, 0, 81, 35));
-		addSlotToContainer(new Slot(tile, 1, 53, 7));
-		addSlotToContainer(new Slot(tile, 2, 109, 7));
-		addSlotToContainer(new Slot(tile, 3, 53, 63));
-		addSlotToContainer(new Slot(tile, 4, 109, 63));
+		addSlotToContainer(new SlotDruidAltar(tile, 0, 81, 35));
+		addSlotToContainer(new SlotDruidAltar(tile, 1, 53, 7));
+		addSlotToContainer(new SlotDruidAltar(tile, 2, 109, 7));
+		addSlotToContainer(new SlotDruidAltar(tile, 3, 53, 63));
+		addSlotToContainer(new SlotDruidAltar(tile, 4, 109, 63));
 
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 9; k++)
