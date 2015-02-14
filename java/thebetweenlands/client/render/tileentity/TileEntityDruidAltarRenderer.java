@@ -70,7 +70,7 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 	}
 
-	private void renderTile(TileEntityDruidAltar tile, double x, double y, double z) {
+	private void renderTile(TileEntityDruidAltar tile, double x, double y, double z, float partialTicks) {
 		if (tile.blockMetadata == 1)
 			bindTexture(ACTIVE);
 		else
@@ -80,8 +80,12 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 		renderMainModel(x, y, z);
 		GL11.glPopMatrix();
 
+		float prevRotation = tile.renderRotation;
+		tile.renderRotation = tile.rotation;
+		tile.renderRotation = prevRotation + (tile.renderRotation - prevRotation) * partialTicks;
+		
 		GL11.glPushMatrix();
-		renderStones(x, y, z, tile.rotation);
+		renderStones(x, y, z, tile.renderRotation);
 		GL11.glPopMatrix();
 
 		GL11.glPushMatrix();
@@ -98,7 +102,7 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 		renderMainModel(x, y, z);
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-		renderStones(x, y, z, tile.rotation);
+		renderStones(x, y, z, tile.renderRotation);
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -124,6 +128,6 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTick) {
-		renderTile((TileEntityDruidAltar) tile, x, y, z);
+		renderTile((TileEntityDruidAltar) tile, x, y, z, partialTick);
 	}
 }

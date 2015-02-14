@@ -13,6 +13,8 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	public float rotation;
 	@SideOnly(Side.CLIENT)
+	public float renderRotation;
+	@SideOnly(Side.CLIENT)
 	private static final float ROTATION_SPEED = 2.0F;
 	
 	public TileEntityDruidAltar() {
@@ -23,8 +25,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	public void updateEntity() {
 		if (worldObj.isRemote) {
 			rotation += ROTATION_SPEED;
-			if (rotation >= 360.0F)
+			if (rotation >= 360.0F) {
 				rotation -= 360.0F;
+				renderRotation -= 360.0F;
+			}
 		}
 	}
 
