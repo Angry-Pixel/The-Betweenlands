@@ -111,6 +111,7 @@ Tar liquid/gen
 Hardened tar
 Tar beast
 Spirit tree blocks/gen
+Dead trees
 
 
 Stage 11 ~ CAVE UPDATE
@@ -118,6 +119,7 @@ Stalacmites/stalactites block/gen
 Lichen block/gen
 Stagnant water
 Stalker
+Thorns
 
 Stage 12 ~ POLISHING STUFF UP
 At this stage, we just finish up anything small that we feel needs adding or improving.
