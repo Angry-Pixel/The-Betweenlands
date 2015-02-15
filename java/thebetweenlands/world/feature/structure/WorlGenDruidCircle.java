@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.core.confighandler.ConfigHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorlGenDruidCircle implements IWorldGenerator {
@@ -34,7 +35,7 @@ public class WorlGenDruidCircle implements IWorldGenerator {
 				for (int zz = z - baseRadius; zz <= z + baseRadius; ++zz) {
 					Block block = world.getBlock(xx, yy, zz);
 					if (block != null && block == biomeBase.topBlock)
-						if (random.nextInt(10) == 0) // this may need to change ie. give it a config option
+						if (random.nextInt(ConfigHandler.DRUID_CIRCLE_FREQUENCY) == 0) // this may need to change ie. give it a config option
 							generateStructure(world, random, x, yy, z);
 				}
 	}

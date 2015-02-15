@@ -2,6 +2,7 @@ package thebetweenlands;
 
 import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.core.confighandler.ConfigHandler;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -11,6 +12,7 @@ import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -22,7 +24,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION)
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
 {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
@@ -34,7 +36,10 @@ public class TheBetweenlands
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-
+		
+		//Configuration File
+		ConfigHandler.INSTANCE.loadConfig(event);
+		
 		//BL Registry
 		BLItemRegistry.init();
 		BLBlockRegistry.init();
@@ -43,8 +48,6 @@ public class TheBetweenlands
 		
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-		// ConfigHandler.init(event.getSuggestedConfigurationFile()); -- Leave those there, we may need them.
-		
 		
 		//TODO: Just temporary to test some stuff
 		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
@@ -60,6 +63,7 @@ public class TheBetweenlands
 		//BL Registry
 		proxy.registerTileEntities();
 		proxy.registerRenderInformation();
+		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 		//Reciepes.init();
 		// For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
 
