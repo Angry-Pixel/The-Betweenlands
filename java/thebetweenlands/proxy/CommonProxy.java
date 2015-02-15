@@ -24,6 +24,10 @@ public class CommonProxy implements IGuiHandler {
 	public void registerRenderInformation() {
 		// unused serverside see ClientProxy for implementation
 	}
+	
+	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+		// unused serverside see ClientProxy for implementation
+	}
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

@@ -1,6 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
@@ -15,10 +14,12 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.entities.particles.EntityDruidCastingFX;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.items.SwampTalisman;
+import thebetweenlands.items.SwampTalisman.TALISMAN;
 
 public class EntityDarkDruid extends EntityMob {
-	private int attackTimer = 140;
+	private int attackTimer = 50;
 	private int attackCounter;
 	private int forgetTimer = 40;
 	private int forgetCounter = 0;
@@ -37,7 +38,6 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.23F));
 		tasks.addTask(4, wanderAI);
 		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 24.0F));
-		//tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24, true));
 		setSize(1.1F, 1.7F);
@@ -67,7 +67,7 @@ public class EntityDarkDruid extends EntityMob {
 			setTarget(null);
 
 		if (tar != getEntityToAttack())
-			if (getDistanceToEntity(tar) <= 8.0F)
+			if (getDistanceToEntity(tar) <= 6.0F)
 				setTarget(tar);
 
 		if (getEntityToAttack() != null && getEntityToAttack() != lastAttackTarget && getEntitySenses().canSee(getEntityToAttack())) {
@@ -119,9 +119,7 @@ public class EntityDarkDruid extends EntityMob {
 		double pY = Math.random() * 0.25 - 0.125;
 		double pZ = Math.cos(a) * Math.random() * 0.25;
 
-		EntityDruidCastingFX particle = new EntityDruidCastingFX(worldObj, posX + offSetX, posY + 1.3, posZ + offSetZ, pX, pY, pZ);
-		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-
+		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.3, posZ + offSetZ, pX, pY, pZ);
 	}
 
 	public void chargeSpell(Entity entity) {
@@ -131,37 +129,33 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	public void castSpell(Entity entity) {
-		entity.motionX = 2.0D * Math.signum(entity.posX - posX);
-		entity.motionZ = 2.0D * Math.signum(entity.posZ - posZ);
-		entity.motionY = 1.5D;
+		entity.motionX = 0.5D * Math.signum(entity.posX - posX);
+		entity.motionZ = 0.5D * Math.signum(entity.posZ - posZ);
+		entity.motionY = 1D;
 	}
 
-	//TODO: Fix
-	/*@Override
-	protected int getDropItemId()
-	{
-		return ID;
-	}*/
+	@Override
+	protected void dropRareDrop(int looting) {
+		entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman, 1), 0.0F);
+	}
 
 	@Override
-	public void dropFewItems(boolean par1, int par2) {
-		//TODO: Fix
-		/*int RM;
-		RM = rand.nextInt(4);
-		if (RM == 0) {
-			ID = Ids.swampTalismanPiece1_actual+Ids.idShift;
+	public void dropFewItems(boolean recentlyHit, int looting) {
+		int randomPiece = rand.nextInt(4);
+		switch(randomPiece) {
+		case 0:
+			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman1, 1), 0.0F);
+			break;
+		case 1:
+			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman2, 1), 0.0F);
+			break;
+		case 2:
+			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman3, 1), 0.0F);
+			break;
+		case 3:
+			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman4, 1), 0.0F);
+			break;
 		}
-		else if (RM == 1) {
-			ID = Ids.swampTalismanPiece2_actual+Ids.idShift;
-		}
-		else if (RM == 2) {
-			ID = Ids.swampTalismanPiece3_actual+Ids.idShift;
-		}
-		else if (RM == 3) {
-			ID = Ids.swampTalismanPiece4_actual+Ids.idShift;
-		}
-
-		dropItem(ID, 1);*/
 	}
 
 	@Override
