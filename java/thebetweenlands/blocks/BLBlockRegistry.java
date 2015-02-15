@@ -14,7 +14,8 @@ public class BLBlockRegistry {
 	public static final List<Block> BLOCKS = new LinkedList<Block>();
 
 	// PORTAL
-
+	public static Block portalBlock = new BlockPortal();
+	
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
 	public static final Block druidStone1 = new BlockDruidStone("druidStone1");
