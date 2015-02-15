@@ -121,5 +121,7 @@ public class GuiDruidAltar extends GuiContainer {
 			if (iconCountTool > 4)
 				iconCountTool = 1;
 		}
+		if(tile.craftingProgress == 1)
+			mc.thePlayer.closeScreen();
 	}
 }

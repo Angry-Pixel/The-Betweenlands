@@ -47,8 +47,11 @@ public class BlockDruidAltar extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar)
-			player.openGui(TheBetweenlands.instance, TheBetweenlands.proxy.GUI_DRUID_ALTAR, world, x, y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar) {
+			TileEntityDruidAltar altar = (TileEntityDruidAltar) world.getTileEntity(x, y, z);
+			if (altar.craftingProgress == 0)
+				player.openGui(TheBetweenlands.instance, TheBetweenlands.proxy.GUI_DRUID_ALTAR, world, x, y, z); 
+			}
 		return true;
 	}
 
