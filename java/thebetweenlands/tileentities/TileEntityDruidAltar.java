@@ -35,7 +35,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	
 	public TileEntityDruidAltar() {
 		super(5, "druidAltar");
-		targetThis = new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D);
 	}
 
 	@Override
@@ -68,6 +67,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	}
 	
 	public void sendParticlePacket() {
+		targetThis = new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D);
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarParticleMessage(xCoord, yCoord, zCoord, craftingProgress), targetThis);
 	}
 
