@@ -42,6 +42,7 @@ public class BLBlockRegistry {
 	// STAIRS, SLABS, WALLS
 	
 	// OTHER THINGS
+	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
 
 	public static void init() {
 		initBlocks();

@@ -1,5 +1,6 @@
 package thebetweenlands.tileentities;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -7,6 +8,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.TALISMAN;
 import thebetweenlands.network.packet.AltarParticleMessage;
@@ -61,11 +63,17 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 					setInventorySlotContents(0, stack);
 					craftingProgress = 0;
 					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+					removeSpawner();
 				}
 			}
 		}
 	}
 	
+	private void removeSpawner() {
+		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == BLBlockRegistry.druidSpawner)
+			worldObj.setBlock(xCoord, yCoord - 1, zCoord, Blocks.grass);
+	}
+
 	public void sendParticlePacket() {
 		targetThis = new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D);
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarParticleMessage(xCoord, yCoord, zCoord, craftingProgress), targetThis);
