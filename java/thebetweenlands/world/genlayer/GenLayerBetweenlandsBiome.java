@@ -20,13 +20,10 @@ public class GenLayerBetweenlandsBiome extends GenLayerBetweenlands {
 	public int[] getInts(int x, int z, int sizeX, int sizeZ) {
 		parent.getInts(x, z, sizeX, sizeZ);
 		int[] ints = IntCache.getIntCache(sizeX * sizeZ);
-
 		for (int zz = 0; zz < sizeZ; ++zz)
 			for (int xx = 0; xx < sizeX; ++xx) {
 				initChunkSeed(xx + x, zz + z);
-				Random rng = new Random();
-				rng.setSeed(this.baseSeed);
-				ints[xx + zz * sizeX] = this.biomesToGenerate.get(rng.nextInt(this.biomesToGenerate.size())).biomeID;
+				ints[xx + zz * sizeX] = this.biomesToGenerate.get(this.nextInt(this.biomesToGenerate.size())).biomeID;
 			}
 
 		return ints;

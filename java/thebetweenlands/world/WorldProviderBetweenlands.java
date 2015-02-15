@@ -20,6 +20,8 @@ import cpw.mods.fml.relauncher.SideOnly;
  *
  */
 public class WorldProviderBetweenlands extends WorldProvider {
+	public static final int LAYER_HEIGHT = 80;
+	
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
 	@SideOnly(Side.CLIENT)
@@ -101,7 +103,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public IChunkProvider createChunkGenerator() {
 		//return new ChunkProviderErebus(worldObj, worldObj.getSeed());
-		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), Blocks.stone, Blocks.water, 80);
+		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), Blocks.stone, Blocks.water, LAYER_HEIGHT);
 	}
 
 	@Override
