@@ -22,12 +22,12 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	private static final float ROTATION_SPEED = 2.0F;
 
-	//TODO: Packet stuff that notifies any player in range that this is currently crafting
-	//Static for animation testing purposes
+	//TODO: Packet stuff that updates this value for every player in range
+	//Change to public once packet stuff is working
 	public static int craftingProgress = 0;
 
-	//6 seconds crafting time
-	public static final int CRAFTING_TIME = 20*6;
+	//10.5 seconds crafting time
+	public static final int CRAFTING_TIME = 20*10+10;
 	
 	public TileEntityDruidAltar() {
 		super(5, "druidAltar");
@@ -41,10 +41,12 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				this.rotation -= 360.0F;
 				this.renderRotation -= 360.0F;
 			}
+			if(this.craftingProgress == 1) {
+				this.worldObj.playSound(this.xCoord, this.yCoord, this.zCoord, "thebetweenlands:druidchant", 1.0F, 1.0F, false);
+			}
 		} else {
 			if(this.craftingProgress != 0) {
 				++this.craftingProgress;
-				//6sec crafting delay
 				if(this.craftingProgress >= CRAFTING_TIME) {
 					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, TALISMAN.swampTalisman.ordinal());
 					setInventorySlotContents(1, null);
@@ -83,7 +85,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				if(!this.worldObj.isRemote) {
 					if(this.craftingProgress == 0) {
 						++this.craftingProgress;
-						this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 1, 2 + 4);
+						this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 1, 2);
 					}
 				}
 			}

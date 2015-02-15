@@ -23,11 +23,12 @@ public class SlotDruidAltar extends Slot {
 		return false;
 	}
 	
-	@Override
+	//Moved
+	/*@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
 		if (stack != null && slotNumber == 0)
 			player.worldObj.playSoundAtEntity(player, "thebetweenlands:druidchant", 1.0F, 1.0F);
 
 		super.onPickupFromSlot(player, stack);
-	}
+	}*/
 }

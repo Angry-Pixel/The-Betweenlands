@@ -131,6 +131,10 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 					}
 					double xOff = xi == 0 ? -0.18 : 1.18;
 					double zOff = zi == 0 ? -0.18 : 1.18;
+					GL11.glPushMatrix();
+					GL11.glTranslated(x+xOff, y+1, z+zOff);
+					this.renderCone(5);
+					GL11.glPopMatrix();
 					Vector3d midVec = new Vector3d(x+0.5D, 0, z+0.5D);
 					Vector3d diffVec = new Vector3d(x+xOff, 0, z+zOff);
 					diffVec.sub(midVec);
@@ -258,6 +262,58 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 		RenderHelper.enableStandardItemLighting();
 	}
 
+	private void renderCone(int faces) {
+		GL11.glPushMatrix();
+		float step = 360.0f/(float)faces;
+		
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glDepthMask(false);
+		
+		for(float i = 0; i < 360.0f; i+=step) {
+			Tessellator tessellator = Tessellator.instance;
+			double lr = 0.1D;
+			double ur = 0.3D;
+			double height = 0.2D;
+			double sin = Math.sin(Math.toRadians(i));
+			double cos = Math.cos(Math.toRadians(i));
+			double sin2 = Math.sin(Math.toRadians(i+step));
+			double cos2 = Math.cos(Math.toRadians(i+step));
+			
+			tessellator.startDrawing(6);
+			tessellator.setColorRGBA(255, 255, 255, 0);
+			tessellator.addVertex(sin*lr, 0, cos*lr);
+			tessellator.addVertex(sin2*lr, 0, cos2*lr);
+			
+			tessellator.setColorRGBA(0, 0, 255, 60);
+			tessellator.addVertex(sin2*ur, height, cos2*ur);
+			tessellator.addVertex(sin*ur, height, cos*ur);
+			
+			tessellator.setColorRGBA(0, 0, 255, 60);
+			tessellator.addVertex(sin*ur, height, cos*ur);
+			tessellator.addVertex(sin2*ur, height, cos2*ur);
+			
+			tessellator.setColorRGBA(255, 255, 255, 0);
+			tessellator.addVertex(sin2*lr, 0, cos2*lr);
+			tessellator.addVertex(sin*lr, 0, cos*lr);
+			tessellator.draw();
+		}
+		
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glShadeModel(GL11.GL_FLAT);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		RenderHelper.enableStandardItemLighting();
+		GL11.glPopMatrix();
+	}
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTick) {
 		renderTile((TileEntityDruidAltar) tile, x, y, z, partialTick);
