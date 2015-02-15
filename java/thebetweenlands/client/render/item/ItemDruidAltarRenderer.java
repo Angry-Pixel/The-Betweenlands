@@ -47,7 +47,7 @@ public class ItemDruidAltarRenderer implements IItemRenderer {
 		GL11.glTranslatef(x, y, z);
 		GL11.glScaled(0.5, 0.5, 0.5);
 
-		TileEntityDruidAltarRenderer.instance.renderTile(0, 0, 0);
+		TileEntityDruidAltarRenderer.instance.renderTileAsItem(0, 0, 0);
 
 		GL11.glPopMatrix();
 	}
