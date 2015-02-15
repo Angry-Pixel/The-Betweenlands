@@ -111,7 +111,11 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 		//Animate the 4 talisman pieces
 		if (tile.blockMetadata == 1 && tile.craftingProgress != 0) {
 			double finalHeight = 2.0D;
+			float prevYOff = tile.renderYOffset;
 			double yOff = (double)tile.craftingProgress / (double)TileEntityDruidAltar.CRAFTING_TIME * finalHeight + 1.0D;
+			tile.renderYOffset = (float)yOff;
+			tile.renderYOffset = prevYOff + (tile.renderYOffset - prevYOff) * partialTicks;
+			yOff = tile.renderYOffset;
 			if(yOff > finalHeight + 1.0D) {
 				yOff = finalHeight + 1.0D;
 			}
@@ -240,15 +244,15 @@ public class TileEntityDruidAltarRenderer extends TileEntitySpecialRenderer {
 			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GL11.glRotatef(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
 			tessellator.startDrawing(6);
-			float f3 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-			float f4 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
+			float pos1 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
+			float pos2 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
 			tessellator.setColorRGBA_I(16777215, (int)(255.0F * (1.0F - f2)));
 			tessellator.addVertex(0.0D, 0.0D, 0.0D);
 			tessellator.setColorRGBA(0, 0, 255, 0);
-			tessellator.addVertex(-0.866D * (double)f4, (double)f3, (double)(-0.5F * f4));
-			tessellator.addVertex(0.866D * (double)f4, (double)f3, (double)(-0.5F * f4));
-			tessellator.addVertex(0.0D, (double)f3, (double)(1.0F * f4));
-			tessellator.addVertex(-0.866D * (double)f4, (double)f3, (double)(-0.5F * f4));
+			tessellator.addVertex(-0.866D * (double)pos2, (double)pos1, (double)(-0.5F * pos2));
+			tessellator.addVertex(0.866D * (double)pos2, (double)pos1, (double)(-0.5F * pos2));
+			tessellator.addVertex(0.0D, (double)pos1, (double)(1.0F * pos2));
+			tessellator.addVertex(-0.866D * (double)pos2, (double)pos1, (double)(-0.5F * pos2));
 			tessellator.draw();
 		}
 		GL11.glPopMatrix();

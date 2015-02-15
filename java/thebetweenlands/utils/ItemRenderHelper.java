@@ -9,6 +9,11 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import org.lwjgl.opengl.GL11;
 
 public class ItemRenderHelper {
+	/**
+	 * Renders an item with the size of a normal block.
+	 * @param item ItemStack
+	 * @param renderPass int
+	 */
 	public static void renderItem(ItemStack item, int renderPass) {
 		GL11.glTranslated(0.5, 0, 1.0D / 16.0D);
 		GL11.glRotatef(-335.0F, 0.0F, 0.0F, 1.0F);

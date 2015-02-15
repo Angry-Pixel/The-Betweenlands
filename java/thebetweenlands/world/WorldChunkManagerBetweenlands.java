@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import thebetweenlands.world.genlayer.GenLayerBetweenlands;
+
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -24,6 +26,7 @@ import net.minecraftforge.event.terraingen.WorldTypeEvent;
  */
 public class WorldChunkManagerBetweenlands extends WorldChunkManager {
 	private static final float rainfall = 0F;
+	
 	//TODO: Impl
 	private static final ArrayList<BiomeGenBase> allowedBiomes = new ArrayList<BiomeGenBase>(/*Arrays.asList(ModBiomes.undergroundJungle, ModBiomes.subterraneanSavannah)*/);
 
@@ -42,11 +45,14 @@ public class WorldChunkManagerBetweenlands extends WorldChunkManager {
 		//this.biomeGenLayer = null;
 		//this.biomeGenLayer = new GenLayerBiome();
 		
-		GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType());
-        agenlayer = getModdedBiomeGenerators(world.getWorldInfo().getTerrainType(), world.getSeed(), agenlayer);
+		//GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType());
+        //agenlayer = getModdedBiomeGenerators(world.getWorldInfo().getTerrainType(), world.getSeed(), agenlayer);
         //this.genBiomes = agenlayer[0];
         //this.biomeIndexLayer = agenlayer[1];
-        this.biomeGenLayer = agenlayer[0];
+        //this.biomeGenLayer = agenlayer[0];
+		
+		biomeGenLayer = GenLayerBetweenlands.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType())[1];
+		//this.biomeGenLayer = new GenLayerBiome();
 	}
 
 	@Override

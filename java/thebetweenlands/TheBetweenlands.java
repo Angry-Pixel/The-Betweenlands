@@ -7,6 +7,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.biomes.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -33,6 +34,7 @@ public class TheBetweenlands
 		BLItemRegistry.init();
 		BLBlockRegistry.init();
 		BLEntityRegistry.init();
+		BLBiomeRegistry.init();
 		
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);

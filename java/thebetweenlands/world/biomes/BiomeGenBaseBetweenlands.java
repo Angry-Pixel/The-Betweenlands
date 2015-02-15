@@ -41,6 +41,7 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 		this.fillerBlock = Blocks.dirt;
 		this.topBlock = Blocks.grass;
 		this.baseBlock = Blocks.stone;
+		this.underLayerTopBlock = Blocks.dirt;
 	}
 	
 	/**
@@ -272,7 +273,7 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 					chunkBlocks[cIndex] = this.topBlock;
 					blockMeta[cIndex] = this.topBlockMeta;
 				}
-			} else if(blocksBelow > 0 && blocksBelow < this.fillerBlockHeight) {
+			} else if(blocksBelow > 0 && blocksBelow <= this.fillerBlockHeight) {
 				//Generate filler block
 				chunkBlocks[cIndex] = this.fillerBlock;
 				blockMeta[cIndex] = this.fillerBlockMeta;

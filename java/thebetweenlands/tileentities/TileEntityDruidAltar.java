@@ -1,9 +1,7 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -20,9 +18,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	public float renderRotation;
 	@SideOnly(Side.CLIENT)
+	public float renderYOffset;
+	@SideOnly(Side.CLIENT)
 	private static final float ROTATION_SPEED = 2.0F;
 
-	//TODO: Packet stuff that updates this value for every player in range
+	//TODO: Packet stuff that updates this value for every player in range or makes sure that the clients are in sync
 	//Change to public once packet stuff is working
 	public static int craftingProgress = 0;
 
