@@ -12,6 +12,7 @@ import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.GenLayerBiome;
 import net.minecraft.world.gen.layer.IntCache;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.terraingen.WorldTypeEvent;
@@ -38,7 +39,14 @@ public class WorldChunkManagerBetweenlands extends WorldChunkManager {
 		
 		//TODO: Impl
 		//biomeGenLayer = GenLayerErebus.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType())[1];
-		this.biomeGenLayer = null;
+		//this.biomeGenLayer = null;
+		//this.biomeGenLayer = new GenLayerBiome();
+		
+		GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType());
+        agenlayer = getModdedBiomeGenerators(world.getWorldInfo().getTerrainType(), world.getSeed(), agenlayer);
+        //this.genBiomes = agenlayer[0];
+        //this.biomeIndexLayer = agenlayer[1];
+        this.biomeGenLayer = agenlayer[0];
 	}
 
 	@Override

@@ -5,12 +5,16 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Direction;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import thebetweenlands.lib.ModInfo;
+import thebetweenlands.world.teleporter.TeleporterBetweenlands;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,6 +35,14 @@ public class BlockPortal extends Block {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
 		//TODO Add teleport and dimension transfer here
+		//TODO: Just temporary to test some stuff
+		if(world instanceof WorldServer) {
+			WorldServer worldServer = (WorldServer)world;
+			if(entity instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) entity;
+				player.mcServer.getConfigurationManager().transferPlayerToDimension(player, ModInfo.DIMENSION_ID, new TeleporterBetweenlands(worldServer));
+			}
+		}
 	}
 
 	@Override

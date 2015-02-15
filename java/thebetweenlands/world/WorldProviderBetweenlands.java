@@ -2,12 +2,14 @@ package thebetweenlands.world;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
+import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -88,17 +90,18 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public void registerWorldChunkManager() {
-		//TODO: Impl
 		/*worldChunkMgr = new WorldChunkManagerErebus(worldObj);
 		hasNoSky = true;
 		dimensionId = ConfigHandler.INSTANCE.erebusDimensionID;*/
+		this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
+		this.hasNoSky = true;
+		this.dimensionId = ModInfo.DIMENSION_ID;
 	}
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		//TODO: Impl
 		//return new ChunkProviderErebus(worldObj, worldObj.getSeed());
-		return null;
+		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), Blocks.stone, Blocks.water, 80);
 	}
 
 	@Override

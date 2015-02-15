@@ -134,10 +134,10 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		//Get biomes for generation
 		this.biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, x * 16, z * 16, 16, 16);
 		
-		//Gnerate base terrain
-		this.generateNoiseXZStack(this.noiseXZ, x, z);
+		//Gnerate base terrain (consist only of baseBlock and layerBlock)
+		this.generateBaseTerrain(x, z, chunkBlocks);
 		
-		//Replace blocks for biome
+		//Replace blocks for biome (replaces blocks according to the biomes)
 		this.replaceBlocksForBiome(x, z, this.rand, chunkBlocks, blockMeta, this.biomesForGeneration);
 		
 		//Generate chunk
@@ -168,6 +168,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
 			bgbb.populate(this.worldObj, this.rand, blockX, blockZ);
 			bgbb.decorate(this.worldObj, this.rand, blockX, blockZ);
+		} else {
+			biome.decorate(this.worldObj, this.rand, blockX, blockZ);
 		}
 		
 		BlockFalling.fallInstantly = false;
@@ -401,13 +403,16 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 							double mainSubSubNoise = mainSubNoise1 - fineSubSubNoise;
 
 							//Generate base blocks, changed later on in replaceBlocksForBiome
-							if ((mainSubSubNoise += fineSubSubNoise) > 0.0D) {
-								chunkBlocks[cHeight += maxHeight] = this.baseBlock;
-							} else if (k2 * 8 + subOctaveIT <= this.layerHeight) {
-								chunkBlocks[cHeight += maxHeight] = this.layerBlock;
-							} else {
-								chunkBlocks[cHeight += maxHeight] = null;
-							}
+							//Generates 4 layers
+							for (int fillWidth = 0; fillWidth < 4; ++fillWidth) {
+								if ((mainSubSubNoise += fineSubSubNoise) > 0.0D) {
+									chunkBlocks[cHeight += maxHeight] = this.baseBlock;
+								} else if (k2 * 8 + subOctaveIT <= this.layerHeight) {
+									chunkBlocks[cHeight += maxHeight] = this.layerBlock;
+								} else {
+									chunkBlocks[cHeight += maxHeight] = null;
+								}
+                            }
 
 							mainSubNoise1 += fineSubNoise1;
 							mainSubNoise2 += fineSubNoise2;
@@ -440,6 +445,13 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		
 		//Generate base block noise
 		this.baseBlockNoise = this.baseBlockNoiseGen.func_151599_a(this.baseBlockNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, baseBlockNoiseVariationFactor * 2.0D, baseBlockNoiseVariationFactor * 2.0D, 1.0D);
+		
+		/*for(int bx = 0; bx < 16; ++bx) {
+			for(int bz = 0; bz < 16; ++bz) {
+				int index = (bz * 16 + bx) * 16*16 + 2;
+				System.out.println(chunkBlocks[index]);
+			}
+		}*/
 		
 		//Iterate through all stacks (16x16) and replace the blocks according to the biome
 		for(int bx = 0; bx < 16; ++bx) {

@@ -1,10 +1,12 @@
 package thebetweenlands;
 
+import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -35,6 +37,11 @@ public class TheBetweenlands
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		// ConfigHandler.init(event.getSuggestedConfigurationFile()); -- Leave those there, we may need them.
+		
+		
+		//TODO: Just temporary to test some stuff
+		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
+		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 	}
 
 	@EventHandler
