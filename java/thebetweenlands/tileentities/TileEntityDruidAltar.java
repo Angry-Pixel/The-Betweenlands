@@ -9,7 +9,7 @@ import net.minecraft.util.AxisAlignedBB;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.TALISMAN;
-import thebetweenlands.network.packet.AltarParticleMessage;
+import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,10 +25,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	private static final float ROTATION_SPEED = 2.0F;
 
-	//TODO: Packet stuff that updates this value for every player in range or makes sure that the clients are in sync
-	//Change to public once packet stuff is working
-	public static int craftingProgress = 0;
-	TargetPoint targetThis;
+	public int craftingProgress = 0;
 
 	//10.5 seconds crafting time
 	public static final int CRAFTING_TIME = 20*10+10;
@@ -45,13 +42,16 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				rotation -= 360.0F;
 				renderRotation -= 360.0F;
 			}
-			if(craftingProgress == 1) {
-				worldObj.playSound(xCoord, yCoord, zCoord, "thebetweenlands:druidchant", 1.0F, 1.0F, false);
+			if(craftingProgress != 0) {
+				++craftingProgress;
 			}
 		} else {
 			if(craftingProgress != 0) {
+				//Sync clients every second
+				if(this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
+					sendCraftingProgressPacket();
+				}
 				++craftingProgress;
-				sendParticlePacket();
 				if(craftingProgress >= CRAFTING_TIME) {
 					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, TALISMAN.swampTalisman.ordinal());
 					setInventorySlotContents(1, null);
@@ -66,9 +66,8 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		}
 	}
 	
-	public void sendParticlePacket() {
-		targetThis = new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D);
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarParticleMessage(xCoord, yCoord, zCoord, craftingProgress), targetThis);
+	public void sendCraftingProgressPacket() {
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
 
 	@Override
@@ -96,6 +95,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 					if(craftingProgress == 0) {
 						++craftingProgress;
 						worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+						TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -1), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 					}
 				}
 			}

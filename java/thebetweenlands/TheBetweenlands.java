@@ -7,7 +7,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
-import thebetweenlands.network.packet.AltarParticleMessage;
+import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.BLBiomeRegistry;
@@ -55,7 +55,7 @@ public class TheBetweenlands
 		
 		// Simple Altar packet
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
-		networkWrapper.registerMessage(AltarPacketHandler.class, AltarParticleMessage.class, 0, Side.CLIENT);
+		networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
 	}
 
 	@EventHandler
