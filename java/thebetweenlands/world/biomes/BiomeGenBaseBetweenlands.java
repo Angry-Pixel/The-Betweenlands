@@ -119,12 +119,14 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	}
 	
 	/**
-	 * Sets the median height of the biome in block height (0 - 128).
+	 * Sets the average biome height and height variation.
 	 * @param height int
+	 * @param variation int
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setRootHeight(int height) {
-		this.rootHeight = ((float)height / 128.0f) * 4.0f - 2.0f;
+	protected final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
+		this.rootHeight = ((float)(height) / 128.0f) * 4.0f - 2.0f;
+		this.heightVariation = variation / 128.0f;
 		return this;
 	}
 	
@@ -149,8 +151,8 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	 */
 	protected final BiomeGenBaseBetweenlands setFogColor(short red, short green, short blue) {
 		this.fogColorRGB[0] = red;
-		this.fogColorRGB[0] = green;
-		this.fogColorRGB[0] = blue;
+		this.fogColorRGB[1] = green;
+		this.fogColorRGB[2] = blue;
 		return this;
 	}
 	
@@ -220,6 +222,7 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 		//X and Z coordinates clamped to 0-15
 		int cx = x & 15;
         int cz = z & 15;
+        
         //Chunk width * height
         int sliceSize = chunkBlocks.length / 256;
         

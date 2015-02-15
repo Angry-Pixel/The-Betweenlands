@@ -46,7 +46,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 	//Holds the octave noise at the current XZ stack
 	double[] noise1;
 	double[] noise2;
-	double[] noise3;
+	double[] clampNoise;
 	double[] baseNoise;
 
 	//Holds the biome height gradient at the current XZ stack
@@ -229,11 +229,24 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 	 */
 	private void generateNoiseXZStack(double[] noiseArray, int x, int z) {
 		//Generate noise XZ components
+		//this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
+		//this.noise1 = this.noiseOctave1.generateNoiseOctaves(this.noise1, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+		//this.noise2 = this.noiseOctave2.generateNoiseOctaves(this.noise2, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
+		//this.clampNoise = this.noiseOctave3.generateNoiseOctaves(this.clampNoise, x, 0, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+		
+		/*this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, 100, z, 5, 1, 5, 2000.0D, 2000.0D, 2000.0D);
+		
+		this.noise1 = this.noiseOctave1.generateNoiseOctaves(this.noise1, x, 10, z, 5, 33, 5, 4000, 4000, 4000);
+		this.noise2 = this.noiseOctave2.generateNoiseOctaves(this.noise2, x, 10, z, 5, 33, 5, 0, 0, 0);
+		this.noise3 = this.noiseOctave3.generateNoiseOctaves(this.noise3, x, 10, z, 5, 33, 5, 0, 0, 0);*/
+		
 		this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
-		this.noise3 = this.noiseOctave3.generateNoiseOctaves(this.noise3, x, 0, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+		
 		this.noise1 = this.noiseOctave1.generateNoiseOctaves(this.noise1, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
 		this.noise2 = this.noiseOctave2.generateNoiseOctaves(this.noise2, x, 0, z, 5, 33, 5, 684.412D, 684.412D, 684.412D);
-
+		
+		this.clampNoise = this.noiseOctave3.generateNoiseOctaves(this.clampNoise, x, 0, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);
+		
 		int noiseIndex = 0;
 		int baseNoiseIndex = 0;
 
@@ -242,10 +255,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 				float averageHeightVariation = 0.0F;
 				float averageRootHeight = 0.0F;
 				float averageHeightGradient = 0.0F;
-				
 				//The current biome
 				BiomeGenBase currentBiome = this.biomesForGeneration[bxo + 2 + (bzo + 2) * 10];
-
 				//Gets the biomes in a 5x5 area around the current XZ stack to average the height
 				for (int sbbxo = -2; sbbxo <= 2; ++sbbxo) {
 					for (int sbbzo = -2; sbbzo <= 2; ++sbbzo) {
@@ -265,7 +276,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 							heightGradient /= 2.0F;
 						}
 
-						averageHeightVariation += surroundingBiome.heightVariation * heightGradient;
+						averageHeightVariation += /*surroundingBiome.heightVariation*/0.02f * heightGradient;
 						averageRootHeight += surroundingBiome.rootHeight * heightGradient;
 						averageHeightGradient += heightGradient;
 					}
@@ -319,8 +330,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 
 					double octaveNoise1 = this.noise1[noiseIndex] / 512.0D;
 					double octaveNoise2 = this.noise2[noiseIndex] / 512.0D;
-					double octaveNouse3 = (this.noise3[noiseIndex] / 10.0D + 1.0D) / 2.0D;
-					double finalNoise = MathHelper.denormalizeClamp(octaveNoise1, octaveNoise2, octaveNouse3) - d6;
+					double octaveNoise3 = (this.clampNoise[noiseIndex] / 10.0D + 1.0D) / 2.0D;
+					double finalNoise = MathHelper.denormalizeClamp(octaveNoise1, octaveNoise2, octaveNoise3) - d6;
 
 					if (j2 > 29) {
 						double d11 = (double)((float)(j2 - 29) / 3.0F);
@@ -445,13 +456,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider {
 		
 		//Generate base block noise
 		this.baseBlockNoise = this.baseBlockNoiseGen.func_151599_a(this.baseBlockNoise, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, baseBlockNoiseVariationFactor * 2.0D, baseBlockNoiseVariationFactor * 2.0D, 1.0D);
-		
-		/*for(int bx = 0; bx < 16; ++bx) {
-			for(int bz = 0; bz < 16; ++bz) {
-				int index = (bz * 16 + bx) * 16*16 + 2;
-				System.out.println(chunkBlocks[index]);
-			}
-		}*/
 		
 		//Iterate through all stacks (16x16) and replace the blocks according to the biome
 		for(int bx = 0; bx < 16; ++bx) {
