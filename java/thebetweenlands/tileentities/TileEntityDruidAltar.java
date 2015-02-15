@@ -6,8 +6,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.TALISMAN;
+import thebetweenlands.network.packet.AltarParticleMessage;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -25,40 +28,47 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	//TODO: Packet stuff that updates this value for every player in range or makes sure that the clients are in sync
 	//Change to public once packet stuff is working
 	public static int craftingProgress = 0;
+	TargetPoint targetThis;
 
 	//10.5 seconds crafting time
 	public static final int CRAFTING_TIME = 20*10+10;
 	
 	public TileEntityDruidAltar() {
 		super(5, "druidAltar");
+		targetThis = new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D);
 	}
 
 	@Override
 	public void updateEntity() {
-		if (this.worldObj.isRemote) {
-			this.rotation += ROTATION_SPEED;
-			if (this.rotation >= 360.0F) {
-				this.rotation -= 360.0F;
-				this.renderRotation -= 360.0F;
+		if (worldObj.isRemote) {
+			rotation += ROTATION_SPEED;
+			if (rotation >= 360.0F) {
+				rotation -= 360.0F;
+				renderRotation -= 360.0F;
 			}
-			if(this.craftingProgress == 1) {
-				this.worldObj.playSound(this.xCoord, this.yCoord, this.zCoord, "thebetweenlands:druidchant", 1.0F, 1.0F, false);
+			if(craftingProgress == 1) {
+				worldObj.playSound(xCoord, yCoord, zCoord, "thebetweenlands:druidchant", 1.0F, 1.0F, false);
 			}
 		} else {
-			if(this.craftingProgress != 0) {
-				++this.craftingProgress;
-				if(this.craftingProgress >= CRAFTING_TIME) {
+			if(craftingProgress != 0) {
+				++craftingProgress;
+				sendParticlePacket();
+				if(craftingProgress >= CRAFTING_TIME) {
 					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, TALISMAN.swampTalisman.ordinal());
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);
 					setInventorySlotContents(3, null);
 					setInventorySlotContents(4, null);
 					setInventorySlotContents(0, stack);
-					this.craftingProgress = 0;
-					this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 2);
+					craftingProgress = 0;
+					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 				}
 			}
 		}
+	}
+	
+	public void sendParticlePacket() {
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarParticleMessage(xCoord, yCoord, zCoord, craftingProgress), targetThis);
 	}
 
 	@Override
@@ -82,10 +92,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 			if (inventory[4] != null)
 				slot4 = getStackInSlot(4).getItemDamage();
 			if(slot1 + slot2 + slot3 + slot4 == 10) {
-				if(!this.worldObj.isRemote) {
-					if(this.craftingProgress == 0) {
-						++this.craftingProgress;
-						this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 1, 2);
+				if(!worldObj.isRemote) {
+					if(craftingProgress == 0) {
+						++craftingProgress;
+						worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 					}
 				}
 			}
