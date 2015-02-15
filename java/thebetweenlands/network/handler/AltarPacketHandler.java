@@ -24,9 +24,6 @@ public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgress
 			TileEntity te = world.getTileEntity((int)message.posX, (int)message.posY, (int)message.posZ);
 			if(te instanceof TileEntityDruidAltar) {
 				TileEntityDruidAltar teda = (TileEntityDruidAltar) te;
-				
-				System.out.println("RECEIVED");
-				
 				if(message.craftingProgress == -1) {
 					world.playSound((int)message.posX, (int)message.posY, (int)message.posZ, "thebetweenlands:druidchant", 1.0F, 1.0F, false);
 				} else {
