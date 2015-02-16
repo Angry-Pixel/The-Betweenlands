@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgressMessage, IMessage> {
-	private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidchant");
+	private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidChant");
 	private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<String, PositionedSoundDC>();
 
 	static final class PositionedSoundDC extends PositionedSound {

@@ -174,19 +174,19 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	protected String getLivingSound() {
 		if(rand.nextBoolean())
-			return "thebetweenlands:darkdruidliving1";
+			return "thebetweenlands:darkDruidLiving1";
 		else
-			return "thebetweenlands:darkdruidliving2";
+			return "thebetweenlands:darkDruidLiving2";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		return "thebetweenlands:darkdruidhit";
+		return "thebetweenlands:darkDruidHit";
 	}
 
 	@Override
 	protected String getDeathSound() { 
-		return "thebetweenlands:darkdruiddeath"; 
+		return "thebetweenlands:darkDruidDeath"; 
 	}
 
 	@Override
