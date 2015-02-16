@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
+<<<<<<< HEAD
 import java.util.HashMap;
 
 public class AltarPacketHandler
@@ -22,6 +23,11 @@ public class AltarPacketHandler
 {
     private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidchant");
     private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<String, PositionedSoundDC>();
+=======
+public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgressMessage, IMessage> {
+	private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidChant");
+	private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<String, PositionedSoundDC>();
+>>>>>>> ea176246174b20dc2b4529fdd042d71cd49fb26c
 
     static final class PositionedSoundDC extends PositionedSound
     {
