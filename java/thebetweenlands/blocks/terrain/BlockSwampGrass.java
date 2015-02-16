@@ -27,6 +27,7 @@ public class BlockSwampGrass extends Block {
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.swampGrass");
+		setTickRandomly(true);
 	}
 	
 	@Override
