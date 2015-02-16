@@ -44,8 +44,6 @@ public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgress
 			TileEntity te = world.getTileEntity((int)message.posX, (int)message.posY, (int)message.posZ);
 			if(te instanceof TileEntityDruidAltar) {
 				TileEntityDruidAltar teda = (TileEntityDruidAltar) te;
-				//TODO: Remove
-				System.out.println(message.craftingProgress);
 				if(message.craftingProgress < 0) {
 					SoundHandler mcSoundHandler = Minecraft.getMinecraft().getSoundHandler();
 					if(message.craftingProgress == -1) {
