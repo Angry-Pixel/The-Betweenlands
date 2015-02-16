@@ -16,8 +16,9 @@ public class SlotDruidAltar extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if(slotNumber == 0 && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() == TALISMAN.swampTalisman.ordinal())
-			return true;
+		if(slotNumber == 0) // && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() == TALISMAN.swampTalisman.ordinal()
+			//Player should not be able to put the talisman back in
+			return false;
 		if(slotNumber > 0 && slotNumber <= 4 && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() != TALISMAN.swampTalisman.ordinal())
 			return true;	
 		return false;

@@ -3,14 +3,14 @@ package thebetweenlands.network.packet;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
-public class AltarParticleMessage implements IMessage {
+public class AltarCraftingProgressMessage implements IMessage {
 
 	public int posX, posY, posZ, craftingProgress;
 
-	public AltarParticleMessage() {
+	public AltarCraftingProgressMessage() {
 	}
 
-	public AltarParticleMessage(int x, int y, int z, int progress) {
+	public AltarCraftingProgressMessage(int x, int y, int z, int progress) {
 		posX = x;
 		posY = y;
 		posZ = z;

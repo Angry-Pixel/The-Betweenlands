@@ -6,6 +6,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotDruidAltar;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.SwampTalisman.TALISMAN;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
@@ -36,9 +38,21 @@ public class ContainerDruidAltar extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
-			if (slotIndex > 5) {
-				if (!mergeItemStack(stack1, 1, 5, false))
-					return null;
+			if (slotIndex >= 5) {
+				//Prevents wrong items from being shift-clicked into the slots
+				if(stack1.getItem() == BLItemRegistry.swampTalisman && stack1.getItemDamage() != TALISMAN.swampTalisman.ordinal()) {
+					if (!mergeItemStack(stack1, 1, 5, false))
+						return null;
+				} else {
+					//Moves items from hotbar to inventory and vice versa
+					if(slotIndex < 32) {
+						if (!mergeItemStack(stack1, 32, 41, false))
+							return null;
+					} else {
+						if (!mergeItemStack(stack1, 5, 31, false))
+							return null;
+					}
+				}
 			} else if (!mergeItemStack(stack1, 5, inventorySlots.size(), false))
 				return null;
 			if (stack1.stackSize == 0)
