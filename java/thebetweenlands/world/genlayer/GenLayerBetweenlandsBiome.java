@@ -2,13 +2,12 @@ package thebetweenlands.world.genlayer;
 
 import java.util.ArrayList;
 
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
-import scala.util.Random;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
 
 public class GenLayerBetweenlandsBiome extends GenLayerBetweenlands {
-	public static final ArrayList<BiomeGenBaseBetweenlands> biomesToGenerate = new ArrayList<BiomeGenBaseBetweenlands>();
+	public static final ArrayList<BiomeGenBase> biomesToGenerate = new ArrayList<BiomeGenBase>();
 	
 	public GenLayerBetweenlandsBiome(long seed, GenLayer parentGenLayer) {
 		super(seed);

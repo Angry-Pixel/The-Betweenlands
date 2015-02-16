@@ -125,8 +125,8 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	 * @return BiomeGenBaseBetweenlands
 	 */
 	protected final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
-		this.rootHeight = ((float)(height) / 128.0f) * 4.0f - 2.0f;
-		this.heightVariation = variation / 128.0f;
+		this.heightVariation = (float)variation / 128.0f;
+		this.rootHeight = ((float)height / 128.0f + this.heightVariation) * 4.0f - 2.0f;
 		return this;
 	}
 	
