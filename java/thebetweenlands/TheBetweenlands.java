@@ -2,13 +2,13 @@ package thebetweenlands;
 
 import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.core.confighandler.ConfigHandler;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;

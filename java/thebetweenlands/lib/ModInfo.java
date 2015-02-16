@@ -1,6 +1,6 @@
 package thebetweenlands.lib;
 
-import thebetweenlands.core.confighandler.ConfigHandler;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class ModInfo {
 	public static final String ID = "thebetweenlands";

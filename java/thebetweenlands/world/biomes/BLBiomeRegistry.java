@@ -1,12 +1,13 @@
 package thebetweenlands.world.biomes;
 
 import net.minecraft.world.biome.BiomeGenBase;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.decorators.TestDecorator;
 import thebetweenlands.world.genlayer.GenLayerBetweenlandsBiome;
 
 public class BLBiomeRegistry {
-	public static TestBiome testBiome;
-	public static TestBiome2 testBiome2;
+	public static BiomeSwampLands swampLands;
+	//public static TestBiome2 testBiome2;
 	
 	public static void init() {
 		/*testBiome = new TestBiome(50, new TestDecorator());
@@ -19,8 +20,11 @@ public class BLBiomeRegistry {
 		
 		//GenLayerBetweenlandsBiome.biomesToGenerate.add(BiomeGenBase.jungle);
 		
-		testBiome = new TestBiome(50, new TestDecorator());
-		testBiome.createMutation();
-		GenLayerBetweenlandsBiome.biomesToGenerate.add(testBiome);
+		addBiome(new BiomeSwampLands(ConfigHandler.BIOME_ID_SWAMPLANDS, new TestDecorator()));
+	}
+	
+	private static void addBiome(BiomeGenBaseBetweenlands biome) {
+		biome.createMutation();
+		GenLayerBetweenlandsBiome.biomesToGenerate.add(biome);
 	}
 }

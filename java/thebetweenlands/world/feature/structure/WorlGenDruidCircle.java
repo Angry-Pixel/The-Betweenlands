@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.core.confighandler.ConfigHandler;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorlGenDruidCircle implements IWorldGenerator {

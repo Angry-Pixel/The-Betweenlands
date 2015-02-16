@@ -5,8 +5,8 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorBaseBetweenlands;
 
-public class TestBiome extends BiomeGenBaseBetweenlands {
-	public TestBiome(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
+public class BiomeSwampLands extends BiomeGenBaseBetweenlands {
+	public BiomeSwampLands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((short)10, (short)30, (short)12);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 10);
