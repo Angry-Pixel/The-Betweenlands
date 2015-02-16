@@ -83,6 +83,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 					setInventorySlotContents(4, null);
 					setInventorySlotContents(0, stack);
 					this.stopCraftingProcess();
+					this.removeSpawner();
 				}
 			}
 		}

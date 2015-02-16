@@ -1,6 +1,9 @@
 # Blocks
 tile.thebetweenlands.betweenstone_0.name=Betweenstone
 tile.thebetweenlands.betweenstone_1.name=Corrupt Betweenstone
+tile.thebetweenlands.bedrock.name=Betweenlands Bedrock
+tile.thebetweenlands.swampDirt.name=Swamp Dirt
+tile.thebetweenlands.swampGrass.name=Swamp Grass
 
 # Items
 item.thebetweenlands.testItem.name=Test Item

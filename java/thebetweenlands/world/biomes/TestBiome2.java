@@ -11,7 +11,7 @@ public class TestBiome2 extends BiomeGenBaseBetweenlands {
 		this.setFogColor((short)10, (short)30, (short)40);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 80);
 		this.setBiomeName("TestBiome2");
-		this.setBlocks(BLBlockRegistry.betweenstone, Blocks.dirt, Blocks.grass, Blocks.sand);
+		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.swampDirt, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)5);
 	}
 }

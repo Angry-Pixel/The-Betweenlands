@@ -59,7 +59,9 @@ public class BlockBetweenstone extends Block implements ISubBlocksBlock {
 
 	@Override
 	public int damageDropped(int meta) {
-		return meta == 0 ? 1 : meta;
+		//What's the point of this? Drops items with wrong damage value
+		//return meta == 0 ? 1 : meta;
+		return meta;
 	}
 
 	@Override

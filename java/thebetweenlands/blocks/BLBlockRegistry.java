@@ -6,6 +6,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.blocks.terrain.BlockSwampDirt;
+import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLBlockRegistry {
@@ -23,6 +26,9 @@ public class BLBlockRegistry {
 	public static final Block druidStone3 = new BlockDruidStone("druidStone3");
 	public static final Block druidStone4 = new BlockDruidStone("druidStone4");
 	public static final Block druidStone5 = new BlockDruidStone("druidStone5");
+	public static final Block betweenlandsBedrock = new BlockBetweenlandsBedrock();
+	public static final Block swampDirt = new BlockSwampDirt();
+	public static final Block swampGrass = new BlockSwampGrass();
 
 	// ORES
 

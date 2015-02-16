@@ -27,7 +27,7 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	private int bottomBlockHeight = 0;
 	private int bottomBlockFuzz = 5;
 	private boolean hasBaseBlockPatches = false;
-	private byte topBlockMeta = 0, fillerBlockMeta = 0, baseBlockMeta = 0, topBlockUnderLayerMeta = 0;
+	private byte topBlockMeta = 0, fillerBlockMeta = 0, baseBlockMeta = 0, topBlockUnderLayerMeta = 0, bottomBlockMeta = 0;
 	private byte fillerBlockHeight = 2;
 	
 	/**
@@ -62,11 +62,12 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	 * @param underLayerTopBlock Block
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBlocks(Block baseBlock, Block fillerBlock, Block topBlock, Block underLayerTopBlock) {
+	protected final BiomeGenBaseBetweenlands setBlocks(Block baseBlock, Block fillerBlock, Block topBlock, Block underLayerTopBlock, Block bottomBlock) {
 		this.baseBlock = baseBlock;
 		this.fillerBlock = fillerBlock;
 		this.topBlock = topBlock;
 		this.underLayerTopBlock = underLayerTopBlock;
+		this.bottomBlock = bottomBlock;
 		return this;
 	}
 	
@@ -77,11 +78,12 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	 * @param baseBlockMeta byte
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBlockMeta(byte topBlockMeta, byte fillerBlockMeta, byte baseBlockMeta, byte topBlockUnderLayerMeta) {
+	protected final BiomeGenBaseBetweenlands setBlockMeta(byte topBlockMeta, byte fillerBlockMeta, byte baseBlockMeta, byte topBlockUnderLayerMeta, byte bottomBlockMeta) {
 		this.topBlockMeta = topBlockMeta;
 		this.baseBlockMeta = baseBlockMeta;
 		this.fillerBlockMeta = fillerBlockMeta;
 		this.topBlockUnderLayerMeta = topBlockUnderLayerMeta;
+		this.bottomBlockMeta = bottomBlockMeta;
 		return this;
 	}
 	
@@ -105,16 +107,6 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 	protected final BiomeGenBaseBetweenlands setBottomBlockHeight(int height, int fuzz) {
 		this.bottomBlockHeight = height;
 		this.bottomBlockFuzz = fuzz;
-		return this;
-	}
-	
-	/**
-	 * Sets the bottom block. By default bedrock.
-	 * @param block Block
-	 * @return BiomeGenBaseBetweenlands
-	 */
-	protected final BiomeGenBaseBetweenlands setBottomBlock(Block block) {
-		this.bottomBlock = block;
 		return this;
 	}
 	
@@ -240,6 +232,7 @@ public class BiomeGenBaseBetweenlands extends BiomeGenBase {
 			//Generate bottom block
 			if(y <= this.bottomBlockHeight + rng.nextInt(this.bottomBlockFuzz)) {
 				chunkBlocks[cIndex] = this.bottomBlock;
+				blockMeta[cIndex] = this.bottomBlockMeta;
 				continue;
 			}
 			
