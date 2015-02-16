@@ -13,7 +13,7 @@ public class ConfigHandler {
 
 	public static final String[] usedCategories = { "World and Dimension"};
 
-	////////Values ///////
+	//////// Values ///////
 	public static int DIMENSION_ID;
 	public static int DRUID_CIRCLE_FREQUENCY;
 	public static int BIOME_ID_SWAMPLANDS;
