@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
-import thebetweenlands.items.SwampTalisman.TALISMAN;
+import thebetweenlands.items.SwampTalisman.EnumTalisman;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 50;
@@ -26,11 +26,11 @@ public class EntityDarkDruid extends EntityMob {
 	private byte isCasting;
 	private Entity lastAttackTarget = null;
 	//private EntityLivingBase getEnityToAttack() = null;
-	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false); 
+	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
-	
-	public EntityDarkDruid(World par1World) {   
-		super(par1World); 
+
+	public EntityDarkDruid(World par1World) {
+		super(par1World);
 		getNavigator().setBreakDoors(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIBreakDoor(this));
@@ -42,13 +42,13 @@ public class EntityDarkDruid extends EntityMob {
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24, true));
 		setSize(1.1F, 1.7F);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		dataWatcher.addObject(20, Byte.valueOf((byte) 0));
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -58,7 +58,7 @@ public class EntityDarkDruid extends EntityMob {
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.5D);
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -98,14 +98,14 @@ public class EntityDarkDruid extends EntityMob {
 			else
 				forgetCounter--;
 		}
-		
+
         if (getEntityToAttack() != null)
             faceEntity(getEntityToAttack(), 100.0F, 100.0F);
-		
+
 		if (worldObj.isRemote && isCasting == 1) {
 			spawnParticles();
 		}
-		
+
 		//Update data watcher
 		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
 	}
@@ -114,7 +114,7 @@ public class EntityDarkDruid extends EntityMob {
 		double a = Math.toRadians(renderYawOffset);
 		double offSetX = -Math.sin(a) * 0.5D;
 		double offSetZ = Math.cos(a) * 0.5D;
-		
+
 		double pX = -Math.sin(a) * Math.random() * 0.25;
 		double pY = Math.random() * 0.25 - 0.125;
 		double pZ = Math.cos(a) * Math.random() * 0.25;
@@ -136,7 +136,7 @@ public class EntityDarkDruid extends EntityMob {
 
 	@Override
 	protected void dropRareDrop(int looting) {
-		entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman, 1), 0.0F);
+		entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN, 1), 0.0F);
 	}
 
 	@Override
@@ -144,16 +144,16 @@ public class EntityDarkDruid extends EntityMob {
 		int randomPiece = rand.nextInt(4);
 		switch(randomPiece) {
 		case 0:
-			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman1, 1), 0.0F);
+			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_1, 1), 0.0F);
 			break;
 		case 1:
-			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman2, 1), 0.0F);
+			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_2, 1), 0.0F);
 			break;
 		case 2:
-			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman3, 1), 0.0F);
+			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_3, 1), 0.0F);
 			break;
 		case 3:
-			entityDropItem(SwampTalisman.createStack(TALISMAN.swampTalisman4, 1), 0.0F);
+			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_4, 1), 0.0F);
 			break;
 		}
 	}
@@ -185,8 +185,8 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	@Override
-	protected String getDeathSound() { 
-		return "thebetweenlands:darkdruiddeath"; 
+	protected String getDeathSound() {
+		return "thebetweenlands:darkdruiddeath";
 	}
 
 	@Override

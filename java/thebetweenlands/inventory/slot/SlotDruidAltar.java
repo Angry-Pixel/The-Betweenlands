@@ -1,11 +1,10 @@
 package thebetweenlands.inventory.slot;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.SwampTalisman;
-import thebetweenlands.items.SwampTalisman.TALISMAN;
+import thebetweenlands.items.SwampTalisman.EnumTalisman;
 
 public class SlotDruidAltar extends Slot {
 
@@ -19,11 +18,11 @@ public class SlotDruidAltar extends Slot {
 		if(slotNumber == 0) // && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() == TALISMAN.swampTalisman.ordinal()
 			//Player should not be able to put the talisman back in
 			return false;
-		if(slotNumber > 0 && slotNumber <= 4 && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() != TALISMAN.swampTalisman.ordinal())
-			return true;	
+		if(slotNumber > 0 && slotNumber <= 4 && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() != EnumTalisman.SWAMP_TALISMAN.ordinal())
+			return true;
 		return false;
 	}
-	
+
 	//Moved
 	/*@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {

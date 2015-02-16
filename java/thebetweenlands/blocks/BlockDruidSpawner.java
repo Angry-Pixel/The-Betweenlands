@@ -1,19 +1,19 @@
 package thebetweenlands.blocks;
 
-import java.util.Random;
-
-import thebetweenlands.creativetabs.ModCreativeTabs;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
-public class BlockDruidSpawner extends BlockSpawner {
+import java.util.Random;
 
+public class BlockDruidSpawner
+        extends BlockSpawner
+{
 	public BlockDruidSpawner(String mobName) {
 		super("thebetweenlands." + mobName);
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.druidSpawner");
-		setBlockTextureName("thebetweenlands:druidSpawner");	
+		setBlockTextureName("thebetweenlands:druidSpawner");
 		setCreativeTab(ModCreativeTabs.blocks);
 	}
 

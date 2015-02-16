@@ -7,7 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotDruidAltar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.TALISMAN;
+import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
@@ -17,7 +17,7 @@ public class ContainerDruidAltar extends Container {
 	public ContainerDruidAltar(InventoryPlayer playerInventory, TileEntityDruidAltar tile) {
 		super();
 		int i = (numRows - 4) * 18;
-		
+
 		addSlotToContainer(new SlotDruidAltar(tile, 0, 81, 35));
 		addSlotToContainer(new SlotDruidAltar(tile, 1, 53, 7));
 		addSlotToContainer(new SlotDruidAltar(tile, 2, 109, 7));
@@ -40,7 +40,7 @@ public class ContainerDruidAltar extends Container {
 			stack = stack1.copy();
 			if (slotIndex >= 5) {
 				//Prevents wrong items from being shift-clicked into the slots
-				if(stack1.getItem() == BLItemRegistry.swampTalisman && stack1.getItemDamage() != TALISMAN.swampTalisman.ordinal()) {
+				if(stack1.getItem() == BLItemRegistry.swampTalisman && stack1.getItemDamage() != EnumTalisman.SWAMP_TALISMAN.ordinal()) {
 					if (!mergeItemStack(stack1, 1, 5, false))
 						return null;
 				} else {

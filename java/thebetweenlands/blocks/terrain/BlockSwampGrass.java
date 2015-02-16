@@ -1,7 +1,5 @@
 package thebetweenlands.blocks.terrain;
 
-import java.util.Random;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -14,12 +12,16 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
-public class BlockSwampGrass extends Block {
+import java.util.Random;
+
+public class BlockSwampGrass
+        extends Block
+{
 	@SideOnly(Side.CLIENT)
 	private IIcon topIcon;
 	@SideOnly(Side.CLIENT)
 	private IIcon sideIcon;
-	
+
 	public BlockSwampGrass() {
 		super(Material.grass);
 		setHardness(0.5F);
@@ -28,49 +30,50 @@ public class BlockSwampGrass extends Block {
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.swampGrass");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(side == 2 || side == 3 || side == 4 || side == 5) {
+		if( side == 2 || side == 3 || side == 4 || side == 5 ) {
 			return this.sideIcon;
-		} else if(side == 1) {
+		} else if( side == 1 ) {
 			return this.topIcon;
-		} else {
-			return this.blockIcon;
 		}
+
+        return this.blockIcon;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		blockIcon = reg.registerIcon("thebetweenlands:swampDirt");
-		sideIcon = reg.registerIcon("thebetweenlands:swampGrassSide");
-		topIcon = reg.registerIcon("thebetweenlands:swampGrassTop");
+        this.blockIcon = reg.registerIcon("thebetweenlands:swampDirt");
+        this.sideIcon = reg.registerIcon("thebetweenlands:swampGrassSide");
+        this.topIcon = reg.registerIcon("thebetweenlands:swampGrassTop");
 	}
-	
+
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-        if (!world.isRemote) {
-            if (world.getBlockLightValue(x, y + 1, z) < 4 && world.getBlockLightOpacity(x, y + 1, z) > 2) {
+        if( !world.isRemote ) {
+            if( world.getBlockLightValue(x, y + 1, z) < 4 && world.getBlockLightOpacity(x, y + 1, z) > 2 ) {
                 world.setBlock(x, y, z, BLBlockRegistry.swampDirt);
-            } else if (world.getBlockLightValue(x, y + 1, z) >= 9) {
-                for (int l = 0; l < 4; ++l) {
+            } else if( world.getBlockLightValue(x, y + 1, z) >= 9 ) {
+                for( int l = 0; l < 4; ++l ) {
                     int xTarget = x + rand.nextInt(3) - 1;
                     int yTarget = y + rand.nextInt(5) - 3;
                     int zTarget = z + rand.nextInt(3) - 1;
                     Block block = world.getBlock(xTarget, yTarget + 1, zTarget);
-                    if (world.getBlock(xTarget, yTarget, zTarget) == Blocks.dirt && 
-                    		world.getBlockMetadata(xTarget, yTarget, zTarget) == 0 && 
-                    		world.getBlockLightValue(xTarget, yTarget + 1, zTarget) >= 4 && 
-                    		world.getBlockLightOpacity(xTarget, yTarget + 1, zTarget) <= 2) {
+                    if( world.getBlock(xTarget, yTarget, zTarget) == Blocks.dirt
+                        && world.getBlockMetadata(xTarget, yTarget, zTarget) == 0
+                        && world.getBlockLightValue(xTarget, yTarget + 1, zTarget) >= 4
+                        && world.getBlockLightOpacity(xTarget, yTarget + 1, zTarget) <= 2 )
+                    {
                         world.setBlock(xTarget, yTarget, zTarget, BLBlockRegistry.swampGrass);
                     }
                 }
             }
         }
     }
-	
+
 	@Override
     public Item getItemDropped(int meta, Random rand, int fortune) {
         return BLBlockRegistry.swampDirt.getItemDropped(0, rand, fortune);

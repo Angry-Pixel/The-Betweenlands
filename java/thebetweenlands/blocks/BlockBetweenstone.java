@@ -1,7 +1,7 @@
 package thebetweenlands.blocks;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,11 +14,13 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemBlockGeneric;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockBetweenstone extends Block implements ISubBlocksBlock {
+import java.util.List;
 
+public class BlockBetweenstone
+        extends Block
+        implements ISubBlocksBlock
+{
 	public static final String[] iconPaths = new String[] { "betweenstone", "corruptBetweenstone" }; //more room here for subtypes..
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
@@ -39,21 +41,21 @@ public class BlockBetweenstone extends Block implements ISubBlocksBlock {
 
 		int i = 0;
 		for (String path : iconPaths)
-			icons[i++] = reg.registerIcon("thebetweenlands:" + path);
+            this.icons[i++] = reg.registerIcon("thebetweenlands:" + path);
 	}
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		if (meta < 0 || meta >= icons.length)
+		if (meta < 0 || meta >= this.icons.length)
 			return null;
-		return icons[meta];
+		return this.icons[meta];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(Item id, CreativeTabs tab, List list) {
-		for (int i = 0; i < icons.length; i++)
+		for (int i = 0; i < this.icons.length; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

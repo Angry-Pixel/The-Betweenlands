@@ -5,7 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 
-public class BlockSpawner extends BlockMobSpawner {
+public class BlockSpawner
+        extends BlockMobSpawner
+{
 	private final String mobName;
 
 	public BlockSpawner(String mobName) {

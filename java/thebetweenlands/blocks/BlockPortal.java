@@ -1,7 +1,7 @@
 package thebetweenlands.blocks;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -15,11 +15,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.teleporter.TeleporterBetweenlands;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockPortal extends Block {
+import java.util.Random;
 
+public class BlockPortal
+        extends Block
+{
 	public static final int[][] types = new int[][] { new int[0], { 3, 1 }, { 2, 0 } };
 
 	public BlockPortal() {
@@ -36,9 +37,9 @@ public class BlockPortal extends Block {
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
 		//TODO Add teleport and dimension transfer here
 		//TODO: Just temporary to test some stuff
-		if(world instanceof WorldServer) {
+		if( world instanceof WorldServer ) {
 			WorldServer worldServer = (WorldServer)world;
-			if(entity instanceof EntityPlayerMP) {
+			if( entity instanceof EntityPlayerMP ) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.mcServer.getConfigurationManager().transferPlayerToDimension(player, ModInfo.DIMENSION_ID, new TeleporterBetweenlands(worldServer));
 			}
@@ -52,15 +53,18 @@ public class BlockPortal extends Block {
 
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-		if (world.getBlock(x - 1, y, z) != this && world.getBlock(x + 1, y, z) != this) {
-			float f = 0.125F;
-			float f2 = 0.5F;
-			setBlockBounds(0.5F - f, 0.0F, 0.5F - f2, 0.5F + f, 1.0F, 0.5F + f2);
+        float xSize;
+        float ySize;
+
+		if( world.getBlock(x - 1, y, z) != this && world.getBlock(x + 1, y, z) != this ) {
+			xSize = 0.125F;
+			ySize = 0.5F;
 		} else {
-			float f1 = 0.5F;
-			float f3 = 0.125F;
-			setBlockBounds(0.5F - f1, 0.0F, 0.5F - f3, 0.5F + f1, 1.0F, 0.5F + f3);
+			xSize = 0.5F;
+			ySize = 0.125F;
 		}
+
+        this.setBlockBounds(0.5F - xSize, 0.0F, 0.5F - ySize, 0.5F + xSize, 1.0F, 0.5F + ySize);
 	}
 
 	@Override
@@ -79,41 +83,43 @@ public class BlockPortal extends Block {
 		Size size = new Size(world, x, y, z, 1);
 		Size size1 = new Size(world, x, y, z, 2);
 
-		if (meta == 1 && (!size.isValidSize() || size.field_150864_e < size.width * size.height))
-			world.setBlockToAir(x, y, z);
-		else if (meta == 2 && (!size1.isValidSize() || size1.field_150864_e < size1.width * size1.height))
-			world.setBlockToAir(x, y, z);
-		else if (meta == 0 && !size.isValidSize() && !size1.isValidSize())
-			world.setBlockToAir(x, y, z);
+		if( meta == 1 && (!size.isValidSize() || size.field_150864_e < size.width * size.height) ) {
+            world.setBlockToAir(x, y, z);
+        } else if( meta == 2 && (!size1.isValidSize() || size1.field_150864_e < size1.width * size1.height) ) {
+            world.setBlockToAir(x, y, z);
+        } else if( meta == 0 && !size.isValidSize() && !size1.isValidSize() ) {
+            world.setBlockToAir(x, y, z);
+        }
 	}
 
 	public boolean tryToCreatePortal(World world, int x, int y, int z) {
 		Size size = new Size(world, x, y, z, 1);
 		Size size1 = new Size(world, x, y, z, 2);
 
-		if (size.isValidSize() && size.field_150864_e == 0) {
+		if( size.isValidSize() && size.field_150864_e == 0 ) {
 			size.makePortal();
 			return true;
-		} else if (size1.isValidSize() && size1.field_150864_e == 0) {
+		} else if( size1.isValidSize() && size1.field_150864_e == 0 ) {
 			size1.makePortal();
 			return true;
-		} else
-			return false;
+		}
+
+        return false;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-		if (world.getBlock(x, y, z) == this)
-			return false;
-		else {
-			boolean flag = world.getBlock(x - 1, y, z) == this && world.getBlock(x - 2, y, z) != this;
-			boolean flag1 = world.getBlock(x + 1, y, z) == this && world.getBlock(x + 2, y, z) != this;
-			boolean flag2 = world.getBlock(x, y, z - 1) == this && world.getBlock(x, y, z - 2) != this;
-			boolean flag3 = world.getBlock(x, y, z + 1) == this && world.getBlock(x, y, z + 2) != this;
-			boolean flag4 = flag || flag1;
-			boolean flag5 = flag2 || flag3;
-			return !flag4 || side != 4 ? !flag4 || side != 5 ? !flag5 || side != 2 ? flag5 && side == 3 : true : true : true;
+		if( world.getBlock(x, y, z) == this ) {
+            return false;
+        } else {
+			boolean isXNegThisAndXNeg2IsNot = world.getBlock(x - 1, y, z) == this && world.getBlock(x - 2, y, z) != this;
+			boolean isXPosThisAndXPos2IsNot = world.getBlock(x + 1, y, z) == this && world.getBlock(x + 2, y, z) != this;
+			boolean isZNegThisAndZNeg2IsNot = world.getBlock(x, y, z - 1) == this && world.getBlock(x, y, z - 2) != this;
+			boolean isZPosThisAndZPos2IsNot = world.getBlock(x, y, z + 1) == this && world.getBlock(x, y, z + 2) != this;
+			boolean isXNegOrIsXPos = isXNegThisAndXNeg2IsNot || isXPosThisAndXPos2IsNot;
+			boolean isZNegOrIsZPos = isZNegThisAndZNeg2IsNot || isZPosThisAndZPos2IsNot;
+			return !(!isXNegOrIsXPos || side != 4) || (!(!isXNegOrIsXPos || side != 5) || (!(!isZNegOrIsZPos || side != 2) || isZNegOrIsZPos && side == 3));
 		}
 	}
 
@@ -131,32 +137,35 @@ public class BlockPortal extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		for (int l = 0; l < 4; l++) {
-			double d = x + rand.nextFloat();
-			double d1 = y + rand.nextFloat();
-			double d2 = z + rand.nextFloat();
-			double d3 = 0.0D;
-			double d4 = 0.0D;
-			double d5 = 0.0D;
-			int i1 = rand.nextInt(2) * 2 - 1;
-			d3 = (rand.nextFloat() - 0.5D) * 0.5D;
-			d4 = (rand.nextFloat() - 0.5D) * 0.5D;
-			d5 = (rand.nextFloat() - 0.5D) * 0.5D;
-			if (world.getBlock(x - 1, y, z) != this && world.getBlock(x + 1, y, z) != this) {
-				d = x + 0.5D + 0.25D * i1;
-				d3 = rand.nextFloat() * 2.0F * i1;
+		for( int i = 0; i < 4; i++ ) {
+			double particleX = x + rand.nextFloat();
+			double particleY = y + rand.nextFloat();
+			double particleZ = z + rand.nextFloat();
+			double motionX;
+			double motionY;
+			double motionZ;
+			int multi = rand.nextInt(2) * 2 - 1;
+
+			motionX = (rand.nextFloat() - 0.5D) * 0.5D;
+			motionY = (rand.nextFloat() - 0.5D) * 0.5D;
+			motionZ = (rand.nextFloat() - 0.5D) * 0.5D;
+
+			if( world.getBlock(x - 1, y, z) != this && world.getBlock(x + 1, y, z) != this ) {
+				particleX = x + 0.5D + 0.25D * multi;
+				motionX = rand.nextFloat() * 2.0F * multi;
 			} else {
-				d2 = z + 0.5D + 0.25D * i1;
-				d5 = rand.nextFloat() * 2.0F * i1;
+				particleZ = z + 0.5D + 0.25D * multi;
+				motionZ = rand.nextFloat() * 2.0F * multi;
 			}
-			world.spawnParticle("smoke", d, d1, d2, d3 / 4D, d4 / 4D, d5 / 4D);
+
+			world.spawnParticle("smoke", particleX, particleY, particleZ, motionX / 4D, motionY / 4D, motionZ / 4D);
 		}
 	}
 
-	public static class Size {
-
+	public static class Size
+    {
 		private final World world;
-		private final int type, field_150866_c, field_150863_d;
+		private final int type, side2, side1;
 		private int field_150864_e = 0;
 		private ChunkCoordinates porition;
 		private int height;
@@ -165,26 +174,30 @@ public class BlockPortal extends Block {
 		public Size(World world, int x, int y, int z, int type) {
 			this.world = world;
 			this.type = type;
-			field_150863_d = types[type][0];
-			field_150866_c = types[type][1];
+			side1 = types[type][0];
+			side2 = types[type][1];
 
-			for (int i1 = y; y > i1 - 21 && y > 0 && isBlockRepleaceable(world.getBlock(x, y - 1, z)); --y)
-				;
+			for( int i1 = y; y > i1 - 21 && y > 0 ; --y) {
+                if( !isBlockRepleaceable(world.getBlock(x, y - 1, z)) ) {
+                    break;
+                }
+            }
 
-			int j1 = getSize(x, y, z, field_150863_d) - 1;
+			int j1 = getSize(x, y, z, this.side1) - 1;
 
-			if (j1 >= 0) {
-				porition = new ChunkCoordinates(x + j1 * Direction.offsetX[field_150863_d], y, z + j1 * Direction.offsetZ[field_150863_d]);
-				width = getSize(porition.posX, porition.posY, porition.posZ, field_150866_c);
+			if( j1 >= 0 ) {
+				this.porition = new ChunkCoordinates(x + j1 * Direction.offsetX[this.side1], y, z + j1 * Direction.offsetZ[this.side1]);
+				this.width = getSize(this.porition.posX, this.porition.posY, this.porition.posZ, this.side2);
 
-				if (width < 2 || width > 21) {
-					porition = null;
-					width = 0;
+				if( this.width < 2 || this.width > 21 ) {
+                    this.porition = null;
+                    this.width = 0;
 				}
 			}
 
-			if (porition != null)
-				height = func_150858_a();
+			if( this.porition != null ) {
+                this.height = func_150858_a();
+            }
 		}
 
 		protected int getSize(int x, int y, int z, int type) {
@@ -275,8 +288,8 @@ public class BlockPortal extends Block {
 
 		public void makePortal() {
 			for (int i = 0; i < width; i++) {
-				int j = porition.posX + Direction.offsetX[field_150866_c] * i;
-				int k = porition.posZ + Direction.offsetZ[field_150866_c] * i;
+				int j = porition.posX + Direction.offsetX[side2] * i;
+				int k = porition.posZ + Direction.offsetZ[side2] * i;
 
 				for (int l = 0; l < height; l++) {
 					int i1 = porition.posY + l;

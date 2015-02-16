@@ -27,47 +27,47 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
 {
-	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
-	public static CommonProxy proxy;
-	public static SimpleNetworkWrapper networkWrapper;
-	
-	@Instance(ModInfo.ID)
-	public static TheBetweenlands instance;
+    @SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
+    public static CommonProxy proxy;
+    public static SimpleNetworkWrapper networkWrapper;
 
-	@EventHandler
-	public static void preInit(FMLPreInitializationEvent event) {
-		
-		//Configuration File
-		ConfigHandler.INSTANCE.loadConfig(event);
-		
-		//BL Registry
-		BLItemRegistry.init();
-		BLBlockRegistry.init();
-		BLEntityRegistry.init();
-		BLBiomeRegistry.init();
-		
-		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
-		
-		//TODO: Just temporary to test some stuff
-		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
-		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
-		
-		// Simple Altar packet
-		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
-		networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
-	}
+    @Instance(ModInfo.ID)
+    public static TheBetweenlands instance;
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		//BL Registry
-		proxy.registerTileEntities();
-		proxy.registerRenderInformation();
-		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
-		//Reciepes.init();
-		// For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
+    @EventHandler
+    public static void preInit(FMLPreInitializationEvent event) {
 
-		// DimensionManager.registerProviderType(Universe.dimensionId, WorldProviderUniverse.class, false);
-		// DimensionManager.registerDimension(Universe.dimensionId, Universe.dimensionId);
-	}
+        //Configuration File
+        ConfigHandler.INSTANCE.loadConfig(event);
+
+        //BL Registry
+        BLItemRegistry.init();
+        BLBlockRegistry.init();
+        BLEntityRegistry.init();
+        BLBiomeRegistry.init();
+
+        GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
+
+        //TODO: Just temporary to test some stuff
+        DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
+        DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
+
+        // Simple Altar packet
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
+        networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        //BL Registry
+        proxy.registerTileEntities();
+        proxy.registerRenderInformation();
+        FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
+        //Reciepes.init();
+        // For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
+
+        // DimensionManager.registerProviderType(Universe.dimensionId, WorldProviderUniverse.class, false);
+        // DimensionManager.registerDimension(Universe.dimensionId, Universe.dimensionId);
+    }
 }

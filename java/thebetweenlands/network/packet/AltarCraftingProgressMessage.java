@@ -3,33 +3,37 @@ package thebetweenlands.network.packet;
 import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 
-public class AltarCraftingProgressMessage implements IMessage {
+public class AltarCraftingProgressMessage
+        implements IMessage
+{
+    public int posX;
+    public int posY;
+    public int posZ;
+    public int craftingProgress;
 
-	public int posX, posY, posZ, craftingProgress;
+    public AltarCraftingProgressMessage() {
+    }
 
-	public AltarCraftingProgressMessage() {
-	}
+    public AltarCraftingProgressMessage(int x, int y, int z, int progress) {
+        this.posX = x;
+        this.posY = y;
+        this.posZ = z;
+        this.craftingProgress = progress;
+    }
 
-	public AltarCraftingProgressMessage(int x, int y, int z, int progress) {
-		posX = x;
-		posY = y;
-		posZ = z;
-		craftingProgress = progress;
-	}
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(this.posX);
+        buf.writeInt(this.posY);
+        buf.writeInt(this.posZ);
+        buf.writeInt(this.craftingProgress);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(posX);
-		buf.writeInt(posY);
-		buf.writeInt(posZ);
-		buf.writeInt(craftingProgress);
-	}
-
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		posX = buf.readInt();
-		posY = buf.readInt();
-		posZ = buf.readInt();
-		craftingProgress = buf.readInt();
-	}
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        this.posX = buf.readInt();
+        this.posY = buf.readInt();
+        this.posZ = buf.readInt();
+        this.craftingProgress = buf.readInt();
+    }
 }

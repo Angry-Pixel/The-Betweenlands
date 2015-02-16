@@ -9,11 +9,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockDruidAltar extends BlockContainer {
+public class BlockDruidAltar
+        extends BlockContainer
+{
 	public BlockDruidAltar() {
 		super(Material.rock);
 		setBlockUnbreakable();
@@ -45,13 +48,17 @@ public class BlockDruidAltar extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar) {
-			TileEntityDruidAltar altar = (TileEntityDruidAltar) world.getTileEntity(x, y, z);
-			if (altar.craftingProgress == 0)
-				player.openGui(TheBetweenlands.instance, TheBetweenlands.proxy.GUI_DRUID_ALTAR, world, x, y, z); 
-			}
+		if( world.isRemote ) {
+            return true;
+        }
+
+		if( world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar ) {
+            TileEntityDruidAltar altar = (TileEntityDruidAltar) world.getTileEntity(x, y, z);
+            if( altar.craftingProgress == 0 ) {
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_DRUID_ALTAR, world, x, y, z);
+            }
+        }
+
 		return true;
 	}
 

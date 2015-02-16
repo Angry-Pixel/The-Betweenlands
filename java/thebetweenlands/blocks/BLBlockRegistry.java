@@ -1,24 +1,24 @@
 package thebetweenlands.blocks;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
-
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
-import cpw.mods.fml.common.registry.GameRegistry;
 
-public class BLBlockRegistry {
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
 
+public class BLBlockRegistry
+{
 	// LIST WITH ALL BLOCKS IN THIS CLASS
 	public static final List<Block> BLOCKS = new LinkedList<Block>();
 
 	// PORTAL
-	public static Block portalBlock = new BlockPortal();
-	
+	public static BlockPortal portalBlock = new BlockPortal();
+
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
 	public static final Block druidStone1 = new BlockDruidStone("druidStone1");
@@ -33,20 +33,20 @@ public class BLBlockRegistry {
 	// ORES
 
 	// WOOD
-	
+
 	// DOUBLE PLANTS
 
 	// SMALL PLANTS
 
 	// UNDERGROWTH
-	
+
 	// DECORATIONS AND UTILITIES
-	
+
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
 	// STAIRS, SLABS, WALLS
-	
+
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
 
@@ -57,7 +57,7 @@ public class BLBlockRegistry {
 	}
 
 	private static void initBlocks() {
-		
+
 	}
 
 	private static void registerBlocks() {
@@ -90,7 +90,8 @@ public class BLBlockRegistry {
 		//for fire etc
 	}
 
-	public static interface ISubBlocksBlock {
+	public static interface ISubBlocksBlock
+    {
 		Class<? extends ItemBlock> getItemBlockClass();
 	}
 }

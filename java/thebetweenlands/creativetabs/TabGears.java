@@ -5,8 +5,9 @@ import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TabGears extends CreativeTabBetweenlands {
-
+public class TabGears
+        extends CreativeTabBetweenlands
+{
 	public TabGears() {
 		super("thebetweenlands.gear");
 	}

@@ -1,17 +1,17 @@
 package thebetweenlands.items;
 
-import java.lang.reflect.Field;
-
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+
+import java.lang.reflect.Field;
 
 public class BLItemRegistry {
 
 		// BASIC MATERIALS
-		public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");;
+		public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
 		public static final Item swampTalisman = new SwampTalisman();
 		// MISC WEAPONS
 
@@ -30,7 +30,7 @@ public class BLItemRegistry {
 			ModCreativeTabs.items.setTab(swampTalisman);
 			ModCreativeTabs.specials.setTab(spawnEggs);
 			ModCreativeTabs.gears.setTab(testItem);
-			
+
 		}
 
 		private static void registerItems() {

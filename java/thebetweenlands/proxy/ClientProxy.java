@@ -15,27 +15,30 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class ClientProxy extends CommonProxy {
-	@Override
-	public void registerRenderInformation() {
-		
-		//Mob Entities
-		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
-		
-		//Tile Entities
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
-		
-		//Item Entities
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
-	}
-	
-	@Override
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
-		EntityFX fx = null;
+public class ClientProxy
+        extends CommonProxy
+{
+    @Override
+    public void registerRenderInformation() {
 
-		if (particleName.equals("druidmagic"))
-			fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ);
+        //Mob Entities
+        RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-	}
+        //Tile Entities
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
+
+        //Item Entities
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
+    }
+
+    @Override
+    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+        EntityFX fx = null;
+
+        if( particleName.equals("druidmagic") ) {
+            fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ);
+        }
+
+        Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+    }
 }

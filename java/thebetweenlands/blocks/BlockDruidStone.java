@@ -13,8 +13,9 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockDruidStone extends Block {
-
+public class BlockDruidStone
+        extends Block
+{
 	private String type;
 	@SideOnly(Side.CLIENT)
 	private IIcon sideIcon;
@@ -27,9 +28,9 @@ public class BlockDruidStone extends Block {
 		setHarvestLevel("pickaxe", 0);
 		setLightLevel(0.8F);
 		setCreativeTab(ModCreativeTabs.blocks);
-		type = blockName;
-		setBlockName("thebetweenlands." + type);
-		setBlockTextureName("thebetweenlands:" + type);
+        this.type = blockName;
+		setBlockName("thebetweenlands." + this.type);
+		setBlockTextureName("thebetweenlands:" + this.type);
 	}
 
 	@Override
@@ -39,9 +40,9 @@ public class BlockDruidStone extends Block {
 
 	@Override
 	public String getLocalizedName() {
-		return String.format(StatCollector.translateToLocal("tile.thebetweenlands." + type));
+		return String.format(StatCollector.translateToLocal("tile.thebetweenlands." + this.type));
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
 		int rot = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 2.5D) & 3;
@@ -53,15 +54,15 @@ public class BlockDruidStone extends Block {
 	public IIcon getIcon(int side, int meta) {
 		switch(meta) {
 		case 0:
-			return side == 3 ? sideIcon : blockIcon;
+			return side == 3 ? this.sideIcon : this.blockIcon;
 		case 1:
-			return side == 4 ? sideIcon : blockIcon;
+			return side == 4 ? this.sideIcon : this.blockIcon;
 		case 2:
-			return side == 2 ? sideIcon : blockIcon;
+			return side == 2 ? this.sideIcon : this.blockIcon;
 		case 3:
-			return side == 5 ? sideIcon : blockIcon;
+			return side == 5 ? this.sideIcon : this.blockIcon;
 		default :
-			return blockIcon;		
+			return this.blockIcon;
 		}
 	}
 
@@ -73,8 +74,7 @@ public class BlockDruidStone extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		blockIcon = reg.registerIcon("stone");
-		sideIcon = reg.registerIcon(getTextureName());
+        this.blockIcon = reg.registerIcon("stone");
+        this.sideIcon = reg.registerIcon(getTextureName());
 	}
-
 }

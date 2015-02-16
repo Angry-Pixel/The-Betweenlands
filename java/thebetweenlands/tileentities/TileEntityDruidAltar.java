@@ -10,7 +10,7 @@ import net.minecraft.util.AxisAlignedBB;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.TALISMAN;
+import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
@@ -76,7 +76,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				}
 
 				if(craftingProgress >= CRAFTING_TIME) {
-					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, TALISMAN.swampTalisman.ordinal());
+					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, EnumTalisman.SWAMP_TALISMAN.ordinal());
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);
 					setInventorySlotContents(3, null);

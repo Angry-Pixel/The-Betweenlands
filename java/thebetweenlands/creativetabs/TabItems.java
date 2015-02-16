@@ -5,8 +5,9 @@ import thebetweenlands.items.BLItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TabItems extends CreativeTabBetweenlands {
-
+public class TabItems
+        extends CreativeTabBetweenlands
+{
 	public TabItems() {
 		super("thebetweenlands.item");
 	}

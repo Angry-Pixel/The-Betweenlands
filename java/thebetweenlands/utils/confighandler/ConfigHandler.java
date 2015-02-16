@@ -6,8 +6,8 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ConfigHandler {
-
+public class ConfigHandler
+{
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
 	public Configuration config;
 
@@ -28,14 +28,16 @@ public class ConfigHandler {
 		DIMENSION_ID = config.get(usedCategories[0], "The Betweenlands Dimension ID", 20).getInt(20);
 		DRUID_CIRCLE_FREQUENCY = config.get(usedCategories[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 10).getInt(10);
 		BIOME_ID_SWAMPLANDS = config.get(usedCategories[0], "Swamplands Biome ID", 50).getInt(50);
-		
-		if (config.hasChanged())
-			config.save();
+
+		if( config.hasChanged() ) {
+            config.save();
+        }
 	}
 
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.modID.equals(ModInfo.ID))
-			syncConfigs();
+		if( event.modID.equals(ModInfo.ID) ) {
+            syncConfigs();
+        }
 	}
 }
