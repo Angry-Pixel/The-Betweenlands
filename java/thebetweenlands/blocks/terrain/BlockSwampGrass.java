@@ -73,6 +73,6 @@ public class BlockSwampGrass extends Block {
 	
 	@Override
     public Item getItemDropped(int meta, Random rand, int fortune) {
-        return BLBlockRegistry.swampGrass.getItemDropped(0, rand, fortune);
+        return BLBlockRegistry.swampDirt.getItemDropped(0, rand, fortune);
     }
 }
