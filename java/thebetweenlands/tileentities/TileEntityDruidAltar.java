@@ -7,6 +7,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
@@ -130,20 +132,40 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	}
 
 	private void startCraftingProcess() {
+		World world = this.getWorldObj();
+		int dim = 0;
+		if(world instanceof WorldServer) {
+			dim = ((WorldServer)world).provider.dimensionId;
+		}
 		craftingProgress = 1;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -1), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//Packet to start sound
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//Sets client crafting progress to 1
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
 
 	private void stopCraftingProcess() {
+		World world = this.getWorldObj();
+		int dim = 0;
+		if(world instanceof WorldServer) {
+			dim = ((WorldServer)world).provider.dimensionId;
+		}
 		craftingProgress = 0;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -2), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 0), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//Packet to cancel sound
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//Sets client crafting progress to 0
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
 
 	public void sendCraftingProgressPacket() {
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(0, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		World world = this.getWorldObj();
+		int dim = 0;
+		if(world instanceof WorldServer) {
+			dim = ((WorldServer)world).provider.dimensionId;
+		}
+		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
 
 	@Override

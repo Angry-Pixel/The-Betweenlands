@@ -29,6 +29,7 @@ public class BlockSwampGrass
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.swampGrass");
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -62,11 +63,18 @@ public class BlockSwampGrass
                     int yTarget = y + rand.nextInt(5) - 3;
                     int zTarget = z + rand.nextInt(3) - 1;
                     Block block = world.getBlock(xTarget, yTarget + 1, zTarget);
+<<<<<<< HEAD
                     if( world.getBlock(xTarget, yTarget, zTarget) == Blocks.dirt
                         && world.getBlockMetadata(xTarget, yTarget, zTarget) == 0
                         && world.getBlockLightValue(xTarget, yTarget + 1, zTarget) >= 4
                         && world.getBlockLightOpacity(xTarget, yTarget + 1, zTarget) <= 2 )
                     {
+=======
+                    if (world.getBlock(xTarget, yTarget, zTarget) == BLBlockRegistry.swampDirt && 
+                    		world.getBlockMetadata(xTarget, yTarget, zTarget) == 0 && 
+                    		world.getBlockLightValue(xTarget, yTarget + 1, zTarget) >= 4 && 
+                    		world.getBlockLightOpacity(xTarget, yTarget + 1, zTarget) <= 2) {
+>>>>>>> origin/master
                         world.setBlock(xTarget, yTarget, zTarget, BLBlockRegistry.swampGrass);
                     }
                 }

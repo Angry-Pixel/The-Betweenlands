@@ -9,7 +9,6 @@ public class BlockBetweenlandsBedrock
 {
 	public BlockBetweenlandsBedrock() {
 		super(Material.rock);
-		setHardness(6000000.0F);
 		setResistance(6000000.0F);
 		setStepSound(soundTypePiston);
 		disableStats();
