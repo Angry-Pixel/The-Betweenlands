@@ -1,11 +1,7 @@
 package thebetweenlands.network.handler;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
@@ -14,20 +10,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-<<<<<<< HEAD
-import java.util.HashMap;
-
-public class AltarPacketHandler
-        implements IMessageHandler<AltarCraftingProgressMessage, IMessage>
-{
-    private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidchant");
-    private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<String, PositionedSoundDC>();
-=======
 public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgressMessage, IMessage> {
 	private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidChant");
 	private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<String, PositionedSoundDC>();
->>>>>>> ea176246174b20dc2b4529fdd042d71cd49fb26c
 
     static final class PositionedSoundDC extends PositionedSound
     {

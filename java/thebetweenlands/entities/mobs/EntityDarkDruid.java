@@ -185,13 +185,8 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	@Override
-<<<<<<< HEAD
-	protected String getDeathSound() {
-		return "thebetweenlands:darkdruiddeath";
-=======
 	protected String getDeathSound() { 
 		return "thebetweenlands:darkDruidDeath"; 
->>>>>>> ea176246174b20dc2b4529fdd042d71cd49fb26c
 	}
 
 	@Override
