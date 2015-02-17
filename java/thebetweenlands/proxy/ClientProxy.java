@@ -32,11 +32,16 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
-    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
         EntityFX fx = null;
 
         if( particleName.equals("druidmagic") ) {
-            fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ);
+            fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
+        }
+        
+        if( particleName.equals("druidmagicbig") ) {
+            fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
+            fx.setRBGColorF(0F, 1F, 1F);
         }
         
         if( particleName.equals("smoke") ) {

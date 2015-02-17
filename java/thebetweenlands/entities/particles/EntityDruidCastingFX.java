@@ -10,15 +10,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class EntityDruidCastingFX
         extends EntityFX
 {
-    private float portalParticleScale;
+    public float portalParticleScale;
 
-    public EntityDruidCastingFX(World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+    public EntityDruidCastingFX(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale) {
         super(world, x, y, z, motionX, motionY, motionZ);
         this.motionX = motionX;
         this.motionY = motionY;
         this.motionZ = motionZ;
         float colorMulti = this.rand.nextFloat() * 0.3F;
-        this.portalParticleScale = this.particleScale = this.rand.nextFloat() * 0.5F + 0.5F;
+        this.portalParticleScale = this.particleScale = scale;
         this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
         this.particleMaxAge = (int) (Math.random() * 10.0D) + 40;
         this.noClip = true;

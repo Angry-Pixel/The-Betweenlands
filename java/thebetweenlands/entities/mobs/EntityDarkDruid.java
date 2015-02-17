@@ -184,7 +184,7 @@ public class EntityDarkDruid extends EntityMob {
 		double pX = -Math.sin(a) * Math.random() * 0.25;
 		double pY = Math.random() * 0.25 - 0.125;
 		double pZ = Math.cos(a) * Math.random() * 0.25;
-		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.0D, posZ + offSetZ, pX, pY, pZ);
+		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.0D, posZ + offSetZ, pX, pY, pZ, rand.nextFloat() * 0.5F + 0.5F);
 	}
 
 	public void chargeSpell(Entity entity) {
