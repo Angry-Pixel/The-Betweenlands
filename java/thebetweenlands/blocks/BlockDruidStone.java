@@ -64,6 +64,14 @@ public class BlockDruidStone
 			return side == 2 ? this.sideIcon : this.blockIcon;
 		case 3:
 			return side == 5 ? this.sideIcon : this.blockIcon;
+		case 4:
+			return side == 3 ? this.sideIcon : this.blockIcon;
+		case 5:
+			return side == 4 ? this.sideIcon : this.blockIcon;
+		case 6:
+			return side == 2 ? this.sideIcon : this.blockIcon;
+		case 7:
+			return side == 5 ? this.sideIcon : this.blockIcon;
 		default :
 			return this.blockIcon;
 		}
