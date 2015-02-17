@@ -1,8 +1,10 @@
 package thebetweenlands;
 
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.listener.GenericListener;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
@@ -67,6 +69,7 @@ public class TheBetweenlands
         proxy.registerTileEntities();
         proxy.registerRenderInformation();
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
         //Reciepes.init();
         // For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
 

@@ -9,7 +9,7 @@ public class TestBiome2
 {
 	public TestBiome2(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
-		this.setFogColor((short)10, (short)30, (short)40);
+		this.setFogColor((byte)10, (byte)30, (byte)40);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 80);
 		this.setBiomeName("TestBiome2");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.swampDirt, BLBlockRegistry.betweenlandsBedrock);

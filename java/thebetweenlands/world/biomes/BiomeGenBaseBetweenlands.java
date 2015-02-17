@@ -22,7 +22,7 @@ public class BiomeGenBaseBetweenlands
 {
     private final BiomeDecoratorBaseBetweenlands decorator;
     private int grassColor, foliageColor;
-    private short[] fogColorRGB = new short[]{255, 255, 255};
+    private byte[] fogColorRGB = new byte[]{(byte) 255, (byte) 255, (byte) 255};
     private Block bottomBlock = Blocks.bedrock;
     private Block underLayerTopBlock, baseBlock;
     private int bottomBlockHeight = 0;
@@ -56,7 +56,7 @@ public class BiomeGenBaseBetweenlands
         this.fillerBlockHeight = fillerBlockHeight;
         return this;
     }
-
+    
     /**
      * Sets the biome main blocks.
      *
@@ -151,7 +151,7 @@ public class BiomeGenBaseBetweenlands
      * @param blue  short
      * @return BiomeGenBaseBetweenlands
      */
-    protected final BiomeGenBaseBetweenlands setFogColor(short red, short green, short blue) {
+    protected final BiomeGenBaseBetweenlands setFogColor(byte red, byte green, byte blue) {
         this.fogColorRGB[0] = red;
         this.fogColorRGB[1] = green;
         this.fogColorRGB[2] = blue;
@@ -198,10 +198,30 @@ public class BiomeGenBaseBetweenlands
     @SideOnly(Side.CLIENT)
     /**
      * Returns the fog RGB color.
-     * @return short[3]
+     * @return byte[3]
      */
-    public final short[] getFogRGB() {
+    public final byte[] getFogRGB() {
         return this.fogColorRGB;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    /**
+     * Returns the distance where the fog starts to build up.
+     * @param farPlaneDistance Maximum render distance
+     * @return float
+     */
+    public float getFogStart(float farPlaneDistance) {
+    	return 10;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    /**
+     * Returns the distance where the fog is fully opaque.
+     * @param farPlaneDistance Maximum render distance
+     * @return float
+     */
+    public float getFogEnd(float farPlaneDistance) {
+    	return farPlaneDistance / 1.2f;
     }
 
     /**

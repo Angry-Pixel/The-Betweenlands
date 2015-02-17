@@ -201,7 +201,7 @@ public class TileEntityDruidAltarRenderer
         GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5F, y + 1.5F, z + 0.5F);
         GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-        model.renderAll();
+        model.renderAll(0.0625F);
         GL11.glPopMatrix();
     }
 
