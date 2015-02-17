@@ -21,7 +21,7 @@ public class BlockDruidStone
 {
 	private String type;
 	@SideOnly(Side.CLIENT)
-	private IIcon sideIcon;
+	private IIcon sideIcon, sideIconActive;
 
 	public BlockDruidStone(String blockName) {
 		super(Material.rock);
@@ -64,6 +64,14 @@ public class BlockDruidStone
 			return side == 2 ? this.sideIcon : this.blockIcon;
 		case 3:
 			return side == 5 ? this.sideIcon : this.blockIcon;
+		case 4:
+			return side == 3 ? this.sideIconActive : this.blockIcon;
+		case 5:
+			return side == 4 ? this.sideIconActive : this.blockIcon;
+		case 6:
+			return side == 2 ? this.sideIconActive : this.blockIcon;
+		case 7:
+			return side == 5 ? this.sideIconActive : this.blockIcon;
 		default :
 			return this.blockIcon;
 		}
@@ -79,6 +87,7 @@ public class BlockDruidStone
 	public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon("stone");
         this.sideIcon = reg.registerIcon(getTextureName());
+        this.sideIconActive = reg.registerIcon(getTextureName()+"Active");
 	}
 	
 	@Override
