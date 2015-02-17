@@ -10,31 +10,31 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
 
-public class SiltNoiseFeature implements BiomeNoiseFeature {
-	private NoiseGeneratorPerlin siltNoiseGen;
-	private double[] siltNoise = new double[256];
+public class AlgaeNoiseFeature implements BiomeNoiseFeature {
+	private NoiseGeneratorPerlin algaeNoiseGen;
+	private double[] algaeNoise = new double[256];
 	
 	@Override
 	public void initializeNoiseGen(Random rng, BiomeGenBaseBetweenlands biome) {
-		this.siltNoiseGen = new NoiseGeneratorPerlin(rng, 4);
+		this.algaeNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 	}
 
 	@Override
 	public void generateNoise(int chunkX, int chunkZ,
 			BiomeGenBaseBetweenlands biome) {
-		this.siltNoise = this.siltNoiseGen.func_151599_a(this.siltNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.03125D * 2.0D, 0.03125D * 2.0D, 1.0D);
+		this.algaeNoise = this.algaeNoiseGen.func_151599_a(this.algaeNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
 
 	@Override
 	public void postReplaceStackBlocks(int x, int z, Block[] chunkBlocks,
 			byte[] chunkMeta, BiomeGenBaseBetweenlands biome) {
 		int sliceSize = chunkBlocks.length / 256;
-		if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0) {
+		if(this.algaeNoise[x * 16 + z] / 1.6f + 1.8f <= 0) {
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT;
 			Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
 			Block blockAbove = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y + 1, z, sliceSize)];
-			if(currentBlock == biome.topBlock && (blockAbove == null || blockAbove == Blocks.air)) {
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.silt;
+			if(currentBlock == BLBlockRegistry.swampWater && (blockAbove == null || blockAbove == Blocks.air)) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y + 1, z, sliceSize)] = BLBlockRegistry.algae;
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
+import thebetweenlands.blocks.terrain.BlockAlgae;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockSilt;
@@ -35,6 +36,7 @@ public class BLBlockRegistry
 	public static final Block silt = new BlockSilt();
 	public static final Block mud = new BlockMud();
 	public static final Block swampWater = new BlockSwampWater();
+	public static final Block algae = new BlockAlgae();
 
 	// ORES
 
