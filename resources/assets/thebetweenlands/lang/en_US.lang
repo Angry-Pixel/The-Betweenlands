@@ -11,6 +11,8 @@ tile.thebetweenlands.druidStone4.name=Rune Stone 4
 tile.thebetweenlands.druidStone5.name=Rune Stone 5
 tile.thebetweenlands.druidSpawner.name=Dark Druid Spawner
 tile.thebetweenlands.druidAltar.name=Dark Druid Altar
+tile.thebetweenlands.silt.name=Silt
+tile.thebetweenlands.mud.name=Mud
 
 # Items
 item.thebetweenlands.testItem.name=Test Item

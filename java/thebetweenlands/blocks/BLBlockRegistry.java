@@ -1,15 +1,17 @@
 package thebetweenlands.blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
-import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.blocks.terrain.BlockSwampDirt;
-import thebetweenlands.blocks.terrain.BlockSwampGrass;
-
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.blocks.terrain.BlockMud;
+import thebetweenlands.blocks.terrain.BlockSilt;
+import thebetweenlands.blocks.terrain.BlockSwampDirt;
+import thebetweenlands.blocks.terrain.BlockSwampGrass;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLBlockRegistry
 {
@@ -29,6 +31,8 @@ public class BLBlockRegistry
 	public static final Block betweenlandsBedrock = new BlockBetweenlandsBedrock();
 	public static final Block swampDirt = new BlockSwampDirt();
 	public static final Block swampGrass = new BlockSwampGrass();
+	public static final Block silt = new BlockSilt();
+	public static final Block mud = new BlockMud();
 
 	// ORES
 
