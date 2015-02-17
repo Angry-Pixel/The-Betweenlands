@@ -14,9 +14,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
 {
@@ -64,6 +66,11 @@ public class ChunkProviderBetweenlands implements IChunkProvider
     //layerBlock generates below this height
     private final int layerHeight;
 
+    
+    /////// Terrain gen features ///////
+    private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
+    
+    
     public ChunkProviderBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
         this.worldObj = world;
         this.baseBlock = baseBlock;
@@ -144,6 +151,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider
         //Replace blocks for biome (replaces blocks according to the biomes)
         this.replaceBlocksForBiome(x, z, this.rand, chunkBlocks, blockMeta, this.biomesForGeneration);
 
+        //Gen caves
+        this.caveGenerator.func_151539_a(this, this.worldObj, x, z, chunkBlocks);
+        
         //Generate chunk
         Chunk chunk = new Chunk(this.worldObj, chunkBlocks, blockMeta, x, z);
         chunk.generateSkylightMap();

@@ -269,6 +269,22 @@ extends BiomeGenBase
 		}
 	}
 
+	/**
+	 * Returns the base block of this biome
+	 * @return Block
+	 */
+	public final Block getBaseBlock() {
+		return this.baseBlock;
+	}
+
+	/**
+	 * Returns the under layer block of this biome
+	 * @return Block
+	 */
+	public final Block getUnderLayerBlock() {
+		return this.underLayerTopBlock;
+	}
+	
 	protected Block[] currentChunkBlocks;
 	protected byte[] currentChunkMeta;
 	protected ChunkProviderBetweenlands currentProvider;
