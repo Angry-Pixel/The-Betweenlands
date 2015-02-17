@@ -24,5 +24,6 @@ extends BiomeGenBaseBetweenlands
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)5);
 		this.addFeature(new SiltNoiseFeature());
+		this.waterColorMultiplier = 0x184220;
 	}
 }

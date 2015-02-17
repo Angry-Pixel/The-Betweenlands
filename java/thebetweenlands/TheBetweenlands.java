@@ -3,6 +3,7 @@ package thebetweenlands;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.listener.GenericListener;
 import thebetweenlands.items.BLItemRegistry;
@@ -46,6 +47,7 @@ public class TheBetweenlands
 
         //BL Registry
         BLItemRegistry.init();
+        BLFluidRegistry.init();
         BLBlockRegistry.init();
         BLEntityRegistry.init();
         BLBiomeRegistry.init();
@@ -70,6 +72,7 @@ public class TheBetweenlands
         proxy.registerRenderInformation();
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
         //Reciepes.init();
         // For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
 

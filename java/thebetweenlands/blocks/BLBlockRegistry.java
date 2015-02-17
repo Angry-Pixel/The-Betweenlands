@@ -11,6 +11,7 @@ import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLBlockRegistry
@@ -33,6 +34,7 @@ public class BLBlockRegistry
 	public static final Block swampGrass = new BlockSwampGrass();
 	public static final Block silt = new BlockSilt();
 	public static final Block mud = new BlockMud();
+	public static final Block swampWater = new BlockSwampWater();
 
 	// ORES
 

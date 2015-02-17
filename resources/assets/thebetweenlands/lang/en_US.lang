@@ -13,6 +13,7 @@ tile.thebetweenlands.druidSpawner.name=Dark Druid Spawner
 tile.thebetweenlands.druidAltar.name=Dark Druid Altar
 tile.thebetweenlands.silt.name=Silt
 tile.thebetweenlands.mud.name=Mud
+tile.thebetweenlands.swampWater.name=Swamp Water
 
 # Items
 item.thebetweenlands.testItem.name=Test Item

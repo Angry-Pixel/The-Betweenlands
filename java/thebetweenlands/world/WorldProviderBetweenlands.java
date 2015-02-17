@@ -10,6 +10,7 @@ import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
@@ -104,7 +105,7 @@ extends WorldProvider
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), Blocks.stone, Blocks.water, LAYER_HEIGHT);
+		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), BLBlockRegistry.betweenstone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
 	}
 
 	@Override

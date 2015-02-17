@@ -1,16 +1,19 @@
 package thebetweenlands.event.listener;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -22,6 +25,8 @@ public class GenericListener {
 	public static final GenericListener INSTANCE = new GenericListener();
 
 
+
+	////// Biome specific fog + smooth transition //////
 	private float currentFogStart;
 	private float currentFogEnd;
 	private float renderFogStart;
@@ -72,6 +77,36 @@ public class GenericListener {
 			this.renderFogEnd = (float) (prevRenderFogEnd + (this.renderFogEnd - prevRenderFogEnd) * partialTicks);
 			GL11.glFogf(GL11.GL_FOG_START, this.renderFogStart);
 			GL11.glFogf(GL11.GL_FOG_END, this.renderFogEnd);
+		}
+	}
+
+
+	////// Underwater fog fix //////
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onFogColor(FogColors event) {
+		World world = FMLClientHandler.instance().getWorldClient();
+		if(world == null) {
+			return;
+		} else if(world.isRemote) {
+			EntityLivingBase renderView = Minecraft.getMinecraft().renderViewEntity;
+			if(renderView == null || renderView.dimension != ConfigHandler.DIMENSION_ID) {
+				return;
+			}
+			if(renderView.isInWater()) {
+				Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
+				if(block == BLBlockRegistry.swampWater) {
+					BiomeGenBase biome = world.getBiomeGenForCoords(
+							MathHelper.floor_double(renderView.posX),
+							MathHelper.floor_double(renderView.posZ));
+					if(biome instanceof BiomeGenBaseBetweenlands) {
+						int colorMultiplier = biome.getWaterColorMultiplier();
+						event.red = ((colorMultiplier & 16711680) >> 16) / 255.0F;
+						event.green = ((colorMultiplier & 65280) >> 8) / 255.0F;
+						event.blue = (colorMultiplier & 255) / 255.0F;
+					}
+				}
+			}
 		}
 	}
 }
