@@ -26,7 +26,7 @@ public class CommonProxy
         // unused serverside see ClientProxy for implementation
     }
 
-    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
         // unused serverside see ClientProxy for implementation
     }
 

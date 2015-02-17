@@ -85,8 +85,7 @@ public class BlockDruidStone
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		Random random = world.rand;
 		double pixel = 0.0625D;
-		if (rand.nextInt(5) == 0)
-			for (int l = 0; l < 6; ++l) {
+			for (int l = 0; l < 5; l++) {
 				double particleX = x + random.nextFloat();
 				double particleY = y + random.nextFloat();
 				double particleZ = z + random.nextFloat();
@@ -109,8 +108,8 @@ public class BlockDruidStone
 				if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
 					particleX = x - pixel;
 
-				if (particleX < x || particleX > x + 1 || particleY < 0.0D || particleY > y + 1 || particleZ < z || particleZ > z + 1)
-					TheBetweenlands.proxy.spawnCustomParticle("druidmagic", world, particleX, particleY, particleZ, 0, 0, 0);
+				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1)
+					TheBetweenlands.proxy.spawnCustomParticle("druidmagicbig", world, particleX, particleY, particleZ, (random.nextFloat() - random.nextFloat()) *0.1, 0, (random.nextFloat() - random.nextFloat())*0.1, rand.nextFloat() + 0.5F);
 			}
 	}
 }
