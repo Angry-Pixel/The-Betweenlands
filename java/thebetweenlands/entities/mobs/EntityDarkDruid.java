@@ -110,7 +110,7 @@ public class EntityDarkDruid extends EntityMob {
 			spawnParticles();
 		}
 		
-		if (!worldObj.isRemote && isEntityAlive())
+		if (!worldObj.isRemote && isEntityAlive() && getEntityToAttack() != null)
 			if (tar.getDistanceSqToEntity(this) > 9.0D && isCasting == 0 && forgetCounter == 0)
 				teleportNearEntity(tar);
 
