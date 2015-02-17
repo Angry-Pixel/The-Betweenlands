@@ -33,6 +33,8 @@ public class TileEntityDruidAltarRenderer
 
     public static TileEntityDruidAltarRenderer instance;
 
+    public final static double FINAL_HEIGHT = 2.0D;
+    
     public TileEntityDruidAltarRenderer() {
     }
 
@@ -103,21 +105,20 @@ public class TileEntityDruidAltarRenderer
 
         //Animate the 4 talisman pieces
         if( tile.blockMetadata == 1 && tile.craftingProgress != 0 ) {
-            double finalHeight = 2.0D;
             float prevYOff = tile.renderYOffset;
-            double yOff = (double) tile.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * finalHeight + 1.0D;
+            double yOff = (double) tile.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * FINAL_HEIGHT + 1.0D;
             tile.renderYOffset = (float) yOff;
             tile.renderYOffset = prevYOff + (tile.renderYOffset - prevYOff) * partialTicks;
             yOff = tile.renderYOffset;
-            if( yOff > finalHeight + 1.0D ) {
-                yOff = finalHeight + 1.0D;
+            if( yOff > FINAL_HEIGHT + 1.0D ) {
+                yOff = FINAL_HEIGHT + 1.0D;
             }
             GL11.glPushMatrix();
             GL11.glTranslated(x + 0.5D, y + 3.1D, z + 0.5D);
             GL11.glRotated(tile.renderRotation * 2.0D, 0, 1, 0);
-            double shineScale = 0.04f * Math.pow(1.0D - (finalHeight + 1.0D - yOff) / finalHeight, 12);
+            double shineScale = 0.04f * Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 12);
             GL11.glScaled(shineScale, shineScale, shineScale);
-            this.renderShine((float) Math.sin(Math.toRadians(tile.renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (finalHeight + 1.0D - yOff) / finalHeight, 12)));
+            this.renderShine((float) Math.sin(Math.toRadians(tile.renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 12)));
             GL11.glPopMatrix();
             boolean exit = false;
             for( int xi = 0; xi < 2; xi++ ) {
@@ -136,7 +137,7 @@ public class TileEntityDruidAltarRenderer
                     Vector3d midVec = new Vector3d(x + 0.5D, 0, z + 0.5D);
                     Vector3d diffVec = new Vector3d(x + xOff, 0, z + zOff);
                     diffVec.sub(midVec);
-                    double rProgress = 1.0D - Math.pow(1.0D - (finalHeight + 1.0D - yOff) / finalHeight, 6);
+                    double rProgress = 1.0D - Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 6);
                     diffVec.scale(rProgress);
                     midVec.add(diffVec);
                     GL11.glPushMatrix();

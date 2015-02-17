@@ -2,12 +2,15 @@ package thebetweenlands.network.handler;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -58,6 +61,21 @@ public class AltarPacketHandler implements IMessageHandler<AltarCraftingProgress
                             }
                         }
                         mcSoundHandler.playSound(sound);
+                        
+                        for(int x = -8; x < 8; x++) {
+                        	for(int y = -8; y < 8; y++) {
+                        		for(int z = -8; z < 8; z++) {
+                                	Block block = world.getBlock(teda.xCoord + x, teda.yCoord + y, teda.zCoord + z);
+                                	if(block == BLBlockRegistry.druidStone1
+                                		|| block == BLBlockRegistry.druidStone2
+                                		|| block == BLBlockRegistry.druidStone3
+                                		|| block == BLBlockRegistry.druidStone4
+                                		|| block == BLBlockRegistry.druidStone5) {
+                                		TheBetweenlands.proxy.spawnCustomParticle("altarcrafting", world, te.xCoord + x, te.yCoord + y, te.zCoord + z, 0, 0, 0, 1.0F, teda);
+                                	}
+                                }
+                            }
+                        }
                     } else if( message.craftingProgress == -2 ) {
                         PositionedSoundDC sound = tileSoundMap.get(message.posX + "|" + message.posY + "|" + message.posZ);
                         if( sound != null ) {

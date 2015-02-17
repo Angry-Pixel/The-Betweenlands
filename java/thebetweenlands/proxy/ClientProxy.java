@@ -11,6 +11,7 @@ import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -32,7 +33,7 @@ public class ClientProxy extends CommonProxy
     }
 
     @Override
-    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
+    public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {
         EntityFX fx = null;
 
         if( particleName.equals("druidmagic") ) {
@@ -41,6 +42,11 @@ public class ClientProxy extends CommonProxy
         
         if( particleName.equals("druidmagicbig") ) {
             fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
+            fx.setRBGColorF(0F, 1F, 1F);
+        }
+        
+        if( particleName.equals("altarcrafting") ) {
+            fx = new EntityAltarCraftingFX(world, x, y, z, vecX, vecY, vecZ, scale, (TileEntityDruidAltar)data[0]);
             fx.setRBGColorF(0F, 1F, 1F);
         }
         

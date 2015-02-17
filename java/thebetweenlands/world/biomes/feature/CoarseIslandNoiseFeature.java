@@ -22,7 +22,7 @@ public class CoarseIslandNoiseFeature implements BiomeNoiseFeature {
 	@Override
 	public void generateNoise(int chunkX, int chunkZ,
 			BiomeGenBaseBetweenlands biome) {
-		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.1D * 2.0D, 0.1D * 2.0D, 1.0D);
+		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
 
 	@Override

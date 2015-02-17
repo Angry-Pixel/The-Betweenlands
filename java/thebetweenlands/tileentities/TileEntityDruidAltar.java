@@ -1,5 +1,6 @@
 package thebetweenlands.tileentities;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -143,6 +144,22 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 1
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+	
+		for(int x = -8; x < 8; x++) {
+        	for(int y = -8; y < 8; y++) {
+        		for(int z = -8; z < 8; z++) {
+                	Block block = world.getBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+                	if(block == BLBlockRegistry.druidStone1
+                		|| block == BLBlockRegistry.druidStone2
+                		|| block == BLBlockRegistry.druidStone3
+                		|| block == BLBlockRegistry.druidStone4
+                		|| block == BLBlockRegistry.druidStone5) {
+                		int meta = world.getBlockMetadata(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+                		world.setBlockMetadataWithNotify(this.xCoord + x, this.yCoord + y, this.zCoord + z, meta + 4, 2);
+                	}
+                }
+            }
+        }
 	}
 
 	private void stopCraftingProcess() {
@@ -157,6 +174,22 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 0
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+	
+		for(int x = -8; x < 8; x++) {
+        	for(int y = -8; y < 8; y++) {
+        		for(int z = -8; z < 8; z++) {
+                	Block block = world.getBlock(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+                	if(block == BLBlockRegistry.druidStone1
+                		|| block == BLBlockRegistry.druidStone2
+                		|| block == BLBlockRegistry.druidStone3
+                		|| block == BLBlockRegistry.druidStone4
+                		|| block == BLBlockRegistry.druidStone5) {
+                		int meta = world.getBlockMetadata(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+                		world.setBlockMetadataWithNotify(this.xCoord + x, this.yCoord + y, this.zCoord + z, meta - 4, 2);
+                	}
+                }
+            }
+        }
 	}
 
 	public void sendCraftingProgressPacket() {
