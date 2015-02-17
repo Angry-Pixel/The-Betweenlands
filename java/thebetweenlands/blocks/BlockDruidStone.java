@@ -1,5 +1,7 @@
 package thebetweenlands.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,6 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -76,5 +79,38 @@ public class BlockDruidStone
 	public void registerBlockIcons(IIconRegister reg) {
         this.blockIcon = reg.registerIcon("stone");
         this.sideIcon = reg.registerIcon(getTextureName());
+	}
+	
+	@Override
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		Random random = world.rand;
+		double pixel = 0.0625D;
+		if (rand.nextInt(5) == 0)
+			for (int l = 0; l < 6; ++l) {
+				double particleX = x + random.nextFloat();
+				double particleY = y + random.nextFloat();
+				double particleZ = z + random.nextFloat();
+
+				if (l == 0 && !world.getBlock(x, y + 1, z).isOpaqueCube())
+					particleY = y + 1 + pixel;
+
+				if (l == 1 && !world.getBlock(x, y - 1, z).isOpaqueCube())
+					particleY = y - pixel;
+
+				if (l == 2 && !world.getBlock(x, y, z + 1).isOpaqueCube())
+					particleZ = z + 1 + pixel;
+
+				if (l == 3 && !world.getBlock(x, y, z - 1).isOpaqueCube())
+					particleZ = z - pixel;
+
+				if (l == 4 && !world.getBlock(x + 1, y, z).isOpaqueCube())
+					particleX = x + 1 + pixel;
+
+				if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
+					particleX = x - pixel;
+
+				if (particleX < x || particleX > x + 1 || particleY < 0.0D || particleY > y + 1 || particleZ < z || particleZ > z + 1)
+					TheBetweenlands.proxy.spawnCustomParticle("druidmagic", world, particleX, particleY, particleZ, 0, 0, 0);
+			}
 	}
 }
