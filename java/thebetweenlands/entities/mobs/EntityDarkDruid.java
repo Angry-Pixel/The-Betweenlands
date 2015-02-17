@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
@@ -14,9 +15,12 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
+import thebetweenlands.network.packet.DruidTeleportParticleMessage;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 50;
@@ -25,7 +29,7 @@ public class EntityDarkDruid extends EntityMob {
 	private int forgetCounter = 0;
 	private byte isCasting;
 	private Entity lastAttackTarget = null;
-	//private EntityLivingBase getEnityToAttack() = null;
+
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 
@@ -105,21 +109,82 @@ public class EntityDarkDruid extends EntityMob {
 		if (worldObj.isRemote && isCasting == 1) {
 			spawnParticles();
 		}
+		
+		if (!worldObj.isRemote && isEntityAlive())
+			if (tar.getDistanceSqToEntity(this) > 9.0D && isCasting == 0 && forgetCounter == 0)
+				teleportNearEntity(tar);
 
 		//Update data watcher
 		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
+	}
+
+	protected boolean teleportNearEntity(Entity entity) {
+		double targetX = entity.posX + (rand.nextDouble() - 0.5D) * 4.0D;
+		double targetY = posY + (double) (rand.nextInt(3) - 1);
+		double targetZ = entity.posZ + (rand.nextDouble() - 0.5D) * 4.0D;
+		return teleportTo(targetX, targetY, targetZ);
+	}
+
+	protected boolean teleportTo(double targetX, double targetY, double targetZ) {
+		double x = posX;
+		double y = posY;
+		double z = posZ;
+		boolean flag = false;
+		int i = MathHelper.floor_double(posX);
+		int j = MathHelper.floor_double(posY);
+		int k = MathHelper.floor_double(posZ);
+
+		if (worldObj.blockExists(i, j, k)) {
+			boolean flag1 = false;
+
+			while (!flag1 && j > 0) {
+				Block block = worldObj.getBlock(i, j - 1, k);
+
+				if (block.getMaterial().blocksMovement()) {
+					flag1 = true;
+				} else {
+					--posY;
+					--j;
+				}
+			}
+
+			if (flag1) {
+				spawnDruidParticlePacket();
+				setPosition(targetX, targetY, targetZ);
+				if (worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox)) {
+					flag = true;
+				}
+			}
+		}
+
+		if (!flag) {
+			setPosition(x, y, z);
+			return false;
+		} else {
+			spawnDruidParticlePacket();
+			worldObj.playSoundEffect(x, y, z, "mob.endermen.portal", 1.0F, 1.0F);
+			playSound("mob.endermen.portal", 1.0F, 1.0F);
+			return true;
+		}
+	}
+
+	private void spawnDruidParticlePacket() {
+     	World world = worldObj;
+		int dim = 0;
+		if(world instanceof WorldServer) {
+			dim = ((WorldServer)world).provider.dimensionId;
+            TheBetweenlands.networkWrapper.sendToAllAround(new DruidTeleportParticleMessage((float)posX, (float)posY + 1, (float)posZ),  new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
+		}	
 	}
 
 	public void spawnParticles() {
 		double a = Math.toRadians(renderYawOffset);
 		double offSetX = -Math.sin(a) * 0.5D;
 		double offSetZ = Math.cos(a) * 0.5D;
-
 		double pX = -Math.sin(a) * Math.random() * 0.25;
 		double pY = Math.random() * 0.25 - 0.125;
 		double pZ = Math.cos(a) * Math.random() * 0.25;
-
-		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.3, posZ + offSetZ, pX, pY, pZ);
+		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.0D, posZ + offSetZ, pX, pY, pZ);
 	}
 
 	public void chargeSpell(Entity entity) {
@@ -165,10 +230,12 @@ public class EntityDarkDruid extends EntityMob {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		int i = MathHelper.floor_double(posX);
-		int j = MathHelper.floor_double(boundingBox.minY);
-		int k = MathHelper.floor_double(posZ);
 		return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox) ;
+	}
+
+	@Override
+	public int getMaxSpawnedInChunk() {
+		return 5;
 	}
 
 	@Override

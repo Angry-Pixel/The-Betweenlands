@@ -2,6 +2,7 @@ package thebetweenlands.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -15,8 +16,7 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class ClientProxy
-        extends CommonProxy
+public class ClientProxy extends CommonProxy
 {
     @Override
     public void registerRenderInformation() {
@@ -38,7 +38,12 @@ public class ClientProxy
         if( particleName.equals("druidmagic") ) {
             fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ);
         }
-
-        Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+        
+        if( particleName.equals("smoke") ) {
+            fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
+        }
+        
+        if (fx != null)
+        	Minecraft.getMinecraft().effectRenderer.addEffect(fx);
     }
 }

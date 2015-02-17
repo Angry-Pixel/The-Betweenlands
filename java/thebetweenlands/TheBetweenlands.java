@@ -6,7 +6,9 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
+import thebetweenlands.network.handler.DruidPacketHandler;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
+import thebetweenlands.network.packet.DruidTeleportParticleMessage;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -56,6 +58,7 @@ public class TheBetweenlands
         // Simple Altar packet
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
         networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
+        networkWrapper.registerMessage(DruidPacketHandler.class, DruidTeleportParticleMessage.class, 1, Side.CLIENT);
     }
 
     @EventHandler
