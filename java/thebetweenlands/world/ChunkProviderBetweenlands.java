@@ -156,6 +156,12 @@ public class ChunkProviderBetweenlands implements IChunkProvider
         
         //Generate chunk
         Chunk chunk = new Chunk(this.worldObj, chunkBlocks, blockMeta, x, z);
+        
+        byte[] chunkBiomes = chunk.getBiomeArray();
+        for (int k = 0; k < chunkBiomes.length; ++k) {
+        	chunkBiomes[k] = (byte)this.biomesForGeneration[k].biomeID;
+        }
+        
         chunk.generateSkylightMap();
         chunk.resetRelightChecks();
 
@@ -507,7 +513,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                     	}
                     	bgbb.generateNoise(chunkX, chunkZ);
                     }
-                	bgbb.replaceStackBlocks(chunkX * 16 + bx, chunkZ * 16 + bz, bx, bz, this.baseBlockPatchNoise[bz + bx * 16], rng, chunkBlocks, blockMeta, this, biomesForGeneration);
+                	bgbb.replaceStackBlocks(chunkX * 16 + bx, chunkZ * 16 + bz, bx, bz, this.baseBlockPatchNoise[bz + bx * 16], rng, chunkBlocks, blockMeta, this, biomesForGeneration, this.worldObj);
                 }
             }
         }

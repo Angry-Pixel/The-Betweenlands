@@ -307,13 +307,18 @@ extends BiomeGenBase
 	 */
 	public final void replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, Random rng, Block[] chunkBlocks, byte[] blockMeta, 
-			ChunkProviderBetweenlands chunkProvider, BiomeGenBase[] biomesForGeneration) {
+			ChunkProviderBetweenlands chunkProvider, BiomeGenBase[] biomesForGeneration,
+			World world) {
 		this.currentChunkBlocks = chunkBlocks;
 		this.currentChunkMeta = blockMeta;
 		this.currentProvider = chunkProvider;
 		this.currentBiomesForGeneration = biomesForGeneration;
 		
 		for(BiomeNoiseFeature feature : this.featureList) {
+			feature.currentBiomesForGeneration = biomesForGeneration;
+			feature.currentProvider = chunkProvider;
+			feature.currentRNG = rng;
+			feature.setChunkAndWorld((blockX-(blockX&15))/16, (blockZ-(blockZ&15))/16, world);
 			feature.preReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider, biomesForGeneration, rng);
 		}
 		

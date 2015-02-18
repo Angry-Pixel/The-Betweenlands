@@ -12,7 +12,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class SiltNoiseFeature implements BiomeNoiseFeature {
+public class SiltNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin siltNoiseGen;
 	private double[] siltNoise = new double[256];
 	

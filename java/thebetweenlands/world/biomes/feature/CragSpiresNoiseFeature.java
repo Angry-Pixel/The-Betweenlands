@@ -12,7 +12,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class CragSpiresNoiseFeature implements BiomeNoiseFeature {
+public class CragSpiresNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin spireNoiseGen;
 	private double[] spireNoise = new double[256];
 	

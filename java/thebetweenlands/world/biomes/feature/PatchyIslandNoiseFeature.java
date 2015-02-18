@@ -12,7 +12,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class PatchyIslandNoiseFeature implements BiomeNoiseFeature {
+public class PatchyIslandNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];
 	
@@ -53,7 +53,8 @@ public class PatchyIslandNoiseFeature implements BiomeNoiseFeature {
 			chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 		}
 		double noise = this.islandNoise[x * 16 + z] / 10.0f;
-		for(int y = layerHeight - depth; y < layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) + 2; y++) {
+		int height = (int)(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) + 2);
+		for(int y = layerHeight - depth; y < height; y++) {
 			chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 		}
 	}

@@ -12,7 +12,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class SmallIslandNoiseFeature implements BiomeNoiseFeature {
+public class SmallIslandNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];
 	
