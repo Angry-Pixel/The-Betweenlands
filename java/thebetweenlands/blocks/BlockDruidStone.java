@@ -94,7 +94,7 @@ public class BlockDruidStone
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		Random random = world.rand;
 		double pixel = 0.0625D;
-		if(world.getBlockMetadata(x, y, z) <= 3) {
+		if(world.getBlockMetadata(x, y, z) <= 3 && rand.nextInt(3) == 0) {
 			for (int l = 0; l < 5; l++) {
 				double particleX = x + random.nextFloat();
 				double particleY = y + random.nextFloat();

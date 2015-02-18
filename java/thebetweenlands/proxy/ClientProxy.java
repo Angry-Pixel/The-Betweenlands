@@ -47,7 +47,6 @@ public class ClientProxy extends CommonProxy
         
         if( particleName.equals("altarcrafting") ) {
             fx = new EntityAltarCraftingFX(world, x, y, z, vecX, vecY, vecZ, scale, (TileEntityDruidAltar)data[0]);
-            fx.setRBGColorF(0F, 1F, 1F);
         }
         
         if( particleName.equals("smoke") ) {

@@ -3,7 +3,6 @@ package thebetweenlands.entities.particles;
 import javax.vecmath.Vector3d;
 
 import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
@@ -47,6 +46,8 @@ public class EntityAltarCraftingFX extends EntityFX {
     	this.prevPosY = this.posY;
     	this.prevPosZ = this.posZ;
     	this.setPosition(this.startPoint.x + xzDiff.x, this.startPoint.y + yDiff.y, this.startPoint.z + xzDiff.z);
+    	particleGreen = (float) (1F - relProgress);
+    	particleBlue = (float) (1F - relProgress);
     	super.onUpdate();
     }
 }
