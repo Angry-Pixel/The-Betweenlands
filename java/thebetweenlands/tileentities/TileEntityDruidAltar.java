@@ -154,32 +154,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		checkDruidCircleMeta(world);
 	}
 
-	private void checkDruidCircleMeta(World world) {
-		int baseRadius = 6;
-		for (int y = 0; y < 6; y++) {
-			for (int x = baseRadius * - 1; x <= baseRadius; ++x) {
-				for (int z = baseRadius * - 1; z <= baseRadius; ++z) {
-					double dSq = x * x + z * z;
-	                if( Math.round(Math.sqrt(dSq)) == baseRadius) {
-					Block block = world.getBlock(xCoord + x, yCoord + y, zCoord + z);
-					if (block == BLBlockRegistry.druidStone1
-							|| block == BLBlockRegistry.druidStone2
-							|| block == BLBlockRegistry.druidStone3
-							|| block == BLBlockRegistry.druidStone4
-							|| block == BLBlockRegistry.druidStone5) {
-						int meta = world.getBlockMetadata(xCoord + x, yCoord + y, zCoord + z);
-						if (craftingProgress == 0 && meta >= 4 || circleShouldRevert && meta >= 4) {
-							world.setBlockMetadataWithNotify(this.xCoord + x, yCoord + y, zCoord + z, meta - 4, 3);
-						} else if (craftingProgress == 1 && meta < 4) {
-							world.setBlockMetadataWithNotify(this.xCoord + x, yCoord + y, zCoord + z, meta + 4, 3);
-						}
-					}
-				}
-			}
-		}
-		}
-	}
-
 	private void stopCraftingProcess() {
 		World world = this.getWorldObj();
 		int dim = 0;
@@ -204,6 +178,33 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		}
 		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
+	
+	private void checkDruidCircleMeta(World world) {
+		int baseRadius = 6;
+		for (int y = 0; y < 6; y++) {
+			for (int x = baseRadius * -1; x <= baseRadius; ++x) {
+				for (int z = baseRadius * -1; z <= baseRadius; ++z) {
+					double dSq = x * x + z * z;
+					if (Math.round(Math.sqrt(dSq)) == baseRadius) {
+						Block block = world.getBlock(xCoord + x, yCoord + y, zCoord + z);
+						if (block == BLBlockRegistry.druidStone1
+								|| block == BLBlockRegistry.druidStone2
+								|| block == BLBlockRegistry.druidStone3
+								|| block == BLBlockRegistry.druidStone4
+								|| block == BLBlockRegistry.druidStone5) {
+							int meta = world.getBlockMetadata(xCoord + x, yCoord + y, zCoord + z);
+							if (craftingProgress == 0 && meta >= 4 || circleShouldRevert && meta >= 4) {
+								world.setBlockMetadataWithNotify(this.xCoord + x, yCoord + y, zCoord + z, meta - 4, 3);
+							} else if (craftingProgress == 1 && meta < 4) {
+								world.setBlockMetadataWithNotify(this.xCoord + x, yCoord + y, zCoord + z, meta + 4, 3);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 
 	@Override
 	@SideOnly(Side.CLIENT)
