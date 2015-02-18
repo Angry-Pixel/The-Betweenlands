@@ -45,7 +45,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		if(!worldObj.isRemote && circleShouldRevert) {
 			checkDruidCircleMeta(worldObj);
 			circleShouldRevert = false;
-			System.out.println("Reverted Circle Blocks");
 		}
 		
 		if (worldObj.isRemote) {
