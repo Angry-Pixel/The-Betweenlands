@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.terrain.BlockAlgae;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;

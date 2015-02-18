@@ -314,7 +314,7 @@ extends BiomeGenBase
 		this.currentBiomesForGeneration = biomesForGeneration;
 		
 		for(BiomeNoiseFeature feature : this.featureList) {
-			feature.preReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider);
+			feature.preReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider, biomesForGeneration, rng);
 		}
 		
 		if(!this.preReplaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ)) {
@@ -386,7 +386,7 @@ extends BiomeGenBase
 		}
 		
 		for(BiomeNoiseFeature feature : this.featureList) {
-			feature.postReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this);
+			feature.postReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider, biomesForGeneration, rng);
 		}
 		
 		this.postReplaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ);

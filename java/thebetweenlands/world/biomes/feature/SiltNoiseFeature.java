@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.ChunkProviderBetweenlands;
@@ -27,7 +28,8 @@ public class SiltNoiseFeature implements BiomeNoiseFeature {
 
 	@Override
 	public void postReplaceStackBlocks(int x, int z, Block[] chunkBlocks,
-			byte[] chunkMeta, BiomeGenBaseBetweenlands biome) {
+			byte[] chunkMeta, BiomeGenBaseBetweenlands biome, ChunkProviderBetweenlands provider, 
+			BiomeGenBase[] chunksForGeneration, Random rng) {
 		int sliceSize = chunkBlocks.length / 256;
 		if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0) {
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT;
@@ -41,5 +43,6 @@ public class SiltNoiseFeature implements BiomeNoiseFeature {
 
 	@Override
 	public void preReplaceStackBlocks(int x, int y, Block[] chunkBlocks,
-			byte[] chunkMeta, BiomeGenBaseBetweenlands biome , ChunkProviderBetweenlands provider) { }
+			byte[] chunkMeta, BiomeGenBaseBetweenlands biome, ChunkProviderBetweenlands provider, 
+			BiomeGenBase[] chunksForGeneration, Random rng) { }
 }
