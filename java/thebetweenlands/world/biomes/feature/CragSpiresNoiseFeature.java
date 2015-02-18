@@ -58,11 +58,13 @@ public class CragSpiresNoiseFeature implements BiomeNoiseFeature {
 				return;
 			}
 			for(int y = lowestBlock; y < layerHeight; y++) {
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.betweenstone;
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.genericStone;
+				chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = 1;
 			}
 			for(int yOff = 0; yOff < -noise * 12; yOff++) {
 				int y = layerHeight + yOff;
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.betweenstone;
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.genericStone;
+				chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = 1;
 			}
 		}
 	}

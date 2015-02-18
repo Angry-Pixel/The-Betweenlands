@@ -352,6 +352,10 @@ extends BiomeGenBase
 			} else {
 				blocksBelow++;
 			}
+			
+			if(currentBlock != chunkProvider.baseBlock) {
+				continue;
+			}
 
 			//Generate base block patch
 			if( this.hasBaseBlockPatches && baseBlockNoiseRN <= 0 ) {

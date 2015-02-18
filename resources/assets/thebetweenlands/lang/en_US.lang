@@ -1,6 +1,7 @@
 # Blocks
-tile.thebetweenlands.betweenstone_0.name=Betweenstone
-tile.thebetweenlands.betweenstone_1.name=Corrupt Betweenstone
+tile.thebetweenlands.betweenstone.name=Betweenstone
+tile.thebetweenlands.genericStone_0.name=Corrupt Betweenstone
+tile.thebetweenlands.genericStone_1.name=Crag Rock
 tile.thebetweenlands.bedrock.name=Betweenlands Bedrock
 tile.thebetweenlands.swampDirt.name=Swamp Dirt
 tile.thebetweenlands.swampGrass.name=Swamp Grass

@@ -3,12 +3,14 @@ package thebetweenlands.event.listener;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 
 import org.lwjgl.opengl.GL11;
@@ -101,10 +103,35 @@ public class GenericListener {
 							MathHelper.floor_double(renderView.posZ));
 					if(biome instanceof BiomeGenBaseBetweenlands) {
 						int colorMultiplier = biome.getWaterColorMultiplier();
-						event.red = ((colorMultiplier & 16711680) >> 16) / 255.0F;
-						event.green = ((colorMultiplier & 65280) >> 8) / 255.0F;
-						event.blue = (colorMultiplier & 255) / 255.0F;
+						event.red = ((colorMultiplier & 16711680) >> 16) / 255.0F / 3.0F;
+						event.green = ((colorMultiplier & 65280) >> 8) / 255.0F / 3.0F;
+						event.blue = (colorMultiplier & 255) / 255.0F / 3.0F;
 					}
+				}
+			}
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onFogDensity(FogDensity event) {
+		World world = FMLClientHandler.instance().getWorldClient();
+		if(world == null) {
+			return;
+		} else if(world.isRemote) {
+			EntityLivingBase renderView = Minecraft.getMinecraft().renderViewEntity;
+			if(renderView == null || renderView.dimension != ConfigHandler.DIMENSION_ID) {
+				return;
+			}
+			if(renderView.isInWater()) {
+				Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
+				if(block == BLBlockRegistry.swampWater) {
+					GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
+	                if (renderView.isPotionActive(Potion.waterBreathing)) {
+	                	event.density = 0.1F;
+	                } else {
+	                	event.density = 0.4F;
+	                }
+					event.setCanceled(true);
 				}
 			}
 		}

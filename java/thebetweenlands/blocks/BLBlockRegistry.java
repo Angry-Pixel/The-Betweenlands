@@ -9,6 +9,7 @@ import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.terrain.BlockAlgae;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
+import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
@@ -26,6 +27,7 @@ public class BLBlockRegistry
 
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
+	public static final Block genericStone = new BlockGenericStone();
 	public static final Block druidStone1 = new BlockDruidStone("druidStone1");
 	public static final Block druidStone2 = new BlockDruidStone("druidStone2");
 	public static final Block druidStone3 = new BlockDruidStone("druidStone3");
