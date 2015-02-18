@@ -35,7 +35,7 @@ public class AlgaeNoiseFeature implements BiomeNoiseFeature {
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT;
 			Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
 			Block blockAbove = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y + 1, z, sliceSize)];
-			if(currentBlock == BLBlockRegistry.swampWater && (blockAbove == null || blockAbove == Blocks.air)) {
+			if(currentBlock == provider.layerBlock && (blockAbove == null || blockAbove == Blocks.air)) {
 				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y + 1, z, sliceSize)] = BLBlockRegistry.algae;
 			}
 		}

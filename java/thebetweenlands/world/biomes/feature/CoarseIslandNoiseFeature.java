@@ -38,13 +38,13 @@ public class CoarseIslandNoiseFeature implements BiomeNoiseFeature {
 		int sliceSize = chunkBlocks.length / 256;
 		double noise = this.islandNoise[x * 16 + z] / 1.4f + 1.8f;
 		int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
-		if(noise <= 0 && chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, layerHeight, z, sliceSize)] == BLBlockRegistry.swampWater) {
+		if(noise <= 0 && chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, layerHeight, z, sliceSize)] == provider.layerBlock) {
 			int minHeight = 2;
 			int heightVariation = 5;
 			for(int yOff = 0; yOff < layerHeight; yOff++) {
 				int y = layerHeight - yOff;
 				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
-				if(currentBlock == BLBlockRegistry.swampWater) {
+				if(currentBlock == provider.layerBlock) {
 					chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 				} else {
 					break;
@@ -63,7 +63,7 @@ public class CoarseIslandNoiseFeature implements BiomeNoiseFeature {
 			for(int yOff = 0; yOff < layerHeight; yOff++) {
 				int y = layerHeight - yOff;
 				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
-				if(currentBlock != BLBlockRegistry.swampWater) {
+				if(currentBlock != provider.layerBlock) {
 					lowestBlock = y;
 					break;
 				}

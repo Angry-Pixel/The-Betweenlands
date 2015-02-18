@@ -34,26 +34,35 @@ public class CragSpiresNoiseFeature implements BiomeNoiseFeature {
 	@Override
 	public void preReplaceStackBlocks(int x, int z, Block[] chunkBlocks,
 			byte[] chunkMeta, BiomeGenBaseBetweenlands biome, ChunkProviderBetweenlands provider, 
-			BiomeGenBase[] chunksForGeneration, Random rng) {
+			BiomeGenBase[] chunksForGeneration, Random rng) { 
 		int sliceSize = chunkBlocks.length / 256;
-		double noise = this.spireNoise[x * 16 + z] / 1.6f + 1.8f;
+		double noise = this.spireNoise[x * 16 + z] / 1.5f + 2.4f;
 		if(noise <= 0) {
-			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
-			if(chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, layerHeight, z, sliceSize)] != BLBlockRegistry.swampWater) {
+			if(-noise * 12 < 1) {
 				return;
 			}
+			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
+			if(chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, layerHeight, z, sliceSize)] != provider.layerBlock) {
+				return;
+			}
+			int lowestBlock = 0;
 			for(int yOff = 0; yOff < layerHeight; yOff++) {
 				int y = layerHeight - yOff;
 				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
-				if(currentBlock == BLBlockRegistry.swampWater) {
-					chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
-				} else {
+				if(currentBlock != provider.layerBlock) {
+					lowestBlock = y;
 					break;
 				}
 			}
-			for(int yOff = 0; yOff < -noise * 10; yOff++) {
+			if(WorldProviderBetweenlands.LAYER_HEIGHT - lowestBlock < 3) {
+				return;
+			}
+			for(int y = lowestBlock; y < layerHeight; y++) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.betweenstone;
+			}
+			for(int yOff = 0; yOff < -noise * 12; yOff++) {
 				int y = layerHeight + yOff;
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.betweenstone;
 			}
 		}
 	}

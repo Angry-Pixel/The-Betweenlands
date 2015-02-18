@@ -5,6 +5,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
 import thebetweenlands.world.biomes.feature.CoarseIslandNoiseFeature;
+import thebetweenlands.world.biomes.feature.CragSpiresNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
 
 public class BiomeSwampLands
@@ -17,7 +18,11 @@ extends BiomeGenBaseBetweenlands
 		this.setBiomeName("Swamplands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)5);
-		this.addFeature(new SiltNoiseFeature()).addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
+		
+		//// Biome features ////
+		this.addFeature(new SiltNoiseFeature())
+		.addFeature(new AlgaeNoiseFeature())
+		.addFeature(new CragSpiresNoiseFeature());
 	}
 }

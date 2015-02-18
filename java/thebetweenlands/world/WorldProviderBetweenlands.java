@@ -105,7 +105,7 @@ extends WorldProvider
 
 	@Override
 	public IChunkProvider createChunkGenerator() {
-		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), BLBlockRegistry.betweenstone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
+		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), Blocks.stone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
 	}
 
 	@Override
