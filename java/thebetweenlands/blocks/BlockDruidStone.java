@@ -92,13 +92,12 @@ public class BlockDruidStone
 	
 	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		Random random = world.rand;
 		double pixel = 0.0625D;
 		if(world.getBlockMetadata(x, y, z) <= 3 && rand.nextInt(3) == 0) {
 			for (int l = 0; l < 5; l++) {
-				double particleX = x + random.nextFloat();
-				double particleY = y + random.nextFloat();
-				double particleZ = z + random.nextFloat();
+				double particleX = x + rand.nextFloat();
+				double particleY = y + rand.nextFloat();
+				double particleZ = z + rand.nextFloat();
 
 				if (l == 0 && !world.getBlock(x, y + 1, z).isOpaqueCube())
 					particleY = y + 1 + pixel;
@@ -119,7 +118,7 @@ public class BlockDruidStone
 					particleX = x - pixel;
 
 				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1)
-					TheBetweenlands.proxy.spawnCustomParticle("druidmagicbig", world, particleX, particleY, particleZ, (random.nextFloat() - random.nextFloat()) *0.1, 0, (random.nextFloat() - random.nextFloat())*0.1, rand.nextFloat() + 0.5F);
+					TheBetweenlands.proxy.spawnCustomParticle("druidmagicbig", world, particleX, particleY, particleZ, (rand.nextFloat() - rand.nextFloat()) *0.1, 0, (rand.nextFloat() - rand.nextFloat())*0.1, rand.nextFloat() + 0.5F);
 			}
 		}
 	}
