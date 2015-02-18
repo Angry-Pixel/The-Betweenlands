@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;

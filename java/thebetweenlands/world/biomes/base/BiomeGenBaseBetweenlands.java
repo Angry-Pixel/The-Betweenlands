@@ -1,4 +1,4 @@
-package thebetweenlands.world.biomes;
+package thebetweenlands.world.biomes.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import thebetweenlands.world.ChunkProviderBetweenlands;
-import thebetweenlands.world.biomes.decorators.BiomeDecoratorBaseBetweenlands;
-import thebetweenlands.world.biomes.feature.BiomeNoiseFeature;
+import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
+import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -56,7 +56,7 @@ extends BiomeGenBase
 	 * @param feature BiomeFeatureBaseBetweenlands
 	 * @return
 	 */
-	protected final BiomeGenBaseBetweenlands addFeature(BiomeNoiseFeature feature) {
+	public final BiomeGenBaseBetweenlands addFeature(BiomeNoiseFeature feature) {
 		this.featureList.add(feature);
 		return this;
 	}
@@ -67,7 +67,7 @@ extends BiomeGenBase
 	 * @param fillerBlockHeight byte
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setFillerBlockHeight(byte fillerBlockHeight) {
+	public final BiomeGenBaseBetweenlands setFillerBlockHeight(byte fillerBlockHeight) {
 		this.fillerBlockHeight = fillerBlockHeight;
 		return this;
 	}
@@ -81,7 +81,7 @@ extends BiomeGenBase
 	 * @param underLayerTopBlock Block
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBlocks(Block baseBlock, Block fillerBlock, Block topBlock, Block underLayerTopBlock, Block bottomBlock) {
+	public final BiomeGenBaseBetweenlands setBlocks(Block baseBlock, Block fillerBlock, Block topBlock, Block underLayerTopBlock, Block bottomBlock) {
 		this.baseBlock = baseBlock;
 		this.fillerBlock = fillerBlock;
 		this.topBlock = topBlock;
@@ -98,7 +98,7 @@ extends BiomeGenBase
 	 * @param baseBlockMeta   byte
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBlockMeta(byte topBlockMeta, byte fillerBlockMeta, byte baseBlockMeta, byte topBlockUnderLayerMeta, byte bottomBlockMeta) {
+	public final BiomeGenBaseBetweenlands setBlockMeta(byte topBlockMeta, byte fillerBlockMeta, byte baseBlockMeta, byte topBlockUnderLayerMeta, byte bottomBlockMeta) {
 		this.topBlockMeta = topBlockMeta;
 		this.baseBlockMeta = baseBlockMeta;
 		this.fillerBlockMeta = fillerBlockMeta;
@@ -114,7 +114,7 @@ extends BiomeGenBase
 	 * @param enabled boolean
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBaseBlockPatches(boolean enabled) {
+	public final BiomeGenBaseBetweenlands setBaseBlockPatches(boolean enabled) {
 		this.hasBaseBlockPatches = enabled;
 		return this;
 	}
@@ -126,7 +126,7 @@ extends BiomeGenBase
 	 * @param fuzz   int
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setBottomBlockHeight(int height, int fuzz) {
+	public final BiomeGenBaseBetweenlands setBottomBlockHeight(int height, int fuzz) {
 		this.bottomBlockHeight = height;
 		this.bottomBlockFuzz = fuzz;
 		return this;
@@ -139,7 +139,7 @@ extends BiomeGenBase
 	 * @param variation int
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
+	public final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
 		this.heightVariation = (float) variation / 128.0f;
 		this.rootHeight = ((float) height / 128.0f + this.heightVariation) * 4.0f - 2.0f;
 		return this;
@@ -152,7 +152,7 @@ extends BiomeGenBase
 	 * @param foliageColor int
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setColors(int grassColor, int foliageColor) {
+	public final BiomeGenBaseBetweenlands setColors(int grassColor, int foliageColor) {
 		this.grassColor = grassColor;
 		this.foliageColor = foliageColor;
 		return this;
@@ -166,7 +166,7 @@ extends BiomeGenBase
 	 * @param blue  short
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	protected final BiomeGenBaseBetweenlands setFogColor(byte red, byte green, byte blue) {
+	public final BiomeGenBaseBetweenlands setFogColor(byte red, byte green, byte blue) {
 		this.fogColorRGB[0] = red;
 		this.fogColorRGB[1] = green;
 		this.fogColorRGB[2] = blue;

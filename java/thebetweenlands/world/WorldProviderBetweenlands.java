@@ -13,7 +13,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

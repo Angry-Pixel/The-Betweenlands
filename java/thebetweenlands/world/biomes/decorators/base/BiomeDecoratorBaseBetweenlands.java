@@ -1,4 +1,4 @@
-package thebetweenlands.world.biomes.decorators;
+package thebetweenlands.world.biomes.decorators.base;
 
 import net.minecraft.world.World;
 

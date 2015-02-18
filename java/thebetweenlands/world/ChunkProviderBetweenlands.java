@@ -17,7 +17,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
 
 public class ChunkProviderBetweenlands implements IChunkProvider

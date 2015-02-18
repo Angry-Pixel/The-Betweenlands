@@ -15,7 +15,7 @@ import thebetweenlands.network.packet.DruidTeleportParticleMessage;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.biomes.BLBiomeRegistry;
+import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;

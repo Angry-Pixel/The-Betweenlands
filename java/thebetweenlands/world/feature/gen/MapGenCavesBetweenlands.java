@@ -8,7 +8,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.MapGenBase;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 
 public class MapGenCavesBetweenlands extends MapGenBase {
 	//TODO: Maybe replace this with nice noise function or clean up this mess a bit

@@ -9,7 +9,8 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.biomes.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
 public class AlgaeNoiseFeature implements BiomeNoiseFeature {
 	private NoiseGeneratorPerlin algaeNoiseGen;

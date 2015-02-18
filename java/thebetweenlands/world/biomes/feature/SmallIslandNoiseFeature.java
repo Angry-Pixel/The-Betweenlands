@@ -12,7 +12,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class CoarseIslandNoiseFeature implements BiomeNoiseFeature {
+public class SmallIslandNoiseFeature implements BiomeNoiseFeature {
 	private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];
 	
@@ -37,41 +37,20 @@ public class CoarseIslandNoiseFeature implements BiomeNoiseFeature {
 			byte[] chunkMeta, BiomeGenBaseBetweenlands biome, ChunkProviderBetweenlands provider, 
 			BiomeGenBase[] chunksForGeneration, Random rng) {
 		int sliceSize = chunkBlocks.length / 256;
-		double noise = this.islandNoise[x * 16 + z] / 1.4f + 1.8f;
 		int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
-		if(noise <= 0 && chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, layerHeight, z, sliceSize)] == provider.layerBlock) {
-			int minHeight = 2;
-			int heightVariation = 5;
-			for(int yOff = 0; yOff < layerHeight; yOff++) {
-				int y = layerHeight - yOff;
-				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
-				if(currentBlock == provider.layerBlock) {
-					chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
-				} else {
-					break;
-				}
+		//Flatten terrain
+		int lowestBlock = 0;
+		for(int yOff = 0; yOff < layerHeight; yOff++) {
+			int y = layerHeight - yOff;
+			Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
+			if(currentBlock != provider.layerBlock) {
+				lowestBlock = y;
+				break;
 			}
-			for(int yOff = 0; yOff < minHeight; yOff++) {
-				int y = layerHeight + yOff;
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
-			}
-			for(int yOff = 0; yOff < -noise / 3.0f * heightVariation; yOff++) {
-				int y = minHeight + layerHeight + yOff;
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
-			}
-		} else {
-			int lowestBlock = 0;
-			for(int yOff = 0; yOff < layerHeight; yOff++) {
-				int y = layerHeight - yOff;
-				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)];
-				if(currentBlock != provider.layerBlock) {
-					lowestBlock = y;
-					break;
-				}
-			}
-			for(int y = lowestBlock; y < layerHeight - (layerHeight - lowestBlock) / 7.5f; y++) {
-				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
-			}
+		}
+		double noise = this.islandNoise[x * 16 + z] / 8.0f;
+		for(int y = lowestBlock; y < layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock); y++) {
+			chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 		}
 	}
 }
