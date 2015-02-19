@@ -2,5 +2,6 @@
 "darkDruidHit": {"category": "hostile","sounds": ["darkDruidHit"]},
 "darkDruidDeath": {"category": "hostile", "sounds": ["darkDruidDeath"]},
 "darkDruidLiving1": {"category": "hostile", "sounds":["darkDruidLiving1"]},
-"darkDruidLiving2": {"category": "hostile", "sounds":["darkDruidLiving2"]}
+"darkDruidLiving2": {"category": "hostile", "sounds":["darkDruidLiving2"]},
+"druidTeleport": {"category": "hostile", "sounds":["druidTeleport"]}
 }

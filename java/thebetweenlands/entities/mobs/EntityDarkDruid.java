@@ -23,13 +23,10 @@ import thebetweenlands.network.packet.DruidTeleportParticleMessage;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDarkDruid extends EntityMob {
-	private int attackTimer = 50;
+	private int attackTimer = 40;
 	private int attackCounter;
-	private int forgetTimer = 40;
-	private int forgetCounter = 0;
 	private byte isCasting;
-	private Entity lastAttackTarget = null;
-
+	private int teleportDelay;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 
@@ -64,17 +61,18 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		EntityPlayer tar = worldObj.getClosestVulnerablePlayerToEntity(this, 64.0D);
-		if (tar == null)
-			setTarget(null);
+	public void onUpdate() {
+		super.onUpdate();
+			EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
 
-		if (tar != getEntityToAttack())
-			if (getDistanceToEntity(tar) <= 6.0F)
-				setTarget(tar);
+		if (target != null) {
+			if (target.onGround && attackCounter == 0)
+				setAttackTarget(target);
+			if (!target.onGround && attackCounter == 0)
+				setAttackTarget(null);
+		}
 
-		if (getEntityToAttack() != null && getEntityToAttack() != lastAttackTarget && getEntitySenses().canSee(getEntityToAttack())) {
+		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && teleportDelay++ >= 100 && getDistanceToEntity(getAttackTarget()) <= 6F) {
 			if (attackCounter == 0) {
 				attackCounter++;
 				tasks.removeTask(meleeAI);
@@ -82,40 +80,32 @@ public class EntityDarkDruid extends EntityMob {
 			else if (attackCounter < attackTimer) {
 				attackCounter++;
 				isCasting = 1;
-				chargeSpell(getEntityToAttack());
+				chargeSpell(getAttackTarget());
 			}
-			else {
+			if(attackCounter >= attackTimer) {
 				attackCounter = 0;
 				isCasting = 0;
-				castSpell(getEntityToAttack());
-				lastAttackTarget = getEntityToAttack();
+				castSpell(getAttackTarget());
 				tasks.addTask(2, meleeAI);
-				forgetCounter = forgetTimer;
 			}
 		}
 		else {
 			attackCounter = 0;
 			isCasting = 0;
-			setTarget(null);
-			if (forgetCounter <= 0)
-				lastAttackTarget = null;
-			else
-				forgetCounter--;
 		}
 
-        if (getEntityToAttack() != null)
-            faceEntity(getEntityToAttack(), 100.0F, 100.0F);
-
+        if (getAttackTarget() != null)
+            faceEntity(getAttackTarget(), 100.0F, 100.0F);
+        
+        dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
+		
 		if (worldObj.isRemote && isCasting == 1) {
 			spawnParticles();
 		}
-		
-		if (!worldObj.isRemote && isEntityAlive() && getEntityToAttack() != null)
-			if (tar.getDistanceSqToEntity(this) > 9.0D && isCasting == 0 && forgetCounter == 0)
-				teleportNearEntity(tar);
 
-		//Update data watcher
-		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
+		if (!worldObj.isRemote && isEntityAlive() && getAttackTarget() != null)
+			if (getAttackTarget().getDistanceSqToEntity(this) > 6.0D && isCasting == 0 && teleportDelay++ >= 120)
+				teleportNearEntity(getAttackTarget());
 	}
 
 	protected boolean teleportNearEntity(Entity entity) {
@@ -161,9 +151,10 @@ public class EntityDarkDruid extends EntityMob {
 			setPosition(x, y, z);
 			return false;
 		} else {
+			teleportDelay = 0;
 			spawnDruidParticlePacket();
-			worldObj.playSoundEffect(x, y, z, "mob.endermen.portal", 1.0F, 1.0F);
-			playSound("mob.endermen.portal", 1.0F, 1.0F);
+			worldObj.playSoundEffect(x, y, z, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
+			playSound("thebetweenlands:druidTeleport", 1.0F, 1.0F);
 			return true;
 		}
 	}
@@ -173,7 +164,7 @@ public class EntityDarkDruid extends EntityMob {
 		int dim = 0;
 		if(world instanceof WorldServer) {
 			dim = ((WorldServer)world).provider.dimensionId;
-            TheBetweenlands.networkWrapper.sendToAllAround(new DruidTeleportParticleMessage((float)posX, (float)posY + 1, (float)posZ),  new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
+            TheBetweenlands.networkWrapper.sendToAllAround(new DruidTeleportParticleMessage((float)posX, (float)posY, (float)posZ),  new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
 		}	
 	}
 
@@ -184,7 +175,7 @@ public class EntityDarkDruid extends EntityMob {
 		double pX = -Math.sin(a) * Math.random() * 0.25;
 		double pY = Math.random() * 0.25 - 0.125;
 		double pZ = Math.cos(a) * Math.random() * 0.25;
-		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.0D, posZ + offSetZ, pX, pY, pZ, rand.nextFloat() * 0.5F + 0.5F);
+		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offSetX, posY + 1.0D, posZ + offSetZ, pX, pY, pZ, rand.nextFloat() * 1F + 0.5F);
 	}
 
 	public void chargeSpell(Entity entity) {
