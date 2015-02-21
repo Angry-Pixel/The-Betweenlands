@@ -33,6 +33,7 @@ extends BiomeGenBase
 	protected boolean hasBaseBlockPatches = true;
 	protected byte topBlockMeta = 0, fillerBlockMeta = 0, baseBlockMeta = 0, topBlockUnderLayerMeta = 0, bottomBlockMeta = 0;
 	protected byte fillerBlockHeight = 2;
+	protected byte underLayerBlockHeight = 2;
 	protected boolean isNoiseGenInitialized = false;
 	protected List<BiomeNoiseFeature> featureList = new ArrayList<BiomeNoiseFeature>();
 
@@ -69,6 +70,17 @@ extends BiomeGenBase
 	 */
 	public final BiomeGenBaseBetweenlands setFillerBlockHeight(byte fillerBlockHeight) {
 		this.fillerBlockHeight = fillerBlockHeight;
+		return this;
+	}
+	
+	/**
+	 * Sets the under layer block height
+	 *
+	 * @param underLayerBlockHeight byte
+	 * @return BiomeGenBaseBetweenlands
+	 */
+	public final BiomeGenBaseBetweenlands setUnderLayerBlockHeight(byte underLayerBlockHeight) {
+		this.underLayerBlockHeight = underLayerBlockHeight;
 		return this;
 	}
 
@@ -334,6 +346,8 @@ extends BiomeGenBase
 
 		//Amount of blocks below the surface
 		int blocksBelow = -1;
+		//Amount of blocks below the first block under the layer
+		int blocksBelowLayer = -1;
 		
 		for( int y = 255; y >= 0; --y ) {
 			//Block array index of the current x, y, z position
@@ -373,17 +387,22 @@ extends BiomeGenBase
 			int aboveIndex = this.getBlockArrayIndex(inChunkX, y + 1, inChunkZ, sliceSize);
 			Block blockAbove = chunkBlocks[aboveIndex];
 
-			if( blocksBelow == 0 ) {
-				if( blockAbove == chunkProvider.layerBlock ) {
-					//Generate under layer top block
-					chunkBlocks[cIndex] = this.underLayerTopBlock;
-					blockMeta[cIndex] = this.topBlockUnderLayerMeta;
-				} else {
-					//Generate top block
-					chunkBlocks[cIndex] = this.topBlock;
-					blockMeta[cIndex] = this.topBlockMeta;
-				}
-			} else if( blocksBelow > 0 && blocksBelow <= this.fillerBlockHeight ) {
+			if(blocksBelowLayer >= 0) {
+				blocksBelowLayer++;
+			}
+			if(currentBlock == chunkProvider.baseBlock && blockAbove == chunkProvider.layerBlock) {
+				blocksBelowLayer++;
+			}
+			
+			if(blocksBelowLayer <= this.underLayerBlockHeight && blocksBelowLayer >= 0) {
+				//Generate under layer top block
+				chunkBlocks[cIndex] = this.underLayerTopBlock;
+				blockMeta[cIndex] = this.topBlockUnderLayerMeta;
+			}  else if( blocksBelow == 0 && currentBlock == chunkProvider.baseBlock) {
+				//Generate top block
+				chunkBlocks[cIndex] = this.topBlock;
+				blockMeta[cIndex] = this.topBlockMeta;
+			} else if( blocksBelow > 0 && blocksBelow <= this.fillerBlockHeight && currentBlock == chunkProvider.baseBlock) {
 				//Generate filler block
 				chunkBlocks[cIndex] = this.fillerBlock;
 				blockMeta[cIndex] = this.fillerBlockMeta;
