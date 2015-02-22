@@ -40,6 +40,7 @@ public class BLBlockRegistry
 	public static final Block mud = new BlockMud();
 	public static final Block swampWater = new BlockSwampWater();
 	public static final Block algae = new BlockAlgae();
+	public static final Block sulfurTorch = new BlockSulfurTorch();
 
 	// ORES
 

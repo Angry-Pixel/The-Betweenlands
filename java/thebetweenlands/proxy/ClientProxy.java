@@ -53,6 +53,11 @@ public class ClientProxy extends CommonProxy
             fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
         }
         
+        if( particleName.equals("sulfurTorch") ) {
+            fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
+            fx.setRBGColorF(1F, 0.9294F, 0F);
+        }
+        
         if (fx != null)
         	Minecraft.getMinecraft().effectRenderer.addEffect(fx);
     }

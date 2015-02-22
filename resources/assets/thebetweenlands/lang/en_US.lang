@@ -15,6 +15,7 @@ tile.thebetweenlands.druidAltar.name=Dark Druid Altar
 tile.thebetweenlands.silt.name=Silt
 tile.thebetweenlands.mud.name=Mud
 tile.thebetweenlands.swampWater.name=Swamp Water
+tile.thebetweenlands.sulfurTorch.name=Sulfur Torch
 
 # Items
 item.thebetweenlands.testItem.name=Test Item
