@@ -78,17 +78,8 @@ public class BlockGenericOre extends Block {
 	@Override
 	public int getExpDrop(IBlockAccess world, int meta, int fortune) {
 		int xpAmount = 0;
-		
-		if (type.equals("aquaMiddleGemOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-		
-		else if (type.equals("greenMiddleGemOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-		
-		else if (type.equals("crimsonMiddleGemOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-		
-		else if (type.equals("sulfurOre"))
+
+		if (type.equals("sulfurOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
 		
 		else if (type.equals("valoniteOre"))

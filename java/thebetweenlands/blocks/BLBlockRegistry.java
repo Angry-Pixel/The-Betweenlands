@@ -46,9 +46,9 @@ public class BLBlockRegistry
 
 	// ORES @Params (name/texture, drops this item, harvest tool, harvest level)
 	// hardness & resistance could be set on an individual basis but aren't atm.
-	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", null, "pickaxe", 0);
-	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", null, "pickaxe", 0);
-	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", null, "pickaxe", 0);
+	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", null, "shovel", 0);
+	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", null, "shovel", 0);
+	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", null, "shovel", 0);
 	public static final Block octineOre = new BlockGenericOre("octineOre", null, "pickaxe", 1); //setting null drops item block
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR, "pickaxe", 0);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD, "pickaxe", 2);
