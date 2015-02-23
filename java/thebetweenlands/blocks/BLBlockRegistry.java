@@ -48,7 +48,7 @@ public class BLBlockRegistry
 	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", EnumMaterialsBL.AQUA_MIDDLE_GEM);
 	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", EnumMaterialsBL.CRIMSON_MIDDLE_GEM);
 	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", EnumMaterialsBL.GREEN_MIDDLE_GEM);
-	public static final Block octineOre = new BlockGenericOre("octineOre", null);
+	public static final Block octineOre = new BlockGenericOre("octineOre", null); //setting null drops item block
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
 	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
