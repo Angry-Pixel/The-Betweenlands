@@ -44,7 +44,7 @@ public class BLBlockRegistry
 	public static final Block algae = new BlockAlgae();
 	public static final Block sulfurTorch = new BlockSulfurTorch();
 	
-	// ORES
+	// ORES - hardness, resistance and harvest level could be set on an individual basis but aren't atm ;P
 	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", EnumMaterialsBL.AQUA_MIDDLE_GEM);
 	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", EnumMaterialsBL.CRIMSON_MIDDLE_GEM);
 	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", EnumMaterialsBL.GREEN_MIDDLE_GEM);
