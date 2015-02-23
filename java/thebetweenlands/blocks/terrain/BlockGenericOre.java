@@ -24,12 +24,11 @@ public class BlockGenericOre extends Block {
 	private EnumMaterialsBL oreDrops;
 	private Random rand = new Random();
 	
-	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops, String toolClass, int level) {
+	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops) {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
 		setHardness(3.0F);
 		setResistance(5.0F);
-		setHarvestLevel(toolClass, level);
 		setCreativeTab(ModCreativeTabs.blocks);
 		type = blockName;
 		oreDrops = blockDrops;

@@ -44,15 +44,15 @@ public class BLBlockRegistry
 	public static final Block algae = new BlockAlgae();
 	public static final Block sulfurTorch = new BlockSulfurTorch();
 
-	// ORES @Params (name/texture, drops this item, harvest tool, harvest level)
+	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
-	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", null, "shovel", 0);
-	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", null, "shovel", 0);
-	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", null, "shovel", 0);
-	public static final Block octineOre = new BlockGenericOre("octineOre", null, "pickaxe", 1); //setting null drops item block
-	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR, "pickaxe", 0);
-	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD, "pickaxe", 2);
-	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL, "pickaxe", 0);
+	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", null);
+	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", null);
+	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", null);
+	public static final Block octineOre = new BlockGenericOre("octineOre", null); //setting null drops item block
+	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
+	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
+	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
 
 	// WOOD
 
@@ -110,6 +110,13 @@ public class BLBlockRegistry
 
 	private static void registerProperties() {
 		//for fire etc
+		aquaMiddleGemOre.setHarvestLevel("shovel", 0);
+		crimsonMiddleGemOre.setHarvestLevel("shovel", 0);
+		greenMiddleGemOre.setHarvestLevel("shovel", 0);
+		octineOre.setHarvestLevel("pickaxe", 1);
+		sulfurOre.setHarvestLevel("pickaxe", 0);
+		valoniteOre.setHarvestLevel("pickaxe", 2);
+		lifeCrystalOre.setHarvestLevel("pickaxe", 0);
 	}
 
 	public static interface ISubBlocksBlock
