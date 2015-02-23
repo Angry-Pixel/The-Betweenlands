@@ -5,11 +5,14 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
@@ -22,12 +25,12 @@ public class BlockGenericOre extends Block {
 	private String type;
 	private EnumMaterialsBL oreDrops;
 
-	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops) {
+	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops, String toolClass, int level) {
 		super(Material.rock);
-		setHardness(1.5F);
-		setResistance(10.0F);
 		setStepSound(soundTypeStone);
-		setHarvestLevel("pickaxe", 0);
+		setHardness(3.0F);
+		setResistance(5.0F);
+		setHarvestLevel(toolClass, level);
 		setCreativeTab(ModCreativeTabs.blocks);
 		type = blockName;
 		oreDrops = blockDrops;
@@ -72,6 +75,35 @@ public class BlockGenericOre extends Block {
 	public boolean isOpaqueCube() {
 		return false;
 	}
+	private Random rand = new Random();
+    @Override
+    public int getExpDrop(IBlockAccess world, int p_149690_5_, int p_149690_7_)
+    {
+    	int j1 = 0;
+            if (type.equals("octineOre"))
+            {
+                j1 = MathHelper.getRandomIntegerInRange(rand, 0, 2);
+            }
+            else if (type.equals("octineOre"))
+            {
+                j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+            }
+            else if (type.equals("octineOre"))
+            {
+                j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+            }
+            else if (type.equals("octineOre"))
+            {
+                j1 = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+            }
+            else if (type.equals("octineOre"))
+            {
+                j1 = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+            }
+
+            return j1;
+
+    }
 	
 	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
