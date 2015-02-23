@@ -2,6 +2,7 @@ package thebetweenlands.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFlameFX;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
@@ -51,6 +52,10 @@ public class ClientProxy extends CommonProxy
         
         if( particleName.equals("smoke") ) {
             fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
+        }
+        
+        if( particleName.equals("flame") ) {
+            fx = new EntityFlameFX(world, x, y, z, vecX, vecY, vecZ);
         }
         
         if( particleName.equals("sulfurTorch") ) {
