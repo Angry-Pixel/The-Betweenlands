@@ -14,6 +14,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMaterialsBL extends Item
 {
+	public static ItemStack createStack(EnumMaterialsBL materialsBL) {
+		return createStack(materialsBL, 1);
+	}
+	
 	public static ItemStack createStack(EnumMaterialsBL materialsBL, int size) {
 		return new ItemStack(BLItemRegistry.materialsBL, size, materialsBL.ordinal());
 	}

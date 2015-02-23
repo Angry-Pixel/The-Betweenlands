@@ -16,6 +16,13 @@ tile.thebetweenlands.silt.name=Silt
 tile.thebetweenlands.mud.name=Mud
 tile.thebetweenlands.swampWater.name=Swamp Water
 tile.thebetweenlands.sulfurTorch.name=Sulfur Torch
+tile.thebetweenlands.aquaMiddleGemOre.name=Aqua Middle Gem Ore
+tile.thebetweenlands.crimsonMiddleGemOre.name=Crimson Middle Gem Ore
+tile.thebetweenlands.greenMiddleGemOre.name=Green Middle Gem Ore
+tile.thebetweenlands.octineOre.name=Octine Ore
+tile.thebetweenlands.sulfurOre.name=Sulfur Ore
+tile.thebetweenlands.valoniteOre.name=Valonite Ore
+tile.thebetweenlands.lifeCrystalOre.name=Life Crystal Ore
 
 # Items
 item.thebetweenlands.testItem.name=Test Item
