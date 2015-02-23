@@ -5,13 +5,11 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringUtils;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
@@ -24,7 +22,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockGenericOre extends Block {
 	private String type;
 	private EnumMaterialsBL oreDrops;
-
+	private Random rand = new Random();
+	
 	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops, String toolClass, int level) {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
@@ -75,36 +74,33 @@ public class BlockGenericOre extends Block {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	private Random rand = new Random();
-    @Override
-    public int getExpDrop(IBlockAccess world, int p_149690_5_, int p_149690_7_)
-    {
-    	int j1 = 0;
-            if (type.equals("octineOre"))
-            {
-                j1 = MathHelper.getRandomIntegerInRange(rand, 0, 2);
-            }
-            else if (type.equals("octineOre"))
-            {
-                j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
-            }
-            else if (type.equals("octineOre"))
-            {
-                j1 = MathHelper.getRandomIntegerInRange(rand, 3, 7);
-            }
-            else if (type.equals("octineOre"))
-            {
-                j1 = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-            }
-            else if (type.equals("octineOre"))
-            {
-                j1 = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-            }
 
-            return j1;
+	@Override
+	public int getExpDrop(IBlockAccess world, int meta, int fortune) {
+		int xpAmount = 0;
+		
+		if (type.equals("aquaMiddleGemOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
+		else if (type.equals("greenMiddleGemOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
+		else if (type.equals("crimsonMiddleGemOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
+		else if (type.equals("sulfurOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
+		else if (type.equals("valoniteOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+		
+		else if (type.equals("lifeCrystalOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
 
-    }
-	
+		return xpAmount;
+
+	}
+
 	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;
