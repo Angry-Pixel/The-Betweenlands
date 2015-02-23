@@ -13,6 +13,7 @@ import thebetweenlands.network.handler.DruidPacketHandler;
 import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import thebetweenlands.network.packet.DruidTeleportParticleMessage;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
@@ -73,7 +74,7 @@ public class TheBetweenlands
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
-        //Reciepes.init();
+        RecipeHandler.init();
         // For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
 
         // DimensionManager.registerProviderType(Universe.dimensionId, WorldProviderUniverse.class, false);
