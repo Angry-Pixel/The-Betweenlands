@@ -95,7 +95,7 @@ public class BlockGenericOre extends Block {
 	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;
-		if(type.equals("octineOre") && rand.nextInt(3) == 0) {
+		if(rand.nextInt(3) == 0) {
 			for (int l = 0; l < 5; l++) {
 				double particleX = x + rand.nextFloat();
 				double particleY = y + rand.nextFloat();
@@ -119,8 +119,12 @@ public class BlockGenericOre extends Block {
 				if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
 					particleX = x - pixel;
 
-				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1)
-					TheBetweenlands.proxy.spawnCustomParticle("flame", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
+					if(type.equals("octineOre"))
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+					else if(type.equals("sulfurOre"))
+						TheBetweenlands.proxy.spawnCustomParticle("sulfurOre", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+				}
 			}
 		}
 	}

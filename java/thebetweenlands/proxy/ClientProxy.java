@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityFlameFX;
 import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -62,6 +63,11 @@ public class ClientProxy extends CommonProxy
             fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
             fx.setRBGColorF(1F, 0.9294F, 0F);
         }
+        
+		if (particleName.equals("sulfurOre")) {
+			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(1F, 0.9294F, 0F);
+		}
         
         if (fx != null)
         	Minecraft.getMinecraft().effectRenderer.addEffect(fx);
