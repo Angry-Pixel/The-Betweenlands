@@ -54,10 +54,20 @@ public class BLBlockRegistry
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
 	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
 
-	// WOOD
+	// TREES
 	public static final Block saplingWeedWood = new BlockBLSapling("saplingWeedWood");
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree");
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
+	
+	public static final Block weedWoodLeaves = new BlockBLLeaves("weedWoodLeaves");
+	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
+	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
+	
+	public static final Block weedWoodLog = new BlockBLLog("weedWoodLog");
+	public static final Block weedWood = new BlockBLLog("weedWood");
+	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
+	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
+
 	
 	// DOUBLE PLANTS
 

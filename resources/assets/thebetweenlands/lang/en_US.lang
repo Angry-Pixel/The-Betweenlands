@@ -24,6 +24,18 @@ tile.thebetweenlands.sulfurOre.name=Sulfur Ore
 tile.thebetweenlands.valoniteOre.name=Valonite Ore
 tile.thebetweenlands.lifeCrystalOre.name=Life Crystal Ore
 
+tile.thebetweenlands.saplingWeedWood.name=Weed Wood Sapling
+tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling
+tile.thebetweenlands.saplingSpiritTree.name=Spirit Tree Sapling
+
+tile.thebetweenlands.weedWoodLog.name=Weed Wood Log
+tile.thebetweenlands.weedWood.name=Weed Wood
+tile.thebetweenlands.weedWoodBark.name=Weed Wood Bark
+tile.thebetweenlands.sapTreeLog.name=Sap Tree Log
+
+tile.thebetweenlands.weedWoodLeaves.name=Weed Wood Leaves
+tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
+
 # Items
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s

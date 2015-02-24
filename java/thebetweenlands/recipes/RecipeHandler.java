@@ -38,6 +38,14 @@ public class RecipeHandler {
 		OreDictionary.registerOre("oreGreenMiddleGem", new ItemStack(BLBlockRegistry.greenMiddleGemOre));
 		OreDictionary.registerOre("oreCrimsonMiddleGem", new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
 		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BLBlockRegistry.lifeCrystalOre));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedWood));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedWoodLog));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.sapTreeLog));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.weedWoodLeaves));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.sapTreeLeaves));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingWeedWood));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSapTree));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSpiritTree));
 
 		// OreDictionary.registerOre("foodMushroom", new ItemStack(BLBlockRegistry.bulbCappedMushroom));
 		
