@@ -54,7 +54,7 @@ public class EntityDarkDruid extends EntityMob {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23D);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(25.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.5D);
@@ -72,7 +72,7 @@ public class EntityDarkDruid extends EntityMob {
 				setAttackTarget(null);
 		}
 
-		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && teleportDelay++ >= 100 && getDistanceToEntity(getAttackTarget()) <= 6F) {
+		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && teleportDelay++ >= 100 && getDistanceSqToEntity(getAttackTarget()) <= 36F) {
 			if (attackCounter == 0) {
 				attackCounter++;
 				tasks.removeTask(meleeAI);
