@@ -55,7 +55,10 @@ public class BLBlockRegistry
 	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
 
 	// WOOD
-
+	public static final Block saplingWeedWood = new BlockBLSapling("saplingWeedWood");
+	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree");
+	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
+	
 	// DOUBLE PLANTS
 
 	// SMALL PLANTS
