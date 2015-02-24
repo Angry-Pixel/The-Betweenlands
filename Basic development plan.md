@@ -30,6 +30,7 @@ All armour sets/tool sets (apart from Lurker armour - thats added later, when th
 
 Stage 4 ~ ESSENTIAL MOBS/DROPS
 Swamp Hag
+Lurker
 Mire Snail
 Blood Snail
 Wight
@@ -38,6 +39,7 @@ Snail flesh food/Shells
 Old bone (no use yet)
 Wight Heart (no use yet)
 Moss (no use yet)
+Lurker Skin
 
 Stage 5 ~ IMPROVED GEN
 Tree fungus block/gen
@@ -74,8 +76,8 @@ Mire coral item
 Mire coral dust block
 
 Stage 8 ~ MORE MOBS
+TINY-ASS FROG AND A POISON ONE, OK DAVE? =P
 Anglers
-Lurkers
 Sporeling
 Snapper
 Needler
