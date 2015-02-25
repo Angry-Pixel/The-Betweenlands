@@ -68,16 +68,11 @@ public class TheBetweenlands
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        //BL Registry
         proxy.registerTileEntities();
         proxy.registerRenderInformation();
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
         RecipeHandler.init();
-        // For ores GameRegistry.registerWorldGenerator(new WORLDGENNAMEGOESHERE());
-
-        // DimensionManager.registerProviderType(Universe.dimensionId, WorldProviderUniverse.class, false);
-        // DimensionManager.registerDimension(Universe.dimensionId, Universe.dimensionId);
     }
 }

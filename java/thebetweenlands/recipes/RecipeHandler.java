@@ -22,7 +22,10 @@ public class RecipeHandler {
 
 		// Miscellaneous
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK), ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
-
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWoodLog));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWood));
+		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK, 4), "p", "p", 'p', new ItemStack(BLBlockRegistry.weedWoodPlanks));
+		
 		// Special Items
 	}
 
@@ -46,7 +49,9 @@ public class RecipeHandler {
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingWeedWood));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSapTree));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSpiritTree));
-
+		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.weedWoodPlanks));
+		OreDictionary.registerOre("stickWood", ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK));
+		
 		// OreDictionary.registerOre("foodMushroom", new ItemStack(BLBlockRegistry.bulbCappedMushroom));
 		
 		OreDictionary.registerOre("ingotOctine", ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));

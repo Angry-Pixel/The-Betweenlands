@@ -68,7 +68,9 @@ public class BLBlockRegistry
 	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
 
-	
+	// WOOD
+	public static final Block weedWoodPlanks = new BlockWeedWoodPlanks();
+
 	// DOUBLE PLANTS
 
 	// SMALL PLANTS
