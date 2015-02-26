@@ -270,7 +270,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		this.clampNoise = this.noiseOctave3.generateNoiseOctaves(this.clampNoise, x, 0, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);*/
 
         //TODO Find good noise scale
-        /*double noiseScale = 1200.0D;
+
+        double noiseScale = /*684.412D*/1200.0D;
         double yNoiseScale = 684.412D / noiseScale;
 
         this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
@@ -296,11 +297,11 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                         //System.out.println(surroundingBiome.biomeName);
 
                         //No amplified terrain in the BL
-						//if (this.field_147435_p == WorldType.AMPLIFIED && f3 > 0.0F)
-                        //{
-                        //    f3 = 1.0F + f3 * 2.0F;
-                        //    f4 = 1.0F + f4 * 4.0F;
-                        //}
+						/*if (this.field_147435_p == WorldType.AMPLIFIED && f3 > 0.0F)
+                        {
+                            f3 = 1.0F + f3 * 2.0F;
+                            f4 = 1.0F + f4 * 4.0F;
+                        }*/
 
                         float heightGradient = this.parabolicField[sbbxo + 2 + (sbbzo + 2) * 5] / (surroundingBiome.rootHeight + 2.0F);
 
@@ -345,8 +346,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                     fineBaseNoise /= 8.0D;
                 }
 
-                System.out.println(fineBaseNoise);
-                
                 ++baseNoiseIndex;
                 double cAvgRootHeight = (double) averageRootHeight;
                 double cAvgHeightVariation = (double) averageHeightVariation;
@@ -381,70 +380,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                     ++noiseIndex;
                 }
             }
-        }*/
-    	
-    	//Last param not used
-    	this.baseNoise = this.baseNoiseOctave.generateNoiseOctaves(this.baseNoise, x, z, 5, 5, 2000.0D, 2000.0D, 0.0D);
-    	
-    	//Index for base noise
-    	int baseNoiseIndex = 0;
-    	
-    	//Index for sub noise
-    	int noiseIndex = 0;
-    	
-    	 for( int bxo = 0; bxo < 5; ++bxo ) {
-             for( int bzo = 0; bzo < 5; ++bzo ) {
-            	 
-            	 //Average
-            	 for( int sbbxo = -2; sbbxo <= 2; ++sbbxo ) {
-                     for( int sbbzo = -2; sbbzo <= 2; ++sbbzo ) {
-
-                     }
-            	 }
-            	 
-            	 double fineBaseNoise = this.baseNoise[baseNoiseIndex] / 8000.0F;
-            	 if( fineBaseNoise < 0.0D ) {
-                     fineBaseNoise = -fineBaseNoise * 0.3D;
-                 }
-                 fineBaseNoise = fineBaseNoise * 3.0D - 2.0D;
-                 if( fineBaseNoise < 0.0D ) {
-                     fineBaseNoise /= 2.0D;
-
-                     if( fineBaseNoise < -1.0D ) {
-                         fineBaseNoise = -1.0D;
-                     }
-
-                     fineBaseNoise /= 1.4D;
-                     fineBaseNoise /= 2.0D;
-                 } else {
-                     if( fineBaseNoise > 1.0D ) {
-                         fineBaseNoise = 1.0D;
-                     }
-
-                     fineBaseNoise /= 8.0D;
-                 }
-            	 
-            	 ++baseNoiseIndex;
-            	 
-            	 //System.out.println(baseNoiseIndex);
-            	 //System.out.println(bxo * 5 + bzo);
-            	 
-            	 //baseNoiseIndex = bxo * 5 + (4-bzo);
-            	// baseNoiseIndex = bxo * 5 + bzo;
-            	 
-            	 for( int byo = 0; byo < 33; ++byo ) {
-            		 double cAvgRootHeight = (double) 0.2F;
-                     double cAvgHeightVariation = (double) 0.2F;
-                     cAvgRootHeight += fineBaseNoise * 0.2D;
-                     cAvgRootHeight = cAvgRootHeight * 8.5D / 8.0D;
-                     //double d5 = 8.5D + cAvgRootHeight * 4.0D;
-                     cAvgRootHeight = 8.5D + cAvgRootHeight * 4.0D;
-            		 double heightLimiterNoise = ((double) byo - cAvgRootHeight) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
-            		 noiseArray[noiseIndex] = 0 - heightLimiterNoise;
-                     ++noiseIndex;
-            	 }
-             }
-    	 }
+        }
     }
 
     /**
@@ -521,7 +457,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                                 if( (mainSubSubNoise += fineSubSubNoise) > 0.0D ) {
                                     chunkBlocks[cHeight += maxHeight] = this.baseBlock;
                                 } else if( k2 * 8 + subOctaveIT <= this.layerHeight ) {
-                                   // chunkBlocks[cHeight += maxHeight] = this.layerBlock;
+                                    chunkBlocks[cHeight += maxHeight] = this.layerBlock;
                                 } else {
                                     chunkBlocks[cHeight += maxHeight] = null;
                                 }
