@@ -48,6 +48,26 @@ item.thebetweenlands.swampTalisman.2.name=Swamp Talisman Piece 2
 item.thebetweenlands.swampTalisman.3.name=Swamp Talisman Piece 3
 item.thebetweenlands.swampTalisman.4.name=Swamp Talisman Piece 4
 
+item.thebetweenlands.weedWoodSword.name=Weed Wood Sword
+item.thebetweenlands.weedWoodPickaxe.name=Weed Wood Pickaxe
+item.thebetweenlands.weedWoodAxe.name=Weed Wood Axe
+item.thebetweenlands.weedWoodShovel.name=Weed Wood Shovel
+
+item.thebetweenlands.betweenstoneSword.name=Betweenstone Sword
+item.thebetweenlands.betweenstonePickaxe.name=Betweenstone Pickaxe
+item.thebetweenlands.betweenstoneAxe.name=Betweenstone Axe
+item.thebetweenlands.betweenstoneShovel.name=Betweenstone Shovel
+
+item.thebetweenlands.octineSword.name=Octine Sword
+item.thebetweenlands.octinePickaxe.name=Octine Pickaxe
+item.thebetweenlands.octineAxe.name=Octine Axe
+item.thebetweenlands.octineShovel.name=Octine Shovel
+
+item.thebetweenlands.valoniteSword.name=Valonite Sword
+item.thebetweenlands.valonitePickaxe.name=Valonite Pickaxe
+item.thebetweenlands.valoniteAxe.name=Valonite Axe
+item.thebetweenlands.valoniteShovel.name=Valonite Shovel
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 

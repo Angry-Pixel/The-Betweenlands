@@ -49,15 +49,9 @@ public class BLItemRegistry {
 		}
 
 		private static void initCreativeTabs() {
-			ModCreativeTabs.items.setTab(swampTalisman);
-			ModCreativeTabs.items.setTab(materialsBL);
-			ModCreativeTabs.specials.setTab(spawnEggs);
-			ModCreativeTabs.gears.setTab(testItem);
-			ModCreativeTabs.gears.setTab(weedWoodSword, weedWoodPickaxe, weedWoodAxe, weedWoodShovel);
-			ModCreativeTabs.gears.setTab(betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel);
-			ModCreativeTabs.gears.setTab(octineSword, octinePickaxe, octineAxe, octineShovel);
-			ModCreativeTabs.gears.setTab(valoniteSword, valonitePickaxe, valoniteAxe,valoniteShovel);
-			
+			ModCreativeTabs.items.setTab(swampTalisman, materialsBL);
+			ModCreativeTabs.specials.setTab(testItem, spawnEggs);
+			ModCreativeTabs.gears.setTab(weedWoodSword, weedWoodPickaxe, weedWoodAxe, weedWoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
 		}
 
 		private static void registerItems() {
