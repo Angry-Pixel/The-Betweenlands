@@ -3,7 +3,9 @@ package thebetweenlands.proxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
+import thebetweenlands.inventory.gui.GuiBLCrafting;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -13,6 +15,7 @@ public class CommonProxy
         implements IGuiHandler
 {
     public static final int GUI_DRUID_ALTAR = 1;
+    public static final int GUI_WEEDWOOD_CRAFT = 2;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -38,6 +41,9 @@ public class CommonProxy
                 return new ContainerDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
             }
         }
+        
+		else if (ID == GUI_WEEDWOOD_CRAFT)
+			return new ContainerBLCraftingTable(player.inventory, world, x, y, z);
 
         return null;
     }
@@ -50,6 +56,9 @@ public class CommonProxy
                 return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
             }
         }
+        
+        else if (ID == GUI_WEEDWOOD_CRAFT)
+			return new GuiBLCrafting(player.inventory, world, x, y, z);
 
         return null;
     }

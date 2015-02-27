@@ -78,7 +78,8 @@ public class BLBlockRegistry
 	// UNDERGROWTH
 
 	// DECORATIONS AND UTILITIES
-
+	public static final Block weedWoodCraftingTable = new BlockBLWorkbench();
+	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
