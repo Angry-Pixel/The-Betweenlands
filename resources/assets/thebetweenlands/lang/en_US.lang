@@ -68,6 +68,21 @@ item.thebetweenlands.valonitePickaxe.name=Valonite Pickaxe
 item.thebetweenlands.valoniteAxe.name=Valonite Axe
 item.thebetweenlands.valoniteShovel.name=Valonite Shovel
 
+item.thebetweenlands.lurkerSkinHelmet.name=Lurker Skin Helmet
+item.thebetweenlands.lurkerSkinChestplate.name=Lurker Skin Chestplate
+item.thebetweenlands.lurkerSkinLeggings.name=Lurker Skin Leggings
+item.thebetweenlands.lurkerSkinBoots.name=Lurker Skin Boots
+
+item.thebetweenlands.octineHelmet.name=Octine Helmet
+item.thebetweenlands.octineChestplate.name=Octine Chestplate
+item.thebetweenlands.octineLeggings.name=Octine Leggings
+item.thebetweenlands.octineBoots.name=Octine Boots
+
+item.thebetweenlands.valoniteHelmet.name=Valonite Helmet
+item.thebetweenlands.valoniteChestplate.name=Valonite Chestplate
+item.thebetweenlands.valoniteLeggings.name=Valonite Leggings
+item.thebetweenlands.valoniteBoots.name=Valonite Boots
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 

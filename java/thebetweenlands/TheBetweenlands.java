@@ -6,6 +6,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.listener.GenericListener;
+import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
@@ -73,6 +74,7 @@ public class TheBetweenlands
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
         RecipeHandler.init();
     }
 }
