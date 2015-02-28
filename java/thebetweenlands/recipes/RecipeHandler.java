@@ -55,7 +55,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteBoots, 1), "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
 
 		// Miscellaneous
-		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK), ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK), ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWoodLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWood));
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK, 4), "p", "p", 'p', new ItemStack(BLBlockRegistry.weedWoodPlanks));
