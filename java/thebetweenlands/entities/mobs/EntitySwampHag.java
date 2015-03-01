@@ -24,8 +24,8 @@ public class EntitySwampHag extends EntityMob {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
 	}
 
@@ -58,7 +58,10 @@ public class EntitySwampHag extends EntityMob {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE), 0F);
+		if (rand.nextBoolean())
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE), 0F);
+		else
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.MOSS), 0F);
 	}
 
 	@Override
