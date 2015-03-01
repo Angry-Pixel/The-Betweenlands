@@ -31,7 +31,7 @@ public class EntityWight extends EntityMob {
 
 	public EntityWight(World world) {
 		super(world);
-		setSize(0.8F, 1.5F);
+		setSize(1.5F, 3F);
 	}
 
 	@Override
