@@ -18,7 +18,7 @@ public class RenderDarkDruid
         extends RenderLiving
 {
     private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/darkDruid.png");
-    private static final ResourceLocation eyeTexture = new ResourceLocation("thebetweenlands:textures/entity/darkDruidGlow.png");
+    private final ResourceLocation eyeTexture = new ResourceLocation("thebetweenlands:textures/entity/darkDruidGlow.png");
 
     public RenderDarkDruid() {
         super(new ModelDarkDruid(), 0.7F);

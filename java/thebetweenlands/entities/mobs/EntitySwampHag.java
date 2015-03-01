@@ -26,7 +26,7 @@ public class EntitySwampHag extends EntityMob {
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
 	}
 
 	@Override
