@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.entities.mobs.EntityWight;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -18,14 +19,25 @@ public class RenderWight extends RenderLiving {
 	public RenderWight() {
 		super(new ModelWight(), 0.5F);
 	}
-	
+
 	@Override
-	protected void preRenderCallback(EntityLivingBase entityliving, float partialTickTime) {
+	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
+		scaleWight((EntityWight) entityliving, f);
+	}
+
+	protected void scaleWight(EntityWight wight, float partialTickTime) {
 		GL11.glScalef(2F, 2F, 2F);
+		GL11.glEnable(3042);
+		GL11.glBlendFunc(770, 771);
+		if(wight.getDataWatcher().getWatchableObjectByte(20) != 1)
+			GL11.glColor4f(1F, 1F, 1F, 0.5F);
+		else
+			GL11.glColor4f(1F, 1F, 1F, 1F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return texture;
 	}
+
 }
