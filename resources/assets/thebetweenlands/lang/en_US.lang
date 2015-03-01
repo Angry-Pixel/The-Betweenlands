@@ -86,6 +86,11 @@ item.thebetweenlands.valoniteBoots.name=Valonite Boots
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
+entity.thebetweenlands.angler.name=Angler Fish
+entity.thebetweenlands.sludge.name=Sludge
+entity.thebetweenlands.swampHag.name=Swamp Hag
+entity.thebetweenlands.tarBeast.name=Tar Beast
+entity.thebetweenlands.wight.name=Wight
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
