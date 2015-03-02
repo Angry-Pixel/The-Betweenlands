@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author The Erebus Team + TCB
  *
  */
-public class BiomeGenBaseBetweenlands
+public abstract class BiomeGenBaseBetweenlands
 extends BiomeGenBase
 {
 	protected final BiomeDecoratorBaseBetweenlands decorator;
@@ -146,16 +146,22 @@ extends BiomeGenBase
 
 	/**
 	 * Sets the average biome height and height variation.
+	 * Deprecated, will probably be replaced later on, but I'll keep it here for now until I've got the new worldgen working.
 	 *
 	 * @param height    int
 	 * @param variation int
 	 * @return BiomeGenBaseBetweenlands
 	 */
+	//Not used atm but I'll still keep it here
+	@Deprecated
 	public final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
 		this.heightVariation = (float) variation / 128.0f;
 		this.rootHeight = ((float) height / 128.0f + this.heightVariation) * 4.0f - 2.0f;
 		return this;
 	}
+	
+	public abstract int getRootHeight(int x, int z);
+	public abstract int getHeightVariation(int x, int z);
 
 	/**
 	 * Sets the biome grass and foliage colors.
@@ -268,7 +274,15 @@ extends BiomeGenBase
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.initializeNoiseGen(rng, this);
 		}
+		this.initializeNoiseGenBiome(rng);
 	}
+	
+	
+	/**
+	 * Initializes additional noise generators. Can be overridden by the biome.
+	 * @param rng Seeded Random
+	 */
+	protected void initializeNoiseGenBiome(Random rng) { }
 	
 	/**
 	 * Generates the noise fields.
@@ -279,7 +293,16 @@ extends BiomeGenBase
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.generateNoise(chunkX, chunkZ, this);
 		}
+		this.generateNoiseBiome(chunkX, chunkZ);
 	}
+	
+	
+	/**
+	 * Generates the noise fields. Can be overridden by the biome.
+	 * @param chunkX
+	 * @param chunkZ
+	 */
+	protected void generateNoiseBiome(int chunkX, int chunkZ) { }
 
 	/**
 	 * Returns the base block of this biome

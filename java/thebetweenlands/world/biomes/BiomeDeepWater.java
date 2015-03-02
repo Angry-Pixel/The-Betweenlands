@@ -23,4 +23,14 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
 	}
+
+	@Override
+	public int getRootHeight(int x, int z) {
+		return WorldProviderBetweenlands.LAYER_HEIGHT - 10;
+	}
+
+	@Override
+	public int getHeightVariation(int x, int z) {
+		return 0;
+	}
 }
