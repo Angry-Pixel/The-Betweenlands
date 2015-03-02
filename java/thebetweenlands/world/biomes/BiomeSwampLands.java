@@ -24,4 +24,14 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature())
 		.addFeature(new CragSpiresNoiseFeature());
 	}
+
+	@Override
+	public int getRootHeight(int x, int z) {
+		return WorldProviderBetweenlands.LAYER_HEIGHT;
+	}
+
+	@Override
+	public int getHeightVariation(int x, int z) {
+		return 10;
+	}
 }

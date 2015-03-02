@@ -111,9 +111,7 @@ public class EntityWight extends EntityMob {
 
 	private void setBoundingBox(boolean state) {
 		if(state) {
-			boundingBox.maxX = boundingBox.minX;
 			boundingBox.maxY = boundingBox.minY;
-			boundingBox.maxZ = boundingBox.minZ;
 		}
 	}
 
