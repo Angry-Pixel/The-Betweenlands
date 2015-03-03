@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.listener.DebugListener;
 import thebetweenlands.event.listener.GenericListener;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -34,56 +35,61 @@ import cpw.mods.fml.relauncher.Side;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
 {
-    @SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
-    public static CommonProxy proxy;
-    public static SimpleNetworkWrapper networkWrapper;
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
+	public static CommonProxy proxy;
+	public static SimpleNetworkWrapper networkWrapper;
 
-    @Instance(ModInfo.ID)
-    public static TheBetweenlands instance;
+	@Instance(ModInfo.ID)
+	public static TheBetweenlands instance;
 
-    /**
-     * True for debug mode
-     * Keys:
-     * - F: Fullbright
-     * - C: Fast flight
-     */
-    public static boolean DEBUG = true;
-    
-    @EventHandler
-    public static void preInit(FMLPreInitializationEvent event) {
+	/**
+	 * True for debug mode
+	 * Keys:
+	 * - F: Fullbright
+	 * - C: Fast flight
+	 */
+	public static boolean DEBUG = true;
 
-        //Configuration File
-        ConfigHandler.INSTANCE.loadConfig(event);
+	@EventHandler
+	public static void preInit(FMLPreInitializationEvent event) {
 
-        //BL Registry
-        BLItemRegistry.init();
-        BLFluidRegistry.init();
-        BLBlockRegistry.init();
-        BLEntityRegistry.init();
-        BLBiomeRegistry.init();
+		//Configuration File
+		ConfigHandler.INSTANCE.loadConfig(event);
 
-        GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-        NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
+		//BL Registry
+		BLItemRegistry.init();
+		BLFluidRegistry.init();
+		BLBlockRegistry.init();
+		BLEntityRegistry.init();
+		BLBiomeRegistry.init();
 
-        //TODO: Just temporary to test some stuff
-        DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
-        DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
+		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-        // Simple Altar packet
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
-        networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
-        networkWrapper.registerMessage(DruidPacketHandler.class, DruidTeleportParticleMessage.class, 1, Side.CLIENT);
-    }
+		//TODO: Just temporary to test some stuff
+		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
+		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.registerTileEntities();
-        proxy.registerRenderInformation();
-        FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(GenericListener.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
-        RecipeHandler.init();
-    }
+		// Simple Altar packet
+		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
+		networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
+		networkWrapper.registerMessage(DruidPacketHandler.class, DruidTeleportParticleMessage.class, 1, Side.CLIENT);
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
+		proxy.registerTileEntities();
+		proxy.registerRenderInformation();
+		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
+
+		if(DEBUG) {
+			FMLCommonHandler.instance().bus().register(DebugListener.INSTANCE);
+			MinecraftForge.EVENT_BUS.register(DebugListener.INSTANCE);
+		}
+
+		RecipeHandler.init();
+	}
 }
