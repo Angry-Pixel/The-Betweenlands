@@ -30,7 +30,7 @@ public class EntityWight extends EntityMob {
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, meleeAttack);
-		tasks.addTask(2, new EntityAIWander(this, 0.5D));
+		tasks.addTask(2, new EntityAIWander(this, 0.3D));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAILeapAtTarget(this, 0.5F));
 	}
@@ -50,7 +50,7 @@ public class EntityWight extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(12.0D);
