@@ -28,7 +28,7 @@ public class EntityDarkDruid extends EntityMob {
 	private int attackCounter;
 	private byte isCasting;
 	private int teleportDelay;
-	private int resetTrail = 20;
+	private int resetTrail = 40;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 
@@ -42,7 +42,7 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(4, wanderAI);
 		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 24.0F));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24, true));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 		setSize(1.1F, 1.7F);
 	}
 
@@ -67,7 +67,7 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-			EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
 
 		if (target != null) {
 			if (target.onGround && attackCounter == 0)
@@ -113,13 +113,13 @@ public class EntityDarkDruid extends EntityMob {
 				setEntityDistance((float)getAttackTarget().getDistanceToEntity(this));
 				teleportNearEntity(getAttackTarget());
 				setTeleported(1);
-				resetTrail = 20;
+				resetTrail = 40;
 			}
 		
 		if(getTeleported() == 1 && resetTrail > 0) resetTrail--;
 		if(getTeleported() == 1 && resetTrail == 0){
 			setTeleported(0);
-			resetTrail = 20;
+			resetTrail = 40;
 		}
 	}
     public void writeEntityToNBT(NBTTagCompound nbt)
@@ -227,11 +227,10 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	public void chargeSpell(Entity entity) {
-		System.out.println((posX - entity.posX) + " " + (posZ - entity.posZ));
-		if(Math.abs(posX - entity.posX) < 3 || Math.abs(posZ - entity.posZ) < 3)
+		if(Math.abs(posX - entity.posX) < 3.5 || Math.abs(posZ - entity.posZ) < 3.5)
 		{
-			entity.motionX *= (posX - entity.posX)*0.1D;
-			entity.motionZ *= (posZ - entity.posZ)*0.1D;
+			entity.motionX *= ((posX - entity.posX) > 0 ? -1: 1)*0.5D;
+			entity.motionZ *= ((posZ - entity.posZ) > 0 ? -1: 1)*0.5D;
 		}
 		else
 		{

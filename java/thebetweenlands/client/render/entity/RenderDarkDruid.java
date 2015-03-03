@@ -36,7 +36,7 @@ public class RenderDarkDruid extends RenderLiving {
 	}
 
 	protected void preRenderCallbackDruid(EntityDarkDruid entity, float f) {
-		if (entity.getTeleported() == 1) {
+		if (entity.getDataWatcher().getWatchableObjectInt(21) == 1) {
 			for (float z = 1F; z <= entity.getEntityDistance() - 6F; z += 1.0F) {
 				GL11.glPushMatrix();
 				GL11.glDepthMask(false);
