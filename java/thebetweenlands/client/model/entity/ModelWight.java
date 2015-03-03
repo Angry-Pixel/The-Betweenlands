@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityWight;
 
 public class ModelWight extends ModelBase
@@ -45,43 +46,35 @@ public class ModelWight extends ModelBase
 		    Leg2.setRotationPoint(-1, 13, 0);
 	}
 
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		super.render(entity, f, f1, f2, f3, f4, f5);
-	    setRotationAngles(f, f1, f2, f3, f4, f5, (EntityWight)entity);
-	    Leg1.render(f5);
-	    Leg2.render(f5);
-	    Arm1.render(f5);
-	    Arm2.render(f5);
-	    TopBody.render(f5);
-	    LowBody.render(f5);
-	    Head.render(f5);
-	    Hood.render(f5);
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
+		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+	    Leg1.render(unitPixel);
+	    Leg2.render(unitPixel);
+	    Arm1.render(unitPixel);
+	    Arm2.render(unitPixel);
+	    TopBody.render(unitPixel);
+	    LowBody.render(unitPixel);
+	    Head.render(unitPixel);
+	    Hood.render(unitPixel);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, EntityWight entity)
-	{
-		/*Head.rotateAngleY = f3 / 12.29578F;
-        Head.rotateAngleX = f4 / 12.29578F;
-		Hood.rotateAngleY = f3 / 12.29578F;
-		Hood.rotateAngleX = f4 / 12.29578F;
-        Arm1.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 0.1F * f1 * 0.5F;
-        Arm2.rotateAngleX = MathHelper.cos(f * 0.6662F) * 0.1F * f1 * 0.5F;
-        Arm1.rotateAngleZ = 0.0F;
-        Arm2.rotateAngleZ = 0.0F;
-        Leg1.rotateAngleX = MathHelper.cos(f * 0.6662F) * 0.1F * f1;
-        Leg2.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 0.1F * f1;
-        Leg1.rotateAngleY = 0.0F;
-        Leg2.rotateAngleY = 0.0F;*/
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+        super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 
-		Arm1.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
-        Arm2.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
-        Arm1.rotateAngleZ = 0.0F;
-        Arm2.rotateAngleZ = 0.0F;
-		Leg1.rotateAngleX = MathHelper.cos(f * 0.6662F) * 1.4F * f1;
-		Leg2.rotateAngleX = MathHelper.cos(f * 0.6662F + (float)Math.PI) * 1.4F * f1;
-		Leg1.rotateAngleY = 0.0F;
-	  	Leg2.rotateAngleY = 0.0F;
+		 EntityWight wight = (EntityWight) entity;
+
+	       	Hood.rotateAngleX = Head.rotateAngleX = wight.getAnimation(); //1F;
+
+       // Hood.rotateAngleX = Head.rotateAngleX = rotationPitch;
+        
+		Arm1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+        Arm2.rotateAngleX = -MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+
+		Leg1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		Leg2.rotateAngleX = -MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
 	}
 
 	public ModelRenderer Arm1;

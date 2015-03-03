@@ -29,10 +29,7 @@ public class RenderWight extends RenderLiving {
 		GL11.glScalef(2F, 2F, 2F);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		if(wight.getDataWatcher().getWatchableObjectByte(20) != 1)
-			GL11.glColor4f(1F, 1F, 1F, 0.5F);
-		else
-			GL11.glColor4f(1F, 1F, 1F, 1F);
+		GL11.glColor4f(1F, 1F, 1F, 1F - wight.getAnimation() * 0.5F);
 	}
 
 	@Override

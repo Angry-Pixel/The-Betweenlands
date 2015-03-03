@@ -4,10 +4,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,25 +22,24 @@ import thebetweenlands.items.SwordBL;
 public class EntityWight extends EntityMob {
 
 	private EntityAIAttackOnCollide meleeAttack = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false);
-	private EntityAINearestAttackableTarget targetPlayer = new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true);
-
+	EntityPlayer previousTarget;
+	
 	public EntityWight(World world) {
 		super(world);
 		setSize(1.5F, 3F);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, meleeAttack);
-		tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D));
-		targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(1, targetPlayer);
-		targetTasks.addTask(0, new EntityAILeapAtTarget(this, 0.5F));
+		tasks.addTask(2, new EntityAIWander(this, 0.5D));
+		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
+		targetTasks.addTask(1, new EntityAILeapAtTarget(this, 0.5F));
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		dataWatcher.addObject(20, new Byte((byte) 0));
+		dataWatcher.addObject(21, 1F);
 	}
 
 	@Override
@@ -56,7 +53,7 @@ public class EntityWight extends EntityMob {
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(12.0D);
 	}
 
 	@Override
@@ -85,23 +82,19 @@ public class EntityWight extends EntityMob {
 
 	@Override
 	public void onUpdate() {
-		if(getAttackTarget() != null && getAttackTarget() instanceof EntityPlayer) {
-			if(getAttackTarget().isSneaking()) {
-				setAttackTarget(null);
-				tasks.removeTask(meleeAttack);
-				tasks.removeTask(targetPlayer);
-				setBoundingBox(false);
-				}
-			else {
-				tasks.addTask(1, meleeAttack);
-				targetTasks.addTask(1, targetPlayer);
-				setBoundingBox(true);
-				}
-			}
+		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 12.0D);
 
-		if (!worldObj.isRemote && getAttackTarget() != null) {
+		if(target != null && !target.isSneaking())
+			setTargetSpotted(target, true);
+
+		if(target != null && target != previousTarget && target.isSneaking())
+			setTargetSpotted(target, false);
+
+		if(target == null && previousTarget != null)
+			setTargetSpotted(target, false);
+
+		if (!worldObj.isRemote && getAttackTarget() != null)
 			dataWatcher.updateObject(20, Byte.valueOf((byte) 1));
-		}
 
 		if (!worldObj.isRemote && getAttackTarget() == null)
 			dataWatcher.updateObject(20, Byte.valueOf((byte) 0));
@@ -109,10 +102,31 @@ public class EntityWight extends EntityMob {
 		super.onUpdate();
 	}
 
-	private void setBoundingBox(boolean state) {
-		if(state) {
-			boundingBox.maxY = boundingBox.minY;
+	private void setTargetSpotted(EntityPlayer target, boolean hasBeenSeen) {
+		if (hasBeenSeen) {
+			tasks.addTask(1, meleeAttack);
+			setAttackTarget(target);
+			previousTarget = target;
+			if (getAnimation() > 0)
+				setAnimation(getAnimation() - 0.1F);
+			
+		} else {
+			setAttackTarget(null);
+			if (getAnimation() < 1)
+				setAnimation(getAnimation() + 0.1F);
+			tasks.removeTask(meleeAttack);
+			if (getAnimation() == 0) {
+				previousTarget = null;
+			}	
 		}
+	}
+
+	private void setAnimation(float progress) {
+		dataWatcher.updateObject(21, progress);	
+	}
+
+	public float getAnimation() {
+		return dataWatcher.getWatchableObjectFloat(21);
 	}
 
 	@Override
