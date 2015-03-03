@@ -41,6 +41,14 @@ public class TheBetweenlands
     @Instance(ModInfo.ID)
     public static TheBetweenlands instance;
 
+    /**
+     * True for debug mode
+     * Keys:
+     * - F: Fullbright
+     * - C: Fast flight
+     */
+    public static boolean DEBUG = true;
+    
     @EventHandler
     public static void preInit(FMLPreInitializationEvent event) {
 
@@ -72,6 +80,7 @@ public class TheBetweenlands
         proxy.registerTileEntities();
         proxy.registerRenderInformation();
         FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(GenericListener.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
