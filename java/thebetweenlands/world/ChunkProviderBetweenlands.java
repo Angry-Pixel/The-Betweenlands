@@ -423,7 +423,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                //The current biome
 		                BiomeGenBase currentBiome = this.biomesForGeneration[bxo + 2 + (bzo + 2) * 10];
 		                float currentBiomeRootHeight = currentBiome.rootHeight;
-		                if(currentBiome instanceof BiomeGenBaseBetweenlands) {
+		                /*if(currentBiome instanceof BiomeGenBaseBetweenlands) {
 		                	//TODO
 		                	if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)currentBiome))) {
 		                		this.biomeGenList.add(((BiomeGenBaseBetweenlands)currentBiome));
@@ -435,7 +435,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                	float heightVar = (float) ((BiomeGenBaseBetweenlands)currentBiome).getHeightVariation(x+(bxo+2)*4, z+(bzo+2)*4) / 128.0f;
 		                	int currentBiomeRootHeightI = ((BiomeGenBaseBetweenlands)currentBiome).getRootHeight(x+(bxo+2)*4, z+(bzo+2)*4);
 		                	currentBiomeRootHeight = ((float) currentBiomeRootHeightI / 128.0f) * 4.0f - 2.0f;
-		                }
+		                }*/
 		                //Gets the biomes in a 5x5 area around the current XZ stack to average the height
 		                for( int sbbxo = -2; sbbxo <= 2; ++sbbxo ) {
 		                    for( int sbbzo = -2; sbbzo <= 2; ++sbbzo ) {
@@ -443,7 +443,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 		                        float surroundingBiomeRootHeight = surroundingBiome.rootHeight;
 		                        float surroundingBiomeHeightVariation = surroundingBiome.heightVariation;
-		                        if(surroundingBiome instanceof BiomeGenBaseBetweenlands) {
+		                        /*if(surroundingBiome instanceof BiomeGenBaseBetweenlands) {
 		                        	//TODO
 		                        	if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)surroundingBiome))) {
 		                        		this.biomeGenList.add(((BiomeGenBaseBetweenlands)surroundingBiome));
@@ -455,7 +455,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                        	surroundingBiomeHeightVariation = (float) ((BiomeGenBaseBetweenlands)surroundingBiome).getHeightVariation(x+(bxo+sbbxo+2)*4, z+(bzo+sbbzo+2)*4) / 128.0f;
 		                        	int surroundingBiomeRootHeightI = ((BiomeGenBaseBetweenlands)currentBiome).getRootHeight(x+(bxo+sbbxo+2)*4, z+(bzo+sbbzo+2)*4);
 		                        	surroundingBiomeRootHeight = ((float) surroundingBiomeRootHeightI / 128.0f) * 4.0f - 2.0f;
-		                        }
+		                        }*/
 
 		                        //System.out.println(surroundingBiome.biomeName);
 
@@ -465,8 +465,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                        //    f3 = 1.0F + f3 * 2.0F;
 		                        //    f4 = 1.0F + f4 * 4.0F;
 		                        //}
-
-
 
 		                        float heightGradient = this.parabolicField[sbbxo + 2 + (sbbzo + 2) * 5] / (surroundingBiomeRootHeight + 2.0F);
 

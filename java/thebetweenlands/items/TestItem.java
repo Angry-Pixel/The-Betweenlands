@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 
 public class TestItem
         extends ItemSword
@@ -28,7 +28,7 @@ public class TestItem
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if( !world.isRemote && player.isSneaking() ) {
-            new WorldGenWeedWoodTree().generate(world, rand, x, y + 1, z);
+            new WorldGenGiantTree().generate(world, rand, x, y + 1, z);
             return true;
         }
         return false;
