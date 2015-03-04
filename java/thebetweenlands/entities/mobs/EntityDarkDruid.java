@@ -29,7 +29,7 @@ public class EntityDarkDruid extends EntityMob {
 	private int attackCounter;
 	private byte isCasting;
 	private int teleportDelay;
-	private int resetTrail = 40;
+	private int resetTrail = 30;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 
@@ -76,31 +76,34 @@ public class EntityDarkDruid extends EntityMob {
 				setAttackTarget(null);
 		}
 
-		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 81F) {
-			if (attackCounter == 0) {
-				attackCounter++;
-				tasks.removeTask(meleeAI);
-			} else if (attackCounter < attackTimer) {
-				attackCounter++;
-				isCasting = 1;
-				chargeSpell(getAttackTarget());
-			}
-			if (attackCounter >= attackTimer) {
+		if (worldObj.isRemote) {
+			if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 100F) {
+				if (attackCounter == 0) {
+					attackCounter++;
+					tasks.removeTask(meleeAI);
+				} else if (attackCounter < attackTimer) {
+					attackCounter++;
+					isCasting = 1;
+					chargeSpell(getAttackTarget());
+				}
+				if (attackCounter >= attackTimer) {
+					attackCounter = 0;
+					isCasting = 0;
+					castSpell(getAttackTarget());
+					tasks.addTask(2, meleeAI);
+				}
+			} else {
 				attackCounter = 0;
 				isCasting = 0;
-				castSpell(getAttackTarget());
-				tasks.addTask(2, meleeAI);
 			}
-		} else {
-			attackCounter = 0;
-			isCasting = 0;
 		}
 
 		if (getAttackTarget() != null)
 			faceEntity(getAttackTarget(), 100.0F, 100.0F);
 
-		if (worldObj.isRemote && isCasting == 1) spawnParticles();
-		if (!worldObj.isRemote) dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
+		if (worldObj.isRemote && isCasting == 1)
+			spawnParticles();
+		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
 
 		if (!worldObj.isRemote && isEntityAlive() && getAttackTarget() != null)
 			if (getAttackTarget().getDistanceSqToEntity(this) > 6.0D && isCasting == 0 && teleportDelay++ >= 20 && getAttackTarget().onGround) {
@@ -110,10 +113,11 @@ public class EntityDarkDruid extends EntityMob {
 				resetTrail = 40;
 			}
 
-		if (!worldObj.isRemote && dataWatcher.getWatchableObjectInt(21) == 1 && resetTrail > 0) resetTrail--;
+		if (!worldObj.isRemote && dataWatcher.getWatchableObjectInt(21) == 1 && resetTrail > 0)
+			resetTrail--;
 		if (!worldObj.isRemote && dataWatcher.getWatchableObjectInt(21) == 1 && resetTrail == 0) {
 			dataWatcher.updateObject(21, 0);
-			resetTrail = 40;
+			resetTrail = 30;
 		}
 	}
 
