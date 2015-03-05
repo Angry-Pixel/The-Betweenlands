@@ -39,15 +39,22 @@ public class WorldGenGiantTree {
 					if (Math.round(Math.sqrt(dSq)) == radius || Math.round(Math.sqrt(dSq)) <= radius && yy == y + height - 1)
 						world.setBlock(x + i, yy, z + j, bark, 0, 2);
 				}
-
+		/*	TODO Maybe do this?
+			if (yy == y + height/4 * 3 - 4) {
+				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/8 +height/16);
+				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/8 + rand.nextInt(height/16));
+				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/8 + rand.nextInt(height/16));
+				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/8 + rand.nextInt(height/16));
+			}
+		 */
 			if (yy == y + height/4 * 3) {
 				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/3 + rand.nextInt(height/10));
-				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/3+ rand.nextInt(height/10));
-				createBranch(world, rand, x, yy, z + radius + 1, 3, false, height/3+ rand.nextInt(height/10));
-				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/3+ rand.nextInt(height/10));
+				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/3 + rand.nextInt(height/10));
+				createBranch(world, rand, x, yy, z + radius + 1, 3, false, height/3 + rand.nextInt(height/10));
+				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/3 + rand.nextInt(height/10));
 			}
 			if (yy == y + height/4 * 3 + 3) {
-				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/4 + rand.nextInt(height/12));
+				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/4 + rand.nextInt(height/10));
 				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/4 + rand.nextInt(height/10));
 				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/4 + rand.nextInt(height/10));
 				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/4 + rand.nextInt(height/10));
@@ -60,36 +67,12 @@ public class WorldGenGiantTree {
 				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/5 + rand.nextInt(height/15));
 			}
 			if (yy == y + height/4 * 3 + 9) {
-				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/6);
+				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/6 + rand.nextInt(height/15));
 				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/6 + rand.nextInt(height/15));
 				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/6 + rand.nextInt(height/15));
 				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/6 + rand.nextInt(height/15));
 			}
-		/*	
-			if (yy == y + height/2 + 3) {
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 4);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 4);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(2), z + radius + 1, 3, 4);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(2), z - radius - 1, 4, 4);
 
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, 3);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, 3);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, 3);
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, 3);
-			}
-			
-			if (yy == y + height/2 + 6) {
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 2);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 2);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, 2);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, 2);
-
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, 2);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, 2);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, 2);
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, 2);
-			}
-*/
 			if (yy == y + 3) {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(9) + 6);
 				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(9) + 6);
@@ -106,8 +89,7 @@ public class WorldGenGiantTree {
 		return true;
 	}
 
-	private void createSmallBranch(World world, Random rand, int x, int y,
-			int z, int dir, int branchLength) {
+	private void createSmallBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength) {
 		int meta = dir;
 		for (int i = 0; i <= branchLength; ++i) {
 
@@ -169,7 +151,7 @@ public class WorldGenGiantTree {
 						if (world.getBlock(x1, y1, z1) != log)
 							world.setBlock(x1, y1, z1, log);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
-						if (world.getBlock(x1, y1, z1) != log)
+						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) != bark)
 							world.setBlock(x1, y1, z1, leaves, 0, 15);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(2) == 0 && y1 == y)
 						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) == leaves)
@@ -195,7 +177,7 @@ public class WorldGenGiantTree {
 				if (!root) {
 					if (i <= branchLength)
 						addVines(world, rand, x + i, y - 3, z, 2);
-					if (i == branchLength/4*3) {
+					if (i == branchLength/2) {
 						createSmallBranch(world, rand, x + i, y - 1, z + 1, 3, 4);
 						createSmallBranch(world, rand, x + i, y - 1, z - 1, 4, 4);
 					}
@@ -213,7 +195,7 @@ public class WorldGenGiantTree {
 				if (!root) {
 					if (i <= branchLength)
 						addVines(world, rand, x - i, y - 3, z, 8);
-					if (i == branchLength/4*3) {
+					if (i == branchLength/2) {
 						createSmallBranch(world, rand, x - i, y - 1, z + 1, 3, 4);
 						createSmallBranch(world, rand, x - i, y - 1, z - 1, 4, 4);
 					}
@@ -230,7 +212,7 @@ public class WorldGenGiantTree {
 				if (!root) {
 					if (i <= branchLength)
 						addVines(world, rand, x, y - 3, z + i, 4);
-					if (i == branchLength/4*3) {
+					if (i == branchLength/2) {
 						createSmallBranch(world, rand, x + 1, y - 1, z + i, 1, 4);
 						createSmallBranch(world, rand, x - 1, y - 1, z + i, 2, 4);
 					}
@@ -247,7 +229,7 @@ public class WorldGenGiantTree {
 				if (!root) {
 					if (i <= branchLength)
 						addVines(world, rand, x, y - 3, z - i, 1);
-					if (i == branchLength/4*3) {
+					if (i == branchLength/2) {
 						createSmallBranch(world, rand, x + 1, y - 1, z - i, 1, 4);
 						createSmallBranch(world, rand,x - 1, y - 1, z - i, 2, 4);
 					}
