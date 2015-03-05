@@ -25,7 +25,7 @@ public class WorldGenGiantTree {
 					if (!world.isAirBlock(xx, yy, zz))
 						return false;
 		
-		createMainCanopy(world, rand, x, y + height/4 * 3 + 8, z, maxRadius - 1);
+		//createMainCanopy(world, rand, x, y + height/4 * 3 + 8, z, maxRadius - 1);
 		
 		for (int yy = y; yy < y + height; ++yy) {
 			if (yy % 5 == 0 && radius > 2)
@@ -47,23 +47,23 @@ public class WorldGenGiantTree {
 				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/3);
 			}
 			if (yy == y + height/4 * 3 + 3) {
-				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/3 - 3);
-				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/3 - 3);
-				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/3 - 3);
-				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/3 - 3);
+				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/4);
+				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/4);
+				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/4);
+				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/4);
 			}
 			
 			if (yy == y + height/4 * 3 + 6) {
-				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/3 - 6);
-				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/3 - 6);
-				createBranch(world, rand, x, yy, z + radius + 1, 3, false, height/3 - 6);
-				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/3 - 6);
+				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/5);
+				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/5);
+				createBranch(world, rand, x, yy, z + radius + 1, 3, false, height/5);
+				createBranch(world, rand, x, yy, z - radius - 1, 4, false, height/5);
 			}
 			if (yy == y + height/4 * 3 + 9) {
-				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/3 - 9);
-				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/3 - 9);
-				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/3 - 9);
-				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/3 - 9);
+				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/6);
+				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/6);
+				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/6);
+				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/6);
 			}
 		/*	
 			if (yy == y + height/2 + 3) {
