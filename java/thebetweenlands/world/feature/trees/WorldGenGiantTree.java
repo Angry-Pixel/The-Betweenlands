@@ -55,28 +55,28 @@ public class WorldGenGiantTree extends WorldGenerator {
 				if(rand.nextInt(5) == 0) {
 					switch (randomDirection) {
 					case 0:
-						createFungus(world, rand, x + radius + 1, yy, z, rand.nextInt(3) + 2);
+						createFungus(world, rand, x + radius/2 + 1, yy, z, rand.nextInt(3) + 5);
 						break;
 					case 1:
-						createFungus(world, rand, x - radius - 1, yy, z, rand.nextInt(3) + 2);
+						createFungus(world, rand, x - radius/2 - 1, yy, z, rand.nextInt(3) + 5);
 						break;
 					case 2:
-						createFungus(world, rand, x, yy, z + radius + 1, rand.nextInt(3) + 2);
+						createFungus(world, rand, x, yy, z + radius/2 + 1, rand.nextInt(3) + 5);
 						break;
 					case 3:
-						createFungus(world, rand, x, yy, z - radius - 1, rand.nextInt(3) + 2);
+						createFungus(world, rand, x, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
 						break;
 					case 4:
-						createFungus(world, rand, x + radius, yy, z + radius, rand.nextInt(3) + 2);
+						createFungus(world, rand, x + radius/2, yy, z + radius/2, rand.nextInt(3) + 5);
 						break;
 					case 5:
-						createFungus(world, rand, x - radius - 1, yy, z - radius - 1, rand.nextInt(3) + 2);
+						createFungus(world, rand, x - radius/2 - 1, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
 						break;
 					case 6:
-						createFungus(world, rand, x - radius - 1, yy, z + radius + 1, rand.nextInt(3) + 2);
+						createFungus(world, rand, x - radius/2 - 1, yy, z + radius/2 + 1, rand.nextInt(3) + 5);
 						break;
 					case 7:
-						createFungus(world, rand, x + radius + 1, yy, z - radius - 1, rand.nextInt(3) + 2);
+						createFungus(world, rand, x + radius/2 + 1, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
 						break;
 					}
 				}
