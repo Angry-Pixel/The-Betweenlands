@@ -76,7 +76,9 @@ public class BLBlockRegistry
 	// SMALL PLANTS
 
 	// UNDERGROWTH
-
+	public static final Block hanger = new BlockHanger();
+	public static final Block treeFungus = new BlockTreeFungus();
+	
 	// DECORATIONS AND UTILITIES
 	public static final Block weedWoodCraftingTable = new BlockBLWorkbench();
 	

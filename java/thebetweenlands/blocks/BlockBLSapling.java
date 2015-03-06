@@ -16,6 +16,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -96,7 +97,7 @@ public class BlockBLSapling extends BlockSapling {
 
 		if(type.equals("saplingWeedWood")) {
 			System.out.println("Generate Weed Wood Tree");
-			//worldGen = new WorldGenWeedWoodTree();
+			worldGen = new WorldGenWeedWoodTree();
 		}
 		
 		if(type.equals("saplingSapTree")) {
@@ -111,10 +112,10 @@ public class BlockBLSapling extends BlockSapling {
 
 		if (worldGen == null)
 			return;
-		//TODO Add trees for this to all work
-	//	world.setBlockToAir(x, y, z);
-	//	if (!worldGen.generate(world, rand, x, y, z))
-	//		world.setBlock(x, y, z, this);
+
+		world.setBlockToAir(x, y, z);
+		if (!worldGen.generate(world, rand, x, y, z))
+			world.setBlock(x, y, z, this);
 	}
 
 	public boolean isSameSapling(World world, int x, int y, int z, int meta) {

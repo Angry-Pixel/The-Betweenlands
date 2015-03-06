@@ -39,6 +39,9 @@ tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
 tile.thebetweenlands.weedWoodPlanks.name=Weed Wood Planks
 tile.thebetweenlands.weedWoodCraftingTable.name=Weed Wood Crafting Table
 
+tile.thebetweenlands.treeFungus.name=Shelf Fungus
+tile.thebetweenlands.hanger.name=Hanger
+
 # Items
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s

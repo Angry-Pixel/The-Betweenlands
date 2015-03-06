@@ -4,11 +4,12 @@ import java.util.Random;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLLeaves;
 import thebetweenlands.blocks.BlockBLLog;
 
-public class WorldGenWeedWoodTree {
+public class WorldGenWeedWoodTree extends WorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
 

@@ -4,15 +4,20 @@ import java.util.Random;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLLeaves;
 import thebetweenlands.blocks.BlockBLLog;
+import thebetweenlands.blocks.BlockHanger;
+import thebetweenlands.blocks.BlockTreeFungus;
 
-public class WorldGenGiantTree {
+public class WorldGenGiantTree extends WorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedWoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedWood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
+	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
+	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		int radius = rand.nextInt(4) + 8;
@@ -24,8 +29,6 @@ public class WorldGenGiantTree {
 				for (int yy = y + 2; yy < y + height; yy++)
 					if (!world.isAirBlock(xx, yy, zz))
 						return false;
-		
-		createMainCanopy(world, rand, x, y + height, z, height/3 + rand.nextInt(height/10));
 		
 		for (int yy = y; yy < y + height; ++yy) {
 			if (yy % 5 == 0 && radius > 2)
@@ -47,6 +50,38 @@ public class WorldGenGiantTree {
 				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/8 + rand.nextInt(height/16));
 			}
 		 */
+			if (yy >= y + height/4 && yy <= y + height/4 * 3 - 2) {
+				int randomDirection = rand.nextInt(8);
+				if(rand.nextInt(5) == 0) {
+					switch (randomDirection) {
+					case 0:
+						createFungus(world, rand, x + radius + 1, yy, z, rand.nextInt(3) + 2);
+						break;
+					case 1:
+						createFungus(world, rand, x - radius - 1, yy, z, rand.nextInt(3) + 2);
+						break;
+					case 2:
+						createFungus(world, rand, x, yy, z + radius + 1, rand.nextInt(3) + 2);
+						break;
+					case 3:
+						createFungus(world, rand, x, yy, z - radius - 1, rand.nextInt(3) + 2);
+						break;
+					case 4:
+						createFungus(world, rand, x + radius, yy, z + radius, rand.nextInt(3) + 2);
+						break;
+					case 5:
+						createFungus(world, rand, x - radius - 1, yy, z - radius - 1, rand.nextInt(3) + 2);
+						break;
+					case 6:
+						createFungus(world, rand, x - radius - 1, yy, z + radius + 1, rand.nextInt(3) + 2);
+						break;
+					case 7:
+						createFungus(world, rand, x + radius + 1, yy, z - radius - 1, rand.nextInt(3) + 2);
+						break;
+					}
+				}
+			}
+			
 			if (yy == y + height/4 * 3) {
 				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/3 + rand.nextInt(height/10));
 				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/3 + rand.nextInt(height/10));
@@ -86,7 +121,24 @@ public class WorldGenGiantTree {
 			}
 			
 		}
+		createMainCanopy(world, rand, x, y + height, z, height/3 + rand.nextInt(height/10));
 		return true;
+	}
+
+	private void createFungus(World world, Random rand, int x, int y, int z, int radius) {
+		for (int yy = y; yy > y - radius; yy -= 2) {
+			if (radius > 1)
+				--radius;
+
+			for (int i = radius * -1; i <= radius; ++i)
+				for (int j = radius * -1; j <= radius; ++j) {
+					double dSq = i * i + j * j;
+					if (Math.round(Math.sqrt(dSq)) <= radius)
+						if (world.getBlock(x + i, yy, z + j) == Blocks.air)
+							world.setBlock(x + i, yy, z + j, fungus);
+				}
+		}
+
 	}
 
 	private void createSmallBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength) {
@@ -155,8 +207,12 @@ public class WorldGenGiantTree {
 							world.setBlock(x1, y1, z1, leaves, 0, 15);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(2) == 0 && y1 == y)
 						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) == leaves)
-							for (int i = 1; i < 1 + rand.nextInt(3); i++)
+							for (int i = 1; i < 1 + rand.nextInt(3); i++) {
 								world.setBlock(x1, y1 - i, z1, leaves, 0, 15);
+								if(i == 2)
+									addHangers(world, rand, x1, y1 - i - 1, z1);
+								}
+					
 				}
 	}
 
@@ -302,6 +358,17 @@ public class WorldGenGiantTree {
 			for (int yy = y; yy > y - length; --yy)
 				if (world.getBlock(x, yy, z) == Blocks.air)
 					world.setBlock(x, yy, z, Blocks.vine, meta, 2);
+				else
+					break;
+		}
+	}
+	
+	public void addHangers(World world, Random rand, int x, int y, int z) {
+		if (rand.nextInt(4) == 0) {
+			int length = rand.nextInt(10) + 10;
+			for (int yy = y; yy > y - length; --yy)
+				if (world.getBlock(x, yy, z) == Blocks.air)
+					world.setBlock(x, yy, z, hanger);
 				else
 					break;
 		}
