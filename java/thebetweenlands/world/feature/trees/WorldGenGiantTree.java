@@ -353,7 +353,7 @@ public class WorldGenGiantTree extends WorldGenerator {
 	}
 
 	public void addVines(World world, Random rand, int x, int y, int z, int meta) {
-		if (rand.nextInt(8) == 0) {
+		if (rand.nextInt(4) == 0) {
 			int length = rand.nextInt(10) + 10;
 			for (int yy = y; yy > y - length; --yy)
 				if (world.getBlock(x, yy, z) == Blocks.air)
