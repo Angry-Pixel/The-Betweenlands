@@ -20,8 +20,8 @@ public class WorldGenGiantTree extends WorldGenerator {
 	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
-		int radius = rand.nextInt(4) + 8;
-		int height = rand.nextInt(5) + 36;
+		int radius = rand.nextInt(6) + 6;
+		int height = rand.nextInt(20) + 30;
 		int maxRadius = radius + height/3;
 
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
@@ -29,7 +29,7 @@ public class WorldGenGiantTree extends WorldGenerator {
 				for (int yy = y + 2; yy < y + height; yy++)
 					if (!world.isAirBlock(xx, yy, zz))
 						return false;
-		
+
 		for (int yy = y; yy < y + height; ++yy) {
 			if (yy % 5 == 0 && radius > 2)
 				--radius;
@@ -41,47 +41,38 @@ public class WorldGenGiantTree extends WorldGenerator {
 						world.setBlock(x + i, yy, z + j, wood, 0, 2);
 					if (Math.round(Math.sqrt(dSq)) == radius || Math.round(Math.sqrt(dSq)) <= radius && yy == y + height - 1)
 						world.setBlock(x + i, yy, z + j, bark, 0, 2);
-				}
-		/*	TODO Maybe do this?
-			if (yy == y + height/4 * 3 - 4) {
-				createBranch(world, rand, x + radius, yy, z + radius, 5, false, height/8 +height/16);
-				createBranch(world, rand, x - radius - 1, yy, z - radius - 1, 6, false, height/8 + rand.nextInt(height/16));
-				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/8 + rand.nextInt(height/16));
-				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/8 + rand.nextInt(height/16));
-			}
-		 */
-			if (yy >= y + height/4 && yy <= y + height/4 * 3 - 2) {
-				int randomDirection = rand.nextInt(8);
-				if(rand.nextInt(5) == 0) {
-					switch (randomDirection) {
-					case 0:
-						createFungus(world, rand, x + radius/2 + 1, yy, z, rand.nextInt(3) + 5);
-						break;
-					case 1:
-						createFungus(world, rand, x - radius/2 - 1, yy, z, rand.nextInt(3) + 5);
-						break;
-					case 2:
-						createFungus(world, rand, x, yy, z + radius/2 + 1, rand.nextInt(3) + 5);
-						break;
-					case 3:
-						createFungus(world, rand, x, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
-						break;
-					case 4:
-						createFungus(world, rand, x + radius/2, yy, z + radius/2, rand.nextInt(3) + 5);
-						break;
-					case 5:
-						createFungus(world, rand, x - radius/2 - 1, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
-						break;
-					case 6:
-						createFungus(world, rand, x - radius/2 - 1, yy, z + radius/2 + 1, rand.nextInt(3) + 5);
-						break;
-					case 7:
-						createFungus(world, rand, x + radius/2 + 1, yy, z - radius/2 - 1, rand.nextInt(3) + 5);
-						break;
+					if (Math.round(Math.sqrt(dSq)) == radius && yy % 5 == 0 && yy >= y + height/4 && yy <= y + height/4 * 3 - 3) {
+						if(rand.nextInt(32) == 0) {
+							int randomDirection = rand.nextInt(8);
+							switch (randomDirection) {
+							case 0:
+								createFungus(world, rand, x - 2 - radius/2, yy, z, rand.nextInt(3) + radius);
+								break;
+							case 1:
+								createFungus(world, rand, x + 2 + radius/2, yy, z, rand.nextInt(3) + radius);
+								break;
+							case 2:
+								createFungus(world, rand, x, yy, z - 2 - radius/2, rand.nextInt(3) + radius);
+								break;
+							case 3:
+								createFungus(world, rand, x, yy, z + 2  + radius/2, rand.nextInt(3) + radius);
+								break;
+							case 4:
+								createFungus(world, rand, x - 2 - radius/2, yy, z - 2 - radius/2, rand.nextInt(3) + radius);
+								break;
+							case 5:
+								createFungus(world, rand, x + 2  + radius/2, yy, z + 2 + radius/2, rand.nextInt(3) + radius);
+								break;
+							case 6:
+								createFungus(world, rand, x + 2 + radius/2, yy, z - 2 - radius/2, rand.nextInt(3) + radius);
+								break;
+							case 7:
+								createFungus(world, rand, x - 2 - radius/2, yy, z + 2 + radius/2, rand.nextInt(3) + radius);
+								break;
+							}
+						}
 					}
 				}
-			}
-			
 			if (yy == y + height/4 * 3) {
 				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/3 + rand.nextInt(height/10));
 				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/3 + rand.nextInt(height/10));
@@ -94,7 +85,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/4 + rand.nextInt(height/10));
 				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/4 + rand.nextInt(height/10));
 			}
-			
 			if (yy == y + height/4 * 3 + 6) {
 				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/5 + rand.nextInt(height/15));
 				createBranch(world, rand, x - radius - 1, yy, z, 2, false, height/5 + rand.nextInt(height/15));
@@ -107,7 +97,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 				createBranch(world, rand, x - radius - 1, yy, z + radius + 1, 7, false, height/6 + rand.nextInt(height/15));
 				createBranch(world, rand, x + radius + 1, yy, z - radius - 1, 8, false, height/6 + rand.nextInt(height/15));
 			}
-
 			if (yy == y + 3) {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(9) + 6);
 				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(9) + 6);
@@ -119,7 +108,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 				createBranch(world, rand, x - radius, yy - rand.nextInt(3), z + radius - 1, 7, true, rand.nextInt(9) + 6);
 				createBranch(world, rand, x + radius, yy - rand.nextInt(3), z - radius + 1, 8, true, rand.nextInt(9) + 6);
 			}
-			
 		}
 		createMainCanopy(world, rand, x, y + height, z, height/3 + rand.nextInt(height/10));
 		return true;
@@ -138,7 +126,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 							world.setBlock(x + i, yy, z + j, fungus);
 				}
 		}
-
 	}
 
 	private void createSmallBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength) {
@@ -190,7 +177,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 				if (i == branchLength)
 					createMainCanopy(world, rand, x + i - 1, y, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 4));
 			}
-
 		}
 	}
 
@@ -212,7 +198,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 								if(i == 2)
 									addHangers(world, rand, x1, y1 - i - 1, z1);
 								}
-					
 				}
 	}
 
@@ -227,6 +212,7 @@ public class WorldGenGiantTree extends WorldGenerator {
 
 			if (dir == 1) {
 				world.setBlock(x + i, y, z, bark);
+				world.setBlock(x + i, y - 1, z, wood);
 				world.setBlock(x + i, y - 1, z + 1, bark);
 				world.setBlock(x + i, y - 1, z - 1, bark);
 				world.setBlock(x + i, y - 2, z, bark);
@@ -242,9 +228,9 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x + i, y, z, branchLength / 2 + rand.nextInt(branchLength / 4));
 				}
 			}
-			
 			if (dir == 2) {
 				world.setBlock(x - i, y, z, bark);
+				world.setBlock(x - i, y - 1, z, wood);
 				world.setBlock(x - i, y - 1, z + 1, bark);
 				world.setBlock(x - i, y - 1, z - 1, bark);
 				world.setBlock(x - i, y - 2, z, bark);
@@ -259,9 +245,9 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x - i, y, z, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 3) {
 				world.setBlock(x, y, z + i, bark);
+				world.setBlock(x, y - 1, z + i, wood);
 				world.setBlock(x + 1, y - 1, z + i, bark);
 				world.setBlock(x - 1, y - 1, z + i, bark);
 				world.setBlock(x, y - 2, z + i, bark);
@@ -276,9 +262,9 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x, y, z + i, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 4) {
 				world.setBlock(x, y, z - i, bark);
+				world.setBlock(x, y - 1, z - i, wood);
 				world.setBlock(x + 1, y - 1, z - i, bark);
 				world.setBlock(x - 1, y - 1, z - i, bark);
 				world.setBlock(x, y - 2, z - i, bark);
@@ -293,7 +279,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x, y, z - i, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 5) {
 				world.setBlock(x + i - 1, y, z + i - 1, bark);
 				world.setBlock(x + i - 1, y - 1, z + i - 1, bark);
@@ -307,7 +292,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x + i - 1, y, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 6) {
 				world.setBlock(x - i + 1, y, z - i + 1, bark);
 				world.setBlock(x - i + 1, y - 1, z - i + 1, bark);
@@ -321,7 +305,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x - i + 1, y, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 7) {
 				world.setBlock(x - i + 1, y, z + i - 1, bark);
 				world.setBlock(x - i + 1, y - 1, z + i - 1, bark);
@@ -335,7 +318,6 @@ public class WorldGenGiantTree extends WorldGenerator {
 						createMainCanopy(world, rand, x - i + 1, y, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
-
 			if (dir == 8) {
 				world.setBlock(x + i - 1, y, z - i + 1, bark);
 				world.setBlock(x + i - 1, y - 1, z - i + 1, bark);
@@ -362,7 +344,7 @@ public class WorldGenGiantTree extends WorldGenerator {
 					break;
 		}
 	}
-	
+
 	public void addHangers(World world, Random rand, int x, int y, int z) {
 		if (rand.nextInt(4) == 0) {
 			int length = rand.nextInt(10) + 10;
