@@ -38,6 +38,7 @@ tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
 
 tile.thebetweenlands.weedWoodPlanks.name=Weed Wood Planks
 tile.thebetweenlands.weedWoodCraftingTable.name=Weed Wood Crafting Table
+tile.thebetweenlands.weedWoodChest.name=Weed Wood Chest
 
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
@@ -103,3 +104,5 @@ itemGroup.thebetweenlands.special=The Betweenlands Specials
 itemGroup.thebetweenlands.plants=The Betweenlands Plants
 
 # Containers
+container.weedWoodChest=Weed Wood Chest
+container.weedWoodChestDouble=Large Weed Wood Chest

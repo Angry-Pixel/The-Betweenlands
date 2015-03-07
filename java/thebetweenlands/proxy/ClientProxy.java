@@ -16,7 +16,9 @@ import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
+import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntitySludge;
@@ -26,6 +28,7 @@ import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -44,9 +47,12 @@ public class ClientProxy extends CommonProxy
         
         //Tile Entities
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
-
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
+        
         //Item Entities
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
+    	MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedWoodChest), new ItemWeedWoodChestRenderer());
+		
     }
 
     @Override

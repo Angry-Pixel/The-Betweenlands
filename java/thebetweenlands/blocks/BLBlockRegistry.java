@@ -81,6 +81,7 @@ public class BLBlockRegistry
 	
 	// DECORATIONS AND UTILITIES
 	public static final Block weedWoodCraftingTable = new BlockBLWorkbench();
+	public static final Block weedWoodChest = new BlockWeedWoodChest();
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();

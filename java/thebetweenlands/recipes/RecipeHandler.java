@@ -60,7 +60,8 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWood));
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK, 4), "p", "p", 'p', new ItemStack(BLBlockRegistry.weedWoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedWoodCraftingTable), "xx", "xx", 'x', BLBlockRegistry.weedWoodPlanks);
-		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedWoodChest), "xxx", "x x", "xxx", 'x', BLBlockRegistry.weedWoodPlanks);
+
 		// Special Items
 	}
 
