@@ -15,7 +15,7 @@ public class BlockDampTorch extends BlockTorch {
         setLightLevel(0);
         setStepSound(soundTypeWood);
         setBlockName("thebetweenlands.dampTorch");
-        setBlockTextureName("torch_on");
+        setBlockTextureName("thebetweenlands:dampTorch");
         setCreativeTab(ModCreativeTabs.blocks);
         setTickRandomly(true);
     }
