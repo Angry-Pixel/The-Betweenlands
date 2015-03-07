@@ -43,6 +43,7 @@ public class BLBlockRegistry
 	public static final Block swampWater = new BlockSwampWater();
 	public static final Block algae = new BlockAlgae();
 	public static final Block sulfurTorch = new BlockSulfurTorch();
+	public static final Block dampTorch = new BlockDampTorch();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
