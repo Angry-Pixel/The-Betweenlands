@@ -28,12 +28,12 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 public class BlockWeedWoodChest extends BlockContainer {
 
 	public BlockWeedWoodChest() {
-		super(Material.rock);
-		setHardness(2.0F);
-		setHarvestLevel("pickaxe", 0);
+		super(Material.wood);
+		setHardness(2.5F);
+		setStepSound(soundTypeWood);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedWoodChest");
-		setBlockTextureName("thebetweenlands:weedWoodChest");
+		setBlockTextureName("thebetweenlands:weedWoodPlanks");
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 	}
 
