@@ -9,6 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockDampTorch extends BlockTorch {
+	
     public BlockDampTorch() {
         super();
         setHardness(0.0F);
@@ -21,6 +22,7 @@ public class BlockDampTorch extends BlockTorch {
     }
 
     @SideOnly(Side.CLIENT)
+	@Override
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
         int meta = world.getBlockMetadata(x, y, z);
         double posX = (double)((float)x + 0.5F);
@@ -43,5 +45,5 @@ public class BlockDampTorch extends BlockTorch {
         else
     		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
     }
- 
+
 }

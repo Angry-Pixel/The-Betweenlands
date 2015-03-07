@@ -1,5 +1,6 @@
 package thebetweenlands.recipes;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -67,6 +68,7 @@ public class RecipeHandler {
 
 	private static void registerSmelting() {
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.octineOre), ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 0.7F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dampTorch), new ItemStack(Blocks.torch), 0F);
 	}
 
 	private static void registerOreDictionary() {

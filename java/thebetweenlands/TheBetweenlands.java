@@ -8,6 +8,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.listener.DebugListener;
 import thebetweenlands.event.listener.GenericListener;
 import thebetweenlands.event.player.OctineArmorHandler;
+import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.handler.AltarPacketHandler;
@@ -84,6 +85,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
+		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 
 		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugListener.INSTANCE);
