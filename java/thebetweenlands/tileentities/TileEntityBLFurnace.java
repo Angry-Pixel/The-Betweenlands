@@ -85,7 +85,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 
 	@Override
     public String getInventoryName() {
-        return hasCustomInventoryName() ? customName : "container.furnace";
+        return hasCustomInventoryName() ? customName : "container.furnaceBL";
     }
 
 	@Override

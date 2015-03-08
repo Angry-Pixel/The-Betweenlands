@@ -43,6 +43,8 @@ tile.thebetweenlands.weedWoodChest.name=Weed Wood Chest
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
 
+tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
+
 # Items
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s
@@ -106,3 +108,4 @@ itemGroup.thebetweenlands.plants=The Betweenlands Plants
 # Containers
 container.weedWoodChest=Weed Wood Chest
 container.weedWoodChestDouble=Large Weed Wood Chest
+container.furnaceBL=Sulfur Furnace
