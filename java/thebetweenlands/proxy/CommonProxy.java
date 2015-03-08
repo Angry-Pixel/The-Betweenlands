@@ -6,11 +6,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BlockWeedWoodChest;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
+import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
 import thebetweenlands.inventory.gui.GuiBLCrafting;
+import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -21,11 +24,13 @@ public class CommonProxy
 {
     public static final int GUI_DRUID_ALTAR = 1;
     public static final int GUI_WEEDWOOD_CRAFT = 2;
-    public static final int GUI_WEEDWOOD_CHEST= 3;
+    public static final int GUI_WEEDWOOD_CHEST = 3;
+    public static final int GUI_BL_FURNACE = 4;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
         registerTileEntity(TileEntityWeedWoodChest.class, "weedWoodChest");
+        registerTileEntity(TileEntityBLFurnace.class, "furnaceBL");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
@@ -56,6 +61,12 @@ public class CommonProxy
         	IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
         	return new ContainerWeedWoodChest(player.inventory, inventory);
         }
+        
+		else if (ID == GUI_BL_FURNACE) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLFurnace)
+				return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+		}
 
         return null;
     }
@@ -76,6 +87,12 @@ public class CommonProxy
         	IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
         	return new GuiWeedWoodChest(player.inventory, inventory);
         }
+        
+		else if (ID == GUI_BL_FURNACE) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLFurnace)
+				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+		}
 
         return null;
     }

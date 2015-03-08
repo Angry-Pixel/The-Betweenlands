@@ -83,6 +83,8 @@ public class BLBlockRegistry
 	// DECORATIONS AND UTILITIES
 	public static final Block weedWoodCraftingTable = new BlockBLWorkbench();
 	public static final Block weedWoodChest = new BlockWeedWoodChest();
+	public static final Block furnaceBL = new BlockBLFurnace(false).setBlockName("thebetweenlands.furnaceBL");
+	public static final Block furnaceBLLit = new BlockBLFurnace(true).setBlockName("thebetweenlands.furnaceBLLit").setLightLevel(0.875F);  
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
