@@ -2,28 +2,74 @@ package thebetweenlands.world.feature.trees;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLLeaves;
 import thebetweenlands.blocks.BlockBLLog;
 import thebetweenlands.blocks.BlockHanger;
 import thebetweenlands.blocks.BlockTreeFungus;
+import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.biomes.base.BLBiomeRegistry;
+import cpw.mods.fml.common.IWorldGenerator;
 
-public class WorldGenGiantTree extends WorldGenerator {
+public class WorldGenGiantTree implements IWorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedWoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedWood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
 	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
 	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
+	
+	private int height = -1;
+	private int radius = -1;
+	private int maxRadius = -1;
+	
+	public WorldGenGiantTree() {
 
-	public boolean generate(World world, Random rand, int x, int y, int z) {
-		int radius = rand.nextInt(6) + 6;
-		int height = rand.nextInt(20) + 30;
-		int maxRadius = radius + height/3;
+	}
+	
+    @Override
+    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+        if( world.provider.dimensionId == ConfigHandler.DIMENSION_ID ) {
+            generate(world, random, chunkX * 16, chunkZ * 16);
+        }
+    }
+	
+    private void generate(World world, Random random, int x, int z) {
+    	int newY = 82; // this looks like island height
+        BiomeGenBase biomeBase = world.getBiomeGenForCoords(x, z);
+        if(validBiomeForGen(biomeBase)) {
+        	//for(int newY = 20 ; newY <= 128; ++newY ) {
+            for(int newX = x - 3; newX <= x + 3; ++newX ) { //magic numbers for testing
+                for(int newZ = z - 3; newZ <= z + 3; ++newZ ) {
+                    Block block = world.getBlock(newX, newY, newZ);
+                    if(block != null && block == biomeBase.topBlock ) {
+                        if(random.nextInt(ConfigHandler.GIANT_TREE_DENSITY) == 0 ) { //config option
+                            generateStructure(world, random, x, newY, z);
+                            break;
+                        }
+                    }
+                }
+            }
+       // }
+        }
+    }
+	
 
+	private boolean validBiomeForGen(BiomeGenBase biomeBase) {
+		return biomeBase == BLBiomeRegistry.swampLands || biomeBase == BLBiomeRegistry.coarseIslands || biomeBase == BLBiomeRegistry.patchyIslands;
+	}
+
+	public boolean generateStructure(World world, Random rand, int x, int y, int z) {
+		
+		radius = rand.nextInt(6) + 6;
+		height = rand.nextInt(20) + 30;
+		maxRadius = radius + height / 3;
+	
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
@@ -355,4 +401,5 @@ public class WorldGenGiantTree extends WorldGenerator {
 					break;
 		}
 	}
+
 }

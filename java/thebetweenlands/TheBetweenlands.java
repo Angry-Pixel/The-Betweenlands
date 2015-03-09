@@ -21,6 +21,7 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
+import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -65,6 +66,7 @@ public class TheBetweenlands
 		BLBiomeRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
 		//TODO: Just temporary to test some stuff
