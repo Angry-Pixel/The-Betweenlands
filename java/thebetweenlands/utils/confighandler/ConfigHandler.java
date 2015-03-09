@@ -17,6 +17,9 @@ public class ConfigHandler
 	public static int DIMENSION_ID;
 	public static int DRUID_CIRCLE_FREQUENCY;
 	public static int BIOME_ID_SWAMPLANDS;
+	public static int BIOME_ID_COARSE_ISLANDS;
+	public static int BIOME_ID_DEEP_WATER;
+	public static int BIOME_ID_PATCHY_ISLANDS;
 	public static int DIMENSION_BRIGHTNESS;
 
 	public void loadConfig(FMLPreInitializationEvent event) {
@@ -29,6 +32,9 @@ public class ConfigHandler
 		DIMENSION_ID = config.get(usedCategories[0], "The Betweenlands Dimension ID", 20).getInt(20);
 		DRUID_CIRCLE_FREQUENCY = config.get(usedCategories[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 10).getInt(10);
 		BIOME_ID_SWAMPLANDS = config.get(usedCategories[0], "Swamplands Biome ID", 50).getInt(50);
+		BIOME_ID_COARSE_ISLANDS = config.get(usedCategories[0], "Coarse Islands Biome ID", 51).getInt(51);
+		BIOME_ID_DEEP_WATER = config.get(usedCategories[0], "Deep Water Biome ID", 52).getInt(52);
+		BIOME_ID_PATCHY_ISLANDS = config.get(usedCategories[0], "Patchy Islands Biome ID", 53).getInt(53);
 		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 10).setMinValue(0).setMaxValue(10).getInt(10);
 
 		if( config.hasChanged() ) {
