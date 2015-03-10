@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderSludge;
@@ -32,8 +33,23 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
-public class ClientProxy extends CommonProxy
-{
+public class ClientProxy extends CommonProxy {
+	
+	public enum BlockRenderIDs {
+
+		DOUBLE_PLANTS;
+
+		private final int ID;
+
+		BlockRenderIDs() {
+			ID = RenderingRegistry.getNextAvailableRenderId();
+		}
+
+		public int id() {
+			return ID;
+		}
+	}
+	
     @Override
     public void registerRenderInformation() {
 
@@ -53,6 +69,8 @@ public class ClientProxy extends CommonProxy
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
     	MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedWoodChest), new ItemWeedWoodChestRenderer());
 		
+    	//Blocks
+    	RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
     }
 
     @Override

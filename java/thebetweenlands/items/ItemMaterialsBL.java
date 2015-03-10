@@ -101,7 +101,8 @@ public class ItemMaterialsBL extends Item
 		VALONITE_SHARD("valoniteShard"),
 		WEEDWOOD_SICK("weedWoodStick"),
 		WICK("wick"),
-		WIGHT_HEART("wightHeart");
+		WIGHT_HEART("wightHeart"),
+		WEEPING_BLUE_PETAL("weepingBluePetal");
 
 		public final String iconName;
 

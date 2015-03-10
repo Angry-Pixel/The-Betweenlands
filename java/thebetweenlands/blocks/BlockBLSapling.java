@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -62,7 +63,7 @@ public class BlockBLSapling extends BlockSapling {
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		Block soil = world.getBlock(x, y - 1, z);
-		return soil != null && soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this);
+		return soil != null && soil.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, this) || soil != null && canPlaceBlockOn(soil);
 	}
 
 	@Override
@@ -74,6 +75,11 @@ public class BlockBLSapling extends BlockSapling {
 				growTree(world, x, y, z, rand);
 		}
 	}
+	
+	@Override	
+    protected boolean canPlaceBlockOn(Block block) {
+        return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass;
+    }
 
 	@Override
 	public void func_149879_c(World world, int x, int y, int z, Random rand) {
