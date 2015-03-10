@@ -33,29 +33,27 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	}
 	
     @Override
-    public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-        if( world.provider.dimensionId == ConfigHandler.DIMENSION_ID ) {
-            generate(world, random, chunkX * 16, chunkZ * 16);
+    public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+        if(world.provider.dimensionId == ConfigHandler.DIMENSION_ID) {
+            generate(world, rand, chunkX * 16, chunkZ * 16);
         }
     }
 	
-    private void generate(World world, Random random, int x, int z) {
-    	int newY = 82; // this looks like island height
+    private void generate(World world, Random rand, int x, int z) {
+    	int newY = 82 + rand.nextInt(5);
         BiomeGenBase biomeBase = world.getBiomeGenForCoords(x, z);
         if(validBiomeForGen(biomeBase)) {
-        	//for(int newY = 20 ; newY <= 128; ++newY ) {
-            for(int newX = x - 3; newX <= x + 3; ++newX ) { //magic numbers for testing
-                for(int newZ = z - 3; newZ <= z + 3; ++newZ ) {
+            for(int newX = x - 5; newX <= x + 5; ++newX) { //magic numbers for testing
+                for(int newZ = z - 5; newZ <= z + 5; ++newZ) {
                     Block block = world.getBlock(newX, newY, newZ);
-                    if(block != null && block == biomeBase.topBlock ) {
-                        if(random.nextInt(ConfigHandler.GIANT_TREE_DENSITY) == 0 ) { //config option
-                            generateStructure(world, random, x, newY, z);
+                    if(block != null && block == biomeBase.topBlock) {
+                        if(rand.nextInt(ConfigHandler.GIANT_TREE_DENSITY) == 0 ) { //config option
+                            generateTree(world, rand, x, newY, z);
                             break;
                         }
                     }
                 }
             }
-       // }
         }
     }
 	
@@ -64,7 +62,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 		return biomeBase == BLBiomeRegistry.swampLands || biomeBase == BLBiomeRegistry.coarseIslands || biomeBase == BLBiomeRegistry.patchyIslands;
 	}
 
-	public boolean generateStructure(World world, Random rand, int x, int y, int z) {
+	public boolean generateTree(World world, Random rand, int x, int y, int z) {
 		
 		radius = rand.nextInt(6) + 6;
 		height = rand.nextInt(20) + 30;
@@ -156,6 +154,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 			}
 		}
 		createMainCanopy(world, rand, x, y + height, z, height/3 + rand.nextInt(height/10));
+		System.out.println("Tree at: "+ x + " : " + y + " : " + z);
 		return true;
 	}
 
