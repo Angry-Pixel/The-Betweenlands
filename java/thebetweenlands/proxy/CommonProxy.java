@@ -6,13 +6,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BlockWeedWoodChest;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
+import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
 import thebetweenlands.inventory.gui.GuiBLCrafting;
+import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
@@ -26,11 +29,13 @@ public class CommonProxy
     public static final int GUI_WEEDWOOD_CRAFT = 2;
     public static final int GUI_WEEDWOOD_CHEST = 3;
     public static final int GUI_BL_FURNACE = 4;
+    public static final int GUI_BL_DUAL_FURNACE = 5;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
         registerTileEntity(TileEntityWeedWoodChest.class, "weedWoodChest");
         registerTileEntity(TileEntityBLFurnace.class, "furnaceBL");
+        registerTileEntity(TileEntityBLDualFurnace.class, "dualFurnaceBL");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
@@ -67,6 +72,12 @@ public class CommonProxy
 			if (tileentity instanceof TileEntityBLFurnace)
 				return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
 		}
+        
+		else if (ID == GUI_BL_DUAL_FURNACE) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLDualFurnace)
+				return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+		}
 
         return null;
     }
@@ -92,6 +103,12 @@ public class CommonProxy
 			TileEntity tileentity = world.getTileEntity(x, y, z);
 			if (tileentity instanceof TileEntityBLFurnace)
 				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+		}
+        
+		else if (ID == GUI_BL_DUAL_FURNACE) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLDualFurnace)
+				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
 		}
 
         return null;

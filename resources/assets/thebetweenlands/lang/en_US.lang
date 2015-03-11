@@ -48,6 +48,7 @@ tile.thebetweenlands.weepingBlue.name=Weeping Blue
 tile.thebetweenlands.swampReed.name=Swamp Reed
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
+tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
 
 # Items
 item.thebetweenlands.testItem.name=Test Item
@@ -113,3 +114,4 @@ itemGroup.thebetweenlands.plants=The Betweenlands Plants
 container.weedWoodChest=Weed Wood Chest
 container.weedWoodChestDouble=Large Weed Wood Chest
 container.furnaceBL=Sulfur Furnace
+container.dualFurnaceBL=Dual Sulfur Furnace
