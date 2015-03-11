@@ -26,13 +26,13 @@ public class ContainerBLDualFurnace extends Container {
 
     public ContainerBLDualFurnace(InventoryPlayer inventory, TileEntityBLDualFurnace tile) {
         tileFurnace = tile;
-        addSlotToContainer(new Slot(tile, 0, 56, 17));
-        addSlotToContainer(new Slot(tile, 1, 56, 53));
-        addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 35));
+        addSlotToContainer(new Slot(tile, 0, 56, 21));
+        addSlotToContainer(new Slot(tile, 1, 56, 57));
+        addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 39));
         
-        addSlotToContainer(new Slot(tile, 3, 56, 96));
-        addSlotToContainer(new Slot(tile, 4, 56, 132));
-        addSlotToContainer(new SlotFurnace(inventory.player, tile, 5, 116, 114));
+        addSlotToContainer(new Slot(tile, 3, 56, 92));
+        addSlotToContainer(new Slot(tile, 4, 56, 128));
+        addSlotToContainer(new SlotFurnace(inventory.player, tile, 5, 116, 110));
         
         int i;
 
