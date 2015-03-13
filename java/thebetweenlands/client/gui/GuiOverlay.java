@@ -23,7 +23,7 @@ public class GuiOverlay extends Gui
         int width = event.resolution.getScaledWidth();
         int height = event.resolution.getScaledHeight();
 
-        renderDecayBar((width / 2) - (27 / 2), (height / 2) - (9 / 2), 27, 9, decayBarTexture);
+        if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) renderDecayBar((width / 2) - (27 / 2), (height / 2) - (9 / 2), 27, 9, decayBarTexture);
     }
 
     public void renderDecayBar(int x, int y, int width, int height, ResourceLocation texture)
