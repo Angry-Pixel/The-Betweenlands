@@ -57,7 +57,7 @@ public class DebugListener {
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
+    public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
 		if(TheBetweenlands.DEBUG) Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 	}
 }
