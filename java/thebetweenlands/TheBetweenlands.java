@@ -4,6 +4,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.listener.DebugListener;
 import thebetweenlands.event.listener.GenericListener;
@@ -57,6 +58,10 @@ public class TheBetweenlands
 
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
+		
+		if (event.getSide() == Side.CLIENT) {
+	        MinecraftForge.EVENT_BUS.register(new GuiOverlay());
+		}
 
 		//BL Registry
 		BLItemRegistry.init();

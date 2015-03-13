@@ -8,9 +8,7 @@ import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
@@ -73,9 +71,6 @@ public class ClientProxy extends CommonProxy {
 		
     	//Blocks
     	RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
-
-        //Events
-        MinecraftForge.EVENT_BUS.register(new GuiOverlay());
     }
 
     @Override
