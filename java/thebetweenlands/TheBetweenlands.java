@@ -74,7 +74,7 @@ public class TheBetweenlands
 		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 
 		// Simple Altar packet
-		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("thebetweenlands");
+		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 		networkWrapper.registerMessage(AltarPacketHandler.class, AltarCraftingProgressMessage.class, 0, Side.CLIENT);
 		networkWrapper.registerMessage(DruidPacketHandler.class, DruidTeleportParticleMessage.class, 1, Side.CLIENT);
 	}
