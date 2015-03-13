@@ -3,13 +3,11 @@ package thebetweenlands.client.gui;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
-import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui
@@ -23,25 +21,26 @@ public class GuiOverlay extends Gui
         int width = event.resolution.getScaledWidth();
         int height = event.resolution.getScaledHeight();
 
-        if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) renderDecayBar((width / 2) - (27 / 2), (height / 2) - (9 / 2), 27, 9, decayBarTexture);
+       if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR)
+        {
+            renderDecayBar((width / 2) - (27 / 2) + 23, height - 49, 27, 9, decayBarTexture, mc.thePlayer.isInsideOfMaterial(Material.water));
+        }
     }
 
-    public void renderDecayBar(int x, int y, int width, int height, ResourceLocation texture)
+    public void renderDecayBar(int x, int y, int width, int height, ResourceLocation texture, boolean offset)
     {
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(false);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(1f, 1f, 1f, 1f);
+        int i = offset ? -10 : 0;
+
         mc.getTextureManager().bindTexture(texture);
-        Tessellator tess = Tessellator.instance;
+
+        drawTexturedModalRect(x, y, 0, 0, width, height);
+
+        /*Tessellator tess = Tessellator.instance;
         tess.startDrawingQuads();
-        tess.addVertexWithUV(x, y + height, -90d, 0d, 1d);
-        tess.addVertexWithUV(x + width, y + height, -90d, 1d, 1d);
-        tess.addVertexWithUV(x + width, y, -90d, 1d, 0d);
-        tess.addVertexWithUV(x, y, -90d, 0d, 0d);
-        tess.draw();
-        glDepthMask(true);
-        glEnable(GL_DEPTH_TEST);
-        glColor4f(1f, 1f, 1f, 1f);
+        tess.addVertexWithUV(x, y + height + i, -90d, 0d, 1d);
+        tess.addVertexWithUV(x + width, y + height + i, -90d, 1d, 1d);
+        tess.addVertexWithUV(x + width, y + i, -90d, 1d, 0d);
+        tess.addVertexWithUV(x, y + i, -90d, 0d, 0d);
+        tess.draw();*/
     }
 }
