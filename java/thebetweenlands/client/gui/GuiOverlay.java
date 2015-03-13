@@ -12,7 +12,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui
 {
-    public ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands", "textures/gui/decayBar.png");
+    public ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
     public Minecraft mc = Minecraft.getMinecraft();
 
     @SubscribeEvent
@@ -31,7 +31,7 @@ public class GuiOverlay extends Gui
     {
         int i = offset ? -10 : 0;
 
-        mc.getTextureManager().bindTexture(texture);
+        mc.renderEngine.bindTexture(texture);
 
         drawTexturedModalRect(x, y, 0, 0, width, height);
 
