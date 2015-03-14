@@ -4,6 +4,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
+import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.MessageSyncPlayerDecay;
 
 public class DecayManager
@@ -28,5 +29,10 @@ public class DecayManager
     public static float getPlayerHearts(EntityPlayer player)
     {
         return Math.max(6f, getDecayLevel(player));
+    }
+
+    public static boolean enableDecay(EntityPlayer player)
+    {
+        return player.dimension == ModInfo.DIMENSION_ID;
     }
 }

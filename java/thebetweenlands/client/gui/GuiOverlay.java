@@ -26,7 +26,7 @@ public class GuiOverlay extends Gui
     {
         updateCounter++;
 
-        if (!mc.thePlayer.capabilities.isCreativeMode)
+        if (DecayManager.enableDecay(mc.thePlayer) && !mc.thePlayer.capabilities.isCreativeMode)
         {
             int width = event.resolution.getScaledWidth();
             int height = event.resolution.getScaledHeight();

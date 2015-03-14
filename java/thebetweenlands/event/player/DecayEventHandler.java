@@ -49,7 +49,7 @@ public class DecayEventHandler
     @SubscribeEvent
     public void keyInput(InputEvent.KeyInputEvent event)
     {
-        if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
+        if (DecayManager.enableDecay(Minecraft.getMinecraft().thePlayer) && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
         {
             DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
         }
@@ -58,7 +58,7 @@ public class DecayEventHandler
     @SubscribeEvent
     public void useItem(PlayerUseItemEvent.Finish event)
     {
-        if (event.item.getItem() instanceof IDecayFood)
+        if (DecayManager.enableDecay(event.entityPlayer) && event.item.getItem() instanceof IDecayFood)
         {
             IDecayFood food = (IDecayFood) event.item.getItem();
             DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
@@ -68,10 +68,17 @@ public class DecayEventHandler
     @SubscribeEvent
     public void playerTick(TickEvent.PlayerTickEvent event)
     {
-        event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(DecayManager.getPlayerHearts(event.player));
+        if (DecayManager.enableDecay(event.player))
+        {
+            event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(DecayManager.getPlayerHearts(event.player));
 
-        if (DecayManager.getDecayLevel(event.player) <= 4) event.player.addPotionEffect(slowness_2);
-        else if (DecayManager.getDecayLevel(event.player) <= 8) event.player.addPotionEffect(slowness_1);
-        else if (DecayManager.getDecayLevel(event.player) <= 12) event.player.addPotionEffect(slowness_0);
+            if (DecayManager.getDecayLevel(event.player) <= 4) event.player.addPotionEffect(slowness_2);
+            else if (DecayManager.getDecayLevel(event.player) <= 8) event.player.addPotionEffect(slowness_1);
+            else if (DecayManager.getDecayLevel(event.player) <= 12) event.player.addPotionEffect(slowness_0);
+        }
+        else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d)
+        {
+            event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20d);
+        }
     }
 }
