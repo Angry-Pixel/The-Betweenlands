@@ -7,7 +7,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 
 public class EntityPropertiesDecay implements IExtendedEntityProperties
 {
-    public int decayLevel;
+    public int decayLevel = 20;
 
     public void saveNBTData(NBTTagCompound nbt)
     {
