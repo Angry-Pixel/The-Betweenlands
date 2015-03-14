@@ -28,11 +28,24 @@ public class DecayManager
 
     public static float getPlayerHearts(EntityPlayer player)
     {
-        return Math.max(6f, getDecayLevel(player));
+        return 20f - (14 - getDecayLevel(player) * 14 / 20);
     }
 
     public static boolean enableDecay(EntityPlayer player)
     {
         return player.dimension == ModInfo.DIMENSION_ID;
+    }
+
+    public static int getCorruptionLevel(EntityPlayer player)
+    {
+        int decayLevel = getDecayLevel(player);
+
+        if (!enableDecay(player)) return 0;
+
+        if (decayLevel <= 4) return 4;
+        else if (decayLevel <= 6) return 3;
+        else if (decayLevel <= 8) return 2;
+        else if (decayLevel <= 12) return 1;
+        else return 0;
     }
 }

@@ -43,6 +43,12 @@ public class DebugListener {
 		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
 			this.fastFlight = !this.fastFlight;
 		}
+        if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
+            TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer);
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_L)) {
+            TheBetweenlands.proxy.uncorruptPlayerSkin(Minecraft.getMinecraft().thePlayer);
+        }
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -61,6 +67,7 @@ public class DebugListener {
         {
             Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
             Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
+            Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);
         }
 	}
 }

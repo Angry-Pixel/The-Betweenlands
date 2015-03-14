@@ -76,9 +76,7 @@ public class DecayEventHandler
             else if (DecayManager.getDecayLevel(event.player) <= 8) event.player.addPotionEffect(slowness_1);
             else if (DecayManager.getDecayLevel(event.player) <= 12) event.player.addPotionEffect(slowness_0);
         }
-        else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d)
-        {
-            event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20d);
-        }
+        else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d) event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20d);
+        else if (event.player.isPotionActive(Potion.moveSlowdown.getId())) event.player.removePotionEffect(Potion.moveSlowdown.getId());
     }
 }
