@@ -1,9 +1,5 @@
 package thebetweenlands.world;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -19,6 +15,10 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
 {
@@ -141,12 +141,12 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 		Block[] chunkBlocks = new Block[65536];
 		byte[] blockMeta = new byte[65536];
+        //Gnerate base terrain (consist only of baseBlock and layerBlock)
+        this.generateBaseTerrain(x, z, chunkBlocks);
 
 		//Get biomes for generation
 		this.biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, x * 16, z * 16, 16, 16);
 
-		//Gnerate base terrain (consist only of baseBlock and layerBlock)
-		this.generateBaseTerrain(x, z, chunkBlocks);
 
 		//Replace blocks for biome (replaces blocks according to the biomes)
 		this.replaceBlocksForBiome(x, z, this.rand, chunkBlocks, blockMeta, this.biomesForGeneration);
@@ -294,7 +294,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 				float avgRootHeight = currentBiomeRootHeight;
 				float avgHeightVariation = currentBiomeHeightVariation;
-				
+
 				//Average
 				int bc = 1;
 				for( int sbbxo = -2; sbbxo <= 2; ++sbbxo ) {
@@ -315,20 +315,20 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                         	surroundingBiomeHeightVariation = (float) ((BiomeGenBaseBetweenlands)surroundingBiome).getHeightVariation(x+(bxo+sbbxo+2)*4, z+(bzo+sbbzo+2)*4) / 128.0f;
                         	int surroundingBiomeRootHeightI = ((BiomeGenBaseBetweenlands)currentBiome).getRootHeight(x+(bxo+sbbxo+2)*4, z+(bzo+sbbzo+2)*4);
                         	surroundingBiomeRootHeight = ((float) surroundingBiomeRootHeightI / 128.0f) * 4.0f - 2.0f;
-                       
+
                         	avgRootHeight += surroundingBiomeRootHeight;
                         	avgHeightVariation += surroundingBiomeHeightVariation;
                         	bc++;
                         }
 					}
 				}
-				
+
 				avgRootHeight = avgRootHeight / (float)bc;
 				avgHeightVariation = avgHeightVariation / (float)bc;
 
 				//System.out.println("B: " + this.biomesForGeneration.length);
 				//System.out.println("N: " + this.baseNoise.length);
-				
+
 				double fineBaseNoise = this.baseNoise[baseNoiseIndex] / 8000.0F;
 				//if( fineBaseNoise < 0.0D ) {
 				//    fineBaseNoise = -fineBaseNoise * 0.3D;
@@ -373,7 +373,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 			}
 		}*/
 	}
-	
+
 	/**
 	 * Will be replaced later on with new worlgen, but I'll keep the old one in here for the others to test out stuff.
 	 * @param noiseArray
