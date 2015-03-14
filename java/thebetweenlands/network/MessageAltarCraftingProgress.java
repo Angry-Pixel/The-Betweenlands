@@ -1,5 +1,6 @@
 package thebetweenlands.network;
 
+import com.google.common.collect.Maps;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 public class MessageAltarCraftingProgress extends AbstractMessage<MessageAltarCraftingProgress>
 {
     private static final ResourceLocation soundLocation = new ResourceLocation("thebetweenlands:druidChant");
-    private static final HashMap<String, PositionedSoundDC> tileSoundMap = new HashMap<>();
+    private static final HashMap<String, PositionedSoundDC> tileSoundMap = Maps.newHashMap();
 
     public int posX;
     public int posY;
