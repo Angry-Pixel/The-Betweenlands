@@ -64,8 +64,8 @@ public class WorldGenGiantTree implements IWorldGenerator {
 
 	public boolean generateTree(World world, Random rand, int x, int y, int z) {
 		
-		radius = rand.nextInt(6) + 6;
-		height = rand.nextInt(20) + 30;
+		radius = rand.nextInt(4) + 8;
+		height = rand.nextInt(radius) + radius * 4;
 		maxRadius = radius + height / 3;
 	
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
