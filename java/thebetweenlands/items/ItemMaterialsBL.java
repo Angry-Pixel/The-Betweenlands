@@ -1,7 +1,7 @@
 package thebetweenlands.items;
 
-import java.util.List;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,8 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemMaterialsBL extends Item
 {
@@ -91,7 +91,6 @@ public class ItemMaterialsBL extends Item
 		MUD_BRICK("mudBrick"),
 		OCTINE_INGOT("octineIngot"),
 		ROTTEN_BARK("rottenBark"),
-		SAP_BALL("sapBall"),
 		SLIMY_BONE("slimyBone"),
 		SLUDGE_BALL("sludgeBall"),
 		SNAPPER_ROOT("snapperRoot"),

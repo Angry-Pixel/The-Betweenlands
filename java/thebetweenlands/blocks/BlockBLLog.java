@@ -1,7 +1,7 @@
 package thebetweenlands.blocks;
 
-import java.util.ArrayList;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLog;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +10,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.items.BLItemRegistry;
+
+import java.util.ArrayList;
 
 public class BlockBLLog extends BlockLog {
 	
@@ -38,7 +37,7 @@ public class BlockBLLog extends BlockLog {
 		if (type.equals("sapTreeLog")) {
 			ArrayList<ItemStack> drops = new ArrayList<ItemStack>();;
 			for (int i = 0; i < 1 + world.rand.nextInt(2 + fortune); i++)
-				drops.add(ItemMaterialsBL.createStack(EnumMaterialsBL.SAP_BALL));
+				drops.add(new ItemStack(BLItemRegistry.sapBall));
 			return drops;
 		}
 		return super.getDrops(world, x, y, z, metadata, fortune);
