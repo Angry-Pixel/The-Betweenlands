@@ -2,9 +2,13 @@ package thebetweenlands.event.player;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
@@ -18,6 +22,10 @@ import thebetweenlands.utils.IDecayFood;
 public class DecayEventHandler
 {
     public static DecayEventHandler INSTANCE = new DecayEventHandler();
+
+    public PotionEffect slowness_0 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true);
+    public PotionEffect slowness_1 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 1, true);
+    public PotionEffect slowness_2 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true);
 
     @SubscribeEvent
     public void entityConstructing(EntityEvent.EntityConstructing event)
@@ -55,5 +63,15 @@ public class DecayEventHandler
             IDecayFood food = (IDecayFood) event.item.getItem();
             DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
         }
+    }
+
+    @SubscribeEvent
+    public void playerTick(TickEvent.PlayerTickEvent event)
+    {
+        event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(DecayManager.getPlayerHearts(event.player));
+
+        if (DecayManager.getDecayLevel(event.player) <= 4) event.player.addPotionEffect(slowness_2);
+        else if (DecayManager.getDecayLevel(event.player) <= 8) event.player.addPotionEffect(slowness_1);
+        else if (DecayManager.getDecayLevel(event.player) <= 12) event.player.addPotionEffect(slowness_0);
     }
 }

@@ -24,4 +24,9 @@ public class DecayManager
     {
         return setDecayLevel(0, player);
     }
+
+    public static float getPlayerHearts(EntityPlayer player)
+    {
+        return Math.max(6f, getDecayLevel(player));
+    }
 }
