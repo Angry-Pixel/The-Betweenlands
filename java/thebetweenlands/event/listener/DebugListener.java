@@ -43,12 +43,6 @@ public class DebugListener {
 		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
 			this.fastFlight = !this.fastFlight;
 		}
-        if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
-            TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer);
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_L)) {
-            TheBetweenlands.proxy.uncorruptPlayerSkin(Minecraft.getMinecraft().thePlayer);
-        }
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

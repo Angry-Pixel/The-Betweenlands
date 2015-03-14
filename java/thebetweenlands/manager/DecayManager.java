@@ -28,7 +28,7 @@ public class DecayManager
 
     public static float getPlayerHearts(EntityPlayer player)
     {
-        return 20f - (14 - getDecayLevel(player) * 14 / 20);
+        return Math.min(20f - (14 - getDecayLevel(player) * 14 / 20), 20f);
     }
 
     public static boolean enableDecay(EntityPlayer player)

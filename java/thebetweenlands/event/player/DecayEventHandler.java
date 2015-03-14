@@ -1,5 +1,6 @@
 package thebetweenlands.event.player;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -52,6 +53,7 @@ public class DecayEventHandler
         if (DecayManager.enableDecay(Minecraft.getMinecraft().thePlayer) && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
         {
             DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
+            if (FMLClientHandler.instance().getWorldClient().isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
         }
     }
 
@@ -62,6 +64,7 @@ public class DecayEventHandler
         {
             IDecayFood food = (IDecayFood) event.item.getItem();
             DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
+            if (event.entity.worldObj.isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
         }
     }
 

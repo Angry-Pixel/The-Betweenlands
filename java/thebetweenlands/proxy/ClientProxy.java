@@ -121,8 +121,14 @@ public class ClientProxy extends CommonProxy {
         return Minecraft.getMinecraft().thePlayer;
     }
 
-    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer)
+    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
     {
+        if (level == 0)
+        {
+            uncorruptPlayerSkin(entityPlayer);
+            return;
+        }
+
         try
         {
             if (!hasBackup(entityPlayer)) backupPlayerSkin(entityPlayer);
@@ -133,7 +139,7 @@ public class ClientProxy extends CommonProxy {
             BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics g = corruptedSkin.getGraphics();
             g.drawImage(skin, 0, 0, null);
-            g.drawImage(corruption, 0, 0, null);
+            for (int i = 0; i < level; i++) g.drawImage(corruption, 0, 0, null);
 
             uploadPlayerSkin(entityPlayer, corruptedSkin);
         }

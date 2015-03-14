@@ -119,7 +119,7 @@ public class CommonProxy
         return null;
     }
 
-    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer)
+    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
     {
 
     }
