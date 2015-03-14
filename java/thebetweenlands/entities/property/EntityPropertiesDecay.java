@@ -12,6 +12,7 @@ public class EntityPropertiesDecay implements IExtendedEntityProperties
     public void saveNBTData(NBTTagCompound nbt)
     {
         nbt.setInteger("decayLevel", decayLevel);
+        System.out.println(decayLevel);
     }
 
     public void loadNBTData(NBTTagCompound nbt)

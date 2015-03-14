@@ -79,6 +79,7 @@ public class TheBetweenlands
 		networkWrapper.registerMessage(MessageAltarCraftingProgress.class, MessageAltarCraftingProgress.class, 0, Side.CLIENT);
 		networkWrapper.registerMessage(MessageDruidTeleportParticle.class, MessageDruidTeleportParticle.class, 1, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
+        networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
 	}
 
 	@EventHandler

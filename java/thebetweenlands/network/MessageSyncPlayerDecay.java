@@ -26,7 +26,7 @@ public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDec
 
     public void onServerMessage(MessageSyncPlayerDecay message, EntityPlayer player)
     {
-
+        ((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel = message.playerDecay;
     }
 
     public void fromBytes(ByteBuf buf)

@@ -40,7 +40,7 @@ public class PlayerDecayEventHandler
     @SubscribeEvent
     public void livingJump(LivingEvent.LivingJumpEvent event)
     {
-        if (event.entity instanceof EntityPlayer)
+        if (event.entity instanceof EntityPlayer && event.entity.worldObj.isRemote)
         {
             EntityPlayer player = (EntityPlayer) event.entity;
             DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) + 1, player);
