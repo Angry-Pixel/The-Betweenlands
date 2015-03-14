@@ -41,7 +41,7 @@ public class BlockPortal
 			WorldServer worldServer = (WorldServer)world;
 			if( entity instanceof EntityPlayerMP ) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
-				player.mcServer.getConfigurationManager().transferPlayerToDimension(player, ModInfo.DIMENSION_ID, new TeleporterBetweenlands(worldServer));
+				player.mcServer.getConfigurationManager().transferPlayerToDimension(player, player.dimension == 0 ? ModInfo.DIMENSION_ID : 0, new TeleporterBetweenlands(worldServer));
 			}
 		}
 	}
