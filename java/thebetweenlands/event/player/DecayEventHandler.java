@@ -44,6 +44,7 @@ public class DecayEventHandler
         {
             int decayLevel = ((EntityPropertiesDecay) event.entity.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel;
             TheBetweenlands.networkWrapper.sendTo(new MessageSyncPlayerDecay(decayLevel), (EntityPlayerMP) event.entity);
+            if (event.entity.worldObj.isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
         }
     }
 
