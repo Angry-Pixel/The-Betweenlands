@@ -78,6 +78,10 @@ public class BLBlockRegistry
 	public static final Block swampReed = new DoubleHeightPlant("SwampReed", 0.8F);
 
 	// SMALL PLANTS
+	public static final Block catTail = new BlockBLSmallPlants("cattail");
+	public static final Block swampPlant = new BlockBLSmallPlants("swampPlant");
+	public static final Block nettleFlowered = new BlockBLSmallPlants("nettleFlowered");
+	public static final Block nettle = new BlockBLSmallPlants("nettle");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();

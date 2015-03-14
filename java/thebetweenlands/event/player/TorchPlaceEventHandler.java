@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TorchPlaceEventHandler {
@@ -19,7 +20,7 @@ public class TorchPlaceEventHandler {
 
 		ItemStack itemstack = event.entityPlayer.inventory.getCurrentItem();
 		if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.torch)) {
-			if (event.entityPlayer.dimension == 0)
+			if (event.entityPlayer.dimension == ConfigHandler.DIMENSION_ID)
 				if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 
 					if (event.face == 1 && BLBlockRegistry.dampTorch.canPlaceBlockAt(event.world, event.x, event.y + 1, event.z)) {

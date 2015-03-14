@@ -19,6 +19,7 @@ extends BiomeGenBaseBetweenlands
 	public BiomeDeepWater(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
+		setColors(0x314D31, 0x314D31);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
 		this.setBiomeName("Deep Waters");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);

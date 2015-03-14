@@ -46,6 +46,10 @@ tile.thebetweenlands.hanger.name=Hanger
 tile.thebetweenlands.sundew.name=Sundew
 tile.thebetweenlands.weepingBlue.name=Weeping Blue
 tile.thebetweenlands.swampReed.name=Swamp Reed
+tile.thebetweenlands.cattail.name=Cattail
+tile.thebetweenlands.swampPlant.name=Swamp Plant
+tile.thebetweenlands.nettleFlowered.name=Flowering Nettle
+tile.thebetweenlands.nettle.name=Nettle
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
