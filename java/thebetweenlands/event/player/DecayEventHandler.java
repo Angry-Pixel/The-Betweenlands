@@ -7,16 +7,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import org.lwjgl.input.Keyboard;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.network.MessageSyncPlayerDecay;
+import thebetweenlands.utils.IDecayFood;
 
-public class PlayerDecayEventHandler
+public class DecayEventHandler
 {
-    public static PlayerDecayEventHandler INSTANCE = new PlayerDecayEventHandler();
+    public static DecayEventHandler INSTANCE = new DecayEventHandler();
 
     @SubscribeEvent
     public void entityConstructing(EntityEvent.EntityConstructing event)
@@ -38,21 +39,21 @@ public class PlayerDecayEventHandler
     }
 
     @SubscribeEvent
-    public void livingJump(LivingEvent.LivingJumpEvent event)
-    {
-        if (event.entity instanceof EntityPlayer && event.entity.worldObj.isRemote)
-        {
-            EntityPlayer player = (EntityPlayer) event.entity;
-            DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) + 1, player);
-        }
-    }
-
-    @SubscribeEvent
     public void keyInput(InputEvent.KeyInputEvent event)
     {
         if (Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
         {
             DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
+        }
+    }
+
+    @SubscribeEvent
+    public void useItem(PlayerUseItemEvent.Finish event)
+    {
+        if (event.item.getItem() instanceof IDecayFood)
+        {
+            IDecayFood food = (IDecayFood) event.item.getItem();
+            DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
         }
     }
 }
