@@ -14,10 +14,10 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.network.packet.AltarCraftingProgressMessage;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.network.MessageAltarCraftingProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 
@@ -147,9 +147,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		craftingProgress = 1;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 		//Packet to start sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 1
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Does the metadata stuff for the circle animated textures
 		checkDruidCircleMeta(world);
 	}
@@ -163,9 +163,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		craftingProgress = 0;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 		//Packet to cancel sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 0
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Does the metadata stuff for the circle animated textures
 		checkDruidCircleMeta(world);
 	}
@@ -176,7 +176,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		if(world instanceof WorldServer) {
 			dim = ((WorldServer)world).provider.dimensionId;
 		}
-		TheBetweenlands.networkWrapper.sendToAllAround(new AltarCraftingProgressMessage(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 	}
 	
 	private void checkDruidCircleMeta(World world) {

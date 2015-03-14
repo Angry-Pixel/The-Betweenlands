@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import thebetweenlands.manager.DecayManager;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui
@@ -21,26 +22,16 @@ public class GuiOverlay extends Gui
         int width = event.resolution.getScaledWidth();
         int height = event.resolution.getScaledHeight();
 
-       if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR)
+        int startX = (width / 2) - (27 / 2) + 23;
+        int startY = height - 49;
+        int offsetY = mc.thePlayer.isInsideOfMaterial(Material.water) ? -10 : 0;
+
+        int decayLevel = DecayManager.getDecayLevel(mc.thePlayer);
+
+        if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR)
         {
-            renderDecayBar((width / 2) - (27 / 2) + 23, height - 49, 27, 9, decayBarTexture, mc.thePlayer.isInsideOfMaterial(Material.water));
+            mc.getTextureManager().bindTexture(decayBarTexture);
+            for (int i = 0; i < decayLevel; i++) drawTexturedModalRect(startX + i * 9, startY + offsetY, 0, 0, 9, 9);
         }
-    }
-
-    public void renderDecayBar(int x, int y, int width, int height, ResourceLocation texture, boolean offset)
-    {
-        int i = offset ? -10 : 0;
-
-        mc.renderEngine.bindTexture(texture);
-
-        drawTexturedModalRect(x, y, 0, 0, width, height);
-
-        /*Tessellator tess = Tessellator.instance;
-        tess.startDrawingQuads();
-        tess.addVertexWithUV(x, y + height + i, -90d, 0d, 1d);
-        tess.addVertexWithUV(x + width, y + height + i, -90d, 1d, 1d);
-        tess.addVertexWithUV(x + width, y + i, -90d, 1d, 0d);
-        tess.addVertexWithUV(x, y + i, -90d, 0d, 0d);
-        tess.draw();*/
     }
 }

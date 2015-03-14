@@ -1,28 +1,19 @@
 package thebetweenlands.entities.mobs;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
-import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBreakDoor;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.network.packet.DruidTeleportParticleMessage;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import thebetweenlands.network.MessageDruidTeleportParticle;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 20;
@@ -177,7 +168,7 @@ public class EntityDarkDruid extends EntityMob {
 		int dim = 0;
 		if (world instanceof WorldServer) {
 			dim = ((WorldServer) world).provider.dimensionId;
-			TheBetweenlands.networkWrapper.sendToAllAround(new DruidTeleportParticleMessage((float) posX, (float) posY, (float) posZ), new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
+			TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float) posX, (float) posY, (float) posZ), new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
 		}
 	}
 

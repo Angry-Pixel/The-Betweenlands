@@ -1,16 +1,15 @@
 package thebetweenlands.event.listener;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
-import org.lwjgl.input.Keyboard;
-
-import thebetweenlands.TheBetweenlands;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import org.lwjgl.input.Keyboard;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.manager.DecayManager;
 
 public class DebugListener {
 	public static final DebugListener INSTANCE = new DebugListener();
@@ -58,6 +57,10 @@ public class DebugListener {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
-		if(TheBetweenlands.DEBUG) Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
+		if (TheBetweenlands.DEBUG)
+        {
+            Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
+            Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
+        }
 	}
 }
