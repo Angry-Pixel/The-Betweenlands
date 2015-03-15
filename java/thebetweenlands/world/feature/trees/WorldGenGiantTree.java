@@ -75,7 +75,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 						return false;
 
 		for (int yy = y; yy < y + height; ++yy) {
-			if (yy % 5 == 0 && radius > 2)
+			if ((yy - y) % 5 == 0 && radius > 2)
 				--radius;
 
 			for (int i = radius * -1; i <= radius; ++i)
