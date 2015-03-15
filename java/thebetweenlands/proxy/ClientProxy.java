@@ -137,6 +137,7 @@ public class ClientProxy extends CommonProxy {
             BufferedImage skin = TextureManager.getPlayerSkin(entityPlayer);
             BufferedImage corruption = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("thebetweenlands:textures/player/playerCorruption.png")).getInputStream());
 
+            if (skin == null) return;
             BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics g = corruptedSkin.getGraphics();
             g.drawImage(skin, 0, 0, null);
