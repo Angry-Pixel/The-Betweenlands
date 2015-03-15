@@ -1,4 +1,4 @@
-package thebetweenlands.event.listener;
+package thebetweenlands.event.render;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -27,8 +27,8 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class GenericListener {
-	public static final GenericListener INSTANCE = new GenericListener();
+public class FogHandler {
+	public static final FogHandler INSTANCE = new FogHandler();
 
 
 

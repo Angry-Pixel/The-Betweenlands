@@ -17,11 +17,11 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.entities.BLEntityRegistry;
-import thebetweenlands.event.listener.DebugListener;
-import thebetweenlands.event.listener.GenericListener;
+import thebetweenlands.event.debug.DebugHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
+import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageAltarCraftingProgress;
@@ -88,7 +88,7 @@ public class TheBetweenlands
 		proxy.registerRenderInformation();
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
@@ -99,8 +99,8 @@ public class TheBetweenlands
         }
 
 		if(DEBUG) {
-			FMLCommonHandler.instance().bus().register(DebugListener.INSTANCE);
-			MinecraftForge.EVENT_BUS.register(DebugListener.INSTANCE);
+			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
+			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
 
 		RecipeHandler.init();
