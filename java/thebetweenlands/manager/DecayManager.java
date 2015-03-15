@@ -16,6 +16,7 @@ public class DecayManager
 
     public static int setDecayLevel(int decayLevel, EntityPlayer player)
     {
+        if (decayLevel < 0) return 0;
         ((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel = decayLevel > 20 ? 20 : decayLevel;
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) TheBetweenlands.networkWrapper.sendToServer(new MessageSyncPlayerDecay(decayLevel));
         return ((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel;
