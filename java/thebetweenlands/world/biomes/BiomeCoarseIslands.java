@@ -9,6 +9,7 @@ import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorCoarseIslands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
+import thebetweenlands.world.biomes.feature.CoarseIslandNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
 
 public class BiomeCoarseIslands
@@ -26,8 +27,8 @@ extends BiomeGenBaseBetweenlands
 		this.setBiomeName("Coarse Islands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)1);
-		//this.addFeature(new CoarseIslandNoiseFeature())
-		this.addFeature(new SiltNoiseFeature())
+		this.addFeature(new CoarseIslandNoiseFeature())
+		.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
 	}
