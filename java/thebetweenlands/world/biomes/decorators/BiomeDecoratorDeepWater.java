@@ -49,7 +49,7 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 			}
 		}
 
-		for (attempt = 0; attempt < 200; attempt++) {
+		for (attempt = 0; attempt < 20; attempt++) {
 			xx = x + offsetXZ();
 			yy = 80 + rand.nextInt(15);
 			zz = z + offsetXZ();
@@ -58,7 +58,7 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 				genSwampPlant.generate(world, rand, xx, yy, zz);
 		}
 
-		for (attempt = 0; attempt < 20; attempt++) {
+		for (attempt = 0; attempt < 10; attempt++) {
 			xx = x + offsetXZ();
 			yy = 80 + rand.nextInt(15);
 			zz = z + offsetXZ();
@@ -67,7 +67,7 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 				genNettle.generate(world, rand, xx, yy, zz);
 		}
 
-		for (attempt = 0; attempt < 20; attempt++) {
+		for (attempt = 0; attempt < 10; attempt++) {
 			xx = x + offsetXZ();
 			yy = 80 + rand.nextInt(15);
 			zz = z + offsetXZ();
@@ -76,7 +76,7 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 				genFerns.generate(world, rand, xx, yy, zz);
 		}
 
-		for (attempt = 0; attempt < 20; attempt++) {
+		for (attempt = 0; attempt < 10; attempt++) {
 			xx = x + offsetXZ();
 			yy = 80 + rand.nextInt(15);
 			zz = z + offsetXZ();
