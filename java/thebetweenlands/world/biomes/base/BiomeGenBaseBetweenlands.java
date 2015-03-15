@@ -157,8 +157,8 @@ extends BiomeGenBase
 		return this;
 	}
 	
-	public abstract int getRootHeight(int x, int z);
-	public abstract int getHeightVariation(int x, int z);
+	//public abstract int getRootHeight(int x, int z);
+	//public abstract int getHeightVariation(int x, int z);
 
 	/**
 	 * Sets the biome grass and foliage colors.

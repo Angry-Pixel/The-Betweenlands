@@ -30,7 +30,7 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x184220;
 	}
 
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT - 10;
 	}
@@ -38,5 +38,5 @@ extends BiomeGenBaseBetweenlands
 	@Override
 	public int getHeightVariation(int x, int z) {
 		return 0;
-	}
+	}*/
 }

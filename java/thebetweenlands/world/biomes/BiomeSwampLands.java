@@ -30,7 +30,7 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new CragSpiresNoiseFeature());
 	}
 
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT;
 	}
@@ -38,5 +38,5 @@ extends BiomeGenBaseBetweenlands
 	@Override
 	public int getHeightVariation(int x, int z) {
 		return 10;
-	}
+	}*/
 }

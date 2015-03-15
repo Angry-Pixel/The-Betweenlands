@@ -46,7 +46,7 @@ extends BiomeGenBaseBetweenlands
 		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
 	
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT + 10;
 	}
@@ -70,5 +70,5 @@ extends BiomeGenBaseBetweenlands
 			return 80;
 		}
 		return 0;
-	}
+	}*/
 }
