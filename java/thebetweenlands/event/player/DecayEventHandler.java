@@ -78,7 +78,7 @@ public class DecayEventHandler
             else if (DecayManager.getDecayLevel(event.player) <= 8) event.player.addPotionEffect(slowness_1);
             else if (DecayManager.getDecayLevel(event.player) <= 12) event.player.addPotionEffect(slowness_0);
 
-            if (event.player.getAge() % 1024 == 0)
+            if (event.player.ticksExisted % 1024 == 0)
             {
                 DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
             }

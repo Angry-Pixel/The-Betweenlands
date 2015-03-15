@@ -6,6 +6,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.debug.DebugHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
@@ -97,11 +98,11 @@ public class TheBetweenlands
             MinecraftForge.EVENT_BUS.register(new GuiOverlay());
         }
 
-	/*	if(DEBUG) {
+		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
-	 */
+	 
 		RecipeHandler.init();
 	}
 }

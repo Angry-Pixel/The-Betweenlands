@@ -63,21 +63,21 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	}
 
 	@Override	
-    protected boolean canPlaceBlockOn(Block block) {
-        return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass;
-    }
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass;
+	}
 
 	@Override
-    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-    	if("nettle".equals(name) || "nettleFlowered".equals(name))
-    		entity.attackEntityFrom(DamageSource.cactus, 1);
-    }
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+		if("nettle".equals(name) || "nettleFlowered".equals(name)) 
+			entity.attackEntityFrom(DamageSource.cactus, 1);
+	}
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-			ret.add(new ItemStack(this));
-			return ret;
+		ret.add(new ItemStack(this));
+		return ret;
 	}
 
 	@Override
