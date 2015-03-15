@@ -1,10 +1,11 @@
 package thebetweenlands.event.player;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import com.google.common.collect.Maps;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,8 +18,11 @@ import org.lwjgl.input.Keyboard;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.manager.DecayManager;
-import thebetweenlands.network.MessageSyncPlayerDecay;
+import thebetweenlands.message.MessageSyncPlayerDecay;
 import thebetweenlands.utils.IDecayFood;
+
+import java.util.Map;
+import java.util.UUID;
 
 public class DecayEventHandler
 {
@@ -27,6 +31,8 @@ public class DecayEventHandler
     public PotionEffect slowness_0 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true);
     public PotionEffect slowness_1 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 1, true);
     public PotionEffect slowness_2 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true);
+
+    public Map<UUID, Integer> corruptionBuffer = Maps.newHashMap();
 
     @SubscribeEvent
     public void entityConstructing(EntityEvent.EntityConstructing event)
@@ -40,21 +46,17 @@ public class DecayEventHandler
     @SubscribeEvent
     public void joinWorld(EntityJoinWorldEvent event)
     {
-        if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayer)
+        if (!event.world.isRemote && event.entity instanceof EntityPlayer)
         {
-            int decayLevel = ((EntityPropertiesDecay) event.entity.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel;
-            TheBetweenlands.networkWrapper.sendTo(new MessageSyncPlayerDecay(decayLevel), (EntityPlayerMP) event.entity);
-            if (event.entity.worldObj.isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
-        }
-    }
+            EntityPlayer player = (EntityPlayer) event.entity;
 
-    @SubscribeEvent
-    public void keyInput(InputEvent.KeyInputEvent event)
-    {
-        if (DecayManager.enableDecay(Minecraft.getMinecraft().thePlayer) && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
+            int decayLevel = DecayManager.getDecayLevel(player);
+
+            TheBetweenlands.networkWrapper.sendTo(new MessageSyncPlayerDecay(decayLevel), (EntityPlayerMP) player);
+        }
+        else if (event.world.isRemote && event.entity instanceof EntityPlayer)
         {
-            DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
-            if (FMLClientHandler.instance().getWorldClient().isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
+            TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.entity, DecayManager.getCorruptionLevel((EntityPlayer) event.entity));
         }
     }
 
@@ -65,7 +67,6 @@ public class DecayEventHandler
         {
             IDecayFood food = (IDecayFood) event.item.getItem();
             DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
-            if (event.entity.worldObj.isRemote) TheBetweenlands.proxy.corruptPlayerSkin(Minecraft.getMinecraft().thePlayer, DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer));
         }
     }
 
@@ -82,5 +83,28 @@ public class DecayEventHandler
         }
         else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d) event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20d);
         else if (event.player.isPotionActive(Potion.moveSlowdown.getId())) event.player.removePotionEffect(Potion.moveSlowdown.getId());
+
+        if (event.player.worldObj.isRemote)
+        {
+            if (!corruptionBuffer.containsKey(event.player.getPersistentID()))
+            {
+                corruptionBuffer.put(event.player.getPersistentID(), DecayManager.getCorruptionLevel(event.player));
+                TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.player, DecayManager.getCorruptionLevel(event.player));
+            }
+            else if (corruptionBuffer.get(event.player.getPersistentID()) != DecayManager.getCorruptionLevel(event.player))
+            {
+                corruptionBuffer.put(event.player.getPersistentID(), DecayManager.getCorruptionLevel(event.player));
+                TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.player, DecayManager.getCorruptionLevel(event.player));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void keyInput(InputEvent.KeyInputEvent event)
+    {
+        if (DecayManager.enableDecay(Minecraft.getMinecraft().thePlayer) && Keyboard.isKeyDown(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode()))
+        {
+            DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
+        }
     }
 }

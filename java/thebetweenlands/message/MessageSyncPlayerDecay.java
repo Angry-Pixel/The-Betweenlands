@@ -1,9 +1,9 @@
-package thebetweenlands.network;
+package thebetweenlands.message;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
-import thebetweenlands.network.base.AbstractMessage;
+import thebetweenlands.message.base.AbstractMessage;
 
 public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDecay>
 {

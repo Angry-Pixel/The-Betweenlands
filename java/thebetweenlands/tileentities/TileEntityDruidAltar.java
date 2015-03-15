@@ -17,7 +17,7 @@ import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.network.MessageAltarCraftingProgress;
+import thebetweenlands.message.MessageAltarCraftingProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 

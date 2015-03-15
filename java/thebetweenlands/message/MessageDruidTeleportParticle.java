@@ -1,4 +1,4 @@
-package thebetweenlands.network;
+package thebetweenlands.message;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.network.base.AbstractMessage;
+import thebetweenlands.message.base.AbstractMessage;
 
 public class MessageDruidTeleportParticle extends AbstractMessage<MessageDruidTeleportParticle>
 {

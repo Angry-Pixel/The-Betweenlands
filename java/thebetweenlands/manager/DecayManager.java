@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.network.MessageSyncPlayerDecay;
+import thebetweenlands.message.MessageSyncPlayerDecay;
 
 public class DecayManager
 {
@@ -28,24 +28,17 @@ public class DecayManager
 
     public static float getPlayerHearts(EntityPlayer player)
     {
-        return Math.min(20f - (14 - getDecayLevel(player) * 14 / 20), 20f);
+        return Math.min(20f - (18 - getDecayLevel(player) * 18 / 20), 20f);
     }
 
     public static boolean enableDecay(EntityPlayer player)
     {
-        return player.dimension == ModInfo.DIMENSION_ID;
+        return player.dimension == ModInfo.DIMENSION_ID && !player.capabilities.isCreativeMode;
     }
 
     public static int getCorruptionLevel(EntityPlayer player)
     {
-        int decayLevel = getDecayLevel(player);
-
         if (!enableDecay(player)) return 0;
-
-        if (decayLevel <= 4) return 4;
-        else if (decayLevel <= 6) return 3;
-        else if (decayLevel <= 8) return 2;
-        else if (decayLevel <= 12) return 1;
-        else return 0;
+        return 10 - getDecayLevel(player) / 2;
     }
 }

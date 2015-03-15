@@ -27,6 +27,7 @@ import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.entities.mobs.*;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
+import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
@@ -123,7 +124,7 @@ public class ClientProxy extends CommonProxy {
 
     public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
     {
-        if (level == 0)
+        if (level == 0 || !DecayManager.enableDecay(entityPlayer))
         {
             uncorruptPlayerSkin(entityPlayer);
             return;

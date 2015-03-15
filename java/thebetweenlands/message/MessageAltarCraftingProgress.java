@@ -1,4 +1,4 @@
-package thebetweenlands.network;
+package thebetweenlands.message;
 
 import com.google.common.collect.Maps;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.network.base.AbstractMessage;
+import thebetweenlands.message.base.AbstractMessage;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 import java.util.HashMap;

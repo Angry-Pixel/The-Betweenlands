@@ -1,4 +1,4 @@
-package thebetweenlands.network.base;
+package thebetweenlands.message.base;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
