@@ -3,39 +3,52 @@ package thebetweenlands.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 
 public class BlockBLWorkbench extends Block {
-	
+
     @SideOnly(Side.CLIENT)
     private IIcon topIcon;
     @SideOnly(Side.CLIENT)
     private IIcon sideIcon;
-	
+
     protected BlockBLWorkbench() {
     	super(Material.wood);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedWoodCraftingTable");
 		setBlockTextureName("thebetweenlands:weedWoodCraftingTable");
     }
-    
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
-		else {
+		if( !world.isRemote ) {
 			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CRAFT, world, x, y, z);
-			return true;
 		}
+
+        return true;
 	}
-	
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+        int rotation = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+        ++rotation;
+        rotation %= 4;
+
+        ((TileEntityBLCraftingTable) world.getTileEntity(x, y, z)).rotation = (byte) rotation;
+    }
+
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
         return side == 1 ? topIcon : (side == 0 ? BLBlockRegistry.weedWoodPlanks.getBlockTextureFromSide(side) : (side != 2 && side != 4 ? blockIcon : sideIcon));
@@ -48,4 +61,13 @@ public class BlockBLWorkbench extends Block {
         sideIcon = icon.registerIcon(getTextureName() + "Front");
     }
 
+    @Override
+    public boolean hasTileEntity(int metadata) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(World world, int metadata) {
+        return new TileEntityBLCraftingTable();
+    }
 }

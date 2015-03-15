@@ -19,6 +19,7 @@ import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.entities.mobs.EntityAngler;
@@ -29,13 +30,14 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
-	
+
 	public enum BlockRenderIDs {
 
 		DOUBLE_PLANTS;
@@ -50,7 +52,7 @@ public class ClientProxy extends CommonProxy {
 			return ID;
 		}
 	}
-	
+
     @Override
     public void registerRenderInformation() {
 
@@ -61,15 +63,16 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderSwampHag());
         RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, new RenderTarBeast());
         RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, new RenderWight());
-        
+
         //Tile Entities
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
-        
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLCraftingTable.class, new TileEntityBLWorkbenchRenderer());
+
         //Item Entities
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
     	MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedWoodChest), new ItemWeedWoodChestRenderer());
-		
+
     	//Blocks
     	RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
     }
@@ -81,34 +84,34 @@ public class ClientProxy extends CommonProxy {
         if( particleName.equals("druidmagic") ) {
             fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
         }
-        
+
         if( particleName.equals("druidmagicbig") ) {
             fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
             fx.setRBGColorF(0F, 1F, 1F);
         }
-        
+
         if( particleName.equals("altarcrafting") ) {
             fx = new EntityAltarCraftingFX(world, x, y, z, vecX, vecY, vecZ, scale, (TileEntityDruidAltar)data[0]);
         }
-        
+
         if( particleName.equals("smoke") ) {
             fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
         }
-        
+
         if( particleName.equals("flame") ) {
             fx = new EntityFlameFX(world, x, y, z, vecX, vecY, vecZ);
         }
-        
+
         if( particleName.equals("sulfurTorch") ) {
             fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
             fx.setRBGColorF(1F, 0.9294F, 0F);
         }
-        
+
 		if (particleName.equals("sulfurOre")) {
 			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(1F, 0.9294F, 0F);
 		}
-        
+
         if (fx != null)
         	Minecraft.getMinecraft().effectRenderer.addEffect(fx);
     }
