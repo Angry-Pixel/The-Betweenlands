@@ -19,6 +19,7 @@ extends BiomeGenBaseBetweenlands
 	public BiomeSwampLands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
+		setColors(0x314D31, 0x314D31);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 10);
 		this.setBiomeName("Swamplands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
@@ -29,7 +30,7 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new CragSpiresNoiseFeature());
 	}
 
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT;
 	}
@@ -37,5 +38,5 @@ extends BiomeGenBaseBetweenlands
 	@Override
 	public int getHeightVariation(int x, int z) {
 		return 10;
-	}
+	}*/
 }

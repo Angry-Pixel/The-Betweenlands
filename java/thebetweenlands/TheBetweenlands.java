@@ -1,5 +1,27 @@
 package thebetweenlands;
 
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.player.DecayEventHandler;
+import thebetweenlands.event.player.OctineArmorHandler;
+import thebetweenlands.event.player.TorchPlaceEventHandler;
+import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.lib.ModInfo;
+import thebetweenlands.message.MessageAltarCraftingProgress;
+import thebetweenlands.message.MessageDruidTeleportParticle;
+import thebetweenlands.message.MessageSyncPlayerDecay;
+import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.recipes.RecipeHandler;
+import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.biomes.base.BLBiomeRegistry;
+import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
+import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -11,29 +33,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.entities.BLEntityRegistry;
-import thebetweenlands.event.listener.DebugListener;
-import thebetweenlands.event.listener.GenericListener;
-import thebetweenlands.event.player.OctineArmorHandler;
-import thebetweenlands.event.player.DecayEventHandler;
-import thebetweenlands.event.player.TorchPlaceEventHandler;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.lib.ModInfo;
-import thebetweenlands.network.MessageAltarCraftingProgress;
-import thebetweenlands.network.MessageDruidTeleportParticle;
-import thebetweenlands.network.MessageSyncPlayerDecay;
-import thebetweenlands.proxy.CommonProxy;
-import thebetweenlands.recipes.RecipeHandler;
-import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
-import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
@@ -88,7 +87,7 @@ public class TheBetweenlands
 		proxy.registerRenderInformation();
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(GenericListener.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
@@ -97,12 +96,12 @@ public class TheBetweenlands
         if (event.getSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlay());
         }
-
+        /*
 		if(DEBUG) {
-			FMLCommonHandler.instance().bus().register(DebugListener.INSTANCE);
-			MinecraftForge.EVENT_BUS.register(DebugListener.INSTANCE);
+			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
+			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
-
+	 */
 		RecipeHandler.init();
 	}
 }

@@ -146,22 +146,19 @@ extends BiomeGenBase
 
 	/**
 	 * Sets the average biome height and height variation.
-	 * Deprecated, will probably be replaced later on, but I'll keep it here for now until I've got the new worldgen working.
 	 *
 	 * @param height    int
 	 * @param variation int
 	 * @return BiomeGenBaseBetweenlands
 	 */
-	//Not used atm but I'll still keep it here
-	@Deprecated
 	public final BiomeGenBaseBetweenlands setHeightAndVariation(int height, int variation) {
 		this.heightVariation = (float) variation / 128.0f;
 		this.rootHeight = ((float) height / 128.0f + this.heightVariation) * 4.0f - 2.0f;
 		return this;
 	}
 	
-	public abstract int getRootHeight(int x, int z);
-	public abstract int getHeightVariation(int x, int z);
+	//public abstract int getRootHeight(int x, int z);
+	//public abstract int getHeightVariation(int x, int z);
 
 	/**
 	 * Sets the biome grass and foliage colors.

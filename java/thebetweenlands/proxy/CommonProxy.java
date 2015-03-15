@@ -1,5 +1,6 @@
 package thebetweenlands.proxy;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
@@ -125,5 +126,15 @@ public class CommonProxy
 
     public EntityPlayer getClientPlayer() {
         return null;
+    }
+
+    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
+    {
+
+    }
+
+    public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer)
+    {
+
     }
 }

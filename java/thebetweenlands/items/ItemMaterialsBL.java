@@ -60,7 +60,7 @@ public class ItemMaterialsBL extends Item
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		return super.getUnlocalizedName() + "." + stack.getItemDamage();
+		return  "item." + EnumMaterialsBL.VALUES[stack.getItemDamage()].iconName;
 	}
 
 	@Override

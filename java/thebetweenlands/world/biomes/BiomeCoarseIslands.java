@@ -9,6 +9,7 @@ import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorCoarseIslands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
+import thebetweenlands.world.biomes.feature.CoarseIslandNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
 
 public class BiomeCoarseIslands
@@ -21,12 +22,13 @@ extends BiomeGenBaseBetweenlands
 	public BiomeCoarseIslands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
+		setColors(0x314D31, 0x314D31);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
 		this.setBiomeName("Coarse Islands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)1);
-		//this.addFeature(new CoarseIslandNoiseFeature())
-		this.addFeature(new SiltNoiseFeature())
+		this.addFeature(new CoarseIslandNoiseFeature())
+		.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
 	}
@@ -44,7 +46,7 @@ extends BiomeGenBaseBetweenlands
 		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
 	
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT + 10;
 	}
@@ -68,5 +70,5 @@ extends BiomeGenBaseBetweenlands
 			return 80;
 		}
 		return 0;
-	}
+	}*/
 }

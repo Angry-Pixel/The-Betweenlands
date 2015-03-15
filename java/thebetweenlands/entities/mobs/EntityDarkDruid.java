@@ -13,7 +13,7 @@ import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.network.MessageDruidTeleportParticle;
+import thebetweenlands.message.MessageDruidTeleportParticle;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 20;

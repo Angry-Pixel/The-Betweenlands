@@ -13,6 +13,6 @@ public class ItemSapBall extends ItemFood implements IDecayFood
 
     public int getDecayHealAmount()
     {
-        return 4;
+        return 2;
     }
 }

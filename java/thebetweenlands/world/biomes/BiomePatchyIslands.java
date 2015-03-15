@@ -19,7 +19,8 @@ extends BiomeGenBaseBetweenlands
 	public BiomePatchyIslands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
-		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 2, 0);
+		setColors(0x314D31, 0x314D31);
+		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 3);
 		this.setBiomeName("Patchy Islands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)1);
@@ -29,7 +30,7 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x184220;
 	}
 
-	@Override
+	/*@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT - 2;
 	}
@@ -38,5 +39,5 @@ extends BiomeGenBaseBetweenlands
 	public int getHeightVariation(int x, int z) {
 		// TODO Auto-generated method stub
 		return 0;
-	}
+	}*/
 }
