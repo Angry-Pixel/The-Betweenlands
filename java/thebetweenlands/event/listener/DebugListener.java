@@ -43,6 +43,9 @@ public class DebugListener {
 		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
 			this.fastFlight = !this.fastFlight;
 		}
+        if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+            DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
+        }
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -57,8 +60,7 @@ public class DebugListener {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
     public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
-		if (TheBetweenlands.DEBUG)
-        {
+		if (TheBetweenlands.DEBUG) {
             Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
             Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
             Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);

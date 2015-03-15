@@ -140,7 +140,7 @@ public class ClientProxy extends CommonProxy {
             BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
             Graphics g = corruptedSkin.getGraphics();
             g.drawImage(skin, 0, 0, null);
-            for (int i = 0; i < level; i++) g.drawImage(corruption, 0, 0, null);
+            for (int i = 0; i < level - 1; i++) g.drawImage(corruption, 0, 0, null);
 
             uploadPlayerSkin(entityPlayer, corruptedSkin);
         }
