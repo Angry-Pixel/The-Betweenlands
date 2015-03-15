@@ -152,7 +152,8 @@ public class ClientProxy extends CommonProxy {
 
     public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer)
     {
-        uploadPlayerSkin(entityPlayer, getOriginalPlayerSkin(entityPlayer));
+        BufferedImage image = getOriginalPlayerSkin(entityPlayer);
+        if (image != null) uploadPlayerSkin(entityPlayer, image);
     }
 
     public boolean hasBackup(AbstractClientPlayer player)
