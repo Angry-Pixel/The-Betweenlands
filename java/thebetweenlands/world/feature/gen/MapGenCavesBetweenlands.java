@@ -8,6 +8,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.MapGenBase;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 
 public class MapGenCavesBetweenlands extends MapGenBase {
@@ -240,8 +241,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 
     protected boolean isOceanBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ)
     {
-    	//TODO: Replace with betweenlands swamp water later on
-        return data[index] == Blocks.flowing_water || data[index] == Blocks.water;
+        return data[index] == Blocks.flowing_water || data[index] == Blocks.water || data[index] == BLBlockRegistry.swampWater;
     }
 
     //Exception biomes to make sure we generate like vanilla
@@ -295,7 +295,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
             if (y < 10)
             {
             	//TODO: Replace with "tar" later on
-                data[index] = Blocks.water;
+                data[index] = BLBlockRegistry.swampWater;
             }
             else
             {
