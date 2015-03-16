@@ -22,8 +22,8 @@ group = "net.angrypixel"
 archivesBaseName = 'TheBetweenlands'
 
 minecraft {
-	version = "1.7.10-10.13.2.1286"
-    runDir = "eclipse"
+    version = "1.7.10-10.13.2.1286"
+    runDir = "minecraft"
 }
 
 processResources {
@@ -44,7 +44,7 @@ processResources {
 
 sourceSets {
     main {
-		output.resourcesDir = output.classesDir
+        output.resourcesDir = output.classesDir
         java { srcDir 'java' }
         resources { srcDir 'resources' }
     }
