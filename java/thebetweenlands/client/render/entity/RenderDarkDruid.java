@@ -1,9 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -12,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 import thebetweenlands.client.model.entity.ModelDarkDruid;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
@@ -28,31 +23,6 @@ public class RenderDarkDruid extends RenderLiving {
 	public RenderDarkDruid() {
 		super(new ModelDarkDruid(), 0.7F);
 		setRenderPassModel(new ModelDarkDruid());
-	}
-
-	@Override
-	protected void preRenderCallback(EntityLivingBase entity, float f) {
-		preRenderCallbackDruid((EntityDarkDruid) entity, f);
-	}
-
-	protected void preRenderCallbackDruid(EntityDarkDruid entity, float f) {
-		if (entity.getDataWatcher().getWatchableObjectInt(21) == 1) {
-			for (float z = 1F; z <= entity.getDataWatcher().getWatchableObjectFloat(22) - 6F; z += 1.0F) {
-				GL11.glPushMatrix();
-				GL11.glDepthMask(false);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glColor4f(1F, 1F, 1F, 0.2F - z * 0.01F * 1.0F);
-				GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glScalef(1F, 1F, 1F);
-				GL11.glTranslatef(0F, -1.51F, z);
-				bindTexture(texture);
-				model.render(entity, 0F, 0F, 0F, 0F, 0F, 0.0625F);
-				GL11.glColor4f(1F, 1F, 1F, 1.0F);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glDepthMask(true);
-				GL11.glPopMatrix();
-			}
-		}
 	}
 
 	protected int setDruidEyeBrightness(EntityDarkDruid entity, int pass, float partialTickTime) {

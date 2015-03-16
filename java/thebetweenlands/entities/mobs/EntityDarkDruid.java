@@ -1,10 +1,16 @@
 package thebetweenlands.entities.mobs;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -14,13 +20,13 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.message.MessageDruidTeleportParticle;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 20;
 	private int attackCounter;
 	private byte isCasting;
 	private int teleportDelay;
-	private int resetTrail = 30;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 
@@ -42,8 +48,6 @@ public class EntityDarkDruid extends EntityMob {
 	protected void entityInit() {
 		super.entityInit();
 		dataWatcher.addObject(20, Byte.valueOf((byte) 0));
-		dataWatcher.addObject(21, 0);
-		dataWatcher.addObject(22, 0F);
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public class EntityDarkDruid extends EntityMob {
 		}
 
 		if (worldObj.isRemote) {
-			if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 100F) {
+			if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 49F) {
 				if (attackCounter == 0) {
 					attackCounter++;
 					tasks.removeTask(meleeAI);
@@ -97,19 +101,8 @@ public class EntityDarkDruid extends EntityMob {
 		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
 
 		if (!worldObj.isRemote && isEntityAlive() && getAttackTarget() != null)
-			if (getAttackTarget().getDistanceSqToEntity(this) > 6.0D && isCasting == 0 && teleportDelay++ >= 20 && getAttackTarget().onGround) {
-				dataWatcher.updateObject(22, (float) getAttackTarget().getDistanceToEntity(this));
+			if (getAttackTarget().getDistanceSqToEntity(this) > 36.0D && isCasting == 0 && teleportDelay++ >= 20 && getAttackTarget().onGround)
 				teleportNearEntity(getAttackTarget());
-				dataWatcher.updateObject(21, 1);
-				resetTrail = 40;
-			}
-
-		if (!worldObj.isRemote && dataWatcher.getWatchableObjectInt(21) == 1 && resetTrail > 0)
-			resetTrail--;
-		if (!worldObj.isRemote && dataWatcher.getWatchableObjectInt(21) == 1 && resetTrail == 0) {
-			dataWatcher.updateObject(21, 0);
-			resetTrail = 30;
-		}
 	}
 
 	protected boolean teleportNearEntity(Entity entity) {
@@ -143,27 +136,40 @@ public class EntityDarkDruid extends EntityMob {
 			}
 
 			if (flag1) {
-				spawnDruidParticlePacket();
-				setPosition(targetX, targetY, targetZ);
-				if (worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox)) {
+				druidParticlePacketOrigin();
+				EntityDarkDruid newDruid = new EntityDarkDruid(worldObj);
+				newDruid.copyDataFrom(this, true);
+				newDruid.setPosition(targetX, targetY, targetZ);
+				if (worldObj.getCollidingBoundingBoxes(newDruid, newDruid.boundingBox).isEmpty() && !worldObj.isAnyLiquid(newDruid.boundingBox)) {
 					flag = true;
+					setDead();
+					worldObj.spawnEntityInWorld(newDruid);
+					druidParticlePacketTarget(newDruid);
+					}
 				}
 			}
-		}
 
 		if (!flag) {
 			setPosition(x, y, z);
 			return false;
 		} else {
 			teleportDelay = 0;
-			spawnDruidParticlePacket();
 			worldObj.playSoundEffect(x, y, z, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
 			playSound("thebetweenlands:druidTeleport", 1.0F, 1.0F);
 			return true;
 		}
 	}
 
-	private void spawnDruidParticlePacket() {
+	private void druidParticlePacketTarget(EntityDarkDruid newDruid) {
+		World world = worldObj;
+		int dim = 0;
+		if (world instanceof WorldServer) {
+			dim = ((WorldServer) world).provider.dimensionId;
+			TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float)newDruid.posX, (float) newDruid.posY, (float) newDruid.posZ), new TargetPoint(dim, newDruid.posX + 0.5D, newDruid.posY + 1.0D, newDruid.posZ + 0.5D, 64D));
+		}
+	}
+
+	private void druidParticlePacketOrigin() {
 		World world = worldObj;
 		int dim = 0;
 		if (world instanceof WorldServer) {
