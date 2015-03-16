@@ -12,6 +12,7 @@ import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockGenericOre;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
+import thebetweenlands.blocks.terrain.BlockPeat;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
@@ -44,6 +45,7 @@ public class BLBlockRegistry
 	public static final Block algae = new BlockAlgae();
 	public static final Block sulfurTorch = new BlockSulfurTorch();
 	public static final Block dampTorch = new BlockDampTorch();
+	public static final Block peat = new BlockPeat();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.

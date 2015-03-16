@@ -1,5 +1,6 @@
 package thebetweenlands;
 
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
