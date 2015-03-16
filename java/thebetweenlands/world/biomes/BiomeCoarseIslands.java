@@ -38,7 +38,7 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x184220;
 	}
 
-	private NoiseGeneratorPerlin islandNoiseGen;
+	/*private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];
 	
 	@Override
@@ -51,7 +51,7 @@ extends BiomeGenBaseBetweenlands
 		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
 	
-	/*@Override
+	@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT + 10;
 	}
@@ -76,20 +76,4 @@ extends BiomeGenBaseBetweenlands
 		}
 		return 0;
 	}*/
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public float getFogStart(float farPlaneDistance) {
-		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
-		Random rng = Minecraft.getMinecraft().theWorld.rand;
-		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, rng)[0];
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public float getFogEnd(float farPlaneDistance) {
-		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
-		Random rng = Minecraft.getMinecraft().theWorld.rand;
-		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, rng)[1];
-	}
 }

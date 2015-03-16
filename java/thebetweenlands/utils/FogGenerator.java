@@ -12,7 +12,7 @@ public class FogGenerator {
 	private double[] fogChunkNoise = new double[256];
 	
 	/**
-	 * Returns the fog range based on a noise generator and the player's position.
+	 * Returns the fog range based on a noise generator and the given position.
 	 * @param x
 	 * @param z
 	 * @param farPlane
@@ -35,7 +35,7 @@ public class FogGenerator {
 		}
 		int ix = (int)(Math.floor(x)) & 15;
 		int iz = (int)(Math.floor(z)) & 15;
-		double fogDist = Math.pow(Math.abs(this.fogChunkNoise[iz * 16 + ix]), 9) / 5.0f;
+		double fogDist = Math.pow(Math.abs(this.fogChunkNoise[iz * 16 + ix]), 4) * 10.0f;
 		if(fogDist > farPlane - 60) {
 			fogDist = farPlane - 60;
 		}
