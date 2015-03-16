@@ -146,6 +146,8 @@ public class EntityDarkDruid extends EntityMob {
 					worldObj.spawnEntityInWorld(newDruid);
 					druidParticlePacketTarget(newDruid);
 					}
+				else
+					newDruid.setDead();
 				}
 			}
 
