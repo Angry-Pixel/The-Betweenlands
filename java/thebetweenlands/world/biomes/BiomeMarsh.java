@@ -8,7 +8,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import thebetweenlands.world.biomes.decorators.BiomeDecoratorCoarseIslands;
+import thebetweenlands.world.biomes.decorators.BiomeDecoratorMarsh;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
@@ -19,8 +19,7 @@ public class BiomeMarsh
 extends BiomeGenBaseBetweenlands
 {
 	public BiomeMarsh(int biomeID, String name, BiomeNoiseFeature feature) {
-		//TODO: Use different decorator
-		this(biomeID, new BiomeDecoratorCoarseIslands(), feature, name);
+		this(biomeID, new BiomeDecoratorMarsh(), feature, name);
 	}
 	
 	public BiomeMarsh(int biomeID, BiomeDecoratorBaseBetweenlands decorator, BiomeNoiseFeature feature, String name) {

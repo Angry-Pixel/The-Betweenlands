@@ -95,16 +95,5 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 				world.setBlock(xx, yy + 1, zz, BLBlockRegistry.weepingBlue, 8, 2);
 			}
 		}
-
-		for (attempt = 0; attempt < 5; attempt++) {
-			xx = x + offsetXZ();
-			yy = 80 + rand.nextInt(15);
-			zz = z + offsetXZ();
-
-			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz) && world.isAirBlock(xx, yy, zz) && world.isAirBlock(xx, yy + 1, zz)) {
-				world.setBlock(xx, yy, zz, BLBlockRegistry.sundew, 0, 2);
-				world.setBlock(xx, yy + 1, zz, BLBlockRegistry.sundew, 8, 2);
-			}
-		}	
 	}
 }
