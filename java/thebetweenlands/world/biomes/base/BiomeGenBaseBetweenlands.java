@@ -50,6 +50,10 @@ extends BiomeGenBase
 		this.topBlock = Blocks.grass;
 		this.baseBlock = Blocks.stone;
 		this.underLayerTopBlock = Blocks.dirt;
+		this.spawnableCaveCreatureList.clear();
+		this.spawnableCreatureList.clear();
+		this.spawnableMonsterList.clear();
+		this.spawnableWaterCreatureList.clear();
 	}
 
 	/**

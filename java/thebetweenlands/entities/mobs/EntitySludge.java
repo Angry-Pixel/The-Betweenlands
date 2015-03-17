@@ -1,7 +1,6 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -14,7 +13,7 @@ import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
 
-public class EntitySludge extends EntityMob {
+public class EntitySludge extends EntityMobBL {
 	private int sludgeJumpDelay;
 	public float squishAmount;
 	public float squishFactor;
@@ -87,7 +86,7 @@ public class EntitySludge extends EntityMob {
 			setAttackTarget(entityplayer);
 		}
 
-		if (onGround && sludgeJumpDelay-- <= 0) {
+		if ((onGround || this.isInWater()) && sludgeJumpDelay-- <= 0) {
 			sludgeJumpDelay = getJumpDelay();
 			if (entityplayer != null)
 				sludgeJumpDelay /= 3;
@@ -100,6 +99,11 @@ public class EntitySludge extends EntityMob {
 			if (onGround)
 				moveStrafing = moveForward = 0.0F;
 		}
+		
+		 if (this.rand.nextFloat() < 0.8F && this.isInWater()) {
+             this.isJumping = true;
+             this.motionY += 0.01D;
+         }
 	}
 
 	protected int getJumpDelay() {

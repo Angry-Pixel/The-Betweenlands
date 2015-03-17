@@ -89,10 +89,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List getPossibleCreatures(EnumCreatureType creatureType, int x, int y, int z) {
-		//TODO: Impl
-		//BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
-		//return biome == null ? null : biome.getSpawnableList(creatureType);
-		return null;
+		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+		return biome == null ? null : biome.getSpawnableList(creatureType);
 	}
 
 	@Override

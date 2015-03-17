@@ -2,12 +2,11 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.init.Items;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 
-public class EntityAngler extends EntityWaterMob {
+public class EntityAngler extends EntityWaterMobBL {
 	public EntityAngler(World par1World) {
 		super(par1World);
 		setSize(1F, 1F);

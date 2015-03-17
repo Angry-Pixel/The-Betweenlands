@@ -62,11 +62,11 @@ public class TheBetweenlands
 		ConfigHandler.INSTANCE.loadConfig(event);
 
 		//BL Registry
-		BLItemRegistry.init();
 		BLFluidRegistry.init();
 		BLBlockRegistry.init();
-		BLEntityRegistry.init();
 		BLBiomeRegistry.init();
+		BLItemRegistry.init();
+		BLEntityRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);

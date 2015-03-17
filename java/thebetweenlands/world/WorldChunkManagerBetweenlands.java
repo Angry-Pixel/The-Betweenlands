@@ -27,9 +27,6 @@ public class WorldChunkManagerBetweenlands
 {
     private static final float rainfall = 0F;
 
-    //TODO: Impl
-    private static final ArrayList<BiomeGenBase> allowedBiomes = new ArrayList<BiomeGenBase>(/*Arrays.asList(ModBiomes.undergroundJungle, ModBiomes.subterraneanSavannah)*/);
-
     @SuppressWarnings("rawtypes")
     private final List biomesToSpawnIn;
     private final BiomeCache biomeCache;
@@ -40,19 +37,7 @@ public class WorldChunkManagerBetweenlands
         this.biomesToSpawnIn = new ArrayList(allowedBiomes);
         this.biomeCache = new BiomeCache(this);
 
-        //TODO: Impl
-        //biomeGenLayer = GenLayerErebus.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType())[1];
-        //this.biomeGenLayer = null;
-        //this.biomeGenLayer = new GenLayerBiome();
-
-        //GenLayer[] agenlayer = GenLayer.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType());
-        //agenlayer = getModdedBiomeGenerators(world.getWorldInfo().getTerrainType(), world.getSeed(), agenlayer);
-        //this.genBiomes = agenlayer[0];
-        //this.biomeIndexLayer = agenlayer[1];
-        //this.biomeGenLayer = agenlayer[0];
-
         biomeGenLayer = GenLayerBetweenlands.initializeAllBiomeGenerators(world.getSeed(), world.getWorldInfo().getTerrainType())[1];
-        //this.biomeGenLayer = new GenLayerBiome();
     }
 
     @Override
@@ -77,23 +62,12 @@ public class WorldChunkManagerBetweenlands
         return biomesForGeneration;
     }
 
-	/*
-	 * @Override public float[] getTemperatures(float temperatureArray[], int x,
-	 * int z, int sizeX, int sizeZ) { if (temperatureArray == null ||
-	 * temperatureArray.length < sizeX * sizeZ) temperatureArray = new
-	 * float[sizeX * sizeZ];
-	 *
-	 * Arrays.fill(temperatureArray, 0, sizeX * sizeZ, temperature); return
-	 * temperatureArray; }
-	 */
-
     @Override
     public float[] getRainfall(float rainfallArray[], int x, int z, int sizeX, int sizeZ) {
         if( rainfallArray == null || rainfallArray.length < sizeX * sizeZ ) {
             rainfallArray = new float[sizeX * sizeZ];
         }
-
-        Arrays.fill(rainfallArray, 0, sizeX * sizeZ, rainfall);
+        Arrays.fill(rainfallArray, 0, sizeX * sizeZ, 0.0f);
         return rainfallArray;
     }
 

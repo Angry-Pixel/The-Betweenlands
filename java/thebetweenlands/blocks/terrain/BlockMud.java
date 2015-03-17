@@ -1,11 +1,15 @@
 package thebetweenlands.blocks.terrain;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntityMobBL;
+import thebetweenlands.entities.mobs.EntityWaterMobBL;
 
 public class BlockMud
         extends Block
@@ -21,8 +25,12 @@ public class BlockMud
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return null;
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List aabblist, Entity entity) {
+        AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
+        if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) && 
+        		(entity instanceof EntityMobBL || entity instanceof EntityWaterMobBL)) {
+            aabblist.add(axisalignedbb1);
+        }
     }
 	
 	@Override
