@@ -29,14 +29,17 @@ tile.thebetweenlands.wisp.name=Will o' the wisp
 tile.thebetweenlands.saplingWeedWood.name=Weed Wood Sapling
 tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling
 tile.thebetweenlands.saplingSpiritTree.name=Spirit Tree Sapling
+tile.thebetweenlands.saplingRubberTree.name=Rubber Tree Sapling
 
 tile.thebetweenlands.weedWoodLog.name=Weed Wood Log
 tile.thebetweenlands.weedWood.name=Weed Wood
 tile.thebetweenlands.weedWoodBark.name=Weed Wood Bark
 tile.thebetweenlands.sapTreeLog.name=Sap Tree Log
+tile.thebetweenlands.rubberTreeLog.name=Rubber Tree Log
 
 tile.thebetweenlands.weedWoodLeaves.name=Weed Wood Leaves
 tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
+tile.thebetweenlands.rubberTreeLeaves.name=Rubber Tree Leaves
 
 tile.thebetweenlands.weedWoodPlanks.name=Weed Wood Planks
 tile.thebetweenlands.weedWoodCraftingTable.name=Weed Wood Crafting Table

@@ -17,6 +17,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.world.feature.trees.WorldGenRubberTree;
+import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -102,13 +104,15 @@ public class BlockBLSapling extends BlockSapling {
 		WorldGenerator worldGen = null;
 
 		if(type.equals("saplingWeedWood")) {
-			System.out.println("Generate Weed Wood Tree");
 			worldGen = new WorldGenWeedWoodTree();
 		}
 		
 		if(type.equals("saplingSapTree")) {
-			System.out.println("Generate Sap Tree");
-			//worldGen = new WorldGenSapTree();
+			worldGen = new WorldGenSapTree();
+		}
+		
+		if(type.equals("saplingRubberTree")) {
+			worldGen = new WorldGenRubberTree();
 		}
 		
 		if(type.equals("saplingSpiritTree")) {

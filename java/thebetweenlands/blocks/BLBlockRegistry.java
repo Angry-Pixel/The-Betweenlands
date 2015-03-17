@@ -62,15 +62,18 @@ public class BLBlockRegistry
 	public static final Block saplingWeedWood = new BlockBLSapling("saplingWeedWood");
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree");
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
+	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree");
 	
 	public static final Block weedWoodLeaves = new BlockBLLeaves("weedWoodLeaves");
 	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
+	public static final Block rubberTreeLeaves = new BlockBLLeaves("rubberTreeLeaves");
 	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
 	
 	public static final Block weedWoodLog = new BlockBLLog("weedWoodLog");
 	public static final Block weedWood = new BlockBLLog("weedWood");
 	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
+	public static final Block rubberTreeLog = new BlockBLLog("rubberTreeLog");
 
 	// WOOD
 	public static final Block weedWoodPlanks = new BlockWeedWoodPlanks();
