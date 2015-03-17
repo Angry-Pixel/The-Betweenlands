@@ -35,6 +35,7 @@ public class CommonProxy
         registerTileEntity(TileEntityBLFurnace.class, "furnaceBL");
         registerTileEntity(TileEntityBLDualFurnace.class, "dualFurnaceBL");
         registerTileEntity(TileEntityBLCraftingTable.class, "crfTableBL");
+        registerTileEntity(TileEntityWisp.class, "wisp");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
@@ -128,13 +129,15 @@ public class CommonProxy
         return null;
     }
 
-    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
-    {
+    public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level) {
 
     }
 
-    public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer)
-    {
+    public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer) {
 
+    }
+    
+    public void updateWispParticles(TileEntityWisp te) {
+    	
     }
 }

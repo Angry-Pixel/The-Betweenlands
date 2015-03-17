@@ -11,7 +11,7 @@ public class ConfigHandler
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
 	public Configuration config;
 
-	public static final String[] usedCategories = { "World and Dimension"};
+	public static final String[] usedCategories = { "World and Dimension", "Rendering"};
 
 	//////// Values ///////
 	public static int DIMENSION_ID;
@@ -23,6 +23,7 @@ public class ConfigHandler
 	public static int BIOME_ID_MARSH1;
 	public static int BIOME_ID_MARSH2;
 	public static int DIMENSION_BRIGHTNESS;
+	public static int WISP_QUALITY;
 	public static int GIANT_TREE_DENSITY; //temp
 
 	public void loadConfig(FMLPreInitializationEvent event) {
@@ -42,6 +43,8 @@ public class ConfigHandler
 		BIOME_ID_MARSH2 = config.get(usedCategories[0], "Marsh 2 Biome ID", 55).getInt(55);
 		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 10).setMinValue(0).setMaxValue(100).getInt(10);
 		GIANT_TREE_DENSITY = config.get(usedCategories[0], "Frequency of Giant Trees. Higher numbers de-crease rate.", 10).getInt(10);
+		
+		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 80).setMinValue(0).setMaxValue(100).getInt(80);
 		
 		if( config.hasChanged() ) {
             config.save();
