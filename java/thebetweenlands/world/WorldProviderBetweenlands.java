@@ -10,6 +10,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -55,7 +56,7 @@ extends WorldProvider
 		byte[] targetFogColor;
 
 		if( biome instanceof BiomeGenBaseBetweenlands ) {
-			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB();
+			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB().clone();
 		} else {
 			targetFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
 		}
@@ -67,6 +68,19 @@ extends WorldProvider
 			}
 		}
 
+		boolean denseFog = false;
+		if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
+				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
+				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
+			denseFog = true;
+		}
+		float m = denseFog ? 80.0f : 0.0f;
+		
+		for(int i = 0; i < 3; i++) {
+			int diff = 255 - targetFogColor[i];
+			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
+		}
+		
 		for(int a = 0; a < 3; a++) {
 			if(this.currentFogColor[a] != targetFogColor[a]) {
 				if(this.currentFogColor[a] < targetFogColor[a]) {
