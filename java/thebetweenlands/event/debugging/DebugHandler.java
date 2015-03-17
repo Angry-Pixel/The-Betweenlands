@@ -17,6 +17,7 @@ public class DebugHandler {
 	/////// DEBUG ///////
 	private boolean fullBright = false;
 	private boolean fastFlight = false;
+	public boolean denseFog = false;
 	private float lightTable[];
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -42,6 +43,9 @@ public class DebugHandler {
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_C)) {
 			this.fastFlight = !this.fastFlight;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_R)) {
+			this.denseFog = !this.denseFog;
 		}
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
             DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);

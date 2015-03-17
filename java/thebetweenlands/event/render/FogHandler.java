@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -58,6 +60,12 @@ public class FogHandler {
 				BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands) biome;
 				fogStart = bgbb.getFogStart(event.farPlaneDistance);
 				fogEnd = bgbb.getFogEnd(event.farPlaneDistance);
+			}
+			if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
+					(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
+					(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
+				fogStart /= 5.0f;
+				fogEnd /= 3.0f;
 			}
 			if(Math.abs(this.currentFogStart - fogStart) > 0.1f) {
 				float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/event.farPlaneDistance/10.f;

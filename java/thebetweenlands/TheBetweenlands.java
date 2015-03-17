@@ -17,6 +17,7 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageAltarCraftingProgress;
 import thebetweenlands.message.MessageDruidTeleportParticle;
 import thebetweenlands.message.MessageSyncPlayerDecay;
+import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -81,6 +82,7 @@ public class TheBetweenlands
 		networkWrapper.registerMessage(MessageDruidTeleportParticle.class, MessageDruidTeleportParticle.class, 1, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
+        networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
 	}
 
 	@EventHandler

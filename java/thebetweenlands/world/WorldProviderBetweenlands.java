@@ -2,19 +2,18 @@ package thebetweenlands.world;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -154,5 +153,35 @@ extends WorldProvider
 		}
 
 		return chunkcoordinates;
+	}
+
+	private BetweenlandsWorldData worldData;
+
+	public BetweenlandsWorldData getWorldData() {
+		if(this.worldData == null) {
+			this.worldData = BetweenlandsWorldData.forWorld(this.worldObj);
+		}
+		return this.worldData;
+	}
+
+	@Override
+	public void updateWeather() {
+		if(!this.worldObj.isRemote) {
+			int timeToFog = this.getWorldData().getTimeToFog();
+			if(timeToFog <= 0) {
+				if(this.getWorldData().getDenseFog()) {
+					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(12000) + 12000);
+				} else {
+					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(168000) + 12000);
+				}
+			} else {
+				--timeToFog;
+				this.getWorldData().setTimeToFogNBT(timeToFog);
+				if (timeToFog <= 0) {
+					this.getWorldData().setDenseFog(!this.getWorldData().getDenseFog());
+				}
+			}
+			TheBetweenlands.networkWrapper.sendToAll(new MessageSyncWeather(this.getWorldData().getDenseFog()));
+		}
 	}
 }
