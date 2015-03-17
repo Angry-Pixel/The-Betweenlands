@@ -42,15 +42,13 @@ extends BiomeGenBaseBetweenlands
 	@SideOnly(Side.CLIENT)
 	public float getFogStart(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
-		Random rng = Minecraft.getMinecraft().theWorld.rand;
-		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, rng)[0];
+		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance)[0];
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getFogEnd(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
-		Random rng = Minecraft.getMinecraft().theWorld.rand;
-		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, rng)[1];
+		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance)[1];
 	}
 }

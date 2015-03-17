@@ -19,12 +19,14 @@ public class FogGenerator {
 	 * @param rng
 	 * @return
 	 */
-	public float[] getFogRange(double x, double z, float farPlane, Random rng) {
-		if(this.fogNoiseGen == null) {
-			this.fogNoiseGen = new NoiseGeneratorPerlin(rng, 4);
-		}
+	public float[] getFogRange(double x, double z, float farPlane) {
 		int cx = (int)((x - ((int)(Math.floor(x)) & 15)) / 16) - 1;
 		int cz = (int)((z - ((int)(Math.floor(z)) & 15)) / 16);
+		if(this.fogNoiseGen == null) {
+			Random rnd = new Random();
+			rnd.setSeed(cx << 32 | cz);
+			this.fogNoiseGen = new NoiseGeneratorPerlin(rnd, 4);
+		}
 		if(this.fogChunkNoise == null || this.lastCX != cx || this.lastCZ != cz) {
 			this.lastCX = cx;
 			this.lastCZ = cz;
