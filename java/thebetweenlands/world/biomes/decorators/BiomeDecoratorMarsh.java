@@ -115,5 +115,14 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 			if (checkSurface(SurfaceType.WATER, xx, yy, zz))
 				BLBlockRegistry.wisp.generateBlock(world, xx, yy, zz);
 		}
+		
+		for (attempt = 0; attempt < 10; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(14);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.PEAT, xx, yy, zz))
+				world.setBlock(xx, yy, zz, Blocks.fire, 0, 3);
+		}
 	}
 }

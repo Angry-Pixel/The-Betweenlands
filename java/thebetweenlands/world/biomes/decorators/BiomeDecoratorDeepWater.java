@@ -98,7 +98,7 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 		
 		for (attempt = 0; attempt < 1; attempt++) {
 			xx = x + offsetXZ();
-			yy = 80 + rand.nextInt(30);
+			yy = 80 + rand.nextInt(62);
 			zz = z + offsetXZ();
 
 			if (checkSurface(SurfaceType.WATER, xx, yy, zz))
