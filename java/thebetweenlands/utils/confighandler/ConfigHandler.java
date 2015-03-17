@@ -41,10 +41,10 @@ public class ConfigHandler
 		BIOME_ID_PATCHY_ISLANDS = config.get(usedCategories[0], "Patchy Islands Biome ID", 53).getInt(53);
 		BIOME_ID_MARSH1 = config.get(usedCategories[0], "Marsh 1 Biome ID", 54).getInt(54);
 		BIOME_ID_MARSH2 = config.get(usedCategories[0], "Marsh 2 Biome ID", 55).getInt(55);
-		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 10).setMinValue(0).setMaxValue(100).getInt(10);
+		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 45).setMinValue(0).setMaxValue(100).getInt(45);
 		GIANT_TREE_DENSITY = config.get(usedCategories[0], "Frequency of Giant Trees. Higher numbers de-crease rate.", 10).getInt(10);
 		
-		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(80);
+		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		
 		if( config.hasChanged() ) {
             config.save();

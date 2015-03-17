@@ -15,6 +15,7 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.tileentities.TileEntityWisp;
@@ -38,30 +39,6 @@ public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 			((TileEntityWisp)tileEntity).lastSpawn = System.nanoTime();
 
 			int wispMeta = tileEntity.getBlockMetadata();
-			int wispcolorOut = 0xFFFF0000;
-			int wispcolorIn = 0xFF00FF00;
-			switch(wispMeta) {
-			case 1:
-				//Pink/White
-				wispcolorOut = 0xFF7F1659;
-				wispcolorIn = 0xFFFFFFFF;
-				break;
-			case 2:
-				//Blue/Pink
-				wispcolorOut = 0xFF0707C8;
-				wispcolorIn = 0xFFC8077B;
-				break;
-			case 3:
-				//Green/Yellow/White
-				wispcolorOut = 0xFF0E2E0B;
-				wispcolorIn = 0xFFC8077B;
-				break;
-			case 4:
-				//Red/Yellow/White
-				wispcolorOut = 0xFF9A6908;
-				wispcolorIn = 0xFF4F0303;
-				break;
-			}
 
 			particleList.add(new EntityWispFX(
 					tileEntity.getWorldObj(), 
@@ -69,7 +46,7 @@ public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 					y + 0.5F +RenderManager.renderPosY, 
 					z + 0.5 + RenderManager.renderPosZ,
 					0.0D, 0.0D, 0.0D,
-					3.0F, 50, wispcolorOut));
+					3.0F, 50, BLBlockRegistry.wisp.colors[wispMeta]));
 
 			particleList.add(new EntityWispFX(
 					tileEntity.getWorldObj(), 
@@ -77,7 +54,7 @@ public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 					y + 0.5F + RenderManager.renderPosY, 
 					z + 0.5 + RenderManager.renderPosZ,
 					0.0D, 0.0D, 0.0D,
-					2.0F, 50, wispcolorIn));
+					2.0F, 50, BLBlockRegistry.wisp.colors[wispMeta + 1]));
 		}
 	}
 

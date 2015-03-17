@@ -9,6 +9,7 @@ public enum SurfaceType {
 	GRASS,
 	DIRT,
 	SAND,
+	WATER,
 	MIXED;
 
 	public boolean matchBlock(Block block) {
@@ -21,6 +22,8 @@ public enum SurfaceType {
 				return block == BLBlockRegistry.swampDirt || block == Blocks.dirt;
 			case SAND:
 				return block == Blocks.sand;
+			case WATER:
+				return block == BLBlockRegistry.swampWater;
 			case MIXED:
 				return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt;
 			default:

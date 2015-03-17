@@ -45,7 +45,7 @@ public class BlockWisp
 	
     @Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-    	world.setBlock(x, y, z, this, world.rand.nextInt(5), 2);
+    	world.setBlock(x, y, z, this, world.rand.nextInt(this.colors.length / 2) * 2, 2);
     }
     
     @Override
@@ -56,5 +56,24 @@ public class BlockWisp
     @Override
     public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
         return true;
+    }
+    
+    //Colors can be added here, always add a pair of colors for outer color and inner color
+    public int[] colors = new int[] {
+    		0xFF7F1659, 0xFFFFFFFF, //Pink/White
+    		0xFF0707C8, 0xFFC8077B, //Blue/Pink
+    		0xFF0E2E0B, 0xFFC8077B, //Green/Yellow/White
+    		0xFF9A6908, 0xFF4F0303  //Red/Yellow/White
+    };
+    
+    /**
+     * Sets the block at the giving position to a wisp block with a random color
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void generateBlock(World world, int x, int y, int z) {
+    	world.setBlock(x, y, z, this, world.rand.nextInt(this.colors.length / 2) * 2, 2);
     }
 }
