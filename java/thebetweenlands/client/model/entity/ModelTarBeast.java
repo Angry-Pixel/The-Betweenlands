@@ -95,7 +95,7 @@ public class ModelTarBeast extends ModelBase {
 	ModelRenderer tarBody26;
 	ModelRenderer tarBody27;
 	ModelRenderer tarBody28;
-  
+
 	public ModelTarBeast() {
 		textureWidth = 128;
 		textureHeight = 128;
@@ -445,7 +445,7 @@ public class ModelTarBeast extends ModelBase {
 		tarBody28.setRotationPoint(0F, -17F, -2F);
 		setRotation(tarBody28, 0F, 0F, 0F);
 	}
-  
+
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
@@ -537,13 +537,13 @@ public class ModelTarBeast extends ModelBase {
 		tarBody27.render(unitPixel);
 		tarBody28.render(unitPixel);
 	}
-  
+
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-  
+
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
