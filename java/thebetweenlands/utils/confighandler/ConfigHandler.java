@@ -44,7 +44,7 @@ public class ConfigHandler
 		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 10).setMinValue(0).setMaxValue(100).getInt(10);
 		GIANT_TREE_DENSITY = config.get(usedCategories[0], "Frequency of Giant Trees. Higher numbers de-crease rate.", 10).getInt(10);
 		
-		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 80).setMinValue(0).setMaxValue(100).getInt(80);
+		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(80);
 		
 		if( config.hasChanged() ) {
             config.save();

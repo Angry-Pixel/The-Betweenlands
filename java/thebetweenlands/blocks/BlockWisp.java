@@ -20,6 +20,7 @@ public class BlockWisp
 		setBlockName("thebetweenlands.wisp");
 		setHardness(0.0f);
 		setBlockBounds(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+		setBlockTextureName("thebetweenlands:wisp");
 	}
 
 	@Override

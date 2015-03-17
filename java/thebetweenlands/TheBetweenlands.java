@@ -1,6 +1,5 @@
 package thebetweenlands;
 
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -12,6 +11,7 @@ import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageAltarCraftingProgress;
@@ -94,6 +94,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
         MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
 
         if (event.getSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlay());
