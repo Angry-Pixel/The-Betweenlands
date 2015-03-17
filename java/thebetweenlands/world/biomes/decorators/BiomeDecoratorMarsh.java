@@ -107,9 +107,9 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 			}
 		}
 		
-		for (attempt = 0; attempt < 4; attempt++) {
+		for (attempt = 0; attempt < 3; attempt++) {
 			xx = x + offsetXZ();
-			yy = 80 + rand.nextInt(15);
+			yy = 80 + rand.nextInt(18);
 			zz = z + offsetXZ();
 
 			if (checkSurface(SurfaceType.WATER, xx, yy, zz))

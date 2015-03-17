@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Vec3;
 
 import org.lwjgl.opengl.GL11;
 
@@ -20,8 +19,6 @@ import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import com.sun.javafx.geom.Vec3d;
 
 public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 	@Override

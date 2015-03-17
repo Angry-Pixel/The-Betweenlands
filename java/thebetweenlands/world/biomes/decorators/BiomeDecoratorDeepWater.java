@@ -95,5 +95,14 @@ public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
 				world.setBlock(xx, yy + 1, zz, BLBlockRegistry.weepingBlue, 8, 2);
 			}
 		}
+		
+		for (attempt = 0; attempt < 1; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(30);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.WATER, xx, yy, zz))
+				BLBlockRegistry.wisp.generateBlock(world, xx, yy, zz);
+		}
 	}
 }
