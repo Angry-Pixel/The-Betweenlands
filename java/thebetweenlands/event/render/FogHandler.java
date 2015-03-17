@@ -28,7 +28,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
 
-
+	public float getCurrentFogStart() {
+		return this.currentFogStart;
+	}
+	
+	public float getCurrentFogEnd() {
+		return this.currentFogEnd;
+	}
 
 	////// Biome specific fog + smooth transition //////
 	private float currentFogStart;

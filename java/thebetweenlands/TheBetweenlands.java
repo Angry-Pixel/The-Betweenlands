@@ -11,6 +11,7 @@ import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.ThemHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -97,7 +98,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
         MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-
+        MinecraftForge.EVENT_BUS.register(ThemHandler.INSTANCE);
+        
         if (event.getSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlay());
         }
