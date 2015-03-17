@@ -170,9 +170,9 @@ extends WorldProvider
 			int timeToFog = this.getWorldData().getTimeToFog();
 			if(timeToFog <= 0) {
 				if(this.getWorldData().getDenseFog()) {
-					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(12000) + 12000);
+					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(12000) + 6000);
 				} else {
-					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(168000) + 12000);
+					this.getWorldData().setTimeToFogNBT(this.worldObj.rand.nextInt(60000) + 6000);
 				}
 			} else {
 				--timeToFog;
