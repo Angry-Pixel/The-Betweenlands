@@ -230,7 +230,7 @@ extends BiomeGenBase
 	 * Returns the fog RGB color.
 	 * @return byte[3]
 	 */
-	public final byte[] getFogRGB() {
+	public byte[] getFogRGB() {
 		return this.fogColorRGB;
 	}
 

@@ -11,9 +11,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.TheBetweenlands;
@@ -24,8 +22,6 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -68,7 +64,7 @@ public class FogHandler {
 				fogEnd /= 3.0f;
 			}
 			if(Math.abs(this.currentFogStart - fogStart) > 0.1f) {
-				float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/event.farPlaneDistance/10.f;
+				float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/event.farPlaneDistance/60.f;
 				if(this.currentFogStart > fogStart) {
 					this.currentFogStart-=currentFogStartIncr;
 				} else if(this.currentFogStart < fogStart) {
@@ -76,7 +72,7 @@ public class FogHandler {
 				}
 			}
 			if(Math.abs(this.currentFogEnd - fogEnd) > 0.1f) {
-				float currentFogEndIncr = Math.abs(this.currentFogEnd - fogEnd)/event.farPlaneDistance/10.f;
+				float currentFogEndIncr = Math.abs(this.currentFogEnd - fogEnd)/event.farPlaneDistance/60.f;
 				if(this.currentFogEnd > fogEnd) {
 					this.currentFogEnd-=currentFogEndIncr;
 				} else if(this.currentFogEnd < fogEnd) {

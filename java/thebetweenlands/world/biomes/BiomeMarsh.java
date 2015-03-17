@@ -1,7 +1,5 @@
 package thebetweenlands.world.biomes;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -21,7 +19,7 @@ extends BiomeGenBaseBetweenlands
 	public BiomeMarsh(int biomeID, String name, BiomeNoiseFeature feature) {
 		this(biomeID, new BiomeDecoratorMarsh(), feature, name);
 	}
-	
+
 	public BiomeMarsh(int biomeID, BiomeDecoratorBaseBetweenlands decorator, BiomeNoiseFeature feature, String name) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
@@ -37,18 +35,39 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x184220;
 	}
+
+	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getFogStart(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
-		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[0];
+		float noise = FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[0];
+		byte[] targetFogColor = this.fogColorRGB.clone();
+		float m = (float) ((50 - noise) / 5.0f);
+		if(m < 0) {
+			m = 0.0f;
+		} else if(m > 150) {
+			m = 150;
+		}
+		for(int i = 0; i < 3; i++) {
+			int diff = 255 - targetFogColor[i];
+			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
+		}
+		this.recalculatedFogColor = targetFogColor;
+		return noise;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getFogEnd(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
 		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[1];
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public byte[] getFogRGB() {
+		return this.recalculatedFogColor;
 	}
 }

@@ -84,12 +84,12 @@ extends WorldProvider
 		for(int a = 0; a < 3; a++) {
 			if(this.currentFogColor[a] != targetFogColor[a]) {
 				if(this.currentFogColor[a] < targetFogColor[a]) {
-					this.currentFogColor[a] += 0.3D;
+					this.currentFogColor[a] += 0.025D;
 					if(this.currentFogColor[a] > targetFogColor[a]) {
 						this.currentFogColor[a] = targetFogColor[a];
 					}
 				} else if(this.currentFogColor[a] > targetFogColor[a]) {
-					this.currentFogColor[a] -= 0.3D;
+					this.currentFogColor[a] -= 0.025D;
 					if(this.currentFogColor[a] < targetFogColor[a]) {
 						this.currentFogColor[a] = targetFogColor[a];
 					}
