@@ -140,4 +140,8 @@ public class CommonProxy
     public void updateWispParticles(TileEntityWisp te) {
     	
     }
+    
+    public void spawnThem() { 
+    	
+    }
 }

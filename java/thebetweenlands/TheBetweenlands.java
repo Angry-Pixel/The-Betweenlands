@@ -11,8 +11,8 @@ import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FogHandler;
-import thebetweenlands.event.render.ThemHandler;
 import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageAltarCraftingProgress;
@@ -92,13 +92,13 @@ public class TheBetweenlands
 		proxy.registerRenderInformation();
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
         MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(ThemHandler.INSTANCE);
         
         if (event.getSide() == Side.CLIENT) {
             MinecraftForge.EVENT_BUS.register(new GuiOverlay());

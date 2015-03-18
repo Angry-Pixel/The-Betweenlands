@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.entity.RenderAngler;
@@ -45,13 +46,18 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
+import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
+import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
+import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
@@ -239,6 +245,29 @@ public class ClientProxy extends CommonProxy {
 		}
 		for(Object particle : te.particleList) {
 			((EntityWispFX)particle).onUpdate();
+		}
+	}
+	
+	@Override
+	public void spawnThem() {
+		if(Minecraft.getMinecraft().thePlayer.dimension != ConfigHandler.DIMENSION_ID) return;
+		boolean denseFog = false;
+		if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
+				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
+				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
+			denseFog = true;
+		}
+		if(denseFog && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
+			int probability = (int)(FogHandler.INSTANCE.getCurrentFogEnd()) / 2 + 16;
+			if(Minecraft.getMinecraft().theWorld.rand.nextInt(probability) == 0) {
+				double xOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;
+				double zOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;
+				double sx = Minecraft.getMinecraft().renderViewEntity.posX + xOff;
+				double sz = Minecraft.getMinecraft().renderViewEntity.posZ + zOff;
+				double sy = Minecraft.getMinecraft().theWorld.getHeightValue((int)sx, (int)sz) + 1.0f + Minecraft.getMinecraft().theWorld.rand.nextFloat() * 2.5f;
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityThemFX(
+						Minecraft.getMinecraft().theWorld, sx, sy, sz));
+			}
 		}
 	}
 }
