@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelDarkDruid;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.utils.LightingUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -30,18 +31,12 @@ public class RenderDarkDruid extends RenderLiving {
 			bindTexture(eyeTexture);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
-			GL11.glDisable(GL11.GL_LIGHTING);
-			char var5 = 61680;
-			int var6 = var5 % 65536;
-			int var7 = var5 / 65536;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var6 / 1.0F, var7 / 1.0F);
+			LightingUtil.INSTANCE.setLighting(255);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			return 1;
 		} else if (pass == 2) {
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_BLEND);
+			LightingUtil.INSTANCE.revert();
 		}
-
 		return -1;
 	}
 

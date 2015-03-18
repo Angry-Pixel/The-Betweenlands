@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelAngler;
 import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.utils.LightingUtil;
 
 public class RenderAngler extends RenderLiving {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/angler.png");
@@ -21,19 +21,20 @@ public class RenderAngler extends RenderLiving {
 	}
 
 	protected int setAnglerEyeBrightness(EntityAngler entity, int pass, float partialTickTime) {
-		if (pass != 0) {
-			return -1;
-		} else {
+		if(pass == 1){
 			bindTexture(eyeTexture);
 			float var4 = 1.0F;
 			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) 100, (float) 100);
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			LightingUtil.INSTANCE.setLighting(255);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, var4);
 			return 1;
+		} else if(pass == 2) {
+			LightingUtil.INSTANCE.revert();
+			GL11.glDisable(GL11.GL_BLEND);
 		}
+		return -1;
 	}
 
 	@Override

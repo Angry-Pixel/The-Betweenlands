@@ -28,7 +28,7 @@ public class RenderWight extends RenderLiving {
 	protected void scaleWight(EntityWight wight, float partialTickTime) {
 		GL11.glScalef(2F, 2F, 2F);
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glColor4f(1F, 1F, 1F, 1F - wight.getAnimation() * 0.5F);
 	}
 
