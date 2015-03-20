@@ -259,7 +259,8 @@ public class BlockWeedWoodChest extends BlockContainer {
 		if (world.isRemote)
 			return true;
 		else {
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CHEST, world, x, y, z);
+			if(getInventory(world, x, y, z) != null)
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CHEST, world, x, y, z);
 			return true;
 		}
 	}
