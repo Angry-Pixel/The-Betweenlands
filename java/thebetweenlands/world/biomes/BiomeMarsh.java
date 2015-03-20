@@ -2,11 +2,9 @@ package thebetweenlands.world.biomes;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntitySludge;
-import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;

@@ -1,16 +1,10 @@
 package thebetweenlands.world.biomes;
 
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
-import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorCoarseIslands;
@@ -18,8 +12,6 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
 import thebetweenlands.world.biomes.feature.CoarseIslandNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BiomeCoarseIslands
 extends BiomeGenBaseBetweenlands
