@@ -1,6 +1,11 @@
 package thebetweenlands.world.biomes;
 
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorSwampLands;
@@ -28,5 +33,10 @@ extends BiomeGenBaseBetweenlands
 		this.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature())
 		.addFeature(new CragSpiresNoiseFeature());
+
+		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 30, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 	}
 }

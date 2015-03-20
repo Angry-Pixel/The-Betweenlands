@@ -6,6 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -36,6 +40,11 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
+
+		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 30, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;
