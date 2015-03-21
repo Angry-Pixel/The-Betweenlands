@@ -1,4 +1,7 @@
-package thebetweenlands.world;
+package thebetweenlands.world.storage;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -56,13 +59,19 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		return this.data;
 	}
 
+	private static final Map<World, BetweenlandsWorldData> CACHE = new HashMap<>();
 	public static BetweenlandsWorldData forWorld(World world) {
+		BetweenlandsWorldData cached = CACHE.get(world);
+		if(cached != null) {
+			return cached;
+		}
 		MapStorage storage = world.perWorldStorage;
 		BetweenlandsWorldData result = (BetweenlandsWorldData)storage.loadData(BetweenlandsWorldData.class, ModInfo.ID);
 		if (result == null) {
 			result = new BetweenlandsWorldData();
 			storage.setData(ModInfo.ID, result);
 		}
+		CACHE.put(world, result);
 		return result;
 	}
 }
