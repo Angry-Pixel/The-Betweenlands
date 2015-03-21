@@ -8,8 +8,11 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.recipes.BLMaterials;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BLItemRegistry {
+    public static final List<Item> ITEMS = new ArrayList<>();
 
     // BASIC MATERIALS
     public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
@@ -88,6 +91,7 @@ public class BLItemRegistry {
     }
 
     private static void registerItem(Item item) {
+        ITEMS.add(item);
         String name = item.getUnlocalizedName();
         String[] strings = name.split("\\.");
         GameRegistry.registerItem(item, strings[strings.length - 1]);
