@@ -7,6 +7,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -15,6 +16,7 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.storage.BetweenlandsWorldData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -179,7 +181,15 @@ extends WorldProvider
 	}
 
 	@Override
+	public boolean canDoRainSnowIce(Chunk chunk) {
+        return false;
+    }
+	
+	@Override
 	public void updateWeather() {
+		this.worldObj.getWorldInfo().setRaining(false);
+		this.worldObj.getWorldInfo().setThundering(false);
+		this.worldObj.setRainStrength(0.0f);
 		if(!this.worldObj.isRemote) {
 			int timeToFog = this.getWorldData().getTimeToFog();
 			if(timeToFog <= 0) {
