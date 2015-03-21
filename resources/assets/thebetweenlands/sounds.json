@@ -200,15 +200,60 @@
     "ambientSwamp": {
         "category": "ambient",
         "sounds": [
-            "ambience/SwampAmbience"
-        ],
-        "stream": true
+            {
+                "name": "ambience/SwampAmbience",
+                "stream": true
+            }
+        ]
     },
     "ambientCave": {
         "category": "ambient",
         "sounds": [
-            "ambience/CaveAmbience"
-        ],
-        "stream": true
-    }
+            {
+                "name": "ambience/CaveAmbience",
+                "stream": true
+            }
+        ]
+    },
+    "music.blDimension": {
+        "category": "music",
+        "sounds": [
+          {
+            "name": "music/CrocodileTears",
+            "stream": true
+          },
+          {
+            "name": "music/Darkness",
+            "stream": true
+          },
+          {
+            "name": "music/InBetween",
+            "stream": true
+          },
+          {
+            "name": "music/game/hal1",
+            "stream": true
+          },
+          {
+            "name": "music/LeechLovePart1",
+            "stream": true
+          },
+          {
+            "name": "music/LeechLovePart2",
+            "stream": true
+          },
+          {
+            "name": "music/RipInTheFold",
+            "stream": true
+          },
+          {
+            "name": "music/SporeBallad",
+            "stream": true
+          },
+          {
+            "name": "music/TheOtherWorld",
+            "stream": true
+          }
+        ]
+      }
 }

@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
+import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.block.BlockRubberLogRender;
@@ -101,6 +102,7 @@ public class ClientProxy extends CommonProxy {
         AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
         FMLCommonHandler.instance().bus().register(ambientHandler);
         MinecraftForge.EVENT_BUS.register(ambientHandler);
+        FMLCommonHandler.instance().bus().register(new BLMusicHandler());
 	}
 
 	@Override
