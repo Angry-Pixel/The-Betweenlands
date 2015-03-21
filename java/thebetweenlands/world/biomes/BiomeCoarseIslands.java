@@ -31,7 +31,7 @@ extends BiomeGenBaseBetweenlands
 		this.addFeature(new CoarseIslandNoiseFeature())
 		.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature());
-		this.waterColorMultiplier = 0x184220;
+		this.waterColorMultiplier = 0x1b3944;
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 30, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));

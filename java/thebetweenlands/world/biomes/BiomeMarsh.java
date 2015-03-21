@@ -36,7 +36,7 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BLBlockRegistry.peat))
 		.addFeature(new PatchNoiseFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BLBlockRegistry.mud))
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
-		this.waterColorMultiplier = 0x184220;
+		this.waterColorMultiplier = 0x485E18;
 		
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 35, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));

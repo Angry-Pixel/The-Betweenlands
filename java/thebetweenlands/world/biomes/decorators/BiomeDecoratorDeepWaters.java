@@ -9,7 +9,7 @@ import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
-public class BiomeDecoratorDeepWater extends BiomeDecoratorBaseBetweenlands {
+public class BiomeDecoratorDeepWaters extends BiomeDecoratorBaseBetweenlands {
 	
 	private final WorldGenerator genTreeWeedwood = new WorldGenWeedWoodTree();
 	private final WorldGenerator genTreeSap = new WorldGenSapTree();

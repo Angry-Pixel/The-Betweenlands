@@ -7,45 +7,37 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import thebetweenlands.world.biomes.decorators.BiomeDecoratorDeepWater;
+import thebetweenlands.world.biomes.decorators.BiomeDecoratorDeepWaters;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
+import thebetweenlands.world.biomes.feature.CragSpiresNoiseFeature;
+import thebetweenlands.world.biomes.feature.DeepWaterNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
-import thebetweenlands.world.biomes.feature.SmallIslandNoiseFeature;
 
-public class BiomeDeepWater
+public class BiomeDeepWaters
 extends BiomeGenBaseBetweenlands
 {
-	public BiomeDeepWater(int biomeID) {
-		this(biomeID, new BiomeDecoratorDeepWater());
+	public BiomeDeepWaters(int biomeID) {
+		this(biomeID, new BiomeDecoratorDeepWaters());
 	}
 	
-	public BiomeDeepWater(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
+	public BiomeDeepWaters(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
 		setColors(0x314D31, 0x314D31);
-		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
+		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 20, 10);
 		this.setBiomeName("Deep Waters");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
-		this.setFillerBlockHeight((byte)1);
-		this.addFeature(new SmallIslandNoiseFeature())
+		this.setFillerBlockHeight((byte)5);
+		this.waterColorMultiplier = 0x1b3944;
+		this.addFeature(new DeepWaterNoiseFeature())
 		.addFeature(new SiltNoiseFeature())
-		.addFeature(new AlgaeNoiseFeature());
-		this.waterColorMultiplier = 0x184220;
+		.addFeature(new AlgaeNoiseFeature())
+		.addFeature(new CragSpiresNoiseFeature());
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 30, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 	}
-
-	/*@Override
-	public int getRootHeight(int x, int z) {
-		return WorldProviderBetweenlands.LAYER_HEIGHT - 10;
-	}
-
-	@Override
-	public int getHeightVariation(int x, int z) {
-		return 0;
-	}*/
 }
