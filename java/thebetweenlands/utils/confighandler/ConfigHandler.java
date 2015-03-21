@@ -25,6 +25,7 @@ public class ConfigHandler
 	public static int DIMENSION_BRIGHTNESS;
 	public static int WISP_QUALITY;
 	public static int GIANT_TREE_DENSITY; //temp
+	public static boolean FIREFLY_LIGHTING;
 
 	public void loadConfig(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
@@ -45,6 +46,7 @@ public class ConfigHandler
 		GIANT_TREE_DENSITY = config.get(usedCategories[0], "Frequency of Giant Trees. Higher numbers de-crease rate.", 10).getInt(10);
 		
 		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
+		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", usedCategories[1], true, "");
 		
 		if( config.hasChanged() ) {
             config.save();

@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
@@ -25,6 +26,7 @@ public class BLEntityRegistry
 		registerEntity(3, EntitySwampHag.class, "swampHag", 0x0B3B0B, 0xDBA901);
 		registerEntity(4, EntityTarBeast.class, "tarBeast", 0x000000, 0x2E2E2E);
 		registerEntity(5, EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
+		registerEntity(6, EntityFirefly.class, "firefly", 0x243B0B, 0x808000);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

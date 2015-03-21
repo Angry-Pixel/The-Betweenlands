@@ -1,8 +1,13 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.particle.EntityFX;
@@ -26,14 +31,26 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.block.BlockRubberLogRender;
-import thebetweenlands.client.render.entity.*;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderSludge;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderTarBeast;
+import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityThemFX;
@@ -48,13 +65,9 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class ClientProxy extends CommonProxy {
 
@@ -82,7 +95,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderSwampHag());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, new RenderTarBeast());
 		RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, new RenderWight());
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, new RenderFirefly());
+		
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());

@@ -1,6 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -13,7 +14,7 @@ import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
 
-public class EntitySludge extends EntityMobBL {
+public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
 	public float squishAmount;
 	public float squishFactor;

@@ -2,6 +2,7 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -14,7 +15,7 @@ import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
 
-public class EntityTarBeast extends EntityMobBL {
+public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public EntityTarBeast(World world) {
 		super(world);
