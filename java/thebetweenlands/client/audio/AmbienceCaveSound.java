@@ -23,7 +23,7 @@ public class AmbienceCaveSound
     public void update() {
         if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= AmbienceSoundPlayHandler.CAVE_START ) {
             if( this.volume > 0.05F ) {
-                this.volume -= 0.075F;
+                this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {
                     this.volume = 0.05F;
                 }
@@ -32,7 +32,7 @@ public class AmbienceCaveSound
             }
         } else {
             if( this.volume < 1.0F ) {
-                this.volume += 0.2F;
+                this.volume += 0.02F;
                 if( this.volume > 1.0F ) {
                     this.volume = 1.0F;
                 }
