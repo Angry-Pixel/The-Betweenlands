@@ -218,42 +218,38 @@
     "music.blDimension": {
         "category": "music",
         "sounds": [
-          {
-            "name": "music/CrocodileTears",
-            "stream": true
-          },
-          {
-            "name": "music/Darkness",
-            "stream": true
-          },
-          {
-            "name": "music/InBetween",
-            "stream": true
-          },
-          {
-            "name": "music/game/hal1",
-            "stream": true
-          },
-          {
-            "name": "music/LeechLovePart1",
-            "stream": true
-          },
-          {
-            "name": "music/LeechLovePart2",
-            "stream": true
-          },
-          {
-            "name": "music/RipInTheFold",
-            "stream": true
-          },
-          {
-            "name": "music/SporeBallad",
-            "stream": true
-          },
-          {
-            "name": "music/TheOtherWorld",
-            "stream": true
-          }
+            {
+                "name": "music/CrocodileTears",
+                "stream": true
+            },
+            {
+                "name": "music/Darkness",
+                "stream": true
+            },
+            {
+                "name": "music/InBetween",
+                "stream": true
+            },
+            {
+                "name": "music/LeechLovePart1",
+                "stream": true
+            },
+            {
+                "name": "music/LeechLovePart2",
+                "stream": true
+            },
+            {
+                "name": "music/RipInTheFold",
+                "stream": true
+            },
+            {
+                "name": "music/SporeBallad",
+                "stream": true
+            },
+            {
+                "name": "music/TheOtherWorld",
+                "stream": true
+            }
         ]
-      }
+    }
 }

@@ -22,13 +22,20 @@ public class AmbienceSoundPlayHandler
     public void onPlayerCltTick(PlayerTickEvent event) {
         if( event.phase == Phase.START && event.side == Side.CLIENT ) {
             if( event.player.dimension == ModInfo.DIMENSION_ID ) {
-                if( event.player.posY >= CAVE_START && (this.ambienceSoundSwamp == null || this.ambienceSoundSwamp.isDonePlaying())) {
-                    ambienceSoundSwamp = new AmbienceSwampSound(event.player);
+                Minecraft mc = Minecraft.getMinecraft();
+                if( event.player.posY >= CAVE_START && (this.ambienceSoundSwamp == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundSwamp)) ) {
+                    if( this.ambienceSoundSwamp != null ) {
+                        this.ambienceSoundSwamp.stop();
+                    }
+                    this.ambienceSoundSwamp = new AmbienceSwampSound(event.player);
                     Minecraft.getMinecraft().getSoundHandler().playSound(ambienceSoundSwamp);
                 }
-                if( event.player.posY < CAVE_START && (this.ambienceSoundCave == null || this.ambienceSoundCave.isDonePlaying())) {
-                    ambienceSoundCave = new AmbienceCaveSound(event.player);
-                    Minecraft.getMinecraft().getSoundHandler().playSound(ambienceSoundCave);
+                if( event.player.posY < CAVE_START && (ambienceSoundCave == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundCave)) ) {
+                    if( this.ambienceSoundCave != null ) {
+                        this.ambienceSoundCave.stop();
+                    }
+                    this.ambienceSoundCave = new AmbienceCaveSound(event.player);
+                    Minecraft.getMinecraft().getSoundHandler().playSound(this.ambienceSoundCave);
                 }
             }
         }

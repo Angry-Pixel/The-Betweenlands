@@ -68,8 +68,8 @@ public class BLMusicHandler
         private ISound currentSound;
         private int timeUntilMusic = 100;
         private static final ResourceLocation BL_MUSIC_RES = new ResourceLocation("thebetweenlands:music.blDimension");
-        private static final int MIN_WAIT = 1200;
-        private static final int MAX_WAIT = 3600;
+        private static final int MIN_WAIT = 6000;
+        private static final int MAX_WAIT = 12000;
 
         public BLMusicTicker(Minecraft minecraft) {
             super(minecraft);
@@ -83,7 +83,7 @@ public class BLMusicHandler
                     this.timeUntilMusic = MathHelper.getRandomIntegerInRange(this.RNG, 0, MIN_WAIT / 2);
                 }
 
-                if (!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+                if( !this.mc.getSoundHandler().isSoundPlaying(this.currentSound) ) {
                     this.currentSound = null;
                     this.timeUntilMusic = Math.min(MathHelper.getRandomIntegerInRange(this.RNG, MIN_WAIT, MAX_WAIT), this.timeUntilMusic);
                 }
