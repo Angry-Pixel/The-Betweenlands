@@ -38,6 +38,10 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	protected void updateEntityActionState() {
 		super.updateEntityActionState();
 
+		if (this.worldObj.isRemote) {
+			return;
+		}
+		
 		double dx = this.waypointX - this.posX;
 		double dy = this.waypointY - this.posY;
 		double dz = this.waypointZ - this.posZ;
@@ -138,6 +142,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		super.onUpdate();
 		if (this.worldObj.isRemote) {
 			if(this.lastLightX != MathHelper.floor_double(this.posX) || 
 					this.lastLightY != MathHelper.floor_double(this.posY) ||
@@ -147,14 +152,14 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 					this.lightUp(this.worldObj, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 				}
 			}
+		} else {
+			if(this.isInWater()) {
+				this.motionY += 0.01D;
+				this.waypointX = this.posX;
+				this.waypointY = this.posY + 0.1D;
+				this.waypointZ = this.posZ;
+			}
 		}
-		if(this.isInWater()) {
-			this.motionY += 0.01D;
-			this.waypointX = this.posX;
-			this.waypointY = this.posY;
-			this.waypointZ = this.posZ;
-		}
-		super.onUpdate();
 	}
 
 	@Override
