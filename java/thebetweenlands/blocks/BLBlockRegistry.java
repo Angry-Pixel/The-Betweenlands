@@ -47,7 +47,7 @@ public class BLBlockRegistry
 	public static final Block dampTorch = new BlockDampTorch();
 	public static final Block peat = new BlockPeat();
 	public static final BlockWisp wisp = new BlockWisp();
-	public static final Block sludge = new BlockSludge();
+	public static final BlockSludge sludge = new BlockSludge();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
