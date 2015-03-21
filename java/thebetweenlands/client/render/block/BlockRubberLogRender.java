@@ -23,7 +23,7 @@ public class BlockRubberLogRender implements ISimpleBlockRenderingHandler {
 		tessellator.setColorOpaque_F(1, 1, 1);
 		IIcon topIcon = ((BlockRubberLog)block).getTopIcon(0);
 		IIcon sideIcon = ((BlockRubberLog)block).getSideIcon(0);
-		this.renderBox(topIcon, sideIcon, 0x1 | 0x2, tessellator, 
+		this.renderBoxX(topIcon, sideIcon, 0x1 | 0x2, tessellator, 
 				0.32D, 0.0D, 0.32D, 
 				0.68D, 1.0D, 0.68D);
 	}
@@ -36,46 +36,83 @@ public class BlockRubberLogRender implements ISimpleBlockRenderingHandler {
 		IIcon topIcon = ((BlockRubberLog)block).getTopIcon(0);
 		IIcon sideIcon = ((BlockRubberLog)block).getSideIcon(0);
 
-		this.renderBox(topIcon, sideIcon, 0, tessellator, 
-				x+0.32D, y+0.32D, z+0.32D,
-				x+0.68D, y+0.68D, z+0.68D);
+		boolean yp = this.isValidBlock(world.getBlock(x, y+1, z));
+		boolean ym = this.isValidBlock(world.getBlock(x, y-1, z)) || 
+				world.getBlock(x, y-1, z).isSideSolid(world, x, y-1, z, ForgeDirection.UP);
+		boolean xp = this.isValidBlock(world.getBlock(x+1, y, z));
+		boolean xm = this.isValidBlock(world.getBlock(x-1, y, z));
+		boolean zp = this.isValidBlock(world.getBlock(x, y, z+1));
+		boolean zm = this.isValidBlock(world.getBlock(x, y, z-1));
+		
+		int sideIndex = 0;
+		int sideCount = 0;
+		if(yp) ++sideCount;
+		if(ym) ++sideCount;
+		if(xp) ++sideCount;
+		if(xm) ++sideCount;
+		if(zp) ++sideCount;
+		if(zm) ++sideCount;
+		if(sideCount == 1) {
+			if(yp) sideIndex |= 0x2;
+			if(ym) sideIndex |= 0x1;
+			if(xp) sideIndex |= 0x8;
+			if(xm) sideIndex |= 0x4;
+			if(zp) sideIndex |= 0x20;
+			if(zm) sideIndex |= 0x10;
+		}
+		
+		//center piece
+		if(!yp && !ym) {
+			if(xp || xm) {
+				this.renderBoxSideX(topIcon, sideIcon, sideIndex, tessellator, 
+						x+0.25D, y+0.25D, z+0.25D,
+						x+0.75D, y+0.75D, z+0.75D);
+			} else {
+				this.renderBoxSideZ(topIcon, sideIcon, sideIndex, tessellator, 
+						x+0.25D, y+0.25D, z+0.25D,
+						x+0.75D, y+0.75D, z+0.75D);
+			}
+		} else {
+			this.renderBoxX(topIcon, sideIcon, sideIndex, tessellator, 
+					x+0.25D, y+0.25D, z+0.25D,
+					x+0.75D, y+0.75D, z+0.75D);
+		}
 		
 		//y+1
-		if(this.isValidBlock(world.getBlock(x, y+1, z))) {
-			this.renderBox(topIcon, sideIcon, 0x1, tessellator, 
-					x+0.32D, y+0.68D, z+0.32D,
-					x+0.68D, y+1.0D, z+0.68D);
+		if(yp) {
+			this.renderBoxXS(topIcon, sideIcon, 0x1, tessellator, 
+					x+0.25D, y+0.75D, z+0.25D,
+					x+0.75D, y+1.0D, z+0.75D);
 		}
 		//y-1
-		if(this.isValidBlock(world.getBlock(x, y-1, z)) || 
-				world.getBlock(x, y-1, z).isSideSolid(world, x, y-1, z, ForgeDirection.UP)) {
-			this.renderBox(topIcon, sideIcon, 0x2, tessellator, 
-					x+0.32D, y, z+0.32D,
-					x+0.68D, y+0.32D, z+0.68D);
+		if(ym) {
+			this.renderBoxXS(topIcon, sideIcon, 0x2, tessellator, 
+					x+0.25D, y, z+0.25D,
+					x+0.75D, y+0.25D, z+0.75D);
 		}
 		//x+1
-		if(this.isValidBlock(world.getBlock(x+1, y, z))) {
-			this.renderBoxSide(topIcon, sideIcon, 0x4, tessellator, 
-					x+0.68D, y+0.32D, z+0.32D,
-					x+1.0D, y+0.68D, z+0.68D);
+		if(xp) {
+			this.renderBoxSideXS(topIcon, sideIcon, 0x4, tessellator, 
+					x+0.75D, y+0.25D, z+0.25D,
+					x+1.0D, y+0.75D, z+0.75D);
 		}
 		//x-1
-		if(this.isValidBlock(world.getBlock(x-1, y, z))) {
-			this.renderBoxSide(topIcon, sideIcon, 0x8, tessellator, 
-					x, y+0.32D, z+0.32D,
-					x+0.32D, y+0.68D, z+0.68D);
+		if(xm) {
+			this.renderBoxSideXS(topIcon, sideIcon, 0x8, tessellator, 
+					x, y+0.25D, z+0.25D,
+					x+0.25D, y+0.75D, z+0.75D);
 		}
 		//z+1
-		if(this.isValidBlock(world.getBlock(x, y, z+1))) {
-			this.renderBoxSide(topIcon, sideIcon, 0x10, tessellator, 
-					x+0.32D, y+0.32D, z+0.68D,
-					x+0.68D, y+0.68D, z+1.0D);
+		if(zp) {
+			this.renderBoxSideZS(topIcon, sideIcon, 0x10, tessellator, 
+					x+0.25D, y+0.25D, z+0.75D,
+					x+0.75D, y+0.75D, z+1.0D);
 		}
 		//z-1
-		if(this.isValidBlock(world.getBlock(x, y, z-1))) {
-			this.renderBoxSide(topIcon, sideIcon, 0x20, tessellator, 
-					x+0.32D, y+0.32D, z,
-					x+0.68D, y+0.68D, z+0.32D);
+		if(zm) {
+			this.renderBoxSideZS(topIcon, sideIcon, 0x20, tessellator, 
+					x+0.25D, y+0.25D, z,
+					x+0.75D, y+0.75D, z+0.25D);
 		}
 		return true;
 	}
@@ -103,8 +140,82 @@ public class BlockRubberLogRender implements ISimpleBlockRenderingHandler {
 		tessellator.addVertexWithUV(x3, y3, z3, umax, vmax);
 		tessellator.addVertexWithUV(x4, y4, z4, umin, vmax);
 	}
+	
+	public void renderQuadS(IIcon icon, Tessellator tessellator, 
+			double x1, double y1, double z1,
+			double x2, double y2, double z2,
+			double x3, double y3, double z3,
+			double x4, double y4, double z4) {
+		double umin = (double)icon.getMinU();
+		double vmin = (double)icon.getMinV();
+		double umax = (double)icon.getMaxU();
+		double vmax = (double)icon.getMaxV();
+		
+		//meh... I'm probably too stupid to figure out the width of the actual texture, but this works too
+		double du = umax - umin;
+		double dv = vmax - vmin;
+		umin += du / 16.0D * 4.0D;
+		umax -= du / 16.0D * 4.0D;
+		vmin += dv / 16.0D * 4.0D;
+		vmax -= dv / 16.0D * 8.0D;
+		
+		tessellator.addVertexWithUV(x1, y1, z1, umin, vmin);
+		tessellator.addVertexWithUV(x2, y2, z2, umax, vmin);
+		tessellator.addVertexWithUV(x3, y3, z3, umax, vmax);
+		tessellator.addVertexWithUV(x4, y4, z4, umin, vmax);
+	}
 
-	public void renderBox(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+	public void renderBoxX(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2,
+				x2, y2, z1);
+
+		//-y
+		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2);
+
+		//+x
+		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2,
+				x2, y1, z1);
+
+		//-x
+		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1);
+
+		//+z
+		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2);
+
+		//-z
+		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1);
+	}
+	
+	public void renderBoxZ(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
 		double dx = x2 - x1;
@@ -154,7 +265,7 @@ public class BlockRubberLogRender implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 	}
 
-	public void renderBoxSide(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+	public void renderBoxSideX(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
 		double dx = x2 - x1;
@@ -198,6 +309,256 @@ public class BlockRubberLogRender implements ISimpleBlockRenderingHandler {
 
 		//-z
 		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1,
+				x2, y1, z1);
+	}
+	
+	public void renderBoxSideZ(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y2, z1,
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2);
+
+		//-y
+		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2);
+
+		//+x
+		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2);
+
+		//-x
+		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1,
+				x1, y1, z1);
+
+		//+z
+		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2,
+				x1, y1, z2);
+
+		//-z
+		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1,
+				x2, y1, z1);
+	}
+	
+	public void renderBoxXS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2,
+				x2, y2, z1);
+
+		//-y
+		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2);
+
+		//+x
+		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2,
+				x2, y1, z1);
+
+		//-x
+		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1);
+
+		//+z
+		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2);
+
+		//-z
+		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1);
+	}
+	
+	public void renderBoxZS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2,
+				x2, y2, z1);
+
+		//-y
+		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2);
+
+		//+x
+		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2,
+				x2, y1, z1);
+
+		//-x
+		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1);
+
+		//+z
+		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2);
+
+		//-z
+		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1);
+	}
+
+	public void renderBoxSideXS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2,
+				x2, y2, z1);
+
+		//-y
+		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2,
+				x1, y1, z1);
+
+		//+x
+		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2);
+
+		//-x
+		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1,
+				x1, y1, z1);
+
+		//+z
+		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2,
+				x1, y1, z2);
+
+		//-z
+		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x1, y2, z1,
+				x2, y2, z1,
+				x2, y1, z1);
+	}
+	
+	public void renderBoxSideZS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
+			double x1, double y1, double z1,
+			double x2, double y2, double z2) {
+		double dx = x2 - x1;
+		double dy = y2 - y1;
+		double dz = z2 - z1;
+
+		//+y
+		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y2, z1,
+				x1, y2, z1,
+				x1, y2, z2,
+				x2, y2, z2);
+
+		//-y
+		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z1,
+				x2, y1, z1,
+				x2, y1, z2,
+				x1, y1, z2);
+
+		//+x
+		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z1,
+				x2, y2, z1,
+				x2, y2, z2,
+				x2, y1, z2);
+
+		//-x
+		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
+				x1, y1, z2,
+				x1, y2, z2,
+				x1, y2, z1,
+				x1, y1, z1);
+
+		//+z
+		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
+				x2, y1, z2,
+				x2, y2, z2,
+				x1, y2, z2,
+				x1, y1, z2);
+
+		//-z
+		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1,
