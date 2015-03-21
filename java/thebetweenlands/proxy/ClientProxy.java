@@ -267,13 +267,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void spawnThem() {
 		if(Minecraft.getMinecraft().thePlayer.dimension != ConfigHandler.DIMENSION_ID) return;
-		boolean denseFog = false;
-		if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
-				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
-				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
-			denseFog = true;
-		}
-		if(denseFog && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
+		if(FogHandler.INSTANCE.hasDenseFog() && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
 			int probability = (int)(FogHandler.INSTANCE.getCurrentFogEnd()) / 2 + 16;
 			if(Minecraft.getMinecraft().theWorld.rand.nextInt(probability) == 0) {
 				double xOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;

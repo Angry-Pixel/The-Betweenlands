@@ -1,12 +1,17 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.AxeBL;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -59,7 +64,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		if (onGround && !flag) {
 			squishAmount = -0.5F;
 			//TODO Make some nice particles I guess
-		/*	for (int j = 0; j < 8; ++j) {
+			/*	for (int j = 0; j < 8; ++j) {
 				float f = rand.nextFloat() * (float) Math.PI * 2.0F;
 				float f1 = rand.nextFloat() * 0.5F + 0.5F;
 				float f2 = MathHelper.sin(f) * 0.5F * f1;
@@ -71,6 +76,14 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 			squishAmount = 1.0F;
 
 		alterSquishAmount();
+		
+		int bx = MathHelper.floor_double(this.posX);
+		int by = MathHelper.floor_double(this.posY);
+		int bz = MathHelper.floor_double(this.posZ);
+		if(this.worldObj.getBlock(bx, by, bz) == Blocks.air && 
+				BLBlockRegistry.sludge.canBlockStay(this.worldObj, bx, by, bz)) {
+			this.worldObj.setBlock(bx, by, bz, BLBlockRegistry.sludge);
+		}
 	}
 
 	protected void alterSquishAmount() {
@@ -100,11 +113,11 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 			if (onGround)
 				moveStrafing = moveForward = 0.0F;
 		}
-		
-		 if (this.rand.nextFloat() < 0.8F && this.isInWater()) {
-             this.isJumping = true;
-             this.motionY += 0.01D;
-         }
+
+		if (this.rand.nextFloat() < 0.8F && this.isInWater()) {
+			this.isJumping = true;
+			this.motionY += 0.01D;
+		}
 	}
 
 	protected int getJumpDelay() {
@@ -114,15 +127,25 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
-		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player))
-			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY)
+		player.setInWeb();
+		player.setJumping(false);
+		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
+			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
 				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
+				player.motionX = 0.0D;
+				player.motionY = 0.0D;
+				player.motionZ = 0.0D;
+			}
+		}
 	}
 
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 2;
 	}
+	
+	@Override
+	protected void collideWithNearbyEntities() { }
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {

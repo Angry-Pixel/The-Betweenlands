@@ -16,6 +16,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.sky.SkyRendererStars;
 import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -75,13 +76,7 @@ extends WorldProvider
 			}
 		}
 
-		boolean denseFog = false;
-		if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
-				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
-				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
-			denseFog = true;
-		}
-		float m = denseFog ? 80.0f : 0.0f;
+		float m = FogHandler.INSTANCE.hasDenseFog() ? 80.0f : 0.0f;
 		
 		for(int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];

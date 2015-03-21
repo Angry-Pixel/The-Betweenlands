@@ -35,6 +35,16 @@ public class FogHandler {
 	public float getCurrentFogEnd() {
 		return this.currentFogEnd;
 	}
+	
+	public boolean hasDenseFog() {
+		boolean denseFog = false;
+		if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
+				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
+				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
+			denseFog = true;
+		}
+		return denseFog;
+	}
 
 	////// Biome specific fog + smooth transition //////
 	private float currentFogStart;
