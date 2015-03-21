@@ -3,6 +3,10 @@ package thebetweenlands.world.biomes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -34,6 +38,11 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BLBlockRegistry.mud))
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x184220;
+		
+		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 35, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 	}
 
 	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};

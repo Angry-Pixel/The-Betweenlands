@@ -50,13 +50,13 @@ public class BlockBLLog extends BlockLog {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	protected IIcon getSideIcon(int meta) {
+	public IIcon getSideIcon(int meta) {
 		return iconSide;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	protected IIcon getTopIcon(int meta) {
+	public IIcon getTopIcon(int meta) {
 		return iconTop;
 	}
 

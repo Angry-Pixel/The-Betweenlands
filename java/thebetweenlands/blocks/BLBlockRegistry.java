@@ -73,7 +73,7 @@ public class BLBlockRegistry
 	public static final Block weedWood = new BlockBLLog("weedWood");
 	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
-	public static final Block rubberTreeLog = new BlockBLLog("rubberTreeLog");
+	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog");
 
 	// WOOD
 	public static final Block weedWoodPlanks = new BlockWeedWoodPlanks();

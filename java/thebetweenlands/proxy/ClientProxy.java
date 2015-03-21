@@ -26,6 +26,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
+import thebetweenlands.client.render.block.BlockRubberLogRender;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderSludge;
@@ -65,7 +66,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS;
+		DOUBLE_PLANTS, RUBBER_LOG;
 
 		private final int ID;
 
@@ -101,6 +102,7 @@ public class ClientProxy extends CommonProxy {
 
 		//Blocks
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
+		RenderingRegistry.registerBlockHandler(new BlockRubberLogRender());
 	}
 
 	@Override
