@@ -5,7 +5,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.MovingSound;
+import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.client.audio.AmbienceCaveSound;
 import thebetweenlands.client.audio.AmbienceSwampSound;
 import thebetweenlands.lib.ModInfo;
@@ -13,8 +13,8 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class AmbienceSoundPlayHandler
 {
-    private MovingSound ambienceSoundSwamp;
-    private MovingSound ambienceSoundCave;
+    private AmbienceSwampSound ambienceSoundSwamp;
+    private AmbienceCaveSound ambienceSoundCave;
 
     public static final int CAVE_START = WorldProviderBetweenlands.LAYER_HEIGHT - 10;
 
@@ -30,6 +30,20 @@ public class AmbienceSoundPlayHandler
                     ambienceSoundCave = new AmbienceCaveSound(event.player);
                     Minecraft.getMinecraft().getSoundHandler().playSound(ambienceSoundCave);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onWorldUnload(WorldEvent.Unload event) {
+        if( event.world.isRemote ) {
+            if( this.ambienceSoundSwamp != null ) {
+                this.ambienceSoundSwamp.stop();
+                this.ambienceSoundSwamp = null;
+            }
+            if( this.ambienceSoundCave != null ) {
+                this.ambienceSoundCave.stop();
+                this.ambienceSoundCave = null;
             }
         }
     }

@@ -98,7 +98,9 @@ public class ClientProxy extends CommonProxy {
 
         //Events
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());
-        FMLCommonHandler.instance().bus().register(new AmbienceSoundPlayHandler());
+        AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
+        FMLCommonHandler.instance().bus().register(ambientHandler);
+        MinecraftForge.EVENT_BUS.register(ambientHandler);
 	}
 
 	@Override

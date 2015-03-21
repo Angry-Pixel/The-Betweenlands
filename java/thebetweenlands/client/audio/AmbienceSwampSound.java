@@ -40,4 +40,8 @@ public class AmbienceSwampSound
             }
         }
     }
+
+    public void stop() {
+        this.donePlaying = true;
+    }
 }

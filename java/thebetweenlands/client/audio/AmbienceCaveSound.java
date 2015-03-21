@@ -39,4 +39,8 @@ public class AmbienceCaveSound
             }
         }
     }
+
+    public void stop() {
+        this.donePlaying = true;
+    }
 }
