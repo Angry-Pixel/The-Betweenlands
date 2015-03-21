@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
@@ -22,6 +23,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderFirefly extends Render {
 
+	public static final Random rnd = new Random();
+	
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
 		FireflyHandler.INSTANCE.fireflyList.add(new SimpleEntry(new SimpleEntry(this, (EntityFirefly)entity), new Vector3d(x, y, z)));
@@ -53,8 +56,11 @@ public class RenderFirefly extends Render {
 		tessellator.setBrightness(255);
 
 		tessellator.setColorRGBA_F(0.4F, 0.2F, 0, 0.2F);
+		if(rnd.nextInt(10) <= 2) {
+			tessellator.setColorRGBA_F(rnd.nextInt(10) / 20.0F + 0.25F, 0.2F, 0, 0.2F);
+		}
 		double cScale = scale;
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < (rnd.nextInt(10) <= 2 ? rnd.nextInt(10) : 10); i++) {
 			cScale -= 0.15D;
 			tessellator.addVertexWithUV(ipx - rx * cScale - ryz * cScale, ipy - rxz * cScale, ipz - rz * cScale - rxy * cScale, 0.0D, 1.0D);
 			tessellator.addVertexWithUV(ipx - rx * cScale + ryz * cScale, ipy + rxz * cScale, ipz - rz * cScale + rxy * cScale, 1.0D, 1.0D);
