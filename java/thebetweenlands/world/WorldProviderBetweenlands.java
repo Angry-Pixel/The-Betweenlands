@@ -1,5 +1,7 @@
 package thebetweenlands.world;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
@@ -9,16 +11,16 @@ import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.client.IRenderHandler;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.render.sky.SkyRendererStars;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -28,6 +30,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class WorldProviderBetweenlands
 extends WorldProvider
 {
+    @SideOnly(Side.CLIENT)
+    private SkyRendererStars skyRenderer;
+
 	public static final int LAYER_HEIGHT = 80;
 
 	@SideOnly(Side.CLIENT)
@@ -208,4 +213,11 @@ extends WorldProvider
 			TheBetweenlands.networkWrapper.sendToAll(new MessageSyncWeather(this.getWorldData().getDenseFog()));
 		}
 	}
+
+    @SideOnly(Side.CLIENT)
+    public IRenderHandler getSkyRenderer()
+    {
+        if (skyRenderer == null) skyRenderer = new SkyRendererStars();
+        return skyRenderer;
+    }
 }
