@@ -26,7 +26,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	
 	public EntityWight(World world) {
 		super(world);
-		setSize(1.5F, 3F);
+		setSize(0.9F, 2F);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, meleeAttack);
