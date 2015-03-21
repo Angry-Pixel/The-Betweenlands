@@ -1,10 +1,20 @@
 package thebetweenlands;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.player.DecayEventHandler;
@@ -26,17 +36,6 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import thebetweenlands.world.feature.trees.WorldGenGiantTree;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
@@ -89,7 +88,7 @@ public class TheBetweenlands
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		proxy.registerTileEntities();
-		proxy.registerRenderInformation();
+		proxy.preInit();
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
@@ -99,16 +98,12 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
         MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-        
-        if (event.getSide() == Side.CLIENT) {
-            MinecraftForge.EVENT_BUS.register(new GuiOverlay());
-        }
-        
+
 		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
-	 
+
 		RecipeHandler.init();
 	}
 }

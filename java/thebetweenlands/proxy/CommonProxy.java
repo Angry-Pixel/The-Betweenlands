@@ -42,7 +42,7 @@ public class CommonProxy
         GameRegistry.registerTileEntity(cls, "tile.thebetweenlands." + baseName);
     }
 
-    public void registerRenderInformation() {
+    public void preInit() {
         // unused serverside see ClientProxy for implementation
     }
 
@@ -136,12 +136,12 @@ public class CommonProxy
     public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer) {
 
     }
-    
+
     public void updateWispParticles(TileEntityWisp te) {
-    	
+
     }
-    
-    public void spawnThem() { 
-    	
+
+    public void spawnThem() {
+
     }
 }
