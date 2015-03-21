@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+        import org.lwjgl.opengl.GL11;
         import thebetweenlands.manager.DecayManager;
 
         import java.util.Random;
@@ -40,6 +41,7 @@ public class GuiOverlay extends Gui
             {
                 mc.getTextureManager().bindTexture(decayBarTexture);
 
+                GL11.glEnable(GL11.GL_BLEND);
                 for (int i = 0; i < 10; i++)
                 {
                     int offsetY = mc.thePlayer.isInsideOfMaterial(Material.water) ? -10 : 0;
