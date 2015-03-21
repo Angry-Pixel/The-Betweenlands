@@ -82,7 +82,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		int bz = MathHelper.floor_double(this.posZ);
 		if(this.worldObj.getBlock(bx, by, bz) == Blocks.air && 
 				BLBlockRegistry.sludge.canBlockStay(this.worldObj, bx, by, bz)) {
-			this.worldObj.setBlock(bx, by, bz, BLBlockRegistry.sludge);
+			BLBlockRegistry.sludge.generateBlockTemporary(this.worldObj, bx, by, bz);
 		}
 	}
 
@@ -127,8 +127,6 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
-		player.setInWeb();
-		player.setJumping(false);
 		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
 			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
 				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
@@ -144,9 +142,6 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		return 2;
 	}
 	
-	@Override
-	protected void collideWithNearbyEntities() { }
-
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.getSourceOfDamage() instanceof EntityPlayer) {

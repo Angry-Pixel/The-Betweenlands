@@ -3,15 +3,15 @@ package thebetweenlands.blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntitySludge;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,10 +26,28 @@ public class BlockSludge extends Block {
         setBlockBounds(0, 0.0F, 0, 1.0F, 0.125F, 1.0F);
     }
     
+    /**
+     * Sets the block at the given position. Block will be removed after 1 minute.
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void generateBlockTemporary(World world, int x, int y, int z) {
+        world.setBlock(x, y, z, this);
+        world.scheduleBlockUpdate(x, y, z, this, 20*60);
+    }
+    
+    @Override
+    public void updateTick(World world, int x, int y, int z, Random rnd) {
+    	world.setBlock(x, y, z, Blocks.air);
+    }
+    
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-    	entity.motionX *= 0.8D;
-        entity.motionZ *= 0.8D;
+    	if(entity instanceof EntitySludge == false) {
+    		entity.setInWeb();
+    	}
     }
 
     @Override
