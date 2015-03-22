@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.*;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.GL11;
@@ -15,6 +16,8 @@ public class SkyRendererStars extends IRenderHandler
     private int starGLCallList;
     private int glSkyList;
     private int glSkyList2;
+
+    private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 
     public SkyRendererStars()
     {
@@ -76,7 +79,7 @@ public class SkyRendererStars extends IRenderHandler
         for (int i = 0; i < 1500; ++i)
         {
             double d0 = (double)(random.nextFloat() * 2.0F - 1.0F);
-            double d1 = (double)(random.nextFloat() * 2.0F - 1.0F);
+            double d1 = (double)(random.nextFloat() * 0.5F - 1.0F);
             double d2 = (double)(random.nextFloat() * 2.0F - 1.0F);
             double d3 = (double)(0.15F + random.nextFloat() * 0.1F);
             double d4 = d0 * d0 + d1 * d1 + d2 * d2;
@@ -100,6 +103,12 @@ public class SkyRendererStars extends IRenderHandler
                 double d15 = Math.sin(d14);
                 double d16 = Math.cos(d14);
 
+                if( random.nextInt(2) == 1 ) {
+                    tessellator.setColorOpaque(0, 96, 0);
+                } else {
+                    tessellator.setColorOpaque(255, 255, 255);
+                }
+
                 for (int j = 0; j < 4; ++j)
                 {
                     double d17 = 0.0D;
@@ -121,6 +130,7 @@ public class SkyRendererStars extends IRenderHandler
 
     public void render(float partialTicks, WorldClient world, Minecraft mc)
     {
+
         RenderGlobal renderGlobal = mc.renderGlobal;
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -272,5 +282,62 @@ public class SkyRendererStars extends IRenderHandler
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDepthMask(true);
+        renderSkyTexture(mc);
+    }
+
+    private void renderSkyTexture(Minecraft mc) {
+        GL11.glDisable(GL11.GL_FOG);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+//        GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.2F);
+        RenderHelper.disableStandardItemLighting();
+        GL11.glDepthMask(false);
+        mc.renderEngine.bindTexture(SKY_TEXTURE_RES);
+        Tessellator tessellator = Tessellator.instance;
+
+//        for (int i = 0; i < 3; ++i)
+//        {
+            GL11.glPushMatrix();
+
+//            if (i == 1)
+//            {
+//                GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
+//            }
+//
+//            if (i == 2)
+//            {
+//                GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+//            }
+//
+//            if (i == 3)
+//            {
+                GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
+//            }
+//
+//            if (i == 4)
+//            {
+//                GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+//            }
+//
+//            if (i == 5)
+//            {
+//                GL11.glRotatef(-90.0F, 0.0F, 0.0F, 1.0F);
+//            }
+
+            tessellator.startDrawingQuads();
+            tessellator.setColorRGBA(256, 256, 256, 128);
+
+            tessellator.addVertexWithUV(-90.0D, -050.0D, -90.0D, 0.0D, 0.0D);
+            tessellator.addVertexWithUV(-90.0D, -050.0D, 90.0D, 0.0D, 1.0D);
+            tessellator.addVertexWithUV(90.0D, -050.0D, 90.0D, 1.0D, 1.0D);
+            tessellator.addVertexWithUV(90.0D, -050.0D, -90.0D, 1.0D, 0.0D);
+            tessellator.draw();
+            GL11.glPopMatrix();
+//        }
+
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
     }
 }
