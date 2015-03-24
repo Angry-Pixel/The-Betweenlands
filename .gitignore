@@ -217,3 +217,9 @@ pip-log.txt
 .idea/
 The-Betweenlands.iml
 eclipse/
+
+# IntelliJ IDEA
+out/
+*.iml
+*.ipr
+*.iws
