@@ -1,15 +1,18 @@
 package thebetweenlands.client.render.shader;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
+import java.util.ArrayList;
+import java.util.List;
 
-import thebetweenlands.event.debugging.DebugHandler;
-import net.minecraft.client.Minecraft;
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.shader.Framebuffer;
+
+import org.lwjgl.opengl.GL11;
 
 public class ShaderHelper {
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
 	private Framebuffer depthBuffer;
+	public List<Vector3d> lightSources = new ArrayList<Vector3d>();
 
 	public Framebuffer getDepthBuffer() {
 		return this.depthBuffer;

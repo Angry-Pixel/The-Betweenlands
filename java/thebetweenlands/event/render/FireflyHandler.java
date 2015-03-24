@@ -10,6 +10,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -30,6 +31,8 @@ public class FireflyHandler {
 			RenderFirefly renderer = e.getKey().getKey();
 			EntityFirefly entity = e.getKey().getValue();
 			renderer.doRenderCallback(entity, pos.x, pos.y, pos.z, event.partialTicks);
+			
+			ShaderHelper.INSTANCE.lightSources.add(new Vector3d(entity.posX, entity.posY, entity.posZ));
 		}
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
