@@ -3,6 +3,7 @@ package thebetweenlands.client.render.shader;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.vecmath.Matrix4f;
 
@@ -11,28 +12,31 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.Shader;
+import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.event.debugging.DebugHandler;
-
-public class BLShader extends Shader {
-	private BLShaderManager pShaderManager;
+public class CShaderInt extends Shader {
+	private CShaderManager pShaderManager;
 	private Matrix4f pProjectionMatrix;
 	private List pListAuxFramebuffers;
 	private List pListAuxNames;
 	private List pListAuxWidths;
 	private List pListAuxHeights;
-
-	public BLShader(IResourceManager resourceLocation, String shaderName,
-			Framebuffer frameBufferIn, Framebuffer frameBufferOut)
+	private final CShader wrapper;
+	private final String shaderName;
+	
+	public CShaderInt(IResourceManager resourceLocation, String shaderName,
+			Framebuffer frameBufferIn, Framebuffer frameBufferOut, CShader wrapper)
 					throws JsonException {
 		super(resourceLocation, shaderName, frameBufferIn, frameBufferOut);
+		this.shaderName = shaderName;
+		this.wrapper = wrapper;
+		this.wrapper.addShader(this);
 		try {
-			//Big reflection mess, sorry xD
 			{
-				this.pShaderManager = new BLShaderManager(resourceLocation, shaderName);
+				this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
 				Field f = this.getClass().getSuperclass().getDeclaredField("manager");
 				f.setAccessible(true);
 				f.set(this, this.pShaderManager);
@@ -62,6 +66,14 @@ public class BLShader extends Shader {
 		}
 	}
 
+	public String getName() {
+		return this.shaderName;
+	}
+	
+	public ShaderUniform getUniform(String name) {
+		return this.pShaderManager.func_147991_a(name);
+	}
+	
 	@Override
 	public void loadShader(float partialTicks) {
 		try {
@@ -70,22 +82,9 @@ public class BLShader extends Shader {
 				f.setAccessible(true);
 				this.pProjectionMatrix = (Matrix4f) f.get(this);
 			}
-			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("manager");
-				f.setAccessible(true);
-				this.pShaderManager = (BLShaderManager) f.get(this);
-			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-
-		///////////////// COPY DEPTH BUFFER ///////////////////
-		DebugHandler.depthBuffer.bindFramebuffer(false);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.pShaderManager.depthBuffer.framebufferTexture);
-		GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_DEPTH_COMPONENT, 0, 0, 
-				this.pShaderManager.depthBuffer.framebufferTextureWidth, 
-				this.pShaderManager.depthBuffer.framebufferTextureHeight, 
-				0);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -103,12 +102,11 @@ public class BLShader extends Shader {
 		GL11.glViewport(0, 0, (int)f1, (int)f2);
 		this.pShaderManager.func_147992_a("DiffuseSampler", this.framebufferIn);
 
-		//////////////////// ADD DEPTH SAMPLER ///////////////////////
-		this.pShaderManager.func_147992_a("DSampler", this.pShaderManager.depthBuffer);
+		for(Entry<String, Object> samplerEntry : this.wrapper.getSamplers().entrySet()) {
+			this.pShaderManager.func_147992_a(samplerEntry.getKey(), samplerEntry.getValue());
+		}
 
-		for (int i = 0; i < this.pListAuxFramebuffers.size(); ++i)
-		{
-			System.out.println("Adding sampler: " + (String)this.pListAuxNames.get(i));
+		for (int i = 0; i < this.pListAuxFramebuffers.size(); ++i) {
 			this.pShaderManager.func_147992_a((String)this.pListAuxNames.get(i), this.pListAuxFramebuffers.get(i));
 			this.pShaderManager.func_147984_b("AuxSize" + i).func_148087_a((float)((Integer)this.pListAuxWidths.get(i)).intValue(), (float)((Integer)this.pListAuxHeights.get(i)).intValue());
 		}
@@ -119,6 +117,7 @@ public class BLShader extends Shader {
 		this.pShaderManager.func_147984_b("Time").func_148090_a(partialTicks);
 		Minecraft minecraft = Minecraft.getMinecraft();
 		this.pShaderManager.func_147984_b("ScreenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
+		this.wrapper.updateShader(this);
 		this.pShaderManager.func_147995_c();
 		this.framebufferOut.framebufferClear();
 		this.framebufferOut.bindFramebuffer(false);

@@ -1,18 +1,18 @@
 package thebetweenlands.event.debugging;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.client.render.shader.BLShaderGroup;
-import thebetweenlands.client.render.shader.ResourceManagerWrapper;
+import thebetweenlands.client.render.shader.CShader;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.manager.DecayManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -64,19 +64,25 @@ public class DebugHandler {
 			try {
 				Minecraft mc = Minecraft.getMinecraft();
 				if(mc.entityRenderer.theShaderGroup == null) {
-					//mc.entityRenderer.activateNextShader();
-					mc.entityRenderer.theShaderGroup = new BLShaderGroup(mc.getTextureManager(), new ResourceManagerWrapper(mc.getResourceManager()), mc.getFramebuffer(), 
-							new ResourceLocation("shaders/post/lighting.json"));
-					//new ResourceLocation("shaders/post/notch.json"));
-					//mc.entityRenderer.theShaderGroup.addShader("thebetweenlands:shaders/overlay", mc.getFramebuffer(), mc.getFramebuffer());
+					CShader shaderWrapper = new CShader(
+							mc.getTextureManager(),
+							mc.getResourceManager(), mc.getFramebuffer(),
+							new ResourceLocation("thebetweenlands:shaders/post/lighting.json"),
+							new ResourceLocation("thebetweenlands:shaders/program/"),
+							new ResourceLocation("thebetweenlands:textures/")
+							).updateSampler("DepthSampler", ShaderHelper.INSTANCE.getDepthBuffer());
+					this.currentShader = shaderWrapper;
+					mc.entityRenderer.theShaderGroup = shaderWrapper.getShaderGroup();
 					mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+					this.useShader = true;
 				} else {
 					mc.entityRenderer.deactivateShader();
+					this.useShader = false;
 				}
 			} catch(Exception ex) {
+				this.useShader = false;
 				ex.printStackTrace();
 			}
-			//this.useShader = !this.useShader;
 		}
 	}
 	@SideOnly(Side.CLIENT)
@@ -99,29 +105,32 @@ public class DebugHandler {
 		}
 	}
 
-	//This copies the depth buffer before it is cleared when rendering the hand
-	public static Framebuffer depthBuffer;
+	private Method renderHandMethod = null;
+	private CShader currentShader = null;
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void renderHand(RenderHandEvent event) {
-		//Create new framebuffer to hold the depth information
-		if(depthBuffer == null) {
-			depthBuffer = new Framebuffer(
-					Minecraft.getMinecraft().getFramebuffer().framebufferWidth, 
-					Minecraft.getMinecraft().getFramebuffer().framebufferHeight, 
-					true);
+		if(this.useShader) {
+			//Render hand to depth buffer to prevent bugs
+			if(this.renderHandMethod == null) {
+				try {
+					this.renderHandMethod = EntityRenderer.class.getDeclaredMethod("renderHand", float.class, int.class);
+					this.renderHandMethod.setAccessible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				this.renderHandMethod.invoke(Minecraft.getMinecraft().entityRenderer, event.partialTicks, event.renderPass);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			ShaderHelper.INSTANCE.updateDepthBuffer(Minecraft.getMinecraft().getFramebuffer());
+			
+			if(this.currentShader != null) {
+				this.currentShader.updateSampler("DepthSampler", ShaderHelper.INSTANCE.getDepthBuffer());
+			}
 		}
-		//Draw to depth buffer
-		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, depthBuffer.framebufferObject);
-		//Read from depth buffer
-		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, Minecraft.getMinecraft().getFramebuffer().framebufferObject);
-		//Blit dat shit
-		int width = Minecraft.getMinecraft().getFramebuffer().framebufferWidth;
-		int height = Minecraft.getMinecraft().getFramebuffer().framebufferHeight;
-		GL30.glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, 
-				GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT, 
-				GL11.GL_NEAREST);
-		//Bind default framebuffer
-		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 	}
 }

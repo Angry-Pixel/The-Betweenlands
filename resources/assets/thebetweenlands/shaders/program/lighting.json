@@ -8,7 +8,7 @@
     "fragment": "lighting",
     "attributes": [ "Position" ],
     "samplers": [
-        { "name": "DSampler" },
+        { "name": "DepthSampler" },
         { "name": "DiffuseSampler" }
     ],
     "uniforms": [

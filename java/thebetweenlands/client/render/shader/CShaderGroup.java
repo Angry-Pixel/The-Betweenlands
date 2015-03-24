@@ -11,17 +11,19 @@ import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 
-public class BLShaderGroup extends ShaderGroup {
+public class CShaderGroup extends ShaderGroup {
 	private IResourceManager pResourceManager;
 	private List pListShaders;
+	private final CShader wrapper;
 	
-	public BLShaderGroup(TextureManager textureManager,
+	public CShaderGroup(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
-			ResourceLocation resourceLocation) throws JsonException {
+			ResourceLocation resourceLocation, CShader wrapper) throws JsonException {
 		super(textureManager, resourceManager, frameBuffer, resourceLocation);
-		System.out.println("Loaded shader group: " + resourceLocation.getResourcePath());
+		this.wrapper = wrapper;
 	}
 	
+	//Called after CTOR
 	@Override
 	public void func_152765_a(TextureManager textureManager, ResourceLocation resourceLocation) throws JsonException {
 		try {
@@ -31,7 +33,6 @@ public class BLShaderGroup extends ShaderGroup {
 			Field slField = this.getClass().getSuperclass().getDeclaredField("listShaders");
 			slField.setAccessible(true);
 			this.pListShaders = (List) slField.get(this);
-			System.out.println("### Successfully retrieved shader group fields ###");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -39,9 +40,8 @@ public class BLShaderGroup extends ShaderGroup {
     }
 	
 	@Override
-	public Shader addShader(String p_148023_1_, Framebuffer p_148023_2_, Framebuffer p_148023_3_) throws JsonException {
-		System.out.println("Adding shader: " + p_148023_1_);
-		Shader shader = new BLShader(this.pResourceManager, p_148023_1_, p_148023_2_, p_148023_3_);
+	public Shader addShader(String name, Framebuffer framebufferIn, Framebuffer framebufferOut) throws JsonException {
+		Shader shader = new CShaderInt(this.pResourceManager, name, framebufferIn, framebufferOut, ((ResourceManagerWrapper)this.pResourceManager).getWrapper());
 		this.pListShaders.add(this.pListShaders.size(), shader);
 		return shader;
 	}

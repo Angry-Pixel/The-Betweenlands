@@ -11,12 +11,17 @@ import net.minecraft.util.ResourceLocation;
 public class ResourceManagerWrapper implements IResourceManager {
 
 	private final IResourceManager parent;
-
-	public ResourceManagerWrapper(IResourceManager parent) {
-		System.out.println("### Wrapping resource manager ###");
+	private final CShader wrapper;
+	
+	public ResourceManagerWrapper(IResourceManager parent, CShader wrapper) {
 		this.parent = parent;
+		this.wrapper = wrapper;
 	}
 
+	public CShader getWrapper() {
+		return this.wrapper;
+	}
+	
 	@Override
 	public Set getResourceDomains() {
 		return this.parent.getResourceDomains();
@@ -25,24 +30,36 @@ public class ResourceManagerWrapper implements IResourceManager {
 	@Override
 	public IResource getResource(ResourceLocation location)
 			throws IOException {
-		if(location.getResourcePath().startsWith("shaders")) {
-			ResourceLocation redirected = new ResourceLocation("thebetweenlands:" + location.getResourcePath());
-			System.out.println("Getting resource: " + redirected.getResourceDomain() + ":" + redirected.getResourcePath());
+		if(location.getResourcePath().startsWith("shaders/post/")) {
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getShaderDescription().getResourceDomain() + ":" + this.wrapper.getShaderDescription().getResourcePath());
+			return this.parent.getResource(redirected);
+		} else if(location.getResourcePath().startsWith("shaders/program/")) {
+			String fileName = location.getResourcePath().replace("shaders/program/", "");
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getShaderPath().getResourceDomain() + ":" + this.wrapper.getShaderPath().getResourcePath() + fileName);
+			return this.parent.getResource(redirected);
+		} else if(location.getResourcePath().startsWith("textures/effect/")) {
+			String fileName = location.getResourcePath().replace("textures/effect/", "");
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getAssetsPath().getResourceDomain() + ":" + this.wrapper.getAssetsPath().getResourcePath() + fileName);
 			return this.parent.getResource(redirected);
 		}
-		System.out.println("Getting resource: " + location.getResourceDomain() + ":" + location.getResourcePath());
 		return this.parent.getResource(location);
 	}
 
 	@Override
 	public List getAllResources(ResourceLocation location)
 			throws IOException {
-		if(location.getResourcePath().startsWith("shaders")) {
-			ResourceLocation redirected = new ResourceLocation("thebetweenlands:" + location.getResourcePath());
-			System.out.println("Getting resources: " + redirected.getResourceDomain() + ":" + redirected.getResourcePath());
+		if(location.getResourcePath().startsWith("shaders/post/")) {
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getShaderDescription().getResourceDomain() + ":" + this.wrapper.getShaderDescription().getResourcePath());
+			return this.parent.getAllResources(redirected);
+		} else if(location.getResourcePath().startsWith("shaders/program/")) {
+			String fileName = location.getResourcePath().replace("shaders/program/", "");
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getShaderPath().getResourceDomain() + ":" + this.wrapper.getShaderPath().getResourcePath() + fileName);
+			return this.parent.getAllResources(redirected);
+		} else if(location.getResourcePath().startsWith("textures/effect/")) {
+			String fileName = location.getResourcePath().replace("textures/effect/", "");
+			ResourceLocation redirected = new ResourceLocation(this.wrapper.getAssetsPath().getResourceDomain() + ":" + this.wrapper.getAssetsPath().getResourcePath() + fileName);
 			return this.parent.getAllResources(redirected);
 		}
-		System.out.println("Getting resources: " + location.getResourceDomain() + ":" + location.getResourcePath());
 		return this.parent.getAllResources(location);
 	}
 
