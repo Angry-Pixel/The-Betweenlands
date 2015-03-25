@@ -16,7 +16,13 @@ import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
-import thebetweenlands.tileentities.*;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import thebetweenlands.tileentities.TileEntityBLFurnace;
+import thebetweenlands.tileentities.TileEntityBush;
+import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityWisp;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -36,6 +42,7 @@ public class CommonProxy
         registerTileEntity(TileEntityBLDualFurnace.class, "dualFurnaceBL");
         registerTileEntity(TileEntityBLCraftingTable.class, "crfTableBL");
         registerTileEntity(TileEntityWisp.class, "wisp");
+        registerTileEntity(TileEntityBush.class, "weedWoodBush");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

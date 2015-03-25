@@ -7,12 +7,14 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
+import thebetweenlands.world.feature.trees.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 	
 	private final WorldGenerator genTreeWeedwood = new WorldGenWeedWoodTree();
 	private final WorldGenerator genTreeSap = new WorldGenSapTree();
+	private final WorldGenerator genBushWeedWood = new WorldGenWeedWoodBush();
 	private final WorldGenTallGrass genFerns = new WorldGenTallGrass(Blocks.tallgrass, 2);
 	private final WorldGenTallGrass genNettle = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final WorldGenTallGrass genSwampPlant = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
@@ -27,6 +29,15 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 
 			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 2, yy, zz - 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 2, yy, zz + 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 2, yy, zz - 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 2, yy, zz + 2))
 			genTreeWeedwood.generate(world, rand, xx, yy, zz);
+		}
+
+		for (attempt = 0; attempt < 70; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz))
+				genBushWeedWood.generate(world, rand, xx, yy, zz);
 		}
 
 		for (attempt = 0; attempt < 50; attempt++) {
