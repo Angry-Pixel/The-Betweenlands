@@ -26,6 +26,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	public EntityFirefly(World world) {
 		super(world);
+		this.ignoreFrustumCheck = true;
 	}
 
 	@Override
@@ -147,9 +148,9 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 			if(this.lastLightX != MathHelper.floor_double(this.posX) || 
 					this.lastLightY != MathHelper.floor_double(this.posY) ||
 					this.lastLightZ != MathHelper.floor_double(this.posZ)) {
-				if(ConfigHandler.FIREFLY_LIGHTING) {
-					//this.switchOff();
-					//this.lightUp(this.worldObj, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
+				if(ConfigHandler.FIREFLY_LIGHTING && !ConfigHandler.USE_SHADER) {
+					this.switchOff();
+					this.lightUp(this.worldObj, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 				}
 			}
 		} else {
@@ -166,8 +167,8 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	public void setDead() {
 		super.setDead();
 		if (this.worldObj.isRemote) {
-			if(ConfigHandler.FIREFLY_LIGHTING) {
-				//switchOff();
+			if(ConfigHandler.FIREFLY_LIGHTING && !ConfigHandler.USE_SHADER) {
+				switchOff();
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -100,7 +101,9 @@ public class TheBetweenlands
         MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
-
+        FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
+        
 		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);

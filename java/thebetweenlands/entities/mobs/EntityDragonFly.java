@@ -24,11 +24,11 @@ public class EntityDragonFly extends EntityAmbientCreature {
 
 	public EntityDragonFly(World world) {
 		super(world);
+		setSize(0.9F, 0.5F);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(2, new EntityAILookIdle(this));
 	}
-
 
 	@Override
 	protected void applyEntityAttributes() {
@@ -56,7 +56,7 @@ public class EntityDragonFly extends EntityAmbientCreature {
 	@Override
 	protected void fall(float par1) {
 	}
-
+/*
 	@Override
 	protected String getLivingSound() {
 		return "";
@@ -71,7 +71,7 @@ public class EntityDragonFly extends EntityAmbientCreature {
 	protected String getDeathSound() {
 		return "";
 	}
-
+*/
 	@Override
 	protected void func_145780_a(int x, int y, int z, Block block) {
 		playSound("mob.spider.step", 0.15F, 1.0F);
