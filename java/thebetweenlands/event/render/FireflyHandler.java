@@ -5,13 +5,16 @@ import java.util.Map.Entry;
 
 import javax.vecmath.Vector3d;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.render.entity.RenderFirefly;
-import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.impl.LightSource;
+import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,7 +35,13 @@ public class FireflyHandler {
 			EntityFirefly entity = e.getKey().getValue();
 			renderer.doRenderCallback(entity, pos.x, pos.y, pos.z, event.partialTicks);
 			
-			ShaderHelper.INSTANCE.lightSources.add(new Vector3d(entity.posX, entity.posY, entity.posZ));
+			if(MainShader.getActiveShader() != null && ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
+				MainShader.getActiveShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
+						entity.worldObj.rand.nextFloat() * 0.1f + 6.0f, 
+						16.0f / 255.0f + entity.worldObj.rand.nextFloat() * 0.04f, 
+						12.0f / 255.0f + entity.worldObj.rand.nextFloat() * 0.01f, 
+						8.0f / 255.0f));
+			}
 		}
 		GL11.glPopMatrix();
 		GL11.glDisable(GL11.GL_BLEND);
