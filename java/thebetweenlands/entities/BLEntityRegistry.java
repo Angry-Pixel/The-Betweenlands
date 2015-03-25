@@ -6,7 +6,9 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
@@ -16,9 +18,6 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 public class BLEntityRegistry
 {
 	public static void init() {
-		// This is an outdated way of doing it
-		// EntityRegistry.registerModEntity(EntityDarkDruid.class, "darkDruid", 2, TheBetweenlands.instance, 30, 3, true);
-
 		// Entity registrations can be with or without spawn egg for non mob entites eg. projectiles etc.
 		registerEntity(0, EntityDarkDruid.class, "darkDruid", 0x000000, 0xFF0000);
 		registerEntity(1, EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
@@ -27,6 +26,8 @@ public class BLEntityRegistry
 		registerEntity(4, EntityTarBeast.class, "tarBeast", 0x000000, 0x2E2E2E);
 		registerEntity(5, EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
 		registerEntity(6, EntityFirefly.class, "firefly", 0x243B0B, 0x808000);
+		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000);
+		registerEntity(8, EntityLeech.class, "leech", 0x804E3D, 0x3D6F80);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

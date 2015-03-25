@@ -111,6 +111,9 @@ entity.thebetweenlands.sludge.name=Sludge
 entity.thebetweenlands.swampHag.name=Swamp Hag
 entity.thebetweenlands.tarBeast.name=Tar Beast
 entity.thebetweenlands.wight.name=Wight
+entity.thebetweenlands.firefly.name=Fire Fly
+entity.thebetweenlands.sporeling.name=Sporeling
+entity.thebetweenlands.leech.name=Leech
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
