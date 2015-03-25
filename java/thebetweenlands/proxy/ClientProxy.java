@@ -32,6 +32,7 @@ import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.block.BlockRubberLogRender;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderSludge;
@@ -47,6 +48,7 @@ import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntitySludge;
@@ -99,6 +101,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, new RenderFirefly());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, new RenderLeech());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderSporeling());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, new RenderDragonFly());
 		
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());

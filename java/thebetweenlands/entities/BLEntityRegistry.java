@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntitySludge;
@@ -28,6 +29,7 @@ public class BLEntityRegistry
 		registerEntity(6, EntityFirefly.class, "firefly", 0x243B0B, 0x808000);
 		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000);
 		registerEntity(8, EntityLeech.class, "leech", 0x804E3D, 0x3D6F80);
+		registerEntity(9, EntityDragonFly.class, "dragonfly", 0x804E3D, 0x3D6F80);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
