@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -115,13 +116,21 @@ public class EntityDragonFly extends EntityAmbientCreature {
 					flyAbout();
 				else
 					land();
+
+				if (!entityFlying && isInWater()) {
+					motionY += 0.2F;
+					flyAbout();
+				}
+				
+				if (!entityFlying && worldObj.getBlock((int)posX, (int)boundingBox.minY - 1, (int)posZ) == Blocks.water)
+					flyAbout();
 			}
 		super.onUpdate();
 	}
 
 	public void flyAbout() {
 		if (currentFlightTarget != null)
-			if (!worldObj.isAirBlock(currentFlightTarget.posX, currentFlightTarget.posY, currentFlightTarget.posZ) || currentFlightTarget.posY < 1)
+			if (!worldObj.isAirBlock(currentFlightTarget.posX, currentFlightTarget.posY, currentFlightTarget.posZ) || currentFlightTarget.posY < 1 || worldObj.getBlock(currentFlightTarget.posX, currentFlightTarget.posY + 1, currentFlightTarget.posZ) == Blocks.water)
 				currentFlightTarget = null;
 
 		if (currentFlightTarget == null || rand.nextInt(30) == 0 || currentFlightTarget.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 10F)
