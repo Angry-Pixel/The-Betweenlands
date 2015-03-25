@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.terrain.BlockAlgae;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
@@ -17,6 +18,7 @@ import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -75,6 +77,7 @@ public class BLBlockRegistry
 	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
 	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog");
+	public static final Block weedWoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedWoodBush").setCreativeTab(ModCreativeTabs.plants);
 
 	// WOOD
 	public static final Block weedWoodPlanks = new BlockWeedWoodPlanks();
