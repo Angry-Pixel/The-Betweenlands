@@ -233,6 +233,12 @@
       "snailLiving1"
     ]
   },
+  "dragonfly": {
+    "category": "neutral",
+    "sounds": [
+      "dragonfly"
+    ]
+  },
   "ambientSwamp": {
     "category": "ambient",
     "sounds": [

@@ -57,12 +57,12 @@ public class EntityDragonFly extends EntityAmbientCreature {
 	@Override
 	protected void fall(float par1) {
 	}
-/*
+
 	@Override
 	protected String getLivingSound() {
-		return "";
+		return "thebetweenlands:dragonfly";
 	}
-
+/*
 	@Override
 	protected String getHurtSound() {
 		return "";
@@ -119,7 +119,6 @@ public class EntityDragonFly extends EntityAmbientCreature {
 
 				if (!entityFlying && isInWater()) {
 					motionY += 0.2F;
-					flyAbout();
 				}
 				
 				if (!entityFlying && worldObj.getBlock((int)posX, (int)boundingBox.minY - 1, (int)posZ) == Blocks.water)
