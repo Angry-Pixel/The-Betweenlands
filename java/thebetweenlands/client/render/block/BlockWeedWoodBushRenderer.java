@@ -61,7 +61,11 @@ public class BlockWeedWoodBushRenderer implements ISimpleBlockRenderingHandler {
 		if(world != null) {
 			tessellator.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 		} else {
-			tessellator.setBrightness(0xF0);
+			Minecraft mc = Minecraft.getMinecraft();
+			if(mc.theWorld != null && mc.thePlayer != null) {
+				tessellator.setBrightness(mc.theWorld.getLightBrightnessForSkyBlocks(
+						(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
+			}
 		}
 
 		tessellator.addTranslation(x, y, z);
