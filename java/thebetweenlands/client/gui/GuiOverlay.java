@@ -48,6 +48,8 @@ public class GuiOverlay extends Gui
 
                     if (updateCounter % (decayLevel * 3 + 1) == 0) offsetY += random.nextInt(3) - 1;
 
+                    GL11.glColor4f(1, 1, 1, 1);
+                    
                     drawTexturedModalRect(startX + i * 8, startY + offsetY, 18, 0, 9, 9);
                     if (i * 2 + 1 < decayLevel) drawTexturedModalRect(startX + i * 8, startY + offsetY, 0, 0, 9, 9);
                     if (i * 2 + 1 == decayLevel) drawTexturedModalRect(startX + i * 8, startY + offsetY, 9, 0, 9, 9);
