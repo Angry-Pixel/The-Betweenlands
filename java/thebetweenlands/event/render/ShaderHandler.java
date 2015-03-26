@@ -10,10 +10,12 @@ import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -31,7 +33,7 @@ public class ShaderHandler {
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void renderHand(RenderHandEvent event) {
+	public void onPreRender(RenderWorldLastEvent event) {
 		if(ConfigHandler.USE_SHADER && !this.failedLoading) {
 			Minecraft mc = Minecraft.getMinecraft();
 			if((this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup)
@@ -70,8 +72,8 @@ public class ShaderHandler {
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
-		if(ConfigHandler.USE_SHADER) {
+	public void onPostRender(TickEvent.RenderTickEvent event) {
+		if(ConfigHandler.USE_SHADER && event.phase == Phase.END) {
 			if(MainShader.getActiveShader() != null) {
 				MainShader.getActiveShader().clearLights();
 			}
