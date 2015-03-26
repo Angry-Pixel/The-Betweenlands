@@ -1,17 +1,23 @@
 package thebetweenlands.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.tileentities.TileEntityBush;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockWeedWoodBush extends BlockContainer{
+public class BlockWeedWoodBush extends BlockContainer /*Block*/ {
 
+	@SideOnly(Side.CLIENT)
+	public IIcon iconFancy, iconFast, iconStick;
+	
 	protected BlockWeedWoodBush() 
 	{
 		super(Material.leaves);
@@ -45,7 +51,7 @@ public class BlockWeedWoodBush extends BlockContainer{
     @Override
     public int getRenderType()
     {
-        return -1;
+        return BlockRenderIDs.BUSH.id();
     }
 
 	@Override
@@ -54,4 +60,11 @@ public class BlockWeedWoodBush extends BlockContainer{
 		return blockIcon;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		this.iconFancy = iconRegister.registerIcon("thebetweenlands:weedWoodLeavesFancy");
+		this.iconFast = iconRegister.registerIcon("thebetweenlands:weedWoodLeavesFast");
+		this.iconStick = iconRegister.registerIcon("thebetweenlands:weedWoodStick");
+	}
 }
