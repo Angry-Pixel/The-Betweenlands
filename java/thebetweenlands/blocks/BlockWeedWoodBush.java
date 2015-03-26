@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -16,7 +17,12 @@ public class BlockWeedWoodBush extends /*BlockContainer*/ Block {
 	protected BlockWeedWoodBush() 
 	{
 		super(Material.leaves);
-		setBlockTextureName("thebetweenlands:" + "weedWoodLeavesFancy");
+		setHardness(0.35F);
+		setStepSound(soundTypeGrass);
+		setCreativeTab(ModCreativeTabs.blocks);
+		setBlockName("thebetweenlands.weedwoodbush");
+		setBlockTextureName("thebetweenlands:weedWoodLeavesFancy");
+        setBlockBounds(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f);
 	}
     
     @Override
