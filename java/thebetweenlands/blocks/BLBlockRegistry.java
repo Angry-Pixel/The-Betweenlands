@@ -12,6 +12,7 @@ import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockGenericOre;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
+import thebetweenlands.blocks.terrain.BlockMiddleGemOre;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
 import thebetweenlands.blocks.terrain.BlockSilt;
@@ -53,9 +54,9 @@ public class BLBlockRegistry
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
-	public static final Block aquaMiddleGemOre = new BlockGenericOre("aquaMiddleGemOre", null);
-	public static final Block crimsonMiddleGemOre = new BlockGenericOre("crimsonMiddleGemOre", null);
-	public static final Block greenMiddleGemOre = new BlockGenericOre("greenMiddleGemOre", null);
+	public static final Block aquaMiddleGemOre = new BlockMiddleGemOre("aquaMiddleGemOre", null);
+	public static final Block crimsonMiddleGemOre = new BlockMiddleGemOre("crimsonMiddleGemOre", null);
+	public static final Block greenMiddleGemOre = new BlockMiddleGemOre("greenMiddleGemOre", null);
 	public static final Block octineOre = new BlockGenericOre("octineOre", null).setLightLevel(0.625F); //setting null drops item block
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
