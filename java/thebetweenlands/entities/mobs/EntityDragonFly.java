@@ -106,24 +106,29 @@ public class EntityDragonFly extends EntityAmbientCreature {
 			motionY *= 0.6D;
 
 		if (!worldObj.isRemote) {
-				if (rand.nextInt(200) == 0)
-					if (!entityFlying)
-						setEntityFlying(true);
-					else
-						setEntityFlying(false);
-
-				if (entityFlying)
-					flyAbout();
+			if (rand.nextInt(200) == 0)
+				if (!entityFlying)
+					setEntityFlying(true);
 				else
-					land();
+					setEntityFlying(false);
 
-				if (!entityFlying && isInWater()) {
-					motionY += 0.2F;
-				}
-				
-				if (!entityFlying && worldObj.getBlock((int)posX, (int)boundingBox.minY - 1, (int)posZ) == Blocks.water)
-					flyAbout();
+			if (entityFlying)
+				flyAbout();
+			else
+				land();
+
+			if (!entityFlying && isInWater()) {
+				motionY += 0.2F;
 			}
+
+			if (!entityFlying
+					&& worldObj.getBlock((int) posX, (int) boundingBox.minY - 1, (int) posZ) == Blocks.water)
+				flyAbout();
+			
+			if (!entityFlying)
+				if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null)
+					flyAbout();
+		}
 		super.onUpdate();
 	}
 
