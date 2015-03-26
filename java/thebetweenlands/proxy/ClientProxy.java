@@ -28,7 +28,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.BlockBushRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.block.BlockRubberLogRender;
 import thebetweenlands.client.render.entity.RenderAngler;
@@ -42,9 +42,7 @@ import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
-import thebetweenlands.client.render.item.ItemRender;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityBushRender;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
@@ -67,7 +65,6 @@ import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
-import thebetweenlands.tileentities.TileEntityBush;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
@@ -80,7 +77,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, BUSH;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH;
 
 		private final int ID;
 
@@ -112,17 +109,15 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLCraftingTable.class, new TileEntityBLWorkbenchRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new TileEntityWispRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBush.class, new TileEntityBushRender());
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedWoodChest), new ItemWeedWoodChestRenderer());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedWoodBush), new ItemRender(new TileEntityBushRender(), new TileEntityBush()));
 
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
 		RenderingRegistry.registerBlockHandler(new BlockRubberLogRender());
-		RenderingRegistry.registerBlockHandler(new BlockBushRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockWeedWoodBushRenderer());
 
         //Events
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());

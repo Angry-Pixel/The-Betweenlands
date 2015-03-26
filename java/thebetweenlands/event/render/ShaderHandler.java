@@ -63,24 +63,6 @@ public class ShaderHandler {
 			
 			if(MainShader.getActiveShader() != null) {
 				MainShader.getActiveShader().updateMatrices();
-			}
-
-			//Small fix for hand depth buffer issues because the hand is rendered after the depth buffer has been cleared
-			if(this.renderHandMethod == null) {
-				try {
-					this.renderHandMethod = EntityRenderer.class.getDeclaredMethod("renderHand", float.class, int.class);
-					this.renderHandMethod.setAccessible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			try {
-				this.renderHandMethod.invoke(Minecraft.getMinecraft().entityRenderer, event.partialTicks, event.renderPass);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			if(MainShader.getActiveShader() != null) {
 				MainShader.getActiveShader().updateDepthBuffer(Minecraft.getMinecraft().getFramebuffer());
 			}
 		}
