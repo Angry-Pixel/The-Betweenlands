@@ -239,6 +239,12 @@
       "dragonfly"
     ]
   },
+  "squish": {
+    "category": "neutral",
+    "sounds": [
+      "squish"
+    ]
+  },
   "ambientSwamp": {
     "category": "ambient",
     "sounds": [
