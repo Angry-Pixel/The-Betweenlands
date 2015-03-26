@@ -117,17 +117,17 @@ public class EntityDragonFly extends EntityAmbientCreature {
 			else
 				land();
 
-			if (!entityFlying && isInWater()) {
-				motionY += 0.2F;
-			}
+			if (!entityFlying) {
 
-			if (!entityFlying
-					&& worldObj.getBlock((int) posX, (int) boundingBox.minY - 1, (int) posZ) == Blocks.water)
-				flyAbout();
-			
-			if (!entityFlying)
+				if (isInWater())
+					motionY += 0.2F;
+
+				if (worldObj.isAnyLiquid(boundingBox.expand(0D, 1D, 0D)))
+					flyAbout();
+
 				if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null)
 					flyAbout();
+			}
 		}
 		super.onUpdate();
 	}
