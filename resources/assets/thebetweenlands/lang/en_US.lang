@@ -115,6 +115,7 @@ entity.thebetweenlands.wight.name=Wight
 entity.thebetweenlands.firefly.name=Fire Fly
 entity.thebetweenlands.sporeling.name=Sporeling
 entity.thebetweenlands.leech.name=Leech
+entity.thebetweenlands.dragonfly.name=Dragon Fly
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
