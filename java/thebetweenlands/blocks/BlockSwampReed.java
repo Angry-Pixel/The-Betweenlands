@@ -27,20 +27,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSwampReed extends BlockBush implements IPlantable {
-
 	private IIcon top, bottom;
-	private final String name;
-	Random rnd = new Random();
 
-	protected BlockSwampReed(String name) {
+	protected BlockSwampReed() {
 		super(Material.coral);
 		this.setTickRandomly(true);
-		this.name = name;
 		setCreativeTab(ModCreativeTabs.plants);
+		setHardness(0.5F);
 		setStepSound(Block.soundTypeGrass);
-		float w = (1F - 0.8F) / 2F;
-		setBlockBounds(w, 0, w, 0.8F + w, 1, 0.8F + w);
-		setBlockName("thebetweenlands." + name.substring(0, 1).toLowerCase() + name.substring(1));
+		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);
+		setBlockName("thebetweenlands.swampReedBlock");
 	}
 
 	@Override
@@ -55,8 +51,8 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	}
 
 	@Override
-	protected boolean canPlaceBlockOn(Block block) {
-		return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass;
+	public boolean canPlaceBlockOn(Block block) {
+		return block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.silt || block == BLBlockRegistry.swampReedUW || block == BLBlockRegistry.swampReed || block == BLBlockRegistry.mud;
 	}
 
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
@@ -72,22 +68,25 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 			return true;
 		}
 	}
-	
-    public boolean canPlaceBlockAt(World world, int x, int y, int z)
-    {
-		boolean hasWater = (world.getBlock(x - 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x + 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x, y - 1, z - 1).getMaterial() == Material.water || world.getBlock(x, y - 1, z + 1).getMaterial() == Material.water);
-        return canPlaceBlockOn(world.getBlock(x, y - 1, z)) && hasWater;
-    }
 
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack item) {
-		if (!world.isRemote) {
-			int l = ((MathHelper.floor_double((double) (entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) + 2) % 4;
-			int size = 1 + rnd.nextInt(4);
-			for (int j = 1; j < size; j++)
-				world.setBlock(x, y + j, z, this, 0, 2);
-			world.setBlock(x, y + size, z, this, 8 | l, 2);
+	public boolean canPlaceBlockAt(World world, int x, int y, int z)
+	{
+		boolean hasWater = (world.getBlock(x - 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x + 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x, y - 1, z - 1).getMaterial() == Material.water || world.getBlock(x, y - 1, z + 1).getMaterial() == Material.water);
+		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) && hasWater;
+	}
+
+	public static void generateReed(World world, int x, int y, int z) {
+		if(!world.isRemote) {
+			int height = world.rand.nextInt(4) + 2;
+			for(int yo = 0; yo < height; yo++) {
+				Block cBlock = world.getBlock(x, y+yo, z);
+				if(cBlock == BLBlockRegistry.swampWater) {
+					world.setBlock(x, y+yo, z, BLBlockRegistry.swampReedUW);
+				} else {
+					world.setBlock(x, y+yo, z, BLBlockRegistry.swampReed);
+				}
+			}
 		}
-		else world.setBlock(x, y, z, Blocks.air, 0, 2);
 	}
 
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
@@ -98,8 +97,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		if (world.getBlock(x, y, z) != this)
 			return super.canBlockStay(world, x, y, z);
-		int l = world.getBlockMetadata(x, y, z);
-		return l != 0 ? world.getBlock(x, y - 1, z) == this : world.getBlock(x, y - 1, z) == this || this.canPlaceBlockOn(world.getBlock(x, y - 1, z));
+		return world.getBlock(x, y - 1, z) == this || this.canPlaceBlockOn(world.getBlock(x, y - 1, z));
 	}
 
 	@Override
@@ -122,8 +120,8 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		top = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
-		bottom = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
+		top = reg.registerIcon("thebetweenlands:swampReedTop");
+		bottom = reg.registerIcon("thebetweenlands:swampReedBottom");
 	}
 
 	@Override

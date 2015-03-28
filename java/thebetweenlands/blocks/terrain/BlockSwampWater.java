@@ -390,6 +390,6 @@ public class BlockSwampWater extends BlockFluidClassic {
     }
 
 	public boolean canConnectTo(Block block) {
-		return block == this || block == BLBlockRegistry.swampWater || block == BLBlockRegistry.mireCoral;
+		return block == this || block == BLBlockRegistry.swampWater || SPECIAL_RENDERERS.containsKey(block);
 	}
 }

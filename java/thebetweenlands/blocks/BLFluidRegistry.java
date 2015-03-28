@@ -17,6 +17,7 @@ public class BLFluidRegistry {
 
 	public static Fluid swampWater = new Fluid("swampWater").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWater");
 	public static Fluid swampWaterMireCoral = new Fluid("swampWaterMireCoral").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterMireCoral");
+	public static Fluid swampWaterReed = new Fluid("swampWaterReed").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterReed");
 
 	private BLFluidRegistry() {
 	}
@@ -41,6 +42,7 @@ public class BLFluidRegistry {
 		if (event.map.getTextureType() == 0) {
 			swampWater.setIcons(BLBlockRegistry.swampWater.getBlockTextureFromSide(0), BLBlockRegistry.swampWater.getBlockTextureFromSide(1));
 			swampWaterMireCoral.setIcons(BLBlockRegistry.swampWater.getBlockTextureFromSide(0), BLBlockRegistry.swampWater.getBlockTextureFromSide(1));
+			swampWaterReed.setIcons(BLBlockRegistry.swampWater.getBlockTextureFromSide(0), BLBlockRegistry.swampWater.getBlockTextureFromSide(1));
 		}
 	}
 }

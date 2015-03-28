@@ -51,7 +51,6 @@ public class BLBlockRegistry
 	public static final Block peat = new BlockPeat();
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
-	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
@@ -87,7 +86,11 @@ public class BLBlockRegistry
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
 	public static final Block weepingBlue = new DoubleHeightPlant("WeepingBlue", 0.5F);
-	public static final Block swampReed = new BlockSwampReed("SwampReed");
+	
+	//PLANTS
+	public static final BlockSwampReed swampReed = new BlockSwampReed();
+	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
+	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

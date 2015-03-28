@@ -1,9 +1,7 @@
-package thebetweenlands.blocks.terrain;
+package thebetweenlands.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,36 +12,36 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.client.render.block.water.WaterMireCoralRenderer;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
+import thebetweenlands.client.render.block.water.WaterSwampReedRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.recipes.BLMaterials;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockMireCoral extends BlockSwampWater implements IPlantable {
-	public IIcon iconMireCoral;
+public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
+	public IIcon iconSwampReed;
+	public IIcon iconSwampReedTop;
 
-	public BlockMireCoral() {
-		super(BLFluidRegistry.swampWaterMireCoral, Material.water);
+	public BlockSwampReedUW() {
+		super(BLFluidRegistry.swampWaterReed, Material.water);
 		setStepSound(Block.soundTypeGrass);
-		setBlockName("thebetweenlands.mireCoral");
+		setBlockName("thebetweenlands.swampReedBlockUW");
 		setHardness(0.5F);
 		setCreativeTab(ModCreativeTabs.plants);
-		setBlockBounds(0.1f, 0.0f, 0.1f, 0.9f, 0.9f, 0.9f);
+		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
 		setTickRandomly(true);
-		setLightLevel(1.0F);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
-		this.setSpecialRenderer(new WaterMireCoralRenderer());
+		this.setSpecialRenderer(new WaterSwampReedRenderer());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconMireCoral = iconRegister.registerIcon("thebetweenlands:mireCoral");
+		this.iconSwampReed = iconRegister.registerIcon("thebetweenlands:swampReedBottom");
+		this.iconSwampReedTop = iconRegister.registerIcon("thebetweenlands:swampReedTop");
 		super.registerBlockIcons(iconRegister);
 	}
 
@@ -73,19 +71,19 @@ public class BlockMireCoral extends BlockSwampWater implements IPlantable {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World p_149695_1_, int p_149695_2_, int p_149695_3_, int p_149695_4_, Block p_149695_5_) {
-		super.onNeighborBlockChange(p_149695_1_, p_149695_2_, p_149695_3_, p_149695_4_, p_149695_5_);
-		this.checkAndDropBlock(p_149695_1_, p_149695_2_, p_149695_3_, p_149695_4_);
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		super.onNeighborBlockChange(world, x, y, z, block);
+		this.checkAndDropBlock(world, x, y, z);
 	}
 
 	@Override
-	public void updateTick(World p_149674_1_, int p_149674_2_, int p_149674_3_, int p_149674_4_, Random p_149674_5_) {
-		this.checkAndDropBlock(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_);
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		this.checkAndDropBlock(world, x, y, z);
 	}
 
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL).getItemDamage();
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
 	}
 
 	@Override
@@ -95,22 +93,28 @@ public class BlockMireCoral extends BlockSwampWater implements IPlantable {
 	
 	@Override
 	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL).getItemDamage();
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
     }
 	
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL).getItem();
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItem();
 	}
 
+    @Override
+    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+        return false;
+    }
+	
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 			world.setBlock(x, y, z, Blocks.air, 0, 2);
+			world.notifyBlockChange(x, y, z, Blocks.air);
 		}
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
-		return block == BLBlockRegistry.mud;
+		return block instanceof BlockSwampReedUW || block == BLBlockRegistry.mud;
 	}
 }
