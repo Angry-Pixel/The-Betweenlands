@@ -28,6 +28,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
 import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRender;
 import thebetweenlands.client.render.block.BlockRubberLogRender;
@@ -77,7 +78,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER;
 
 		private final int ID;
 
@@ -118,6 +119,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRender());
 		RenderingRegistry.registerBlockHandler(new BlockRubberLogRender());
 		RenderingRegistry.registerBlockHandler(new BlockWeedWoodBushRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockSwampWaterRenderer());
 
         //Events
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());

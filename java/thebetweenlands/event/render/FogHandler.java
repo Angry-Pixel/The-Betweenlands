@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -121,7 +121,7 @@ public class FogHandler {
 			}
 			if(renderView.isInWater()) {
 				Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
-				if(block == BLBlockRegistry.swampWater) {
+				if(block instanceof BlockSwampWater) {
 					BiomeGenBase biome = world.getBiomeGenForCoords(
 							MathHelper.floor_double(renderView.posX),
 							MathHelper.floor_double(renderView.posZ));
@@ -148,7 +148,7 @@ public class FogHandler {
 			}
 			if(renderView.isInWater()) {
 				Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
-				if(block == BLBlockRegistry.swampWater) {
+				if(block instanceof BlockSwampWater) {
 					GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
 	                if (renderView.isPotionActive(Potion.waterBreathing)) {
 	                	event.density = 0.1F;

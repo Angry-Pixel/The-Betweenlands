@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.terrain.BlockAlgae;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
@@ -13,6 +12,7 @@ import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockGenericOre;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMiddleGemOre;
+import thebetweenlands.blocks.terrain.BlockMireCoral;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
 import thebetweenlands.blocks.terrain.BlockSilt;
@@ -51,6 +51,7 @@ public class BLBlockRegistry
 	public static final Block peat = new BlockPeat();
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
+	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
