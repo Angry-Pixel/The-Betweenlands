@@ -18,6 +18,8 @@ import thebetweenlands.blocks.plants.BlockHanger;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
+import thebetweenlands.blocks.plants.BlockWaterFlower;
+import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
 import thebetweenlands.blocks.structure.BlockDruidAltar;
@@ -110,6 +112,8 @@ public class BLBlockRegistry
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
+	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
+	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
 
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

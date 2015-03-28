@@ -87,7 +87,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		System.out.println("Normal Weedwood Tree at: "+ x + " : " + y + " : " + z);
+		//System.out.println("Normal Weedwood Tree at: "+ x + " : " + y + " : " + z);
 		return true;
 	}
 

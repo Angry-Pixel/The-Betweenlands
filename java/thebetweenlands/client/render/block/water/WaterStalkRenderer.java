@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.block;
+package thebetweenlands.client.render.block.water;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -10,14 +10,9 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.plants.BlockSwampReed;
-import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 
-@SideOnly(Side.CLIENT)
-public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
+public class WaterStalkRenderer implements IWaterRenderer {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
@@ -30,7 +25,7 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
 		}
 		tessellator.startDrawingQuads();
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, -0.5, -0.5, -0.5, 1.0f);
+		renderer.drawCrossedSquares(((BlockWaterFlowerStalk)block).iconStalk, -0.5, -0.5, -0.5, 1.0f);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -39,21 +34,7 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 		Tessellator.instance.setColorOpaque(255, 255, 255);
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, x, y, z, 1.0f);
-		Block blockAbove = world.getBlock(x, y+1, z);
-		if(blockAbove == BLBlockRegistry.swampWater || blockAbove == Blocks.air) {
-			renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReedTop, x, y+1, z, 1.0f);
-		}
+		renderer.drawCrossedSquares(((BlockWaterFlowerStalk)block).iconStalk, x, y, z, 1.0f);
 		return true;
-	}
-
-	@Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return BlockRenderIDs.SWAMP_REED.id();
 	}
 }
