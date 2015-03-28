@@ -86,7 +86,7 @@ public class BLBlockRegistry
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
 	public static final Block weepingBlue = new DoubleHeightPlant("WeepingBlue", 0.5F);
-	public static final Block swampReed = new DoubleHeightPlant("SwampReed", 0.8F);
+	public static final Block swampReed = new BlockSwampReed("SwampReed");
 
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
