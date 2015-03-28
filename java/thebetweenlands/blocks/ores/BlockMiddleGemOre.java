@@ -1,4 +1,4 @@
-package thebetweenlands.blocks.terrain;
+package thebetweenlands.blocks.ores;
 
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 

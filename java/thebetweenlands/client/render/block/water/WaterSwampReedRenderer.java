@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BlockSwampReedUW;
+import thebetweenlands.blocks.plants.BlockSwampReedUW;
 
 public class WaterSwampReedRenderer implements IWaterRenderer {
 	@Override

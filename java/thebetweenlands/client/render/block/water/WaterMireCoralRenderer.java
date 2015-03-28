@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.blocks.terrain.BlockMireCoral;
+import thebetweenlands.blocks.plants.BlockMireCoral;
 
 public class WaterMireCoralRenderer implements IWaterRenderer {
 	@Override

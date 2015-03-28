@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.container;
 
 import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 
@@ -21,6 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;

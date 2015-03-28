@@ -1,4 +1,4 @@
-package thebetweenlands.blocks.terrain;
+package thebetweenlands.blocks.plants;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;

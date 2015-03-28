@@ -1,5 +1,6 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.structure;
 
+import thebetweenlands.blocks.BlockSpawner;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 public class BlockDruidSpawner extends BlockSpawner {

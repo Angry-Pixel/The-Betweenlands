@@ -9,7 +9,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BlockRubberLog;
+import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;

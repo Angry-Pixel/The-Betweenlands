@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import thebetweenlands.blocks.BlockWeedWoodChest;
+import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;

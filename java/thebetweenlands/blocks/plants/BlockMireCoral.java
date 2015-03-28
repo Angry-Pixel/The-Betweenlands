@@ -1,4 +1,4 @@
-package thebetweenlands.blocks.terrain;
+package thebetweenlands.blocks.plants;
 
 import java.util.Random;
 
@@ -17,6 +17,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterMireCoralRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;

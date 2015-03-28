@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.structure;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package thebetweenlands.blocks.terrain;
+package thebetweenlands.blocks.ores;
 
 import java.util.ArrayList;
 import java.util.Random;

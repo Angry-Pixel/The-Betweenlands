@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.structure;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;

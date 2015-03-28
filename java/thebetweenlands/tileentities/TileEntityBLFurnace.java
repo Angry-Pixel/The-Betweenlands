@@ -16,7 +16,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import thebetweenlands.blocks.BlockBLFurnace;
+import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import cpw.mods.fml.common.registry.GameRegistry;

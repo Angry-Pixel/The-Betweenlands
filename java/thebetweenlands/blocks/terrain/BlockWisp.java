@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.terrain;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;

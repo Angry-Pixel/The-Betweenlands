@@ -5,8 +5,8 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BlockBLLeaves;
-import thebetweenlands.blocks.BlockBLLog;
+import thebetweenlands.blocks.tree.BlockBLLeaves;
+import thebetweenlands.blocks.tree.BlockBLLog;
 
 public class WorldGenRubberTree extends WorldGenerator {
 

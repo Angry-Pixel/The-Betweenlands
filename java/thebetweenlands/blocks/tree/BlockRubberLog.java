@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.tree;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;

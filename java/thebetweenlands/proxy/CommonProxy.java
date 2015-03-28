@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BlockWeedWoodChest;
+import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;

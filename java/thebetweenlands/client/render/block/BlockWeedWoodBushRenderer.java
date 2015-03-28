@@ -11,7 +11,7 @@ import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.blocks.BlockWeedWoodBush;
+import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;

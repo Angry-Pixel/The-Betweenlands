@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BlockSwampReed;
+import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;

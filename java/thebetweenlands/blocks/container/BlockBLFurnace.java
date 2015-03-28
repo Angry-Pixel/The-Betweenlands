@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.container;
 
 import java.util.Random;
 
@@ -19,6 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
@@ -34,7 +35,7 @@ public class BlockBLFurnace extends BlockContainer {
     @SideOnly(Side.CLIENT)
     private IIcon frontIcon;
 
-    protected BlockBLFurnace(boolean isActive) {
+    public BlockBLFurnace(boolean isActive) {
         super(Material.rock);
         active = isActive;
         setHardness(3.5F);

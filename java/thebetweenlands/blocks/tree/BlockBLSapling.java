@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.tree;
 
 import java.util.List;
 import java.util.Random;
@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;

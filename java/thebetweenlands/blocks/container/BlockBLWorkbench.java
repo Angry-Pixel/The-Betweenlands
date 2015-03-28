@@ -1,4 +1,4 @@
-package thebetweenlands.blocks;
+package thebetweenlands.blocks.container;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,6 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import cpw.mods.fml.relauncher.Side;
@@ -24,7 +25,7 @@ public class BlockBLWorkbench extends Block {
     @SideOnly(Side.CLIENT)
     private IIcon sideIcon;
 
-    protected BlockBLWorkbench() {
+    public BlockBLWorkbench() {
     	super(Material.wood);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedWoodCraftingTable");
