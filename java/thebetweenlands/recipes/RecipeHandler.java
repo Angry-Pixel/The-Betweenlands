@@ -1,6 +1,7 @@
 package thebetweenlands.recipes;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -59,6 +60,7 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK), ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWoodLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedWoodPlanks, 4), new ItemStack(BLBlockRegistry.weedWood));
+		GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 4, 10), new ItemStack(BLBlockRegistry.sundew));
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_SICK, 4), "p", "p", 'p', new ItemStack(BLBlockRegistry.weedWoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedWoodCraftingTable), "xx", "xx", 'x', BLBlockRegistry.weedWoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedWoodChest), "xxx", "x x", "xxx", 'x', BLBlockRegistry.weedWoodPlanks);

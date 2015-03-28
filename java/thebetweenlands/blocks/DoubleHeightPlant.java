@@ -30,6 +30,7 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@SideOnly(Side.CLIENT)
 	private IIcon top, bottom;
 	private final String name;
+	Random rnd = new Random();
 
 	public DoubleHeightPlant(String name) {
 		this(name, 1);
@@ -39,6 +40,7 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 		this.name = name;
 		setCreativeTab(ModCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
+		this.setTickRandomly(true);
 		float w = (1F - width) / 2F;
 		setBlockBounds(w, 0, w, width + w, 1, width + w);
 		setBlockName("thebetweenlands." + name.substring(0, 1).toLowerCase() + name.substring(1));
@@ -51,22 +53,14 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		if ("Sundew".equals(name))
-			drops.add(new ItemStack(this, 1));
-		if (world.rand.nextInt(8) != 0)
-			return drops;
-
-		if ("Sundew".equals(name))
-			drops.add(new ItemStack(Items.glowstone_dust, 1 + fortune));
-		else if ("WeepingBlue".equals(name))
-			drops.add(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEPING_BLUE_PETAL, 1 + fortune));
-		else {
-			ItemStack seed = ForgeHooks.getGrassSeed(world);
-			if (seed != null)
-				drops.add(seed);
-		}
-
+		if ("Sundew".equals(name)) drops.add(new ItemStack(this, 1));
+		if ("WeepingBlue".equals(name)) drops.add(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEPING_BLUE_PETAL, 1 + rnd.nextInt(3) + fortune));
 		return drops;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if ("WeepingBlue".equals(name) && world.getBlockMetadata(x, y, z) != 0) world.spawnParticle("dripWater", x + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), y + 0.2F + rand.nextFloat()/2F, z + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), 0D, 0D, 0D); 
 	}
 
 	@Override
