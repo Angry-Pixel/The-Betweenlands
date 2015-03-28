@@ -76,7 +76,7 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		if (!"cattail".equals(name)) ret.add(new ItemStack(this));
+		if (!"cattail".equals(name) && !"swampPlant".equals(name)) ret.add(new ItemStack(this));
 		return ret;
 	}
 
