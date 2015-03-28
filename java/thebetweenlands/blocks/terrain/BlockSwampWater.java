@@ -23,25 +23,27 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockSwampWater extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	protected IIcon stillIcon, flowingIcon;
-	
+
 	protected boolean canSpread = true;
-	
+	protected boolean hasBoundingBox = false;
+
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<>();
 
 	public BlockSwampWater() {
 		super(BLFluidRegistry.swampWater, Material.water);
+		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		setBlockName("thebetweenlands.swampWater");
 	}
 
 	public BlockSwampWater(Fluid fluid, Material material) {
 		super(fluid, material);
 	}
-	
+
 	public BlockSwampWater setSpecialRenderer(IWaterRenderer renderer) {
 		SPECIAL_RENDERERS.put(this, renderer);
 		return this;
 	}
-	
+
 	public IWaterRenderer getSpecialRenderer() {
 		if(SPECIAL_RENDERERS.containsKey(this)) {
 			return SPECIAL_RENDERERS.get(this);
@@ -65,61 +67,57 @@ public class BlockSwampWater extends BlockFluidClassic {
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
 		if (world.getBlock(x, y, z).isAir(world, x, y, z)) return true;
 
-        Block block = world.getBlock(x, y, z);
+		Block block = world.getBlock(x, y, z);
 
-        if (this.canConnectTo(block))
-        {
-            return false;
-        }
+		if (this.canConnectTo(block))
+		{
+			return false;
+		}
 
-        if (displacements.containsKey(block))
-        {
-            return displacements.get(block);
-        }
+		if (displacements.containsKey(block))
+		{
+			return displacements.get(block);
+		}
 
-        Material material = block.getMaterial();
-        if (material.blocksMovement() || material == Material.portal)
-        {
-            return false;
-        }
+		Material material = block.getMaterial();
+		if (material.blocksMovement() || material == Material.portal)
+		{
+			return false;
+		}
 
-        int density = getDensity(world, x, y, z);
-        if (density == Integer.MAX_VALUE) 
-        {
-        	 return true;
-        }
-        
-        if (this.density > density)
-        {
-        	return true;
-        }
-        else
-        {
-        	return false;
-        }
+		int density = getDensity(world, x, y, z);
+		if (density == Integer.MAX_VALUE) 
+		{
+			return true;
+		}
+
+		if (this.density > density)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockAccess blockAccess, int x, int y, int z) {
-		if (this.blockMaterial != Material.water) {
-			return 16777215;
-		} else {
-			int avgRed = 0;
-			int avgGreen = 0;
-			int avgBlue = 0;
+		int avgRed = 0;
+		int avgGreen = 0;
+		int avgBlue = 0;
 
-			for (int xOff = -1; xOff <= 1; ++xOff) {
-				for (int yOff = -1; yOff <= 1; ++yOff) {
-					int colorMultiplier = blockAccess.getBiomeGenForCoords(x + yOff, z + xOff).getWaterColorMultiplier();
-					avgRed += (colorMultiplier & 16711680) >> 16;
-				avgGreen += (colorMultiplier & 65280) >> 8;
-				avgBlue += colorMultiplier & 255;
-				}
+		for (int xOff = -1; xOff <= 1; ++xOff) {
+			for (int yOff = -1; yOff <= 1; ++yOff) {
+				int colorMultiplier = blockAccess.getBiomeGenForCoords(x + yOff, z + xOff).getWaterColorMultiplier();
+				avgRed += (colorMultiplier & 16711680) >> 16;
+			avgGreen += (colorMultiplier & 65280) >> 8;
+			avgBlue += colorMultiplier & 255;
 			}
-
-			return (avgRed / 9 & 255) << 16 | (avgGreen / 9 & 255) << 8 | avgBlue / 9 & 255;
 		}
+
+		return (avgRed / 9 & 255) << 16 | (avgGreen / 9 & 255) << 8 | avgBlue / 9 & 255;
 	}
 
 	@Override
@@ -171,15 +169,15 @@ public class BlockSwampWater extends BlockFluidClassic {
 			return false;
 		}
 	}
-	
+
 	@Override
 	protected void flowIntoBlock(World world, int x, int y, int z, int meta) {
-        if (meta < 0) return;
-        if (displaceIfPossible(world, x, y, z) && this.canSpread) {
-            world.setBlock(x, y, z, this, meta, 3);
-        }
-    }
-	
+		if (meta < 0) return;
+		if (displaceIfPossible(world, x, y, z) && this.canSpread) {
+			world.setBlock(x, y, z, this, meta, 3);
+		}
+	}
+
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int quantaRemaining = quantaPerBlock - world.getBlockMetadata(x, y, z);
@@ -262,130 +260,135 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	@Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-        Block block = world.getBlock(x, y, z);
-        if(side == 0 && block != BLBlockRegistry.swampWater) {
-        	return true;
-        }
-        if (!this.canConnectTo(block))
-        {
-            return !block.isOpaqueCube();
-        }
-        return block.getMaterial() == this.getMaterial() ? false : super.shouldSideBeRendered(world, x, y, z, side);
-    }
+	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+		Block block = world.getBlock(x, y, z);
+		if(side == 0 && block != BLBlockRegistry.swampWater) {
+			return true;
+		}
+		if (!this.canConnectTo(block))
+		{
+			return !block.isOpaqueCube();
+		}
+		return (block.getMaterial() == this.getMaterial() || this.canConnectTo(block)) ? false : super.shouldSideBeRendered(world, x, y, z, side);
+	}
 
 	@Override
 	public boolean displaceIfPossible(World world, int x, int y, int z)
-    {
-        if (world.getBlock(x, y, z).isAir(world, x, y, z))
-        {
-            return true;
-        }
+	{
+		if (world.getBlock(x, y, z).isAir(world, x, y, z))
+		{
+			return true;
+		}
 
-        Block block = world.getBlock(x, y, z);
-        if (this.canConnectTo(block))
-        {
-            return false;
-        }
+		Block block = world.getBlock(x, y, z);
+		if (this.canConnectTo(block))
+		{
+			return false;
+		}
 
-        if (displacements.containsKey(block))
-        {
-            if (displacements.get(block))
-            {
-                block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-                return true;
-            }
-            return false;
-        }
+		if (displacements.containsKey(block))
+		{
+			if (displacements.get(block))
+			{
+				block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+				return true;
+			}
+			return false;
+		}
 
-        Material material = block.getMaterial();
-        if (material.blocksMovement() || material == Material.portal)
-        {
-            return false;
-        }
+		Material material = block.getMaterial();
+		if (material.blocksMovement() || material == Material.portal)
+		{
+			return false;
+		}
 
-        int density = getDensity(world, x, y, z);
-        if (density == Integer.MAX_VALUE) 
-        {
-        	 block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-        	 return true;
-        }
-        
-        if (this.density > density)
-        {
-        	return true;
-        }
-        else
-        {
-        	return false;
-        }
-    }
-	
+		int density = getDensity(world, x, y, z);
+		if (density == Integer.MAX_VALUE) 
+		{
+			block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			return true;
+		}
+
+		if (this.density > density)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 	@Override
 	public Vec3 getFlowVector(IBlockAccess world, int x, int y, int z)
-    {
-        Vec3 vec = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
-        int decay = quantaPerBlock - getQuantaValue(world, x, y, z);
+	{
+		Vec3 vec = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
+		int decay = quantaPerBlock - getQuantaValue(world, x, y, z);
 
-        for (int side = 0; side < 4; ++side)
-        {
-            int x2 = x;
-            int z2 = z;
+		for (int side = 0; side < 4; ++side)
+		{
+			int x2 = x;
+			int z2 = z;
 
-            switch (side)
-            {
-                case 0: --x2; break;
-                case 1: --z2; break;
-                case 2: ++x2; break;
-                case 3: ++z2; break;
-            }
+			switch (side)
+			{
+			case 0: --x2; break;
+			case 1: --z2; break;
+			case 2: ++x2; break;
+			case 3: ++z2; break;
+			}
 
-            int otherDecay = quantaPerBlock - getQuantaValue(world, x2, y, z2);
-            if (otherDecay >= quantaPerBlock)
-            {
-                if (!world.getBlock(x2, y, z2).getMaterial().blocksMovement() && !this.canConnectTo(world.getBlock(x2, y, z2)))
-                {
-                    otherDecay = quantaPerBlock - getQuantaValue(world, x2, y - 1, z2);
-                    if (otherDecay >= 0)
-                    {
-                        int power = otherDecay - (decay - quantaPerBlock);
-                        vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
-                    }
-                }
-            }
-            else if (otherDecay >= 0)
-            {
-                int power = otherDecay - decay;
-                vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
-            }
-        }
+			int otherDecay = quantaPerBlock - getQuantaValue(world, x2, y, z2);
+			if (otherDecay >= quantaPerBlock)
+			{
+				if (!world.getBlock(x2, y, z2).getMaterial().blocksMovement() && !this.canConnectTo(world.getBlock(x2, y, z2)))
+				{
+					otherDecay = quantaPerBlock - getQuantaValue(world, x2, y - 1, z2);
+					if (otherDecay >= 0)
+					{
+						int power = otherDecay - (decay - quantaPerBlock);
+						vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+					}
+				}
+			}
+			else if (otherDecay >= 0)
+			{
+				int power = otherDecay - decay;
+				vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+			}
+		}
 
-        if (this.canConnectTo(world.getBlock(x, y + 1, z)))
-        {
-            boolean flag =
-                isBlockSolid(world, x,     y,     z - 1, 2) ||
-                isBlockSolid(world, x,     y,     z + 1, 3) ||
-                isBlockSolid(world, x - 1, y,     z,     4) ||
-                isBlockSolid(world, x + 1, y,     z,     5) ||
-                isBlockSolid(world, x,     y + 1, z - 1, 2) ||
-                isBlockSolid(world, x,     y + 1, z + 1, 3) ||
-                isBlockSolid(world, x - 1, y + 1, z,     4) ||
-                isBlockSolid(world, x + 1, y + 1, z,     5);
+		if (this.canConnectTo(world.getBlock(x, y + 1, z)))
+		{
+			boolean flag =
+					isBlockSolid(world, x,     y,     z - 1, 2) ||
+					isBlockSolid(world, x,     y,     z + 1, 3) ||
+					isBlockSolid(world, x - 1, y,     z,     4) ||
+					isBlockSolid(world, x + 1, y,     z,     5) ||
+					isBlockSolid(world, x,     y + 1, z - 1, 2) ||
+					isBlockSolid(world, x,     y + 1, z + 1, 3) ||
+					isBlockSolid(world, x - 1, y + 1, z,     4) ||
+					isBlockSolid(world, x + 1, y + 1, z,     5);
 
-            if (flag)
-            {
-                vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
-            }
-        }
-        vec = vec.normalize();
-        return vec;
-    }
-	
+			if (flag)
+			{
+				vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
+			}
+		}
+		vec = vec.normalize();
+		return vec;
+	}
+
 	@Override
 	public int getRenderType() {
 		return BlockRenderIDs.SWAMP_WATER.id();
 	}
 	
+	@Override
+	public boolean canCollideCheck(int meta, boolean boat) {
+        return this.hasBoundingBox;
+    }
+
 	public boolean canConnectTo(Block block) {
 		return block == this || block == BLBlockRegistry.swampWater || block == BLBlockRegistry.mireCoral;
 	}

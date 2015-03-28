@@ -1,14 +1,17 @@
 package thebetweenlands.client.render.block;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -29,20 +32,22 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 		Tessellator tessellator = Tessellator.instance;
-		int l = block.colorMultiplier(blockAccess, x, y, z);
-		float f = (float)(l >> 16 & 255) / 255.0F;
-		float f1 = (float)(l >> 8 & 255) / 255.0F;
-		float f2 = (float)(l & 255) / 255.0F;
-		boolean flag = block.shouldSideBeRendered(blockAccess, x, y + 1, z, 1);
-		boolean flag1 = block.shouldSideBeRendered(blockAccess, x, y - 1, z, 0);
-		boolean[] aboolean = new boolean[] {block.shouldSideBeRendered(blockAccess, x, y, z - 1, 2), block.shouldSideBeRendered(blockAccess, x, y, z + 1, 3), block.shouldSideBeRendered(blockAccess, x - 1, y, z, 4), block.shouldSideBeRendered(blockAccess, x + 1, y, z, 5)};
+		int colorMultiplier = block.colorMultiplier(blockAccess, x, y, z);
+		float colorR = (float)(colorMultiplier >> 16 & 255) / 255.0F;
+		float colorG = (float)(colorMultiplier >> 8 & 255) / 255.0F;
+		float colorB = (float)(colorMultiplier & 255) / 255.0F;
+		boolean isBreakingBlock = renderer.overrideBlockTexture != null;
+		boolean renderTop = block.shouldSideBeRendered(blockAccess, x, y + 1, z, 1);
+		boolean renderBottom = block.shouldSideBeRendered(blockAccess, x, y - 1, z, 0);
+		boolean[] renderSides = new boolean[] {block.shouldSideBeRendered(blockAccess, x, y, z - 1, 2), block.shouldSideBeRendered(blockAccess, x, y, z + 1, 3), block.shouldSideBeRendered(blockAccess, x - 1, y, z, 4), block.shouldSideBeRendered(blockAccess, x + 1, y, z, 5)};
 
 		IWaterRenderer specialRenderer = ((BlockSwampWater)block).getSpecialRenderer();
 		if(specialRenderer != null) {
+			tessellator.setBrightness(blockAccess.getLightBrightnessForSkyBlocks(x, y, z, 0));
 			specialRenderer.renderWorldBlock(blockAccess, x, y, z, block, modelId, renderer);
 		}
 
-		if (!flag && !flag1 && !aboolean[0] && !aboolean[1] && !aboolean[2] && !aboolean[3])
+		if (isBreakingBlock || !renderTop && !renderBottom && !renderSides[0] && !renderSides[1] && !renderSides[2] && !renderSides[3])
 		{
 			return false;
 		}
@@ -50,37 +55,43 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 		{
 			boolean flag2 = false;
 			float f3 = 0.5F;
-			float f4 = 1.0F;
+			float colorMult = 1.0F;
+			tessellator.setColorOpaque_F(colorMult * colorR, colorMult * colorG, colorMult * colorB);
 			float f5 = 0.8F;
 			float f6 = 0.6F;
 			double d0 = 0.0D;
 			double d1 = 1.0D;
-			Material material = block.getMaterial();
 			int i1 = blockAccess.getBlockMetadata(x, y, z);
-			double d2 = (double)renderer.getLiquidHeight(x, y, z, material);
-			double d3 = (double)renderer.getLiquidHeight(x, y, z + 1, material);
-			double d4 = (double)renderer.getLiquidHeight(x + 1, y, z + 1, material);
-			double d5 = (double)renderer.getLiquidHeight(x + 1, y, z, material);
-			double d6 = 0.0010000000474974513D;
+			Material material = block.getMaterial();
+			double wch = (double)getLiquidHeight(blockAccess, x, y, z, Material.water);
+			double wzh = (double)getLiquidHeight(blockAccess, x, y, z + 1, Material.water);
+			double wxzh = (double)getLiquidHeight(blockAccess, x + 1, y, z + 1, Material.water);
+			double wxh = (double)getLiquidHeight(blockAccess, x + 1, y, z, Material.water);
+			double minHeightSub = 0.0010000000474974513D;
 			float f9;
 			float f10;
 			float f11;
 
-			if (renderer.renderAllFaces || flag)
+			if (renderer.renderAllFaces || renderTop)
 			{
 				flag2 = true;
 				IIcon iicon = renderer.getBlockIconFromSideAndMetadata(block, 1, i1);
-				float f7 = (float)BlockLiquid.getFlowDirection(blockAccess, x, y, z, material);
+				float f7 = 0.0f;
+				if(material == Material.water || material == Material.lava) {
+					f7 = (float)BlockLiquid.getFlowDirection(blockAccess, x, y, z, material);
+				} else {
+					f7 = (float)((BlockSwampWater)block).getFlowDirection(blockAccess, x, y, z);
+				}
 
 				if (f7 > -999.0F)
 				{
 					iicon = renderer.getBlockIconFromSideAndMetadata(block, 2, i1);
 				}
 
-				d2 -= d6;
-				d3 -= d6;
-				d4 -= d6;
-				d5 -= d6;
+				wch -= minHeightSub;
+				wzh -= minHeightSub;
+				wxzh -= minHeightSub;
+				wxh -= minHeightSub;
 				double d7;
 				double d8;
 				double d10;
@@ -117,26 +128,25 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 				}
 
 				tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, x, y, z));
-				tessellator.setColorOpaque_F(f4 * f, f4 * f1, f4 * f2);
-				tessellator.addVertexWithUV((double)(x + 0), (double)y + d2, (double)(z + 0), d7, d14);
-				tessellator.addVertexWithUV((double)(x + 0), (double)y + d3, (double)(z + 1), d8, d16);
-				tessellator.addVertexWithUV((double)(x + 1), (double)y + d4, (double)(z + 1), d10, d18);
-				tessellator.addVertexWithUV((double)(x + 1), (double)y + d5, (double)(z + 0), d12, d20);
-				tessellator.addVertexWithUV((double)(x + 0), (double)y + d2, (double)(z + 0), d7, d14);
-				tessellator.addVertexWithUV((double)(x + 1), (double)y + d5, (double)(z + 0), d12, d20);
-				tessellator.addVertexWithUV((double)(x + 1), (double)y + d4, (double)(z + 1), d10, d18);
-				tessellator.addVertexWithUV((double)(x + 0), (double)y + d3, (double)(z + 1), d8, d16);
+				tessellator.setColorOpaque_F(colorMult * colorR, colorMult * colorG, colorMult * colorB);
+				tessellator.addVertexWithUV((double)(x + 0), (double)y + wch, (double)(z + 0), d7, d14);
+				tessellator.addVertexWithUV((double)(x + 0), (double)y + wzh, (double)(z + 1), d8, d16);
+				tessellator.addVertexWithUV((double)(x + 1), (double)y + wxzh, (double)(z + 1), d10, d18);
+				tessellator.addVertexWithUV((double)(x + 1), (double)y + wxh, (double)(z + 0), d12, d20);
+				tessellator.addVertexWithUV((double)(x + 0), (double)y + wch, (double)(z + 0), d7, d14);
+				tessellator.addVertexWithUV((double)(x + 1), (double)y + wxh, (double)(z + 0), d12, d20);
+				tessellator.addVertexWithUV((double)(x + 1), (double)y + wxzh, (double)(z + 1), d10, d18);
+				tessellator.addVertexWithUV((double)(x + 0), (double)y + wzh, (double)(z + 1), d8, d16);
 			}
 
-			if (renderer.renderAllFaces || flag1)
+			if (renderer.renderAllFaces || renderBottom)
 			{
-				tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, x, y - 1, z));
-				tessellator.setColorOpaque_F(f3, f3, f3);
-				if(blockAccess.getBlock(x, y-1, z) != block) {
-					tessellator.setColorOpaque_F(f4 * f, f4 * f1, f4 * f2);
-					renderer.renderFaceYNeg(block, (double)x, (double)y + d6, (double)z, renderer.getBlockIconFromSide(block, 1));
+				if(blockAccess.getBlock(x, y-1, z) instanceof BlockSwampWater == false) {
+					tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, x, y - 1, z));
+					tessellator.setColorOpaque_F(colorMult * colorR, colorMult * colorG, colorMult * colorB);
+					renderer.renderFaceYNeg(block, (double)x, (double)y + minHeightSub, (double)z, renderer.getBlockIconFromSide(block, 0));
+					flag2 = true;
 				}
-				flag2 = true;
 			}
 
 			for (int k1 = 0; k1 < 4; ++k1)
@@ -166,7 +176,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 
 				IIcon iicon1 = renderer.getBlockIconFromSideAndMetadata(block, k1 + 2, i1);
 
-				if (renderer.renderAllFaces || aboolean[k1])
+				if (renderer.renderAllFaces || renderSides[k1])
 				{
 					double d9;
 					double d11;
@@ -177,37 +187,37 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 
 					if (k1 == 0)
 					{
-						d9 = d2;
-						d11 = d5;
+						d9 = wch;
+						d11 = wxh;
 						d13 = (double)x;
 						d17 = (double)(x + 1);
-						d15 = (double)z + d6;
-						d19 = (double)z + d6;
+						d15 = (double)z + minHeightSub;
+						d19 = (double)z + minHeightSub;
 					}
 					else if (k1 == 1)
 					{
-						d9 = d4;
-						d11 = d3;
+						d9 = wxzh;
+						d11 = wzh;
 						d13 = (double)(x + 1);
 						d17 = (double)x;
-						d15 = (double)(z + 1) - d6;
-						d19 = (double)(z + 1) - d6;
+						d15 = (double)(z + 1) - minHeightSub;
+						d19 = (double)(z + 1) - minHeightSub;
 					}
 					else if (k1 == 2)
 					{
-						d9 = d3;
-						d11 = d2;
-						d13 = (double)x + d6;
-						d17 = (double)x + d6;
+						d9 = wzh;
+						d11 = wch;
+						d13 = (double)x + minHeightSub;
+						d17 = (double)x + minHeightSub;
 						d15 = (double)(z + 1);
 						d19 = (double)z;
 					}
 					else
 					{
-						d9 = d5;
-						d11 = d4;
-						d13 = (double)(x + 1) - d6;
-						d17 = (double)(x + 1) - d6;
+						d9 = wxh;
+						d11 = wxzh;
+						d13 = (double)(x + 1) - minHeightSub;
+						d17 = (double)(x + 1) - minHeightSub;
 						d15 = (double)z;
 						d19 = (double)(z + 1);
 					}
@@ -221,7 +231,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 					tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, l1, y, j1));
 					float f13 = 1.0F;
 					f13 *= k1 < 2 ? f5 : f6;
-					tessellator.setColorOpaque_F(f4 * f13 * f, f4 * f13 * f1, f4 * f13 * f2);
+					tessellator.setColorOpaque_F(colorMult * f13 * colorR, colorMult * f13 * colorG, colorMult * f13 * colorB);
 					tessellator.addVertexWithUV(d13, (double)y + d9, d15, (double)f8, (double)f10);
 					tessellator.addVertexWithUV(d17, (double)y + d11, d19, (double)f9, (double)f11);
 					tessellator.addVertexWithUV(d17, (double)(y + 0), d19, (double)f9, (double)f12);
@@ -237,6 +247,51 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 			renderer.renderMaxY = d1;
 			return flag2;
 		}
+	}
+
+	public float getLiquidHeight(IBlockAccess blockAccess, int x, int y, int z, Material liquidMaterial) {
+		int l = 0;
+		float f = 0.0F;
+
+		for (int sb = 0; sb < 4; ++sb)
+		{
+			int xp = x - (sb & 1);
+			int zp = z - (sb >> 1 & 1);
+
+			if (blockAccess.getBlock(xp, y + 1, zp).getMaterial() == liquidMaterial)
+			{
+				return 1.0F;
+			}
+
+			if(blockAccess.getBlock(xp, y, zp) instanceof BlockSwampWater) {
+				f += 1.1 - ((BlockSwampWater)blockAccess.getBlock(xp, y, zp)).getQuantaPercentage(blockAccess, xp, y, zp);
+				++l;
+			} else {
+				Material material = blockAccess.getBlock(xp, y, zp).getMaterial();
+
+				if (material == liquidMaterial)
+				{
+
+					int l1 = blockAccess.getBlockMetadata(xp, y, zp);
+
+					if (l1 >= 8 || l1 == 0)
+					{
+						f += BlockLiquid.getLiquidHeightPercent(l1) * 10.0F;
+						l += 10;
+					}
+
+					f += BlockLiquid.getLiquidHeightPercent(l1);
+					++l;
+				}
+				else if (!material.isSolid())
+				{
+					++f;
+					++l;
+				}
+			}
+		}
+
+		return 1.0F - f / (float)l;
 	}
 
 	@Override
