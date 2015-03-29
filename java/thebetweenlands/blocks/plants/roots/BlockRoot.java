@@ -79,6 +79,11 @@ public class BlockRoot extends Block {
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+	
+	@Override
 	public int getRenderType() {
 		return BlockRenderIDs.ROOT.id();
 	}
