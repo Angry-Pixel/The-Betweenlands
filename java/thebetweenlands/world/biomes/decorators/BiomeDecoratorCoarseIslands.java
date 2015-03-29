@@ -5,7 +5,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
+import thebetweenlands.blocks.plants.roots.BlockRoot;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
@@ -120,6 +123,19 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 				if(BLBlockRegistry.waterFlowerStalk.canPlaceBlockAt(world, xx, yy, zz)) {
 					BlockWaterFlower.generateFlowerPatch(world, xx, yy, zz, 20, 6);
 				}
+			}
+		}
+		
+		for (attempt = 0; attempt < 10; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 - 10 + rand.nextInt(20);
+			zz = z + offsetXZ();
+
+			Block block = world.getBlock(xx, yy, zz);
+			Block blockAbove = world.getBlock(xx, yy+1, zz);
+			Block blockAbove2 = world.getBlock(xx, yy+2, zz);
+			if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
+				BlockRoot.generateRoot(world, xx, yy+1, zz, WorldProviderBetweenlands.LAYER_HEIGHT - yy + world.rand.nextInt(8));
 			}
 		}
 	}

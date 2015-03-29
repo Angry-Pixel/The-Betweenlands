@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
@@ -26,6 +27,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	protected boolean canSpread = true;
 	protected boolean hasBoundingBox = false;
+	protected boolean canCollide = false;
 
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<>();
 
@@ -387,10 +389,24 @@ public class BlockSwampWater extends BlockFluidClassic {
 	public int getRenderType() {
 		return BlockRenderIDs.SWAMP_WATER.id();
 	}
-	
+
 	@Override
 	public boolean canCollideCheck(int meta, boolean boat) {
-        return this.hasBoundingBox;
+		return this.hasBoundingBox;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		if(this.canCollide) {
+			return AxisAlignedBB.getBoundingBox(x+this.minX, y+this.minY, z+this.minZ, x+this.maxX, y+this.maxY, z+this.maxZ);
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean isCollidable() {
+        return this.canCollide;
     }
 
 	public boolean canConnectTo(Block block) {

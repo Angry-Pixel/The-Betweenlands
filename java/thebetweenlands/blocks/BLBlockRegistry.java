@@ -7,7 +7,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
@@ -24,6 +23,8 @@ import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
+import thebetweenlands.blocks.plants.roots.BlockRoot;
+import thebetweenlands.blocks.plants.roots.BlockRootUW;
 import thebetweenlands.blocks.stalactite.BlockStalactite;
 import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
@@ -117,6 +118,8 @@ public class BLBlockRegistry
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
+	public static final BlockRootUW rootUW = new BlockRootUW();
+	public static final BlockRoot root = new BlockRoot();
 
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
