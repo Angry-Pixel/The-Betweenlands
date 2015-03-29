@@ -17,6 +17,9 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RottenFoodHandler
 {
     public static final RottenFoodHandler INSTANCE = new RottenFoodHandler();
@@ -24,11 +27,12 @@ public class RottenFoodHandler
     private static final ImmutableList<Item> EXCEPTION_INSTS;
 
     static {
-        Item[] items = new Item[] {
-                BLItemRegistry.rottenFood,
-                Items.rotten_flesh,
-                Items.potionitem
-        };
+        List<Item> items = new ArrayList<>();
+        items.add(BLItemRegistry.rottenFood);
+        items.add(Items.rotten_flesh);
+        items.add(Items.potionitem);
+
+        items.addAll(BLItemRegistry.ITEMS);
 
         EXCEPTION_INSTS = ImmutableList.copyOf(items);
     }

@@ -1,9 +1,7 @@
 package thebetweenlands.items;
 
-import java.util.List;
-
-import thebetweenlands.blocks.BLBlockRegistry;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,8 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.blocks.BLBlockRegistry;
+
+import java.util.List;
 
 public class ItemMaterialsBL extends Item
 {
@@ -122,9 +121,7 @@ public class ItemMaterialsBL extends Item
 		SULFUR("sulfur"),
 		VALONITE_SHARD("valoniteShard"),
 		WEEDWOOD_SICK("weedWoodStick"),
-		WICK("wick"),
-		WIGHT_HEART("wightHeart"),
-		WEEPING_BLUE_PETAL("weepingBluePetal");
+		WICK("wick");
 
 		public final String iconName;
 
