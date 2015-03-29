@@ -109,10 +109,10 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 			Block blockAbove = world.getBlock(xx, yy+1, zz);
 			Block blockAbove2 = world.getBlock(xx, yy+2, zz);
 			if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
-				BlockSwampReed.generateReed(world, xx, yy+1, zz);
+				BlockSwampReed.generateReedPatch(world, xx, yy+1, zz, 40, 10);
 			} else if(block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
 				if(BLBlockRegistry.swampReed.canPlaceBlockAt(world, xx, yy+1, zz)) {
-					BlockSwampReed.generateReed(world, xx, yy+1, zz);
+					BlockSwampReed.generateReedPatch(world, xx, yy+1, zz, 40, 10);
 				}
 			}
 		}

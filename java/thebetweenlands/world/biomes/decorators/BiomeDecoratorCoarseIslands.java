@@ -5,7 +5,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -135,7 +134,11 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 			Block blockAbove = world.getBlock(xx, yy+1, zz);
 			Block blockAbove2 = world.getBlock(xx, yy+2, zz);
 			if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
-				BlockRoot.generateRoot(world, xx, yy+1, zz, WorldProviderBetweenlands.LAYER_HEIGHT - yy + world.rand.nextInt(8));
+				if(world.rand.nextInt(3) == 0) {
+					BlockRoot.generateRootPatch(world, xx, yy+1, zz, 60, 15);
+				} else {
+					BlockRoot.generateRoot(world, xx, yy+1, zz, WorldProviderBetweenlands.LAYER_HEIGHT - yy + world.rand.nextInt(8) + 1);
+				}
 			}
 		}
 	}

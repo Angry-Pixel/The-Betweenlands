@@ -76,11 +76,34 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) && hasWater;
 	}
 
+	public static void generateReedPatch(World world, int x, int y, int z, int tries, int radius) {
+		for(int i = 0; i < tries; i++) {
+			int bx = x + world.rand.nextInt(radius) - radius/2;
+			int by = y + world.rand.nextInt(radius) - radius/2;
+			int bz = z + world.rand.nextInt(radius) - radius/2;
+			if(Math.sqrt((bx-x)*(bx-x)+(by-y)*(by-y)+(bz-z)*(bz-z)) <= radius) {
+				Block cBlock = world.getBlock(bx, by, bz);
+				Block blockAbove = world.getBlock(bx, by+1, bz);
+				Block blockAbove2 = world.getBlock(bx, by+2, bz);
+				if(cBlock == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+					BlockSwampReed.generateReed(world, bx, by+1, bz);
+				} else if(cBlock.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
+					if(BLBlockRegistry.swampReed.canPlaceBlockAt(world, bx, by+1, bz)) {
+						BlockSwampReed.generateReed(world, bx, by+1, bz);
+					}
+				}
+			}
+		}
+	}
+	
 	public static void generateReed(World world, int x, int y, int z) {
 		if(!world.isRemote) {
 			int height = world.rand.nextInt(4) + 2;
 			for(int yo = 0; yo < height; yo++) {
 				Block cBlock = world.getBlock(x, y+yo, z);
+				if(cBlock != Blocks.air && cBlock != BLBlockRegistry.swampWater) {
+					break;
+				}
 				if(cBlock == BLBlockRegistry.swampWater) {
 					world.setBlock(x, y+yo, z, BLBlockRegistry.swampReedUW);
 				} else {
