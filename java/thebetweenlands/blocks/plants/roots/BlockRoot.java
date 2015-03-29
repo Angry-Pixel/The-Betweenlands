@@ -33,15 +33,11 @@ public class BlockRoot extends Block {
 		super(Material.wood);
 		this.setTickRandomly(true);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setHardness(0.5F);
+		setHardness(1.0F);
 		setStepSound(Block.soundTypeWood);
-		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);
+		//setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);
 		setBlockName("thebetweenlands.root");
 		setBlockTextureName("thebetweenlands:weedWoodBark");
-	}
-
-	@Override
-	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 	}
 
 	@Override
@@ -64,11 +60,6 @@ public class BlockRoot extends Block {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		this.checkAndDropBlock(world, x, y, z);
 	}
-
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
 	
     @Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
@@ -91,12 +82,11 @@ public class BlockRoot extends Block {
 	public int getRenderType() {
 		return BlockRenderIDs.ROOT.id();
 	}
-
+	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess access, int x, int y, int z) {
-		return 0xFFFFFF;
-	}
+    public boolean isWood(IBlockAccess world, int x, int y, int z) {
+        return true;
+    }
 	
 	public static void generateRoot(World world, int x, int y, int z, int height) {
 		if(!world.isRemote) {

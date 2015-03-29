@@ -26,7 +26,7 @@ public class BlockRootUW extends BlockSwampWater {
 		setBlockName("thebetweenlands.rootUW");
 		setHardness(1.0F);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
+		setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		setTickRandomly(true);
 		setBlockTextureName("thebetweenlands:weedWoodBark");
 		this.canSpread = false;
@@ -68,6 +68,11 @@ public class BlockRootUW extends BlockSwampWater {
         return false;
     }
 	
+    @Override
+    public boolean isWood(IBlockAccess world, int x, int y, int z) {
+        return true;
+    }
+    
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
