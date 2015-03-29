@@ -60,7 +60,8 @@ public class BLItemRegistry {
     public static final Item spawnEggs = new SpawnEggs().setUnlocalizedName("thebetweenlands.monsterPlacer").setTextureName("spawn_egg");
 
     //FOOD
-    public static final Item sapBall = new ItemSapBall().setUnlocalizedName("thebesteenlands.sapBall").setTextureName("thebetweenlands:sapBall");
+    public static final Item sapBall = new ItemSapBall().setUnlocalizedName("thebetweenlands.sapBall").setTextureName("thebetweenlands:sapBall");
+    public static final Item rottenFood = new ItemRottenFood().setAlwaysEdible().setUnlocalizedName("thebetweenlands.rottenFood").setTextureName("thebetweenlands:rottenFood");
 
     public static void init() {
         initCreativeTabs();

@@ -105,6 +105,8 @@ item.thebetweenlands.valoniteChestplate.name=Valonite Chestplate
 item.thebetweenlands.valoniteLeggings.name=Valonite Leggings
 item.thebetweenlands.valoniteBoots.name=Valonite Boots
 
+item.thebetweenlands.rottenFood.name=Rotten Food
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler Fish
