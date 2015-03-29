@@ -8,6 +8,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
+import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
@@ -103,7 +104,8 @@ public class TheBetweenlands
         MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
-        
+		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
+
 		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
