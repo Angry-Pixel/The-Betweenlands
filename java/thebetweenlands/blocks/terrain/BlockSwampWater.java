@@ -267,7 +267,11 @@ public class BlockSwampWater extends BlockFluidClassic {
 		}
 		if (!this.canConnectTo(block))
 		{
-			return !block.isOpaqueCube();
+			if(side == 1) {
+				return true;
+			} else {
+				return !block.isOpaqueCube();
+			}
 		}
 		return (block.getMaterial() == this.getMaterial() || this.canConnectTo(block)) ? false : super.shouldSideBeRendered(world, x, y, z, side);
 	}
