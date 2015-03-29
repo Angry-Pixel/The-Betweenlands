@@ -12,19 +12,24 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 
-public class SmallIslandNoiseFeature extends BiomeNoiseFeature {
-	private NoiseGeneratorPerlin islandNoiseGen;
-	private double[] islandNoise = new double[256];
+public class FlatLandNoiseFeature extends BiomeNoiseFeature {
+	private NoiseGeneratorPerlin landNoiseGen;
+	private double[] landNoise = new double[256];
+	
+	private NoiseGeneratorPerlin riverNoiseGen;
+	private double[] riverNoise = new double[256];
 	
 	@Override
 	public void initializeNoiseGen(Random rng, BiomeGenBaseBetweenlands biome) {
-		this.islandNoiseGen = new NoiseGeneratorPerlin(rng, 4);
+		this.landNoiseGen = new NoiseGeneratorPerlin(rng, 4);
+		this.riverNoiseGen = new NoiseGeneratorPerlin(rng, 2);
 	}
 
 	@Override
 	public void generateNoise(int chunkX, int chunkZ,
 			BiomeGenBaseBetweenlands biome) {
-		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
+		this.landNoise = this.landNoiseGen.func_151599_a(this.landNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.06D, 0.06D, 1.0D);
+		this.riverNoise = this.riverNoiseGen.func_151599_a(this.riverNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.032D, 0.032D, 1.0D);
 	}
 
 	@Override
@@ -48,9 +53,18 @@ public class SmallIslandNoiseFeature extends BiomeNoiseFeature {
 				break;
 			}
 		}
-		double noise = this.islandNoise[x * 16 + z] / 8.0f;
-		for(int y = lowestBlock; y < layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock); y++) {
-			chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+		double noise = this.landNoise[x * 16 + z] / 25.0f;
+		double riverNoise = Math.abs(this.riverNoise[x * 16 + z]) * 4.0D;
+		riverNoise *= riverNoise * riverNoise * riverNoise * riverNoise;
+		riverNoise *= 25.0D;
+		if(riverNoise < 6.0f) {
+			for(int y = lowestBlock; y < layerHeight; y++) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+			}
+		} else {
+			for(int y = lowestBlock; y < layerHeight + Math.abs(noise * (layerHeight - lowestBlock)); y++) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+			}
 		}
 	}
 }

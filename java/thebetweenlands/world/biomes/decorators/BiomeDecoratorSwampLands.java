@@ -6,17 +6,20 @@ import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.plants.BlockSwampReed;
-import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.feature.trees.WorldGenGiantTree;
+import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 
+	private final WorldGenGiantTree genTreeGiant = new WorldGenGiantTree();
 	private final WorldGenerator genTreeWeedwood = new WorldGenWeedWoodTree();
 	private final WorldGenerator genTreeSap = new WorldGenSapTree();
+	private final WorldGenerator genTreeRubber = new WorldGenRubberTree();
 	private final WorldGenerator genBushWeedWood = new WorldGenWeedWoodBush();
 	private final WorldGenTallGrass genNettle = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final WorldGenTallGrass genSwampPlant = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
@@ -24,7 +27,100 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 
 	@Override
 	public void decorate() {
-		for (attempt = 0; attempt < 120; attempt++) {
+		for (attempt = 0; attempt < 240; attempt++) {
+			xx = x + rand.nextInt(5) + 12;
+			yy = 80 + rand.nextInt(15);
+			zz = z + rand.nextInt(5) + 12;
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz))
+				genTreeGiant.generateTree(world, rand, xx, yy, zz);
+		}
+		
+		for (attempt = 0; attempt < 240; attempt++) {
+			xx = x + rand.nextInt(5) + 12;
+			yy = 80 + rand.nextInt(15);
+			zz = z + rand.nextInt(5) + 12;
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 2, yy, zz - 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 2, yy, zz + 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 2, yy, zz - 2) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 2, yy, zz + 2))
+				genTreeWeedwood.generate(world, rand, xx, yy, zz);
+		}
+		
+		for (attempt = 0; attempt < 50; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 1, yy, zz - 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 1, yy, zz + 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 1, yy, zz - 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 1, yy, zz + 1))
+				genTreeRubber.generate(world, rand, xx, yy, zz);
+		}
+
+		for (attempt = 0; attempt < 30; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 1, yy, zz - 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 1, yy, zz + 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx + 1, yy, zz - 1) && checkSurface(SurfaceType.SWAMP_GRASS, xx - 1, yy, zz + 1))
+				genTreeSap.generate(world, rand, xx, yy, zz);
+		}
+		
+		for (attempt = 0; attempt < 50; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz))
+				genBushWeedWood.generate(world, rand, xx, yy, zz);
+		}
+
+		for (attempt = 0; attempt < 64; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz))
+				genSwampPlant.generate(world, rand, xx, yy, zz);
+		}
+
+		for (attempt = 0; attempt < 50; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 - 10 + rand.nextInt(20);
+			zz = z + offsetXZ();
+
+			Block block = world.getBlock(xx, yy, zz);
+			Block blockAbove = world.getBlock(xx, yy+1, zz);
+			Block blockAbove2 = world.getBlock(xx, yy+2, zz);
+			if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+				BlockSwampReed.generateReedPatch(world, xx, yy+1, zz, 40, 10);
+			} else if(block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
+				if(BLBlockRegistry.swampReed.canPlaceBlockAt(world, xx, yy+1, zz)) {
+					BlockSwampReed.generateReedPatch(world, xx, yy+1, zz, 40, 10);
+				}
+			}
+		}
+
+		for (attempt = 0; attempt < 2; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(20);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz))
+				genNettle.generate(world, rand, xx, yy, zz);
+		}
+
+		for (attempt = 0; attempt < 60; attempt++) {
+			xx = x + offsetXZ();
+			yy = 80 + rand.nextInt(15);
+			zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.SWAMP_GRASS, xx, yy, zz)
+					&& (checkSurface(SurfaceType.WATER, xx-1, yy, zz)
+							|| checkSurface(SurfaceType.WATER, xx+1, yy, zz)
+							|| checkSurface(SurfaceType.WATER, xx, yy, zz+1)
+							|| checkSurface(SurfaceType.WATER, xx-1, yy, zz-1)))
+				genCattail.generate(world, rand, xx, yy, zz);
+		}
+
+		/*for (attempt = 0; attempt < 120; attempt++) {
 			xx = x + rand.nextInt(5) + 12;
 			yy = 80 + rand.nextInt(15);
 			zz = z + rand.nextInt(5) + 12;
@@ -99,7 +195,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 				world.setBlock(xx, yy + 1, zz, BLBlockRegistry.weepingBlue, 8, 2);
 			}
 		}
-		
+
 		for (attempt = 0; attempt < 50; attempt++) {
 			xx = x + offsetXZ();
 			yy = 80 - 10 + rand.nextInt(20);
@@ -139,6 +235,6 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 					BlockWaterFlower.generateFlowerPatch(world, xx, yy, zz, 20, 6);
 				}
 			}
-		}
+		}*/
 	}
 }

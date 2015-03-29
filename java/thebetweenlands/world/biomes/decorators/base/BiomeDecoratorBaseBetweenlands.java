@@ -60,7 +60,7 @@ public class BiomeDecoratorBaseBetweenlands
 	protected void decorate() { }
 
 	protected final int offsetXZ() {
-		return rand.nextInt(16) + 8;
+		return rand.nextInt(16);
 	}
 
 	protected boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
