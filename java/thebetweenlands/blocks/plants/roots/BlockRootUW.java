@@ -82,6 +82,6 @@ public class BlockRootUW extends BlockSwampWater {
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
-		return block instanceof BlockRootUW || block == BLBlockRegistry.mud;
+		return block instanceof BlockRootUW || block == this || block.isOpaqueCube();
 	}
 }

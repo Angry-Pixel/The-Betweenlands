@@ -37,6 +37,7 @@ import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import thebetweenlands.world.feature.trees.WorldGenGiantTree;
@@ -73,7 +74,7 @@ public class TheBetweenlands
 		BLEntityRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-		GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);
+		//GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
 		//TODO: Just temporary to test some stuff

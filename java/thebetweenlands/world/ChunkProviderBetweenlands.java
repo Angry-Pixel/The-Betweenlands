@@ -13,12 +13,15 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
 {
@@ -77,6 +80,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		this.layerBlock = layerBlock;
 		this.layerHeight = layerHeight;
 
+		//Registers the redirection IWorldGenerator that calls decorator#postTerrainGen
+		GameRegistry.registerWorldGenerator(new WorldGenRedirect(), 0);
+		
 		//Initializes the noise generators
 		this.initializeNoiseGen(seed);
 	}

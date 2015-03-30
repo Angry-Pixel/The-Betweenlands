@@ -53,7 +53,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 
 	@Override
 	public boolean canPlaceBlockOn(Block block) {
-		return block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.silt || block == BLBlockRegistry.swampReedUW || block == BLBlockRegistry.swampReed || block == BLBlockRegistry.mud;
+		return block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.silt || block == BLBlockRegistry.swampReedUW || block == BLBlockRegistry.swampReed || block == BLBlockRegistry.mud || block == BLBlockRegistry.deadGrass;
 	}
 
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {

@@ -15,22 +15,22 @@ public enum SurfaceType {
 
 	public boolean matchBlock(Block block) {
 		switch (this) {
-			case SWAMP_GRASS:
-			return block == BLBlockRegistry.swampGrass || block == Blocks.mycelium;
-			case GRASS:
-				return block == Blocks.grass || block == Blocks.mycelium;
-			case DIRT:
-				return block == BLBlockRegistry.swampDirt || block == Blocks.dirt;
-			case SAND:
-				return block == Blocks.sand;
-			case WATER:
-				return block == BLBlockRegistry.swampWater;
-			case PEAT:
-				return block == BLBlockRegistry.peat;
-			case MIXED:
-				return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt;
-			default:
-				return false;
+		case SWAMP_GRASS:
+			return block == BLBlockRegistry.swampGrass || block == Blocks.mycelium || block == BLBlockRegistry.deadGrass;
+		case GRASS:
+			return block == Blocks.grass || block == Blocks.mycelium;
+		case DIRT:
+			return block == BLBlockRegistry.swampDirt || block == Blocks.dirt;
+		case SAND:
+			return block == Blocks.sand;
+		case WATER:
+			return block == BLBlockRegistry.swampWater;
+		case PEAT:
+			return block == BLBlockRegistry.peat;
+		case MIXED:
+			return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.deadGrass;
+		default:
+			return false;
 		}
 	}
 }

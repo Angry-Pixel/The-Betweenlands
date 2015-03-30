@@ -208,6 +208,14 @@ extends BiomeGenBase
 	public void populate(World world, Random rand, int x, int z) {
 		this.decorator.populate(world, rand, x, z);
 	}
+	
+	/**
+	 * Generates additional biome content after decoration and population
+	 * Called from an IWorldGenerator.
+	 */
+	public void postTerrainGen(World world, Random rand, int x, int z) {
+		this.decorator.postTerrainGen(world, rand, x, z);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

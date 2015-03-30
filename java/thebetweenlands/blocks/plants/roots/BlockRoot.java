@@ -75,7 +75,7 @@ public class BlockRoot extends Block {
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
-		return block instanceof BlockRootUW || block == this || block == BLBlockRegistry.mud;
+		return block instanceof BlockRootUW || block == this || block.isOpaqueCube();
 	}
 
 	@Override

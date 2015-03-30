@@ -28,7 +28,7 @@ extends BiomeGenBaseBetweenlands
 		setColors(0x314D31, 0x314D31);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
 		this.setBiomeName("Swamplands");
-		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
+		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)1);
 		this.addFeature(new FlatLandNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature());

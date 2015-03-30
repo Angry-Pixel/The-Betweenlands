@@ -31,6 +31,7 @@ import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
+import thebetweenlands.blocks.terrain.BlockDeadGrass;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
@@ -67,6 +68,7 @@ public class BLBlockRegistry
 	public static final Block betweenlandsBedrock = new BlockBetweenlandsBedrock();
 	public static final Block swampDirt = new BlockSwampDirt();
 	public static final Block swampGrass = new BlockSwampGrass();
+	public static final Block deadGrass = new BlockDeadGrass();
 	public static final Block silt = new BlockSilt();
 	public static final Block mud = new BlockMud();
 	public static final Block swampWater = new BlockSwampWater();

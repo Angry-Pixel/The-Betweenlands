@@ -54,13 +54,23 @@ public class BiomeDecoratorBaseBetweenlands
 		this.world = world;
 		this.decorate();
 	}
+	
+	public final void postTerrainGen(World world, Random rand, int x, int z) {
+		this.x = x;
+		this.z = z;
+		this.rand = rand;
+		this.world = world;
+		this.postTerrainGen();
+	}
 
 	protected void populate() { }
  
 	protected void decorate() { }
 
+	protected void postTerrainGen() { }
+	
 	protected final int offsetXZ() {
-		return rand.nextInt(16);
+		return rand.nextInt(16) + 8;
 	}
 
 	protected boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
