@@ -17,6 +17,8 @@ import net.minecraft.client.util.JsonException;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 public class CShaderInt extends Shader {
 	private CShaderManager pShaderManager;
 	private Matrix4f pProjectionMatrix;
@@ -37,27 +39,27 @@ public class CShaderInt extends Shader {
 		try {
 			{
 				this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
-				Field f = this.getClass().getSuperclass().getDeclaredField("manager");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "c");
 				f.setAccessible(true);
 				f.set(this, this.pShaderManager);
 			}
 			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("listAuxFramebuffers");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "d");
 				f.setAccessible(true);
 				this.pListAuxFramebuffers = (List) f.get(this);
 			}
 			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("listAuxNames");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "e");
 				f.setAccessible(true);
 				this.pListAuxNames = (List) f.get(this);
 			}
 			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("listAuxWidths");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "f");
 				f.setAccessible(true);
 				this.pListAuxWidths = (List) f.get(this);
 			}
 			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("listAuxHeights");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "g");
 				f.setAccessible(true);
 				this.pListAuxHeights = (List) f.get(this);
 			}
@@ -78,7 +80,7 @@ public class CShaderInt extends Shader {
 	public void loadShader(float partialTicks) {
 		try {
 			{
-				Field f = this.getClass().getSuperclass().getDeclaredField("projectionMatrix");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "h");
 				f.setAccessible(true);
 				this.pProjectionMatrix = (Matrix4f) f.get(this);
 			}
