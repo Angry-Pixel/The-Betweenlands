@@ -53,16 +53,28 @@ public class FlatLandNoiseFeature extends BiomeNoiseFeature {
 				break;
 			}
 		}
-		double noise = this.landNoise[x * 16 + z] / 25.0f;
+		double noise = this.landNoise[x * 16 + z] / 18.0f;
 		double riverNoise = Math.abs(this.riverNoise[x * 16 + z]) * 4.0D;
 		riverNoise *= riverNoise * riverNoise * riverNoise * riverNoise;
 		riverNoise *= 25.0D;
-		if(riverNoise < 6.0f) {
-			for(int y = lowestBlock; y < layerHeight; y++) {
+		int terrainHeight = (int)Math.ceil(Math.abs(noise * (layerHeight - lowestBlock)));
+		/*if(riverNoise < 6.0f) {
+			for(int y = lowestBlock; y < layerHeight - ((6.0D-riverNoise) / 3.0 / terrainHeight); y++) {
 				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 			}
 		} else {
-			for(int y = lowestBlock; y < layerHeight + Math.abs(noise * (layerHeight - lowestBlock)); y++) {
+			for(int y = lowestBlock; y < layerHeight + terrainHeight; y++) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+			}
+		}*/
+		float riverThreshold = 6.0f * (terrainHeight + 2);
+		double riverPercentage = 1.0D - (riverNoise / riverThreshold);
+		if(riverNoise < riverThreshold) {
+			for(int y = lowestBlock; y < layerHeight + terrainHeight - riverPercentage * (terrainHeight + ((riverThreshold - riverNoise) / 16.0D)); y++) {
+				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
+			}
+		} else {
+			for(int y = lowestBlock; y < layerHeight + terrainHeight; y++) {
 				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
 			}
 		}
