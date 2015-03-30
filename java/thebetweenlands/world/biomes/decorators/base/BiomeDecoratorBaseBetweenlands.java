@@ -60,7 +60,14 @@ public class BiomeDecoratorBaseBetweenlands
 		this.z = z;
 		this.rand = rand;
 		this.world = world;
-		this.postTerrainGen();
+		this.postTerrainGen2();
+	}
+	
+	public final void postTerrainGen2(World world, Random rand, int x, int z) {
+		this.x = x;
+		this.z = z;
+		this.rand = rand;
+		this.world = world;
 		this.postTerrainGen2();
 	}
 
