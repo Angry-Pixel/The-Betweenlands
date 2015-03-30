@@ -32,17 +32,19 @@ public class DecorationHelper {
 	private final Random rand;
 	private final int x, y, z;
 	private final World world;
+	private final boolean centerOffset;
 
-	public DecorationHelper(Random rand, World world, int x, int y, int z) {
+	public DecorationHelper(Random rand, World world, int x, int y, int z, boolean centerOffset) {
 		this.rand = rand;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.world = world;
+		this.centerOffset = centerOffset;
 	}
 
 	private final int offsetXZ() {
-		return rand.nextInt(16) + 8;
+		return rand.nextInt(16) + (this.centerOffset ? 8 : 0);
 	}
 
 	private final boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
@@ -81,7 +83,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateWeedwoodBush(int attempts) {
 		for(int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -166,7 +168,7 @@ public class DecorationHelper {
 				GEN_RUBBER_TREE.generate(this.world, this.rand, x, y, z);
 		}
 	}
-	
+
 	public void generateWeepingBlue(int attempts) {
 		for(int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -234,8 +236,8 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
-	public void generateRoots(double probability) {
+
+	public void generateWaterRoots(double probability) {
 		if(probability >= 1.0D) {
 			for(int i = 0; i < (int)probability; i++) {
 				int x = this.x + this.offsetXZ();
@@ -246,7 +248,7 @@ public class DecorationHelper {
 				Block blockAbove2 = world.getBlock(x, y+2, z);
 				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
 					if(world.rand.nextInt(3) == 0) {
-						BlockRoot.generateRootPatch(world, x, y+1, z, 60, 15);
+						BlockRoot.generateWaterRootPatch(world, x, y+1, z, 60, 15);
 					} else {
 						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
 					}
@@ -262,6 +264,44 @@ public class DecorationHelper {
 				Block blockAbove2 = world.getBlock(x, y+2, z);
 				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
 					if(world.rand.nextInt(3) == 0) {
+						BlockRoot.generateWaterRootPatch(world, x, y+1, z, 60, 15);
+					} else {
+						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+					}
+				}
+			}
+		}
+	}
+
+	public void generateRoots(double probability, int patchProbability) {
+		if(probability >= 1.0D) {
+			for(int i = 0; i < (int)probability; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				Block cBlock = world.getBlock(x, y, z);
+				Block blockAbove = world.getBlock(x, y+1, z);
+				Block blockAbove2 = world.getBlock(x, y+2, z);
+				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+					if(world.rand.nextInt(patchProbability) == 0) {
+						BlockRoot.generateRootPatch(world, x, y+1, z, 60, 15);
+					} else {
+						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+					}
+				}
+			}
+		} else {
+			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				Block cBlock = world.getBlock(x, y, z);
+				Block blockAbove = world.getBlock(x, y+1, z);
+				Block blockAbove2 = world.getBlock(x, y+2, z);
+				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+					if(world.rand.nextInt(patchProbability) == 0) {
 						BlockRoot.generateRootPatch(world, x, y+1, z, 60, 15);
 					} else {
 						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
@@ -270,7 +310,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateReeds(double probability) {
 		if(probability >= 1.0D) {
 			for(int i = 0; i < (int)probability; i++) {

@@ -18,6 +18,7 @@ public class WorldGenRedirect implements IWorldGenerator {
            	if(biome instanceof BiomeGenBaseBetweenlands) {
            		BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands)biome;
            		bgbb.postTerrainGen(world, random, chunkX * 16, chunkZ * 16);
+           		bgbb.postTerrainGen2(world, random, chunkX * 16, chunkZ * 16);
            	}
         }
 	}

@@ -61,6 +61,7 @@ public class BiomeDecoratorBaseBetweenlands
 		this.rand = rand;
 		this.world = world;
 		this.postTerrainGen();
+		this.postTerrainGen2();
 	}
 
 	protected void populate() { }
@@ -68,6 +69,7 @@ public class BiomeDecoratorBaseBetweenlands
 	protected void decorate() { }
 
 	protected void postTerrainGen() { }
+	protected void postTerrainGen2() { }
 	
 	protected final int offsetXZ() {
 		return rand.nextInt(16) + 8;

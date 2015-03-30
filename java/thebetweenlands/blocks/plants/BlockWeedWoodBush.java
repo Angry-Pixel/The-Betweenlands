@@ -9,7 +9,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockWeedWoodBush extends /*BlockContainer*/ Block {
+public class BlockWeedWoodBush extends Block {
 
 	@SideOnly(Side.CLIENT)
 	public IIcon iconFancy, iconFast, iconStick;

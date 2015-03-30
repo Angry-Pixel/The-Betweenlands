@@ -216,6 +216,13 @@ extends BiomeGenBase
 	public void postTerrainGen(World world, Random rand, int x, int z) {
 		this.decorator.postTerrainGen(world, rand, x, z);
 	}
+	
+	/**
+	 * Called after postTerrainGen
+	 */
+	public void postTerrainGen2(World world, Random rand, int x, int z) {
+		this.decorator.postTerrainGen(world, rand, x, z);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)

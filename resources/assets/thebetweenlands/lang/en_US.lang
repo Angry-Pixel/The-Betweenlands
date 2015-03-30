@@ -31,6 +31,8 @@ tile.thebetweenlands.sludge.name=Sludge Block
 tile.thebetweenlands.stalactite.name=Stalactite Block
 tile.thebetweenlands.root.name=Root Block
 tile.thebetweenlands.rootUW.name=Root under water Block
+tile.thebetweenlands.deadGrass.name=Dead Grass
+tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
 
 tile.thebetweenlands.saplingWeedWood.name=Weed Wood Sapling
 tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling

@@ -32,6 +32,7 @@ import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockDeadGrass;
+import thebetweenlands.blocks.terrain.BlockFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
@@ -78,6 +79,7 @@ public class BLBlockRegistry
 	public static final Block peat = new BlockPeat();
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
+	public static final Block fallenLeaves = new BlockFallenLeaves();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.

@@ -93,7 +93,7 @@ public class BlockRoot extends Block {
         return true;
     }
 	
-	public static void generateRootPatch(World world, int x, int y, int z, int tries, int radius) {
+	public static void generateWaterRootPatch(World world, int x, int y, int z, int tries, int radius) {
 		for(int i = 0; i < tries; i++) {
 			int bx = x + world.rand.nextInt(radius) - radius/2;
 			int by = y + world.rand.nextInt(radius) - radius/2;
@@ -103,6 +103,23 @@ public class BlockRoot extends Block {
 				Block blockAbove = world.getBlock(bx, by+1, bz);
 				Block blockAbove2 = world.getBlock(bx, by+2, bz);
 				if(cBlock == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
+					generateRoot(world, bx, by+1, bz, world.rand.nextInt(6) + 2);
+				}
+			}
+		}
+	}
+	
+	public static void generateRootPatch(World world, int x, int y, int z, int tries, int radius) {
+		for(int i = 0; i < tries; i++) {
+			int bx = x + world.rand.nextInt(radius) - radius/2;
+			int by = y + world.rand.nextInt(radius) - radius/2;
+			int bz = z + world.rand.nextInt(radius) - radius/2;
+			if(Math.sqrt((bx-x)*(bx-x)+(by-y)*(by-y)+(bz-z)*(bz-z)) <= radius) {
+				Block cBlock = world.getBlock(bx, by, bz);
+				Block blockAbove = world.getBlock(bx, by+1, bz);
+				Block blockAbove2 = world.getBlock(bx, by+2, bz);
+				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
 					generateRoot(world, bx, by+1, bz, world.rand.nextInt(6) + 2);
 				}
 			}
