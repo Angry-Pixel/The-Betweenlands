@@ -140,7 +140,7 @@ public class ModelConverter {
 				vec3 oxyz = this.getBoxCorner(true, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
 
 				//ModelBox quad list
-				Field f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList");
+				Field f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i");
 				TexturedQuad[] mbQuadList = null;
 				try {
 					mbQuadList = (TexturedQuad[]) f_mbQuadList.get(modelBox);
