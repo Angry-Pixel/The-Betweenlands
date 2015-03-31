@@ -113,7 +113,7 @@ public class ModelConverter {
 		
 		//Rotate yaw
 		rm.setRotations(0, (float)Math.toRadians(-this.rotationYaw), 0);
-		return rm.transformVec(scaledPos, scaledRotPos);
+		return rm.transformVec(scaledPos, new vec3(0, 0, 0));
 	}
 	
 	private vec3 transformPosition(vec3 scaledPos, ModelRenderer modelRenderer, RotationMatrix rm, double modelScale) {

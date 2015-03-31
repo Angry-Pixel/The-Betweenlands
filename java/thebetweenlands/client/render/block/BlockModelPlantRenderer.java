@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
+import scala.util.Random;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -60,14 +61,18 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator.instance.setColorOpaque(255, 255, 255);
 		Tessellator.instance.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
 
-		if(plantModel == null) {
-			plantModel = new ModelConverter(
-					new ModelBlackHatMushroom2(),
-					0.065D,
-					64.0D, 64.0D,
-					BLBlockRegistry.modelPlant.modelTexture,
-					true);
-		}
+		//if(plantModel == null) {
+		Random rnd = new Random();
+		rnd.setSeed(x * y * z);
+		plantModel = new ModelConverter(
+				new ModelBlackHatMushroom2(),
+				0.065D,
+				64.0D, 64.0D,
+				BLBlockRegistry.modelPlant.modelTexture,
+				true, 
+				rnd.nextFloat() * 180, 
+				rnd.nextFloat() * 40 - 20);
+		//}
 		plantModel.renderWithTessellator(Tessellator.instance);
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
