@@ -28,7 +28,14 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.*;
+import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockModelPlantRenderer;
+import thebetweenlands.client.render.block.BlockRootRenderer;
+import thebetweenlands.client.render.block.BlockRubberLogRenderer;
+import thebetweenlands.client.render.block.BlockStalactiteRenderer;
+import thebetweenlands.client.render.block.BlockSwampReedRenderer;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
@@ -75,7 +82,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT;
 
 		private final int ID;
 
@@ -120,7 +127,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockSwampReedRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockStalactiteRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRootRenderer());
-
+		RenderingRegistry.registerBlockHandler(new BlockModelPlantRenderer());
+		
         //Events
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());
         AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();

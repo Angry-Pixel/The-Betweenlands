@@ -4,19 +4,22 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.model.entity.ModelDragonFly;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
+import thebetweenlands.utils.ModelConverter;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
+public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
+	public static ModelConverter plantModel;
+
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
@@ -28,21 +31,47 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 			tessellator.setBrightness(mc.theWorld.getLightBrightnessForSkyBlocks(
 					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
 		}
+
+		Tessellator.instance.addTranslation(0.5F, 1.5F, 0.5F);
+
 		tessellator.startDrawingQuads();
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, -0.5, -0.5, -0.5, 1.0f);
+
+		if(plantModel == null) {
+			plantModel = new ModelConverter(
+					new ModelDragonFly(),
+					0.065D,
+					128.0D, 128.0D,
+					BLBlockRegistry.modelPlant.modelTexture,
+					true);
+		}
+		plantModel.renderWithTessellator(Tessellator.instance);
+
 		tessellator.draw();
+
+		Tessellator.instance.addTranslation(-0.5F, -1.5F, -0.5F);
+
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
+
 		Tessellator.instance.setColorOpaque(255, 255, 255);
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, x, y, z, 1.0f);
-		Block blockAbove = world.getBlock(x, y+1, z);
-		if(blockAbove == BLBlockRegistry.swampWater || blockAbove == Blocks.air) {
-			renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReedTop, x, y+1, z, 1.0f);
+		Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z + 0.5F);
+
+		if(plantModel == null) {
+			plantModel = new ModelConverter(
+					new ModelDragonFly(),
+					0.065D,
+					128.0D, 128.0D,
+					BLBlockRegistry.modelPlant.modelTexture,
+					true);
 		}
+		plantModel.renderWithTessellator(Tessellator.instance);
+
+		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.5F, -z - 0.5F);
+
 		return true;
 	}
 
@@ -53,6 +82,6 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return BlockRenderIDs.SWAMP_REED.id();
+		return BlockRenderIDs.MODEL_PLANT.id();
 	}
 }
