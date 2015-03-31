@@ -9,8 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.model.block.ModelFern;
-import thebetweenlands.client.model.entity.ModelDragonFly;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -39,9 +38,9 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 		if(plantModel == null) {
 			plantModel = new ModelConverter(
-					new ModelFern(),
+					new ModelBlackHatMushroom2(),
 					0.065D,
-					128.0D, 128.0D,
+					64.0D, 64.0D,
 					BLBlockRegistry.modelPlant.modelTexture,
 					true);
 		}
@@ -59,19 +58,19 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			Block block, int modelId, RenderBlocks renderer) {
 
 		Tessellator.instance.setColorOpaque(255, 255, 255);
-		Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z + 0.5F);
+		Tessellator.instance.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
 
 		if(plantModel == null) {
 			plantModel = new ModelConverter(
-					new ModelFern(),
+					new ModelBlackHatMushroom2(),
 					0.065D,
-					128.0D, 128.0D,
+					64.0D, 64.0D,
 					BLBlockRegistry.modelPlant.modelTexture,
 					true);
 		}
 		plantModel.renderWithTessellator(Tessellator.instance);
 
-		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.5F, -z - 0.5F);
+		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
 
 		return true;
 	}

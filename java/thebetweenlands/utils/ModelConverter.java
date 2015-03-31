@@ -2,6 +2,7 @@ package thebetweenlands.utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
@@ -76,10 +77,10 @@ public class ModelConverter {
 	}
 
 	private vec3 getBoxCorner(boolean xb, boolean yb, boolean zb, ModelBox modelBox, ModelRenderer modelRenderer, double modelScale, RotationMatrix rm) {
-		double posX = ((!xb ? modelBox.posX1 : modelBox.posX2) + modelRenderer.offsetX);
-		double posY = ((!yb ? modelBox.posY1 : modelBox.posY2) + modelRenderer.offsetY);
+		double posX = (!xb ? modelBox.posX1 : modelBox.posX2) + modelRenderer.offsetX;
+		double posY = (!yb ? modelBox.posY1 : modelBox.posY2) + modelRenderer.offsetY;
 		double posZ = (!zb ? modelBox.posZ1 : modelBox.posZ2) + modelRenderer.offsetZ;
-		vec3 scaledPos = new vec3(posX * modelScale, (posY) * modelScale, posZ * modelScale);
+		vec3 scaledPos = new vec3(posX * modelScale, posY * modelScale, posZ * modelScale);
 		vec3 scaledRotPos = new vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
 
 		//Dirty fix to prevent some bugs when rotation == 0
@@ -88,42 +89,120 @@ public class ModelConverter {
 			modelRenderer.rotateAngleY = 0.0001F;
 			modelRenderer.rotateAngleZ = 0.0001F;
 		}
-
+		
+		//Offset to rotation point
 		scaledPos.x += scaledRotPos.x;
 		scaledPos.y += scaledRotPos.y;
 		scaledPos.z += scaledRotPos.z;
 
+		//Apply own rotation and transformation
 		rm.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
 		scaledPos = rm.transformVec(scaledPos, scaledRotPos);
 
+		//Simulate parent rotation and transformation
+		ArrayList<ModelRenderer> parents = this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer);
+		if(parents.size() > 0) {
+			for(ModelRenderer parent : parents) {
+				scaledPos = this.transformPosition(scaledPos, parent, ROTATION_MATRIX, modelScale);
+			}
+		}
+		
+		//Rotate upside down + pitch
 		rm.setRotations((float)Math.toRadians(-180 - this.rotationPitch), 0, 0);
 		scaledPos = rm.transformVec(scaledPos, new vec3(0, 0, 0));
-
+		
+		//Rotate yaw
 		rm.setRotations(0, (float)Math.toRadians(-this.rotationYaw), 0);
-		return rm.transformVec(scaledPos, new vec3(0, 0, 0));
+		return rm.transformVec(scaledPos, scaledRotPos);
+	}
+	
+	private vec3 transformPosition(vec3 scaledPos, ModelRenderer modelRenderer, RotationMatrix rm, double modelScale) {
+		vec3 scaledRotPos = new vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
+
+		//Dirty fix to prevent some bugs when rotation == 0
+		if(modelRenderer.rotateAngleX == 0.0F && modelRenderer.rotateAngleY == 0.0F && modelRenderer.rotateAngleZ == 0.0F) {
+			modelRenderer.rotateAngleX = 0.0001F;
+			modelRenderer.rotateAngleY = 0.0001F;
+			modelRenderer.rotateAngleZ = 0.0001F;
+		}
+		
+		//Offset to rotation point
+		scaledPos.x += scaledRotPos.x;
+		scaledPos.y += scaledRotPos.y;
+		scaledPos.z += scaledRotPos.z;
+
+		//Apply own rotation and transformation
+		rm.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
+		scaledPos = rm.transformVec(scaledPos, scaledRotPos);
+		
+		return scaledPos;
 	}
 
 	private final float rotationYaw;
 	private final float rotationPitch;
+	
+	//Holds a list of vertices and UVs of this model
 	private final ArrayList<vec3UV> modelQuadList = new ArrayList<vec3UV>();
+	
+	//Holds the parents for each ModelRenderer of this model
+	private final HashMap<ModelRenderer, ModelRenderer> childOfMap = new HashMap<ModelRenderer, ModelRenderer>();
 
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices.
+	 * @param model
+	 * @param scale
+	 * @param textureWidth
+	 * @param textureHeight
+	 * @param texture
+	 * @param renderDoubleFace
+	 */
 	public ModelConverter(ModelBase model, double scale, double textureWidth, double textureHeight, IIcon texture, boolean renderDoubleFace) {
 		this.rotationYaw = 0.0F;
 		this.rotationPitch = 0.0F;
 		this.constructModel(model, scale, textureWidth, textureHeight, texture, renderDoubleFace);
 	}
 	
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices.
+	 * @param model
+	 * @param scale
+	 * @param textureWidth
+	 * @param textureHeight
+	 * @param texture
+	 * @param renderDoubleFace
+	 * @param rotationYaw
+	 * @param rotationPitch
+	 */
 	public ModelConverter(ModelBase model, double scale, double textureWidth, double textureHeight, IIcon texture, boolean renderDoubleFace, float rotationYaw, float rotationPitch) {
 		this.rotationYaw = rotationYaw;
 		this.rotationPitch = rotationPitch;
 		this.constructModel(model, scale, textureWidth, textureHeight, texture, renderDoubleFace);
 	}
 
+	/**
+	 * Reconstructs the model vertices from the given data
+	 * @param modelBase
+	 * @param modelScale
+	 * @param actualWidth
+	 * @param actualHeight
+	 * @param texture
+	 * @param renderDoubleFace
+	 */
 	private void constructModel(ModelBase modelBase, double modelScale, double actualWidth, double actualHeight, IIcon texture, boolean renderDoubleFace) {
 		//Model texture width/height
 		double modelWidth = modelBase.textureWidth;
 		double modelHeight = modelBase.textureHeight;
 
+		for(Object obj1 : modelBase.boxList) {
+			ModelRenderer modelRenderer = (ModelRenderer) obj1;
+			if(modelRenderer.childModels != null) {
+				for(Object obj2 : modelRenderer.childModels) {
+					ModelRenderer childModelRenderer = (ModelRenderer) obj2;
+					this.childOfMap.put(childModelRenderer, modelRenderer);
+				}
+			}
+		}
+		
 		for(Object obj1 : modelBase.boxList) {
 			ModelRenderer modelRenderer = (ModelRenderer) obj1;
 			for(Object obj2 : modelRenderer.cubeList) {
@@ -292,14 +371,44 @@ public class ModelConverter {
 		}
 	}
 
+	/**
+	 * Recursively returns a list of all parents and subparents of the given ModelRenderer.
+	 * Used to simulate previous rotations and transformations.
+	 * @param parentList
+	 * @param modelRenderer
+	 * @return
+	 */
+	private ArrayList<ModelRenderer> getParentList(ArrayList<ModelRenderer> parentList, ModelRenderer modelRenderer) {
+		if(this.childOfMap.containsKey(modelRenderer)) {
+			ModelRenderer parent = this.childOfMap.get(modelRenderer);
+			parentList.add(parent);
+			this.getParentList(parentList, parent);
+		}
+		return parentList;
+	}
+	
+	/**
+	 * Adds a vertex + UV to the model quad list
+	 * @param vert
+	 * @param u
+	 * @param v
+	 */
 	private void addVertexWithUV(vec3 vert, double u, double v) {
 		this.modelQuadList.add(new vec3UV(vert.x, vert.y, vert.z, u, v));
 	}
 
+	/**
+	 * Returns the list of the reconstructed vertices + UVs of this model
+	 * @return
+	 */
 	public ArrayList<vec3UV> getVertices() {
 		return this.modelQuadList;
 	}
 
+	/**
+	 * Renders the model quads with the tessellator. Tessellator must already be drawing
+	 * @param tessellator
+	 */
 	public void renderWithTessellator(Tessellator tessellator) {
 		for(vec3UV vert : this.modelQuadList) {
 			tessellator.addVertexWithUV(vert.x, vert.y, vert.z, vert.u, vert.v);
