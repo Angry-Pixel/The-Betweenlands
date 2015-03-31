@@ -2,15 +2,19 @@ package thebetweenlands.client.render.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
 
 import scala.util.Random;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom3;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -18,8 +22,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
-	public static ModelConverter plantModel;
+public class BlockBlackHatMushroomRenderer implements ISimpleBlockRenderingHandler {
+	public static ModelConverter plantModelInv;
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
@@ -37,15 +41,15 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 		tessellator.startDrawingQuads();
 
-		if(plantModel == null) {
-			plantModel = new ModelConverter(
+		if(plantModelInv == null) {
+			plantModelInv = new ModelConverter(
 					new ModelBlackHatMushroom2(),
 					0.065D,
 					64.0D, 64.0D,
-					BLBlockRegistry.modelPlant.modelTexture,
+					BLBlockRegistry.blackHatMushroom.modelTexture2,
 					true);
 		}
-		plantModel.renderWithTessellator(Tessellator.instance);
+		plantModelInv.renderWithTessellator(Tessellator.instance);
 
 		tessellator.draw();
 
@@ -61,19 +65,29 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator.instance.setColorOpaque(255, 255, 255);
 		Tessellator.instance.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
 
-		//if(plantModel == null) {
 		Random rnd = new Random();
 		rnd.setSeed(x * y * z);
-		plantModel = new ModelConverter(
-				new ModelBlackHatMushroom2(),
+		ModelBase model = null;
+		IIcon modelTexture = null;
+		if(rnd.nextInt(30) <= 10) {
+			model = new ModelBlackHatMushroom();
+			modelTexture = BLBlockRegistry.blackHatMushroom.modelTexture1;
+		} else if(rnd.nextInt(30) <= 20) {
+			model = new ModelBlackHatMushroom2();
+			modelTexture = BLBlockRegistry.blackHatMushroom.modelTexture2;
+		} else {
+			model = new ModelBlackHatMushroom3();
+			modelTexture = BLBlockRegistry.blackHatMushroom.modelTexture3;
+		}
+		ModelConverter worldModel = new ModelConverter(
+				model,
 				0.065D,
 				64.0D, 64.0D,
-				BLBlockRegistry.modelPlant.modelTexture,
+				modelTexture,
 				true, 
 				rnd.nextFloat() * 180, 
 				rnd.nextFloat() * 40 - 20);
-		//}
-		plantModel.renderWithTessellator(Tessellator.instance);
+		worldModel.renderWithTessellator(Tessellator.instance);
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
 
