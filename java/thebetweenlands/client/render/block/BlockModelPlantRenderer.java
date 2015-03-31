@@ -9,6 +9,7 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.model.block.ModelFern;
 import thebetweenlands.client.model.entity.ModelDragonFly;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
@@ -38,7 +39,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 		if(plantModel == null) {
 			plantModel = new ModelConverter(
-					new ModelDragonFly(),
+					new ModelFern(),
 					0.065D,
 					128.0D, 128.0D,
 					BLBlockRegistry.modelPlant.modelTexture,
@@ -62,7 +63,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 		if(plantModel == null) {
 			plantModel = new ModelConverter(
-					new ModelDragonFly(),
+					new ModelFern(),
 					0.065D,
 					128.0D, 128.0D,
 					BLBlockRegistry.modelPlant.modelTexture,

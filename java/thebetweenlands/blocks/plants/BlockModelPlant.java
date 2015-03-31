@@ -21,6 +21,6 @@ public class BlockModelPlant extends BlockBLSmallPlants {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		modelTexture = reg.registerIcon("thebetweenlands:dragonFlyBlock");
+		modelTexture = reg.registerIcon("thebetweenlands:fernModelTexture");
 	}
 }
