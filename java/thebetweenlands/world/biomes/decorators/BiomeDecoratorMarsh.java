@@ -6,13 +6,6 @@ import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 
 public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 	@Override
-	public void decorate() {
-		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, true);
-
-		helper.generateWeedwoodTree(100);
-	}
-	
-	@Override
 	public void postTerrainGen() {
 		for (int i = 0; i < 10; i++) {
 			int px = this.x + offsetXZ();
@@ -25,8 +18,9 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateGiantWeedwoodTree(20);
+		helper.generateGiantWeedwoodTree(1);
 		
+		helper.generateWeedwoodTree(2);
 		helper.generateSwampGrass(30);
 		helper.generateNettles(2);
 		helper.generateCattail(2);

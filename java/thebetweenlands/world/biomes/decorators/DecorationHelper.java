@@ -122,11 +122,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x + 1, y, z + 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, y + 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z + 1))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
 				GEN_GIANT_TREE.generateTree(this.world, this.rand, x, y, z);
 		}
 	}
@@ -136,11 +132,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x + 1, y, z + 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, y + 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z + 1))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
 				GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 		}
 	}
@@ -150,11 +142,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x + 1, y, z + 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, y + 1, y, z - 1)
-					&& this.checkSurface(SurfaceType.SWAMP_GRASS, x - 1, y, z + 1))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
 				GEN_SAP_TREE.generate(this.world, this.rand, x, y, z);
 		}
 	}

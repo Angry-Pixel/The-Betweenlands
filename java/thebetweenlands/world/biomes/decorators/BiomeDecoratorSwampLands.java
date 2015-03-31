@@ -6,17 +6,12 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 
 public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 	@Override
-	public void decorate() {
-		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, true);
-
-		helper.generateWeedwoodTree(300);
-	}
-	
-	@Override
 	public void postTerrainGen() {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateGiantWeedwoodTree(120);
+		helper.generateGiantWeedwoodTree(60);
+		
+		helper.generateWeedwoodTree(100);
 		
 		helper.generateWeedwoodBush(120);
 		helper.generateRubberTree(40);
