@@ -24,6 +24,9 @@ version = "1.7.10-1.0.0-alpha.1-build." + project.buildnumber
 group = "net.angrypixel"
 archivesBaseName = 'TheBetweenlands'
 
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
 minecraft {
     version = "1.7.10-10.13.2.1230"
     runDir = "minecraft"
