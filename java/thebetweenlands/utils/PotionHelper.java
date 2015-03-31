@@ -15,7 +15,7 @@ public class PotionHelper
     public static void initPotionArray() {
         try {
             //FIXME: find SRG name!
-            Field potionArr = ReflectionHelper.findField(Potion.class, "potionTypes", "a");
+            Field potionArr = ReflectionHelper.findField(Potion.class, "potionTypes", "field_76425_a");
             Field modfield = Field.class.getDeclaredField("modifiers");
             modfield.setAccessible(true);
             modfield.setInt(potionArr, potionArr.getModifiers() & ~Modifier.FINAL);

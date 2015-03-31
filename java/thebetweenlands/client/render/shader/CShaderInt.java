@@ -39,27 +39,27 @@ public class CShaderInt extends Shader {
 		try {
 			{
 				this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "c");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "field_148051_c");
 				f.setAccessible(true);
 				f.set(this, this.pShaderManager);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "d");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "field_148048_d");
 				f.setAccessible(true);
 				this.pListAuxFramebuffers = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "e");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "field_148049_e");
 				f.setAccessible(true);
 				this.pListAuxNames = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "f");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "field_148046_f");
 				f.setAccessible(true);
 				this.pListAuxWidths = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "g");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "field_148047_g");
 				f.setAccessible(true);
 				this.pListAuxHeights = (List) f.get(this);
 			}
@@ -80,7 +80,7 @@ public class CShaderInt extends Shader {
 	public void loadShader(float partialTicks) {
 		try {
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "h");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "field_148053_h");
 				f.setAccessible(true);
 				this.pProjectionMatrix = (Matrix4f) f.get(this);
 			}
