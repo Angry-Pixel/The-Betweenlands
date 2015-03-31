@@ -41,12 +41,11 @@ public class PatchNoiseFeature extends BiomeNoiseFeature {
 			BiomeGenBase[] chunksForGeneration, Random rng) {
 		int sliceSize = chunkBlocks.length / 256;
 		if(this.mudNoise[x * 16 + z] / 1.6f + 1.5f <= 0) {
-			//FIXME: Doesn't generate
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;
 			for(int yo = 0; yo < WorldProviderBetweenlands.LAYER_HEIGHT + 20; yo++) {
 				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y - yo, z, sliceSize)];
 				Block blockAbove = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y - yo + 1, z, sliceSize)];
-				if(currentBlock == biome.topBlock && blockAbove == Blocks.air) {
+				if(currentBlock == biome.topBlock && (blockAbove == Blocks.air || blockAbove == null)) {
 					chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y - yo, z, sliceSize)] = this.block;
 					break;
 				}
