@@ -154,7 +154,6 @@ public class WorldGenGiantTree implements IWorldGenerator {
 			}
 		}
 		createMainCanopy(world, rand, x, y + height, z, height/3 + rand.nextInt(height/10));
-		//System.out.println("Tree at: "+ x + " : " + y + " : " + z);
 		return true;
 	}
 

@@ -11,6 +11,8 @@ import thebetweenlands.blocks.tree.BlockBLLog;
 
 public class WorldGenWeedWoodTree extends WorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
+	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedWoodBark;
+	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedWood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
@@ -24,7 +26,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 					if (!world.isAirBlock(xx, yy, zz))
 						return false;
 		
-		createMainCanopy(world, rand, x, y + height/2 + 1, z, maxRadius);
+		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
 		
 		for (int yy = y; yy < y + height; ++yy) {
 			if (yy % 5 == 0 && radius > 1)
@@ -33,17 +35,17 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 			for (int i = radius * -1; i <= radius; ++i)
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
-					if (Math.round(Math.sqrt(dSq)) <= radius && yy <= y + height - 2)
-						world.setBlock(x + i, yy, z + j, log, 0, 2);
-					if (Math.round(Math.sqrt(dSq)) <= radius && yy == y || Math.round(Math.sqrt(dSq)) <= radius && yy == y + height - 1)
-						world.setBlock(x + i, yy, z + j, log, 15, 2);
+					if (Math.round(Math.sqrt(dSq)) < radius && yy <= y + height - 2)
+					world.setBlock(x + i, yy, z + j, wood, 0, 2);
+					if (Math.round(Math.sqrt(dSq)) == radius && yy == y || Math.round(Math.sqrt(dSq)) == radius && yy <= y + height - 1)
+						world.setBlock(x + i, yy, z + j, bark, 0, 2);
 				}
 
-			if (yy == y + height/2) {
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, false, rand.nextInt(2) + 3);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, false, rand.nextInt(2) + 3);
-				createBranch(world, rand, x, yy - rand.nextInt(2), z + radius + 1, 3, false, rand.nextInt(2) + 3);
-				createBranch(world, rand, x, yy - rand.nextInt(2), z - radius - 1, 4, false, rand.nextInt(2) + 3);
+			if (yy == y + height/2 + 2) {
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x, yy - rand.nextInt(2), z + radius + 1, 3, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x, yy - rand.nextInt(2), z - radius - 1, 4, false, rand.nextInt(2) + 4);
 
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, false, rand.nextInt(2) + 3);
 				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, false, rand.nextInt(2) + 3);
@@ -51,7 +53,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, false, rand.nextInt(2) + 3);
 			}
 			
-			if (yy == y + height/2 + 3) {
+			if (yy == y + height/2 + 4) {
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 4);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 4);
 				createSmallBranch(world, rand, x, yy - rand.nextInt(2), z + radius + 1, 3, 4);
@@ -63,7 +65,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, 3);
 			}
 			
-			if (yy == y + height/2 + 6) {
+			if (yy == y + height/2 + 7) {
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 2);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 2);
 				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, 2);
@@ -87,7 +89,6 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		//System.out.println("Normal Weedwood Tree at: "+ x + " : " + y + " : " + z);
 		return true;
 	}
 
@@ -130,7 +131,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 		for (int x1 = x - maxRadius; x1 <= x + maxRadius; x1++)
 			for (int z1 = z - maxRadius; z1 <= z + maxRadius; z1++)
 				for (int y1 = y; y1 < y + maxRadius; y1++) {
-					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.0D);
+					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.5D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (world.getBlock(x1, y1, z1) != log && rand.nextInt(5) != 0)
 							world.setBlock(x1, y1, z1, leaves);
