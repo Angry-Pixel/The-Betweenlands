@@ -8,6 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelAngler;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.entities.mobs.EntityAngler;
@@ -25,10 +26,10 @@ public class RenderAngler extends RenderLiving {
 
 	protected int setAnglerEyeBrightness(EntityAngler entity, int pass, float partialTickTime) {
 		if(pass == 1){
-			if(MainShader.getActiveShader() != null && ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
+			if(ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
 				double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
 				double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
-				MainShader.getActiveShader().addLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff, 
+				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff, 
 						1.0f, 
 						10.0f / 255.0f, 
 						30.0f / 255.0f, 
