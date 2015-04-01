@@ -24,9 +24,9 @@ public class EntitySporeling extends EntityCreature {
 		stepHeight = 1.0F;
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAvoidEntity(this, EntityLivingBase.class, 10.0F, 0.9D, 0.6D));
-		tasks.addTask(2, new EntityAIPanic(this, 0.9D));
-		tasks.addTask(3, new EntityAIWander(this, 0.6D));
+		tasks.addTask(1, new EntityAIAvoidEntity(this, EntityLivingBase.class, 10.0F, 0.7D, 0.5D));
+		tasks.addTask(2, new EntityAIPanic(this, 0.7D));
+		tasks.addTask(3, new EntityAIWander(this, 0.5D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
 	}
@@ -34,7 +34,7 @@ public class EntitySporeling extends EntityCreature {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.9D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}
