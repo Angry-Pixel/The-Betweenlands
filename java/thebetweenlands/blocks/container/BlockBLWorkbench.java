@@ -28,8 +28,8 @@ public class BlockBLWorkbench extends Block {
     public BlockBLWorkbench() {
     	super(Material.wood);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("thebetweenlands.weedWoodCraftingTable");
-		setBlockTextureName("thebetweenlands:weedWoodCraftingTable");
+		setBlockName("thebetweenlands.weedwoodCraftingTable");
+		setBlockTextureName("thebetweenlands:weedwoodCraftingTable");
     }
 
 	@Override
@@ -52,7 +52,7 @@ public class BlockBLWorkbench extends Block {
 
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        return side == 1 ? topIcon : (side == 0 ? BLBlockRegistry.weedWoodPlanks.getBlockTextureFromSide(side) : (side != 2 && side != 4 ? blockIcon : sideIcon));
+        return side == 1 ? topIcon : (side == 0 ? BLBlockRegistry.weedwoodPlanks.getBlockTextureFromSide(side) : (side != 2 && side != 4 ? blockIcon : sideIcon));
     }
 
     @SideOnly(Side.CLIENT)

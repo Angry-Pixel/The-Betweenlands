@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ItemWeedWoodChestRenderer implements IItemRenderer {
 	private final ModelChest modelChest = new ModelChest();
-	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/tiles/weedWoodChest.png");
+	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/tiles/weedwoodChest.png");
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {

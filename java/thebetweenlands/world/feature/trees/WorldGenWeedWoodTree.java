@@ -10,10 +10,10 @@ import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 
 public class WorldGenWeedWoodTree extends WorldGenerator {
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
-	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedWoodBark;
-	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedWood;
-	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
+	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
+	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
+	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
+	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		int radius = rand.nextInt(2) + 3;

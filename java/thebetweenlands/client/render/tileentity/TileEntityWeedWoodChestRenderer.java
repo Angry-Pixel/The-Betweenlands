@@ -19,8 +19,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class TileEntityWeedWoodChestRenderer extends TileEntitySpecialRenderer {
 
-	private static final ResourceLocation RES_NORMAL_DOUBLE = new ResourceLocation("thebetweenlands:textures/tiles/weedWoodLargechest.png");
-	private static final ResourceLocation RES_NORMAL_SINGLE = new ResourceLocation("thebetweenlands:textures/tiles/weedWoodChest.png");
+	private static final ResourceLocation RES_NORMAL_DOUBLE = new ResourceLocation("thebetweenlands:textures/tiles/weedwoodLargechest.png");
+	private static final ResourceLocation RES_NORMAL_SINGLE = new ResourceLocation("thebetweenlands:textures/tiles/weedwoodChest.png");
 
 	private final ModelChest chestModel = new ModelChest();
 	private final ModelChest largeChestModel = new ModelLargeChest();

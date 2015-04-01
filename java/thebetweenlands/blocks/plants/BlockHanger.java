@@ -80,7 +80,7 @@ public class BlockHanger extends BlockBush  implements IShearable {
 	}
 
 	private boolean isValidBlock(Block block) {
-		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedWoodLeaves || block == this;
+		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block == this;
 	}
 
 }

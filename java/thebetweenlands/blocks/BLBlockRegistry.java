@@ -94,25 +94,25 @@ public class BLBlockRegistry
 	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
 
 	// TREES
-	public static final Block saplingWeedWood = new BlockBLSapling("saplingWeedWood");
+	public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood");
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree");
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
 	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree");
 	
-	public static final Block weedWoodLeaves = new BlockBLLeaves("weedWoodLeaves");
+	public static final Block weedwoodLeaves = new BlockBLLeaves("weedwoodLeaves");
 	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
 	public static final Block rubberTreeLeaves = new BlockBLLeaves("rubberTreeLeaves");
 	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
 	
-	public static final Block weedWoodLog = new BlockBLLog("weedWoodLog");
-	public static final Block weedWood = new BlockBLLog("weedWood");
-	public static final Block weedWoodBark = new BlockBLLog("weedWoodBark");
+	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog");
+	public static final Block weedwood = new BlockBLLog("weedwood");
+	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
 	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog");
-	public static final Block weedWoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedWoodBush").setCreativeTab(ModCreativeTabs.plants);
+	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
 
 	// WOOD
-	public static final Block weedWoodPlanks = new BlockWeedWoodPlanks();
+	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
@@ -140,8 +140,8 @@ public class BLBlockRegistry
 	public static final Block treeFungus = new BlockTreeFungus();
 	
 	// DECORATIONS AND UTILITIES
-	public static final Block weedWoodCraftingTable = new BlockBLWorkbench();
-	public static final Block weedWoodChest = new BlockWeedWoodChest();
+	public static final Block weedwoodCraftingTable = new BlockBLWorkbench();
+	public static final Block weedwoodChest = new BlockWeedWoodChest();
 	public static final Block furnaceBL = new BlockBLFurnace(false).setBlockName("thebetweenlands.furnaceBL");
 	public static final Block furnaceBLLit = new BlockBLFurnace(true).setBlockName("thebetweenlands.furnaceBLLit").setLightLevel(0.875F);  
 	public static final Block dualFurnaceBL = new BlockBLDualFurnace(false).setBlockName("thebetweenlands.dualFurnaceBL");

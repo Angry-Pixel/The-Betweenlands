@@ -28,7 +28,7 @@ public class BlockRootUW extends BlockSwampWater {
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		setTickRandomly(true);
-		setBlockTextureName("thebetweenlands:weedWoodBark");
+		setBlockTextureName("thebetweenlands:weedwoodBark");
 		this.canSpread = false;
 		this.hasBoundingBox = true;
 		this.canCollide = true;
@@ -38,7 +38,7 @@ public class BlockRootUW extends BlockSwampWater {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconRoot = iconRegister.registerIcon("thebetweenlands:weedWoodBark");
+		this.iconRoot = iconRegister.registerIcon("thebetweenlands:weedwoodBark");
 		super.registerBlockIcons(iconRegister);
 	}
 

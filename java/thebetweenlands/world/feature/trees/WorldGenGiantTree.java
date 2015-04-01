@@ -17,10 +17,10 @@ import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenGiantTree implements IWorldGenerator {
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedWoodLog;
-	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedWoodBark;
-	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedWood;
-	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedWoodLeaves;
+	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
+	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
+	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
+	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
 	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
 	

@@ -33,8 +33,8 @@ public class BlockWeedWoodChest extends BlockContainer {
 		setHardness(2.5F);
 		setStepSound(soundTypeWood);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("thebetweenlands.weedWoodChest");
-		setBlockTextureName("thebetweenlands:weedWoodPlanks");
+		setBlockName("thebetweenlands.weedwoodChest");
+		setBlockTextureName("thebetweenlands:weedwoodPlanks");
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 	}
 
@@ -268,7 +268,7 @@ public class BlockWeedWoodChest extends BlockContainer {
 
 	public static IInventory getInventory(World world, int x, int y, int z) {
 		Object object = world.getTileEntity(x, y, z);
-		Block chest = BLBlockRegistry.weedWoodChest;
+		Block chest = BLBlockRegistry.weedwoodChest;
 
 		if (object == null)
 			return null;
@@ -286,16 +286,16 @@ public class BlockWeedWoodChest extends BlockContainer {
 			return null;
 		else {
 			if (world.getBlock(x - 1, y, z) == chest)
-				object = new InventoryLargeChest("container.weedWoodChestDouble", (TileEntityWeedWoodChest) world.getTileEntity(x - 1, y, z), (IInventory) object);
+				object = new InventoryLargeChest("container.weedwoodChestDouble", (TileEntityWeedWoodChest) world.getTileEntity(x - 1, y, z), (IInventory) object);
 
 			if (world.getBlock(x + 1, y, z) == chest)
-				object = new InventoryLargeChest("container.weedWoodChestDouble", (IInventory) object, (TileEntityWeedWoodChest) world.getTileEntity(x + 1, y, z));
+				object = new InventoryLargeChest("container.weedwoodChestDouble", (IInventory) object, (TileEntityWeedWoodChest) world.getTileEntity(x + 1, y, z));
 
 			if (world.getBlock(x, y, z - 1) == chest)
-				object = new InventoryLargeChest("container.weedWoodChestDouble", (TileEntityWeedWoodChest) world.getTileEntity(x, y, z - 1), (IInventory) object);
+				object = new InventoryLargeChest("container.weedwoodChestDouble", (TileEntityWeedWoodChest) world.getTileEntity(x, y, z - 1), (IInventory) object);
 
 			if (world.getBlock(x, y, z + 1) == chest)
-				object = new InventoryLargeChest("container.weedWoodChestDouble", (IInventory) object, (TileEntityWeedWoodChest) world.getTileEntity(x, y, z + 1));
+				object = new InventoryLargeChest("container.weedwoodChestDouble", (IInventory) object, (TileEntityWeedWoodChest) world.getTileEntity(x, y, z + 1));
 
 			return (IInventory) object;
 		}
