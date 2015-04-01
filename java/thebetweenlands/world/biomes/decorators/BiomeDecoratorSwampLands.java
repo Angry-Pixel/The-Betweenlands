@@ -40,7 +40,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 							break;
 						}
 						Block cBlock = this.world.getBlock(px, py-yo, pz);
-						if(cBlock == BLBlockRegistry.deadGrass) {
+						if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass) {
 							if(this.world.isAirBlock(px, py-yo+1, pz)) {
 								this.world.setBlock(px, py-yo+1, pz, BLBlockRegistry.fallenLeaves);
 								break;

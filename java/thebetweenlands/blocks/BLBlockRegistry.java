@@ -15,6 +15,7 @@ import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
 import thebetweenlands.blocks.plants.BlockBLSmallPlants;
+import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockHanger;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
@@ -126,7 +127,8 @@ public class BLBlockRegistry
 	public static final BlockRootUW rootUW = new BlockRootUW();
 	public static final BlockRoot root = new BlockRoot();
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
-
+	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
+	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
 	public static final Block swampPlant = new BlockBLSmallPlants("swampPlant");

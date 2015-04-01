@@ -9,13 +9,11 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockBlackHatMushroom extends BlockBLSmallPlants {
-	public IIcon modelTexture1;
-	public IIcon modelTexture2;
-	public IIcon modelTexture3;
+public class BlockFlatHeadMushroom extends BlockBLSmallPlants {
+	public IIcon modelTexture1, modelTexture2;
 	
-	public BlockBlackHatMushroom() {
-		super("blackHatMushroom");
+	public BlockFlatHeadMushroom() {
+		super("flatHeadMushroom");
 	}
 
 	@Override
@@ -26,9 +24,8 @@ public class BlockBlackHatMushroom extends BlockBLSmallPlants {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		modelTexture1 = reg.registerIcon("thebetweenlands:blackHatMushroom");
-		modelTexture2 = reg.registerIcon("thebetweenlands:blackHatMushroom2");
-		modelTexture3 = reg.registerIcon("thebetweenlands:blackHatMushroom3");
+		modelTexture1 = reg.registerIcon("thebetweenlands:flatHeadMushroom");
+		modelTexture2 = reg.registerIcon("thebetweenlands:flatHeadMushroom2");
 	}
 	
 	@Override
