@@ -50,6 +50,10 @@ public class DecorationHelper {
 	private final boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z)) && this.world.isAirBlock(x, y, z);
 	}
+	
+	private final boolean checkInWater(SurfaceType surfaceType, int x, int y, int z) {
+		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z)) && !world.getBlock(x, y, z).isBlockNormalCube();
+	}
 
 	public void generateSwampGrass(int attempts) {
 		for(int i = 0; i < attempts; i++) {
@@ -132,7 +136,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkInWater(SurfaceType.DIRT, x, y, z))
 				GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 		}
 	}
