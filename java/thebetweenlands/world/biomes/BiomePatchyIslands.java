@@ -2,11 +2,7 @@ package thebetweenlands.world.biomes;
 
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntitySwampHag;
-import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorPatchyIslands;
@@ -39,6 +35,8 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 5, 1, 2));
+        spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 20, 2, 4));
+        spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 50, 10, 20));
+        spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
 	}
 }

@@ -3,9 +3,7 @@ package thebetweenlands.world.biomes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.EntitySludge;
-import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -37,7 +35,8 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BLBlockRegistry.mud))
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x485E18;
-		
+
+        spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 50, 10, 20));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 35, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
