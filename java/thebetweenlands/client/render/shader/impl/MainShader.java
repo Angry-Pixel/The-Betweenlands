@@ -21,7 +21,6 @@ import thebetweenlands.client.render.shader.CShader;
 import thebetweenlands.client.render.shader.CShaderInt;
 
 public class MainShader extends CShader {
-	private static MainShader activeShader = null;
 	private Framebuffer depthBuffer;
 	private List<LightSource> lightSources = new ArrayList<LightSource>();
 	private Matrix4f INVMVP;
@@ -37,11 +36,6 @@ public class MainShader extends CShader {
 			ResourceLocation assetsPath) {
 		super(textureManager, resourceManager, frameBuffer, shaderDescription,
 				shaderPath, assetsPath);
-		activeShader = this;
-	}
-
-	public static MainShader getActiveShader() {
-		return activeShader;
 	}
 
 	public void addLight(LightSource light) {

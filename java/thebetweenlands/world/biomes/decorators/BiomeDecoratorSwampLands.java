@@ -31,7 +31,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 				int pz = this.z + zo;
 				int py = this.world.getHeightValue(px, pz) - 1;
 				if(this.world.getBlock(px, py, pz) == BLBlockRegistry.rubberTreeLeaves
-						|| this.world.getBlock(px, py, pz) == BLBlockRegistry.weedWoodLeaves
+						|| this.world.getBlock(px, py, pz) == BLBlockRegistry.weedwoodLeaves
 						|| this.world.getBlock(px, py, pz) == BLBlockRegistry.sapTreeLeaves) {
 					int yo = 0;
 					for(int i = 0; i < 128; i++) {
@@ -40,7 +40,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 							break;
 						}
 						Block cBlock = this.world.getBlock(px, py-yo, pz);
-						if(cBlock == BLBlockRegistry.deadGrass) {
+						if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass) {
 							if(this.world.isAirBlock(px, py-yo+1, pz)) {
 								this.world.setBlock(px, py-yo+1, pz, BLBlockRegistry.fallenLeaves);
 								break;

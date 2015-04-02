@@ -21,7 +21,7 @@ public class BlockWeedWoodBush extends Block {
 		setStepSound(soundTypeGrass);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedwoodbush");
-		setBlockTextureName("thebetweenlands:weedWoodLeavesFancy");
+		setBlockTextureName("thebetweenlands:weedwoodLeavesFancy");
         setBlockBounds(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f);
 	}
     
@@ -46,9 +46,9 @@ public class BlockWeedWoodBush extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconFancy = iconRegister.registerIcon("thebetweenlands:weedWoodLeavesFancy");
-		this.iconFast = iconRegister.registerIcon("thebetweenlands:weedWoodLeavesFast");
-		this.iconStick = iconRegister.registerIcon("thebetweenlands:weedWoodStick");
+		this.iconFancy = iconRegister.registerIcon("thebetweenlands:weedwoodLeavesFancy");
+		this.iconFast = iconRegister.registerIcon("thebetweenlands:weedwoodLeavesFast");
+		this.iconStick = iconRegister.registerIcon("thebetweenlands:weedwoodStick");
 		super.registerBlockIcons(iconRegister);
 	}
 }

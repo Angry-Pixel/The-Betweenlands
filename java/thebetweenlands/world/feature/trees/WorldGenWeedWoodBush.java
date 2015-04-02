@@ -33,7 +33,7 @@ public class WorldGenWeedWoodBush extends WorldGenTrees
 		//if (block1.canSustainPlant(world, x, y, z, ForgeDirection.UP, (IPlantable) BLBlockRegistry.saplingWeedWood)) 
 		//{
 			++y;
-			this.setBlockAndNotifyAdequately(world, x, y, z, BLBlockRegistry.weedWoodBush, 0);
+			this.setBlockAndNotifyAdequately(world, x, y, z, BLBlockRegistry.weedwoodBush, 0);
 
 			for (int l = y; l <= y + 2; ++l) {
 				int i1 = l - y;
@@ -46,7 +46,7 @@ public class WorldGenWeedWoodBush extends WorldGenTrees
 						int j2 = i2 - z;
 
 						if ((Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0) && world.getBlock(k1, l, i2).canBeReplacedByLeaves(world, k1, l, i2)) {
-							this.setBlockAndNotifyAdequately(world, k1, l, i2, BLBlockRegistry.weedWoodBush, 0);
+							this.setBlockAndNotifyAdequately(world, k1, l, i2, BLBlockRegistry.weedwoodBush, 0);
 						}
 					}
 				}

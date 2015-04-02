@@ -20,7 +20,7 @@ public enum SurfaceType {
 		case GRASS:
 			return block == Blocks.grass || block == Blocks.mycelium;
 		case DIRT:
-			return block == BLBlockRegistry.swampDirt || block == Blocks.dirt;
+			return block == BLBlockRegistry.swampDirt || block == Blocks.dirt || block == BLBlockRegistry.mud;
 		case SAND:
 			return block == Blocks.sand;
 		case WATER:

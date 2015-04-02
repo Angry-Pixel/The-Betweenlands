@@ -104,7 +104,7 @@ public class BlockBLSapling extends BlockSapling {
 
 		WorldGenerator worldGen = null;
 
-		if(type.equals("saplingWeedWood")) {
+		if(type.equals("saplingWeedwood")) {
 			worldGen = new WorldGenWeedWoodTree();
 		}
 		

@@ -26,7 +26,7 @@ public class TileEntityWeedWoodChest extends TileEntityBasicInventory {
 	private int ticksSinceSync;
 
 	public TileEntityWeedWoodChest() {
-		super(27, "container.weedWoodChest");
+		super(27, "container.weedwoodChest");
 	}
 
 	@Override

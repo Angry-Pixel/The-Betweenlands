@@ -22,7 +22,7 @@ public class BlockGenericStone
         extends Block
         implements ISubBlocksBlock
 {
-	public static final String[] iconPaths = new String[] { "corruptBetweenstone", "cragRock" }; //more room here for subtypes..
+	public static final String[] iconPaths = new String[] { "corruptBetweenstone", "cragrock" }; //more room here for subtypes..
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
 

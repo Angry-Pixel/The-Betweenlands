@@ -37,7 +37,7 @@ public class BlockRoot extends Block {
 		setStepSound(Block.soundTypeWood);
 		//setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);
 		setBlockName("thebetweenlands.root");
-		setBlockTextureName("thebetweenlands:weedWoodBark");
+		setBlockTextureName("thebetweenlands:weedwoodBark");
 	}
 
 	@Override

@@ -155,7 +155,7 @@ public class EntityLeech extends EntityMob {
 	}
 
 	public void setBloodConsumed(int amount) {
-		hungerCoolDown = 100;
+		hungerCoolDown = 500;
 		dataWatcher.updateObject(15, Byte.valueOf((byte) amount));
 		if(amount == 0 && riddenByEntity == null) {
 			targetTasks.addTask(0, AI_ATTACK_TARGET);

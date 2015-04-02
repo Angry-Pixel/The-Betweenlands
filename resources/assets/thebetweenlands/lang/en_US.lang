@@ -34,28 +34,31 @@ tile.thebetweenlands.rootUW.name=Root under water Block
 tile.thebetweenlands.deadGrass.name=Dead Grass
 tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
 
-tile.thebetweenlands.saplingWeedWood.name=Weed Wood Sapling
+tile.thebetweenlands.saplingWeedwood.name=Weedwood Sapling
 tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling
 tile.thebetweenlands.saplingSpiritTree.name=Spirit Tree Sapling
 tile.thebetweenlands.saplingRubberTree.name=Rubber Tree Sapling
 
-tile.thebetweenlands.weedWoodLog.name=Weed Wood Log
-tile.thebetweenlands.weedWood.name=Weed Wood
-tile.thebetweenlands.weedWoodBark.name=Weed Wood Bark
+tile.thebetweenlands.weedwoodLog.name=Weedwood Log
+tile.thebetweenlands.weedwood.name=Weedwood
+tile.thebetweenlands.weedwoodBark.name=Weedwood Bark
 tile.thebetweenlands.sapTreeLog.name=Sap Tree Log
 tile.thebetweenlands.rubberTreeLog.name=Rubber Tree Log
 
-tile.thebetweenlands.weedWoodLeaves.name=Weed Wood Leaves
+tile.thebetweenlands.weedwoodLeaves.name=Weedwood Leaves
 tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
 tile.thebetweenlands.rubberTreeLeaves.name=Rubber Tree Leaves
 
-tile.thebetweenlands.weedWoodPlanks.name=Weed Wood Planks
-tile.thebetweenlands.weedWoodCraftingTable.name=Weed Wood Crafting Table
-tile.thebetweenlands.weedWoodChest.name=Weed Wood Chest
-tile.thebetweenlands.weedWoodBush.name=Weed Wood Bush
+tile.thebetweenlands.weedwoodPlanks.name=Weedwood Planks
+tile.thebetweenlands.weedwoodCraftingTable.name=Weedwood Crafting Table
+tile.thebetweenlands.weedwoodChest.name=Weedwood Chest
+tile.thebetweenlands.weedwoodBush.name=Weedwood Bush
 
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
+
+# Shrooms
+tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
 
 tile.thebetweenlands.sundew.name=Sundew
 tile.thebetweenlands.weepingBlue.name=Weeping Blue
@@ -83,10 +86,10 @@ item.thebetweenlands.swampTalisman.2.name=Swamp Talisman Piece 2
 item.thebetweenlands.swampTalisman.3.name=Swamp Talisman Piece 3
 item.thebetweenlands.swampTalisman.4.name=Swamp Talisman Piece 4
 
-item.thebetweenlands.weedWoodSword.name=Weed Wood Sword
-item.thebetweenlands.weedWoodPickaxe.name=Weed Wood Pickaxe
-item.thebetweenlands.weedWoodAxe.name=Weed Wood Axe
-item.thebetweenlands.weedWoodShovel.name=Weed Wood Shovel
+item.thebetweenlands.weedwoodSword.name=Weedwood Sword
+item.thebetweenlands.weedwoodPickaxe.name=Weedwood Pickaxe
+item.thebetweenlands.weedwoodAxe.name=Weedwood Axe
+item.thebetweenlands.weedwoodShovel.name=Weedwood Shovel
 
 item.thebetweenlands.betweenstoneSword.name=Betweenstone Sword
 item.thebetweenlands.betweenstonePickaxe.name=Betweenstone Pickaxe
@@ -140,7 +143,7 @@ itemGroup.thebetweenlands.special=The Betweenlands Specials
 itemGroup.thebetweenlands.plants=The Betweenlands Plants
 
 # Containers
-container.weedWoodChest=Weed Wood Chest
-container.weedWoodChestDouble=Large Weed Wood Chest
+container.weedwoodChest=Weedwood Chest
+container.weedwoodChestDouble=Large Weedwood Chest
 container.furnaceBL=Sulfur Furnace
 container.dualFurnaceBL=Dual Sulfur Furnace

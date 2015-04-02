@@ -3,6 +3,8 @@ package thebetweenlands.utils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
@@ -14,20 +16,22 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelConverter {
+	//Holds the rotation matrix
 	private static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
 
-	public static class vec3 {
-		public double x, y, z;
-		public vec3(double x, double y, double z) {
+	//The field of ModelBox#quadList
+	private static Field f_mbQuadList = null;
+
+	public static class Vec3 {
+		public double x, y, z, u, v;
+		public Vec3(double x, double y, double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
+			this.u = 0.0D;
+			this.v = 0.0D;
 		}
-	}
-
-	public static class vec3UV {
-		public double x, y, z, u, v;
-		public vec3UV(double x, double y, double z, double u, double v) {
+		public Vec3(double x, double y, double z, double u, double v) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -37,51 +41,179 @@ public class ModelConverter {
 	}
 
 	public static class RotationMatrix {
-		private float alpha;
-		private float beta;
-		private float gamma;
-		private float matrix[];
+		private float matrix[] = new float[9];
 
+		private float rotG;
+		private float rotB;
+		private float rotA;
+
+		/**
+		 * Sets the matrix rotations.
+		 * @param rotG		Rotation gamma (pitch)
+		 * @param rotB		Rotation beta (yaw)
+		 * @param rotA		Rotation alpha (roll)
+		 */
 		public void setRotations(float rotG, float rotB, float rotA) {
-			this.alpha = rotA;
-			this.beta = rotB;
-			this.gamma = rotG;
-			float sinAlpha = (float)Math.sin(this.alpha);
-			float sinBeta = (float)Math.sin(this.beta);
-			float sinGamma = (float)Math.sin(this.gamma);
-			float cosAlpha = (float)Math.cos(this.alpha);
-			float cosBeta = (float)Math.cos(this.beta);
-			float cosGamma = (float)Math.cos(this.gamma);
-			this.matrix = new float[] { cosAlpha * cosBeta, (cosAlpha * sinBeta * sinGamma) - (sinAlpha * cosGamma), (cosAlpha * sinBeta * cosGamma) + (sinAlpha * sinGamma),
-					sinAlpha * cosBeta, (sinAlpha * sinBeta * sinGamma) + (cosAlpha * cosGamma), (sinAlpha * sinBeta * cosGamma) - (cosAlpha * sinGamma),
-					-sinBeta,  cosBeta * sinGamma, cosBeta * cosGamma};
+			if(this.rotA == rotA && this.rotB == rotB && this.rotG == rotG) {
+				return;
+			}
+			this.rotA = rotA;
+			this.rotB = rotB;
+			this.rotG = rotG;
+			float sinAlpha = (float)Math.sin(rotA);
+			float sinBeta = (float)Math.sin(rotB);
+			float sinGamma = (float)Math.sin(rotG);
+			float cosAlpha = (float)Math.cos(rotA);
+			float cosBeta = (float)Math.cos(rotB);
+			float cosGamma = (float)Math.cos(rotG);
+			this.matrix[0] = cosAlpha * cosBeta;
+			this.matrix[1] = (cosAlpha * sinBeta * sinGamma) - (sinAlpha * cosGamma); 
+			this.matrix[2] = (cosAlpha * sinBeta * cosGamma) + (sinAlpha * sinGamma);
+			this.matrix[3] = sinAlpha * cosBeta;
+			this.matrix[4] = (sinAlpha * sinBeta * sinGamma) + (cosAlpha * cosGamma);
+			this.matrix[5] = (sinAlpha * sinBeta * cosGamma) - (cosAlpha * sinGamma);
+			this.matrix[6] = -sinBeta;
+			this.matrix[7] = cosBeta * sinGamma;
+			this.matrix[8] = cosBeta * cosGamma;
 		}
 
-		public vec3 transformVec(vec3 rotpoint, vec3 centerpoint) {
-			vec3 result = new vec3(0, 0, 0);
+		/**
+		 * Transforms/Rotates the given point around the given center and returns the result.
+		 * @param point			Point to rotate
+		 * @param centerPoint	Rotation center
+		 * @return
+		 */
+		public Vec3 transformVec(Vec3 point, Vec3 centerPoint) {
+			double px = point.x - centerPoint.x;
+			double py = point.y - centerPoint.y;
+			double pz = point.z - centerPoint.z;
 
-			double px = rotpoint.x - centerpoint.x;
-			double py = rotpoint.y - centerpoint.y;
-			double pz = rotpoint.z - centerpoint.z;
+			Vec3 result = new Vec3(0, 0, 0);
 
-			result.x = this.matrix[0]*px + this.matrix[1]*py + this.matrix[2]*pz;
-			result.y = this.matrix[3]*px + this.matrix[4]*py + this.matrix[5]*pz;
-			result.z = this.matrix[6]*px + this.matrix[7]*py + this.matrix[8]*pz;
+			result.x = this.matrix[0] * px + this.matrix[1] * py + this.matrix[2] * pz;
+			result.y = this.matrix[3] * px + this.matrix[4] * py + this.matrix[5] * pz;
+			result.z = this.matrix[6] * px + this.matrix[7] * py + this.matrix[8] * pz;
 
-			result.x += centerpoint.x;
-			result.y += centerpoint.y;
-			result.z += centerpoint.z;
+			result.x += centerPoint.x;
+			result.y += centerPoint.y;
+			result.z += centerPoint.z;
 
 			return result;
 		}
 	}
 
-	private vec3 getBoxCorner(boolean xb, boolean yb, boolean zb, ModelBox modelBox, ModelRenderer modelRenderer, double modelScale, RotationMatrix rm) {
-		double posX = (!xb ? modelBox.posX1 : modelBox.posX2) + modelRenderer.offsetX;
-		double posY = (!yb ? modelBox.posY1 : modelBox.posY2) + modelRenderer.offsetY;
-		double posZ = (!zb ? modelBox.posZ1 : modelBox.posZ2) + modelRenderer.offsetZ;
-		vec3 scaledPos = new vec3(posX * modelScale, posY * modelScale, posZ * modelScale);
-		vec3 scaledRotPos = new vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
+	public static class TextureMap {
+		private final double umin, vmin, umax, vmax;
+		private final int width, height;
+
+		/**
+		 * Creates a new TextureMap. Uses the default UVs of (0.0|0.0) and (1.0|1.0)
+		 * @param width			Width of the texture (pixels)
+		 * @param height		Height of the texture (pixels)
+		 */
+		public TextureMap(int width, int height) {
+			this.width = width;
+			this.height = height;
+			this.umin = 0.0D;
+			this.vmin = 0.0D;
+			this.umax = 1.0D;
+			this.vmax = 1.0D;
+		}
+
+		/**
+		 * Creates a new TextureMap. Uses the UVs of the given minecraft IIcon
+		 * @param width			Width of the texture (pixels)
+		 * @param height		Height of the texture (pixels)
+		 * @param icon			Minecraft IIcon
+		 */
+		public TextureMap(int width, int height, IIcon icon) {
+			this.width = width;
+			this.height = height;
+			this.umin = icon.getMinU();
+			this.vmin = icon.getMinV();
+			this.umax = icon.getMaxU();
+			this.vmax = icon.getMaxV();
+		}
+
+		/**
+		 * Creates a new TextureMap.
+		 * @param width			Width of the texture (pixels)
+		 * @param height		Height of the texture (pixels)
+		 * @param umin			Min. U
+		 * @param vmin			Min. V
+		 * @param umax			Max. U
+		 * @param vmax			Max. V
+		 */
+		public TextureMap(int width, int height, double umin, double vmin, double umax, double vmax) {
+			this.width = width;
+			this.height = height;
+			this.umin = umin;
+			this.vmin = vmin;
+			this.umax = umax;
+			this.vmax = vmax;
+		}
+	}
+
+	//Holds a list of vertices and UVs of this model
+	private final ArrayList<Vec3> modelVertexList = new ArrayList<Vec3>();
+
+	//Holds the parent component of each ModelRenderer of this model
+	private final Map<ModelRenderer, ModelRenderer> childOfMap = new HashMap<ModelRenderer, ModelRenderer>();
+
+	//Holds a list of all parent components and sub-parent components of each ModelRenderer of this model
+	private final Map<ModelRenderer, List<ModelRenderer>> parentMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
+
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param model					The model
+	 * @param scale					Scale of the model (usually 0.065)
+	 * @param textureMap			TextureMap that holds the UVs and texture width/height
+	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
+	 */
+	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace) {
+		this.constructModel(model, scale, textureMap, renderDoubleFace);
+		this.rotate(0, -180, new Vec3(0, 0, 0));
+	}
+
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param model					The model
+	 * @param scale					Scale of the model (usually 0.065)
+	 * @param textureMap			TextureMap that holds the UVs and texture width/height
+	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
+	 * @param rotationYaw			Rotation yaw
+	 * @param rotationPitch			Rotation pitch
+	 */
+	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationYaw, float rotationPitch) {
+		this.constructModel(model, scale, textureMap, renderDoubleFace);
+		this.rotate(-rotationYaw, -(rotationPitch + 180), new Vec3(0, 0, 0));
+	}
+
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param model					The model
+	 * @param scale					Scale of the model (usually 0.065)
+	 * @param textureMap			TextureMap that holds the UVs and texture width/height
+	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
+	 * @param rotationYaw			Rotation yaw
+	 * @param rotationPitch			Rotation pitch
+	 * @param rotaitonCenter		Center of the rotation
+	 */
+	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationYaw, float rotationPitch, Vec3 rotationCenter) {
+		this.constructModel(model, scale, textureMap, renderDoubleFace);
+		this.rotate(-rotationYaw, -(rotationPitch + 180), rotationCenter);
+	}
+
+	/**
+	 * Transforms the given Vec3 with the given scale and ModelRenderer rotations.
+	 * @param scaledPos			Scaled vertex position
+	 * @param modelRenderer		Minecraft ModelRenderer
+	 * @param rotationMatrix	Rotation matrix
+	 * @param modelScale		Scale of the model (usually 0.065)
+	 * @return
+	 */
+	private Vec3 transformPosition(Vec3 scaledPos, ModelRenderer modelRenderer, RotationMatrix rotationMatrix, double modelScale) {
+		Vec3 scaledRotPos = new Vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
 
 		//Dirty fix to prevent some bugs when rotation == 0
 		if(modelRenderer.rotateAngleX == 0.0F && modelRenderer.rotateAngleY == 0.0F && modelRenderer.rotateAngleZ == 0.0F) {
@@ -89,137 +221,107 @@ public class ModelConverter {
 			modelRenderer.rotateAngleY = 0.0001F;
 			modelRenderer.rotateAngleZ = 0.0001F;
 		}
-		
+
 		//Offset to rotation point
 		scaledPos.x += scaledRotPos.x;
 		scaledPos.y += scaledRotPos.y;
 		scaledPos.z += scaledRotPos.z;
 
 		//Apply own rotation and transformation
-		rm.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
-		scaledPos = rm.transformVec(scaledPos, scaledRotPos);
+		rotationMatrix.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
+		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
+
+		return scaledPos;
+	}
+
+	/**
+	 * Returns a corner of the box of the given ModelRenderer.
+	 * @param xb				True for X + width
+	 * @param yb				True for Y + height
+	 * @param zb				True for Z + depth
+	 * @param modelBox			Minecraft ModelBox
+	 * @param modelRenderer		Minecraft ModelRenderer
+	 * @param modelScale		Scale of the model (usually 0.065)
+	 * @param rotationMatrix	Rotation matrix
+	 * @return
+	 */
+	private Vec3 getBoxCorner(boolean xb, boolean yb, boolean zb, ModelBox modelBox, ModelRenderer modelRenderer, double modelScale, RotationMatrix rotationMatrix) {
+		double posX = (!xb ? modelBox.posX1 : modelBox.posX2) + modelRenderer.offsetX;
+		double posY = (!yb ? modelBox.posY1 : modelBox.posY2) + modelRenderer.offsetY;
+		double posZ = (!zb ? modelBox.posZ1 : modelBox.posZ2) + modelRenderer.offsetZ;
+		Vec3 scaledPos = new Vec3(posX * modelScale, posY * modelScale, posZ * modelScale);
+		Vec3 scaledRotPos = new Vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
+
+		//Dirty fix to prevent some bugs when rotation == 0
+		if(modelRenderer.rotateAngleX == 0.0F && modelRenderer.rotateAngleY == 0.0F && modelRenderer.rotateAngleZ == 0.0F) {
+			modelRenderer.rotateAngleX = 0.0001F;
+			modelRenderer.rotateAngleY = 0.0001F;
+			modelRenderer.rotateAngleZ = 0.0001F;
+		}
+
+		//Offset to rotation point
+		scaledPos.x += scaledRotPos.x;
+		scaledPos.y += scaledRotPos.y;
+		scaledPos.z += scaledRotPos.z;
+
+		//Apply own rotation and transformation
+		rotationMatrix.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
+		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
 
 		//Simulate parent rotation and transformation
-		ArrayList<ModelRenderer> parents = this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer);
-		if(parents.size() > 0) {
+		List<ModelRenderer> parents = this.parentMap.get(modelRenderer);
+		if(parents != null && parents.size() > 0) {
 			for(ModelRenderer parent : parents) {
 				scaledPos = this.transformPosition(scaledPos, parent, ROTATION_MATRIX, modelScale);
 			}
 		}
-		
-		//Rotate upside down + pitch
-		rm.setRotations((float)Math.toRadians(-180 - this.rotationPitch), 0, 0);
-		scaledPos = rm.transformVec(scaledPos, new vec3(0, 0, 0));
-		
-		//Rotate yaw
-		rm.setRotations(0, (float)Math.toRadians(-this.rotationYaw), 0);
-		return rm.transformVec(scaledPos, new vec3(0, 0, 0));
-	}
-	
-	private vec3 transformPosition(vec3 scaledPos, ModelRenderer modelRenderer, RotationMatrix rm, double modelScale) {
-		vec3 scaledRotPos = new vec3(modelRenderer.rotationPointX * modelScale, modelRenderer.rotationPointY * modelScale, modelRenderer.rotationPointZ * modelScale);
 
-		//Dirty fix to prevent some bugs when rotation == 0
-		if(modelRenderer.rotateAngleX == 0.0F && modelRenderer.rotateAngleY == 0.0F && modelRenderer.rotateAngleZ == 0.0F) {
-			modelRenderer.rotateAngleX = 0.0001F;
-			modelRenderer.rotateAngleY = 0.0001F;
-			modelRenderer.rotateAngleZ = 0.0001F;
-		}
-		
-		//Offset to rotation point
-		scaledPos.x += scaledRotPos.x;
-		scaledPos.y += scaledRotPos.y;
-		scaledPos.z += scaledRotPos.z;
-
-		//Apply own rotation and transformation
-		rm.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
-		scaledPos = rm.transformVec(scaledPos, scaledRotPos);
-		
 		return scaledPos;
 	}
 
-	private final float rotationYaw;
-	private final float rotationPitch;
-	
-	//Holds a list of vertices and UVs of this model
-	private final ArrayList<vec3UV> modelQuadList = new ArrayList<vec3UV>();
-	
-	//Holds the parents for each ModelRenderer of this model
-	private final HashMap<ModelRenderer, ModelRenderer> childOfMap = new HashMap<ModelRenderer, ModelRenderer>();
-
 	/**
-	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices.
-	 * @param model
-	 * @param scale
-	 * @param textureWidth
-	 * @param textureHeight
-	 * @param texture
-	 * @param renderDoubleFace
+	 * Reconstructs a list of vertices and UVs with the given data.
+	 * @param modelBase				The model
+	 * @param modelScale			Scale of the model (usually 0.065)
+	 * @param textureMap			TextureMap that holds the UVs and texture width/height
+	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 */
-	public ModelConverter(ModelBase model, double scale, double textureWidth, double textureHeight, IIcon texture, boolean renderDoubleFace) {
-		this.rotationYaw = 0.0F;
-		this.rotationPitch = 0.0F;
-		this.constructModel(model, scale, textureWidth, textureHeight, texture, renderDoubleFace);
-	}
-	
-	/**
-	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices.
-	 * @param model
-	 * @param scale
-	 * @param textureWidth
-	 * @param textureHeight
-	 * @param texture
-	 * @param renderDoubleFace
-	 * @param rotationYaw
-	 * @param rotationPitch
-	 */
-	public ModelConverter(ModelBase model, double scale, double textureWidth, double textureHeight, IIcon texture, boolean renderDoubleFace, float rotationYaw, float rotationPitch) {
-		this.rotationYaw = rotationYaw;
-		this.rotationPitch = rotationPitch;
-		this.constructModel(model, scale, textureWidth, textureHeight, texture, renderDoubleFace);
-	}
-
-	/**
-	 * Reconstructs the model vertices from the given data
-	 * @param modelBase
-	 * @param modelScale
-	 * @param actualWidth
-	 * @param actualHeight
-	 * @param texture
-	 * @param renderDoubleFace
-	 */
-	private void constructModel(ModelBase modelBase, double modelScale, double actualWidth, double actualHeight, IIcon texture, boolean renderDoubleFace) {
+	private void constructModel(ModelBase modelBase, double modelScale, TextureMap textureMap, boolean renderDoubleFace) {
 		//Model texture width/height
 		double modelWidth = modelBase.textureWidth;
 		double modelHeight = modelBase.textureHeight;
 
-		for(Object obj1 : modelBase.boxList) {
-			ModelRenderer modelRenderer = (ModelRenderer) obj1;
+		//Create child map
+		for(ModelRenderer modelRenderer : (List<ModelRenderer>) modelBase.boxList) {
 			if(modelRenderer.childModels != null) {
-				for(Object obj2 : modelRenderer.childModels) {
-					ModelRenderer childModelRenderer = (ModelRenderer) obj2;
+				for(ModelRenderer childModelRenderer : (List<ModelRenderer>) modelRenderer.childModels) {
 					this.childOfMap.put(childModelRenderer, modelRenderer);
 				}
 			}
 		}
-		
-		for(Object obj1 : modelBase.boxList) {
-			ModelRenderer modelRenderer = (ModelRenderer) obj1;
-			for(Object obj2 : modelRenderer.cubeList) {
-				ModelBox modelBox = (ModelBox) obj2;
 
+		//Create parent map
+		for(ModelRenderer modelRenderer : (List<ModelRenderer>) modelBase.boxList) {
+			this.parentMap.put(modelRenderer, this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer));
+		}
+
+		//Iterate through ModelRenderers and boxes in the ModelBase
+		for(ModelRenderer modelRenderer : (List<ModelRenderer>) modelBase.boxList) {
+			for(ModelBox modelBox : (List<ModelBox>) modelRenderer.cubeList) {
 				//ModelBox transformed vertices
-				vec3 o = this.getBoxCorner(false, false, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 ox = this.getBoxCorner(true, false, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oy = this.getBoxCorner(false, true, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oz = this.getBoxCorner(false, false, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oxy = this.getBoxCorner(true, true, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oyz = this.getBoxCorner(false, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oxz = this.getBoxCorner(true, false, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
-				vec3 oxyz = this.getBoxCorner(true, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 o = this.getBoxCorner(false, false, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 ox = this.getBoxCorner(true, false, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oy = this.getBoxCorner(false, true, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oz = this.getBoxCorner(false, false, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oxy = this.getBoxCorner(true, true, false, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oyz = this.getBoxCorner(false, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oxz = this.getBoxCorner(true, false, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
+				Vec3 oxyz = this.getBoxCorner(true, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
 
 				//ModelBox quad list
-				Field f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i");
+				if(f_mbQuadList == null) {
+					f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i");
+				}
 				TexturedQuad[] mbQuadList = null;
 				try {
 					mbQuadList = (TexturedQuad[]) f_mbQuadList.get(modelBox);
@@ -235,150 +337,138 @@ public class ModelConverter {
 				PositionTextureVertex[] mbVertices5 = mbQuadList[4].vertexPositions;
 				PositionTextureVertex[] mbVertices6 = mbQuadList[5].vertexPositions;
 
-				double umin = texture.getMinU();
-				double vmin = texture.getMinV();
-				double umax = texture.getMaxU();
-				double vmax = texture.getMaxV();
-				double uvWidth = (umax - umin) * modelWidth / actualWidth;
-				double uvHeight = (vmax - vmin) * modelHeight / actualHeight;
+				//IIcon UVs
+				double umin = textureMap.umin;
+				double vmin = textureMap.vmin;
+				double umax = textureMap.umax;
+				double vmax = textureMap.vmax;
+				double uvWidth = (umax - umin) * modelWidth / textureMap.width;
+				double uvHeight = (vmax - vmin) * modelHeight / textureMap.height;
 
-				double u11 = umin + mbVertices5[0].texturePositionX * uvWidth;
-				double v11 = vmin + mbVertices5[0].texturePositionY * uvHeight;
-				double u14 = umin + mbVertices5[1].texturePositionX * uvWidth;
-				double v14 = vmin + mbVertices5[1].texturePositionY * uvHeight;
-				double u13 = umin + mbVertices5[2].texturePositionX * uvWidth;
-				double v13 = vmin + mbVertices5[2].texturePositionY * uvHeight;
-				double u12 = umin + mbVertices5[3].texturePositionX * uvWidth;
-				double v12 = vmin + mbVertices5[3].texturePositionY * uvHeight;
-
-				double u23 = umin + mbVertices6[0].texturePositionX * uvWidth;
-				double v23 = vmin + mbVertices6[0].texturePositionY * uvHeight;
-				double u24 = umin + mbVertices6[1].texturePositionX * uvWidth;
-				double v24 = vmin + mbVertices6[1].texturePositionY * uvHeight;
-				double u21 = umin + mbVertices6[2].texturePositionX * uvWidth;
-				double v21 = vmin + mbVertices6[2].texturePositionY * uvHeight;
-				double u22 = umin + mbVertices6[3].texturePositionX * uvWidth;
-				double v22 = vmin + mbVertices6[3].texturePositionY * uvHeight;
-
-				double u31 = umin + mbVertices4[0].texturePositionX * uvWidth;
-				double v31 = vmin + mbVertices4[0].texturePositionY * uvHeight;
-				double u34 = umin + mbVertices4[1].texturePositionX * uvWidth;
-				double v34 = vmin + mbVertices4[1].texturePositionY * uvHeight;
-				double u33 = umin + mbVertices4[2].texturePositionX * uvWidth;
-				double v33 = vmin + mbVertices4[2].texturePositionY * uvHeight;
-				double u32 = umin + mbVertices4[3].texturePositionX * uvWidth;
-				double v32 = vmin + mbVertices4[3].texturePositionY * uvHeight;
-
-				double u43 = umin + mbVertices3[0].texturePositionX * uvWidth;
-				double v43 = vmin + mbVertices3[0].texturePositionY * uvHeight;
-				double u44 = umin + mbVertices3[1].texturePositionX * uvWidth;
-				double v44 = vmin + mbVertices3[1].texturePositionY * uvHeight;
-				double u41 = umin + mbVertices3[2].texturePositionX * uvWidth;
-				double v41 = vmin + mbVertices3[2].texturePositionY * uvHeight;
-				double u42 = umin + mbVertices3[3].texturePositionX * uvWidth;
-				double v42 = vmin + mbVertices3[3].texturePositionY * uvHeight;
-
-				double u54 = umin + mbVertices1[0].texturePositionX * uvWidth;
-				double v54 = vmin + mbVertices1[0].texturePositionY * uvHeight;
-				double u51 = umin + mbVertices1[1].texturePositionX * uvWidth;
-				double v51 = vmin + mbVertices1[1].texturePositionY * uvHeight;
-				double u52 = umin + mbVertices1[2].texturePositionX * uvWidth;
-				double v52 = vmin + mbVertices1[2].texturePositionY * uvHeight;
-				double u53 = umin + mbVertices1[3].texturePositionX * uvWidth;
-				double v53 = vmin + mbVertices1[3].texturePositionY * uvHeight;
-
-				double u61 = umin + mbVertices2[0].texturePositionX * uvWidth;
-				double v61 = vmin + mbVertices2[0].texturePositionY * uvHeight;
-				double u62 = umin + mbVertices2[1].texturePositionX * uvWidth;
-				double v62 = vmin + mbVertices2[1].texturePositionY * uvHeight;
-				double u63 = umin + mbVertices2[2].texturePositionX * uvWidth;
-				double v63 = vmin + mbVertices2[2].texturePositionY * uvHeight;
-				double u64 = umin + mbVertices2[3].texturePositionX * uvWidth;
-				double v64 = vmin + mbVertices2[3].texturePositionY * uvHeight;
-
-				//1
-				this.addVertexWithUV(o, u11, v11);
-				this.addVertexWithUV(oy, u12, v12);
-				this.addVertexWithUV(oxy, u13, v13);
-				this.addVertexWithUV(ox, u14, v14);
+				//Face 1
+				this.addVertexWithUV(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, u11, v11);
-					this.addVertexWithUV(ox, u14, v14);
-					this.addVertexWithUV(oxy, u13, v13);
-					this.addVertexWithUV(oy, u12, v12);
+					this.addVertexWithUV(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight);
 				}
 
-				//2
-				this.addVertexWithUV(oz, u21, v21);
-				this.addVertexWithUV(oxz, u22, v22);
-				this.addVertexWithUV(oxyz, u23, v23);
-				this.addVertexWithUV(oyz, u24, v24);
+				//Face 2
+				this.addVertexWithUV(oz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxyz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oyz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(oz, u21, v21);
-					this.addVertexWithUV(oyz, u24, v24);
-					this.addVertexWithUV(oxyz, u23, v23);
-					this.addVertexWithUV(oxz, u22, v22);
+					this.addVertexWithUV(oz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oyz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxyz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
 				}
 
-				//3
-				this.addVertexWithUV(oy, u31, v31);
-				this.addVertexWithUV(oyz, u32, v32);
-				this.addVertexWithUV(oxyz, u33, v33);
-				this.addVertexWithUV(oxy, u34, v34);
+				//Face 3
+				this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(oy, u31, v31);
-					this.addVertexWithUV(oxy, u34, v34);
-					this.addVertexWithUV(oxyz, u33, v33);
-					this.addVertexWithUV(oyz, u32, v32);
+					this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
 				}
 
-				//4
-				this.addVertexWithUV(o, u41, v41);
-				this.addVertexWithUV(ox, u42, v42);
-				this.addVertexWithUV(oxz, u43, v43);
-				this.addVertexWithUV(oz, u44, v44);
+				//Face 4
+				this.addVertexWithUV(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, u41, v41);
-					this.addVertexWithUV(oz, u44, v44);
-					this.addVertexWithUV(oxz, u43, v43);
-					this.addVertexWithUV(ox, u42, v42);
+					this.addVertexWithUV(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight);
 				}
 
-				//5
-				this.addVertexWithUV(ox, u51, v51);
-				this.addVertexWithUV(oxy, u52, v52);
-				this.addVertexWithUV(oxyz, u53, v53);
-				this.addVertexWithUV(oxz, u54, v54);
+				//Face 5
+				this.addVertexWithUV(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(ox, u51, v51);
-					this.addVertexWithUV(oxz, u54, v54);
-					this.addVertexWithUV(oxyz, u53, v53);
-					this.addVertexWithUV(oxy, u52, v52);
+					this.addVertexWithUV(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight);
 				}
 
-				//6
-				this.addVertexWithUV(o, u61, v61);
-				this.addVertexWithUV(oz, u62, v62);
-				this.addVertexWithUV(oyz, u63, v63);
-				this.addVertexWithUV(oy, u64, v64);
+				//Face 6
+				this.addVertexWithUV(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight);
+				this.addVertexWithUV(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, u61, v61);
-					this.addVertexWithUV(oy, u64, v64);
-					this.addVertexWithUV(oyz, u63, v63);
-					this.addVertexWithUV(oz, u62, v62);
+					this.addVertexWithUV(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight);
+					this.addVertexWithUV(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight);
 				}
 			}
 		}
 	}
 
 	/**
-	 * Recursively returns a list of all parents and subparents of the given ModelRenderer.
-	 * Used to simulate previous rotations and transformations.
-	 * @param parentList
-	 * @param modelRenderer
+	 * Rotates the model vertices.
+	 * @param yaw		Rotation yaw
+	 * @param pitch		Rotation pitch
+	 * @param center	Rotation center
 	 * @return
 	 */
-	private ArrayList<ModelRenderer> getParentList(ArrayList<ModelRenderer> parentList, ModelRenderer modelRenderer) {
+	public ModelConverter rotate(float yaw, float pitch, Vec3 center) {
+		ROTATION_MATRIX.setRotations((float)Math.toRadians(-pitch), 0, 0);
+		for(Vec3 vec : this.modelVertexList) {
+			Vec3 rotatedPoint = null;
+			rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
+			vec.x = rotatedPoint.x;
+			vec.y = rotatedPoint.y;
+			vec.z = rotatedPoint.z;
+		}
+		ROTATION_MATRIX.setRotations(0, (float)Math.toRadians(-yaw), 0);
+		for(Vec3 vec : this.modelVertexList) {
+			Vec3 rotatedPoint = null;
+			rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
+			vec.x = rotatedPoint.x;
+			vec.y = rotatedPoint.y;
+			vec.z = rotatedPoint.z;
+		}
+		return this;
+	}
+
+	/**
+	 * Offsets the model vertices.
+	 * @param offset	Offset
+	 * @return
+	 */
+	public ModelConverter offset(Vec3 offset) {
+		for(Vec3 vec : this.modelVertexList) {
+			vec.x += offset.x;
+			vec.y += offset.y;
+			vec.z += offset.z;
+		}
+		return this;
+	}
+
+	/**
+	 * Recursively returns a list of all parents and sub-parents of the given ModelRenderer.
+	 * Used to simulate previous rotations and transformations.
+	 * @param parentList		List to be populated with parents
+	 * @param modelRenderer		Minecraft ModelRenderer
+	 * @return
+	 */
+	private List<ModelRenderer> getParentList(List<ModelRenderer> parentList, ModelRenderer modelRenderer) {
 		if(this.childOfMap.containsKey(modelRenderer)) {
 			ModelRenderer parent = this.childOfMap.get(modelRenderer);
 			parentList.add(parent);
@@ -386,31 +476,32 @@ public class ModelConverter {
 		}
 		return parentList;
 	}
-	
+
 	/**
-	 * Adds a vertex + UV to the model quad list
-	 * @param vert
-	 * @param u
-	 * @param v
+	 * Adds a vertex + UV to the model vertex list.
+	 * @param vert		The vertex position
+	 * @param u			Texture X coordinate
+	 * @param v			Texture Y coordinate
 	 */
-	private void addVertexWithUV(vec3 vert, double u, double v) {
-		this.modelQuadList.add(new vec3UV(vert.x, vert.y, vert.z, u, v));
+	private void addVertexWithUV(Vec3 vert, double u, double v) {
+		this.modelVertexList.add(new Vec3(vert.x, vert.y, vert.z, u, v));
 	}
 
 	/**
-	 * Returns the list of the reconstructed vertices + UVs of this model
+	 * Returns the list of the reconstructed vertices + UVs of this model.
 	 * @return
 	 */
-	public ArrayList<vec3UV> getVertices() {
-		return this.modelQuadList;
+	public List<Vec3> getVertices() {
+		return this.modelVertexList;
 	}
 
 	/**
-	 * Renders the model quads with the tessellator. Tessellator must already be drawing
+	 * Renders the model with the given tessellator. 
+	 * The tessellator must already be drawing.
 	 * @param tessellator
 	 */
 	public void renderWithTessellator(Tessellator tessellator) {
-		for(vec3UV vert : this.modelQuadList) {
+		for(Vec3 vert : this.modelVertexList) {
 			tessellator.addVertexWithUV(vert.x, vert.y, vert.z, vert.u, vert.v);
 		}
 	}
