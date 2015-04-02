@@ -108,8 +108,9 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 					0.065D,
 					new TextureMap(64, 64, modelTexture),
 					true, 
-					rnd.nextFloat() * 180, 
-					rnd.nextFloat() * 40 - 20);
+					rnd.nextFloat() * 40 - 20, 
+					rnd.nextFloat() * 180,
+					0.0F);
 			worldModel.renderWithTessellator(Tessellator.instance);
 		} else {
 			if(rnd.nextInt(20) <= 10) {
@@ -124,8 +125,9 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 					0.065D,
 					new TextureMap(64, 64, modelTexture),
 					true, 
-					rnd.nextFloat() * 180, 
-					rnd.nextFloat() * 40 - 20);
+					rnd.nextFloat() * 40 - 20, 
+					rnd.nextFloat() * 180,
+					0.0F);
 
 			worldModel.renderWithTessellator(Tessellator.instance);
 		}

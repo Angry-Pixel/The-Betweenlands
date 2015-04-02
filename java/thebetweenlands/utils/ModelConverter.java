@@ -38,6 +38,13 @@ public class ModelConverter {
 			this.u = u;
 			this.v = v;
 		}
+		public Vec3 cross(Vec3 vec) {
+			Vec3 crossProduct = new Vec3(0, 0, 0);
+			crossProduct.x = this.y * vec.z - vec.y * this.z;
+			crossProduct.y = this.z * vec.x - vec.z * this.x;
+			crossProduct.z = this.x * vec.y - vec.x * this.y;
+			return crossProduct;
+		}
 	}
 
 	public static class RotationMatrix {
@@ -163,6 +170,9 @@ public class ModelConverter {
 	//Holds a list of all parent components and sub-parent components of each ModelRenderer of this model
 	private final Map<ModelRenderer, List<ModelRenderer>> parentMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
 
+	private final Vec3 fwdVec = new Vec3(0, 0, 1);
+	private final Vec3 upVec = new Vec3(0, -1, 0);
+
 	/**
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
 	 * @param model					The model
@@ -172,7 +182,7 @@ public class ModelConverter {
 	 */
 	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace) {
 		this.constructModel(model, scale, textureMap, renderDoubleFace);
-		this.rotate(0, -180, new Vec3(0, 0, 0));
+		this.rotate(1.0F, 180.0F, 0.0F, 0.0F, new Vec3(0, 0, 0));
 	}
 
 	/**
@@ -181,12 +191,13 @@ public class ModelConverter {
 	 * @param scale					Scale of the model (usually 0.065)
 	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
-	 * @param rotationYaw			Rotation yaw
-	 * @param rotationPitch			Rotation pitch
+	 * @param rotationX				Rotation around X axis (degrees)
+	 * @param rotationY				Rotation around Y axis (degrees)
+	 * @param rotationZ				Rotation around Z axis (degrees)
 	 */
-	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationYaw, float rotationPitch) {
+	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
 		this.constructModel(model, scale, textureMap, renderDoubleFace);
-		this.rotate(-rotationYaw, -(rotationPitch + 180), new Vec3(0, 0, 0));
+		this.rotate(1.0F, rotationX + 180.0F, rotationY, rotationZ, new Vec3(0, 0, 0));
 	}
 
 	/**
@@ -195,13 +206,14 @@ public class ModelConverter {
 	 * @param scale					Scale of the model (usually 0.065)
 	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
-	 * @param rotationYaw			Rotation yaw
-	 * @param rotationPitch			Rotation pitch
+	 * @param rotationX				Rotation around X axis (degrees)
+	 * @param rotationY				Rotation around Y axis (degrees)
+	 * @param rotationZ				Rotation around Z axis (degrees)
 	 * @param rotaitonCenter		Center of the rotation
 	 */
-	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationYaw, float rotationPitch, Vec3 rotationCenter) {
+	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3 rotationCenter) {
 		this.constructModel(model, scale, textureMap, renderDoubleFace);
-		this.rotate(-rotationYaw, -(rotationPitch + 180), rotationCenter);
+		this.rotate(1.0F, rotationX + 180.0F, rotationY, rotationZ, rotationCenter);
 	}
 
 	/**
@@ -422,13 +434,15 @@ public class ModelConverter {
 
 	/**
 	 * Rotates the model vertices.
-	 * @param yaw		Rotation yaw
-	 * @param pitch		Rotation pitch
-	 * @param center	Rotation center
+	 * @param rotation		Rotation (degrees)
+	 * @param x				X axis (pitch)
+	 * @param y				Y axis (yaw)
+	 * @param z				Z axis (roll)
+	 * @param center		Rotation center
 	 * @return
 	 */
-	public ModelConverter rotate(float yaw, float pitch, Vec3 center) {
-		ROTATION_MATRIX.setRotations((float)Math.toRadians(-pitch), 0, 0);
+	public ModelConverter rotate(float rotation, float x, float y, float z, Vec3 center) {
+		ROTATION_MATRIX.setRotations((float)Math.toRadians(x * rotation), (float)Math.toRadians(y * rotation), (float)Math.toRadians(z * rotation));
 		for(Vec3 vec : this.modelVertexList) {
 			Vec3 rotatedPoint = null;
 			rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
@@ -436,27 +450,52 @@ public class ModelConverter {
 			vec.y = rotatedPoint.y;
 			vec.z = rotatedPoint.z;
 		}
-		ROTATION_MATRIX.setRotations(0, (float)Math.toRadians(-yaw), 0);
+		Vec3 rotatedFwdVec = ROTATION_MATRIX.transformVec(this.fwdVec, center);
+		this.fwdVec.x = rotatedFwdVec.x;
+		this.fwdVec.y = rotatedFwdVec.y;
+		this.fwdVec.z = rotatedFwdVec.z;
+		Vec3 rotatedUpVec = ROTATION_MATRIX.transformVec(this.upVec, center);
+		this.upVec.x = rotatedUpVec.x;
+		this.upVec.y = rotatedUpVec.y;
+		this.upVec.z = rotatedUpVec.z;
+		return this;
+	}
+
+	/**
+	 * Offsets the model vertices in world space.
+	 * @param offset	Offset
+	 * @return
+	 */
+	public ModelConverter offsetWS(Vec3 offset) {
 		for(Vec3 vec : this.modelVertexList) {
-			Vec3 rotatedPoint = null;
-			rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
-			vec.x = rotatedPoint.x;
-			vec.y = rotatedPoint.y;
-			vec.z = rotatedPoint.z;
+			vec.x += offset.x;
+			vec.y += offset.y;
+			vec.z += offset.z;
 		}
 		return this;
 	}
 
 	/**
-	 * Offsets the model vertices.
-	 * @param offset	Offset
+	 * Offsets the model vertices in model space.
+	 * @param offset
 	 * @return
 	 */
-	public ModelConverter offset(Vec3 offset) {
+	public ModelConverter offsetMS(Vec3 offset) {
+		Vec3 leftVec = this.fwdVec.cross(this.upVec);
 		for(Vec3 vec : this.modelVertexList) {
-			vec.x += offset.x;
-			vec.y += offset.y;
-			vec.z += offset.z;
+			Vec3 offsetVec = new Vec3(0, 0, 0);
+			offsetVec.x += this.upVec.x * offset.y;
+			offsetVec.y += this.upVec.y * offset.y;
+			offsetVec.z += this.upVec.z * offset.y;
+			offsetVec.x += this.fwdVec.x * offset.z;
+			offsetVec.y += this.fwdVec.y * offset.z;
+			offsetVec.z += this.fwdVec.z * offset.z;
+			offsetVec.x += leftVec.x * offset.x;
+			offsetVec.y += leftVec.y * offset.x;
+			offsetVec.z += leftVec.z * offset.x;
+			vec.x += offsetVec.x;
+			vec.y += offsetVec.y;
+			vec.z += offsetVec.z;
 		}
 		return this;
 	}
