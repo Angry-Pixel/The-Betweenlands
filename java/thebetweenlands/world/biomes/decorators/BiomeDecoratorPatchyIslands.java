@@ -17,7 +17,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateNettles(1);
 		helper.generateCattail(2);
 		helper.generateWeepingBlue(2);
-		helper.generateReeds(8);
+		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateFlowerPatch(1.0D);
 	}
