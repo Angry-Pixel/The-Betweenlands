@@ -17,6 +17,7 @@ import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom3;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
+import thebetweenlands.client.model.block.ModelTubePlant;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.TextureMap;
@@ -25,9 +26,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler {
+public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvFlatHead;
 	public static ModelConverter plantModelInvBlackHead;
+	
+	public static ModelConverter plantModelTubePlant;
 
 	public static ModelBlackHatMushroom modelBlackHatMushroom1 = new ModelBlackHatMushroom();
 	public static ModelBlackHatMushroom2 modelBlackHatMushroom2 = new ModelBlackHatMushroom2();
@@ -35,7 +38,9 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 
 	public static ModelFlatHeadMushroom modelFlatHeadMushroom1 = new ModelFlatHeadMushroom();
 	public static ModelFlatHeadMushroom2 modelFlatHeadMushroom2 = new ModelFlatHeadMushroom2();
-
+	
+	public static ModelTubePlant modelTubePlant = new ModelTubePlant();
+	
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
@@ -73,7 +78,18 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 			}
 			plantModelInvFlatHead.renderWithTessellator(Tessellator.instance);
 		}
-
+		
+		if(block == BLBlockRegistry.tubePlant) {
+			if(plantModelTubePlant == null) {
+				plantModelTubePlant = new ModelConverter(
+						new ModelTubePlant(),
+						0.065D,
+						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
+						true);
+			}
+			plantModelTubePlant.renderWithTessellator(Tessellator.instance);
+		}
+		
 		tessellator.draw();
 
 		Tessellator.instance.addTranslation(-0.5F, -1.5F, -0.5F);
@@ -112,7 +128,7 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 					rnd.nextFloat() * 180,
 					0.0F);
 			worldModel.renderWithTessellator(Tessellator.instance);
-		} else {
+		} else if(block == BLBlockRegistry.flatHeadMushroom) {
 			if(rnd.nextInt(20) <= 10) {
 				model = modelFlatHeadMushroom1;
 				modelTexture = BLBlockRegistry.flatHeadMushroom.modelTexture1;
@@ -130,6 +146,15 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 					0.0F);
 
 			worldModel.renderWithTessellator(Tessellator.instance);
+		} else {
+			if(plantModelTubePlant == null) {
+				plantModelTubePlant = new ModelConverter(
+						new ModelTubePlant(),
+						0.065D,
+						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
+						true);
+			}
+			plantModelTubePlant.renderWithTessellator(Tessellator.instance);
 		}
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
@@ -144,6 +169,6 @@ public class BlockModelMushroomRenderer implements ISimpleBlockRenderingHandler 
 
 	@Override
 	public int getRenderId() {
-		return BlockRenderIDs.MODEL_MUSHROOM.id();
+		return BlockRenderIDs.MODEL_PLANT.id();
 	}
 }

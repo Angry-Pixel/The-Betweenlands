@@ -20,7 +20,7 @@ public class BlockBlackHatMushroom extends BlockBLSmallPlants {
 
 	@Override
 	public int getRenderType() {
-		return BlockRenderIDs.MODEL_MUSHROOM.id();
+		return BlockRenderIDs.MODEL_PLANT.id();
 	}
 	
 	@Override

@@ -370,15 +370,15 @@ public class ModelConverter {
 				}
 
 				//Face 2
-				this.addVertexWithUV(oz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxyz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oyz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
+				this.addVertexWithUV(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(oz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oyz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxyz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
+					this.addVertexWithUV(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
 				}
 
 				//Face 3
