@@ -95,7 +95,7 @@ public class EntityDragonFly extends EntityAmbientCreature {
 		if (!isFlying())
 			wingFloat = 0.0F;
 		else
-			wingFloat = mathWings.swing(5.0F, 0.1F);
+			wingFloat = mathWings.swing(5.0F, 0.1F, false);
 
 		if (motionY < 0.0D)
 			motionY *= 0.6D;

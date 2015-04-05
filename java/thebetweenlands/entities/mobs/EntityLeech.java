@@ -110,13 +110,13 @@ public class EntityLeech extends EntityMob {
 			if (getBloodConsumed() > 0)
 				setBloodConsumed(getBloodConsumed() - 1);
 		if (ridingEntity != null) {
-			moveProgress = 1.0F + mathSucking.swing(1.F, 0.15F);
+			moveProgress = 1.0F + mathSucking.swing(1.F, 0.15F, false);
 			if (rand.nextInt(10) == 0)
 				for (int i = 0; i < 8; i++)
 					worldObj.spawnParticle("reddust", posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
 		} else
 			if(!worldObj.isRemote)
-				moveProgress = 0F + mathSucking.swing(1.F, 0.15F);
+				moveProgress = 0F + mathSucking.swing(1.F, 0.15F, false);
 
 		if (ridingEntity != null && ridingEntity instanceof EntityLivingBase && getBloodConsumed() < MAX_BLOOD_LEVEL) {
 			drainage++;

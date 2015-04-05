@@ -17,7 +17,12 @@ public class AnimationMathHelper {
 		h = 1.0F;
 	}
 
-	public float swing(float speed, float max) {
+	public float swing(float speed, float max, boolean reset) {
+		if(reset) {
+			b = 0.0F;
+			c = 0.0F;
+			h = 1.0F;
+		}
 		e = b;
 		d = c;
 		c = (float) ((double) c + 4 * 0.8F);
