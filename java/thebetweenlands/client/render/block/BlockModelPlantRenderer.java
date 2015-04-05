@@ -19,6 +19,7 @@ import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
 import thebetweenlands.client.model.block.ModelRegularPlant;
 import thebetweenlands.client.model.block.ModelTubePlant;
+import thebetweenlands.client.model.block.ModelVenusFlyTrap;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.TextureMap;
@@ -32,6 +33,9 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvFlatHead;
 	public static ModelConverter plantModelInvBlackHead;
 	public static ModelConverter plantModelInvRegularPlant;
+	
+	public static ModelConverter plantModelVenusFlyTrap;
+	public static ModelConverter plantModelVenusFlyTrapBlooming;
 	
 	public static ModelConverter plantModelTubePlant;
 	
@@ -119,6 +123,17 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			plantModelInvRegularPlant.renderWithTessellator(Tessellator.instance);
 		}
 		
+		if(block == BLBlockRegistry.venusFlyTrap) {
+			if(plantModelVenusFlyTrap == null) {
+				plantModelVenusFlyTrap = new ModelConverter(
+						new ModelVenusFlyTrap(),
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.venusFlyTrap.modelTexture),
+						true);
+			}
+			plantModelVenusFlyTrap.renderWithTessellator(Tessellator.instance);
+		}
+		
 		tessellator.draw();
 
 		Tessellator.instance.addTranslation(-0.5F, -1.5F, -0.5F);
@@ -201,6 +216,27 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			plantModelRegularPlant.renderWithTessellator(Tessellator.instance);
 			plantModelRegularPlant.offsetWS(offset.neg());
 			plantModelRegularPlant.rotate(-rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F));
+		} else if(block == BLBlockRegistry.venusFlyTrap) {
+			if(plantModelVenusFlyTrap == null) {
+				plantModelVenusFlyTrap = new ModelConverter(
+						new ModelVenusFlyTrap(),
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.venusFlyTrap.modelTexture),
+						true);
+			}
+			if(plantModelVenusFlyTrapBlooming == null) {
+				plantModelVenusFlyTrapBlooming = new ModelConverter(
+						new ModelVenusFlyTrap(),
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.venusFlyTrap.modelTextureBlooming),
+						true);
+			}
+			int meta = world.getBlockMetadata(x, y, z);
+			if(meta == 0) {
+				plantModelVenusFlyTrap.renderWithTessellator(Tessellator.instance);
+			} else {
+				plantModelVenusFlyTrapBlooming.renderWithTessellator(Tessellator.instance);
+			}
 		}
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
