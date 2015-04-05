@@ -45,6 +45,9 @@ public class ModelConverter {
 			crossProduct.z = this.x * vec.y - vec.x * this.y;
 			return crossProduct;
 		}
+		public Vec3 neg() {
+			return new Vec3(-this.x, -this.y, -this.z);
+		}
 	}
 
 	public static class RotationMatrix {

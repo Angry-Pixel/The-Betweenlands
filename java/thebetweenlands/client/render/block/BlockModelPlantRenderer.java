@@ -17,10 +17,12 @@ import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom3;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
+import thebetweenlands.client.model.block.ModelRegularPlant;
 import thebetweenlands.client.model.block.ModelTubePlant;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.TextureMap;
+import thebetweenlands.utils.ModelConverter.Vec3;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -29,8 +31,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvFlatHead;
 	public static ModelConverter plantModelInvBlackHead;
+	public static ModelConverter plantModelInvRegularPlant;
 	
 	public static ModelConverter plantModelTubePlant;
+	
+	public static ModelConverter plantModelRegularPlant;
 
 	public static ModelBlackHatMushroom modelBlackHatMushroom1 = new ModelBlackHatMushroom();
 	public static ModelBlackHatMushroom2 modelBlackHatMushroom2 = new ModelBlackHatMushroom2();
@@ -38,6 +43,8 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 	public static ModelFlatHeadMushroom modelFlatHeadMushroom1 = new ModelFlatHeadMushroom();
 	public static ModelFlatHeadMushroom2 modelFlatHeadMushroom2 = new ModelFlatHeadMushroom2();
+	
+	public static ModelRegularPlant modelRegularPlant = new ModelRegularPlant();
 	
 	public static ModelTubePlant modelTubePlant = new ModelTubePlant();
 	
@@ -90,6 +97,28 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			plantModelTubePlant.renderWithTessellator(Tessellator.instance);
 		}
 		
+		if(block == BLBlockRegistry.tubePlant) {
+			if(plantModelTubePlant == null) {
+				plantModelTubePlant = new ModelConverter(
+						new ModelTubePlant(),
+						0.065D,
+						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
+						true);
+			}
+			plantModelTubePlant.renderWithTessellator(Tessellator.instance);
+		}
+		
+		if(block == BLBlockRegistry.regularPlant) {
+			if(plantModelInvRegularPlant == null) {
+				plantModelInvRegularPlant = new ModelConverter(
+						new ModelRegularPlant(),
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.regularPlant.modelTexture1),
+						true);
+			}
+			plantModelInvRegularPlant.renderWithTessellator(Tessellator.instance);
+		}
+		
 		tessellator.draw();
 
 		Tessellator.instance.addTranslation(-0.5F, -1.5F, -0.5F);
@@ -101,6 +130,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 
+		Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 		Tessellator.instance.setColorOpaque(255, 255, 255);
 		Tessellator.instance.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
 
@@ -146,7 +176,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 					0.0F);
 
 			worldModel.renderWithTessellator(Tessellator.instance);
-		} else {
+		} else if(block == BLBlockRegistry.tubePlant) {
 			if(plantModelTubePlant == null) {
 				plantModelTubePlant = new ModelConverter(
 						new ModelTubePlant(),
@@ -155,6 +185,22 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			plantModelTubePlant.renderWithTessellator(Tessellator.instance);
+		} else if(block == BLBlockRegistry.regularPlant) {
+			if(plantModelRegularPlant == null) {
+				plantModelRegularPlant = new ModelConverter(
+						new ModelRegularPlant(),
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.regularPlant.modelTexture1),
+						true);
+			}
+			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			float rotYaw = rnd.nextFloat() * 360.0F;
+			//TODO: Not sure if that's better for performance than reloading the model. I'll do some testing later on
+			plantModelRegularPlant.rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F));
+			plantModelRegularPlant.offsetWS(offset);
+			plantModelRegularPlant.renderWithTessellator(Tessellator.instance);
+			plantModelRegularPlant.offsetWS(offset.neg());
+			plantModelRegularPlant.rotate(-rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F));
 		}
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
