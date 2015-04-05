@@ -24,6 +24,7 @@ import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
 import thebetweenlands.blocks.plants.BlockTubePlant;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
+import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
@@ -134,6 +135,7 @@ public class BLBlockRegistry
 	public static final BlockTubePlant tubePlant = new BlockTubePlant();
 	public static final BlockRegularPlant regularPlant = new BlockRegularPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
+	public static final BlockVolarpad volarpad = new BlockVolarpad();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
