@@ -198,7 +198,7 @@ public class ModelSwampHag extends ModelBase {
 		head1.rotateAngleY = rotationYaw / (180F / (float)Math.PI) - 0.045553093477052F;
 		head1.rotateAngleX = rotationPitch / (180F / (float)Math.PI) - 0.8196066167365371F;
 		head1.rotateAngleZ = rotationPitch / (180F / (float)Math.PI)  + 0.045553093477052F;
-		if (hag.getEntityToAttack() != null) { // TODO make this work after some zzzzzzzzzzzz
+		if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
 			armright.rotateAngleX = -((float) Math.PI / 2F);
 			armright.rotateAngleZ = hag.breatheFloat* 0.5F;
 		}
@@ -207,8 +207,8 @@ public class ModelSwampHag extends ModelBase {
 			armright.rotateAngleZ = hag.breatheFloat* 0.5F;
 		}
 
-		legright1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
-		legleft1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAngle;
+		legright1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle -0.18203784098300857F;
+		legleft1.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAngle -0.18203784098300857F;
 		legright1.rotateAngleY = 0.0F;
 		legleft1.rotateAngleY = 0.0F;
 	}

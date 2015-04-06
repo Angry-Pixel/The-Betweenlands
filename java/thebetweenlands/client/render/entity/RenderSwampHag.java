@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -40,6 +39,10 @@ public class RenderSwampHag extends RenderLiving {
 
 		return -1;
 	}
+
+    protected void preRenderCallback(EntityLivingBase entity, float par2) {
+    	GL11.glScalef(0.74F, 0.74F, 0.74F);
+    }
 
 	protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
 		return setSwampHagEyeBrightness((EntitySwampHag) entity, pass, partialTickTime);
