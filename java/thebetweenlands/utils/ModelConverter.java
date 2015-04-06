@@ -243,7 +243,7 @@ public class ModelConverter {
 		scaledPos.z += scaledRotPos.z;
 
 		//Apply own rotation and transformation
-		rotationMatrix.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
+		this.applyRotation(modelRenderer, rotationMatrix);
 		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
 
 		return scaledPos;
@@ -269,9 +269,9 @@ public class ModelConverter {
 
 		//Dirty fix to prevent some bugs when rotation == 0
 		if(modelRenderer.rotateAngleX == 0.0F && modelRenderer.rotateAngleY == 0.0F && modelRenderer.rotateAngleZ == 0.0F) {
-			modelRenderer.rotateAngleX = 0.0001F;
-			modelRenderer.rotateAngleY = 0.0001F;
-			modelRenderer.rotateAngleZ = 0.0001F;
+			modelRenderer.rotateAngleX = 0.0000001F;
+			modelRenderer.rotateAngleY = 0.0000001F;
+			modelRenderer.rotateAngleZ = 0.0000001F;
 		}
 
 		//Offset to rotation point
@@ -280,7 +280,7 @@ public class ModelConverter {
 		scaledPos.z += scaledRotPos.z;
 
 		//Apply own rotation and transformation
-		rotationMatrix.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
+		this.applyRotation(modelRenderer, rotationMatrix);
 		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
 
 		//Simulate parent rotation and transformation
@@ -546,5 +546,14 @@ public class ModelConverter {
 		for(Vec3 vert : this.modelVertexList) {
 			tessellator.addVertexWithUV(vert.x, vert.y, vert.z, vert.u, vert.v);
 		}
+	}
+	
+	/**
+	 * Applies the rotation of the ModelRenderer to the rotation matrix.
+	 * @param modelRenderer			Minecraft ModelRenderer
+	 * @param rotationMatrix		Rotation matrix
+	 */
+	protected void applyRotation(ModelRenderer modelRenderer, RotationMatrix rotationMatrix) {
+		rotationMatrix.setRotations(modelRenderer.rotateAngleX, modelRenderer.rotateAngleY, modelRenderer.rotateAngleZ);
 	}
 }

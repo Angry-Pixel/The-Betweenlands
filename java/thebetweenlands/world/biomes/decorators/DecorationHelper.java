@@ -27,7 +27,7 @@ public class DecorationHelper {
 	private final static WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedWoodBush();
 	private final static WorldGenTallGrass GEN_NETTLE = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final static WorldGenTallGrass GEN_CATTAIL = new WorldGenTallGrass(BLBlockRegistry.catTail, 1);
-	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.volarpad, 1);
 
 	private final Random rand;
 	private final int x, y, z;

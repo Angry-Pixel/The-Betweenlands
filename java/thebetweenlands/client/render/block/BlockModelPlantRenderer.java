@@ -3,6 +3,7 @@ package thebetweenlands.client.render.block;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
@@ -97,17 +98,6 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			if(plantModelInvTubePlant == null) {
 				plantModelInvTubePlant = new ModelConverter(
 						new ModelTubePlant(),
-						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
-						true);
-			}
-			plantModelInvTubePlant.renderWithTessellator(Tessellator.instance);
-		}
-		
-		if(block == BLBlockRegistry.tubePlant) {
-			if(plantModelInvTubePlant == null) {
-				plantModelInvTubePlant = new ModelConverter(
-						new ModelTubePlant(),
 						0.065D / 1.5D,
 						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
 						true);
@@ -143,7 +133,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plandModelInvVolarpad = new ModelConverter(
 						new ModelVolarpad(),
 						0.065D / 3.0D,
-						new TextureMap(256, 256, BLBlockRegistry.volarpad.modelTexture),
+						new TextureMap(256, 256, BLBlockRegistry.volarpad.modelTexture1),
 						true);
 				plandModelInvVolarpad.offsetWS(new Vec3(0, -1.2, 0));
 			}
@@ -254,12 +244,33 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plantModelVenusFlyTrapBlooming.renderWithTessellator(Tessellator.instance);
 			}
 		} else if(block == BLBlockRegistry.volarpad) {
+			modelTexture = BLBlockRegistry.volarpad.modelTexture1;
+			int randNum = rnd.nextInt(3);
+			if(randNum == 0) {
+				modelTexture = BLBlockRegistry.volarpad.modelTexture2;
+			} else if(randNum == 1) {
+				modelTexture = BLBlockRegistry.volarpad.modelTexture3;
+			}
+			final ModelVolarpad volarPadModel = new ModelVolarpad();
+			Random rnd2 = new Random();
+			rnd2.setSeed(x*y*z);
+			float plantHeightOffset = -rnd2.nextFloat()/1.3F;
+			final float padRotation = (float) (rnd.nextFloat() * 2.0F * Math.PI);
 			ModelConverter worldModel = new ModelConverter(
-					new ModelVolarpad(),
+					volarPadModel,
 					0.065D,
-					new TextureMap(256, 256, BLBlockRegistry.volarpad.modelTexture),
-					true);
-
+					new TextureMap(256, 256, modelTexture),
+					true) {
+				@Override
+				protected void applyRotation(ModelRenderer modelRenderer, RotationMatrix rotationMatrix) {
+					if(modelRenderer == volarPadModel.pad1) {
+						modelRenderer.rotateAngleY = padRotation;
+					}
+					super.applyRotation(modelRenderer, rotationMatrix);
+				}
+			};
+			worldModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0));
+			worldModel.offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 			worldModel.renderWithTessellator(Tessellator.instance);
 		}
 

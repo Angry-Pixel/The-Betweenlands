@@ -1,5 +1,9 @@
 package thebetweenlands.world;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -16,11 +20,6 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
@@ -72,6 +71,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 	/////// Terrain gen features ///////
 	private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
+	//private MapGenBase caveGenerator = new MapGenCavesBetweenlandsNew();
 
 
 	public ChunkProviderBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
@@ -150,7 +150,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 		//Get biomes for generation
 		this.biomesForGeneration = worldObj.getWorldChunkManager().loadBlockGeneratorData(biomesForGeneration, x * 16, z * 16, 16, 16);
-
 
 		//Replace blocks for biome (replaces blocks according to the biomes)
 		this.replaceBlocksForBiome(x, z, this.rand, chunkBlocks, blockMeta, this.biomesForGeneration);
@@ -679,7 +678,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 					if(!this.biomeGenList.contains(bgbb)) {
 						this.biomeGenList.add(bgbb);
 						if(!bgbb.isNoiseGenInitialized()) {
-							bgbb.initializeNoiseGen(rng);
+							bgbb.initializeNoiseGen(new Random(this.worldObj.getSeed()));
 						}
 						bgbb.generateNoise(chunkX, chunkZ);
 					}
