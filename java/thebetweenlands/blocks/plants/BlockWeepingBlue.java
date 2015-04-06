@@ -42,11 +42,6 @@ public class BlockWeepingBlue extends BlockBLSmallPlants {
 		drops.add(new ItemStack(BLItemRegistry.weepingBluePetal, 1 + world.rand.nextInt(3) + fortune));
 		return drops;
 	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return AxisAlignedBB.getBoundingBox(x, y + 1.99F, z, x + 1, y + 2, z + 1);
-	}
 	
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
