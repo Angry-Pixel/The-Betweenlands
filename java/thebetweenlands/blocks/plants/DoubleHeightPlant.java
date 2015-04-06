@@ -50,13 +50,7 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		if ("Sundew".equals(name)) drops.add(new ItemStack(this, 1));
-		if ("WeepingBlue".equals(name)) drops.add(new ItemStack(BLItemRegistry.weepingBluePetal, 1 + rnd.nextInt(3) + fortune));
 		return drops;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		if ("WeepingBlue".equals(name) && world.getBlockMetadata(x, y, z) != 0) world.spawnParticle("dripWater", x + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), y + 0.2F + rand.nextFloat()/2F, z + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), 0D, 0D, 0D);
 	}
 
 	@Override

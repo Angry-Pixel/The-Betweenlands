@@ -22,6 +22,7 @@ import thebetweenlands.client.model.block.ModelRegularPlant;
 import thebetweenlands.client.model.block.ModelTubePlant;
 import thebetweenlands.client.model.block.ModelVenusFlyTrap;
 import thebetweenlands.client.model.block.ModelVolarpad;
+import thebetweenlands.client.model.block.ModelWeepingBlue;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.TextureMap;
@@ -37,24 +38,22 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvRegularPlant;
 	public static ModelConverter plandModelInvVolarpad;
 	public static ModelConverter plantModelInvTubePlant;
+	public static ModelConverter plantModelInvWeepingBlue;
 	
 	public static ModelConverter plantModelVenusFlyTrap;
 	public static ModelConverter plantModelVenusFlyTrapBlooming;
-	
 	public static ModelConverter plantModelTubePlant;
-	
 	public static ModelConverter plantModelRegularPlant;
+	public static ModelConverter plantModelWeepingBlue;
 
 	public static ModelBlackHatMushroom modelBlackHatMushroom1 = new ModelBlackHatMushroom();
 	public static ModelBlackHatMushroom2 modelBlackHatMushroom2 = new ModelBlackHatMushroom2();
 	public static ModelBlackHatMushroom3 modelBlackHatMushroom3 = new ModelBlackHatMushroom3();
-
 	public static ModelFlatHeadMushroom modelFlatHeadMushroom1 = new ModelFlatHeadMushroom();
 	public static ModelFlatHeadMushroom2 modelFlatHeadMushroom2 = new ModelFlatHeadMushroom2();
-	
 	public static ModelRegularPlant modelRegularPlant = new ModelRegularPlant();
-	
 	public static ModelTubePlant modelTubePlant = new ModelTubePlant();
+	public static ModelWeepingBlue modelWeepingBlue = new ModelWeepingBlue();
 	
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
@@ -138,6 +137,18 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plandModelInvVolarpad.offsetWS(new Vec3(0, -1.2, 0));
 			}
 			plandModelInvVolarpad.renderWithTessellator(Tessellator.instance);
+		}
+		
+		if(block == BLBlockRegistry.weepingBlue) {
+			if(plantModelInvWeepingBlue == null) {
+				plantModelInvWeepingBlue = new ModelConverter(
+						modelWeepingBlue,
+						0.065D / 1.5D,
+						new TextureMap(64, 64, BLBlockRegistry.weepingBlue.modelTexture1),
+						true);
+				plantModelInvWeepingBlue.offsetWS(new Vec3(0, -0.75, 0));
+			}
+			plantModelInvWeepingBlue.renderWithTessellator(Tessellator.instance);
 		}
 		
 		tessellator.draw();
@@ -272,6 +283,15 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			worldModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0));
 			worldModel.offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 			worldModel.renderWithTessellator(Tessellator.instance);
+		} else if(block == BLBlockRegistry.weepingBlue) {
+			if(plantModelWeepingBlue == null) {
+				plantModelWeepingBlue = new ModelConverter(
+						modelWeepingBlue,
+						0.065D,
+						new TextureMap(64, 64, BLBlockRegistry.weepingBlue.modelTexture1),
+						true);
+			}
+			plantModelWeepingBlue.renderWithTessellator(Tessellator.instance);
 		}
 
 		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);

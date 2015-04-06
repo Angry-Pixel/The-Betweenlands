@@ -28,6 +28,7 @@ import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
+import thebetweenlands.blocks.plants.BlockWeepingBlue;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -120,7 +121,6 @@ public class BLBlockRegistry
 
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
-	public static final Block weepingBlue = new DoubleHeightPlant("WeepingBlue", 0.5F);
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
@@ -136,6 +136,7 @@ public class BLBlockRegistry
 	public static final BlockRegularPlant regularPlant = new BlockRegularPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
 	public static final BlockVolarpad volarpad = new BlockVolarpad();
+	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

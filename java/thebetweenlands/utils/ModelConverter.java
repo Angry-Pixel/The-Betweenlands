@@ -385,7 +385,7 @@ public class ModelConverter {
 				}
 
 				//Face 3
-				this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
+				/*this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
 				this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
 				this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
 				this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
@@ -394,6 +394,16 @@ public class ModelConverter {
 					this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
 					this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
 					this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
+				}*/
+				this.addVertexWithUV(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
+				this.addVertexWithUV(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
+				this.addVertexWithUV(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
+				if(renderDoubleFace) {
+					this.addVertexWithUV(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
+					this.addVertexWithUV(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
+					this.addVertexWithUV(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
 				}
 
 				//Face 4
