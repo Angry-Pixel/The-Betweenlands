@@ -1,125 +1,125 @@
 package thebetweenlands.client.model.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelAngler extends ModelBase
-{
-	ModelRenderer body;
-	ModelRenderer teeth;
-	ModelRenderer jaw;
-	ModelRenderer fin1;
-	ModelRenderer fin2;
-	ModelRenderer fin3;
-	ModelRenderer fin4;
-	ModelRenderer antenna1;
-	ModelRenderer antenna2;
+public class ModelAngler extends ModelBase {
+    ModelRenderer lure1;
+    ModelRenderer lure2;
+    ModelRenderer lure3;
+    ModelRenderer head;
+    ModelRenderer jaw;
+    ModelRenderer bottomTeeth;
+    ModelRenderer topTeeth;
+    ModelRenderer body;
+    ModelRenderer tail;
+    ModelRenderer midSection;
+    ModelRenderer dorsalFin;
+    ModelRenderer pectoralFinL;
+    ModelRenderer pectoralFinR;
+    ModelRenderer tailFin;
 
-	public ModelAngler()
-	{
-		textureWidth = 64;
-		textureHeight = 32;
+   public ModelAngler() {
+	   this.textureWidth = 64;
+       this.textureHeight = 32;
+       this.pectoralFinL = new ModelRenderer(this, 35, 0);
+       this.pectoralFinL.setRotationPoint(2.0F, 11.0F, 2.0F);
+       this.pectoralFinL.addBox(0.0F, 0.0F, -1.5F, 4, 0, 3, 0.0F);
+       this.setRotation(pectoralFinL, -0.5585053563117981F, -0.6217309832572937F, -0.2617993950843811F);
+       this.midSection = new ModelRenderer(this, 42, 21);
+       this.midSection.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.midSection.addBox(-1.0F, -7.0F, 8.0F, 2, 6, 5, 0.0F);
+       this.setRotation(midSection, 0.0F, -0.024346200749278072F, 0.0F);
+       this.lure1 = new ModelRenderer(this, 2, 0);
+       this.lure1.setRotationPoint(0.0F, 9.0F, 0.0F);
+       this.lure1.addBox(-0.5F, -3.0F, -0.5F, 1, 3, 1, 0.0F);
+       this.setRotation(lure1, 0.8203047513961792F, -0.0F, 0.0F);
+       this.lure3 = new ModelRenderer(this, 0, 9);
+       this.lure3.setRotationPoint(0.0F, 9.0F, 0.0F);
+       this.lure3.addBox(-1.5F, -5.0F, -4.5F, 3, 3, 3, 0.0F);
+       this.setRotation(lure3, 0.8203047513961792F, -0.0F, 0.0F);
+       this.head = new ModelRenderer(this, 0, 19);
+       this.head.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.head.addBox(-2.0F, -5.0F, 0.0F, 4, 6, 7, 0.0F);
+       this.setRotation(head, 0.8203047513961792F, -0.0F, 0.0F);
+       this.topTeeth = new ModelRenderer(this, 16, 0);
+       this.topTeeth.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.topTeeth.addBox(-2.0F, -4.5F, -2.0F, 4, 5, 2, 0.0F);
+       this.setRotation(topTeeth, 0.8203047513961792F, -0.0F, 0.0F);
+       this.lure2 = new ModelRenderer(this, 0, 4);
+       this.lure2.setRotationPoint(0.0F, 9.0F, 0.0F);
+       this.lure2.addBox(-0.5F, -4.0F, -3.5F, 1, 1, 4, 0.0F);
+       this.setRotation(lure2, 0.8203047513961792F, -0.0F, 0.0F);
+       this.dorsalFin = new ModelRenderer(this, 46, -6);
+       this.dorsalFin.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.dorsalFin.addBox(0.0F, -11.0F, 5.0F, 0, 3, 6, 0.0F);
+       this.setRotation(dorsalFin, -0.13962633907794952F, -0.024346200749278072F, 0.0F);
+       this.jaw = new ModelRenderer(this, 14, 13);
+       this.jaw.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.jaw.addBox(-1.5F, -4.0F, -1.0F, 3, 5, 1, 0.0F);
+       this.setRotation(jaw, 1.3782689571380613F, -0.0F, 0.0F);
+       this.body = new ModelRenderer(this, 22, 17);
+       this.body.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.body.addBox(-1.5F, -8.0F, 1.0F, 3, 8, 7, 0.0F);
+       this.tail = new ModelRenderer(this, 56, 26);
+       this.tail.setRotationPoint(0.0F, 12.0F, 13.0F);
+       this.tail.addBox(-0.5F, -17.5F, 0.0F, 1, 3, 3, 0.0F);
+       this.setRotation(tail, 0.0F, 0.07557275661135447F, 0.0F);
+       this.pectoralFinR = new ModelRenderer(this, 35, 0);
+       this.pectoralFinR.setRotationPoint(-2.0F, 11.0F, 2.0F);
+       this.pectoralFinR.addBox(-4.0F, 0.0F, -1.5F, 4, 0, 3, 0.0F);
+       this.setRotation(pectoralFinR, -0.5585053563117981F, 0.6217309832572937F, 0.2617993950843811F);
+       this.bottomTeeth = new ModelRenderer(this, 8, 0);
+       this.bottomTeeth.setRotationPoint(0.0F, 16.0F, 0.0F);
+       this.bottomTeeth.addBox(-1.5F, -3.5F, 0.0F, 3, 5, 1, 0.0F);
+       this.setRotation(bottomTeeth, 1.3782689571380613F, -0.0F, 0.0F);
+       this.tailFin = new ModelRenderer(this, 58, -3);
+       this.tailFin.setRotationPoint(0.0F, 12.0F, 13.0F);
+       this.tailFin.addBox(0.0F, -18.0F, 3.0F, 0, 4, 3, 0.0F);
+       this.setRotation(tailFin, 0.0F, 0.07557275661135447F, 0.0F);
+       this.midSection.addChild(this.tail);
+       this.midSection.addChild(this.tailFin);
 
-		body = new ModelRenderer(this, 0, 0);
-		body.addBox(-2F, 0F, -10F, 4, 5, 10);
-		body.setRotationPoint(0F, 12F, 6F);
-		body.setTextureSize(64, 32);
-		body.mirror = true;
-		setRotation(body, 0F, 0F, 0F);
+    }
 
-		teeth = new ModelRenderer(this, 0, 16);
-		teeth.addBox(-3F, 0F, -10F, 6, 2, 10);
-		teeth.setRotationPoint(0F, 13.5F, 4F);
-		teeth.setTextureSize(64, 32);
-		teeth.mirror = true;
-		setRotation(teeth, -50.3490659F, 0F, 0F);
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
+		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+        body.render(unitPixel);
+        pectoralFinL.render(unitPixel);
+        pectoralFinR.render(unitPixel);
+        bottomTeeth.render(unitPixel);
+        topTeeth.render(unitPixel);
+        lure3.render(unitPixel);
+        jaw.render(unitPixel);
+        dorsalFin.render(unitPixel);
+        midSection.render(unitPixel);
+        lure1.render(unitPixel);
+        lure2.render(unitPixel);
+        head.render(unitPixel);
+    }
 
-		jaw = new ModelRenderer(this, 28, 0);
-		jaw.addBox(0F, 0F, -9.4F, 6, 2, 10);
-		jaw.setRotationPoint(-3F, 15.5F, 4F);
-		jaw.setTextureSize(64, 32);
-		jaw.mirror = true;
-		setRotation(jaw, -50.3490659F, 0F, 0F);
-
-		fin1 = new ModelRenderer(this, 0, 0);
-		fin1.addBox(0F, 0F, 0F, 1, 2, 3);
-		fin1.setRotationPoint(-0.5F, 12.5F, 5F);
-		fin1.setTextureSize(64, 32);
-		fin1.mirror = true;
-		setRotation(fin1, 0.4363323F, 0F, 0F);
-
-		fin2 = new ModelRenderer(this, 0, 0);
-		fin2.addBox(0F, 0F, 0F, 1, 2, 3);
-		fin2.setRotationPoint(-0.5F, 13.8F, 5.8F);
-		fin2.setTextureSize(64, 32);
-		fin2.mirror = true;
-		setRotation(fin2, -0.4363323F, 0F, 0F);
-
-		fin3 = new ModelRenderer(this, 0, 0);
-		fin3.addBox(0F, 0F, 0F, 1, 2, 4);
-		fin3.setRotationPoint(-2F, 13.8F, 5F);
-		fin3.setTextureSize(64, 32);
-		fin3.mirror = true;
-		setRotation(fin3, -0.4363323F, -1.396263F, 0F);
-
-		fin4 = new ModelRenderer(this, 0, 0);
-		fin4.addBox(0F, 0F, 0F, 1, 2, 4);
-		fin4.setRotationPoint(2F, 13.8F, 5F);
-		fin4.setTextureSize(64, 32);
-		fin4.mirror = true;
-		setRotation(fin4, -0.4363323F, 1.396263F, 0F);
-
-		antenna1 = new ModelRenderer(this, 50, 0);
-		antenna1.addBox(0F, -4F, 0F, 1, 4, 1);
-		antenna1.setRotationPoint(-0.5F, 12F, -4F);
-		antenna1.setTextureSize(64, 32);
-		antenna1.mirror = true;
-		setRotation(antenna1, 0F, 0F, 0F);
-
-		antenna2 = new ModelRenderer(this, 50, 5);
-		antenna2.addBox(0F, 0F, -4F, 1, 1, 4);
-		antenna2.setRotationPoint(-0.5F, 8F, -4F);
-		antenna2.setTextureSize(64, 32);
-		antenna2.mirror = true;
-		setRotation(antenna2, 0F, 0F, 0F);
-	}
-
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		super.render(entity, f, f1, f2, f3, f4, f5);
-		setRotationAngles(f, f1, f2, f3, f4, f5);
-		body.render(f5);
-		teeth.render(f5);
-		jaw.render(f5);
-		fin1.render(f5);
-		fin2.render(f5);
-		fin3.render(f5);
-		fin4.render(f5);
-		antenna1.render(f5);
-		antenna2.render(f5);
-	}
-
-	private void setRotation(ModelRenderer model, float x, float y, float z)
-	{
+	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		this.jaw.rotateAngleX = (float) (MathHelper.cos(f * 0.3000000F * 5) *  1.2F * f1);
-		this.teeth.rotateAngleX = (float) (MathHelper.cos(f * 0.3000000F * 5) * 1.2F * f1);
-		/*
-    this.fin1.rotateAngleY = (f4 / (180F / (float)Math.PI)) + 0.443F;
-    this.fin2.rotateAngleY = (f4 / (180F / (float)Math.PI)) + 0.443F;
-    this.fin3.rotateAngleY = (f4 / (180F / (float)Math.PI)) + 0.443F;
-    this.fin4.rotateAngleY = (f4 / (180F / (float)Math.PI)) + 0.443F;
-		 */
+    
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		this.jaw.rotateAngleX = 1.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		this.bottomTeeth.rotateAngleX = 1.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		pectoralFinL.rotateAngleY = -0.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		pectoralFinR.rotateAngleY = 0.5F - MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		dorsalFin.rotateAngleY = midSection.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle*0.2F;
+		tail.rotateAngleY = midSection.rotateAngleY * 1.1F;
+		tailFin.rotateAngleY = midSection.rotateAngleY * 1.2F;
 	}
 }
