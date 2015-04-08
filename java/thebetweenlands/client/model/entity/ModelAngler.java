@@ -84,7 +84,6 @@ public class ModelAngler extends ModelBase {
        this.setRotation(tailFin, 0.0F, 0.07557275661135447F, 0.0F);
        this.midSection.addChild(this.tail);
        this.midSection.addChild(this.tailFin);
-
     }
 
 	@Override
@@ -110,12 +109,12 @@ public class ModelAngler extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-    
+
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 		EntityAngler angler = (EntityAngler)entity;
-		this.jaw.rotateAngleX = 1.5F + angler.moveProgress;//+ MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		this.jaw.rotateAngleX = 1.5F + angler.moveProgress;
 		this.bottomTeeth.rotateAngleX = 1.5F + angler.moveProgress;
 		pectoralFinL.rotateAngleY = -0.5F - angler.moveProgress;
 		pectoralFinR.rotateAngleY = 0.5F + angler.moveProgress;
