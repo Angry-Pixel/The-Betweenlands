@@ -18,9 +18,9 @@ public class LurkerSkinArmor extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
 		if (stack.getItem() == BLItemRegistry.lurkerSkinLeggings)
-			return "thebetweenlands:textures/armour/luker2.png";
+			return "thebetweenlands:textures/armour/lurker2.png";
 		else
-			return "thebetweenlands:textures/armour/luker1.png";
+			return "thebetweenlands:textures/armour/lurker1.png";
 	}
 
 	@Override

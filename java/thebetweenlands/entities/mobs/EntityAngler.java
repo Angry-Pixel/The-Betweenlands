@@ -3,7 +3,9 @@ package thebetweenlands.entities.mobs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
@@ -13,7 +15,7 @@ import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.utils.AnimationMathHelper;
 
-public class EntityAngler extends EntityWaterMob implements IEntityBL {
+public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
     private ChunkCoordinates currentSwimTarget;
     AnimationMathHelper animation = new AnimationMathHelper();
@@ -76,35 +78,60 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
         return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
     }
 
+    public boolean isGrounded() {
+        return !isInWater() && worldObj.getBlock((int) posX, (int) posY + 1, (int) posZ) == Blocks.air && worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ).isCollidable();
+    }
+
 	@Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        moveProgress = animation.swing(1.2F, 0.4F, false);
+        EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+        setTarget(target);
+
         if (isInWater()) {
+        	moveProgress = animation.swing(1.2F, 0.4F, false);
         	if (!worldObj.isRemote) {
-				swimAbout();
+    			if (getEntityToAttack() != null) {
+    				currentSwimTarget = new ChunkCoordinates((int) getEntityToAttack().posX, (int) ((int) getEntityToAttack().posY + getEntityToAttack().getEyeHeight()), (int) getEntityToAttack().posZ);
+    				swimToTarget();
+    			}
+    			else
+    				swimAbout();
         	}
 
             renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
             rotationYaw = renderYawOffset;
         }
         else {
+        	moveProgress = animation.swing(2F, 0.4F, false);
             if (!worldObj.isRemote) {
+            	if(!onGround)
+            	{
                 motionX = 0.0D;
                 motionY -= 0.08D;
                 motionY *= 0.9800000190734863D;
                 motionZ = 0.0D;
+                }
+            	else if(onGround) {
+					motionY += 0.4F;
+					motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
+					motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
+				}
             }
         }
     }
 
-	protected void swimAbout() {
+	public void swimAbout() {
 		if (currentSwimTarget != null && (worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != BLBlockRegistry.swampWater && worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != Blocks.water || currentSwimTarget.posY < 1))
 			currentSwimTarget = null;
 
 		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 10.0F)
 			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(4) + 1, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
 
+		swimToTarget();
+	}
+
+	protected void swimToTarget() {
 		double targetX = currentSwimTarget.posX + 0.5D - posX;
 		double targetY = currentSwimTarget.posY - posY;
 		double targetZ = currentSwimTarget.posZ + 0.5D - posZ;
@@ -113,6 +140,16 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
 		motionY -= 0.01D;
 		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.10000000149011612D;
 		moveForward = 0.5F;
+	}
+
+	@Override
+	public void onCollideWithPlayer(EntityPlayer player) {
+		super.onCollideWithPlayer(player);
+		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
+			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
+				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
+			}
+		}
 	}
 
 	@Override
