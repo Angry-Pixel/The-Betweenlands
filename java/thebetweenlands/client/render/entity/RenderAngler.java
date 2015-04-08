@@ -10,7 +10,6 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.model.entity.ModelAngler;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.impl.LightSource;
-import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.utils.LightingUtil;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -21,11 +20,11 @@ public class RenderAngler extends RenderLiving {
 
 	public RenderAngler() {
 		super(new ModelAngler(), 0.5F);
-		this.setRenderPassModel(new ModelAngler());
+		setRenderPassModel(new ModelAngler());
 	}
 
 	protected int setAnglerEyeBrightness(EntityAngler entity, int pass, float partialTickTime) {
-		if(pass == 1){
+		if(pass == 1) {
 			if(ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
 				double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
 				double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
@@ -53,11 +52,17 @@ public class RenderAngler extends RenderLiving {
 
 	@Override
 	protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
-		return this.setAnglerEyeBrightness((EntityAngler) entity, pass, partialTickTime);
+		return setAnglerEyeBrightness((EntityAngler) entity, pass, partialTickTime);
+	}
+	
+	@Override
+	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
+		GL11.glTranslatef(0F, 0.5F, 0F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return texture;
 	}
+
 }

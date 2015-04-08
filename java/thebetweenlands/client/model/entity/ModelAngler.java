@@ -3,7 +3,7 @@ package thebetweenlands.client.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
+import thebetweenlands.entities.mobs.EntityAngler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -114,12 +114,13 @@ public class ModelAngler extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		this.jaw.rotateAngleX = 1.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
-		this.bottomTeeth.rotateAngleX = 1.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
-		pectoralFinL.rotateAngleY = -0.5F + MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
-		pectoralFinR.rotateAngleY = 0.5F - MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
-		dorsalFin.rotateAngleY = midSection.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle*0.2F;
-		tail.rotateAngleY = midSection.rotateAngleY * 1.1F;
-		tailFin.rotateAngleY = midSection.rotateAngleY * 1.2F;
+		EntityAngler angler = (EntityAngler)entity;
+		this.jaw.rotateAngleX = 1.5F + angler.moveProgress;//+ MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
+		this.bottomTeeth.rotateAngleX = 1.5F + angler.moveProgress;
+		pectoralFinL.rotateAngleY = -0.5F - angler.moveProgress;
+		pectoralFinR.rotateAngleY = 0.5F + angler.moveProgress;
+		dorsalFin.rotateAngleY = midSection.rotateAngleY =  -0.05F + angler.moveProgress *0.2F;
+		tail.rotateAngleY = midSection.rotateAngleY * 1.2F;
+		tailFin.rotateAngleY = midSection.rotateAngleY * 1.4F;
 	}
 }

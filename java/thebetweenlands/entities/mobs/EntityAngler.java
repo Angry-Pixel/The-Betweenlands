@@ -1,16 +1,27 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.init.Items;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.utils.AnimationMathHelper;
 
-public class EntityAngler extends EntityMob implements IEntityBL {
+public class EntityAngler extends EntityWaterMob implements IEntityBL {
+	
 
+    private float randomMotionSpeed;
+    private float randomMotionVecX;
+    private float randomMotionVecY;
+    private float randomMotionVecZ;
+    AnimationMathHelper animation = new AnimationMathHelper();
+    public float moveProgress;
+    
 	public EntityAngler(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.9F, 0.5F);
 	}
 
 	@Override
@@ -53,5 +64,46 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	public boolean getCanSpawnHere() {
 		return worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
 	}
+	
+    public boolean isInWater() {
+        return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
+    }
+
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        moveProgress = animation.swing(1.2F, 0.4F, false);
+        if (isInWater()) {
+        	randomMotionSpeed = 0.5F + rand.nextFloat();
+
+            if (!worldObj.isRemote){
+                motionX = (double)(randomMotionVecX * randomMotionSpeed);
+                motionZ = (double)(randomMotionVecZ * randomMotionSpeed);
+                motionY = (double)(randomMotionVecY * randomMotionSpeed);
+            }
+            renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
+            rotationYaw = renderYawOffset;
+        }
+        else {
+            if (!worldObj.isRemote) {
+                motionX = 0.0D;
+                motionY -= 0.08D;
+                motionY *= 0.9800000190734863D;
+                motionZ = 0.0D;
+            }
+        }
+    }
+
+    public void moveEntityWithHeading(float strafe, float forwards) {
+        moveEntity(motionX, motionY, motionZ);
+    }
+
+    protected void updateEntityActionState() {
+       if (rand.nextInt(50) == 0 || !inWater || randomMotionVecX == 0.0F && randomMotionVecY == 0.0F && randomMotionVecZ == 0.0F) {
+            float randomAngle = rand.nextFloat() * (float)Math.PI * 2.0F;
+            randomMotionVecX = MathHelper.cos(randomAngle) * 0.2F;
+            randomMotionVecY = -0.1F + rand.nextFloat() * 0.2F;
+            randomMotionVecZ = MathHelper.sin(randomAngle) * 0.2F;
+        }
+    }
 
 }
