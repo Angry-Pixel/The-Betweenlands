@@ -1,24 +1,24 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.init.Items;
-import net.minecraft.util.MathHelper;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL {
-	
 
-    private float randomMotionSpeed;
-    private float randomMotionVecX;
-    private float randomMotionVecY;
-    private float randomMotionVecZ;
+    private ChunkCoordinates currentSwimTarget;
     AnimationMathHelper animation = new AnimationMathHelper();
     public float moveProgress;
-    
+
 	public EntityAngler(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
@@ -44,6 +44,12 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
 	protected String getDeathSound() {
 		return "thebetweenlands:anglerDeath";
 	}
+	
+	@Override
+	protected void func_145780_a(int x, int y, int z, Block block) {
+		if (rand.nextInt(10) == 0)
+			playSound("game.hostile.swim", 0.1F, 2.0F);
+	}
 
 	@Override
 	protected float getSoundVolume() {
@@ -56,7 +62,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
 		int count;
 
 		for (count = 0; count < amount; ++count) {
-			dropItem(Items.leather, 1);
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.LURKER_SKIN), 0.0F);
 		}
 	}
 
@@ -64,22 +70,21 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
 	public boolean getCanSpawnHere() {
 		return worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
 	}
-	
+
+	@Override
     public boolean isInWater() {
         return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
     }
 
+	@Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         moveProgress = animation.swing(1.2F, 0.4F, false);
         if (isInWater()) {
-        	randomMotionSpeed = 0.5F + rand.nextFloat();
+        	if (!worldObj.isRemote) {
+				swimAbout();
+        	}
 
-            if (!worldObj.isRemote){
-                motionX = (double)(randomMotionVecX * randomMotionSpeed);
-                motionZ = (double)(randomMotionVecZ * randomMotionSpeed);
-                motionY = (double)(randomMotionVecY * randomMotionSpeed);
-            }
             renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
             rotationYaw = renderYawOffset;
         }
@@ -93,17 +98,28 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL {
         }
     }
 
-    public void moveEntityWithHeading(float strafe, float forwards) {
-        moveEntity(motionX, motionY, motionZ);
-    }
+	protected void swimAbout() {
+		if (currentSwimTarget != null && (worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != BLBlockRegistry.swampWater && worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != Blocks.water || currentSwimTarget.posY < 1))
+			currentSwimTarget = null;
 
-    protected void updateEntityActionState() {
-       if (rand.nextInt(50) == 0 || !inWater || randomMotionVecX == 0.0F && randomMotionVecY == 0.0F && randomMotionVecZ == 0.0F) {
-            float randomAngle = rand.nextFloat() * (float)Math.PI * 2.0F;
-            randomMotionVecX = MathHelper.cos(randomAngle) * 0.2F;
-            randomMotionVecY = -0.1F + rand.nextFloat() * 0.2F;
-            randomMotionVecZ = MathHelper.sin(randomAngle) * 0.2F;
-        }
-    }
+		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 10.0F)
+			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(4) + 1, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
+
+		double targetX = currentSwimTarget.posX + 0.5D - posX;
+		double targetY = currentSwimTarget.posY - posY;
+		double targetZ = currentSwimTarget.posZ + 0.5D - posZ;
+		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.10000000149011612D;
+		motionY += (Math.signum(targetY) * 0.599999988079071D - motionY) * 0.010000000149011612D;
+		motionY -= 0.01D;
+		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.10000000149011612D;
+		moveForward = 0.5F;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.equals(DamageSource.inWall))
+			return false;
+		return super.attackEntityFrom(source, damage);
+	}
 
 }

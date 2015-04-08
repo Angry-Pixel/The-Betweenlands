@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.IEntityBL;
 
 public class BlockMud
@@ -26,16 +27,17 @@ public class BlockMud
 	@Override
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List aabblist, Entity entity) {
         AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
-        if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) && 
-        		entity instanceof IEntityBL) {
+        if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) &&  entity instanceof IEntityBL) {
             aabblist.add(axisalignedbb1);
         }
     }
 	
 	@Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-        entity.motionX *= 0.2D;
-        entity.motionY *= 0.2D;
-        entity.motionZ *= 0.2D;
+		if (!(entity instanceof EntityAngler)) {
+			entity.motionX *= 0.2D;
+			entity.motionY *= 0.2D;
+			entity.motionZ *= 0.2D;
+		}
     }
 }
