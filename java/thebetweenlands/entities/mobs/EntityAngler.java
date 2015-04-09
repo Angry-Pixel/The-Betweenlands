@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -26,6 +27,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	public EntityAngler(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
+		setAir(80);
 	}
 
 	@Override
@@ -78,7 +80,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
+		return worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
 	}
 
 	@Override
@@ -106,7 +108,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
     			else
     				swimAbout();
         	}
-
             renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
             rotationYaw = renderYawOffset;
         }
@@ -129,6 +130,30 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
             }
         }
     }
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
+			setDead();
+	}
+
+	@Override
+	public void onEntityUpdate() {
+		int air = getAir();
+		super.onEntityUpdate();
+
+		if (isEntityAlive() && !isInWater()) {
+			--air;
+			setAir(air);
+
+			if (getAir() == -20) {
+				setAir(0);
+				attackEntityFrom(DamageSource.drown, 2.0F);
+			}
+		} else
+			setAir(80);
+	}
 
 	public void swimAbout() {
 		if (currentSwimTarget != null && (worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != BLBlockRegistry.swampWater && worldObj.getBlock(currentSwimTarget.posX, currentSwimTarget.posY, currentSwimTarget.posZ) != Blocks.water || currentSwimTarget.posY < 1))
