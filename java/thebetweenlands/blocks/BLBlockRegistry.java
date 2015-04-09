@@ -19,10 +19,10 @@ import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockHanger;
 import thebetweenlands.blocks.plants.BlockMireCoral;
-import thebetweenlands.blocks.plants.BlockRegularPlant;
+import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
-import thebetweenlands.blocks.plants.BlockTubePlant;
+import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
@@ -132,15 +132,15 @@ public class BLBlockRegistry
 	public static final BlockRoot root = new BlockRoot();
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
 	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
-	public static final BlockTubePlant pitcherPlant = new BlockTubePlant();
-	public static final BlockRegularPlant regularPlant = new BlockRegularPlant();
+	public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
+	public static final BlockSwampPlant swampPlant = new BlockSwampPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
 	public static final BlockVolarpad volarpad = new BlockVolarpad();
 	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
-	public static final Block swampPlant = new BlockBLSmallPlants("swampPlant");
+	public static final Block swampTallGrass = new BlockBLSmallPlants("swampTallGrass");
 	public static final Block nettleFlowered = new BlockBLSmallPlants("nettleFlowered");
 	public static final Block nettle = new BlockBLSmallPlants("nettle");
 

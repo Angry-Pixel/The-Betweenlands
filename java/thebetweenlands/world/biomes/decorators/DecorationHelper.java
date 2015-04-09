@@ -30,8 +30,8 @@ public class DecorationHelper {
 	private final static WorldGenerator GEN_FLAT_HEAD_MUSHROOMS = new WorldGenMushrooms(BLBlockRegistry.flatHeadMushroom, 15);
 	private final static WorldGenTallGrass GEN_NETTLE = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final static WorldGenTallGrass GEN_CATTAIL = new WorldGenTallGrass(BLBlockRegistry.catTail, 1);
-	private final static WorldGenTallGrass GEN_SWAMP_TALL_GRASS = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
-	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.regularPlant, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_TALL_GRASS = new WorldGenTallGrass(BLBlockRegistry.swampTallGrass, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
 	private final static WorldGenTallGrass GEN_VENUS_FLY_TRAP = new WorldGenTallGrass(BLBlockRegistry.venusFlyTrap, 0);
 	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
 	private final static WorldGenTallGrass GEN_SUNDEW = new WorldGenTallGrass(BLBlockRegistry.sundew, 0);
