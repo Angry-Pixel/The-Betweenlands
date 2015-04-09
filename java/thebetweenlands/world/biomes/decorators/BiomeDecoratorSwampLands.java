@@ -18,7 +18,12 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 		helper.generateSapTree(40);
 		helper.generateRoots(7.0D, 2);
 		helper.generateReeds(100);
-		helper.generateSwampGrass(60);
+		helper.generateSwampPlant(60);
+		helper.generateVenusFlyTrap(40);
+		helper.generatePitcherPlant(30);
+		helper.generateFlatHeadMushrooms(60);
+		helper.generateBlackHatMushrooms(60);
+		helper.generateVolarpad(10);
 		helper.generateCattail(2);
 		helper.generateNettles(1);
 	}

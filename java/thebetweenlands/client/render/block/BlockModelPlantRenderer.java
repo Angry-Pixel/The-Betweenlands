@@ -93,12 +93,12 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			plantModelInvFlatHead.renderWithTessellator(Tessellator.instance);
 		}
 		
-		if(block == BLBlockRegistry.tubePlant) {
+		if(block == BLBlockRegistry.pitcherPlant) {
 			if(plantModelInvTubePlant == null) {
 				plantModelInvTubePlant = new ModelConverter(
 						new ModelTubePlant(),
 						0.065D / 1.5D,
-						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
+						new TextureMap(128, 128, BLBlockRegistry.pitcherPlant.modelTexture1),
 						true);
 				plantModelInvTubePlant.offsetWS(new Vec3(0, -0.7, 0));
 			}
@@ -208,12 +208,12 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 					0.0F);
 
 			worldModel.renderWithTessellator(Tessellator.instance);
-		} else if(block == BLBlockRegistry.tubePlant) {
+		} else if(block == BLBlockRegistry.pitcherPlant) {
 			if(plantModelTubePlant == null) {
 				plantModelTubePlant = new ModelConverter(
 						new ModelTubePlant(),
 						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.tubePlant.modelTexture1),
+						new TextureMap(128, 128, BLBlockRegistry.pitcherPlant.modelTexture1),
 						true);
 			}
 			plantModelTubePlant.renderWithTessellator(Tessellator.instance);

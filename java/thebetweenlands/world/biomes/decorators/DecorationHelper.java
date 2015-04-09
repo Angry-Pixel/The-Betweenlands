@@ -13,10 +13,11 @@ import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.feature.plants.WorldGenMushrooms;
+import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
@@ -25,9 +26,16 @@ public class DecorationHelper {
 	private final static WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	private final static WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
 	private final static WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedWoodBush();
+	private final static WorldGenerator GEN_BLACK_HAT_MUSHROOMS = new WorldGenMushrooms(BLBlockRegistry.blackHatMushroom, 15);
+	private final static WorldGenerator GEN_FLAT_HEAD_MUSHROOMS = new WorldGenMushrooms(BLBlockRegistry.flatHeadMushroom, 15);
 	private final static WorldGenTallGrass GEN_NETTLE = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final static WorldGenTallGrass GEN_CATTAIL = new WorldGenTallGrass(BLBlockRegistry.catTail, 1);
-	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_TALL_GRASS = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.regularPlant, 1);
+	private final static WorldGenTallGrass GEN_VENUS_FLY_TRAP = new WorldGenTallGrass(BLBlockRegistry.venusFlyTrap, 0);
+	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
+	private final static WorldGenTallGrass GEN_SUNDEW = new WorldGenTallGrass(BLBlockRegistry.sundew, 0);
+	private final static WorldGenTallGrass GEN_PITCHER_PLANT = new WorldGenTallGrass(BLBlockRegistry.pitcherPlant, 0);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -50,13 +58,24 @@ public class DecorationHelper {
 	private final boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z)) && this.world.isAirBlock(x, y, z);
 	}
-	
+
 	private final boolean checkAboveSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y, z));
 	}
 
 	public void generateSwampGrass(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_SWAMP_TALL_GRASS.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+
+	public void generateSwampPlant(int attempts) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -67,7 +86,7 @@ public class DecorationHelper {
 	}
 
 	public void generateNettles(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -78,7 +97,7 @@ public class DecorationHelper {
 	}
 
 	public void generateCattail(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -88,8 +107,53 @@ public class DecorationHelper {
 		}
 	}
 
+	public void generateVenusFlyTrap(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_VENUS_FLY_TRAP.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+
+	public void generateVolarpad(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_VOLARPAD.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+
+	public void generateSundew(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.sundew, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.sundew, 8, 2);
+			}
+		}
+	}
+
+	public void generatePitcherPlant(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+				world.setBlock(x, y, z, BLBlockRegistry.pitcherPlant, 0, 2);
+		}
+	}
+
 	public void generateWeedwoodBush(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -99,9 +163,27 @@ public class DecorationHelper {
 		}
 	}
 
+	public void generateBlackHatMushrooms(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_BLACK_HAT_MUSHROOMS.generate(this.world, this.rand, x, y, z);
+		}
+	}
+
+	public void generateFlatHeadMushrooms(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_FLAT_HEAD_MUSHROOMS.generate(this.world, this.rand, x, y, z);
+		}
+	}
+
 	public void generateWisp(double probability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
@@ -110,7 +192,7 @@ public class DecorationHelper {
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
@@ -122,7 +204,7 @@ public class DecorationHelper {
 	}
 
 	public void generateGiantWeedwoodTree(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -132,7 +214,7 @@ public class DecorationHelper {
 	}
 
 	public void generateWeedwoodTree(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -142,7 +224,7 @@ public class DecorationHelper {
 	}
 
 	public void generateSapTree(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -152,7 +234,7 @@ public class DecorationHelper {
 	}
 
 	public void generateRubberTree(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -162,7 +244,7 @@ public class DecorationHelper {
 	}
 
 	public void generateWeepingBlue(int attempts) {
-		for(int i = 0; i < attempts; i++) {
+		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
@@ -174,26 +256,26 @@ public class DecorationHelper {
 	}
 
 	public void generateMireCoral(double probability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block cBlock = this.world.getBlock(x, y, z);
-				if(cBlock == BLBlockRegistry.swampWater) {
-					if(BLBlockRegistry.mireCoral.canPlaceBlockAt(this.world, x, y, z)) {
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.mireCoral.canPlaceBlockAt(this.world, x, y, z)) {
 						this.world.setBlock(x, y, z, BLBlockRegistry.mireCoral, 0, 3);
 					}
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block cBlock = this.world.getBlock(x, y, z);
-				if(cBlock == BLBlockRegistry.swampWater) {
-					if(BLBlockRegistry.mireCoral.canPlaceBlockAt(this.world, x, y, z)) {
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.mireCoral.canPlaceBlockAt(this.world, x, y, z)) {
 						this.world.setBlock(x, y, z, BLBlockRegistry.mireCoral, 0, 3);
 					}
 				}
@@ -202,26 +284,26 @@ public class DecorationHelper {
 	}
 
 	public void generateFlowerPatch(double probability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
-				Block cBlock = this.world.getBlock(x, y+1, z);
-				if(cBlock == BLBlockRegistry.swampWater) {
-					if(BLBlockRegistry.waterFlowerStalk.canPlaceBlockAt(this.world, x, y, z)) {
+				Block cBlock = this.world.getBlock(x, y + 1, z);
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.waterFlowerStalk.canPlaceBlockAt(this.world, x, y, z)) {
 						BlockWaterFlower.generateFlowerPatch(this.world, x, y, z, 35, 10);
 					}
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block cBlock = this.world.getBlock(x, y, z);
-				if(cBlock == BLBlockRegistry.swampWater) {
-					if(BLBlockRegistry.waterFlowerStalk.canPlaceBlockAt(this.world, x, y, z)) {
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.waterFlowerStalk.canPlaceBlockAt(this.world, x, y, z)) {
 						BlockWaterFlower.generateFlowerPatch(this.world, x, y, z, 35, 10);
 					}
 				}
@@ -230,35 +312,35 @@ public class DecorationHelper {
 	}
 
 	public void generateWaterRoots(double probability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block block = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
-				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
-					if(world.rand.nextInt(3) == 0) {
-						BlockRoot.generateWaterRootPatch(world, x, y+1, z, 60, 15);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
+				if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
+					if (world.rand.nextInt(3) == 0) {
+						BlockRoot.generateWaterRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
-						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+						BlockRoot.generateRoot(world, x, y + 1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
 					}
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block block = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
-				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
-					if(world.rand.nextInt(3) == 0) {
-						BlockRoot.generateWaterRootPatch(world, x, y+1, z, 60, 15);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
+				if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == BLBlockRegistry.swampWater) {
+					if (world.rand.nextInt(3) == 0) {
+						BlockRoot.generateWaterRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
-						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+						BlockRoot.generateRoot(world, x, y + 1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
 					}
 				}
 			}
@@ -266,37 +348,37 @@ public class DecorationHelper {
 	}
 
 	public void generateRoots(double probability, int patchProbability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block cBlock = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
 				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
-				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
-					if(world.rand.nextInt(patchProbability) == 0) {
-						BlockRoot.generateRootPatch(world, x, y+1, z, 60, 15);
+				if ((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+					if (world.rand.nextInt(patchProbability) == 0) {
+						BlockRoot.generateRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
-						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+						BlockRoot.generateRoot(world, x, y + 1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
 					}
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block cBlock = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
 				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
-				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
-					if(world.rand.nextInt(patchProbability) == 0) {
-						BlockRoot.generateRootPatch(world, x, y+1, z, 60, 15);
+				if ((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+					if (world.rand.nextInt(patchProbability) == 0) {
+						BlockRoot.generateRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
-						BlockRoot.generateRoot(world, x, y+1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
+						BlockRoot.generateRoot(world, x, y + 1, z, WorldProviderBetweenlands.LAYER_HEIGHT - y + world.rand.nextInt(8) + 1);
 					}
 				}
 			}
@@ -304,35 +386,35 @@ public class DecorationHelper {
 	}
 
 	public void generateReeds(double probability) {
-		if(probability >= 1.0D) {
-			for(int i = 0; i < (int)probability; i++) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block block = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
-				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
-					BlockSwampReed.generateReedPatch(world, x, y+1, z, 40, 10);
-				} else if(block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
-					if(BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y+1, z)) {
-						BlockSwampReed.generateReedPatch(world, x, y+1, z, 40, 10);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
+				if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+					BlockSwampReed.generateReedPatch(world, x, y + 1, z, 40, 10);
+				} else if (block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
+					if (BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y + 1, z)) {
+						BlockSwampReed.generateReedPatch(world, x, y + 1, z, 40, 10);
 					}
 				}
 			}
 		} else {
-			if(this.rand.nextInt((int)(1.0D / probability)) == 0) {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
 				Block block = world.getBlock(x, y, z);
-				Block blockAbove = world.getBlock(x, y+1, z);
-				Block blockAbove2 = world.getBlock(x, y+2, z);
-				if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
-					BlockSwampReed.generateReedPatch(world, x, y+1, z, 40, 10);
-				} else if(block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
-					if(BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y+1, z)) {
-						BlockSwampReed.generateReedPatch(world, x, y+1, z, 40, 10);
+				Block blockAbove = world.getBlock(x, y + 1, z);
+				Block blockAbove2 = world.getBlock(x, y + 2, z);
+				if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+					BlockSwampReed.generateReedPatch(world, x, y + 1, z, 40, 10);
+				} else if (block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
+					if (BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y + 1, z)) {
+						BlockSwampReed.generateReedPatch(world, x, y + 1, z, 40, 10);
 					}
 				}
 			}

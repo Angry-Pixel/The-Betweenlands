@@ -132,7 +132,7 @@ public class BLBlockRegistry
 	public static final BlockRoot root = new BlockRoot();
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
 	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
-	public static final BlockTubePlant tubePlant = new BlockTubePlant();
+	public static final BlockTubePlant pitcherPlant = new BlockTubePlant();
 	public static final BlockRegularPlant regularPlant = new BlockRegularPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
 	public static final BlockVolarpad volarpad = new BlockVolarpad();
