@@ -26,6 +26,7 @@ public class ItemMaterialsBL extends Item
 	}
 	
 	public static ItemStack createStack(Item item, int size, int meta) {
+		return new ItemStack(item, size, meta);
 	}
 
 	@SideOnly(Side.CLIENT)
