@@ -2,6 +2,7 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
@@ -9,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -24,6 +26,12 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	public EntityAngler(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(20, Byte.valueOf((byte) 0));
 	}
 
 	@Override
@@ -113,6 +121,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
                 motionZ = 0.0D;
                 }
             	else if(onGround) {
+            		setIsLeaping((byte) 0);
 					motionY += 0.4F;
 					motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
 					motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
@@ -146,10 +155,25 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
 		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
+			if(getDistanceToEntity(player) <= 1.5F)
 			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
 				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
 			}
 		}
+	}
+	
+	@Override
+	protected void attackEntity(Entity entity, float distance) {
+		if (distance > 2.0F && distance < 6.0F && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && rand.nextInt(3) == 0)
+			if (isInWater() && worldObj.getBlock((int) posX, (int) posY + 1, (int) posZ) == Blocks.air) {
+				setIsLeaping((byte) 1);
+				double distanceX = entity.posX - posX;
+				double distanceZ = entity.posZ - posZ;
+				float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
+				motionX = distanceX / distanceSqrRoot * 1.5D * 0.900000011920929D + motionX * 2.70000000298023224D;
+				motionZ = distanceZ / distanceSqrRoot * 1.5D * 0.900000011920929D + motionZ * 2.70000000298023224D;
+				motionY = 0.8D;
+			}
 	}
 
 	@Override
@@ -157,6 +181,14 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		if (source.equals(DamageSource.inWall))
 			return false;
 		return super.attackEntityFrom(source, damage);
+	}
+	
+	public int getIsLeaping() {
+		return dataWatcher.getWatchableObjectByte(20);
+	}
+	
+	public void setIsLeaping(byte leaping) {
+		dataWatcher.updateObject(20, Byte.valueOf((byte) leaping));
 	}
 
 }
