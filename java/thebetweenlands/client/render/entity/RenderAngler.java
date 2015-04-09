@@ -59,7 +59,7 @@ public class RenderAngler extends RenderLiving {
 	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
 		GL11.glTranslatef(0F, 0.5F, 0F);
 		EntityAngler angler = (EntityAngler)entityliving;
-		if(angler.isGrounded()) {
+		if(angler.isGrounded() && angler.getIsLeaping() == 0) {
 			GL11.glRotatef(90F, 0F, 0F, 1F);
 			GL11.glTranslatef(-0.7F, 0.7F, 0F);
 		}
