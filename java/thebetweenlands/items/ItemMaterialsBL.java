@@ -24,6 +24,9 @@ public class ItemMaterialsBL extends Item
 	public static ItemStack createStack(EnumMaterialsBL materialsBL, int size) {
 		return new ItemStack(BLItemRegistry.materialsBL, size, materialsBL.ordinal());
 	}
+	
+	public static ItemStack createStack(Item item, int size, int meta) {
+	}
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
@@ -121,7 +124,8 @@ public class ItemMaterialsBL extends Item
 		SULFUR("sulfur"),
 		VALONITE_SHARD("valoniteShard"),
 		WEEDWOOD_SICK("weedWoodStick"),
-		WICK("wick");
+		WICK("wick"),
+		ANGLER_TOOTH("anglerTooth");
 
 		public final String iconName;
 
@@ -131,6 +135,8 @@ public class ItemMaterialsBL extends Item
 
 		public static final EnumMaterialsBL[] VALUES = values();
 	}
+
+
 
 	// Slimy Bonemeal
 
