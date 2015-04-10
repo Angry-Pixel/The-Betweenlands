@@ -31,27 +31,27 @@ public class EntityBloodSnail extends EntityMob {
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
-
+/*
 	@Override
 	protected String getLivingSound() {
-		return "erebus:snailliving";
+		return "thebetweenlands:snailliving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		return "erebus:snailhurt";
+		return "thebetweenlands:snailhurt";
 	}
 
 	@Override
 	protected String getDeathSound() {
-		return "erebus:snaildeath";
+		return "thebetweenlands:snaildeath";
 	}
 
-	//@Override
-	//protected Item getDropItem() {
-	//	return ModItems.lifeBlood;
-	//}
-
+	@Override
+	protected Item getDropItem() {
+		return ModItems.lifeBlood;
+	}
+*/
 	@Override
 	protected Entity findPlayerToAttack() {
 		EntityPlayer var1 = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
