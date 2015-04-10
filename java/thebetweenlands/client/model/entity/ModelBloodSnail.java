@@ -103,10 +103,10 @@ public class ModelBloodSnail extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		sensor1.rotateAngleX = MathHelper.cos(limbSwing * 1F + (float) Math.PI) * 0.5F * limbSwingAngle;
-		sensor2.rotateAngleX = MathHelper.cos(limbSwing * 1F) * 0.5F * limbSwingAngle;
-		sensor1.rotateAngleY = MathHelper.cos(limbSwing * 1F + (float) Math.PI) * 0.5F * limbSwingAngle - 0.2F;
-		sensor2.rotateAngleY = MathHelper.cos(limbSwing * 1F) * 0.5F * limbSwingAngle + 0.2F;
+		sensor1.rotateAngleX = MathHelper.cos(limbSwing * 1F + (float) Math.PI) * 1.5F * limbSwingAngle + 0.5F;
+		sensor2.rotateAngleX = MathHelper.cos(limbSwing * 1F) * 1.5F * limbSwingAngle + 0.5F;
+		sensor1.rotateAngleY = MathHelper.cos(limbSwing * 1F + (float) Math.PI) * 1.5F * limbSwingAngle + 0.2F;
+		sensor2.rotateAngleY = MathHelper.cos(limbSwing * 1F) * 1.5F * limbSwingAngle - 0.2F;
 	}
 
 }

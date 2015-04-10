@@ -1,16 +1,19 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityMireSnail extends EntityMob {
+public class EntityMireSnail extends EntityTameable {
 
 	public EntityMireSnail(World world) {
 		super(world);
@@ -23,7 +26,6 @@ public class EntityMireSnail extends EntityMob {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D); // Movespeed
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D); // MaxHealth
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D); // atkDmg
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D); // followRange
 	}
 
@@ -52,29 +54,10 @@ public class EntityMireSnail extends EntityMob {
 		return ModItems.lifeBlood;
 	}
 */
-	@Override
-	protected Entity findPlayerToAttack() {
-		EntityPlayer var1 = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
-		return var1 != null && canEntityBeSeen(var1) ? var1 : null;
-	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entity) {
-		if (super.attackEntityAsMob(entity)) {
-			if (entity instanceof EntityLiving) {
-				byte duration = 0;
-				if (worldObj.difficultySetting == EnumDifficulty.NORMAL)
-					duration = 7;
-				else if (worldObj.difficultySetting == EnumDifficulty.HARD)
-					duration = 15;
-
-				if (duration > 0) {
-					((EntityLiving) entity).addPotionEffect(new PotionEffect(Potion.poison.id, duration * 20, 0));
-					((EntityLiving) entity).addPotionEffect(new PotionEffect(Potion.confusion.id, duration * 20, 0));
-				}
-			}
-			return true;
-		} else
-			return false;
+	public EntityAgeable createChild(EntityAgeable entity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
