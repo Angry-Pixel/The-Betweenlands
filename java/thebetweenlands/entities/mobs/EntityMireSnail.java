@@ -1,30 +1,56 @@
 package thebetweenlands.entities.mobs;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMate;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.EnumDifficulty;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntityMireSnail extends EntityTameable {
+public class EntityMireSnail extends EntityAnimal {
+
+	int shagCount = 0;
 
 	public EntityMireSnail(World world) {
 		super(world);
-		setSize(1.0F, 0.8F);
+		getNavigator().setAvoidsWater(true);
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIPanic(this, 0.6D));
+		tasks.addTask(2, new EntityAIMate(this, 0.5D));
+		tasks.addTask(3, new EntityAITempt(this, 0.5D, ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL).getItem(), false));
+		tasks.addTask(5, new EntityAIWander(this, 0.5D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
+		setSize(0.8F, 0.6F);
 		stepHeight = 0.0F;
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(31, new Byte((byte) 0));
+	}
+
+	@Override
+	public boolean isAIEnabled() {
+		return true;
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D); // Movespeed
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D); // Movespeed
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D); // MaxHealth
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D); // followRange
 	}
@@ -32,6 +58,14 @@ public class EntityMireSnail extends EntityTameable {
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
+	}
+	
+	@Override
+	protected boolean canDespawn() {
+		if (getHasMated() == 1)
+			return false;
+		else
+			return true;
 	}
 /*
 	@Override
@@ -56,8 +90,49 @@ public class EntityMireSnail extends EntityTameable {
 */
 
 	@Override
-	public EntityAgeable createChild(EntityAgeable entity) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean interact(EntityPlayer player) {
+		ItemStack is = player.inventory.getCurrentItem();
+
+		if (is != null && isBreedingItem(is) && !shagging()) {
+			player.swingItem();
+			setTame((byte) 1);
+			return super.interact(player);
+		}
+		
+		return super.interact(player);
+	}
+
+	public boolean shagging() {
+		return isInLove();
+	}
+	
+	@Override
+	public boolean isBreedingItem(ItemStack is) {
+		return is != null && is.getItem() == BLItemRegistry.materialsBL && is.getItemDamage() == EnumMaterialsBL.SLUDGE_BALL.ordinal();
+	}
+	
+	@Override
+	public EntityAgeable createChild(EntityAgeable entityageable) {
+		return new EntityMireSnailEgg(worldObj);
+	}
+	
+	public void setTame(byte hasMated) {
+		dataWatcher.updateObject(31, Byte.valueOf(hasMated));
+	}
+	
+	public byte getHasMated() {
+		return dataWatcher.getWatchableObjectByte(31);
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setByte("hasMated", getHasMated());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setTame(nbt.getByte("hasMated"));
 	}
 }
