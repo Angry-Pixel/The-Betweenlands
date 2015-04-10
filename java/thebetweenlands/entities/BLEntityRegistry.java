@@ -4,10 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -30,6 +32,8 @@ public class BLEntityRegistry
 		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000);
 		registerEntity(8, EntityLeech.class, "leech", 0x804E3D, 0x3D6F80);
 		registerEntity(9, EntityDragonFly.class, "dragonfly", 0x804E3D, 0x3D6F80);
+		registerEntity(10, EntityBloodSnail.class, "bloodSnail", 0x804E3D, 0x3D6F80);
+		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x804E3D, 0x3D6F80);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

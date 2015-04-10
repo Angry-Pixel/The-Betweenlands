@@ -37,10 +37,12 @@ import thebetweenlands.client.render.block.BlockSwampReedRenderer;
 import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
 import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
@@ -53,10 +55,12 @@ import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -108,6 +112,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, new RenderLeech());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderSporeling());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, new RenderDragonFly());
+		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, new RenderBloodSnail());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, new RenderMireSnail());
 		
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
