@@ -24,8 +24,11 @@ import thebetweenlands.message.MessageSyncPlayerDecay;
 import thebetweenlands.message.MessageSyncWeather;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
+import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.utils.network.SidedPacketHandler;
+import thebetweenlands.utils.network.impl.CommonPacketProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
@@ -48,6 +51,11 @@ public class TheBetweenlands
 	public static CommonProxy proxy;
 	public static SimpleNetworkWrapper networkWrapper;
 
+	public static SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
+
+	@SidedProxy(modId = ModInfo.ID, clientSide = "thebetweenlands.utils.network.impl.ClientPacketProxy", serverSide = "thebetweenlands.utils.network.impl.CommonPacketProxy")
+	public static CommonPacketProxy packetProxy;
+	
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands instance;
 
@@ -88,6 +96,14 @@ public class TheBetweenlands
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
         networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
         networkWrapper.registerMessage(MessageSnailHatchParticle.class, MessageSnailHatchParticle.class, 5, Side.CLIENT);
+        
+        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 5, 6);
+		//Packets
+		try {
+			sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@EventHandler

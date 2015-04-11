@@ -51,6 +51,7 @@ import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
@@ -75,6 +76,7 @@ import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
+import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
@@ -123,6 +125,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLCraftingTable.class, new TileEntityBLWorkbenchRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new TileEntityWispRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnimator.class, new TileEntityAnimatorRenderer());
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());

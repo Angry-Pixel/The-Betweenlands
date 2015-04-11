@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
@@ -19,10 +20,10 @@ import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockHanger;
 import thebetweenlands.blocks.plants.BlockMireCoral;
+import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
-import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
@@ -156,6 +157,7 @@ public class BLBlockRegistry
 	public static final Block dualFurnaceBL = new BlockBLDualFurnace(false).setBlockName("thebetweenlands.dualFurnaceBL");
 	public static final Block dualFurnaceBLLit = new BlockBLDualFurnace(true).setBlockName("thebetweenlands.dualFurnaceBLLit").setLightLevel(0.875F);
 	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0f).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
+	public static final Block animator = new BlockAnimator();
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();

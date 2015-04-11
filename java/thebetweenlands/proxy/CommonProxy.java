@@ -16,6 +16,7 @@ import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
@@ -43,6 +44,7 @@ public class CommonProxy
         registerTileEntity(TileEntityBLCraftingTable.class, "crfTableBL");
         registerTileEntity(TileEntityWisp.class, "wisp");
         registerTileEntity(TileEntityBush.class, "weedWoodBush");
+        registerTileEntity(TileEntityAnimator.class, "animator");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

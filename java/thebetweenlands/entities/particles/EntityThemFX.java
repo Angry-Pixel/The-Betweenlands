@@ -30,6 +30,7 @@ public class EntityThemFX extends EntityFX {
 		this.startY = this.posY;
 	}
 
+	@Override
 	public void renderParticle(Tessellator par1Tessellator, float partialTicks, float rx, float rxz, float rz, float ryz, float rxy) {
 		par1Tessellator.draw();
 		par1Tessellator.startDrawingQuads();
