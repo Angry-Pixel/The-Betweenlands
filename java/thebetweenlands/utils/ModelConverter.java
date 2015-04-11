@@ -38,6 +38,27 @@ public class ModelConverter {
 			this.u = u;
 			this.v = v;
 		}
+		public Vec3(Vec3 vec, double u, double v) {
+			this.x = vec.x;
+			this.y = vec.y;
+			this.z = vec.z;
+			this.u = u;
+			this.v = v;
+		}
+		public Vec3(double u, double v) {
+			this.x = 0.0D;
+			this.y = 0.0D;
+			this.z = 0.0D;
+			this.u = u;
+			this.v = v;
+		}
+		public Vec3(Vec3 vec) {
+			this.x = vec.x;
+			this.y = vec.y;
+			this.z = vec.z;
+			this.u = vec.u;
+			this.v = vec.v;
+		}
 		public Vec3 cross(Vec3 vec) {
 			Vec3 crossProduct = new Vec3(0, 0, 0);
 			crossProduct.x = this.y * vec.z - vec.y * this.z;
@@ -164,14 +185,189 @@ public class ModelConverter {
 		}
 	}
 
+	public static final class Quad {
+		private Vec3[] vertices = new Vec3[4];
+		private Quad(Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4) {
+			this.vertices[0] = v1;
+			this.vertices[1] = v2;
+			this.vertices[2] = v3;
+			this.vertices[3] = v4;
+		}
+
+		/**
+		 * Returns the vertices of this quad.
+		 * @return
+		 */
+		public Vec3[] getVertices() {
+			return this.vertices;
+		}
+	}
+
+	public static final class Box {
+		private Quad[] quads;
+		private ModelRenderer modelRenderer;
+		private ModelBox modelBox;
+
+		private Box(Quad[] quads, ModelRenderer modelRenderer, ModelBox modelBox) {
+			this.quads = quads;
+			this.modelRenderer = modelRenderer;
+			this.modelBox = modelBox;
+		}
+
+		/**
+		 * Returns the quads of this box.
+		 * @return
+		 */
+		public Quad[] getQuads() {
+			return this.quads;
+		}
+
+		/**
+		 * Returns the ModelRenderer box of this box.
+		 * @return
+		 */
+		public ModelRenderer getModelRenderer() {
+			return this.modelRenderer;
+		}
+
+		/**
+		 * Returns the ModelBox of this box.
+		 * @return
+		 */
+		public ModelBox getModelBox() {
+			return this.modelBox;
+		}
+	}
+
+	public static class Model {
+		private final Vec3 fwdVec;
+		private final Vec3 upVec;
+		private List<Box> modelBoxes = new ArrayList<Box>();
+
+		private Model(List<Box> modelBoxList, Vec3 fwdVec, Vec3 upVec) {
+			this.fwdVec = new Vec3(fwdVec);
+			this.upVec = new Vec3(upVec);
+			for(Box box : modelBoxList) {
+				Quad[] quads = new Quad[box.quads.length];
+				for(int i = 0; i < box.quads.length; i++) {
+					Quad quad = box.quads[i];
+					quads[i] = new Quad(
+							new Vec3(quad.vertices[0]),
+							new Vec3(quad.vertices[1]),
+							new Vec3(quad.vertices[2]),
+							new Vec3(quad.vertices[3]));
+				}
+				Box b = new Box(quads, box.modelRenderer, box.modelBox);
+				this.modelBoxes.add(b);
+			}
+		}
+
+		/**
+		 * Offsets the model vertices in world space.
+		 * @param offset	Offset
+		 * @return
+		 */
+		public Model offsetWS(Vec3 offset) {
+			for(Box box : this.modelBoxes) {
+				for(Quad quad : box.quads) {
+					for(int i = 0; i < 4; i++) {
+						Vec3 vec = quad.vertices[i];
+						vec.x += offset.x;
+						vec.y += offset.y;
+						vec.z += offset.z;
+					}
+				}
+			}
+			return this;
+		}
+
+		/**
+		 * Offsets the model vertices in model space.
+		 * @param offset
+		 * @return
+		 */
+		public Model offsetMS(Vec3 offset) {
+			Vec3 leftVec = this.fwdVec.cross(this.upVec);
+			for(Box box : this.modelBoxes) {
+				for(Quad quad : box.quads) {
+					for(int i = 0; i < 4; i++) {
+						Vec3 vec = quad.vertices[i];
+						vec.x += this.upVec.x * offset.y + this.fwdVec.x * offset.z + leftVec.x * offset.x;
+						vec.y += this.upVec.y * offset.y + this.fwdVec.y * offset.z + leftVec.y * offset.x;
+						vec.z += this.upVec.z * offset.y + this.fwdVec.z * offset.z + leftVec.z * offset.x;
+					}
+				}
+			}
+			return this;
+		}
+
+		/**
+		 * Rotates the model vertices.
+		 * @param rotation		Rotation (degrees)
+		 * @param x				X axis (pitch)
+		 * @param y				Y axis (yaw)
+		 * @param z				Z axis (roll)
+		 * @param center		Rotation center
+		 * @return
+		 */
+		public Model rotate(float rotation, float x, float y, float z, Vec3 center) {
+			ROTATION_MATRIX.setRotations((float)Math.toRadians(x * rotation), (float)Math.toRadians(y * rotation), (float)Math.toRadians(z * rotation));
+			for(Box box : this.modelBoxes) {
+				for(Quad quad : box.quads) {
+					for(int i = 0; i < 4; i++) {
+						Vec3 vec = quad.vertices[i];
+						Vec3 rotatedPoint = null;
+						rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
+						vec.x = rotatedPoint.x;
+						vec.y = rotatedPoint.y;
+						vec.z = rotatedPoint.z;
+					}
+				}
+			}
+			Vec3 rotatedFwdVec = ROTATION_MATRIX.transformVec(this.fwdVec, center);
+			this.fwdVec.x = rotatedFwdVec.x;
+			this.fwdVec.y = rotatedFwdVec.y;
+			this.fwdVec.z = rotatedFwdVec.z;
+			Vec3 rotatedUpVec = ROTATION_MATRIX.transformVec(this.upVec, center);
+			this.upVec.x = rotatedUpVec.x;
+			this.upVec.y = rotatedUpVec.y;
+			this.upVec.z = rotatedUpVec.z;
+			return this;
+		}
+
+		/**
+		 * Returns the list of the reconstructed boxes of this model.
+		 * @return
+		 */
+		public List<Box> getBoxes() {
+			return this.modelBoxes;
+		}
+
+		/**
+		 * Renders this model with the given tessellator. 
+		 * The tessellator must already be drawing.
+		 * @param tessellator
+		 */
+		public void renderWithTessellator(Tessellator tessellator) {
+			for(Box box : this.modelBoxes) {
+				for(Quad quad : box.quads) {
+					for(int i = 0; i < 4; i++) {
+						Vec3 vec = quad.vertices[i];
+						tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+					}
+				}
+			}
+		}
+	}
+
 	//Holds a list of vertices and UVs of this model
-	private final ArrayList<Vec3> modelVertexList = new ArrayList<Vec3>();
+	private final List<Box> modelBoxList = new ArrayList<Box>();
 
 	//Holds the parent component of each ModelRenderer of this model
 	private final Map<ModelRenderer, ModelRenderer> childOfMap = new HashMap<ModelRenderer, ModelRenderer>();
 
 	//Holds a list of all parent components and sub-parent components of each ModelRenderer of this model
-	private final Map<ModelRenderer, List<ModelRenderer>> parentMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
+	private final Map<ModelRenderer, List<ModelRenderer>> parentOfMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
 
 	private final Vec3 fwdVec = new Vec3(0, 0, 1);
 	private final Vec3 upVec = new Vec3(0, -1, 0);
@@ -284,7 +480,7 @@ public class ModelConverter {
 		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
 
 		//Simulate parent rotation and transformation
-		List<ModelRenderer> parents = this.parentMap.get(modelRenderer);
+		List<ModelRenderer> parents = this.parentOfMap.get(modelRenderer);
 		if(parents != null && parents.size() > 0) {
 			for(ModelRenderer parent : parents) {
 				scaledPos = this.transformPosition(scaledPos, parent, ROTATION_MATRIX, modelScale);
@@ -317,7 +513,7 @@ public class ModelConverter {
 
 		//Create parent map
 		for(ModelRenderer modelRenderer : (List<ModelRenderer>) modelBase.boxList) {
-			this.parentMap.put(modelRenderer, this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer));
+			this.parentOfMap.put(modelRenderer, this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer));
 		}
 
 		//Iterate through ModelRenderers and boxes in the ModelBase
@@ -360,87 +556,112 @@ public class ModelConverter {
 				double uvWidth = (umax - umin) * modelWidth / textureMap.width;
 				double uvHeight = (vmax - vmin) * modelHeight / textureMap.height;
 
+				/*Quad face1 = new Quad(
+						new Vec3(),
+						new Vec3(),
+						new Vec3(),
+						new Vec3());*/
+
+				ArrayList<Quad> quadList = new ArrayList<Quad>(12);
+
 				//Face 1
-				this.addVertexWithUV(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight);
+				Quad face1 = new Quad(
+						new Vec3(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight),
+						new Vec3(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight),
+						new Vec3(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight),
+						new Vec3(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight));
+				quadList.add(face1);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight);
+					Quad face1d = new Quad(
+							new Vec3(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight),
+							new Vec3(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight),
+							new Vec3(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight),
+							new Vec3(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight));
+					quadList.add(face1d);
 				}
 
 				//Face 2
-				this.addVertexWithUV(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
+				Quad face2 = new Quad(
+						new Vec3(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight),
+						new Vec3(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight),
+						new Vec3(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight),
+						new Vec3(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight));
+				quadList.add(face2);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight);
+					Quad face2d = new Quad(
+							new Vec3(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight),
+							new Vec3(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight),
+							new Vec3(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight),
+							new Vec3(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight));
+					quadList.add(face2d);
 				}
 
 				//Face 3
-				/*this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
+				Quad face3 = new Quad(
+						new Vec3(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight),
+						new Vec3(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight),
+						new Vec3(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight),
+						new Vec3(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight));
+				quadList.add(face3);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(oy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
-				}*/
-				this.addVertexWithUV(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
-				this.addVertexWithUV(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
-				if(renderDoubleFace) {
-					this.addVertexWithUV(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight);
-					this.addVertexWithUV(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight);
+					Quad face3d = new Quad(
+							new Vec3(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight),
+							new Vec3(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight),
+							new Vec3(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight),
+							new Vec3(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight));
+					quadList.add(face3d);
 				}
 
 				//Face 4
-				this.addVertexWithUV(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight);
+				Quad face4 = new Quad(
+						new Vec3(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight),
+						new Vec3(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight),
+						new Vec3(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight),
+						new Vec3(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight));
+				quadList.add(face4);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight);
+					Quad face4d = new Quad(
+							new Vec3(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight),
+							new Vec3(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight),
+							new Vec3(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight),
+							new Vec3(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight));
+					quadList.add(face4d);
 				}
 
 				//Face 5
-				this.addVertexWithUV(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight);
-				this.addVertexWithUV(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight);
+				Quad face5 = new Quad(
+						new Vec3(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight),
+						new Vec3(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight),
+						new Vec3(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight),
+						new Vec3(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight));
+				quadList.add(face5);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight);
-					this.addVertexWithUV(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight);
+					Quad face5d = new Quad(
+							new Vec3(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight),
+							new Vec3(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight),
+							new Vec3(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight),
+							new Vec3(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight));
+					quadList.add(face5d);
 				}
 
 				//Face 6
-				this.addVertexWithUV(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight);
-				this.addVertexWithUV(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight);
-				this.addVertexWithUV(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight);
-				this.addVertexWithUV(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight);
+				Quad face6 = new Quad(
+						new Vec3(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight),
+						new Vec3(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight),
+						new Vec3(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight),
+						new Vec3(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight));
+				quadList.add(face6);
 				if(renderDoubleFace) {
-					this.addVertexWithUV(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight);
-					this.addVertexWithUV(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight);
-					this.addVertexWithUV(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight);
-					this.addVertexWithUV(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight);
+					Quad face6d = new Quad(
+							new Vec3(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight),
+							new Vec3(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight),
+							new Vec3(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight),
+							new Vec3(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight));
+					quadList.add(face6d);
 				}
+
+				Quad[] quads = quadList.toArray(new Quad[0]);
+				this.addBox(new Box(quads, modelRenderer, modelBox));
 			}
 		}
 	}
@@ -456,12 +677,17 @@ public class ModelConverter {
 	 */
 	public ModelConverter rotate(float rotation, float x, float y, float z, Vec3 center) {
 		ROTATION_MATRIX.setRotations((float)Math.toRadians(x * rotation), (float)Math.toRadians(y * rotation), (float)Math.toRadians(z * rotation));
-		for(Vec3 vec : this.modelVertexList) {
-			Vec3 rotatedPoint = null;
-			rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
-			vec.x = rotatedPoint.x;
-			vec.y = rotatedPoint.y;
-			vec.z = rotatedPoint.z;
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					Vec3 rotatedPoint = null;
+					rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
+					vec.x = rotatedPoint.x;
+					vec.y = rotatedPoint.y;
+					vec.z = rotatedPoint.z;
+				}
+			}
 		}
 		Vec3 rotatedFwdVec = ROTATION_MATRIX.transformVec(this.fwdVec, center);
 		this.fwdVec.x = rotatedFwdVec.x;
@@ -480,10 +706,15 @@ public class ModelConverter {
 	 * @return
 	 */
 	public ModelConverter offsetWS(Vec3 offset) {
-		for(Vec3 vec : this.modelVertexList) {
-			vec.x += offset.x;
-			vec.y += offset.y;
-			vec.z += offset.z;
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					vec.x += offset.x;
+					vec.y += offset.y;
+					vec.z += offset.z;
+				}
+			}
 		}
 		return this;
 	}
@@ -495,20 +726,15 @@ public class ModelConverter {
 	 */
 	public ModelConverter offsetMS(Vec3 offset) {
 		Vec3 leftVec = this.fwdVec.cross(this.upVec);
-		for(Vec3 vec : this.modelVertexList) {
-			Vec3 offsetVec = new Vec3(0, 0, 0);
-			offsetVec.x += this.upVec.x * offset.y;
-			offsetVec.y += this.upVec.y * offset.y;
-			offsetVec.z += this.upVec.z * offset.y;
-			offsetVec.x += this.fwdVec.x * offset.z;
-			offsetVec.y += this.fwdVec.y * offset.z;
-			offsetVec.z += this.fwdVec.z * offset.z;
-			offsetVec.x += leftVec.x * offset.x;
-			offsetVec.y += leftVec.y * offset.x;
-			offsetVec.z += leftVec.z * offset.x;
-			vec.x += offsetVec.x;
-			vec.y += offsetVec.y;
-			vec.z += offsetVec.z;
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					vec.x += this.upVec.x * offset.y + this.fwdVec.x * offset.z + leftVec.x * offset.x;
+					vec.y += this.upVec.y * offset.y + this.fwdVec.y * offset.z + leftVec.y * offset.x;
+					vec.z += this.upVec.z * offset.y + this.fwdVec.z * offset.z + leftVec.z * offset.x;
+				}
+			}
 		}
 		return this;
 	}
@@ -530,21 +756,19 @@ public class ModelConverter {
 	}
 
 	/**
-	 * Adds a vertex + UV to the model vertex list.
-	 * @param vert		The vertex position
-	 * @param u			Texture X coordinate
-	 * @param v			Texture Y coordinate
+	 * Adds a model box to the model box list.
+	 * @param box	Box
 	 */
-	private void addVertexWithUV(Vec3 vert, double u, double v) {
-		this.modelVertexList.add(new Vec3(vert.x, vert.y, vert.z, u, v));
+	private void addBox(Box box) {
+		this.modelBoxList.add(box);
 	}
 
 	/**
-	 * Returns the list of the reconstructed vertices + UVs of this model.
+	 * Returns the list of the reconstructed boxes of this model.
 	 * @return
 	 */
-	public List<Vec3> getVertices() {
-		return this.modelVertexList;
+	public List<Box> getBoxes() {
+		return this.modelBoxList;
 	}
 
 	/**
@@ -553,11 +777,24 @@ public class ModelConverter {
 	 * @param tessellator
 	 */
 	public void renderWithTessellator(Tessellator tessellator) {
-		for(Vec3 vert : this.modelVertexList) {
-			tessellator.addVertexWithUV(vert.x, vert.y, vert.z, vert.u, vert.v);
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+				}
+			}
 		}
 	}
-	
+
+	/**
+	 * Returns a copy of this model.
+	 * @return
+	 */
+	public Model getModel() {
+		return new Model(this.modelBoxList, this.fwdVec, this.upVec);
+	}
+
 	/**
 	 * Applies the rotation of the ModelRenderer to the rotation matrix.
 	 * @param modelRenderer			Minecraft ModelRenderer
