@@ -50,10 +50,15 @@ public class EntityMireSnail extends EntityAnimal {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D); // Movespeed
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D); // MaxHealth
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D); // followRange
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}
+
+	@Override
+    public boolean getCanSpawnHere() {
+        return worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox);
+    }
 
 	@Override
 	public int getMaxSpawnedInChunk() {
@@ -82,12 +87,17 @@ public class EntityMireSnail extends EntityAnimal {
 	protected String getDeathSound() {
 		return "thebetweenlands:snaildeath";
 	}
-
-	@Override
-	protected Item getDropItem() {
-		return ModItems.lifeBlood;
-	}
 */
+	@Override
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		if (isBurning())
+			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+		else
+			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+		
+		if (rand.nextBoolean())
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_SNAIL_SHELL, 1), 0.0F);
+	}
 
 	@Override
 	public boolean interact(EntityPlayer player) {

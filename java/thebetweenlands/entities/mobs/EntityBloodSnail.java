@@ -9,6 +9,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
 public class EntityBloodSnail extends EntityMob {
 
@@ -21,15 +24,26 @@ public class EntityBloodSnail extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D); // Movespeed
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D); // MaxHealth
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D); // atkDmg
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D); // followRange
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}
 
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
+	}
+
+	@Override
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		if (isBurning())
+			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+		else
+			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+
+		if (rand.nextBoolean())
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.BLOOD_SNAIL_SHELL, 1), 0.0F);
 	}
 /*
 	@Override

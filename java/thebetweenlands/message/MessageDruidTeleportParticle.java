@@ -1,12 +1,12 @@
 package thebetweenlands.message;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.message.base.AbstractMessage;
+import cpw.mods.fml.client.FMLClientHandler;
 
 public class MessageDruidTeleportParticle extends AbstractMessage<MessageDruidTeleportParticle>
 {

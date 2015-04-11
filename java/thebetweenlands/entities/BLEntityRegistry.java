@@ -35,7 +35,7 @@ public class BLEntityRegistry
 		registerEntity(9, EntityDragonFly.class, "dragonfly", 0x804E3D, 0x3D6F80);
 		registerEntity(10, EntityBloodSnail.class, "bloodSnail", 0x804E3D, 0x3D6F80);
 		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x804E3D, 0x3D6F80);
-		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg", 0x804E3D, 0x3D6F80);
+		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

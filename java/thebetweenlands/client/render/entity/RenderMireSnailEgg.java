@@ -16,7 +16,7 @@ public class RenderMireSnailEgg extends RenderLiving {
 	private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/mireSnailEgg.png");
 
 	public RenderMireSnailEgg() {
-		super(new ModelSnailEgg(), 0.5F);
+		super(new ModelSnailEgg(), 0.1F);
 	}
 
 	@Override
