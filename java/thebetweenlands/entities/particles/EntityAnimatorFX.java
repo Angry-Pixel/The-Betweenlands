@@ -4,105 +4,82 @@ import java.util.ArrayList;
 
 import javax.vecmath.Vector3d;
 
-import org.lwjgl.opengl.GL11;
-
-import thebetweenlands.event.render.FogHandler;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntityAnimatorFX extends EntityPathParticle {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/them.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");
 
 	private int ticks = 0;
-	
+	private float sizeDecrease = 0.0F;
+
 	public EntityAnimatorFX(World world, double x, double y, double z,
 			double motionX, double motionY, double motionZ,
-			ArrayList<Vector3d> targetPoints) {
+			ArrayList<Vector3d> targetPoints, IIcon icon, float sizeDecrease) {
 		super(world, x, y, z, motionX, motionY, motionZ, targetPoints);
-		
-		this.color = 0xFFFFFFFF;
-		this.scale = 0.05f;
-		this.startY = this.posY;
+
+		this.particleScale = world.rand.nextFloat() / 2.0F;
 		this.particleMaxAge = 10000000;
 		this.particleAge = 0;
+		this.sizeDecrease = sizeDecrease;
+
+		this.setParticleIcon(icon);
+
+		this.particleAlpha = 0.35F + world.rand.nextFloat() / 2.0F;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
+		this.particleScale -= this.sizeDecrease;
+
 		this.ticks++;
-		if(this.ticks >= 200) {
+		if(this.ticks >= 200 || this.particleScale <= 0.0F) {
 			this.setDead();
 		}
-		
+
 		double t = 1.0D / 200.0D * this.ticks;
-		
+
 		Vector3d pos = this.getPosition(t);
-		
+
 		this.setPosition(pos.x, pos.y, pos.z);
 		this.motionX = 0;
 		this.motionY = 0;
 		this.motionZ = 0;
 	}
 
-	
-	
-	private double startY;
-	private float scale;
-	private int color;
-	
 	@Override
-	public void renderParticle(Tessellator par1Tessellator, float partialTicks, float rx, float rxz, float rz, float ryz, float rxy) {
-		par1Tessellator.draw();
-		par1Tessellator.startDrawingQuads();
-		
-		//float ipx = (float)((this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks) - this.interpPosX);
-		//float ipy = (float)((this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks) - this.interpPosY);
-		//float ipz = (float)((this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks) - this.interpPosZ);
+	public void renderParticle(Tessellator tessellator, float x, float y, float z, float rx, float rxz, float rxy)
+	{
+		float umin = ((float)this.particleTextureIndexX + this.particleTextureJitterX / 4.0F) / 16.0F;
+		float umax = umin + 0.015609375F;
+		float vmin = ((float)this.particleTextureIndexY + this.particleTextureJitterY / 4.0F) / 16.0F;
+		float vmax = vmin + 0.015609375F;
+		float scale = 0.1F * this.particleScale;
 
-		float ipx = (float)(this.posX - this.interpPosX);
-		float ipy = (float)(this.posY - this.interpPosY);
-		float ipz = (float)(this.posZ - this.interpPosZ);
-		
-		int prevTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
-		
-		par1Tessellator.setBrightness(255);
+		if (this.particleIcon != null)
+		{
+			umin = this.particleIcon.getInterpolatedU((double)(this.particleTextureJitterX / 4.0F * 16.0F));
+			umax = this.particleIcon.getInterpolatedU((double)((this.particleTextureJitterX + 1.0F) / 4.0F * 16.0F));
+			vmin = this.particleIcon.getInterpolatedV((double)(this.particleTextureJitterY / 4.0F * 16.0F));
+			vmax = this.particleIcon.getInterpolatedV((double)((this.particleTextureJitterY + 1.0F) / 4.0F * 16.0F));
+		}
 
-		//System.out.println(this.posX + " " + this.posY + " " + this.posZ);
-		
-		float a = 255.0F;
-		float r = (float)(color >> 16 & 0xff) / 255F;
-		float g = (float)(color >> 8 & 0xff) / 255F;
-		float b = (float)(color & 0xff) / 255F;
+		float px = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)x - interpPosX);
+		float py = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)x - interpPosY);
+		float pz = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)x - interpPosZ);
+		tessellator.setColorRGBA_F(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha);
+		tessellator.addVertexWithUV((double)(px - y * scale - rxz * scale), (double)(py - z * scale), (double)(pz - rx * scale - rxy * scale), (double)umin, (double)vmax);
+		tessellator.addVertexWithUV((double)(px - y * scale + rxz * scale), (double)(py + z * scale), (double)(pz - rx * scale + rxy * scale), (double)umin, (double)vmin);
+		tessellator.addVertexWithUV((double)(px + y * scale + rxz * scale), (double)(py + z * scale), (double)(pz + rx * scale + rxy * scale), (double)umax, (double)vmin);
+		tessellator.addVertexWithUV((double)(px + y * scale - rxz * scale), (double)(py - z * scale), (double)(pz + rx * scale - rxy * scale), (double)umax, (double)vmax);
+	}
 
-		GL11.glDisable(GL11.GL_BLEND);
-		
-		par1Tessellator.setColorRGBA_F(r, g, b, a);
-		par1Tessellator.addVertexWithUV(ipx - rx * scale - ryz * scale, ipy - rxz * scale*2, ipz - rz * scale - rxy * scale, 0.0D, 1.0D);
-		par1Tessellator.addVertexWithUV(ipx - rx * scale + ryz * scale, ipy + rxz * scale*2, ipz - rz * scale + rxy * scale, 0.0D, 0.0D);
-		par1Tessellator.addVertexWithUV(ipx + rx * scale + ryz * scale, ipy + rxz * scale*2, ipz + rz * scale + rxy * scale, 1.0D, 0.0D);
-		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale*2, ipz + rz * scale - rxy * scale, 1.0D, 1.0D);
-		
-		/*par1Tessellator.addVertex(ipx - rx * scale - ryz * scale, ipy - rxz * scale*2, ipz - rz * scale - rxy * scale);
-		par1Tessellator.addVertex(ipx - rx * scale + ryz * scale, ipy + rxz * scale*2, ipz - rz * scale + rxy * scale);
-		par1Tessellator.addVertex(ipx + rx * scale + ryz * scale, ipy + rxz * scale*2, ipz + rz * scale + rxy * scale);
-		par1Tessellator.addVertex(ipx + rx * scale - ryz * scale, ipy - rxz * scale*2, ipz + rz * scale - rxy * scale);
-		
-		par1Tessellator.addVertex(ipx - rx * scale - ryz * scale, ipy - rxz * scale*2, ipz - rz * scale - rxy * scale);
-		par1Tessellator.addVertex(ipx + rx * scale - ryz * scale, ipy - rxz * scale*2, ipz + rz * scale - rxy * scale);
-		par1Tessellator.addVertex(ipx + rx * scale + ryz * scale, ipy + rxz * scale*2, ipz + rz * scale + rxy * scale);
-		par1Tessellator.addVertex(ipx - rx * scale + ryz * scale, ipy + rxz * scale*2, ipz - rz * scale + rxy * scale);*/
-		
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		
-		par1Tessellator.draw();
-		par1Tessellator.startDrawingQuads();
-		
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, prevTex);
+	@Override
+	public int getFXLayer() {
+		return 2;
 	}
 }

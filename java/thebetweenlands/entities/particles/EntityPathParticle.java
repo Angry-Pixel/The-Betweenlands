@@ -1,13 +1,11 @@
 package thebetweenlands.entities.particles;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.vecmath.Vector3d;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
-import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 
 public class EntityPathParticle extends EntityFX {
 	private int positionIndex = 0;
@@ -19,7 +17,7 @@ public class EntityPathParticle extends EntityFX {
 	}
 
 	public Vector3d getPosition(double t) {
-		int segments = (int)Math.ceil(this.targetPoints.size() / 4.0D);
+		int segments = (int)Math.ceil(this.targetPoints.size() / 3.0D);
 		int segmentIndex = (int)Math.floor(segments * t);
 		Vector3d segment[] = new Vector3d[4];
 		for(int v = 0; v < 4; v++) {
