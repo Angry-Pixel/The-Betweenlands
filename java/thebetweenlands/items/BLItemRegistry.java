@@ -80,6 +80,7 @@ public class BLItemRegistry {
     public static final Item weepingBluePetal = new ItemWeepingBluePetal().setUnlocalizedName("thebetweenlands.weepingBluePetal").setTextureName("thebetweenlands:weepingBluePetal");
     public static final Item wightsHeart = new ItemWightHeart().setUnlocalizedName("thebetweenlands.wightHeart").setTextureName("thebetweenlands:wightHeart");
     public static final Item yellowDottedFungus = new ItemFood(10, 20.0F, false).setUnlocalizedName("thebetweenlands.yellowDottedFungus").setTextureName("thebetweenlands:yellowDottedFungus");
+    public static final Item siltCrabClaw = new ItemFood(2, 0.6F, false).setUnlocalizedName("thebetweenlands.siltCrabClaw").setTextureName("thebetweenlands:siltCrabClaw");
 
 
     public static void init() {
@@ -91,7 +92,7 @@ public class BLItemRegistry {
     private static void initCreativeTabs() {
         ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, reedDonut, jamDonut, gertsDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
-                                     wightsHeart, yellowDottedFungus);
+                                     wightsHeart, yellowDottedFungus, siltCrabClaw);
         ModCreativeTabs.specials.setTab(testItem, spawnEggs);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots);
