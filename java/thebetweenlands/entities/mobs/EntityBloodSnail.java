@@ -24,7 +24,7 @@ public class EntityBloodSnail extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.4D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
@@ -44,6 +44,15 @@ public class EntityBloodSnail extends EntityMob {
 
 		if (rand.nextBoolean())
 			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.BLOOD_SNAIL_SHELL, 1), 0.0F);
+	}
+
+	public boolean isClimbing() {
+		return !onGround && isOnLadder();
+	}
+
+	@Override
+	public boolean isOnLadder() {
+		return isCollidedHorizontally;
 	}
 /*
 	@Override
