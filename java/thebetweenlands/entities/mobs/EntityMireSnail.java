@@ -14,12 +14,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import thebetweenlands.entities.entityAI.IEntityBLWallClimbing;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntityMireSnail extends EntityAnimal implements IEntityBLWallClimbing{
+public class EntityMireSnail extends EntityAnimal {
 
 	int shagCount = 0;
 
@@ -125,25 +124,25 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBLWallClimbi
 	public boolean shagging() {
 		return isInLove();
 	}
-	
+
 	@Override
 	public boolean isBreedingItem(ItemStack is) {
 		return is != null && is.getItem() == BLItemRegistry.materialsBL && is.getItemDamage() == EnumMaterialsBL.SLUDGE_BALL.ordinal();
 	}
-	
+
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
 		return new EntityMireSnailEgg(worldObj);
 	}
-	
+
 	public void setTame(byte hasMated) {
 		dataWatcher.updateObject(31, Byte.valueOf(hasMated));
 	}
-	
+
 	public byte getHasMated() {
 		return dataWatcher.getWatchableObjectByte(31);
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -155,4 +154,5 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBLWallClimbi
 		super.readEntityFromNBT(nbt);
 		setTame(nbt.getByte("hasMated"));
 	}
+    
 }
