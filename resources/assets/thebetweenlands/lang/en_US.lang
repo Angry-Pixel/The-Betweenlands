@@ -123,6 +123,11 @@ item.thebetweenlands.valoniteBoots.name=Valonite Boots
 
 item.thebetweenlands.rottenFood.name=Rotten Food
 
+item.thebetweenlands.aquaMiddleGem.name=Aqua Middle Gem
+item.thebetweenlands.crimsonMiddleGem.name=Crimson Middle Gem
+item.thebetweenlands.greenMiddleGem.name=Green Middle Gem
+item.thebetweenlands.bloodSnailShell.name=Blood Snail Shell
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler Fish
