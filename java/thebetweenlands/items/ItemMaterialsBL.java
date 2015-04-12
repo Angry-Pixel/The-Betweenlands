@@ -126,7 +126,8 @@ public class ItemMaterialsBL extends Item
 		VALONITE_SHARD("valoniteShard"),
 		WEEDWOOD_SICK("weedWoodStick"),
 		WICK("wick"),
-		ANGLER_TOOTH("anglerTooth");
+		ANGLER_TOOTH("anglerTooth"),
+		WEEDWOOD_BOWL("weedwoodBowl");
 
 		public final String iconName;
 

@@ -141,6 +141,7 @@ item.thebetweenlands.weepingBluePetal.name=Weeping Blue Petal
 item.thebetweenlands.wightsHeart.name=Wight's Heart
 item.thebetweenlands.yellowDottedFungus.name=Yellow Dotted Fungus
 item.thebetweenlands.siltCrabClaw.name=Silt Crab Claw
+item.thebetweenlands.crabstick.name=Crabstick
 
 item.thebetweenlands.aquaMiddleGem.name=Aqua Middle Gem
 item.thebetweenlands.crimsonMiddleGem.name=Crimson Middle Gem
@@ -168,6 +169,7 @@ item.thebetweenlands.sulfur.name=Sulfur
 item.thebetweenlands.valoniteShard.name=Valonite Shard
 item.thebetweenlands.weedWoodStick.name=Weedwood Stick
 item.thebetweenlands.anglerTooth.name=Angler Tooth
+item.thebetweenlands.weedwoodBowl.name=Weedwood Bowl
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
