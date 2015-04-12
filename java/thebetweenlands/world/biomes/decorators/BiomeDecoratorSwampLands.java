@@ -9,23 +9,23 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 	public void postTerrainGen() {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateGiantWeedwoodTree(60);
+		helper.generateGiantWeedwoodTree(100);
 		
 		helper.generateWeedwoodTree(100);
 		
-		helper.generateWeedwoodBush(120);
-		helper.generateRubberTree(40);
-		helper.generateSapTree(40);
+		helper.generateWeedwoodBush(130);
+		helper.generateRubberTree(50);
+		helper.generateSapTree(50);
 		helper.generateRoots(7.0D, 2);
-		helper.generateReeds(100);
-		helper.generateSwampPlant(60);
+		helper.generateReeds(2000);
+		helper.generateSwampPlant(80);
 		helper.generateVenusFlyTrap(10);
-		helper.generatePitcherPlant(30);
+		helper.generatePitcherPlant(20);
 		helper.generateFlatHeadMushrooms(15);
 		helper.generateBlackHatMushrooms(15);
 		helper.generateVolarpad(2);
-		helper.generateCattail(2);
-		helper.generateNettles(1);
+		helper.generateCattail(5);
+		helper.generateNettles(10);
 	}
 	
 	@Override
