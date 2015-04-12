@@ -1,16 +1,16 @@
 package thebetweenlands.items;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.recipes.BLMaterials;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLItemRegistry {
     public static final List<Item> ITEMS = new ArrayList<>();
@@ -82,7 +82,8 @@ public class BLItemRegistry {
     public static final Item yellowDottedFungus = new ItemFood(10, 20.0F, false).setUnlocalizedName("thebetweenlands.yellowDottedFungus").setTextureName("thebetweenlands:yellowDottedFungus");
     public static final Item siltCrabClaw = new ItemFood(2, 0.6F, false).setUnlocalizedName("thebetweenlands.siltCrabClaw").setTextureName("thebetweenlands:siltCrabClaw");
     public static final Item crabstick = new ItemFood(6, 5.3F, false).setUnlocalizedName("thebetweenlands.crabstick").setTextureName("thebetweenlands:crabstick");
-
+    public static final Item nettleSoup = new ItemNettleSoup().setUnlocalizedName("thebetweenlands.nettleSoup").setTextureName("thebetweenlands:nettleSoup");
+    
 
     public static void init() {
         initCreativeTabs();
@@ -93,7 +94,7 @@ public class BLItemRegistry {
     private static void initCreativeTabs() {
         ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, reedDonut, jamDonut, gertsDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
-                                     wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick);
+                                     wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup);
         ModCreativeTabs.specials.setTab(testItem, spawnEggs);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots);
