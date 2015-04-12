@@ -305,14 +305,41 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			float padRotation = rnd.nextFloat() * 360.0F;
 			int randNum = rnd.nextInt(3);
 			if(randNum == 0) {
-				plantModelVolarpad1.getModel().rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F)).renderWithTessellator(Tessellator.instance);
+				Model convertedModel = plantModelVolarpad1.getModel();
+				for(Box box : convertedModel.getBoxes()) {
+					ModelRenderer mr = box.getModelRenderer();
+					if(mr == modelVolarpad.pad1) {
+						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						break;
+					}
+				}
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
+				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.renderWithTessellator(Tessellator.instance);
 			} else if(randNum == 1) {
-				plantModelVolarpad2.getModel().rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F)).renderWithTessellator(Tessellator.instance);
+				Model convertedModel = plantModelVolarpad2.getModel();
+				for(Box box : convertedModel.getBoxes()) {
+					ModelRenderer mr = box.getModelRenderer();
+					if(mr == modelVolarpad.pad1) {
+						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						break;
+					}
+				}
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
+				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.renderWithTessellator(Tessellator.instance);
 			} else {
-				plantModelVolarpad3.getModel().rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F)).renderWithTessellator(Tessellator.instance);
+				Model convertedModel = plantModelVolarpad3.getModel();
+				for(Box box : convertedModel.getBoxes()) {
+					ModelRenderer mr = box.getModelRenderer();
+					if(mr == modelVolarpad.pad1) {
+						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						break;
+					}
+				}
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
+				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.renderWithTessellator(Tessellator.instance);
 			}
 		} else if(block == BLBlockRegistry.weepingBlue) {
 			if(plantModelWeepingBlue == null) {

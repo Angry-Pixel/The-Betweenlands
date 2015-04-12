@@ -204,9 +204,10 @@ public class ModelConverter {
 	}
 
 	public static final class Box {
-		private Quad[] quads;
-		private ModelRenderer modelRenderer;
-		private ModelBox modelBox;
+		private final Quad[] quads;
+		private final ModelRenderer modelRenderer;
+		private final ModelBox modelBox;
+		private final List<Box> childBoxes = new ArrayList<Box>();
 
 		private Box(Quad[] quads, ModelRenderer modelRenderer, ModelBox modelBox) {
 			this.quads = quads;
@@ -237,6 +238,41 @@ public class ModelConverter {
 		public ModelBox getModelBox() {
 			return this.modelBox;
 		}
+
+		/**
+		 * Returns the list of all child boxes of this box.
+		 * @return
+		 */
+		public List<Box> getChildBoxes() {
+			return this.childBoxes;
+		}
+		
+		/**
+		 * Rotates the box and its child boxes.
+		 * @param rotation		Rotation (degrees)
+		 * @param x				X axis (pitch)
+		 * @param y				Y axis (yaw)
+		 * @param z				Z axis (roll)
+		 * @param center		Rotation center
+		 * @return
+		 */
+		public Box rotate(float rotation, float x, float y, float z, Vec3 center) {
+			ROTATION_MATRIX.setRotations((float)Math.toRadians(x * rotation), (float)Math.toRadians(y * rotation), (float)Math.toRadians(z * rotation));
+			for(Box box : this.childBoxes) {
+				box.rotate(rotation, x, y, z, center);
+			}
+			for(Quad quad : this.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					Vec3 rotatedPoint = null;
+					rotatedPoint = ROTATION_MATRIX.transformVec(vec, center);
+					vec.x = rotatedPoint.x;
+					vec.y = rotatedPoint.y;
+					vec.z = rotatedPoint.z;
+				}
+			}
+			return this;
+		}
 	}
 
 	public static class Model {
@@ -245,8 +281,11 @@ public class ModelConverter {
 		private List<Box> modelBoxes = new ArrayList<Box>();
 
 		private Model(List<Box> modelBoxList, Vec3 fwdVec, Vec3 upVec) {
+			//Old, New
+			Map<Box, Box> copyReference = new HashMap<Box, Box>();
 			this.fwdVec = new Vec3(fwdVec);
 			this.upVec = new Vec3(upVec);
+			//Copy boxes
 			for(Box box : modelBoxList) {
 				Quad[] quads = new Quad[box.quads.length];
 				for(int i = 0; i < box.quads.length; i++) {
@@ -259,6 +298,14 @@ public class ModelConverter {
 				}
 				Box b = new Box(quads, box.modelRenderer, box.modelBox);
 				this.modelBoxes.add(b);
+				copyReference.put(box, b);
+			}
+			//Copy child boxes
+			for(Box box : modelBoxList) {
+				Box newBox = copyReference.get(box);
+				for(Box childBox : box.childBoxes) {
+					newBox.childBoxes.add(copyReference.get(childBox));
+				}
 			}
 		}
 
@@ -367,7 +414,9 @@ public class ModelConverter {
 	private final Map<ModelRenderer, ModelRenderer> childOfMap = new HashMap<ModelRenderer, ModelRenderer>();
 
 	//Holds a list of all parent components and sub-parent components of each ModelRenderer of this model
-	private final Map<ModelRenderer, List<ModelRenderer>> parentOfMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
+	private final Map<ModelRenderer, List<ModelRenderer>> parentMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
+
+	private final Map<ModelRenderer, List<Box>> modelRendererBoxMap = new HashMap<ModelRenderer, List<Box>>();
 
 	private final Vec3 fwdVec = new Vec3(0, 0, 1);
 	private final Vec3 upVec = new Vec3(0, -1, 0);
@@ -480,7 +529,7 @@ public class ModelConverter {
 		scaledPos = rotationMatrix.transformVec(scaledPos, scaledRotPos);
 
 		//Simulate parent rotation and transformation
-		List<ModelRenderer> parents = this.parentOfMap.get(modelRenderer);
+		List<ModelRenderer> parents = this.parentMap.get(modelRenderer);
 		if(parents != null && parents.size() > 0) {
 			for(ModelRenderer parent : parents) {
 				scaledPos = this.transformPosition(scaledPos, parent, ROTATION_MATRIX, modelScale);
@@ -513,7 +562,7 @@ public class ModelConverter {
 
 		//Create parent map
 		for(ModelRenderer modelRenderer : (List<ModelRenderer>) modelBase.boxList) {
-			this.parentOfMap.put(modelRenderer, this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer));
+			this.parentMap.put(modelRenderer, this.getParentList(new ArrayList<ModelRenderer>(), modelRenderer));
 		}
 
 		//Iterate through ModelRenderers and boxes in the ModelBase
@@ -555,12 +604,6 @@ public class ModelConverter {
 				double vmax = textureMap.vmax;
 				double uvWidth = (umax - umin) * modelWidth / textureMap.width;
 				double uvHeight = (vmax - vmin) * modelHeight / textureMap.height;
-
-				/*Quad face1 = new Quad(
-						new Vec3(),
-						new Vec3(),
-						new Vec3(),
-						new Vec3());*/
 
 				ArrayList<Quad> quadList = new ArrayList<Quad>(12);
 
@@ -664,6 +707,58 @@ public class ModelConverter {
 				this.addBox(new Box(quads, modelRenderer, modelBox));
 			}
 		}
+
+		//Find the child models of each ModelRenderer
+		Map<ModelRenderer, List<ModelRenderer>> childModelMap = new HashMap<ModelRenderer, List<ModelRenderer>>();
+		for(Box box : this.modelBoxList) {
+			ModelRenderer mr = box.modelRenderer;
+			List<ModelRenderer> childList = childModelMap.get(mr);
+			if(childList == null) {
+				childList = new ArrayList<ModelRenderer>();
+				childModelMap.put(mr, childList);
+			}
+			List<ModelRenderer> childModels = this.getChildModels(new ArrayList<ModelRenderer>(), mr);
+			for(ModelRenderer childModel : childModels) {
+				if(!childList.contains(childModel)) {
+					childList.add(childModel);
+				}
+			}
+		}
+
+		//Add child boxes to each box
+		for(Box box : this.modelBoxList) {
+			List<ModelRenderer> childModels = childModelMap.get(box.modelRenderer);
+			for(ModelRenderer childModel : childModels) {
+				List<Box> childBoxes = this.modelRendererBoxMap.get(childModel);
+				for(Box childBox : childBoxes) {
+					if(!box.childBoxes.contains(childBox)) {
+						box.childBoxes.add(childBox);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns a list of all child and sub-child models of the given ModelRenderer.
+	 * @param list					List to be populated
+	 * @param modelRenderer			Minecraft ModelRenderer
+	 * @return
+	 */
+	private List<ModelRenderer> getChildModels(List<ModelRenderer> list, ModelRenderer modelRenderer) {
+		if(modelRenderer.childModels != null && modelRenderer.childModels.size() > 0) {
+			for(ModelRenderer childModel : (List<ModelRenderer>) modelRenderer.childModels) {
+				list.add(childModel);
+				if(!list.contains(childModel)) {
+					for(ModelRenderer mr : this.getChildModels(list, childModel)) {
+						if(!list.contains(mr)) {
+							list.add(mr);
+						}
+					}
+				}
+			}
+		}
+		return list;
 	}
 
 	/**
@@ -761,6 +856,12 @@ public class ModelConverter {
 	 */
 	private void addBox(Box box) {
 		this.modelBoxList.add(box);
+		List<Box> boxList = this.modelRendererBoxMap.get(box.modelRenderer);
+		if(boxList == null) {
+			boxList = new ArrayList<Box>();
+			this.modelRendererBoxMap.put(box.modelRenderer, boxList);
+		}
+		boxList.add(box);
 	}
 
 	/**
