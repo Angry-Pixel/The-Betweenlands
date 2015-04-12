@@ -11,9 +11,9 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 	
 		helper.generateWeedwoodTree(40);
 		helper.generateSapTree(30);
-		helper.generateWeedwoodBush(20);
-		helper.generateCattail(50);
-		helper.generateSwampGrass(30);
+		helper.generateWeedwoodBush(10);
+		helper.generateCattail(20);
+		helper.generateSwampGrass(50);
 		helper.generateNettles(1);
 		helper.generateCattail(2);
 		helper.generateWeepingBlue(2);

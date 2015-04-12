@@ -11,16 +11,16 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 
 		helper.generateWeedwoodTree(25);
 		helper.generateSapTree(30);
-		helper.generateWeedwoodBush(20);
-		helper.generateCattail(50);
+		helper.generateWeedwoodBush(40);
+		helper.generateCattail(10);
 		helper.generateSwampGrass(30);
 		helper.generateNettles(1);
 		helper.generateCattail(2);
-		helper.generateVolarpad(20);
+		helper.generateVolarpad(10);
 		helper.generateWeepingBlue(2);
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateFlowerPatch(1.0D);
-		helper.generateWaterRoots(10.0D);
+		helper.generateWaterRoots(5.0D);
 	}
 }
