@@ -124,7 +124,7 @@ public class ItemMaterialsBL extends Item
 		STALKER_EYE("stalkerEye"),
 		SULFUR("sulfur"),
 		VALONITE_SHARD("valoniteShard"),
-		WEEDWOOD_SICK("weedWoodStick"),
+		WEEDWOOD_STICK("weedWoodStick"),
 		WICK("wick"),
 		ANGLER_TOOTH("anglerTooth"),
 		WEEDWOOD_BOWL("weedwoodBowl");
