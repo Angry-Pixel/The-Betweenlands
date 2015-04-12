@@ -14,11 +14,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.entities.entityAI.IEntityBLWallClimbing;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntityMireSnail extends EntityAnimal {
+public class EntityMireSnail extends EntityAnimal implements IEntityBLWallClimbing{
 
 	int shagCount = 0;
 
