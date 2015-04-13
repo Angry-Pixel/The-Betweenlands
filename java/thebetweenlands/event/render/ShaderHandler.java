@@ -28,7 +28,7 @@ public class ShaderHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onPreRender(RenderWorldLastEvent event) {
-		if(ConfigHandler.USE_SHADER) {
+		if(ConfigHandler.USE_SHADER && ShaderHelper.INSTANCE.isShaderSupported()) {
 			ShaderHelper.INSTANCE.enableShader();
 			ShaderHelper.INSTANCE.updateShader();
 		}
@@ -37,7 +37,7 @@ public class ShaderHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onPostRender(TickEvent.RenderTickEvent event) {
-		if(ConfigHandler.USE_SHADER && event.phase == Phase.END) {
+		if(ConfigHandler.USE_SHADER && event.phase == Phase.END && ShaderHelper.INSTANCE.isShaderSupported()) {
 			ShaderHelper.INSTANCE.clearDynLights();
 		}
 	}

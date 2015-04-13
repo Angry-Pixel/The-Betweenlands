@@ -1,5 +1,8 @@
 package thebetweenlands.client.render.shader;
 
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.ShaderGroup;
@@ -16,9 +19,18 @@ public class ShaderHelper {
 	private MainShader currentShader;
 	private boolean failedLoading = false;
 	private ShaderGroup currentShaderGroup;
-
+	private boolean checked = false;
+	private boolean shadersSupported = false;
+	
 	public boolean isShaderSupported() {
-		return OpenGlHelper.func_153193_b();
+		if(!this.checked){
+			this.checked = true;
+			ContextCapabilities contextCapabilities = GLContext.getCapabilities();
+			boolean supportsGL21 = contextCapabilities.OpenGL21;
+	        boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
+			this.shadersSupported = OpenGlHelper.func_153193_b() && supported;
+		}
+		return this.shadersSupported;
 	}
 
 	public void enableShader() {
