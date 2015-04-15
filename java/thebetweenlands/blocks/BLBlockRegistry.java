@@ -158,6 +158,7 @@ public class BLBlockRegistry
 	public static final Block dualFurnaceBLLit = new BlockBLDualFurnace(true).setBlockName("thebetweenlands.dualFurnaceBLLit").setLightLevel(0.875F);
 	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0f).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
 	public static final Block animator = new BlockAnimator();
+	public static final Block mudBrick = new BlockMudBrick(null);
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
