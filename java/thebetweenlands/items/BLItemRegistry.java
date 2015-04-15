@@ -93,7 +93,7 @@ public class BLItemRegistry {
 
     private static void initCreativeTabs() {
         ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
-                                     snailFleshCooked, reedDonut, jamDonut, gertsDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
+                                     snailFleshCooked, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup);
         ModCreativeTabs.specials.setTab(testItem, spawnEggs);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
