@@ -158,21 +158,21 @@ public class BLBlockRegistry
 	public static final Block dualFurnaceBLLit = new BlockBLDualFurnace(true).setBlockName("thebetweenlands.dualFurnaceBLLit").setLightLevel(0.875F);
 	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0f).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
 	public static final Block animator = new BlockAnimator();
-	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
-	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block carvedTempleBrick = new BlockBLGenericDeco("carvedTempleBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block cragrockBrick = new BlockBLGenericDeco("cragrockBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block cragTiles = new BlockBLGenericDeco("cragTiles").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block dungeonTile = new BlockBLGenericDeco("dungeonTile").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block goldCircleBrick = new BlockBLGenericDeco("goldCircleBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block smoothBetweenstone = new BlockBLGenericDeco("smoothBetweenstone").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block smoothTempleBrick = new BlockBLGenericDeco("smoothTempleBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block solidTar = new BlockBLGenericDeco("solidTar").setHardness(10f).setResistance(20.0F).setStepSound(Block.soundTypeStone);
-	public static final Block sulphurBlock = new BlockBLGenericDeco("sulphurBlock").setHardness(2f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block valoniteBlock = new BlockBLGenericDeco("valoniteBlock").setHardness(5).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block templeBrick = new BlockBLGenericDeco("templeBrick").setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block carvedTempleBrick = new BlockBLGenericDeco("carvedTempleBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block cragrockBrick = new BlockBLGenericDeco("cragrockBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block cragTiles = new BlockBLGenericDeco("cragTiles", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block dungeonTile = new BlockBLGenericDeco("dungeonTile", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block goldCircleBrick = new BlockBLGenericDeco("goldCircleBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block smoothBetweenstone = new BlockBLGenericDeco("smoothBetweenstone", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block smoothTempleBrick = new BlockBLGenericDeco("smoothTempleBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block solidTar = new BlockBLGenericDeco("solidTar", Material.rock).setHardness(10f).setResistance(20.0F).setStepSound(Block.soundTypeStone);
+	public static final Block sulphurBlock = new BlockBLGenericDeco("sulphurBlock", Material.rock).setHardness(2f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block valoniteBlock = new BlockBLGenericDeco("valoniteBlock", Material.rock).setHardness(5).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block templeBrick = new BlockBLGenericDeco("templeBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();

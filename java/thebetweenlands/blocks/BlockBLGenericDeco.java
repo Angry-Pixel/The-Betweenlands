@@ -9,8 +9,8 @@ public class BlockBLGenericDeco extends Block {
 	
 	private String type;
 
-	public BlockBLGenericDeco(String blockName) {
-		super(Material.rock);
+	public BlockBLGenericDeco(String blockName, Material material) {
+		super(material);
 		setCreativeTab(ModCreativeTabs.blocks);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
