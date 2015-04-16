@@ -85,6 +85,11 @@ tile.thebetweenlands.solidTarStairs.name=Solid Tar Stairs
 tile.thebetweenlands.templeBrickStairs.name=Temple Brick Stairs
 tile.thebetweenlands.weedwoodPlankStairs.name=Weedwood Plank Stairs
 tile.thebetweenlands.rubberTreePlankStairs.name=Rubber Tree Plank Stairs
+tile.thebetweenlands.mudBrickWall.name=Mud Brick Wall
+tile.thebetweenlands.cragrockWall.name=Cragrock Brick Wall
+tile.thebetweenlands.smoothBetweenstoneWall.name=Smooth Betweenstone Wall
+tile.thebetweenlands.solidTarWall.name=Solid Tar Wall
+tile.thebetweenlands.templeBrickWall.name=Temple Brick Wall
 
 # Shrooms
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
