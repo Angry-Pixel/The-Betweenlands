@@ -159,6 +159,20 @@ public class BLBlockRegistry
 	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0f).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
 	public static final Block animator = new BlockAnimator();
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick");
+	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone").setLightLevel(0.875F);
+	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles");
+	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag");
+	public static final Block carvedTempleBrick = new BlockBLGenericDeco("carvedTempleBrick");
+	public static final Block cragrockBrick = new BlockBLGenericDeco("cragrockBrick");
+	public static final Block cragTiles = new BlockBLGenericDeco("cragTiles");
+	public static final Block dungeonTile = new BlockBLGenericDeco("dungeonTile");
+	public static final Block goldCircleBrick = new BlockBLGenericDeco("goldCircleBrick");
+	public static final Block smoothBetweenstone = new BlockBLGenericDeco("smoothBetweenstone");
+	public static final Block smoothTempleBrick = new BlockBLGenericDeco("smoothTempleBrick");
+	public static final Block solidTar = new BlockBLGenericDeco("solidTar");
+	public static final Block sulphurBlock = new BlockBLGenericDeco("sulphurBlock");
+	public static final Block valoniteBlock = new BlockBLGenericDeco("valoniteBlock");
+	public static final Block templeBrick = new BlockBLGenericDeco("templeBrick");
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
