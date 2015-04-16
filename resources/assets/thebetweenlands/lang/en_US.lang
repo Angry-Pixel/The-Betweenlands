@@ -77,6 +77,14 @@ tile.thebetweenlands.thatch.name=Thatch
 tile.thebetweenlands.rubberTreePlanks.name=Rubber Tree Planks
 tile.thebetweenlands.octineBlock.name=Octine Block
 
+# Stairs, Slabs, Walls, Fences
+tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs
+tile.thebetweenlands.cragrockBrickStairs.name=Cragrock Brick Stairs
+tile.thebetweenlands.smoothBetweenstoneStairs.name=Smooth Betweenstone Stairs
+tile.thebetweenlands.solidTarStairs.name=Solid Tar Stairs
+tile.thebetweenlands.templeBrickStairs.name=Temple Brick Stairs
+tile.thebetweenlands.weedwoodPlankStairs.name=Weedwood Plank Stairs
+tile.thebetweenlands.rubberTreePlankStairs.name=Rubber Tree Plank Stairs
 
 # Shrooms
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom

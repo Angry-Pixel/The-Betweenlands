@@ -181,10 +181,15 @@ public class BLBlockRegistry
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
-	// STAIRS, SLABS, WALLS
+	// STAIRS, SLABS, WALLS, FENCES
 	public static final Block mudBrickStairs = new BlockStairsBL(mudBrick, 0).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.mudBrickStairs");
+	public static final Block cragrockBrickStairs = new BlockStairsBL(cragrockBrick, 0).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.cragrockBrickStairs");
+	public static final Block smoothBetweenstoneStairs = new BlockStairsBL(smoothBetweenstone, 0).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.smoothBetweenstoneStairs");
+	public static final Block solidTarStairs = new BlockStairsBL(solidTar, 0).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.solidTarStairs");	
+	public static final Block templeBrickStairs = new BlockStairsBL(templeBrick, 0).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.templeBrickStairs");
+	public static final Block weedwoodPlankStairs = new BlockStairsBL(weedwoodPlanks, 0).setHardness(2F).setResistance(10.0F).setStepSound(Block.soundTypeWood).setBlockName("thebetweenlands.weedwoodPlankStairs");
+	public static final Block rubberTreePlankStairs = new BlockStairsBL(rubberTreePlanks, 0).setHardness(2F).setResistance(10.0F).setStepSound(Block.soundTypeWood).setBlockName("thebetweenlands.rubberTreePlankStairs");
 	
-
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
 
