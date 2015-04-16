@@ -94,7 +94,7 @@ public class BLBlockRegistry
 	public static final Block aquaMiddleGemOre = new BlockMiddleGemOre("aquaMiddleGemOre", null);
 	public static final Block crimsonMiddleGemOre = new BlockMiddleGemOre("crimsonMiddleGemOre", null);
 	public static final Block greenMiddleGemOre = new BlockMiddleGemOre("greenMiddleGemOre", null);
-	public static final Block octineOre = new BlockGenericOre("octineOre", null).setLightLevel(0.625F); //setting null drops item block
+	public static final Block octineOre = new BlockGenericOre("octineOre", null).setLightLevel(0.875F); //setting null drops item block
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
 	public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
@@ -169,11 +169,15 @@ public class BLBlockRegistry
 	public static final Block goldCircleBrick = new BlockBLGenericDeco("goldCircleBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block smoothBetweenstone = new BlockBLGenericDeco("smoothBetweenstone", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block smoothTempleBrick = new BlockBLGenericDeco("smoothTempleBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block solidTar = new BlockBLGenericDeco("solidTar", Material.rock).setHardness(10f).setResistance(20.0F).setStepSound(Block.soundTypeStone);
+	public static final Block solidTar = new BlockBLGenericDeco("solidTar", Material.rock).setHardness(15f).setResistance(20.0F).setStepSound(Block.soundTypeStone);
 	public static final Block sulphurBlock = new BlockBLGenericDeco("sulphurBlock", Material.rock).setHardness(2f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block valoniteBlock = new BlockBLGenericDeco("valoniteBlock", Material.rock).setHardness(5).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block octineBlock = new BlockBLGenericDeco("octineBlock", Material.rock).setHardness(5f).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block valoniteBlock = new BlockBLGenericDeco("valoniteBlock", Material.rock).setHardness(10f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block templeBrick = new BlockBLGenericDeco("templeBrick", Material.rock).setHardness(1.5f).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5f).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
+	public static final Block rubberTreePlanks = new BlockBLGenericDeco("rubberTreePlanks", Material.wood).setHardness(2f).setResistance(5.0F).setStepSound(Block.soundTypeWood);
 
+	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
