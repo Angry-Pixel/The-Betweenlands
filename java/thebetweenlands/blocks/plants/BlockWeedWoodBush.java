@@ -48,7 +48,7 @@ public class BlockWeedWoodBush extends Block {
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		this.iconFancy = iconRegister.registerIcon("thebetweenlands:weedwoodLeavesFancy");
 		this.iconFast = iconRegister.registerIcon("thebetweenlands:weedwoodLeavesFast");
-		this.iconStick = iconRegister.registerIcon("thebetweenlands:weedwoodStick");
+		this.iconStick = iconRegister.registerIcon("thebetweenlands:weedWoodStick");
 		super.registerBlockIcons(iconRegister);
 	}
 }
