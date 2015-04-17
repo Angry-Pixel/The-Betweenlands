@@ -1,7 +1,12 @@
 package thebetweenlands.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockWall;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import cpw.mods.fml.relauncher.Side;
@@ -25,4 +30,12 @@ public class BlockBLWall extends BlockWall {
 	public IIcon getIcon(int side, int meta) {
 	 return blockType.getIcon(side, blockMeta);	
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void getSubBlocks(Item id, CreativeTabs creativeTab, List list) {
+		list.add(new ItemStack(id, 1, blockMeta));
+	}
+
 }
