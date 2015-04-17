@@ -100,6 +100,7 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(new ItemStack(BLItemRegistry.snailFleshRaw), new ItemStack(BLItemRegistry.snailFleshCooked), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.betweenstone), new ItemStack(BLBlockRegistry.smoothBetweenstone), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone,1,1), new ItemStack(BLBlockRegistry.cragrockBrick), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.silt), new ItemStack(BLBlockRegistry.siltGlass), 0F);
 	}
 
 	private static void registerOreDictionary() {
