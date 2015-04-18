@@ -211,7 +211,7 @@ public class BLBlockRegistry
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	
 	//DOORS
-	public static final Block doorWeedwood = new BlockBLDoor("weedwood");
+	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
 
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");

@@ -17,10 +17,6 @@ public class BlockBLDoor extends BlockDoor {
 	private Item item;
 	private int renderPass = 0;
 
-	public BlockBLDoor(String name) {
-		this(name, Material.wood);
-	}
-
 	public BlockBLDoor(String name, Material material) {
 		super(material);
 		disableStats();

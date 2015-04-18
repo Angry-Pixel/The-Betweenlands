@@ -28,6 +28,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
 import thebetweenlands.client.render.block.BlockModelPlantRenderer;
 import thebetweenlands.client.render.block.BlockRootRenderer;
@@ -140,6 +141,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockStalactiteRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRootRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockModelPlantRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer());
 		
         //Events
         MinecraftForge.EVENT_BUS.register(new GuiOverlay());

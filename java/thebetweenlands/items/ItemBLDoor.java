@@ -18,11 +18,11 @@ public class ItemBLDoor extends Item {
 	public ItemBLDoor(Block door) {
 		this.door = (BlockBLDoor) door;
 		setMaxStackSize(64);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.items);
 
 		String name = ((BlockBLDoor) door).name;
-		setTextureName("erebus:door_" + name);
-		setUnlocalizedName("erebus.door_" + name);
+		setTextureName("thebetweenlands:door_" + name);
+		setUnlocalizedName("thebetweenlands.door_" + name);
 
 		this.door.setItem(this);
 	}
