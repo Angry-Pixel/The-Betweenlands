@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 
@@ -14,6 +15,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
+	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		int radius = rand.nextInt(2) + 3;
@@ -244,7 +246,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 			int length = rand.nextInt(4) + 4;
 			for (int yy = y; yy > y - length; --yy)
 				if (world.getBlock(x, yy, z) == Blocks.air)
-					world.setBlock(x, yy, z, Blocks.vine, meta, 2);
+					world.setBlock(x, yy, z,ivy, meta, 2);
 				else
 					break;
 		}

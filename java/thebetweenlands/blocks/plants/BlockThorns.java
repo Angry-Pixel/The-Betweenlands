@@ -7,10 +7,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
-import thebetweenlands.creativetabs.ModCreativeTabs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
 public class BlockThorns extends BlockVine implements IShearable {
 

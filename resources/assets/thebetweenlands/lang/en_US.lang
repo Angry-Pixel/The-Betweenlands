@@ -110,6 +110,8 @@ tile.thebetweenlands.swampReedBlockUW.name=Swamp Reed under water Block
 tile.thebetweenlands.mireCoral.name=Mire Coral Block
 tile.thebetweenlands.waterFlowerStalk.name=Water Flower Stalk Block
 tile.thebetweenlands.waterFlower.name=Water Flower Block
+tile.thebetweenlands.thorns.name=Thorns
+tile.thebetweenlands.poisonIvy.name=Poison Ivy
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace

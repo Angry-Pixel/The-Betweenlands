@@ -76,7 +76,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x + i, y, z, log, meta == 0 ? 0 : 4, 2);
 				if(i == branchLength) {
 					createLeaves(world, x + i, y, z, false);
-					addVines(world, rand, x + i, y - 2, z, 2);
 				}
 			}
 
@@ -84,7 +83,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x - i, y, z, log, meta == 0 ? 0 : 4, 2);
 				if(i == branchLength) {
 					createLeaves(world, x - i, y, z, false);
-					addVines(world, rand, x - i, y - 2, z, 8);
 				}
 			}
 
@@ -92,7 +90,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x, y, z + i, log,  meta == 0 ? 0 : 8, 2);
 				if(i == branchLength) {
 					createLeaves(world, x, y, z + i, false);
-					addVines(world, rand, x, y - 2, z + i, 4);
 				}
 			}
 
@@ -100,7 +97,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x, y, z - i, log,  meta == 0 ? 0 : 8, 2);
 				if(i == branchLength) {
 					createLeaves(world, x, y, z - i, false);
-					addVines(world, rand, x, y - 2, z - i, 1);
 					}
 			}
 
@@ -108,7 +104,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x + i - 1, y, z + i - 1, log, meta == 0 ? 0 : 4, 2);
 				if(i == branchLength) {
 					createLeaves(world, x + i - 1, y, z + i - 1, false);
-					addVines(world, rand, x + i - 1, y - 2, z + i - 1, 2);
 				}
 			}
 
@@ -116,7 +111,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x - i + 1, y, z - i + 1, log, meta == 0 ? 0 : 4, 2);
 				if(i == branchLength) {
 					createLeaves(world, x - i + 1, y, z - i + 1, false);
-					addVines(world, rand, x - i + 1, y - 2, z - i + 1, 8);
 				}
 			}
 
@@ -124,7 +118,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x - i + 1, y, z + i - 1, log, meta == 0 ? 0 : 8, 2);
 				if(i == branchLength) {
 					createLeaves(world, x - i + 1, y, z + i - 1, false);
-					addVines(world, rand, x - i + 1, y - 2, z + i - 1, 4);
 				}
 			}
 
@@ -132,7 +125,6 @@ public class WorldGenSapTree extends WorldGenerator {
 				world.setBlock(x + i - 1, y, z - i + 1, log, meta == 0 ? 0 : 8, 2);
 				if(i == branchLength) {
 					createLeaves(world, x + i - 1, y, z - i + 1, false);
-					addVines(world, rand, x + i - 1, y - 2, z - i + 1, 1);
 				}
 			}
 		}
@@ -157,14 +149,4 @@ public class WorldGenSapTree extends WorldGenerator {
 		world.setBlock(x - 1, y, z, log, 15, 2);
 	}
 	
-	public void addVines(World world, Random rand, int x, int y, int z, int meta) {
-		if (rand.nextInt(4) != 0) {
-			int length = rand.nextInt(3) + 2;
-			for (int yy = y; yy > y - length; --yy)
-				if (world.getBlock(x, yy, z) == Blocks.air)
-					world.setBlock(x, yy, z, Blocks.vine, meta, 2);
-				else
-					break;
-		}
-	}
 }
