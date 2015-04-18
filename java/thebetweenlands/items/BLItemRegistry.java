@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.common.IFuelHandler;
@@ -84,7 +85,9 @@ public class BLItemRegistry {
     public static final Item crabstick = new ItemFood(6, 5.3F, false).setUnlocalizedName("thebetweenlands.crabstick").setTextureName("thebetweenlands:crabstick");
     public static final Item nettleSoup = new ItemNettleSoup().setUnlocalizedName("thebetweenlands.nettleSoup").setTextureName("thebetweenlands:nettleSoup");
     
-
+    //DOORS
+    public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
+    
     public static void init() {
         initCreativeTabs();
         registerItems();

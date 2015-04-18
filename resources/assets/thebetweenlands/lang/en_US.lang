@@ -33,6 +33,11 @@ tile.thebetweenlands.root.name=Root Block
 tile.thebetweenlands.rootUW.name=Root under water Block
 tile.thebetweenlands.deadGrass.name=Dead Grass
 tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
+tile.thebetweenlands.wallPlants_0.name=Moss
+tile.thebetweenlands.wallPlants_1.name=Lichen
+
+tile.thebetweenlands.slimyGrass.name=Slimy Grass
+tile.thebetweenlands.slimyDirt.name=Slimy Dirt
 
 tile.thebetweenlands.saplingWeedwood.name=Weedwood Sapling
 tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling
@@ -53,6 +58,7 @@ tile.thebetweenlands.weedwoodPlanks.name=Weedwood Planks
 tile.thebetweenlands.weedwoodCraftingTable.name=Weedwood Crafting Table
 tile.thebetweenlands.weedwoodChest.name=Weedwood Chest
 tile.thebetweenlands.weedwoodBush.name=Weedwood Bush
+tile.thebetweenlands.doorWeedwood.name=Weedwood Door
 
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
@@ -95,7 +101,7 @@ tile.thebetweenlands.templeBrickWall.name=Temple Brick Wall
 tile.thebetweenlands.weedwoodPlankFence.name=Weedwood Plank Fence
 tile.thebetweenlands.rubberTreePlankFence.name=Rubber Tree Plank Fence
 
-# Shrooms
+# Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
 
 tile.thebetweenlands.sundew.name=Sundew

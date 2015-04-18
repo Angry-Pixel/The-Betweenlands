@@ -43,7 +43,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 		super(Material.plants);
 		setHardness(0.2F);
 		setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.blocks);;
+		setCreativeTab(ModCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		setBlockName("thebetweenlands.wallPlants");
 	}

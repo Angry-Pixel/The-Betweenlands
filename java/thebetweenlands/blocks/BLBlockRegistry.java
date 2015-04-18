@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import thebetweenlands.blocks.BlockBLDoor;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
@@ -52,6 +53,8 @@ import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.blocks.terrain.BlockWisp;
+import thebetweenlands.blocks.terrain.BlockSlimyGrass;
+import thebetweenlands.blocks.terrain.BlockSlimyDirt;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockBLSapling;
@@ -91,6 +94,8 @@ public class BLBlockRegistry
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
 	public static final Block fallenLeaves = new BlockFallenLeaves();
+	public static final Block slimyGrass = new BlockSlimyGrass();
+	public static final Block slimyDirt = new BlockSlimyDirt();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
@@ -204,6 +209,9 @@ public class BLBlockRegistry
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
+	
+	//DOORS
+	public static final Block doorWeedwood = new BlockBLDoor("weedwood");
 
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
