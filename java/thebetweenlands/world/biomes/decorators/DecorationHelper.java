@@ -13,6 +13,7 @@ import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenGiantTree;
@@ -36,6 +37,8 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
 	private final static WorldGenTallGrass GEN_SUNDEW = new WorldGenTallGrass(BLBlockRegistry.sundew, 0);
 	private final static WorldGenTallGrass GEN_PITCHER_PLANT = new WorldGenTallGrass(BLBlockRegistry.pitcherPlant, 0);
+	private final static WorldGenerator GEN_MOSS_PATCH = new WorldGenMossPatch(0);
+	private final static WorldGenerator GEN_LICHEN_PATCH = new WorldGenMossPatch(1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -418,6 +421,28 @@ public class DecorationHelper {
 					}
 				}
 			}
+		}
+	}
+
+	public void generateMossPatch(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int xx = x + offsetXZ();
+			int yy = 30 + rand.nextInt(80);
+			int zz = z + offsetXZ();
+
+			if (world.isAirBlock(xx, yy, zz))
+				GEN_MOSS_PATCH.generate(world, rand, xx, yy, zz);
+		}
+	}
+
+	public void generateLichenPatch(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int xx = x + offsetXZ();
+			int yy = 30 + rand.nextInt(80);
+			int zz = z + offsetXZ();
+
+			if (world.isAirBlock(xx, yy, zz))
+				GEN_LICHEN_PATCH.generate(world, rand, xx, yy, zz);
 		}
 	}
 }
