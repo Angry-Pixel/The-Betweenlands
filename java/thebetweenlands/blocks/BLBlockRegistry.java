@@ -138,6 +138,7 @@ public class BLBlockRegistry
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
 	public static final BlockVolarpad volarpad = new BlockVolarpad();
 	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
+	public static final BlockThorns thorns = new BlockThorns();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
