@@ -2,6 +2,7 @@ package thebetweenlands.event.render;
 
 import java.lang.reflect.Method;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -29,6 +30,11 @@ public class ShaderHandler {
 	@SubscribeEvent
 	public void onPreRender(RenderWorldLastEvent event) {
 		if(ConfigHandler.USE_SHADER && ShaderHelper.INSTANCE.isShaderSupported()) {
+			Minecraft mc = Minecraft.getMinecraft();
+			if(!mc.gameSettings.fboEnable) {
+				mc.gameSettings.fboEnable = true;
+				mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
+			}
 			ShaderHelper.INSTANCE.enableShader();
 			ShaderHelper.INSTANCE.updateShader();
 		}

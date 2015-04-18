@@ -48,7 +48,7 @@ public class ConfigHandler
 		
 		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", usedCategories[1], true, "");
-		USE_SHADER = config.getBoolean("Use shaders for rendering", usedCategories[1], true, "");
+		USE_SHADER = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", usedCategories[1], true, "");
 		
 		if( config.hasChanged() ) {
             config.save();

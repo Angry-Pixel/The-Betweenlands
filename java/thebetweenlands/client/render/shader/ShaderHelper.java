@@ -28,7 +28,7 @@ public class ShaderHelper {
 			ContextCapabilities contextCapabilities = GLContext.getCapabilities();
 			boolean supportsGL21 = contextCapabilities.OpenGL21;
 	        boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
-			this.shadersSupported = OpenGlHelper.func_153193_b() && supported;
+			this.shadersSupported = OpenGlHelper.func_153193_b() && supported && OpenGlHelper.framebufferSupported;
 		}
 		return this.shadersSupported;
 	}
