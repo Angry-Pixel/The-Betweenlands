@@ -33,7 +33,7 @@ public class FireflyHandler {
 			RenderFirefly renderer = e.getKey().getKey();
 			EntityFirefly entity = e.getKey().getValue();
 			renderer.doRenderCallback(entity, pos.x, pos.y, pos.z, event.partialTicks);
-			
+
 			if(ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
 				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
 						entity.worldObj.rand.nextFloat() * 0.1f + 6.0f, 

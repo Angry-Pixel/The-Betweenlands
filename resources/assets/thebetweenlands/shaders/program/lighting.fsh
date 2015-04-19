@@ -9,6 +9,10 @@ uniform sampler2D DepthSampler;
 //Matrix to transform screen space coordinates to world space coordinates
 uniform mat4 INVMVP;
 
+//zNear and zFar
+uniform float zNear;
+uniform float zFar;
+
 //Light data
 uniform float   LightSourcesX[64];
 uniform float   LightSourcesY[64];
@@ -27,17 +31,18 @@ varying vec2 oneTexel;
 
 void main() {
     //Using the texture coordinate and the depth, the original vertex in world space coordinates can be calculated
-    //Allowing to perform 3D calculations in a post-processing shader
-    //The depth value is linearized to make it more visible
+    //The depth value from the depth buffer is not linear
+    float zBuffer = texture2D(DepthSampler, texCoord).x;
+    float fragDepth = pow(zBuffer, 2);
     
-    float fragDepth = texture2D(DepthSampler, texCoord).x;
-    
+    //Calculate fragment world position relative to the camera position
     vec4 fragRelPos = vec4(texCoord.xy * 2.0 - 1.0, fragDepth, 1.0) * INVMVP;
     fragRelPos.xyz /= fragRelPos.w;
     
+    //Get diffuse color
     vec4 color = texture2D(DiffuseSampler, texCoord);
-    vec4 initColor = vec4(color.r, color.g, color.b, color.a);
     
+    //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(LightSources); i++) {
         vec3 lightPos = vec3(LightSourcesX[i], LightSourcesY[i], LightSourcesZ[i]);
         float dist = distance(lightPos, fragRelPos.xyz);
@@ -47,5 +52,6 @@ void main() {
         }
     }
     
+    //Return calculated color
     gl_FragColor = color;
 }

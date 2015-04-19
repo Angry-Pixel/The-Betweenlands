@@ -90,16 +90,16 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("zFar");
 			if(uniform != null) {
-				uniform.func_148090_a((float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16));
+				uniform.func_148090_a((float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F);
 			}
 		}
 		{
 			ShaderUniform uniform = shader.getUniform("CamPos");
 			if(uniform != null) {
 				uniform.func_148095_a(
-						(float)(RenderManager.renderPosX*2),
-						(float)(RenderManager.renderPosY*2),
-						(float)(RenderManager.renderPosZ*2));
+						(float)(RenderManager.renderPosX),
+						(float)(RenderManager.renderPosY),
+						(float)(RenderManager.renderPosZ));
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class MainShader extends CShader {
 				float[] posArray = new float[64];
 				for(int i = 0; i < this.lightSources.size(); i++) {
 					if(i >= 64) break;
-					posArray[i] = (float)(-RenderManager.renderPosX*2 + this.lightSources.get(i).x*2);
+					posArray[i] = (float)(-RenderManager.renderPosX + this.lightSources.get(i).x);
 				}
 				uniform.func_148097_a(posArray);
 			}
@@ -182,7 +182,7 @@ public class MainShader extends CShader {
 				float[] posArray = new float[64];
 				for(int i = 0; i < this.lightSources.size(); i++) {
 					if(i >= 64) break;
-					posArray[i] = (float)(-RenderManager.renderPosY*2 + this.lightSources.get(i).y*2);
+					posArray[i] = (float)(-RenderManager.renderPosY + this.lightSources.get(i).y);
 				}
 				uniform.func_148097_a(posArray);
 			}
@@ -193,7 +193,7 @@ public class MainShader extends CShader {
 				float[] posArray = new float[64];
 				for(int i = 0; i < this.lightSources.size(); i++) {
 					if(i >= 64) break;
-					posArray[i] = (float)(-RenderManager.renderPosZ*2 + this.lightSources.get(i).z*2);
+					posArray[i] = (float)(-RenderManager.renderPosZ + this.lightSources.get(i).z);
 				}
 				uniform.func_148097_a(posArray);
 			}
@@ -204,7 +204,7 @@ public class MainShader extends CShader {
 				float[] posArray = new float[64];
 				for(int i = 0; i < this.lightSources.size(); i++) {
 					if(i >= 64) break;
-					posArray[i] = (float)(this.lightSources.get(i).radius * 2);
+					posArray[i] = (float)(this.lightSources.get(i).radius);
 				}
 				uniform.func_148097_a(posArray);
 			}
