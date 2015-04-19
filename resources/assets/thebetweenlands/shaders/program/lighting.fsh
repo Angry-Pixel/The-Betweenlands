@@ -23,6 +23,12 @@ uniform float   LightColorsB[64];
 uniform float   LightRadii[64];
 uniform float   LightSources;
 
+//Cam pos
+uniform vec3 CamPos;
+
+//Time
+uniform float Time;
+
 //Fragment position [0.0, 1.0][0.0, 1.0]
 varying vec2 texCoord;
 
@@ -46,8 +52,25 @@ void main() {
     //Get fragment world position
     vec3 fragPos = getFragPos();
     
+    bool inLight = false;
+    for(int i = 0; i < int(LightSources); i++) {
+        vec3 lightPos = vec3(LightSourcesX[i], LightSourcesY[i], LightSourcesZ[i]);
+        float dist = distance(lightPos, fragPos);
+        float radius = LightRadii[i];
+        if(dist < radius) {
+            inLight = true;
+            break;
+        }
+    }
+    
     //Get diffuse color
-    vec4 color = texture2D(DiffuseSampler, texCoord);
+    vec4 color;
+    if(!inLight) {
+        color = texture2D(DiffuseSampler, texCoord);
+    } else {
+        float timeWrapped = 3.14159 * 2 * Time;
+        color = texture2D(DiffuseSampler, texCoord + vec2(sin((fragPos.y + CamPos.y) * 5 + timeWrapped) / 1000, 0));
+    }
     
     //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(LightSources); i++) {
