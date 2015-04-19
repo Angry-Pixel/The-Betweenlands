@@ -273,9 +273,11 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			int meta = world.getBlockMetadata(x, y, z);
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			if(meta == 0) {
-				plantModelVenusFlyTrap.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+				plantModelVenusFlyTrap.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
+				.offsetWS(offset).renderWithTessellator(Tessellator.instance);
 			} else {
-				plantModelVenusFlyTrapBlooming.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+				plantModelVenusFlyTrapBlooming.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
+				.offsetWS(offset).renderWithTessellator(Tessellator.instance);
 			}
 		} else if(block == BLBlockRegistry.volarpad) {
 			if(plantModelVolarpad1 == null) {

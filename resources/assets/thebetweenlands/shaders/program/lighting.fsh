@@ -29,7 +29,7 @@ varying vec2 texCoord;
 //Size of one texel
 varying vec2 oneTexel;
 
-void main() {
+vec3 getFragPos() {
     //Using the texture coordinate and the depth, the original vertex in world space coordinates can be calculated
     //The depth value from the depth buffer is not linear
     float zBuffer = texture2D(DepthSampler, texCoord).x;
@@ -39,13 +39,20 @@ void main() {
     vec4 fragRelPos = vec4(texCoord.xy * 2.0 - 1.0, fragDepth, 1.0) * INVMVP;
     fragRelPos.xyz /= fragRelPos.w;
     
+    return fragRelPos.xyz;
+}
+
+void main() {
+    //Get fragment world position
+    vec3 fragPos = getFragPos();
+    
     //Get diffuse color
     vec4 color = texture2D(DiffuseSampler, texCoord);
     
     //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(LightSources); i++) {
         vec3 lightPos = vec3(LightSourcesX[i], LightSourcesY[i], LightSourcesZ[i]);
-        float dist = distance(lightPos, fragRelPos.xyz);
+        float dist = distance(lightPos, fragPos);
         float radius = LightRadii[i];
         if(dist < radius) {
             color.xyz += vec3(LightColorsR[i], LightColorsG[i], LightColorsB[i]) * (1.0 - dist / radius);
