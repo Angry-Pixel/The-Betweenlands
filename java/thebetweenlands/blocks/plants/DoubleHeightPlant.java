@@ -49,7 +49,14 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		if ("Sundew".equals(name)) drops.add(new ItemStack(this, 1));
+		if (world.rand.nextInt(8) != 0)
+			return drops;
+
+		if ("Sundew".equals(name))
+			drops.add(new ItemStack(this));
+		
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		if (!"DoubleSwampTallgrass".equals(name)) ret.add(new ItemStack(this));
 		return drops;
 	}
 

@@ -26,8 +26,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 		helper.generateVolarpad(2);
 		helper.generateCattail(5);
 		helper.generateNettles(10);
-		helper.generateMossPatch(10);
-		helper.generateLichenPatch(10);
+		helper.generateMossPatch(20);
 	}
 	
 	@Override

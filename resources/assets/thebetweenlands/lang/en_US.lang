@@ -58,7 +58,7 @@ tile.thebetweenlands.weedwoodPlanks.name=Weedwood Planks
 tile.thebetweenlands.weedwoodCraftingTable.name=Weedwood Crafting Table
 tile.thebetweenlands.weedwoodChest.name=Weedwood Chest
 tile.thebetweenlands.weedwoodBush.name=Weedwood Bush
-tile.thebetweenlands.doorWeedwood.name=Weedwood Door
+tile.thebetweenlands.doorweedwood.name=Weedwood Door
 
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
@@ -118,6 +118,8 @@ tile.thebetweenlands.waterFlowerStalk.name=Water Flower Stalk Block
 tile.thebetweenlands.waterFlower.name=Water Flower Block
 tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
+tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
+tile.thebetweenlands.doubleSwampTallgrass.name=Double Swamp Tallgrass
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace

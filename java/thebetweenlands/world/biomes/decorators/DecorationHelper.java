@@ -32,6 +32,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_NETTLE = new WorldGenTallGrass(BLBlockRegistry.nettle, 1);
 	private final static WorldGenTallGrass GEN_CATTAIL = new WorldGenTallGrass(BLBlockRegistry.catTail, 1);
 	private final static WorldGenTallGrass GEN_SWAMP_TALL_GRASS = new WorldGenTallGrass(BLBlockRegistry.swampTallGrass, 1);
+	private final static WorldGenTallGrass GEN_SWAMP_DOUBLE_TALL_GRASS = new WorldGenTallGrass(BLBlockRegistry.doubleSwampTallgrass, 1);
 	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
 	private final static WorldGenTallGrass GEN_VENUS_FLY_TRAP = new WorldGenTallGrass(BLBlockRegistry.venusFlyTrap, 0);
 	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
@@ -73,6 +74,19 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
 				GEN_SWAMP_TALL_GRASS.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateSwampTallGrass(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.doubleSwampTallgrass, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.doubleSwampTallgrass, 8, 2);
 			}
 		}
 	}

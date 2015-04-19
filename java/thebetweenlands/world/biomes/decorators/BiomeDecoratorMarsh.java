@@ -27,7 +27,5 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generateCattail(2);
 		helper.generateWeepingBlue(3);
 		helper.generateWisp(2);
-		helper.generateMossPatch(10);
-		helper.generateLichenPatch(10);
 	}
 }

@@ -130,6 +130,7 @@ public class BLBlockRegistry
 
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
+	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("doubleSwampTallgrass", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
