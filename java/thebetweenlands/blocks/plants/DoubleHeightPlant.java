@@ -53,7 +53,7 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 			return drops;
 
 		if ("Sundew".equals(name))
-			drops.add(new ItemStack(this));
+			drops.add(new ItemStack(this, 1));
 		
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (!"DoubleSwampTallgrass".equals(name)) ret.add(new ItemStack(this));
