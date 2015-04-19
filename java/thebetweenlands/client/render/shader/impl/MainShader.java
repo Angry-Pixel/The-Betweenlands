@@ -2,7 +2,13 @@ package thebetweenlands.client.render.shader.impl;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
 
 import javax.vecmath.Matrix4f;
 
@@ -30,7 +36,7 @@ public class MainShader extends CShader {
 	private FloatBuffer mvBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private FloatBuffer pmBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private GeometryBuffer geometryBuffer = new GeometryBuffer();
-	
+
 	public MainShader(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
 			ResourceLocation shaderDescription, ResourceLocation shaderPath,
@@ -38,7 +44,7 @@ public class MainShader extends CShader {
 		super(textureManager, resourceManager, frameBuffer, shaderDescription,
 				shaderPath, assetsPath);
 	}
-	
+
 	public GeometryBuffer getGeometryBuffer() {
 		return this.geometryBuffer;
 	}
@@ -76,11 +82,13 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureWidth, 
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
-		
+
 		if(this.geometryBuffer.update(input)) {
 			this.updateSampler("GeomDiffuseSampler", this.geometryBuffer.getGeometryBuffer());
 			this.updateSampler("GeomDepthSampler", this.geometryBuffer.getGeometryDepthBuffer());
 		}
+
+		input.bindFramebuffer(false);
 	}
 
 	@Override
@@ -141,7 +149,23 @@ public class MainShader extends CShader {
 		}
 	}
 
+	private static final Comparator<LightSource> lightSourceSorter = new Comparator<LightSource>(){
+		@Override
+		public int compare(LightSource o1, LightSource o2) {
+			double dx1 = o1.x - RenderManager.renderPosX;
+			double dy1 = o1.y - RenderManager.renderPosY;
+			double dz1 = o1.z - RenderManager.renderPosZ;
+			double dx2 = o2.x - RenderManager.renderPosX;
+			double dy2 = o2.y - RenderManager.renderPosY;
+			double dz2 = o2.z - RenderManager.renderPosZ;
+			return Math.sqrt(dx1*dx1 + dy1*dy1 + dz1*dz1) > Math.sqrt(dx2*dx2 + dy2*dy2 + dz2*dz2) ? 1 : -1;
+		}
+	};
+
 	private void uploadLights(CShaderInt shader) {
+		//Sorts lights by distance
+		Collections.sort(this.lightSources, lightSourceSorter);
+
 		{
 			ShaderUniform uniform = shader.getUniform("LightColorsR");
 			if(uniform != null) {
