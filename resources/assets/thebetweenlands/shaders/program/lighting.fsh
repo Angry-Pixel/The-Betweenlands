@@ -35,6 +35,7 @@ varying vec2 texCoord;
 //Size of one texel
 varying vec2 oneTexel;
 
+//Claculates the fragment world position (relative to camera)
 vec3 getFragPos() {
     //Using the texture coordinate and the depth, the original vertex in world space coordinates can be calculated
     //The depth value from the depth buffer is not linear
@@ -52,25 +53,11 @@ void main() {
     //Get fragment world position
     vec3 fragPos = getFragPos();
     
-    bool inLight = false;
-    for(int i = 0; i < int(LightSources); i++) {
-        vec3 lightPos = vec3(LightSourcesX[i], LightSourcesY[i], LightSourcesZ[i]);
-        float dist = distance(lightPos, fragPos);
-        float radius = LightRadii[i];
-        if(dist < radius) {
-            inLight = true;
-            break;
-        }
-    }
+    //Set to true if fragment should be distorted
+    bool distortion = false;
     
-    //Get diffuse color
+    //Holds the calculated color
     vec4 color;
-    if(!inLight) {
-        color = texture2D(DiffuseSampler, texCoord);
-    } else {
-        float timeWrapped = 3.14159 * 2 * Time;
-        color = texture2D(DiffuseSampler, texCoord + vec2(sin((fragPos.y + CamPos.y) * 5 + timeWrapped) / 1000, 0));
-    }
     
     //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(LightSources); i++) {
@@ -78,8 +65,19 @@ void main() {
         float dist = distance(lightPos, fragPos);
         float radius = LightRadii[i];
         if(dist < radius) {
-            color.xyz += vec3(LightColorsR[i], LightColorsG[i], LightColorsB[i]) * (1.0 - dist / radius);
+            if(LightColorsR[i] == -1 && LightColorsG[i] == -1 && LightColorsB[i] == -1) {
+                distortion = true;
+            } else {
+                color.xyz += vec3(LightColorsR[i], LightColorsG[i], LightColorsB[i]) * (1.0 - dist / radius);
+            }
         }
+    }
+    
+    if(!distortion) {
+        color += texture2D(DiffuseSampler, texCoord);
+    } else {
+        float timeWrapped = 3.14159 * 2 * Time;
+        color += texture2D(DiffuseSampler, texCoord + vec2(sin((fragPos.y + CamPos.y) * 5 + timeWrapped) / 1000, 0));
     }
     
     //Return calculated color

@@ -154,7 +154,14 @@ public class MainShader extends CShader {
 			double dx2 = o2.x - RenderManager.renderPosX;
 			double dy2 = o2.y - RenderManager.renderPosY;
 			double dz2 = o2.z - RenderManager.renderPosZ;
-			return Math.sqrt(dx1*dx1 + dy1*dy1 + dz1*dz1) > Math.sqrt(dx2*dx2 + dy2*dy2 + dz2*dz2) ? 1 : -1;
+			double d1 = Math.sqrt(dx1*dx1 + dy1*dy1 + dz1*dz1);
+			double d2 = Math.sqrt(dx2*dx2 + dy2*dy2 + dz2*dz2);
+			if(d1 > d2) {
+				return 1;
+			} else if(d1 < d2) {
+				return -1;
+			}
+			return 0;
 		}
 	};
 

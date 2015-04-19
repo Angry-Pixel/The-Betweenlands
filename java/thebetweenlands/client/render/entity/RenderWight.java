@@ -8,7 +8,10 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -23,6 +26,14 @@ public class RenderWight extends RenderLiving {
 	@Override
 	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
 		scaleWight((EntityWight) entityliving, f);
+		
+		if(ConfigHandler.USE_SHADER) {
+			ShaderHelper.INSTANCE.addDynLight(new LightSource(entityliving.posX, entityliving.posY, entityliving.posZ, 
+					10.0f, 
+					-1, 
+					-1, 
+					-1));
+		}
 	}
 
 	protected void scaleWight(EntityWight wight, float partialTickTime) {
