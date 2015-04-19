@@ -76,7 +76,7 @@ public class ShaderHelper {
 		}
 		if(this.currentShader != null) {
 			this.currentShader.updateMatrices();
-			this.currentShader.updateDepthBuffer(Minecraft.getMinecraft().getFramebuffer());
+			this.currentShader.updateBuffers(Minecraft.getMinecraft().getFramebuffer());
 		}
 	}
 	
