@@ -26,8 +26,8 @@ uniform float   LightSources;
 //Cam pos
 uniform vec3 CamPos;
 
-//Time
-uniform float Time;
+//Time in milliseconds
+uniform float MSTime;
 
 //Fragment position [0.0, 1.0][0.0, 1.0]
 varying vec2 texCoord;
@@ -55,6 +55,8 @@ void main() {
     
     //Set to true if fragment should be distorted
     bool distortion = false;
+    //Strength of distortion, depends on fragment to source distance
+    float distortionMultiplier = 0.0F;
     
     //Holds the calculated color
     vec4 color;
@@ -67,6 +69,7 @@ void main() {
         if(dist < radius) {
             if(LightColorsR[i] == -1 && LightColorsG[i] == -1 && LightColorsB[i] == -1) {
                 distortion = true;
+                distortionMultiplier = max(distortionMultiplier, 1.0 - pow(dist / radius, 4));
             } else {
                 color.xyz += vec3(LightColorsR[i], LightColorsG[i], LightColorsB[i]) * (1.0 - dist / radius);
             }
@@ -76,8 +79,8 @@ void main() {
     if(!distortion) {
         color += texture2D(DiffuseSampler, texCoord);
     } else {
-        float timeWrapped = 3.14159 * 2 * Time;
-        color += texture2D(DiffuseSampler, texCoord + vec2(sin((fragPos.y + CamPos.y) * 5 + timeWrapped) / 1000, 0));
+        float fragDistortion = (fragPos.y + CamPos.y + (fragPos.x + CamPos.x + fragPos.z + CamPos.z) / 5) * 5;
+        color += texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300) / 800 * distortionMultiplier, 0));
     }
     
     //Return calculated color

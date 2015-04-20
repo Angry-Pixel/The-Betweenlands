@@ -116,6 +116,12 @@ public class MainShader extends CShader {
 						(float)(RenderManager.renderPosZ));
 			}
 		}
+		{
+			ShaderUniform uniform = shader.getUniform("MSTime");
+			if(uniform != null) {
+				uniform.func_148090_a(System.nanoTime() / 1000000.0F);
+			}
+		}
 	}
 
 	private void uploadMatrices(CShaderInt shader) {
