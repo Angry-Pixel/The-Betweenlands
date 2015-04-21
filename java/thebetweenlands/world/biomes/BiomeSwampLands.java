@@ -38,6 +38,8 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 2, 1, 1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
         spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 20, 2, 6));
+        spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 20, 1, 2));
+        spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 5, 1, 1));
 	}
 
 	/*@Override

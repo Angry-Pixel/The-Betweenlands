@@ -18,7 +18,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntityMireSnail extends EntityAnimal {
+public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	int shagCount = 0;
 

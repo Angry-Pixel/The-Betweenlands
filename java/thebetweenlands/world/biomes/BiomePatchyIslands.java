@@ -38,5 +38,7 @@ extends BiomeGenBaseBetweenlands
         spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 20, 2, 4));
         spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 50, 10, 20));
         spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
+        spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 20, 1, 2));
+        spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 5, 1, 1));
 	}
 }

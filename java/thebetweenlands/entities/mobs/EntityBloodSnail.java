@@ -13,7 +13,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntityBloodSnail extends EntityMob {
+public class EntityBloodSnail extends EntityMob implements IEntityBL {
 
 	public EntityBloodSnail(World world) {
 		super(world);
