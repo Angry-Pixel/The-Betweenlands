@@ -119,7 +119,7 @@ tile.thebetweenlands.waterFlower.name=Water Flower Block
 tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
 tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
-tile.thebetweenlands.doubleSwampTallgrass.name=Double Swamp Tallgrass
+tile.thebetweenlands.DoubleSwampTallgrass.name=Double Swamp Tallgrass
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
