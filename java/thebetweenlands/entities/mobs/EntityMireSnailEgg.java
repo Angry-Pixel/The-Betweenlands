@@ -8,10 +8,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.message.MessageSnailHatchParticle;
+import thebetweenlands.utils.AnimationMathHelper;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityMireSnailEgg extends EntityAnimal {
-
+	public float pulseFloat;
+	AnimationMathHelper pulse = new AnimationMathHelper();
 	public EntityMireSnailEgg(World world) {
 		super(world);
 		setSize(0.35F, 0.35F);
@@ -34,6 +36,8 @@ public class EntityMireSnailEgg extends EntityAnimal {
 			if(getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
 				hatch();
 		}
+		pulseFloat = pulse.swing(0.3F, 0.2F, false);
+		renderYawOffset = prevRenderYawOffset;
 	}
 
 	private void hatch() {
@@ -54,6 +58,11 @@ public class EntityMireSnailEgg extends EntityAnimal {
 			dim = ((WorldServer) world).provider.dimensionId;
 			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSnailHatchParticle((float)posX, (float)posY, (float)posZ), new TargetPoint(dim, posX + 0.5D, posY + 0.2D, posZ + 0.5D, 16D));
 		}
+	}
+
+	@Override
+	public boolean isMovementCeased() {
+		return true;
 	}
 
 	@Override
