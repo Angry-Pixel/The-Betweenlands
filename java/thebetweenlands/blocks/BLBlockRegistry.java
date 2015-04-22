@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import thebetweenlands.blocks.BlockBLDoor;
 import net.minecraft.item.ItemBlock;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
@@ -49,12 +48,12 @@ import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
 import thebetweenlands.blocks.terrain.BlockSilt;
+import thebetweenlands.blocks.terrain.BlockSlimyDirt;
+import thebetweenlands.blocks.terrain.BlockSlimyGrass;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.blocks.terrain.BlockWisp;
-import thebetweenlands.blocks.terrain.BlockSlimyGrass;
-import thebetweenlands.blocks.terrain.BlockSlimyDirt;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockBLSapling;
@@ -71,6 +70,7 @@ public class BLBlockRegistry
 
 	// PORTAL
 	public static BlockPortal portalBlock = new BlockPortal();
+	public static BlockTreePortal treePortalBlock = new BlockTreePortal();
 
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
@@ -124,7 +124,8 @@ public class BLBlockRegistry
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
 	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog");
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
-
+	public static final Block portalBark = new BlockBLLog("portalBark");
+	
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
