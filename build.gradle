@@ -28,7 +28,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 minecraft {
-    version = "1.7.10-10.13.2.1230"
+    version = "1.7.10-10.13.3.1365-1.7.10"
     runDir = "minecraft"
 	replace '${version}', project.version
 }
