@@ -103,6 +103,7 @@ tile.thebetweenlands.rubberTreePlankFence.name=Rubber Tree Plank Fence
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
+tile.thebetweenlands.flatHeadMushroom.name=Flathead Mushroom
 
 tile.thebetweenlands.sundew.name=Sundew
 tile.thebetweenlands.weepingBlue.name=Weeping Blue
@@ -120,6 +121,9 @@ tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
 tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
 tile.thebetweenlands.DoubleSwampTallgrass.name=Double Swamp Tallgrass
+tile.thebetweenlands.pitcherPlant.name=Pitcher Plant
+tile.thebetweenlands.venusFlyTrap.name=Venus Fly Trap
+tile.thebetweenlands.volarpad.name=Volarpad 
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
