@@ -28,6 +28,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	// Progress (0-100). Used for rendering
 	public int progress;
 	public boolean isAnimating = false;
+	public int itemsConsumed = 0;
 
 	public float crystalVelocity = 0.0F;
 	public float crystalRotation = 0.0F;
@@ -45,22 +46,29 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			if (Math.abs(this.crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0) {
 				this.crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
 			}
-			this.progress++;
-			if (this.progress >= 44) {
-				this.progress = 0;
+			if (this.isAnimating) {
+				this.progress++;
+				if (this.progress >= 44) {
+					this.progress = 0;
+					this.itemsConsumed++;
+				}
 			}
 		} else {
-			if (this.progress % 20 == 0) {
+			if (getStackInSlot(0) != null && getStackInSlot(1) != null && getStackInSlot(2) != null && itemsConsumed < 64) {
 				sendProgressPacket();
+				++progress;
+				if (this.progress >= 44) {
+					this.progress = 0;
+					this.decrStackSize(2, 1);
+					itemsConsumed++;
+					if (getStackInSlot(0) == null || getStackInSlot(1) == null || getStackInSlot(2) == null || itemsConsumed >= 64)
+						this.stopCraftingProcess();
+				}
 			}
-			++progress;
-			if (this.progress >= 44) {
-				this.progress = 0;
-				this.decrStackSize(2, 1);
-				if (getStackInSlot(0) == null || getStackInSlot(1) == null || getStackInSlot(2) == null)
-					this.stopCraftingProcess();
-			}
+			else this.stopCraftingProcess();
+//			 System.out.println(itemsConsumed);
 		}
+		this.updateContainingBlockInfo();
 	}
 
 	@Override
@@ -75,9 +83,9 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			is.stackSize = getInventoryStackLimit();
 		}
 		if (is != null) {
-			if (inventory[0] != null && inventory[1] != null && inventory[2] != null) {
+			if (inventory[0] != null && inventory[1] != null && inventory[2] != null && inventory[1].stackSize >= 64) {
 				if (!worldObj.isRemote) {
-					if (!isAnimating) {
+					if (!isAnimating || (isAnimating && itemsConsumed < 64)) {
 						this.startCraftingProcess();
 					}
 				}

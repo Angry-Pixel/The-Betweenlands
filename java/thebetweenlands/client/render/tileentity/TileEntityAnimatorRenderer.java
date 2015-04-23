@@ -127,10 +127,11 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(0, 0, 1.0F, 0.5F);
+		GL11.glRotatef(te.crystalRotation, 0, -1, 0);
+		GL11.glColor4f(0, 0.5F, 0.1F, 0.5F);
 		GL11.glRotatef(90.0F, 1, 0, 0);
 		Sphere s = new Sphere();
-		s.draw(0.4F, 6, 2);
+		s.draw(0.4F, 10, 10);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glPopMatrix();
@@ -149,7 +150,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		}
 
 		// Life Crystal Particles
-		if (te.getStackInSlot(2) != null) {
+		if (te.getStackInSlot(1) != null) {
 			points = new ArrayList<Vector3d>();
 			points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.5D, te.zCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D));
 			points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
