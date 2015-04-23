@@ -73,8 +73,6 @@ public class DecayEventHandler {
 			// Oli, if you ever want to change decay speed, change the number
 			// that the ticksExisted is divided by.
 			// Right now every multiple of 2048 the decay level is decreased by 1
-			if (!event.player.worldObj.isRemote)
-				System.out.println(event.player.ticksExisted);
 			if (event.player.ticksExisted % 2048 == 0) {
 				DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
 			}

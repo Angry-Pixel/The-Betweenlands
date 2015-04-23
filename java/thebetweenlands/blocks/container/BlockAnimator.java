@@ -7,15 +7,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockAnimator
-        extends BlockContainer
-{
+public class BlockAnimator extends BlockContainer {
 	public BlockAnimator() {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
@@ -45,16 +45,14 @@ public class BlockAnimator
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if( world.isRemote ) {
-            return true;
-        }
+		if (world.isRemote) {
+			return true;
+		}
 
-		/*if( world.getTileEntity(x, y, z) instanceof TileEntityDruidAltar ) {
-            TileEntityDruidAltar altar = (TileEntityDruidAltar) world.getTileEntity(x, y, z);
-            if( altar.craftingProgress == 0 ) {
-                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_DRUID_ALTAR, world, x, y, z);
-            }
-        }*/
+		if (world.getTileEntity(x, y, z) instanceof TileEntityAnimator) {
+			TileEntityAnimator altar = (TileEntityAnimator) world.getTileEntity(x, y, z);
+			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
+		}
 
 		return true;
 	}

@@ -6,11 +6,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
+import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
+import thebetweenlands.inventory.gui.GuiAnimator;
 import thebetweenlands.inventory.gui.GuiBLCrafting;
 import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
@@ -35,6 +37,7 @@ public class CommonProxy
     public static final int GUI_WEEDWOOD_CHEST = 3;
     public static final int GUI_BL_FURNACE = 4;
     public static final int GUI_BL_DUAL_FURNACE = 5;
+    public static final int GUI_ANIMATOR = 6;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -93,6 +96,12 @@ public class CommonProxy
 				return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
 		}
 
+		else if (ID == GUI_ANIMATOR) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityAnimator)
+				return new ContainerAnimator(player.inventory, (TileEntityAnimator) tileentity);
+		}
+
         return null;
     }
 
@@ -129,6 +138,12 @@ public class CommonProxy
 			TileEntity tileentity = world.getTileEntity(x, y, z);
 			if (tileentity instanceof TileEntityBLDualFurnace)
 				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+		}
+
+		else if (ID == GUI_ANIMATOR) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityAnimator)
+				return new GuiAnimator(player.inventory, (TileEntityAnimator) tileentity);
 		}
 
         return null;

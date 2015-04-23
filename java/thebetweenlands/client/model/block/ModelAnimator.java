@@ -161,6 +161,29 @@ public class ModelAnimator extends ModelBase {
         this.woodplate4.render(f5);
         this.scroll1.render(f5);
     }
+    
+    public void renderAll(float f5) { 
+        this.stonecorner2.render(f5);
+        this.woodplate1.render(f5);
+        this.woodplate5.render(f5);
+        this.stonecorner1.render(f5);
+        this.woodleg4.render(f5);
+        this.woodplate6.render(f5);
+        this.beam2.render(f5);
+        this.beam1.render(f5);
+        this.beam3.render(f5);
+        this.woodleg2.render(f5);
+        this.woodplate2.render(f5);
+        this.woodleg3.render(f5);
+        this.stonecorner3.render(f5);
+        this.woodleg1.render(f5);
+        this.board4.render(f5);
+        this.woodplate3.render(f5);
+        this.stonecorner4.render(f5);
+        this.stonebase.render(f5);
+        this.woodplate4.render(f5);
+        this.scroll1.render(f5);
+    }
 
     /**
      * This is a helper function from Tabula to set the rotation of model parts

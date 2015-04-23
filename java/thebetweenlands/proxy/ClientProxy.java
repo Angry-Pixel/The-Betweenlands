@@ -50,6 +50,7 @@ import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderWight;
+import thebetweenlands.client.render.item.ItemAnimatorRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
@@ -130,6 +131,7 @@ public class ClientProxy extends CommonProxy {
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.animator), new ItemAnimatorRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedwoodChest), new ItemWeedWoodChestRenderer());
 
 		//Block Renderer
