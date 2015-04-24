@@ -32,6 +32,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 
 	public int craftingProgress = 0;
 	private boolean circleShouldRevert = true;
+	private int[] damageValues = {0, 0, 0, 0};
 
 	//11 seconds crafting time
 	public static final int CRAFTING_TIME = 20*17;
@@ -117,17 +118,29 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		int slot1 = 0, slot2 = 0, slot3 = 0, slot4 = 0;
 		if (inventory[1] != null) {
 			slot1 = getStackInSlot(1).getItemDamage();
+			damageValues[0] = slot1;
 		}
+		else damageValues[0] = 0;
+		
 		if (inventory[2] != null) {
 			slot2 = getStackInSlot(2).getItemDamage();
+			damageValues[1] = slot2;
 		}
+		else damageValues[1] = 0;
+		
 		if (inventory[3] != null) {
 			slot3 = getStackInSlot(3).getItemDamage();
+			damageValues[2] = slot3;
 		}
+		else damageValues[2] = 0;
+		
 		if (inventory[4] != null) {
 			slot4 = getStackInSlot(4).getItemDamage();
+			damageValues[3] = slot4;
 		}
-		if(slot1 + slot2 + slot3 + slot4 == 10 && is != null) {
+		else damageValues[3] = 0;
+		
+		if(slot1 + slot2 + slot3 + slot4 == 10 && areDifferentParts() && is != null) {
 			if(inventory[0] == null) {
 				if(!worldObj.isRemote) {
 					if(craftingProgress == 0) {
@@ -136,6 +149,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 				}
 			}
 		}
+	}
+	
+	private boolean areDifferentParts()
+	{
+		return damageValues[0] != damageValues[1] && damageValues[1] != damageValues[2] && damageValues[2] != damageValues[3] && damageValues[3] != damageValues[0];
 	}
 
 	private void startCraftingProcess() {
