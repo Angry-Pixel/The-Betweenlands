@@ -83,7 +83,7 @@ public class SwampTalisman
 				Block block = world.getBlock(x, y, z);
 				if( block == Blocks.air ) {
 					//TODO Add a better sound effect than this crap
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "fire.ignite", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
 					onBlockAdded(world, x, y, z);
 				}
 

@@ -131,6 +131,7 @@ tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
 # Items
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s
+item.thebetweenlands.angryPebble.name=Angry Pebble
 
 item.thebetweenlands.swampTalisman.0.name=Swamp Talisman
 item.thebetweenlands.swampTalisman.1.name=Swamp Talisman Piece

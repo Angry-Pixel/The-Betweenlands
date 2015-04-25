@@ -245,6 +245,12 @@
       "squish"
     ]
   },
+  "sorry": {
+    "category": "item",
+    "sounds": [
+      "sorry"
+    ]
+  },
   "ambientSwamp": {
     "category": "ambient",
     "sounds": [
