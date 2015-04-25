@@ -246,7 +246,7 @@
     ]
   },
   "sorry": {
-    "category": "item",
+    "category": "player",
     "sounds": [
       "sorry"
     ]

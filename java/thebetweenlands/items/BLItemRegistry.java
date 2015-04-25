@@ -89,7 +89,7 @@ public class BLItemRegistry {
     public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
     
     //MISC
-    public static final Item angryPebble = new ItemAngryPebble().setUnlocalizedName("thebetweenlands.angryPebble").setTextureName("angryPebble");
+    public static final Item angryPebble = new ItemAngryPebble();
     
     public static void init() {
         initCreativeTabs();

@@ -237,6 +237,10 @@ entity.thebetweenlands.firefly.name=Fire Fly
 entity.thebetweenlands.sporeling.name=Sporeling
 entity.thebetweenlands.leech.name=Leech
 entity.thebetweenlands.dragonfly.name=Dragonfly
+entity.thebetweenlands.bloodSnail.name=Blood Snail
+entity.thebetweenlands.mireSnail.name=Mire Snail
+entity.thebetweenlands.mireSnailEgg.name=Mire Snail Egg
+entity.thebetweenlands.angryPebble.name=Angry Pebble
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
