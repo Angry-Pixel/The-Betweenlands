@@ -1,33 +1,49 @@
 package thebetweenlands.entities;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 
-public class EntityAngryPebble extends EntityThrowable{
+public class EntityAngryPebble extends EntityThrowable {
 
-	public EntityAngryPebble(World par1World) {
-		super(par1World);
+	public EntityAngryPebble(World world) {
+		super(world);
 	}
-	
-	public EntityAngryPebble(World world, EntityLivingBase enity){
-		super(world, enity);
+
+	public EntityAngryPebble(World world, EntityLivingBase entity) {
+		super(world, entity);
 	}
 
 	@Override
-	protected void onImpact(MovingObjectPosition var1) {
-		for(int i = 0; i < 10; i++){
-			this.worldObj.spawnParticle("flame", this.posX, this.posY, this.posZ, 0.9F, 0.9F, 0.9F);
-		}
-		
-		if(!this.worldObj.isRemote){
-			this.setDead();
-			if(!this.worldObj.isRemote){
-				this.worldObj.createExplosion((Entity) null, this.posX,  this.posY,  this.posZ, 4.5F, true);
+	public void onUpdate() {
+		super.onUpdate();
+		if (ticksExisted > 400)
+			setDead();
+	}
+
+	@Override
+	protected void onImpact(MovingObjectPosition mop) {
+		if (mop.typeOfHit != null) {
+			if (worldObj.isRemote) {
+				double particleX = MathHelper.floor_double(posX) + rand.nextFloat();
+				double particleY = MathHelper.floor_double(posY) + rand.nextFloat();
+				double particleZ = MathHelper.floor_double(posZ) + rand.nextFloat();
+				for (int count = 0; count < 10; count++)
+					TheBetweenlands.proxy.spawnCustomParticle("flame", worldObj, particleX, particleY, particleZ, 0, 0, 0, 0);
+			}
+			
+			if (!worldObj.isRemote) {
+				explode();
+				setDead();
 			}
 		}
 	}
 
+	private void explode() {
+		boolean blockDamage = worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
+		worldObj.createExplosion(this, posX, posY, posZ, 4.5F, blockDamage);
+	}
 }
