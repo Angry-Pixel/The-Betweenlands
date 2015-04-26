@@ -120,16 +120,17 @@ tile.thebetweenlands.waterFlower.name=Water Flower Block
 tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
 tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
-tile.thebetweenlands.DoubleSwampTallgrass.name=Double Swamp Tallgrass
+tile.thebetweenlands.doubleSwampTallgrass.name=Double Swamp Tallgrass
 tile.thebetweenlands.pitcherPlant.name=Pitcher Plant
 tile.thebetweenlands.venusFlyTrap.name=Venus Fly Trap
 tile.thebetweenlands.volarpad.name=Volarpad 
 
 tile.thebetweenlands.arrowArum.name=Arrow Arum
-tile.thebetweenlands.buttonBush.name=Button Bush
+tile.thebetweenlands.buttonBush.name=Buttonbush
 tile.thebetweenlands.marshHibiscus.name=Marsh Hibiscus
 tile.thebetweenlands.pickerelWeed.name=Pickerel Weed
 tile.thebetweenlands.phragmites.name=Phragmites
+tile.thebetweenlands.softRush.name=Soft Rush
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace

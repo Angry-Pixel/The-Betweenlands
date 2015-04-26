@@ -11,7 +11,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 	
 		helper.generateWeedwoodTree(40);
 		helper.generateSapTree(30);
-		helper.generateWeedwoodBush(10);
 		helper.generateCattail(15);
 		helper.generateSwampGrass(50);
 		helper.generateSwampTallGrass(100);
@@ -21,6 +20,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateMireCoral(3.0D);
 		helper.generateFlowerPatch(1.0D);
 		helper.generateMossPatch(10);
-		helper.generateButtonBush(5);
+		helper.generateButtonBush(10);
 	}
 }

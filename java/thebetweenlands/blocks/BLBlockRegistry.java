@@ -162,6 +162,7 @@ public class BLBlockRegistry
 	public static final Block buttonBush = new BlockBLSmallPlants("buttonBush");
 	public static final Block marshHibiscus = new BlockBLSmallPlants("marshHibiscus");
 	public static final Block pickerelWeed = new BlockBLSmallPlants("pickerelWeed");
+	public static final Block softRush = new BlockBLSmallPlants("softRush");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();
