@@ -132,6 +132,7 @@ public class BLBlockRegistry
 	// DOUBLE PLANTS
 	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
 	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F); 
+	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
@@ -157,6 +158,10 @@ public class BLBlockRegistry
 	public static final Block swampTallGrass = new BlockBLSmallPlants("swampTallGrass");
 	public static final Block nettleFlowered = new BlockBLSmallPlants("nettleFlowered");
 	public static final Block nettle = new BlockBLSmallPlants("nettle");
+	public static final Block arrowArum = new BlockBLSmallPlants("arrowArum");
+	public static final Block buttonBush = new BlockBLSmallPlants("buttonBush");
+	public static final Block marshHibiscus = new BlockBLSmallPlants("marshHibiscus");
+	public static final Block pickerelWeed = new BlockBLSmallPlants("pickerelWeed");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();

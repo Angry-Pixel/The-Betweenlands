@@ -40,6 +40,12 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_PITCHER_PLANT = new WorldGenTallGrass(BLBlockRegistry.pitcherPlant, 0);
 	private final static WorldGenerator GEN_MOSS_PATCH = new WorldGenMossPatch(0);
 	private final static WorldGenerator GEN_LICHEN_PATCH = new WorldGenMossPatch(1);
+	private final static WorldGenTallGrass GEN_ARROW_ARUM = new WorldGenTallGrass(BLBlockRegistry.arrowArum, 1);
+	private final static WorldGenTallGrass GEN_BUTTON_BUSH = new WorldGenTallGrass(BLBlockRegistry.buttonBush, 1);
+	private final static WorldGenTallGrass GEN_MARSH_HIBISCUS = new WorldGenTallGrass(BLBlockRegistry.marshHibiscus, 1);
+	private final static WorldGenTallGrass GEN_PICKEREL_WEED = new WorldGenTallGrass(BLBlockRegistry.pickerelWeed, 1);
+	private final static WorldGenTallGrass GEN_PHRAGMITES = new WorldGenTallGrass(BLBlockRegistry.phragmites, 1);
+	private final static WorldGenTallGrass GEN_WEEPING_BLUE = new WorldGenTallGrass(BLBlockRegistry.weepingBlue, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -66,6 +72,62 @@ public class DecorationHelper {
 	private final boolean checkAboveSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y, z));
 	}
+	
+	public void generatePhragmites(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.phragmites, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.phragmites, 8, 2);
+			}
+		}
+	}
+	public void generateArrowArum(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_ARROW_ARUM.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateButtonBush(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_BUTTON_BUSH.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateMarshHibiscus(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_MARSH_HIBISCUS.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generatePickerelWeed(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_PICKEREL_WEED.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
 
 	public void generateSwampGrass(int attempts) {
 		for (int i = 0; i < attempts; i++) {
@@ -90,6 +152,7 @@ public class DecorationHelper {
 			}
 		}
 	}
+	
 
 	public void generateSwampPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
@@ -265,9 +328,9 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
-				world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 0, 2);
-				world.setBlock(x, y + 1, z, BLBlockRegistry.weepingBlue, 8, 2);
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y, z)) {
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+					GEN_WEEPING_BLUE.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}
