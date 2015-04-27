@@ -47,6 +47,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_PHRAGMITES = new WorldGenTallGrass(BLBlockRegistry.phragmites, 1);
 	private final static WorldGenTallGrass GEN_WEEPING_BLUE = new WorldGenTallGrass(BLBlockRegistry.weepingBlue, 1);
 	private final static WorldGenTallGrass GEN_SOFT_RUSH = new WorldGenTallGrass(BLBlockRegistry.softRush, 1);
+	private final static WorldGenTallGrass GEN_MARSH_MALLOW = new WorldGenTallGrass(BLBlockRegistry.marshMallow, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -86,6 +87,20 @@ public class DecorationHelper {
 			}
 		}
 	}
+	
+	public void generateTallCattail(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.tallCattail, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.tallCattail, 8, 2);
+			}
+		}
+	}
+	
 	public void generateArrowArum(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -93,6 +108,17 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
 				GEN_ARROW_ARUM.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateMarshMallow(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_MARSH_MALLOW.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}

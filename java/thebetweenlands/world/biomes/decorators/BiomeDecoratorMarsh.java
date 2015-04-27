@@ -18,18 +18,18 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateGiantWeedwoodTree(1);
+		helper.generateGiantWeedwoodTree(5);
 		
 		helper.generateWeedwoodTree(2);
 		helper.generateSwampGrass(20);
 		helper.generateSundew(6);
 		helper.generateNettles(2);
-		helper.generateCattail(2);
-		helper.generateWeepingBlue(3);
+		helper.generateWeepingBlue(1);
 		helper.generateWisp(2);
 		helper.generateArrowArum(2);
 		helper.generatePickerelWeed(2);
 		helper.generateMarshHibiscus(2);
+		helper.generateMarshMallow(2);
 		helper.generatePhragmites(200);
 		helper.generateSoftRush(60);
 	}
