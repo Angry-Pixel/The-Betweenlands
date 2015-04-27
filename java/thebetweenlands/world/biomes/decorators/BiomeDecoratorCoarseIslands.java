@@ -16,8 +16,7 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateSwampGrass(30);
 		helper.generateNettles(1);
 		helper.generateCattail(2);
-		helper.generateVolarpad(10);
-		helper.generateWeepingBlue(1);
+		helper.generateVolarpad(5);
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateFlowerPatch(1.0D);

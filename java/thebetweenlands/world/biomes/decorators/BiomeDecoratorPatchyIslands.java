@@ -16,11 +16,10 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateSwampGrass(50);
 		helper.generateSwampTallGrass(100);
 		helper.generateNettles(1);
-		helper.generateWeepingBlue(1);
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateFlowerPatch(1.0D);
 		helper.generateMossPatch(10);
-		helper.generateMilkweed(5);
+		helper.generateMilkweed(10);
 	}
 }
