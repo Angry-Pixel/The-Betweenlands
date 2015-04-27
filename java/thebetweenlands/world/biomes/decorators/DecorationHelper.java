@@ -70,9 +70,9 @@ public class DecorationHelper {
 	private final boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z)) && this.world.isAirBlock(x, y, z);
 	}
-
-	private final boolean checkAboveSurface(SurfaceType surfaceType, int x, int y, int z) {
-		return surfaceType.matchBlock(this.world.getBlock(x, y, z));
+	
+	private final boolean checkBelowWater(SurfaceType surfaceType, int x, int y, int z) {
+		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z));
 	}
 	
 	public void generatePhragmites(int attempts) {
@@ -326,7 +326,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 				GEN_GIANT_TREE.generateTree(this.world, this.rand, x, y, z);
 		}
 	}
@@ -336,7 +336,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkSurface(SurfaceType.DIRT, x, y, z) && this.checkAboveSurface(SurfaceType.WATER, x, y + 1, z))
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 				GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 		}
 	}
