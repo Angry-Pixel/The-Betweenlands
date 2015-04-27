@@ -48,6 +48,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_WEEPING_BLUE = new WorldGenTallGrass(BLBlockRegistry.weepingBlue, 1);
 	private final static WorldGenTallGrass GEN_SOFT_RUSH = new WorldGenTallGrass(BLBlockRegistry.softRush, 1);
 	private final static WorldGenTallGrass GEN_MARSH_MALLOW = new WorldGenTallGrass(BLBlockRegistry.marshMallow, 1);
+	private final static WorldGenTallGrass GEN_MILKWEED = new WorldGenTallGrass(BLBlockRegistry.milkweed, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -141,6 +142,17 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
 				GEN_SOFT_RUSH.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateMilkweed(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_MILKWEED.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}

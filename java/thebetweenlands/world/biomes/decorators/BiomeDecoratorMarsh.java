@@ -30,7 +30,8 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generatePickerelWeed(2);
 		helper.generateMarshHibiscus(2);
 		helper.generateMarshMallow(2);
-		helper.generatePhragmites(200);
-		helper.generateSoftRush(60);
+		helper.generateButtonBush(2);
+		helper.generatePhragmites(300);
+		helper.generateSoftRush(90);
 	}
 }
