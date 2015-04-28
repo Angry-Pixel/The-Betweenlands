@@ -9,9 +9,9 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 	public void postTerrainGen() {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateGiantWeedwoodTree(100);
+		helper.generateGiantWeedwoodTree(60);
 		
-		helper.generateWeedwoodTree(100);
+		helper.generateWeedwoodTree(60);
 		
 		helper.generateWeedwoodBush(130);
 		helper.generateRubberTree(50);
