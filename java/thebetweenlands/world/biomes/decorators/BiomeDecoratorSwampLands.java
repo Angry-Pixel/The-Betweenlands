@@ -6,7 +6,7 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 
 public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 	public BiomeDecoratorSwampLands() {
-		this.setPostChunkGenPasses(1);
+		this.setPostChunkGenPasses(2);
 	}
 
 	@Override
