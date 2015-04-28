@@ -1,10 +1,15 @@
 package thebetweenlands.client.render.shader;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GLContext;
+
 import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -19,15 +24,15 @@ public class ShaderHelper {
 	private boolean shadersSupported = false;
 	
 	public boolean isShaderSupported() {
-		/*if(!this.checked){
+		if(!this.checked){
 			this.checked = true;
 			ContextCapabilities contextCapabilities = GLContext.getCapabilities();
 			boolean supportsGL21 = contextCapabilities.OpenGL21;
 	        boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
 			this.shadersSupported = OpenGlHelper.func_153193_b() && supported && OpenGlHelper.framebufferSupported;
 		}
-		return this.shadersSupported;*/
-		return false; //TODO: Fix this method for AMD gpus
+		return this.shadersSupported;
+		//return false; //TODO: Fix this method for AMD gpus
 	}
 
 	public void enableShader() {

@@ -14,13 +14,13 @@ uniform float zNear;
 uniform float zFar;
 
 //Light data
-uniform float   LightSourcesX[64];
-uniform float   LightSourcesY[64];
-uniform float   LightSourcesZ[64];
-uniform float   LightColorsR[64];
-uniform float   LightColorsG[64];
-uniform float   LightColorsB[64];
-uniform float   LightRadii[64];
+uniform float   LightSourcesX[32];
+uniform float   LightSourcesY[32];
+uniform float   LightSourcesZ[32];
+uniform float   LightColorsR[32];
+uniform float   LightColorsG[32];
+uniform float   LightColorsB[32];
+uniform float   LightRadii[32];
 uniform float   LightSources;
 
 //Cam pos
@@ -79,7 +79,7 @@ void main() {
     if(!distortion) {
         color += texture2D(DiffuseSampler, texCoord);
     } else {
-        float fragDistortion = (fragPos.y + CamPos.y + (fragPos.x + CamPos.x + fragPos.z + CamPos.z) / 5) * 5;
+        float fragDistortion = (fragPos.y + CamPos.y + (cos(fragPos.x + CamPos.x) * sin(fragPos.z + CamPos.z))) * 5;
         color += texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300) / 800 * distortionMultiplier, 0));
     }
     

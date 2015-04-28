@@ -178,9 +178,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightColorsR");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(this.lightSources.get(i).r);
 				}
 				uniform.func_148097_a(posArray);
@@ -189,9 +189,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightColorsG");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(this.lightSources.get(i).g);
 				}
 				uniform.func_148097_a(posArray);
@@ -200,9 +200,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightColorsB");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(this.lightSources.get(i).b);
 				}
 				uniform.func_148097_a(posArray);
@@ -211,9 +211,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightSourcesX");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(-RenderManager.renderPosX + this.lightSources.get(i).x);
 				}
 				uniform.func_148097_a(posArray);
@@ -222,9 +222,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightSourcesY");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(-RenderManager.renderPosY + this.lightSources.get(i).y);
 				}
 				uniform.func_148097_a(posArray);
@@ -233,9 +233,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightSourcesZ");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(-RenderManager.renderPosZ + this.lightSources.get(i).z);
 				}
 				uniform.func_148097_a(posArray);
@@ -244,9 +244,9 @@ public class MainShader extends CShader {
 		{
 			ShaderUniform uniform = shader.getUniform("LightRadii");
 			if(uniform != null) {
-				float[] posArray = new float[64];
+				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 64) break;
+					if(i >= 32) break;
 					posArray[i] = (float)(this.lightSources.get(i).radius);
 				}
 				uniform.func_148097_a(posArray);
@@ -256,8 +256,8 @@ public class MainShader extends CShader {
 			ShaderUniform uniform = shader.getUniform("LightSources");
 			if(uniform != null) {
 				int count = this.lightSources.size();
-				if(count > 64) {
-					count = 64;
+				if(count > 32) {
+					count = 32;
 				}
 				uniform.func_148090_a(count);
 			}
