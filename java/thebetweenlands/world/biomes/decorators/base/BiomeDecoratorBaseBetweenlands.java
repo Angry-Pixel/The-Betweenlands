@@ -17,11 +17,23 @@ import thebetweenlands.world.feature.gen.WorldGenMinableBetweenlands;
  */
 public class BiomeDecoratorBaseBetweenlands
 {
+	private int postChunkPopulatePasses = 1;
+	private int postChunkGenPasses = 1;
 	protected World world;
 	protected Random rand;
 	protected int x, z;
 	protected int xx, yy, zz, attempt;
-
+	
+	public final BiomeDecoratorBaseBetweenlands setPostChunkGenPasses(int passes) {
+		this.postChunkGenPasses = passes;
+		return this;
+	}
+	
+	public final BiomeDecoratorBaseBetweenlands setPostChunkPopulatePasses(int passes) {
+		this.postChunkPopulatePasses = passes;
+		return this;
+	}
+	
 	public final int getX() {
 		return this.x;
 	}
@@ -38,45 +50,30 @@ public class BiomeDecoratorBaseBetweenlands
 		return this.world;
 	}
 
-	public final void populate(World world, Random rand, int x, int z) {
+	public final void postChunkPopulate(World world, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
 		this.rand = rand;
 		this.world = world;
 		this.generateOres();
-		this.populate();
-	}
-
-	public final void decorate(World world, Random rand, int x, int z) {
-		this.x = x;
-		this.z = z;
-		this.rand = rand;
-		this.world = world;
-		this.decorate();
+		for(int i = 0; i < this.postChunkPopulatePasses; i++) {
+			this.postChunkPopulate(i);
+		}
 	}
 	
-	public final void postTerrainGen(World world, Random rand, int x, int z) {
+	public final void postChunkGen(World world, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
 		this.rand = rand;
 		this.world = world;
-		this.postTerrainGen();
-	}
-	
-	public final void postTerrainGen2(World world, Random rand, int x, int z) {
-		this.x = x;
-		this.z = z;
-		this.rand = rand;
-		this.world = world;
-		this.postTerrainGen2();
+		for(int i = 0; i < this.postChunkGenPasses; i++) {
+			this.postChunkGen(i);
+		}
 	}
 
-	protected void populate() { }
- 
-	protected void decorate() { }
+	protected void postChunkPopulate(int pass) { }
 
-	protected void postTerrainGen() { }
-	protected void postTerrainGen2() { }
+	protected void postChunkGen(int pass) { }
 	
 	protected final int offsetXZ() {
 		return rand.nextInt(16) + 8;

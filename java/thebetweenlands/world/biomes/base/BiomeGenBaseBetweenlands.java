@@ -192,36 +192,20 @@ extends BiomeGenBase
 		return this;
 	}
 
-	@Override
 	/**
 	 * Decorates the biome, called after BiomeGenBaseBetweenlands#populate.
 	 * Used to generate features such as trees.
 	 */
-	public void decorate(World world, Random rand, int x, int z) {
-		this.decorator.decorate(world, rand, x, z);
-	}
-
-	/**
-	 * Populates the biome, called before BiomeGenBasebetweenlands#decorate.
-	 * Used to generate features such as lakes.
-	 */
-	public void populate(World world, Random rand, int x, int z) {
-		this.decorator.populate(world, rand, x, z);
+	public void postChunkPopulate(World world, Random rand, int x, int z) {
+		this.decorator.postChunkPopulate(world, rand, x, z);
 	}
 	
 	/**
 	 * Generates additional biome content after decoration and population
 	 * Called from an IWorldGenerator.
 	 */
-	public void postTerrainGen(World world, Random rand, int x, int z) {
-		this.decorator.postTerrainGen(world, rand, x, z);
-	}
-	
-	/**
-	 * Called after postTerrainGen
-	 */
-	public void postTerrainGen2(World world, Random rand, int x, int z) {
-		this.decorator.postTerrainGen2(world, rand, x, z);
+	public void postChunkGen(World world, Random rand, int x, int z) {
+		this.decorator.postChunkGen(world, rand, x, z);
 	}
 
 	@Override

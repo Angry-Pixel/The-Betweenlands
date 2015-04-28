@@ -4,7 +4,7 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 
 public class BiomeDecoratorDeepWaters extends BiomeDecoratorBaseBetweenlands {
 	@Override
-	public void postTerrainGen() {
+	public void postChunkGen(int pass) {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
 		helper.generateWisp(1);

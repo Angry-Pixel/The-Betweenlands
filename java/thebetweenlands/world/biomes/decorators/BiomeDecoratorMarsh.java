@@ -6,7 +6,7 @@ import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 
 public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 	@Override
-	public void postTerrainGen() {
+	public void postChunkGen(int pass) {
 		for (int i = 0; i < 10; i++) {
 			int px = this.x + offsetXZ();
 			int py = 80 + rand.nextInt(14);

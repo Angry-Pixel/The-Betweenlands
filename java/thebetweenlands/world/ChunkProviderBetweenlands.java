@@ -189,8 +189,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 			BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands) biome;
 			this.rand.setSeed(this.worldObj.getSeed());
 			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
-			bgbb.populate(this.worldObj, this.rand, blockX, blockZ);
-			bgbb.decorate(this.worldObj, this.rand, blockX, blockZ);
+			bgbb.postChunkPopulate(this.worldObj, this.rand, blockX, blockZ);
 		} else {
 			biome.decorate(this.worldObj, this.rand, blockX, blockZ);
 		}
