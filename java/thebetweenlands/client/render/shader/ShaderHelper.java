@@ -32,7 +32,6 @@ public class ShaderHelper {
 			this.shadersSupported = OpenGlHelper.func_153193_b() && supported && OpenGlHelper.framebufferSupported;
 		}
 		return this.shadersSupported;
-		//return false; //TODO: Fix this method for AMD gpus
 	}
 
 	public void enableShader() {
