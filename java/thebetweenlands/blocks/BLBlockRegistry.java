@@ -157,6 +157,7 @@ public class BLBlockRegistry
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
 	public static final Block swampTallGrass = new BlockBLSmallPlants("swampTallGrass");
+	public static final Block shoots = new BlockBLSmallPlants("shoots");
 	public static final Block nettleFlowered = new BlockBLSmallPlants("nettleFlowered");
 	public static final Block nettle = new BlockBLSmallPlants("nettle");
 	public static final Block arrowArum = new BlockBLSmallPlants("arrowArum");
