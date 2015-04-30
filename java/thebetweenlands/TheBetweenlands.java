@@ -127,6 +127,7 @@ public class TheBetweenlands
         FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 
 		if(DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
