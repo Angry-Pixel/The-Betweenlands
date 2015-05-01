@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeedwoodBow extends ItemBow {
 
-	public static final String[] bowAnimationIcon = new String[] { "weedwoodBow0", "weedwoodBow1", "weedwoodbow2" };
+	public static final String[] bowAnimationIcon = new String[] { "weedwoodBow0", "weedwoodBow1", "weedwoodBow2" };
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
