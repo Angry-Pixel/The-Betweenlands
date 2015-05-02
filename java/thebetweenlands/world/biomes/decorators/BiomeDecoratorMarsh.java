@@ -33,5 +33,6 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generateButtonBush(2);
 		helper.generatePhragmites(400);
 		helper.generateSoftRush(130);
+		helper.generateBroomsedge(40);
 	}
 }
