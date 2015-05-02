@@ -25,6 +25,7 @@ import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
+import thebetweenlands.blocks.plants.BlockBogBean;
 import thebetweenlands.blocks.plants.BlockThorns;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
@@ -134,10 +135,12 @@ public class BLBlockRegistry
 	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F); 
 	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
+	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
+	public static final BlockBogBean bogBean = new BlockBogBean();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
@@ -167,6 +170,8 @@ public class BLBlockRegistry
 	public static final Block softRush = new BlockBLSmallPlants("softRush");
 	public static final Block marshMallow = new BlockBLSmallPlants("marshMallow");
 	public static final Block milkweed = new BlockBLSmallPlants("milkweed");
+	public static final Block blueIris = new BlockBLSmallPlants("blueIris");
+	public static final Block copperIris = new BlockBLSmallPlants("copperIris");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();

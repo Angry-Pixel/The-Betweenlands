@@ -135,6 +135,10 @@ tile.thebetweenlands.shoots.name=Shoots
 tile.thebetweenlands.phragmites.name=Phragmites
 tile.thebetweenlands.softRush.name=Soft Rush
 tile.thebetweenlands.tallCattail.name=Tall Cattail
+tile.thebetweenlands.cardinalFlower.name=Cardinal Flower
+tile.thebetweenlands.blueIris.name=Blue Iris
+tile.thebetweenlands.copperIris.name=Copper Iris
+tile.thebetweenlands.bogBean.name=Bog Bean
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
