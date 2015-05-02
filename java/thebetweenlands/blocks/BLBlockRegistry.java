@@ -26,6 +26,7 @@ import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
 import thebetweenlands.blocks.plants.BlockBogBean;
+import thebetweenlands.blocks.plants.BlockGoldenClub;
 import thebetweenlands.blocks.plants.BlockThorns;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
@@ -141,6 +142,7 @@ public class BLBlockRegistry
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
 	public static final BlockBogBean bogBean = new BlockBogBean();
+	public static final BlockGoldenClub goldenClub = new BlockGoldenClub();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
