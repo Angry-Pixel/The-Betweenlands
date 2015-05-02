@@ -2,8 +2,6 @@ package thebetweenlands.blocks.plants;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,15 +12,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.render.block.water.WaterMireCoralRenderer;
+import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.recipes.BLMaterials;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMireCoral extends BlockSwampWater implements IPlantable {
 	public IIcon iconMireCoral;
@@ -38,13 +36,13 @@ public class BlockMireCoral extends BlockSwampWater implements IPlantable {
 		setLightLevel(1.0F);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
-		this.setSpecialRenderer(new WaterMireCoralRenderer());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		this.iconMireCoral = iconRegister.registerIcon("thebetweenlands:mireCoral");
+		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconMireCoral));
 		super.registerBlockIcons(iconRegister);
 	}
 

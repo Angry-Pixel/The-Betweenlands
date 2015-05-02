@@ -15,7 +15,7 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.render.block.water.WaterSwampReedRenderer;
+import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -36,7 +36,6 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 		setTickRandomly(true);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
-		this.setSpecialRenderer(new WaterSwampReedRenderer());
 	}
 
 	@Override
@@ -44,6 +43,7 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		this.iconSwampReed = iconRegister.registerIcon("thebetweenlands:swampReedBottom");
 		this.iconSwampReedTop = iconRegister.registerIcon("thebetweenlands:swampReedTop");
+		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconSwampReed, this.iconSwampReedTop));
 		super.registerBlockIcons(iconRegister);
 	}
 

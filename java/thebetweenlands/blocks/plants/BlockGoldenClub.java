@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -15,10 +14,8 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.render.block.water.WaterGoldenClubRenderer;
+import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -36,7 +33,6 @@ public class BlockGoldenClub extends BlockSwampWater implements IPlantable {
 		setTickRandomly(true);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
-		this.setSpecialRenderer(new WaterGoldenClubRenderer());
 	}
 
 	@Override
@@ -44,6 +40,7 @@ public class BlockGoldenClub extends BlockSwampWater implements IPlantable {
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		this.iconGoldenClubBottom = iconRegister.registerIcon("thebetweenlands:goldenClubBottom");
 		this.iconGoldenClubTop = iconRegister.registerIcon("thebetweenlands:goldenClubTop");
+		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconGoldenClubBottom, this.iconGoldenClubTop));
 		super.registerBlockIcons(iconRegister);
 	}
 
