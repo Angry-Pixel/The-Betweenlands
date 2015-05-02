@@ -53,6 +53,6 @@ public class BlockBogBeanRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public int getRenderId() {
-		return BlockRenderIDs.SWAMP_REED.id();
+		return BlockRenderIDs.BOG_BEAN.id();
 	}
 }

@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,8 +16,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterBogBeanRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -87,6 +85,11 @@ public class BlockBogBean extends BlockSwampWater implements IPlantable {
     public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
         return false;
     }
+    
+	@Override
+	public int getRenderId() {
+		return BlockRenderIDs.BOG_BEAN.id();
+	}
 	
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
@@ -98,5 +101,7 @@ public class BlockBogBean extends BlockSwampWater implements IPlantable {
 
 	protected boolean canPlaceBlockOn(Block block) {
 		return block instanceof BlockBogBean || block == BLBlockRegistry.mud;
+		
+		
 	}
 }
