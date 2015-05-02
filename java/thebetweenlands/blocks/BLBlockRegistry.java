@@ -19,6 +19,7 @@ import thebetweenlands.blocks.plants.BlockBLSmallPlants;
 import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockHanger;
+import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
@@ -144,6 +145,7 @@ public class BLBlockRegistry
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
 	public static final BlockBogBean bogBean = new BlockBogBean();
 	public static final BlockGoldenClub goldenClub = new BlockGoldenClub();
+	public static final BlockMarshMarigold marshMarigold = new BlockMarshMarigold();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
