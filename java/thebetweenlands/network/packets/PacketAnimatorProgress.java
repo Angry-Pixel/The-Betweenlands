@@ -1,8 +1,8 @@
-package thebetweenlands.packets;
+package thebetweenlands.network.packets;
 
 import io.netty.buffer.ByteBuf;
+import thebetweenlands.network.base.IPacket;
 import thebetweenlands.tileentities.TileEntityAnimator;
-import thebetweenlands.utils.network.IPacket;
 
 public class PacketAnimatorProgress implements IPacket {
 	public PacketAnimatorProgress() { }

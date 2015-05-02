@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -14,10 +15,12 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
+import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packets.PacketDruidAltarProgress;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.message.MessageAltarCraftingProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 
@@ -165,9 +168,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		craftingProgress = 1;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 		//Packet to start sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -1)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 1
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, 1)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Does the metadata stuff for the circle animated textures
 		checkDruidCircleMeta(world);
 	}
@@ -181,9 +184,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		craftingProgress = 0;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 		//Packet to cancel sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -2)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Sets client crafting progress to 0
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, 0)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		//Does the metadata stuff for the circle animated textures
 		checkDruidCircleMeta(world);
 	}
@@ -194,7 +197,18 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		if(world instanceof WorldServer) {
 			dim = ((WorldServer)world).provider.dimensionId;
 		}
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, craftingProgress), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+	}
+	
+	@SubscribePacket
+	public static void onProgressPacket(PacketDruidAltarProgress pkt) {
+		TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(pkt.x, pkt.y, pkt.z);
+		if (te instanceof TileEntityDruidAltar) {
+			TileEntityDruidAltar tile = (TileEntityDruidAltar) te;
+			if(pkt.progress >= 0) {
+				tile.craftingProgress = pkt.progress;
+			}
+		}
 	}
 	
 	private void checkDruidCircleMeta(World world) {

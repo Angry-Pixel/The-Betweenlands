@@ -17,18 +17,14 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.message.MessageAltarCraftingProgress;
-import thebetweenlands.message.MessageDruidTeleportParticle;
-import thebetweenlands.message.MessageSnailHatchParticle;
-import thebetweenlands.message.MessageSyncPlayerDecay;
-import thebetweenlands.message.MessageSyncWeather;
+import thebetweenlands.network.base.SidedPacketHandler;
+import thebetweenlands.network.base.impl.CommonPacketProxy;
+import thebetweenlands.network.message.MessageSyncPlayerDecay;
+import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
-import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.utils.network.SidedPacketHandler;
-import thebetweenlands.utils.network.impl.CommonPacketProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
@@ -53,7 +49,7 @@ public class TheBetweenlands
 
 	public static SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
 
-	@SidedProxy(modId = ModInfo.ID, clientSide = "thebetweenlands.utils.network.impl.ClientPacketProxy", serverSide = "thebetweenlands.utils.network.impl.CommonPacketProxy")
+	@SidedProxy(modId = ModInfo.ID, clientSide = "thebetweenlands.network.base.impl.ClientPacketProxy", serverSide = "thebetweenlands.network.base.impl.CommonPacketProxy")
 	public static CommonPacketProxy packetProxy;
 	
 	@Instance(ModInfo.ID)
@@ -81,29 +77,19 @@ public class TheBetweenlands
 		BLEntityRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-		//GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);
+		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-		//TODO: Just temporary to test some stuff
 		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
 		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 
 		//Packet Registry
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-		networkWrapper.registerMessage(MessageAltarCraftingProgress.class, MessageAltarCraftingProgress.class, 0, Side.CLIENT);
-		networkWrapper.registerMessage(MessageDruidTeleportParticle.class, MessageDruidTeleportParticle.class, 1, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
         networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
-        networkWrapper.registerMessage(MessageSnailHatchParticle.class, MessageSnailHatchParticle.class, 5, Side.CLIENT);
         
-        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 5, 6);
-		//Packets
-		try {
-			sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21);
 	}
 
 	@EventHandler
@@ -115,13 +101,19 @@ public class TheBetweenlands
         PotionHelper.registerPotions();
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
+		
+		//FIXME: Not MP compatible
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
+        
         FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
-        MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
+        
+		//FIXME: Not MP compatible
+		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
+		
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);

@@ -1,7 +1,5 @@
 package thebetweenlands.world;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
@@ -15,13 +13,14 @@ import net.minecraftforge.client.IRenderHandler;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.sky.SkyRendererStars;
-import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.message.MessageSyncWeather;
+import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -189,7 +188,6 @@ extends WorldProvider
 	public void updateWeather() {
 		this.worldObj.getWorldInfo().setRaining(false);
 		this.worldObj.getWorldInfo().setThundering(false);
-		this.worldObj.setRainStrength(0.0f);
 		if(!this.worldObj.isRemote) {
 			int timeToFog = this.getWorldData().getTimeToFog();
 			if(timeToFog <= 0) {
@@ -206,6 +204,8 @@ extends WorldProvider
 				}
 			}
 			TheBetweenlands.networkWrapper.sendToAll(new MessageSyncWeather(this.getWorldData().getDenseFog()));
+		} else {
+			this.worldObj.setRainStrength(0.0f);
 		}
 	}
 

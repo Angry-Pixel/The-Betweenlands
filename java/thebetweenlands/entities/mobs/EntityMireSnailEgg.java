@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.message.MessageSnailHatchParticle;
+import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -56,7 +56,7 @@ public class EntityMireSnailEgg extends EntityAnimal {
 		int dim = 0;
 		if (world instanceof WorldServer) {
 			dim = ((WorldServer) world).provider.dimensionId;
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSnailHatchParticle((float)posX, (float)posY, (float)posZ), new TargetPoint(dim, posX + 0.5D, posY + 0.2D, posZ + 0.5D, 16D));
+			TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketSnailHatchParticle(this.posX, this.posY, this.posZ)), new TargetPoint(dim, posX + 0.5D, posY + 0.2D, posZ + 0.5D, 16D));
 		}
 	}
 

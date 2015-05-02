@@ -1,8 +1,8 @@
-package thebetweenlands.utils.network;
+package thebetweenlands.network.base;
 
 import java.util.List;
 
-import thebetweenlands.utils.network.impl.SimplePacketSerializer;
+import thebetweenlands.network.base.impl.SimplePacketSerializer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

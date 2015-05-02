@@ -1,4 +1,4 @@
-package thebetweenlands.utils.network.impl;
+package thebetweenlands.network.base.impl;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -8,11 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thebetweenlands.utils.network.ListenerEntry;
-import thebetweenlands.utils.network.IPacket;
-import thebetweenlands.utils.network.IPacketProxy;
-import thebetweenlands.utils.network.SubscribePacket;
-
+import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.IPacketProxy;
+import thebetweenlands.network.base.ListenerEntry;
+import thebetweenlands.network.base.SubscribePacket;
 import cpw.mods.fml.relauncher.Side;
 
 public class CommonPacketProxy implements IPacketProxy {

@@ -1,6 +1,5 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -10,12 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.message.MessageAltarCraftingProgress;
-import thebetweenlands.packets.PacketAnimatorProgress;
-import thebetweenlands.utils.network.SubscribePacket;
+import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packets.PacketAnimatorProgress;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -102,10 +97,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		isAnimating = true;
 		progress = 0;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+		//TODO: Currently not used
 		// Packet to start sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		// Sets client crafting progress to 1
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 1), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 	}
 
@@ -118,10 +114,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		isAnimating = false;
 		progress = 0;
 		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+		//TODO: Currently not used
 		// Packet to cancel sound
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -2), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		// Sets client crafting progress to 0
-		TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+		//TheBetweenlands.networkWrapper.sendToAllAround(new MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 0), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 	}
 

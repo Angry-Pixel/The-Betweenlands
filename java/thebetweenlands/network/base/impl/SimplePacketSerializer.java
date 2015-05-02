@@ -1,12 +1,12 @@
-package thebetweenlands.utils.network.impl;
+package thebetweenlands.network.base.impl;
+
+import io.netty.buffer.ByteBuf;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
-import thebetweenlands.utils.network.IPacket;
-import thebetweenlands.utils.network.IPacketSerializer;
-
-import io.netty.buffer.ByteBuf;
+import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.IPacketSerializer;
 
 /**
  * Serializes the packets by name. Server and client both have to have the same packet class in the same location.

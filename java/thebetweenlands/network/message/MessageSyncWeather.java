@@ -1,8 +1,8 @@
-package thebetweenlands.message;
+package thebetweenlands.network.message;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import thebetweenlands.message.base.AbstractMessage;
+import thebetweenlands.network.message.base.AbstractMessage;
 
 public class MessageSyncWeather extends AbstractMessage<MessageSyncWeather> {
 	public static boolean hasDenseFog = false;

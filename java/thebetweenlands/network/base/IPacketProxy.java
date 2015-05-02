@@ -1,4 +1,4 @@
-package thebetweenlands.utils.network;
+package thebetweenlands.network.base;
 
 import java.util.List;
 import java.util.Map;
