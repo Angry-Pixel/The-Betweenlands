@@ -101,19 +101,13 @@ public class TheBetweenlands
         PotionHelper.registerPotions();
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
-		
-		//FIXME: Not MP compatible
         FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
-        
         FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
-        
-		//FIXME: Not MP compatible
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
-		
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);

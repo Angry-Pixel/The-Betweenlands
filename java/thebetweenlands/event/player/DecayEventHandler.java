@@ -3,7 +3,6 @@ package thebetweenlands.event.player;
 import java.util.Map;
 import java.util.UUID;
 
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,7 +47,7 @@ public class DecayEventHandler {
 
 			TheBetweenlands.networkWrapper.sendTo(new MessageSyncPlayerDecay(decayLevel), (EntityPlayerMP) player);
 		} else if (event.world.isRemote && event.entity instanceof EntityPlayer) {
-			TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.entity, DecayManager.getCorruptionLevel((EntityPlayer) event.entity));
+			TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayer) event.entity, DecayManager.getCorruptionLevel((EntityPlayer) event.entity));
 		}
 	}
 
@@ -86,10 +85,10 @@ public class DecayEventHandler {
 		if (event.player.worldObj.isRemote) {
 			if (!corruptionBuffer.containsKey(event.player.getPersistentID())) {
 				corruptionBuffer.put(event.player.getPersistentID(), DecayManager.getCorruptionLevel(event.player));
-				TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.player, DecayManager.getCorruptionLevel(event.player));
+				TheBetweenlands.proxy.corruptPlayerSkin(event.player, DecayManager.getCorruptionLevel(event.player));
 			} else if (corruptionBuffer.get(event.player.getPersistentID()) != DecayManager.getCorruptionLevel(event.player)) {
 				corruptionBuffer.put(event.player.getPersistentID(), DecayManager.getCorruptionLevel(event.player));
-				TheBetweenlands.proxy.corruptPlayerSkin((EntityPlayerSP) event.player, DecayManager.getCorruptionLevel(event.player));
+				TheBetweenlands.proxy.corruptPlayerSkin(event.player, DecayManager.getCorruptionLevel(event.player));
 			}
 		}
 	}
