@@ -50,6 +50,8 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_MARSH_MALLOW = new WorldGenTallGrass(BLBlockRegistry.marshMallow, 1);
 	private final static WorldGenTallGrass GEN_MILKWEED = new WorldGenTallGrass(BLBlockRegistry.milkweed, 1);
 	private final static WorldGenTallGrass GEN_SHOOTS = new WorldGenTallGrass(BLBlockRegistry.shoots, 1);
+	private final static WorldGenTallGrass GEN_COPPER_IRIS = new WorldGenTallGrass(BLBlockRegistry.copperIris, 1);
+	private final static WorldGenTallGrass GEN_BLUE_IRIS = new WorldGenTallGrass(BLBlockRegistry.blueIris, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -90,6 +92,32 @@ public class DecorationHelper {
 		}
 	}
 	
+	public void generateCardinalFlower(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.cardinalFlower, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.cardinalFlower, 8, 2);
+			}
+		}
+	}
+	
+	public void generateBroomsedge(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			{
+				world.setBlock(x, y, z, BLBlockRegistry.broomsedge, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.broomsedge, 8, 2);
+			}
+		}
+	}
+	
 	public void generateTallCattail(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -99,6 +127,28 @@ public class DecorationHelper {
 			{
 				world.setBlock(x, y, z, BLBlockRegistry.tallCattail, 0, 2);
 				world.setBlock(x, y + 1, z, BLBlockRegistry.tallCattail, 8, 2);
+			}
+		}
+	}
+	
+	public void generateCopperIris(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_COPPER_IRIS.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateBlueIris(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_BLUE_IRIS.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}

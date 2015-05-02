@@ -137,6 +137,7 @@ public class BLBlockRegistry
 	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
 	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
+	public static final Block broomsedge = new DoubleHeightPlant("Broomsedge", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
