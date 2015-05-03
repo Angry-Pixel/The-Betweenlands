@@ -1,17 +1,16 @@
 package thebetweenlands.client.render.block;
 
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
+
+import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -31,6 +30,8 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
+		BlockSwampWater swampWaterBlock = (BlockSwampWater) block;
+		
 		Tessellator tessellator = Tessellator.instance;
 		int colorMultiplier = block.colorMultiplier(blockAccess, x, y, z);
 		float colorR = (float)(colorMultiplier >> 16 & 255) / 255.0F;
@@ -75,7 +76,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 			if (renderer.renderAllFaces || renderTop)
 			{
 				flag2 = true;
-				IIcon iicon = renderer.getBlockIconFromSideAndMetadata(block, 1, i1);
+				IIcon iicon = /*renderer.getBlockIconFromSideAndMetadata(block, 1, i1)*/swampWaterBlock.getWaterIcon(1);
 				float f7 = 0.0f;
 				if(material == Material.water || material == Material.lava) {
 					f7 = (float)BlockLiquid.getFlowDirection(blockAccess, x, y, z, material);
@@ -85,7 +86,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 
 				if (f7 > -999.0F)
 				{
-					iicon = renderer.getBlockIconFromSideAndMetadata(block, 2, i1);
+					iicon = /*renderer.getBlockIconFromSideAndMetadata(block, 2, i1)*/swampWaterBlock.getWaterIcon(2);
 				}
 
 				wch -= minHeightSub;
@@ -144,7 +145,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 				if(blockAccess.getBlock(x, y-1, z) instanceof BlockSwampWater == false) {
 					tessellator.setBrightness(block.getMixedBrightnessForBlock(blockAccess, x, y - 1, z));
 					tessellator.setColorOpaque_F(colorMult * colorR, colorMult * colorG, colorMult * colorB);
-					renderer.renderFaceYNeg(block, (double)x, (double)y + minHeightSub, (double)z, renderer.getBlockIconFromSide(block, 0));
+					renderer.renderFaceYNeg(block, (double)x, (double)y + minHeightSub, (double)z, /*renderer.getBlockIconFromSide(block, 0)*/swampWaterBlock.getWaterIcon(0));
 					flag2 = true;
 				}
 			}
@@ -174,7 +175,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 					++l1;
 				}
 
-				IIcon iicon1 = renderer.getBlockIconFromSideAndMetadata(block, k1 + 2, i1);
+				IIcon iicon1 = /*renderer.getBlockIconFromSideAndMetadata(block, k1 + 2, i1)*/swampWaterBlock.getWaterIcon(k1 + 2);
 
 				if (renderer.renderAllFaces || renderSides[k1])
 				{
