@@ -18,10 +18,10 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateMossPatch(10);
-		helper.generateMilkweed(2);
-		helper.generateShoots(2);
-		helper.generateCardinalFlower(10);
-		helper.generateBlueEyedGrass(2);
-		helper.generateBoneset(2);
+		helper.generateMilkweed(5);
+		helper.generateShoots(5);
+		helper.generateCardinalFlower(5);
+		helper.generateBlueEyedGrass(5);
+		helper.generateBoneset(5);
 	}
 }
