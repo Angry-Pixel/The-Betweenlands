@@ -32,4 +32,16 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants {
 	public Item getItemDropped(int meta, Random rand, int fortune) {
 		return null;
 	}
+	
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass() {
+        return 1;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
 }
