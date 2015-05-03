@@ -66,6 +66,7 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLBlockRegistry
@@ -135,7 +136,7 @@ public class BLBlockRegistry
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
 	// DOUBLE PLANTS
-	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
+	public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F).setRenderType(BlockRenderIDs.MODEL_PLANT.id());
 	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F); 
 	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 

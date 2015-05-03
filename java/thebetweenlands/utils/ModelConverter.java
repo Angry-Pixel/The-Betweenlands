@@ -383,6 +383,27 @@ public class ModelConverter {
 		}
 
 		/**
+		 * Scales the model vertices.
+		 * @param x       X Scale
+		 * @param y       Y Scale
+		 * @param z       Z Scale
+		 * @return
+		 */
+		public Model scale(double x, double y, double z) {
+			for(Box box : this.modelBoxes) {
+				for(Quad quad : box.quads) {
+					for(int i = 0; i < 4; i++) {
+						Vec3 vec = quad.vertices[i];
+						vec.x *= x;
+						vec.y *= y;
+						vec.z *= z;
+					}
+				}
+			}
+			return this;
+		}
+		
+		/**
 		 * Returns the list of the reconstructed boxes of this model.
 		 * @return
 		 */
@@ -834,6 +855,27 @@ public class ModelConverter {
 		return this;
 	}
 
+	/**
+	 * Scales the model vertices.
+	 * @param x       X Scale
+	 * @param y       Y Scale
+	 * @param z       Z Scale
+	 * @return
+	 */
+	public ModelConverter scale(double x, double y, double z) {
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					vec.x *= x;
+					vec.y *= y;
+					vec.z *= z;
+				}
+			}
+		}
+		return this;
+	}
+	
 	/**
 	 * Recursively returns a list of all parents and sub-parents of the given ModelRenderer.
 	 * Used to simulate previous rotations and transformations.
