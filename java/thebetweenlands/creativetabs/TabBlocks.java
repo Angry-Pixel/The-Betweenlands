@@ -25,7 +25,7 @@ public class TabBlocks
 
 	@Override
 	public Item getTabIconItem() {
-		return Item.getItemFromBlock(BLBlockRegistry.betweenstone);
+		return Item.getItemFromBlock(BLBlockRegistry.swampGrass);
 	}
 
 	@Override
