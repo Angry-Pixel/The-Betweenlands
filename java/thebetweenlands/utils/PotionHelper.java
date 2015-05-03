@@ -14,7 +14,6 @@ public class PotionHelper
     /** adds support for 128 different potions, hopefully this doesn't break mods :I **/
     public static void initPotionArray() {
         try {
-            //FIXME: find SRG name!
             Field potionArr = ReflectionHelper.findField(Potion.class, "potionTypes", "field_76425_a");
             Field modfield = Field.class.getDeclaredField("modifiers");
             modfield.setAccessible(true);
