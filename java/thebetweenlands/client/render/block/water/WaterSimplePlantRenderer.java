@@ -54,4 +54,9 @@ public class WaterSimplePlantRenderer implements IWaterRenderer {
 		}
 		return true;
 	}
+
+	@Override
+	public IIcon getIcon() {
+		return this.iconTop != null ? this.iconTop : this.iconBottom;
+	}
 }
