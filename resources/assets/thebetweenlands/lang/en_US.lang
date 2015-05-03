@@ -142,6 +142,10 @@ tile.thebetweenlands.bogBean.name=Bog Bean
 tile.thebetweenlands.goldenClub.name=Golden Club
 tile.thebetweenlands.marshMarigold.name=Marsh Marigolds
 tile.thebetweenlands.broomsedge.name=Broomsedge 
+tile.thebetweenlands.blueEyedGrass.name=Blue Eyed Grass
+tile.thebetweenlands.boneset.name=Boneset
+tile.thebetweenlands.bottleBrushGrass.name=Bottle Brush Grass
+tile.thebetweenlands.waterWeeds.name=Water Weeds
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace

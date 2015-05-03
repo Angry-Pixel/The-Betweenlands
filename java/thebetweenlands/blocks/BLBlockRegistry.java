@@ -34,6 +34,7 @@ import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWallPlants;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
+import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
@@ -146,6 +147,7 @@ public class BLBlockRegistry
 	public static final BlockBogBean bogBean = new BlockBogBean();
 	public static final BlockGoldenClub goldenClub = new BlockGoldenClub();
 	public static final BlockMarshMarigold marshMarigold = new BlockMarshMarigold();
+	public static final BlockWaterWeeds waterWeeds = new BlockWaterWeeds();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
@@ -177,6 +179,9 @@ public class BLBlockRegistry
 	public static final Block milkweed = new BlockBLSmallPlants("milkweed");
 	public static final Block blueIris = new BlockBLSmallPlants("blueIris");
 	public static final Block copperIris = new BlockBLSmallPlants("copperIris");
+	public static final Block blueEyedGrass = new BlockBLSmallPlants("blueEyedGrass");
+	public static final Block boneset = new BlockBLSmallPlants("boneset");
+	public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();

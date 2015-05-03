@@ -16,6 +16,7 @@ public class BLFluidRegistry {
 	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<>();
 	
 	public static Fluid swampWater = new Fluid("swampWater").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWater");
+	public static Fluid swampWaterWaterWeeds = new Fluid("swampWaterWaterWeeds").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterWaterWeeds");
 	public static Fluid swampWaterMireCoral = new Fluid("swampWaterMireCoral").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterMireCoral");
 	public static Fluid swampWaterReed = new Fluid("swampWaterReed").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterReed");
 	public static Fluid swampWaterBogBean = new Fluid("swampWaterBogBean").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterBogBean");
@@ -23,6 +24,7 @@ public class BLFluidRegistry {
 	public static Fluid swampWaterMarshMarigold = new Fluid("swampWaterMarshMarigold").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterMarshMarigold");
 	public static Fluid swampWaterStalk = new Fluid("swampWaterStalk").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterStalk");
 	public static Fluid swampWaterRoot = new Fluid("swampWaterRoot").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterRoot");
+
 
 	private BLFluidRegistry() {
 	}

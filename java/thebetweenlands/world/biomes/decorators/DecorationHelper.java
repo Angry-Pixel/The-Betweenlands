@@ -52,6 +52,9 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_SHOOTS = new WorldGenTallGrass(BLBlockRegistry.shoots, 1);
 	private final static WorldGenTallGrass GEN_COPPER_IRIS = new WorldGenTallGrass(BLBlockRegistry.copperIris, 1);
 	private final static WorldGenTallGrass GEN_BLUE_IRIS = new WorldGenTallGrass(BLBlockRegistry.blueIris, 1);
+	private final static WorldGenTallGrass GEN_BLUE_EYED_GRASS = new WorldGenTallGrass(BLBlockRegistry.blueEyedGrass, 1);
+	private final static WorldGenTallGrass GEN_BONESET = new WorldGenTallGrass(BLBlockRegistry.boneset, 1);
+	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -127,6 +130,39 @@ public class DecorationHelper {
 			{
 				world.setBlock(x, y, z, BLBlockRegistry.tallCattail, 0, 2);
 				world.setBlock(x, y + 1, z, BLBlockRegistry.tallCattail, 8, 2);
+			}
+		}
+	}
+	
+	public void generateBoneset(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_BONESET.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateBlueEyedGrass(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_BLUE_EYED_GRASS.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+	
+	public void generateBottleBrushGrass(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_BOTTLE_BRUSH_GRASS.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}
