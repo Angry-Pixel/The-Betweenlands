@@ -136,7 +136,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 		if(block == BLBlockRegistry.bulbCappedMushroom) {
 			if(plantModelInvBulbCappedMushroom == null) {
 				plantModelInvBulbCappedMushroom = new ModelConverter(
-						new ModelRegularPlant(),
+						new ModelBulbCappedMushroom(),
 						0.065D,
 						new TextureMap(64, 64, BLBlockRegistry.bulbCappedMushroom.modelTexture1),
 						true);
@@ -266,7 +266,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.swampPlant.modelTexture1),
 						true);
 			}
-			
+
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
 		} else if(block == BLBlockRegistry.bulbCappedMushroom) {
@@ -277,7 +277,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.bulbCappedMushroom.modelTexture1),
 						true);
 			}
-			
+
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			float rotYaw = rnd.nextFloat() * 360.0F;
 			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
