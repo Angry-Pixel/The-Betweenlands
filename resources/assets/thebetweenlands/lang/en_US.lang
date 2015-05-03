@@ -85,6 +85,8 @@ tile.thebetweenlands.rubberTreePlanks.name=Rubber Tree Planks
 tile.thebetweenlands.blockOfCompost.name=Block of Compost
 tile.thebetweenlands.dungeonWall.name=Dungeon Wall
 tile.thebetweenlands.chiseledBetweenstone.name=Chiseled Betweenstone 
+tile.thebetweenlands.betweenstoneBricks.name=Betweenstone Bricks
+tile.thebetweenlands.mireCoralBlock.name=Block of Mire Coral
 
 # Stairs, Slabs, Walls, Fences
 tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs

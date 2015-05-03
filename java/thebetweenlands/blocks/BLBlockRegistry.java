@@ -140,7 +140,7 @@ public class BLBlockRegistry
 	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
 	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
-	public static final Block broomsedge = new DoubleHeightPlant("Broomsedge", 0.8F); 
+	public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
@@ -200,6 +200,7 @@ public class BLBlockRegistry
 	public static final Block animator = new BlockAnimator();
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block betweenstoneBricks = new BlockBLGenericDeco("betweenstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block chiseledBetweenstone = new BlockBLGenericDeco("chiseledBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
@@ -220,6 +221,7 @@ public class BLBlockRegistry
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block rubberTreePlanks = new BlockBLGenericDeco("rubberTreePlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
+	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
