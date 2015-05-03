@@ -405,7 +405,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			double scale = rnd.nextFloat() * 0.4D + 0.6D;
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, -1.3F + scale/0.9F, rnd.nextFloat()/2.0F - 0.25F);
+			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, -1.65F + scale/0.65F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelSundew.getModel().scale(scale, scale, scale).rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
 			.offsetWS(offset).renderWithTessellator(Tessellator.instance);
 		}
