@@ -19,8 +19,13 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
+import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.network.message.MessageSyncWeather;
+import thebetweenlands.network.packets.PacketAnimatorProgress;
+import thebetweenlands.network.packets.PacketDruidAltarProgress;
+import thebetweenlands.network.packets.PacketDruidTeleportParticle;
+import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.PotionHelper;
@@ -45,16 +50,17 @@ public class TheBetweenlands
 {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
-	public static SimpleNetworkWrapper networkWrapper;
-
-	public static SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
-
-	@SidedProxy(modId = ModInfo.ID, clientSide = "thebetweenlands.network.base.impl.ClientPacketProxy", serverSide = "thebetweenlands.network.base.impl.CommonPacketProxy")
-	public static CommonPacketProxy packetProxy;
 	
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands instance;
 
+	/// Network ///
+	public static SimpleNetworkWrapper networkWrapper;
+	public static final SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
+	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer(); 
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
+	public static CommonPacketProxy packetProxy;
+	
 	/**
 	 * True for debug mode
 	 * Keys:
@@ -83,13 +89,19 @@ public class TheBetweenlands
 		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
 		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 
-		//Packet Registry
+		//Message Registry
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
         networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
         
-        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21);
+        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
+        
+        //Packet Registry
+        packetRegistry.registerPacket(PacketAnimatorProgress.class, (byte) 0);
+        packetRegistry.registerPacket(PacketDruidAltarProgress.class, (byte) 1);
+        packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
+        packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
 	}
 
 	@EventHandler

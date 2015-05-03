@@ -29,7 +29,7 @@ public final class MessageWrapper implements IMessage {
 	}
 	
 	protected void deserialize() throws Exception {
-		this.pkt = this.packetHandler.getPacketSerializer().deserialize(this.buffer);
+		this.pkt = this.packetHandler.getPacketSerializer().deserializePacketObj(this.buffer);
 		this.pkt.deserialize(this.buffer);
 	}
 	
@@ -40,7 +40,7 @@ public final class MessageWrapper implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buffer) {
-		this.packetHandler.getPacketSerializer().serialize(this.pkt, buffer);
+		this.packetHandler.getPacketSerializer().serializePacketObj(this.pkt, buffer);
 		this.pkt.serialize(buffer);
 	}
 }

@@ -6,16 +6,17 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import thebetweenlands.network.base.IPacket;
-import thebetweenlands.network.base.IPacketSerializer;
+import thebetweenlands.network.base.IPacketObjectSerializer;
 
 /**
  * Serializes the packets by name. Server and client both have to have the same packet class in the same location.
+ * Packets don't have to be registered.
  */
-public final class SimplePacketSerializer implements IPacketSerializer {
+public final class SimplePacketObjectSerializer implements IPacketObjectSerializer {
 	private final HashMap<String, IPacket> packetObjMap = new HashMap<String, IPacket>();
 
 	@Override
-	public IPacket deserialize(ByteBuf buffer) throws Exception {
+	public IPacket deserializePacketObj(ByteBuf buffer) throws Exception {
 		int strLen = buffer.readInt();
 		byte[] strBytes = new byte[strLen];
 		buffer.readBytes(strBytes);
@@ -30,7 +31,7 @@ public final class SimplePacketSerializer implements IPacketSerializer {
 	}
 
 	@Override
-	public void serialize(IPacket pkt, ByteBuf buffer) {
+	public void serializePacketObj(IPacket pkt, ByteBuf buffer) {
 		String pktClassName = pkt.getClass().getName();
 		byte[] strBytes = pktClassName.getBytes(Charset.forName("UTF-8"));
 		buffer.writeInt(strBytes.length);

@@ -2,7 +2,7 @@ package thebetweenlands.network.base;
 
 import java.util.List;
 
-import thebetweenlands.network.base.impl.SimplePacketSerializer;
+import thebetweenlands.network.base.impl.SimplePacketObjectSerializer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -13,13 +13,13 @@ public final class SidedPacketHandler implements IMessageHandler<MessageWrapper,
 	private static SidedPacketHandler instance;
 	private IPacketProxy proxy;
 	private SimpleNetworkWrapper networkWrapper;
-	private IPacketSerializer packetSerializer = new SimplePacketSerializer();
+	private IPacketObjectSerializer packetSerializer = new SimplePacketObjectSerializer();
 	
 	public MessageWrapper wrapPacket(IPacket pkt) {
 		return new MessageWrapper(pkt, this);
 	}
 
-	public SidedPacketHandler setPacketSerializer(IPacketSerializer packetSerializer) {
+	public SidedPacketHandler setPacketSerializer(IPacketObjectSerializer packetSerializer) {
 		if(packetSerializer == null) {
 			throw new NullPointerException("Packet Serializer must not be null!");
 		}
@@ -53,7 +53,7 @@ public final class SidedPacketHandler implements IMessageHandler<MessageWrapper,
 		this.proxy.registerPacketHandler(handlerClass.getName(), receiverSide);
 	}
 
-	protected IPacketSerializer getPacketSerializer() {
+	protected IPacketObjectSerializer getPacketSerializer() {
 		return this.packetSerializer;
 	}
 	
