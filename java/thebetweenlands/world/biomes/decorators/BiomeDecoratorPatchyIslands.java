@@ -23,5 +23,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateCardinalFlower(10);
 		helper.generateBlueEyedGrass(10);
 		helper.generateBoneset(10);
+		helper.generateRottenLog(10);
 	}
 }

@@ -55,6 +55,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BLUE_EYED_GRASS = new WorldGenTallGrass(BLBlockRegistry.blueEyedGrass, 1);
 	private final static WorldGenTallGrass GEN_BONESET = new WorldGenTallGrass(BLBlockRegistry.boneset, 1);
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
+	private final static WorldGenTallGrass GEN_ROTTEN_LOG = new WorldGenTallGrass(BLBlockRegistry.rottenLog, 1);
 
 	private final Random rand;
 	private final int x, y, z;
@@ -376,6 +377,16 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
 				world.setBlock(x, y, z, BLBlockRegistry.pitcherPlant, 0, 2);
+		}
+	}
+	
+	public void generateRottenLog(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+				world.setBlock(x, y, z, BLBlockRegistry.rottenLog, 0, 2);
 		}
 	}
 
