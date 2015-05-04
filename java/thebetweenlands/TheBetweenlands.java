@@ -1,5 +1,12 @@
 package thebetweenlands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -105,33 +112,50 @@ public class TheBetweenlands
 	}
 
 	@EventHandler
+	@SuppressWarnings("unchecked")
 	public void init(FMLInitializationEvent event) {
+		// Remove all the door recipes.
+		// This is needed otherwise our doors will not be craftable due to the
+		// recipe ordering
+		List<IRecipe> doorRecipes = new ArrayList<IRecipe>();
+		for (IRecipe recipe : (List<IRecipe>) CraftingManager.getInstance().getRecipeList())
+			if (recipe != null) {
+				ItemStack stack = recipe.getRecipeOutput();
+				if (stack != null && stack.getItem() == Items.wooden_door)
+					doorRecipes.add(recipe);
+			}
+		for (IRecipe recipe : doorRecipes)
+			CraftingManager.getInstance().getRecipeList().remove(recipe);
+
 		proxy.registerTileEntities();
 		proxy.preInit();
 
-        PotionHelper.initPotionArray();
-        PotionHelper.registerPotions();
+		PotionHelper.initPotionArray();
+		PotionHelper.registerPotions();
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 
-		if(DEBUG) {
+		if (DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
 
 		RecipeHandler.init();
+
+		// Add the other door recipes back
+		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
 	}
 }
