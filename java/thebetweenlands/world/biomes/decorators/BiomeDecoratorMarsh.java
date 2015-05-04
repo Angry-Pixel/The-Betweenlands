@@ -1,6 +1,12 @@
 package thebetweenlands.world.biomes.decorators;
 
+import java.util.Random;
+
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 
@@ -35,5 +41,18 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generateSoftRush(130);
 		helper.generateBroomsedge(40);
 		helper.generateBottleBrushGrass(5);*/
+	}
+	
+	@Override
+	public void preChunkProvide(World world, Random rand, ChunkDataAccess dataAccess) {
+		for (int i = 0; i < 4000; i++) {
+			int x = rand.nextInt(16);
+			int y = WorldProviderBetweenlands.LAYER_HEIGHT - 16 + rand.nextInt(32);
+			int z = rand.nextInt(16);
+			if(dataAccess.getBlock(x, y-1, z) == BLBlockRegistry.swampGrass && dataAccess.isAir(x, y, z)) {
+				dataAccess.setBlock(x, y, z, BLBlockRegistry.phragmites, 0);
+				dataAccess.setBlock(x, y+1, z, BLBlockRegistry.phragmites, 8);
+			}
+		}
 	}
 }

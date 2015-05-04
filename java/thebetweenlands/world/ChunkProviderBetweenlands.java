@@ -157,6 +157,19 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		//Gen caves
 		this.caveGenerator.func_151539_a(this, this.worldObj, x, z, chunkBlocks);
 
+		//Decorate stuff before the chunk is provided
+		List<BiomeGenBaseBetweenlands> uniqueBiomes = new ArrayList<BiomeGenBaseBetweenlands>();
+		for(BiomeGenBase biome : this.biomesForGeneration) {
+			if(!uniqueBiomes.contains(biome) && biome instanceof BiomeGenBaseBetweenlands) {
+				uniqueBiomes.add((BiomeGenBaseBetweenlands) biome);
+			}
+		}
+		for(BiomeGenBaseBetweenlands biome : uniqueBiomes) {
+			this.rand.setSeed(this.worldObj.getSeed());
+			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
+			biome.preChunkProvide(this.worldObj, this.rand, x, z, chunkBlocks, blockMeta, this.biomesForGeneration);
+		}
+		
 		//Generate chunk
 		Chunk chunk = new Chunk(this.worldObj, chunkBlocks, blockMeta, x, z);
 

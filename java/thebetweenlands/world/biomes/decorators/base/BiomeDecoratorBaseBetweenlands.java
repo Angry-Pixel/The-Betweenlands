@@ -2,10 +2,12 @@ package thebetweenlands.world.biomes.decorators.base;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.gen.OreGens;
 import thebetweenlands.world.feature.gen.WorldGenMinableBetweenlands;
@@ -71,6 +73,12 @@ public class BiomeDecoratorBaseBetweenlands
 		}
 	}
 
+	public final void preChunkProvide(World world, Random rand, int chunkX, int chunkZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomes) {
+		this.preChunkProvide(world, rand, new ChunkDataAccess(chunkX, chunkZ, blocks, metadata, biomes));
+	}
+	
+	protected void preChunkProvide(World world, Random rand, ChunkDataAccess dataAccess) { }
+	
 	protected void postChunkPopulate(int pass) { }
 
 	protected void postChunkGen(int pass) { }

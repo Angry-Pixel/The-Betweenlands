@@ -208,6 +208,20 @@ extends BiomeGenBase
 		this.decorator.postChunkGen(world, rand, x, z);
 	}
 
+	/**
+	 * Called before the chunk is provided.
+	 * @param world
+	 * @param rand
+	 * @param chunkX
+	 * @param chunkZ
+	 * @param blocks
+	 * @param metadata
+	 * @param biomes
+	 */
+	public final void preChunkProvide(World world, Random rand, int chunkX, int chunkZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomes) {
+		this.decorator.preChunkProvide(world, rand, chunkX, chunkZ, blocks, metadata, biomes);
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	/**
