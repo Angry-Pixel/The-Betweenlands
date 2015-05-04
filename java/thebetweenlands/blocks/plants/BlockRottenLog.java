@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRottenLog extends Block {
-	public IIcon modelTexture1, modelTexture2;
+//	public IIcon modelTexture1;
 
 	public BlockRottenLog() {
 		super(Material.wood);
@@ -36,7 +36,7 @@ public class BlockRottenLog extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		modelTexture1 = reg.registerIcon("thebetweenlands:rottenLog");
+		blockIcon = reg.registerIcon("thebetweenlands:rottenLog");
 	}
 
 	@Override

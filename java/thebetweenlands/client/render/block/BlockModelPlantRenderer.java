@@ -168,7 +168,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plantModelInvRottenLog = new ModelConverter(
 						new ModelRottenLog(),
 						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.func_149735_b(0, 0)),
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
 						true);
 			}
 			plantModelInvRottenLog.renderWithTessellator(Tessellator.instance);
@@ -312,20 +312,20 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			}
 			
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			float rotYaw = rnd.nextFloat() * 360.0F;
-			plantModelRottenLog.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
-			offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
 		} else if(block == BLBlockRegistry.rottenLog) {
 			if(plantModelRottenLog == null) {
 				plantModelRottenLog = new ModelConverter(
 						new ModelRottenLog(),
 						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.func_149735_b(0, 0)),
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
 						true);
 			}
 
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			float rotYaw = rnd.nextFloat() * 360.0F;
+			plantModelRottenLog.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
+			offsetWS(offset).renderWithTessellator(Tessellator.instance);
 		} else if(block == BLBlockRegistry.venusFlyTrap) {
 			if(plantModelVenusFlyTrap == null) {
 				plantModelVenusFlyTrap = new ModelConverter(
