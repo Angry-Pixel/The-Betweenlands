@@ -11,5 +11,6 @@ public class BiomeDecoratorDeepWaters extends BiomeDecoratorBaseBetweenlands {
 		helper.generateFlowerPatch(10.0D);
 		helper.generateMireCoral(15.0D);
 		helper.generateLichenPatch(10);
+		helper.generateWaterWeeds(6, 6, 30);
 	}
 }

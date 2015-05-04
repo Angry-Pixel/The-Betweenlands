@@ -11,6 +11,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
@@ -36,7 +37,6 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
 	private final static WorldGenTallGrass GEN_VENUS_FLY_TRAP = new WorldGenTallGrass(BLBlockRegistry.venusFlyTrap, 0);
 	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
-	private final static WorldGenTallGrass GEN_SUNDEW = new WorldGenTallGrass(BLBlockRegistry.sundew, 0);
 	private final static WorldGenTallGrass GEN_PITCHER_PLANT = new WorldGenTallGrass(BLBlockRegistry.pitcherPlant, 0);
 	private final static WorldGenerator GEN_MOSS_PATCH = new WorldGenMossPatch(0);
 	private final static WorldGenerator GEN_LICHEN_PATCH = new WorldGenMossPatch(1);
@@ -78,11 +78,11 @@ public class DecorationHelper {
 	private final boolean checkSurface(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z)) && this.world.isAirBlock(x, y, z);
 	}
-	
+
 	private final boolean checkBelowWater(SurfaceType surfaceType, int x, int y, int z) {
 		return surfaceType.matchBlock(this.world.getBlock(x, y - 1, z));
 	}
-	
+
 	public void generatePhragmites(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -95,7 +95,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateCardinalFlower(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -108,7 +108,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateBroomsedge(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -121,7 +121,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateTallCattail(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -134,7 +134,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateBoneset(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -145,7 +145,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateBlueEyedGrass(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -156,7 +156,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateBottleBrushGrass(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -167,7 +167,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateCopperIris(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -178,7 +178,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateBlueIris(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -189,7 +189,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateArrowArum(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -200,7 +200,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateShoots(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -211,7 +211,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateMarshMallow(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -222,7 +222,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateButtonBush(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -233,7 +233,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateSoftRush(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -244,7 +244,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateMilkweed(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -255,7 +255,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateMarshHibiscus(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -266,7 +266,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generatePickerelWeed(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -288,7 +288,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateSwampTallGrass(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -301,7 +301,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 
 	public void generateSwampPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
@@ -357,14 +357,15 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateSundew(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
-				GEN_SUNDEW.generate(this.world, this.rand, x, y, z);
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
+				world.setBlock(x, y, z, BLBlockRegistry.sundew, 0, 2);
+				world.setBlock(x, y + 1, z, BLBlockRegistry.sundew, 8, 2);
 			}
 		}
 	}
@@ -379,7 +380,7 @@ public class DecorationHelper {
 				world.setBlock(x, y, z, BLBlockRegistry.pitcherPlant, 0, 2);
 		}
 	}
-	
+
 	public void generateRottenLog(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -653,6 +654,58 @@ public class DecorationHelper {
 				} else if (block.isOpaqueCube() && blockAbove == Blocks.air && blockAbove2 == Blocks.air) {
 					if (BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y + 1, z)) {
 						BlockSwampReed.generateReedPatch(world, x, y + 1, z, 40, 10);
+					}
+				}
+			}
+		}
+	}
+
+	public void generateWaterWeeds(int attempts, int radius, int density) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			Block block = world.getBlock(x, y, z);
+			Block blockAbove = world.getBlock(x, y + 1, z);
+			if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater) {
+				for(int i2 = 0; i2 < density; i2++) {
+					int bx = x + world.rand.nextInt(radius) - radius/2;
+					int by = y + world.rand.nextInt(radius) - radius/2;
+					int bz = z + world.rand.nextInt(radius) - radius/2;
+					if(Math.sqrt((bx-x)*(bx-x)+(by-y)*(by-y)+(bz-z)*(bz-z)) <= radius) {
+						block = world.getBlock(bx, by, bz);
+						blockAbove = world.getBlock(bx, by+1, bz);
+						if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater) {
+							for(int yo = 1; yo < this.rand.nextInt(WorldProviderBetweenlands.LAYER_HEIGHT - by + 1); yo++) {
+								this.world.setBlock(bx, by+yo, bz, BLBlockRegistry.waterWeeds);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public void generateOneDeep(int attempts, int radius, int density, BlockSwampWater uwBlock) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			Block block = world.getBlock(x, y, z);
+			Block blockAbove = world.getBlock(x, y + 1, z);
+			Block blockAbove2 = world.getBlock(x, y + 2, z);
+			if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+				for(int i2 = 0; i2 < density; i2++) {
+					int bx = x + world.rand.nextInt(radius) - radius/2;
+					int by = y + world.rand.nextInt(radius) - radius/2;
+					int bz = z + world.rand.nextInt(radius) - radius/2;
+					if(Math.sqrt((bx-x)*(bx-x)+(by-y)*(by-y)+(bz-z)*(bz-z)) <= radius) {
+						block = world.getBlock(bx, by, bz);
+						blockAbove = world.getBlock(bx, by + 1, bz);
+						blockAbove2 = world.getBlock(bx, by + 2, bz);
+						if(block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater && blockAbove2 == Blocks.air) {
+							this.world.setBlock(x, y+1, z, uwBlock);
+						}
 					}
 				}
 			}

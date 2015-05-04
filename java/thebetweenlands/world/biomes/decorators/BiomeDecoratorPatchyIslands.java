@@ -1,5 +1,6 @@
 package thebetweenlands.world.biomes.decorators;
 
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 
 public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands {
@@ -24,5 +25,8 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateBlueEyedGrass(10);
 		helper.generateBoneset(10);
 		helper.generateRottenLog(10);
+		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.marshMarigold);
+		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.bogBean);
+		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.goldenClub);
 	}
 }

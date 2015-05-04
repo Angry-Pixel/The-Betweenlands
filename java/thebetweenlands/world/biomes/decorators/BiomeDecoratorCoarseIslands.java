@@ -24,5 +24,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateVolarpad(5);
 		helper.generateCopperIris(5);
 		helper.generateBlueIris(5);
+		helper.generateWaterWeeds(6, 6, 30);
 	}
 }
