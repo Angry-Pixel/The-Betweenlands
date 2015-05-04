@@ -20,7 +20,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 
 		helper.generateGiantWeedwoodTree(1);
 		
-		helper.generateWeedwoodTree(1);
+		/*helper.generateWeedwoodTree(1);
 		helper.generateSwampGrass(20);
 		helper.generateSundew(5);
 		helper.generateNettles(2);
@@ -34,6 +34,6 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generatePhragmites(400);
 		helper.generateSoftRush(130);
 		helper.generateBroomsedge(40);
-		helper.generateBottleBrushGrass(5);
+		helper.generateBottleBrushGrass(5);*/
 	}
 }

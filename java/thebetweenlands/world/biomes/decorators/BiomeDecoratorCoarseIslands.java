@@ -9,7 +9,7 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 
 		helper.generateGiantWeedwoodTree(50);
 
-		helper.generateWeedwoodTree(25);
+		/*helper.generateWeedwoodTree(25);
 		helper.generateSapTree(30);
 		helper.generateWeedwoodBush(40);
 		helper.generateCattail(10);
@@ -24,6 +24,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateVolarpad(5);
 		helper.generateCopperIris(5);
 		helper.generateBlueIris(5);
-		helper.generateWaterWeeds(6, 6, 30);
+		helper.generateWaterWeeds(6, 6, 30);*/
 	}
 }
