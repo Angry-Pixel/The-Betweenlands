@@ -26,15 +26,18 @@ tile.thebetweenlands.lifeCrystalOre.name=Life Crystal Ore
 tile.thebetweenlands.peat.name=Peat
 tile.thebetweenlands.wisp.name=Will o' the wisp
 tile.thebetweenlands.dampTorch.name=Damp Torch
-tile.thebetweenlands.algae.name=Algae Block
-tile.thebetweenlands.sludge.name=Sludge Block
+tile.thebetweenlands.algae.name=Algae
+tile.thebetweenlands.sludge.name=Sludge
 tile.thebetweenlands.stalactite.name=Stalactite Block
-tile.thebetweenlands.root.name=Root Block
-tile.thebetweenlands.rootUW.name=Root under water Block
+tile.thebetweenlands.root.name=Root
+tile.thebetweenlands.rootUW.name=Root Under Water
 tile.thebetweenlands.deadGrass.name=Dead Grass
 tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
 tile.thebetweenlands.wallPlants_0.name=Moss
 tile.thebetweenlands.wallPlants_1.name=Lichen
+tile.thebetweenlands.animator.name=Animator
+tile.thebetweenlands.portalBark.name=Portal Tree Bark
+tile.thebetweenlands.rottenLog.name=Rotten Log
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -84,6 +87,9 @@ tile.thebetweenlands.thatch.name=Thatch
 tile.thebetweenlands.rubberTreePlanks.name=Rubber Tree Planks
 tile.thebetweenlands.blockOfCompost.name=Block of Compost
 tile.thebetweenlands.dungeonWall.name=Dungeon Wall
+tile.thebetweenlands.chiseledBetweenstone.name=Chiseled Betweenstone 
+tile.thebetweenlands.betweenstoneBricks.name=Betweenstone Bricks
+tile.thebetweenlands.mireCoralBlock.name=Block of Mire Coral
 
 # Stairs, Slabs, Walls, Fences
 tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs
@@ -104,6 +110,7 @@ tile.thebetweenlands.rubberTreePlankFence.name=Rubber Tree Plank Fence
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
 tile.thebetweenlands.flatHeadMushroom.name=Flathead Mushroom
+tile.thebetweenlands.bulbCappedMushroom.name=Bulb-Capped Mushroom
 
 tile.thebetweenlands.sundew.name=Sundew
 tile.thebetweenlands.weepingBlue.name=Weeping Blue
@@ -112,11 +119,11 @@ tile.thebetweenlands.cattail.name=Cattail
 tile.thebetweenlands.swampPlant.name=Swamp Plant
 tile.thebetweenlands.nettleFlowered.name=Flowering Nettle
 tile.thebetweenlands.nettle.name=Nettle
-tile.thebetweenlands.swampReedBlock.name=Swamp Reed Block
-tile.thebetweenlands.swampReedBlockUW.name=Swamp Reed under water Block
-tile.thebetweenlands.mireCoral.name=Mire Coral Block
-tile.thebetweenlands.waterFlowerStalk.name=Water Flower Stalk Block
-tile.thebetweenlands.waterFlower.name=Water Flower Block
+tile.thebetweenlands.swampReedBlock.name=Swamp Reed
+tile.thebetweenlands.swampReedBlockUW.name=Swamp Reed Under Water
+tile.thebetweenlands.mireCoral.name=Mire Coral
+tile.thebetweenlands.waterFlowerStalk.name=Water Flower Stalk
+tile.thebetweenlands.waterFlower.name=Water Flower
 tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
 tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
@@ -135,6 +142,17 @@ tile.thebetweenlands.shoots.name=Shoots
 tile.thebetweenlands.phragmites.name=Phragmites
 tile.thebetweenlands.softRush.name=Soft Rush
 tile.thebetweenlands.tallCattail.name=Tall Cattail
+tile.thebetweenlands.cardinalFlower.name=Cardinal Flower
+tile.thebetweenlands.blueIris.name=Blue Iris
+tile.thebetweenlands.copperIris.name=Copper Iris
+tile.thebetweenlands.bogBean.name=Bog Bean
+tile.thebetweenlands.goldenClub.name=Golden Club
+tile.thebetweenlands.marshMarigold.name=Marsh Marigolds
+tile.thebetweenlands.broomsedge.name=Broomsedge 
+tile.thebetweenlands.blueEyedGrass.name=Blue Eyed Grass
+tile.thebetweenlands.boneset.name=Boneset
+tile.thebetweenlands.bottleBrushGrass.name=Bottle Brush Grass
+tile.thebetweenlands.waterWeeds.name=Water Weeds
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
@@ -254,6 +272,7 @@ entity.thebetweenlands.bloodSnail.name=Blood Snail
 entity.thebetweenlands.mireSnail.name=Mire Snail
 entity.thebetweenlands.mireSnailEgg.name=Mire Snail Egg
 entity.thebetweenlands.angryPebble.name=Angry Pebble
+entity.thebetweenlands.siltCrab.name=Silt Crab
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks

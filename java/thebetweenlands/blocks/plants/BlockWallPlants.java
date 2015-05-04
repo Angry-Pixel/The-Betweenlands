@@ -232,7 +232,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	}
 
 	private boolean isValidBlock(Block block) {
-		return block.isBlockNormalCube();
+		return block.isNormalCube();
 	}
 
 	@Override

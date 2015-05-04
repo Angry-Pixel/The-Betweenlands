@@ -147,4 +147,9 @@ public class WaterRootRenderer implements IWaterRenderer {
 
         return true;
     }
+
+	@Override
+	public IIcon getIcon() {
+		return BLBlockRegistry.rootUW.iconRoot;
+	}
 }

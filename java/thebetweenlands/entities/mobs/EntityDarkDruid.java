@@ -19,7 +19,7 @@ import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.message.MessageDruidTeleportParticle;
+import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDarkDruid extends EntityMob {
@@ -167,7 +167,8 @@ public class EntityDarkDruid extends EntityMob {
 		int dim = 0;
 		if (world instanceof WorldServer) {
 			dim = ((WorldServer) world).provider.dimensionId;
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float)newDruid.posX, (float) newDruid.posY, (float) newDruid.posZ), new TargetPoint(dim, newDruid.posX + 0.5D, newDruid.posY + 1.0D, newDruid.posZ + 0.5D, 64D));
+			//TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float)newDruid.posX, (float) newDruid.posY, (float) newDruid.posZ), new TargetPoint(dim, newDruid.posX + 0.5D, newDruid.posY + 1.0D, newDruid.posZ + 0.5D, 64D));
+			TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidTeleportParticle(newDruid)), new TargetPoint(dim, newDruid.posX + 0.5D, newDruid.posY + 1.0D, newDruid.posZ + 0.5D, 64D));
 		}
 	}
 
@@ -176,7 +177,8 @@ public class EntityDarkDruid extends EntityMob {
 		int dim = 0;
 		if (world instanceof WorldServer) {
 			dim = ((WorldServer) world).provider.dimensionId;
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float) posX, (float) posY, (float) posZ), new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
+			//TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticle((float) posX, (float) posY, (float) posZ), new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
+			TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidTeleportParticle(this)), new TargetPoint(dim, posX + 0.5D, posY + 1.0D, posZ + 0.5D, 64D));
 		}
 	}
 

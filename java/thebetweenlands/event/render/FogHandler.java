@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandler;
-import thebetweenlands.message.MessageSyncWeather;
+import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import cpw.mods.fml.client.FMLClientHandler;

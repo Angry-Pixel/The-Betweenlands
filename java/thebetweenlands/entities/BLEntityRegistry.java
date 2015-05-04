@@ -11,6 +11,7 @@ import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -37,6 +38,8 @@ public class BLEntityRegistry
 		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x804E3D, 0x3D6F80);
 		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg");
 		registerEntity(13, EntityAngryPebble.class, "angryPebble");
+		registerEntity(14, EntityBLArrow.class, "anglerToothArrow");
+		registerEntity(15, EntitySiltCrab.class, "siltCrab", 0x086A87, 0xB43104);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

@@ -24,10 +24,12 @@ import java.util.Random;
 
 public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@SideOnly(Side.CLIENT)
-	private IIcon top, bottom;
+	public IIcon topIcon, bottomIcon;
 	private final String name;
 	Random rnd = new Random();
 
+	private int renderType = -1;
+	
 	public DoubleHeightPlant(String name) {
 		this(name, 1);
 	}
@@ -42,6 +44,11 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 		setBlockName("thebetweenlands." + name.substring(0, 1).toLowerCase() + name.substring(1));
 	}
 
+	public DoubleHeightPlant setRenderType(int renderType) {
+		this.renderType = renderType;
+		return this;
+	}
+	
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 	}
@@ -55,10 +62,14 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 		if ("Sundew".equals(name))
 			drops.add(new ItemStack(this, 1));
 		
+		if ("CardinalFlower".equals(name))
+			drops.add(new ItemStack(this, 1));
+		
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (!"DoubleSwampTallgrass".equals(name)) ret.add(new ItemStack(this));
 		if (!"Phragmites".equals(name)) ret.add(new ItemStack(this));
 		if (!"TallCattail".equals(name)) ret.add(new ItemStack(this));
+		if (!"Broomsedge".equals(name)) ret.add(new ItemStack(this));
 		return drops;
 	}
 
@@ -69,26 +80,26 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 
 	@Override
 	public int getRenderType() {
-		return BlockRenderIDs.DOUBLE_PLANTS.id();
+		return this.renderType == -1 ? BlockRenderIDs.DOUBLE_PLANTS.id() : this.renderType;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		return top;
+		return topIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		return func_149887_c(world.getBlockMetadata(x, y, z)) ? top : bottom;
+		return func_149887_c(world.getBlockMetadata(x, y, z)) ? topIcon : bottomIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		top = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
-		bottom = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
+		topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
+		bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
 	}
 
 	@Override

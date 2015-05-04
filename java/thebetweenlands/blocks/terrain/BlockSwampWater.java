@@ -55,7 +55,15 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
+		IWaterRenderer renderer = this.getSpecialRenderer();
+		if(renderer != null) {
+			return renderer.getIcon();
+		}
 		return side == 0 || side == 1 ? stillIcon : flowingIcon;
+	}
+	
+	public IIcon getWaterIcon(int side) {
+		return side == 0 || side == 1 ? this.stillIcon : this.flowingIcon;
 	}
 
 	@Override

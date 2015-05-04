@@ -15,7 +15,7 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.render.block.water.WaterStalkRenderer;
+import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -35,13 +35,13 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 		setTickRandomly(true);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
-		this.setSpecialRenderer(new WaterStalkRenderer());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		this.iconStalk = iconRegister.registerIcon("thebetweenlands:waterFlowerStalk");
+		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconStalk));
 		super.registerBlockIcons(iconRegister);
 	}
 

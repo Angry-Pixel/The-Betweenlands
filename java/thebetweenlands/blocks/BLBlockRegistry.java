@@ -17,20 +17,26 @@ import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
 import thebetweenlands.blocks.plants.BlockBLSmallPlants;
 import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
+import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockHanger;
+import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
+import thebetweenlands.blocks.plants.BlockRottenLog;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
+import thebetweenlands.blocks.plants.BlockBogBean;
+import thebetweenlands.blocks.plants.BlockGoldenClub;
 import thebetweenlands.blocks.plants.BlockThorns;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWallPlants;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
+import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
@@ -61,6 +67,7 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLBlockRegistry
@@ -130,14 +137,20 @@ public class BLBlockRegistry
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
 	// DOUBLE PLANTS
-	public static final Block sundew = new DoubleHeightPlant("Sundew", 0.8F);
+	public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F).setRenderType(BlockRenderIDs.MODEL_PLANT.id());
 	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F); 
 	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
+	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
+	public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F); 
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
+	public static final BlockBogBean bogBean = new BlockBogBean();
+	public static final BlockGoldenClub goldenClub = new BlockGoldenClub();
+	public static final BlockMarshMarigold marshMarigold = new BlockMarshMarigold();
+	public static final BlockWaterWeeds waterWeeds = new BlockWaterWeeds();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
@@ -145,6 +158,7 @@ public class BLBlockRegistry
 	public static final BlockRoot root = new BlockRoot();
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
 	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
+	public static final BlockBulbCappedMushroom bulbCappedMushroom = new BlockBulbCappedMushroom();
 	public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
 	public static final BlockSwampPlant swampPlant = new BlockSwampPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
@@ -153,6 +167,8 @@ public class BLBlockRegistry
 	public static final BlockThorns thorns = new BlockThorns();
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
+	
+	public static final Block rottenLog = new BlockRottenLog();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
@@ -167,6 +183,11 @@ public class BLBlockRegistry
 	public static final Block softRush = new BlockBLSmallPlants("softRush");
 	public static final Block marshMallow = new BlockBLSmallPlants("marshMallow");
 	public static final Block milkweed = new BlockBLSmallPlants("milkweed");
+	public static final Block blueIris = new BlockBLSmallPlants("blueIris");
+	public static final Block copperIris = new BlockBLSmallPlants("copperIris");
+	public static final Block blueEyedGrass = new BlockBLSmallPlants("blueEyedGrass");
+	public static final Block boneset = new BlockBLSmallPlants("boneset");
+	public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass");
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockHanger();
@@ -183,7 +204,9 @@ public class BLBlockRegistry
 	public static final Block animator = new BlockAnimator();
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block betweenstoneBricks = new BlockBLGenericDeco("betweenstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block chiseledBetweenstone = new BlockBLGenericDeco("chiseledBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block cragrockBrick = new BlockBLGenericDeco("cragrockBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block cragTiles = new BlockBLGenericDeco("cragTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
@@ -202,6 +225,7 @@ public class BLBlockRegistry
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block rubberTreePlanks = new BlockBLGenericDeco("rubberTreePlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
+	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();

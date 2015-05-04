@@ -17,18 +17,19 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.message.MessageAltarCraftingProgress;
-import thebetweenlands.message.MessageDruidTeleportParticle;
-import thebetweenlands.message.MessageSnailHatchParticle;
-import thebetweenlands.message.MessageSyncPlayerDecay;
-import thebetweenlands.message.MessageSyncWeather;
+import thebetweenlands.network.base.SidedPacketHandler;
+import thebetweenlands.network.base.impl.CommonPacketProxy;
+import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.network.message.MessageSyncPlayerDecay;
+import thebetweenlands.network.message.MessageSyncWeather;
+import thebetweenlands.network.packets.PacketAnimatorProgress;
+import thebetweenlands.network.packets.PacketDruidAltarProgress;
+import thebetweenlands.network.packets.PacketDruidTeleportParticle;
+import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
-import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.utils.network.SidedPacketHandler;
-import thebetweenlands.utils.network.impl.CommonPacketProxy;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
@@ -49,16 +50,17 @@ public class TheBetweenlands
 {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
-	public static SimpleNetworkWrapper networkWrapper;
-
-	public static SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
-
-	@SidedProxy(modId = ModInfo.ID, clientSide = "thebetweenlands.utils.network.impl.ClientPacketProxy", serverSide = "thebetweenlands.utils.network.impl.CommonPacketProxy")
-	public static CommonPacketProxy packetProxy;
 	
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands instance;
 
+	/// Network ///
+	public static SimpleNetworkWrapper networkWrapper;
+	public static final SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
+	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer(); 
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
+	public static CommonPacketProxy packetProxy;
+	
 	/**
 	 * True for debug mode
 	 * Keys:
@@ -81,29 +83,25 @@ public class TheBetweenlands
 		BLEntityRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
-		//GameRegistry.registerWorldGenerator(new WorldGenGiantTree(), 0);
+		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 
-		//TODO: Just temporary to test some stuff
 		DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
 		DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);
 
-		//Packet Registry
+		//Message Registry
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-		networkWrapper.registerMessage(MessageAltarCraftingProgress.class, MessageAltarCraftingProgress.class, 0, Side.CLIENT);
-		networkWrapper.registerMessage(MessageDruidTeleportParticle.class, MessageDruidTeleportParticle.class, 1, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
         networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
-        networkWrapper.registerMessage(MessageSnailHatchParticle.class, MessageSnailHatchParticle.class, 5, Side.CLIENT);
         
-        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 5, 6);
-		//Packets
-		try {
-			sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
+        
+        //Packet Registry
+        packetRegistry.registerPacket(PacketAnimatorProgress.class, (byte) 0);
+        packetRegistry.registerPacket(PacketDruidAltarProgress.class, (byte) 1);
+        packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
+        packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
 	}
 
 	@EventHandler
@@ -121,7 +119,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
-        MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);

@@ -1,5 +1,6 @@
 package thebetweenlands.items;
 
+import thebetweenlands.entities.EntityBLArrow;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeedwoodBow extends ItemBow {
 
-	public static final String[] bowAnimationIcon = new String[] { "weedwoodBow0", "weedwoodBow1", "weedwoodbow2" };
+	public static final String[] bowAnimationIcon = new String[] { "weedwoodBow0", "weedwoodBow1", "weedwoodBow2" };
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
@@ -74,7 +75,7 @@ public class ItemWeedwoodBow extends ItemBow {
 
 		boolean canShoot = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
 
-		if (canShoot || player.inventory.hasItem(Items.arrow)) {
+		if (canShoot || player.inventory.hasItem(BLItemRegistry.anglerToothArrow)) {
 			float power = (float) maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 3.0F;
 
@@ -84,7 +85,7 @@ public class ItemWeedwoodBow extends ItemBow {
 			if (power > 1.0F)
 				power = 1.0F;
 
-			EntityArrow entityarrow = new EntityArrow(world, player, power * 4.0F);
+			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power * 4.0F);
 
 			if (power == 1.0F)
 				entityarrow.setIsCritical(true);

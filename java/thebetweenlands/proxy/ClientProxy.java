@@ -24,6 +24,7 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
@@ -39,6 +40,7 @@ import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
 import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
+import thebetweenlands.client.render.entity.RenderBLArrow;
 import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
@@ -46,6 +48,7 @@ import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
@@ -60,6 +63,7 @@ import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.EntityAngryPebble;
+import thebetweenlands.entities.EntityBLArrow;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
@@ -68,6 +72,7 @@ import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -80,6 +85,7 @@ import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
+import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
@@ -89,12 +95,13 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, DOOR;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR;
 
 		private final int ID;
 
@@ -109,6 +116,15 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void preInit() {
+		//Register packet handlers
+		try {
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ClientPacketHandler.class, Side.CLIENT);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityDruidAltar.class, Side.CLIENT);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		//Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderAngler());
@@ -124,6 +140,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, new RenderMireSnail());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, new RenderMireSnailEgg());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, new RenderAngryPebble());
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, new RenderBLArrow());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, new RenderSiltCrab());
 		
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -200,8 +218,10 @@ public class ClientProxy extends CommonProxy {
 		return Minecraft.getMinecraft().thePlayer;
 	}
 
-	public void corruptPlayerSkin(AbstractClientPlayer entityPlayer, int level)
+	@Override
+	public void corruptPlayerSkin(EntityPlayer player, int level)
 	{
+		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
 		if (level == 0 || !DecayManager.enableDecay(entityPlayer))
 		{
 			uncorruptPlayerSkin(entityPlayer);
@@ -229,8 +249,10 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	public void uncorruptPlayerSkin(AbstractClientPlayer entityPlayer)
+	@Override
+	public void uncorruptPlayerSkin(EntityPlayer player)
 	{
+		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
 		BufferedImage image = getOriginalPlayerSkin(entityPlayer);
 		if (image != null) uploadPlayerSkin(entityPlayer, image);
 	}
