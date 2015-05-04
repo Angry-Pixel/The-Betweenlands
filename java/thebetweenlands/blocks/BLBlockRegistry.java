@@ -24,6 +24,7 @@ import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
+import thebetweenlands.blocks.plants.BlockRottenLog;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
@@ -166,6 +167,8 @@ public class BLBlockRegistry
 	public static final BlockThorns thorns = new BlockThorns();
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
+	
+	public static final Block rottenLog = new BlockRottenLog();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

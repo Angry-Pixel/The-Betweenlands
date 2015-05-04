@@ -20,6 +20,7 @@ import thebetweenlands.client.model.block.ModelBulbCappedMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
 import thebetweenlands.client.model.block.ModelRegularPlant;
+import thebetweenlands.client.model.block.ModelRottenLog;
 import thebetweenlands.client.model.block.ModelSundew;
 import thebetweenlands.client.model.block.ModelTubePlant;
 import thebetweenlands.client.model.block.ModelVenusFlyTrap;
@@ -46,6 +47,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvVenusFlyTrap;
 	public static ModelConverter plantModelInvBulbCappedMushroom;
 	public static ModelConverter plantModelInvSundew;
+	public static ModelConverter plantModelInvRottenLog;
 
 	public static ModelConverter plantModelVolarpad1;
 	public static ModelConverter plantModelVolarpad2;
@@ -63,6 +65,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelWeepingBlue;
 	public static ModelConverter plantModelBulbCappedMushroom;
 	public static ModelConverter plantModelSundew;
+	public static ModelConverter plantModelRottenLog;
 
 	public static ModelBlackHatMushroom modelBlackHatMushroom1 = new ModelBlackHatMushroom();
 	public static ModelBlackHatMushroom2 modelBlackHatMushroom2 = new ModelBlackHatMushroom2();
@@ -75,6 +78,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelVolarpad modelVolarpad = new ModelVolarpad();
 	public static ModelBulbCappedMushroom modelBulbCappedMushroom = new ModelBulbCappedMushroom();
 	public static ModelSundew modelSundew = new ModelSundew();
+	public static ModelRottenLog modelRottenLog = new ModelRottenLog();
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
@@ -157,6 +161,17 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			plantModelInvVenusFlyTrap.renderWithTessellator(Tessellator.instance);
+		}
+		
+		if(block == BLBlockRegistry.rottenLog) {
+			if(plantModelInvRottenLog == null) {
+				plantModelInvRottenLog = new ModelConverter(
+						new ModelRottenLog(),
+						0.065D,
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.modelTexture1),
+						true);
+			}
+			plantModelInvRottenLog.renderWithTessellator(Tessellator.instance);
 		}
 
 		if(block == BLBlockRegistry.volarpad) {
@@ -293,6 +308,19 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new ModelBulbCappedMushroom(),
 						0.065D,
 						new TextureMap(64, 64, BLBlockRegistry.bulbCappedMushroom.modelTexture1),
+						true);
+			}
+			
+			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			float rotYaw = rnd.nextFloat() * 360.0F;
+			plantModelRottenLog.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
+			offsetWS(offset).renderWithTessellator(Tessellator.instance);
+		} else if(block == BLBlockRegistry.rottenLog) {
+			if(plantModelRottenLog == null) {
+				plantModelRottenLog = new ModelConverter(
+						new ModelRottenLog(),
+						0.065D,
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.modelTexture1),
 						true);
 			}
 
