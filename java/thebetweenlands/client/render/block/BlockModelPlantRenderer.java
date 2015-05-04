@@ -168,7 +168,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plantModelInvRottenLog = new ModelConverter(
 						new ModelRottenLog(),
 						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.modelTexture1),
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.func_149735_b(0, 0)),
 						true);
 			}
 			plantModelInvRottenLog.renderWithTessellator(Tessellator.instance);
@@ -320,7 +320,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				plantModelRottenLog = new ModelConverter(
 						new ModelRottenLog(),
 						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.modelTexture1),
+						new TextureMap(128, 128, BLBlockRegistry.rottenLog.func_149735_b(0, 0)),
 						true);
 			}
 
