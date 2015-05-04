@@ -356,19 +356,18 @@ public class DecorationHelper {
 			}
 		}
 	}
-
+	
 	public void generateSundew(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
-			{
-				world.setBlock(x, y, z, BLBlockRegistry.sundew, 0, 2);
-				world.setBlock(x, y + 1, z, BLBlockRegistry.sundew, 8, 2);
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+				GEN_SUNDEW.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}
+
 
 	public void generatePitcherPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
