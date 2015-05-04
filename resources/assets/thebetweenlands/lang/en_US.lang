@@ -271,6 +271,7 @@ entity.thebetweenlands.bloodSnail.name=Blood Snail
 entity.thebetweenlands.mireSnail.name=Mire Snail
 entity.thebetweenlands.mireSnailEgg.name=Mire Snail Egg
 entity.thebetweenlands.angryPebble.name=Angry Pebble
+entity.thebetweenlands.siltCrab.name=Silt Crab
 
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
