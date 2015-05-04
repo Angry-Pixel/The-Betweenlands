@@ -17,8 +17,10 @@ import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
 import thebetweenlands.blocks.plants.BlockBLSmallPlants;
 import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
+import thebetweenlands.blocks.plants.BlockBogBean;
 import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
+import thebetweenlands.blocks.plants.BlockGoldenClub;
 import thebetweenlands.blocks.plants.BlockHanger;
 import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
@@ -28,8 +30,6 @@ import thebetweenlands.blocks.plants.BlockRottenLog;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
-import thebetweenlands.blocks.plants.BlockBogBean;
-import thebetweenlands.blocks.plants.BlockGoldenClub;
 import thebetweenlands.blocks.plants.BlockThorns;
 import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
 import thebetweenlands.blocks.plants.BlockVolarpad;
@@ -67,6 +67,7 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -245,16 +246,30 @@ public class BLBlockRegistry
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
-	
+
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
 
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
+	
+	// SLABS
+	public static void registerSlabs() {
+		Block weedwoodPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "weedwoodPlanks", null);
+		Block weedwoodPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab);
+		GameRegistry.registerBlock(weedwoodPlankSlab, ItemBlockSlab.class, weedwoodPlankSlab.getUnlocalizedName(), weedwoodPlankSlab, weedwoodPlankSlabDouble, false);
+		GameRegistry.registerBlock(weedwoodPlankSlabDouble, ItemBlockSlab.class, weedwoodPlankSlabDouble.getUnlocalizedName() + "Double", weedwoodPlankSlab, weedwoodPlankSlabDouble, true);
+	
+		Block rubberPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "rubberTreePlanks", null);
+		Block rubberPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "rubberTreePlanks", rubberPlankSlab);
+		GameRegistry.registerBlock(rubberPlankSlab, ItemBlockSlab.class, rubberPlankSlab.getUnlocalizedName(), rubberPlankSlab, rubberPlankSlabDouble, false);
+		GameRegistry.registerBlock(rubberPlankSlabDouble, ItemBlockSlab.class, rubberPlankSlabDouble.getUnlocalizedName() + "Double", rubberPlankSlab, rubberPlankSlabDouble, true);
+	}
 
 	public static void init() {
 		initBlocks();
 		registerBlocks();
+		registerSlabs();
 		registerProperties();
 	}
 

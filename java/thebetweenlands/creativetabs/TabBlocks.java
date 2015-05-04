@@ -33,7 +33,7 @@ public class TabBlocks
 	public int func_151243_f() {
 		return 0;
 	}
-
+/*
     @Override
     public void displayAllReleventItems(List tabItems) {
         super.displayAllReleventItems(tabItems);
@@ -47,5 +47,5 @@ public class TabBlocks
                                                                                      });
         }
         Collections.sort(tabItems, this.sortedBlocks);
-    }
+    }*/
 }
