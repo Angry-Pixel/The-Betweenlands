@@ -7,10 +7,10 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class ItemMarshmallow
+public class ItemMarshmallowPink
         extends ItemFood
 {
-    public ItemMarshmallow() {
+    public ItemMarshmallowPink() {
         super(4, 10F, false);
     }
 
@@ -19,7 +19,7 @@ public class ItemMarshmallow
         super.onFoodEaten(stack, world, player);
 
         if( player != null ) {
-            player.addPotionEffect(new PotionEffect(Potion.moveSpeed.getId(), 400, 1));
+            player.addPotionEffect(new PotionEffect(Potion.jump.getId(), 400, 1));
         }
     }
 }
