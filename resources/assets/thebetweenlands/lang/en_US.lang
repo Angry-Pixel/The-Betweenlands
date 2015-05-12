@@ -176,10 +176,10 @@ item.thebetweenlands.weedwoodPickaxe.name=Weedwood Pickaxe
 item.thebetweenlands.weedwoodAxe.name=Weedwood Axe
 item.thebetweenlands.weedwoodShovel.name=Weedwood Shovel
 
-item.thebetweenlands.betweenstoneSword.name=Betweenstone Sword
-item.thebetweenlands.betweenstonePickaxe.name=Betweenstone Pickaxe
-item.thebetweenlands.betweenstoneAxe.name=Betweenstone Axe
-item.thebetweenlands.betweenstoneShovel.name=Betweenstone Shovel
+item.thebetweenlands.betweenstoneSword.name=Bone Sword
+item.thebetweenlands.betweenstonePickaxe.name=Bone Pickaxe
+item.thebetweenlands.betweenstoneAxe.name=Bone Axe
+item.thebetweenlands.betweenstoneShovel.name=Bone Shovel
 
 item.thebetweenlands.octineSword.name=Octine Sword
 item.thebetweenlands.octinePickaxe.name=Octine Pickaxe
@@ -195,6 +195,11 @@ item.thebetweenlands.lurkerSkinHelmet.name=Lurker Skin Helmet
 item.thebetweenlands.lurkerSkinChestplate.name=Lurker Skin Chestplate
 item.thebetweenlands.lurkerSkinLeggings.name=Lurker Skin Leggings
 item.thebetweenlands.lurkerSkinBoots.name=Lurker Skin Boots
+
+item.thebetweenlands.boneHelmet.name=Bone Helmet
+item.thebetweenlands.boneChestplate.name=Bone Chestplate
+item.thebetweenlands.boneLeggings.name=Bone Leggings
+item.thebetweenlands.boneBoots.name=Bone Boots
 
 item.thebetweenlands.octineHelmet.name=Octine Helmet
 item.thebetweenlands.octineChestplate.name=Octine Chestplate
