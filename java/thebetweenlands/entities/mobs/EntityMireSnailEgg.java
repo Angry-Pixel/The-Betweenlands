@@ -31,7 +31,7 @@ public class EntityMireSnailEgg extends EntityAnimal {
 		if(getGrowingAge() < 0 || getGrowingAge() > 0) // stupid hack to stop entity scaling 
 			setGrowingAge(0);
 		if(!worldObj.isRemote) {
-			if(getHatchTime() < 100)
+			if(getHatchTime() < 24000)
 				setHatchTime(getHatchTime() + 1);
 			if(getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
 				hatch();
