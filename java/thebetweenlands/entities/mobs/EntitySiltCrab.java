@@ -38,6 +38,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		tasks.addTask(3, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		targetTasks.addTask(1, target);
+		stepHeight = 2;
 	}
 
 	@Override
@@ -80,6 +81,13 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 				canAttack = true;
 			}
 
+			if (aggroCooldown == 0 && canAttack) {
+				tasks.removeTask(meleeAttack);
+				targetTasks.removeTask(target);
+				tasks.addTask(1, runAway);
+				canAttack = false;
+			}
+
 			if (aggroCooldown < 201)
 				aggroCooldown++;
 		}
@@ -104,14 +112,9 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!worldObj.isRemote) {
-			if (canAttack && aggroCooldown++ == 202) {
-				tasks.removeTask(meleeAttack);
-				targetTasks.removeTask(target);
-				tasks.addTask(1, runAway);
-				aggroCooldown = 0;
-				canAttack = false;
-			}
+		super.onCollideWithPlayer(player);
+		if (!worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && canAttack) {
+			aggroCooldown = 0;
 		}
 	}
 }

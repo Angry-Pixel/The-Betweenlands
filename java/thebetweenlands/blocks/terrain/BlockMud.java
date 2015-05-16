@@ -9,6 +9,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.IEntityBL;
 
 public class BlockMud
@@ -34,7 +35,7 @@ public class BlockMud
 	
 	@Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (!(entity instanceof EntityAngler)) {
+		if (!(entity instanceof EntityAngler) || !(entity instanceof EntitySiltCrab)) {
 			entity.motionX *= 0.2D;
 			entity.motionY *= 0.2D;
 			entity.motionZ *= 0.2D;
