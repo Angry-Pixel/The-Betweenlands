@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
 
-public class EntityLeech extends EntityMob {
+public class EntityLeech extends EntityMob implements IEntityBL {
 
 	private final int MAX_BLOOD_LEVEL = 5;
 	private EntityLivingBase target;
