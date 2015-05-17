@@ -81,7 +81,6 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	public boolean isOnLadder() {
 		return isCollidedHorizontally;
 	}
-/*
 	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:snailliving";
@@ -96,7 +95,6 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	protected String getDeathSound() {
 		return "thebetweenlands:snaildeath";
 	}
-*/
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (isBurning())

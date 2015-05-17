@@ -54,7 +54,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	public boolean isOnLadder() {
 		return isCollidedHorizontally;
 	}
-/*
+	
 	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:snailliving";
@@ -70,11 +70,6 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		return "thebetweenlands:snaildeath";
 	}
 
-	@Override
-	protected Item getDropItem() {
-		return ModItems.lifeBlood;
-	}
-*/
 	@Override
 	protected Entity findPlayerToAttack() {
 		EntityPlayer var1 = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
