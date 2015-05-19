@@ -31,7 +31,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
 		
 		for (int yy = y; yy < y + height; ++yy) {
-			if (yy % 5 == 0 && radius > 1)
+			if ((yy - y) % 5 == 0 && radius > 1 && yy > 7)
 				--radius;
 
 			for (int i = radius * -1; i <= radius; ++i)
@@ -86,15 +86,15 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 			}
 
 			if (yy == y + 1) {
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x, yy - rand.nextInt(2), z + radius + 1, 3, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x, yy - rand.nextInt(2), z - radius - 1, 4, true, rand.nextInt(2) + 3);
 
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z + radius + 1, 5, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z - radius - 1, 6, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z + radius + 1, 7, true, rand.nextInt(2) + 3);
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z - radius - 1, 8, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
 		return true;
