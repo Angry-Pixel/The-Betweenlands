@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -18,8 +19,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 
 public class BlockBLLeaves extends BlockLeaves {
 
@@ -119,12 +118,12 @@ public class BlockBLLeaves extends BlockLeaves {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-		placedByPlayer = true;
+		world.setBlockMetadataWithNotify(x, y, z, 1, 2);
 	}
 
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z) {
-		if (!placedByPlayer) {
+		if (world.getBlockMetadata(x, y, z) != 1) {
 			int i2 = world.getBlockMetadata(x, y, z);
 
 			if ((i2 & 8) == 0) {
@@ -133,4 +132,5 @@ public class BlockBLLeaves extends BlockLeaves {
 			world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) | 8, 4);
 		}
 	}
+
 }
