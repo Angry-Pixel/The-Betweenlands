@@ -26,6 +26,7 @@ import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockPlantSmall;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -322,7 +323,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	}
 
 	@Override
-	public Item getItemDropped(int id, Random random, int fortune) {
+	public Item getItemDropped(int meta, Random random, int fortune) {
 		return null;
 	}
 
@@ -438,6 +439,18 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	@Override
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return ItemBlockPlantSmall.class;
+	}
+	@Override
+	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
+		if (!world.isRemote && meta > 1 && meta <= 7) {
+			int dropChance = 4;
+			if(fortune > 0 && fortune <= 4){
+				dropChance -= fortune;
+			}
+			if(world.rand.nextInt(dropChance) == 0){
+				this.dropBlockAsItem(world, x, y, z, new ItemStack(BLItemRegistry.materialsBL, 1, 14));
+			}
+		}
 	}
 
 }
