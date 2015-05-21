@@ -24,7 +24,7 @@ import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockBLSapling extends BlockSapling  {
+public class BlockBLSapling extends BlockSapling {
 	
 	private String type;
 	@SideOnly(Side.CLIENT)
