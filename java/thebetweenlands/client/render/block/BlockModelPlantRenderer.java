@@ -170,6 +170,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						0.065D * 0.45D,
 						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
 						true);
+				plantModelInvRottenLog.offsetMS(new Vec3(0D, -0.55D, 0D));
 			}
 			plantModelInvRottenLog.renderWithTessellator(Tessellator.instance);
 		}
