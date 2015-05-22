@@ -119,12 +119,12 @@ public class BlockBLLeaves extends BlockLeaves {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-		placedByPlayer = true;
+		world.setBlockMetadataWithNotify(x, y, z, 1, 2);
 	}
 
 	@Override
 	public void beginLeavesDecay(World world, int x, int y, int z) {
-		if (!placedByPlayer) {
+		if (world.getBlockMetadata(x, y, z) != 1) {
 			int i2 = world.getBlockMetadata(x, y, z);
 
 			if ((i2 & 8) == 0) {
