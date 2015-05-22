@@ -167,7 +167,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			if(plantModelInvRottenLog == null) {
 				plantModelInvRottenLog = new ModelConverter(
 						new ModelRottenLog(),
-						0.065D,
+						0.065D * 0.45D,
 						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
 						true);
 			}
