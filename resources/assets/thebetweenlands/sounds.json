@@ -269,6 +269,30 @@
       }
     ]
   },
+  "portal": {
+    "category": "block",
+    "sounds": [
+      "portal"
+    ]
+  },
+  "portalActivate": {
+    "category": "block",
+    "sounds": [
+      "portalActivate"
+    ]
+  },
+  "portalTravel": {
+    "category": "block",
+    "sounds": [
+      "portalTravel"
+    ]
+  },
+  "portalTrigger": {
+    "category": "block",
+    "sounds": [
+      "portalTrigger"
+    ]
+  },  
   "music.blDimension": {
     "category": "music",
     "sounds": [
@@ -302,4 +326,5 @@
       }
     ]
   }
+  
 }

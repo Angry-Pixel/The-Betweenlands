@@ -177,4 +177,35 @@ public class BlockTreePortal extends Block {
 	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
 		return side > 1;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		for( int i = 0; i < 4; i++ ) {
+			double particleX = x + rand.nextFloat();
+			double particleY = y + rand.nextFloat();
+			double particleZ = z + rand.nextFloat();
+			double motionX;
+			double motionY;
+			double motionZ;
+			int multi = rand.nextInt(2) * 2 - 1;
+
+			motionX = (rand.nextFloat() - 0.5D) * 0.5D;
+			motionY = (rand.nextFloat() - 0.5D) * 0.5D;
+			motionZ = (rand.nextFloat() - 0.5D) * 0.5D;
+
+			if( world.getBlock(x - 1, y, z) != this && world.getBlock(x + 1, y, z) != this ) {
+				particleX = x + 0.5D + 0.25D * multi;
+				motionX = rand.nextFloat() * 2.0F * multi;
+			} else {
+				particleZ = z + 0.5D + 0.25D * multi;
+				motionZ = rand.nextFloat() * 2.0F * multi;
+			}
+
+			world.spawnParticle("smoke", particleX, particleY, particleZ, motionX / 4D, motionY / 4D, motionZ / 4D);
+		}
+		if(rand.nextInt(100) == 0){
+			world.playSound((double)x + .5, (double)y + .5, (double)z + .5, "thebetweenlands:portal", 0.2F, rand.nextFloat() * 0.4F + 0.8F, false);
+		}
+	}
 }

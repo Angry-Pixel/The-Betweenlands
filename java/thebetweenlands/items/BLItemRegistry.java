@@ -20,6 +20,7 @@ public class BLItemRegistry {
     public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
     public static final Item swampTalisman = new SwampTalisman();
     public static final Item materialsBL = new ItemMaterialsBL();
+    public static final Item soundTest = new ItemSoundTest().setUnlocalizedName("thebetweenlands.testItemSound");
 
     // WEAPONS TOOLS
     public static final Item weedwoodSword = new SwordBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodSword").setTextureName("thebetweenlands:weedWoodSword");
@@ -118,7 +119,7 @@ public class BLItemRegistry {
         ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink);
-        ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll);
+        ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow);
     }
