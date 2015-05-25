@@ -7,6 +7,7 @@ import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -76,7 +77,7 @@ public class SwampTalisman
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
 					player.setPosition(x + 0.5D, y + 2D, z + 0.5D);
 					new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z);
-					world.setBlockToAir(x, y, z);
+					world.setBlockMetadataWithNotify(x, y, z, 1, 3);
 				}
 				is.damageItem(1, player);
 				return true;

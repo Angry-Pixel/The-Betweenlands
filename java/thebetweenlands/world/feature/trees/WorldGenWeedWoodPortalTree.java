@@ -2,6 +2,7 @@ package thebetweenlands.world.feature.trees;
 
 import java.util.Random;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -97,7 +98,6 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		world.setBlockMetadataWithNotify(x, y, z, 1, 3);
 		return true;
 	}
 
