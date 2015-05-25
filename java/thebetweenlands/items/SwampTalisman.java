@@ -1,24 +1,19 @@
 package thebetweenlands.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
+
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.tree.BlockBLSapling;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
-
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class SwampTalisman
         extends Item
@@ -73,34 +68,20 @@ public class SwampTalisman
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int meta, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && player.isSneaking()) {
-            /*switch( meta ) {
-                case 0: --y; break;
-                case 1: ++y; break;
-                case 2: --z; break;
-                case 3: ++z; break;
-                case 4: --x; break;
-                case 5: ++x; break;
-            }*/
-
-			if (!player.canPlayerEdit(x, y, z, meta, is)) {
-				System.out.println("nope");
+			if (!player.canPlayerEdit(x, y, z, meta, is))
 				return false;
-			} else {
+			else {
 				Block block = world.getBlock(x, y, z);
 				if (block instanceof BlockSapling) {
-					System.out.println("indeed");
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-					Random rand = new Random();
-					new WorldGenWeedWoodPortalTree().generate(world, rand, x, y - 2, z);
+					player.setPosition(x + 0.5D, y + 2D, z + 0.5D);
+					new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z);
 					world.setBlockToAir(x, y, z);
 				}
-
 				is.damageItem(1, player);
-
 				return true;
 			}
 		}
-
 		return false;
 	}
 
