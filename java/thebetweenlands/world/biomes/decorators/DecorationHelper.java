@@ -17,6 +17,7 @@ import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
+import thebetweenlands.world.feature.trees.WorldGenDeadTree;
 import thebetweenlands.world.feature.trees.WorldGenGiantTree;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
@@ -56,6 +57,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BONESET = new WorldGenTallGrass(BLBlockRegistry.boneset, 1);
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 	private final static WorldGenTallGrass GEN_ROTTEN_LOG = new WorldGenTallGrass(BLBlockRegistry.rottenLog, 1);
+	private final static WorldGenDeadTree GEN_DEAD_TREE = new WorldGenDeadTree();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -449,6 +451,16 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 				GEN_GIANT_TREE.generateTree(this.world, this.rand, x, y, z);
+		}
+	}
+	
+	public void generateDeadTree(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+				GEN_DEAD_TREE.generateTree(this.world, this.rand, x, y, z);
 		}
 	}
 

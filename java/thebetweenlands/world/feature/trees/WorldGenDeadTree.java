@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -18,7 +19,8 @@ public class WorldGenDeadTree implements IWorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
-
+	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
+	
 	private int height = -1;
 	private int radius = -1;
 	private int maxRadius = -1;
@@ -75,9 +77,10 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
 
-					if (Math.round(Math.sqrt(dSq)) == radius && yy < y + height - 1)
-						if(rand.nextInt(7) != 0)
-							world.setBlock(x + i, yy, z + j, bark, 0, 2);
+					if (Math.round(Math.sqrt(dSq)) == radius && yy < y + height - 1) {
+						world.setBlock(x + i, yy, z + j, bark, 0, 2);
+						addVines(world, rand, x + i, yy, z + j);
+					}
 
 					if (Math.round(Math.sqrt(dSq)) < radius)
 						world.setBlock(x + i, yy, z + j, wood);
@@ -123,15 +126,15 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				}
 			
 			if (yy == y + 3) {
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, true, rand.nextInt(9) + 6);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, rand.nextInt(9) + 6);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, rand.nextInt(9) + 6);
+				createBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, rand.nextInt(9) + 6);
+				createBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, rand.nextInt(9) + 6);
 
-				createBranch(world, rand, x + radius - 1, yy - rand.nextInt(3), z + radius, 5, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x - radius + 1, yy - rand.nextInt(3), z - radius, 6, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x - radius, yy - rand.nextInt(3), z + radius - 1, 7, true, rand.nextInt(9) + 6);
-				createBranch(world, rand, x + radius, yy - rand.nextInt(3), z - radius + 1, 8, true, rand.nextInt(9) + 6);
+				createBranch(world, rand, x + radius - 1, yy - rand.nextInt(3), z + radius, 5, rand.nextInt(9) + 6);
+				createBranch(world, rand, x - radius + 1, yy - rand.nextInt(3), z - radius, 6, rand.nextInt(9) + 6);
+				createBranch(world, rand, x - radius, yy - rand.nextInt(3), z + radius - 1, 7, rand.nextInt(9) + 6);
+				createBranch(world, rand, x + radius, yy - rand.nextInt(3), z - radius + 1, 8, rand.nextInt(9) + 6);
 			}
 
 		}
@@ -165,14 +168,11 @@ public class WorldGenDeadTree implements IWorldGenerator {
 		}
 	}
 
-	// TODO Leaving Vines and Branch code like this until Poison Ivy and Moss are made - it will be re-purposed.
-	private void createBranch(World world, Random rand, int x, int y, int z, int dir, boolean root, int branchLength) {
+	private void createBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength) {
 
 		for (int i = 0; i <= branchLength; ++i) {
 
-			if (!root && i >= 3)
-				y++;
-			else if (root && i >= 5)
+			 if (i >= 5)
 				y--;
 
 			if (dir == 1) {
@@ -181,9 +181,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x + i, y - 1, z + 1, bark);
 				world.setBlock(x + i, y - 1, z - 1, bark);
 				world.setBlock(x + i, y - 2, z, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x + i, y - 3, z, 2);
 			}
 			if (dir == 2) {
 				world.setBlock(x - i, y, z, bark);
@@ -191,9 +188,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x - i, y - 1, z + 1, bark);
 				world.setBlock(x - i, y - 1, z - 1, bark);
 				world.setBlock(x - i, y - 2, z, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x - i, y - 3, z, 8);
 			}
 			if (dir == 3) {
 				world.setBlock(x, y, z + i, bark);
@@ -201,9 +195,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x + 1, y - 1, z + i, bark);
 				world.setBlock(x - 1, y - 1, z + i, bark);
 				world.setBlock(x, y - 2, z + i, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x, y - 3, z + i, 4);
 			}
 			if (dir == 4) {
 				world.setBlock(x, y, z - i, bark);
@@ -211,9 +202,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x + 1, y - 1, z - i, bark);
 				world.setBlock(x - 1, y - 1, z - i, bark);
 				world.setBlock(x, y - 2, z - i, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x, y - 3, z - i, 1);
 			}
 			if (dir == 5) {
 				world.setBlock(x + i - 1, y, z + i - 1, bark);
@@ -221,9 +209,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x + i - 1, y - 2, z + i - 1, bark);
 				world.setBlock(x + i - 2, y - 1, z + i - 1, bark);
 				world.setBlock(x + i - 1, y - 1, z + i - 2, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x + i - 1, y - 3, z + i - 1, 2);
 			}
 			if (dir == 6) {
 				world.setBlock(x - i + 1, y, z - i + 1, bark);
@@ -231,9 +216,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x - i + 1, y - 2, z - i + 1, bark);
 				world.setBlock(x - i + 2, y - 1, z - i + 1, bark);
 				world.setBlock(x - i + 1, y - 1, z - i + 2, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x - i + 1, y - 3, z - i + 1, 8);
 			}
 			if (dir == 7) {
 				world.setBlock(x - i + 1, y, z + i - 1, bark);
@@ -241,9 +223,6 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x - i + 1, y - 2, z + i - 1, bark);
 				world.setBlock(x - i + 2, y - 1, z + i - 1, bark);
 				world.setBlock(x - i + 1, y - 1, z + i - 2, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x - i + 1, y - 3, z + i - 1, 4);
 			}
 			if (dir == 8) {
 				world.setBlock(x + i - 1, y, z - i + 1, bark);
@@ -251,21 +230,29 @@ public class WorldGenDeadTree implements IWorldGenerator {
 				world.setBlock(x + i - 1, y - 2, z - i + 1, bark);
 				world.setBlock(x + i - 2, y - 1, z - i + 1, bark);
 				world.setBlock(x + i - 1, y - 1, z - i + 2, bark);
-				if (!root)
-					if (i <= branchLength)
-						addVines(world, rand, x + i - 1, y - 3, z - i + 1, 1);
 			}
 		}
 	}
 
-	public void addVines(World world, Random rand, int x, int y, int z, int meta) {
-		if (rand.nextInt(3) == 0) {
-			int length = rand.nextInt(10) + 10;
-			for (int yy = y; yy > y - length; --yy)
-				if (world.getBlock(x, yy, z) == Blocks.air)
-					world.setBlock(x, yy, z, Blocks.vine, meta, 2);
-				else
-					break;
+	public void addVines(World world, Random rand, int x, int y, int z) {
+		int offset = 1;
+		switch (rand.nextInt(4)) {
+		case 0:
+			if (world.isAirBlock(x, y, z - offset))
+				world.setBlock(x, y, z - offset, ivy, 1, 2);
+			break;
+		case 1:
+			if (world.isAirBlock(x, y, z + offset))
+				world.setBlock(x, y, z + offset, ivy, 4, 2);
+			break;
+		case 2:
+			if (world.isAirBlock(x - offset, y, z))
+				world.setBlock(x - offset, y, z, ivy, 8, 2);
+			break;
+		case 3:
+			if (world.isAirBlock(x + offset, y, z))
+				world.setBlock(x + offset, y, z, ivy, 2, 2);
+			break;
 		}
 	}
 
