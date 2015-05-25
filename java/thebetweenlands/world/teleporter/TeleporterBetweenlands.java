@@ -35,7 +35,7 @@ public class TeleporterBetweenlands extends Teleporter {
 				for (int z = zMin; z <= zMax; z++) {
 					Block block = world.getBlock(x, y, z);
 					int meta = block.getDamageValue(world, x, y, z);
-					if (block instanceof BlockBLLog && ((BlockBLLog) block).getType().equals("weedwoodLog") && meta == 16) {
+					if (block instanceof BlockBLLog && ((BlockBLLog) block).getType().equals("weedwood") && meta == 15) {
 						System.out.println("should have teleported:" + x + "," + y + "," + z);
 						entity.setLocationAndAngles(x, y + 1, z, entity.rotationYaw, 0.0F);
 						check = false;
