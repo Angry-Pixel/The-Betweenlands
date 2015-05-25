@@ -45,23 +45,23 @@ public class BlockTreePortal extends Block {
 
 	public static boolean isPatternValidX(World world, int x, int y, int z) {
 		// Layer 0
-		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark, 0) && !check(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0))
+		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0))
 			return false;
 
 		// Layer 1
-		if (!check(world, x, y, z - 1, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y, z - 1, BLBlockRegistry.portalBark))
 			return false;
-		if (!check(world, x, y, z + 1, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y, z + 1, BLBlockRegistry.portalBark))
 			return false;
 
 		// Layer 2
-		if (!check(world, x, y + 1, z - 1, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y + 1, z - 1, BLBlockRegistry.portalBark))
 			return false;
-		if (!check(world, x, y + 1, z + 1, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y + 1, z + 1, BLBlockRegistry.portalBark))
 			return false;
 
 		// Layer 3
-		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark))
 			return false;
 
 		return true;
@@ -69,29 +69,33 @@ public class BlockTreePortal extends Block {
 	
 	public static boolean isPatternValidZ(World world, int x, int y, int z) {
 		// Layer 0
-		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark, 0) && !check(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
+		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
 			return false;
 
 		// Layer 1
-		if (!check(world, x - 1, y, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x - 1, y, z, BLBlockRegistry.portalBark))
 			return false;
-		if (!check(world, x + 1, y, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x + 1, y, z, BLBlockRegistry.portalBark))
 			return false;
 
 		// Layer 2
-		if (!check(world, x - 1, y + 1, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x - 1, y + 1, z, BLBlockRegistry.portalBark))
 			return false;
-		if (!check(world, x + 1, y + 1, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x + 1, y + 1, z, BLBlockRegistry.portalBark))
 			return false;
 
 		// Layer 3
-		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark, 0))
+		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark))
 			return false;
 
 		return true;
 	}
 
-	private static boolean check(World world, int x, int y, int z, Block target, int meta) {
+	private static boolean check(World world, int x, int y, int z, Block target) {
+		return world.getBlock(x, y, z) == target;
+	}
+	
+	private static boolean checkPortal(World world, int x, int y, int z, Block target, int meta) {
 		return world.getBlock(x, y, z) == target && world.getBlockMetadata(x, y, z) == meta;
 	}
 
@@ -102,13 +106,13 @@ public class BlockTreePortal extends Block {
 
 	@Override
     public boolean canBlockStay(World world, int x, int y, int z) {
-		if(check(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
+		if(checkPortal(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
 			return true;
-		if(check(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
+		if(checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
 			return true;
-		if(check(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y, z))
+		if(checkPortal(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y, z))
 			return true;
-		if(check(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y - 1, z))
+		if(checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y - 1, z))
 			return true;
 		else {
 			world.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
