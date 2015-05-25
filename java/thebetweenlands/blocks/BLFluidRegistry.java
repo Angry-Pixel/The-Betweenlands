@@ -14,7 +14,7 @@ public class BLFluidRegistry {
 	public static final BLFluidRegistry INSTANCE = new BLFluidRegistry();
 
 	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<>();
-	
+
 	public static Fluid swampWater = new Fluid("swampWater").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWater");
 	public static Fluid swampWaterWaterWeeds = new Fluid("swampWaterWaterWeeds").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterWaterWeeds");
 	public static Fluid swampWaterMireCoral = new Fluid("swampWaterMireCoral").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterMireCoral");

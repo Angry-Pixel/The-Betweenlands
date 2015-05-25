@@ -98,7 +98,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		world.setBlockMetadataWithNotify(x, y, z, 1, 3);
+		world.setBlockMetadataWithNotify(x, y, z, 16, 3);
 		return true;
 	}
 

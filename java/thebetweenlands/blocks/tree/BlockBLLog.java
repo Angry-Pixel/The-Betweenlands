@@ -69,4 +69,8 @@ public class BlockBLLog extends BlockLog {
 		else
 			iconTop = iconRegister.registerIcon(getTextureName()+"Top");
 	}
+
+	public String getType(){
+		return type;
+	}
 }
