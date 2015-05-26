@@ -26,6 +26,17 @@ public class BlockTreePortal extends Block {
 	}
 
 	public static boolean makePortalX(World world, int x, int y, int z) {
+		world.setBlock(x, y + 2, z - 1, BLBlockRegistry.portalBarkFrame, 8, 2);
+		world.setBlock(x, y + 2, z, BLBlockRegistry.portalBarkFrame, 9, 2);
+		world.setBlock(x, y + 2, z + 1, BLBlockRegistry.portalBarkFrame, 10, 2);
+		world.setBlock(x, y + 1, z - 1, BLBlockRegistry.portalBarkFrame, 11, 2);
+		world.setBlock(x, y + 1, z + 1, BLBlockRegistry.portalBarkFrame, 12, 2);
+		world.setBlock(x, y, z - 1, BLBlockRegistry.portalBarkFrame, 11, 2);
+		world.setBlock(x, y, z + 1, BLBlockRegistry.portalBarkFrame, 12, 2);
+		world.setBlock(x, y - 1, z - 1, BLBlockRegistry.portalBarkFrame, 13, 2);
+		world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 14, 2);
+		world.setBlock(x, y - 1, z + 1, BLBlockRegistry.portalBarkFrame, 15, 2);
+		
 		if (isPatternValidX(world, x, y, z)) {
 			world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 0, 2);
 			world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 0, 2);
@@ -35,6 +46,17 @@ public class BlockTreePortal extends Block {
 	}
 	
 	public static boolean makePortalZ(World world, int x, int y, int z) {
+		world.setBlock(x - 1, y + 2, z, BLBlockRegistry.portalBarkFrame, 0, 2);
+		world.setBlock(x, y + 2, z, BLBlockRegistry.portalBarkFrame, 1, 2);
+		world.setBlock(x + 1, y + 2, z, BLBlockRegistry.portalBarkFrame, 2, 2);
+		world.setBlock(x - 1, y + 1, z, BLBlockRegistry.portalBarkFrame, 3, 2);
+		world.setBlock(x + 1, y + 1, z, BLBlockRegistry.portalBarkFrame, 4, 2);
+		world.setBlock(x - 1, y, z, BLBlockRegistry.portalBarkFrame, 3, 2);
+		world.setBlock(x + 1, y, z, BLBlockRegistry.portalBarkFrame, 4, 2);
+		world.setBlock(x - 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 5, 2);
+		world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 6, 2);
+		world.setBlock(x + 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 7, 2);
+		
 		if (isPatternValidZ(world, x, y, z)) {
 			world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 1, 2);
 			world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 1, 2);
@@ -45,23 +67,23 @@ public class BlockTreePortal extends Block {
 
 	public static boolean isPatternValidX(World world, int x, int y, int z) {
 		// Layer 0
-		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0))
+		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBarkFrame) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0))
 			return false;
 
 		// Layer 1
-		if (!check(world, x, y, z - 1, BLBlockRegistry.portalBark))
+		if (!check(world, x, y, z - 1, BLBlockRegistry.portalBarkFrame))
 			return false;
-		if (!check(world, x, y, z + 1, BLBlockRegistry.portalBark))
+		if (!check(world, x, y, z + 1, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		// Layer 2
-		if (!check(world, x, y + 1, z - 1, BLBlockRegistry.portalBark))
+		if (!check(world, x, y + 1, z - 1, BLBlockRegistry.portalBarkFrame))
 			return false;
-		if (!check(world, x, y + 1, z + 1, BLBlockRegistry.portalBark))
+		if (!check(world, x, y + 1, z + 1, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		// Layer 3
-		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark))
+		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		return true;
@@ -69,23 +91,23 @@ public class BlockTreePortal extends Block {
 	
 	public static boolean isPatternValidZ(World world, int x, int y, int z) {
 		// Layer 0
-		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBark) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
+		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBarkFrame) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
 			return false;
 
 		// Layer 1
-		if (!check(world, x - 1, y, z, BLBlockRegistry.portalBark))
+		if (!check(world, x - 1, y, z, BLBlockRegistry.portalBarkFrame))
 			return false;
-		if (!check(world, x + 1, y, z, BLBlockRegistry.portalBark))
+		if (!check(world, x + 1, y, z, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		// Layer 2
-		if (!check(world, x - 1, y + 1, z, BLBlockRegistry.portalBark))
+		if (!check(world, x - 1, y + 1, z, BLBlockRegistry.portalBarkFrame))
 			return false;
-		if (!check(world, x + 1, y + 1, z, BLBlockRegistry.portalBark))
+		if (!check(world, x + 1, y + 1, z, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		// Layer 3
-		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBark))
+		if (!check(world, x, y + 2, z, BLBlockRegistry.portalBarkFrame))
 			return false;
 
 		return true;
@@ -142,7 +164,7 @@ public class BlockTreePortal extends Block {
         float xSize;
         float ySize;
 
-		if( world.getBlock(x - 1, y, z) != BLBlockRegistry.portalBark && world.getBlock(x + 1, y, z) != BLBlockRegistry.portalBark ) {
+		if( world.getBlock(x - 1, y, z) != BLBlockRegistry.portalBarkFrame && world.getBlock(x + 1, y, z) != BLBlockRegistry.portalBarkFrame ) {
 			xSize = 0.125F;
 			ySize = 0.5F;
 		} else {

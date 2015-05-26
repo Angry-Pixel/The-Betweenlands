@@ -2,7 +2,6 @@ package thebetweenlands.world.feature.trees;
 
 import java.util.Random;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -10,9 +9,11 @@ import thebetweenlands.blocks.BlockTreePortal;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
+import thebetweenlands.blocks.tree.BlockBLPortalFrame;
 
 public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.portalBark;
+	private BlockBLPortalFrame portalFrame = (BlockBLPortalFrame) BLBlockRegistry.portalBarkFrame;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
@@ -45,6 +46,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius && yy == y || Math.round(Math.sqrt(dSq)) == radius && yy <= y + height - 1)
 						world.setBlock(x + i, yy, z + j, bark, 0, 2);
 				}
+			
 			if(yy == y + 4) {
 				portal.makePortalX(world, x + radius, yy - 2, z);
 				portal.makePortalX(world, x - radius, yy - 2, z);
