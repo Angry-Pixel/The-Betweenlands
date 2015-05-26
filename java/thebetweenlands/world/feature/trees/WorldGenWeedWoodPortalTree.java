@@ -46,7 +46,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius && yy == y || Math.round(Math.sqrt(dSq)) == radius && yy <= y + height - 1)
 						world.setBlock(x + i, yy, z + j, bark, 0, 2);
 				}
-			
+
 			if(yy == y + 4) {
 				portal.makePortalX(world, x + radius, yy - 2, z);
 				portal.makePortalX(world, x - radius, yy - 2, z);
