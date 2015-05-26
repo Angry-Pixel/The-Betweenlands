@@ -68,7 +68,7 @@ public class SwampTalisman
 
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int meta, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && player.isSneaking()) {
+		if (!world.isRemote ) {
 			if (!player.canPlayerEdit(x, y, z, meta, is))
 				return false;
 			else {
