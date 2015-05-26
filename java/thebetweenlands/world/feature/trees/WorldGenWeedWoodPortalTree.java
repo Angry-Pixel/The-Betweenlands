@@ -9,11 +9,9 @@ import thebetweenlands.blocks.BlockTreePortal;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
-import thebetweenlands.blocks.tree.BlockBLPortalFrame;
 
 public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.portalBark;
-	private BlockBLPortalFrame portalFrame = (BlockBLPortalFrame) BLBlockRegistry.portalBarkFrame;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
