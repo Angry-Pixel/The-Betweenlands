@@ -1,7 +1,7 @@
 package thebetweenlands.world.storage;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -59,7 +59,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		return this.data;
 	}
 
-	private static final Map<World, BetweenlandsWorldData> CACHE = new HashMap<>();
+	private static final Map<World, BetweenlandsWorldData> CACHE = new WeakHashMap<>();
 	public static BetweenlandsWorldData forWorld(World world) {
 		BetweenlandsWorldData cached = CACHE.get(world);
 		if(cached != null) {
