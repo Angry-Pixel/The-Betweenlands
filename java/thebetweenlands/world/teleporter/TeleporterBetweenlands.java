@@ -3,25 +3,35 @@ package thebetweenlands.world.teleporter;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.LongHashMap;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TeleporterBetweenlands extends Teleporter {
+	private final WorldServer worldServerInstance;
+	private final LongHashMap destinationCoordinateCache = new LongHashMap();
+	private final List<Long> destinationCoordinateKeys = new ArrayList<Long>();
+
 	//TODO: No special functionality yet, just for testing purposes
 	public TeleporterBetweenlands(WorldServer worldServer) {
 		super(worldServer);
+		worldServerInstance = worldServer;
 	}
+
 
 	//Just putting this here to stop nether portals appearing in the overworld
 	@Override
 	public void placeInPortal(Entity entity, double posX, double posY, double posZ, float rotationYaw) {
 		World world = entity.worldObj;
-		if (!teleport(entity, posX, posY, posZ, rotationYaw)) {
+		if (placeInExistingPortal(entity, posX, posY, posZ, rotationYaw)) {
 			for (int y = 200; y > 0; y--) {
 				Block block = world.getBlock((int) posX, y, (int) posZ);
 				if (block != Blocks.air) {
@@ -35,7 +45,7 @@ public class TeleporterBetweenlands extends Teleporter {
 							if(canGenerate(world, (int)posX, yy, (int)posZ)){
 								System.out.println("should have generated," + posX + "," + yy + "," + posZ);
 								new WorldGenWeedWoodPortalTree().generate(world, world.rand, (int) posX, yy, (int) posZ);
-								entity.setLocationAndAngles((int) posX, yy + 1, (int) posZ, rotationYaw, 0.0F);
+								entity.setLocationAndAngles((int) posX, yy + 2, (int) posZ, rotationYaw, 0.0F);
 								break;
 							}
 						}
@@ -59,29 +69,86 @@ public class TeleporterBetweenlands extends Teleporter {
 						return false;
 		return true;
 	}
-	public boolean teleport(Entity entity, double posX, double posY, double posZ, float rotationYaw){
-		World world = entity.worldObj;
-		int radius = 40;
-		int lowest = (int) posY - radius;
-		int highest = (int) posY + radius;
-		int xMin = (int) posX - radius;
-		int xMax = (int) posX + radius;
-		int zMin = (int) posZ - radius;
-		int zMax = (int) posZ + radius;
 
+	@Override
+	public boolean placeInExistingPortal(Entity entity, double x, double y, double z, float rotationYaw) {
+		int checkRadius = 32;
+		double distToPortal = -1.0;
+		int posX = 0;
+		int posY = 0;
+		int posZ = 0;
+		int roundX = MathHelper.floor_double(entity.posX);
+		int roundZ = MathHelper.floor_double(entity.posZ);
+		long coordPair = ChunkCoordIntPair.chunkXZ2Int(roundX, roundZ);
+		boolean portalNotSaved = true;
 
-		for (int y = lowest; y <= highest; y++) {
-			for (int x = xMin; x <= xMax; x++) {
-				for (int z = zMin; z <= zMax; z++) {
-					Block block = world.getBlock(x, y, z);
-					if (block instanceof BlockBLLog && ((BlockBLLog) block).getType().equals("weedwood") && block.getDamageValue(world, x, y, z) == 15) {
-						System.out.println("should have teleported:" + x + "," + y + "," + z);
-						entity.setLocationAndAngles(x, y + 1, z, rotationYaw, 0.0F);
-						return true;
+		if (destinationCoordinateCache.containsItem(coordPair)) {
+			PortalPosition pos = (PortalPosition) destinationCoordinateCache.getValueByKey(coordPair);
+			distToPortal = 0.0;
+			posX = pos.posX;
+			posY = pos.posY;
+			posZ = pos.posZ;
+			pos.lastUpdateTime = worldServerInstance.getTotalWorldTime();
+			portalNotSaved = false;
+		} else
+			for (int i = roundX - checkRadius; i <= roundX + checkRadius; i++)
+				for (int j = roundZ - checkRadius; j <= roundZ + checkRadius; j++)
+					for (int h = worldServerInstance.getActualHeight() - 1; h >= 0; h--) {
+						Block block = worldServerInstance.getBlock(i, j, h);
+						if (block instanceof BlockBLLog && ((BlockBLLog) block).getType().equals("weedwood") && block.getDamageValue(worldServerInstance, i, j, h) == 15) {
+							double X = i + 0.5 - entity.posX;
+							double Y = j + 0.5 - entity.posZ;
+							double Z = h - 2 + 0.5 - entity.posY;
+							double dist = X * X + Z * Z + Y * Y;
+
+							if (distToPortal < 0.0 || dist < distToPortal) {
+								distToPortal = dist;
+								posX = i;
+								posY = h;
+								posZ = j;
+							}
+						}
 					}
-				}
+		if (distToPortal >= 0.0) {
+			if (portalNotSaved) {
+				destinationCoordinateCache.add(coordPair, new PortalPosition(posX, posY, posZ, worldServerInstance.getTotalWorldTime()));
+				destinationCoordinateKeys.add(Long.valueOf(coordPair));
 			}
+
+			entity.motionX = entity.motionY = entity.motionZ = 0.0;
+
+			int entityFacing = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+			float entityRotation = 0;
+			double offsetX = 0;
+			double offsetZ = 0;
+
+			switch (entityFacing) {
+				case 0:
+					entityRotation = 180;
+					offsetX = 0.5D;
+					offsetZ = -0.5D;
+					break;
+				case 1:
+					entityRotation = 270;
+					offsetX = 1.5D;
+					offsetZ = 0.5D;
+					break;
+				case 2:
+					entityRotation = 0;
+					offsetX = 0.5D;
+					offsetZ = 1.5D;
+					break;
+				case 3:
+					entityRotation = 90;
+					offsetX = -0.5D;
+					offsetZ = 0.5D;
+					break;
+			}
+
+			entity.setLocationAndAngles(posX + offsetX, posY , posZ + offsetZ, entityRotation, entity.rotationPitch);
+			return true;
 		}
+
 		return false;
 	}
 }
