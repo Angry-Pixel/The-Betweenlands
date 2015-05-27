@@ -9,6 +9,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
@@ -36,14 +37,14 @@ public class TeleporterBetweenlands extends Teleporter {
 				Block block = world.getBlock((int) posX, y, (int) posZ);
 				if (block != Blocks.air) {
 					if(canGenerate(world, (int)posX, y, (int)posZ)) {
-						System.out.println("should have generated," + posX + "," + y + "," + posZ);
+						System.out.println("should have generated," + posX + "," + y + "," + posZ + "world id:" + DimensionManager.getWorld(entity.dimension));
 						new WorldGenWeedWoodPortalTree().generate(world, world.rand, (int) posX, y, (int) posZ);
 						entity.setLocationAndAngles((int) posX, y + 1, (int) posZ, rotationYaw, 0.0F);
 						break;
 					}else{
 						for (int yy = y; yy < 200; yy++){
 							if(canGenerate(world, (int)posX, yy, (int)posZ)){
-								System.out.println("should have generated," + posX + "," + yy + "," + posZ);
+								System.out.println("should have generated," + posX + "," + yy + "," + posZ + "world id:" + DimensionManager.getWorld(entity.dimension));
 								new WorldGenWeedWoodPortalTree().generate(world, world.rand, (int) posX, yy, (int) posZ);
 								entity.setLocationAndAngles((int) posX, yy + 2, (int) posZ, rotationYaw, 0.0F);
 								break;
@@ -97,8 +98,8 @@ public class TeleporterBetweenlands extends Teleporter {
 						Block block = worldServerInstance.getBlock(i, j, h);
 						if (block instanceof BlockBLLog && ((BlockBLLog) block).getType().equals("weedwood") && block.getDamageValue(worldServerInstance, i, j, h) == 15) {
 							double X = i + 0.5 - entity.posX;
-							double Y = j + 0.5 - entity.posZ;
-							double Z = h - 2 + 0.5 - entity.posY;
+							double Y = j + 0.5 - entity.posY;
+							double Z = h  + 0.5 - entity.posZ;
 							double dist = X * X + Z * Z + Y * Y;
 
 							if (distToPortal < 0.0 || dist < distToPortal) {
@@ -117,35 +118,9 @@ public class TeleporterBetweenlands extends Teleporter {
 
 			entity.motionX = entity.motionY = entity.motionZ = 0.0;
 
-			int entityFacing = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 			float entityRotation = 0;
-			double offsetX = 0;
-			double offsetZ = 0;
 
-			switch (entityFacing) {
-				case 0:
-					entityRotation = 180;
-					offsetX = 0.5D;
-					offsetZ = -0.5D;
-					break;
-				case 1:
-					entityRotation = 270;
-					offsetX = 1.5D;
-					offsetZ = 0.5D;
-					break;
-				case 2:
-					entityRotation = 0;
-					offsetX = 0.5D;
-					offsetZ = 1.5D;
-					break;
-				case 3:
-					entityRotation = 90;
-					offsetX = -0.5D;
-					offsetZ = 0.5D;
-					break;
-			}
-
-			entity.setLocationAndAngles(posX + offsetX, posY , posZ + offsetZ, entityRotation, entity.rotationPitch);
+			entity.setLocationAndAngles(posX , posY + 2 , posZ , entityRotation, entity.rotationPitch);
 			return true;
 		}
 
