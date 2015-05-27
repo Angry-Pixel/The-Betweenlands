@@ -22,13 +22,13 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 		int height = 16;
 		int maxRadius = 9;
 
-		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
+		/*for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
 					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube()) {
 						System.out.println("couldn't make tree," + x + "," + y + "," + z);
 						return false;
-					}
+					}*/
 		
 		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
 		
@@ -100,8 +100,8 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		world.setBlockMetadataWithNotify(x, y, z, 15, 3);
-		System.out.println("made tree," + x + "," + y + "," + z);
+		world.setBlock(x, y, z, BLBlockRegistry.druidStone1, 0, 3);
+		System.out.println("made tree," + x + "," + y + "," + z + " World: " + world);
 		return true;
 	}
 

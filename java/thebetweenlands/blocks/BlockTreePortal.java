@@ -5,17 +5,14 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import thebetweenlands.lib.ModInfo;
-import thebetweenlands.world.teleporter.TeleporterBetweenlands;
+import thebetweenlands.world.teleporter.TeleporterHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 public class BlockTreePortal extends Block {
+
 	public BlockTreePortal() {
 		super(Material.portal);
 		setLightLevel(1.0F);
@@ -177,14 +174,13 @@ public class BlockTreePortal extends Block {
 	
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
-		//TODO Add teleport and dimension transfer here
-		//TODO: Just temporary to test some stuff
-		if( world instanceof WorldServer ) {
-			WorldServer worldServer = (WorldServer)world;
-			if( entity instanceof EntityPlayerMP ) {
-				EntityPlayerMP player = (EntityPlayerMP) entity;
-				player.mcServer.getConfigurationManager().transferPlayerToDimension(player, player.dimension == 0 ? ModInfo.DIMENSION_ID : 0, new TeleporterBetweenlands(worldServer));
-			}
+		if (entity.ridingEntity == null && entity.riddenByEntity == null && entity.timeUntilPortal <= 0) {
+			if (entity.dimension == 0)
+				TeleporterHandler.transferToBL(entity);
+			else
+				TeleporterHandler.transferToOverworld(entity);
+			if (entity != null)
+				entity.timeUntilPortal = 20;
 		}
 	}
 
