@@ -76,7 +76,7 @@ public class SwampTalisman
 				Block block = world.getBlock(x, y, z);
 				if (block instanceof BlockSapling) {
 					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-					player.setPosition(x + 0.5D, y + 2D, z + 0.5D);
+					player.setLocationAndAngles(x + 0.5D, y + 2D, z + 0.5D, player.rotationYaw, player.rotationPitch);
                     new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z);
 				}
 				is.damageItem(1, player);
@@ -87,7 +87,7 @@ public class SwampTalisman
 	}
 
 
-    public static enum EnumTalisman
+    public enum EnumTalisman
     {
         SWAMP_TALISMAN("swampTalisman"),
         SWAMP_TALISMAN_1("swampTalisman1"),
@@ -97,7 +97,7 @@ public class SwampTalisman
 
         public final String iconName;
 
-        private EnumTalisman(String unlocName) {
+        EnumTalisman(String unlocName) {
             this.iconName = unlocName;
         }
 

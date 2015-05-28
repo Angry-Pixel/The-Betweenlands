@@ -14,6 +14,9 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.tree.BlockBLLeaves;
+import thebetweenlands.blocks.tree.BlockBLLog;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
 public final class TeleporterBetweenlands extends Teleporter {
@@ -36,7 +39,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean placeInExistingPortal(Entity entity, double x, double y, double z, float rotationYaw) {
-		int checkRadius = 32;
+		int checkRadius = 50;
 		double distToPortal = -1.0;
 		int posX = 0;
 		int posY = 0;
@@ -120,22 +123,28 @@ public final class TeleporterBetweenlands extends Teleporter {
 	@Override
 	public boolean makePortal(Entity entity) {
 		int posX = MathHelper.floor_double(entity.posX);
-		int posY = MathHelper.floor_double(entity.posY) - 2;
 		int posZ = MathHelper.floor_double(entity.posZ);
-
-		for (int y = 200; y > 0; y--) {
-			Block block = worldServerInstance.getBlock( posX, y, posZ);
-			if (block != Blocks.air) {
-				if (canGenerate(worldServerInstance, posX, y, posZ)) {
-					new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, y, posZ);
-					entity.setLocationAndAngles(posX, y + 2, posZ, entity.rotationYaw, entity.rotationPitch);
-					return true;
-				} else {
-					for (int yy = y; yy < 200; yy++) {
-						if (canGenerate(worldServerInstance, posX, yy, posZ)) {
-							new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, yy,  posZ);
-							entity.setLocationAndAngles(posX, yy + 2, posZ, entity.rotationYaw, entity.rotationPitch);
-							return true;
+		int maxPortalSpawnHeight;
+		if (entity.dimension == ConfigHandler.DIMENSION_ID){
+			maxPortalSpawnHeight = 85;
+		}else {
+			maxPortalSpawnHeight = 100;
+		}
+		for (int z = posZ; z < posZ + 40; z++) {
+			for (int y = maxPortalSpawnHeight; y > 80; y--) {
+				Block block = worldServerInstance.getBlock(posX, y, z);
+				if (block != Blocks.air) {
+					if (canGenerate(worldServerInstance, posX, y, z)) {
+						new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, y, z);
+						entity.setLocationAndAngles(posX, y + 2, z, entity.rotationYaw, entity.rotationPitch);
+						return true;
+					} else {
+						for (int yy = y; yy < maxPortalSpawnHeight; yy++) {
+							if (canGenerate(worldServerInstance, posX, yy, z)) {
+								new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, yy, z);
+								entity.setLocationAndAngles(posX, yy + 2, z, entity.rotationYaw, entity.rotationPitch);
+								return true;
+							}
 						}
 					}
 				}
@@ -146,12 +155,16 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	public boolean canGenerate(World world, int posX, int posY, int posZ){
 		int height = 16;
-		int maxRadius = 9;
+		int maxRadius = 11;
 		for (int xx = posX - maxRadius; xx <= posX + maxRadius; xx++)
 			for (int zz = posZ - maxRadius; zz <= posZ + maxRadius; zz++)
-				for (int yy = posY + 2; yy < posY + height; yy++)
-					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube())
+				for (int yy = posY + 2; yy < posY + height; yy++) {
+					Block block = world.getBlock(xx, yy, zz);
+					if (!world.isAirBlock(xx, yy, zz) && block.isNormalCube())
 						return false;
+					else if(block instanceof BlockBLLeaves)
+						return false;
+				}
 		return true;
 	}
 
