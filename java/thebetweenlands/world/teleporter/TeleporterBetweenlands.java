@@ -6,10 +6,12 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
@@ -59,7 +61,6 @@ public final class TeleporterBetweenlands extends Teleporter {
 					for (int h = worldServerInstance.getActualHeight() - 1; h >= 0; h--) {
 						Block block = worldServerInstance.getBlock(i, h, j);
 						if (block == BLBlockRegistry.druidStone1) {
-							System.out.println("found block we are looking for X:" + i + " Y: "+ h + " Z:" + j);
 							double X = i + 0.5 - entity.posX;
 							double Z = j + 0.5 - entity.posZ;
 							double Y = h + 2  + 0.5 - entity.posY;
@@ -118,16 +119,39 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean makePortal(Entity entity) {
-		int x = MathHelper.floor_double(entity.posX);
-		int y = MathHelper.floor_double(entity.posY) - 2;
-		int z = MathHelper.floor_double(entity.posZ);
+		int posX = MathHelper.floor_double(entity.posX);
+		int posY = MathHelper.floor_double(entity.posY) - 2;
+		int posZ = MathHelper.floor_double(entity.posZ);
 
-		for (int i = -16; i <= 16; i++)
-			for (int j = 0; j <= 28; j++)
-				for (int k = -16; k <= 16; k++)
-					worldServerInstance.setBlockToAir(x + i, y + j, z + k);
-		
-		new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, x, y, z);
+		for (int y = 200; y > 0; y--) {
+			Block block = worldServerInstance.getBlock( posX, y, posZ);
+			if (block != Blocks.air) {
+				if (canGenerate(worldServerInstance, posX, y, posZ)) {
+					new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, y, posZ);
+					entity.setLocationAndAngles(posX, y + 2, posZ, entity.rotationYaw, entity.rotationPitch);
+					return true;
+				} else {
+					for (int yy = y; yy < 200; yy++) {
+						if (canGenerate(worldServerInstance, posX, yy, posZ)) {
+							new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, yy,  posZ);
+							entity.setLocationAndAngles(posX, yy + 2, posZ, entity.rotationYaw, entity.rotationPitch);
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean canGenerate(World world, int posX, int posY, int posZ){
+		int height = 16;
+		int maxRadius = 9;
+		for (int xx = posX - maxRadius; xx <= posX + maxRadius; xx++)
+			for (int zz = posZ - maxRadius; zz <= posZ + maxRadius; zz++)
+				for (int yy = posY + 2; yy < posY + height; yy++)
+					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube())
+						return false;
 		return true;
 	}
 
