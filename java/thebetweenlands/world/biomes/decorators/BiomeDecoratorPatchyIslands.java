@@ -10,7 +10,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 
 		helper.generateGiantWeedwoodTree(40);
 	
-		/*helper.generateWeedwoodTree(40);
+		helper.generateWeedwoodTree(40);
 		helper.generateSapTree(30);
 		helper.generateCattail(10);
 		helper.generateTallCattail(25);
@@ -27,6 +27,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateRottenLog(10);
 		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.marshMarigold);
 		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.bogBean);
-		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.goldenClub);*/
+		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.goldenClub);
 	}
 }

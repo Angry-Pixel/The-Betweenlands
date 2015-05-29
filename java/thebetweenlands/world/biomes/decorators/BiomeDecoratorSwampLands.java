@@ -14,13 +14,13 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 		if(pass == 0) {
 			DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-			//helper.generateGiantWeedwoodTree(60);
+			helper.generateGiantWeedwoodTree(60);
 			
-			helper.generateDeadTree(20);
+			helper.generateDeadTree(10);
 
 			helper.generateWeedwoodTree(60);
 
-			/*helper.generateWeedwoodBush(130);
+			helper.generateWeedwoodBush(130);
 			helper.generateRubberTree(50);
 			helper.generateSapTree(50);
 			helper.generateRoots(7.0D, 2);
@@ -33,7 +33,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 			helper.generateVolarpad(2);
 			helper.generateCattail(5);
 			helper.generateNettles(10);
-			helper.generateMossPatch(20);*/
+			helper.generateMossPatch(20);
 		} else {
 			for(int xo = -16; xo < 32; xo++) {
 				for(int zo = -16; zo < 32; zo++) {
