@@ -13,10 +13,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.debugging.DebugHandler;
-import thebetweenlands.event.player.DecayEventHandler;
-import thebetweenlands.event.player.OctineArmorHandler;
-import thebetweenlands.event.player.RottenFoodHandler;
-import thebetweenlands.event.player.TorchPlaceEventHandler;
+import thebetweenlands.event.player.*;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.ShaderHandler;
@@ -111,6 +108,7 @@ public class TheBetweenlands
         packetRegistry.registerPacket(PacketDruidAltarProgress.class, (byte) 1);
         packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
         packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
+
 	}
 
 	@EventHandler

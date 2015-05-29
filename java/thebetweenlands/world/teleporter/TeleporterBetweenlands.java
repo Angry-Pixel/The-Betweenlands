@@ -13,6 +13,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
@@ -125,13 +126,18 @@ public final class TeleporterBetweenlands extends Teleporter {
 		int posX = MathHelper.floor_double(entity.posX);
 		int posZ = MathHelper.floor_double(entity.posZ);
 		int maxPortalSpawnHeight;
-		if (entity.dimension == ConfigHandler.DIMENSION_ID){
-			maxPortalSpawnHeight = 85;
-		}else {
+		int minSpawnHeight;
+		System.out.println(entity.dimension);
+		if (entity.dimension == 0) {
 			maxPortalSpawnHeight = 100;
+			minSpawnHeight = 64;
+		} else {
+			maxPortalSpawnHeight = 85;
+			minSpawnHeight = 80;
 		}
+		System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
 		for (int z = posZ; z < posZ + 40; z++) {
-			for (int y = maxPortalSpawnHeight; y > 80; y--) {
+			for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
 				Block block = worldServerInstance.getBlock(posX, y, z);
 				if (block != Blocks.air) {
 					if (canGenerate(worldServerInstance, posX, y, z)) {
@@ -139,7 +145,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 						entity.setLocationAndAngles(posX, y + 2, z, entity.rotationYaw, entity.rotationPitch);
 						return true;
 					} else {
-						for (int yy = y; yy < maxPortalSpawnHeight; yy++) {
+						for (int yy = y; yy <= maxPortalSpawnHeight; yy++) {
 							if (canGenerate(worldServerInstance, posX, yy, z)) {
 								new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, yy, z);
 								entity.setLocationAndAngles(posX, yy + 2, z, entity.rotationYaw, entity.rotationPitch);
@@ -160,9 +166,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			for (int zz = posZ - maxRadius; zz <= posZ + maxRadius; zz++)
 				for (int yy = posY + 2; yy < posY + height; yy++) {
 					Block block = world.getBlock(xx, yy, zz);
-					if (!world.isAirBlock(xx, yy, zz) && block.isNormalCube())
-						return false;
-					else if(block instanceof BlockBLLeaves)
+					if ((!world.isAirBlock(xx, yy, zz) && block.isNormalCube()) || block instanceof BlockBLLeaves || block instanceof BlockBLLog)
 						return false;
 				}
 		return true;
