@@ -137,8 +137,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 			minSpawnHeight = 80;
 		}
 		System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
-		for (int x = posX; x < posX + 40; x++) {
-			for (int z = posZ; z < posZ + 40; z++) {
+		for (int x = posX - 20; x < posX + 20; x++) {
+			for (int z = posZ - 20; z < posZ + 20; z++) {
 				for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
 					Block block = worldServerInstance.getBlock(x, y, z);
 					if (block != Blocks.air) {
@@ -164,7 +164,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	public boolean canGenerate(World world, int posX, int posY, int posZ){
 		int height = 16;
-		int maxRadius = 11;
+		int maxRadius = 9;
 		for (int xx = posX - maxRadius; xx <= posX + maxRadius; xx++)
 			for (int zz = posZ - maxRadius; zz <= posZ + maxRadius; zz++)
 				for (int yy = posY + 2; yy < posY + height; yy++) {
