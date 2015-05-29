@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.LongHashMap;
@@ -136,20 +137,22 @@ public final class TeleporterBetweenlands extends Teleporter {
 			minSpawnHeight = 80;
 		}
 		System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
-		for (int z = posZ; z < posZ + 40; z++) {
-			for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
-				Block block = worldServerInstance.getBlock(posX, y, z);
-				if (block != Blocks.air) {
-					if (canGenerate(worldServerInstance, posX, y, z)) {
-						new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, y, z);
-						entity.setLocationAndAngles(posX, y + 2, z, entity.rotationYaw, entity.rotationPitch);
-						return true;
-					} else {
-						for (int yy = y; yy <= maxPortalSpawnHeight; yy++) {
-							if (canGenerate(worldServerInstance, posX, yy, z)) {
-								new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, posX, yy, z);
-								entity.setLocationAndAngles(posX, yy + 2, z, entity.rotationYaw, entity.rotationPitch);
-								return true;
+		for (int x = posX; x < posX + 40; x++) {
+			for (int z = posZ; z < posZ + 40; z++) {
+				for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
+					Block block = worldServerInstance.getBlock(x, y, z);
+					if (block != Blocks.air) {
+						if (canGenerate(worldServerInstance, x, y, z)) {
+							new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, x, y, z);
+							entity.setLocationAndAngles(x, y + 2, z, entity.rotationYaw, entity.rotationPitch);
+							return true;
+						} else {
+							for (int yy = y; yy <= maxPortalSpawnHeight; yy++) {
+								if (canGenerate(worldServerInstance, x, yy, z)) {
+									new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, x, yy, z);
+									entity.setLocationAndAngles(x, yy + 2, z, entity.rotationYaw, entity.rotationPitch);
+									return true;
+								}
 							}
 						}
 					}
@@ -166,7 +169,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			for (int zz = posZ - maxRadius; zz <= posZ + maxRadius; zz++)
 				for (int yy = posY + 2; yy < posY + height; yy++) {
 					Block block = world.getBlock(xx, yy, zz);
-					if ((!world.isAirBlock(xx, yy, zz) && block.isNormalCube()) || block instanceof BlockBLLeaves || block instanceof BlockBLLog)
+					if ((!world.isAirBlock(xx, yy, zz) && block.isNormalCube()) || block instanceof BlockLeaves)
 						return false;
 				}
 		return true;
