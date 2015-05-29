@@ -41,7 +41,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean placeInExistingPortal(Entity entity, double x, double y, double z, float rotationYaw) {
-		int checkRadius = 256;
+		int checkRadius = 128;
 		double distToPortal = -1.0;
 		int posX = 0;
 		int posY = 0;
@@ -137,8 +137,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 			minSpawnHeight = 80;
 		}
 		System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
-		for (int x = posX - 256; x < posX + 256; x++) {
-			for (int z = posZ - 256; z < posZ + 256; z++) {
+		for (int x = posX - 128; x < posX + 128; x++) {
+			for (int z = posZ - 128; z < posZ + 128; z++) {
 				for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
 					Block block = worldServerInstance.getBlock(x, y, z);
 					if (block != Blocks.air) {
