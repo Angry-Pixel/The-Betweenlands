@@ -57,17 +57,17 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	
 	@Override
 	protected String getLivingSound() {
-		return "thebetweenlands:snailliving";
+		return "thebetweenlands:snailLiving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		return "thebetweenlands:snailhurt";
+		return "thebetweenlands:snailHurt";
 	}
 
 	@Override
 	protected String getDeathSound() {
-		return "thebetweenlands:snaildeath";
+		return "thebetweenlands:snailDeath";
 	}
 
 	@Override
