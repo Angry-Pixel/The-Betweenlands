@@ -22,6 +22,7 @@ public class WorldGenSapTree extends WorldGenerator {
 				for (int yy = y + 2; yy < y + height; yy++)
 					if (!world.isAirBlock(xx, yy, zz))
 						return false;
+
 		
 		for (int yy = y; yy < y + height; ++yy) {
 			world.setBlock(x, yy, z, log, 0, 2);

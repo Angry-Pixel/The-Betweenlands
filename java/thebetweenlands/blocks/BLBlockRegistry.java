@@ -14,32 +14,7 @@ import thebetweenlands.blocks.container.BlockBLWorkbench;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
-import thebetweenlands.blocks.plants.BlockAlgae;
-import thebetweenlands.blocks.plants.BlockBLSmallPlants;
-import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
-import thebetweenlands.blocks.plants.BlockBogBean;
-import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
-import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
-import thebetweenlands.blocks.plants.BlockGoldenClub;
-import thebetweenlands.blocks.plants.BlockHanger;
-import thebetweenlands.blocks.plants.BlockMarshMarigold;
-import thebetweenlands.blocks.plants.BlockMireCoral;
-import thebetweenlands.blocks.plants.BlockPitcherPlant;
-import thebetweenlands.blocks.plants.BlockPoisonIvy;
-import thebetweenlands.blocks.plants.BlockRottenLog;
-import thebetweenlands.blocks.plants.BlockSwampPlant;
-import thebetweenlands.blocks.plants.BlockSwampReed;
-import thebetweenlands.blocks.plants.BlockSwampReedUW;
-import thebetweenlands.blocks.plants.BlockThorns;
-import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
-import thebetweenlands.blocks.plants.BlockVolarpad;
-import thebetweenlands.blocks.plants.BlockWallPlants;
-import thebetweenlands.blocks.plants.BlockWaterFlower;
-import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
-import thebetweenlands.blocks.plants.BlockWaterWeeds;
-import thebetweenlands.blocks.plants.BlockWeedWoodBush;
-import thebetweenlands.blocks.plants.BlockWeepingBlue;
-import thebetweenlands.blocks.plants.DoubleHeightPlant;
+import thebetweenlands.blocks.plants.*;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
 import thebetweenlands.blocks.stalactite.BlockStalactite;
@@ -171,6 +146,8 @@ public class BLBlockRegistry
 	public static final Block wallPlants = new BlockWallPlants();
 	
 	public static final Block rottenLog = new BlockRottenLog();
+	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
+	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

@@ -9,11 +9,12 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
 		helper.generateGiantWeedwoodTree(40);
-	
+
 		helper.generateWeedwoodTree(40);
 		helper.generateSapTree(30);
 		helper.generateCattail(10);
 		helper.generateTallCattail(25);
+		helper.generateHugeMushroom(10);
 		helper.generateSwampGrass(50);
 		helper.generateSwampTallGrass(100);
 		helper.generateReeds(20);

@@ -14,6 +14,7 @@ import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
@@ -58,6 +59,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 	private final static WorldGenTallGrass GEN_ROTTEN_LOG = new WorldGenTallGrass(BLBlockRegistry.rottenLog, 1);
 	private final static WorldGenDeadTree GEN_DEAD_TREE = new WorldGenDeadTree();
+	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -481,6 +483,16 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
 				GEN_SAP_TREE.generate(this.world, this.rand, x, y, z);
+		}
+	}
+
+	public void generateHugeMushroom(int attempts) {
+		for (int i = 0; i < attempts; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+				GEN_HUGE_MUSHROOM.generate(this.world, this.rand, x, y, z);
 		}
 	}
 

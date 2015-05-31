@@ -13,9 +13,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockTreePortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
-/**
- * Created by Bart on 30-5-2015.
- */
 public class PlayerPortalHandler {
     int timer = 120;
     Minecraft mc;
@@ -28,9 +25,8 @@ public class PlayerPortalHandler {
             NBTTagCompound nbt = player.getEntityData();
             if(nbt.getBoolean("INPORTAL")){
                 player.worldObj.playSound(player.posX, player.posY, player.posZ, "thebetweenlands:portalTrigger", 0.2F, 0.8F, false);
-                
                 if(player.worldObj.getBlock(floor(player.posX), floor(player.posY), floor(player.posZ)) == BLBlockRegistry.treePortalBlock) {
-                    if (timer == 0) {
+                    if (timer == 0 || player.capabilities.isCreativeMode) {
                         player.worldObj.playSound(player.posX, player.posY, player.posZ, "thebetweenlands:portalTravel", 0.2F, 0.8F, false);
                         if (player.dimension == 0) {
                             player.timeUntilPortal = 10;
