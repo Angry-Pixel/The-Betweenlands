@@ -1,17 +1,12 @@
 package thebetweenlands.event.player;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.S29PacketSoundEffect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import sun.plugin.com.ParameterListCorrelator;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.BlockTreePortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerPortalHandler {
     int timer = 120;
