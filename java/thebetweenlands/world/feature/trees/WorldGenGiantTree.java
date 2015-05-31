@@ -26,10 +26,6 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 	
-	private int height = -1;
-	private int radius = -1;
-	private int maxRadius = -1;
-	
 	public WorldGenGiantTree() {
 
 	}
@@ -66,9 +62,9 @@ public class WorldGenGiantTree implements IWorldGenerator {
 
 	public boolean generateTree(World world, Random rand, int x, int y, int z) {
 		
-		radius = rand.nextInt(4) + 8;
-		height = rand.nextInt(radius) + radius * 4;
-		maxRadius = radius + height / 3;
+		int radius = rand.nextInt(4) + 8;
+		int height = rand.nextInt(radius) + radius * 4;
+		int maxRadius = radius + height / 3;
 	
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
