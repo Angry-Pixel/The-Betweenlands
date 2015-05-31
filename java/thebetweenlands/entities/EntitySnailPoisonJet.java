@@ -12,6 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -49,7 +50,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 
 		if (mop.entityHit != null) {
 
-			if (mop.entityHit instanceof EntityLivingBase) {
+			if (mop.entityHit instanceof EntityLivingBase && !(mop.entityHit instanceof EntityBloodSnail)) {
 				if (!worldObj.isRemote) {
 					((EntityLivingBase) mop.entityHit).addPotionEffect(new PotionEffect(Potion.poison.id, 5 * 20, 0));
 					((EntityLivingBase) mop.entityHit).attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);

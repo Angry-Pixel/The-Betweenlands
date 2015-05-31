@@ -145,7 +145,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, new RenderBLArrow());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, new RenderSiltCrab());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderSnailPoisonJet());
-		
+
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
@@ -211,7 +211,7 @@ public class ClientProxy extends CommonProxy {
 			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(1F, 0.9294F, 0F);
 		}
-		
+
 		if (particleName.equals("snailPoison")) {
 			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(1F, 0F, 0F);

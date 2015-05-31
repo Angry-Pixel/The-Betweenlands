@@ -39,7 +39,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 		
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -70,7 +70,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		if (rand.nextBoolean())
 			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.BLOOD_SNAIL_SHELL, 1), 0.0F);
 	}
-	
+
 	@Override
 	public boolean isAIEnabled() {
 		return true;
@@ -84,7 +84,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	public boolean isOnLadder() {
 		return isCollidedHorizontally;
 	}
-	
+
 	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:snailLiving";
@@ -119,19 +119,19 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		} else
 			return false;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (getAttackTarget() != null) {
 			float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().boundingBox.minY, getAttackTarget().posZ);
-				if (getRangeAttackTimer() < 100 && distance > 3)
-					setRangeAttackTimer(getRangeAttackTimer() + 2);
-				if (getRangeAttackTimer() == 100 && distance > 3)
-					shootMissile(getAttackTarget(), distance);
-			}
+			if (getRangeAttackTimer() < 100 && distance > 3)
+				setRangeAttackTimer(getRangeAttackTimer() + 2);
+			if (getRangeAttackTimer() == 100 && distance > 3)
+				shootMissile(getAttackTarget(), distance);
+		}
 	}
-	
+
 	public void shootMissile(EntityLivingBase entity, float distance) {
 		setRangeAttackTimer(0);
 		if (canEntityBeSeen(entity)) {
@@ -145,7 +145,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 			worldObj.spawnEntityInWorld(missile);
 		}
 	}
-	
+
 	public void setRangeAttackTimer(int size) {
 		dataWatcher.updateObject(20, Integer.valueOf(size));
 	}
