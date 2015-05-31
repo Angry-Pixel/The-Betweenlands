@@ -56,7 +56,7 @@ public class BlockBlubCappedMushroomHead extends Block {
             if (fortune > 0){
                 dropChance -= 2*fortune;
             }
-            if(world.rand.nextInt(dropChance) == 0) {
+            if(world.rand.nextInt(dropChance) <= 0) {
                 this.dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(meta, world.rand, fortune), 1));
             }
         }
