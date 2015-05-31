@@ -5,9 +5,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+
+import java.util.Random;
 
 
 public class BlockBlubCappedMushroomStalk extends Block {
@@ -42,6 +48,25 @@ public class BlockBlubCappedMushroomStalk extends Block {
             return this.bot;
         else
             return sides;
+    }
+
+    @Override
+    public Item getItemDropped(int meta, Random rand, int fortune) {
+        return Item.getItemFromBlock(BLBlockRegistry.bulbCappedMushroom);
+    }
+
+    @Override
+    public void dropBlockAsItemWithChance (World world, int x, int y, int z, int meta, float chance, int fortune) {
+        if (!world.isRemote) {
+            int dropChance = 10;
+
+            if (fortune > 0){
+                dropChance -= 2*fortune;
+            }
+            if(world.rand.nextInt(dropChance) == 0) {
+                this.dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(meta, world.rand, fortune), 1));
+            }
+        }
     }
 
 }

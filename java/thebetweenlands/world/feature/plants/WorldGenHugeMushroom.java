@@ -35,6 +35,7 @@ public class WorldGenHugeMushroom extends WorldGenerator {
 
         }
         new WorldGenMushrooms(BLBlockRegistry.bulbCappedMushroom, 15).generate(world, rand, x, y, z);
+        new WorldGenMushrooms(BLBlockRegistry.bulbCappedMushroom, 15).generate(world, rand, x, y, z);
         return true;
     }
 
