@@ -1,6 +1,7 @@
 package thebetweenlands.world.feature.trees;
 
-import cpw.mods.fml.common.IWorldGenerator;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -12,18 +13,13 @@ import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-
-import java.util.Random;
+import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenDeadTree implements IWorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
-	
-	private int height = -1;
-	private int radius = -1;
-	private int maxRadius = -1;
 
 	public WorldGenDeadTree() {
 	}
@@ -59,9 +55,9 @@ public class WorldGenDeadTree implements IWorldGenerator {
 
 	public boolean generateTree(World world, Random rand, int x, int y, int z) {
 		
-		radius = rand.nextInt(4) + 8;
-		height = rand.nextInt(radius) + radius;
-		maxRadius = radius + height / 3;
+		int radius = rand.nextInt(4) + 8;
+		int height = rand.nextInt(radius) + radius;
+		int maxRadius = radius + height / 3;
 	
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
