@@ -151,11 +151,31 @@ tile.thebetweenlands.copperIris.name=Copper Iris
 tile.thebetweenlands.bogBean.name=Bog Bean
 tile.thebetweenlands.goldenClub.name=Golden Club
 tile.thebetweenlands.marshMarigold.name=Marsh Marigolds
-tile.thebetweenlands.broomsedge.name=Broomsedge 
+tile.thebetweenlands.broomSedge.name=Broomsedge 
 tile.thebetweenlands.blueEyedGrass.name=Blue Eyed Grass
 tile.thebetweenlands.boneset.name=Boneset
 tile.thebetweenlands.bottleBrushGrass.name=Bottle Brush Grass
 tile.thebetweenlands.waterWeeds.name=Water Weeds
+
+tile.thebetweenlands.hugeMushroomTop.name=Bulb-Capped Mushroom Top
+tile.thebetweenlands.hugeMushroomStalk.name=Bulb-Capped Mushroom Stalk
+
+tile.thebetweenlands.portalBarkFrame_0.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_1.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_2.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_3.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_4.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_5.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_6.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_7.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_8.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_9.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_10.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_11.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_12.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_13.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_14.name=Portal Frame
+tile.thebetweenlands.portalBarkFrame_15.name=Portal Frame
 
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
