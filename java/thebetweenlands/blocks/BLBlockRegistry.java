@@ -107,6 +107,7 @@ public class BLBlockRegistry
 	public static final BlockMarshMarigold marshMarigold = new BlockMarshMarigold();
 	public static final BlockWaterWeeds waterWeeds = new BlockWaterWeeds();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
+	public static final BlockDeepWaterCoral deepWaterCoral = new BlockDeepWaterCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();
 	public static final BlockWaterFlower waterFlower = new BlockWaterFlower();
 	public static final BlockRootUW rootUW = new BlockRootUW();

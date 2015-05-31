@@ -24,6 +24,7 @@ public class BLFluidRegistry {
 	public static Fluid swampWaterMarshMarigold = new Fluid("swampWaterMarshMarigold").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterMarshMarigold");
 	public static Fluid swampWaterStalk = new Fluid("swampWaterStalk").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterStalk");
 	public static Fluid swampWaterRoot = new Fluid("swampWaterRoot").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterRoot");
+	public static Fluid swampWaterDeepWaterCoral = new Fluid("swampWaterDeepWaterCoral").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterDeepWaterCoral");
 
 
 	private BLFluidRegistry() {

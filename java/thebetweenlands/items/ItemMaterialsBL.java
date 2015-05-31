@@ -110,6 +110,7 @@ public class ItemMaterialsBL extends Item
 		LIFE_CRYSTAL("lifeCrystal"),
 		MIDDLE_FRUIT_SEEDS("middleFruitSeeds"),
 		MIRE_CORAL("mireCoral"),
+		DEEP_WATER_CORAL("deepWaterCoral"),
 		MOSS("moss"),
 		MUD_BRICK("mudBrick"),
 		OCTINE_INGOT("octineIngot"),
