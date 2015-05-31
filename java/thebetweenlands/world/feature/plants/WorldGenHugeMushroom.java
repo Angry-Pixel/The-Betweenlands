@@ -28,7 +28,12 @@ public class WorldGenHugeMushroom extends WorldGenerator {
 
 
         for (int yy = y; yy < y + height; ++yy) {
-            world.setBlock(x, yy, z, stalk);
+            if (yy == y) {
+                world.setBlock(x, yy, z, stalk);
+                world.setBlockMetadataWithNotify(x, yy, z, 1, 2);
+            }
+            else
+                world.setBlock(x, yy, z, stalk);
 
             if(yy == y + height -1)
                 generateHead(world, x, yy, z);

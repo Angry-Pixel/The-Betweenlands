@@ -19,6 +19,7 @@ import java.util.Random;
 public class BlockBlubCappedMushroomStalk extends Block {
     public IIcon sides;
     public IIcon bot;
+    public IIcon sideGround;
 
     public BlockBlubCappedMushroomStalk() {
         super(Material.wood);
@@ -32,13 +33,17 @@ public class BlockBlubCappedMushroomStalk extends Block {
     public void registerBlockIcons(IIconRegister iconRegister) {
         this.sides = iconRegister.registerIcon("thebetweenlands:bulbCappedShroomStalk1");
         this.bot = iconRegister.registerIcon("thebetweenlands:bulbCappedShroomStalk2");
+        this.sideGround = iconRegister.registerIcon("thebetweenlands:bulbCappedShroomStalk1Bottomy");
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side){
+        int meta = access.getBlockMetadata(x, y, z);
         if(side == 0 || side == 1)
             return this.bot;
+        else if (meta == 1)
+            return sideGround;
         else
             return sides;
     }
@@ -46,6 +51,8 @@ public class BlockBlubCappedMushroomStalk extends Block {
     public IIcon getIcon(int side, int meta){
         if(side == 0 || side == 1)
             return this.bot;
+        else if (meta == 1)
+            return sideGround;
         else
             return sides;
     }
