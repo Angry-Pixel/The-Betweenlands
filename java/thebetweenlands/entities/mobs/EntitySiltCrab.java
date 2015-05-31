@@ -1,12 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,12 +9,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
+import thebetweenlands.items.*;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	

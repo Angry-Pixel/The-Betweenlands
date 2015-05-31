@@ -1,11 +1,11 @@
 package thebetweenlands.entities.particles;
 
-import javax.vecmath.Vector3d;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
+
+import javax.vecmath.Vector3d;
 
 public class EntityAltarCraftingFX extends EntityFX {
 	private TileEntityDruidAltar target;

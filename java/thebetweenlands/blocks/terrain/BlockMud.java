@@ -1,7 +1,5 @@
 package thebetweenlands.blocks.terrain;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -11,6 +9,8 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.IEntityBL;
+
+import java.util.List;
 
 public class BlockMud
         extends Block

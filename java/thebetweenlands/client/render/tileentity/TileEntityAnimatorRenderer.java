@@ -1,20 +1,13 @@
 package thebetweenlands.client.render.tileentity;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import javax.vecmath.Vector3d;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
-
 import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
@@ -22,7 +15,10 @@ import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
-import thebetweenlands.utils.LightingUtil;
+
+import javax.vecmath.Vector3d;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 	private static final ModelAnimator model = new ModelAnimator();

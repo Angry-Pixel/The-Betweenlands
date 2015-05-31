@@ -1,11 +1,10 @@
 package thebetweenlands.entities.particles;
 
-import java.util.ArrayList;
-
-import javax.vecmath.Vector3d;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
+
+import javax.vecmath.Vector3d;
+import java.util.ArrayList;
 
 public class EntityPathParticle extends EntityFX {
 	private int positionIndex = 0;

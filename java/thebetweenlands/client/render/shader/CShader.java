@@ -1,9 +1,5 @@
 package thebetweenlands.client.render.shader;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
@@ -12,6 +8,10 @@ import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class CShader {
 	private ShaderGroup shaderGroup = null;

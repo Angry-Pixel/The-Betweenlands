@@ -1,22 +1,19 @@
 package thebetweenlands.event.render;
 
-import java.util.ArrayList;
-import java.util.Map.Entry;
-
-import javax.vecmath.Vector3d;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import javax.vecmath.Vector3d;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 
 public class FireflyHandler {
 	public static final FireflyHandler INSTANCE = new FireflyHandler();

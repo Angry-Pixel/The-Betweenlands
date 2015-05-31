@@ -1,9 +1,6 @@
 package thebetweenlands.world.biomes.feature;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -11,6 +8,8 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
+
+import java.util.Random;
 
 public class CragSpiresNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin spireNoiseGen;

@@ -1,7 +1,6 @@
 package thebetweenlands.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.network.base.IPacket;
 
 public class PacketSnailHatchParticle implements IPacket {

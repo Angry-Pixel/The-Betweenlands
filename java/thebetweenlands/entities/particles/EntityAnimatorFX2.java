@@ -1,10 +1,9 @@
 package thebetweenlands.entities.particles;
 
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 import javax.vecmath.Vector3d;
-
-import net.minecraft.world.World;
+import java.util.ArrayList;
 
 public class EntityAnimatorFX2 extends EntityPathParticle {
 	private int ticks = 0;

@@ -1,9 +1,9 @@
 package thebetweenlands.network.base;
 
+import cpw.mods.fml.relauncher.Side;
+
 import java.util.List;
 import java.util.Map;
-
-import cpw.mods.fml.relauncher.Side;
 
 public interface IPacketProxy {
 	public void registerPacketHandler(String className, Side side) throws Exception;

@@ -1,12 +1,13 @@
-package thebetweenlands.blocks; 
-import java.util.Random;
+package thebetweenlands.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockDampTorch extends BlockTorch {
 	

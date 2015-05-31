@@ -1,5 +1,6 @@
 package thebetweenlands.recipes;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -9,7 +10,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
 

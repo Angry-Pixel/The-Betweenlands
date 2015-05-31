@@ -1,13 +1,11 @@
 package thebetweenlands.client.render.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
-import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 
 @SideOnly(Side.CLIENT)
 public class ItemAnimatorRenderer

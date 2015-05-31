@@ -1,7 +1,9 @@
 package thebetweenlands.network.handlers;
 
-import java.util.HashMap;
-
+import com.google.common.collect.Maps;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
@@ -21,11 +23,7 @@ import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
 
 public class ClientPacketHandler {
 

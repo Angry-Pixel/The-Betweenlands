@@ -7,7 +7,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.tileentities.TileEntityAnimator;
 
 public class ContainerAnimator extends Container {

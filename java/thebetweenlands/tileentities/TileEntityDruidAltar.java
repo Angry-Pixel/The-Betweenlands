@@ -1,5 +1,9 @@
 package thebetweenlands.tileentities;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -17,10 +21,6 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 

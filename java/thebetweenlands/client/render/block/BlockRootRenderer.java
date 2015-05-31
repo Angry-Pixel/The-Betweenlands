@@ -1,17 +1,12 @@
 package thebetweenlands.client.render.block;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.stalactite.BlockStalactite;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.block.water.WaterRootRenderer;
 import thebetweenlands.proxy.ClientProxy;
 

@@ -1,7 +1,5 @@
 package thebetweenlands.items;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -9,7 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
-import thebetweenlands.world.feature.trees.WorldGenDeadTree;
+
+import java.util.Random;
 
 public class TestItem extends ItemSword {
 

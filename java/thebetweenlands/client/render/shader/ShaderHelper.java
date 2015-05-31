@@ -6,10 +6,8 @@ import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GLContext;
-
 import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.utils.confighandler.ConfigHandler;

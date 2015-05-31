@@ -1,8 +1,7 @@
 package thebetweenlands.client.render.shader.impl;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.shader.Framebuffer;
+import org.lwjgl.opengl.GL11;
 
 public class GeometryBuffer {
 	private Framebuffer geometryBuffer;

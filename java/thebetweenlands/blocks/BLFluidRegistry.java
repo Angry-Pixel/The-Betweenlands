@@ -1,14 +1,14 @@
 package thebetweenlands.blocks;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 public class BLFluidRegistry {
 	public static final BLFluidRegistry INSTANCE = new BLFluidRegistry();

@@ -1,6 +1,5 @@
 package thebetweenlands.world.biomes;
 
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.*;
 import thebetweenlands.world.WorldProviderBetweenlands;

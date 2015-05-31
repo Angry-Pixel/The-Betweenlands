@@ -2,7 +2,6 @@ package thebetweenlands.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import thebetweenlands.network.base.IPacket;
-import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class PacketDruidAltarProgress implements IPacket {

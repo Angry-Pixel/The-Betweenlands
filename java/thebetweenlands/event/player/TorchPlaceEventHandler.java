@@ -1,5 +1,6 @@
 package thebetweenlands.event.player;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -7,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class TorchPlaceEventHandler {
 	@SubscribeEvent

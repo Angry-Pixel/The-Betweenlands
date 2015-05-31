@@ -1,13 +1,13 @@
 package thebetweenlands.network.base;
 
-import java.util.List;
-
-import thebetweenlands.network.base.impl.SimplePacketObjectSerializer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import thebetweenlands.network.base.impl.SimplePacketObjectSerializer;
+
+import java.util.List;
 
 public final class SidedPacketHandler implements IMessageHandler<MessageWrapper, IMessage> {
 	private static SidedPacketHandler instance;

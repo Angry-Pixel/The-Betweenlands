@@ -7,11 +7,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.plants.BlockGoldenClub;
 
 public class WaterSimplePlantRenderer implements IWaterRenderer {
 	private IIcon iconTop, iconBottom;

@@ -1,5 +1,7 @@
 package thebetweenlands.inventory.container;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -11,8 +13,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerBLDualFurnace extends Container {
     private TileEntityBLDualFurnace tileFurnace;

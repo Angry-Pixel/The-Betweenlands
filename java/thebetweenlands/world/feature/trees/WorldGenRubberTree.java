@@ -1,12 +1,12 @@
 package thebetweenlands.world.feature.trees;
 
-import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
+
+import java.util.Random;
 
 public class WorldGenRubberTree extends WorldGenerator {
 

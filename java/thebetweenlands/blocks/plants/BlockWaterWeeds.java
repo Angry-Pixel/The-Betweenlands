@@ -1,7 +1,7 @@
 package thebetweenlands.blocks.plants;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,8 +16,8 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
 	public IIcon iconWaterPlantBottom;

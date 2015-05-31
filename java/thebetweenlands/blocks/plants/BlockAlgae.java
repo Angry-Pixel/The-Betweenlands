@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.plants;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.Entity;
@@ -7,8 +9,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAlgae extends BlockBush {
     public BlockAlgae() {

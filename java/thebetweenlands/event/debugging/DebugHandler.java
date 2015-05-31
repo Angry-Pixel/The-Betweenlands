@@ -1,17 +1,15 @@
 package thebetweenlands.event.debugging;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-
-import org.lwjgl.input.Keyboard;
-
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.manager.DecayManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import org.lwjgl.input.Keyboard;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.manager.DecayManager;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();

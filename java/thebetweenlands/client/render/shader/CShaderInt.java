@@ -1,12 +1,6 @@
 package thebetweenlands.client.render.shader;
 
-import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.vecmath.Matrix4f;
-
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.IResourceManager;
@@ -14,10 +8,13 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.Shader;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
-
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import javax.vecmath.Matrix4f;
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class CShaderInt extends Shader {
 	private CShaderManager pShaderManager;

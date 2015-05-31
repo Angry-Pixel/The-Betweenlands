@@ -1,6 +1,6 @@
 package thebetweenlands.client.gui;
 
-        import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -8,10 +8,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-        import org.lwjgl.opengl.GL11;
-        import thebetweenlands.manager.DecayManager;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.manager.DecayManager;
 
-        import java.util.Random;
+import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui

@@ -1,11 +1,7 @@
 package thebetweenlands.world.genlayer;
 
 import net.minecraft.world.WorldType;
-import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.GenLayerFuzzyZoom;
-import net.minecraft.world.gen.layer.GenLayerIsland;
-import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
-import net.minecraft.world.gen.layer.GenLayerZoom;
+import net.minecraft.world.gen.layer.*;
 
 public abstract class GenLayerBetweenlands
         extends GenLayer

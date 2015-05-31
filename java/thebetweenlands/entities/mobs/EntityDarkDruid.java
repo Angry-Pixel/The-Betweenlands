@@ -1,16 +1,10 @@
 package thebetweenlands.entities.mobs;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIBreakDoor;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -20,7 +14,6 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDarkDruid extends EntityMob {
 	private int attackTimer = 20;

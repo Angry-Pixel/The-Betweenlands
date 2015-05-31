@@ -1,12 +1,10 @@
 package thebetweenlands.world.feature.plants;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.plants.BlockBlubCappedMushroomHead;
 import thebetweenlands.blocks.plants.BlockBlubCappedMushroomStalk;
-import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 
 import java.util.Random;
 

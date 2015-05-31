@@ -4,16 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.plants.BlockSwampReedUW;
 import thebetweenlands.blocks.plants.roots.RootData;
-import thebetweenlands.blocks.stalactite.StalactiteData;
 import thebetweenlands.blocks.stalactite.StalactiteHelper;
 
 public class WaterRootRenderer implements IWaterRenderer {

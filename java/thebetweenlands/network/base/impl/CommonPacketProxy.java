@@ -1,18 +1,14 @@
 package thebetweenlands.network.base.impl;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import cpw.mods.fml.relauncher.Side;
 import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.IPacketProxy;
 import thebetweenlands.network.base.ListenerEntry;
 import thebetweenlands.network.base.SubscribePacket;
-import cpw.mods.fml.relauncher.Side;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 public class CommonPacketProxy implements IPacketProxy {
 	protected Map<Class<? extends IPacket>, List<ListenerEntry>> commonListeners = (Map<Class<? extends IPacket>, List<ListenerEntry>>) Collections.synchronizedMap(new HashMap<Class<? extends IPacket>, List<ListenerEntry>>());

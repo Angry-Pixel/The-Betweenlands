@@ -1,12 +1,10 @@
 package thebetweenlands.network.base.impl;
 
 import io.netty.buffer.ByteBuf;
-
-import java.nio.charset.Charset;
-import java.util.HashMap;
-
 import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.IPacketObjectSerializer;
+
+import java.util.HashMap;
 
 /**
  * Serializes the packets by ID. Server and client both have to have the same packet ID map.

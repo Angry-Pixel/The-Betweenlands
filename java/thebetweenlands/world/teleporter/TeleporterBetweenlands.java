@@ -1,9 +1,5 @@
 package thebetweenlands.world.teleporter;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
@@ -14,12 +10,12 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.tree.BlockBLLeaves;
-import thebetweenlands.blocks.tree.BlockBLLog;
-import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public final class TeleporterBetweenlands extends Teleporter {
 	private final WorldServer worldServerInstance;

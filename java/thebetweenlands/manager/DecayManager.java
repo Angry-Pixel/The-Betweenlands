@@ -1,11 +1,11 @@
 package thebetweenlands.manager;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class DecayManager
 {

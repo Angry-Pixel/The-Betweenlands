@@ -1,10 +1,11 @@
 package thebetweenlands.world.teleporter;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import gnu.trove.map.TObjectByteMap;
 import gnu.trove.map.hash.TObjectByteHashMap;
-
-import java.util.UUID;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecartContainer;
@@ -16,10 +17,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+
+import java.util.UUID;
 
 public final class TeleporterHandler {
 	private static TeleporterHandler INSTANCE = new TeleporterHandler();

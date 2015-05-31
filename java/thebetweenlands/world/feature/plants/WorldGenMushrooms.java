@@ -1,11 +1,10 @@
 package thebetweenlands.world.feature.plants;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.blocks.BLBlockRegistry;
+
+import java.util.Random;
 
 public class WorldGenMushrooms extends WorldGenerator {
 	Block mush;

@@ -1,33 +1,15 @@
 package thebetweenlands.proxy;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
-import thebetweenlands.inventory.container.ContainerAnimator;
-import thebetweenlands.inventory.container.ContainerBLCraftingTable;
-import thebetweenlands.inventory.container.ContainerBLDualFurnace;
-import thebetweenlands.inventory.container.ContainerBLFurnace;
-import thebetweenlands.inventory.container.ContainerDruidAltar;
-import thebetweenlands.inventory.container.ContainerWeedWoodChest;
-import thebetweenlands.inventory.gui.GuiAnimator;
-import thebetweenlands.inventory.gui.GuiBLCrafting;
-import thebetweenlands.inventory.gui.GuiBLDualFurnace;
-import thebetweenlands.inventory.gui.GuiBLFurnace;
-import thebetweenlands.inventory.gui.GuiDruidAltar;
-import thebetweenlands.inventory.gui.GuiWeedWoodChest;
-import thebetweenlands.tileentities.TileEntityAnimator;
-import thebetweenlands.tileentities.TileEntityBLCraftingTable;
-import thebetweenlands.tileentities.TileEntityBLDualFurnace;
-import thebetweenlands.tileentities.TileEntityBLFurnace;
-import thebetweenlands.tileentities.TileEntityBush;
-import thebetweenlands.tileentities.TileEntityDruidAltar;
-import thebetweenlands.tileentities.TileEntityWeedWoodChest;
-import thebetweenlands.tileentities.TileEntityWisp;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import thebetweenlands.inventory.container.*;
+import thebetweenlands.inventory.gui.*;
+import thebetweenlands.tileentities.*;
 
 public class CommonProxy
         implements IGuiHandler

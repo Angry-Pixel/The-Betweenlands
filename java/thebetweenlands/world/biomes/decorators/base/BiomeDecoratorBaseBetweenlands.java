@@ -1,7 +1,5 @@
 package thebetweenlands.world.biomes.decorators.base;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -11,6 +9,8 @@ import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.gen.OreGens;
 import thebetweenlands.world.feature.gen.WorldGenMinableBetweenlands;
+
+import java.util.Random;
 
 /**
  *

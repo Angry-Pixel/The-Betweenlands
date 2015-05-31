@@ -1,11 +1,11 @@
 package thebetweenlands.event.player;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import thebetweenlands.items.BLItemRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class OctineArmorHandler {
 	@SubscribeEvent

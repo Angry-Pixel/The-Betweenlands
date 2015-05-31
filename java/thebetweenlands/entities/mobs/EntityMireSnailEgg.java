@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -9,7 +10,6 @@ import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityMireSnailEgg extends EntityAnimal {
 	public float pulseFloat;

@@ -1,13 +1,13 @@
 package thebetweenlands.world.storage;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import thebetweenlands.lib.ModInfo;
+
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class BetweenlandsWorldData extends WorldSavedData {
 	private NBTTagCompound data = new NBTTagCompound();

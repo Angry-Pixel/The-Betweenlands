@@ -1,19 +1,15 @@
 package thebetweenlands.utils;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import net.minecraft.client.model.*;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.PositionTextureVertex;
-import net.minecraft.client.model.TexturedQuad;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelConverter {
 	//Holds the rotation matrix

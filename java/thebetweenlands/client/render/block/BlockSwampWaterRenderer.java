@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.block;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -8,13 +9,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
 public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 

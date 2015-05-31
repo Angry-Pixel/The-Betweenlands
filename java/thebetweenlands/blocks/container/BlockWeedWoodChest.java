@@ -1,9 +1,5 @@
 package thebetweenlands.blocks.container;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-
-import java.util.Iterator;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -25,6 +21,10 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+
+import java.util.Iterator;
+
+import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 
 public class BlockWeedWoodChest extends BlockContainer {
 

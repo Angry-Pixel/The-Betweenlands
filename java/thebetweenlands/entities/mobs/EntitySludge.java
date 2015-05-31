@@ -1,8 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import java.util.List;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,12 +9,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;

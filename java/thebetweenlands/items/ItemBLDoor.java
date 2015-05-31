@@ -8,8 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.blocks.BlockBLDoor;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
 public class ItemBLDoor extends Item {
 

@@ -1,6 +1,5 @@
 package thebetweenlands.world.biomes;
 
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.*;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -8,9 +7,8 @@ import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorSwampLands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
-import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
-import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
 import thebetweenlands.world.biomes.feature.FlatLandNoiseFeature;
+import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
 
 public class BiomeSwampLands
 extends BiomeGenBaseBetweenlands

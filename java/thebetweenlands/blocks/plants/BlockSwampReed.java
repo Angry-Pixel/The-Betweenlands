@@ -1,7 +1,7 @@
 package thebetweenlands.blocks.plants;
 
-import java.util.ArrayList;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
@@ -18,8 +18,8 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
 
 public class BlockSwampReed extends BlockBush implements IPlantable {
 	public IIcon top, bottom;

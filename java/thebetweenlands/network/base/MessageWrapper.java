@@ -1,12 +1,7 @@
 package thebetweenlands.network.base;
 
-import io.netty.buffer.ByteBuf;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.netty.buffer.ByteBuf;
 
 public final class MessageWrapper implements IMessage {
 	public MessageWrapper() { }

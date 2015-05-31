@@ -1,7 +1,7 @@
 package thebetweenlands.blocks.tree;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.client.Minecraft;
@@ -16,10 +16,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.world.biomes.base.BLBiomeRegistry;
+
+import java.util.Random;
 
 public class BlockBLLeaves extends BlockLeaves {
 

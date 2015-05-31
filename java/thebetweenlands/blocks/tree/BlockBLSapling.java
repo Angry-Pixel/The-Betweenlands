@@ -1,8 +1,7 @@
 package thebetweenlands.blocks.tree;
 
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -21,8 +20,9 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 public class BlockBLSapling extends BlockSapling {
 	

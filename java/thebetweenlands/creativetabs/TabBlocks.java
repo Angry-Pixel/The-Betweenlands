@@ -1,18 +1,12 @@
 package thebetweenlands.creativetabs;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Ordering;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class TabBlocks
         extends CreativeTabBetweenlands

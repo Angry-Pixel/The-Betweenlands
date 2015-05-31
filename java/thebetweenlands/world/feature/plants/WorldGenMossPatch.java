@@ -1,17 +1,12 @@
 package thebetweenlands.world.feature.plants;
 
-import static net.minecraftforge.common.util.ForgeDirection.DOWN;
-import static net.minecraftforge.common.util.ForgeDirection.EAST;
-import static net.minecraftforge.common.util.ForgeDirection.NORTH;
-import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
-import static net.minecraftforge.common.util.ForgeDirection.UP;
-import static net.minecraftforge.common.util.ForgeDirection.WEST;
-
-import java.util.Random;
-
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+
+import java.util.Random;
+
+import static net.minecraftforge.common.util.ForgeDirection.*;
 
 public class WorldGenMossPatch extends WorldGenerator {
     boolean blockPlaced = false;

@@ -1,8 +1,7 @@
 package thebetweenlands.blocks.terrain;
 
-import java.util.HashMap;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -18,8 +17,9 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class BlockSwampWater extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)

@@ -1,10 +1,6 @@
 package thebetweenlands.client.render.shader;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import cpw.mods.fml.relauncher.ReflectionHelper;
-
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
@@ -12,6 +8,9 @@ import net.minecraft.client.shader.Shader;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class CShaderGroup extends ShaderGroup {
 	private IResourceManager pResourceManager;

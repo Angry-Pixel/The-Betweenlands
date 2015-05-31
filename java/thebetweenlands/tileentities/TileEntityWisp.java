@@ -1,9 +1,9 @@
 package thebetweenlands.tileentities;
 
-import java.util.ArrayList;
-
 import net.minecraft.tileentity.TileEntity;
 import thebetweenlands.TheBetweenlands;
+
+import java.util.ArrayList;
 
 public class TileEntityWisp extends TileEntity { 
 	public long lastSpawn = 0;

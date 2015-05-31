@@ -1,14 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,12 +11,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntitySwampHag extends EntityMob implements IEntityBL {

@@ -1,11 +1,11 @@
 package thebetweenlands.world.feature.gen;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenMinableBetweenlands extends WorldGenerator {
 	private Block toGen;

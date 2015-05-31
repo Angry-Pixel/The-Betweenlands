@@ -1,5 +1,4 @@
-package thebetweenlands.blocks.plants; import java.util.ArrayList;
-import java.util.Random;
+package thebetweenlands.blocks.plants;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -12,6 +11,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class BlockHanger extends BlockBush  implements IShearable {
 	

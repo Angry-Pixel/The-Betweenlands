@@ -1,8 +1,8 @@
 package thebetweenlands.event.player;
 
-import java.util.Map;
-import java.util.UUID;
-
+import com.google.common.collect.Maps;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,10 +17,8 @@ import thebetweenlands.manager.DecayManager;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.utils.IDecayFood;
 
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import java.util.Map;
+import java.util.UUID;
 
 public class DecayEventHandler {
 	public static DecayEventHandler INSTANCE = new DecayEventHandler();

@@ -1,7 +1,5 @@
 package thebetweenlands.world.biomes.decorators;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -18,11 +16,9 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.trees.WorldGenDeadTree;
-import thebetweenlands.world.feature.trees.WorldGenGiantTree;
-import thebetweenlands.world.feature.trees.WorldGenRubberTree;
-import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+import thebetweenlands.world.feature.trees.*;
+
+import java.util.Random;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();

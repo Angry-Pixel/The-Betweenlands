@@ -15,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.ArrayList;

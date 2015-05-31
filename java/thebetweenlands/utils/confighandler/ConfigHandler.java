@@ -1,10 +1,10 @@
 package thebetweenlands.utils.confighandler;
 
-import net.minecraftforge.common.config.Configuration;
-import thebetweenlands.lib.ModInfo;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.config.Configuration;
+import thebetweenlands.lib.ModInfo;
 
 public class ConfigHandler
 {

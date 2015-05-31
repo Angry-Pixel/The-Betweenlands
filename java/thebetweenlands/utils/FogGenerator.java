@@ -1,8 +1,8 @@
 package thebetweenlands.utils;
 
-import java.util.Random;
-
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+
+import java.util.Random;
 
 public class FogGenerator {
 	public static final FogGenerator INSTANCE = new FogGenerator();

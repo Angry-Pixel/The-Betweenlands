@@ -1,24 +1,21 @@
 package thebetweenlands.client.render.tileentity;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-
-import javax.vecmath.Vector3d;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+
+import javax.vecmath.Vector3d;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 
 public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 	@Override

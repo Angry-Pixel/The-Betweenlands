@@ -1,14 +1,12 @@
 package thebetweenlands.client.model.entity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.entities.mobs.EntityDragonFly;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelDragonFly extends ModelBase {
     ModelRenderer torso;

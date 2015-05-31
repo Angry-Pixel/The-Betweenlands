@@ -1,5 +1,7 @@
 package thebetweenlands.tileentities;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -11,8 +13,6 @@ import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packets.PacketAnimatorProgress;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityAnimator extends TileEntityBasicInventory {
 

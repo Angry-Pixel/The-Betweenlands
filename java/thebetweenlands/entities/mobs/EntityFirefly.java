@@ -1,5 +1,7 @@
 package thebetweenlands.entities.mobs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
@@ -9,8 +11,6 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 

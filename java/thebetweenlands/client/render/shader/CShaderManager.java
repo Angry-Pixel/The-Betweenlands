@@ -1,10 +1,6 @@
 package thebetweenlands.client.render.shader;
 
-import java.lang.reflect.Field;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderManager;
 import net.minecraft.client.util.JsonException;
 

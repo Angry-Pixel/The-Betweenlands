@@ -1,9 +1,13 @@
 package thebetweenlands.world.biomes;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -11,8 +15,6 @@ import thebetweenlands.world.biomes.decorators.BiomeDecoratorMarsh;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BiomeMarsh
 extends BiomeGenBaseBetweenlands

@@ -1,7 +1,7 @@
 package thebetweenlands.blocks;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySludge;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockSludge extends Block {
     public BlockSludge() {

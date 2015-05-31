@@ -1,18 +1,16 @@
 package thebetweenlands.event.render;
 
-import java.util.ArrayList;
-import java.util.Map.Entry;
-
-import javax.vecmath.Vector3d;
-
-import org.lwjgl.opengl.GL11;
-
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
-import thebetweenlands.tileentities.TileEntityWisp;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
+import thebetweenlands.tileentities.TileEntityWisp;
+
+import javax.vecmath.Vector3d;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 
 public class WispHandler {
 	public static final WispHandler INSTANCE = new WispHandler();

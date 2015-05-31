@@ -1,7 +1,5 @@
 package thebetweenlands.blocks.tree;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.world.World;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 

@@ -8,12 +8,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 

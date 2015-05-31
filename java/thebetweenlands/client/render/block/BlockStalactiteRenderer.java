@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.stalactite.BlockStalactite;
 import thebetweenlands.proxy.ClientProxy;
 

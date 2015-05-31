@@ -1,9 +1,7 @@
 package thebetweenlands.world.biomes.base;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -12,8 +10,10 @@ import net.minecraft.world.biome.BiomeGenBase;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  *

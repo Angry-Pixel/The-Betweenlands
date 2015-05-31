@@ -1,7 +1,6 @@
 package thebetweenlands.world.feature.trees;
 
-import java.util.Random;
-
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -13,7 +12,8 @@ import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-import cpw.mods.fml.common.IWorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenDeadTree implements IWorldGenerator {
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;

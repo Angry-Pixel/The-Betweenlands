@@ -1,9 +1,9 @@
 package thebetweenlands.creativetabs;
 
-import net.minecraft.item.Item;
-import thebetweenlands.items.BLItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.Item;
+import thebetweenlands.items.BLItemRegistry;
 
 public class TabGears
         extends CreativeTabBetweenlands

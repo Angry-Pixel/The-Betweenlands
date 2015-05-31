@@ -1,13 +1,12 @@
 package thebetweenlands.entities.particles;
 
-import java.util.ArrayList;
-
-import javax.vecmath.Vector3d;
-
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import javax.vecmath.Vector3d;
+import java.util.ArrayList;
 
 public class EntityAnimatorFX extends EntityPathParticle {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");

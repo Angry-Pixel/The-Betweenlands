@@ -1,12 +1,12 @@
 package thebetweenlands.event.player;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.teleporter.TeleporterHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class PlayerPortalHandler {
     int timer = 120;

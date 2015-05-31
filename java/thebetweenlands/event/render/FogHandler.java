@@ -1,5 +1,9 @@
 package thebetweenlands.event.render;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -11,19 +15,13 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
