@@ -51,7 +51,7 @@ public class BlockBlubCappedMushroomHead extends Block {
     @Override
     public void dropBlockAsItemWithChance (World world, int x, int y, int z, int meta, float chance, int fortune) {
         if (!world.isRemote) {
-            int dropChance = 20;
+            int dropChance = 6;
 
             if (fortune > 0){
                 dropChance -= 2*fortune;
