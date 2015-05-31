@@ -14,6 +14,8 @@ public class BlockBLFence extends BlockFence {
 	
 	public BlockBLFence(String name, Material material) {
 		super(name, material);
+		setHardness(2.0F);
+		setResistance(5.0F);
 		setCreativeTab(ModCreativeTabs.blocks);
 		textureName = "thebetweenlands:" + name;
 	}
