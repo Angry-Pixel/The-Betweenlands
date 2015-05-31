@@ -1,11 +1,24 @@
 package thebetweenlands.entities;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityDragonFly;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.items.SpawnEggs;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BLEntityRegistry
 {
@@ -27,6 +40,7 @@ public class BLEntityRegistry
 		registerEntity(13, EntityAngryPebble.class, "angryPebble");
 		registerEntity(14, EntityBLArrow.class, "anglerToothArrow");
 		registerEntity(15, EntitySiltCrab.class, "siltCrab", 0x086A87, 0xB43104);
+		registerEntity(16, EntitySnailPoisonJet.class, "snailPoisonjet");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

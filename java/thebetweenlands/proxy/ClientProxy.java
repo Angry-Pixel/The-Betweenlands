@@ -1,9 +1,13 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.particle.EntityFX;
@@ -25,15 +29,57 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.*;
-import thebetweenlands.client.render.entity.*;
+import thebetweenlands.client.render.block.BlockDoorRenderer;
+import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockModelPlantRenderer;
+import thebetweenlands.client.render.block.BlockRootRenderer;
+import thebetweenlands.client.render.block.BlockRubberLogRenderer;
+import thebetweenlands.client.render.block.BlockStalactiteRenderer;
+import thebetweenlands.client.render.block.BlockSwampReedRenderer;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderAngryPebble;
+import thebetweenlands.client.render.entity.RenderBLArrow;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderDragonFly;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderMireSnail;
+import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
+import thebetweenlands.client.render.entity.RenderSludge;
+import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSporeling;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderTarBeast;
+import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.item.ItemAnimatorRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
-import thebetweenlands.client.render.tileentity.*;
+import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.EntityAngryPebble;
 import thebetweenlands.entities.EntityBLArrow;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.EntitySnailPoisonJet;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityDarkDruid;
+import thebetweenlands.entities.mobs.EntityDragonFly;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityThemFX;
@@ -42,15 +88,16 @@ import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.network.handlers.ClientPacketHandler;
-import thebetweenlands.tileentities.*;
+import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 
@@ -97,6 +144,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, new RenderAngryPebble());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, new RenderBLArrow());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, new RenderSiltCrab());
+		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderSnailPoisonJet());
 		
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -162,6 +210,11 @@ public class ClientProxy extends CommonProxy {
 		if (particleName.equals("sulfurOre")) {
 			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(1F, 0.9294F, 0F);
+		}
+		
+		if (particleName.equals("snailPoison")) {
+			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(1F, 0F, 0F);
 		}
 
 		if (fx != null)
