@@ -24,7 +24,7 @@ public class BlockRootUW extends BlockSwampWater {
 		setStepSound(Block.soundTypeWood);
 		setBlockName("thebetweenlands.rootUW");
 		setHardness(1.0F);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.plants);
 		setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		setTickRandomly(true);
 		setBlockTextureName("thebetweenlands:weedwoodBark");

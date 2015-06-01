@@ -16,7 +16,7 @@ public class BlockRoot extends Block {
 	public BlockRoot() {
 		super(Material.wood);
 		this.setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.plants);
 		setHardness(1.0F);
 		setStepSound(Block.soundTypeWood);
 		//setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);

@@ -14,7 +14,7 @@ public class BlockAlgae extends BlockBush {
     public BlockAlgae() {
     	setHardness(0.1F);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.plants);
 		setBlockName("thebetweenlands.algae");
 		setBlockTextureName("thebetweenlands:algae");
         setBlockBounds(0, 0.0F, 0, 1.0F, 0.125F, 1.0F);

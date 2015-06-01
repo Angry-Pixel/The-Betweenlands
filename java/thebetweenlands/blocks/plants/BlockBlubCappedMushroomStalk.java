@@ -24,7 +24,7 @@ public class BlockBlubCappedMushroomStalk extends Block {
     public BlockBlubCappedMushroomStalk() {
         super(Material.wood);
         setBlockName("thebetweenlands.hugeMushroomStalk");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(ModCreativeTabs.plants);
         setLightLevel(1.0F);
     }
 

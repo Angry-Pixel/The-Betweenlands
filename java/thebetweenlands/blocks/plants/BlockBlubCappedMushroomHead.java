@@ -16,7 +16,7 @@ public class BlockBlubCappedMushroomHead extends Block {
         super(Material.wood);
         setBlockName("thebetweenlands.hugeMushroomTop");
         setBlockTextureName("thebetweenlands:bulbCappedShroomCap");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(ModCreativeTabs.plants);
         setLightLevel(1.0F);
     }
 

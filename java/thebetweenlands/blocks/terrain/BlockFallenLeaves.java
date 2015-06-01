@@ -13,7 +13,7 @@ public class BlockFallenLeaves extends BlockBush {
     public BlockFallenLeaves() {
     	setHardness(0.1F);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.plants);
 		setBlockName("thebetweenlands.fallenLeaves");
 		setBlockTextureName("thebetweenlands:fallenLeaves");
         setBlockBounds(0, 0.0F, 0, 1.0F, 0.05F, 1.0F);
