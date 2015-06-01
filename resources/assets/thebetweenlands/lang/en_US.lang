@@ -119,6 +119,13 @@ tile.thebetweenlands.solidTarWall.name=Solid Tar Wall
 tile.thebetweenlands.templeBrickWall.name=Temple Brick Wall
 tile.thebetweenlands.weedwoodPlankFence.name=Weedwood Plank Fence
 tile.thebetweenlands.rubberTreePlankFence.name=Rubber Tree Plank Fence
+tile.thebetweenlands.betweenstoneBricksSlab.name=Betweenstone Brick Slab
+tile.thebetweenlands.mudBrickSlab.name=Mud Brick Slab
+tile.thebetweenlands.cragrockBrickSlab.name=Cragrock Brick Slab
+tile.thebetweenlands.limestoneBricksSlab.name=Limestone Brick Slab
+tile.thebetweenlands.smoothBetweenstoneSlab.name=Smooth Betweenstone Slab
+tile.thebetweenlands.solidTarSlab.name=Solid Tar Slab
+tile.thebetweenlands.templeBrickSlab.name=Temple Brick Slab
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
