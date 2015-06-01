@@ -1,5 +1,7 @@
 package thebetweenlands.world.biomes.decorators;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -16,9 +18,12 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.trees.*;
-
-import java.util.Random;
+import thebetweenlands.world.feature.trees.WorldGenDeadTree;
+import thebetweenlands.world.feature.trees.WorldGenGiantTree;
+import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
+import thebetweenlands.world.feature.trees.WorldGenRubberTree;
+import thebetweenlands.world.feature.trees.WorldGenSapTree;
+import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
@@ -53,7 +58,6 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BLUE_EYED_GRASS = new WorldGenTallGrass(BLBlockRegistry.blueEyedGrass, 1);
 	private final static WorldGenTallGrass GEN_BONESET = new WorldGenTallGrass(BLBlockRegistry.boneset, 1);
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
-	private final static WorldGenTallGrass GEN_ROTTEN_LOG = new WorldGenTallGrass(BLBlockRegistry.rottenLog, 1);
 	private final static WorldGenDeadTree GEN_DEAD_TREE = new WorldGenDeadTree();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
 
@@ -383,12 +387,16 @@ public class DecorationHelper {
 
 	public void generateRottenLog(int attempts) {
 		for (int i = 0; i < attempts; i++) {
-			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
-				world.setBlock(x, y, z, BLBlockRegistry.rottenLog, 0, 2);
-		}
+				int length = rand.nextInt(5) + 4;
+				int baseRadius = rand.nextInt(3) + 2;
+				byte direction = (byte) rand.nextInt(2);
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+					new WorldGenRottenLogs(length, baseRadius, direction).generate(world, rand, x, y, z);
+			}
 	}
 
 	public void generateWeedwoodBush(int attempts) {

@@ -1,8 +1,5 @@
 package thebetweenlands.client.render.block;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -11,16 +8,33 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+
 import org.lwjgl.opengl.GL11;
+
 import scala.util.Random;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.model.block.*;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
+import thebetweenlands.client.model.block.ModelBlackHatMushroom3;
+import thebetweenlands.client.model.block.ModelBulbCappedMushroom;
+import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
+import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
+import thebetweenlands.client.model.block.ModelRegularPlant;
+import thebetweenlands.client.model.block.ModelRottenLog;
+import thebetweenlands.client.model.block.ModelSundew;
+import thebetweenlands.client.model.block.ModelTubePlant;
+import thebetweenlands.client.model.block.ModelVenusFlyTrap;
+import thebetweenlands.client.model.block.ModelVolarpad;
+import thebetweenlands.client.model.block.ModelWeepingBlue;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.Box;
 import thebetweenlands.utils.ModelConverter.Model;
 import thebetweenlands.utils.ModelConverter.TextureMap;
 import thebetweenlands.utils.ModelConverter.Vec3;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
@@ -33,7 +47,6 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelInvVenusFlyTrap;
 	public static ModelConverter plantModelInvBulbCappedMushroom;
 	public static ModelConverter plantModelInvSundew;
-	public static ModelConverter plantModelInvRottenLog;
 
 	public static ModelConverter plantModelVolarpad1;
 	public static ModelConverter plantModelVolarpad2;
@@ -51,7 +64,6 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelConverter plantModelWeepingBlue;
 	public static ModelConverter plantModelBulbCappedMushroom;
 	public static ModelConverter plantModelSundew;
-	public static ModelConverter plantModelRottenLog;
 
 	public static ModelBlackHatMushroom modelBlackHatMushroom1 = new ModelBlackHatMushroom();
 	public static ModelBlackHatMushroom2 modelBlackHatMushroom2 = new ModelBlackHatMushroom2();
@@ -147,18 +159,6 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			plantModelInvVenusFlyTrap.renderWithTessellator(Tessellator.instance);
-		}
-		
-		if(block == BLBlockRegistry.rottenLog) {
-			if(plantModelInvRottenLog == null) {
-				plantModelInvRottenLog = new ModelConverter(
-						new ModelRottenLog(),
-						0.065D * 0.45D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
-						true);
-				plantModelInvRottenLog.offsetMS(new Vec3(0D, -0.55D, 0D));
-			}
-			plantModelInvRottenLog.renderWithTessellator(Tessellator.instance);
 		}
 
 		if(block == BLBlockRegistry.volarpad) {
@@ -300,19 +300,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
-		} else if(block == BLBlockRegistry.rottenLog) {
-			if(plantModelRottenLog == null) {
-				plantModelRottenLog = new ModelConverter(
-						new ModelRottenLog(),
-						0.065D,
-						new TextureMap(128, 128, BLBlockRegistry.rottenLog.getIcon(0, 0)),
-						true);
-			}
 
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			float rotYaw = rnd.nextFloat() * 360.0F;
-			plantModelRottenLog.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
-			offsetWS(offset).renderWithTessellator(Tessellator.instance);
 		} else if(block == BLBlockRegistry.venusFlyTrap) {
 			if(plantModelVenusFlyTrap == null) {
 				plantModelVenusFlyTrap = new ModelConverter(

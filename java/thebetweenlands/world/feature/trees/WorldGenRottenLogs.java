@@ -13,7 +13,7 @@ public class WorldGenRottenLogs extends WorldGenerator {
 	private int length = -1;
 	private int baseRadius = -1;
 	private byte direction;
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
+	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.rottenLog;
 	
 	public WorldGenRottenLogs(int length, int baseRadius, byte direction) {
 		this.length = length;

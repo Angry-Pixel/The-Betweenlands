@@ -88,6 +88,7 @@ public class BLBlockRegistry
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark");
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
+	public static final Block rottenLog = new BlockBLLog("rottenWeedwoodLog");
 	
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
@@ -125,7 +126,6 @@ public class BLBlockRegistry
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
 	
-	public static final Block rottenLog = new BlockRottenLog();
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
 	
