@@ -310,6 +310,8 @@ entity.thebetweenlands.mireSnailEgg.name=Mire Snail Egg
 entity.thebetweenlands.angryPebble.name=Angry Pebble
 entity.thebetweenlands.siltCrab.name=Silt Crab
 
+entity.thebetweenlands.snailPoisonJet.name=Snail Poison Jet
+
 # Others
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
 itemGroup.thebetweenlands.item=The Betweenlands Items
