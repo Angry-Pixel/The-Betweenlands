@@ -94,12 +94,12 @@ public class BlockDeepWaterCoral extends BlockSwampWater implements IPlantable {
 	
 	@Override
 	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL).getItemDamage();
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL).getItemDamage();
     }
 	
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL).getItem();
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL).getItem();
 	}
 
 	protected void checkAndDropBlock(World world, int x, int y, int z) {

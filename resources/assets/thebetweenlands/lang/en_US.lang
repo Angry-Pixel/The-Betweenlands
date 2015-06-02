@@ -38,7 +38,7 @@ tile.thebetweenlands.wallPlants_1.name=Lichen
 tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.portalBark.name=Portal Tree Bark
 tile.thebetweenlands.rottenLog.name=Rotten Log
-tile.thebetweenlands.rottenLog.name=Rotten Weedwood Log
+tile.thebetweenlands.rottenWeedwoodLog.name=Rotten Weedwood Log
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -99,10 +99,7 @@ tile.thebetweenlands.limestone.name=Limestone
 tile.thebetweenlands.limestoneBricks.name=Limestone Bricks
 tile.thebetweenlands.limestoneTiles.name=Limestone Tiles
 tile.thebetweenlands.chiseledLimestone.name=Chiseled Limestone
-tile.thebetweenlands.limestoneBrickWall.name=Limestone Brick Wall
-tile.thebetweenlands.limestoneBrickStairs.name=Limestone Brick Stairs
-tile.thebetweenlands.betweenstoneBrickStairs.name=Betweenstone Brick Stairs
-tile.thebetweenlands.betweenstoneBrickWall.name=Betweenstone Brick Wall
+tile.thebetweenlands.polishedLimestone.name=Polished Limestone
 
 # Stairs, Slabs, Walls, Fences
 tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs
@@ -126,6 +123,10 @@ tile.thebetweenlands.limestoneBricksSlab.name=Limestone Brick Slab
 tile.thebetweenlands.smoothBetweenstoneSlab.name=Smooth Betweenstone Slab
 tile.thebetweenlands.solidTarSlab.name=Solid Tar Slab
 tile.thebetweenlands.templeBrickSlab.name=Temple Brick Slab
+tile.thebetweenlands.limestoneBrickWall.name=Limestone Brick Wall
+tile.thebetweenlands.limestoneBrickStairs.name=Limestone Brick Stairs
+tile.thebetweenlands.betweenstoneBrickStairs.name=Betweenstone Brick Stairs
+tile.thebetweenlands.betweenstoneBrickWall.name=Betweenstone Brick Wall
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom

@@ -168,6 +168,7 @@ public class BLBlockRegistry
 	public static final Block chiseledBetweenstone = new BlockBLGenericDeco("chiseledBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block carvedCrag = new BlockBLGenericDeco("carvedCrag", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block cragrockBrick = new BlockBLGenericDeco("cragrockBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block polishedLimestone = new BlockBLGenericDeco("polishedLimestone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block limestoneBricks = new BlockBLGenericDeco("limestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block limestoneTiles = new BlockBLGenericDeco("limestoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block chiseledLimestone = new BlockBLGenericDeco("chiseledLimestone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
