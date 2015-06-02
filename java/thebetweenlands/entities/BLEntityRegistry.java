@@ -40,7 +40,7 @@ public class BLEntityRegistry
 		registerEntity(13, EntityAngryPebble.class, "angryPebble");
 		registerEntity(14, EntityBLArrow.class, "anglerToothArrow");
 		registerEntity(15, EntitySiltCrab.class, "siltCrab", 0x086A87, 0xB43104);
-		registerEntity(16, EntitySnailPoisonJet.class, "snailPoisonjet");
+		registerEntity(16, EntitySnailPoisonJet.class, "snailPoisonJet");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
