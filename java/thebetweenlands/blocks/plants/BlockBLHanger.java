@@ -15,14 +15,16 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockHanger extends BlockBush  implements IShearable {
-	
-	public BlockHanger() {
+public class BlockBLHanger extends BlockBush  implements IShearable {
+	private String type;
+
+	public BlockBLHanger(String blockName) {
     	super(Material.plants);
         setHardness(0.0F);
+		type = blockName;
 		setCreativeTab(ModCreativeTabs.plants);
-		setBlockName("thebetweenlands.hanger");
-		setBlockTextureName("thebetweenlands:hanger");
+		setBlockName("thebetweenlands." + type);
+		setBlockTextureName("thebetweenlands:" + type);
 		setStepSound(Block.soundTypeGrass);
     	setTickRandomly(true);
 	}
@@ -82,7 +84,7 @@ public class BlockHanger extends BlockBush  implements IShearable {
 	}
 
 	private boolean isValidBlock(Block block) {
-		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block == this;
+		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block instanceof BlockBLHanger;
 	}
 
 }

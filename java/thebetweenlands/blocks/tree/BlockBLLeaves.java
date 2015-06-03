@@ -43,18 +43,18 @@ public class BlockBLLeaves extends BlockLeaves {
 
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
-        if(this.type.equals("weedwoodLeaves")){
-            return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
-        }
-        else if(this.type.equals("sapTreeLeaves")){
-            return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
-        }
-        else if(this.type.equals("rubberTreeLeaves")){
-            return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
-        }
-        else {
-            return Item.getItemFromBlock(this);
-        }
+		switch (this.type) {
+			case "weedwoodLeaves":
+				return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
+			case "sapTreeLeaves":
+				return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
+			case "rubberTreeLeaves":
+				return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
+			case "purpleRainLeaves":
+				return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
+			default:
+				return Item.getItemFromBlock(this);
+		}
 	}
 
 

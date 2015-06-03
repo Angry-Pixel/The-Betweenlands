@@ -9,13 +9,16 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
-public class BlockFallenLeaves extends BlockBush {
-    public BlockFallenLeaves() {
+public class BlockBLFallenLeaves extends BlockBush{
+
+    private String type;
+    public BlockBLFallenLeaves(String blockName) {
     	setHardness(0.1F);
 		setStepSound(soundTypeGrass);
 		setCreativeTab(ModCreativeTabs.plants);
-		setBlockName("thebetweenlands.fallenLeaves");
-		setBlockTextureName("thebetweenlands:fallenLeaves");
+        type = blockName;
+		setBlockName("thebetweenlands." + type);
+		setBlockTextureName("thebetweenlands:" + type);
         setBlockBounds(0, 0.0F, 0, 1.0F, 0.05F, 1.0F);
     }
     

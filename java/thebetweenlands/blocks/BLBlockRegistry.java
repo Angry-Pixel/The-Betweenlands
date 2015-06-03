@@ -55,7 +55,8 @@ public class BLBlockRegistry
 	public static final Block peat = new BlockPeat();
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
-	public static final Block fallenLeaves = new BlockFallenLeaves();
+	public static final Block fallenLeaves = new BlockBLFallenLeaves("fallenLeaves");
+	public static final Block purpleFallenLeaves = new BlockBLFallenLeaves("purpleFallenLeaves");
 	public static final Block slimyGrass = new BlockSlimyGrass();
 	public static final Block slimyDirt = new BlockSlimyDirt();
 
@@ -74,11 +75,13 @@ public class BLBlockRegistry
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree");
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
 	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree");
+	public static final Block saplingPurpleRain = new BlockBLSapling("saplingPurpleRain");
 	
 	public static final Block weedwoodLeaves = new BlockBLLeaves("weedwoodLeaves");
 	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
 	public static final Block rubberTreeLeaves = new BlockBLLeaves("rubberTreeLeaves");
 	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
+	public static final Block purpleRainLeaves = new BlockBLLeaves("purpleRainLeaves");
 	
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog");
 	public static final Block weedwood = new BlockBLLog("weedwood");
@@ -89,6 +92,8 @@ public class BLBlockRegistry
 	public static final Block portalBark = new BlockBLLog("portalBark");
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
 	public static final Block rottenLog = new BlockBLLog("rottenWeedwoodLog");
+	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
+
 	
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
@@ -149,7 +154,9 @@ public class BLBlockRegistry
 	public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass");
 
 	// UNDERGROWTH
-	public static final Block hanger = new BlockHanger();
+	public static final Block hanger = new BlockBLHanger("hanger");
+	public static final Block purpleHanger = new BlockBLHanger("purpleHanger");
+	public static final Block purpleHangerFlowered = new BlockBLHanger("purpleHangerFlowered");
 	public static final Block treeFungus = new BlockTreeFungus();
 	
 	// DECORATIONS AND UTILITIES

@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.plants.BlockHanger;
+import thebetweenlands.blocks.plants.BlockBLHanger;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
@@ -23,7 +23,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 	private BlockTreeFungus fungus = (BlockTreeFungus) BLBlockRegistry.treeFungus;
-	private BlockHanger hanger = (BlockHanger) BLBlockRegistry.hanger;
+	private BlockBLHanger hanger = (BlockBLHanger) BLBlockRegistry.hanger;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 	
 	public WorldGenGiantTree() {

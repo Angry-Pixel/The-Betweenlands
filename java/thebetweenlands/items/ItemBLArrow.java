@@ -12,7 +12,7 @@ public class ItemBLArrow extends Item {
 
 	public ItemBLArrow(String string) {
 		super();
-		string = type;
+		type = string;
 		setTextureName("thebetweenlands:" + type + "Item");
 	}
 
