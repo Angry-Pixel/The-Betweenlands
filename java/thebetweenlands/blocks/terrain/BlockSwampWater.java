@@ -27,7 +27,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	protected boolean canSpread = true;
 	protected boolean hasBoundingBox = false;
-	protected boolean canCollide = true;
+	protected boolean canCollide = false;
 
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<>();
 
