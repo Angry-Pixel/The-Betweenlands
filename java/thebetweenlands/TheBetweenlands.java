@@ -1,16 +1,8 @@
 package thebetweenlands;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -21,7 +13,11 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.debugging.DebugHandler;
-import thebetweenlands.event.player.*;
+import thebetweenlands.event.player.DecayEventHandler;
+import thebetweenlands.event.player.OctineArmorHandler;
+import thebetweenlands.event.player.PlayerPortalHandler;
+import thebetweenlands.event.player.RottenFoodHandler;
+import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.ShaderHandler;
@@ -46,9 +42,17 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import thebetweenlands.world.teleporter.TeleporterHandler;
-
-import java.util.ArrayList;
-import java.util.List;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
