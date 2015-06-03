@@ -10,7 +10,7 @@ import thebetweenlands.event.render.FogHandler;
 
 public class EntityThemFX extends EntityFX {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/them.png");
-	public static final double TEXTURE_HEIGHT = 0.0992D;
+	public static final double TEXTURE_HEIGHT = 0.1279D;
 	public static final int TEXTURE_COUNT = 5;
 	
 	private double startY;
@@ -27,7 +27,7 @@ public class EntityThemFX extends EntityFX {
 		this.particleMaxAge = (int)500;
 		this.noClip = true;
 		this.color = 0xFFFFFFFF;
-		this.scale = 0.5f;
+		this.scale = 0.8f;
 		this.startY = this.posY;
 		
 		this.texture = this.worldObj.rand.nextInt(EntityThemFX.TEXTURE_COUNT) / 5.0D;
