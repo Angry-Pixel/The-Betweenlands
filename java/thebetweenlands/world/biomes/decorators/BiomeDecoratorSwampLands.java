@@ -18,7 +18,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 
 			helper.generateDeadTree(10);
 
-			helper.generateRottenLog(5);
+			helper.generateRottenLog(2);
 
 			helper.generateWeedwoodTree(60);
 
