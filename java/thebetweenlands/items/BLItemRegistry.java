@@ -29,8 +29,8 @@ public class BLItemRegistry {
     public static final Item weedwoodShovel = new SpadeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
     public static final Item weedwoodBow = new ItemWeedwoodBow().setUnlocalizedName("thebetweenlands.weedwoodBow").setTextureName("thebetweenlands:weedwoodBow");
     public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow").setUnlocalizedName("thebetweenlands.anglerToothArrow").setTextureName("thebetweenlands:anglerToothArrowItem");
-  //  public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow").setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
- //   public static final Item octineArrow = new ItemBLArrow("octineArrow").setUnlocalizedName("thebetweenlands.octineArrow");
+    public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow").setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
+    public static final Item octineArrow = new ItemBLArrow("octineArrow").setUnlocalizedName("thebetweenlands.octineArrow");
 
     public static final Item betweenstoneSword = new SwordBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
     public static final Item betweenstonePickaxe = new PickaxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstonePickaxe").setTextureName("thebetweenlands:betweenstonePickaxe");
@@ -121,7 +121,7 @@ public class BLItemRegistry {
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink);
         ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
-        ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow);
+        ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow);
     }
 
     private static void registerItems() {

@@ -16,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import thebetweenlands.items.ItemBLArrow;
@@ -35,6 +37,8 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	private int ticksInAir;
 	private double damage = 2.0D;
 	private int knockbackStrength;
+	public boolean isOctineArrow = false;
+	public boolean isPoisonedAnglerToothArrow = false;
 
 	public EntityBLArrow(World world) {
 		super(world);
@@ -264,7 +268,8 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 						damagesource = ItemBLArrow.causeArrowDamage(this, shootingEntity);
 					}
 
-					if (isBurning() && !(movingobjectposition.entityHit instanceof EntityEnderman)) {
+					boolean enderman = !(movingobjectposition.entityHit instanceof EntityEnderman);
+					if (isBurning() && enderman) {
 						movingobjectposition.entityHit.setFire(5);
 					}
 
@@ -291,6 +296,19 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 
 							if (shootingEntity != null && movingobjectposition.entityHit != shootingEntity && movingobjectposition.entityHit instanceof EntityPlayer && shootingEntity instanceof EntityPlayerMP) {
 								((EntityPlayerMP) shootingEntity).playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(6, 0.0F));
+							}
+							//special arrows
+
+							//TODO set better poison value
+							if(isPoisonedAnglerToothArrow && enderman)
+								entitylivingbase.addPotionEffect(new PotionEffect(Potion.poison.getId(), 200, 2));
+
+							//TODO set better burning value
+							if(isOctineArrow && enderman){
+								if(isBurning())
+									movingobjectposition.entityHit.setFire(9);
+								else
+									movingobjectposition.entityHit.setFire(5);
 							}
 						}
 
@@ -398,6 +416,8 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		par1NBTTagCompound.setByte("inGround", (byte) (inGround ? 1 : 0));
 		par1NBTTagCompound.setByte("pickup", (byte) canBePickedUp);
 		par1NBTTagCompound.setDouble("damage", damage);
+		par1NBTTagCompound.setBoolean("isOctineArrow", isOctineArrow);
+		par1NBTTagCompound.setBoolean("isPoisonedAnglerToothArrow", isPoisonedAnglerToothArrow);
 	}
 
 	@Override
@@ -410,6 +430,8 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		inData = par1NBTTagCompound.getByte("inData") & 255;
 		arrowShake = par1NBTTagCompound.getByte("shake") & 255;
 		inGround = par1NBTTagCompound.getByte("inGround") == 1;
+		isOctineArrow = par1NBTTagCompound.getBoolean("isOctineArrow");
+		isPoisonedAnglerToothArrow = par1NBTTagCompound.getBoolean("isPoisonedAnglerToothArrow");
 
 		if (par1NBTTagCompound.hasKey("damage", 99)) {
 			damage = par1NBTTagCompound.getDouble("damage");
@@ -489,5 +511,14 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 
 	public int getDamageIndex() {
 		return damageIndex;
+	}
+
+	public String getType(){
+		if(isPoisonedAnglerToothArrow)
+			return "poisonedAnglerToothArrow";
+		else if(isOctineArrow)
+			return "octineArrow";
+		else
+			return "anglerToothArrow";
 	}
 }

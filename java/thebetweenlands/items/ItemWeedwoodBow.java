@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.EntityBLArrow;
 
 public class ItemWeedwoodBow extends ItemBow {
@@ -73,8 +74,11 @@ public class ItemWeedwoodBow extends ItemBow {
 		maxUseDuration = event.charge;
 
 		boolean canShoot = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
+		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
+		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
 
-		if (canShoot || player.inventory.hasItem(BLItemRegistry.anglerToothArrow)) {
+		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow) {
 			float power = (float) maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 3.0F;
 
@@ -85,6 +89,11 @@ public class ItemWeedwoodBow extends ItemBow {
 				power = 1.0F;
 
 			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power * 4.0F);
+
+			if(poisonedAnglerToothArrow)
+				entityarrow.isPoisonedAnglerToothArrow = true;
+			else if(octineArrow)
+				 entityarrow.isOctineArrow = true;
 
 			if (power == 1.0F)
 				entityarrow.setIsCritical(true);
@@ -107,8 +116,12 @@ public class ItemWeedwoodBow extends ItemBow {
 
 			if (canShoot)
 				entityarrow.canBePickedUp = 2;
+			else if(poisonedAnglerToothArrow)
+				player.inventory.consumeInventoryItem(BLItemRegistry.poisonedAnglerToothArrow);
+			else if(octineArrow)
+				player.inventory.consumeInventoryItem(BLItemRegistry.octineArrow);
 			else
-				player.inventory.consumeInventoryItem(Items.arrow);
+				player.inventory.consumeInventoryItem(BLItemRegistry.anglerToothArrow);
 
 			if (!world.isRemote)
 				world.spawnEntityInWorld(entityarrow);
@@ -130,6 +143,24 @@ public class ItemWeedwoodBow extends ItemBow {
 			fov = 1.0F - multiplier * 0.15F;
 		}
 	event.newfov = fov;
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack item, World world, EntityPlayer player) {
+		ArrowNockEvent event = new ArrowNockEvent(player, item);
+		MinecraftForge.EVENT_BUS.post(event);
+		if (event.isCanceled()) {
+			return event.result;
+		}
+
+		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
+		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
+		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
+		if (player.capabilities.isCreativeMode || anglerToothArrow || poisonedAnglerToothArrow || octineArrow) {
+			player.setItemInUse(item, this.getMaxItemUseDuration(item));
+		}
+
+		return item;
 	}
 }
 
