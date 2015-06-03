@@ -3,12 +3,16 @@ package thebetweenlands.blocks;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import thebetweenlands.items.BLItemRegistry;
 
 public class BLFluidRegistry {
 	public static final BLFluidRegistry INSTANCE = new BLFluidRegistry();
@@ -43,7 +47,7 @@ public class BLFluidRegistry {
 			throw new RuntimeException(e);
 		}
 
-		//FluidContainerRegistry.registerFluidContainer(swampWater, new ItemStack(Items.water_bucket), new ItemStack(Items.bucket));
+		FluidContainerRegistry.registerFluidContainer(swampWater, new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.weedwoodBucket));
 	}
 
 	@SubscribeEvent

@@ -67,7 +67,7 @@ public class ItemWeedWoodBucket extends Item {
 					Block block = world.getBlock(x, y, z);
 					int meta = world.getBlockMetadata(x, y, z);
 
-					if (block == BLBlockRegistry.swampWater && meta == 0) {
+					if (block == BLBlockRegistry.swampWater) {//&& meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
 					}
