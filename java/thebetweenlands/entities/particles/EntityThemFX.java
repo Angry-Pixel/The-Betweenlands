@@ -30,7 +30,8 @@ public class EntityThemFX extends EntityFX {
 		this.scale = 0.8f;
 		this.startY = this.posY;
 		
-		this.texture = this.worldObj.rand.nextInt(EntityThemFX.TEXTURE_COUNT) / 5.0D;
+		this.texture = (double) this.worldObj.rand.nextInt(EntityThemFX.TEXTURE_COUNT) /
+				(double) EntityThemFX.TEXTURE_COUNT;
 	}
 
 	@Override
