@@ -33,6 +33,7 @@ tile.thebetweenlands.root.name=Root
 tile.thebetweenlands.rootUW.name=Root Under Water
 tile.thebetweenlands.deadGrass.name=Dead Grass
 tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
+tile.thebetweenlands.purpleFallenLeaves.name=Purple Fallen Leaves
 tile.thebetweenlands.wallPlants_0.name=Moss
 tile.thebetweenlands.wallPlants_1.name=Lichen
 tile.thebetweenlands.animator.name=Animator
@@ -47,16 +48,20 @@ tile.thebetweenlands.saplingWeedwood.name=Weedwood Sapling
 tile.thebetweenlands.saplingSapTree.name=Sap Tree Sapling
 tile.thebetweenlands.saplingSpiritTree.name=Spirit Tree Sapling
 tile.thebetweenlands.saplingRubberTree.name=Rubber Tree Sapling
+tile.thebetweenlands.saplingPurpleRain.name=Purple Rain Sapling
 
 tile.thebetweenlands.weedwoodLog.name=Weedwood Log
 tile.thebetweenlands.weedwood.name=Weedwood
 tile.thebetweenlands.weedwoodBark.name=Weedwood Bark
 tile.thebetweenlands.sapTreeLog.name=Sap Tree Log
 tile.thebetweenlands.rubberTreeLog.name=Rubber Tree Log
+tile.thebetweenlands.purpleRainLog.name=Purple Rain Log
 
 tile.thebetweenlands.weedwoodLeaves.name=Weedwood Leaves
 tile.thebetweenlands.sapTreeLeaves.name=Sap Tree Leaves
 tile.thebetweenlands.rubberTreeLeaves.name=Rubber Tree Leaves
+tile.thebetweenlands.purpleRainLeavesLight.name=Purple Rain Leaves
+tile.thebetweenlands.purpleRainLeavesDark.name=Purple Rain Leaves
 
 tile.thebetweenlands.weedwoodPlanks.name=Weedwood Planks
 tile.thebetweenlands.weedwoodCraftingTable.name=Weedwood Crafting Table
@@ -69,6 +74,8 @@ tile.thebetweenlands.rubberTreePlanksSlab.name=Rubber Tree Planks Slab
 
 tile.thebetweenlands.treeFungus.name=Shelf Fungus
 tile.thebetweenlands.hanger.name=Hanger
+tile.thebetweenlands.purpleHanger.name=Purple Hanger
+tile.thebetweenlands.purpleHangerFlowered.name=Flowered Purple Hanger
 
 tile.thebetweenlands.mudBrick.name=Mud Bricks
 tile.thebetweenlands.angryBetweenstone.name=Angry Betweenstone
@@ -309,6 +316,11 @@ item.thebetweenlands.valoniteShard.name=Valonite Shard
 item.thebetweenlands.weedWoodStick.name=Weedwood Stick
 item.thebetweenlands.anglerTooth.name=Angler Tooth
 item.thebetweenlands.weedwoodBowl.name=Weedwood Bowl
+item.thebetweenlands.weedwoodBucket.name=Weedwood Bucket
+item.thebetweenlands.weedwoodBucketWater.name=Weedwood Water Bucket
+item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
+item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
+item.thebetweenlands.octineArrow.name=Octine Arrow
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
