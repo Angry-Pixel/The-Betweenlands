@@ -50,7 +50,9 @@ public class BlockBLLeaves extends BlockLeaves {
 				return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
 			case "rubberTreeLeaves":
 				return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
-			case "purpleRainLeaves":
+			case "purpleRainLeavesDark":
+				return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
+			case "purpleRainLeavesLight":
 				return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
 			default:
 				return Item.getItemFromBlock(this);

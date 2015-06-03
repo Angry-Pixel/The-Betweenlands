@@ -81,7 +81,8 @@ public class BLBlockRegistry
 	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
 	public static final Block rubberTreeLeaves = new BlockBLLeaves("rubberTreeLeaves");
 	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
-	public static final Block purpleRainLeaves = new BlockBLLeaves("purpleRainLeaves");
+	public static final Block purpleRainLeavesLight = new BlockBLLeaves("purpleRainLeavesLight");
+	public static final Block purpleRainLeavesDark = new BlockBLLeaves("purpleRainLeavesDark");
 	
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog");
 	public static final Block weedwood = new BlockBLLog("weedwood");
