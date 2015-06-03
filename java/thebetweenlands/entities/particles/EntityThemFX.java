@@ -10,10 +10,13 @@ import thebetweenlands.event.render.FogHandler;
 
 public class EntityThemFX extends EntityFX {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/them.png");
-
+	public static final double TEXTURE_HEIGHT = 0.0992D;
+	public static final int TEXTURE_COUNT = 10;
+	
 	private double startY;
 	private float scale;
 	private int color;
+	private double texture;
 
 	public EntityThemFX(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
@@ -26,6 +29,8 @@ public class EntityThemFX extends EntityFX {
 		this.color = 0xFFFFFFFF;
 		this.scale = 0.5f;
 		this.startY = this.posY;
+		
+		this.texture = this.worldObj.rand.nextInt(EntityThemFX.TEXTURE_COUNT) / 10.0D;
 	}
 
 	@Override
@@ -60,10 +65,11 @@ public class EntityThemFX extends EntityFX {
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 		
 		par1Tessellator.setColorRGBA_F(r, g, b, a);
-		par1Tessellator.addVertexWithUV(ipx - rx * scale - ryz * scale, ipy - rxz * scale*2, ipz - rz * scale - rxy * scale, 0.0D, 1.0D);
-		par1Tessellator.addVertexWithUV(ipx - rx * scale + ryz * scale, ipy + rxz * scale*2, ipz - rz * scale + rxy * scale, 0.0D, 0.0D);
-		par1Tessellator.addVertexWithUV(ipx + rx * scale + ryz * scale, ipy + rxz * scale*2, ipz + rz * scale + rxy * scale, 1.0D, 0.0D);
-		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale*2, ipz + rz * scale - rxy * scale, 1.0D, 1.0D);
+		
+		par1Tessellator.addVertexWithUV(ipx - rx * scale - ryz * scale, ipy - rxz * scale*2, ipz - rz * scale - rxy * scale, 1.0D, this.texture + EntityThemFX.TEXTURE_HEIGHT);
+		par1Tessellator.addVertexWithUV(ipx - rx * scale + ryz * scale, ipy + rxz * scale*2, ipz - rz * scale + rxy * scale, 1.0D, this.texture);
+		par1Tessellator.addVertexWithUV(ipx + rx * scale + ryz * scale, ipy + rxz * scale*2, ipz + rz * scale + rxy * scale, 0.0D, this.texture);
+		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale*2, ipz + rz * scale - rxy * scale, 0.0D, this.texture + EntityThemFX.TEXTURE_HEIGHT);
 		
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		
