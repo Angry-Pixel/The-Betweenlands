@@ -67,7 +67,7 @@ public class ItemWeedWoodBucket extends Item {
 					Block block = world.getBlock(x, y, z);
 					int meta = world.getBlockMetadata(x, y, z);
 
-					if (block == BLBlockRegistry.swampWater) {//&& meta == 0) {
+					if (block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
 					}
@@ -127,7 +127,7 @@ public class ItemWeedWoodBucket extends Item {
 			if (!world.isAirBlock(x, y, z) && !flag)
 				return false;
 			else {
-				if (world.provider.isHellWorld && fluid == BLBlockRegistry.swampWater) {
+				if (world.provider.isHellWorld && fluid == BLBlockRegistry.tarFluid) {
 					world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 
 					for (int i = 0; i < 8; i++)
