@@ -1,5 +1,8 @@
 package thebetweenlands.recipes;
 
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.common.util.EnumHelper;
@@ -16,4 +19,5 @@ public class BLMaterials {
 	public static ArmorMaterial armorOctine = EnumHelper.addArmorMaterial("OCTINE", 15, new int[] {2, 6, 5, 2}, 0);
 	public static ArmorMaterial armorValonite = EnumHelper.addArmorMaterial("VALONITE", 33, new int[] {3, 8, 6, 3}, 0);
 
+	public static Material tar = new MaterialLiquid(MapColor.mapColorArray[0]);
 }
