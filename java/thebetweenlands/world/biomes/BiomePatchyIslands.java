@@ -34,10 +34,11 @@ extends BiomeGenBaseBetweenlands
 		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
-        	spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 20, 2, 4));
-        	spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
-        	spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
-        	spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
-        	spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
+    	spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 20, 2, 4));
+    	spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
+    	spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
+    	spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
+    	spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
+    	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
 	}
 }
