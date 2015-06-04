@@ -40,6 +40,7 @@ tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.portalBark.name=Portal Tree Bark
 tile.thebetweenlands.rottenLog.name=Rotten Log
 tile.thebetweenlands.rottenWeedwoodLog.name=Rotten Weedwood Log
+tile.thebetweenlands.tarFluid.name=Liquid Tar
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -317,7 +318,7 @@ item.thebetweenlands.weedWoodStick.name=Weedwood Stick
 item.thebetweenlands.anglerTooth.name=Angler Tooth
 item.thebetweenlands.weedwoodBowl.name=Weedwood Bowl
 item.thebetweenlands.weedwoodBucket.name=Weedwood Bucket
-item.thebetweenlands.weedwoodBucketWater.name=Weedwood Water Bucket
+item.thebetweenlands.weedwoodBucketTar.name=Weedwood Tar Bucket
 item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow

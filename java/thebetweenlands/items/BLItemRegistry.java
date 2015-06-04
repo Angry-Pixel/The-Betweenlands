@@ -49,7 +49,7 @@ public class BLItemRegistry {
     public static final Item valoniteShovel = new SpadeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteShovel").setTextureName("thebetweenlands:valoniteShovel");
     
     public static final Item weedwoodBucket = new ItemWeedWoodBucket();
-    public static final Item weedwoodBucketTar = new ItemWeedWoodBucket(BLBlockRegistry.tarFluid).setUnlocalizedName("thebetweenlands.weedwoodBucketWater").setTextureName("thebetweenlands:weedwoodBucketTar");
+    public static final Item weedwoodBucketTar = new ItemWeedWoodBucket(BLBlockRegistry.tarFluid).setUnlocalizedName("thebetweenlands.weedwoodBucketTar").setTextureName("thebetweenlands:weedwoodBucketTar");
     
     // MISC ARMOUR
     public static final Item lurkerSkinHelmet = new LurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");

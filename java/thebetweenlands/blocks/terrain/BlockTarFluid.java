@@ -21,7 +21,6 @@ public class BlockTarFluid extends BlockFluidClassic {
 	public BlockTarFluid() {
 		super(BLFluidRegistry.swampWater, BLMaterials.tar);
 		setBlockName("thebetweenlands.tarFluid");
-		setCreativeTab(ModCreativeTabs.blocks);
 	}
 
 	@Override
