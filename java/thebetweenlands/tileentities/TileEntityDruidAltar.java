@@ -124,16 +124,17 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	}
 	
 	private boolean containsAllParts() {
-		return damageValues[0] > 0 &&
-			   damageValues[1] > 0 &&
-			   damageValues[2] > 0 &&
-			   damageValues[3] > 0 &&
-			   damageValues[0] != damageValues[1] &&
-			   damageValues[0] != damageValues[2] &&
-			   damageValues[0] != damageValues[3] &&
-			   damageValues[1] != damageValues[2] &&
-			   damageValues[1] != damageValues[3] &&
-			   damageValues[2] != damageValues[3];
+		return
+			damageValues[0] > 0 &&
+			damageValues[1] > 0 &&
+			damageValues[2] > 0 &&
+			damageValues[3] > 0 &&
+			damageValues[0] != damageValues[1] &&
+			damageValues[0] != damageValues[2] &&
+			damageValues[0] != damageValues[3] &&
+			damageValues[1] != damageValues[2] &&
+			damageValues[1] != damageValues[3] &&
+			damageValues[2] != damageValues[3];
 	}
 
 	private void startCraftingProcess() {
