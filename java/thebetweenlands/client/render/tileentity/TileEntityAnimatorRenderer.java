@@ -1,13 +1,24 @@
 package thebetweenlands.client.render.tileentity;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
+
 import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
@@ -15,10 +26,6 @@ import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
-
-import javax.vecmath.Vector3d;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 	private static final ModelAnimator model = new ModelAnimator();
@@ -40,20 +47,6 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
 		renderMainModel(x, y, z);
-		GL11.glPopMatrix();
-
-		// Sphere
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 1.5D, z + 0.5D);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(0, 0, 1.0F, 0.5F);
-		GL11.glRotatef(90.0F, 1, 0, 0);
-		Sphere s = new Sphere();
-		s.draw(0.4F, 6, 2);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glPopMatrix();
 	}
 
@@ -117,20 +110,24 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 
-		// 'Sphere'
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 1.5D, z + 0.5D);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glRotatef(te.crystalRotation, 0, -1, 0);
-		GL11.glColor4f(0, 0.5F, 0.1F, 0.5F);
-		GL11.glRotatef(90.0F, 1, 0, 0);
-		Sphere s = new Sphere();
-		s.draw(0.4F, 10, 10);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glPopMatrix();
+		// Item
+		if (te.getStackInSlot(0) != null) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
+			if(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)GL11.glTranslated(0.0D, -0.5D, 0.0D);
+			if(!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)){
+				GL11.glRotatef(-te.crystalRotation, 0, 1, 0);
+				GL11.glScaled(0.3D, 0.3D, 0.3D);
+				ItemRenderHelper.renderItem(te.getStackInSlot(0), 0);
+			}
+			else{
+				GL11.glScaled(0.3D, 0.3D, 0.3D);
+				Entity entity = EntityList.createEntityByID(te.getStackInSlot(0).getItemDamage(), tileEntity.getWorldObj());
+				entity.setRotationYawHead(0F);
+				RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 1F);   
+			}
+			GL11.glPopMatrix();
+		}
 
 		// Sulfur Particles
 		if (te.getStackInSlot(2) != null) {

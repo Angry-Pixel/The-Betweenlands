@@ -45,11 +45,13 @@ public class GuiAnimator extends GuiContainer {
 
 		if (tile.getStackInSlot(1) == null)
 			renderSlot(new ItemStack(BLItemRegistry.materialsBL, 1, 11).getIconIndex(), 43, 54);
-		else
-			this.drawTexturedModalRect(k + 45, l + 10, 176, 0, 16, 48);
+		else {
+			int i1 = 48 - tile.life / 100;
+			this.drawTexturedModalRect(k + 45, l + 10 + i1, 176, i1, 16, 48);
+		}
 
 		if (tile.getStackInSlot(2) == null)
-			renderSlot(new ItemStack(BLItemRegistry.materialsBL, 1, 23).getIconIndex(), 116, 54);
+			renderSlot(new ItemStack(BLItemRegistry.materialsBL, 1, 24).getIconIndex(), 116, 54);
 
 		if (tile.progress > 0) {
 			int i1 = tile.progress;
@@ -71,5 +73,7 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
+
+		if (this.tile.itemsConsumed >= tile.stackSize) this.mc.thePlayer.closeScreen();
 	}
 }

@@ -1,11 +1,13 @@
 package thebetweenlands.blocks.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -14,6 +16,8 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAnimator extends BlockContainer {
 	public BlockAnimator() {
@@ -50,8 +54,28 @@ public class BlockAnimator extends BlockContainer {
 		}
 
 		if (world.getTileEntity(x, y, z) instanceof TileEntityAnimator) {
-			TileEntityAnimator altar = (TileEntityAnimator) world.getTileEntity(x, y, z);
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
+			System.out.println(world.isRemote);
+			TileEntityAnimator animator = (TileEntityAnimator) world.getTileEntity(x, y, z);
+			if (animator.itemsConsumed < animator.stackSize) player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
+			else{
+				if(animator.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer){
+					Entity entity = EntityList.createEntityByID(animator.getStackInSlot(0).getItemDamage(), world);
+					entity.posX = x;
+					entity.posY = y + 0.5D;
+					entity.posZ = z;
+					world.spawnEntityInWorld(entity);
+				}
+				else{
+			        EntityItem entityitem = new EntityItem(world, x, y + 1D, z, animator.getStackInSlot(0));
+			        entityitem.motionX = 0;
+			        entityitem.motionZ = 0;
+			        entityitem.motionY = 0.11000000298023224D;
+			        world.spawnEntityInWorld(entityitem);					
+				}
+				animator.decrStackSize(0, 1);
+				animator.itemsConsumed = 0;
+				animator.isDirty = true;
+			}
 		}
 
 		return true;

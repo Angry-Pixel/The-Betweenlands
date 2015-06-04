@@ -19,7 +19,7 @@ public class ContainerAnimator extends Container {
 
 		addSlotToContainer(new Slot(tile, 0, 80, 24));
 		addSlotToContainer(new SlotRestriction(tile, 1, 43, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 11), 1));
-		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 23), 64));
+		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 24), 64));
 
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 9; k++)
@@ -39,7 +39,7 @@ public class ContainerAnimator extends Container {
 				if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == 11 && !slot.getHasStack()) {
 					((Slot) inventorySlots.get(1)).putStack(new ItemStack(stack1.getItem(), 1, stack1.getItemDamage()));
 					slot.decrStackSize(1);
-				} else if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == 23) {
+				} else if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == 24) {
 					if (!mergeItemStack(stack1, 2, 3, false))
 						return null;
 				} else if (stack1.getItem() != null) {
