@@ -13,8 +13,8 @@ public class EntityAltarCraftingFX extends EntityFX {
 	private final Vector3d startPoint;
 	private final Vector3d endPoint;
 
-	public EntityAltarCraftingFX(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale, TileEntityDruidAltar target) {
-		super(world, x, y, z, motionX, motionY, motionZ);
+	public EntityAltarCraftingFX(World world, double x, double y, double z, float scale, TileEntityDruidAltar target) {
+		super(world, x, y, z, 0, 0, 0);
 		this.motionX = this.motionY = this.motionZ = 0;
 		this.target = target;
 		this.startPoint = new Vector3d(x, y, z);

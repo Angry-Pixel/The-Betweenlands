@@ -191,7 +191,7 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		if( particleName.equals("altarcrafting") ) {
-			fx = new EntityAltarCraftingFX(world, x, y, z, vecX, vecY, vecZ, scale, (TileEntityDruidAltar)data[0]);
+			fx = new EntityAltarCraftingFX(world, x, y, z, scale, (TileEntityDruidAltar)data[0]);
 		}
 
 		if( particleName.equals("smoke") ) {
