@@ -69,7 +69,7 @@ public class ItemWeedWoodBucket extends Item {
 
 					if (block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
-						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
+						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);
 					}
 
 				} else {
