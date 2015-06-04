@@ -71,6 +71,11 @@ public class ItemWeedWoodBucket extends Item {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);
 					}
+					
+					if (block == BLBlockRegistry.swampWater && meta == 0) {
+						world.setBlockToAir(x, y, z);
+						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
+					}
 
 				} else {
 					if (pos.sideHit == 0)
@@ -127,7 +132,7 @@ public class ItemWeedWoodBucket extends Item {
 			if (!world.isAirBlock(x, y, z) && !flag)
 				return false;
 			else {
-				if (world.provider.isHellWorld && fluid == BLBlockRegistry.tarFluid) {
+				if (world.provider.isHellWorld && fluid == BLBlockRegistry.tarFluid || world.provider.isHellWorld && fluid == BLBlockRegistry.swampWater) {
 					world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 
 					for (int i = 0; i < 8; i++)

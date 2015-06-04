@@ -50,6 +50,7 @@ public class BLItemRegistry {
     
     public static final Item weedwoodBucket = new ItemWeedWoodBucket();
     public static final Item weedwoodBucketTar = new ItemWeedWoodBucket(BLBlockRegistry.tarFluid).setUnlocalizedName("thebetweenlands.weedwoodBucketTar").setTextureName("thebetweenlands:weedwoodBucketTar");
+    public static final Item weedwoodBucketWater = new ItemWeedWoodBucket(BLBlockRegistry.swampWater).setUnlocalizedName("thebetweenlands.weedwoodBucketWater").setTextureName("thebetweenlands:weedwoodBucketWater");
     
     // MISC ARMOUR
     public static final Item lurkerSkinHelmet = new LurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
