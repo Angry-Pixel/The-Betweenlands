@@ -77,8 +77,9 @@ public class ItemWeedwoodBow extends ItemBow {
 		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
 		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
 		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
+		boolean basiliskArrow = player.inventory.hasItem(BLItemRegistry.basiliskArrow);
 
-		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow) {
+		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
 			float power = (float) maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 3.0F;
 
@@ -94,6 +95,8 @@ public class ItemWeedwoodBow extends ItemBow {
 				entityarrow.isPoisonedAnglerToothArrow = true;
 			else if(octineArrow)
 				 entityarrow.isOctineArrow = true;
+			else if(basiliskArrow)
+				entityarrow.isBasiliskArrow = true;
 
 			if (power == 1.0F)
 				entityarrow.setIsCritical(true);
@@ -120,6 +123,8 @@ public class ItemWeedwoodBow extends ItemBow {
 				player.inventory.consumeInventoryItem(BLItemRegistry.poisonedAnglerToothArrow);
 			else if(octineArrow)
 				player.inventory.consumeInventoryItem(BLItemRegistry.octineArrow);
+			else if(basiliskArrow)
+				player.inventory.consumeInventoryItem(BLItemRegistry.basiliskArrow);
 			else
 				player.inventory.consumeInventoryItem(BLItemRegistry.anglerToothArrow);
 
@@ -156,7 +161,8 @@ public class ItemWeedwoodBow extends ItemBow {
 		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
 		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
 		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
-		if (player.capabilities.isCreativeMode || anglerToothArrow || poisonedAnglerToothArrow || octineArrow) {
+		boolean basiliskArrow = player.inventory.hasItem(BLItemRegistry.basiliskArrow);
+		if (player.capabilities.isCreativeMode || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
 			player.setItemInUse(item, this.getMaxItemUseDuration(item));
 		}
 

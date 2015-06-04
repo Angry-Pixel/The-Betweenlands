@@ -21,6 +21,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import thebetweenlands.items.ItemBLArrow;
+import thebetweenlands.utils.PotionHelper;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	private int knockbackStrength;
 	public boolean isOctineArrow = false;
 	public boolean isPoisonedAnglerToothArrow = false;
+	public boolean isBasiliskArrow = false;
 
 	public EntityBLArrow(World world) {
 		super(world);
@@ -309,6 +311,10 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 									movingobjectposition.entityHit.setFire(9);
 								else
 									movingobjectposition.entityHit.setFire(5);
+							}
+
+							if(isBasiliskArrow && enderman){
+								entitylivingbase.addPotionEffect(new PotionEffect(PotionHelper.petrify.getId(), 100));
 							}
 						}
 

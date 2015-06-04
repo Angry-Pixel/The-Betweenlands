@@ -108,62 +108,32 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
                 if(rand.nextInt(2) == 0 && i%2 == 0)
                     z++;
                 world.setBlock(x+i, y, z, log, 5, 2);
-                if(rand.nextInt(2) == 0 && i%2 != 0)
-                    world.setBlock(x+i, y+1, z, log, 5, 2);
+                world.setBlock(x+i, y+1, z, log, 5, 2);
             }
 
             if (dir == 2) {
                 if(rand.nextInt(2) == 0 && i%2 == 0)
                     z--;
                 world.setBlock(x-i, y, z, log, 5, 2);
-                if(rand.nextInt(2) == 0 && i%2 != 0)
-                    world.setBlock(x-i, y+1, z, log, 5, 2);
+                world.setBlock(x-i, y+1, z, log, 5, 2);
             }
 
             if (dir == 3) {
                 if(rand.nextInt(2) == 0 && i%2 == 0)
                     x++;
                 world.setBlock(x, y, z+i, log, 9, 2);
-                if(rand.nextInt(2) == 0 && i%2 != 0)
-                    world.setBlock(x, y+1, z+i, log, 9, 2);
+                world.setBlock(x, y+1, z+i, log, 9, 2);
             }
 
             if (dir == 4) {
                 if(rand.nextInt(2) == 0 && i%2 == 0)
                     z--;
                 world.setBlock(x, y, z-i, log, 9, 2);
-                if(rand.nextInt(2) == 0 && i%2 == 0)
-                    world.setBlock(x, y+1, z-i, log, 9, 2);
+                world.setBlock(x, y+1, z-i, log, 9, 2);
 
             }
 
-            /*switch (dir){
-                case 1:{
-                    world.setBlock(x+i, y, z, log, 5, 2);
-                }
-                case 2:{
-                    world.setBlock(x-i, y, z, log, 5, 2);
-                }
-                case 3:{
-                    world.setBlock(x, y, z+i, log, 9, 2);
-                }
-                case 4:{
-                    world.setBlock(x, y, z-i, log, 9, 2);
-                }
-                case 5:{
 
-                }
-                case 6:{
-
-                }
-                case 7:{
-
-                }
-                case 8:{
-
-                }
-
-            }*/
         }
 
     }
