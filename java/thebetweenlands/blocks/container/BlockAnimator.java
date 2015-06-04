@@ -5,11 +5,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -60,10 +63,12 @@ public class BlockAnimator extends BlockContainer {
 			else{
 				if(animator.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer){
 					Entity entity = EntityList.createEntityByID(animator.getStackInSlot(0).getItemDamage(), world);
-					entity.posX = x;
-					entity.posY = y + 0.5D;
-					entity.posZ = z;
-					world.spawnEntityInWorld(entity);
+                    EntityLiving entityliving = (EntityLiving)entity;
+                    entity.setLocationAndAngles(x, y + 0.5D, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F), 0.0F);
+                    entityliving.rotationYawHead = entityliving.rotationYaw;
+                    entityliving.renderYawOffset = entityliving.rotationYaw;
+                    entityliving.onSpawnWithEgg((IEntityLivingData)null);
+					world.spawnEntityInWorld(entityliving);
 				}
 				else{
 			        EntityItem entityitem = new EntityItem(world, x, y + 1D, z, animator.getStackInSlot(0));

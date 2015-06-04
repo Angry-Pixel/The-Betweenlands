@@ -100,6 +100,12 @@ public class SpawnEggs
 
         return is;
     }
+    
+    public static EntityLiving getEntity(World world, double x, double y, double z, ItemStack is)
+    {
+        EggData egg = getEggData(is);
+    	return egg.spawnMob(world, x, y, z, is);
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

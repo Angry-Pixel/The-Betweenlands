@@ -12,18 +12,19 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Sphere;
 
 import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.SpawnEggs;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
 
@@ -114,17 +115,25 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		if (te.getStackInSlot(0) != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
-			if(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)GL11.glTranslated(0.0D, -0.5D, 0.0D);
-			if(!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)){
-				GL11.glRotatef(-te.crystalRotation, 0, 1, 0);
+			GL11.glRotatef(-te.crystalRotation, 0, 1, 0);
+			if (te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)
+				GL11.glTranslated(0.0D, -0.5D, 0.0D);
+			if (!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)) {
 				GL11.glScaled(0.3D, 0.3D, 0.3D);
 				ItemRenderHelper.renderItem(te.getStackInSlot(0), 0);
-			}
-			else{
-				GL11.glScaled(0.3D, 0.3D, 0.3D);
-				Entity entity = EntityList.createEntityByID(te.getStackInSlot(0).getItemDamage(), tileEntity.getWorldObj());
-				entity.setRotationYawHead(0F);
-				RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 1F);   
+			} else {
+				GL11.glScaled(0.5D, 0.5D, 0.5D);
+				Entity entity = null;
+				if (te.getStackInSlot(0).getItem() instanceof SpawnEggs)
+					entity = SpawnEggs.getEntity(te.getWorldObj(), x, y, z, te.getStackInSlot(0));
+				else
+					entity = EntityList.createEntityByID(te.getStackInSlot(0).getItemDamage(), tileEntity.getWorldObj());
+				if (entity != null) {
+					entity.setRotationYawHead(0F);
+					entity.rotationPitch = 0F;
+					RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 1F);
+				}
+
 			}
 			GL11.glPopMatrix();
 		}

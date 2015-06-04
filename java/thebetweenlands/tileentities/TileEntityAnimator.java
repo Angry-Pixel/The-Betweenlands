@@ -1,7 +1,9 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.init.Items;
+import java.util.Random;
+
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -30,9 +32,10 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	// Progress (0-100). Used for rendering
-	public int progress, life = 4800, lifeDecrement = 40;
+	public int progress, life = 480, lifeDepletion = 480 / 4;
 	public boolean isAnimating = false, isDirty = false;
 	public int itemsConsumed = 0, stackSize = 16;
+	Random rand = new Random();
 
 	public float crystalVelocity = 0.0F;
 	public float crystalRotation = 0.0F;
@@ -65,15 +68,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			if (getStackInSlot(0) != null && getStackInSlot(1) != null && getStackInSlot(2) != null && itemsConsumed < stackSize) {
 				sendProgressPacket();
 				++progress;
-				lifeDecrement--;
-				if (lifeDecrement <= 0) {
-					life -= 10;
-					if (life <= 0) {
-						this.decrStackSize(1, 1);
-						life = 4800;
-					}
-					lifeDecrement = 40;
-				}
 				if (this.progress >= 44) {
 					this.progress = 0;
 					this.decrStackSize(2, 1);
@@ -83,8 +77,18 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 				}
 			} else
 				this.stopCraftingProcess();
-			if (itemsConsumed >= stackSize && getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.scroll)
-				this.setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(worldObj.rand, items)).getItem(worldObj.rand));
+			if (itemsConsumed >= stackSize && getStackInSlot(0) != null) {
+				if (getStackInSlot(0).getItem() == BLItemRegistry.scroll) {
+					this.setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(rand, items)).getItem(rand));
+					lifeDepletion = 480/4;
+				}
+				else if (getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) lifeDepletion = 480;
+				life -= lifeDepletion;
+				if (life <= 0) {
+					this.decrStackSize(1, 1);
+					life = 480;
+				}
+			}
 		}
 		this.updateContainingBlockInfo();
 	}
@@ -206,6 +210,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		if (packet.func_148853_f() == 0)
 			readFromNBT(packet.func_148857_g());
-//		worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		// worldObj.func_147479_m(xCoord, yCoord, zCoord);
 	}
 }
