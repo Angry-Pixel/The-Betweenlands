@@ -24,6 +24,8 @@ public class ItemBLArrow extends Item {
 				return (new EntityDamageSourceIndirect("PoisonedAnglerToothArrow", entityBLArrow, entity)).setProjectile();
 			case "octineArrow":
 				return (new EntityDamageSourceIndirect("OctineArrow", entityBLArrow, entity)).setProjectile();
+			case "basiliskArrow":
+				return (new EntityDamageSourceIndirect("basiliskArrow", entityBLArrow, entity)).setProjectile();
 			default:
 				return (new EntityDamageSourceIndirect("AnglerToothArrow", entityBLArrow, entity)).setProjectile();
 		}

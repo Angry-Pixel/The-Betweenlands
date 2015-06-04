@@ -3,6 +3,7 @@ package thebetweenlands.utils;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.potion.Potion;
 import thebetweenlands.potion.PotionDecayRestore;
+import thebetweenlands.potion.PotionPetrify;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -10,6 +11,7 @@ import java.lang.reflect.Modifier;
 public class PotionHelper
 {
     public static PotionDecayRestore decayRestore;
+    public static PotionPetrify petrify;
 
     /** adds support for 128 different potions, hopefully this doesn't break mods :I **/
     public static void initPotionArray() {
@@ -30,6 +32,7 @@ public class PotionHelper
 
     public static void registerPotions() {
         decayRestore = new PotionDecayRestore(getFreePotionId());
+        petrify = new PotionPetrify(getFreePotionId());
     }
 
     private static int getFreePotionId() {
