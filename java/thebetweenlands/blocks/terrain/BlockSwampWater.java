@@ -1,7 +1,8 @@
 package thebetweenlands.blocks.terrain;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -17,16 +18,15 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-
-import java.util.HashMap;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSwampWater extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	protected IIcon stillIcon, flowingIcon;
 
 	protected boolean canSpread = true;
-	protected boolean hasBoundingBox = true;
+	protected boolean hasBoundingBox = false;
 	protected boolean canCollide = false;
 
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<>();
@@ -399,8 +399,8 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	@Override
-	public boolean canCollideCheck(int meta, boolean boat) {
-		return this.hasBoundingBox;
+	public boolean canCollideCheck(int meta, boolean fullHit) {
+		return this.hasBoundingBox || fullHit && meta == 0;
 	}
 
 	@Override
