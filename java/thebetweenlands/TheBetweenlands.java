@@ -36,6 +36,7 @@ import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
+import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -91,6 +92,7 @@ public class TheBetweenlands
 		BLBiomeRegistry.init();
 		BLItemRegistry.init();
 		BLEntityRegistry.init();
+		TileEntityAnimator.addItems();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		

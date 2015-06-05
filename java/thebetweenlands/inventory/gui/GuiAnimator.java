@@ -73,7 +73,6 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-
 		if (this.tile.itemsConsumed >= tile.stackSize) this.mc.thePlayer.closeScreen();
 	}
 }

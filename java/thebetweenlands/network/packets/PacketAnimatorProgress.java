@@ -6,24 +6,31 @@ import thebetweenlands.network.base.IPacket;
 import thebetweenlands.tileentities.TileEntityAnimator;
 
 public class PacketAnimatorProgress implements IPacket {
-	public PacketAnimatorProgress() { }
-	
+	public PacketAnimatorProgress() {
+	}
+
 	public int x, y, z, progress, life, slot0Size, slot0ItemID, slot0ItemMeta, slot1Size, slot2Size, itemsConsumed;
-	
+	public boolean lifeDepleted;
+
 	public PacketAnimatorProgress(TileEntityAnimator tile) {
 		this.x = tile.xCoord;
 		this.y = tile.yCoord;
 		this.z = tile.zCoord;
 		this.progress = tile.progress;
 		this.life = tile.life;
-		this.slot0Size = tile.getStackInSlot(0).stackSize;
-		this.slot0ItemID = Item.getIdFromItem(tile.getStackInSlot(0).getItem());
-		this.slot0ItemMeta = tile.getStackInSlot(0).getItemDamage();
-		this.slot1Size = tile.getStackInSlot(1).stackSize;
-		this.slot2Size = tile.getStackInSlot(2).stackSize;
+		if (tile.getStackInSlot(0) != null) {
+			this.slot0Size = tile.getStackInSlot(0).stackSize;
+			this.slot0ItemID = Item.getIdFromItem(tile.getStackInSlot(0).getItem());
+			this.slot0ItemMeta = tile.getStackInSlot(0).getItemDamage();
+		}
+		if (tile.getStackInSlot(1) != null)
+			this.slot1Size = tile.getStackInSlot(1).stackSize;
+		if (tile.getStackInSlot(2) != null)
+			this.slot2Size = tile.getStackInSlot(2).stackSize;
 		this.itemsConsumed = tile.itemsConsumed;
+		this.lifeDepleted = tile.lifeDepleted;
 	}
-	
+
 	@Override
 	public void deserialize(ByteBuf buffer) {
 		this.x = buffer.readInt();
@@ -37,6 +44,7 @@ public class PacketAnimatorProgress implements IPacket {
 		this.slot1Size = buffer.readInt();
 		this.slot2Size = buffer.readInt();
 		this.itemsConsumed = buffer.readInt();
+		this.lifeDepleted = buffer.readBoolean();
 	}
 
 	@Override
@@ -52,5 +60,6 @@ public class PacketAnimatorProgress implements IPacket {
 		buffer.writeInt(this.slot1Size);
 		buffer.writeInt(this.slot2Size);
 		buffer.writeInt(this.itemsConsumed);
+		buffer.writeBoolean(this.lifeDepleted);
 	}
 }

@@ -3,21 +3,27 @@ package thebetweenlands.inventory.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotRestriction;
+import thebetweenlands.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityAnimator;
 
 public class ContainerAnimator extends Container {
 
 	private final int numRows = 2;
+	private int life;
+	private int sulphur;
+	private TileEntityAnimator animator;
 
 	public ContainerAnimator(InventoryPlayer playerInventory, TileEntityAnimator tile) {
 		super();
 		int i = (numRows - 4) * 18;
+		this.animator = tile;
 
-		addSlotToContainer(new Slot(tile, 0, 80, 24));
+		addSlotToContainer(new SlotSizeRestriction(tile, 0, 80, 24, 1));
 		addSlotToContainer(new SlotRestriction(tile, 1, 43, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 11), 1));
 		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 24), 64));
 
@@ -30,51 +36,52 @@ public class ContainerAnimator extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		ItemStack stack = null;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		ItemStack itemstack = null;
+		Slot slot = (Slot) this.inventorySlots.get(slotIndex);
+
 		if (slot != null && slot.getHasStack()) {
-			ItemStack stack1 = slot.getStack();
-			stack = stack1.copy();
-			if (slotIndex >= 3) {
-				if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == 11 && !slot.getHasStack()) {
-					((Slot) inventorySlots.get(1)).putStack(new ItemStack(stack1.getItem(), 1, stack1.getItemDamage()));
-					slot.decrStackSize(1);
-				} else if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == 24) {
-					if (!mergeItemStack(stack1, 2, 3, false))
-						return null;
-				} else if (stack1.getItem() != null) {
-					if (!mergeItemStack(stack1, 0, 1, false))
-						return null;
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+
+			if (slotIndex < 3) {
+				if (!this.mergeItemStack(itemstack1, 3, 39, true)) {
+					return null;
 				}
-				// Moves items from hotbar to inventory and vice versa
-				else {
-					if (slotIndex < 30) {
-						if (!mergeItemStack(stack1, 30, 39, false))
-							return null;
-					} else {
-						if (!mergeItemStack(stack1, 3, 29, false))
-							return null;
+			} else {
+				if (itemstack1.getItem() == BLItemRegistry.materialsBL && itemstack1.getItemDamage() == 11 && !(((Slot) this.inventorySlots.get(1)).getHasStack() || !((Slot) this.inventorySlots.get(1)).isItemValid(itemstack1))) {
+					((Slot) this.inventorySlots.get(1)).putStack(new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage()));
+					--itemstack1.stackSize;
+				} else if (itemstack1.getItem() == BLItemRegistry.materialsBL && itemstack1.getItemDamage() == 24) {
+					if (!mergeItemStack(itemstack1, 2, 3, false)) {
+						return null;
 					}
-				}
-			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
-				return null;
+				} else if (!(((Slot) this.inventorySlots.get(0)).getHasStack() || !((Slot) this.inventorySlots.get(0)).isItemValid(itemstack1))) {
+					((Slot) this.inventorySlots.get(0)).putStack(new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage()));
+					--itemstack1.stackSize;
+				} else
+					return null;
+			}
 
-			if (stack1.stackSize == 0)
-				slot.putStack(null);
-			else
+			if (itemstack1.stackSize == 0) {
+				slot.putStack((ItemStack) null);
+			} else {
 				slot.onSlotChanged();
+			}
 
-			if (stack1.stackSize != stack.stackSize)
-				slot.onPickupFromSlot(player, stack1);
-			else
+			if (itemstack1.stackSize == itemstack.stackSize) {
 				return null;
+			}
+
+			slot.onPickupFromSlot(player, itemstack1);
 		}
-		return stack;
+
+		return itemstack;
 	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
+		animator.sendProgressPacket();
 	}
 
 	@Override

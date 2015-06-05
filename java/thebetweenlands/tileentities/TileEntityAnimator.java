@@ -1,7 +1,9 @@
 package thebetweenlands.tileentities;
 
+import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
@@ -26,14 +28,20 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 public class TileEntityAnimator extends TileEntityBasicInventory {
 
 	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.LIFE_CRYSTAL), 10), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD), 20), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 30), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 40) };
+	public static final ArrayList<ItemStack> viable = new ArrayList<ItemStack>();
 
 	public TileEntityAnimator() {
 		super(3, "animator");
 	}
 
+	public static void addItems() {
+		viable.add(new ItemStack(Items.spawn_egg));
+		viable.add(new ItemStack(BLItemRegistry.scroll));
+	}
+
 	// Progress (0-100). Used for rendering
 	public int progress, life = 480, lifeDepletion = 480 / 4;
-	public boolean isAnimating = false, isDirty = false;
+	public boolean isAnimating = false, isDirty = false, lifeDepleted = false;
 	public int itemsConsumed = 0, stackSize = 16;
 	Random rand = new Random();
 
@@ -42,6 +50,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 
 	@Override
 	public void updateEntity() {
+		boolean canStart = true;
 		if (isDirty) {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			isDirty = false;
@@ -65,7 +74,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 				}
 			}
 		} else {
-			if (getStackInSlot(0) != null && getStackInSlot(1) != null && getStackInSlot(2) != null && itemsConsumed < stackSize) {
+			if (getStackInSlot(0) != null && getStackInSlot(1) != null && getStackInSlot(2) != null && itemsConsumed < stackSize && (getStackInSlot(0).getItem().equals(Items.spawn_egg) || getStackInSlot(0).getItem().equals(BLItemRegistry.scroll) || getStackInSlot(0).getItem().equals(BLItemRegistry.spawnEggs))) {
 				sendProgressPacket();
 				++progress;
 				if (this.progress >= 44) {
@@ -77,17 +86,20 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 				}
 			} else
 				this.stopCraftingProcess();
-			if (itemsConsumed >= stackSize && getStackInSlot(0) != null) {
-				if (getStackInSlot(0).getItem() == BLItemRegistry.scroll) {
+			if (itemsConsumed >= stackSize && getStackInSlot(0) != null && !lifeDepleted) {
+				if (getStackInSlot(0).getItem().equals(BLItemRegistry.scroll)) {
 					this.setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(rand, items)).getItem(rand));
-					lifeDepletion = 480/4;
-				}
-				else if (getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) lifeDepletion = 480;
+					lifeDepletion = (480 / 4);
+				} else if (getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)
+					lifeDepletion = 480;
+				else
+					lifeDepletion = 480 / 10;
 				life -= lifeDepletion;
 				if (life <= 0) {
-					this.decrStackSize(1, 1);
+					decrStackSize(1, 1);
 					life = 480;
 				}
+				lifeDepleted = true;
 			}
 		}
 		this.updateContainingBlockInfo();
@@ -172,10 +184,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			TileEntityAnimator tile = (TileEntityAnimator) te;
 			tile.progress = pkt.progress;
 			tile.life = pkt.life;
-			tile.setInventorySlotContents(0, new ItemStack(Item.getItemById(pkt.slot0ItemID), pkt.slot0Size, pkt.slot0ItemMeta));
-			tile.getStackInSlot(1).stackSize = pkt.slot1Size;
-			tile.getStackInSlot(2).stackSize = pkt.slot2Size;
+			if(tile.getStackInSlot(0) != null)tile.setInventorySlotContents(0, new ItemStack(Item.getItemById(pkt.slot0ItemID), pkt.slot0Size, pkt.slot0ItemMeta));
+			if(tile.getStackInSlot(1) != null)tile.getStackInSlot(1).stackSize = pkt.slot1Size;
+			if(tile.getStackInSlot(2) != null)tile.getStackInSlot(2).stackSize = pkt.slot2Size;
 			tile.itemsConsumed = pkt.itemsConsumed;
+			tile.lifeDepleted = pkt.lifeDepleted;
 		}
 	}
 
@@ -187,6 +200,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		super.writeToNBT(nbt);
 		nbt.setInteger("life", life);
 		nbt.setInteger("itemsConsumed", itemsConsumed);
+		nbt.setBoolean("lifeDepleted", lifeDepleted);
 	}
 
 	/**
@@ -197,6 +211,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		super.readFromNBT(nbt);
 		life = nbt.getInteger("life");
 		itemsConsumed = nbt.getInteger("itemsConsumed");
+		lifeDepleted = nbt.getBoolean("lifeDepleted");
 	}
 
 	@Override
