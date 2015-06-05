@@ -19,7 +19,7 @@ public class BlockTarFluid extends BlockFluidClassic {
 	protected IIcon stillIcon, flowingIcon;
 
 	public BlockTarFluid() {
-		super(BLFluidRegistry.swampWater, BLMaterials.tar);
+		super(BLFluidRegistry.tarFluid, BLMaterials.tar);
 		setBlockName("thebetweenlands.tarFluid");
 	}
 
