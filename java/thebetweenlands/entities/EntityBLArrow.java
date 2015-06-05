@@ -12,6 +12,7 @@ import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -192,6 +193,9 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 
 				if (ticksInGround == 1200) {
 					setDead();
+				}
+				else if (isOctineArrow && ticksInGround == 1) {
+					worldObj.setBlock(this.landedX, this.landedY+1, this.landedZ, Blocks.fire);
 				}
 			} else {
 				inGround = false;
