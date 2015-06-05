@@ -323,6 +323,7 @@ item.thebetweenlands.weedwoodBucketTar.name=Weedwood Tar Bucket
 item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
+item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
