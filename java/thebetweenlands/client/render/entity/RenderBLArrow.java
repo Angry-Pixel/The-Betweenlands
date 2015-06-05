@@ -1,16 +1,20 @@
 package thebetweenlands.client.render.entity;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.entities.EntityBLArrow;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderBLArrow extends Render {
@@ -28,6 +32,11 @@ public class RenderBLArrow extends Render {
             case "poisonedAnglerToothArrow":
                 FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture2);
             case "octineArrow":
+            	//TODO: Fix the arrow type check. Currently it's only correct on the server side, but not on the client side
+            	//Use the datawatcher or something else that let's the client know which type of arrow is being rendered
+            	if(ShaderHelper.INSTANCE.isShaderSupported()) {
+            		ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
+                }
                 FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture3);
             default:
                 FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
