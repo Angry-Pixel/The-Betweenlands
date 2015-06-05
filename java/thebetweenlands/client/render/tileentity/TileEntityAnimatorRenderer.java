@@ -118,7 +118,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			GL11.glRotatef(-te.crystalRotation, 0, 1, 0);
 			if (te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)
 				GL11.glTranslated(0.0D, -0.5D, 0.0D);
-			if (!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)) {
+			if (!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) && te.getStackInSlot(0) != null) {
 				GL11.glScaled(0.3D, 0.3D, 0.3D);
 				ItemRenderHelper.renderItem(te.getStackInSlot(0), 0);
 			} else {
@@ -133,7 +133,6 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 					entity.rotationPitch = 0F;
 					RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 1F);
 				}
-
 			}
 			GL11.glPopMatrix();
 		}

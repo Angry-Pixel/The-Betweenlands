@@ -1,5 +1,7 @@
 package thebetweenlands.inventory.container;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -83,6 +85,13 @@ public class ContainerAnimator extends Container {
 		super.detectAndSendChanges();
 		animator.sendProgressPacket();
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int value) 
+    {
+		super.updateProgressBar(id, value);
+		animator.sendProgressPacket();    	
+    }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer p_75145_1_) {
