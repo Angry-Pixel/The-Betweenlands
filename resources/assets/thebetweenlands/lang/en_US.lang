@@ -88,12 +88,15 @@ tile.thebetweenlands.cragTiles.name=Cragrock Tiles
 tile.thebetweenlands.dungeonTile.name=Dungeon Tile
 tile.thebetweenlands.goldCircleBrick.name=Gold Circle Brick
 tile.thebetweenlands.smoothBetweenstone.name=Smooth Betweenstone
-tile.thebetweenlands.smoothTempleBrick.name=Smooth Temple Bricks
+tile.thebetweenlands.smoothTempleBrick.name=Smooth Temple Brick
 tile.thebetweenlands.solidTar.name=Solid Tar
 tile.thebetweenlands.sulphurBlock.name=Sulfur Block
 tile.thebetweenlands.octineBlock.name=Octine Block
 tile.thebetweenlands.valoniteBlock.name=Valonite Block
 tile.thebetweenlands.templeBrick.name=Temple Bricks
+tile.thebetweenlands.mossyTempleBrick.name=Mossy Temple Brick
+tile.thebetweenlands.crackedTempleBrick.name=Cracked Temple Brick
+tile.thebetweenlands.bloodyTempleBrick.name=Bloody Temple Brick
 tile.thebetweenlands.templePillar.name=Temple Pillar
 tile.thebetweenlands.thatch.name=Thatch
 tile.thebetweenlands.rubberTreePlanks.name=Rubber Tree Planks
@@ -323,6 +326,7 @@ item.thebetweenlands.weedwoodBucketTar.name=Weedwood Tar Bucket
 item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
+item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
