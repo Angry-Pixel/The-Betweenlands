@@ -6,7 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -16,6 +19,10 @@ import java.util.Random;
 
 public class BlockRottenLog extends Block {
 //	public IIcon modelTexture1;
+	public IIcon end;
+	public IIcon top;
+	public IIcon bottom;
+	public IIcon sides;
 
 	public BlockRottenLog() {
 		super(Material.wood);
@@ -23,36 +30,23 @@ public class BlockRottenLog extends Block {
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
 		setBlockName("thebetweenlands.rottenLog");
-		setBlockTextureName("thebetweenlands:rottenLog");
 		setCreativeTab(ModCreativeTabs.plants);
-	}
-
-	@Override
-	public int getRenderType() {
-		return BlockRenderIDs.MODEL_PLANT.id();
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		blockIcon = reg.registerIcon("thebetweenlands:rottenLog");
+		end = reg.registerIcon("thebetweenlands:rottenLog4");
+		top = reg.registerIcon("thebetweenlands:rottenLog2");
+		bottom = reg.registerIcon("thebetweenlands:rottenLog1");
+		sides = reg.registerIcon("thebetweenlands:rottenLog3");
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderBlockPass() {
-		return 1;
-	}
+
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.ROTTEN_BARK).getItemDamage();
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.ROTTEN_BARK).getItem();
 	}
 
 	@Override
@@ -61,17 +55,76 @@ public class BlockRottenLog extends Block {
 	}
 
 	@Override
-	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.ROTTEN_BARK).getItemDamage();
-	}
-
-	@Override
-	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.ROTTEN_BARK).getItem();
-	}
-
-	@Override
 	public boolean isOpaqueCube(){
 		return false;
 	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean isBlockNormalCube(){
+		return false;
+	}
+
+	@Override
+	public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
+		Block block = iblockaccess.getBlock(x, y, z);
+		return !(block instanceof BlockRottenLog);
+	}
+
+
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side){
+		int meta = access.getBlockMetadata(z, y, z);
+		if(meta == 0){
+			if(side == 0)
+				return bottom;
+			if(side == 1)
+				return bottom;
+			if(side == 2 || side == 3)
+				return end;
+			else
+				return sides;
+		} else if(meta == 1) {
+			if (side == 0)
+				return bottom;
+			if (side == 1)
+				return bottom;
+			if (side == 4 || side == 5)
+				return end;
+			else
+				return sides;
+		} else if(meta == 2) {
+			if (side == 0)
+				return bottom;
+			if (side == 1)
+				return top;
+			if (side == 2 || side == 3)
+				return end;
+			else
+				return sides;
+		} else if(meta == 3) {
+			if (side == 0)
+				return bottom;
+			if (side == 1)
+				return top;
+			if (side == 4 || side == 5)
+				return end;
+			else
+				return sides;
+		}
+		return bottom;
+	}
+
 }

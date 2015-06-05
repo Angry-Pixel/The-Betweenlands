@@ -1,10 +1,14 @@
 package thebetweenlands.items;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import thebetweenlands.entities.EntityBLArrow;
+
+import java.util.List;
 
 public class ItemBLArrow extends Item {
 	
@@ -15,6 +19,16 @@ public class ItemBLArrow extends Item {
 		type = string;
 		setTextureName("thebetweenlands:" + type + "Item");
 	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		ItemBLArrow item = (ItemBLArrow) stack.getItem();
+		if (item == BLItemRegistry.octineArrow)
+			list.add("Use with caution");
+		if (item == BLItemRegistry.basiliskArrow)
+			list.add("Stunningly good");
+	}
+
 
 	public static DamageSource causeArrowDamage(EntityBLArrow entityBLArrow, Entity entity) {
 		//TODO make these types
@@ -29,7 +43,7 @@ public class ItemBLArrow extends Item {
 			default:
 				return (new EntityDamageSourceIndirect("AnglerToothArrow", entityBLArrow, entity)).setProjectile();
 		}
-
 	}
+
 	
 }
