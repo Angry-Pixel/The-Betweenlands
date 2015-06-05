@@ -64,7 +64,7 @@ public class BlockBLLog extends BlockLog {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		iconSide = iconRegister.registerIcon(getTextureName());
-		if(type.equals("weedwood") || type.equals("weedwoodBark") || type.equals("portalBark"))
+		if(type.equals("weedwood") || type.equals("weedwoodBark") || type.equals("rottenWeedwoodBark") || type.equals("portalBark"))
 			iconTop = iconSide;
 		else
 			iconTop = iconRegister.registerIcon(getTextureName()+"Top");

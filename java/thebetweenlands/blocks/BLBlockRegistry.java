@@ -111,6 +111,7 @@ public class BLBlockRegistry
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog");
 	public static final Block weedwood = new BlockBLLog("weedwood");
 	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark");
+	public static final Block rottenWeedwoodBark = new BlockBLLog("rottenWeedwoodBark");
 	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog");
 	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog");
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
