@@ -14,7 +14,6 @@ import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.inventory.container.ContainerPurifier;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
@@ -134,20 +133,21 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			return;
-
-		ItemStack input;
-			input = inventory[0];
-
-			if (getStackInSlot(0) != null && getStackInSlot(0).getItem() == Item.getItemFromBlock(BLBlockRegistry.aquaMiddleGemOre) && getStackInSlot(0).getItemDamage() == 0 && getStackInSlot(0).stackSize == 1 && getWaterAmount() > 0) {
+		// TODO write a recipe input/output method
+			ItemStack stack = ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM);
+			if (getStackInSlot(0) != null && getStackInSlot(0).getItem() == Item.getItemFromBlock(BLBlockRegistry.aquaMiddleGemOre) && getStackInSlot(0).getItemDamage() == 0 && getStackInSlot(0).stackSize >= 1 && getWaterAmount() > 0) {
 				time++;
 
 				if (time >= MAX_TIME) {
-					for (int i = 0; i < 2; i++)
+					for (int i = 0; i < 1; i++)
 						if (inventory[i] != null)
 							if (--inventory[i].stackSize <= 0)
 								inventory[i] = null;
 					extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
-					inventory[1] = ItemStack.copyItemStack(ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM, 1));
+					if (inventory[1] == null)
+						inventory[1] = stack.copy();
+					else if (inventory[1].isItemEqual(stack))
+						inventory[1].stackSize += stack.stackSize;
 					time = 0;
 					markDirty();
 				}
