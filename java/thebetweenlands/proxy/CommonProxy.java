@@ -1,15 +1,35 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
-import thebetweenlands.inventory.container.*;
-import thebetweenlands.inventory.gui.*;
-import thebetweenlands.tileentities.*;
+import thebetweenlands.inventory.container.ContainerAnimator;
+import thebetweenlands.inventory.container.ContainerBLCraftingTable;
+import thebetweenlands.inventory.container.ContainerBLDualFurnace;
+import thebetweenlands.inventory.container.ContainerBLFurnace;
+import thebetweenlands.inventory.container.ContainerDruidAltar;
+import thebetweenlands.inventory.container.ContainerPurifier;
+import thebetweenlands.inventory.container.ContainerWeedWoodChest;
+import thebetweenlands.inventory.gui.GuiAnimator;
+import thebetweenlands.inventory.gui.GuiBLCrafting;
+import thebetweenlands.inventory.gui.GuiBLDualFurnace;
+import thebetweenlands.inventory.gui.GuiBLFurnace;
+import thebetweenlands.inventory.gui.GuiDruidAltar;
+import thebetweenlands.inventory.gui.GuiPurifier;
+import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import thebetweenlands.tileentities.TileEntityBLFurnace;
+import thebetweenlands.tileentities.TileEntityBush;
+import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityWisp;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy
         implements IGuiHandler
@@ -20,6 +40,7 @@ public class CommonProxy
     public static final int GUI_BL_FURNACE = 4;
     public static final int GUI_BL_DUAL_FURNACE = 5;
     public static final int GUI_ANIMATOR = 6;
+    public static final int GUI_PURIFIER = 7;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -30,6 +51,7 @@ public class CommonProxy
         registerTileEntity(TileEntityWisp.class, "wisp");
         registerTileEntity(TileEntityBush.class, "weedWoodBush");
         registerTileEntity(TileEntityAnimator.class, "animator");
+        registerTileEntity(TileEntityPurifier.class, "purifier");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
@@ -84,6 +106,12 @@ public class CommonProxy
 				return new ContainerAnimator(player.inventory, (TileEntityAnimator) tileentity);
 		}
 
+		else if (ID == GUI_PURIFIER) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPurifier)
+				return new ContainerPurifier(player.inventory, (TileEntityPurifier) tileentity);
+		}
+
         return null;
     }
 
@@ -126,6 +154,12 @@ public class CommonProxy
 			TileEntity tileentity = world.getTileEntity(x, y, z);
 			if (tileentity instanceof TileEntityAnimator)
 				return new GuiAnimator(player.inventory, (TileEntityAnimator) tileentity);
+		}
+
+		else if (ID == GUI_PURIFIER) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPurifier)
+				return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
 		}
 
         return null;
