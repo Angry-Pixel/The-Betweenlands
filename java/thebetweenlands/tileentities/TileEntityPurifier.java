@@ -74,7 +74,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 				return FluidContainerRegistry.drainFluidContainer(bucket);
 			}
 		}
-
 		return bucket;
 	}
 
@@ -101,64 +100,65 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public int getWaterAmount() {
 		return waterTank.getFluidAmount();
 	}
-	
+
 	public int getTanksFullValue() {
 		return waterTank.getCapacity();
 	}
-	
+
 	public int getScaledWaterAmount(int scale) {
 		return waterTank.getFluid() != null ? (int) ((float) waterTank.getFluid().amount / (float) waterTank.getCapacity() * scale) : 0;
 	}
-	
+
 	public void getGUIData(int id, int value) {
 		switch (id) {
-			case 0:
-				time = value;
-				break;
-			case 1:
-				if (waterTank.getFluid() == null)
-					waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, value));
-				else
-					waterTank.getFluid().amount = value;
-				break;
-			}
+		case 0:
+			time = value;
+			break;
+		case 1:
+			if (waterTank.getFluid() == null)
+				waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, value));
+			else
+				waterTank.getFluid().amount = value;
+			break;
+		}
 	}
-	
+
 	public void sendGUIData(ContainerPurifier counter, ICrafting craft) {
 		craft.sendProgressBarUpdate(counter, 0, time);
 		craft.sendProgressBarUpdate(counter, 1, waterTank.getFluid() != null ? waterTank.getFluid().amount : 0);
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			return;
 		// TODO write a recipe input/output method
-			ItemStack stack = ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM);
-			if (getStackInSlot(0) != null && getStackInSlot(0).getItem() == Item.getItemFromBlock(BLBlockRegistry.aquaMiddleGemOre) && getStackInSlot(0).getItemDamage() == 0 && getStackInSlot(0).stackSize >= 1 && getWaterAmount() > 0) {
-				time++;
+		ItemStack stack = ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM);
+		if (getStackInSlot(0) != null && getStackInSlot(0).getItem() == Item.getItemFromBlock(BLBlockRegistry.aquaMiddleGemOre) && getStackInSlot(0).getItemDamage() == 0 && getStackInSlot(0).stackSize >= 1 && getWaterAmount() > 0) {
+			time++;
 
-				if (time >= MAX_TIME) {
-					for (int i = 0; i < 1; i++)
-						if (inventory[i] != null)
-							if (--inventory[i].stackSize <= 0)
-								inventory[i] = null;
-					extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
-					if (inventory[1] == null)
-						inventory[1] = stack.copy();
-					else if (inventory[1].isItemEqual(stack))
-						inventory[1].stackSize += stack.stackSize;
-					time = 0;
-					markDirty();
-				}
+			if (time >= MAX_TIME) {
+				for (int i = 0; i < 1; i++)
+					if (inventory[i] != null)
+						if (--inventory[i].stackSize <= 0)
+							inventory[i] = null;
+				extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+				if (inventory[1] == null)
+					inventory[1] = stack.copy();
+				else if (inventory[1].isItemEqual(stack))
+					inventory[1].stackSize += stack.stackSize;
+				time = 0;
+				markDirty();
 			}
+		}
+
 		if (getStackInSlot(0) == null) {
 			time = 0;
 			markDirty();
 		}
 		System.out.println("Purifying: "+ isPurifying() + " Stack: " + getStackInSlot(0) + " Time: " + time);
 	}
-	
+
 	private void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
