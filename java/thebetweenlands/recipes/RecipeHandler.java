@@ -71,6 +71,7 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlanks, 4), new ItemStack(BLBlockRegistry.weedwoodLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlanks, 4), new ItemStack(BLBlockRegistry.weedwood));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.purpleRainPlanks, 4), new ItemStack(BLBlockRegistry.purpleRainLog));
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 4, 10), new ItemStack(BLBlockRegistry.sundew));
 		GameRegistry.addShapelessRecipe(new ItemStack(Items.dye, 4, 9), new ItemStack(BLBlockRegistry.waterFlower));
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK, 4), "p", "p", 'p', new ItemStack(BLBlockRegistry.weedwoodPlanks));

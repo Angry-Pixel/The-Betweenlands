@@ -144,10 +144,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		if (rand.nextBoolean())
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE), 0F);
-		else
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.MOSS), 0F);
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE, 3), 0F);
 	}
 
 	@Override

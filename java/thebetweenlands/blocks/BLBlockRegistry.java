@@ -223,6 +223,7 @@ public class BLBlockRegistry
 	public static final BlockTemplePillar templePillar = new BlockTemplePillar();
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block rubberTreePlanks = new BlockBLGenericDeco("rubberTreePlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
+	public static final Block purpleRainPlanks = new BlockBLGenericDeco("purpleRainPlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block deepWaterCoralBlock = new BlockBLGenericDeco("deepWaterCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
@@ -240,6 +241,7 @@ public class BLBlockRegistry
 	public static final Block templeBrickStairs = new BlockBLStairs(templeBrick, 0).setBlockName("thebetweenlands.templeBrickStairs");
 	public static final Block weedwoodPlankStairs = new BlockBLStairs(weedwoodPlanks, 0).setBlockName("thebetweenlands.weedwoodPlankStairs");
 	public static final Block rubberTreePlankStairs = new BlockBLStairs(rubberTreePlanks, 0).setBlockName("thebetweenlands.rubberTreePlankStairs");
+	public static final Block purpleRainPlankStairs = new BlockBLStairs(purpleRainPlanks, 0).setBlockName("thebetweenlands.purpleRainPlankStairs");
 	public static final Block betweenstoneBrickWall = new BlockBLWall(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickWall");
 	public static final Block mudBrickWall = new BlockBLWall(mudBrick, 0).setBlockName("thebetweenlands.mudBrickWall");
 	public static final Block cragrockWall = new BlockBLWall(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockWall");
@@ -249,7 +251,8 @@ public class BLBlockRegistry
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
-
+	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
+	
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
 
@@ -268,6 +271,11 @@ public class BLBlockRegistry
 		Block rubberPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "rubberTreePlanks", rubberPlankSlab);
 		GameRegistry.registerBlock(rubberPlankSlab, ItemBlockSlab.class, rubberPlankSlab.getUnlocalizedName(), rubberPlankSlab, rubberPlankSlabDouble, false);
 		GameRegistry.registerBlock(rubberPlankSlabDouble, ItemBlockSlab.class, rubberPlankSlabDouble.getUnlocalizedName() + "Double", rubberPlankSlab, rubberPlankSlabDouble, true);
+	
+		Block purpleRainPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "purpleRainPlanks", null);
+		Block purpleRainPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "purpleRainPlanks", rubberPlankSlab);
+		GameRegistry.registerBlock(purpleRainPlankSlab, ItemBlockSlab.class, purpleRainPlankSlab.getUnlocalizedName(), purpleRainPlankSlab, purpleRainPlankSlabDouble, false);
+		GameRegistry.registerBlock(purpleRainPlankSlabDouble, ItemBlockSlab.class, purpleRainPlankSlabDouble.getUnlocalizedName() + "Double", purpleRainPlankSlab, purpleRainPlankSlabDouble, true);
 		
 		Block betweenstoneBrickSlab = new BlockBLSlabStone(false, Material.rock, "betweenstoneBricks", null);
 		Block betweenstoneBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "betweenstoneBricks", betweenstoneBrickSlab);
