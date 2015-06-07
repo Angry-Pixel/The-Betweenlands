@@ -1,6 +1,7 @@
 package thebetweenlands.recipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -98,6 +99,42 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.hugeMushroomTop, 4), "xx", "xx", 'x', BLBlockRegistry.bulbCappedMushroom);
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 3), "##", "##", "##", '#', "plankWeedwood"));
+		
+		// Stairs, slabs, walls, fences
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.betweenstoneBricks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.mudBrick);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrickStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.cragrockBrick);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.limestoneBricks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.smoothBetweenstone);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.solidTar);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.templeBrick);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.rubberTreePlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankStairs, 4), "#  ", "## ", "###", 'x', BLBlockRegistry.purpleRainPlanks);
+		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickWall, 6), "###", "###", 'x', BLBlockRegistry.betweenstoneBricks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickWall, 6), "###", "###", 'x', BLBlockRegistry.mudBrick);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockWall, 6), "###", "###", 'x', BLBlockRegistry.cragrockBrick);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickWall, 6), "###", "###", 'x', BLBlockRegistry.limestoneBricks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneWall, 6), "###", "###", 'x', BLBlockRegistry.smoothBetweenstone);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarWall, 6), "###", "###", 'x', BLBlockRegistry.solidTar);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickWall, 6), "###", "###", 'x', BLBlockRegistry.templeBrick);
+		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFence, 3), "X#X", "X#X", 'x',  ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFence, 3), "X#X", "X#X", 'x',  ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.rubberTreePlanks));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankFence, 3), "X#X", "X#X", 'x',  ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.purpleRainPlanks));
+		
+		//Not sure how to do these
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlab, 4), "###", 'x', BLBlockRegistry.betweenstoneBricks);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickSlab, 4), "###", 'x', BLBlockRegistry.mudBrick);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrickSlab, 4), "###", 'x', BLBlockRegistry.cragrockBrick);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickSlab, 4), "###", 'x', BLBlockRegistry.limestoneBricks);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneSlab, 4), "###", 'x', BLBlockRegistry.smoothBetweenstone);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarSlab, 4), "###", 'x', BLBlockRegistry.solidTar);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickSlab, 4), "###", 'x', BLBlockRegistry.templeBrick);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankSlab, 4), "###", 'x', BLBlockRegistry.weedwoodPlanks);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankSlab, 4), "###", 'x', BLBlockRegistry.rubberTreePlanks);
+		//GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankSlab, 4), "###", 'x', BLBlockRegistry.purpleRainPlanks);
 		
 		//Food
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.reedDonut, 3), " # ", "# #", " # ", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
