@@ -15,8 +15,6 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
-	private ChunkCoordinates movementTarget;
-	
 	public EntityLurker(World world) {
 		super(world);
 		

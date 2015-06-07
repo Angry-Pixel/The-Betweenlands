@@ -293,63 +293,64 @@ public class BLBlockRegistry
 
 	
 	// SLABS
-	public static void registerSlabs() {
-		Block weedwoodPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "weedwoodPlanks", null);
-		Block weedwoodPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab);
+	public static final Block weedwoodPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "weedwoodPlanks", null);
+	public static final Block weedwoodPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab);
+	public static final Block rubberTreePlankSlab = new BlockBLSlabPlanks(false, Material.wood, "rubberTreePlanks", null);
+	public static final Block rubberTreePlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "rubberTreePlanks", rubberTreePlankSlab);
+	public static final Block purpleRainPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "purpleRainPlanks", null);
+	public static final Block purpleRainPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "purpleRainPlanks", rubberTreePlankSlab);
+	public static final Block betweenstoneBrickSlab = new BlockBLSlabStone(false, Material.rock, "betweenstoneBricks", null);
+	public static final Block betweenstoneBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "betweenstoneBricks", betweenstoneBrickSlab);
+	public static final Block mudBrickSlab = new BlockBLSlabStone(false, Material.rock, "mudBrick", null);
+	public static final Block mudBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "mudBrick", mudBrickSlab);
+	public static final Block cragrockBrickSlab = new BlockBLSlabStone(false, Material.rock, "cragrockBrick", null);
+	public static final Block cragrockBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "cragrockBrick", cragrockBrickSlab);
+	public static final Block limestoneBrickSlab = new BlockBLSlabStone(false, Material.rock, "limestoneBricks", null);
+	public static final Block limestoneBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "limestoneBricks", limestoneBrickSlab);
+	public static final Block smoothBetweenstoneSlab = new BlockBLSlabStone(false, Material.rock, "smoothBetweenstone", null);
+	public static final Block smoothBetweenstoneSlabDouble = new BlockBLSlabStone(true, Material.rock, "smoothBetweenstone", smoothBetweenstoneSlab);
+	public static final Block solidTarSlab = new BlockBLSlabStone(false, Material.rock, "solidTar", null);
+	public static final Block solidTarSlabDouble = new BlockBLSlabStone(true, Material.rock, "solidTar", solidTarSlab);
+	public static final Block templeBrickSlab = new BlockBLSlabStone(false, Material.rock, "templeBrick", null);
+	public static final Block templeBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "templeBrick", templeBrickSlab);
+	
+	/*public static void registerSlabs() {
 		GameRegistry.registerBlock(weedwoodPlankSlab, ItemBlockSlab.class, weedwoodPlankSlab.getUnlocalizedName(), weedwoodPlankSlab, weedwoodPlankSlabDouble, false);
 		GameRegistry.registerBlock(weedwoodPlankSlabDouble, ItemBlockSlab.class, weedwoodPlankSlabDouble.getUnlocalizedName() + "Double", weedwoodPlankSlab, weedwoodPlankSlabDouble, true);
 	
-		Block rubberPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "rubberTreePlanks", null);
-		Block rubberPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "rubberTreePlanks", rubberPlankSlab);
 		GameRegistry.registerBlock(rubberPlankSlab, ItemBlockSlab.class, rubberPlankSlab.getUnlocalizedName(), rubberPlankSlab, rubberPlankSlabDouble, false);
 		GameRegistry.registerBlock(rubberPlankSlabDouble, ItemBlockSlab.class, rubberPlankSlabDouble.getUnlocalizedName() + "Double", rubberPlankSlab, rubberPlankSlabDouble, true);
 	
-		Block purpleRainPlankSlab = new BlockBLSlabPlanks(false, Material.wood, "purpleRainPlanks", null);
-		Block purpleRainPlankSlabDouble = new BlockBLSlabPlanks(true, Material.wood, "purpleRainPlanks", rubberPlankSlab);
 		GameRegistry.registerBlock(purpleRainPlankSlab, ItemBlockSlab.class, purpleRainPlankSlab.getUnlocalizedName(), purpleRainPlankSlab, purpleRainPlankSlabDouble, false);
 		GameRegistry.registerBlock(purpleRainPlankSlabDouble, ItemBlockSlab.class, purpleRainPlankSlabDouble.getUnlocalizedName() + "Double", purpleRainPlankSlab, purpleRainPlankSlabDouble, true);
 		
-		Block betweenstoneBrickSlab = new BlockBLSlabStone(false, Material.rock, "betweenstoneBricks", null);
-		Block betweenstoneBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "betweenstoneBricks", betweenstoneBrickSlab);
 		GameRegistry.registerBlock(betweenstoneBrickSlab, ItemBlockSlab.class, betweenstoneBrickSlab.getUnlocalizedName(), betweenstoneBrickSlab, betweenstoneBrickSlabDouble, false);
 		GameRegistry.registerBlock(betweenstoneBrickSlabDouble, ItemBlockSlab.class, betweenstoneBrickSlabDouble.getUnlocalizedName() + "Double", betweenstoneBrickSlab, betweenstoneBrickSlabDouble, true);
 
-		Block mudBrickSlab = new BlockBLSlabStone(false, Material.rock, "mudBrick", null);
-		Block mudBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "mudBrick", mudBrickSlab);
 		GameRegistry.registerBlock(mudBrickSlab, ItemBlockSlab.class, mudBrickSlab.getUnlocalizedName(), mudBrickSlab, mudBrickSlabDouble, false);
 		GameRegistry.registerBlock(mudBrickSlabDouble, ItemBlockSlab.class, mudBrickSlabDouble.getUnlocalizedName() + "Double", mudBrickSlab, mudBrickSlabDouble, true);
 		
-		Block cragrockBrickSlab = new BlockBLSlabStone(false, Material.rock, "cragrockBrick", null);
-		Block cragrockBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "cragrockBrick", cragrockBrickSlab);
 		GameRegistry.registerBlock(cragrockBrickSlab, ItemBlockSlab.class, cragrockBrickSlab.getUnlocalizedName(), cragrockBrickSlab, cragrockBrickSlabDouble, false);
 		GameRegistry.registerBlock(cragrockBrickSlabDouble, ItemBlockSlab.class, cragrockBrickSlabDouble.getUnlocalizedName() + "Double", cragrockBrickSlab, cragrockBrickSlabDouble, true);
 	
-		Block limestoneBrickSlab = new BlockBLSlabStone(false, Material.rock, "limestoneBricks", null);
-		Block limestoneBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "limestoneBricks", limestoneBrickSlab);
 		GameRegistry.registerBlock(limestoneBrickSlab, ItemBlockSlab.class, limestoneBrickSlab.getUnlocalizedName(), limestoneBrickSlab, limestoneBrickSlabDouble, false);
 		GameRegistry.registerBlock(limestoneBrickSlabDouble, ItemBlockSlab.class, limestoneBrickSlabDouble.getUnlocalizedName() + "Double", limestoneBrickSlab, limestoneBrickSlabDouble, true);
 		
-		Block smoothBetweenstoneSlab = new BlockBLSlabStone(false, Material.rock, "smoothBetweenstone", null);
-		Block smoothBetweenstoneSlabDouble = new BlockBLSlabStone(true, Material.rock, "smoothBetweenstone", smoothBetweenstoneSlab);
 		GameRegistry.registerBlock(smoothBetweenstoneSlab, ItemBlockSlab.class, smoothBetweenstoneSlab.getUnlocalizedName(), smoothBetweenstoneSlab, smoothBetweenstoneSlabDouble, false);
 		GameRegistry.registerBlock(smoothBetweenstoneSlabDouble, ItemBlockSlab.class, smoothBetweenstoneSlabDouble.getUnlocalizedName() + "Double", smoothBetweenstoneSlab, smoothBetweenstoneSlabDouble, true);
 
-		Block solidTarSlab = new BlockBLSlabStone(false, Material.rock, "solidTar", null);
-		Block solidTarSlabDouble = new BlockBLSlabStone(true, Material.rock, "solidTar", solidTarSlab);
 		GameRegistry.registerBlock(solidTarSlab, ItemBlockSlab.class, solidTarSlab.getUnlocalizedName(), solidTarSlab, solidTarSlabDouble, false);
 		GameRegistry.registerBlock(solidTarSlabDouble, ItemBlockSlab.class, solidTarSlabDouble.getUnlocalizedName() + "Double", solidTarSlab, solidTarSlabDouble, true);
 		
-		Block templeBrickSlab = new BlockBLSlabStone(false, Material.rock, "templeBrick", null);
-		Block templeBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "templeBrick", templeBrickSlab);
 		GameRegistry.registerBlock(templeBrickSlab, ItemBlockSlab.class, templeBrickSlab.getUnlocalizedName(), templeBrickSlab, templeBrickSlabDouble, false);
 		GameRegistry.registerBlock(templeBrickSlabDouble, ItemBlockSlab.class, templeBrickSlabDouble.getUnlocalizedName() + "Double", templeBrickSlab, templeBrickSlabDouble, true);
 		
-	}
+	}*/
 
 	public static void init() {
 		initBlocks();
 		registerBlocks();
-		registerSlabs();
+		// registerSlabs();
 		registerProperties();
 	}
 
