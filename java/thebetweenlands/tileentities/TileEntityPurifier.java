@@ -131,7 +131,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			return;
-		// TODO write a recipe input/output method
 		ItemStack output = PurifierRecipe.getOutput(inventory[1]);
 		if(hasFuel() && !outputIsFull()) {
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
@@ -155,7 +154,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			time = 0;
 			markDirty();
 		}
-		System.out.println("Purifying: "+ isPurifying() + " Stack: " + getStackInSlot(1) + " Time: " + time);
 	}
 
 	private void extractFluids(FluidStack fluid) {
