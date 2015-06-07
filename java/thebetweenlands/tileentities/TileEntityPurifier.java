@@ -132,11 +132,10 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		if (worldObj.isRemote)
 			return;
 		// TODO write a recipe input/output method
+		ItemStack output = PurifierRecipe.getOutput(inventory[1]);
 		if(hasFuel() && !outputIsFull()) {
-			ItemStack output = PurifierRecipe.getOutput(inventory[1]);
-			if (output != null && getWaterAmount() > 0) {
+			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				time++;
-
 				if (time >= MAX_TIME) {
 					for (int i = 0; i < 2; i++)
 						if (inventory[i] != null)
@@ -146,31 +145,26 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 					if (inventory[2] == null)
 						inventory[2] = output.copy();
 					else if (inventory[2].isItemEqual(output))
-					inventory[2].stackSize += output.stackSize;
+						inventory[2].stackSize += output.stackSize;
 					time = 0;
 					markDirty();
 				}
 			}
 		}
-		
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
 			time = 0;
 			markDirty();
 		}
 		System.out.println("Purifying: "+ isPurifying() + " Stack: " + getStackInSlot(1) + " Time: " + time);
-		
 	}
-
-
 
 	private void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
 	}
-	
+
 	public boolean hasFuel() {
 		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.materialsBL && getStackInSlot(0).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
-		
 	}
 
 	private boolean outputIsFull() {

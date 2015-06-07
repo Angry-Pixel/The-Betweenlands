@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class PurifierRecipe {
 
@@ -15,18 +14,18 @@ public class PurifierRecipe {
 	 *
 	 * @param output
 	 *            what will be produced by the recipe
-	 * @param inputs
+	 * @param input
 	 *            the input item for the recipe
 	 */
-	public static void addRecipe(ItemStack output, ItemStack inputs) {
-		recipes.add(new PurifierRecipe(output, inputs));
+
+	public static void addRecipe(ItemStack output, ItemStack input) {
+		recipes.add(new PurifierRecipe(output, input));
 	}
 
-	public static ItemStack getOutput(ItemStack inputs) {
+	public static ItemStack getOutput(ItemStack input) {
 		for (PurifierRecipe recipe : recipes)
-			if (recipe.matches(inputs))
+			if (recipe.matches(input))
 				return recipe.getOutput();
-
 		return null;
 	}
 
@@ -35,27 +34,25 @@ public class PurifierRecipe {
 	}
 
 	private final ItemStack output;
-	private final ItemStack inputs;
+	private final ItemStack input;
 
-	private PurifierRecipe(ItemStack output, ItemStack inputs) {
+	private PurifierRecipe(ItemStack output, ItemStack input) {
 		this.output = ItemStack.copyItemStack(output);
-		this.inputs = ItemStack.copyItemStack(inputs);
+		this.input = ItemStack.copyItemStack(input);
 
-			if (inputs instanceof ItemStack)
-				inputs = ItemStack.copyItemStack((ItemStack) inputs);
-
+			if (input instanceof ItemStack)
+				input = ItemStack.copyItemStack((ItemStack) input);
 			else
 				throw new IllegalArgumentException("Input must be an ItemStack");
 	}
 
 	public ItemStack getInputs() {
-		return ItemStack.copyItemStack(inputs);
+		return ItemStack.copyItemStack(input);
 	}
 
 	public ItemStack getOutput() {
 		return ItemStack.copyItemStack(output);
 	}
-
 
 	public boolean matches(ItemStack stacks) {
 		if (stacks != null)
@@ -79,13 +76,13 @@ public class PurifierRecipe {
 
 		return false;
 	}
-	
+
 	public static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2, boolean matchSize) {
 		if (stack1 == null || stack2 == null)
 			return false;
 
 		if (stack1.getItem() == stack2.getItem())
-			if (stack1.getItemDamage() == stack2.getItemDamage() || isWildcard(stack1.getItemDamage()) || isWildcard(stack2.getItemDamage()))
+			if (stack1.getItemDamage() == stack2.getItemDamage())
 				if (!matchSize || stack1.stackSize == stack2.stackSize) {
 					if (stack1.hasTagCompound() && stack2.hasTagCompound())
 						return stack1.getTagCompound().equals(stack2.getTagCompound());
@@ -93,8 +90,5 @@ public class PurifierRecipe {
 				}
 		return false;
 	}
-	
-	private static boolean isWildcard(int meta) {
-		return meta == OreDictionary.WILDCARD_VALUE;
-	}
+
 }
