@@ -116,6 +116,8 @@ tile.thebetweenlands.limestoneTiles.name=Limestone Tiles
 tile.thebetweenlands.chiseledLimestone.name=Chiseled Limestone
 tile.thebetweenlands.polishedLimestone.name=Polished Limestone
 
+tile.thebetweenlands.choca.name=Chock-A-Block
+
 # Stairs, Slabs, Walls, Fences
 tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs
 tile.thebetweenlands.cragrockBrickStairs.name=Cragrock Brick Stairs
