@@ -17,6 +17,7 @@ public class RecipeHandler {
 		registerOreDictionary();
 		registerRecipes();
 		registerSmelting();
+		registerPurifierRecipes();
 	}
 
 	private static void registerRecipes() {
@@ -185,5 +186,11 @@ public class RecipeHandler {
 
 		OreDictionary.registerOre("ingotOctine", ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
 
+	}
+	
+	private static void registerPurifierRecipes() {
+		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM), new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
+		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.CRIMSON_MIDDLE_GEM), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
+		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GREEN_MIDDLE_GEM), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
 	}
 }

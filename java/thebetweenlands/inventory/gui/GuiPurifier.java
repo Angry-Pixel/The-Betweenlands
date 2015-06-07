@@ -28,11 +28,12 @@ public class GuiPurifier extends GuiContainer {
 		drawTexturedModalRect(xx, yy, 0, 0, xSize, ySize);
 
 		int water = purifier.getScaledWaterAmount(60);
-		drawTexturedModalRect(xx + 69, yy + 71 - water, 176, 74 - water, 11, water);
+		drawTexturedModalRect(xx + 34, yy + 72 - water, 176, 74 - water, 11, water);
 
 		if (purifier.isPurifying()) {
 			int i1 = purifier.getPurifyingProgress();
-			drawTexturedModalRect(xx + 94, yy + 49 - i1, 176, 13 - i1, 73,  i1 + 1);
+			//drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
+			drawTexturedModalRect(xx + 62, yy + 36 + i1, 176, 0 + i1, 12, 14 - i1);
 		}
 	}
 

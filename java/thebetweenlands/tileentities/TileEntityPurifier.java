@@ -1,7 +1,6 @@
 package thebetweenlands.tileentities;
 
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -11,20 +10,20 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.inventory.container.ContainerPurifier;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.recipes.PurifierRecipe;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler {
 
 	protected final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
 	public int time = 0;
-	private static final int MAX_TIME = 434;
+	private static final int MAX_TIME = 432;
 
 	public TileEntityPurifier() {
-		super(2, "container.purifier");
+		super(3, "container.purifier");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
 	}
 
@@ -90,7 +89,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	}
 
 	public int getPurifyingProgress() {
-		return time / 30;
+		return time / 36;
 	}
 
 	public boolean isPurifying() {
@@ -133,34 +132,48 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		if (worldObj.isRemote)
 			return;
 		// TODO write a recipe input/output method
-		ItemStack stack = ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM);
-		if (getStackInSlot(0) != null && getStackInSlot(0).getItem() == Item.getItemFromBlock(BLBlockRegistry.aquaMiddleGemOre) && getStackInSlot(0).getItemDamage() == 0 && getStackInSlot(0).stackSize >= 1 && getWaterAmount() > 0) {
-			time++;
+		if(hasFuel() && !outputIsFull()) {
+			ItemStack output = PurifierRecipe.getOutput(inventory[1]);
+			if (output != null && getWaterAmount() > 0) {
+				time++;
 
-			if (time >= MAX_TIME) {
-				for (int i = 0; i < 1; i++)
-					if (inventory[i] != null)
-						if (--inventory[i].stackSize <= 0)
-							inventory[i] = null;
-				extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
-				if (inventory[1] == null)
-					inventory[1] = stack.copy();
-				else if (inventory[1].isItemEqual(stack))
-					inventory[1].stackSize += stack.stackSize;
-				time = 0;
-				markDirty();
+				if (time >= MAX_TIME) {
+					for (int i = 0; i < 2; i++)
+						if (inventory[i] != null)
+							if (--inventory[i].stackSize <= 0)
+								inventory[i] = null;
+					extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+					if (inventory[2] == null)
+						inventory[2] = output.copy();
+					else if (inventory[2].isItemEqual(output))
+					inventory[2].stackSize += output.stackSize;
+					time = 0;
+					markDirty();
+				}
 			}
 		}
-
-		if (getStackInSlot(0) == null) {
+		
+		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
 			time = 0;
 			markDirty();
 		}
-		System.out.println("Purifying: "+ isPurifying() + " Stack: " + getStackInSlot(0) + " Time: " + time);
+		System.out.println("Purifying: "+ isPurifying() + " Stack: " + getStackInSlot(1) + " Time: " + time);
+		
 	}
+
+
 
 	private void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
+	}
+	
+	public boolean hasFuel() {
+		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.materialsBL && getStackInSlot(0).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
+		
+	}
+
+	private boolean outputIsFull() {
+		return getStackInSlot(2) != null && getStackInSlot(2).stackSize >= getInventoryStackLimit();
 	}
 }

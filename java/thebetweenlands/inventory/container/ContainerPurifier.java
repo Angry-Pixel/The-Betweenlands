@@ -15,9 +15,10 @@ public class ContainerPurifier extends Container {
 	public ContainerPurifier(InventoryPlayer inventory, TileEntityPurifier tileentity) {
 		counter = tileentity;
 
-		addSlotToContainer(new Slot(tileentity, 0, 94, 53));
-		addSlotToContainer(new Slot(tileentity, 1, 94, 15));
-
+		addSlotToContainer(new Slot(tileentity, 0, 61, 54));
+		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
+		addSlotToContainer(new Slot(tileentity, 2, 121, 34));
+		
 		for (int i = 0; i < 3; ++i)
 			for (int j = 0; j < 9; ++j)
 				addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
