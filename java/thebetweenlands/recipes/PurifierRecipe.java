@@ -64,17 +64,8 @@ public class PurifierRecipe {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean areStacksTheSame(Object obj, ItemStack target) {
-		if (obj instanceof ItemStack)
-			return areStacksTheSame((ItemStack) obj, target, false);
-		else if (obj instanceof List) {
-			List<ItemStack> list = (List<ItemStack>) obj;
-			for (ItemStack stack : list)
-				if (areStacksTheSame(stack, target, false))
-					return true;
-		}
-
-		return false;
+	private boolean areStacksTheSame(ItemStack stack, ItemStack target) {
+		return areStacksTheSame(stack, target, false);
 	}
 
 	public static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2, boolean matchSize) {
