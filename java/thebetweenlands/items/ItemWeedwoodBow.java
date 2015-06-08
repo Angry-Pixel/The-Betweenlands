@@ -92,11 +92,11 @@ public class ItemWeedwoodBow extends ItemBow {
 			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power);
 
 			if(poisonedAnglerToothArrow)
-				entityarrow.setPoisonedAnglerToothArrow(true);
+				entityarrow.isPoisonedAnglerToothArrow = true;
 			else if(octineArrow)
-				 entityarrow.setOctineArrow(true);
+				 entityarrow.isOctineArrow = true;
 			else if(basiliskArrow)
-				entityarrow.setBasiliskArrow(true);
+				entityarrow.isBasiliskArrow = true;
 
 			if (power == 1.0F)
 				entityarrow.setIsCritical(true);
