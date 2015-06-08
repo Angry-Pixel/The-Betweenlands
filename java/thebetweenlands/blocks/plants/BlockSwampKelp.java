@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,23 +16,22 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
 import java.util.Random;
 
-public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
-	public IIcon iconWaterWeeds;
+public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
+	public IIcon iconWaterPlantBottom;
+	public IIcon iconWaterPlantTop;
 
-	public BlockWaterWeeds() {
-		super(BLFluidRegistry.swampWaterWaterWeedsSmall, Material.water);
+	public BlockSwampKelp() {
+		super(BLFluidRegistry.swampWaterWaterWeeds, Material.water);
 		setStepSound(Block.soundTypeGrass);
-		setBlockName("thebetweenlands.waterWeedsSmall");
+		setBlockName("thebetweenlands.waterWeeds");
 		setHardness(0.5F);
-		setCreativeTab(ModCreativeTabs.plants);
-		setBlockBounds(0.1f, 0.0f, 0.1f, 0.9f, 0.9f, 0.9f);
-		setTickRandomly(true);
         setLightLevel(0.875F);
+		setCreativeTab(ModCreativeTabs.plants);
+		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
+		setTickRandomly(true);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
 	}
@@ -41,8 +39,9 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconWaterWeeds = iconRegister.registerIcon("thebetweenlands:waterWeeds");
-		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconWaterWeeds));
+		this.iconWaterPlantBottom = iconRegister.registerIcon("thebetweenlands:waterPlantBottom");
+		this.iconWaterPlantTop = iconRegister.registerIcon("thebetweenlands:waterPlantTop");
+		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconWaterPlantBottom, this.iconWaterPlantTop));
 		super.registerBlockIcons(iconRegister);
 	}
 
@@ -95,7 +94,7 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
 		}
 	}
 
-	public boolean canPlaceBlockOn(Block block) {
-		return block == BLBlockRegistry.mud;
+	protected boolean canPlaceBlockOn(Block block) {
+		return block instanceof BlockSwampKelp || block == BLBlockRegistry.mud;
 	}
 }

@@ -40,6 +40,7 @@ import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWallPlants;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
+import thebetweenlands.blocks.plants.BlockSwampKelp;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
@@ -167,7 +168,8 @@ public class BLBlockRegistry
 	public static final BlockBogBean bogBean = new BlockBogBean();
 	public static final BlockGoldenClub goldenClub = new BlockGoldenClub();
 	public static final BlockMarshMarigold marshMarigold = new BlockMarshMarigold();
-	public static final BlockWaterWeeds waterWeeds = new BlockWaterWeeds();
+	public static final BlockSwampKelp waterWeeds = new BlockSwampKelp();
+	public static final BlockWaterWeeds waterWeedsSmall = new BlockWaterWeeds();
 	public static final BlockMireCoral mireCoral = new BlockMireCoral();
 	public static final BlockDeepWaterCoral deepWaterCoral = new BlockDeepWaterCoral();
 	public static final BlockWaterFlowerStalk waterFlowerStalk = new BlockWaterFlowerStalk();

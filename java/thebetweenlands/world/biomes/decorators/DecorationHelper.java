@@ -550,6 +550,34 @@ public class DecorationHelper {
 		}
 	}
 	
+	public void generateWaterWeedsSmall(double probability) {
+		if (probability >= 1.0D) {
+			for (int i = 0; i < (int) probability; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				Block cBlock = this.world.getBlock(x, y, z);
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.waterWeedsSmall.canPlaceBlockAt(this.world, x, y, z)) {
+						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeedsSmall, 0, 3);
+					}
+				}
+			}
+		} else {
+			if (this.rand.nextInt((int) (1.0D / probability)) == 0) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				Block cBlock = this.world.getBlock(x, y, z);
+				if (cBlock == BLBlockRegistry.swampWater) {
+					if (BLBlockRegistry.waterWeedsSmall.canPlaceBlockAt(this.world, x, y, z)) {
+						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeedsSmall, 0, 3);
+					}
+				}
+			}
+		}
+	}
+	
 	public void generateDeepWaterCoral(double probability) {
 		if (probability >= 1.0D) {
 			for (int i = 0; i < (int) probability; i++) {
