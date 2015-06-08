@@ -10,10 +10,10 @@ import thebetweenlands.tileentities.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
 
-	protected TileEntityPurifier counter;
+	protected TileEntityPurifier purifier;
 
 	public ContainerPurifier(InventoryPlayer inventory, TileEntityPurifier tileentity) {
-		counter = tileentity;
+		purifier = tileentity;
 
 		addSlotToContainer(new Slot(tileentity, 0, 61, 54));
 		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
@@ -35,19 +35,19 @@ public class ContainerPurifier extends Container {
 	@Override
 	public void addCraftingToCrafters(ICrafting crafter) {
 		super.addCraftingToCrafters(crafter);
-		counter.sendGUIData(this, crafter);
+		purifier.sendGUIData(this, crafter);
 	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		for (Object crafter : crafters)
-			counter.sendGUIData(this, (ICrafting) crafter);
+			purifier.sendGUIData(this, (ICrafting) crafter);
 	}
 
 	@Override
 	public void updateProgressBar(int id, int value) {
-		counter.getGUIData(id, value);
+		purifier.getGUIData(id, value);
 	}
 
 	@Override

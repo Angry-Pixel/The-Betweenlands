@@ -122,9 +122,9 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		}
 	}
 
-	public void sendGUIData(ContainerPurifier counter, ICrafting craft) {
-		craft.sendProgressBarUpdate(counter, 0, time);
-		craft.sendProgressBarUpdate(counter, 1, waterTank.getFluid() != null ? waterTank.getFluid().amount : 0);
+	public void sendGUIData(ContainerPurifier purifier, ICrafting craft) {
+		craft.sendProgressBarUpdate(purifier, 0, time);
+		craft.sendProgressBarUpdate(purifier, 1, waterTank.getFluid() != null ? waterTank.getFluid().amount : 0);
 	}
 
 	@Override
