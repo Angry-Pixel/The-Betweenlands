@@ -6,6 +6,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
@@ -28,8 +30,29 @@ public class ContainerPurifier extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		//TODO Shift Clicky Stuff
-		return null;
+		ItemStack stack = null;
+		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stack1 = slot.getStack();
+			stack = stack1.copy();
+			if (slotIndex > 2) {
+				if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()) {
+					if (!mergeItemStack(stack1, 0, 1, false))
+						return null;
+				} else if (!mergeItemStack(stack1, 1, 2, true))
+						return null;
+			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
+				return null;
+			if (stack1.stackSize == 0)
+				slot.putStack(null);
+			else
+				slot.onSlotChanged();
+			if (stack1.stackSize != stack.stackSize)
+				slot.onPickupFromSlot(player, stack1);
+			else
+				return null;
+		}
+		return stack;
 	}
 
 	@Override
