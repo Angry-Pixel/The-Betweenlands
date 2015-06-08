@@ -1,6 +1,9 @@
 package thebetweenlands.world;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
@@ -16,11 +19,8 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import thebetweenlands.world.feature.gen.MapGenCavesBetweenlands;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import thebetweenlands.world.feature.gen.MapGenCavesBetweenlandsNew;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
 {
@@ -70,8 +70,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 
 	/////// Terrain gen features ///////
-	private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
-	//private MapGenBase caveGenerator = new MapGenCavesBetweenlandsNew();
+	//private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
+	private MapGenBase caveGenerator = new MapGenCavesBetweenlandsNew();
 
 
 	public ChunkProviderBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {

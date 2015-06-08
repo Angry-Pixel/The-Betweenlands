@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -59,12 +60,19 @@ public class CragSpiresNoiseFeature extends BiomeNoiseFeature {
 			}
 			for(int y = lowestBlock; y < layerHeight; y++) {
 				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.genericStone;
-				chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = 1;
+				chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BlockGenericStone.META_CRAGROCK;
 			}
-			for(int yOff = 0; yOff < -noise * 12; yOff++) {
+			int rockHeight = (int)Math.floor(-noise * 12);
+			for(int yOff = 0; yOff < rockHeight; yOff++) {
 				int y = layerHeight + yOff;
 				chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BLBlockRegistry.genericStone;
-				chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = 1;
+				if(yOff == rockHeight - 2) {
+					chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BlockGenericStone.META_MOSSYCRAGROCK2;
+				} else if(yOff == rockHeight - 1) {
+					chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BlockGenericStone.META_MOSSYCRAGROCK1;
+				} else {
+					chunkMeta[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = BlockGenericStone.META_CRAGROCK;
+				}
 			}
 		}
 	}

@@ -25,6 +25,11 @@ public class BlockGenericStone
         implements ISubBlocksBlock
 {
 	public static final String[] iconPaths = new String[] { "corruptBetweenstone", "cragrock", "mossyCragrockSide1", "mossyCragrockSide2" }; //more room here for subtypes..
+	
+	public static final int META_CRAGROCK = 1;
+	public static final int META_MOSSYCRAGROCK1 = 2;
+	public static final int META_MOSSYCRAGROCK2 = 3;
+	
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
 	private IIcon mosTop;
@@ -88,22 +93,21 @@ public class BlockGenericStone
 		return ItemBlockGeneric.class;
 	}
 
-
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random random) {
 		if (!world.isRemote) {
-			if (world.getBlock(x, y, z) instanceof BlockGenericStone && world.getBlockMetadata(x, y, z) == 2) {
+			if (world.getBlockMetadata(x, y, z) == META_MOSSYCRAGROCK1) {
 				int i1 = x + random.nextInt(3) - 1;
 				int j1 = y + random.nextInt(4) - 3;
 				int k1 = z + random.nextInt(3) - 1;
 				
 				Block block = world.getBlock(i1, j1, k1);
 				int meta = world.getBlockMetadata(i1, j1, k1);
-				if (block instanceof BlockGenericStone && meta == 1) {
-					if (world.getBlock(i1, j1 + 1, k1) instanceof BlockGenericStone && (world.getBlockMetadata(i1, j1 + 1, k1) == 2 || world.getBlockMetadata(i1, j1 + 1, k1) == 1))
-						world.setBlockMetadataWithNotify(i1, j1, k1, 3, 2);
+				if (block instanceof BlockGenericStone && meta == META_CRAGROCK) {
+					if (world.getBlock(i1, j1 + 1, k1) instanceof BlockGenericStone && (world.getBlockMetadata(i1, j1 + 1, k1) == META_MOSSYCRAGROCK1 || world.getBlockMetadata(i1, j1 + 1, k1) == META_CRAGROCK))
+						world.setBlockMetadataWithNotify(i1, j1, k1, META_MOSSYCRAGROCK2, 2);
 					else if (world.getBlock(i1, j1, k1) == Blocks.air)
-						world.setBlockMetadataWithNotify(i1, j1, k1, 2, 2);
+						world.setBlockMetadataWithNotify(i1, j1, k1, META_MOSSYCRAGROCK1, 2);
 				}
 			}
 		}
