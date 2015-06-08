@@ -33,11 +33,11 @@ public class FogGenerator {
 			this.fogChunkNoise = this.fogNoiseGen.func_151599_a(
 					this.fogChunkNoise, 
 					(double) (cx * 16), (double) (cz * 16), 
-					16, 16, 0.005D, 0.005D, 0.005D);
+					16, 16, 0.003D, 0.003D, 0.003D);
 		}
 		int ix = (int)(Math.floor(x)) & 15;
 		int iz = (int)(Math.floor(z)) & 15;
-		double fogDist = Math.abs(this.fogChunkNoise[iz * 16 + ix]) * 100;
+		double fogDist = Math.pow(Math.abs(this.fogChunkNoise[iz * 16 + ix] * 2.5D), 2) * 60;
 		if(fogDist > farPlane - 60) {
 			fogDist = farPlane - 60;
 		} else if(fogDist < 1.0f) {

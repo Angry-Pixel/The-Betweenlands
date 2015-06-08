@@ -9,7 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.input.Keyboard;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
+import thebetweenlands.utils.FogGenerator;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
@@ -92,6 +94,7 @@ public class DebugHandler {
 			Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + (float)(FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2.0D), 2, 26, 0xFFFFFFFF);
 		}
 	}
 }
