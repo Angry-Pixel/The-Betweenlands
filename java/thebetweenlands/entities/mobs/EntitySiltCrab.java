@@ -57,7 +57,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.siltCrabClaw, 1, 0), 0.0F);
+		entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.siltCrabClaw, 2, 0), 0.0F);
 	}
 
 	@Override

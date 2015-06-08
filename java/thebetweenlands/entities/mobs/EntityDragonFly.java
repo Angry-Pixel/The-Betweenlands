@@ -78,7 +78,7 @@ public class EntityDragonFly extends EntityAmbientCreature {
 		int chance = rand.nextInt(4) + rand.nextInt(1 + looting);
 		int amount;
 		for (amount = 0; amount < chance; ++amount)
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.DRAGONFLY_WING), 0.0F);
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.DRAGONFLY_WING, 4), 0.0F);
 	}
 
 	public boolean isFlying() {

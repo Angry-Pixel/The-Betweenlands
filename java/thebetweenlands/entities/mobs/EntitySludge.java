@@ -45,7 +45,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (rand.nextInt(5) == 0)
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL, 1 + looting), 0.0F);
+			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL, 3 + looting), 0.0F);
 	}
 
 	@Override

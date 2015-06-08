@@ -244,6 +244,68 @@
     "sounds": [
       "squish"
     ]
+
+  },
+  "lurkerLiving1": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerLiving1"
+    ]
+  },
+  "lurkerLiving2": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerLiving2"
+    ]
+  },
+  "lurkerLiving3": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerLiving3"
+    ]
+  },
+  "lurkerLiving4": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerLiving4"
+    ]
+  },
+  "lurkerLiving5": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerLiving5"
+    ]
+  },
+  "lurkerHurt1": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerHurt1"
+    ]
+  },
+  "lurkerHurt2": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerHurt2"
+    ]
+  },
+  "lurkerHurt3": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerHurt3"
+    ]
+  },
+  "lurkerHurt4": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerHurt4"
+    ]
+  },
+  "lurkerDeath": {
+    "category": "hostile",
+    "sounds": [
+      "lurkerDeath"
+    ]
+
   },
   "sorry": {
     "category": "player",

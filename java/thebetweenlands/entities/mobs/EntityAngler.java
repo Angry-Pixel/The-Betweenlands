@@ -76,7 +76,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		if (recentlyHit) {
 			for (count = 0; count < amount; ++count) {
 				if (rand.nextBoolean())
-					entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.ANGLER_TOOTH), 0.0F);
+					entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.ANGLER_TOOTH, 3), 0.0F);
 				else
 					entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.anglerMeatRaw, 1, 0), 0.0F);
 			}
