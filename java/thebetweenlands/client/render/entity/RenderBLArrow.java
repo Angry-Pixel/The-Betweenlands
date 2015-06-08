@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderBLArrow extends Render {
-    private static ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/anglerToothArrow.png");
+    private static ResourceLocation texture1 = new ResourceLocation("thebetweenlands:textures/entity/anglerToothArrow.png");
     private static ResourceLocation texture2 = new ResourceLocation("thebetweenlands:textures/entity/poisonedAnglerToothArrow.png");
     private static ResourceLocation texture3 = new ResourceLocation("thebetweenlands:textures/entity/octineArrow.png");
 
@@ -28,19 +28,15 @@ public class RenderBLArrow extends Render {
     }
 
     public void renderArrow(EntityBLArrow entityArrow, double x, double y, double z, float yaw, float tick) {
-        switch (entityArrow.getType()) {
-            case "poisonedAnglerToothArrow":
-                FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture2);
-            case "octineArrow":
-            	//TODO: Fix the arrow type check. Currently it's only correct on the server side, but not on the client side
-            	//Use the datawatcher or something else that let's the client know which type of arrow is being rendered
-            	if(ShaderHelper.INSTANCE.isShaderSupported()) {
-            		ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
-                }
-                FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture3);
-            default:
-                FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
+        int type = entityArrow.getDataWatcher().getWatchableObjectInt(17);
+        if(type == 2){
+            if(ShaderHelper.INSTANCE.isShaderSupported()) {
+                ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
+            }
         }
+
+        FMLClientHandler.instance().getClient().getTextureManager().bindTexture(getEntityTexture(entityArrow));
+
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x, (float) y, (float) z);
         GL11.glRotatef(entityArrow.prevRotationYaw + (entityArrow.rotationYaw - entityArrow.prevRotationYaw) * tick - 90.0F, 0.0F, 1.0F, 0.0F);
@@ -99,15 +95,13 @@ public class RenderBLArrow extends Render {
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        String type = ((EntityBLArrow) entity).getType();
-        switch (type) {
-            case "poisonedAnglerToothArrow":
-                return texture2;
-            case "octineArrow":
-                return texture3;
-            default:
-                return texture;
-        }
+        int type = entity.getDataWatcher().getWatchableObjectInt(17);
+        if(type == 2)
+            return texture2;
+        else if (type == 3)
+            return texture3;
+        else
+            return texture1;
     }
 
 

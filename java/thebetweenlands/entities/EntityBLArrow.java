@@ -37,11 +37,11 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	private Item arrows;
 	private int ticksInGround;
 	private int ticksInAir;
-	private double damage = 2.0D;
+	private double damage = 1.0D;
 	private int knockbackStrength;
-	public boolean isOctineArrow = false;
-	public boolean isPoisonedAnglerToothArrow = false;
-	public boolean isBasiliskArrow = false;
+	public boolean isOctineArrow;
+	public boolean isPoisonedAnglerToothArrow;
+	public boolean isBasiliskArrow;
 
 	public EntityBLArrow(World world) {
 		super(world);
@@ -111,6 +111,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	@Override
 	protected void entityInit() {
 		dataWatcher.addObject(16, Byte.valueOf((byte) 0));
+		dataWatcher.addObject(17, 1);
 	}
 
 	@Override
@@ -163,6 +164,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	@Override
 	public void onUpdate() {
 		super.onEntityUpdate();
+		getType();
 
 		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
 			float f = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
@@ -428,6 +430,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		par1NBTTagCompound.setDouble("damage", damage);
 		par1NBTTagCompound.setBoolean("isOctineArrow", isOctineArrow);
 		par1NBTTagCompound.setBoolean("isPoisonedAnglerToothArrow", isPoisonedAnglerToothArrow);
+		par1NBTTagCompound.setBoolean("isBasiliskArrow", isBasiliskArrow);
 	}
 
 	@Override
@@ -442,6 +445,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		inGround = par1NBTTagCompound.getByte("inGround") == 1;
 		isOctineArrow = par1NBTTagCompound.getBoolean("isOctineArrow");
 		isPoisonedAnglerToothArrow = par1NBTTagCompound.getBoolean("isPoisonedAnglerToothArrow");
+		isBasiliskArrow = par1NBTTagCompound.getBoolean("isBasiliskArrow");
 
 		if (par1NBTTagCompound.hasKey("damage", 99)) {
 			damage = par1NBTTagCompound.getDouble("damage");
@@ -523,12 +527,12 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		return damageIndex;
 	}
 
-	public String getType(){
+	public void getType(){
 		if(isPoisonedAnglerToothArrow)
-			return "poisonedAnglerToothArrow";
+			dataWatcher.updateObject(17, 2);
 		else if(isOctineArrow)
-			return "octineArrow";
+			dataWatcher.updateObject(17, 3);
 		else
-			return "anglerToothArrow";
+			dataWatcher.updateObject(17, 1);
 	}
 }
