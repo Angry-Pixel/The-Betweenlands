@@ -43,6 +43,8 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 				break;
 		}
 		model.renderAll();
+		if(purifier.isPurifying() && purifier.lightOn)
+			model.renderFirePlate();
 		GL11.glPopMatrix();
 	
 // TODO make this a water block and make it sync for rendering

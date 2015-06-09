@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.container;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -12,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
@@ -74,6 +77,17 @@ public class BlockPurifier extends BlockContainer {
 	}
 
 	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		if (world.getTileEntity(x, y, z) instanceof TileEntityPurifier) {
+			TileEntityPurifier tile = (TileEntityPurifier) world.getTileEntity(x, y, z);
+			if (tile == null)
+				return 0;
+			return tile.lightOn ? 13 : 0;
+		}
+		return 0;
+	}
+
+	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block,
 			int meta) {
 		IInventory tile = (IInventory) world.getTileEntity(x, y, z);
@@ -94,6 +108,36 @@ public class BlockPurifier extends BlockContainer {
 			}
 		super.breakBlock(world, x, y, z, block, meta);
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if (world.getTileEntity(x, y, z) instanceof TileEntityPurifier ) {
+			TileEntityPurifier  tile = (TileEntityPurifier ) world.getTileEntity(x, y, z);
+        if (tile.isPurifying() && tile.lightOn) {
+            float xx = (float)x + 0.5F;
+            float yy = (float)y + 0.0F + rand.nextFloat() * 6.0F / 16.0F;
+            float zz = (float)z + 0.5F;
+            float fixedOffset = 0.25F;
+            float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
+
+            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx - fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+                world.spawnParticle("flame", (double)(xx - fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
+
+            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+                world.spawnParticle("flame", (double)(xx + fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
+
+            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + randomOffset), (double)yy, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+                world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D);
+
+            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + randomOffset), (double)yy, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+                world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D);
+                
+                if (world.isAirBlock(x, y + 1, z))
+                	TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, y + 1, zz, 0.1D, 0.0D, 0.1D, 0);
+            }
+		}
+    }
 
 	@Override
 	public int getRenderType() {

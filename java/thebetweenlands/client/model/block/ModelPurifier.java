@@ -156,7 +156,6 @@ public class ModelPurifier extends ModelBase {
     }
 
 	public void renderAll() {
-		fireplate.render(0.0625F);
 		beam3.render(0.0625F);
 		base.render(0.0625F);
 		beam1.render(0.0625F);
@@ -166,6 +165,10 @@ public class ModelPurifier extends ModelBase {
 		sidebeam4.render(0.0625F);
 		sidebeam2.render(0.0625F);
 		sidebeam3.render(0.0625F);
+	}
+
+	public void renderFirePlate() {
+		fireplate.render(0.0625F);	
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

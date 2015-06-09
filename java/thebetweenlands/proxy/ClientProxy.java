@@ -85,6 +85,7 @@ import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
+import thebetweenlands.entities.particles.EntityBLBubbleFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
@@ -225,6 +226,11 @@ public class ClientProxy extends CommonProxy {
 		if (particleName.equals("snailPoison")) {
 			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(1F, 0F, 0F);
+		}
+
+		if (particleName.equals("bubblePurifier")) {
+			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
 		}
 
 		if (fx != null)

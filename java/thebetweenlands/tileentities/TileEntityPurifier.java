@@ -3,6 +3,9 @@ package thebetweenlands.tileentities;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -21,7 +24,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
 	public int time = 0;
 	private static final int MAX_TIME = 432;
-
+	public boolean lightOn = false;
 	public TileEntityPurifier() {
 		super(3, "container.purifier");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
@@ -80,12 +83,26 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
+		lightOn = nbt.getBoolean("state");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
+		nbt.setBoolean("state", lightOn);
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setBoolean("state", lightOn);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+		lightOn = packet.func_148857_g().getBoolean("state");
 	}
 
 	public int getPurifyingProgress() {
@@ -135,6 +152,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		if(hasFuel() && !outputIsFull()) {
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				time++;
+				setIlluminated(true);
 				if (time >= MAX_TIME) {
 					for (int i = 0; i < 2; i++)
 						if (inventory[i] != null)
@@ -147,12 +165,14 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 						inventory[2].stackSize += output.stackSize;
 					time = 0;
 					markDirty();
+					setIlluminated(false);
 				}
 			}
 		}
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
 			time = 0;
 			markDirty();
+			setIlluminated(false);
 		}
 	}
 
@@ -167,5 +187,22 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
 	private boolean outputIsFull() {
 		return getStackInSlot(2) != null && getStackInSlot(2).stackSize >= getInventoryStackLimit();
+	}
+
+	public void setIlluminated(boolean state) {
+		lightOn = state;
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), 0, lightOn ? 1 : 0);
+	}
+
+	@Override
+	public boolean receiveClientEvent(int eventId, int eventData) {
+		switch (eventId) {
+			case 0:
+				lightOn = eventData == 1;
+				worldObj.func_147451_t(xCoord, yCoord, zCoord);
+				return true;
+			default:
+				return false;
+		}
 	}
 }
