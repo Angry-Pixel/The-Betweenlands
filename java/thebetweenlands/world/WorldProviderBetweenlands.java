@@ -30,8 +30,8 @@ import thebetweenlands.world.storage.BetweenlandsWorldData;
 public class WorldProviderBetweenlands
 extends WorldProvider
 {
-    @SideOnly(Side.CLIENT)
-    private SkyRendererStars skyRenderer;
+	@SideOnly(Side.CLIENT)
+	private SkyRendererStars skyRenderer;
 
 	public static final int LAYER_HEIGHT = 80;
 
@@ -39,6 +39,8 @@ extends WorldProvider
 	private double[] currentFogColor;
 
 	private boolean allowHostiles, allowAnimals;
+
+	public float[] originalLightBrightnessTable = new float[16];
 
 	@Override
 	public boolean canRespawnHere() {
@@ -76,12 +78,12 @@ extends WorldProvider
 		}
 
 		float m = FogHandler.INSTANCE.hasDenseFog() ? 80.0f : 0.0f;
-		
+
 		for(int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];
 			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
 		}
-		
+
 		for(int a = 0; a < 3; a++) {
 			if(this.currentFogColor[a] != targetFogColor[a]) {
 				if(this.currentFogColor[a] < targetFogColor[a]) {
@@ -106,8 +108,9 @@ extends WorldProvider
 		float minBrightness = (float) (1.0F / 100000000.0F * Math.pow((float)ConfigHandler.DIMENSION_BRIGHTNESS, 4) + 0.005F);
 		for(int i = 0; i <= 15; i++) {
 			float f1 = 1F - (i*i*i) / (15F*15F*15F);
-			lightBrightnessTable[i] = (1F - f1) / (f1 * 3F + 1F) * (1F - minBrightness) + minBrightness;
+			this.lightBrightnessTable[i] = (1F - f1) / (f1 * 3F + 1F) * (1F - minBrightness) + minBrightness;
 		}
+		System.arraycopy(this.lightBrightnessTable, 0, this.originalLightBrightnessTable, 0, 16);
 	}
 
 	@Override
@@ -181,9 +184,9 @@ extends WorldProvider
 
 	@Override
 	public boolean canDoRainSnowIce(Chunk chunk) {
-        return false;
-    }
-	
+		return false;
+	}
+
 	@Override
 	public void updateWeather() {
 		this.worldObj.getWorldInfo().setRaining(false);
@@ -209,10 +212,11 @@ extends WorldProvider
 		}
 	}
 
-    @SideOnly(Side.CLIENT)
-    public IRenderHandler getSkyRenderer()
-    {
-        if (skyRenderer == null) skyRenderer = new SkyRendererStars();
-        return skyRenderer;
-    }
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IRenderHandler getSkyRenderer()
+	{
+		if (skyRenderer == null) skyRenderer = new SkyRendererStars();
+		return skyRenderer;
+	}
 }

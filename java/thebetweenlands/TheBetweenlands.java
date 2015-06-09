@@ -18,6 +18,7 @@ import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
+import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.ShaderHandler;

@@ -1,23 +1,26 @@
 package thebetweenlands.event.debugging;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+
+import org.lwjgl.input.Keyboard;
+
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.manager.DecayManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import org.lwjgl.input.Keyboard;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.event.render.FogHandler;
-import thebetweenlands.manager.DecayManager;
-import thebetweenlands.utils.FogGenerator;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
 
 	/////// DEBUG ///////
-	private boolean fullBright = false;
+	public boolean fullBright = false;
 	private boolean fastFlight = false;
 	public boolean denseFog = false;
 	private float lightTable[];
@@ -95,6 +98,13 @@ public class DebugHandler {
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + (float)(FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2.0D), 2, 26, 0xFFFFFFFF);
+			float lightLevel = 0.0F;
+			World world = Minecraft.getMinecraft().theWorld;
+			if(world != null) {
+				WorldProvider provider = world.provider;
+				lightLevel += provider.lightBrightnessTable[0];
+			}
+			Minecraft.getMinecraft().fontRenderer.drawString("Base Light: " + lightLevel, 2, 34, 0xFFFFFFFF);
 		}
 	}
 }

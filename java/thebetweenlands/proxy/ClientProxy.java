@@ -88,6 +88,7 @@ import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
+import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
@@ -183,6 +184,7 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(ambientHandler);
         MinecraftForge.EVENT_BUS.register(ambientHandler);
         FMLCommonHandler.instance().bus().register(new BLMusicHandler());
+        FMLCommonHandler.instance().bus().register(BrightnessHandler.INSTANCE);
 	}
 
 	@Override

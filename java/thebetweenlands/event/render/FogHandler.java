@@ -21,6 +21,7 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 
 public class FogHandler {
@@ -71,12 +72,25 @@ public class FogHandler {
 				fogStart = bgbb.getFogStart(event.farPlaneDistance);
 				fogEnd = bgbb.getFogEnd(event.farPlaneDistance);
 			}
+			
+			//Dense fog
 			if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
 					(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
 					(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
 				fogStart /= 5.0f;
 				fogEnd /= 3.0f;
 			}
+			
+			//Underground fog
+			if(renderView.posY < WorldProviderBetweenlands.LAYER_HEIGHT) {
+				float multiplier = ((float)(WorldProviderBetweenlands.LAYER_HEIGHT - renderView.posY) / (float)WorldProviderBetweenlands.LAYER_HEIGHT);
+				multiplier = 1.0F - multiplier;
+				multiplier *= Math.pow(multiplier, 6);
+				multiplier = multiplier * 0.9F + 0.1F;
+				fogStart *= multiplier;
+				fogEnd *= multiplier;
+			}
+			
 			if(Math.abs(this.currentFogStart - fogStart) > 0.1f) {
 				float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/event.farPlaneDistance/60.f;
 				if(this.currentFogStart > fogStart) {
