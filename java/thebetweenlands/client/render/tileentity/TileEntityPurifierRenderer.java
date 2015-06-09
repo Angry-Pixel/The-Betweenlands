@@ -1,14 +1,17 @@
 package thebetweenlands.client.render.tileentity;
 
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelPurifier;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import cpw.mods.fml.relauncher.Side;
@@ -53,14 +56,26 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 		int capacity = purifier.waterTank.getCapacity();
 		float size = 0.70F / capacity * amount;
 		if (amount >= 100) {
+			Tessellator tess = Tessellator.instance;
+			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
+			
 			GL11.glPushMatrix();
-			GL11.glEnable(3042);
+			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(770, 771);
-			GL11.glTranslated((float) x + 0.5F, (float) (y + 0.26F + size * 0.5F), (float) z + 0.5F);
-			GL11.glScalef(0.6F, -size, -0.6F);
 			bindTexture(TextureMap.locationBlocksTexture);
-			blockRenderer.renderBlockAsItem(BLBlockRegistry.purpleRainLog, 0, 1.0F);
-			GL11.glDisable(3042);
+			float tx = (float) x + 0.0F;
+			float ty = (float) (y + 0.26F + size * 0.5F);
+			float tz = (float) z + 0.0F;
+			tess.addTranslation(tx, ty, tz);
+			tess.startDrawingQuads();
+			tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
+			tess.addVertexWithUV(0.1, 0, 0.1, waterIcon.getMinU(), waterIcon.getMinV());
+			tess.addVertexWithUV(0.1, 0, 0.9, waterIcon.getMinU(), waterIcon.getMaxV());
+			tess.addVertexWithUV(0.9, 0, 0.9, waterIcon.getMaxU(), waterIcon.getMaxV());
+			tess.addVertexWithUV(0.9, 0, 0.1, waterIcon.getMaxU(), waterIcon.getMinV());
+			tess.draw();
+			tess.addTranslation(-tx, -ty, -tz);
+			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
 	}
