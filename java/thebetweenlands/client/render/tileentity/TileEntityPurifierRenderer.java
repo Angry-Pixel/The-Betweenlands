@@ -54,7 +54,7 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 // TODO give it bubbles whilst purifying
 		int amount = purifier.waterTank.getFluidAmount();
 		int capacity = purifier.waterTank.getCapacity();
-		float size = 1.25F / capacity * amount;
+		float size = 1.22F / capacity * amount;
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;
 			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);

@@ -121,16 +121,16 @@ public class BlockPurifier extends BlockContainer {
             float fixedOffset = 0.25F;
             float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx - fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx - fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx - fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + randomOffset), (double)yy, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(xx + randomOffset), (double)yy, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D);
                 
                 if (world.isAirBlock(x, y + 1, z))

@@ -169,7 +169,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 					time = 0;
 					markDirty();
 					setIlluminated(false);
-				//	worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
 		}
