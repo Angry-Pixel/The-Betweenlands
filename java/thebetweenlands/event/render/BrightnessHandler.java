@@ -21,8 +21,8 @@ public class BrightnessHandler {
 		if(player.dimension == ConfigHandler.DIMENSION_ID && player.worldObj != null) {
 			if(player.worldObj.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) player.worldObj.provider;
-				double diff = Math.max((WorldProviderBetweenlands.LAYER_HEIGHT - player.posY), 0.0D);
-				float multiplier = ((float)diff / (float)WorldProviderBetweenlands.LAYER_HEIGHT);
+				double diff = Math.max(((WorldProviderBetweenlands.LAYER_HEIGHT - 10) - player.posY), 0.0D);
+				float multiplier = ((float)diff / (float)(WorldProviderBetweenlands.LAYER_HEIGHT - 10));
 				multiplier = 1.0F - multiplier;
 				multiplier *= Math.pow(multiplier, 6);
 				multiplier = multiplier * 0.9F + 0.1F;

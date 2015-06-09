@@ -10,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -97,14 +98,14 @@ public class DebugHandler {
 			Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);
-			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + (float)(FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2.0D), 2, 26, 0xFFFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + (float)(FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2.0D) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
 			float lightLevel = 0.0F;
 			World world = Minecraft.getMinecraft().theWorld;
 			if(world != null) {
 				WorldProvider provider = world.provider;
 				lightLevel += provider.lightBrightnessTable[0];
 			}
-			Minecraft.getMinecraft().fontRenderer.drawString("Base Light: " + lightLevel, 2, 34, 0xFFFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawString("Base Light: " + lightLevel + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
 		}
 	}
 }

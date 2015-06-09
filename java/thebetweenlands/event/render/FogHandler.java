@@ -74,16 +74,14 @@ public class FogHandler {
 			}
 			
 			//Dense fog
-			if((!TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog) ||
-					(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !MessageSyncWeather.hasDenseFog) ||
-					(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && MessageSyncWeather.hasDenseFog)) {
+			if(this.hasDenseFog()) {
 				fogStart /= 5.0f;
 				fogEnd /= 3.0f;
 			}
 			
 			//Underground fog
-			if(renderView.posY < WorldProviderBetweenlands.LAYER_HEIGHT) {
-				float multiplier = ((float)(WorldProviderBetweenlands.LAYER_HEIGHT - renderView.posY) / (float)WorldProviderBetweenlands.LAYER_HEIGHT);
+			if(renderView.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10)) {
+				float multiplier = ((float)((WorldProviderBetweenlands.LAYER_HEIGHT - 10) - renderView.posY) / (float)(WorldProviderBetweenlands.LAYER_HEIGHT - 10));
 				multiplier = 1.0F - multiplier;
 				multiplier *= Math.pow(multiplier, 6);
 				multiplier = multiplier * 0.9F + 0.1F;
