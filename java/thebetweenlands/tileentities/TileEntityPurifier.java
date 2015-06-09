@@ -18,7 +18,7 @@ import thebetweenlands.recipes.PurifierRecipe;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler {
 
-	protected final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
+	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
 	public int time = 0;
 	private static final int MAX_TIME = 432;
 
