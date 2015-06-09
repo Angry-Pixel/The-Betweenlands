@@ -59,7 +59,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		return this.data;
 	}
 
-	private static final Map<World, BetweenlandsWorldData> CACHE = new WeakHashMap<>();
+	private static final Map<World, BetweenlandsWorldData> CACHE = new WeakHashMap<World, BetweenlandsWorldData>();
 	public static BetweenlandsWorldData forWorld(World world) {
 		BetweenlandsWorldData cached = CACHE.get(world);
 		if(cached != null) {

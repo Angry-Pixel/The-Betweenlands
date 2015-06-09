@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BLFluidRegistry {
 	public static final BLFluidRegistry INSTANCE = new BLFluidRegistry();
 
-	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<>();
+	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 
 	public static Fluid swampWater = new Fluid("swampWater").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWater");
 	public static Fluid swampWaterWaterWeeds = new Fluid("swampWaterWaterWeeds").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterWaterWeeds");

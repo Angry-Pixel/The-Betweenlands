@@ -27,7 +27,7 @@ public class RottenFoodHandler
     private static final ImmutableList<Item> EXCEPTION_INSTS;
 
     static {
-        List<Item> items = new ArrayList<>();
+        List<Item> items = new ArrayList<Item>();
         items.add(BLItemRegistry.rottenFood);
         items.add(Items.rotten_flesh);
         items.add(Items.potionitem);

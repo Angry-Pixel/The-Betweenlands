@@ -14,7 +14,7 @@ import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLItemRegistry {
-    public static final List<Item> ITEMS = new ArrayList<>();
+    public static final List<Item> ITEMS = new ArrayList<Item>();
 
     // BASIC MATERIALS
     public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");

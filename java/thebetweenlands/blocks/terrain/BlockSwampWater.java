@@ -29,7 +29,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 	protected boolean hasBoundingBox = false;
 	protected boolean canCollide = false;
 
-	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<>();
+	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<Block, IWaterRenderer>();
 
 	public BlockSwampWater() {
 		super(BLFluidRegistry.swampWater, Material.water);
