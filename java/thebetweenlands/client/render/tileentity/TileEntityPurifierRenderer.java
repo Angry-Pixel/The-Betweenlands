@@ -14,6 +14,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelPurifier;
 import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -53,11 +54,19 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 		int amount = purifier.waterTank.getFluidAmount();
 		int capacity = purifier.waterTank.getCapacity();
 		float size = 1F / capacity * amount;
-
+		
+		if (purifier.getStackInSlot(2) != null) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.25D, y + 0.45D + size * 0.125F, z + 0.5D);
+			GL11.glScaled(0.5D, 0.5D, 0.5D);
+			ItemRenderHelper.renderItemIn3D(purifier.getStackInSlot(2));
+			GL11.glPopMatrix();
+		}
+		
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;
 			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
-
+			
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(770, 771);
