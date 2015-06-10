@@ -102,7 +102,7 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.rubberTreePlanks, 4), new ItemStack(BLBlockRegistry.rubberTreeLog));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mireCoralBlock, 4), "xx", "xx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_CORAL));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.deepWaterCoralBlock, 4), "xx", "xx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.hugeMushroomTop, 4), "xx", "xx", 'x',  ItemMaterialsBL.createStack(EnumMaterialsBL.BULB_CAPPED_MUSHROOM));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.hugeMushroomTop, 4), "xx", "xx", 'x',  BLItemRegistry.bulbCappedMushroomItem);
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 3), "##", "##", "##", '#', "plankWeedwood"));
 		
@@ -149,8 +149,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.crabstick, 3), "  #", " # ", "#  ", '#', new ItemStack(BLItemRegistry.siltCrabClaw));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.sapJello, 1), new ItemStack(BLItemRegistry.sludgeJello), new ItemStack(BLItemRegistry.sapBall));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.middleFruitJello, 1), new ItemStack(BLItemRegistry.sludgeJello), new ItemStack(BLItemRegistry.middleFruit));
-		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL), ItemMaterialsBL.createStack(EnumMaterialsBL.BLACK_HAT_MUSHROOM),  ItemMaterialsBL.createStack(EnumMaterialsBL.FLATHEAD_MUSHROOM), BLBlockRegistry.nettleFlowered);
-		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL), ItemMaterialsBL.createStack(EnumMaterialsBL.BLACK_HAT_MUSHROOM),  ItemMaterialsBL.createStack(EnumMaterialsBL.FLATHEAD_MUSHROOM), BLBlockRegistry.nettle);
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL), BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettleFlowered);
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL), BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettle);
 		
 		// Special Items
 	}
@@ -181,16 +181,26 @@ public class RecipeHandler {
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedwood));
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedwoodLog));
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.sapTreeLog));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.rubberTreeLog));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.purpleRainLog));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.weedwoodLeaves));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.sapTreeLeaves));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.rubberTreeLeaves));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.purpleRainLeavesLight));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.purpleRainLeavesDark));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingWeedwood));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSapTree));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingRubberTree));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingPurpleRain));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSpiritTree));
 		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.weedwoodPlanks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.rubberTreePlanks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.purpleRainPlanks, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("plankWeedwood", new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		OreDictionary.registerOre("stickWood", ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
-
-		// OreDictionary.registerOre("foodMushroom", new ItemStack(BLBlockRegistry.bulbCappedMushroom));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.bulbCappedMushroomItem));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.blackHatMushroomItem));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.flatheadMushroomItem));
 
 		OreDictionary.registerOre("ingotOctine", ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
 

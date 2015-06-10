@@ -75,6 +75,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 				fill(ForgeDirection.UNKNOWN, fluid, true);
 				return FluidContainerRegistry.drainFluidContainer(bucket);
 			}
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // TODO This doesn't seem to work here
 		}
 		return bucket;
 	}
@@ -97,12 +98,14 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("state", lightOn);
+		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		lightOn = packet.func_148857_g().getBoolean("state");
+		waterTank.readFromNBT(packet.func_148857_g().getCompoundTag("waterTank"));
 	}
 
 	public int getPurifyingProgress() {
@@ -179,6 +182,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	private void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public boolean hasFuel() {

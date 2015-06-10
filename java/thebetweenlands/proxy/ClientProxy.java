@@ -232,6 +232,11 @@ public class ClientProxy extends CommonProxy {
 			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
 		}
+		
+		if( particleName.equals("steamPurifier") ) {
+			fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
+			fx.setRBGColorF(1F, 1F, 1F);
+		}
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);

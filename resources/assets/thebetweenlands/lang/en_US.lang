@@ -334,9 +334,9 @@ item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
 item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
-item.thebetweenlands.blackHatMushroom.name=Black Cap Mushroom
-item.thebetweenlands.flatheadMushroom.name=Flathead Mushroom
-item.thebetweenlands.bulbCappedMushroom.name=Bulb-Capped Mushrooms
+item.thebetweenlands.blackHatMushroomItem.name=Black Hat Mushroom
+item.thebetweenlands.flatheadMushroomItem.name=Flathead Mushroom
+item.thebetweenlands.bulbCappedMushroomItem.name=Bulb-Capped Mushrooms
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
