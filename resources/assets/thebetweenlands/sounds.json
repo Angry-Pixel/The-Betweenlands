@@ -354,6 +354,12 @@
     "sounds": [
       "portalTrigger"
     ]
+  },
+  "purifier": {
+    "category": "block",
+    "sounds": [
+      "purifier"
+    ]
   },  
   "music.blDimension": {
     "category": "music",

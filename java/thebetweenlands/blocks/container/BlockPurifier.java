@@ -63,11 +63,12 @@ public class BlockPurifier extends BlockContainer {
 			if (player.getCurrentEquippedItem() != null) {
 				ItemStack oldItem = player.getCurrentEquippedItem();
 				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
-
+				world.markBlockForUpdate(x, y, z);
 				if (!player.capabilities.isCreativeMode)
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
 				if (!ItemStack.areItemStacksEqual(oldItem, newItem))
 					return true;
+				
 		}
 
 			if (tile != null)

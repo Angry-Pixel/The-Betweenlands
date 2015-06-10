@@ -54,7 +54,7 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 // TODO give it bubbles whilst purifying
 		int amount = purifier.waterTank.getFluidAmount();
 		int capacity = purifier.waterTank.getCapacity();
-		float size = 1.22F / capacity * amount;
+		float size = 1F / capacity * amount;
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;
 			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
@@ -64,7 +64,7 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 			GL11.glBlendFunc(770, 771);
 			bindTexture(TextureMap.locationBlocksTexture);
 			float tx = (float) x + 0.0F;
-			float ty = (float) (y + 0.26F + size * 0.5F);
+			float ty = (float) (y + 0.35F + size * 0.5F);
 			float tz = (float) z + 0.0F;
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
