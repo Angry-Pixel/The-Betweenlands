@@ -75,7 +75,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 				fill(ForgeDirection.UNKNOWN, fluid, true);
 				return FluidContainerRegistry.drainFluidContainer(bucket);
 			}
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // TODO This doesn't seem to work here
 		}
 		return bucket;
 	}
@@ -155,7 +154,10 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		if(hasFuel() && !outputIsFull()) {
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				time++;
-				setIlluminated(true);
+				if(time% 108 == 0)
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:purifier", 1F, 1F);
+				if(!lightOn)
+					setIlluminated(true);
 				if (time >= MAX_TIME) {
 					for (int i = 0; i < 2; i++)
 						if (inventory[i] != null)

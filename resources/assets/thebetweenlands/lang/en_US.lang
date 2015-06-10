@@ -297,6 +297,10 @@ item.thebetweenlands.sludgeJello.name=Sludge Jello
 item.thebetweenlands.middleFruitJello.name=Purple Pear Jello
 item.thebetweenlands.marshmallow.name=Green Marshmallow
 item.thebetweenlands.marshmallowPink.name=Pink Marshmallow
+item.thebetweenlands.friedSwampKelp.name=Fried Swamp Kelp
+item.thebetweenlands.blackHatMushroomItem.name=Black Hat Mushroom
+item.thebetweenlands.flatheadMushroomItem.name=Flathead Mushroom
+item.thebetweenlands.bulbCappedMushroomItem.name=Bulb-Capped Mushrooms
 
 item.thebetweenlands.aquaMiddleGem.name=Aqua Middle Gem
 item.thebetweenlands.crimsonMiddleGem.name=Crimson Middle Gem
@@ -334,9 +338,7 @@ item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
 item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
-item.thebetweenlands.blackHatMushroomItem.name=Black Hat Mushroom
-item.thebetweenlands.flatheadMushroomItem.name=Flathead Mushroom
-item.thebetweenlands.bulbCappedMushroomItem.name=Bulb-Capped Mushrooms
+item.thebetweenlands.swampKelp.name=Swamp Kelp
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid

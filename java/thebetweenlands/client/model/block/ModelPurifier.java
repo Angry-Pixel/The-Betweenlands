@@ -160,7 +160,7 @@ public class ModelPurifier extends ModelBase {
 		base.render(0.0625F);
 		beam1.render(0.0625F);
 		sidebeam1.render(0.0625F);
-		filter.render(0.0625F);
+		//filter.render(0.0625F);
 		beam2.render(0.0625F);
 		sidebeam4.render(0.0625F);
 		sidebeam2.render(0.0625F);
