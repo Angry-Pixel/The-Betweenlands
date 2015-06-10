@@ -31,6 +31,14 @@ public abstract class EnvironmentEvent {
 	}
 
 	/**
+	 * Marks the event as dirty or clean.
+	 * @param dirty
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+	
+	/**
 	 * Returns whether this event is marked as dirty.
 	 * @return
 	 */

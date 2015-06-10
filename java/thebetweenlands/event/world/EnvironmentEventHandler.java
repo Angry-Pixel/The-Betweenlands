@@ -27,16 +27,20 @@ public class EnvironmentEventHandler {
 	public void onTick(WorldTickEvent event) {
 		if(event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
+			
+			//Always save the world data
+			provider.getWorldData().markDirty();
+			
 			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
 				eevent.update(event.world.rand);
 				if(eevent.isDirty()) {
-					provider.getWorldData().markDirty();
+					eevent.setDirty(false);
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
 				}
 			}
 			lastSync++;
-			if(lastSync >= 60) {
+			if(lastSync >= 80) {
 				lastSync = 0;
 				for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
