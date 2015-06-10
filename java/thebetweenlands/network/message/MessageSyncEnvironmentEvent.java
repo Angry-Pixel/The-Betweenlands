@@ -54,9 +54,10 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 
 	@Override
 	public void onClientMessage(MessageSyncEnvironmentEvent message, EntityPlayer player) {
-		EnvironmentEvent eevent = EnvironmentEventRegistry.forName(this.eventName);
+		EnvironmentEvent eevent = EnvironmentEventRegistry.forName(message.eventName);
 		if(eevent != null) {
-			eevent.setActive(this.active);
+			eevent.setActive(message.active);
+			eevent.setDirty(false);
 		}
 	}
 

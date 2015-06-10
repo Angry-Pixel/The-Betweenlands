@@ -189,7 +189,9 @@ extends WorldProvider
 	public void updateWeather() {
 		this.worldObj.getWorldInfo().setRaining(false);
 		this.worldObj.getWorldInfo().setThundering(false);
-		this.worldObj.setRainStrength(0.0f);
+		if(this.worldObj.isRemote) {
+			this.worldObj.setRainStrength(0.0f);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
