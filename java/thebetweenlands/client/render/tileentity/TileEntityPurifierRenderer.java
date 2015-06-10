@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.tileentity;
 
+import java.util.Random;
+
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -13,6 +15,8 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelPurifier;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -55,11 +59,32 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 		int capacity = purifier.waterTank.getCapacity();
 		float size = 1F / capacity * amount;
 		
-		if (purifier.getStackInSlot(2) != null) {
+		/*if (purifier.getStackInSlot(2) != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.25D, y + 0.45D + size * 0.125F, z + 0.5D);
 			GL11.glScaled(0.5D, 0.5D, 0.5D);
 			ItemRenderHelper.renderItemIn3D(purifier.getStackInSlot(2));
+			GL11.glPopMatrix();
+		}*/
+		
+		if (purifier.getStackInSlot(2) != null) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.5D, y + 0.27D, z + 0.5D);
+			GL11.glRotated(180, 1, 0, 0);
+			int items = purifier.getStackInSlot(2).stackSize;
+			Random rand = new Random();
+			rand.setSeed((long) (purifier.xCoord + purifier.yCoord + purifier.zCoord));
+			for (int i = 0; i < items; i++) {
+				GL11.glPushMatrix();
+				GL11.glTranslated(rand.nextFloat() / 3.0D - 1.0D / 6.0D, -0.2D, rand.nextFloat() / 3.0D - 1.0D / 6.0D);
+				GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 1, 0, 0);
+				GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 0, 0, 1);
+				GL11.glScaled(0.15D, 0.15D, 0.15D);
+				GL11.glRotated(90, 1, 0, 0);
+				GL11.glRotated(rand.nextFloat() * 360.0F, 0, 0, 1);
+				ItemRenderHelper.renderItem(purifier.getStackInSlot(2), 0);
+				GL11.glPopMatrix();
+			}
 			GL11.glPopMatrix();
 		}
 		
