@@ -49,16 +49,15 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 		if(purifier.isPurifying() && purifier.lightOn)
 			model.renderFirePlate();
 		GL11.glPopMatrix();
-	
-// TODO make this a water block and make it sync for rendering
-// TODO give it bubbles whilst purifying
+
 		int amount = purifier.waterTank.getFluidAmount();
 		int capacity = purifier.waterTank.getCapacity();
 		float size = 1F / capacity * amount;
+
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;
 			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
-			
+
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(770, 771);
