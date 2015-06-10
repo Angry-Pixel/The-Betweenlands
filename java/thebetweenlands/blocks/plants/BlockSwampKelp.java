@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -16,7 +17,9 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
@@ -92,6 +95,13 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			world.notifyBlockChange(x, y, z, Blocks.air);
 		}
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		drops.add(new ItemStack(BLItemRegistry.swampKelp, 1 + fortune));
+		return drops;
 	}
 
 	protected boolean canPlaceBlockOn(Block block) {
