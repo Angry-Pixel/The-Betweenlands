@@ -26,6 +26,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public int time = 0;
 	private static final int MAX_TIME = 432;
 	public boolean lightOn = false;
+	private int prevStackSize = 0;
 	private Item prevItem;
 
 	public TileEntityPurifier() {
@@ -196,10 +197,14 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			markDirty();
 			setIlluminated(false);
 		}
+		if(this.prevStackSize != (inventory[2] != null ? inventory[2].stackSize : 0)) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 		if(this.prevItem != (inventory[2] != null ? inventory[2].getItem() : null)) {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		this.prevItem = inventory[2] != null ? inventory[2].getItem() : null;
+		this.prevStackSize = inventory[2] != null ? inventory[2].stackSize : 0;
 	}
 
 	private void extractFluids(FluidStack fluid) {
