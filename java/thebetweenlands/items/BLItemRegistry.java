@@ -105,6 +105,9 @@ public class BLItemRegistry {
     public static final Item sapJello = new ItemSapJello().setUnlocalizedName("thebetweenlands.sapJello").setTextureName("thebetweenlands:sapJello");
     public static final Item marshmallow = new ItemMarshmallow().setUnlocalizedName("thebetweenlands.marshmallow").setTextureName("thebetweenlands:greenMarshmallow");
     public static final Item marshmallowPink = new ItemMarshmallowPink().setUnlocalizedName("thebetweenlands.marshmallowPink").setTextureName("thebetweenlands:pinkMarshmallow");
+    public static final Item flatheadMushroomItem = new ItemFlatheadMushroom().setUnlocalizedName("thebetweenlands.flatheadMushroomItem").setTextureName("thebetweenlands:flatheadMushroom");
+    public static final Item blackHatMushroomItem = new ItemBlackHatMushroom().setUnlocalizedName("thebetweenlands.blackHatMushroomItem").setTextureName("thebetweenlands:blackHatMushroom");
+    public static final Item bulbCappedMushroomItem = new ItemBulbCappedMushroom().setUnlocalizedName("thebetweenlands.bulbCappedMushroomItem").setTextureName("thebetweenlands:bulbCappedMushroom");
     
     //DOORS
     public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
@@ -121,7 +124,7 @@ public class BLItemRegistry {
     }
 
     private static void initCreativeTabs() {
-        ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
+        ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodBucketWater, weedwoodBucketTar);
         ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest);
