@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class EnvironmentEventRegistry {
-	public static final EnvironmentEvent DENSE_FOG = new EnvironmentEvent() {
+	public static final EnvironmentEvent DENSE_FOG = new TimedEnvironmentEvent() {
 		@Override
 		public String getEventName() {
 			return "Dense Fog";

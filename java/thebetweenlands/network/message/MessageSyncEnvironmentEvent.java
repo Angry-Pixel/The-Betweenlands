@@ -11,12 +11,14 @@ import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvironmentEvent> {
+	private EnvironmentEvent event;
 	private String eventName;
 	private boolean active;
 	
 	public MessageSyncEnvironmentEvent() {}
 	
 	public MessageSyncEnvironmentEvent(EnvironmentEvent eevent) {
+		this.event = eevent;
 		this.eventName = eevent.getEventName();
 		this.active = eevent.isActive();
 	}
@@ -31,6 +33,10 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 			eventName = new String(strBytes, "UTF-8");
 			this.eventName = eventName;
 			this.active = buffer.readBoolean();
+			EnvironmentEvent eevent = EnvironmentEventRegistry.forName(this.eventName);
+			if(eevent != null) {
+				eevent.loadEventPacket(buffer);
+			}
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Failed to sync environment event");
 			e.printStackTrace();
@@ -43,6 +49,7 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 		buffer.writeInt(strBytes.length);
 		buffer.writeBytes(strBytes);
 		buffer.writeBoolean(this.active);
+		this.event.sendEventPacket(buffer);
 	}
 
 	@Override

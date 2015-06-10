@@ -83,8 +83,6 @@ public class TheBetweenlands
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
-		System.out.println("SATAN");
-		
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
 

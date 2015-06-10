@@ -28,6 +28,7 @@ public class EnvironmentEventHandler {
 		if(event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
 			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
+				if(!eevent.isLoaded()) continue;
 				eevent.update(event.world.rand);
 				if(eevent.isDirty()) {
 					provider.getWorldData().markDirty();
