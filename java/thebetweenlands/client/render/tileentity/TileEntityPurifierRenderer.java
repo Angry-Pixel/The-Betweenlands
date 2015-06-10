@@ -76,7 +76,7 @@ public class TileEntityPurifierRenderer extends TileEntitySpecialRenderer {
 			rand.setSeed((long) (purifier.xCoord + purifier.yCoord + purifier.zCoord));
 			for (int i = 0; i < items; i++) {
 				GL11.glPushMatrix();
-				GL11.glTranslated(rand.nextFloat() / 3.0D - 1.0D / 6.0D, -0.2D, rand.nextFloat() / 3.0D - 1.0D / 6.0D);
+				GL11.glTranslated(rand.nextFloat() / 3.0D - 1.0D / 6.0D, -0.25D, rand.nextFloat() / 3.0D - 1.0D / 6.0D);
 				GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 1, 0, 0);
 				GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 0, 0, 1);
 				GL11.glScaled(0.15D, 0.15D, 0.15D);

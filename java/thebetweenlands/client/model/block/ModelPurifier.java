@@ -82,7 +82,7 @@ public class ModelPurifier extends ModelBase {
         sidebeam1.addBox(-2.0F, -14.0F, -1.5F, 3, 14, 3, 0.0F);
         setRotation(sidebeam1, 0.0F, 0.0F, -0.045553093477052F);
         filter = new ModelRenderer(this, 50, 0);
-        filter.setRotationPoint(0.0F, 12.0F, 0.0F);
+        filter.setRotationPoint(0.0F, 16.5F, 0.0F);
         filter.addBox(-5.0F, 0.0F, -5.0F, 10, 0, 10, 0.0F);
         shutter = new ModelRenderer(this, 36, 51);
         shutter.setRotationPoint(0.0F, 0.0F, -2.0F);
@@ -160,7 +160,7 @@ public class ModelPurifier extends ModelBase {
 		base.render(0.0625F);
 		beam1.render(0.0625F);
 		sidebeam1.render(0.0625F);
-		//filter.render(0.0625F);
+		filter.render(0.0625F);
 		beam2.render(0.0625F);
 		sidebeam4.render(0.0625F);
 		sidebeam2.render(0.0625F);
