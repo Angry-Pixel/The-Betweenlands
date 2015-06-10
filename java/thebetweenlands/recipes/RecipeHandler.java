@@ -181,16 +181,26 @@ public class RecipeHandler {
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedwood));
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.weedwoodLog));
 		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.sapTreeLog));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.rubberTreeLog));
+		OreDictionary.registerOre("logWood", new ItemStack(BLBlockRegistry.purpleRainLog));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.weedwoodLeaves));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.sapTreeLeaves));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.rubberTreeLeaves));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.purpleRainLeavesLight));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BLBlockRegistry.purpleRainLeavesDark));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingWeedwood));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSapTree));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingRubberTree));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingPurpleRain));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSpiritTree));
 		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.weedwoodPlanks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.rubberTreePlanks, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.purpleRainPlanks, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("plankWeedwood", new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		OreDictionary.registerOre("stickWood", ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
-
-		// OreDictionary.registerOre("foodMushroom", new ItemStack(BLBlockRegistry.bulbCappedMushroom));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.bulbCappedMushroomItem));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.blackHatMushroomItem));
+        OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.flatheadMushroomItem));
 
 		OreDictionary.registerOre("ingotOctine", ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
 
