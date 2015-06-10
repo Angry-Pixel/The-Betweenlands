@@ -5,6 +5,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.world.events.EnvironmentEvent;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -43,16 +45,22 @@ public class BetweenlandsWorldData extends WorldSavedData {
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		this.data = compound.getCompoundTag(ModInfo.ID);
+		this.data = compound.getCompoundTag(ModInfo.ID + ":worldData");
 		this.hasDenseFog = this.data.getBoolean("hasDenseFog");
 		this.timeToFog = this.data.getInteger("timeToFog");
+		for(EnvironmentEvent event : EnvironmentEventRegistry.getEvents().values()) {
+			event.readFromNBT(compound);
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
+		for(EnvironmentEvent event : EnvironmentEventRegistry.getEvents().values()) {
+			event.writeToNBT(compound);
+		}
 		this.data.setBoolean("hasDenseFog", this.hasDenseFog);
 		this.data.setInteger("timeToFog", this.timeToFog);
-		compound.setTag(ModInfo.ID, this.data);
+		compound.setTag(ModInfo.ID + ":worldData", this.data);
 	}
 
 	public NBTTagCompound getData() {

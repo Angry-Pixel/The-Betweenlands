@@ -11,6 +11,8 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.events.EnvironmentEvent;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -106,6 +108,18 @@ public class DebugHandler {
 				lightLevel += provider.lightBrightnessTable[0];
 			}
 			Minecraft.getMinecraft().fontRenderer.drawString("Base Light: " + lightLevel + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
+			String activeEvents = "";
+			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
+				if(eevent.isActive()) {
+					activeEvents += eevent.getEventName() + ", ";
+				}
+			}
+			if(activeEvents.length() > 2) {
+				activeEvents = activeEvents.substring(0, activeEvents.length() - 2);
+			} else {
+				activeEvents = "None";
+			}
+			Minecraft.getMinecraft().fontRenderer.drawString("Active events: " + activeEvents, 2, 42, 0xFFFFFFFF);
 		}
 	}
 }

@@ -18,19 +18,19 @@ import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
-import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
-import thebetweenlands.network.message.MessageSyncWeather;
 import thebetweenlands.network.packets.PacketAnimatorProgress;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
@@ -42,6 +42,7 @@ import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -94,6 +95,7 @@ public class TheBetweenlands
 		BLItemRegistry.init();
 		BLEntityRegistry.init();
 		TileEntityAnimator.addItems();
+		EnvironmentEventRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		
@@ -106,7 +108,7 @@ public class TheBetweenlands
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
         networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
-        networkWrapper.registerMessage(MessageSyncWeather.class, MessageSyncWeather.class, 4, Side.CLIENT);
+        networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
         
         sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
         
@@ -156,7 +158,9 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
-
+		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
+		
 		if (DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
