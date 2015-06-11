@@ -111,7 +111,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	@Override
 	protected void entityInit() {
 		dataWatcher.addObject(16, Byte.valueOf((byte) 0));
-		dataWatcher.addObject(17, 1);
+		dataWatcher.addObject(17, 0);
 	}
 
 	@Override
@@ -428,9 +428,6 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		par1NBTTagCompound.setByte("inGround", (byte) (inGround ? 1 : 0));
 		par1NBTTagCompound.setByte("pickup", (byte) canBePickedUp);
 		par1NBTTagCompound.setDouble("damage", damage);
-		par1NBTTagCompound.setBoolean("isOctineArrow", isOctineArrow);
-		par1NBTTagCompound.setBoolean("isPoisonedAnglerToothArrow", isPoisonedAnglerToothArrow);
-		par1NBTTagCompound.setBoolean("isBasiliskArrow", isBasiliskArrow);
 	}
 
 	@Override
@@ -442,10 +439,6 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		blockHit = Block.getBlockById(par1NBTTagCompound.getByte("inTile") & 255);
 		inData = par1NBTTagCompound.getByte("inData") & 255;
 		arrowShake = par1NBTTagCompound.getByte("shake") & 255;
-		inGround = par1NBTTagCompound.getByte("inGround") == 1;
-		isOctineArrow = par1NBTTagCompound.getBoolean("isOctineArrow");
-		isPoisonedAnglerToothArrow = par1NBTTagCompound.getBoolean("isPoisonedAnglerToothArrow");
-		isBasiliskArrow = par1NBTTagCompound.getBoolean("isBasiliskArrow");
 
 		if (par1NBTTagCompound.hasKey("damage", 99)) {
 			damage = par1NBTTagCompound.getDouble("damage");
@@ -528,11 +521,12 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	}
 
 	public void getType(){
-		if(isPoisonedAnglerToothArrow)
-			dataWatcher.updateObject(17, 2);
-		else if(isOctineArrow)
-			dataWatcher.updateObject(17, 3);
-		else
-			dataWatcher.updateObject(17, 1);
+		//to add more arrows
+		if(dataWatcher.getWatchableObjectInt(17) == 1)
+			isPoisonedAnglerToothArrow = true;
+		else if(dataWatcher.getWatchableObjectInt(17) == 2)
+			isOctineArrow = true;
+		else if(dataWatcher.getWatchableObjectInt(17) == 2)
+			isBasiliskArrow = true;
 	}
 }

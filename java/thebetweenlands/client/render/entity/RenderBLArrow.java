@@ -21,6 +21,7 @@ public class RenderBLArrow extends Render {
     private static ResourceLocation texture1 = new ResourceLocation("thebetweenlands:textures/entity/anglerToothArrow.png");
     private static ResourceLocation texture2 = new ResourceLocation("thebetweenlands:textures/entity/poisonedAnglerToothArrow.png");
     private static ResourceLocation texture3 = new ResourceLocation("thebetweenlands:textures/entity/octineArrow.png");
+    private static ResourceLocation texture4 = new ResourceLocation("thebetweenlands:textures/entity/basiliskArrow.png");
 
     @Override
     public void doRender(Entity entity, double x, double y, double z, float yaw, float tick) {
@@ -29,11 +30,9 @@ public class RenderBLArrow extends Render {
 
     public void renderArrow(EntityBLArrow entityArrow, double x, double y, double z, float yaw, float tick) {
         int type = entityArrow.getDataWatcher().getWatchableObjectInt(17);
-        if(type == 2){
-            if(ShaderHelper.INSTANCE.isShaderSupported()) {
+        if(entityArrow.isOctineArrow)
+            if (ShaderHelper.INSTANCE.isShaderSupported())
                 ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
-            }
-        }
 
         FMLClientHandler.instance().getClient().getTextureManager().bindTexture(getEntityTexture(entityArrow));
 
@@ -95,11 +94,13 @@ public class RenderBLArrow extends Render {
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        int type = entity.getDataWatcher().getWatchableObjectInt(17);
-        if(type == 2)
+
+        if(((EntityBLArrow)entity).isPoisonedAnglerToothArrow)
             return texture2;
-        else if (type == 3)
+        else if (((EntityBLArrow)entity).isOctineArrow)
             return texture3;
+        else if(((EntityBLArrow)entity).isBasiliskArrow)
+            return texture4;
         else
             return texture1;
     }
