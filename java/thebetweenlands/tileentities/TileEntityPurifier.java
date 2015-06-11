@@ -188,7 +188,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 					}
 					time = 0;
 					markDirty();
-					setIlluminated(false);
+					boolean canRun = output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output);
+					if(!canRun) setIlluminated(false);
 				}
 			}
 		}
