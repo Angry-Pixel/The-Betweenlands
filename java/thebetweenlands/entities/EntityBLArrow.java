@@ -526,7 +526,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 			isPoisonedAnglerToothArrow = true;
 		else if(dataWatcher.getWatchableObjectInt(17) == 2)
 			isOctineArrow = true;
-		else if(dataWatcher.getWatchableObjectInt(17) == 2)
+		else if(dataWatcher.getWatchableObjectInt(17) == 3)
 			isBasiliskArrow = true;
 	}
 }
