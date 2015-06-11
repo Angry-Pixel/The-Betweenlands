@@ -238,6 +238,11 @@ public class ClientProxy extends CommonProxy {
 			fx.setRBGColorF(1F, 1F, 1F);
 		}
 
+		if( particleName.equals("portal") ) {
+			fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(0.039f, 0.443f, 0.039f);
+		}
+
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 	}
