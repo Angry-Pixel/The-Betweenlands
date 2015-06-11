@@ -16,6 +16,7 @@ import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -187,9 +188,11 @@ extends WorldProvider
 
 	@Override
 	public void updateWeather() {
-		this.worldObj.getWorldInfo().setRaining(false);
+		this.worldObj.getWorldInfo().setRaining(EnvironmentEventRegistry.HEAVY_RAIN.isActive());
 		this.worldObj.getWorldInfo().setThundering(false);
-		if(this.worldObj.isRemote) {
+		if(this.worldObj.isRemote && EnvironmentEventRegistry.HEAVY_RAIN.isActive()) {
+			this.worldObj.setRainStrength(0.5f);
+		} else {
 			this.worldObj.setRainStrength(0.0f);
 		}
 	}

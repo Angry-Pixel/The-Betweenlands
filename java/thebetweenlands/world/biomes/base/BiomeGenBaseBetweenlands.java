@@ -54,7 +54,7 @@ extends BiomeGenBase
 		this.spawnableCreatureList.clear();
 		this.spawnableMonsterList.clear();
 		this.spawnableWaterCreatureList.clear();
-		this.setDisableRain();
+		//this.setDisableRain();
         this.setTemperatureRainfall(2.0f, 0.0f);
 	}
 

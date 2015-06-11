@@ -31,6 +31,7 @@ import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.plants.BlockRottenLog;
+import thebetweenlands.blocks.plants.BlockSwampKelp;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockSwampReedUW;
@@ -40,7 +41,6 @@ import thebetweenlands.blocks.plants.BlockVolarpad;
 import thebetweenlands.blocks.plants.BlockWallPlants;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
-import thebetweenlands.blocks.plants.BlockSwampKelp;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
@@ -58,6 +58,7 @@ import thebetweenlands.blocks.terrain.BlockDeadGrass;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
+import thebetweenlands.blocks.terrain.BlockPuddle;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSlimyDirt;
 import thebetweenlands.blocks.terrain.BlockSlimyGrass;
@@ -113,6 +114,7 @@ public class BLBlockRegistry
 	public static final Block slimyGrass = new BlockSlimyGrass();
 	public static final Block slimyDirt = new BlockSlimyDirt();
 	public static final Block tarFluid = new BlockTarFluid();
+	public static final Block puddle = new BlockPuddle();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.

@@ -6,13 +6,13 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.TimedEnvironmentEvent;
 
 public class EventHeavyRain extends TimedEnvironmentEvent{
@@ -22,18 +22,18 @@ public class EventHeavyRain extends TimedEnvironmentEvent{
 	}
 	@Override
 	public int getOffTime(Random rnd) {
-		return /*rnd.nextInt(12000) + 12000*/80;
+		return rnd.nextInt(12000) + 12000;
 	}
 	@Override
 	public int getOnTime(Random rnd) {
-		return /*rnd.nextInt(6000) + 3000*/80;
+		return rnd.nextInt(6000) + 3000;
 	}
 
 	@Override
 	public void update(World world) {
 		super.update(world);
 
-		if(this.isActive()) {
+		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world.rand.nextInt(20) == 0) {
 			if(!world.isRemote && world instanceof WorldServer) {
 				WorldServer worldServer = (WorldServer)world;
 				Set<ChunkCoordIntPair> activeChunks = new HashSet();
@@ -52,16 +52,17 @@ public class EventHeavyRain extends TimedEnvironmentEvent{
 				Iterator<ChunkCoordIntPair> it = activeChunks.iterator();
 				while(it.hasNext()) {
 					ChunkCoordIntPair chunkPos = it.next();
-					Chunk chunk = world.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
-					int cbx = world.rand.nextInt(16);
-					int cbz = world.rand.nextInt(16);
-					int by = chunk.getPrecipitationHeight(cbx, cbz);
-					int bx = chunkPos.chunkXPos * 16 + cbx;
-					int bz = chunkPos.chunkZPos * 16 + cbz;
-					//if(world.getBlock(bx, by-1, bz) != BLBlockRegistry.swampWater) {
-						System.out.println("HEAVY RAIN CHUNK UPDATES");
-						//world.setBlock(bx, by, bz, BLBlockRegistry.swampWater);
-					//}
+					if(world.rand.nextInt(6) == 0) {
+						Chunk chunk = worldServer.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
+						int cbx = world.rand.nextInt(16);
+						int cbz = world.rand.nextInt(16);
+						int by = chunk.getPrecipitationHeight(cbx, cbz);
+						int bx = chunkPos.chunkXPos * 16 + cbx;
+						int bz = chunkPos.chunkZPos * 16 + cbz;
+						if(world.getBlock(bx, by-1, bz) != BLBlockRegistry.puddle && BLBlockRegistry.puddle.canPlaceBlockAt(world, bx, by, bz)) {
+							world.setBlock(bx, by, bz, BLBlockRegistry.puddle);
+						}
+					}
 				}
 			}
 		}
