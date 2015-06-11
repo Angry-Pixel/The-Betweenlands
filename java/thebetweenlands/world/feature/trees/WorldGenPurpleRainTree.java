@@ -34,10 +34,9 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
         return true;
     }
 
-    private void tramp(World world, int x, int y, int acctualY, int z, int height, int radius, Random random){
-        if (y <= acctualY + height - 8){
-            System.out.println("adsadswa");
-            for(int distance = 1; distance <= 2; distance++) {
+    private void tramp(World world, int x, int y, int acctualY, int z, int height, int radius, Random random) {
+        if (y <= acctualY + height - 8) {
+            for (int distance = 1; distance <= 2; distance++) {
                 world.setBlock(x, y, z, log);
                 world.setBlock(x - distance, y, z, log);
                 world.setBlock(x + distance, y, z, log);
@@ -48,7 +47,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
                     world.setBlock(x + 1, y, z + 1, log);
                     world.setBlock(x - 1, y, z + 1, log);
                     world.setBlock(x + 1, y, z - 1, log);
-                }else {
+                } else {
                     world.setBlock(x - distance, y, z - 1, log);
                     world.setBlock(x + distance, y, z + 1, log);
                     world.setBlock(x - distance, y, z + 1, log);
@@ -59,8 +58,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
                     world.setBlock(x + 1, y, z - distance, log);
                 }
             }
-        }
-        else {
+        } else {
             world.setBlock(x, y, z, log);
             world.setBlock(x - 1, y, z, log);
             world.setBlock(x + 1, y, z, log);
@@ -71,11 +69,11 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
             world.setBlock(x - 1, y, z + 1, log);
             world.setBlock(x + 1, y, z - 1, log);
         }
-        if(y == acctualY + height){
-            addBranch(world, random, x+2, y, z, 1, 4+random.nextInt(2));
-            addBranch(world, random, x-2, y, z, 2, 4+random.nextInt(2));
-            addBranch(world, random, x, y, z+2, 3, 4+random.nextInt(2));
-            addBranch(world, random, x, y, z-2, 4, 4+random.nextInt(2));
+        if (y == acctualY + height) {
+            addBranch(world, random, x + 2, y, z, 1, 4 + random.nextInt(2));
+            addBranch(world, random, x - 2, y, z, 2, 4 + random.nextInt(2));
+            addBranch(world, random, x, y, z + 2, 3, 4 + random.nextInt(2));
+            addBranch(world, random, x, y, z - 2, 4, 4 + random.nextInt(2));
         }
     }
 
@@ -99,42 +97,78 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
         }
     }
 
-    private void addBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength){
-        for(int i = 0; i<= branchLength; i++){
-            if (i >= 1 && rand.nextInt(2) == 0) {
-                y+= 2;
+    private void addBranch(World world, Random rand, int x, int y, int z, int dir, int branchLength) {
+        for (int i = 0; i <= branchLength; i++) {
+            if (i >= 1 && rand.nextInt(20) <= 13) {
+                y++;
             }
             if (dir == 1) {
-                if(rand.nextInt(2) == 0 && i%2 == 0)
+                if (rand.nextInt(3) == 0)
                     z++;
-                world.setBlock(x+i, y, z, log, 5, 2);
-                world.setBlock(x+i, y+1, z, log, 5, 2);
+                world.setBlock(x + i, y, z, log, 5, 2);
+                if (rand.nextInt(5) == 0) {
+                    world.setBlock(x + i, y + 1, z, log, 5, 2);
+                    y++;
+                }
+                if (i >= branchLength - 2 && rand.nextInt(3) == 0)
+                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
             }
 
             if (dir == 2) {
-                if(rand.nextInt(2) == 0 && i%2 == 0)
+                if (rand.nextInt(3) == 0)
                     z--;
-                world.setBlock(x-i, y, z, log, 5, 2);
-                world.setBlock(x-i, y+1, z, log, 5, 2);
+                world.setBlock(x - i, y, z, log, 5, 2);
+                if (rand.nextInt(5) == 0) {
+                    world.setBlock(x - i, y + 1, z, log, 5, 2);
+                    y++;
+                }
+                if (i >= branchLength - 2 && rand.nextInt(3) == 0)
+                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
             }
 
             if (dir == 3) {
-                if(rand.nextInt(2) == 0 && i%2 == 0)
-                    x++;
-                world.setBlock(x, y, z+i, log, 9, 2);
-                world.setBlock(x, y+1, z+i, log, 9, 2);
+                if (rand.nextInt(3) == 0)
+                    x--;
+                world.setBlock(x, y, z + i, log, 9, 2);
+                if (rand.nextInt(5) == 0) {
+                    world.setBlock(x, y + 1, z - i, log, 9, 2);
+                    y++;
+                }
+                if (i >= branchLength - 2 && rand.nextInt(3) == 0)
+                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
             }
 
             if (dir == 4) {
-                if(rand.nextInt(2) == 0 && i%2 == 0)
-                    z--;
-                world.setBlock(x, y, z-i, log, 9, 2);
-                world.setBlock(x, y+1, z-i, log, 9, 2);
-
+                if (rand.nextInt(3) == 0)
+                    x++;
+                world.setBlock(x, y, z - i, log, 9, 2);
+                if (rand.nextInt(5) == 0) {
+                    world.setBlock(x, y + 1, z + i, log, 9, 2);
+                    y++;
+                }
+                if (i >= branchLength - 2 && rand.nextInt(3) == 0)
+                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
             }
-
-
         }
+    }
 
+    private void addSubBranch(World world, Random rand, int x, int y, int z, int branchLength) {
+        for (int i = 0; i <= branchLength; i++) {
+            y++;
+            world.setBlock(x, y, z, log);
+            if (i == branchLength && rand.nextInt(5) == 0) {
+                world.setBlock(x, y, z - 1, log);
+                world.setBlock(x, y + 1, z - 1, log);
+            } else if (i == branchLength && rand.nextInt(5) == 0) {
+                world.setBlock(x, y, z + 1, log);
+                world.setBlock(x, y + 1, z + 1, log);
+            } else if (i == branchLength && rand.nextInt(5) == 0) {
+                world.setBlock(x - 1, y, z, log);
+                world.setBlock(x - 1, y + 1, z, log);
+            } else if (i == branchLength && rand.nextInt(5) == 0) {
+                world.setBlock(x + 1, y, z, log);
+                world.setBlock(x + 1, y + 1, z, log);
+            }
+        }
     }
 }
