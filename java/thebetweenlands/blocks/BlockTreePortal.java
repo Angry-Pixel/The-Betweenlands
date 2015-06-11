@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 import java.util.Random;
@@ -229,7 +230,7 @@ public class BlockTreePortal extends Block {
 				motionZ = rand.nextFloat() * 2.0F * multi;
 			}
 
-			world.spawnParticle("smoke", particleX, particleY, particleZ, motionX / 4D, motionY / 4D, motionZ / 4D);
+			TheBetweenlands.proxy.spawnCustomParticle("portal", world, particleX, particleY, particleZ, motionX, motionY, motionZ, 0);
 		}
 		if(rand.nextInt(100) == 0){
 			world.playSound((double)x + .5, (double)y + .5, (double)z + .5, "thebetweenlands:portal", 0.2F, rand.nextFloat() * 0.4F + 0.8F, false);
