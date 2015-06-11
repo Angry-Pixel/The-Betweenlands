@@ -1,5 +1,9 @@
 package thebetweenlands.blocks;
 
+import static net.minecraftforge.common.util.ForgeDirection.EAST;
+import static net.minecraftforge.common.util.ForgeDirection.NORTH;
+import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
+import static net.minecraftforge.common.util.ForgeDirection.WEST;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -45,14 +49,9 @@ public class BlockSludge extends Block {
     
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-    	if(entity instanceof EntitySludge == false) {
+    	if(entity instanceof EntitySludge == false && entity.onGround) {
     		entity.setInWeb();
     	}
-    }
-
-    @Override
-    public boolean canBlockStay(World world, int x, int y, int z) {
-        return world.getBlock(x, y - 1, z).isSideSolid(world, x, y - 1, z, ForgeDirection.UP);
     }
     
     @Override
@@ -90,5 +89,27 @@ public class BlockSludge extends Block {
     @Override
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
         return null;
+    }
+    
+    @Override
+    public boolean isNormalCube() {
+    	return false;
+    }
+    
+    @Override
+    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+        return World.doesBlockHaveSolidTopSurface(world, x, y-1, z);
+    }
+    
+    @Override
+    public boolean canBlockStay(World world, int x, int y, int z) {
+    	return World.doesBlockHaveSolidTopSurface(world, x, y-1, z);
+    }
+    
+    @Override
+    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+    	if(!World.doesBlockHaveSolidTopSurface(world, x, y-1, z)) {
+    		world.setBlock(x, y, z, Blocks.air);
+    	}
     }
 }

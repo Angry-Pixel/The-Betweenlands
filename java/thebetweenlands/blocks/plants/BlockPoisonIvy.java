@@ -26,7 +26,7 @@ public class BlockPoisonIvy extends BlockVine implements IShearable {
 
 	@Override
 	 public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if(entity instanceof EntityLivingBase){
+		if(!world.isRemote && entity instanceof EntityLivingBase && world.rand.nextInt(200) == 0){
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.poison.getId(), 50, 25));			
 		}
 	}

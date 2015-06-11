@@ -74,7 +74,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		int by = MathHelper.floor_double(this.posY);
 		int bz = MathHelper.floor_double(this.posZ);
 		if(this.worldObj.getBlock(bx, by, bz) == Blocks.air && 
-				BLBlockRegistry.sludge.canBlockStay(this.worldObj, bx, by, bz)) {
+				BLBlockRegistry.sludge.canPlaceBlockAt(this.worldObj, bx, by, bz)) {
 			BLBlockRegistry.sludge.generateBlockTemporary(this.worldObj, bx, by, bz);
 		}
 	}
