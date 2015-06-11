@@ -1,12 +1,9 @@
 package thebetweenlands.world.events;
 
 import io.netty.buffer.ByteBuf;
-
-import java.util.Random;
-
-import thebetweenlands.lib.ModInfo;
-
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+import thebetweenlands.lib.ModInfo;
 
 public abstract class EnvironmentEvent {
 	private NBTTagCompound nbtt = new NBTTagCompound();
@@ -59,7 +56,7 @@ public abstract class EnvironmentEvent {
 	 * Called every world tick.
 	 * @param rnd
 	 */
-	public void update(Random rnd) { }
+	public void update(World world) { }
 
 	/**
 	 * Returns the NBT data of this event.

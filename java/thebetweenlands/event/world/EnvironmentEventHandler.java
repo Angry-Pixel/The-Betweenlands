@@ -33,7 +33,7 @@ public class EnvironmentEventHandler {
 			
 			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
-				eevent.update(event.world.rand);
+				eevent.update(event.world);
 				if(eevent.isDirty()) {
 					eevent.setDirty(false);
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));

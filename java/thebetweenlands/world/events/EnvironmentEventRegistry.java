@@ -3,26 +3,17 @@ package thebetweenlands.world.events;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+
+import thebetweenlands.world.events.impl.EventDenseFog;
+import thebetweenlands.world.events.impl.EventHeavyRain;
 
 public class EnvironmentEventRegistry {
-	public static final EnvironmentEvent DENSE_FOG = new TimedEnvironmentEvent() {
-		@Override
-		public String getEventName() {
-			return "Dense Fog";
-		}
-		@Override
-		public int getOffTime(Random rnd) {
-			return rnd.nextInt(60000) + 6000;
-		}
-		@Override
-		public int getOnTime(Random rnd) {
-			return rnd.nextInt(12000) + 6000;
-		}
-	};
-
+	public static EnvironmentEvent DENSE_FOG = new EventDenseFog();
+	public static EnvironmentEvent HEAVY_RAIN = new EventHeavyRain();
+	
 	public static void init() {
 		register(DENSE_FOG);
+		register(HEAVY_RAIN);
 	}
 	
 	private static final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();
