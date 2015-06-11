@@ -1,12 +1,20 @@
 package thebetweenlands.blocks;
 
+import static net.minecraftforge.common.util.ForgeDirection.DOWN;
 import static net.minecraftforge.common.util.ForgeDirection.EAST;
 import static net.minecraftforge.common.util.ForgeDirection.NORTH;
 import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
+import static net.minecraftforge.common.util.ForgeDirection.UP;
 import static net.minecraftforge.common.util.ForgeDirection.WEST;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCompressedPowered;
+import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockSnow;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -111,5 +119,10 @@ public class BlockSludge extends Block {
     	if(!World.doesBlockHaveSolidTopSurface(world, x, y-1, z)) {
     		world.setBlock(x, y, z, Blocks.air);
     	}
+    }
+    
+    @Override
+    public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+        return false;
     }
 }
