@@ -42,6 +42,7 @@ public class BlockGenericStone
 		setHarvestLevel("pickaxe", 0);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.genericStone");
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -98,18 +99,19 @@ public class BlockGenericStone
 		if (!world.isRemote) {
 			if (world.getBlockMetadata(x, y, z) == META_MOSSYCRAGROCK1) {
 				int i1 = x + random.nextInt(3) - 1;
-				int j1 = y + random.nextInt(4) - 3;
+				int j1 = y + random.nextInt(3) - 1;
 				int k1 = z + random.nextInt(3) - 1;
 				
 				Block block = world.getBlock(i1, j1, k1);
 				int meta = world.getBlockMetadata(i1, j1, k1);
 				if (block instanceof BlockGenericStone && meta == META_CRAGROCK) {
-					if (world.getBlock(i1, j1 + 1, k1) instanceof BlockGenericStone && (world.getBlockMetadata(i1, j1 + 1, k1) == META_MOSSYCRAGROCK1 || world.getBlockMetadata(i1, j1 + 1, k1) == META_CRAGROCK))
+					if (world.getBlock(i1, j1 + 1, k1) instanceof BlockGenericStone && world.getBlock(i1, j1 + 2, k1) == Blocks.air &&(world.getBlockMetadata(i1, j1 + 1, k1) == META_MOSSYCRAGROCK1 || world.getBlockMetadata(i1, j1 + 1, k1) == META_CRAGROCK))
 						world.setBlockMetadataWithNotify(i1, j1, k1, META_MOSSYCRAGROCK2, 2);
-					else if (world.getBlock(i1, j1, k1) == Blocks.air)
+					else if (world.getBlock(i1, j1, k1) instanceof BlockGenericStone && world.getBlock(i1, j1 + 1, k1) == Blocks.air)
 						world.setBlockMetadataWithNotify(i1, j1, k1, META_MOSSYCRAGROCK1, 2);
 				}
 			}
 		}
 	}
+	
 }
