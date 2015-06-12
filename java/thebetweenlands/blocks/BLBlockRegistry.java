@@ -265,7 +265,8 @@ public class BLBlockRegistry
 	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");;
 	
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
-	
+	public static final BlockWalkway blockWalkWay = new BlockWalkway();
+
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
