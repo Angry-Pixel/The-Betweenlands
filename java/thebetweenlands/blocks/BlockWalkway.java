@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -65,6 +66,13 @@ public class BlockWalkway extends Block {
 
         if (facing == 1 || facing == 3)
             world.setBlockMetadataWithNotify(x, y, z, 1, 2);
+    }
+
+    @Override
+    public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
+        double boost = 2.3D;
+        entity.motionX *= boost;
+        entity.motionZ *= boost;
     }
 
 }

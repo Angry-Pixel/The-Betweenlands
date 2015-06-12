@@ -64,4 +64,6 @@ public class ModelWalkway extends ModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+
+
 }
