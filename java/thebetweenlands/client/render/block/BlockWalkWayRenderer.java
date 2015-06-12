@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.block;
 
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -45,6 +46,8 @@ public class BlockWalkWayRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		if(world == null)
+			return false;
     	if(modelConverterWalkway == null) {
     		modelConverterWalkway = new ModelConverter(
     	            modelWalkway,
@@ -55,13 +58,36 @@ public class BlockWalkWayRenderer implements ISimpleBlockRenderingHandler {
     	}
     	
     	Minecraft mc = Minecraft.getMinecraft();
-		if(world != null && mc.thePlayer != null) {
+		if( mc.thePlayer != null) {
 			Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(
-					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
+					(int) (mc.thePlayer.posX), (int) (mc.thePlayer.posY), (int) (mc.thePlayer.posZ), 0));
 		}
-    	
-    	Tessellator.instance.addTranslation(x+0.5F, y+1.5F, z+0.5F);
-        modelConverterWalkway.renderWithTessellator(Tessellator.instance);
+
+    	Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z +0.5F);
+        //modelConverterWalkway.renderWithTessellator(Tessellator.instance);
+
+		if( world.getBlockMetadata(x, y, z) == 1) {
+			ModelConverter.Model model = modelConverterWalkway.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new ModelConverter.Vec3(0, 0, 0));
+			for (ModelConverter.Box box : model.getBoxes()) {
+				if ((box.getModelRenderer() == modelWalkway.standright || box.getModelRenderer() == modelWalkway.standleft) && !World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) continue; //skips this part/box
+				for (ModelConverter.Quad quad : box.getQuads()) {
+					for (int i = 0; i < 4; i++) {
+						ModelConverter.Vec3 vec = quad.getVertices()[i];
+						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+					}
+				}
+			}
+		} else{
+			for (ModelConverter.Box box : modelConverterWalkway.getBoxes()) {
+				if ((box.getModelRenderer() == modelWalkway.standright || box.getModelRenderer() == modelWalkway.standleft) && !World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) continue; //skips this part/box
+				for (ModelConverter.Quad quad : box.getQuads()) {
+					for (int i = 0; i < 4; i++) {
+						ModelConverter.Vec3 vec = quad.getVertices()[i];
+						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+					}
+				}
+			}
+		}
         Tessellator.instance.addTranslation(-x-0.5F, -y-1.5F, -z-0.5F);
         return true;
     }
