@@ -77,8 +77,14 @@ public class BlockWoodChipPath extends Block {
     @Override
     public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
         double boost = 2.3D;
-        entity.motionX *= boost;
-        entity.motionZ *= boost;
+        double motionX = Math.abs(entity.motionX);
+        double motionZ = Math.abs(entity.motionZ);
+        if (motionX < 2.0D && !entity.isAirBorne) {
+            entity.motionX *= boost;
+        }
+        if (motionZ < 2.0D && !entity.isAirBorne) {
+            entity.motionZ *= boost;
+        }
     }
 }
 
