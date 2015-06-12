@@ -24,6 +24,7 @@ public class BlockWalkway extends Block {
         super(Material.wood);
         this.setBlockName("thebetweenlands.walkway");
         this.setCreativeTab(ModCreativeTabs.blocks);
+        this.setBlockBounds(0, 0.0F, 0, 1.0F, 0.6F, 1.0F);
     }
 
     @Override
