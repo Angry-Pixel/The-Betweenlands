@@ -56,6 +56,8 @@ public class BlockWalkWayRenderer implements ISimpleBlockRenderingHandler {
     	            true
     	    );
     	}
+
+		Tessellator.instance.setColorRGBA_F(1,1,1,1);
     	
     	Minecraft mc = Minecraft.getMinecraft();
 		if( mc.thePlayer != null) {
