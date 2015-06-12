@@ -233,6 +233,12 @@
       "snailLiving1"
     ]
   },
+  "snailLiving2": {
+    "category": "hostile",
+    "sounds": [
+      "snailLiving1"
+    ]
+  },
   "dragonfly": {
     "category": "neutral",
     "sounds": [

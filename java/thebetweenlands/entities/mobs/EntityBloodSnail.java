@@ -78,7 +78,10 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		return "thebetweenlands:snailLiving";
+		if(worldObj.rand.nextBoolean())
+			return "thebetweenlands:snailLiving1";
+		else
+			return "thebetweenlands:snailLiving2";
 	}
 
 	@Override
