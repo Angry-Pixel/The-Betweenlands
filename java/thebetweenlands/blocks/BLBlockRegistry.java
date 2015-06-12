@@ -262,7 +262,7 @@ public class BLBlockRegistry
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block deepWaterCoralBlock = new BlockBLGenericDeco("deepWaterCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	
-	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone);
+	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
