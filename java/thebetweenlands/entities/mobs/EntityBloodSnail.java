@@ -76,15 +76,6 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		return true;
 	}
 
-	public boolean isClimbing() {
-		return !onGround && isOnLadder();
-	}
-
-	@Override
-	public boolean isOnLadder() {
-		return isCollidedHorizontally;
-	}
-
 	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:snailLiving";
