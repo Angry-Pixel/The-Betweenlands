@@ -106,48 +106,56 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
                 if (rand.nextInt(3) == 0)
                     z++;
                 world.setBlock(x + i, y, z, log, 5, 2);
-                if (rand.nextInt(5) == 0) {
+                if (rand.nextInt(5) == 0 || i == branchLength) {
                     world.setBlock(x + i, y + 1, z, log, 5, 2);
                     y++;
                 }
                 if (i >= branchLength - 2 && rand.nextInt(3) == 0)
-                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
+                    addSubBranch(world, rand, x + i, y, z, 1 + rand.nextInt(3));
+                else if( i == branchLength)
+                    addLeaves(world, rand, x + i, y, z);
             }
 
             if (dir == 2) {
                 if (rand.nextInt(3) == 0)
                     z--;
                 world.setBlock(x - i, y, z, log, 5, 2);
-                if (rand.nextInt(5) == 0) {
+                if (rand.nextInt(5) == 0 || i == branchLength) {
                     world.setBlock(x - i, y + 1, z, log, 5, 2);
                     y++;
                 }
                 if (i >= branchLength - 2 && rand.nextInt(3) == 0)
-                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
+                    addSubBranch(world, rand, x - i, y, z, 1 + rand.nextInt(3));
+                else if( i == branchLength)
+                    addLeaves(world, rand, x - i, y, z );
             }
 
             if (dir == 3) {
                 if (rand.nextInt(3) == 0)
                     x--;
                 world.setBlock(x, y, z + i, log, 9, 2);
-                if (rand.nextInt(5) == 0) {
-                    world.setBlock(x, y + 1, z - i, log, 9, 2);
+                if (rand.nextInt(5) == 0 || i == branchLength) {
+                    world.setBlock(x, y + 1, z + i, log, 9, 2);
                     y++;
                 }
                 if (i >= branchLength - 2 && rand.nextInt(3) == 0)
-                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
+                    addSubBranch(world, rand, x, y, z + i, 1 + rand.nextInt(3));
+                else if( i == branchLength)
+                    addLeaves(world, rand, x, y, z + i);
             }
 
             if (dir == 4) {
                 if (rand.nextInt(3) == 0)
                     x++;
                 world.setBlock(x, y, z - i, log, 9, 2);
-                if (rand.nextInt(5) == 0) {
-                    world.setBlock(x, y + 1, z + i, log, 9, 2);
+                if (rand.nextInt(5) == 0 || i == branchLength) {
+                    world.setBlock(x, y + 1, z - i, log, 9, 2);
                     y++;
                 }
                 if (i >= branchLength - 2 && rand.nextInt(3) == 0)
-                    addSubBranch(world, rand, x, y, z, 1 + rand.nextInt(3));
+                    addSubBranch(world, rand, x, y, z - i, 1 + rand.nextInt(3));
+                else if( i == branchLength)
+                    addLeaves(world, rand, x, y, z - i);
             }
         }
     }
@@ -159,16 +167,60 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
             if (i == branchLength && rand.nextInt(5) == 0) {
                 world.setBlock(x, y, z - 1, log);
                 world.setBlock(x, y + 1, z - 1, log);
+                addLeaves(world, rand, x, y + 1, z - 1);
             } else if (i == branchLength && rand.nextInt(5) == 0) {
                 world.setBlock(x, y, z + 1, log);
                 world.setBlock(x, y + 1, z + 1, log);
+                addLeaves(world, rand, x, y + 1, z + 1);
             } else if (i == branchLength && rand.nextInt(5) == 0) {
                 world.setBlock(x - 1, y, z, log);
                 world.setBlock(x - 1, y + 1, z, log);
+                addLeaves(world, rand, x - 1, y + 1, z);
             } else if (i == branchLength && rand.nextInt(5) == 0) {
                 world.setBlock(x + 1, y, z, log);
                 world.setBlock(x + 1, y + 1, z, log);
+                addLeaves(world, rand, x + 1, y + 1, z);
+            } else if (i == branchLength){
+                addLeaves(world, rand, x, y, z);
             }
         }
+    }
+
+    private void addLeaves(World world, Random rand, int x, int y, int z) {
+
+        world.setBlock(x + 1, y, z, leavesLight);
+        world.setBlock(x - 1, y, z, leavesLight);
+        world.setBlock(x + 1, y, z - 1, leavesLight);
+        world.setBlock(x - 1, y, z + 1, leavesLight);
+        world.setBlock(x + 1, y, z + 1, leavesLight);
+        world.setBlock(x - 1, y, z - 1, leavesLight);
+        world.setBlock(x, y, z - 1, leavesLight);
+        world.setBlock(x, y, z + 1, leavesLight);
+
+
+        world.setBlock(x + 2, y, z, leavesLight);
+        world.setBlock(x - 2, y, z, leavesLight);
+        world.setBlock(x + 1, y, z - 2, leavesLight);
+        world.setBlock(x - 1, y, z + 2, leavesLight);
+        world.setBlock(x + 1, y, z + 2, leavesLight);
+        world.setBlock(x - 1, y, z - 2, leavesLight);
+        world.setBlock(x + 2, y, z - 1, leavesLight);
+        world.setBlock(x - 2, y, z + 1, leavesLight);
+        world.setBlock(x + 2, y, z + 1, leavesLight);
+        world.setBlock(x - 2, y, z - 1, leavesLight);
+        world.setBlock(x, y, z - 2, leavesLight);
+        world.setBlock(x, y, z + 2, leavesLight);
+
+        world.setBlock(x, y + 1, z, leavesDark);
+        world.setBlock(x + 1, y + 1, z, leavesDark);
+        world.setBlock(x - 1, y + 1, z, leavesDark);
+        world.setBlock(x + 1, y + 1, z - 1, leavesDark);
+        world.setBlock(x - 1, y + 1, z + 1, leavesDark);
+        world.setBlock(x + 1, y + 1, z + 1, leavesDark);
+        world.setBlock(x - 1, y + 1, z - 1, leavesDark);
+        world.setBlock(x, y + 1, z - 1, leavesDark);
+        world.setBlock(x, y + 1, z + 1, leavesDark);
+
+
     }
 }
