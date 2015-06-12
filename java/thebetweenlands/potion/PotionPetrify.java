@@ -24,8 +24,12 @@ public class PotionPetrify extends Potion {
         livingBase.posZ = MathHelper.floor_double(livingBase.posZ) + 0.5;
         livingBase.rotationYaw = livingBase.prevRotationYaw = 0F;
         livingBase.renderYawOffset = livingBase.prevRenderYawOffset = 0F;
-
         livingBase.motionX = livingBase.motionY = livingBase.motionZ = 0.0;
+        livingBase.isSwingInProgress = false;
+        livingBase.limbSwing = 0F;
+        livingBase.limbSwingAmount = 0F;
+        livingBase.swingProgressInt = 0;
+
 
         int x = MathHelper.floor_double(livingBase.posX);
         int y = MathHelper.floor_double(livingBase.posY) - 1;
