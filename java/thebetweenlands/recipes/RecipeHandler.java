@@ -216,5 +216,6 @@ public class RecipeHandler {
 		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.AQUA_MIDDLE_GEM), new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
 		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.CRIMSON_MIDDLE_GEM), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
 		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GREEN_MIDDLE_GEM), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
+		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.farmedDirt, 1, 0), new ItemStack(BLBlockRegistry.swampDirt));
 	}
 }
