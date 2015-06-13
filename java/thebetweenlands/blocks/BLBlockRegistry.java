@@ -115,7 +115,8 @@ public class BLBlockRegistry
 	public static final Block slimyDirt = new BlockSlimyDirt();
 	public static final Block tarFluid = new BlockTarFluid();
 	public static final Block puddle = new BlockPuddle();
-
+	public static final Block farmedDirt = new BlockSwampDirt();
+	
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
 	public static final Block aquaMiddleGemOre = new BlockMiddleGemOre("aquaMiddleGemOre", null);
@@ -152,7 +153,6 @@ public class BLBlockRegistry
 	public static final Block rottenLog = new BlockRottenLog();
 	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
-	
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
