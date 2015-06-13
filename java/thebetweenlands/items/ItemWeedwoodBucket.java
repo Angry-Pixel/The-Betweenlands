@@ -68,10 +68,10 @@ public class ItemWeedwoodBucket extends Item {
 					Block block = world.getBlock(x, y, z);
 					int meta = world.getBlockMetadata(x, y, z);
 
-					if (block == BLBlockRegistry.rubberTreeLog && meta == 0 && pos.sideHit >= 2) {
+					if (block == BLBlockRegistry.rubberTreeLog && meta == 0 && pos.sideHit >= 2 && !world.isRemote) {
 						int tx = x + (pos.sideHit == 4 ? -1 : (pos.sideHit == 5 ? 1 : 0));
 						int tz = z + (pos.sideHit == 2 ? -1 : (pos.sideHit == 3 ? 1 : 0));
-						world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap);
+						world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
 						stack.stackSize--;
 						return stack;
 					}

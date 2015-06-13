@@ -5,27 +5,41 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRubberTap extends Block {
+	public IIcon icon;
 
 	public BlockRubberTap() {
 		super(Material.wood);
 		setBlockName("thebetweenlands.rubberTap");
 		setHardness(0.8F);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(null);
 		setStepSound(Block.soundTypeWood);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return null;
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register) {
+		this.icon = register.registerIcon("thebetweenlands:blockBucket");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return this.icon;
 	}
 
 	@Override
@@ -76,8 +90,10 @@ public class BlockRubberTap extends Block {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		//15 min. schedule
-		world.scheduleBlockUpdate(x, y, z, this, /*20*60*15*/20);
+		if(world.isRemote) return;
+		
+		//5 min. schedule
+		world.scheduleBlockUpdate(x, y, z, this, 20*60*5);
 
 		if (world.getBlockMetadata(x, y, z) == 0) {
 			if (world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog) {
@@ -167,19 +183,21 @@ public class BlockRubberTap extends Block {
 	}
 
 	public boolean isFull(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y, z);
-		return meta >= 5;
+		return world.getBlockMetadata(x, y, z) >= 5;
 	}
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		this.setFull(world, x, y, z, true);
+		if(!world.isRemote) {
+			this.setFull(world, x, y, z, true);
+		}
 	}
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		if(world.isRemote) return new ArrayList<ItemStack>();
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		if(!this.isFull(world, x, y, z)) {
+		if(meta < 5) {
 			drops.add(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucket, 1, 0));
 		} else {
 			drops.add(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0));
