@@ -184,10 +184,10 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
     
 	@Override
 	public void updateEntity() {
-		boolean flag = furnaceBurnTime > 0;
-		boolean flag1 = false;
-		boolean flag2 = furnaceBurnTime2 > 0;
-		boolean flag3 = false;
+		boolean isBurning1 = furnaceBurnTime > 0;
+		boolean isDirty1 = false;
+		boolean isBurning2 = furnaceBurnTime2 > 0;
+		boolean isDirty2 = false;
 
 		if (furnaceBurnTime > 0)
 			--furnaceBurnTime;
@@ -201,7 +201,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 					currentItemBurnTime = furnaceBurnTime = getItemBurnTime(furnaceItemStacks[1]);
 
 					if (furnaceBurnTime > 0) {
-						flag1 = true;
+						isDirty1 = true;
 
 						if (furnaceItemStacks[1] != null) {
 							--furnaceItemStacks[1].stackSize;
@@ -219,7 +219,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 					if (furnaceCookTime == 200) {
 						furnaceCookTime = 0;
 						smeltItem();
-						flag1 = true;
+						isDirty1 = true;
 					}
 				} else {
 					furnaceCookTime = 0;
@@ -231,7 +231,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 					currentItemBurnTime2 = furnaceBurnTime2 = getItemBurnTime(furnaceItemStacks[4]);
 
 					if (furnaceBurnTime2 > 0) {
-						flag3 = true;
+						isDirty2 = true;
 
 						if (furnaceItemStacks[4] != null) {
 							--furnaceItemStacks[4].stackSize;
@@ -249,7 +249,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 					if (furnaceCookTime2 == 200) {
 						furnaceCookTime2 = 0;
 						smeltItem2();
-						flag3 = true;
+						isDirty2 = true;
 					}
 				} else {
 					furnaceCookTime2 = 0;
@@ -258,13 +258,13 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 		}
 
-		if (flag != furnaceBurnTime > 0 || flag2 != furnaceBurnTime2 > 0) {
-			flag1 = true;
-			flag3 = true;
+		if (isBurning1 != furnaceBurnTime > 0 || isBurning2 != furnaceBurnTime2 > 0) {
+			isDirty1 = true;
+			isDirty2 = true;
 			BlockBLDualFurnace.updateFurnaceBlockState(furnaceBurnTime > 0 || furnaceBurnTime2 > 0, worldObj, xCoord, yCoord, zCoord);
 		}
 
-		if (flag1 && flag3) {
+		if (isDirty1 || isDirty2) {
 			markDirty();
 		}
 	}

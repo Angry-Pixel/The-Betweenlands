@@ -440,7 +440,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 			}
 		} else {
 			if(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity)) {
-				AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+((float)this.getQuantaValue(world, x, y, z)/(float)this.quantaPerBlock), z+1);
+				AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+((float)this.getQuantaValue(world, x, y, z)/(float)this.quantaPerBlock)*0.8F, z+1);
 				if (blockBB != null && bb.intersectsWith(blockBB)) {
 					bbList.add(blockBB);
 				}

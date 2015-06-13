@@ -155,8 +155,8 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 	@Override
     public void updateEntity()
     {
-        boolean flag = furnaceBurnTime > 0;
-        boolean flag1 = false;
+        boolean isBurning = furnaceBurnTime > 0;
+        boolean isDirty = false;
 
         if (furnaceBurnTime > 0)
         {
@@ -173,7 +173,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 
                     if (furnaceBurnTime > 0)
                     {
-                        flag1 = true;
+                        isDirty = true;
 
                         if (furnaceItemStacks[1] != null)
                         {
@@ -195,7 +195,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
                     {
                         furnaceCookTime = 0;
                         smeltItem();
-                        flag1 = true;
+                        isDirty = true;
                     }
                 }
                 else
@@ -204,14 +204,14 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
                 }
             }
 
-            if (flag != furnaceBurnTime > 0)
+            if (isBurning != furnaceBurnTime > 0)
             {
-                flag1 = true;
+                isDirty = true;
                 BlockBLFurnace.updateFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
             }
         }
 
-        if (flag1)
+        if (isDirty)
         {
             markDirty();
         }
