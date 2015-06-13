@@ -55,6 +55,7 @@ import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
 import thebetweenlands.blocks.terrain.BlockDeadGrass;
+import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
@@ -115,7 +116,7 @@ public class BLBlockRegistry
 	public static final Block slimyDirt = new BlockSlimyDirt();
 	public static final Block tarFluid = new BlockTarFluid();
 	public static final Block puddle = new BlockPuddle();
-	public static final Block farmedDirt = new BlockSwampDirt();
+	public static final Block farmedDirt = new BlockFarmedDirt();
 	
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
