@@ -115,6 +115,9 @@ tile.thebetweenlands.limestoneTiles.name=Limestone Tiles
 tile.thebetweenlands.chiseledLimestone.name=Chiseled Limestone
 tile.thebetweenlands.polishedLimestone.name=Polished Limestone
 
+tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
+tile.thebetweenlands.walkway.name=Weedwood Walkway
+
 tile.thebetweenlands.choca.name=Chock-A-Block
 
 # Stairs, Slabs, Walls, Fences
@@ -339,6 +342,7 @@ item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
 item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
 item.thebetweenlands.swampKelp.name=Swamp Kelp
+item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
