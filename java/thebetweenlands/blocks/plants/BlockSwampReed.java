@@ -66,6 +66,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 		}
 	}
 
+	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z)
 	{
 		boolean hasWater = (world.getBlock(x - 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x + 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x, y - 1, z - 1).getMaterial() == Material.water || world.getBlock(x, y - 1, z + 1).getMaterial() == Material.water);

@@ -75,7 +75,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 				flag2 = true;
 				IIcon iicon = /*renderer.getBlockIconFromSideAndMetadata(block, 1, i1)*/swampWaterBlock.getWaterIcon(1);
 				float f7 = 0.0f;
-				if(material == Material.water || material == Material.lava) {
+				if((material == Material.water || material == Material.lava) && block instanceof BlockSwampWater == false) {
 					f7 = (float)BlockLiquid.getFlowDirection(blockAccess, x, y, z, material);
 				} else {
 					f7 = (float)((BlockSwampWater)block).getFlowDirection(blockAccess, x, y, z);

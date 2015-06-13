@@ -76,17 +76,19 @@ public class ItemMaterialsBL extends Item {
 	@Override
 	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		if (is.getItemDamage() == this.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage() && side == 1) {
-			if (BLBlockRegistry.swampReed.canPlaceBlockOn(world.getBlock(x, y, z))) {
-				Block block = world.getBlock(x, y + 1, z);
-				if (block == Blocks.air) {
-					if (!world.isRemote) {
+			Block block = world.getBlock(x, y + 1, z);
+			if (block == Blocks.air) {
+				if (BLBlockRegistry.swampReed.canPlaceBlockOn(world.getBlock(x, y, z))) {
+					if(!world.isRemote) {
 						world.setBlock(x, y + 1, z, BLBlockRegistry.swampReed);
 						world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BLBlockRegistry.swampReed.stepSound.func_150496_b(), (BLBlockRegistry.swampReed.stepSound.getVolume() + 1.0F) / 2.0F, BLBlockRegistry.swampReed.stepSound.getPitch() * 0.8F);
 						--is.stackSize;
 					}
 					return true;
-				} else if (block == BLBlockRegistry.swampWater) {
-					if (!world.isRemote) {
+				}
+			} else if (block == BLBlockRegistry.swampWater) {
+				if (BLBlockRegistry.swampReedUW.canPlaceBlockAt(world, x, y + 1, z)) {
+					if(!world.isRemote) {
 						world.setBlock(x, y + 1, z, BLBlockRegistry.swampReedUW);
 						world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BLBlockRegistry.swampReed.stepSound.func_150496_b(), (BLBlockRegistry.swampReed.stepSound.getVolume() + 1.0F) / 2.0F, BLBlockRegistry.swampReed.stepSound.getPitch() * 0.8F);
 						--is.stackSize;

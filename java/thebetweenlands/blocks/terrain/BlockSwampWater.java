@@ -61,7 +61,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 		}
 		return side == 0 || side == 1 ? stillIcon : flowingIcon;
 	}
-	
+
 	public IIcon getWaterIcon(int side) {
 		return side == 0 || side == 1 ? this.stillIcon : this.flowingIcon;
 	}
@@ -364,23 +364,26 @@ public class BlockSwampWater extends BlockFluidClassic {
 			case 3: ++z2; break;
 			}
 
-			int otherDecay = quantaPerBlock - getQuantaValue(world, x2, y, z2);
-			if (otherDecay >= quantaPerBlock)
-			{
-				if (!world.getBlock(x2, y, z2).getMaterial().blocksMovement() && !this.canConnectTo(world.getBlock(x2, y, z2)))
+			Block otherBlock = world.getBlock(x2, y, z2);
+			if(otherBlock instanceof BlockSwampWater && ((BlockSwampWater)otherBlock).canSpread) {
+				int otherDecay = quantaPerBlock - getQuantaValue(world, x2, y, z2);
+				if (otherDecay >= quantaPerBlock)
 				{
-					otherDecay = quantaPerBlock - getQuantaValue(world, x2, y - 1, z2);
-					if (otherDecay >= 0)
+					if (!world.getBlock(x2, y, z2).getMaterial().blocksMovement() && !this.canConnectTo(world.getBlock(x2, y, z2)))
 					{
-						int power = otherDecay - (decay - quantaPerBlock);
-						vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+						otherDecay = quantaPerBlock - getQuantaValue(world, x2, y - 1, z2);
+						if (otherDecay >= 0)
+						{
+							int power = otherDecay - (decay - quantaPerBlock);
+							vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+						}
 					}
 				}
-			}
-			else if (otherDecay >= 0)
-			{
-				int power = otherDecay - decay;
-				vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+				else if (otherDecay >= 0)
+				{
+					int power = otherDecay - decay;
+					vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
+				}
 			}
 		}
 
@@ -406,6 +409,15 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	@Override
+	public int getQuantaValue(IBlockAccess world, int x, int y, int z) {
+		if(this.canSpread) {
+			return super.getQuantaValue(world, x, y, z);
+		} else {
+			return this.quantaPerBlock;
+		}
+	}
+
+	@Override
 	public int getRenderType() {
 		return BlockRenderIDs.SWAMP_WATER.id();
 	}
@@ -423,11 +435,11 @@ public class BlockSwampWater extends BlockFluidClassic {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public boolean isCollidable() {
-        return this.canCollide;
-    }
+		return this.canCollide;
+	}
 
 	public boolean canConnectTo(Block block) {
 		return block == this || block == BLBlockRegistry.swampWater || SPECIAL_RENDERERS.containsKey(block);
