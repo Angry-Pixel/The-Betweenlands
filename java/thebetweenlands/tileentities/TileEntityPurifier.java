@@ -28,6 +28,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public boolean lightOn = false;
 	private int prevStackSize = 0;
 	private Item prevItem;
+	private boolean client_isPurifying = false;
 
 	public TileEntityPurifier() {
 		super(3, "container.purifier");
@@ -88,6 +89,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		super.readFromNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		lightOn = nbt.getBoolean("state");
+		time = nbt.getInteger("progress");
 	}
 
 	@Override
@@ -95,6 +97,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		super.writeToNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setBoolean("state", lightOn);
+		nbt.setInteger("progress", time);
 	}
 
 	@Override
@@ -108,6 +111,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		} else {
 			nbt.setTag("outputItem", null);
 		}
+		nbt.setBoolean("isPurifying", this.isPurifying());
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -121,6 +125,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		} else {
 			inventory[2] = null;
 		}
+		client_isPurifying = packet.func_148857_g().getBoolean("isPurifying");
+		System.out.println("packettest: " + client_isPurifying);
 	}
 
 	public int getPurifyingProgress() {
@@ -128,7 +134,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	}
 
 	public boolean isPurifying() {
-		return time > 0;
+		return time > 0 || this.client_isPurifying;
 	}
 
 	public int getWaterAmount() {
@@ -192,6 +198,9 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 					if(!canRun) setIlluminated(false);
 				}
 			}
+		}
+		if(time > 0) {
+			markDirty();
 		}
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
 			time = 0;
