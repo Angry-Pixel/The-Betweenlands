@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
@@ -25,6 +26,12 @@ public class BlockVolarpad extends BlockBLSmallPlants {
 		return BlockRenderIDs.MODEL_PLANT.id();
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture1;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {

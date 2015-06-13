@@ -41,4 +41,10 @@ public class BlockFlatHeadMushroom extends BlockBLSmallPlants {
 		drops.add(new ItemStack(BLItemRegistry.flatheadMushroomItem, 1 + fortune));
 		return drops;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture1;
+	}
 }

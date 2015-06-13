@@ -44,4 +44,10 @@ public class BlockBlackHatMushroom extends BlockBLSmallPlants {
 		drops.add(new ItemStack(BLItemRegistry.blackHatMushroomItem, 1 + fortune));
 		return drops;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture1;
+	}
 }

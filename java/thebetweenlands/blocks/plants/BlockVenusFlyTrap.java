@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
@@ -28,6 +29,12 @@ public class BlockVenusFlyTrap extends BlockBLSmallPlants {
 	public void registerBlockIcons(IIconRegister reg) {
 		modelTexture = reg.registerIcon("thebetweenlands:venusFlyTrap");
 		modelTextureBlooming = reg.registerIcon("thebetweenlands:venusFlyTrapBlooming");
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture;
 	}
 	
 	@Override

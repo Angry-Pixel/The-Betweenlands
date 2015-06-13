@@ -31,4 +31,10 @@ public class BlockSwampPlant extends BlockBLSmallPlants {
 	public Item getItemDropped(int meta, Random rand, int fortune) {
 		return null;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture1;
+	}
 }

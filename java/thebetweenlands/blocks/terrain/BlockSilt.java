@@ -3,10 +3,12 @@ package thebetweenlands.blocks.terrain;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
+import thebetweenlands.items.ItemRubberBoots;
 
 public class BlockSilt
         extends Block
@@ -29,7 +31,7 @@ public class BlockSilt
 
 	@Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if(!(entity instanceof EntitySiltCrab)) {
+		if(!(entity instanceof EntitySiltCrab) && !(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity))) {
 			entity.motionX *= 0.4D;
 			entity.motionZ *= 0.4D;
 		}

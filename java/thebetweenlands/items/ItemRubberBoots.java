@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemRubberBoots extends ItemArmor {
-	private static final int MAX_WALK_TICKS = 25;
+	private static final int MAX_WALK_TICKS = 40;
 
 	public ItemRubberBoots() {
 		super(BLMaterials.armorRubber, 2, 3);

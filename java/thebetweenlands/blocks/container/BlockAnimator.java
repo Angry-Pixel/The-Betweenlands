@@ -104,12 +104,7 @@ public class BlockAnimator extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		return BLBlockRegistry.betweenstone.getIcon(side, meta);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg) {
+		return BLBlockRegistry.betweenstone.getIcon(0, 0);
 	}
 
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {

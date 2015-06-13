@@ -17,6 +17,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityPurifier;
@@ -35,13 +36,8 @@ public class BlockPurifier extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister reg) {
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		return blockIcon;
+		return BLBlockRegistry.betweenstone.getIcon(0, 0);
 	}
 
 	@Override
