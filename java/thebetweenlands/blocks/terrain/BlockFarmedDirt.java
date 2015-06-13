@@ -19,9 +19,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
-	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt" };
+	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt", "fertDirtDecayed", "fertGrassDecayed" };
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
+	private IIcon sideIcon;
 	
 	public BlockFarmedDirt() {
 		super(Material.ground);
@@ -34,6 +35,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
+		sideIcon = reg.registerIcon("thebetweenlands:swampDirt");
 		icons = new IIcon[iconPaths.length];
 
 		int i = 0;
@@ -45,7 +47,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public IIcon getIcon(int side, int meta) {
 		if (meta < 0 || meta >= icons.length)
 			return null;
-		return icons[meta];
+		
+		return meta == 0 ? icons[meta] : side == 1 && meta != 0 ? icons[meta] : sideIcon;
 	}
 
 	@Override
