@@ -188,9 +188,10 @@ extends WorldProvider
 
 	@Override
 	public void updateWeather() {
-		this.worldObj.getWorldInfo().setRaining(EnvironmentEventRegistry.HEAVY_RAIN.isActive());
+		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
 		this.worldObj.getWorldInfo().setThundering(false);
-		if(this.worldObj.isRemote && EnvironmentEventRegistry.HEAVY_RAIN.isActive()) {
+		if(this.worldObj.isRemote && eeRegistry.HEAVY_RAIN.isActive()) {
 			this.worldObj.setRainStrength(0.5f);
 		} else {
 			this.worldObj.setRainStrength(0.0f);

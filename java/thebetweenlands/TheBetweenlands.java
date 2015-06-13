@@ -95,7 +95,6 @@ public class TheBetweenlands
 		BLItemRegistry.init();
 		BLEntityRegistry.init();
 		TileEntityAnimator.addItems();
-		EnvironmentEventRegistry.init();
 
 		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
 		

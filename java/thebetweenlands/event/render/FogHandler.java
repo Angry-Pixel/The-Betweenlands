@@ -38,13 +38,19 @@ public class FogHandler {
 	}
 	
 	public boolean hasDenseFog() {
-		boolean denseFog = false;
-		if((!TheBetweenlands.DEBUG && EnvironmentEventRegistry.DENSE_FOG.isActive()) ||
-				(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !EnvironmentEventRegistry.DENSE_FOG.isActive()) ||
-				(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && EnvironmentEventRegistry.DENSE_FOG.isActive())) {
-			denseFog = true;
+		World world = Minecraft.getMinecraft().theWorld;
+		if(world.provider instanceof WorldProviderBetweenlands) {
+			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+			boolean denseFog = false;
+			if((!TheBetweenlands.DEBUG && eeRegistry.DENSE_FOG.isActive()) ||
+					(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
+					(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && eeRegistry.DENSE_FOG.isActive())) {
+				denseFog = true;
+			}
+			return denseFog;
 		}
-		return denseFog;
+		return false;
 	}
 
 	////// Biome specific fog + smooth transition //////

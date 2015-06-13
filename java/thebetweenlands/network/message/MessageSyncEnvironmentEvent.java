@@ -5,8 +5,11 @@ import io.netty.buffer.ByteBuf;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import thebetweenlands.network.message.base.AbstractMessage;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
@@ -14,15 +17,15 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 	private EnvironmentEvent event;
 	private String eventName;
 	private boolean active;
-	
+
 	public MessageSyncEnvironmentEvent() {}
-	
+
 	public MessageSyncEnvironmentEvent(EnvironmentEvent eevent) {
 		this.event = eevent;
 		this.eventName = eevent.getEventName();
 		this.active = eevent.isActive();
 	}
-	
+
 	@Override
 	public void fromBytes(ByteBuf buffer) {
 		int strLen = buffer.readInt();
@@ -33,9 +36,14 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 			eventName = new String(strBytes, "UTF-8");
 			this.eventName = eventName;
 			this.active = buffer.readBoolean();
-			EnvironmentEvent eevent = EnvironmentEventRegistry.forName(this.eventName);
-			if(eevent != null) {
-				eevent.loadEventPacket(buffer);
+			World world = Minecraft.getMinecraft().theWorld;
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+				EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
+				if(eevent != null) {
+					eevent.loadEventPacket(buffer);
+				}
 			}
 		} catch (UnsupportedEncodingException e) {
 			System.err.println("Failed to sync environment event");
@@ -54,10 +62,14 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 
 	@Override
 	public void onClientMessage(MessageSyncEnvironmentEvent message, EntityPlayer player) {
-		EnvironmentEvent eevent = EnvironmentEventRegistry.forName(message.eventName);
-		if(eevent != null) {
-			eevent.setActive(message.active);
-			eevent.setDirty(false);
+		World world = player.worldObj;
+		if(world.provider instanceof WorldProviderBetweenlands) {
+			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+			EnvironmentEvent eevent = eeRegistry.forName(message.eventName);
+			if(eevent != null) {
+				eevent.setActive(message.active, false);
+			}
 		}
 	}
 

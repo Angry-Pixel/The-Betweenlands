@@ -47,9 +47,9 @@ public abstract class EnvironmentEvent {
 	 * Activates or deactivates the event. Marks the event as dirty.
 	 * @param active
 	 */
-	public void setActive(boolean active) {
+	public void setActive(boolean active, boolean markDirty) {
 		this.active = active;
-		this.markDirty();
+		if(markDirty) this.markDirty();
 	}
 
 	/**

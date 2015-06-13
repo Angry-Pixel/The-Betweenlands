@@ -109,9 +109,13 @@ public class DebugHandler {
 			}
 			Minecraft.getMinecraft().fontRenderer.drawString("Base Light: " + lightLevel + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
 			String activeEvents = "";
-			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
-				if(eevent.isActive()) {
-					activeEvents += eevent.getEventName() + ", ";
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+				for(EnvironmentEvent eevent : eeRegistry.getEvents().values()) {
+					if(eevent.isActive()) {
+						activeEvents += eevent.getEventName() + ", ";
+					}
 				}
 			}
 			if(activeEvents.length() > 2) {

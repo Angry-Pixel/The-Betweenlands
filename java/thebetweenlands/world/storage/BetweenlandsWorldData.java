@@ -1,5 +1,8 @@
 package thebetweenlands.world.storage;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -8,23 +11,28 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 public class BetweenlandsWorldData extends WorldSavedData {
 	private NBTTagCompound data = new NBTTagCompound();
 
 	private int timeToFog;
 	private boolean hasDenseFog;
+	
+	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
 
 	public BetweenlandsWorldData() {
 		super(ModInfo.ID);
+		this.environmentEventRegistry.init();
 	}
 	
 	public BetweenlandsWorldData(String name) {
 		super(name);
+		this.environmentEventRegistry.init();
 	}
 
+	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+		return this.environmentEventRegistry;
+	}
+	
 	public void setTimeToFogNBT(int time) {
 		this.timeToFog = time;
 		this.markDirty();
@@ -48,14 +56,14 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		this.data = compound.getCompoundTag(ModInfo.ID + ":worldData");
 		this.hasDenseFog = this.data.getBoolean("hasDenseFog");
 		this.timeToFog = this.data.getInteger("timeToFog");
-		for(EnvironmentEvent event : EnvironmentEventRegistry.getEvents().values()) {
+		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.readFromNBT(compound);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
-		for(EnvironmentEvent event : EnvironmentEventRegistry.getEvents().values()) {
+		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.writeToNBT(compound);
 		}
 		this.data.setBoolean("hasDenseFog", this.hasDenseFog);

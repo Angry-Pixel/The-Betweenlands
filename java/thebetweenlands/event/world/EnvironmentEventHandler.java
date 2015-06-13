@@ -31,7 +31,7 @@ public class EnvironmentEventHandler {
 			//Always save the world data
 			provider.getWorldData().markDirty();
 			
-			for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
+			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
 				eevent.update(event.world);
 				if(eevent.isDirty()) {
@@ -42,7 +42,7 @@ public class EnvironmentEventHandler {
 			lastSync++;
 			if(lastSync >= 80) {
 				lastSync = 0;
-				for(EnvironmentEvent eevent : EnvironmentEventRegistry.getEvents().values()) {
+				for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
 				}
 			}

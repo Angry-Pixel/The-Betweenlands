@@ -2,11 +2,14 @@ package thebetweenlands.commands;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.world.World;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
@@ -40,12 +43,19 @@ public class CommandToggleEvent implements ICommand {
 				eventName += args[i] + " ";
 			}
 			eventName = eventName.substring(0, eventName.length() - 1);
-			EnvironmentEvent event = EnvironmentEventRegistry.forName(eventName);
-			if(event != null) {
-				event.setActive(!event.isActive());
-				sender.addChatMessage(new ChatComponentText("Toggled event: " + eventName));
+			World world = sender.getEntityWorld();
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+				EnvironmentEvent event = eeRegistry.forName(eventName);
+				if(event != null) {
+					event.setActive(!event.isActive(), true);
+					sender.addChatMessage(new ChatComponentText("Toggled event: " + eventName));
+				} else {
+					sender.addChatMessage(new ChatComponentText("Could not find event '" + eventName + "'"));
+				}
 			} else {
-				sender.addChatMessage(new ChatComponentText("Could not find event '" + eventName + "'"));
+				sender.addChatMessage(new ChatComponentText("You must be in a Betweenlands world to toggle events"));
 			}
 		}
 	}

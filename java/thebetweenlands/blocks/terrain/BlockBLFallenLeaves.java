@@ -64,4 +64,9 @@ public class BlockBLFallenLeaves extends BlockBush{
     	}
         return super.shouldSideBeRendered(blockAccess, x, y, z, side);
     }
+    
+    @Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
 }

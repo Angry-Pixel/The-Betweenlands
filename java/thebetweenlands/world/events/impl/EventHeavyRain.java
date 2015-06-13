@@ -15,18 +15,18 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.TimedEnvironmentEvent;
 
-public class EventHeavyRain extends TimedEnvironmentEvent{
+public class EventHeavyRain extends TimedEnvironmentEvent {
 	@Override
 	public String getEventName() {
 		return "Heavy Rain";
 	}
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(12000) + 12000;
+		return rnd.nextInt(40000) + 20000;
 	}
 	@Override
 	public int getOnTime(Random rnd) {
-		return rnd.nextInt(6000) + 3000;
+		return rnd.nextInt(8000) + 3500;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent{
 				Iterator<ChunkCoordIntPair> it = activeChunks.iterator();
 				while(it.hasNext()) {
 					ChunkCoordIntPair chunkPos = it.next();
-					if(world.rand.nextInt(6) == 0) {
+					if(world.rand.nextInt(4) == 0) {
 						Chunk chunk = worldServer.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
 						int cbx = world.rand.nextInt(16);
 						int cbz = world.rand.nextInt(16);
