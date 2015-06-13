@@ -40,7 +40,6 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_SWAMP_PLANT = new WorldGenTallGrass(BLBlockRegistry.swampPlant, 1);
 	private final static WorldGenTallGrass GEN_VENUS_FLY_TRAP = new WorldGenTallGrass(BLBlockRegistry.venusFlyTrap, 0);
 	private final static WorldGenTallGrass GEN_VOLARPAD = new WorldGenTallGrass(BLBlockRegistry.volarpad, 0);
-	private final static WorldGenTallGrass GEN_PITCHER_PLANT = new WorldGenTallGrass(BLBlockRegistry.pitcherPlant, 0);
 	private final static WorldGenerator GEN_MOSS_PATCH = new WorldGenMossPatch(0);
 	private final static WorldGenerator GEN_LICHEN_PATCH = new WorldGenMossPatch(1);
 	private final static WorldGenTallGrass GEN_ARROW_ARUM = new WorldGenTallGrass(BLBlockRegistry.arrowArum, 1);
@@ -518,8 +517,8 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
 				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
-					this.world.setBlock(z, x, y, BLBlockRegistry.weepingBlue, 0, 2);
-					this.world.setBlock(z, x, y, BLBlockRegistry.weepingBlue, 8, 2);
+					this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 0, 2);
+					this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 8, 2);
 				}
 			}
 		}
