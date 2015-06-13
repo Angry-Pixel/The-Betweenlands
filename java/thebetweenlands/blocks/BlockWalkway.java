@@ -6,8 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -40,7 +43,7 @@ public class BlockWalkway extends Block {
     }
 
     @Override
-    public boolean isOpaqueCube(){
+    public boolean isOpaqueCube() {
         return false;
     }
 
@@ -56,7 +59,7 @@ public class BlockWalkway extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean isBlockNormalCube(){
+    public boolean isBlockNormalCube() {
         return false;
     }
 
@@ -69,21 +72,15 @@ public class BlockWalkway extends Block {
     }
 
     @Override
-    public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-        double boost = 2.3D;
-        double motionX = Math.abs(entity.motionX);
-        double motionZ = Math.abs(entity.motionZ);
-        if (motionX < 1.0D && !entity.isAirBorne) {
-            entity.motionX *= boost;
-        }
-        if (motionZ < 1.0D && !entity.isAirBorne) {
-            entity.motionZ *= boost;
-        }
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+        System.out.println(entity instanceof EntityLiving);
+        if (entity instanceof EntityLivingBase && !((EntityLivingBase) entity).isPotionActive(Potion.moveSpeed))
+            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 2, 0));
     }
-    
+
     @Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return icon;
-	}
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {
+        return icon;
+    }
 }

@@ -5,11 +5,19 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+
+import java.util.List;
 
 /**
  * Created by Bart on 12-6-2015.
@@ -75,16 +83,10 @@ public class BlockWoodChipPath extends Block {
     }
 
     @Override
-    public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-        double boost = 2.3D;
-        double motionX = Math.abs(entity.motionX);
-        double motionZ = Math.abs(entity.motionZ);
-        if (motionX < 2.0D && !entity.isAirBorne) {
-            entity.motionX *= boost;
-        }
-        if (motionZ < 2.0D && !entity.isAirBorne) {
-            entity.motionZ *= boost;
-        }
+    public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+        System.out.println(entity instanceof EntityLiving);
+        if (entity instanceof EntityLivingBase && !((EntityLivingBase) entity).isPotionActive(Potion.moveSpeed))
+            ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 2, 0));
     }
 }
 
