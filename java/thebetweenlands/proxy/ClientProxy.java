@@ -170,7 +170,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockRootRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockModelPlantRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer());
-		RenderingRegistry.registerBlockHandler(new BlockWalkWayRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockWalkwayRenderer());
 
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());

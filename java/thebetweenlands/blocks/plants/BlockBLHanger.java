@@ -27,6 +27,7 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 		setBlockTextureName("thebetweenlands:" + type);
 		setStepSound(Block.soundTypeGrass);
     	setTickRandomly(true);
+    	setBlockBounds(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 	}
 
 	@Override

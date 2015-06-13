@@ -17,7 +17,7 @@ import thebetweenlands.utils.ModelConverter;
 /**
  * Created by Bart on 12-6-2015.
  */
-public class BlockWalkWayRenderer implements ISimpleBlockRenderingHandler {
+public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 
 	public static ModelWalkway modelWalkway = new ModelWalkway();
 

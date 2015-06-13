@@ -266,7 +266,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			} else {
 				plantModelFlatHead2.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
 			}
-		} else if(block == BLBlockRegistry.pitcherPlant) {
+		} else if(block == BLBlockRegistry.pitcherPlant && world.getBlock(x, y+1, z) == BLBlockRegistry.pitcherPlant) {
 			if(plantModelTubePlant == null) {
 				plantModelTubePlant = new ModelConverter(
 						new ModelTubePlant(),
@@ -389,7 +389,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 				convertedModel.renderWithTessellator(Tessellator.instance);
 			}
-		} else if(block == BLBlockRegistry.weepingBlue) {
+		} else if(block == BLBlockRegistry.weepingBlue && world.getBlock(x, y+1, z) == BLBlockRegistry.weepingBlue) {
 			if(plantModelWeepingBlue == null) {
 				plantModelWeepingBlue = new ModelConverter(
 						modelWeepingBlue,
@@ -399,7 +399,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			}
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelWeepingBlue.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
-		} else if(block == BLBlockRegistry.sundew && world.getBlock(x, y-1, z) != BLBlockRegistry.sundew) {
+		} else if(block == BLBlockRegistry.sundew && world.getBlock(x, y+1, z) == BLBlockRegistry.sundew) {
 			if(plantModelSundew == null) {
 				plantModelSundew = new ModelConverter(
 						modelSundew,

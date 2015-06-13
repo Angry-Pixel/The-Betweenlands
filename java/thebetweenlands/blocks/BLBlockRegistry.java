@@ -163,6 +163,8 @@ public class BLBlockRegistry
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
 	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
 	public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F); 
+	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
+	public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
 	
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
@@ -181,11 +183,9 @@ public class BLBlockRegistry
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
 	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
 	public static final BlockBulbCappedMushroom bulbCappedMushroom = new BlockBulbCappedMushroom();
-	public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
 	public static final BlockSwampPlant swampPlant = new BlockSwampPlant();
 	public static final BlockVenusFlyTrap venusFlyTrap = new BlockVenusFlyTrap();
 	public static final BlockVolarpad volarpad = new BlockVolarpad();
-	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
 	public static final BlockThorns thorns = new BlockThorns();
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();

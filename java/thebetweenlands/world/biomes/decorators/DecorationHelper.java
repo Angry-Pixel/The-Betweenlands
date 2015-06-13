@@ -48,7 +48,6 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_MARSH_HIBISCUS = new WorldGenTallGrass(BLBlockRegistry.marshHibiscus, 1);
 	private final static WorldGenTallGrass GEN_PICKEREL_WEED = new WorldGenTallGrass(BLBlockRegistry.pickerelWeed, 1);
 	private final static WorldGenTallGrass GEN_PHRAGMITES = new WorldGenTallGrass(BLBlockRegistry.phragmites, 1);
-	private final static WorldGenTallGrass GEN_WEEPING_BLUE = new WorldGenTallGrass(BLBlockRegistry.weepingBlue, 1);
 	private final static WorldGenTallGrass GEN_SOFT_RUSH = new WorldGenTallGrass(BLBlockRegistry.softRush, 1);
 	private final static WorldGenTallGrass GEN_MARSH_MALLOW = new WorldGenTallGrass(BLBlockRegistry.marshMallow, 1);
 	private final static WorldGenTallGrass GEN_MILKWEED = new WorldGenTallGrass(BLBlockRegistry.milkweed, 1);
@@ -380,23 +379,25 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
 				world.setBlock(x, y, z, BLBlockRegistry.pitcherPlant, 0, 2);
+				world.setBlock(x, y, z, BLBlockRegistry.pitcherPlant, 8, 2);
+			}
 		}
 	}
 
 	public void generateRottenLog(int attempts) {
 		for (int i = 0; i < attempts; i++) {
-				int length = rand.nextInt(5) + 4;
-				int baseRadius = rand.nextInt(3) + 2;
-				byte direction = (byte) rand.nextInt(2);
-				int x = this.x + this.offsetXZ();
-				int y = this.y - 8 + this.rand.nextInt(16);
-				int z = this.z + this.offsetXZ();
+			int length = rand.nextInt(5) + 4;
+			int baseRadius = rand.nextInt(3) + 2;
+			byte direction = (byte) rand.nextInt(2);
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
 
-				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
-					new WorldGenRottenLogs(length, baseRadius, direction).generate(world, rand, x, y, z);
-			}
+			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+				new WorldGenRottenLogs(length, baseRadius, direction).generate(world, rand, x, y, z);
+		}
 	}
 
 	public void generateWeedwoodBush(int attempts) {
@@ -459,7 +460,7 @@ public class DecorationHelper {
 				new WorldGenGiantTree().generateTree(this.world, this.rand, x, y, z);
 		}
 	}
-	
+
 	public void generateDeadTree(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -515,9 +516,11 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y, z)) {
-				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
-					GEN_WEEPING_BLUE.generate(this.world, this.rand, x, y, z);
+			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
+					this.world.setBlock(z, x, y, BLBlockRegistry.weepingBlue, 0, 2);
+					this.world.setBlock(z, x, y, BLBlockRegistry.weepingBlue, 8, 2);
+				}
 			}
 		}
 	}
@@ -549,7 +552,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateWaterWeedsSmall(double probability) {
 		if (probability >= 1.0D) {
 			for (int i = 0; i < (int) probability; i++) {
@@ -577,7 +580,7 @@ public class DecorationHelper {
 			}
 		}
 	}
-	
+
 	public void generateDeepWaterCoral(double probability) {
 		if (probability >= 1.0D) {
 			for (int i = 0; i < (int) probability; i++) {

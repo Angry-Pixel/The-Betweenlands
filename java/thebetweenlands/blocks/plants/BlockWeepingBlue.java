@@ -12,7 +12,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockWeepingBlue extends BlockBLSmallPlants {
+public class BlockWeepingBlue extends DoubleHeightPlant {
 	public IIcon modelTexture1;
 
 	public BlockWeepingBlue() {
@@ -37,8 +37,15 @@ public class BlockWeepingBlue extends BlockBLSmallPlants {
 		return drops;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		world.spawnParticle("dripWater", x + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), y + 1.6F + rand.nextFloat()/2F, z + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), 0D, 0D, 0D);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return modelTexture1;
 	}
 }

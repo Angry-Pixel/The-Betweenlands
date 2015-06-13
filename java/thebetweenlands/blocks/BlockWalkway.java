@@ -80,5 +80,10 @@ public class BlockWalkway extends Block {
             entity.motionZ *= boost;
         }
     }
-
+    
+    @Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return icon;
+	}
 }
