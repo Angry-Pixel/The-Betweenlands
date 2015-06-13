@@ -1,11 +1,14 @@
 package thebetweenlands.blocks.terrain;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -17,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
+import thebetweenlands.items.ItemRubberBoots;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -428,11 +432,19 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List bbList, Entity entity) {
 		if(this.canCollide) {
-			return AxisAlignedBB.getBoundingBox(x+this.minX, y+this.minY, z+this.minZ, x+this.maxX, y+this.maxY, z+this.maxZ);
+			AxisAlignedBB blockBB = this.getCollisionBoundingBoxFromPool(world, x, y, z);
+			if (blockBB != null && bb.intersectsWith(blockBB)) {
+				bbList.add(blockBB);
+			}
 		} else {
-			return null;
+			if(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity)) {
+				AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+((float)this.getQuantaValue(world, x, y, z)/(float)this.quantaPerBlock), z+1);
+				if (blockBB != null && bb.intersectsWith(blockBB)) {
+					bbList.add(blockBB);
+				}
+			}
 		}
 	}
 

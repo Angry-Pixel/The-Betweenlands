@@ -3,6 +3,7 @@ package thebetweenlands.blocks.terrain;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
@@ -10,6 +11,7 @@ import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.IEntityBL;
+import thebetweenlands.items.ItemRubberBoots;
 
 import java.util.List;
 
@@ -29,7 +31,8 @@ public class BlockMud
 	@Override
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List aabblist, Entity entity) {
         AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
-        if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) && entity instanceof IEntityBL) {
+        boolean canWalk = entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity);
+        if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) && (entity instanceof IEntityBL || canWalk)) {
             aabblist.add(axisalignedbb1);
         }
     }

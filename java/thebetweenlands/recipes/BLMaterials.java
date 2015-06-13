@@ -18,6 +18,7 @@ public class BLMaterials {
 	public static ArmorMaterial armorBone = EnumHelper.addArmorMaterial("SLIMYBONE", 5, new int[] {2, 5, 3, 1}, 0);
 	public static ArmorMaterial armorOctine = EnumHelper.addArmorMaterial("OCTINE", 15, new int[] {2, 6, 5, 2}, 0);
 	public static ArmorMaterial armorValonite = EnumHelper.addArmorMaterial("VALONITE", 33, new int[] {3, 8, 6, 3}, 0);
-
+	public static ArmorMaterial armorRubber = EnumHelper.addArmorMaterial("RUBBER", 8, new int[] {0, 0, 0, 1}, 0);
+	
 	public static Material tar = new MaterialLiquid(MapColor.mapColorArray[0]);
 }

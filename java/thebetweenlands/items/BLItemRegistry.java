@@ -62,7 +62,6 @@ public class BLItemRegistry {
     public static final Item boneChestplate = new BoneArmor(1).setUnlocalizedName("thebetweenlands.boneChestplate").setTextureName("thebetweenlands:boneChestplate");
     public static final Item boneLeggings = new BoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings").setTextureName("thebetweenlands:boneLeggings");
     public static final Item boneBoots = new BoneArmor(3).setUnlocalizedName("thebetweenlands.boneBoots").setTextureName("thebetweenlands:boneBoots");
-
     
     public static final Item octineHelmet = new OctineArmor(0).setUnlocalizedName("thebetweenlands.octineHelmet").setTextureName("thebetweenlands:octineHelmet");
     public static final Item octineChestplate = new OctineArmor(1).setUnlocalizedName("thebetweenlands.octineChestplate").setTextureName("thebetweenlands:octineChestplate");
@@ -74,6 +73,8 @@ public class BLItemRegistry {
     public static final Item valoniteLeggings = new ValoniteArmor(2).setUnlocalizedName("thebetweenlands.valoniteLeggings").setTextureName("thebetweenlands:valoniteLeggings");
     public static final Item valoniteBoots = new ValoniteArmor(3).setUnlocalizedName("thebetweenlands.valoniteBoots").setTextureName("thebetweenlands:valoniteBoots");
 
+    public static final Item rubberBoots = new ItemRubberBoots().setUnlocalizedName("thebetweenlands.rubberBoots").setTextureName("thebetweenlands:rubberBoots");
+    
     // CREATIVE
     public static final Item spawnEggs = new SpawnEggs().setUnlocalizedName("thebetweenlands.monsterPlacer").setTextureName("spawn_egg");
 
@@ -116,7 +117,7 @@ public class BLItemRegistry {
     //MISC
     public static final Item angryPebble = new ItemAngryPebble();
     public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll");
-    public static final Item swampKelp = new OctineArmor(0).setUnlocalizedName("thebetweenlands.swampKelp").setTextureName("thebetweenlands:swampKelp");
+    public static final Item swampKelp = new Item().setUnlocalizedName("thebetweenlands.swampKelp").setTextureName("thebetweenlands:swampKelp");
     public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
     
     public static void init() {
