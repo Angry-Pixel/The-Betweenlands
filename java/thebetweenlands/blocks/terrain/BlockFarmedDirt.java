@@ -2,6 +2,7 @@ package thebetweenlands.blocks.terrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -16,6 +17,8 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.block.ItemBlockGeneric;
 import cpw.mods.fml.relauncher.Side;
@@ -35,25 +38,39 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.farmedDirt");
+		setTickRandomly(true);
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-
+		
 			if (player.isSneaking())
 				return false;
 
-			if (player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
-				System.out.println("Hit a Block and this will change it");
-				if(world.getBlockMetadata(x, y, z) == 0) {
+			int meta = world.getBlockMetadata(x, y, z);
+			ItemStack stack = player.getCurrentEquippedItem();
+
+			if (stack.getItem() instanceof SpadeBL) {
+				if(meta == 0) {
 					world.setBlockMetadataWithNotify(x, y, z, 3, 3);
 					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
 					player.getCurrentEquippedItem().damageItem(1, player);
 				}
 				return true;
-		}
+			}
+			
+			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
+				if(meta >= 1 && meta <= 3) {
+					world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+					if (!world.isRemote)
+						world.playAuxSFX(2005, x, y + 1, z, 0);
+					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+					player.getCurrentEquippedItem().stackSize--;
+				}
+				return true;
+			}
 		return true;
 	}
 
@@ -70,6 +87,15 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		
 		return drops;
 	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		int meta = world.getBlockMetadata(x, y, z);
+		if(world.rand.nextInt(100) == 0)
+			if(meta == 5 || meta == 4) 
+				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+	}
+
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
 		sideIcon = reg.registerIcon("thebetweenlands:swampDirt");
