@@ -75,14 +75,6 @@ public class TheBetweenlands
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
 	public static CommonPacketProxy packetProxy;
 	
-	/**
-	 * True for debug mode
-	 * Keys:
-	 * - F: Fullbright
-	 * - C: Fast flight
-	 */
-	public static boolean DEBUG = true;
-
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
@@ -160,7 +152,7 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		
-		if (DEBUG) {
+		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}

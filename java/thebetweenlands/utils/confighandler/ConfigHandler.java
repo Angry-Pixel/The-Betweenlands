@@ -11,7 +11,7 @@ public class ConfigHandler
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
 	public Configuration config;
 
-	public static final String[] usedCategories = { "World and Dimension", "Rendering"};
+	public static final String[] usedCategories = { "World and Dimension", "Rendering", "General"};
 
 	//////// Values ///////
 	public static int DIMENSION_ID;
@@ -27,6 +27,7 @@ public class ConfigHandler
 	public static int GIANT_TREE_DENSITY; //temp
 	public static boolean USE_SHADER;
 	public static boolean FIREFLY_LIGHTING;
+	public static boolean DEBUG;
 
 	public void loadConfig(FMLPreInitializationEvent event) {
 		config = new Configuration(event.getSuggestedConfigurationFile());
@@ -49,6 +50,9 @@ public class ConfigHandler
 		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", usedCategories[1], true, "");
 		USE_SHADER = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", usedCategories[1], true, "");
+		
+		//Change the default value of this to false when releasing the mod
+		DEBUG = config.getBoolean("Debug mode", usedCategories[2], true, "");
 		
 		if( config.hasChanged() ) {
             config.save();

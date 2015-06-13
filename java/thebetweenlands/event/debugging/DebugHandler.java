@@ -10,6 +10,7 @@ import org.lwjgl.input.Keyboard;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
@@ -30,7 +31,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
-		if(!TheBetweenlands.DEBUG || Minecraft.getMinecraft().theWorld == null) return;
+		if(!ConfigHandler.DEBUG || Minecraft.getMinecraft().theWorld == null) return;
 		if(Keyboard.isKeyDown(Keyboard.KEY_F)){
 			this.fullBright = !this.fullBright;
 			if(this.fullBright) {
@@ -86,7 +87,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTick(TickEvent event) {
-		if(!TheBetweenlands.DEBUG || Minecraft.getMinecraft().thePlayer == null) return;
+		if(!ConfigHandler.DEBUG || Minecraft.getMinecraft().thePlayer == null) return;
 		if(this.fastFlight) {
 			Minecraft.getMinecraft().thePlayer.capabilities.setFlySpeed(1.0f);
 		} else {
@@ -96,7 +97,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
-		if (TheBetweenlands.DEBUG) {
+		if (ConfigHandler.DEBUG) {
 			Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);

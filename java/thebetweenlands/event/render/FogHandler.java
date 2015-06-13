@@ -43,9 +43,9 @@ public class FogHandler {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			boolean denseFog = false;
-			if((!TheBetweenlands.DEBUG && eeRegistry.DENSE_FOG.isActive()) ||
-					(DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
-					(!DebugHandler.INSTANCE.denseFog && TheBetweenlands.DEBUG && eeRegistry.DENSE_FOG.isActive())) {
+			if((!ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive()) ||
+					(DebugHandler.INSTANCE.denseFog && ConfigHandler.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
+					(!DebugHandler.INSTANCE.denseFog && ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())) {
 				denseFog = true;
 			}
 			return denseFog;
