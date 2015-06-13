@@ -1,28 +1,17 @@
 package thebetweenlands.blocks;
 
-import static net.minecraftforge.common.util.ForgeDirection.EAST;
-import static net.minecraftforge.common.util.ForgeDirection.NORTH;
-import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
-import static net.minecraftforge.common.util.ForgeDirection.WEST;
-
 import java.util.ArrayList;
 import java.util.Random;
 
-import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockRubberTap extends Block {
 
@@ -56,30 +45,30 @@ public class BlockRubberTap extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return world.isSideSolid(x - 1, y, z, EAST,  true) ||
-				world.isSideSolid(x + 1, y, z, WEST,  true) ||
-				world.isSideSolid(x, y, z - 1, SOUTH, true) ||
-				world.isSideSolid(x, y, z + 1, NORTH, true);
+		return world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog ||
+				world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog ||
+				world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog ||
+				world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog;
 	}
 
 	@Override
 	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
 		int res = meta;
 
-		if (side == 2 && world.isSideSolid(x, y, z + 1, NORTH, true)) {
+		if (side == 2 && world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog) {
+			res = 4;
+		}
+
+		if (side == 3 && world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog) {
 			res = 3;
 		}
 
-		if (side == 3 && world.isSideSolid(x, y, z - 1, SOUTH, true)) {
+		if (side == 4 && world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog) {
 			res = 2;
 		}
 
-		if (side == 4 && world.isSideSolid(x + 1, y, z, WEST, true)) {
+		if (side == 5 && world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog) {
 			res = 1;
-		}
-
-		if (side == 5 && world.isSideSolid(x - 1, y, z, EAST, true)) {
-			res = 0;
 		}
 
 		return res;
@@ -87,22 +76,18 @@ public class BlockRubberTap extends Block {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		if(world.isRemote) {
-			return;
-		}
-
 		//15 min. schedule
 		world.scheduleBlockUpdate(x, y, z, this, /*20*60*15*/20);
 
 		if (world.getBlockMetadata(x, y, z) == 0) {
-			if (world.isSideSolid(x - 1, y, z, EAST, true)) {
-				world.setBlockMetadataWithNotify(x, y, z, 0, 2);
-			} else if (world.isSideSolid(x + 1, y, z, WEST, true)) {
+			if (world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog) {
 				world.setBlockMetadataWithNotify(x, y, z, 1, 2);
-			} else if (world.isSideSolid(x, y, z - 1, SOUTH, true)) {
+			} else if (world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog) {
 				world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-			} else if (world.isSideSolid(x, y, z + 1, NORTH, true)) {
+			} else if (world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog) {
 				world.setBlockMetadataWithNotify(x, y, z, 3, 2);
+			} else if (world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog) {
+				world.setBlockMetadataWithNotify(x, y, z, 4, 2);
 			}
 		}
 
@@ -119,19 +104,19 @@ public class BlockRubberTap extends Block {
 			int meta = world.getBlockMetadata(x, y, z);
 			boolean mustDrop = false;
 
-			if (!world.isSideSolid(x - 1, y, z, EAST, true) && meta == 0) {
+			if (world.getBlock(x - 1, y, z) != BLBlockRegistry.rubberTreeLog && meta == 1) {
 				mustDrop = true;
 			}
 
-			if (!world.isSideSolid(x + 1, y, z, WEST, true) && meta == 1) {
+			if (world.getBlock(x + 1, y, z) != BLBlockRegistry.rubberTreeLog && meta == 2) {
 				mustDrop = true;
 			}
 
-			if (!world.isSideSolid(x, y, z - 1, SOUTH, true) && meta == 2) {
+			if (world.getBlock(x, y, z - 1) != BLBlockRegistry.rubberTreeLog && meta == 3) {
 				mustDrop = true;
 			}
 
-			if (!world.isSideSolid(x, y, z + 1, NORTH, true) && meta == 3) {
+			if (world.getBlock(x, y, z + 1) != BLBlockRegistry.rubberTreeLog && meta == 4) {
 				mustDrop = true;
 			}
 
@@ -162,28 +147,28 @@ public class BlockRubberTap extends Block {
 	public void setFull(World world, int x, int y, int z, boolean full) {
 		int meta = world.getBlockMetadata(x, y, z);
 		switch(meta) {
-		case 0:
-		case 4:
-			world.setBlockMetadataWithNotify(x, y, z, full ? 4 : 0, 2);
-			break;
 		case 1:
 		case 5:
-			world.setBlockMetadataWithNotify(x, y, z, full ? 5 : 0, 2);
+			world.setBlockMetadataWithNotify(x, y, z, full ? 5 : 1, 2);
 			break;
 		case 2:
 		case 6:
-			world.setBlockMetadataWithNotify(x, y, z, full ? 6 : 0, 2);
+			world.setBlockMetadataWithNotify(x, y, z, full ? 6 : 2, 2);
 			break;
 		case 3:
 		case 7:
-			world.setBlockMetadataWithNotify(x, y, z, full ? 7 : 0, 2);
+			world.setBlockMetadataWithNotify(x, y, z, full ? 7 : 3, 2);
+			break;
+		case 4:
+		case 8:
+			world.setBlockMetadataWithNotify(x, y, z, full ? 8 : 4, 2);
 			break;
 		}
 	}
 
 	public boolean isFull(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
-		return meta >= 4;
+		return meta >= 5;
 	}
 
 	@Override

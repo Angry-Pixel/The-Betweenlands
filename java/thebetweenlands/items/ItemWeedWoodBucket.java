@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
@@ -67,6 +68,14 @@ public class ItemWeedwoodBucket extends Item {
 					Block block = world.getBlock(x, y, z);
 					int meta = world.getBlockMetadata(x, y, z);
 
+					if (block == BLBlockRegistry.rubberTreeLog && meta == 0 && pos.sideHit >= 2) {
+						int tx = x + (pos.sideHit == 4 ? -1 : (pos.sideHit == 5 ? 1 : 0));
+						int tz = z + (pos.sideHit == 2 ? -1 : (pos.sideHit == 3 ? 1 : 0));
+						world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap);
+						stack.stackSize--;
+						return stack;
+					}
+					
 					if (block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);

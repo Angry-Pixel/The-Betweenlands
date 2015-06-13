@@ -65,7 +65,7 @@ public class BlockRubberTapRenderer implements ISimpleBlockRenderingHandler {
 		
 		ModelConverter.Model model = modelConverterWalkway.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new ModelConverter.Vec3(0, 0, 0));
 		
-		model.rotate(90*world.getBlockMetadata(x, y, z), 0, 0, 0, new ModelConverter.Vec3(-1, 0, 0));
+		model.rotate(20*world.getBlockMetadata(x, y, z), 0, 1, 0, new ModelConverter.Vec3(0.0, 0, 0.0));
 		
 		model.renderWithTessellator(Tessellator.instance);
 		

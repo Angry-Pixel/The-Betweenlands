@@ -171,7 +171,7 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.betweenstone), new ItemStack(BLBlockRegistry.smoothBetweenstone), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone,1,1), new ItemStack(BLBlockRegistry.cragrockBrick), 0F);
 		GameRegistry.addSmelting(ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL), new ItemStack(BLItemRegistry.sludgeJello), 0F);
-
+		GameRegistry.addSmelting(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0), ItemMaterialsBL.createStack(EnumMaterialsBL.RUBBER_BALL), 0F);
 	}
 
 	private static void registerOreDictionary() {
