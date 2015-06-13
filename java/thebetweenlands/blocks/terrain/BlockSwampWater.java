@@ -182,6 +182,9 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	@Override
 	protected void flowIntoBlock(World world, int x, int y, int z, int meta) {
+		if(!this.canSpread) {
+			return;
+		}
 		if (meta < 0) return;
 		if (displaceIfPossible(world, x, y, z) && this.canSpread) {
 			world.setBlock(x, y, z, this, meta, 3);
@@ -190,6 +193,9 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
+		if(!this.canSpread) {
+			return;
+		}
 		int quantaRemaining = quantaPerBlock - world.getBlockMetadata(x, y, z);
 		int expQuanta = -101;
 
@@ -289,6 +295,9 @@ public class BlockSwampWater extends BlockFluidClassic {
 	@Override
 	public boolean displaceIfPossible(World world, int x, int y, int z)
 	{
+		if(!this.canSpread) {
+			return false;
+		}
 		if (world.getBlock(x, y, z).isAir(world, x, y, z))
 		{
 			return true;
@@ -336,6 +345,9 @@ public class BlockSwampWater extends BlockFluidClassic {
 	@Override
 	public Vec3 getFlowVector(IBlockAccess world, int x, int y, int z)
 	{
+		if(!this.canSpread) {
+			return Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
+		}
 		Vec3 vec = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
 		int decay = quantaPerBlock - getQuantaValue(world, x, y, z);
 
@@ -400,7 +412,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	@Override
 	public boolean canCollideCheck(int meta, boolean fullHit) {
-		return this.hasBoundingBox || fullHit && meta == 0;
+		return this.hasBoundingBox || fullHit && (!this.canSpread || meta == 0);
 	}
 
 	@Override

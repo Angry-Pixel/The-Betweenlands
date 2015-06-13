@@ -20,6 +20,7 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BlockSwampReed extends BlockBush implements IPlantable {
 	public IIcon top, bottom;
@@ -32,6 +33,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 		setStepSound(Block.soundTypeGrass);
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);
 		setBlockName("thebetweenlands.swampReedBlock");
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -161,5 +163,22 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	@Override
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return world.getBlockMetadata(x, y, z);
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		if (world.isAirBlock(x, y + 1, z)) {
+			int reedHeight;
+			for (reedHeight = 1; world.getBlock(x, y - reedHeight, z) == this; ++reedHeight) {;}
+			if (reedHeight < 3) {
+				int meta = world.getBlockMetadata(x, y, z);
+				if (meta == 15) {
+					world.setBlock(x, y + 1, z, this);
+					world.setBlockMetadataWithNotify(x, y, z, 0, 4);
+				} else {
+					world.setBlockMetadataWithNotify(x, y, z, meta + 1, 4);
+				}
+			}
+		}
 	}
 }

@@ -79,11 +79,6 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 	}
 
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand) {
-		this.checkAndDropBlock(world, x, y, z);
-	}
-
-	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
 	}
@@ -108,6 +103,24 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
         return false;
     }
 	
+    @Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+    	this.checkAndDropBlock(world, x, y, z);
+		if (world.isAirBlock(x, y + 1, z) || world.getBlock(x, y + 1, z) == BLBlockRegistry.swampWater) {
+			int meta = world.getBlockMetadata(x, y, z);
+			if (meta == 10) {
+				if(world.isAirBlock(x, y + 1, z)) {
+					world.setBlock(x, y + 1, z, BLBlockRegistry.swampReed);
+				} else {
+					world.setBlock(x, y + 1, z, this);
+				}
+				world.setBlockMetadataWithNotify(x, y, z, 0, 4);
+			} else {
+				world.setBlockMetadataWithNotify(x, y, z, meta + 1, 4);
+			}
+		}
+	}
+    
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
