@@ -6,11 +6,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRoot extends Block {
 	public BlockRoot() {
@@ -75,6 +79,22 @@ public class BlockRoot extends Block {
 	@Override
     public boolean isWood(IBlockAccess world, int x, int y, int z) {
         return true;
+    }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public boolean isBlockNormalCube() {
+        return false;
+    }
+
+	@Override
+    public boolean isNormalCube() {
+        return false;
+    }
+    
+	@Override
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+		return false;
     }
 	
 	public static void generateWaterRootPatch(World world, int x, int y, int z, int tries, int radius) {

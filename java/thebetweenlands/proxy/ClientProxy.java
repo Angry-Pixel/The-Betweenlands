@@ -102,7 +102,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP;
 
 		private final int ID;
 
@@ -171,7 +171,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockModelPlantRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockWalkwayRenderer());
-
+		RenderingRegistry.registerBlockHandler(new BlockRubberTapRenderer());
+		
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
         AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();

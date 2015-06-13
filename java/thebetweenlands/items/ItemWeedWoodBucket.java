@@ -13,17 +13,17 @@ import net.minecraftforge.event.entity.player.FillBucketEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import cpw.mods.fml.common.eventhandler.Event;
 
-public class ItemWeedWoodBucket extends Item {
+public class ItemWeedwoodBucket extends Item {
 
 	private final Block fluid;
 
-	public ItemWeedWoodBucket() {
+	public ItemWeedwoodBucket() {
 		this(Blocks.air);
 		setUnlocalizedName("thebetweenlands.weedwoodBucket");
 		setTextureName("thebetweenlands:weedwoodBucket");
 	}
 
-	public ItemWeedWoodBucket(Block fluid) {
+	public ItemWeedwoodBucket(Block fluid) {
 		this.fluid = fluid;
 		setMaxStackSize(1);
 	}

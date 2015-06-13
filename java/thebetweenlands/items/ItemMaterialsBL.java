@@ -101,7 +101,14 @@ public class ItemMaterialsBL extends Item {
 	}
 
 	public static enum EnumMaterialsBL {
-		AQUA_MIDDLE_GEM("aquaMiddleGem"), CRIMSON_MIDDLE_GEM("crimsonMiddleGem"), GREEN_MIDDLE_GEM("greenMiddleGem"), BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), LIFE_CRYSTAL("lifeCrystal"), MIDDLE_FRUIT_SEEDS("middleFruitSeeds"), MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), MOSS("moss"), MUD_BRICK("mudBrick"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"), GROUND_WEEDWOOD_BARK("groundWeedwoodBark");
+		AQUA_MIDDLE_GEM("aquaMiddleGem"), CRIMSON_MIDDLE_GEM("crimsonMiddleGem"), GREEN_MIDDLE_GEM("greenMiddleGem"), 
+		BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), 
+		LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), 
+		LIFE_CRYSTAL("lifeCrystal"), MIDDLE_FRUIT_SEEDS("middleFruitSeeds"), MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), 
+		MOSS("moss"), MUD_BRICK("mudBrick"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
+		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
+		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"), 
+		GROUND_WEEDWOOD_BARK("groundWeedwoodBark"), RUBBER_BALL("rubber");
 
 		public final String iconName;
 
