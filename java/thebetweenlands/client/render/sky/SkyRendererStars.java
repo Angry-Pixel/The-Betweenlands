@@ -50,9 +50,6 @@ public class SkyRendererStars extends IRenderHandler
 		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
 		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd()*FogHandler.INSTANCE.getCurrentFogEnd()/30.0F);
 		GL11.glColor3f(f1, f2, f3);
-		GL11.glEnable(GL11.GL_FOG);
-		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
-		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd()*FogHandler.INSTANCE.getCurrentFogEnd()/30.0F);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -117,6 +114,8 @@ public class SkyRendererStars extends IRenderHandler
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		float f18 = world.getStarBrightness(partialTicks) * f6;
 
+		GL11.glDisable(GL11.GL_BLEND);
+		
 		if (f18 > 0.0F) {
 			GL11.glColor4f(f18, f18, f18, f18);
 			GL11.glCallList(starGLCallList);
