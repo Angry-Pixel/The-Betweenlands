@@ -247,12 +247,13 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 		
-		if(particleName.equals("fish")) {
-			if(world.rand.nextBoolean()) {
+		int fishParticle = world.rand.nextInt(3);
+			if(fishParticle  == 0) {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish1.png"), 1);
-			} else {
+			} else if(fishParticle == 1) {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish2.png"), 1);
-			}
+			} else {
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish3.png"), 1);
 		}
 		
 		if(particleName.equals("fly")) {

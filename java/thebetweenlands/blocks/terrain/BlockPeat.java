@@ -1,5 +1,9 @@
 package thebetweenlands.blocks.terrain;
 
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -8,6 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemRubberBoots;
 
@@ -47,5 +52,13 @@ extends Block
 	@Override
 	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
 		return 0;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(60) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1, z, 0.0D, 0.0D, 0.0D, 0);
+		}
 	}
 }
