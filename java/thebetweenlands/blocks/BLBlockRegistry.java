@@ -3,10 +3,13 @@ package thebetweenlands.blocks;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
@@ -81,6 +84,8 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry
 {
@@ -160,9 +165,25 @@ public class BLBlockRegistry
 	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
 
 	// DOUBLE PLANTS
-	public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F).setRenderType(BlockRenderIDs.MODEL_PLANT.id());
+	public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F){
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+			if(world.rand.nextInt(35) == 0) {
+				TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1, z, 0.0D, 0.0D, 0.0D, 0);
+			}
+		}
+	}.setRenderType(BlockRenderIDs.MODEL_PLANT.id());
 	public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F); 
-	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F); 
+	public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F){
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+			if(world.rand.nextInt(15) == 0) {
+				TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+			}
+		}
+	}; 
 	public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F); 
 	public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F); 
 	public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F); 

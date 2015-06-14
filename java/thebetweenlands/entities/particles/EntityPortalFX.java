@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.event.render.FogHandler;
 
-public class EntityLeafFX extends EntityFX {
+public class EntityPortalFX extends EntityFX {
 	private ResourceLocation particleTexture;
 	private float scale;
 	private int color;
@@ -18,14 +18,15 @@ public class EntityLeafFX extends EntityFX {
 	private double relativeTextureHeight;
 	private int currentTexture = 0;
 	private int textureCounter = 0;
-	private double tx, ty, tz;
 
-	public EntityLeafFX(World world, double x, double y, double z, int maxAge, float scale, int color, ResourceLocation texture, int textures) {
+	public EntityPortalFX(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, int color, ResourceLocation texture, int textures) {
 		super(world, x, y, z, 0, 0, 0);
-		this.posX = this.prevPosX = this.tx = x;
-		this.posY = this.prevPosY = this.ty = y;
-		this.posZ = this.prevPosZ = this.tz = z;
-		this.motionX = this.motionY = this.motionZ = 0.0D;
+		this.posX = this.prevPosX = x;
+		this.posY = this.prevPosY = y;
+		this.posZ = this.prevPosZ = z;
+		this.motionX = mx;
+		this.motionY = my;
+		this.motionZ = mz;
 		this.particleMaxAge = maxAge;
 		this.noClip = false;
 		this.color = color;
@@ -68,10 +69,9 @@ public class EntityLeafFX extends EntityFX {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.moveEntity(0, -0.04F, 0);
 		if(!this.onGround) {
 			this.textureCounter++;
-			if(this.textureCounter >= 5) {
+			if(this.textureCounter >= 3) {
 				this.textureCounter = 0;
 				this.currentTexture++;
 				if(this.currentTexture >= this.textures) {
@@ -80,4 +80,5 @@ public class EntityLeafFX extends EntityFX {
 			}
 		}
 	}
+
 }

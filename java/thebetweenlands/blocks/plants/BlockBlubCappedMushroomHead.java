@@ -69,7 +69,7 @@ public class BlockBlubCappedMushroomHead extends Block {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        if(world.rand.nextInt(200) == 0) {
+        if(world.rand.nextInt(150) == 0) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
         		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
