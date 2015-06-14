@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -59,5 +60,20 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants {
     @SideOnly(Side.CLIENT)
     public boolean renderAsNormalBlock() {
         return false;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        if(world.rand.nextInt(1500) == 0) {
+        	int particle = rand.nextInt(3);
+        	if(particle == 0) {
+        		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        	} else if(particle == 1) {
+        		TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        	} else {
+        		TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        	}
+        }
     }
 }

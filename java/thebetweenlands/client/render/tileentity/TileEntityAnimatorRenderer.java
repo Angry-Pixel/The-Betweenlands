@@ -22,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
+import thebetweenlands.entities.particles.EntityBugFX;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.SpawnEggs;
@@ -137,7 +138,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			GL11.glPopMatrix();
 		}
 
-		// Sulfur Particles
+		/*// Sulfur Particles
 		if (te.getStackInSlot(2) != null) {
 			rand = te.getWorldObj().rand;
 			points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D, te.yCoord + 0.1D, te.zCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D));
@@ -175,6 +176,10 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		// Smoke
 		if (te.getWorldObj().rand.nextInt(150) == 0) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(new EntitySmokeFX(te.getWorldObj(), te.xCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.3, te.zCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, 0, 0, 0, (rand.nextFloat() / 2.0F) + 1F));
+		}*/
+
+		if (te.getWorldObj().rand.nextInt(10) == 0) {
+			Minecraft.getMinecraft().effectRenderer.addEffect(new EntityBugFX(te.getWorldObj(), te.xCoord + 0.5, te.yCoord + 2, te.zCoord + 0.5, 400, 0.03F, 0.02F, 0.1F * te.getWorldObj().rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2));
 		}
 	}
 }

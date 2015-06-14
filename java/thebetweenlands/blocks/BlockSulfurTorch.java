@@ -43,6 +43,17 @@ public class BlockSulfurTorch extends BlockTorch {
     		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY + offSetY, posZ + offSetXZ, 0.0D, 0.0D, 0.0D, 0);
         else
     		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+   
+        if(world.rand.nextInt(1500) == 0) {
+        	int particle = rand.nextInt(3);
+        	if(particle == 0) {
+        		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	} else if(particle == 1) {
+        		TheBetweenlands.proxy.spawnCustomParticle("fly", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	} else {
+        		TheBetweenlands.proxy.spawnCustomParticle("moth", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	}
+        }
     }
  
 }

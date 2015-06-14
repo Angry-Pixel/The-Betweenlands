@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
@@ -31,7 +32,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 		setStepSound(Block.soundTypeGrass);
 		setBlockName("thebetweenlands.waterWeeds");
 		setHardness(0.5F);
-        setLightLevel(0.875F);
+		setLightLevel(0.875F);
 		setCreativeTab(ModCreativeTabs.plants);
 		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
 		setTickRandomly(true);
@@ -84,11 +85,11 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 		this.checkAndDropBlock(world, x, y, z);
 	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
-	
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return false;
+	}
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -96,7 +97,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 			world.notifyBlockChange(x, y, z, Blocks.air);
 		}
 	}
-	
+
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
@@ -106,5 +107,13 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 
 	protected boolean canPlaceBlockOn(Block block) {
 		return block instanceof BlockSwampKelp || block == BLBlockRegistry.mud;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(1500) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("waterBug", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+		}
 	}
 }

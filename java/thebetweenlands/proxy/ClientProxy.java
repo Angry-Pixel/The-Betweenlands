@@ -78,6 +78,7 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityBLBubbleFX;
+import thebetweenlands.entities.particles.EntityBugFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
@@ -236,7 +237,27 @@ public class ClientProxy extends CommonProxy {
 			fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0.039f, 0.443f, 0.039f);
 		}
-
+		
+		if(particleName.equals("moth")) {
+			if(world.rand.nextBoolean()) {
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2);
+			} else {
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth2.png"), 2);
+			}
+		}
+		
+		if(particleName.equals("fly")) {
+			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fly.png"), 2);
+		}
+		
+		if(particleName.equals("mosquito")) {
+			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/mosquito.png"), 2);
+		}
+		
+		if(particleName.equals("waterBug")) {
+			fx = new EntityBugFX(world, x, y, z, 400, 0.03F, 0.02F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/waterbug.png"), 2);
+		}
+		
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 	}

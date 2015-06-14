@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -18,7 +19,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import java.util.Random;
 
 public class BlockRottenLog extends Block {
-//	public IIcon modelTexture1;
+	//	public IIcon modelTexture1;
 	public IIcon end;
 	public IIcon top;
 	public IIcon bottom;
@@ -125,6 +126,14 @@ public class BlockRottenLog extends Block {
 				return sides;
 		}
 		return bottom;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(2000) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+		}
 	}
 
 }

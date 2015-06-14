@@ -7,6 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
@@ -31,7 +32,7 @@ public class BlockVolarpad extends BlockBLSmallPlants {
 	public IIcon getIcon(int side, int meta) {
 		return modelTexture1;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
@@ -48,5 +49,13 @@ public class BlockVolarpad extends BlockBLSmallPlants {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return AxisAlignedBB.getBoundingBox(x, y + 1.99F, z, x + 1, y + 2, z + 1);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(1200) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+		}
 	}
 }
