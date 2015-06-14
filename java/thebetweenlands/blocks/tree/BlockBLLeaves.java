@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
@@ -44,18 +45,18 @@ public class BlockBLLeaves extends BlockLeaves {
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
 		switch (this.type) {
-			case "weedwoodLeaves":
-				return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
-			case "sapTreeLeaves":
-				return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
-			case "rubberTreeLeaves":
-				return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
-			case "purpleRainLeavesDark":
-				return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
-			case "purpleRainLeavesLight":
-				return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
-			default:
-				return Item.getItemFromBlock(this);
+		case "weedwoodLeaves":
+			return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
+		case "sapTreeLeaves":
+			return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
+		case "rubberTreeLeaves":
+			return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
+		case "purpleRainLeavesDark":
+			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
+		case "purpleRainLeavesLight":
+			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
+		default:
+			return Item.getItemFromBlock(this);
 		}
 	}
 
@@ -111,9 +112,9 @@ public class BlockBLLeaves extends BlockLeaves {
 			if (fortune > 0){
 				dropChance -= 2*fortune;
 			}
-            if(world.rand.nextInt(dropChance) == 0) {
-                this.dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(meta, world.rand, fortune), 1));
-            }
+			if(world.rand.nextInt(dropChance) == 0) {
+				this.dropBlockAsItem(world, x, y, z, new ItemStack(this.getItemDropped(meta, world.rand, fortune), 1));
+			}
 		}
 	}
 
@@ -131,6 +132,16 @@ public class BlockBLLeaves extends BlockLeaves {
 				world.setBlockMetadataWithNotify(x, y, z, i2 | 8, 4);
 			}
 			world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) | 8, 4);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(200) == 0) {
+			if(world.isAirBlock(x, y-1, z)) {
+				TheBetweenlands.proxy.spawnCustomParticle("leaf", world, x + rand.nextFloat(), y, z + rand.nextFloat(), 0.0D, 0.0D, 0.0D, 0);
+			}
 		}
 	}
 }

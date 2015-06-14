@@ -10,30 +10,27 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.event.render.FogHandler;
 
-public class EntityBugFX extends EntityFX {
+public class EntityLeafFX extends EntityFX {
 	private ResourceLocation particleTexture;
 	private float scale;
 	private int color;
 	private int textures;
-	private float jitter;
-	private float speed;
 	private double relativeTextureHeight;
 	private int currentTexture = 0;
+	private int textureCounter = 0;
 	private double tx, ty, tz;
 
-	public EntityBugFX(World world, double x, double y, double z, int maxAge, float speed, float jitter, float scale, int color, ResourceLocation texture, int textures) {
+	public EntityLeafFX(World world, double x, double y, double z, int maxAge, float scale, int color, ResourceLocation texture, int textures) {
 		super(world, x, y, z, 0, 0, 0);
 		this.posX = this.prevPosX = this.tx = x;
 		this.posY = this.prevPosY = this.ty = y;
 		this.posZ = this.prevPosZ = this.tz = z;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 		this.particleMaxAge = maxAge;
-		this.noClip = true;
+		this.noClip = false;
 		this.color = color;
 		this.scale = scale;
-		this.jitter = jitter;
 		this.textures = textures;
-		this.speed = speed;
 		this.relativeTextureHeight = 1.0D / this.textures;
 		this.particleTexture = texture;
 	}
@@ -75,18 +72,16 @@ public class EntityBugFX extends EntityFX {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.moveEntity(this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter);
-		this.currentTexture++;
-		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));
-		if(distToTarget <= this.speed + this.jitter) {
-			this.tx = this.posX + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-			this.ty = this.posY + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-			this.tz = this.posZ + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-		} else {
-			this.moveEntity(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
-		}
-		if(this.currentTexture >= this.textures) {
-			this.currentTexture = 0;
+		this.moveEntity(0, -0.04F, 0);
+		if(!this.onGround) {
+			this.textureCounter++;
+			if(this.textureCounter >= 5) {
+				this.textureCounter = 0;
+				this.currentTexture++;
+				if(this.currentTexture >= this.textures) {
+					this.currentTexture = 0;
+				}
+			}
 		}
 	}
 }
