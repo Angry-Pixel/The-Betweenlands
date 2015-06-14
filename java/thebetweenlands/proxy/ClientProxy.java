@@ -81,6 +81,7 @@ import thebetweenlands.entities.particles.EntityBLBubbleFX;
 import thebetweenlands.entities.particles.EntityBugFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityLeafFX;
+import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.render.BrightnessHandler;
@@ -235,8 +236,7 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		if( particleName.equals("portal") ) {
-			fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0.039f, 0.443f, 0.039f);
+			fx = new EntityPortalFX(world, x, y, z, vecX, vecY, vecZ, 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/portal.png"), 6);
 		}
 		
 		if(particleName.equals("moth")) {
