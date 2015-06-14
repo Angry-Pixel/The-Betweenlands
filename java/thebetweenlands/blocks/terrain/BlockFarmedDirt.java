@@ -14,6 +14,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
@@ -76,7 +77,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		
-		if(meta == 0 || meta == 3 ||meta == 6)
+		if(meta == 0 || meta == 3 ||meta == 6 || meta == 9 ||meta == 10)
 			drops.add(new ItemStack(Item.getItemFromBlock(this), 1, 0));
 		if(meta == 1 || meta == 4 || meta == 7)
 			drops.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.swampDirt), 1, 0));
@@ -89,9 +90,16 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if(world.rand.nextInt(1) == 0)
+		if(world.rand.nextInt(1) == 0) {
 			if(meta == 5 || meta == 4) 
 				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+			if(meta == 1)
+				world.setBlock(x, y, z, BLBlockRegistry.swampDirt, 0, 3);
+			if(meta == 2)
+				world.setBlock(x, y, z, BLBlockRegistry.swampGrass, 0, 3);
+			if(meta == 3)
+				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
+		}
 		if(meta == 7 || meta == 8)
 			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == 7)
 				world.setBlockMetadataWithNotify(x, y + 1, z, 8, 3);
@@ -113,7 +121,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		if (meta < 0 || meta >= icons.length)
 			return null;
 		
-		if(meta == 3 ||meta == 6)
+		if(meta == 3 || meta == 6 || meta == 9 || meta == 10)
 			if (side == 1)
 				return icons[meta];
 			else
@@ -155,6 +163,43 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return ItemBlockGeneric.class;
+	}
+	
+	@Override
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		double pixel = 0.0625D;
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta == 7 || meta == 8) {
+			if (rand.nextInt(10) == 0) {
+				for (int l = 0; l < 3; l++) {
+					double particleX = x + rand.nextFloat();
+					double particleY = y + rand.nextFloat();
+					double particleZ = z + rand.nextFloat();
+
+					if (l == 0 && !world.getBlock(x, y + 2, z).isOpaqueCube())
+						particleY = y + 1 + pixel;
+
+					if (l == 1 && !world.getBlock(x, y - 1, z).isOpaqueCube())
+						particleY = y - pixel;
+
+					if (l == 2 && !world.getBlock(x, y, z + 1).isOpaqueCube())
+						particleZ = z + 1 + pixel;
+
+					if (l == 3 && !world.getBlock(x, y, z - 1).isOpaqueCube())
+						particleZ = z - pixel;
+
+					if (l == 4 && !world.getBlock(x + 1, y, z).isOpaqueCube())
+						particleX = x + 1 + pixel;
+
+					if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
+						particleX = x - pixel;
+
+					if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
+						TheBetweenlands.proxy.spawnCustomParticle("dirtDecay", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+					}
+				}
+			}
+		}
 	}
 
 }

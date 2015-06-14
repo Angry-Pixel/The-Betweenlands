@@ -225,6 +225,11 @@ public class ClientProxy extends CommonProxy {
 			fx.setRBGColorF(1F, 0F, 0F);
 		}
 
+		if (particleName.equals("dirtDecay")) {
+			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
+		}
+
 		if (particleName.equals("bubblePurifier")) {
 			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0.306F, 0.576F, 0.192F);

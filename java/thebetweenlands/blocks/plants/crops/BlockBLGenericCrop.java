@@ -1,6 +1,7 @@
 package thebetweenlands.blocks.plants.crops;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.creativetabs.ModCreativeTabs;
@@ -136,5 +138,42 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public int getRenderType() {
 		return 1;
+	}
+	
+	@Override
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		double pixel = 0.0625D;
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta >= 8) {
+			if (rand.nextInt(10) == 0) {
+				for (int l = 0; l < 3; l++) {
+					double particleX = x + rand.nextFloat();
+					double particleY = y + rand.nextFloat();
+					double particleZ = z + rand.nextFloat();
+
+					if (l == 0 && !world.getBlock(x, y + 2, z).isOpaqueCube())
+						particleY = y + 1 + pixel;
+
+					if (l == 1 && !world.getBlock(x, y - 1, z).isOpaqueCube())
+						particleY = y - pixel;
+
+					if (l == 2 && !world.getBlock(x, y, z + 1).isOpaqueCube())
+						particleZ = z + 1 + pixel;
+
+					if (l == 3 && !world.getBlock(x, y, z - 1).isOpaqueCube())
+						particleZ = z - pixel;
+
+					if (l == 4 && !world.getBlock(x + 1, y, z).isOpaqueCube())
+						particleX = x + 1 + pixel;
+
+					if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
+						particleX = x - pixel;
+
+					if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
+						TheBetweenlands.proxy.spawnCustomParticle("dirtDecay", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+					}
+				}
+			}
+		}
 	}
 }
