@@ -25,7 +25,7 @@ public class WorldGenRubberTree extends WorldGenerator {
 						return false;
 
 		for (int yy = y; yy < y + height; ++yy) {
-			world.setBlock(x, yy, z, log, 0, 2);
+			world.setBlock(x, yy, z, log, 1, 2);
 
 			if (yy == y + height - 1)
 				createMainCanopy(world, rand, x, yy, z, maxRadius);
@@ -50,16 +50,16 @@ public class WorldGenRubberTree extends WorldGenerator {
 			}
 
 			if (dir == 1)
-				world.setBlock(x + i, y, z, log, meta == 0 ? 0 : 4, 2);
+				world.setBlock(x + i, y, z, log, 1, 2);
 
 			if (dir == 2)
-				world.setBlock(x - i, y, z, log, meta == 0 ? 0 : 4, 2);
+				world.setBlock(x - i, y, z, log, 1, 2);
 
 			if (dir == 3)
-				world.setBlock(x, y, z + i, log,  meta == 0 ? 0 : 8, 2);
+				world.setBlock(x, y, z + i, log,  1, 2);
 
 			if (dir == 4)
-				world.setBlock(x, y, z - i, log,  meta == 0 ? 0 : 8, 2);
+				world.setBlock(x, y, z - i, log,  1, 2);
 
 		}
 	}

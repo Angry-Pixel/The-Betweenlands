@@ -59,29 +59,29 @@ public class BlockRubberTap extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog ||
-				world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog ||
-				world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog ||
-				world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog;
+		return (world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x-1, y, z) == 1)||
+				(world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x+1, y, z) == 1) ||
+				(world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z-1) == 1) ||
+				(world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z+1) == 1);
 	}
 
 	@Override
 	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
 		int res = meta;
 
-		if (side == 2 && world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog) {
+		if (side == 2 && world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z+1) == 1) {
 			res = 4;
 		}
 
-		if (side == 3 && world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog) {
+		if (side == 3 && world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z-1) == 1) {
 			res = 3;
 		}
 
-		if (side == 4 && world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog) {
+		if (side == 4 && world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x+1, y, z) == 1) {
 			res = 2;
 		}
 
-		if (side == 5 && world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog) {
+		if (side == 5 && world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x-1, y, z) == 1) {
 			res = 1;
 		}
 
@@ -96,13 +96,13 @@ public class BlockRubberTap extends Block {
 		world.scheduleBlockUpdate(x, y, z, this, 20*60*5);
 
 		if (world.getBlockMetadata(x, y, z) == 0) {
-			if (world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog) {
+			if (world.getBlock(x-1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x-1, y, z) == 1) {
 				world.setBlockMetadataWithNotify(x, y, z, 1, 2);
-			} else if (world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog) {
+			} else if (world.getBlock(x+1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x+1, y, z) == 1) {
 				world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-			} else if (world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog) {
+			} else if (world.getBlock(x, y, z-1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z-1) == 1) {
 				world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-			} else if (world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog) {
+			} else if (world.getBlock(x, y, z+1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z+1) == 1) {
 				world.setBlockMetadataWithNotify(x, y, z, 4, 2);
 			}
 		}
@@ -120,19 +120,19 @@ public class BlockRubberTap extends Block {
 			int meta = world.getBlockMetadata(x, y, z);
 			boolean mustDrop = false;
 
-			if (world.getBlock(x - 1, y, z) != BLBlockRegistry.rubberTreeLog && meta == 1) {
+			if (!(world.getBlock(x - 1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x-1, y, z) == 1) && meta == 1) {
 				mustDrop = true;
 			}
 
-			if (world.getBlock(x + 1, y, z) != BLBlockRegistry.rubberTreeLog && meta == 2) {
+			if (!(world.getBlock(x + 1, y, z) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x+1, y, z) == 1) && meta == 2) {
 				mustDrop = true;
 			}
 
-			if (world.getBlock(x, y, z - 1) != BLBlockRegistry.rubberTreeLog && meta == 3) {
+			if (!(world.getBlock(x, y, z - 1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z-1) == 1) && meta == 3) {
 				mustDrop = true;
 			}
 
-			if (world.getBlock(x, y, z + 1) != BLBlockRegistry.rubberTreeLog && meta == 4) {
+			if (!(world.getBlock(x, y, z + 1) == BLBlockRegistry.rubberTreeLog && world.getBlockMetadata(x, y, z+1) == 1) && meta == 4) {
 				mustDrop = true;
 			}
 

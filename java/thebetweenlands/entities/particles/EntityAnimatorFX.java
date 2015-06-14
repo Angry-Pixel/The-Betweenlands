@@ -9,8 +9,6 @@ import javax.vecmath.Vector3d;
 import java.util.ArrayList;
 
 public class EntityAnimatorFX extends EntityPathParticle {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");
-
 	private int ticks = 0;
 	private float sizeDecrease = 0.0F;
 
