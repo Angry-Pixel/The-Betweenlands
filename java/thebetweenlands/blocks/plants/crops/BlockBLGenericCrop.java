@@ -87,7 +87,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
-			return true;
+			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		System.out.println("Crop Meta is: " + meta + " Crop:" + plantDrops + " Seed: "+ seed);
 		ItemStack stack = player.getCurrentEquippedItem();
@@ -101,7 +101,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override

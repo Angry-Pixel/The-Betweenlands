@@ -24,7 +24,7 @@ public class BlockSwampDirt
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
-			return true;
+			return false;
 
 			if (player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
 				world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 1, 3);
@@ -32,6 +32,6 @@ public class BlockSwampDirt
 				player.getCurrentEquippedItem().damageItem(1, player);
 				return true;
 		}
-		return true;
+		return false;
 	}
 }
