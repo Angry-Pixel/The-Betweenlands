@@ -1,7 +1,6 @@
 package thebetweenlands.blocks.plants.crops;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -11,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
@@ -25,6 +23,8 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
+	@SideOnly(Side.CLIENT)
+	private IIcon decayedTexture;
 	private String type;
 
 	public BlockBLGenericCrop(String blockName) {
@@ -102,42 +102,23 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
-    public void updateTick(World world, int x, int y, int z, Random rand) {
-        super.updateTick(world, x, y, z, rand);
-
-        if (world.getBlockLightValue(x, y + 1, z) >= 9) {
-            int meta = world.getBlockMetadata(x, y, z);
-
-            if (meta < 7) {
-                if (rand.nextInt(25) == 0) {
-                    ++meta;
-                    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-                }
-            }
-        }
-    }
-	
-	@Override
-    public void func_149863_m(World world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 5);
-        if (meta > 7)
-            meta = 7;
-        world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-    }
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta < 0 || meta >= iconArray.length)
-			return null;
-		return iconArray[meta];
+		if (meta < 7) {
+			if (meta == 6)
+				meta = 5;
+			return iconArray[meta >> 1];
+		} else if (meta == 8)
+			return decayedTexture;
+		else
+			return iconArray[3];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		iconArray = new IIcon[8];
-
+		iconArray = new IIcon[4];
+		decayedTexture = iconRegister.registerIcon("thebetweenlands:" + type + "Decay");
 		for (int i = 0; i < iconArray.length; ++i)
 			iconArray[i] = iconRegister.registerIcon("thebetweenlands:" + type + i);
 	}

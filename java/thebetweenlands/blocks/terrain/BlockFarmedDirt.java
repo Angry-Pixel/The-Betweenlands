@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
+import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -88,9 +89,12 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if(world.rand.nextInt(100) == 0)
+		if(world.rand.nextInt(1) == 0)
 			if(meta == 5 || meta == 4) 
 				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+		if(meta == 7 || meta == 8)
+			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == 7)
+				world.setBlockMetadataWithNotify(x, y + 1, z, 8, 3);
 	}
 
 	@Override
