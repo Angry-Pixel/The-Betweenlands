@@ -10,6 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
@@ -119,6 +120,14 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 				}
 				++yo;
 			}
+		}
+	}
+		
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if(world.rand.nextInt(40) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y + 1.5, z, 0.0D, 0.0D, 0.0D, 0);
 		}
 	}
 }
