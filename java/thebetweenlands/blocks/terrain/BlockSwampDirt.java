@@ -9,7 +9,7 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.SpadeBL;
 
 public class BlockSwampDirt
-        extends Block
+extends Block
 {
 	public BlockSwampDirt() {
 		super(Material.ground);
@@ -26,11 +26,11 @@ public class BlockSwampDirt
 		if (world.isRemote)
 			return false;
 
-			if (player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
-				world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 1, 3);
-				world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
-				player.getCurrentEquippedItem().damageItem(1, player);
-				return true;
+		if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
+			world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 1, 3);
+			world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+			player.getCurrentEquippedItem().damageItem(1, player);
+			return true;
 		}
 		return false;
 	}

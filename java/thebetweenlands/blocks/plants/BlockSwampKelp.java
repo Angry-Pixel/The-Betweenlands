@@ -112,7 +112,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		if(world.rand.nextInt(1500) == 0) {
+		if(world.rand.nextInt(35) == 0) {
 			TheBetweenlands.proxy.spawnCustomParticle("waterBug", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
 		}
 	}

@@ -44,14 +44,10 @@ public class EntityLeafFX extends EntityFX {
 		int prevTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(this.particleTexture);
 
-		par1Tessellator.setBrightness(0);
-
 		float a = (float)(this.color >> 24 & 0xff) / 255F;
 		float r = (float)(this.color >> 16 & 0xff) / 255F;
 		float g = (float)(this.color >> 8 & 0xff) / 255F;
 		float b = (float)(this.color & 0xff) / 255F;
-
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		par1Tessellator.startDrawingQuads();
 		par1Tessellator.setColorRGBA_F(r, g, b, a);

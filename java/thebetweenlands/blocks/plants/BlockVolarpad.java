@@ -54,8 +54,8 @@ public class BlockVolarpad extends BlockBLSmallPlants {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		if(world.rand.nextInt(1200) == 0) {
-			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+		if(world.rand.nextInt(40) == 0) {
+			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1.5, z, 0.0D, 0.0D, 0.0D, 0);
 		}
 	}
 }
