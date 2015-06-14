@@ -36,6 +36,7 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
 		Tessellator.instance.setColorOpaque(255, 255, 255);
+		Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, x, y, z, 1.0f);
 		Block blockAbove = world.getBlock(x, y+1, z);
 		if(blockAbove == BLBlockRegistry.swampWater || blockAbove == Blocks.air) {
