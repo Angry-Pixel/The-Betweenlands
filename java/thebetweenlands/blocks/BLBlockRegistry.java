@@ -195,7 +195,7 @@ public class BLBlockRegistry
 	
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
-	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush", BLItemRegistry.middleFruit, BLItemRegistry.middleFruitSeeds);
+	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush");
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

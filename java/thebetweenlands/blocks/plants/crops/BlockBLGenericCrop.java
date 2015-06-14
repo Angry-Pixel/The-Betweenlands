@@ -27,24 +27,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
 	private String type;
-	private Item plantDrops;
-	private Item seed;
 
-	/**
-	 * @param blockName
-	 *            the name of this block
-	 * @param blockDrops
-	 *            whatever item this crop drops that isn't seeds
-	 * @param seedDrop
-	 *            whatever item this crop drops as seeds
-	 */
-
-	public BlockBLGenericCrop(String blockName, Item blockDrops, Item seedDrop) {
+	public BlockBLGenericCrop(String blockName) {
 		setStepSound(soundTypeGrass);
 		setCreativeTab(ModCreativeTabs.blocks);
 		type = blockName;
-		plantDrops = blockDrops;
-		seed = seedDrop;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 	}
@@ -53,23 +40,35 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
 
-		if (metadata >= 7 && plantDrops != null) {
+		if (metadata >= 7) {
 			for (int i = 0; i < 1 + fortune; ++i)
 				if (world.rand.nextInt(15) <= metadata)
-					ret.add(new ItemStack(func_149866_i()));
-			ret.add(new ItemStack(func_149865_P()));
+					ret.add(getSeedDrops());
+			ret.add(getCropDrops());
 		}
 		return ret;
 	}
-
+	
+	public ItemStack getSeedDrops() {
+		if(type.equals("middleFruitBush"))
+			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);	
+		return null;	
+	}
+		
+	public ItemStack getCropDrops() {
+		if(type.equals("middleFruitBush"))
+			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);	
+		return null;	
+	}
+	
 	@Override
-	protected Item func_149866_i() {
-		return seed;
+	protected Item func_149866_i() { //disabled for custom BL bits
+		return null;
 	}
 
 	@Override
-	protected Item func_149865_P() { 
-		return plantDrops;
+	protected Item func_149865_P() { //disabled for custom BL bits
+		return null;
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		if (world.isRemote)
 			return false;
 		int meta = world.getBlockMetadata(x, y, z);
-		System.out.println("Crop Meta is: " + meta + " Crop:" + plantDrops + " Seed: "+ seed);
+		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(stack.getItem() == Items.dye)) {
 			//TODO Temp Bonemeal will end up being plant tonic
@@ -108,10 +107,10 @@ public class BlockBLGenericCrop extends BlockCrops {
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
 
-        if (world.getBlockLightValue(x, y + 1, z) >= 9) {
+        if (world.getBlockLightValue(x, y + 1, z) >= 7) {
             int meta = world.getBlockMetadata(x, y, z);
 
-            if (meta < 9) {
+            if (meta < 7) {
                 if (rand.nextInt(25) == 0) {
                     ++meta;
                     world.setBlockMetadataWithNotify(x, y, z, meta, 3);
