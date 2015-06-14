@@ -463,7 +463,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(rand.nextInt(2500) == 0) {
 			if(world.getBlock(x, y + 2, z) == BLBlockRegistry.swampWater) {
-				TheBetweenlands.proxy.spawnCustomParticle("waterBug", world, x, y, z, 0, 0, 0, 0);
+				TheBetweenlands.proxy.spawnCustomParticle("fish", world, x, y, z, 0, 0, 0, 0);
 			} else if(world.getBlock(x, y - 1, z) == BLBlockRegistry.mud) {
 				if(rand.nextInt(2) == 0) {
 					TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y + 1.5, z, 0, 0, 0, 0);
