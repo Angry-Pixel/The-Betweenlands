@@ -65,7 +65,7 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants {
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        if(world.rand.nextInt(1500) == 0) {
+        if(world.rand.nextInt(100) == 0) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
         		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);

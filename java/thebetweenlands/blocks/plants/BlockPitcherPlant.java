@@ -43,7 +43,7 @@ public class BlockPitcherPlant extends DoubleHeightPlant {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		if(world.rand.nextInt(1500) == 0) {
+		if(world.rand.nextInt(60) == 0) {
 			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1, z, 0.0D, 0.0D, 0.0D, 0);
 		}
 	}

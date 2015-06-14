@@ -23,7 +23,6 @@ import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.event.render.TextureStitchHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.event.world.ThemHandler;
@@ -140,7 +139,6 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(TextureStitchHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
