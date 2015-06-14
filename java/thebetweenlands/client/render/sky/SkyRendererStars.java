@@ -48,7 +48,7 @@ public class SkyRendererStars extends IRenderHandler
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_FOG);
 		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
-		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd()*FogHandler.INSTANCE.getCurrentFogEnd()/30.0F);
+		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd()*FogHandler.INSTANCE.getCurrentFogEnd()/15.0F);
 		GL11.glColor3f(f1, f2, f3);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -284,10 +284,6 @@ public class SkyRendererStars extends IRenderHandler
 	}
 
 	private void renderSkyTexture(Minecraft mc) {
-		GL11.glEnable(GL11.GL_FOG);
-		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
-		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd()*FogHandler.INSTANCE.getCurrentFogEnd()/100.0F);
-
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
