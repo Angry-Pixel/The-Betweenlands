@@ -100,16 +100,24 @@ public class BlockBLGenericCrop extends BlockCrops {
 				return true;
 			}
 		}
-		if (stack != null && meta >= 9) {
+		if (stack != null && meta >= 8) {
+			 int metaDirt = world.getBlockMetadata(x, y -1 , z);
 			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.PLANT_TONIC.ordinal()) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
-					if (!world.isRemote)
+				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
+					if (!world.isRemote) {
 						world.playAuxSFX(2005, x, y, z, 0);
+						if(metaDirt == 7 || metaDirt == 8)
+							world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - 3, 3);
+					}
+					if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket)))
+						player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
+				}
 				return true;
 			}
 		}
 		return true;
 	}
+
 
 	@Override
 	@SideOnly(Side.CLIENT)

@@ -91,7 +91,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if(world.rand.nextInt(1) == 0) {
-			if(meta == 5 || meta == 4) 
+			if(meta == 4 || meta == 5) 
 				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
 			if(meta == 1)
 				world.setBlock(x, y, z, BLBlockRegistry.swampDirt, 0, 3);
