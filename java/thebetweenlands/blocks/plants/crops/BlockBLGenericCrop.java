@@ -90,7 +90,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
 		//TODO Temp Compost will end up being plant tonic
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack != null) {
+		if (stack != null && !(meta >= 8)) {
 			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
 				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
 					if (!world.isRemote)
