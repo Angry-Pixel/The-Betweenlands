@@ -128,7 +128,7 @@ public class ClientProxy extends CommonProxy {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		//Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderAngler());
@@ -148,7 +148,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, new RenderSiltCrab());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderSnailPoisonJet());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, new RenderLurker());
-		
+
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
@@ -162,7 +162,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.animator), new ItemAnimatorRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedwoodChest), new ItemWeedWoodChestRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.purifier), new ItemPurifierRenderer());
-		
+
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberLogRenderer());
@@ -175,14 +175,14 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockWalkwayRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberTapRenderer());
-		
+
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
-        AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
-        FMLCommonHandler.instance().bus().register(ambientHandler);
-        MinecraftForge.EVENT_BUS.register(ambientHandler);
-        FMLCommonHandler.instance().bus().register(new BLMusicHandler());
-        FMLCommonHandler.instance().bus().register(BrightnessHandler.INSTANCE);
+		AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
+		FMLCommonHandler.instance().bus().register(ambientHandler);
+		MinecraftForge.EVENT_BUS.register(ambientHandler);
+		FMLCommonHandler.instance().bus().register(new BLMusicHandler());
+		FMLCommonHandler.instance().bus().register(BrightnessHandler.INSTANCE);
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class ClientProxy extends CommonProxy {
 			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
 		}
-		
+
 		if( particleName.equals("steamPurifier") ) {
 			fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
 			fx.setRBGColorF(1F, 1F, 1F);
@@ -243,7 +243,7 @@ public class ClientProxy extends CommonProxy {
 		if( particleName.equals("portal") ) {
 			fx = new EntityPortalFX(world, x, y, z, vecX, vecY, vecZ, 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/portal.png"), 6);
 		}
-		
+
 		if(particleName.equals("moth")) {
 			if(world.rand.nextBoolean()) {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2);
@@ -251,32 +251,34 @@ public class ClientProxy extends CommonProxy {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth2.png"), 2);
 			}
 		}
-		
-		int fishParticle = world.rand.nextInt(3);
+
+		if(particleName.equals("fish")) {
+			int fishParticle = world.rand.nextInt(3);
 			if(fishParticle  == 0) {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish1.png"), 1);
 			} else if(fishParticle == 1) {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish2.png"), 1);
 			} else {
 				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish3.png"), 1);
+			}
 		}
-		
+
 		if(particleName.equals("fly")) {
 			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fly.png"), 2);
 		}
-		
+
 		if(particleName.equals("mosquito")) {
 			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/mosquito.png"), 2);
 		}
-		
+
 		if(particleName.equals("waterBug")) {
 			fx = new EntityBugFX(world, x, y, z, 400, 0.03F, 0.02F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/waterbug.png"), 2);
 		}
-		
+
 		if(particleName.equals("leaf")) {
 			fx = new EntityLeafFX(world, x, y, z, 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/leaf.png"), 5);
 		}
-		
+
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 	}
