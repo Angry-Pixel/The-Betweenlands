@@ -50,7 +50,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			int meta = world.getBlockMetadata(x, y, z);
 			ItemStack stack = player.getCurrentEquippedItem();
 
-			if (stack !=null && stack.getItem() instanceof SpadeBL) {
+			if (stack.getItem() instanceof SpadeBL) {
 				if(meta == 0) {
 					world.setBlockMetadataWithNotify(x, y, z, 3, 3);
 					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
@@ -59,7 +59,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				return true;
 			}
 			
-			if (stack !=null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
+			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
 				if(meta >= 1 && meta <= 3) {
 					world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
 					if (!world.isRemote)
