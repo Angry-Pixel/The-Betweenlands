@@ -39,13 +39,22 @@ public class ItemRubberBoots extends ItemArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if(world.isRemote) return;
+		if(world.isRemote) {
+			if(itemStack.stackTagCompound != null) {
+				int walkTicksLeft = itemStack.stackTagCompound.getInteger("walkTicksLeft");
+				if(world.getBlock((int)Math.floor(player.posX), (int)Math.floor(player.posY)-2, (int)Math.floor(player.posZ)) == BLBlockRegistry.swampWater) {
+					player.motionX *= 1.0D / 40.0D * walkTicksLeft;
+					player.motionZ *= 1.0D / 40.0D * walkTicksLeft;
+				}
+			}
+			return;
+		}
 		if(itemStack.stackTagCompound == null) {
 			itemStack.stackTagCompound = new NBTTagCompound(); 
 		}
 		int walkTicksLeft = itemStack.stackTagCompound.getInteger("walkTicksLeft");
-		Block blockBelowPlayer = world.getBlock((int)Math.floor(player.posX), (int)Math.floor(player.posY) - 1, (int)Math.floor(player.posZ));
-		boolean playerOnGround = player.onGround && !player.isInWater() && blockBelowPlayer != BLBlockRegistry.swampWater && blockBelowPlayer != BLBlockRegistry.mud;
+		Block blockBelowPlayer = world.getBlock((int)Math.floor(player.posX), (int)Math.floor(player.posY), (int)Math.floor(player.posZ));
+		boolean playerOnGround = player.onGround && !player.isInWater() && blockBelowPlayer != BLBlockRegistry.swampWater;
 		if(walkTicksLeft == 0 || playerOnGround) {
 			itemStack.stackTagCompound.setInteger("walkTicksLeft", MAX_WALK_TICKS);
 		} else {
@@ -64,5 +73,15 @@ public class ItemRubberBoots extends ItemArmor {
 			}
 		}
 		return false;
+	}
+
+	public static double getWalkPercentage(EntityPlayer player) {
+		ItemStack boots = player.inventory.armorInventory[0];
+		if(boots != null && boots.getItem() instanceof ItemRubberBoots) {
+			if(boots.stackTagCompound != null) {
+				return (double)boots.stackTagCompound.getInteger("walkTicksLeft") / (double)MAX_WALK_TICKS;
+			}
+		}
+		return 0.0D;
 	}
 }
