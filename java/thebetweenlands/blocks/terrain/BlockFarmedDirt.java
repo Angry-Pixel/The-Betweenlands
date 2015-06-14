@@ -44,7 +44,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
-			return true;
+			return false;
 
 			int meta = world.getBlockMetadata(x, y, z);
 			ItemStack stack = player.getCurrentEquippedItem();
@@ -68,7 +68,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				}
 				return true;
 			}
-		return true;
+		return false;
 	}
 
 	@Override
