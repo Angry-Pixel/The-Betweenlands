@@ -45,6 +45,7 @@ import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
 import thebetweenlands.blocks.plants.DoubleHeightPlant;
+import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
 import thebetweenlands.blocks.stalactite.BlockStalactite;
@@ -75,6 +76,7 @@ import thebetweenlands.blocks.tree.BlockBLSapling;
 import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -193,6 +195,7 @@ public class BLBlockRegistry
 	
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
+	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush", BLItemRegistry.middleFruit, BLItemRegistry.middleFruitSeeds);
 	
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");

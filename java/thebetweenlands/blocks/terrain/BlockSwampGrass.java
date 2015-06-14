@@ -39,9 +39,6 @@ public class BlockSwampGrass
 		if (world.isRemote)
 			return true;
 
-			if (player.isSneaking())
-				return false;
-
 			if (player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
 				Block farmedDirt = BLBlockRegistry.farmedDirt;
 				world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 2, 3);
