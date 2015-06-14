@@ -37,7 +37,9 @@ extends Block
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if(!(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity))) {
+		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && 
+				((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		if(!canWalk) {
 			entity.motionX *= 0.85D;
 			entity.motionY *= 0.85D;
 			entity.motionZ *= 0.85D;

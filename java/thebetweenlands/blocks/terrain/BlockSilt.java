@@ -31,7 +31,9 @@ public class BlockSilt
 
 	@Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if(!(entity instanceof EntitySiltCrab) && !(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity))) {
+		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && 
+				((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		if(!(entity instanceof EntitySiltCrab) && !canWalk) {
 			entity.motionX *= 0.4D;
 			entity.motionZ *= 0.4D;
 		}

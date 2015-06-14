@@ -21,6 +21,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
+import thebetweenlands.items.ItemImprovedRubberBoots;
 import thebetweenlands.items.ItemRubberBoots;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
@@ -440,7 +441,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 				bbList.add(blockBB);
 			}
 		} else {
-			if(entity instanceof EntityPlayer && ItemRubberBoots.checkPlayerEffect((EntityPlayer)entity)) {
+			if(entity instanceof EntityPlayer && ItemImprovedRubberBoots.checkPlayerEffect((EntityPlayer)entity)) {
 				AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+((float)this.getQuantaValue(world, x, y, z)/(float)this.quantaPerBlock)*0.8F, z+1);
 				if (blockBB != null && bb.intersectsWith(blockBB)) {
 					bbList.add(blockBB);
