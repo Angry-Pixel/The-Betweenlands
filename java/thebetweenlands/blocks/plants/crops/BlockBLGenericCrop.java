@@ -86,11 +86,8 @@ public class BlockBLGenericCrop extends BlockCrops {
 	
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
-		//TODO Temp Compost will end up being plant tonic
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(meta >= 8)) {
 			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED.ordinal()) {
@@ -100,24 +97,39 @@ public class BlockBLGenericCrop extends BlockCrops {
 				return true;
 			}
 		}
-		if (stack != null && meta >= 8) {
-			 int metaDirt = world.getBlockMetadata(x, y -1 , z);
-			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.PLANT_TONIC.ordinal()) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
-					if (!world.isRemote) {
-						world.playAuxSFX(2005, x, y, z, 0);
-						if(metaDirt == 7 || metaDirt == 8)
-							world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - 3, 3);
-					}
-					if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket)))
-						player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
-				}
-				return true;
+		if (stack != null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.PLANT_TONIC.ordinal()) {
+			int metaDirt = world.getBlockMetadata(x, y - 1 , z);
+			if (!world.isRemote) {
+				if (meta >= 8)
+					world.setBlockMetadataWithNotify(x, y, z, meta - 1 , 3);
+				world.playAuxSFX(2005, x, y, z, 0);
+				if(metaDirt == 7 || metaDirt == 8)
+					world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - 3, 3);
 			}
+			if(!player.capabilities.isCreativeMode) {
+				stack.stackSize--;
+				if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket)))
+					player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
+			}
+			return true;
 		}
 		return true;
 	}
 
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		super.updateTick(world, x, y, z, rand);
+		int metaDirt = world.getBlockMetadata(x, y - 1, z);
+		if (world.getBlockLightValue(x, y + 1, z) >= 9) {
+			int meta = world.getBlockMetadata(x, y, z);
+			if (meta < 7 && metaDirt <= 6) {
+				if (rand.nextInt(25) == 0) {
+					++meta;
+					world.setBlockMetadataWithNotify(x, y, z, meta, 3);
+				}
+			}
+		}
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
