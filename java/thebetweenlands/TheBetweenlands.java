@@ -14,6 +14,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
@@ -152,7 +153,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
-		
+		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
+
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);

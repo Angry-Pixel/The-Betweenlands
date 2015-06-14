@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -89,25 +88,24 @@ public class BlockBLGenericCrop extends BlockCrops {
 			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
+		//TODO Temp Compost will end up being plant tonic
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack != null && !(stack.getItem() == Items.dye)) {
-			//TODO Temp Bonemeal will end up being plant tonic
+		if (stack != null) {
 			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
+				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
 					if (!world.isRemote)
 						world.playAuxSFX(2005, x, y, z, 0);
-					return true;
-				}
+				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
     public void updateTick(World world, int x, int y, int z, Random rand) {
         super.updateTick(world, x, y, z, rand);
 
-        if (world.getBlockLightValue(x, y + 1, z) >= 7) {
+        if (world.getBlockLightValue(x, y + 1, z) >= 9) {
             int meta = world.getBlockMetadata(x, y, z);
 
             if (meta < 7) {

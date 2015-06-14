@@ -29,8 +29,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt", "fertDirtDecayed", "fertGrassDecayed" };
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
-	private IIcon sideIcon;
-	
+	private IIcon sideIconDirt, sideIconGrass;
+
 	public BlockFarmedDirt() {
 		super(Material.ground);
 		setHardness(0.5F);
@@ -95,7 +95,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public void registerBlockIcons(IIconRegister reg) {
-		sideIcon = reg.registerIcon("thebetweenlands:swampDirt");
+		sideIconDirt = reg.registerIcon("thebetweenlands:swampDirt");
+		sideIconGrass = reg.registerIcon("thebetweenlands:swampGrassSide");
 		icons = new IIcon[iconPaths.length];
 
 		int i = 0;
@@ -108,7 +109,25 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		if (meta < 0 || meta >= icons.length)
 			return null;
 		
-		return meta == 0 ? icons[meta] : side == 1 && meta != 0 ? icons[meta] : sideIcon;
+		if(meta == 3 ||meta == 6)
+			if (side == 1)
+				return icons[meta];
+			else
+				return icons[0];
+
+		if(meta == 1 || meta == 4 || meta == 7)
+			if (side == 1)
+				return icons[meta];
+			else
+				return sideIconDirt;
+
+		if(meta == 2 || meta == 5 || meta == 8)
+			if (side == 1)
+				return icons[meta];
+			else
+				return sideIconGrass;
+
+		return icons[meta];
 	}
 
 	@Override

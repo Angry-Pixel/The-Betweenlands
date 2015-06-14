@@ -23,7 +23,8 @@ public class ItemBLGenericSeed extends ItemSeedFood implements IPlantable {
 		if (side != 1)
 			return false;
 		else if (player.canPlayerEdit(x, y, z, side, stack) && player.canPlayerEdit(x, y + 1, z, side, stack)) {
-			if (world.getBlock(x, y, z) == soilId && world.isAirBlock(x, y + 1, z)) {
+			int meta = world.getBlockMetadata(x, y, z);
+			if (world.getBlock(x, y, z) == soilId && meta >= 4 && meta <= 6 && world.isAirBlock(x, y + 1, z)) {
 				world.setBlock(x, y + 1, z, cropId);
 				--stack.stackSize;
 				return true;
