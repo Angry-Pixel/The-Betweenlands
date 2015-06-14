@@ -124,7 +124,7 @@ public class BLBlockRegistry
 	public static final Block tarFluid = new BlockTarFluid();
 	public static final Block puddle = new BlockPuddle();
 	public static final Block farmedDirt = new BlockFarmedDirt();
-	
+
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
 	public static final Block aquaMiddleGemOre = new BlockMiddleGemOre("aquaMiddleGemOre", null);
@@ -141,14 +141,14 @@ public class BLBlockRegistry
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
 	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree");
 	public static final Block saplingPurpleRain = new BlockBLSapling("saplingPurpleRain");
-	
+
 	public static final Block weedwoodLeaves = new BlockBLLeaves("weedwoodLeaves");
 	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves");
 	public static final Block rubberTreeLeaves = new BlockBLLeaves("rubberTreeLeaves");
 	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
 	public static final Block purpleRainLeavesLight = new BlockBLLeaves("purpleRainLeavesLight");
 	public static final Block purpleRainLeavesDark = new BlockBLLeaves("purpleRainLeavesDark");
-	
+
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog");
 	public static final Block weedwood = new BlockBLLog("weedwood");
 	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark");
@@ -180,7 +180,11 @@ public class BLBlockRegistry
 		@SideOnly(Side.CLIENT)
 		public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 			if(world.rand.nextInt(15) == 0) {
-				TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+				if(world.rand.nextInt(6) != 0) {
+					TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+				} else {
+					TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+				}
 			}
 		}
 	}; 
@@ -189,7 +193,7 @@ public class BLBlockRegistry
 	public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F); 
 	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
 	public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
-	
+
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
@@ -213,11 +217,11 @@ public class BLBlockRegistry
 	public static final BlockThorns thorns = new BlockThorns();
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
-	
+
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
 	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush");
-	
+
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
 	public static final Block swampTallGrass = new BlockBLSmallPlants("swampTallGrass");
@@ -242,7 +246,7 @@ public class BLBlockRegistry
 	public static final Block purpleHanger = new BlockBLHanger("purpleHanger");
 	public static final Block purpleHangerFlowered = new BlockBLHanger("purpleHangerFlowered");
 	public static final Block treeFungus = new BlockTreeFungus();
-	
+
 	// DECORATIONS AND UTILITIES
 	public static final Block weedwoodCraftingTable = new BlockBLWorkbench();
 	public static final Block weedwoodChest = new BlockWeedWoodChest();
@@ -287,9 +291,9 @@ public class BLBlockRegistry
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block deepWaterCoralBlock = new BlockBLGenericDeco("deepWaterCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final BlockRubberTap rubberTap = new BlockRubberTap();
-	
+
 	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");;
-	
+
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
 
@@ -317,7 +321,7 @@ public class BLBlockRegistry
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
-	
+
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
 
@@ -345,7 +349,7 @@ public class BLBlockRegistry
 	public static final Block solidTarSlabDouble = new BlockBLSlabStone(true, Material.rock, "solidTar", solidTarSlab);
 	public static final Block templeBrickSlab = new BlockBLSlabStone(false, Material.rock, "templeBrick", null);
 	public static final Block templeBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "templeBrick", templeBrickSlab);
-	
+
 	public static void registerSlabs() {
 		GameRegistry.registerBlock(weedwoodPlankSlab, ItemBlockSlab.class, weedwoodPlankSlab.getUnlocalizedName(), weedwoodPlankSlab, weedwoodPlankSlabDouble, false);
 		GameRegistry.registerBlock(weedwoodPlankSlabDouble, ItemBlockSlab.class, weedwoodPlankSlabDouble.getUnlocalizedName() + "Double", weedwoodPlankSlab, weedwoodPlankSlabDouble, true);
@@ -426,7 +430,7 @@ public class BLBlockRegistry
 	}
 
 	public static interface ISubBlocksBlock
-    {
+	{
 		Class<? extends ItemBlock> getItemBlockClass();
 	}
 }
