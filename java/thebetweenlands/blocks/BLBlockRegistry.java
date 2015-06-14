@@ -179,7 +179,7 @@ public class BLBlockRegistry
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-			if(world.rand.nextInt(120) == 0) {
+			if(world.rand.nextInt(15) == 0) {
 				TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
 			}
 		}
