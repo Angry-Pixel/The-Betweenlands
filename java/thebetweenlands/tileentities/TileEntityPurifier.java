@@ -126,7 +126,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			inventory[2] = null;
 		}
 		client_isPurifying = packet.func_148857_g().getBoolean("isPurifying");
-		System.out.println("packettest: " + client_isPurifying);
 	}
 
 	public int getPurifyingProgress() {
