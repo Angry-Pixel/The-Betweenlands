@@ -93,7 +93,15 @@ public class BlockBLGenericCrop extends BlockCrops {
 		//TODO Temp Compost will end up being plant tonic
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(meta >= 8)) {
-			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
+			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED.ordinal()) {
+				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
+					if (!world.isRemote)
+						world.playAuxSFX(2005, x, y, z, 0);
+				return true;
+			}
+		}
+		if (stack != null && meta >= 9) {
+			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.PLANT_TONIC.ordinal()) {
 				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
 					if (!world.isRemote)
 						world.playAuxSFX(2005, x, y, z, 0);
