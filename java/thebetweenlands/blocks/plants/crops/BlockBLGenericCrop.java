@@ -99,7 +99,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(meta >= 8)) {
-			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED.ordinal()) {
+			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED_DUST.ordinal()) {
 				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
 					if (!world.isRemote)
 						world.playAuxSFX(2005, x, y, z, 0);

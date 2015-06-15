@@ -360,6 +360,7 @@ item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
 item.thebetweenlands.plantTonic.name=Plant Tonic
 item.thebetweenlands.rubber.name=Solid Rubber
 item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
+item.thebetweenlands.driedSwampReedDust.name=Dried Swamp Reed Dust
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
