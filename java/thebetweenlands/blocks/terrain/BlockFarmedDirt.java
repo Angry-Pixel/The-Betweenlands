@@ -45,31 +45,48 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return false;
-
 			int meta = world.getBlockMetadata(x, y, z);
 			ItemStack stack = player.getCurrentEquippedItem();
-
 			if (stack !=null && stack.getItem() instanceof SpadeBL) {
-				if(meta == 0) {
-					world.setBlockMetadataWithNotify(x, y, z, 3, 3);
-					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
-					player.getCurrentEquippedItem().damageItem(1, player);
+				if (!world.isRemote) {
+					if(meta == 0) {
+						world.setBlockMetadataWithNotify(x, y, z, 3, 3);
+						world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+						player.getCurrentEquippedItem().damageItem(1, player);
+					}
 				}
 				return true;
-			}
-			
-			if (stack !=null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
-				if(meta >= 1 && meta <= 3) {
+			}	
+		if (stack != null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
+			if (!world.isRemote) {
+				if (meta == 1 || meta == 2) {
 					world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
-					if (!world.isRemote)
-						world.playAuxSFX(2005, x, y + 1, z, 0);
-					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+					world.playAuxSFX(2005, x, y + 1, z, 0);
+					world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
 					player.getCurrentEquippedItem().stackSize--;
 				}
-				return true;
+				if (meta == 3) {
+					world.setBlockMetadataWithNotify(x, y, z, 10, 3);
+					System.out.println("Special meta is: " + world.getBlockMetadata(x, y, z));
+					world.playAuxSFX(2005, x, y + 1, z, 0);
+					world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+					player.getCurrentEquippedItem().stackSize--;
+				}
 			}
+			return true;
+		}
+		if (stack != null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.PLANT_TONIC.ordinal()) {
+			if (!world.isRemote) {
+				if (meta == 7 || meta == 8)
+					world.setBlockMetadataWithNotify(x, y, z, meta - 3, 3);
+			}
+			if (!player.capabilities.isCreativeMode) {
+				stack.stackSize--;
+				if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket)))
+					player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
+			}
+			return true;
+		}
 		return false;
 	}
 
@@ -90,9 +107,13 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if(world.rand.nextInt(1) == 0) {
-			if(meta == 4 || meta == 5) 
+		//Decay rate of composted blocks
+		if(world.rand.nextInt(10) == 0)
+			if(meta == 4 || meta == 5)
 				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+		
+		//Dug dirt reverts to un-dug
+		if(world.rand.nextInt(10) == 0) {
 			if(meta == 1)
 				world.setBlock(x, y, z, BLBlockRegistry.swampDirt, 0, 3);
 			if(meta == 2)
@@ -100,6 +121,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			if(meta == 3)
 				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
 		}
+		
+		//Update decay to plants above
 		if(meta == 7 || meta == 8)
 			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == 7)
 				world.setBlockMetadataWithNotify(x, y + 1, z, 8, 3);
@@ -118,12 +141,18 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		if (meta < 0 || meta >= icons.length)
+		if (meta < 0 || meta >= icons.length + 2)
 			return null;
 		
-		if(meta == 3 || meta == 6 || meta == 9 || meta == 10)
+		if(meta == 3 || meta == 6)
 			if (side == 1)
 				return icons[meta];
+			else
+				return icons[0];
+		
+		if(meta == 9 || meta == 10)
+			if (side == 1)
+				return icons[6];
 			else
 				return icons[0];
 

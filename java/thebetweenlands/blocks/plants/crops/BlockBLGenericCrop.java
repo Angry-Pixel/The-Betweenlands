@@ -40,13 +40,17 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
-
-		if (metadata >= 7) {
-			for (int i = 0; i < 1 + fortune; ++i)
+		if (metadata == 7) {
+			for (int i = 0; i < 1 + fortune; ++i) {
 				if (world.rand.nextInt(15) <= metadata)
 					ret.add(getSeedDrops());
-			ret.add(getCropDrops());
+				ret.add(getCropDrops());
+			}
 		}
+		if (metadata < 7)
+			ret.add(getSeedDrops());
+		if (metadata > 7)
+			ret.add(getSeedDrops());
 		return ret;
 	}
 	
@@ -73,10 +77,15 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
+    public Item getItemDropped(int meta, Random rand, int amount) { //disabled for custom BL bits
+        return null;
+    }
+
+	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		Block soil = world.getBlock(x, y - 1, z);
 		int meta = world.getBlockMetadata(x, y -1, z);
-		return soil != null && soil instanceof BlockFarmedDirt && meta >= 4 && meta <= 8;
+		return soil != null && soil instanceof BlockFarmedDirt && meta >= 4 && meta <= 10;
 	}
 
 	@Override
@@ -114,6 +123,28 @@ public class BlockBLGenericCrop extends BlockCrops {
 			return true;
 		}
 		return true;
+	}
+	
+	@Override
+	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
+		int meta = world.getBlockMetadata(x, y, z);
+		int metaDirt = world.getBlockMetadata(x, y - 1, z);
+		if (meta >= 7) {
+			if (metaDirt == 10)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 9, 3);
+			if (metaDirt == 9)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 6, 3);
+			if (metaDirt == 8)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 2, 3);
+			if (metaDirt == 7)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
+			if (metaDirt == 6)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 3, 3);
+			if (metaDirt == 5)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 2, 3);
+			if (metaDirt == 4)
+				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
+		}
 	}
 
 	@Override
