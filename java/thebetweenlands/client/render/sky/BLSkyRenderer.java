@@ -15,7 +15,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 
 import java.util.Random;
 
-public class SkyRendererStars extends IRenderHandler
+public class BLSkyRenderer extends IRenderHandler
 {
 	private int starGLCallList;
 	private int glSkyList;
@@ -174,7 +174,7 @@ public class SkyRendererStars extends IRenderHandler
 		renderSkyTexture(mc);
 	}
 	
-	public SkyRendererStars()
+	public BLSkyRenderer()
 	{
 		this.starGLCallList = GLAllocation.generateDisplayLists(3);
 		GL11.glPushMatrix();

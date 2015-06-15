@@ -11,7 +11,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.render.sky.SkyRendererStars;
+import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -30,7 +30,7 @@ public class WorldProviderBetweenlands
 extends WorldProvider
 {
 	@SideOnly(Side.CLIENT)
-	private SkyRendererStars skyRenderer;
+	private BLSkyRenderer skyRenderer;
 
 	public static final int LAYER_HEIGHT = 80;
 
@@ -202,7 +202,7 @@ extends WorldProvider
 	@Override
 	public IRenderHandler getSkyRenderer()
 	{
-		if (skyRenderer == null) skyRenderer = new SkyRendererStars();
+		if (skyRenderer == null) skyRenderer = new BLSkyRenderer();
 		return skyRenderer;
 	}
 }
