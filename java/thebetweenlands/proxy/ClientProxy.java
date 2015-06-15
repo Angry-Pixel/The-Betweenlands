@@ -246,33 +246,33 @@ public class ClientProxy extends CommonProxy {
 
 		if(particleName.equals("moth")) {
 			if(world.rand.nextBoolean()) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2);
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2);
 			} else {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/moth2.png"), 2);
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/moth2.png"), 2);
 			}
 		}
 
 		if(particleName.equals("fish")) {
 			int fishParticle = world.rand.nextInt(3);
 			if(fishParticle  == 0) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish1.png"), 1);
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish1.png"), 1);
 			} else if(fishParticle == 1) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish2.png"), 1);
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish2.png"), 1);
 			} else {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fish3.png"), 1);
+				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish3.png"), 1);
 			}
 		}
 
 		if(particleName.equals("fly")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/fly.png"), 2);
+			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/fly.png"), 2);
 		}
 
 		if(particleName.equals("mosquito")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/mosquito.png"), 2);
+			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/mosquito.png"), 2);
 		}
 
 		if(particleName.equals("waterBug")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.03F, 0.02F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/waterbug.png"), 2);
+			fx = new EntityBugFX(world, x, y, z, 400, 0.03F, 0.02F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/waterbug.png"), 2);
 		}
 
 		if(particleName.equals("leaf")) {

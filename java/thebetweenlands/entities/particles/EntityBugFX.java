@@ -2,12 +2,15 @@ package thebetweenlands.entities.particles;
 
 import javax.vecmath.Vector3d;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
+
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.render.FogHandler;
 
 public class EntityBugFX extends EntityFX {
@@ -19,9 +22,10 @@ public class EntityBugFX extends EntityFX {
 	private float speed;
 	private double relativeTextureHeight;
 	private int currentTexture = 0;
+	private boolean underwater;
 	private double tx, ty, tz;
 
-	public EntityBugFX(World world, double x, double y, double z, int maxAge, float speed, float jitter, float scale, int color, ResourceLocation texture, int textures) {
+	public EntityBugFX(World world, double x, double y, double z, int maxAge, float speed, float jitter, float scale, int color, boolean underwater, ResourceLocation texture, int textures) {
 		super(world, x, y, z, 0, 0, 0);
 		this.posX = this.prevPosX = this.tx = x;
 		this.posY = this.prevPosY = this.ty = y;
@@ -82,6 +86,12 @@ public class EntityBugFX extends EntityFX {
 			this.tx = this.posX + this.worldObj.rand.nextFloat()*2.0F-1.0F;
 			this.ty = this.posY + this.worldObj.rand.nextFloat()*2.0F-1.0F;
 			this.tz = this.posZ + this.worldObj.rand.nextFloat()*2.0F-1.0F;
+			Block targetBlock = this.worldObj.getBlock((int)Math.floor(this.tx), (int)Math.floor(this.ty), (int)Math.floor(this.tz));
+			if(this.underwater == (targetBlock instanceof BlockSwampWater == false)) {
+				this.tx = this.posX;
+				this.ty = this.posY;
+				this.tz = this.posZ;
+			}
 		} else {
 			this.moveEntity(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
 		}
