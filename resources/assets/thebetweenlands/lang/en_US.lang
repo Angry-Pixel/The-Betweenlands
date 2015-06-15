@@ -2,6 +2,8 @@
 tile.thebetweenlands.betweenstone.name=Betweenstone
 tile.thebetweenlands.genericStone_0.name=Corrupt Betweenstone
 tile.thebetweenlands.genericStone_1.name=Cragrock
+tile.thebetweenlands.genericStone_2.name=Mossy Cragrock Top
+tile.thebetweenlands.genericStone_3.name=Mossy Cragrock Bottom
 tile.thebetweenlands.bedrock.name=Betweenlands Bedrock
 tile.thebetweenlands.swampDirt.name=Swamp Dirt
 tile.thebetweenlands.swampGrass.name=Swamp Grass
@@ -40,6 +42,18 @@ tile.thebetweenlands.portalBark.name=Portal Tree Bark
 tile.thebetweenlands.rottenLog.name=Rotten Log
 tile.thebetweenlands.rottenWeedwoodBark.name=Rotten Weedwood Bark
 tile.thebetweenlands.tarFluid.name=Liquid Tar
+tile.thebetweenlands.puddle.name=Puddle
+tile.thebetweenlands.smoothCragrock.name=Smooth Cragrock
+
+tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
+tile.thebetweenlands.farmedDirt_2.name=Dug Swamp Dirt
+tile.thebetweenlands.farmedDirt_3.name=Dug Swamp Grass
+tile.thebetweenlands.farmedDirt_4.name=Dug Purified Swamp Dirt
+tile.thebetweenlands.farmedDirt_5.name=Composted Swamp Dirt
+tile.thebetweenlands.farmedDirt_6.name=Composted Swamp Grass
+tile.thebetweenlands.farmedDirt_7.name=Composted Purified Swamp Dirt
+tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Dirt
+tile.thebetweenlands.farmedDirt_9.name=Decayed Composted Swamp Grass
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -343,6 +357,9 @@ item.thebetweenlands.octineArrow.name=Octine Arrow
 item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
 item.thebetweenlands.swampKelp.name=Swamp Kelp
 item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
+item.thebetweenlands.plantTonic.name=Plant Tonic
+item.thebetweenlands.rubber.name=Solid Rubber
+item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid

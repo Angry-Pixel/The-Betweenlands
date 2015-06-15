@@ -87,6 +87,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL, 4), "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBucket), " X ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks),'X', ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED_ROPE));
 		
+		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.PLANT_TONIC), new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.sapBall));
+		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
 		
@@ -95,7 +97,15 @@ public class RecipeHandler {
 		//Deco Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.MUD_BRICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.smoothBetweenstone));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.genericStone,1,1));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBricks, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.betweenstone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledBetweenstone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.betweenstoneBrickSlab));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.smoothCragrock));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrick, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.genericStone,1,1));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.carvedCrag, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.cragrockBrickSlab));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.polishedLimestone), "xx", "xx", 'x', BLBlockRegistry.limestone);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBricks, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.limestone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledLimestone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.limestoneBrickSlab));		
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.sulphurBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR, 9), new ItemStack(BLBlockRegistry.sulphurBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octineBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
@@ -172,7 +182,7 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(new ItemStack(BLItemRegistry.frogLegsRaw), new ItemStack(BLItemRegistry.frogLegsCooked), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLItemRegistry.snailFleshRaw), new ItemStack(BLItemRegistry.snailFleshCooked), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.betweenstone), new ItemStack(BLBlockRegistry.smoothBetweenstone), 0F);
-		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone,1,1), new ItemStack(BLBlockRegistry.cragrockBrick), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone,1,1), new ItemStack(BLBlockRegistry.smoothCragrock), 0F);
 		GameRegistry.addSmelting(ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL), new ItemStack(BLItemRegistry.sludgeJello), 0F);
 		GameRegistry.addSmelting(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0), ItemMaterialsBL.createStack(EnumMaterialsBL.RUBBER_BALL), 0F);
 	}
