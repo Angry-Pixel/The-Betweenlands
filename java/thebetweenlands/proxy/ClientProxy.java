@@ -112,6 +112,7 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
+import thebetweenlands.utils.ToolDecayImage;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -212,6 +213,16 @@ public class ClientProxy extends CommonProxy {
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
 		}
 	}
+
+	@Override
+    public void postInit() {
+		try {
+			ToolDecayImage.createTextureAfterObjects();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 
 	@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {

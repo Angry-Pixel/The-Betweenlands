@@ -1,7 +1,9 @@
 package thebetweenlands;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -13,19 +15,13 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
-import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
-import thebetweenlands.event.render.FireflyHandler;
-import thebetweenlands.event.render.FogHandler;
-import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
-import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.base.SidedPacketHandler;
@@ -52,6 +48,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -74,11 +71,13 @@ public class TheBetweenlands
 	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer(); 
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
 	public static CommonPacketProxy packetProxy;
+    public static File dir;
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
+        dir = event.getModConfigurationDirectory();
 
 		//BL Registry
 		BLFluidRegistry.init();
@@ -151,6 +150,12 @@ public class TheBetweenlands
 		TeleporterHandler.init();
 		// Add the other door recipes back
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
+	}
+
+	@EventHandler
+	@SuppressWarnings("unchecked")
+	public void postInit(FMLPostInitializationEvent event) {
+		proxy.postInit();
 	}
 	
 	@EventHandler
