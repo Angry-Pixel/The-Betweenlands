@@ -5,9 +5,9 @@ import io.netty.buffer.ByteBuf;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.base.AbstractMessage;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
@@ -36,8 +36,8 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 			eventName = new String(strBytes, "UTF-8");
 			this.eventName = eventName;
 			this.active = buffer.readBoolean();
-			World world = Minecraft.getMinecraft().theWorld;
-			if(world.provider instanceof WorldProviderBetweenlands) {
+			World world = TheBetweenlands.proxy.getClientWorld();
+			if(world != null && world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 				EnvironmentEvent eevent = eeRegistry.forName(this.eventName);

@@ -136,27 +136,16 @@ public class TheBetweenlands
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
-
-		if (ConfigHandler.DEBUG) {
-			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
-			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
-		}
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

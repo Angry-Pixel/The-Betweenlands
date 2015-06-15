@@ -1,5 +1,6 @@
 package thebetweenlands.proxy;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
@@ -168,20 +169,18 @@ public class CommonProxy
     public EntityPlayer getClientPlayer() {
         return null;
     }
+    
+	public World getClientWorld() {
+		return null;
+	}
 
-    public void corruptPlayerSkin(EntityPlayer entityPlayer, int level) {
+    public void corruptPlayerSkin(EntityPlayer entityPlayer, int level) { }
 
-    }
+    public void uncorruptPlayerSkin(EntityPlayer entityPlayer) { }
 
-    public void uncorruptPlayerSkin(EntityPlayer entityPlayer) {
+    public void updateWispParticles(TileEntityWisp te) { }
 
-    }
-
-    public void updateWispParticles(TileEntityWisp te) {
-
-    }
-
-    public void spawnThem() {
-
-    }
+    public void spawnThem() { }
+    
+    public void playPortalSounds(Entity entity, int timer) { }
 }

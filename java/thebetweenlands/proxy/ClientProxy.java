@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityFlameFX;
 import net.minecraft.client.particle.EntitySmokeFX;
@@ -17,6 +18,7 @@ import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +31,17 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.*;
+import thebetweenlands.client.render.block.BlockDoorRenderer;
+import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockModelPlantRenderer;
+import thebetweenlands.client.render.block.BlockRootRenderer;
+import thebetweenlands.client.render.block.BlockRubberLogRenderer;
+import thebetweenlands.client.render.block.BlockRubberTapRenderer;
+import thebetweenlands.client.render.block.BlockStalactiteRenderer;
+import thebetweenlands.client.render.block.BlockSwampReedRenderer;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
+import thebetweenlands.client.render.block.BlockWalkwayRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -84,8 +96,13 @@ import thebetweenlands.entities.particles.EntityLeafFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
+import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.render.BrightnessHandler;
+import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.ShaderHandler;
+import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.network.handlers.ClientPacketHandler;
@@ -183,6 +200,17 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ambientHandler);
 		FMLCommonHandler.instance().bus().register(new BLMusicHandler());
 		FMLCommonHandler.instance().bus().register(BrightnessHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
+
+		if (ConfigHandler.DEBUG) {
+			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
+			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
+		}
 	}
 
 	@Override
@@ -281,6 +309,11 @@ public class ClientProxy extends CommonProxy {
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+	}
+
+	@Override
+	public World getClientWorld() {
+		return Minecraft.getMinecraft().theWorld;
 	}
 
 	@Override
@@ -406,6 +439,20 @@ public class ClientProxy extends CommonProxy {
 				double sy = Minecraft.getMinecraft().theWorld.getHeightValue((int)sx, (int)sz) + 1.0f + Minecraft.getMinecraft().theWorld.rand.nextFloat() * 2.5f;
 				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityThemFX(
 						Minecraft.getMinecraft().theWorld, sx, sy, sz));
+			}
+		}
+	}
+
+	@Override
+	public void playPortalSounds(Entity entity, int timer) { 
+		if(entity instanceof EntityPlayerSP){
+			EntityPlayerSP player = (EntityPlayerSP)entity;
+			if(timer < 120) {
+				player.closeScreen();
+				if (timer == 119)
+					player.playSound("thebetweenlands:portalTrigger", 1.0F, 0.8F);
+				if(timer == 2)
+					player.playSound("thebetweenlands:portalTravel", 1.25f, 0.8f);
 			}
 		}
 	}

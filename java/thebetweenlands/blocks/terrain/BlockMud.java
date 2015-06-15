@@ -31,16 +31,21 @@ public class BlockMud
 	
 	@Override
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List aabblist, Entity entity) {
-        AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
+		AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
         boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
         if (axisalignedbb1 != null && aabb.intersectsWith(axisalignedbb1) && (entity instanceof IEntityBL || canWalk)) {
-            aabblist.add(axisalignedbb1);
+            if(!canWalk) {
+            	aabblist.add(axisalignedbb1);
+            } else {
+            	if(world.isRemote) aabblist.add(AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+1-0.125, z+1));
+            }
         }
     }
 	
 	@Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (!(entity instanceof EntityAngler) || !(entity instanceof EntitySiltCrab) || !(entity instanceof EntityLurker)) {
+		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		if (!(entity instanceof EntityAngler) && !(entity instanceof EntitySiltCrab) && !(entity instanceof EntityLurker) && !canWalk) {
 			entity.motionX *= 0.2D;
 			entity.motionY *= 0.2D;
 			entity.motionZ *= 0.2D;
