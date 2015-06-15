@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemImprovedRubberBoots extends ItemRubberBoots {
-	private static final int MAX_WALK_TICKS = 40;
+	private static final int MAX_WALK_TICKS = 20;
 
 	public ItemImprovedRubberBoots() {
 		super();
@@ -43,8 +43,8 @@ public class ItemImprovedRubberBoots extends ItemRubberBoots {
 			if(itemStack.stackTagCompound != null) {
 				int walkTicksLeft = itemStack.stackTagCompound.getInteger("walkTicksLeft");
 				if(player.onGround && world.getBlock((int)Math.floor(player.posX), (int)Math.floor(player.posY)-2, (int)Math.floor(player.posZ)) == BLBlockRegistry.swampWater) {
-					player.motionX *= 1.0D / 40.0D * walkTicksLeft;
-					player.motionZ *= 1.0D / 40.0D * walkTicksLeft;
+					player.motionX *= 1.0D / MAX_WALK_TICKS * walkTicksLeft;
+					player.motionZ *= 1.0D / MAX_WALK_TICKS * walkTicksLeft;
 				}
 			}
 			return;
