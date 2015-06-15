@@ -29,6 +29,7 @@ public class BlockBLWorkbench extends Block {
     	super(Material.wood);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedwoodCraftingTable");
+		setHardness(2.5F);
 		setBlockTextureName("thebetweenlands:weedwoodCraftingTable");
     }
 

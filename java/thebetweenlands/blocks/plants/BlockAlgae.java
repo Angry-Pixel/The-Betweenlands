@@ -1,10 +1,13 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -61,5 +64,10 @@ public class BlockAlgae extends BlockBush {
     		return false;
     	}
         return super.shouldSideBeRendered(blockAccess, x, y, z, side);
+    }
+    
+    @Override
+    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+        return null;
     }
 }

@@ -23,6 +23,8 @@ public class BlockBlubCappedMushroomStalk extends Block {
 
     public BlockBlubCappedMushroomStalk() {
         super(Material.wood);
+		setStepSound(Block.soundTypeCloth);
+		setHardness(0.2F);
         setBlockName("thebetweenlands.hugeMushroomStalk");
         setCreativeTab(ModCreativeTabs.plants);
         setLightLevel(1.0F);

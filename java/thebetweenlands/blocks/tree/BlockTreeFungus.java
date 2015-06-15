@@ -17,10 +17,10 @@ public class BlockTreeFungus extends Block {
 	private IIcon sideIcon;
 
 	public BlockTreeFungus() {
-		super(Material.wood);
+        super(Material.wood);
+		setStepSound(Block.soundTypeCloth);
 		setHardness(0.2F);
 		setCreativeTab(ModCreativeTabs.plants);
-		setStepSound(Block.soundTypeWood);
 		setBlockName("thebetweenlands.treeFungus");
 		setBlockTextureName("thebetweenlands:treeFungus");
 	}

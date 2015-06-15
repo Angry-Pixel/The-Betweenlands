@@ -18,6 +18,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockBlubCappedMushroomHead extends Block {
     public BlockBlubCappedMushroomHead() {
         super(Material.wood);
+		setStepSound(Block.soundTypeCloth);
+		setHardness(0.2F);
         setBlockName("thebetweenlands.hugeMushroomTop");
         setBlockTextureName("thebetweenlands:bulbCappedShroomCap");
         setCreativeTab(ModCreativeTabs.plants);
