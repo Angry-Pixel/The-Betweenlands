@@ -108,9 +108,13 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
 		//Decay rate of composted blocks
-		if(world.rand.nextInt(10) == 0)
+		if(world.rand.nextInt(10) == 0) {
 			if(meta == 4 || meta == 5)
 				world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
+			//Update decay to plants above
+			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == 7)
+				world.setBlockMetadataWithNotify(x, y + 1, z, 8, 3);
+		}
 		
 		//Dug dirt reverts to un-dug
 		if(world.rand.nextInt(10) == 0) {
@@ -121,11 +125,6 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			if(meta == 3)
 				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
 		}
-		
-		//Update decay to plants above
-		if(meta == 7 || meta == 8)
-			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == 7)
-				world.setBlockMetadataWithNotify(x, y + 1, z, 8, 3);
 	}
 
 	@Override
