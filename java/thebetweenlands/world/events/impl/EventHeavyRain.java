@@ -13,9 +13,14 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.events.TimedEnvironmentEvent;
 
 public class EventHeavyRain extends TimedEnvironmentEvent {
+	public EventHeavyRain(EnvironmentEventRegistry registry) {
+		super(registry);
+	}
+	
 	@Override
 	public String getEventName() {
 		return "Heavy Rain";

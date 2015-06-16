@@ -2,9 +2,13 @@ package thebetweenlands.world.events.impl;
 
 import java.util.Random;
 
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.events.TimedEnvironmentEvent;
 
 public class EventDenseFog extends TimedEnvironmentEvent {
+	public EventDenseFog(EnvironmentEventRegistry registry) {
+		super(registry);
+	}
 	@Override
 	public String getEventName() {
 		return "Dense Fog";

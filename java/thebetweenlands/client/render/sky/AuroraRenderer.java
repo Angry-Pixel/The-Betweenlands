@@ -105,8 +105,8 @@ public class AuroraRenderer {
 			for(int si = 0; si < subSegments; si++) {
 				prevDirection = new Vector2d(this.currDirection.x, this.currDirection.y);
 				
-				float dirXNoise = this.interpolatedNoise(randNoiseOffset + 0.01F * ((i + (si) / (float)subSegments))) * 0.1F - 0.05F;
-				float dirYNoise = this.interpolatedNoise(randNoiseOffset + 0.01F * ((i + (si) / (float)subSegments) * 5)) * 0.1F - 0.05F;
+				float dirXNoise = this.interpolatedNoise(randNoiseOffset * 10 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 10000000000.0D)))) * 0.1F - 0.05F;
+				float dirYNoise = this.interpolatedNoise(randNoiseOffset * 20 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 10000000000.0D)) * 5)) * 0.1F - 0.05F;
 				
 				this.currDirection = new Vector2d(this.currDirection.x + dirXNoise, this.currDirection.y + dirYNoise);
 				this.currDirection.normalize();

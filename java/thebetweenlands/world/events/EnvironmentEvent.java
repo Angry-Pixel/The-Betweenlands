@@ -6,11 +6,16 @@ import net.minecraft.world.World;
 import thebetweenlands.lib.ModInfo;
 
 public abstract class EnvironmentEvent {
+	private final EnvironmentEventRegistry registry;
 	private NBTTagCompound nbtt = new NBTTagCompound();
 	private boolean active = false;
 	private boolean dirty = false;
 	private boolean loaded = false;
 
+	public EnvironmentEvent(EnvironmentEventRegistry registry) {
+		this.registry = registry;
+	}
+	
 	/**
 	 * Returns whether this event is currently active.
 	 * @return
@@ -122,4 +127,12 @@ public abstract class EnvironmentEvent {
 	 * @return
 	 */
 	public abstract String getEventName();
+	
+	/**
+	 * Returns the event registry of this event.
+	 * @return
+	 */
+	public EnvironmentEventRegistry getRegistry() {
+		return this.registry;
+	}
 }

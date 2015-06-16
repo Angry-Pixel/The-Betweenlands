@@ -7,6 +7,10 @@ import thebetweenlands.world.events.impl.EventHeavyRain;
 import net.minecraft.world.World;
 
 public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
+	public TimedEnvironmentEvent(EnvironmentEventRegistry registry) {
+		super(registry);
+	}
+
 	private int time = 0;
 	private Random rnd = null;
 
