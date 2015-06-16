@@ -29,6 +29,7 @@ public class BlockSwampDirt
 			if (player.getCurrentEquippedItem() !=null && player.getCurrentEquippedItem().getItem() instanceof SpadeBL) {
 				world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 1, 3);
 				world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+				world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
 				player.getCurrentEquippedItem().damageItem(1, player);
 				return true;
 		}
