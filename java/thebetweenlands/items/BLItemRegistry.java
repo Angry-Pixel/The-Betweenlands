@@ -115,6 +115,7 @@ public class BLItemRegistry {
     
     //DOORS
     public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
+    public static final Item doorOctine = new ItemBLDoor(BLBlockRegistry.doorOctine);
     
     //MISC
     public static final Item angryPebble = new ItemAngryPebble();

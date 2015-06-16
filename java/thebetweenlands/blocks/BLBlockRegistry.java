@@ -334,6 +334,9 @@ public class BLBlockRegistry
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
+	public static final Block doorOctine = new BlockBLDoor("octine", Material.rock);
+	public static final Block trapDoorWeedwood = new BlockBLTrapDoor("weedwood", Material.wood);
+	public static final Block trapDoorOctine = new BlockBLTrapDoor("octine", Material.rock);
 
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
