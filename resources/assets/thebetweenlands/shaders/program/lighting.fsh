@@ -84,5 +84,5 @@ void main() {
     }
     
     //Return calculated color
-    gl_FragColor = color;
+    gl_FragColor = texture2D(DiffuseSampler, texCoord);
 }

@@ -71,7 +71,7 @@ public class MainShader extends CShader {
 		}
 		input.bindFramebuffer(false);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.depthBuffer.framebufferTexture);
-		GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, /*GL11.GL_DEPTH_COMPONENT*/GL11.GL_RGBA, 0, 0, 
+		GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_DEPTH_COMPONENT, 0, 0, 
 				this.depthBuffer.framebufferTextureWidth, 
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
