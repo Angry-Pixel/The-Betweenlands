@@ -14,6 +14,8 @@ public class BlockWeedWoodPlanks extends Block {
 		setBlockName("thebetweenlands.weedwoodPlanks");
 		setBlockTextureName("thebetweenlands:weedwoodPlanks");
 		setCreativeTab(ModCreativeTabs.blocks);
+		setHardness(2.0F);
+		setResistance(5.0F);
 	}
 
 }

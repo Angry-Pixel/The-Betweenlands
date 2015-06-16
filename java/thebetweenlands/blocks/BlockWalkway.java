@@ -57,8 +57,8 @@ public class BlockWalkway extends Block {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean isBlockNormalCube() {
         return false;
     }
@@ -73,7 +73,7 @@ public class BlockWalkway extends Block {
 
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-        System.out.println(entity instanceof EntityLiving);
+
         if (entity instanceof EntityLivingBase && !((EntityLivingBase) entity).isPotionActive(Potion.moveSpeed))
             ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 2, 0));
     }

@@ -298,10 +298,12 @@ public class BLBlockRegistry
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
 
+	public static final Block blockTotem = new BlockTotem();
+
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
-	// STAIRS, SLABS, WALLS, FENCES
+	// STAIRS, SLABS, WALLS, FENCES, SIGNS
 	public static final Block betweenstoneBrickStairs = new BlockBLStairs(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickStairs");
 	public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
 	public static final Block cragrockBrickStairs = new BlockBLStairs(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockBrickStairs");
@@ -322,6 +324,11 @@ public class BLBlockRegistry
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
+	public static final Block weedwoodPlankFenceGate = new BlockBLFenceGate("weedwoodPlanks");
+	public static final Block rubberTreePlankFenceGate = new BlockBLFenceGate("rubberTreePlanks");
+	public static final Block purpleRainPlankFenceGate = new BlockBLFenceGate("purpleRainPlanks");
+	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
+	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
