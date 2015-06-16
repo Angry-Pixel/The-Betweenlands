@@ -138,7 +138,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 			if (metaDirt == 7)
 				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
 			if (metaDirt == 6)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 3, 3);
+				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
 			if (metaDirt == 5)
 				world.setBlockMetadataWithNotify(x, y - 1, z, 2, 3);
 			if (metaDirt == 4)
