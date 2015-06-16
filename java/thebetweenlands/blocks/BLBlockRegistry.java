@@ -294,11 +294,11 @@ public class BLBlockRegistry
 	public static final BlockRubberTap rubberTap = new BlockRubberTap();
 
 	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");;
-
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
-
 	public static final Block blockTotem = new BlockTotem();
+	public static final Block siltGlas = new BlockBLGlass();
+	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
 
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();

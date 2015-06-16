@@ -43,8 +43,7 @@ public class BlockBlubCappedMushroomHead extends Block {
     }
 
     @Override
-    public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side)
-    {
+    public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
         Block block = iblockaccess.getBlock(x, y, z);
         return block != BLBlockRegistry.hugeMushroomTop;
     }
