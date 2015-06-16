@@ -12,6 +12,7 @@ public class BlockBLLadder extends BlockLadder {
         this.setBlockName("thebetweenlands." + name + "Ladder");
         setCreativeTab(ModCreativeTabs.blocks);
         this.setBlockTextureName("thebetweenlands:" + name + "Ladder");
-        setHardness(0.4F);
+        this.setHardness(1.0F);
+        this.setStepSound(soundTypeLadder);
     }
 }

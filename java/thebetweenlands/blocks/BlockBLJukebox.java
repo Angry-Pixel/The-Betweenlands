@@ -19,6 +19,7 @@ public class BlockBLJukebox extends BlockJukebox {
         textureName = "thebetweenlands:" + name + "Jukebox";
         setHardness(2.0F);
         setResistance(10.0F);
+        this.setStepSound(soundTypeWood);
     }
 
     @Override

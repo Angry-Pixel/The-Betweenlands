@@ -19,6 +19,7 @@ public class BlockBLFenceGate extends BlockFenceGate {
         textureName = "thebetweenlands:" + name;
         setHardness(2.0F);
         setResistance(5.0F);
+        this.setStepSound(soundTypeWood);
     }
 
     @Override

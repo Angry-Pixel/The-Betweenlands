@@ -25,6 +25,7 @@ public class BlockTotem extends Block {
         textureName = "thebetweenlands:" + "totem";
         setHardness(2.0F);
         setResistance(5.0F);
+        this.setStepSound(soundTypeWood);
     }
 
     @Override

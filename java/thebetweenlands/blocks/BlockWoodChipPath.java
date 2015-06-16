@@ -31,6 +31,7 @@ public class BlockWoodChipPath extends Block {
         this.setCreativeTab(ModCreativeTabs.blocks);
         setHardness(2.0F);
         setResistance(5.0F);
+        this.setStepSound(soundTypeWood);
     }
 
     @Override
