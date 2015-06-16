@@ -329,6 +329,8 @@ public class BLBlockRegistry
 	public static final Block purpleRainPlankFenceGate = new BlockBLFenceGate("purpleRainPlanks");
 	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
+	public static final Block weedwoodPlankButton = new BlockBLButton("weedwoodPlanks", true);
+	public static final Block betweenstoneButton = new BlockBLButton("betweenstone", false);
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
