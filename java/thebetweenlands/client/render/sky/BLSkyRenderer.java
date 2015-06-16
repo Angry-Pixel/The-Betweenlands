@@ -1,19 +1,30 @@
 package thebetweenlands.client.render.sky;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
+import javax.vecmath.Vector2d;
+import javax.vecmath.Vector4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
+
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
-
-import java.util.Random;
 
 public class BLSkyRenderer extends IRenderHandler
 {
@@ -23,6 +34,59 @@ public class BLSkyRenderer extends IRenderHandler
 
 	private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 
+	private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
+	
+	public BLSkyRenderer()
+	{
+		this.starGLCallList = GLAllocation.generateDisplayLists(3);
+		GL11.glPushMatrix();
+		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
+		this.renderStars();
+		GL11.glEndList();
+		GL11.glPopMatrix();
+		Tessellator tessellator = Tessellator.instance;
+		this.glSkyList = this.starGLCallList + 1;
+		GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
+		byte b2 = 64;
+		int i = 256 / b2 + 2;
+		float f = 16.0F;
+		int j;
+		int k;
+
+		for (j = -b2 * i; j <= b2 * i; j += b2)
+		{
+			for (k = -b2 * i; k <= b2 * i; k += b2)
+			{
+				tessellator.startDrawingQuads();
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
+				tessellator.draw();
+			}
+		}
+
+		GL11.glEndList();
+		this.glSkyList2 = this.starGLCallList + 2;
+		GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
+		f = -16.0F;
+		tessellator.startDrawingQuads();
+
+		for (j = -b2 * i; j <= b2 * i; j += b2)
+		{
+			for (k = -b2 * i; k <= b2 * i; k += b2)
+			{
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
+				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
+				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
+			}
+		}
+
+		tessellator.draw();
+		GL11.glEndList();
+	}
+	
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		RenderGlobal renderGlobal = mc.renderGlobal;
@@ -172,59 +236,14 @@ public class BLSkyRenderer extends IRenderHandler
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDepthMask(true);
 		renderSkyTexture(mc);
+		
+		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
+			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
+				this.renderAuroras(mc);
+			}
+		}
 	}
 	
-	public BLSkyRenderer()
-	{
-		this.starGLCallList = GLAllocation.generateDisplayLists(3);
-		GL11.glPushMatrix();
-		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
-		this.renderStars();
-		GL11.glEndList();
-		GL11.glPopMatrix();
-		Tessellator tessellator = Tessellator.instance;
-		this.glSkyList = this.starGLCallList + 1;
-		GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
-		byte b2 = 64;
-		int i = 256 / b2 + 2;
-		float f = 16.0F;
-		int j;
-		int k;
-
-		for (j = -b2 * i; j <= b2 * i; j += b2)
-		{
-			for (k = -b2 * i; k <= b2 * i; k += b2)
-			{
-				tessellator.startDrawingQuads();
-				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
-				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
-				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
-				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
-				tessellator.draw();
-			}
-		}
-
-		GL11.glEndList();
-		this.glSkyList2 = this.starGLCallList + 2;
-		GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
-		f = -16.0F;
-		tessellator.startDrawingQuads();
-
-		for (j = -b2 * i; j <= b2 * i; j += b2)
-		{
-			for (k = -b2 * i; k <= b2 * i; k += b2)
-			{
-				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + 0));
-				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + 0));
-				tessellator.addVertex((double)(j + 0), (double)f, (double)(k + b2));
-				tessellator.addVertex((double)(j + b2), (double)f, (double)(k + b2));
-			}
-		}
-
-		tessellator.draw();
-		GL11.glEndList();
-	}
-
 	private void renderStars()
 	{
 		Random random = new Random(10842L);
@@ -307,5 +326,50 @@ public class BLSkyRenderer extends IRenderHandler
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
+	}
+	
+	private void renderAuroras(Minecraft mc) {
+		Random rand = mc.theWorld.rand;
+		double newAuroraPosX = mc.thePlayer.posX + rand.nextInt(160) - 80;
+		double newAuroraPosZ = mc.thePlayer.posZ + rand.nextInt(160) - 80;
+		double newAuroraPosY = 180;
+		double minDist = 0.0D;
+		
+		Iterator<AuroraRenderer> auroraIT = this.auroras.iterator();
+		while(auroraIT.hasNext()) {
+			AuroraRenderer aurora = auroraIT.next();
+			if(aurora.getDistance(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ) > 180) {
+				auroraIT.remove();
+				this.auroras.remove(aurora);
+			}
+			double dist = aurora.getDistance(newAuroraPosX, newAuroraPosY, newAuroraPosZ);
+			if(dist < minDist || minDist == 0.0D) {
+				minDist = dist;
+			}
+		}
+		if(minDist > 120 || this.auroras.size() == 0) {
+			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(20) + 5));
+		}
+		
+		List<Vector4f> gradients = new ArrayList<Vector4f>();
+
+		gradients.add(new Vector4f(0, 1, 0, 0.05F));
+		gradients.add(new Vector4f(0, 1, 0, 0.05F));
+		gradients.add(new Vector4f(0, 1, 0.8F, 1.0F));
+		gradients.add(new Vector4f(0, 0.7F, 1, 0.05F));
+		gradients.add(new Vector4f(0, 0.4F, 1, 0.05F));
+		
+		GL11.glDepthMask(false);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glPushMatrix();
+		GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ);
+		for(AuroraRenderer aurora : this.auroras) {
+			double dist = aurora.getDistance(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
+			aurora.render((float)(180.0F - dist) / 180.0F, gradients);
+		}
+		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthMask(true);
 	}
 }

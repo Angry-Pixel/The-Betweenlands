@@ -3,7 +3,6 @@ package thebetweenlands.client.render.tileentity;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
 
 import net.minecraft.client.Minecraft;
@@ -20,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.block.ModelAnimator;
-import thebetweenlands.client.render.sky.AuroraRenderer;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -67,10 +65,6 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		Random rand = new Random();
 		ArrayList<Vector3d> points = new ArrayList<Vector3d>();
 
-		
-		AuroraRenderer renderTest = new AuroraRenderer(x, y, z, new Vector2d(0.8, 0.5));
-		renderTest.render(partialTicks);
-		
 		this.crystalVelocity -= 0.1F;
 		if (this.crystalVelocity <= 0.0F) {
 			this.crystalVelocity = 0.0F;
