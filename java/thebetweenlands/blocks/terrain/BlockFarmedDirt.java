@@ -64,13 +64,15 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 					world.setBlockMetadataWithNotify(x, y, z, meta + 3, 3);
 					world.playAuxSFX(2005, x, y + 1, z, 0);
 					world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
-					player.getCurrentEquippedItem().stackSize--;
+					if (!player.capabilities.isCreativeMode)
+						player.getCurrentEquippedItem().stackSize--;
 				}
 				if (meta == 3) {
 					world.setBlockMetadataWithNotify(x, y, z, 10, 3);
 					world.playAuxSFX(2005, x, y + 1, z, 0);
 					world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
-					player.getCurrentEquippedItem().stackSize--;
+					if (!player.capabilities.isCreativeMode)
+						player.getCurrentEquippedItem().stackSize--;
 				}
 			}
 			return true;
