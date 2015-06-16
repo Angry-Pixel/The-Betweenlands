@@ -28,7 +28,7 @@ public class MainShader extends CShader {
 	private Matrix4f PM;
 	private FloatBuffer mvBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private FloatBuffer pmBuffer = GLAllocation.createDirectFloatBuffer(16);
-	private GeometryBuffer geometryBuffer = new GeometryBuffer();
+	//private GeometryBuffer geometryBuffer = new GeometryBuffer();
 
 	public MainShader(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
@@ -38,9 +38,9 @@ public class MainShader extends CShader {
 				shaderPath, assetsPath);
 	}
 
-	public GeometryBuffer getGeometryBuffer() {
+	/*public GeometryBuffer getGeometryBuffer() {
 		return this.geometryBuffer;
-	}
+	}*/
 
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
@@ -76,10 +76,10 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
 
-		if(this.geometryBuffer.update(input)) {
+		/*if(this.geometryBuffer.update(input)) {
 			this.updateSampler("GeomDiffuseSampler", this.geometryBuffer.getGeometryBuffer());
 			this.updateSampler("GeomDepthSampler", this.geometryBuffer.getGeometryDepthBuffer());
-		}
+		}*/
 
 		input.bindFramebuffer(false);
 	}
