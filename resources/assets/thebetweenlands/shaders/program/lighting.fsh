@@ -59,7 +59,7 @@ void main() {
     float distortionMultiplier = 0.0F;
     
     //Holds the calculated color
-    vec4 color;
+    vec4 color = vec4(0, 0, 0, 0);
     
     //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(LightSources); i++) {
@@ -71,18 +71,18 @@ void main() {
                 distortion = true;
                 distortionMultiplier = max(distortionMultiplier, 1.0 - pow(dist / radius, 4));
             } else {
-                color.xyz += vec3(LightColorsR[i], LightColorsG[i], LightColorsB[i]) * (1.0 - dist / radius);
+                color += vec4(LightColorsR[i], LightColorsG[i], LightColorsB[i], 0) * (1.0 - dist / radius);
             }
         }
     }
     
     if(!distortion) {
-        color += texture2D(DiffuseSampler, texCoord);
+        color += vec4(texture2D(DiffuseSampler, texCoord));
     } else {
         float fragDistortion = (fragPos.y + CamPos.y + (cos(fragPos.x + CamPos.x) * sin(fragPos.z + CamPos.z))) * 5;
-        color += texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300) / 800 * distortionMultiplier, 0));
+        color += vec4(texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300) / 800 * distortionMultiplier, 0)));
     }
     
     //Return calculated color
-    gl_FragColor = texture2D(DiffuseSampler, texCoord);
+    gl_FragColor = color;
 }
