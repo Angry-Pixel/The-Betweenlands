@@ -60,12 +60,14 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 	
 	@Override
-	public void saveEventData() { 
+	public void saveEventData() {
+		super.saveEventData();
 		this.getData().setShort("auroraType", this.auroraType);
 	}
 
 	@Override
-	public void loadEventData() { 
+	public void loadEventData() {
+		super.loadEventData();
 		this.auroraType = this.getData().getShort("auroraType");
 	}
 
