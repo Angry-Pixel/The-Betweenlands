@@ -348,7 +348,7 @@ public class BLSkyRenderer extends IRenderHandler
 			}
 		}
 		if(minDist > 120 || this.auroras.size() == 0) {
-			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(20) + 5));
+			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(30) + 8));
 		}
 		
 		List<Vector4f> gradients = new ArrayList<Vector4f>();
