@@ -13,10 +13,6 @@ import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 public class BetweenlandsWorldData extends WorldSavedData {
 	private NBTTagCompound data = new NBTTagCompound();
-
-	private int timeToFog;
-	private boolean hasDenseFog;
-	
 	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
 
 	public BetweenlandsWorldData() {
@@ -32,30 +28,10 @@ public class BetweenlandsWorldData extends WorldSavedData {
 	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
-	
-	public void setTimeToFogNBT(int time) {
-		this.timeToFog = time;
-		this.markDirty();
-	}
-
-	public void setDenseFog(boolean fog) {
-		this.hasDenseFog = fog;
-		this.markDirty();
-	}
-
-	public int getTimeToFog() {
-		return this.timeToFog;
-	}
-
-	public boolean getDenseFog() {
-		return this.hasDenseFog;
-	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		this.data = compound.getCompoundTag(ModInfo.ID + ":worldData");
-		this.hasDenseFog = this.data.getBoolean("hasDenseFog");
-		this.timeToFog = this.data.getInteger("timeToFog");
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.readFromNBT(compound);
 		}
@@ -66,8 +42,6 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.writeToNBT(compound);
 		}
-		this.data.setBoolean("hasDenseFog", this.hasDenseFog);
-		this.data.setInteger("timeToFog", this.timeToFog);
 		compound.setTag(ModInfo.ID + ":worldData", this.data);
 	}
 
