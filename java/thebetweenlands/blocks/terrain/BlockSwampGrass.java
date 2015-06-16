@@ -43,6 +43,7 @@ public class BlockSwampGrass
 				Block farmedDirt = BLBlockRegistry.farmedDirt;
 				world.setBlock(x, y, z, BLBlockRegistry.farmedDirt, 2, 3);
 				world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), farmedDirt.stepSound.getStepResourcePath(), (farmedDirt.stepSound.getVolume() + 1.0F) / 2.0F, farmedDirt.stepSound.getPitch() * 0.8F);
+				world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
 				player.getCurrentEquippedItem().damageItem(1, player);
 				return true;
 		}
