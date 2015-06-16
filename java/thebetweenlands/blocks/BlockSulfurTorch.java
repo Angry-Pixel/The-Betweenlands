@@ -44,7 +44,7 @@ public class BlockSulfurTorch extends BlockTorch {
         else
     		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
    
-        if(world.rand.nextInt(20) == 0) {
+        if(world.rand.nextInt(20) == 0 && world.canBlockSeeTheSky(x, y, z)) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
         		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
