@@ -395,3 +395,10 @@ container.furnaceBL=Sulfur Furnace
 container.dualFurnaceBL=Dual Sulfur Furnace
 tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.purifier.name=Purifier
+
+# Tooltips
+decay.0=Undecayed
+decay.1=Slightly decayed
+decay.2=Very decayed
+decay.3=Extremely decayed
+decay.4=Completely decayed
