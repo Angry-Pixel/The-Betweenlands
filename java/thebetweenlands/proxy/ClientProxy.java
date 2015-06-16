@@ -30,6 +30,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
+import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
@@ -207,6 +208,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(new DecayTextureStitchHandler());
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
