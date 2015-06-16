@@ -41,7 +41,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
 		if (metadata == 7) {
-			for (int i = 0; i < 1 + fortune; ++i) {
+			for (int i = 0; i < 3 + fortune; ++i) {
 				if (world.rand.nextInt(15) <= metadata)
 					ret.add(getSeedDrops());
 				ret.add(getCropDrops());
@@ -96,7 +96,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		int meta = world.getBlockMetadata(x, y, z);
-		System.out.println("Crop Meta is: " + meta + " Crop:" + getCropDrops() + " Seed: "+ getSeedDrops());
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(meta >= 8)) {
 			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED_DUST.ordinal()) {
