@@ -52,6 +52,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 					if(meta == 0) {
 						world.setBlockMetadataWithNotify(x, y, z, 3, 3);
 						world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+						world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
 						player.getCurrentEquippedItem().damageItem(1, player);
 					}
 				}
@@ -119,12 +120,10 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		
 		//Dug dirt reverts to un-dug
 		if(world.rand.nextInt(10) == 0) {
-			if(meta == 1)
+			if(meta == 1 || meta == 3)
 				world.setBlock(x, y, z, BLBlockRegistry.swampDirt, 0, 3);
 			if(meta == 2)
 				world.setBlock(x, y, z, BLBlockRegistry.swampGrass, 0, 3);
-			if(meta == 3)
-				world.setBlockMetadataWithNotify(x, y, z, 0, 3);
 		}
 	}
 
