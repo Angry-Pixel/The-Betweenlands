@@ -44,16 +44,29 @@ tile.thebetweenlands.rottenWeedwoodBark.name=Rotten Weedwood Bark
 tile.thebetweenlands.tarFluid.name=Liquid Tar
 tile.thebetweenlands.puddle.name=Puddle
 tile.thebetweenlands.smoothCragrock.name=Smooth Cragrock
+tile.thebetweenlands.totem.name=Totem Block
+tile.thebetweenlands.siltGlass.name=Silt Glass
+tile.thebetweenlands.siltGlassPane.name=Silt Glass Pane
+tile.thebetweenlands.weedwoodPlanksFenceGate.name=Weedwood Plank Fence Gate
+tile.thebetweenlands.rubberTreePlanksFenceGate.name=Rubber Tree Plank Fence Gate
+tile.thebetweenlands.purpleRainPlanksFenceGate.name=Purple Rain Plank Fence Gate
+tile.thebetweenlands.weedwoodJukebox.name=Weedwood Jukebox
+tile.thebetweenlands.weedwoodLadder.name=Weedwood Ladder
+tile.thebetweenlands.dooroctine.name=Octine Door
+tile.thebetweenlands.weedwoodTrapDoor.name=Weedwood Trapdoor
+tile.thebetweenlands.octineTrapDoor.name=Octine Trapdoor
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
-tile.thebetweenlands.farmedDirt_2.name=Dug Swamp Dirt
-tile.thebetweenlands.farmedDirt_3.name=Dug Swamp Grass
-tile.thebetweenlands.farmedDirt_4.name=Dug Purified Swamp Dirt
-tile.thebetweenlands.farmedDirt_5.name=Composted Swamp Dirt
-tile.thebetweenlands.farmedDirt_6.name=Composted Swamp Grass
-tile.thebetweenlands.farmedDirt_7.name=Composted Purified Swamp Dirt
-tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Dirt
-tile.thebetweenlands.farmedDirt_9.name=Decayed Composted Swamp Grass
+tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
+tile.thebetweenlands.farmedDirt_2.name=Dug Swamp Grass
+tile.thebetweenlands.farmedDirt_3.name=Dug Purified Swamp Dirt
+tile.thebetweenlands.farmedDirt_4.name=Composted Swamp Dirt
+tile.thebetweenlands.farmedDirt_5.name=Composted Swamp Grass
+tile.thebetweenlands.farmedDirt_6.name=Composted Purified Swamp Dirt
+tile.thebetweenlands.farmedDirt_7.name=Decayed Composted Swamp Dirt
+tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Grass
+
+tile.thebetweenlands.middleFruitBush.name=Purple Pear Bush
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
