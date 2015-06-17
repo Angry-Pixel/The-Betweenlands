@@ -32,17 +32,7 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.BlockDoorRenderer;
-import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
-import thebetweenlands.client.render.block.BlockModelPlantRenderer;
-import thebetweenlands.client.render.block.BlockRootRenderer;
-import thebetweenlands.client.render.block.BlockRubberLogRenderer;
-import thebetweenlands.client.render.block.BlockRubberTapRenderer;
-import thebetweenlands.client.render.block.BlockStalactiteRenderer;
-import thebetweenlands.client.render.block.BlockSwampReedRenderer;
-import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
-import thebetweenlands.client.render.block.BlockWalkwayRenderer;
-import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.block.*;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -125,7 +115,7 @@ public class ClientProxy extends CommonProxy {
 
 	public enum BlockRenderIDs {
 
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER;
 
 		private final int ID;
 
@@ -195,6 +185,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockDoorRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockWalkwayRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberTapRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockBLLeverRenderer());
 
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
