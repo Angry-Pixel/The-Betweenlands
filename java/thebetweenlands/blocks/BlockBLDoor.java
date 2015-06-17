@@ -26,7 +26,6 @@ public class BlockBLDoor extends BlockDoor {
 		setStepSound(soundTypeWood);
 		setBlockName("thebetweenlands.door" + name);
 		setBlockTextureName("thebetweenlands:door_" + name);
-		setCreativeTab(ModCreativeTabs.blocks);
 	}
 
 	public void setItem(Item item) {

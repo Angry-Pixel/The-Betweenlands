@@ -336,6 +336,7 @@ public class BLBlockRegistry
 	public static final Block betweenstonePressurePlate = new BlockBLPressurePlate("betweenstone", Material.rock, BlockPressurePlate.Sensitivity.mobs);
 	public static final Block octinePressurePlate = new BlockBLPressurePlate("octineBlock", Material.rock, BlockPressurePlate.Sensitivity.players);
 	public static final Block weedwoordLever = new BlockBLLever();
+	public static final Block mudFlowerPot = new BlockBLFlowerPot();
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
