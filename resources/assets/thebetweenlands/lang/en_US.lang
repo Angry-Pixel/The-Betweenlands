@@ -410,9 +410,9 @@ tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.purifier.name=Purifier
 
 # Tooltips
-decay.0=Undecayed
-decay.1=Slightly decayed
-decay.2=Moderately decayed
-decay.3=Very decayed
-decay.4=Extremely decayed
-decay.5=Completely decayed
+decay.0=Good as new!
+decay.1=Slightly corroded
+decay.2=Moderately corroded
+decay.3=Very corroded
+decay.4=Extremely corroded
+decay.5=Completely corroded
