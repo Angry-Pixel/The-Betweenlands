@@ -120,7 +120,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 				createBranch(world, rand, x + radius, yy - rand.nextInt(3), z - radius + 1, 8, true, rand.nextInt(6) + 6);
 			}
 		}
-		createMainCanopy(world, rand, x, y + height - 3, z, height/4 + rand.nextInt(3));
+		createMainCanopy(world, rand, x, y + height - 2, z, height/4 + rand.nextInt(3));
 		return true;
 	}
 
@@ -180,23 +180,20 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 		for (int x1 = x - maxRadius; x1 <= x + maxRadius; x1++)
 			for (int z1 = z - maxRadius; z1 <= z + maxRadius; z1++)
 				for (int y1 = y; y1 < y + maxRadius; y1 ++) {
-					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.5D);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(4) == 0 && y1 > y)
+					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 3.0D);
+					if (Math.round(Math.sqrt(dSq)) < maxRadius - 2 && rand.nextInt(4) == 0 && y1 > y)
 						if (world.getBlock(x1, y1, z1) != log)
 							world.setBlock(x1, y1, z1, log);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) != log)
-							if(rand.nextBoolean())
+							if(y1 == y || y1 == y + 1)
 								world.setBlock(x1, y1, z1, leavesLight, 0, 15);
 							else
 								world.setBlock(x1, y1, z1, leavesDark, 0, 15);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(2) == 0 && y1 == y)
 						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) instanceof BlockBLLeaves)
 							for (int i = 1; i < 1 + rand.nextInt(3); i++) {
-								if(rand.nextBoolean())
 									world.setBlock(x1, y1 - i, z1, leavesLight, 0, 15);
-								else
-									world.setBlock(x1, y1 - i, z1, leavesDark, 0, 15);
 								if(i == 2)
 									addHangers(world, rand, x1, y1 - i - 1, z1);
 								}
@@ -232,7 +229,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 					}
 						addHangers(world, rand, x + i, y - 3, z);
 					if (i == branchLength)
-						createMainCanopy(world, rand, x + i, y, z, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x + i, y + 1, z, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 2) {
@@ -249,7 +246,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 						createSmallBranch(world, rand, x - i, y - 1, z - 1, 4, 4);
 					}
 					if (i == branchLength)
-						createMainCanopy(world, rand, x - i, y, z, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x - i, y + 1, z, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 3) {
@@ -266,7 +263,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 						createSmallBranch(world, rand, x - 1, y - 1, z + i, 2, 4);
 					}
 					if (i == branchLength)
-						createMainCanopy(world, rand, x, y, z + i, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x, y + 1, z + i, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 4) {
@@ -283,7 +280,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 						createSmallBranch(world, rand,x - 1, y - 1, z - i, 2, 4);
 					}
 					if (i == branchLength)
-						createMainCanopy(world, rand, x, y, z - i, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x, y + 1, z - i, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 5) {
@@ -296,7 +293,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 					if (i <= branchLength)
 						addHangers(world, rand, x + i - 1, y - 3, z + i - 1);
 					if (i == branchLength)
-						createMainCanopy(world, rand, x + i - 1, y, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x + i - 1, y + 1, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 6) {
@@ -309,7 +306,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 					if (i <= branchLength)
 						addHangers(world, rand, x - i + 1, y - 3, z - i + 1);
 					if (i == branchLength)
-						createMainCanopy(world, rand, x - i + 1, y, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x - i + 1, y + 1, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 7) {
@@ -322,7 +319,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 					if (i <= branchLength)
 						addHangers(world, rand, x - i + 1, y - 3, z + i - 1);
 					if (i == branchLength)
-						createMainCanopy(world, rand, x - i + 1, y, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x - i + 1, y + 1, z + i - 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 			if (dir == 8) {
@@ -335,7 +332,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 					if (i <= branchLength)
 						addHangers(world, rand, x + i - 1, y - 3, z - i + 1);
 					if (i == branchLength)
-						createMainCanopy(world, rand, x + i - 1, y, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 2));
+						createMainCanopy(world, rand, x + i - 1, y + 1, z - i + 1, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
 			}
 		}
@@ -345,10 +342,14 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 		if (rand.nextBoolean()) {
 			int length = rand.nextInt(6) + 6;
 			for (int yy = y; yy > y - length; --yy)
-				if (world.getBlock(x, yy, z) == Blocks.air)
-					world.setBlock(x, yy, z, hanger);
-				else
-					break;
+				if (world.getBlock(x, yy, z) == Blocks.air) {
+					if(yy > y - length / 4 )
+						world.setBlock(x, yy, z, hangerFlowered);
+					else if(yy <= y - length / 4 )
+						world.setBlock(x, yy, z, hanger);
+					else
+						break;
+				}
 		}
 	}
 
