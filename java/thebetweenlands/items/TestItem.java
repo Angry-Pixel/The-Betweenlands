@@ -8,6 +8,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree;
+import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree2;
 
 import java.util.Random;
 
@@ -29,7 +30,7 @@ public class TestItem extends ItemSword {
         if( !world.isRemote && player.isSneaking() ) {
             //new WorldGenDeadTree().generateTree(world, rand, x, y + 1, z);
             //new WorldGenHugeMushroom().generate(world, rand, x, y+1, z);
-            new WorldGenPurpleRainTree().generate(world, rand, x, y+1, z);
+            new WorldGenPurpleRainTree2().generateTree(world, rand, x, y + 1, z);
             return true;
         }
         return false;
