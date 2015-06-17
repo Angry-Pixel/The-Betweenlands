@@ -186,7 +186,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 							world.setBlock(x1, y1, z1, log);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1, z1) != log)
-							if(y1 == y || y1 == y + 1)
+							if(y1 %2 == 0)
 								world.setBlock(x1, y1, z1, leavesLight, 0, 15);
 							else
 								world.setBlock(x1, y1, z1, leavesDark, 0, 15);
