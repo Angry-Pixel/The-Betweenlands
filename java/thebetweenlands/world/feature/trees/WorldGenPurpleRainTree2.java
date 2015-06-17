@@ -181,7 +181,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 			for (int z1 = z - maxRadius; z1 <= z + maxRadius; z1++)
 				for (int y1 = y; y1 < y + maxRadius; y1 ++) {
 					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 3.0D);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 2 && rand.nextInt(4) == 0 && y1 > y)
+					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(4) == 0 && y1 + 1 > y)
 						if (world.getBlock(x1, y1, z1) != log)
 							world.setBlock(x1, y1, z1, log);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
