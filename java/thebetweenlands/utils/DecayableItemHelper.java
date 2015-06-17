@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 public final class DecayableItemHelper {
 	public static final int MAX_DECAY = 255;
 	public static final String TOOLTIP_PART = "/" + MAX_DECAY + ")";
+	public static final int DECAY_STAGE_COUNT = 6;
 
 	private DecayableItemHelper() {
 	}
@@ -61,7 +62,7 @@ public final class DecayableItemHelper {
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		int decay = getDecay(itemStack);
 		StringBuilder decayInfo = new StringBuilder("decay.");
-		decayInfo.append((10 * decay + 630) / 635);
+		decayInfo.append(getDecayStage(decay));
 		decayInfo.replace(0, decayInfo.length(), StatCollector.translateToLocal(decayInfo.toString()));
 		if (advancedItemTooltips) {
 			decayInfo.append(" (");
@@ -69,5 +70,13 @@ public final class DecayableItemHelper {
 			decayInfo.append(TOOLTIP_PART);
 		}
 		lines.add(decayInfo.toString());
+	}
+
+	public static int getDecayStage(ItemStack itemStack) {
+		return getDecayStage(getDecay(itemStack));
+	}
+
+	public static int getDecayStage(int decay) {
+		return (10 * decay + 630) / 635;
 	}
 }

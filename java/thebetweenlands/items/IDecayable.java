@@ -5,5 +5,5 @@ import net.minecraft.util.IIcon;
 public interface IDecayable {
 	public IIcon[] getIcons();
 
-	public void setDecayIcons(IIcon[] decayIcons);
+	public void setDecayIcons(IIcon[][] decayIcons);
 }

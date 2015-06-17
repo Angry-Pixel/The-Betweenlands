@@ -26,6 +26,7 @@ import org.apache.logging.log4j.Logger;
 
 import scala.actors.threadpool.Arrays;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.utils.DecayableItemHelper;
 
 import com.google.common.collect.Lists;
 
@@ -47,10 +48,13 @@ public class TextureDecay extends TextureAtlasSprite {
 
 	private String baseIconName;
 
-	public TextureDecay(String iconName, String baseIconName) {
+	private int decayAmount;
+
+	public TextureDecay(String iconName, String baseIconName, int decayAmount) {
 		super(iconName);
 		this.baseIconName = baseIconName;
-		seed = iconName.hashCode();
+		this.decayAmount = decayAmount;
+		seed = baseIconName.hashCode();
 	}
 
 	private void resetSprite() {
@@ -124,7 +128,19 @@ public class TextureDecay extends TextureAtlasSprite {
 				if (pixel >>> 24 != 0 && RANDOM.nextBoolean()) {
 					decay = decayPixels[(x % width % decayWidth) + (y % width % decayWidth) * decayWidth];
 				}
-				mipmapLevels[0][x + y * width] = decay;
+				int r1 = pixel >> 16 & 0xFF;
+				int g1 = pixel >> 8 & 0xFF;
+				int b1 = pixel & 0xFF;
+				float alpha = decayAmount / (float) (DecayableItemHelper.DECAY_STAGE_COUNT - 1) * ((decay >>> 24 & 0xFF) / 255F);
+				int r2 = decay >> 16 & 0xFF;
+				int g2 = decay >> 8 & 0xFF;
+				int b2 = decay & 0xFF;
+				pixel &= 0xFF000000;
+				pixel |= (int) (alpha * r2 + (1 - alpha) * r1 + 0.5F) << 16;
+				pixel |= (int) (alpha * g2 + (1 - alpha) * g1 + 0.5F) << 8;
+				pixel |= (int) (alpha * b2 + (1 - alpha) * b1 + 0.5F);
+				System.out.printf("(%s, %s, %s), (%s, %s, %s), %s\n", r1, g1, b1, r2, g2, b2, alpha);
+				mipmapLevels[0][x + y * width] = pixel;
 			}
 		}
 

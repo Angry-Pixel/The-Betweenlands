@@ -23,6 +23,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.render.TextureDecay;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.IDecayable;
+import thebetweenlands.utils.DecayableItemHelper;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,13 +35,15 @@ public class DecayTextureStitchHandler {
 				if (item instanceof IDecayable) {
 					IDecayable decayableItem = (IDecayable) item;
 					IIcon[] icons = decayableItem.getIcons();
-					IIcon[] decayIcons = new IIcon[icons.length];
+					IIcon[][] decayIcons = new IIcon[icons.length][DecayableItemHelper.DECAY_STAGE_COUNT];
 					for (int i = 0; i < icons.length; i++) {
-						String iconName = icons[i].getIconName();
-						String decayIconName = iconName + "_decay";
-						TextureDecay decayTexture = new TextureDecay(decayIconName, iconName);
-						e.map.setTextureEntry(decayIconName, decayTexture);
-						decayIcons[i] = decayTexture;
+						for (int n = 0; n < DecayableItemHelper.DECAY_STAGE_COUNT; n++) {
+							String iconName = icons[i].getIconName();
+							String decayIconName = iconName + "_decay_" + n;
+							TextureDecay decayTexture = new TextureDecay(decayIconName, iconName, n);
+							e.map.setTextureEntry(decayIconName, decayTexture);
+							decayIcons[i][n] = decayTexture;
+						}
 					}
 					decayableItem.setDecayIcons(decayIcons);
 				}

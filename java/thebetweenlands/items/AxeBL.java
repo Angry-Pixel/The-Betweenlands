@@ -13,7 +13,10 @@ import thebetweenlands.utils.IDecayFood;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
@@ -21,29 +24,20 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class AxeBL extends ItemAxe implements IDecayable {
-	private IIcon decayIcon;
+	private IIcon[] decayIcons;
 
 	public AxeBL(ToolMaterial material) {
 		super(material);
 	}
 
 	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
+	public IIcon getIconIndex(ItemStack stack) {
+		return decayIcons[DecayableItemHelper.getDecayStage(stack)];
 	}
 
 	@Override
 	public IIcon getIcon(ItemStack stack, int pass) {
-		if (pass == 1) {
-			// TODO: change how decayable item icons are rendered
-			float decay = 127F / 255;
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glAlphaFunc(GL11.GL_GREATER, 0);
-	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-	        GL11.glColor4f(1, 1, 1, decay);
-			return decayIcon;
-		}
-		return super.getIcon(stack, pass);
+		return getIconIndex(stack);
 	}
 
 	@Override
@@ -52,8 +46,8 @@ public class AxeBL extends ItemAxe implements IDecayable {
 	}
 
 	@Override
-	public void setDecayIcons(IIcon[] decayIcons) {
-		decayIcon = decayIcons[0];
+	public void setDecayIcons(IIcon[][] decayIcons) {
+		this.decayIcons = decayIcons[0];
 	}
 
 	@Override
