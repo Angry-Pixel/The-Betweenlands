@@ -139,7 +139,6 @@ public class TextureDecay extends TextureAtlasSprite {
 				pixel |= (int) (alpha * r2 + (1 - alpha) * r1 + 0.5F) << 16;
 				pixel |= (int) (alpha * g2 + (1 - alpha) * g1 + 0.5F) << 8;
 				pixel |= (int) (alpha * b2 + (1 - alpha) * b1 + 0.5F);
-				System.out.printf("(%s, %s, %s), (%s, %s, %s), %s\n", r1, g1, b1, r2, g2, b2, alpha);
 				mipmapLevels[0][x + y * width] = pixel;
 			}
 		}

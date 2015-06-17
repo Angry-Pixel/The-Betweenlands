@@ -1,11 +1,14 @@
 package thebetweenlands.items;
 
+import java.util.List;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBow;
@@ -16,14 +19,16 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import scala.actors.threadpool.Arrays;
 import thebetweenlands.entities.EntityBLArrow;
+import thebetweenlands.utils.DecayableItemHelper;
 
-public class ItemWeedwoodBow extends ItemBow {
+public class ItemWeedwoodBow extends ItemBow implements IDecayable {
+	public static final int ANIMATION_LENGTH = 3;
 
-	public static final String[] bowAnimationIcon = new String[] { "weedwoodBow0", "weedwoodBow1", "weedwoodBow2" };
-
-	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
+
+	private IIcon[][] decayIcons;
 
 	public ItemWeedwoodBow() {
 	}
@@ -31,11 +36,11 @@ public class ItemWeedwoodBow extends ItemBow {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister icon) {
-		itemIcon = icon.registerIcon("thebetweenlands:weedwoodBow");
-		iconArray = new IIcon[bowAnimationIcon.length];
-
-		for (int iconIndex = 0; iconIndex < iconArray.length; ++iconIndex) {
-			iconArray[iconIndex] = icon.registerIcon("thebetweenlands:" + bowAnimationIcon[iconIndex]);
+		itemIcon = icon.registerIcon(iconString);
+		iconArray = new IIcon[ANIMATION_LENGTH + 1];
+		iconArray[0] = itemIcon;
+		for (int iconIndex = 1; iconIndex < iconArray.length; iconIndex++) {
+			iconArray[iconIndex] = icon.registerIcon(iconString + (iconIndex - 1));
 		}
 	}
 
@@ -43,25 +48,27 @@ public class ItemWeedwoodBow extends ItemBow {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (usingItem != null) {
+			IIcon[] stage;
 			int time = 36000 - useRemaining;
-			if (time < 6)
-				return iconArray[0];
-			if (time < 10)
-				return iconArray[1];
-			return iconArray[2];
+			return decayIcons[time < 6 ? 1 : time < 10 ? 2 : 3][DecayableItemHelper.getDecayStage(usingItem)];
 		}
-		return getIcon(stack, renderPass);
+		return decayIcons[0][DecayableItemHelper.getDecayStage(stack)];
 	}
 
 	@Override
-	public IIcon getItemIconForUseDuration(int iconIndex) {
-		return iconArray[iconIndex];
+	public IIcon getIconIndex(ItemStack stack) {
+		return decayIcons[0][DecayableItemHelper.getDecayStage(stack)];
 	}
 
 	@Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 36000;
-    }
+	public IIcon getIcon(ItemStack stack, int pass) {
+		return getIconIndex(stack);
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 36000;
+	}
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int inUseCount) {
@@ -80,17 +87,19 @@ public class ItemWeedwoodBow extends ItemBow {
 		boolean basiliskArrow = player.inventory.hasItem(BLItemRegistry.basiliskArrow);
 
 		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
-			float power = (float) maxUseDuration / 10.0F;
+			float power = maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 3.0F;
 
-			if ((double) power < 0.1D)
+			power *= (DecayableItemHelper.getModifier(stack) - 0.5F) * 2 + 0.15F;
+
+			if (power < 0.1F)
 				return;
 
 			if (power > 1.0F)
 				power = 1.0F;
 
 			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power);
-			if(!world.isRemote) {
+			if (!world.isRemote) {
 				if (poisonedAnglerToothArrow)
 					entityarrow.getDataWatcher().updateObject(17, 1);
 				else if (octineArrow)
@@ -119,11 +128,11 @@ public class ItemWeedwoodBow extends ItemBow {
 
 			if (canShoot)
 				entityarrow.canBePickedUp = 2;
-			else if(poisonedAnglerToothArrow)
+			else if (poisonedAnglerToothArrow)
 				player.inventory.consumeInventoryItem(BLItemRegistry.poisonedAnglerToothArrow);
-			else if(octineArrow)
+			else if (octineArrow)
 				player.inventory.consumeInventoryItem(BLItemRegistry.octineArrow);
-			else if(basiliskArrow)
+			else if (basiliskArrow)
 				player.inventory.consumeInventoryItem(BLItemRegistry.basiliskArrow);
 			else
 				player.inventory.consumeInventoryItem(BLItemRegistry.anglerToothArrow);
@@ -137,17 +146,17 @@ public class ItemWeedwoodBow extends ItemBow {
 	@SubscribeEvent
 	public void onUpdateFOV(FOVUpdateEvent event) {
 		float fov = event.fov;
-		if(event.entity.isUsingItem() && event.entity.getItemInUse().getItem() == this ) {
+		if (event.entity.isUsingItem() && event.entity.getItemInUse().getItem() == this) {
 			int duration = event.entity.getItemInUseDuration();
 			float multiplier = duration / 10.0F;
-			if( multiplier > 1.0F ) {
+			if (multiplier > 1.0F) {
 				multiplier = 1.0F;
 			} else {
 				multiplier *= multiplier;
 			}
 			fov = 1.0F - multiplier * 0.15F;
 		}
-	event.newfov = fov;
+		event.newfov = fov;
 	}
 
 	@Override
@@ -168,5 +177,24 @@ public class ItemWeedwoodBow extends ItemBow {
 
 		return item;
 	}
-}
 
+	@Override
+	public IIcon[] getIcons() {
+		return iconArray;
+	}
+
+	@Override
+	public void setDecayIcons(IIcon[][] decayIcons) {
+		this.decayIcons = decayIcons;
+	}
+
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
+		DecayableItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+	}
+
+	@Override
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+	}
+}

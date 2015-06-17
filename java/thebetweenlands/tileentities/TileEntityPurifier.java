@@ -172,7 +172,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		if (worldObj.isRemote)
 			return;
 		
-		ItemStack output = PurifierRecipe.getOutput(inventory[1]);
+		ItemStack output = PurifierRecipe.getRecipeOutput(inventory[1]);
 		if(hasFuel() && !outputIsFull()) {
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				time++;

@@ -127,10 +127,13 @@ public class HeldItemTooltipHandler {
 			return true;
 		}
 		if (a != null && b != null) {
-			if (a.stackTagCompound == null && b.stackTagCompound != null) {
+			if (a.stackTagCompound == null && b.stackTagCompound == null) {
+				return true;
+			}
+			if (a.stackTagCompound == null ^ b.stackTagCompound == null) {
 				return false;
 			}
-			return a.stackTagCompound == null || areNBTCompoundsEquals(a.stackTagCompound, b.stackTagCompound, exclusions);
+			return areNBTCompoundsEquals(a.stackTagCompound, b.stackTagCompound, exclusions);
 		}
 		return false;
 	}

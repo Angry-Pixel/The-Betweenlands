@@ -1,19 +1,22 @@
 package thebetweenlands.utils;
 
-import java.util.Arrays;
-import java.util.Formatter;
 import java.util.List;
+import java.util.UUID;
 
-import thebetweenlands.client.tooltips.HeldItemTooltipHandler;
-import thebetweenlands.manager.DecayManager;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.manager.DecayManager;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 public final class DecayableItemHelper {
 	public static final int MAX_DECAY = 255;
@@ -37,8 +40,18 @@ public final class DecayableItemHelper {
 		itemStack.setTagInfo("Decay", new NBTTagInt(decay));
 	}
 
+	public static float getModifier(ItemStack itemStack) {
+		return (-0.5F * (getDecay(itemStack) / (float) MAX_DECAY) + 1);
+	}
+
 	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, Block block, int meta) {
-		return normalDigSpeed * (-0.5F * (getDecay(itemStack) / (float) MAX_DECAY) + 1);
+		return normalDigSpeed * getModifier(itemStack);
+	}
+
+	public static Multimap getAttributeModifiers(ItemStack stack, UUID uuid, float damageVsEntity) {
+		Multimap multimap = HashMultimap.create();
+		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
+		return multimap;
 	}
 
 	public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
@@ -49,7 +62,7 @@ public final class DecayableItemHelper {
 		if (decay < MAX_DECAY) {
 			float probability = holder.isInWater() ? 0.0075F : 0.0025F;
 			if (holder instanceof EntityPlayer) {
-				probability *= ((EntityPlayer) holder).isUsingItem() ? 1.025F : 1;
+				probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 1.025F : 1;
 				float playerDecay = DecayManager.getDecayLevel((EntityPlayer) holder) / 20F;
 				probability *= (1 - playerDecay * 0.5F);
 			}

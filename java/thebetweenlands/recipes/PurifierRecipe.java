@@ -6,79 +6,57 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
-public class PurifierRecipe {
+public abstract class PurifierRecipe {
+	private static final List<PurifierRecipe> RECIPES = new ArrayList<PurifierRecipe>();
+	private static final PurifierRecipeDecayable DECAYABLE_ITEMS_RECIPE = new PurifierRecipeDecayable();
 
-	private static final List<PurifierRecipe> recipes = new ArrayList<PurifierRecipe>();
+	public abstract ItemStack getOutput(ItemStack input);
+
+	public abstract boolean matches(ItemStack stack);
 
 	/**
-	 *
-	 * @param output
-	 *            what will be produced by the recipe
-	 * @param input
-	 *            the input item for the recipe
+	 * @param output what will be produced by the recipe
+	 * @param input the input item for the recipe
 	 */
-
 	public static void addRecipe(ItemStack output, ItemStack input) {
-		recipes.add(new PurifierRecipe(output, input));
+		RECIPES.add(new PurifierRecipeStandard(output, input));
 	}
 
-	public static ItemStack getOutput(ItemStack input) {
-		for (PurifierRecipe recipe : recipes)
-			if (recipe.matches(input))
-				return recipe.getOutput();
+	public static ItemStack getRecipeOutput(ItemStack input) {
+		for (PurifierRecipe recipe : RECIPES) {
+			if (recipe.matches(input)) {
+				return recipe.getOutput(input);
+			}
+		}
+		if (DECAYABLE_ITEMS_RECIPE.matches(input)) {
+			return DECAYABLE_ITEMS_RECIPE.getOutput(input);
+		}
 		return null;
 	}
 
 	public static List<PurifierRecipe> getRecipeList() {
-		return Collections.unmodifiableList(recipes);
+		return Collections.unmodifiableList(RECIPES);
 	}
 
-	private final ItemStack output;
-	private final ItemStack input;
-
-	private PurifierRecipe(ItemStack output, ItemStack input) {
-		this.output = ItemStack.copyItemStack(output);
-		this.input = ItemStack.copyItemStack(input);
-
-			if (input instanceof ItemStack)
-				input = ItemStack.copyItemStack((ItemStack) input);
-			else
-				throw new IllegalArgumentException("Input must be an ItemStack");
+	public static boolean areStacksTheSame(ItemStack a, ItemStack b) {
+		return areStacksTheSame(a, b, false);
 	}
 
-	public ItemStack getInputs() {
-		return ItemStack.copyItemStack(input);
-	}
-
-	public ItemStack getOutput() {
-		return ItemStack.copyItemStack(output);
-	}
-
-	public boolean matches(ItemStack stacks) {
-		if (stacks != null)
-			if (areStacksTheSame(getInputs(), stacks)) {
-				stacks = null;
-				return true;
-			}
-		return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	private boolean areStacksTheSame(ItemStack stack, ItemStack target) {
-		return areStacksTheSame(stack, target, false);
-	}
-
-	public static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2, boolean matchSize) {
-		if (stack1 == null || stack2 == null)
+	public static boolean areStacksTheSame(ItemStack a, ItemStack b, boolean matchStackSize) {
+		if (a == null || b == null) {
 			return false;
+		}
 
-		if (stack1.getItem() == stack2.getItem())
-			if (stack1.getItemDamage() == stack2.getItemDamage())
-				if (!matchSize || stack1.stackSize == stack2.stackSize) {
-					if (stack1.hasTagCompound() && stack2.hasTagCompound())
-						return stack1.getTagCompound().equals(stack2.getTagCompound());
-					return stack1.hasTagCompound() == stack2.hasTagCompound();
+		if (a.getItem() == b.getItem()) {
+			if (a.getItemDamage() == b.getItemDamage()) {
+				if (!matchStackSize || a.stackSize == b.stackSize) {
+					if (a.hasTagCompound() && b.hasTagCompound()) {
+						return a.getTagCompound().equals(b.getTagCompound());
+					}
+					return a.hasTagCompound() == b.hasTagCompound();
 				}
+			}
+		}
 		return false;
 	}
 
