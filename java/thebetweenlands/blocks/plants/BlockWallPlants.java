@@ -443,7 +443,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 				dropChance -= fortune;
 			}
 			if(world.rand.nextInt(dropChance) == 0){
-				this.dropBlockAsItem(world, x, y, z, new ItemStack(BLItemRegistry.materialsBL, 1, 14));
+				this.dropBlockAsItem(world, x, y, z, new ItemStack(BLItemRegistry.materialsBL, 1, 16));
 			}
 		}
 	}
