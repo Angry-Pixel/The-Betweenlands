@@ -60,7 +60,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
 
 	public boolean generateTree(World world, Random rand, int x, int y, int z) {
 		
-		int radius = 3 + rand.nextInt(2);
+		int radius = 4 + rand.nextInt(2);
 		int height = 30 + rand.nextInt(5);
 		int maxRadius = 9;
 	
