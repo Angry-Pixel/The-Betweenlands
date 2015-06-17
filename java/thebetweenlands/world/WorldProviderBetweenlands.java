@@ -200,6 +200,15 @@ extends WorldProvider
 		}
 	}
 
+	//Fix for buggy rain (?)
+	@Override
+	public void calculateInitialWeather() { 
+		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		this.worldObj.getWorldInfo().setThundering(false);
+		super.calculateInitialWeather();
+	}
+	
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer()
