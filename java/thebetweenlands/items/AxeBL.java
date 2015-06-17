@@ -67,7 +67,7 @@ public class AxeBL extends ItemAxe implements IDecayable {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean isShiftDown) {
-		DecayableItemHelper.addInformation(itemStack, player, lines, isShiftDown);
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }

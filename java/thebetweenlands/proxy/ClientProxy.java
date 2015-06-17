@@ -71,6 +71,7 @@ import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityPurifierRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
+import thebetweenlands.client.tooltips.HeldItemTooltipHandler;
 import thebetweenlands.entities.EntityAngryPebble;
 import thebetweenlands.entities.EntityBLArrow;
 import thebetweenlands.entities.EntitySnailPoisonJet;
@@ -209,6 +210,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new DecayTextureStitchHandler());
+		FMLCommonHandler.instance().bus().register(new HeldItemTooltipHandler());
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
