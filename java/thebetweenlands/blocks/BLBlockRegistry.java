@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.world.World;
@@ -303,7 +304,7 @@ public class BLBlockRegistry
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
-	// STAIRS, SLABS, WALLS, FENCES, SIGNS
+	// STAIRS, SLABS, WALLS, FENCES, SIGNS, ETC.
 	public static final Block betweenstoneBrickStairs = new BlockBLStairs(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickStairs");
 	public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
 	public static final Block cragrockBrickStairs = new BlockBLStairs(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockBrickStairs");
@@ -331,6 +332,9 @@ public class BLBlockRegistry
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
 	public static final Block weedwoodPlankButton = new BlockBLButton("weedwoodPlanks", true);
 	public static final Block betweenstoneButton = new BlockBLButton("betweenstone", false);
+	public static final Block weedwoodPlankPressurePlate = new BlockBLPressurePlate("weedwoodPlanks", Material.wood, BlockPressurePlate.Sensitivity.everything);
+	public static final Block betweenstonePressurePlate = new BlockBLPressurePlate("betweenstone", Material.rock, BlockPressurePlate.Sensitivity.mobs);
+	public static final Block octinePressurePlate = new BlockBLPressurePlate("octineBlock", Material.rock, BlockPressurePlate.Sensitivity.players);
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);

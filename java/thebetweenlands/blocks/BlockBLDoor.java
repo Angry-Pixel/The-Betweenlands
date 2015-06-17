@@ -4,9 +4,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
@@ -24,6 +26,7 @@ public class BlockBLDoor extends BlockDoor {
 		setStepSound(soundTypeWood);
 		setBlockName("thebetweenlands.door" + name);
 		setBlockTextureName("thebetweenlands:door_" + name);
+		setCreativeTab(ModCreativeTabs.blocks);
 	}
 
 	public void setItem(Item item) {

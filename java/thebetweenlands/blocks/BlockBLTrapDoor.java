@@ -7,31 +7,47 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
 /**
  * Created by Bart on 16-6-2015.
  */
 public class BlockBLTrapDoor extends BlockTrapDoor {
+    private IIcon sideIcon;
 
     public BlockBLTrapDoor(String name, Material material) {
         super(material);
         this.setBlockName("thebetweenlands." + name + "TrapDoor");
-        textureName = "thebetweenlands:" + name;
+        textureName = "thebetweenlands:" + name + "Trapdoor";
         setHardness(3.0F);
         setStepSound(soundTypeWood);
+        setCreativeTab(ModCreativeTabs.blocks);
     }
+
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
+    public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side){
         return blockIcon;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {
+        if(side == 0 || side == 1 )
+            return blockIcon;
+        else
+            return sideIcon;
+    }
+
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-        this.blockIcon = register.registerIcon(textureName + "Trapdoor");
+        this.blockIcon = register.registerIcon(textureName);
+        this.sideIcon = register.registerIcon(textureName + "Side");
     }
 
     @Override
