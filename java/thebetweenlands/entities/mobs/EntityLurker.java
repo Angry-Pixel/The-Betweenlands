@@ -15,6 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -308,5 +310,27 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	public boolean isNoHandleInWater() {
 		return inWater;
+	}
+	
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:lurkerLiving" + randomSound;
+	}
+	
+	@Override
+	protected String getHurtSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:lurkerHurt" + randomSound;
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:lurkerDeath";
+	}
+	
+	@Override
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.LURKER_SKIN, 3), 0F);
 	}
 }
