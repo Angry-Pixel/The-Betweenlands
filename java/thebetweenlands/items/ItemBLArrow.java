@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.StatCollector;
 import thebetweenlands.entities.EntityBLArrow;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public class ItemBLArrow extends Item {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		ItemBLArrow item = (ItemBLArrow) stack.getItem();
 		if (item == BLItemRegistry.octineArrow)
-			list.add("Use with caution");
+			list.add(StatCollector.translateToLocal("arrow.caution"));
 		if (item == BLItemRegistry.basiliskArrow)
-			list.add("Stunningly good");
+			list.add(StatCollector.translateToLocal("arrow.stunning"));
 	}
 
 

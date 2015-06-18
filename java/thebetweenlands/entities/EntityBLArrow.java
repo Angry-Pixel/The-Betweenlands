@@ -196,7 +196,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 				if (ticksInGround == 1200) {
 					setDead();
 				}
-				else if (isOctineArrow && ticksInGround == 1) {
+				else if (isOctineArrow && ticksInGround == 1 && worldObj.getBlock(this.landedX, this.landedY+1, this.landedZ).isReplaceable(worldObj, this.landedX, this.landedY+1, this.landedZ)) {
 					worldObj.setBlock(this.landedX, this.landedY+1, this.landedZ, Blocks.fire);
 				}
 			} else {

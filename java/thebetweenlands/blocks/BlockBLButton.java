@@ -20,7 +20,7 @@ public class BlockBLButton extends BlockButton {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
+    public IIcon getIcon(int side, int meta) {
         return blockIcon;
     }
 

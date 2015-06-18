@@ -62,23 +62,17 @@ public class BlockBLDoor extends BlockDoor {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float hitX, float hitY, float hitZ) {
-		if (this.blockMaterial == Material.rock)
-		{
+		if (this.blockMaterial == Material.rock) {
 			return false; //Allow items to interact with the door
-		}
-		else
-		{
+		} else {
 			int i1 = this.func_150012_g(world, x, y, z);
 			int j1 = i1 & 7;
 			j1 ^= 4;
 
-			if ((i1 & 8) == 0)
-			{
+			if ((i1 & 8) == 0) {
 				world.setBlockMetadataWithNotify(x, y, z, j1, 2);
 				world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-			}
-			else
-			{
+			} else {
 				world.setBlockMetadataWithNotify(x, y - 1, z, j1, 2);
 				world.markBlockRangeForRenderUpdate(x, y - 1, z, x, y, z);
 			}

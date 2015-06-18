@@ -29,14 +29,14 @@ public class BlockBLTrapDoor extends BlockTrapDoor {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side){
+    public IIcon getIcon(IBlockAccess access, int x, int y, int z, int side) {
         return blockIcon;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        if(side == 0 || side == 1 )
+        if (side == 0 || side == 1)
             return blockIcon;
         else
             return sideIcon;
@@ -52,12 +52,9 @@ public class BlockBLTrapDoor extends BlockTrapDoor {
 
     @Override
     public boolean onBlockActivated(World wor, int x, int y, int z, EntityPlayer entityPlayer, int meta, float hitX, float hitY, float hitZ) {
-        if (this.blockMaterial == Material.rock)
-        {
+        if (this.blockMaterial == Material.rock) {
             return true;
-        }
-        else
-        {
+        } else {
             int i1 = wor.getBlockMetadata(x, y, z);
             wor.setBlockMetadataWithNotify(x, y, z, i1 ^ 4, 2);
             wor.playAuxSFXAtEntity(entityPlayer, 1003, x, y, z, 0);
