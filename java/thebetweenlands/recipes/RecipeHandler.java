@@ -84,16 +84,15 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED_ROPE, 4), "p", "p" , "p", 'p', ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED));
 		GameRegistry.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL, 4), "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBucket), " X ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks),'X', ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED_ROPE));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder), "X X", "xxx", "X X", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK),'X', ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED_ROPE));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder, 3), "X X", "xxx", "X X", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK),'X', ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED_ROPE));		
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankButton), new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneButton), new ItemStack(BLBlockRegistry.smoothBetweenstone));		
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.PLANT_TONIC), new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.sapBall));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePressurePlate), "xx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octinePressurePlate), "xx", 'x', BLBlockRegistry.octineBlock);
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'p', ItemMaterialsBL.createStack(EnumMaterialsBL.MUD_BRICK));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.MUD_BRICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark),'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
-		
 		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
