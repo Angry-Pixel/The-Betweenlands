@@ -184,6 +184,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		if (Math.abs(tailYaw) < 90) {
 			tailYaw += (prevRenderYawOffset - renderYawOffset);
 		}
+		if (Math.abs(tailPitch) < 90) {
+			tailPitch += (prevRotationPitch - rotationPitch);
+		}
 		tailPitch *= (1 - movementSpeed);
 		tailYaw *= (1 - movementSpeed);
 	}

@@ -29,6 +29,7 @@ public class ModelLurker extends ModelBase {
 	private ModelRenderer hindfinRight;
 
 	private ModelRenderer[] tail;
+	private float[] restingTailRotationAngleXs;
 
 	public ModelLurker() {
 		textureWidth = 256;
@@ -209,6 +210,10 @@ public class ModelLurker extends ModelBase {
 		trunk.addChild(hindfinRight);
 
 		tail = new ModelRenderer[] { lumbarVertebrae, tailFirst, tailSecond, tailThird };
+		restingTailRotationAngleXs = new float[tail.length];
+		for (int i = 0; i < restingTailRotationAngleXs.length; i++) {
+			restingTailRotationAngleXs[i] = tail[i].rotateAngleX;
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -231,10 +236,12 @@ public class ModelLurker extends ModelBase {
 		head.rotateAngleX = -mouthOpen * 0.4F + 0.0743572F;
 		mandable.rotateAngleX = mouthOpen * 0.4F;
 		float yaw = lurker.getTailYaw(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
+		float pitch = lurker.getTailPitch(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
 		boolean inWater = lurker.isNoHandleInWater();
 		for (int i = 0; i < tail.length; i++) {
 			ModelRenderer segment = tail[i];
 			segment.rotateAngleY = yaw;
+			segment.rotateAngleX = restingTailRotationAngleXs[i] + pitch;
 			if (inWater) {
 				segment.rotateAngleY += MathHelper.sin(swing * 0.3F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
 			}
