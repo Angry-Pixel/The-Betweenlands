@@ -4,231 +4,211 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 import thebetweenlands.entities.mobs.EntityLurker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelLurker extends ModelBase {
-	ModelRenderer torso1;
-	ModelRenderer torso2;
-	ModelRenderer torso3;
-	ModelRenderer torso4;
-	ModelRenderer tail1;
-	ModelRenderer tail2;
-	ModelRenderer tail3;
-	ModelRenderer tailfin1;
-	ModelRenderer tailfin2;
-	ModelRenderer tailfin3;
-	ModelRenderer bump1;
-	ModelRenderer bump2;
-	ModelRenderer bump3;
-	ModelRenderer head1;
-	ModelRenderer jawbottom;
-	ModelRenderer jawtop;
-	ModelRenderer tooth1left;
-	ModelRenderer tooth1right;
-	ModelRenderer tooth2left;
-	ModelRenderer tooth2right;
-	ModelRenderer tooth3left;
-	ModelRenderer tooth3right;
-	ModelRenderer horn1;
-	ModelRenderer horn2;
-	ModelRenderer finleft1;
-	ModelRenderer finright1;
-	ModelRenderer finleft2;
-	ModelRenderer finright2;
-	ModelRenderer finleft3;
-	ModelRenderer finright3;
-	ModelRenderer nailleft1;
-	ModelRenderer nailright1;
-	ModelRenderer nailleft2;
-	ModelRenderer nailright2;
+	private ModelRenderer trunk;
+	private ModelRenderer lumbarVertebrae;
+	private ModelRenderer tailFirst;
+	private ModelRenderer tailSecond;
+	private ModelRenderer tailThird;
+	private ModelRenderer bumpFirst;
+	private ModelRenderer bumpSecond;
+	private ModelRenderer bumpThird;
+	private ModelRenderer head;
+	private ModelRenderer mandable;
+	private ModelRenderer forefinLeftProximal;
+	private ModelRenderer forefinRightProximal;
+	private ModelRenderer forefinLeftDistal;
+	private ModelRenderer forefinRightDistal;
+	private ModelRenderer hindfinLeft;
+	private ModelRenderer hindfinRight;
+
+	private ModelRenderer[] tail;
 
 	public ModelLurker() {
 		textureWidth = 256;
 		textureHeight = 128;
-		initModel();
-	}
 
-	private void initModel() {
-		boxList.clear();
-		torso1 = new ModelRenderer(this, 0, 0);
-		torso1.addBox(-5F, 0F, 0F, 10, 10, 22);
-		torso1.setRotationPoint(0F, 11F, -11F);
-		setRotation(torso1, 0F, 0F, 0F);
-		torso2 = new ModelRenderer(this, 0, 33);
-		torso2.addBox(-5.5F, -0.5F, 3F, 11, 8, 16);
-		torso2.setRotationPoint(0F, 11F, -11F);
-		setRotation(torso2, 0F, 0F, 0F);
-		torso3 = new ModelRenderer(this, 0, 58);
-		torso3.addBox(-3.5F, 1.5F, -1.5F, 7, 7, 2);
-		torso3.setRotationPoint(0F, 11F, -11F);
-		setRotation(torso3, 0F, 0F, 0F);
-		torso4 = new ModelRenderer(this, 20, 58);
-		torso4.addBox(-4F, 0F, 0F, 8, 8, 6);
-		torso4.setRotationPoint(0F, 11F, 11F);
-		setRotation(torso4, -0.0371786F, 0F, 0F);
-		tail1 = new ModelRenderer(this, 0, 74);
-		tail1.addBox(-3F, 0F, 0F, 6, 7, 7);
-		tail1.setRotationPoint(0F, 11.25F, 17F);
-		setRotation(tail1, -0.0743572F, 0F, 0F);
-		tail2 = new ModelRenderer(this, 0, 90);
-		tail2.addBox(-2F, 0F, 0F, 4, 5, 8);
-		tail2.setRotationPoint(0F, 0.75F, 7F);
-		setRotation(tail2, -0.0743572F, 0F, 0F);
-		tail3 = new ModelRenderer(this, 0, 105);
-		tail3.addBox(-1.5F, 0F, 0F, 3, 4, 9);
-		tail3.setRotationPoint(0F, 1.75F, 14.8F);
-		setRotation(tail3, -0.0743572F, 0F, 0F);
-		tailfin1 = new ModelRenderer(this, 28, 74);
-		tailfin1.addBox(-0.5F, -13F, 5F, 1, 9, 4);
-		tailfin1.setRotationPoint(0F, 1.75F, 14.8F);
-		setRotation(tailfin1, -0.8179295F, 0F, 0F);
-		tailfin2 = new ModelRenderer(this, 40, 74);
-		tailfin2.addBox(-0.5F, 7.5F, 1.5F, 1, 7, 3);
-		tailfin2.setRotationPoint(0F, 1.75F, 14.8F);
-		setRotation(tailfin2, 0.5576792F, 0F, 0F);
-		tailfin3 = new ModelRenderer(this, 49, 74);
-		tailfin3.addBox(-0.5F, 4F, -1F, 1, 4, 2);
-		tailfin3.setRotationPoint(0F, 1.75F, 14.8F);
-		setRotation(tailfin3, 0.3717861F, 0F, 0F);
-		bump1 = new ModelRenderer(this, 66, 0);
-		bump1.addBox(-1.5F, -2F, 4F, 3, 2, 3);
-		bump1.setRotationPoint(0F, 11F, -11F);
-		setRotation(bump1, -0.0940825F, 0F, 0F);
-		bump2 = new ModelRenderer(this, 66, 7);
-		bump2.addBox(-1F, -2F, 10F, 2, 2, 2);
-		bump2.setRotationPoint(0F, 11F, -11F);
-		setRotation(bump2, -0.0766374F, 0F, 0F);
-		bump3 = new ModelRenderer(this, 66, 13);
-		bump3.addBox(-1F, -2F, 15F, 2, 2, 2);
-		bump3.setRotationPoint(0F, 11F, -11F);
-		setRotation(bump3, -0.0591841F, 0F, 0F);
-		head1 = new ModelRenderer(this, 95, 0);
-		head1.addBox(-4F, -2F, -6F, 8, 7, 6);
-		head1.setRotationPoint(0F, 14F, -12F);
-		setRotation(head1, 0.0743572F, 0F, 0F);
-		jawbottom = new ModelRenderer(this, 95, 15);
-		jawbottom.addBox(-4.5F, -2.5F, -13F, 9, 4, 16);
-		jawbottom.setRotationPoint(0F, 18F, -16F);
-		setRotation(jawbottom, 0.074351F, 0F, 0F);
-		jawtop = new ModelRenderer(this, 95, 36);
-		jawtop.addBox(-3.5F, -1F, -11F, 7, 3, 12);
-		jawtop.setRotationPoint(0F, 14F, -18F);
-		setRotation(jawtop, 0.1858869F, 0F, 0F);
-		tooth1left = new ModelRenderer(this, 95, 53);
-		tooth1left.addBox(3.5F, -7F, -15F, 1, 3, 1);
-		tooth1left.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth1left, 0.4089647F, 0F, 0.1487144F);
-		tooth1right = new ModelRenderer(this, 101, 53);
-		tooth1right.addBox(-4.5F, -7F, -15F, 1, 3, 1);
-		tooth1right.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth1right, 0.4089647F, 0F, -0.1487195F);
-		tooth2left = new ModelRenderer(this, 107, 53);
-		tooth2left.addBox(2.5F, -2F, -14F, 1, 1, 1);
-		tooth2left.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth2left, 0.2230717F, -0.0743572F, 0.1487144F);
-		tooth2right = new ModelRenderer(this, 112, 53);
-		tooth2right.addBox(-3.5F, -2F, -14F, 1, 1, 1);
-		tooth2right.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth2right, 0.2230717F, 0.074351F, -0.1487195F);
-		tooth3left = new ModelRenderer(this, 118, 53);
-		tooth3left.addBox(3.5F, -2F, -11F, 1, 1, 1);
-		tooth3left.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth3left, 0.2602503F, 0F, 0.1487144F);
-		tooth3right = new ModelRenderer(this, 123, 53);
-		tooth3right.addBox(-4.5F, -2F, -11F, 1, 1, 1);
-		tooth3right.setRotationPoint(0F, 14F, -12F);
-		setRotation(tooth3right, 0.2602503F, 0F, -0.1487195F);
-		horn1 = new ModelRenderer(this, 129, 53);
-		horn1.addBox(-1F, -1.5F, -8F, 2, 1, 2);
-		horn1.setRotationPoint(0F, 14F, -18F);
-		setRotation(horn1, 0.185895F, 0F, 0F);
-		horn2 = new ModelRenderer(this, 129, 57);
-		horn2.addBox(-0.5F, -1.5F, -3F, 1, 1, 1);
-		horn2.setRotationPoint(0F, 14F, -18F);
-		setRotation(horn2, 0.185895F, 0F, 0F);
-		finleft1 = new ModelRenderer(this, 155, 0);
-		finleft1.addBox(0F, 0F, -1F, 5, 2, 3);
-		finleft1.setRotationPoint(4F, 18F, -8F);
-		setRotation(finleft1, -0.2602503F, 0.2230717F, 0.4461433F);
-		finright1 = new ModelRenderer(this, 172, 0);
-		finright1.addBox(0F, 0F, -2F, 5, 2, 3);
-		finright1.setRotationPoint(-4F, 18F, -8F);
-		setRotation(finright1, 0.260246F, 2.918522F, -0.4461411F);
-		finleft2 = new ModelRenderer(this, 155, 7);
-		finleft2.addBox(2F, 0.5F, 0F, 5, 1, 8);
-		finleft2.setRotationPoint(4F, 18F, -8F);
-		setRotation(finleft2, -0.260246F, 0.4461411F, 0.4461433F);
-		finright2 = new ModelRenderer(this, 182, 7);
-		finright2.addBox(-7F, 0.5F, 0F, 5, 1, 8);
-		finright2.setRotationPoint(-4F, 18F, -8F);
-		setRotation(finright2, -0.260246F, -0.4461411F, -0.4461411F);
-		finleft3 = new ModelRenderer(this, 155, 18);
-		finleft3.addBox(0F, -1F, -0.5F, 4, 1, 8);
-		finleft3.setRotationPoint(4F, 20F, 5F);
-		setRotation(finleft3, -0.260246F, 0.4461411F, 0.4461411F);
-		finright3 = new ModelRenderer(this, 181, 18);
-		finright3.addBox(-4F, -1F, -0.5F, 4, 1, 8);
-		finright3.setRotationPoint(-4F, 20F, 5F);
-		setRotation(finright3, -0.260246F, -0.4461411F, -0.4461411F);
-		nailleft1 = new ModelRenderer(this, 155, 30);
-		nailleft1.addBox(5.5F, -0.2F, 7F, 1, 1, 2);
-		nailleft1.setRotationPoint(4F, 18F, -8F);
-		setRotation(nailleft1, -0.3346033F, 0.4461411F, 0.4461411F);
-		nailright1 = new ModelRenderer(this, 162, 30);
-		nailright1.addBox(-6.5F, -0.2F, 7F, 1, 1, 2);
-		nailright1.setRotationPoint(-4F, 18F, -8F);
-		setRotation(nailright1, -0.3346033F, -0.4461411F, -0.4461411F);
-		nailleft2 = new ModelRenderer(this, 170, 30);
-		nailleft2.addBox(3.5F, -0.2F, 7.3F, 1, 1, 1);
-		nailleft2.setRotationPoint(4F, 18F, -8F);
-		setRotation(nailleft2, -0.3345971F, 0.4461411F, 0.4461411F);
-		nailright2 = new ModelRenderer(this, 176, 30);
-		nailright2.addBox(-4.5F, -0.2F, 7.2F, 1, 1, 1);
-		nailright2.setRotationPoint(-4F, 18F, -8F);
-		setRotation(nailright2, -0.3345971F, -0.4461411F, -0.4461411F);
-		
-		tail1.addChild(tail2);
-		tail1.addChild(tail3);
-		tail1.addChild(tailfin1);
-		tail1.addChild(tailfin2);
-		tail1.addChild(tailfin3);
-	}
+		trunk = new ModelRenderer(this, 0, 0);
+		trunk.addBox(-5F, 0F, 0F, 10, 10, 22);
+		// add dorsal buldge
+		trunk.setTextureOffset(0, 33);
+		trunk.addBox(-5.5F, -0.5F, 3, 11, 8, 16);
+		// add cervical vertebrae
+		trunk.setTextureOffset(0, 58);
+		trunk.addBox(-3.5F, 1.5F, -1.5F, 7, 7, 2);
+		trunk.setRotationPoint(0F, 11F, -11F);
 
-	@Override
-	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
-		setRotationAngles(limbSwing, limbSwingAngle, ticksExisted, rotationYaw, rotationPitch, scale, entity);
-		torso1.render(scale);
-		torso2.render(scale);
-		torso3.render(scale);
-		torso4.render(scale);
-		tail1.render(scale);
-		bump1.render(scale);
-		bump2.render(scale);
-		bump3.render(scale);
-		head1.render(scale);
-		jawbottom.render(scale);
-		jawtop.render(scale);
-		tooth1left.render(scale);
-		tooth1right.render(scale);
-		tooth2left.render(scale);
-		tooth2right.render(scale);
-		tooth3left.render(scale);
-		tooth3right.render(scale);
-		horn1.render(scale);
-		horn2.render(scale);
-		finleft1.render(scale);
-		finright1.render(scale);
-		finleft2.render(scale);
-		finright2.render(scale);
-		finleft3.render(scale);
-		finright3.render(scale);
-		nailleft1.render(scale);
-		nailright1.render(scale);
-		nailleft2.render(scale);
-		nailright2.render(scale);
+		bumpFirst = new ModelRenderer(this, 66, 0);
+		bumpFirst.addBox(-1.5F, -2F, 4F, 3, 2, 3);
+		setRotation(bumpFirst, -0.0940825F, 0F, 0F);
+		trunk.addChild(bumpFirst);
+
+		bumpSecond = new ModelRenderer(this, 66, 7);
+		bumpSecond.addBox(-1F, -2F, 10F, 2, 2, 2);
+		setRotation(bumpSecond, -0.0766374F, 0, 0);
+		trunk.addChild(bumpSecond);
+
+		bumpThird = new ModelRenderer(this, 66, 13);
+		bumpThird.addBox(-1F, -2F, 15F, 2, 2, 2);
+		setRotation(bumpThird, -0.0591841F, 0F, 0F);
+		trunk.addChild(bumpThird);
+
+		head = new ModelRenderer(this, 95, 0);
+		head.addBox(-4F, -2F, -6F, 8, 7, 6);
+		head.setRotationPoint(0F, 3F, -1F);
+		setRotation(head, 0.0743572F, 0F, 0F);
+		trunk.addChild(head);
+
+		ModelRenderer maxilla = new ModelRenderer(this, 95, 36);
+		maxilla.addBox(-3.5F, 0, 0, 7, 3, 12);
+		// add first horn
+		maxilla.setTextureOffset(129, 53);
+		maxilla.addBox(-1F, -0.5F, 3F, 2, 1, 2);
+		// add second horn
+		maxilla.setTextureOffset(129, 57);
+		maxilla.addBox(-0.5F, -0.5F, 8F, 1, 1, 1);
+		maxilla.setRotationPoint(0F, -0.2F, -16.5F);
+		setRotation(maxilla, 0.1115297F, 0, 0);
+		head.addChild(maxilla);
+
+		mandable = new ModelRenderer(this, 95, 15);
+		mandable.addBox(-4.5F, -2F, -15F, 9, 4, 16);
+		mandable.setRotationPoint(0F, 3F, -2F);
+		head.addChild(mandable);
+
+		ModelRenderer tooth = new ModelRenderer(this, 95, 53);
+		tooth.addBox(3.5F, -7F, -15F, 1, 3, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.4F, 0F, 0.1487144F);
+		mandable.addChild(tooth);
+
+		tooth = new ModelRenderer(this, 101, 53);
+		tooth.addBox(-4.5F, -7F, -15F, 1, 3, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.4F, 0F, -0.1487195F);
+		mandable.addChild(tooth);
+
+		tooth = new ModelRenderer(this, 107, 53);
+		tooth.addBox(2.5F, -2F, -14F, 1, 1, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.2230717F, -0.0743572F, 0.1487144F);
+		mandable.addChild(tooth);
+
+		tooth = new ModelRenderer(this, 112, 53);
+		tooth.addBox(-3.5F, -2F, -14F, 1, 1, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.2230717F, 0.074351F, -0.1487195F);
+		mandable.addChild(tooth);
+
+		tooth = new ModelRenderer(this, 118, 53);
+		tooth.addBox(3.5F, -2F, -11F, 1, 1, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.2602503F, 0F, 0.1487144F);
+		mandable.addChild(tooth);
+
+		tooth = new ModelRenderer(this, 123, 53);
+		tooth.addBox(-4.5F, -2F, -11F, 1, 1, 1);
+		tooth.setRotationPoint(0F, -4F, 2F);
+		setRotation(tooth, 0.2602503F, 0F, -0.1487195F);
+		mandable.addChild(tooth);
+
+		lumbarVertebrae = new ModelRenderer(this, 20, 58);
+		lumbarVertebrae.addBox(-4F, -4F, 0F, 8, 8, 6);
+		lumbarVertebrae.setRotationPoint(0F, 4F, 21.75F);
+		setRotation(lumbarVertebrae, -0.0371786F, 0F, 0F);
+		trunk.addChild(lumbarVertebrae);
+
+		tailFirst = new ModelRenderer(this, 0, 74);
+		tailFirst.addBox(-3F, -3.5F, 0F, 6, 7, 7);
+		tailFirst.setRotationPoint(0F, -0.5F, 5.75F);
+		setRotation(tailFirst, -0.0371786F, 0F, 0F);
+		lumbarVertebrae.addChild(tailFirst);
+
+		tailSecond = new ModelRenderer(this, 0, 90);
+		tailSecond.addBox(-2F, -2.5F, 0F, 4, 5, 8);
+		tailSecond.setRotationPoint(0F, -0.25F, 6.75F);
+		setRotation(tailSecond, -0.0743572F, 0F, 0F);
+		tailFirst.addChild(tailSecond);
+
+		tailThird = new ModelRenderer(this, 0, 105);
+		tailThird.addBox(-1.5F, -2F, 0F, 3, 4, 9);
+		tailThird.setRotationPoint(0F, -0.1F, 7.75F);
+		setRotation(tailThird, 0F, 0F, 0F);
+		tailSecond.addChild(tailThird);
+
+		ModelRenderer tailFin = new ModelRenderer(this, 28, 74);
+		tailFin.addBox(-0.5F, -9, -4, 1, 9, 4);
+		tailFin.setRotationPoint(0F, 1F, 9.5F);
+		setRotation(tailFin, -0.7807509F, 0F, 0F);
+		tailThird.addChild(tailFin);
+
+		tailFin = new ModelRenderer(this, 40, 74);
+		tailFin.addBox(-0.5F, 0, 0, 1, 7, 3);
+		tailFin.setRotationPoint(0F, 2F, 6F);
+		setRotation(tailFin, 0.6320364F, 0F, 0F);
+		tailThird.addChild(tailFin);
+
+		tailFin = new ModelRenderer(this, 49, 74);
+		tailFin.addBox(-0.5F, 0, 0, 1, 4, 2);
+		tailFin.setRotationPoint(0F, 2, 1);
+		setRotation(tailFin, 0.4461433F, 0F, 0F);
+		tailThird.addChild(tailFin);
+
+		forefinLeftProximal = new ModelRenderer(this, 155, 0);
+		forefinLeftProximal.addBox(0F, 0F, -1F, 5, 2, 3);
+		forefinLeftProximal.setRotationPoint(4F, 7F, 3F);
+		setRotation(forefinLeftProximal, -0.2602503F, 0.2230717F, 0.4461433F);
+		trunk.addChild(forefinLeftProximal);
+
+		forefinRightProximal = new ModelRenderer(this, 172, 0);
+		forefinRightProximal.addBox(0F, 0F, -2F, 5, 2, 3);
+		forefinRightProximal.setRotationPoint(-4F, 7F, 3F);
+		setRotation(forefinRightProximal, 0.260246F, 2.918522F, -0.4461411F);
+		trunk.addChild(forefinRightProximal);
+
+		forefinLeftDistal = new ModelRenderer(this, 155, 7);
+		forefinLeftDistal.addBox(-1F, 0.5F, -1F, 5, 1, 8);
+		// add first nail
+		forefinLeftDistal.setTextureOffset(155, 30);
+		forefinLeftDistal.addBox(2.5F, 0.3F, 6F, 1, 1, 2);
+		// add second nail
+		forefinLeftDistal.setTextureOffset(170, 30);
+		forefinLeftDistal.addBox(0.5F, 0.3F, 6.5F, 1, 1, 1);
+		forefinLeftDistal.setRotationPoint(3, 0, 0);
+		setRotation(forefinLeftDistal, 0, 0.2F, 0);
+		forefinLeftProximal.addChild(forefinLeftDistal);
+
+		forefinRightDistal = new ModelRenderer(this, 182, 7);
+		forefinRightDistal.addBox(-4F, 0.5F, -1F, 5, 1, 8);
+		// add first nail
+		forefinRightDistal.setTextureOffset(162, 30);
+		forefinRightDistal.addBox(-3.5F, 0.3F, 6F, 1, 1, 2);
+		// add second nail
+		forefinRightDistal.setTextureOffset(176, 30);
+		forefinRightDistal.addBox(-1.5F, 0.3F, 6.5F, 1, 1, 1);
+		forefinRightDistal.setRotationPoint(3, 0, 0);
+		setRotation(forefinRightDistal, 0, -0.2F + (float) Math.PI, 0);
+		forefinRightProximal.addChild(forefinRightDistal);
+
+		hindfinLeft = new ModelRenderer(this, 155, 18);
+		hindfinLeft.addBox(0F, -1F, -0.5F, 4, 1, 8);
+		hindfinLeft.setRotationPoint(4F, 9F, 16F);
+		setRotation(hindfinLeft, -0.260246F, 0.4461411F, 0.4461411F);
+		trunk.addChild(hindfinLeft);
+
+		hindfinRight = new ModelRenderer(this, 181, 18);
+		hindfinRight.addBox(-4F, -1F, -0.5F, 4, 1, 8);
+		hindfinRight.setRotationPoint(-4F, 9F, 16F);
+		setRotation(hindfinRight, -0.260246F, -0.4461411F, -0.4461411F);
+		trunk.addChild(hindfinRight);
+
+		tail = new ModelRenderer[] { lumbarVertebrae, tailFirst, tailSecond, tailThird };
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -238,13 +218,26 @@ public class ModelLurker extends ModelBase {
 	}
 
 	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
+		head.rotateAngleY = rotationYaw / 180 * (float) Math.PI;
+		head.rotateAngleX += rotationPitch / 180 * (float) Math.PI;
+		trunk.render(scale);
+	}
+
+	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityLurker lurker = (EntityLurker) entity;
-		tail1.rotateAngleY = -0.05F + lurker.moveProgress * 0.2F;
-		tail2.rotateAngleY = tail1.rotateAngleY * 1.2F;
-		tail3.rotateAngleY = tail1.rotateAngleY * 1.4F;
-		tailfin1.rotateAngleY = tail1.rotateAngleY * 1.4F;
-		tailfin2.rotateAngleY = tail1.rotateAngleY * 1.6F;
-		tailfin3.rotateAngleY = tail1.rotateAngleY * 1.6F;
+		float mouthOpen = lurker.getMouthOpen(partialRenderTicks);
+		head.rotateAngleX = -mouthOpen * 0.4F + 0.0743572F;
+		mandable.rotateAngleX = mouthOpen * 0.4F;
+		float yaw = lurker.getTailYaw(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
+		boolean inWater = lurker.isNoHandleInWater();
+		for (int i = 0; i < tail.length; i++) {
+			ModelRenderer segment = tail[i];
+			segment.rotateAngleY = yaw;
+			if (inWater) {
+				segment.rotateAngleY += MathHelper.sin(swing * 0.3F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
+			}
+		}
 	}
 }

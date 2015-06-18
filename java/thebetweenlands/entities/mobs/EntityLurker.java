@@ -18,6 +18,8 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
+	private static final int MOUTH_OPEN_TICKS = 20;
+
 	private ChunkCoordinates currentSwimTarget;
 
 	private Class<?>[] prey = { EntityAngler.class, EntityDragonFly.class };
@@ -25,6 +27,22 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	private AnimationMathHelper animation = new AnimationMathHelper();
 
 	public float moveProgress;
+
+	private float prevRotationPitch;
+	private float rotationPitch;
+
+	private float prevTailYaw;
+	private float tailYaw;
+
+	private float prevTailPitch;
+	private float tailPitch;
+
+	private float prevMouthOpenTicks;
+	private float mouthOpenTicks;
+
+	private int ticksUntilBiteDamage = -1;
+
+	private Entity entityBeingBit;
 
 	public EntityLurker(World world) {
 		super(world);
@@ -35,6 +53,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataWatcher.addObject(20, (byte) 0);
+		dataWatcher.addObject(21, (byte) 0);
+		dataWatcher.addObject(22, (float) 1);
 	}
 
 	@Override
@@ -55,10 +75,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	@Override
 	public boolean isInWater() {
 		return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
-	}
-
-	public boolean isGrounded() {
-		return !isInWater() && getRelativeBlock(1) == Blocks.air && getRelativeBlock(-1).isCollidable();
 	}
 
 	private Block getRelativeBlock(int offsetY) {
@@ -94,18 +110,87 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				}
 			}
 		}
+		float magnitude = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ) * (onGround ? 0 : 1);
+		float motionPitch = (float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90;
+		if (magnitude > 1) {
+			magnitude = 1;
+		}
+		float newRotationPitch = (rotationPitch - motionPitch) * magnitude * 4;
+		tailPitch += (rotationPitch - newRotationPitch);
+		rotationPitch = newRotationPitch;
+		if (Math.abs(rotationPitch) < 0.05F) {
+			rotationPitch = 0;
+		}
 	}
 
 	@Override
 	public void onUpdate() {
+		prevRotationPitch = rotationPitch;
+		prevTailPitch = tailPitch;
+		prevTailYaw = tailYaw;
+		while (rotationPitch - prevRotationPitch < -180) {
+			prevRotationPitch -= 360;
+		}
+		while (rotationPitch - prevRotationPitch >= 180) {
+			prevRotationPitch += 360;
+		}
+		while (tailPitch - prevTailPitch < -180) {
+			prevTailPitch -= 360;
+		}
+		while (tailPitch - prevTailPitch >= 180) {
+			prevTailPitch += 360;
+		}
+		while (tailYaw - prevTailYaw < -180) {
+			prevTailYaw -= 360;
+		}
+		while (tailYaw - prevTailYaw >= 180) {
+			prevTailYaw += 360;
+		}
+		prevMouthOpenTicks = mouthOpenTicks;
 		super.onUpdate();
-//		prevRotationPitch = rotationPitch;
-//		prevRotationYaw = rotationYaw;
-//		prevRotationYawHead = rotationYawHead;
-//		limbSwingAmount = 0;
-//		limbSwing = 0;
-//		renderYawOffset = 0;
-//		prevRenderYawOffset = 0;
+		if (shouldMouthBeOpen()) {
+			if (mouthOpenTicks < MOUTH_OPEN_TICKS) {
+				mouthOpenTicks += getMouthMoveSpeed();
+			}
+			if (mouthOpenTicks > MOUTH_OPEN_TICKS) {
+				mouthOpenTicks = MOUTH_OPEN_TICKS;
+			}
+		} else {
+			if (mouthOpenTicks > 0) {
+				mouthOpenTicks -= getMouthMoveSpeed();
+			}
+			if (mouthOpenTicks < 0) {
+				mouthOpenTicks = 0;
+			}
+		}
+		if (ticksUntilBiteDamage > -1) {
+			ticksUntilBiteDamage--;
+			if (ticksUntilBiteDamage == -1) {
+				setShouldMouthBeOpen(false);
+				super.attackEntityAsMob(entityBeingBit);
+				if (isLeaping() && entityBeingBit instanceof EntityDragonFly) {
+					entityBeingBit.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entityBeingBit).getMaxHealth());
+				}
+				entityBeingBit = null;
+			}
+		}
+		float movementSpeed = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
+		movementSpeed *= 1.02F;
+		if (movementSpeed > 1) {
+			movementSpeed = 1;
+		} else if (movementSpeed < 0.08) {
+			movementSpeed = 0;
+		}
+		if (Math.abs(tailYaw) < 90) {
+			tailYaw += (prevRenderYawOffset - renderYawOffset);
+		}
+		tailPitch *= (1 - movementSpeed);
+		tailYaw *= (1 - movementSpeed);
+	}
+
+	@Override
+	protected void updateEntityActionState() {
+		super.updateEntityActionState();
 		entityToAttack = findEnemyToAttack();
 	}
 
@@ -149,19 +234,20 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
 		if (distance < 2 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY) {
-			super.attackEntityAsMob(entity);
-			if (isLeaping() && entity instanceof EntityDragonFly)
-				entity.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entity).getMaxHealth());
+			setShouldMouthBeOpen(true);
+			setMouthMoveSpeed(10);
+			ticksUntilBiteDamage = 10;
+			entityBeingBit = entity;
 		}
-		if (isInWater() && entity instanceof EntityDragonFly) {
+		if (isNoHandleInWater() && entity instanceof EntityDragonFly && !isLeaping()) {
 			if (distance > 0 && distance < 10 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY) {
 				setIsLeaping(true);
 				double distanceX = entity.posX - posX;
 				double distanceZ = entity.posZ - posZ;
 				float magnitude = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-				motionX = distanceX / magnitude * 0.5 * 0.9 + motionX * 1.7;
-				motionZ = distanceZ / magnitude * 0.5 * 0.9 + motionZ * 1.7;
-				motionY = 1;
+				motionX += distanceX / magnitude * 0.6;
+				motionZ += distanceZ / magnitude * 0.6;
+				motionY += 0.7;
 			}
 		}
 	}
@@ -180,5 +266,41 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	public void setIsLeaping(boolean isLeaping) {
 		dataWatcher.updateObject(20, (byte) (isLeaping ? 1 : 0));
+	}
+
+	public boolean shouldMouthBeOpen() {
+		return dataWatcher.getWatchableObjectByte(21) == 1;
+	}
+
+	public void setShouldMouthBeOpen(boolean shouldMouthBeOpen) {
+		dataWatcher.updateObject(21, (byte) (shouldMouthBeOpen ? 1 : 0));
+	}
+
+	public float getMouthMoveSpeed() {
+		return dataWatcher.getWatchableObjectFloat(22);
+	}
+
+	public void setMouthMoveSpeed(float mouthMoveSpeed) {
+		dataWatcher.updateObject(22, mouthMoveSpeed);
+	}
+
+	public float getRotationPitch(float partialRenderTicks) {
+		return rotationPitch * partialRenderTicks + prevRotationPitch * (1 - partialRenderTicks);
+	}
+
+	public float getMouthOpen(float partialRenderTicks) {
+		return (mouthOpenTicks * partialRenderTicks + prevMouthOpenTicks * (1 - partialRenderTicks)) / MOUTH_OPEN_TICKS;
+	}
+
+	public float getTailYaw(float partialRenderTicks) {
+		return tailYaw * partialRenderTicks + prevTailYaw * (1 - partialRenderTicks);
+	}
+
+	public float getTailPitch(float partialRenderTicks) {
+		return tailPitch * partialRenderTicks + prevTailPitch * (1 - partialRenderTicks);
+	}
+
+	public boolean isNoHandleInWater() {
+		return inWater;
 	}
 }
