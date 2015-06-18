@@ -55,6 +55,14 @@ tile.thebetweenlands.weedwoodLadder.name=Weedwood Ladder
 tile.thebetweenlands.dooroctine.name=Octine Door
 tile.thebetweenlands.weedwoodTrapDoor.name=Weedwood Trapdoor
 tile.thebetweenlands.octineTrapDoor.name=Octine Trapdoor
+tile.thebetweenlands.weedwoodPlanksButton.name=Weedwood Button
+tile.thebetweenlands.smoothBetweenstoneButton.name=Betweenstone Button
+tile.thebetweenlands.weedwoodPlanksPressurePlate.name=Weedwood Pressure Plate
+tile.thebetweenlands.betweenstonePressurePlate.name=Betweenstone Pressure Plate
+tile.thebetweenlands.octineBlockPressurePlate.name=Octine Pressure Plate
+tile.thebetweenlands.weedwoodLever.name=Weedwood Lever
+tile.thebetweenlands.mudFlowerPot.name=Mud Brick Flower Pot
+tile.thebetweenlands.weedwoodPlanksPressurePlate.name=Weedwood Pressure Plate
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt

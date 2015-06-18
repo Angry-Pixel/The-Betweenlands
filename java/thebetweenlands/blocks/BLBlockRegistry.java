@@ -331,11 +331,11 @@ public class BLBlockRegistry
 	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
 	public static final Block weedwoodPlankButton = new BlockBLButton("weedwoodPlanks", true);
-	public static final Block betweenstoneButton = new BlockBLButton("betweenstone", false);
+	public static final Block betweenstoneButton = new BlockBLButton("smoothBetweenstone", false);
 	public static final Block weedwoodPlankPressurePlate = new BlockBLPressurePlate("weedwoodPlanks", Material.wood, BlockPressurePlate.Sensitivity.everything);
 	public static final Block betweenstonePressurePlate = new BlockBLPressurePlate("betweenstone", Material.rock, BlockPressurePlate.Sensitivity.mobs);
 	public static final Block octinePressurePlate = new BlockBLPressurePlate("octineBlock", Material.rock, BlockPressurePlate.Sensitivity.players);
-	public static final Block weedwoordLever = new BlockBLLever();
+	public static final Block weedwoodLever = new BlockBLLever();
 	public static final Block mudFlowerPot = new BlockBLFlowerPot();
 
 	//DOORS
