@@ -94,6 +94,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 					currentSwimTarget = new ChunkCoordinates(MathHelper.floor_double(entityToAttack.posX), MathHelper.floor_double(entityToAttack.posY), MathHelper.floor_double(entityToAttack.posZ));
 					swimToTarget();
 				}
+				if (motionY < 0 && isLeaping()) {
+					setIsLeaping(false);
+				}
 			}
 			renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
 			rotationYaw = renderYawOffset;
@@ -115,7 +118,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		if (magnitude > 1) {
 			magnitude = 1;
 		}
-		float newRotationPitch = (rotationPitch - motionPitch) * magnitude * 4;
+		float newRotationPitch = (rotationPitch - motionPitch) * magnitude * 4 * (getRelativeBlock(2).getMaterial() == Material.water || !inWater ? 1 : 0);
 		tailPitch += (rotationPitch - newRotationPitch);
 		rotationPitch = newRotationPitch;
 		if (Math.abs(rotationPitch) < 0.05F) {
@@ -242,15 +245,15 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			ticksUntilBiteDamage = 10;
 			entityBeingBit = entity;
 		}
-		if (isNoHandleInWater() && entity instanceof EntityDragonFly && !isLeaping()) {
-			if (distance > 0 && distance < 10 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY) {
+		if (inWater && entity instanceof EntityDragonFly && !isLeaping()) {
+			if (distance > 0 && distance < 5) {
 				setIsLeaping(true);
 				double distanceX = entity.posX - posX;
 				double distanceZ = entity.posZ - posZ;
 				float magnitude = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-				motionX += distanceX / magnitude * 0.6;
-				motionZ += distanceZ / magnitude * 0.6;
-				motionY += 0.7;
+				motionX += distanceX / magnitude * 1.1;
+				motionZ += distanceZ / magnitude * 1.1;
+				motionY += 0.9;
 			}
 		}
 	}
