@@ -29,8 +29,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, new Byte((byte) 0));
-		dataWatcher.addObject(21, 1F);
+		dataWatcher.addObject(20, (byte) 0);
+		dataWatcher.addObject(21, (float) 1);
 	}
 
 	@Override

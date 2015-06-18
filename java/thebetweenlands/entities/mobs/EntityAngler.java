@@ -34,7 +34,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, Byte.valueOf((byte) 0));
+		dataWatcher.addObject(20, (byte) 0);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
                 motionZ = 0.0D;
                 }
             	else if(onGround) {
-            		setIsLeaping((byte) 0);
+            		setIsLeaping(false);
 					motionY += 0.4F;
 					motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
 					motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
@@ -196,7 +196,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	protected void attackEntity(Entity entity, float distance) {
 		if (distance > 2.0F && distance < 6.0F && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && rand.nextInt(3) == 0)
 			if (isInWater() && worldObj.getBlock((int) posX, (int) posY + 1, (int) posZ) == Blocks.air) {
-				setIsLeaping((byte) 1);
+				setIsLeaping(true);
 				double distanceX = entity.posX - posX;
 				double distanceZ = entity.posZ - posZ;
 				float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
@@ -213,12 +213,12 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		return super.attackEntityFrom(source, damage);
 	}
 	
-	public int getIsLeaping() {
-		return dataWatcher.getWatchableObjectByte(20);
+	public boolean isLeaping() {
+		return dataWatcher.getWatchableObjectByte(20) == 1;
 	}
 	
-	public void setIsLeaping(byte leaping) {
-		dataWatcher.updateObject(20, Byte.valueOf((byte) leaping));
+	public void setIsLeaping(boolean leaping) {
+		dataWatcher.updateObject(20, (byte) (leaping ? 1 : 0));
 	}
 
 }

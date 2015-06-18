@@ -40,7 +40,7 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, Byte.valueOf((byte) 0));
+		dataWatcher.addObject(20, (byte) 0);
 	}
 
 	@Override
@@ -91,7 +91,7 @@ public class EntityDarkDruid extends EntityMob {
 
 		if (worldObj.isRemote && isCasting == 1)
 			spawnParticles();
-		dataWatcher.updateObject(20, Byte.valueOf((byte) isCasting));
+		dataWatcher.updateObject(20, (byte) isCasting);
 
 		if (!worldObj.isRemote && isEntityAlive() && getAttackTarget() != null)
 			if (getAttackTarget().getDistanceSqToEntity(this) > 36.0D && isCasting == 0 && teleportDelay++ >= 20 && getAttackTarget().onGround)

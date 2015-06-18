@@ -39,7 +39,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(31, new Byte((byte) 0));
+		dataWatcher.addObject(31, (byte) 0);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	
 	@Override
 	protected boolean canDespawn() {
-		if (getHasMated() == 1)
+		if (hasMated())
 			return false;
 		else
 			return true;
@@ -107,7 +107,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 		if (is != null && isBreedingItem(is) && !shagging()) {
 			player.swingItem();
-			setTame((byte) 1);
+			setHasMated(true);
 			return super.interact(player);
 		}
 		
@@ -128,24 +128,24 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		return new EntityMireSnailEgg(worldObj);
 	}
 
-	public void setTame(byte hasMated) {
-		dataWatcher.updateObject(31, Byte.valueOf(hasMated));
+	public void setHasMated(boolean hasMated) {
+		dataWatcher.updateObject(31, (byte) (hasMated ? 1 : 0));
 	}
 
-	public byte getHasMated() {
-		return dataWatcher.getWatchableObjectByte(31);
+	public boolean hasMated() {
+		return dataWatcher.getWatchableObjectByte(31) == 1;
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setByte("hasMated", getHasMated());
+		nbt.setBoolean("hasMated", hasMated());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setTame(nbt.getByte("hasMated"));
+		setHasMated(nbt.getBoolean("hasMated"));
 	}
     
 }

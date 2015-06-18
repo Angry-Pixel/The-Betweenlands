@@ -43,7 +43,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(15, Byte.valueOf((byte) 0));
+		dataWatcher.addObject(15, (byte) 0);
 	}
 
 	@Override

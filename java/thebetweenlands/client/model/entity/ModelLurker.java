@@ -3,6 +3,7 @@ package thebetweenlands.client.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.entities.mobs.EntityLurker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,7 +48,11 @@ public class ModelLurker extends ModelBase {
 	public ModelLurker() {
 		textureWidth = 256;
 		textureHeight = 128;
+		initModel();
+	}
 
+	private void initModel() {
+		boxList.clear();
 		torso1 = new ModelRenderer(this, 0, 0);
 		torso1.addBox(-5F, 0F, 0F, 10, 10, 22);
 		torso1.setRotationPoint(0F, 11F, -11F);
@@ -151,7 +156,7 @@ public class ModelLurker extends ModelBase {
 		finright1 = new ModelRenderer(this, 172, 0);
 		finright1.addBox(0F, 0F, -2F, 5, 2, 3);
 		finright1.setRotationPoint(-4F, 18F, -8F);
-		setRotation(finright1, 0.260246F, 2.918522F, 0.4461411F); //
+		setRotation(finright1, 0.260246F, 2.918522F, -0.4461411F);
 		finleft2 = new ModelRenderer(this, 155, 7);
 		finleft2.addBox(2F, 0.5F, 0F, 5, 1, 8);
 		finleft2.setRotationPoint(4F, 18F, -8F);
@@ -192,41 +197,38 @@ public class ModelLurker extends ModelBase {
 		tail1.addChild(tailfin3);
 	}
 
-	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime,
-			float rotationYaw, float rotationPitch, float unitPixel) {
-		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-		
-		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		
-		torso1.render(unitPixel);
-		torso2.render(unitPixel);
-		torso3.render(unitPixel);
-		torso4.render(unitPixel);
-		tail1.render(unitPixel);
-		bump1.render(unitPixel);
-		bump2.render(unitPixel);
-		bump3.render(unitPixel);
-		head1.render(unitPixel);
-		jawbottom.render(unitPixel);
-		jawtop.render(unitPixel);
-		tooth1left.render(unitPixel);
-		tooth1right.render(unitPixel);
-		tooth2left.render(unitPixel);
-		tooth2right.render(unitPixel);
-		tooth3left.render(unitPixel);
-		tooth3right.render(unitPixel);
-		horn1.render(unitPixel);
-		horn2.render(unitPixel);
-		finleft1.render(unitPixel);
-		finright1.render(unitPixel);
-		finleft2.render(unitPixel);
-		finright2.render(unitPixel);
-		finleft3.render(unitPixel);
-		finright3.render(unitPixel);
-		nailleft1.render(unitPixel);
-		nailright1.render(unitPixel);
-		nailleft2.render(unitPixel);
-		nailright2.render(unitPixel);
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
+		setRotationAngles(limbSwing, limbSwingAngle, ticksExisted, rotationYaw, rotationPitch, scale, entity);
+		torso1.render(scale);
+		torso2.render(scale);
+		torso3.render(scale);
+		torso4.render(scale);
+		tail1.render(scale);
+		bump1.render(scale);
+		bump2.render(scale);
+		bump3.render(scale);
+		head1.render(scale);
+		jawbottom.render(scale);
+		jawtop.render(scale);
+		tooth1left.render(scale);
+		tooth1right.render(scale);
+		tooth2left.render(scale);
+		tooth2right.render(scale);
+		tooth3left.render(scale);
+		tooth3right.render(scale);
+		horn1.render(scale);
+		horn2.render(scale);
+		finleft1.render(scale);
+		finright1.render(scale);
+		finleft2.render(scale);
+		finright2.render(scale);
+		finleft3.render(scale);
+		finright3.render(scale);
+		nailleft1.render(scale);
+		nailright1.render(scale);
+		nailleft2.render(scale);
+		nailright2.render(scale);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -235,10 +237,10 @@ public class ModelLurker extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
-		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		EntityLurker lurker = (EntityLurker)entity;
-		tail1.rotateAngleY =  -0.05F + lurker.moveProgress *0.2F;
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+		EntityLurker lurker = (EntityLurker) entity;
+		tail1.rotateAngleY = -0.05F + lurker.moveProgress * 0.2F;
 		tail2.rotateAngleY = tail1.rotateAngleY * 1.2F;
 		tail3.rotateAngleY = tail1.rotateAngleY * 1.4F;
 		tailfin1.rotateAngleY = tail1.rotateAngleY * 1.4F;

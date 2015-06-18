@@ -43,7 +43,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, new Integer(0));
+		dataWatcher.addObject(20, 0);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	public void setRangeAttackTimer(int size) {
-		dataWatcher.updateObject(20, Integer.valueOf(size));
+		dataWatcher.updateObject(20, size);
 	}
 
 	public int getRangeAttackTimer() {

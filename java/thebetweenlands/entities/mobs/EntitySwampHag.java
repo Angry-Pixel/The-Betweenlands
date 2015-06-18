@@ -44,9 +44,9 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(19, new Byte((byte) 0));
-		dataWatcher.addObject(20, new Byte((byte) 0));
-		dataWatcher.addObject(21, new Integer(0));
+		dataWatcher.addObject(19, (byte) 0);
+		dataWatcher.addObject(20, (byte) 0);
+		dataWatcher.addObject(21, 0);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23000000417232513D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
@@ -80,8 +80,8 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		return "thebetweenlands:swampHagLiving" + getTalkSound();
 	}
 
-	private void setTalkSound(byte soundIndex) {
-		dataWatcher.updateObject(19, Byte.valueOf(soundIndex));
+	private void setTalkSound(int soundIndex) {
+		dataWatcher.updateObject(19, (byte) soundIndex);
 	}
 	
 	private byte getTalkSound() {
@@ -90,61 +90,69 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getHurtSound() {
-		setTalkSound((byte) 4);
-		setJawState((byte) 1);
+		setTalkSound(4);
+		setShouldJawMove(true);
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:swampHagHurt" + randomSound;
 	}
 
 	@Override
 	protected String getDeathSound() {
-		setTalkSound((byte) 4);
-		setJawState((byte) 1);
+		setTalkSound(4);
+		setShouldJawMove(true);
 		return "thebetweenlands:swampHagDeath";
 	}
 
 	@Override
 	public void onLivingUpdate() {
-
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 
-		if(!worldObj.isRemote)
-			dataWatcher.updateObject(21, Integer.valueOf(livingSoundTime));
+		if (!worldObj.isRemote) {
+			updateLivingSoundTime();
+		}
 
-		if(animationTick > 0) {
+		if (animationTick > 0) {
 			animationTick--;
 		}
 
-		if(animationTick == 0) {
-			setJawState((byte) 0);
+		if (animationTick == 0) {
+			setShouldJawMove(false);
 			jawFloat = animationTalk.swing(0F, 0F, true);
 		}
 
-		if(dataWatcher.getWatchableObjectInt(21) == -getTalkInterval())
-			setJawState((byte) 1);
+		if (getLivingSoundTime() == -getTalkInterval())
+			setShouldJawMove(true);
 
-		if (getJawState() == 0)
+		if (!shouldJawMove())
 			jawFloat = animationTalk.swing(0F, 0F, true);
-		else if (getJawState() == 1 && getTalkSound() != 3 && getTalkSound() != 4)
+		else if (shouldJawMove() && getTalkSound() != 3 && getTalkSound() != 4)
 			jawFloat = animationTalk.swing(2.0F, 0.1F, false);
-		else if (getJawState() == 1 && getTalkSound() == 3 || getJawState() == 1 && getTalkSound() == 4)
+		else if (shouldJawMove() && getTalkSound() == 3 || shouldJawMove() && getTalkSound() == 4)
 			jawFloat = animationTalk.swing(0.4F, 1.2F, false);
-			super.onLivingUpdate();	
+		super.onLivingUpdate();	
 	}
 	
-	public void setJawState(byte jawState) {
-		dataWatcher.updateObject(20, Byte.valueOf(jawState));
-		if(jawState == 1)
+	public void setShouldJawMove(boolean jawState) {
+		dataWatcher.updateObject(20, (byte) (jawState ? 1 : 0));
+		if (jawState)
 			animationTick = 20;
 	}
 
-	public byte getJawState() {
-		return dataWatcher.getWatchableObjectByte(20);
+	public boolean shouldJawMove() {
+		return dataWatcher.getWatchableObjectByte(20) == 1;
+	}
+
+	private void updateLivingSoundTime() {
+		dataWatcher.updateObject(21, livingSoundTime);
+	}
+
+	private int getLivingSoundTime() {
+		return dataWatcher.getWatchableObjectInt(21);
 	}
 	
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE, 3), 0F);
+		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE, 3), 0F);
 	}
 
 	@Override

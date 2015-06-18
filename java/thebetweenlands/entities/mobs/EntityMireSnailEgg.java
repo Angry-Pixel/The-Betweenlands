@@ -22,7 +22,7 @@ public class EntityMireSnailEgg extends EntityAnimal {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(31, new Integer(0));
+		dataWatcher.addObject(31, 0);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class EntityMireSnailEgg extends EntityAnimal {
 		if(snail.getCanSpawnHere()) {
 			setDead();
 			hatchParticlePacketTarget();
-			snail.setTame(Byte.valueOf((byte) 1));
+			snail.setHasMated(true);
 			worldObj.spawnEntityInWorld(snail);
 		}
 	}
@@ -78,7 +78,7 @@ public class EntityMireSnailEgg extends EntityAnimal {
 	}
 
 	public void setHatchTime(int hatchTime) {
-		dataWatcher.updateObject(31, Integer.valueOf(hatchTime));
+		dataWatcher.updateObject(31, hatchTime);
 	}
 
 	public int getHatchTime() {
