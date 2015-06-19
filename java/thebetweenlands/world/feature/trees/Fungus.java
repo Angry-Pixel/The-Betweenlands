@@ -3,11 +3,11 @@ package thebetweenlands.world.feature.trees;
 import java.util.Random;
 import java.util.Stack;
 
-import thebetweenlands.blocks.BLBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thebetweenlands.blocks.BLBlockRegistry;
 
 public class Fungus {
 	private int posX;

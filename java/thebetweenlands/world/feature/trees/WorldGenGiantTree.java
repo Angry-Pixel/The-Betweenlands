@@ -16,15 +16,15 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import cpw.mods.fml.common.IWorldGenerator;
 
-public class WorldGenGiantTree implements IWorldGenerator {
+public abstract class WorldGenGiantTree implements IWorldGenerator {
 	private static final int MIN_TRUNK_RADIUS = 2;
-	private static final int MAX_TRUNK_RADIUS = 11;
+	private static final int MAX_TRUNK_RADIUS = 16;
 
 	private static final int STEEPNESS = 180;
 
 	public static final ForgeDirection[] DIRECTIONS = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
 
-	public static final byte[][] TRUNK_LAYERS = new byte[MAX_TRUNK_RADIUS - MIN_TRUNK_RADIUS + 1][];
+	private static final byte[][] TRUNK_LAYERS = new byte[MAX_TRUNK_RADIUS - MIN_TRUNK_RADIUS + 1][];
 
 	static {
 		initTrunkLayers();
@@ -34,7 +34,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (world.provider.dimensionId == ConfigHandler.DIMENSION_ID) {
 			int blockX = chunkX * 16, blockZ = chunkZ * 16;
-			int blockY = 82 + rand.nextInt(5);
+			int blockY = rand.nextInt(3) + 79;
 			BiomeGenBase biomeBase = world.getBiomeGenForCoords(blockX, blockZ);
 			if (isValidBiome(biomeBase)) {
 				// magic numbers for testing
@@ -55,7 +55,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	}
 
 	public final boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
-		int baseRadius = rand.nextInt(4) + 8;
+		int baseRadius = rand.nextInt(6) + 11;
 		int height = rand.nextInt(baseRadius) + baseRadius * getRadiusHeightRatio();
 		int maxRadius = baseRadius + height / 3;
 		if (isSpaceOccupied(world, blockX, blockY, blockZ, maxRadius, height)) {
@@ -68,11 +68,11 @@ public class WorldGenGiantTree implements IWorldGenerator {
 		for (int dy = 0; dy < height; dy++) {
 			int y = blockY + dy;
 			int radius = getRadius(baseRadius, dy);
-			byte[] form = TRUNK_LAYERS[radius - MIN_TRUNK_RADIUS];
+			byte[] layer = TRUNK_LAYERS[radius - MIN_TRUNK_RADIUS];
 			int size = radius * 2 + 1;
 			for (int dx = -radius; dx <= radius; dx++) {
 				for (int dz = -radius; dz <= radius; dz++) {
-					byte state = form[dx * mirrorX + radius + (dz * mirrorZ + radius) * size];
+					byte state = layer[dx * mirrorX + radius + (dz * mirrorZ + radius) * size];
 					switch (state) {
 					case 0:
 						if (world.getBlock(blockX + dx, y - 1, blockZ + dz) == weedwood) {
@@ -95,22 +95,26 @@ public class WorldGenGiantTree implements IWorldGenerator {
 				}
 			}
 		}
-		generateShoots(world, rand, baseRadius, height, blockX, blockY, blockZ);
 		for (Fungus fungus : fungi) {
 			fungus.generate(world, rand);
 		}
+		generateShoots(world, rand, baseRadius, height, blockX, blockY, blockZ);
 		return true;
 	}
 
 	protected void generateShoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ) {
-		int rootCount = rand.nextInt(3) + 4;
+		generateRoots(world, rand, baseRadius, height, blockX, blockY + 2, blockZ, rand.nextInt(3) + 4, false);
+		generateRoots(world, rand, baseRadius, height, blockX, blockY + 7, blockZ, rand.nextInt(3) + 3, true);
+	}
+
+	private void generateRoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ, int rootCount, boolean high) {
 		float angle = 2 * (float) Math.PI / rootCount;
 		float angleOffset = rand.nextFloat() * 2 * (float) Math.PI;
 		for (int root = 0; root < rootCount; root++) {
-			float yaw = angleOffset + angle * root;
-			float pitch = -(float) Math.PI / 8 + rand.nextFloat() * (float) Math.PI / 16;
-			int length = rand.nextInt(7) + 18;
-			float posX = MathHelper.cos(yaw) * baseRadius * 0.2F + blockX, posY = blockY + 2, posZ = MathHelper.sin(yaw) * baseRadius * 0.2F + blockZ;
+			float yaw = angle * root + angleOffset;
+			float pitch = high ? 0 : -(float) Math.PI / 8 + rand.nextFloat() * (float) Math.PI / 16;
+			int length = rand.nextInt(7) + (high ? 25 : 18);
+			float posX = MathHelper.cos(yaw) * baseRadius * 0.2F + blockX, posY = blockY, posZ = MathHelper.sin(yaw) * baseRadius * 0.2F + blockZ;
 			generateRoot(world, rand, posX, posY, posZ, yaw, pitch, length, 2, 1);
 		}
 	}
@@ -148,7 +152,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 							Block block = world.getBlock((int) posX + x, (int) posY + y, (int) posZ + z);
 							Block above = world.getBlock((int) posX + x, (int) posY + y + 1, (int) posZ + z);
 							if (block == weedwood && above.getMaterial().isReplaceable()) {
-								break;
+								continue;
 							}
 							world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
 						}
@@ -165,7 +169,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	private boolean isSpaceOccupied(World world, int blockX, int blockY, int blockZ, int maxRadius, int height) {
 		for (int x = blockX - maxRadius; x <= blockX + maxRadius; x++) {
 			for (int z = blockZ - maxRadius; z <= blockZ + maxRadius; z++) {
-				for (int y = blockY + 2; y < blockY + height; y++) {
+				for (int y = blockY + 4; y < blockY + height; y++) {
 					if (!world.getBlock(x, y, z).getMaterial().isReplaceable()) {
 						return true;
 					}
@@ -200,7 +204,7 @@ public class WorldGenGiantTree implements IWorldGenerator {
 	}
 
 	public static void initTrunkLayers() {
-		float slope = 2F / (MAX_TRUNK_RADIUS - MIN_TRUNK_RADIUS);
+		float slope = 1.5F / (MAX_TRUNK_RADIUS - MIN_TRUNK_RADIUS);
 		for (int i = 0; i < TRUNK_LAYERS.length; i++) {
 			int radius = i + MIN_TRUNK_RADIUS;
 			int size = radius * 2 + 1;
