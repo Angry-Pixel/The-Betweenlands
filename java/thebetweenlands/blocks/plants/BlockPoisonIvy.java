@@ -11,9 +11,11 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 public class BlockPoisonIvy extends BlockVine implements IShearable {
+	private final int[] directionToMeta = { -1, -1, 1, 4, 8, 2 };
 
 	public BlockPoisonIvy() {
 		super();
@@ -35,5 +37,9 @@ public class BlockPoisonIvy extends BlockVine implements IShearable {
 	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess access, int x, int y, int z) {
 		return 0xFFFFFF;
+	}
+
+	public int getMetaForDirection(ForgeDirection direction) {
+		return directionToMeta[direction.ordinal()];
 	}
 }

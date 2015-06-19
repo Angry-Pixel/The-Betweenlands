@@ -48,7 +48,6 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (usingItem != null) {
-			IIcon[] stage;
 			int time = 36000 - useRemaining;
 			return decayIcons[time < 6 ? 1 : time < 10 ? 2 : 3][DecayableItemHelper.getDecayStage(usingItem)];
 		}

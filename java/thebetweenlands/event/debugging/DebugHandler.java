@@ -7,7 +7,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import org.lwjgl.input.Keyboard;
 
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.utils.confighandler.ConfigHandler;

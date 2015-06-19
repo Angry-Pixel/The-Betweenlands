@@ -18,15 +18,15 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.trees.WorldGenDeadTree;
-import thebetweenlands.world.feature.trees.WorldGenGiantTree;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
 import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
-	private final static WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
+	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
 	private final static WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedWoodTree();
 	private final static WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	private final static WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
@@ -56,7 +56,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BLUE_EYED_GRASS = new WorldGenTallGrass(BLBlockRegistry.blueEyedGrass, 1);
 	private final static WorldGenTallGrass GEN_BONESET = new WorldGenTallGrass(BLBlockRegistry.boneset, 1);
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
-	private final static WorldGenDeadTree GEN_DEAD_TREE = new WorldGenDeadTree();
+	private final static WorldGenGiantTreeDead GEN_DEAD_TREE = new WorldGenGiantTreeDead();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
 
 	private final Random rand;
@@ -456,7 +456,7 @@ public class DecorationHelper {
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
 			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
-				new WorldGenGiantTree().generateTree(this.world, this.rand, x, y, z);
+				GEN_GIANT_TREE.generateTree(this.world, this.rand, x, y, z);
 		}
 	}
 
