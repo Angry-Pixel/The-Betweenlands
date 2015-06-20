@@ -152,12 +152,12 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			if (side == 1)
 				return icons[meta];
 			else
-				return icons[0];
+				return icons[PURE_SWAMP_DIRT];
 		if(meta == FERT_PURE_SWAMP_DIRT_MID || meta == FERT_PURE_SWAMP_DIRT_MAX)
 			if (side == 1)
-				return icons[6];
+				return icons[FERT_PURE_SWAMP_DIRT_MIN];
 			else
-				return icons[0];
+				return icons[PURE_SWAMP_DIRT];
 		if(meta == DUG_SWAMP_DIRT || meta == FERT_DIRT || meta == FERT_DIRT_DECAYED)
 			if (side == 1)
 				return icons[meta];
