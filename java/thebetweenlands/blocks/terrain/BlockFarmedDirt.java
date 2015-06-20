@@ -55,7 +55,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				if (!world.isRemote) {
 					if(meta == PURE_SWAMP_DIRT) {
 						world.setBlockMetadataWithNotify(x, y, z, DUG_PURE_SWAMP_DIRT, 3);
-						world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+						world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
 						world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
 						stack.damageItem(1, player);
 					}
@@ -96,7 +96,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	public void playCompostEffects(World world, int x, int y, int z) {
 		world.playAuxSFX(2005, x, y + 1, z, 0);
-		world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+		world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
 	}
 
 	@Override
