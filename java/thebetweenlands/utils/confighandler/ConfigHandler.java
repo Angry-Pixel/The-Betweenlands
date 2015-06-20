@@ -24,7 +24,6 @@ public class ConfigHandler
 	public static int BIOME_ID_MARSH2;
 	public static int DIMENSION_BRIGHTNESS;
 	public static int WISP_QUALITY;
-	public static int GIANT_TREE_DENSITY; //temp
 	public static boolean USE_SHADER;
 	public static boolean FIREFLY_LIGHTING;
 	public static boolean DEBUG;
@@ -45,7 +44,6 @@ public class ConfigHandler
 		BIOME_ID_MARSH1 = config.get(usedCategories[0], "Marsh 1 Biome ID", 54).getInt(54);
 		BIOME_ID_MARSH2 = config.get(usedCategories[0], "Marsh 2 Biome ID", 55).getInt(55);
 		DIMENSION_BRIGHTNESS = config.get(usedCategories[0], "Dimension brightness (0-100)", 60).setMinValue(0).setMaxValue(100).getInt(60);
-		GIANT_TREE_DENSITY = config.get(usedCategories[0], "Frequency of Giant Trees. Higher numbers de-crease rate.", 10).getInt(10);
 		
 		WISP_QUALITY = config.get(usedCategories[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", usedCategories[1], true, "");

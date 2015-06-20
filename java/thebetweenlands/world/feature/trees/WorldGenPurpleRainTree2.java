@@ -43,7 +43,7 @@ public class WorldGenPurpleRainTree2 implements IWorldGenerator {
                 for(int newZ = z - 5; newZ <= z + 5; ++newZ) {
                     Block block = world.getBlock(newX, newY, newZ);
                     if(block != null && block == biomeBase.topBlock) {
-                        if(rand.nextInt(ConfigHandler.GIANT_TREE_DENSITY) == 0 ) { //config option
+                        if(rand.nextInt(100) == 0 ) { //config option
                             generateTree(world, rand, x, newY, z);
                             break;
                         }

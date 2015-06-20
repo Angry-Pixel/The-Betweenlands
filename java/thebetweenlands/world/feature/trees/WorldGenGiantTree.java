@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -18,9 +19,9 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public abstract class WorldGenGiantTree implements IWorldGenerator {
 	private static final int MIN_TRUNK_RADIUS = 2;
-	private static final int MAX_TRUNK_RADIUS = 16;
+	private static final int MAX_TRUNK_RADIUS = 18;
 
-	private static final int STEEPNESS = 180;
+	private static final int STEEPNESS = 160;
 
 	public static final ForgeDirection[] DIRECTIONS = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST };
 
@@ -34,29 +35,18 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	public final void generate(Random rand, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (world.provider.dimensionId == ConfigHandler.DIMENSION_ID) {
 			int blockX = chunkX * 16, blockZ = chunkZ * 16;
-			int blockY = rand.nextInt(3) + 79;
 			BiomeGenBase biomeBase = world.getBiomeGenForCoords(blockX, blockZ);
 			if (isValidBiome(biomeBase)) {
-				// magic numbers for testing
-				for (int nearX = blockX - 5; nearX <= blockX + 5; nearX++) {
-					for (int nearZ = blockZ - 5; nearZ <= blockZ + 5; nearZ++) {
-						Block block = world.getBlock(nearX, blockY, nearZ);
-						if (block != null && block == biomeBase.topBlock) {
-							if (rand.nextInt(ConfigHandler.GIANT_TREE_DENSITY) == 0) {
-								if (generateTree(world, rand, blockX, blockY, blockZ)) {
-									break;
-								}
-							}
-						}
-					}
+				if (rand.nextInt(100) == 0) {
+					generateTree(world, rand, blockX, 76, blockZ);
 				}
 			}
 		}
 	}
 
 	public final boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
-		int baseRadius = rand.nextInt(6) + 11;
-		int height = rand.nextInt(baseRadius) + baseRadius * getRadiusHeightRatio();
+		int baseRadius = rand.nextInt(6) + 13;
+		int height = rand.nextInt(baseRadius) + baseRadius * getRadiusHeightRatio() + 3;
 		int maxRadius = baseRadius + height / 3;
 		if (isSpaceOccupied(world, blockX, blockY, blockZ, maxRadius, height)) {
 			return false;
@@ -104,7 +94,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 
 	protected void generateShoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ) {
 		generateRoots(world, rand, baseRadius, height, blockX, blockY + 2, blockZ, rand.nextInt(3) + 4, false);
-		generateRoots(world, rand, baseRadius, height, blockX, blockY + 7, blockZ, rand.nextInt(3) + 3, true);
+		generateRoots(world, rand, baseRadius, height, blockX, blockY + 10, blockZ, rand.nextInt(3) + 3, true);
 	}
 
 	private void generateRoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ, int rootCount, boolean high) {
@@ -170,7 +160,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 		for (int x = blockX - maxRadius; x <= blockX + maxRadius; x++) {
 			for (int z = blockZ - maxRadius; z <= blockZ + maxRadius; z++) {
 				for (int y = blockY + 4; y < blockY + height; y++) {
-					if (!world.getBlock(x, y, z).getMaterial().isReplaceable()) {
+					if (world.getBlock(x, y, z).getMaterial() == Material.wood) {
 						return true;
 					}
 				}

@@ -1,5 +1,7 @@
 package thebetweenlands.event.debugging;
 
+import java.text.DecimalFormat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
@@ -21,6 +23,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
+
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##.00");
 
 	/////// DEBUG ///////
 	public boolean fullBright = false;
@@ -100,7 +104,8 @@ public class DebugHandler {
 			Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);
-			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + (float)(FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2.0D) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
+			float fog = FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2;
+			Minecraft.getMinecraft().fontRenderer.drawString("Fog: " + DECIMAL_FORMAT.format(fog) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (Minecraft.getMinecraft().thePlayer.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10) ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
 			float lightLevel = 0.0F;
 			World world = Minecraft.getMinecraft().theWorld;
 			if(world != null) {

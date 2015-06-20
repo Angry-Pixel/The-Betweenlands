@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
 import javax.imageio.ImageIO;
@@ -16,6 +18,7 @@ import net.minecraft.client.particle.EntityFlameFX;
 import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
@@ -32,7 +35,19 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.render.block.*;
+import thebetweenlands.client.render.TessellatorDebug;
+import thebetweenlands.client.render.block.BlockBLLeverRenderer;
+import thebetweenlands.client.render.block.BlockDoorRenderer;
+import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockModelPlantRenderer;
+import thebetweenlands.client.render.block.BlockRootRenderer;
+import thebetweenlands.client.render.block.BlockRubberLogRenderer;
+import thebetweenlands.client.render.block.BlockRubberTapRenderer;
+import thebetweenlands.client.render.block.BlockStalactiteRenderer;
+import thebetweenlands.client.render.block.BlockSwampReedRenderer;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
+import thebetweenlands.client.render.block.BlockWalkwayRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -109,6 +124,7 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
@@ -206,6 +222,13 @@ public class ClientProxy extends CommonProxy {
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
+			Field tessellatorInstanceField = ReflectionHelper.findField(Tessellator.class, "instance");
+			try {
+				ReflectionHelper.findField(Field.class, "modifiers").setInt(tessellatorInstanceField, tessellatorInstanceField.getModifiers() & ~Modifier.FINAL);
+				tessellatorInstanceField.set(null, new TessellatorDebug());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

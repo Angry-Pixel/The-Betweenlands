@@ -105,7 +105,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 					setIsLeaping(false);
 				} else {
 					motionX *= 0.4;
-					motionY -= 0.08;
 					motionY *= 0.98;
 					motionZ *= 0.4;
 				}
@@ -274,10 +273,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
-		if (distance < 3 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && ticksUntilBiteDamage == -1) {
+		if (attackTime <= 0 && distance < 3 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && ticksUntilBiteDamage == -1) {
 			setShouldMouthBeOpen(true);
 			setMouthMoveSpeed(10);
 			ticksUntilBiteDamage = 10;
+			attackTime = 20;
 			entityBeingBit = entity;
 		}
 		if (inWater && entity instanceof EntityDragonFly && !isLeaping() && distance < 5) {
