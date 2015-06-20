@@ -191,12 +191,25 @@ extends WorldProvider
 		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
 		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
 		this.worldObj.getWorldInfo().setThundering(false);
-		if(this.worldObj.isRemote) {
+        this.worldObj.prevRainingStrength = this.worldObj.rainingStrength;
+		if(!this.worldObj.isRemote) {
+			float rainingStrength = this.worldObj.rainingStrength;
 			if(eeRegistry.HEAVY_RAIN.isActive()) {
-				this.worldObj.setRainStrength(0.5f);
+				if (rainingStrength < 0.5F) {
+					rainingStrength += 0.0125F;
+				}
+				if (rainingStrength > 0.5F) {
+					rainingStrength = 0.5F;
+				}
 			} else {
-				this.worldObj.setRainStrength(0.0f);
+				if (rainingStrength > 0) {
+					rainingStrength -= 0.0125F;
+				}
+				if (rainingStrength < 0) {
+					rainingStrength = 0;
+				}
 			}
+			this.worldObj.rainingStrength = rainingStrength;
 		}
 	}
 
