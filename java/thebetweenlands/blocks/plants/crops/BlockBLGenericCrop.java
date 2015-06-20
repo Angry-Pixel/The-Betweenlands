@@ -204,7 +204,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta >= 8) {
 			if (rand.nextInt(10) == 0) {
-				for (int l = 0; l < 3; l++) {
+				for (int l = 0; l <= 5; l++) {
 					double particleX = x + rand.nextFloat();
 					double particleY = y + rand.nextFloat();
 					double particleZ = z + rand.nextFloat();

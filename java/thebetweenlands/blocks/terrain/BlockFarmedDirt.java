@@ -208,7 +208,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		int meta = getDamageValue(world, x, y, z);
 		if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED) {
 			if (rand.nextInt(10) == 0) {
-				for (int l = 0; l < 4; l++) {
+				for (int l = 0; l <= 5; l++) {
 					double particleX = x + rand.nextFloat();
 					double particleY = y + rand.nextFloat();
 					double particleZ = z + rand.nextFloat();
