@@ -27,7 +27,7 @@ public class TessellatorDebug extends Tessellator {
 	@Override
 	public void startDrawingQuads() {
 		checkCaller();
-		super.startDrawingQuads();
+		startDrawing(7);
 	}
 
 	private void checkCaller() {
