@@ -40,7 +40,7 @@ import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-import thebetweenlands.world.feature.structure.WorlGenDruidCircle;
+import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -87,7 +87,7 @@ public class TheBetweenlands
 		BLEntityRegistry.init();
 		TileEntityAnimator.addItems();
 
-		GameRegistry.registerWorldGenerator(new WorlGenDruidCircle(), 0);
+		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 

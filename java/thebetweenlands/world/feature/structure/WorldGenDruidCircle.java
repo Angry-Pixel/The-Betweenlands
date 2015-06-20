@@ -11,13 +11,13 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 
 import java.util.Random;
 
-public class WorlGenDruidCircle
+public class WorldGenDruidCircle
         implements IWorldGenerator
 {
     private int height = -1;
     private int baseRadius = -1;
 
-    public WorlGenDruidCircle() {
+    public WorldGenDruidCircle() {
         height = 4;
         baseRadius = 6;
     }
