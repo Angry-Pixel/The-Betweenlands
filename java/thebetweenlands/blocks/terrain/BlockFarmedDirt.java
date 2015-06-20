@@ -146,7 +146,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public IIcon getIcon(int side, int meta) {
-		if (meta < DUG_PURE_SWAMP_DIRT || meta >= icons.length + 2)
+		if (meta < PURE_SWAMP_DIRT || meta >= icons.length + 2)
 			return null;
 		if(meta == DUG_PURE_SWAMP_DIRT || meta == FERT_PURE_SWAMP_DIRT_MIN)
 			if (side == 1)
