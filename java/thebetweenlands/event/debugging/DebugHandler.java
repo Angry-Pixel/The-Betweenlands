@@ -96,7 +96,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
-		if (ConfigHandler.DEBUG) {
+		if (ConfigHandler.DEBUG && !Minecraft.getMinecraft().gameSettings.showDebugInfo) {
 			Minecraft.getMinecraft().fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(Minecraft.getMinecraft().thePlayer), 2, 10, 0xFFFFFFFF);
 			Minecraft.getMinecraft().fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(Minecraft.getMinecraft().thePlayer), 2, 18, 0xFFFFFFFF);

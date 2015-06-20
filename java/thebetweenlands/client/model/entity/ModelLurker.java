@@ -233,18 +233,29 @@ public class ModelLurker extends ModelBase {
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityLurker lurker = (EntityLurker) entity;
 		float mouthOpen = lurker.getMouthOpen(partialRenderTicks);
-		head.rotateAngleX = -mouthOpen * 0.4F + 0.0743572F;
-		mandable.rotateAngleX = mouthOpen * 0.4F;
 		float yaw = lurker.getTailYaw(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
 		float pitch = lurker.getTailPitch(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
-		boolean inWater = lurker.isNoHandleInWater();
+		forefinLeftProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 8) * speed * 1.5F - 0.2602503F;
+		forefinLeftProximal.rotateAngleY = MathHelper.cos(swing * 0.8F) * speed * 1.7F + 0.2230717F;
+		forefinLeftProximal.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.7F + 0.4461433F - speed * 0.7F;
+		forefinLeftDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + (float) Math.PI / 4) * speed * 0.7F + 0.2F;
+		hindfinLeft.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
+		hindfinLeft.rotateAngleY = MathHelper.sin(swing * 0.8F - (float) Math.PI / 2) * speed * 1.2F + 0.4461411F;
+		forefinRightProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 8) * speed * 1.5F + 0.2602503F;
+		forefinRightProximal.rotateAngleY = MathHelper.cos(swing * 0.8F) * speed * 1.7F + 2.918522F;
+		forefinRightProximal.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.7F - 0.4461433F + speed * 0.7F;
+		forefinRightDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + (float) Math.PI / 4) * speed * 0.7F - 0.2F + (float) Math.PI;
+		hindfinRight.rotateAngleX = MathHelper.sin(swing * 0.8F + (float) Math.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
+		hindfinRight.rotateAngleY = MathHelper.cos(swing * 0.8F + (float) Math.PI / 2) * speed * 1.2F - 0.4461411F;
+		trunk.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.1F;
+		head.rotateAngleZ = -trunk.rotateAngleZ;
+		head.rotateAngleX = -mouthOpen * 0.4F + 0.0743572F;
+		mandable.rotateAngleX = mouthOpen * 0.4F;
 		for (int i = 0; i < tail.length; i++) {
 			ModelRenderer segment = tail[i];
-			segment.rotateAngleY = yaw;
 			segment.rotateAngleX = restingTailRotationAngleXs[i] + pitch;
-			if (inWater) {
-				segment.rotateAngleY += MathHelper.sin(swing * 0.3F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
-			}
+			segment.rotateAngleY = yaw + MathHelper.sin(swing * 0.4F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
+			segment.rotateAngleZ = -trunk.rotateAngleZ / tail.length;
 		}
 	}
 }
