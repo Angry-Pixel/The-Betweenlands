@@ -340,7 +340,7 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		if (particleName.equals("splash")) {
-			fx = new EntitySplashFX(world, x, y, z, vecX, vecY, vecZ);
+			fx = new EntitySplashFX(world, x, y, z, vecX, vecY, vecZ, data.length == 0 || !(data[0] instanceof Integer) ? 0xFFFFFF : (int) data[0]);
 		}
 
 		if (fx != null)
