@@ -11,16 +11,15 @@ import thebetweenlands.client.model.entity.ModelLurker;
 import thebetweenlands.entities.mobs.EntityLurker;
 
 public class RenderLurker extends RenderLiving {
-	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/lurker.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/lurker.png");
 
 	public RenderLurker() {
 		super(new ModelLurker(), 0.5F);
-		this.setRenderPassModel(new ModelLurker());
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return this.texture;
+		return TEXTURE;
 	}
 
 	@Override

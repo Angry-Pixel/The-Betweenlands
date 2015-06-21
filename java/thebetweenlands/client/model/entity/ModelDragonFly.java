@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 @SideOnly(Side.CLIENT)
-public class ModelDragonFly extends ModelBase {
+public class ModelDragonfly extends ModelBase {
     ModelRenderer torso;
     ModelRenderer leftback1;
     ModelRenderer leftback2;
@@ -41,7 +41,7 @@ public class ModelDragonFly extends ModelBase {
     ModelRenderer tail3;
     ModelRenderer tail2;
 
-    public ModelDragonFly() {
+    public ModelDragonfly() {
         textureWidth = 128;
         textureHeight = 64;
         tail3 = new ModelRenderer(this, 0, 32);
@@ -187,10 +187,12 @@ public class ModelDragonFly extends ModelBase {
 		antennaright.render(unitPixel);
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glLightModeli(GL11.GL_LIGHT_MODEL_TWO_SIDE, 1);
 		wingright1.render(unitPixel);
 		wingleft1.render(unitPixel);
 		wingright2.render(unitPixel);
 		wingleft2.render(unitPixel);
+		GL11.glLightModeli(GL11.GL_LIGHT_MODEL_TWO_SIDE, 0);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 		leftfront1.render(unitPixel);

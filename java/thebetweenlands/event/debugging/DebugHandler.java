@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
 
-	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("##.00");
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
 
 	/////// DEBUG ///////
 	public boolean fullBright = false;

@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -9,15 +10,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.utils.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
 	private static final int MOUTH_OPEN_TICKS = 20;
@@ -42,7 +46,12 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	private Entity entityBeingBit;
 
-	private int anger = 0;
+	private int anger;
+
+	private boolean prevInWater;
+
+	private int leapRiseTime;
+	private int leapFallTime;
 
 	public EntityLurker(World world) {
 		super(world);
@@ -100,7 +109,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
 			rotationYaw = renderYawOffset;
 		} else {
-			if (!worldObj.isRemote) {
+			if (worldObj.isRemote) {
+				if (prevInWater && isLeaping()) {
+					breachWater();
+				}
+			} else {
 				if (onGround) {
 					setIsLeaping(false);
 				} else {
@@ -110,17 +123,83 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				}
 			}
 		}
+		if (isLeaping()) {
+			leapRiseTime++;
+			if (!worldObj.isRemote) {
+				rotationYaw += 10F;
+			}
+		} else {
+			if (leapRiseTime > 0 && leapFallTime == leapRiseTime) {
+				leapFallTime = leapRiseTime = 0;
+			}
+			if (leapFallTime < leapRiseTime) {
+				leapFallTime++;
+			}
+		}
 		float magnitude = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ) * (onGround ? 0 : 1);
 		float motionPitch = (float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90;
 		if (magnitude > 1) {
 			magnitude = 1;
 		}
-		float newRotationPitch = (rotationPitchBody - motionPitch) * magnitude * 4 * (getRelativeBlock(2).getMaterial() == Material.water || !inWater ? 1 : 0);
-		tailPitch += (rotationPitchBody - newRotationPitch);
-		rotationPitchBody = newRotationPitch;
+		float newRotationPitch = isLeaping() ? 90 : leapFallTime > 0 ? -45 : (rotationPitchBody - motionPitch) * magnitude * 4 * (inWater ? 1 : 0);
+		tailPitch += (rotationPitchBody - newRotationPitch) * 0.75F;
+		rotationPitchBody += (newRotationPitch - rotationPitchBody) * 0.3F;
 		if (Math.abs(rotationPitchBody) < 0.05F) {
 			rotationPitchBody = 0;
 		}
+	}
+
+	private void breachWater() {
+		int ring = 2;
+		int waterColorMultiplier = getWaterColor();
+		while (ring --> 0) {
+			int particleCount = ring * 12 + 20 + rand.nextInt(10);
+			for (int p = 0; p < particleCount; p++) {
+				float theta = p / (float) particleCount * MathUtils.TAU;
+				float dx = MathHelper.cos(theta);
+				float dz = MathHelper.sin(theta);
+				double x = posX + dx * ring * 1 * MathUtils.linearTransformd(rand.nextDouble(), 0, 1, 0.6, 1.2) + rand.nextDouble() * 0.3 - 0.15;
+				double y = posY - rand.nextDouble() * 0.2;
+				double z = posZ + dz * ring * 1 * MathUtils.linearTransformd(rand.nextDouble(), 0, 1, 0.6, 1.2) + rand.nextDouble() * 0.3 - 0.15;
+				double motionX = dx * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
+				double motionY = ring * 0.3F + rand.nextDouble() * 0.1;
+				double motionZ = dz * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
+				TheBetweenlands.proxy.spawnCustomParticle("splash", worldObj, x, y, z, motionX, motionY, motionZ, 1, waterColorMultiplier);
+			}
+		}
+	}
+
+	private int getWaterColor() {
+		int blockX = MathHelper.floor_double(posX), blockZ = MathHelper.floor_double(posZ);
+		int y = 0;
+		while (getRelativeBlock(y--) == Blocks.air && posY - y > 0);
+		int blockY = MathHelper.floor_double(boundingBox.minY + y);
+		Block block = worldObj.getBlock(blockX, blockY, blockZ);
+		if (block.getMaterial().isLiquid()) {
+			int r = 255, g = 255, b = 255;
+			// TODO: autmatically build a map of all liquid blocks to the average color of there texture to get color from
+			if (block == BLBlockRegistry.swampWater) {
+				r = 147;
+				g = 132;
+				b = 83;
+			} else if (block == Blocks.water || block == Blocks.flowing_water) {
+				r = 49;
+				g = 70;
+				b = 245;
+			} else if (block == Blocks.lava || block == Blocks.flowing_lava) {
+				r = 207;
+				g = 85;
+				b = 16;
+			}
+			Color c = new Color(r, g, b);
+			c = c.brighter();
+			r = c.getRed();
+			g = c.getGreen();
+			b = c.getBlue();
+			int multiplier = block.colorMultiplier(worldObj, blockX, blockY, blockZ);
+			return 0xFF000000 | (r * (multiplier >> 16 & 0xFF) / 255) << 16 | (g * (multiplier >> 8 & 0xFF) / 255) << 8 | (b * (multiplier & 0xFF) / 255);
+		}
+		return 0xFFFFFFFF;
 	}
 
 	@Override
@@ -164,6 +243,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			prevTailYaw += 360;
 		}
 		prevMouthOpenTicks = mouthOpenTicks;
+		prevInWater = inWater;
 		super.onUpdate();
 		if (shouldMouthBeOpen()) {
 			if (mouthOpenTicks < MOUTH_OPEN_TICKS) {
@@ -187,8 +267,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				if (entityBeingBit != null) {
 					if (!entityBeingBit.isDead) {
 						super.attackEntityAsMob(entityBeingBit);
-						if (isLeaping() && entityBeingBit instanceof EntityDragonFly) {
-							entityBeingBit.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entityBeingBit).getMaxHealth());
+						if (riddenByEntity == entityBeingBit) {
+							riddenByEntity.attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entityBeingBit).getMaxHealth());
 						}
 					}
 					entityBeingBit = null;
@@ -207,7 +287,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		if (Math.abs(tailPitch) < 90) {
 			tailPitch += (prevRotationPitchBody - rotationPitchBody);
 		}
-		tailPitch *= (1 - movementSpeed);
+		tailPitch *= 0.5F;
 		tailYaw *= (1 - movementSpeed);
 	}
 
@@ -215,7 +295,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	protected void updateEntityActionState() {
 		super.updateEntityActionState();
 		if (entityToAttack == null) {
-			entityToAttack = findEnemyToAttack();
+			if (entityBeingBit == null) {
+				entityToAttack = findEnemyToAttack();
+			}
 		} else {
 			if (entityToAttack.getDistanceSqToEntity(this) > 256) {
 				entityToAttack = null;
@@ -248,6 +330,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	}
 
 	private void swimToTarget() {
+		if (riddenByEntity != null) {
+			return;
+		}
 		double targetX = currentSwimTarget.posX + 0.5 - posX;
 		double targetY = currentSwimTarget.posY - posY;
 		double targetZ = currentSwimTarget.posZ + 0.5 - posZ;
@@ -272,13 +357,14 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public boolean shouldDismountInWater(Entity rider) {
+		return false;
+	}
+
+	@Override
 	protected void attackEntity(Entity entity, float distance) {
-		if (attackTime <= 0 && distance < 3 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && ticksUntilBiteDamage == -1) {
-			setShouldMouthBeOpen(true);
-			setMouthMoveSpeed(10);
-			ticksUntilBiteDamage = 10;
-			attackTime = 20;
-			entityBeingBit = entity;
+		if (entityBeingBit != null || riddenByEntity != null || entity.ridingEntity != null) {
+			return;
 		}
 		if (inWater && entity instanceof EntityDragonFly && !isLeaping() && distance < 5) {
 			setIsLeaping(true);
@@ -286,8 +372,19 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			double distanceZ = entity.posZ - posZ;
 			float magnitude = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
 			motionX += distanceX / magnitude * 0.8;
-			motionZ += distanceZ / magnitude * 0.8;
 			motionY += 0.9;
+			motionZ += distanceZ / magnitude * 0.8;
+		}
+		if (attackTime <= 0 && distance < 3 && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && ticksUntilBiteDamage == -1) {
+			setShouldMouthBeOpen(true);
+			setMouthMoveSpeed(10);
+			ticksUntilBiteDamage = 10;
+			attackTime = 20;
+			entityBeingBit = entity;
+			if (isLeaping() && entity instanceof EntityDragonFly) {
+				entity.mountEntity(this);
+				entityToAttack = null;
+			}
 		}
 	}
 
@@ -350,10 +447,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	public float getTailPitch(float partialRenderTicks) {
 		return tailPitch * partialRenderTicks + prevTailPitch * (1 - partialRenderTicks);
-	}
-
-	public boolean isSimplyInWater() {
-		return inWater;
 	}
 
 	@Override

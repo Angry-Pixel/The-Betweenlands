@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.client.model.entity.ModelDragonFly;
+import thebetweenlands.client.model.entity.ModelDragonfly;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 
 @SideOnly(Side.CLIENT)
@@ -15,7 +15,7 @@ public class RenderDragonFly extends RenderLiving {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/dragonFly.png");
 
 	public RenderDragonFly() {
-		super(new ModelDragonFly(), 0.5F);
+		super(new ModelDragonfly(), 0.5F);
 	}
 
 	@Override

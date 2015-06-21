@@ -1,16 +1,31 @@
 package thebetweenlands.client.model.entity;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import thebetweenlands.client.model.AdvancedModelRenderer;
+import thebetweenlands.client.model.IModelRenderCallback;
+import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityLurker;
+import thebetweenlands.proxy.ClientProxy;
+import thebetweenlands.utils.MathUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelLurker extends ModelBase {
+public class ModelLurker extends ModelBase implements IModelRenderCallback {
+	private FloatBuffer colorBuffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
+
 	private ModelRenderer trunk;
 	private ModelRenderer lumbarVertebrae;
 	private ModelRenderer tailFirst;
@@ -20,7 +35,7 @@ public class ModelLurker extends ModelBase {
 	private ModelRenderer bumpSecond;
 	private ModelRenderer bumpThird;
 	private ModelRenderer head;
-	private ModelRenderer mandable;
+	private AdvancedModelRenderer mandable;
 	private ModelRenderer forefinLeftProximal;
 	private ModelRenderer forefinRightProximal;
 	private ModelRenderer forefinLeftDistal;
@@ -30,6 +45,10 @@ public class ModelLurker extends ModelBase {
 
 	private ModelRenderer[] tail;
 	private float[] restingTailRotationAngleXs;
+
+	private EntityLurker currentLurker;
+
+	private float partialRenderTicks;
 
 	public ModelLurker() {
 		textureWidth = 256;
@@ -78,9 +97,10 @@ public class ModelLurker extends ModelBase {
 		setRotation(maxilla, 0.1115297F, 0, 0);
 		head.addChild(maxilla);
 
-		mandable = new ModelRenderer(this, 95, 15);
+		mandable = new AdvancedModelRenderer(this, 95, 15);
 		mandable.addBox(-4.5F, -2F, -15F, 9, 4, 16);
 		mandable.setRotationPoint(0F, 3F, -2F);
+		mandable.addCallback(this);
 		head.addChild(mandable);
 
 		ModelRenderer tooth = new ModelRenderer(this, 95, 53);
@@ -194,7 +214,7 @@ public class ModelLurker extends ModelBase {
 		forefinRightDistal.setTextureOffset(176, 30);
 		forefinRightDistal.addBox(-1.5F, 0.3F, 6.5F, 1, 1, 1);
 		forefinRightDistal.setRotationPoint(3, 0, 0);
-		setRotation(forefinRightDistal, 0, -0.2F + (float) Math.PI, 0);
+		setRotation(forefinRightDistal, 0, -0.2F + MathUtils.PI, 0);
 		forefinRightProximal.addChild(forefinRightDistal);
 
 		hindfinLeft = new ModelRenderer(this, 155, 18);
@@ -224,29 +244,63 @@ public class ModelLurker extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
-		head.rotateAngleY = rotationYaw / 180 * (float) Math.PI;
-		head.rotateAngleX += rotationPitch / 180 * (float) Math.PI;
+		currentLurker = (EntityLurker) entity;
+		rotationYaw = MathHelper.clamp_float(rotationYaw, -60, 60);
+		head.rotateAngleY = rotationYaw * MathUtils.DEG_TO_RAD;
+		head.rotateAngleX += rotationPitch * MathUtils.DEG_TO_RAD;
 		trunk.render(scale);
+		currentLurker = null;
+	}
+
+	@Override
+	public void render(AdvancedModelRenderer advancedModelRenderer, float scale) {
+		if (currentLurker.riddenByEntity instanceof EntityDragonFly) {
+			GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer);
+			boolean texture2D = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
+			int textureBinding2D = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+			GL11.glPushMatrix();
+			GL11.glRotatef(180, 1, 0, 0);
+			GL11.glTranslatef(0, 0, 0.5F);
+			GL11.glColor3f(1, 1, 1);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			EntityDragonFly dragonfly = (EntityDragonFly) currentLurker.riddenByEntity;
+			dragonfly.prevRenderYawOffset = dragonfly.renderYawOffset = 0;
+			dragonfly.prevRotationYaw = dragonfly.rotationYaw = 0;
+			dragonfly.prevRotationYawHead = dragonfly.rotationYawHead = 0;
+			ClientProxy.dragonFlyRenderer.doRender(dragonfly, 0, 0, 0, 0, partialRenderTicks);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureBinding2D);
+			GL11.glPopMatrix();
+			if (texture2D) {
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+			} else {
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+			}
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(colorBuffer.get(), colorBuffer.get(), colorBuffer.get(), colorBuffer.get());
+			colorBuffer.clear();
+		}
 	}
 
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityLurker lurker = (EntityLurker) entity;
 		float mouthOpen = lurker.getMouthOpen(partialRenderTicks);
-		float yaw = lurker.getTailYaw(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
-		float pitch = lurker.getTailPitch(partialRenderTicks) / 180 * (float) Math.PI * 0.2F;
-		forefinLeftProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 8) * speed * 1.5F - 0.2602503F;
+		float yaw = lurker.getTailYaw(partialRenderTicks) * MathUtils.DEG_TO_RAD * 0.2F;
+		float pitch = lurker.getTailPitch(partialRenderTicks) * MathUtils.DEG_TO_RAD * 0.2F;
+		forefinLeftProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - MathUtils.PI / 8) * speed * 1.5F - 0.2602503F;
 		forefinLeftProximal.rotateAngleY = MathHelper.cos(swing * 0.8F) * speed * 1.7F + 0.2230717F;
 		forefinLeftProximal.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.7F + 0.4461433F - speed * 0.7F;
-		forefinLeftDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + (float) Math.PI / 4) * speed * 0.7F + 0.2F;
-		hindfinLeft.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
-		hindfinLeft.rotateAngleY = MathHelper.sin(swing * 0.8F - (float) Math.PI / 2) * speed * 1.2F + 0.4461411F;
-		forefinRightProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - (float) Math.PI / 8) * speed * 1.5F + 0.2602503F;
+		forefinLeftDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + MathUtils.PI / 4) * speed * 0.7F + 0.2F;
+		hindfinLeft.rotateAngleX = MathHelper.cos(swing * 0.8F - MathUtils.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
+		hindfinLeft.rotateAngleY = MathHelper.sin(swing * 0.8F - MathUtils.PI / 2) * speed * 1.2F + 0.4461411F;
+		forefinRightProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - MathUtils.PI / 8) * speed * 1.5F + 0.2602503F;
 		forefinRightProximal.rotateAngleY = MathHelper.cos(swing * 0.8F) * speed * 1.7F + 2.918522F;
 		forefinRightProximal.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.7F - 0.4461433F + speed * 0.7F;
-		forefinRightDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + (float) Math.PI / 4) * speed * 0.7F - 0.2F + (float) Math.PI;
-		hindfinRight.rotateAngleX = MathHelper.sin(swing * 0.8F + (float) Math.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
-		hindfinRight.rotateAngleY = MathHelper.cos(swing * 0.8F + (float) Math.PI / 2) * speed * 1.2F - 0.4461411F;
+		forefinRightDistal.rotateAngleY = MathHelper.sin(swing * 0.8F + MathUtils.PI / 4) * speed * 0.7F - 0.2F + MathUtils.PI;
+		hindfinRight.rotateAngleX = MathHelper.sin(swing * 0.8F + MathUtils.PI / 2) * speed * 1.0F - 0.260246F + speed * 0.8F;
+		hindfinRight.rotateAngleY = MathHelper.cos(swing * 0.8F + MathUtils.PI / 2) * speed * 1.2F - 0.4461411F;
 		trunk.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.1F;
 		head.rotateAngleZ = -trunk.rotateAngleZ;
 		head.rotateAngleX = -mouthOpen * 0.4F + 0.0743572F;
@@ -257,5 +311,6 @@ public class ModelLurker extends ModelBase {
 			segment.rotateAngleY = yaw + MathHelper.sin(swing * 0.4F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
 			segment.rotateAngleZ = -trunk.rotateAngleZ / tail.length;
 		}
+		this.partialRenderTicks = partialRenderTicks;
 	}
 }

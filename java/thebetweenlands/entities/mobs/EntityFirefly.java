@@ -49,25 +49,25 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		double dist = dx * dx + dy * dy + dz * dz;
 
 		if (dist < 1.0D || dist > 3600.0D) {
-			this.waypointX = this.posX + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+			this.waypointX = this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 			if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
-				this.waypointY = this.posY + (double)((-this.rand.nextFloat() * 2.0F) * 16.0F);
+				this.waypointY = this.posY + (-this.rand.nextFloat() * 2.0F) * 16.0F;
 			} else {
 				float rndFloat = this.rand.nextFloat() * 2.0F - 1.0F;
 				if(rndFloat > 0.0D) {
 					rndFloat -= 0.5D;
 					double maxRange = WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer - this.posY;
-					this.waypointY = this.posY + (double)((-this.rand.nextFloat() * 2.0F) * maxRange);
+					this.waypointY = this.posY + (-this.rand.nextFloat() * 2.0F) * maxRange;
 				} else {
-					this.waypointY = this.posY + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+					this.waypointY = this.posY + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 				}
 			}
-			this.waypointZ = this.posZ + (double)((this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
+			this.waypointZ = this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 		}
 
 		if (this.courseChangeCooldown-- <= 0) {
 			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
-			dist = (double)MathHelper.sqrt_double(dist);
+			dist = MathHelper.sqrt_double(dist);
 
 			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist)) {
 				this.motionX += dx / dist * 0.03D;
@@ -89,13 +89,14 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private boolean isCourseTraversable(double x, double y, double z, double step) {
 		double d4 = (this.waypointX - this.posX) / step;
 		double d5 = (this.waypointY - this.posY) / step;
 		double d6 = (this.waypointZ - this.posZ) / step;
 		AxisAlignedBB axisalignedbb = this.boundingBox.copy();
 
-		for (int i = 1; (double)i < step; ++i)
+		for (int i = 1; i < step; ++i)
 		{
 			axisalignedbb.offset(d4, d5, d6);
 
