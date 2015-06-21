@@ -60,7 +60,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 					break;
 				}
 			}
-			ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+			ClassWriter classWriter = new ClassWriter(0);
 			classNode.accept(classWriter);
 			return classWriter.toByteArray();
 		}
