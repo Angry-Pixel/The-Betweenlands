@@ -1,6 +1,7 @@
 package thebetweenlands.network.handlers;
 
 import com.google.common.collect.Maps;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,6 +22,8 @@ import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
+import thebetweenlands.network.packets.PacketTickspeed;
+import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 import java.util.HashMap;
@@ -118,5 +121,10 @@ public class ClientPacketHandler {
 				eff.addEffect(new EntityBreakingFX(world, packet.x + (world.rand.nextDouble() - 0.5D) * 0.35F, packet.y + world.rand.nextDouble() * 0.175F, packet.z + (world.rand.nextDouble() - 0.5D) * 0.35F, Items.slime_ball));
 			}
 		}
+	}
+
+	@SubscribePacket
+	public static void handleTickspeed(PacketTickspeed packet) {
+		ClientProxy.debugTimer.setTicksPerSecond(packet.getTicksPerSecond());
 	}
 }

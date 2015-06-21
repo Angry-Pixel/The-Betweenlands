@@ -427,3 +427,7 @@ decay.4=Extremely corroded
 decay.5=Completely corroded
 arrow.caution=Use with caution
 arrow.stunning=Stunningly good
+
+# Commands
+commands.tickspeed.success=Set tickspeed to %s ticks per second
+commands.tickspeed.usage=/tickspeed <ticks per second>

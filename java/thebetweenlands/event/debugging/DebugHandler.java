@@ -1,16 +1,24 @@
 package thebetweenlands.event.debugging;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 import org.lwjgl.input.Keyboard;
 
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.DecayManager;
+import thebetweenlands.network.packets.PacketTickspeed;
+import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
@@ -18,13 +26,26 @@ import thebetweenlands.world.events.EnvironmentEventRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.ReflectionHelper.UnableToFindFieldException;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
 
-	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#0.00");
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
+
+	private static final Field SLEEP_PER_TICK_FIELD;
+	static {
+		Field sleepPerTickField = null;
+		try {
+			sleepPerTickField = ReflectionHelper.findField(MinecraftServer.class, TheBetweenlandsClassTransformer.SLEEP_PER_TICK);
+		} catch (UnableToFindFieldException e) {
+			System.out.println("MinecraftServer was not transformed!");
+		}
+		SLEEP_PER_TICK_FIELD = sleepPerTickField;
+	}
 
 	/////// DEBUG ///////
 	public boolean fullBright = false;
@@ -129,6 +150,37 @@ public class DebugHandler {
 				activeEvents = "None";
 			}
 			Minecraft.getMinecraft().fontRenderer.drawString("Active events: " + activeEvents, 2, 42, 0xFFFFFFFF);
+			Minecraft.getMinecraft().fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, 50, 0xFFFFFFFF);
+		}
+	}
+
+	@SubscribeEvent
+	public void onEntityJoinWorldEvent(EntityJoinWorldEvent event) {
+		if (!event.world.isRemote && event.entity instanceof EntityPlayerMP) {
+			TheBetweenlands.networkWrapper.sendTo(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketTickspeed(1000F / getSleepPerTick())), (EntityPlayerMP) event.entity);
+		}
+	}
+
+	public static long getSleepPerTick() {
+		if (SLEEP_PER_TICK_FIELD == null) {
+			return 50L;
+		}
+		try {
+			return (long) SLEEP_PER_TICK_FIELD.get(MinecraftServer.getServer());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 50L;
+	}
+
+	public static void setSleepPerTick(long sleepPerTick) {
+		if (SLEEP_PER_TICK_FIELD == null) {
+			return;
+		}
+		try {
+			SLEEP_PER_TICK_FIELD.set(MinecraftServer.getServer(), sleepPerTick);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -13,6 +13,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.command.server.CommandTickSpeed;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.player.BonemealEventHandler;
@@ -33,6 +34,7 @@ import thebetweenlands.network.packets.PacketAnimatorProgress;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
+import thebetweenlands.network.packets.PacketTickspeed;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -107,6 +109,7 @@ public class TheBetweenlands
         packetRegistry.registerPacket(PacketDruidAltarProgress.class, (byte) 1);
         packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
         packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
+        packetRegistry.registerPacket(PacketTickspeed.class, (byte) 4);
 
 	}
 
@@ -161,5 +164,8 @@ public class TheBetweenlands
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandToggleEvent());
+		if (ConfigHandler.DEBUG) {
+			event.registerServerCommand(new CommandTickSpeed());
+		}
 	}
 }

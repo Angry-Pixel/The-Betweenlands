@@ -1,30 +1,14 @@
 package thebetweenlands.client.event;
 
-import java.awt.Desktop;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-
-import javax.imageio.ImageIO;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.TextureStitchEvent;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.render.TextureDecay;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.IDecayable;
 import thebetweenlands.utils.DecayableItemHelper;
-import thebetweenlands.world.storage.BetweenlandsWorldData;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DecayTextureStitchHandler {

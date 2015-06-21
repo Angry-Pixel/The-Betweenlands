@@ -64,6 +64,10 @@ sourceSets {
 
 jar {
     classifier = 'universal'
+    manifest {
+        attributes('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
+        attributes('FMLCorePluginContainsFMLMod': 'true')
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
+import net.minecraft.util.Timer;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
@@ -120,18 +121,18 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
+import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.ToolDecayImage;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
-
 	public enum BlockRenderIDs {
-
 		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER;
 
 		private final int ID;
@@ -146,6 +147,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public static RenderDragonFly dragonFlyRenderer;
+
+	public static TimerDebug debugTimer;
 
 	@Override
 	public void preInit() {
@@ -225,17 +228,18 @@ public class ClientProxy extends CommonProxy {
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
-			Field tessellatorInstanceField = ReflectionHelper.findField(Tessellator.class, "instance");
+			Field tessellatorInstanceField = ReflectionHelper.findField(Tessellator.class, "instance", "field_78398_a", "a");
 			try {
 				ReflectionHelper.findField(Field.class, "modifiers").setInt(tessellatorInstanceField, tessellatorInstanceField.getModifiers() & ~Modifier.FINAL);
 				tessellatorInstanceField.set(null, new TessellatorDebug());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20F), "timer", "field_71428_T", "Q");
 		}
 	}
 
-	@Override
+	/*@Override
     public void postInit() {
 		try {
 			ToolDecayImage.createTextureAfterObjects();
@@ -243,7 +247,7 @@ public class ClientProxy extends CommonProxy {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
+    }*/
 
 	@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {
