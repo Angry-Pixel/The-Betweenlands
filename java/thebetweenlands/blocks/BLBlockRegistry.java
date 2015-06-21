@@ -56,23 +56,7 @@ import thebetweenlands.blocks.stalactite.BlockStalactite;
 import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
-import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
-import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.blocks.terrain.BlockBetweenstone;
-import thebetweenlands.blocks.terrain.BlockDeadGrass;
-import thebetweenlands.blocks.terrain.BlockFarmedDirt;
-import thebetweenlands.blocks.terrain.BlockGenericStone;
-import thebetweenlands.blocks.terrain.BlockMud;
-import thebetweenlands.blocks.terrain.BlockPeat;
-import thebetweenlands.blocks.terrain.BlockPuddle;
-import thebetweenlands.blocks.terrain.BlockSilt;
-import thebetweenlands.blocks.terrain.BlockSlimyDirt;
-import thebetweenlands.blocks.terrain.BlockSlimyGrass;
-import thebetweenlands.blocks.terrain.BlockSwampDirt;
-import thebetweenlands.blocks.terrain.BlockSwampGrass;
-import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.blocks.terrain.BlockTarFluid;
-import thebetweenlands.blocks.terrain.BlockWisp;
+import thebetweenlands.blocks.terrain.*;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockBLPortalFrame;
@@ -125,6 +109,7 @@ public class BLBlockRegistry
 	public static final Block tarFluid = new BlockTarFluid();
 	public static final Block puddle = new BlockPuddle();
 	public static final Block farmedDirt = new BlockFarmedDirt();
+	public static final Block dentrothyst = new BlockDentrothyst();
 
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.

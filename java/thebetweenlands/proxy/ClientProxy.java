@@ -37,18 +37,7 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.TessellatorDebug;
-import thebetweenlands.client.render.block.BlockBLLeverRenderer;
-import thebetweenlands.client.render.block.BlockDoorRenderer;
-import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
-import thebetweenlands.client.render.block.BlockModelPlantRenderer;
-import thebetweenlands.client.render.block.BlockRootRenderer;
-import thebetweenlands.client.render.block.BlockRubberLogRenderer;
-import thebetweenlands.client.render.block.BlockRubberTapRenderer;
-import thebetweenlands.client.render.block.BlockStalactiteRenderer;
-import thebetweenlands.client.render.block.BlockSwampReedRenderer;
-import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
-import thebetweenlands.client.render.block.BlockWalkwayRenderer;
-import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.block.*;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -133,7 +122,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER, MUDFLOWERPOT;
 
 		private final int ID;
 
@@ -208,6 +197,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockWalkwayRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberTapRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBLLeverRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockMudFlowerPotRenderer());
 
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
