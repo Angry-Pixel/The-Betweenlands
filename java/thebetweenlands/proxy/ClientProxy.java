@@ -144,6 +144,8 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	public static RenderDragonFly dragonFlyRenderer;
+
 	@Override
 	public void preInit() {
 		//Register packet handlers
@@ -165,7 +167,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, new RenderFirefly());
 		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, new RenderLeech());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderSporeling());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, new RenderDragonFly());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, dragonFlyRenderer = new RenderDragonFly());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, new RenderBloodSnail());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, new RenderMireSnail());
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, new RenderMireSnailEgg());
