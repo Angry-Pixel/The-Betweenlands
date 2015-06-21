@@ -235,19 +235,9 @@ public class ClientProxy extends CommonProxy {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20F), "timer", "field_71428_T", "Q");
+			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20), "timer", "field_71428_T", "Q");
 		}
 	}
-
-	/*@Override
-    public void postInit() {
-		try {
-			ToolDecayImage.createTextureAfterObjects();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }*/
 
 	@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {

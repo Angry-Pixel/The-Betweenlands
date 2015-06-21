@@ -17,12 +17,9 @@ import org.objectweb.asm.tree.VarInsnNode;
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static final String SLEEP_PER_TICK = "sleepPerTick";
 
-	public long sleepPerTick;
-
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 		if ("net.minecraft.server.MinecraftServer".equals(name)) {
-			sleepPerTick = 50L;
 			ClassNode classNode = new ClassNode();
 			ClassReader classReader = new ClassReader(basicClass);
 			classReader.accept(classNode, 0);
