@@ -191,11 +191,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				g = 85;
 				b = 16;
 			}
-			Color c = new Color(r, g, b);
-			c = c.brighter();
-			r = c.getRed();
-			g = c.getGreen();
-			b = c.getBlue();
 			int multiplier = block.colorMultiplier(worldObj, blockX, blockY, blockZ);
 			return 0xFF000000 | (r * (multiplier >> 16 & 0xFF) / 255) << 16 | (g * (multiplier >> 8 & 0xFF) / 255) << 8 | (b * (multiplier & 0xFF) / 255);
 		}

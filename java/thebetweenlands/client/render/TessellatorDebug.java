@@ -3,9 +3,6 @@ package thebetweenlands.client.render;
 import java.lang.reflect.Field;
 
 import net.minecraft.client.renderer.Tessellator;
-
-import org.lwjgl.input.Keyboard;
-
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class TessellatorDebug extends Tessellator {
@@ -13,24 +10,22 @@ public class TessellatorDebug extends Tessellator {
 
 	private StackTraceElement currentStartDrawingCaller;
 
-	private boolean isRDown = false;
-
-	private Field isDrawingField = ReflectionHelper.findField(Tessellator.class, "isDrawing");
+	private Field isDrawingField = ReflectionHelper.findField(Tessellator.class, "isDrawing", "field_78415_z", "x");
 
 	@Override
 	public void startDrawing(int mode) {
-		checkCaller();
+		checkStart();
 		super.startDrawing(mode);
 		currentStartDrawingCaller = null;
 	}
 
 	@Override
 	public void startDrawingQuads() {
-		checkCaller();
+		checkStart();
 		startDrawing(7);
 	}
 
-	private void checkCaller() {
+	private void checkStart() {
 		try {
 			boolean isDrawing = isDrawingField.getBoolean(this);
 			if (isDrawing) {
@@ -40,14 +35,6 @@ public class TessellatorDebug extends Tessellator {
 		}
 		if (currentStartDrawingCaller == null) {
 			currentStartDrawingCaller = currentThread.getStackTrace()[3];
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_Y)) {
-			if (!isRDown) {
-				System.out.println(currentStartDrawingCaller);
-				isRDown = true;
-			}
-		} else {
-			isRDown = false;
 		}
 	}
 }
