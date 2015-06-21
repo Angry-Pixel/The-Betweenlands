@@ -101,6 +101,7 @@ import thebetweenlands.entities.particles.EntityBugFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityLeafFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
+import thebetweenlands.entities.particles.EntitySplashFX;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.debugging.DebugHandler;
@@ -336,6 +337,10 @@ public class ClientProxy extends CommonProxy {
 
 		if(particleName.equals("leaf")) {
 			fx = new EntityLeafFX(world, x, y, z, 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/leaf.png"), 5);
+		}
+
+		if (particleName.equals("splash")) {
+			fx = new EntitySplashFX(world, x, y, z, vecX, vecY, vecZ);
 		}
 
 		if (fx != null)
