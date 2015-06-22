@@ -1,5 +1,16 @@
 package thebetweenlands.client.render.shader.impl;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.vecmath.Matrix4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -8,16 +19,11 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.client.render.shader.CShader;
 import thebetweenlands.client.render.shader.CShaderInt;
-
-import javax.vecmath.Matrix4f;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;
@@ -28,7 +34,7 @@ public class MainShader extends CShader {
 	private Matrix4f PM;
 	private FloatBuffer mvBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private FloatBuffer pmBuffer = GLAllocation.createDirectFloatBuffer(16);
-	//private GeometryBuffer geometryBuffer = new GeometryBuffer();
+	private Map<String, GeometryBuffer> geometryBuffers = new HashMap<String, GeometryBuffer>();
 
 	public MainShader(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
@@ -38,9 +44,14 @@ public class MainShader extends CShader {
 				shaderPath, assetsPath);
 	}
 
-	/*public GeometryBuffer getGeometryBuffer() {
-		return this.geometryBuffer;
-	}*/
+	public GeometryBuffer getGeometryBuffer(String samplerName) {
+		GeometryBuffer geomBuffer = this.geometryBuffers.get(samplerName);
+		if(geomBuffer == null) {
+			geomBuffer = new GeometryBuffer(true);
+			this.geometryBuffers.put(samplerName, geomBuffer);
+		}
+		return geomBuffer;
+	}
 
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
@@ -76,11 +87,17 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
 
-		/*if(this.geometryBuffer.update(input)) {
-			this.updateSampler("GeomDiffuseSampler", this.geometryBuffer.getGeometryBuffer());
-			this.updateSampler("GeomDepthSampler", this.geometryBuffer.getGeometryDepthBuffer());
-		}*/
-
+		for(Entry<String, GeometryBuffer> geomBufferEntry : this.geometryBuffers.entrySet()) {
+			geomBufferEntry.getValue().update(input);
+			String samplerName = geomBufferEntry.getKey();
+			Framebuffer geomBuffer = geomBufferEntry.getValue().getGeometryBuffer();
+			Framebuffer geomDepthBuffer = geomBufferEntry.getValue().getGeometryDepthBuffer();
+			this.updateSampler(samplerName, geomBuffer);
+			if(geomDepthBuffer != null) {
+				this.updateSampler(samplerName + "_Depth", geomDepthBuffer);
+			}
+		}
+		
 		input.bindFramebuffer(false);
 	}
 

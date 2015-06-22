@@ -4,7 +4,7 @@
     ],
     "passes": [
         {
-            "name": "lighting",
+            "name": "blshader",
             "intarget": "minecraft:main",
             "outtarget": "swap"
         },
