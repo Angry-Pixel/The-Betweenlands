@@ -58,7 +58,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
-		if(!ConfigHandler.DEBUG || Minecraft.getMinecraft().theWorld == null) return;
+		if(!ConfigHandler.DEBUG || Minecraft.getMinecraft().theWorld == null || !Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) return;
 		if(Keyboard.isKeyDown(Keyboard.KEY_F)){
 			this.fullBright = !this.fullBright;
 			if(this.fullBright) {
