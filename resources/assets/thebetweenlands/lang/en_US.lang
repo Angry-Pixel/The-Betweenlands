@@ -431,3 +431,20 @@ arrow.stunning=Stunningly good
 # Commands
 commands.tickspeed.success=Set tickspeed to %s ticks per second
 commands.tickspeed.usage=/tickspeed <ticks per second>
+
+commands.blevent.success.on=The event '%s' is now taking place
+commands.blevent.success.off=The event '%s' is no longer taking place
+commands.blevent.success.alloff=All events are no longer taking place
+commands.blevent.usage=/blevent <toggle|on|off|list>
+commands.blevent.usage.toggle=/blevent toggle <event name>
+commands.blevent.usage.on=/blevent on <event name>
+commands.blevent.usage.off=/blevent off [event name]
+commands.blevent.failure.unknown=Unknown event '%s'
+commands.blevent.failure.wrongdimension=You must be in a Betweenlands world to toggle events
+commands.blevent.failure.alreadyon=The event '%s' is already on
+commands.blevent.failure.alreadyoff=The event '%s' is already off
+
+# Events
+event.denseFog.name=Dense Fog
+event.heavyRain.name=Heavy Rain
+event.auroras.name=Auroras

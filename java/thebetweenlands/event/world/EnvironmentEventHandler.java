@@ -5,7 +5,6 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
-import thebetweenlands.world.events.EnvironmentEventRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 

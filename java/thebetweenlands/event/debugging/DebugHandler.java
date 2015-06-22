@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -140,7 +141,7 @@ public class DebugHandler {
 				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 				for(EnvironmentEvent eevent : eeRegistry.getEvents().values()) {
 					if(eevent.isActive()) {
-						activeEvents += eevent.getEventName() + ", ";
+						activeEvents += StatCollector.translateToLocal(eevent.getLocalizationEventName()) + ", ";
 					}
 				}
 			}

@@ -11,7 +11,7 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 	}
 	@Override
 	public String getEventName() {
-		return "Dense Fog";
+		return "denseFog";
 	}
 	@Override
 	public int getOffTime(Random rnd) {

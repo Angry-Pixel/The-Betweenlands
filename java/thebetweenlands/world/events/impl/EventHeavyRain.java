@@ -23,7 +23,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	
 	@Override
 	public String getEventName() {
-		return "Heavy Rain";
+		return "heavyRain";
 	}
 	@Override
 	public int getOffTime(Random rnd) {

@@ -127,7 +127,15 @@ public abstract class EnvironmentEvent {
 	 * @return
 	 */
 	public abstract String getEventName();
-	
+
+	/**
+	 * Returns the localization name of this event.
+	 * @return
+	 */
+	public String getLocalizationEventName() {
+		return "event." + getEventName() + ".name";
+	}
+
 	/**
 	 * Returns the event registry of this event.
 	 * @return
