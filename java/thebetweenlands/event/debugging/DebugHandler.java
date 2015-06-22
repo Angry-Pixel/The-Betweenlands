@@ -52,7 +52,9 @@ public class DebugHandler {
 	public boolean fullBright = false;
 	private boolean fastFlight = false;
 	public boolean denseFog = false;
+	public boolean ignoreStart = true;
 	private float lightTable[];
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
@@ -83,6 +85,9 @@ public class DebugHandler {
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
 			DecayManager.resetDecay(Minecraft.getMinecraft().thePlayer);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
+			this.ignoreStart = !this.ignoreStart;
 		}
 		/*if(Keyboard.isKeyDown(Keyboard.KEY_Z)) {
 			try {
