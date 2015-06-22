@@ -14,7 +14,6 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -89,7 +88,7 @@ public class FogHandler {
 			
 			//Underground fog
 			if(renderView.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10)) {
-				float multiplier = ((float)((WorldProviderBetweenlands.LAYER_HEIGHT - 10) - renderView.posY) / (float)(WorldProviderBetweenlands.LAYER_HEIGHT - 10));
+				float multiplier = ((float)((WorldProviderBetweenlands.LAYER_HEIGHT - 10) - renderView.posY) / (WorldProviderBetweenlands.LAYER_HEIGHT - 10));
 				multiplier = 1.0F - multiplier;
 				multiplier *= Math.pow(multiplier, 6);
 				multiplier = multiplier * 0.9F + 0.1F;

@@ -46,7 +46,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 
 	public final boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
 		int baseRadius = rand.nextInt(6) + 13;
-		int height = rand.nextInt(baseRadius) + baseRadius * getRadiusHeightRatio() + 3;
+		int height = rand.nextInt(getRadiusHeightRatio() * 4 + 1) + baseRadius * getRadiusHeightRatio() + 3;
 		int maxRadius = baseRadius + height / 3;
 		if (isSpaceOccupied(world, blockX, blockY, blockZ, maxRadius, height)) {
 			return false;
@@ -159,7 +159,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	private boolean isSpaceOccupied(World world, int blockX, int blockY, int blockZ, int maxRadius, int height) {
 		for (int x = blockX - maxRadius; x <= blockX + maxRadius; x++) {
 			for (int z = blockZ - maxRadius; z <= blockZ + maxRadius; z++) {
-				for (int y = blockY + 4; y < blockY + height; y++) {
+				for (int y = blockY; y < blockY + 10 + height; y++) {
 					if (world.getBlock(x, y, z).getMaterial() == Material.wood) {
 						return true;
 					}

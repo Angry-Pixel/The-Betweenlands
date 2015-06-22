@@ -104,7 +104,7 @@ extends WorldProvider
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float minBrightness = (float) (1.0F / 100000000.0F * Math.pow((float)ConfigHandler.DIMENSION_BRIGHTNESS, 4) + 0.005F);
+		float minBrightness = (float) (1.0F / 100000000.0F * Math.pow(ConfigHandler.DIMENSION_BRIGHTNESS, 4) + 0.005F);
 		for(int i = 0; i <= 15; i++) {
 			float f1 = 1F - (i*i*i) / (15F*15F*15F);
 			this.lightBrightnessTable[i] = (1F - f1) / (f1 * 3F + 1F) * (1F - minBrightness) + minBrightness;

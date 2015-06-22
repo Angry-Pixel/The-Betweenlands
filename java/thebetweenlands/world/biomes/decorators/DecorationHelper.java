@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -12,15 +13,15 @@ import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
 import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
@@ -451,8 +452,8 @@ public class DecorationHelper {
 		}
 	}
 
-	public void generateGiantWeedwoodTree(int attempts) {
-		if (rand.nextInt(100 * attempts) != 0) {
+	public void generateGiantWeedwoodTree(int rate) {
+		if (rand.nextInt(5 * rate) != 0) {
 			return;
 		}
 		int x = this.x + this.offsetXZ();
@@ -463,8 +464,8 @@ public class DecorationHelper {
 		}
 	}
 
-	public void generateDeadTree(int attempts) {
-		if (rand.nextInt(100 * attempts) != 0) {
+	public void generateDeadTree(int rate) {
+		if (rand.nextInt(5 * rate) != 0) {
 			return;
 		}
 		int x = this.x + this.offsetXZ();
@@ -476,42 +477,50 @@ public class DecorationHelper {
 	}
 
 	public void generateWeedwoodTree(int attempts) {
-		for (int i = 0; i < attempts; i++) {
-			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
-				GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
+		if (canShortThingsGenerateHere()) {
+			for (int i = 0; i < attempts; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+					GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
+			}
 		}
 	}
 
 	public void generateSapTree(int attempts) {
-		for (int i = 0; i < attempts; i++) {
-			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
-				GEN_SAP_TREE.generate(this.world, this.rand, x, y, z);
+		if (canShortThingsGenerateHere()) {
+			for (int i = 0; i < attempts; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+					GEN_SAP_TREE.generate(this.world, this.rand, x, y, z);
+			}
 		}
 	}
 
 	public void generateHugeMushroom(int attempts) {
-		for (int i = 0; i < attempts; i++) {
-			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
-				GEN_HUGE_MUSHROOM.generate(this.world, this.rand, x, y, z);
+		if (canShortThingsGenerateHere()) {
+			for (int i = 0; i < attempts; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+					GEN_HUGE_MUSHROOM.generate(this.world, this.rand, x, y, z);
+			}
 		}
 	}
 
 	public void generateRubberTree(int attempts) {
-		for (int i = 0; i < attempts; i++) {
-			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
-			if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
-				GEN_RUBBER_TREE.generate(this.world, this.rand, x, y, z);
+		if (canShortThingsGenerateHere()) {
+			for (int i = 0; i < attempts; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
+					GEN_RUBBER_TREE.generate(this.world, this.rand, x, y, z);
+			}
 		}
 	}
 
@@ -825,4 +834,10 @@ public class DecorationHelper {
 		}
 	}
 
+	private boolean canShortThingsGenerateHere() {
+		if (world.provider instanceof WorldProviderBetweenlands) {
+			return ((ChunkProviderBetweenlands) ((WorldServer) world).theChunkProviderServer.currentChunkProvider).evalTreeNoise(x * 0.01, z * 0.01) > -0.25;
+		}
+		return true;
+	}
 }

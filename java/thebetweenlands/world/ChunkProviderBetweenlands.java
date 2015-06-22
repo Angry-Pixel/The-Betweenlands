@@ -17,6 +17,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.MapGenCavesBetweenlandsNew;
@@ -73,6 +74,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 	//private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
 	private MapGenBase caveGenerator = new MapGenCavesBetweenlandsNew();
 
+	private NoiseGeneratorSimplex treeNoise;
 
 	public ChunkProviderBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
 		this.worldObj = world;
@@ -241,7 +243,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		//Generate parabolic field
 		for( int j = -2; j <= 2; ++j ) {
 			for( int k = -2; k <= 2; ++k ) {
-				float f = 10.0F / MathHelper.sqrt_float((float) (j * j + k * k) + 0.2F);
+				float f = 10.0F / MathHelper.sqrt_float(j * j + k * k + 0.2F);
 				this.parabolicField[j + 2 + (k + 2) * 5] = f;
 			}
 		}
@@ -255,6 +257,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
         this.field_147430_m = (NoiseGeneratorPerlin)noiseGens[3];
         this.noiseGen5 = (NoiseGeneratorOctaves)noiseGens[4];
         this.noiseGen6 = (NoiseGeneratorOctaves)noiseGens[5];*/
+
+		treeNoise = new NoiseGeneratorSimplex(rand);
 	}
 
 	/**
@@ -527,8 +531,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                //System.out.println(fineBaseNoise);
 
 		                ++baseNoiseIndex;
-		                double cAvgRootHeight = (double) averageRootHeight;
-		                double cAvgHeightVariation = (double) averageHeightVariation;
+		                double cAvgRootHeight = averageRootHeight;
+		                double cAvgHeightVariation = averageHeightVariation;
 		                cAvgRootHeight += fineBaseNoise * 0.2D;
 		                cAvgRootHeight = cAvgRootHeight * 8.5D / 8.0D;
 		                //double d5 = 8.5D + cAvgRootHeight * 4.0D;
@@ -536,7 +540,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 		                for( int byo = 0; byo < 33; ++byo ) {
 		                    //double d6 = ((double)j2 - d5) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
-		                    double heightLimiterNoise = ((double) byo - cAvgRootHeight) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
+		                    double heightLimiterNoise = (byo - cAvgRootHeight) * 12.0D * 128.0D / 256.0D / cAvgHeightVariation;
 
 		                    //System.out.println("RH: " + cAvgRootHeight);
 		                    //System.out.println("HV: " + cAvgHeightVariation);
@@ -551,7 +555,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                    double finalNoise = MathHelper.denormalizeClamp(octaveNoise1, octaveNoise2, octaveNoise3) - heightLimiterNoise;
 
 		                    if( byo > 29 ) {
-		                        double d11 = (double) ((float) (byo - 29) / 3.0F);
+		                        double d11 = (byo - 29) / 3.0F;
 		                        finalNoise = finalNoise * (1.0D - d11) + -10.0D * d11;
 		                    }
 
@@ -676,7 +680,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		double baseBlockNoiseVariationFactor = 0.03125D;
 
 		//Generate base block noise
-		this.baseBlockPatchNoise = this.baseBlockPatchNoiseGen.func_151599_a(this.baseBlockPatchNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, baseBlockNoiseVariationFactor * 2.0D, baseBlockNoiseVariationFactor * 2.0D, 1.0D);
+		this.baseBlockPatchNoise = this.baseBlockPatchNoiseGen.func_151599_a(this.baseBlockPatchNoise, chunkX * 16, chunkZ * 16, 16, 16, baseBlockNoiseVariationFactor * 2.0D, baseBlockNoiseVariationFactor * 2.0D, 1.0D);
 
 		//Iterate through all stacks (16x16) and replace the blocks according to the biome
 		this.biomeGenList.clear();
@@ -698,5 +702,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 				}
 			}
 		}
+	}
+
+	public double evalTreeNoise(double x, double z) {
+		return treeNoise.func_151605_a(x, z);
 	}
 }
