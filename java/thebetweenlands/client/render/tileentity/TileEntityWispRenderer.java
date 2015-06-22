@@ -61,11 +61,13 @@ public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.004F);
 
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		Minecraft.getMinecraft().getTextureManager().bindTexture(EntityWispFX.TEXTURE);
+		bindTexture(EntityWispFX.TEXTURE);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		for(Object particle : particleList){
 			((EntityWispFX)particle).renderParticle(tessellator, partialTicks, 
 					ActiveRenderInfo.rotationX,

@@ -1,77 +1,97 @@
 package thebetweenlands.entities.particles;
 
+import thebetweenlands.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntityWispFX extends EntityFX {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");
 
+	private float prevFlameScale;
 	private float flameScale;
 	private int color;
 	private int brightness;
 
 	public EntityWispFX(World world, double x, double y, double z, double mx, double my, double mz, float size, int bright, int col) {
 		super(world, x, y, z, mx, my, mz);
-		this.motionX = motionX * 0.01D + mx;
-		this.motionY = motionY * 0.01D + my;
-		this.motionZ = motionZ * 0.01D + mz;
+		motionX = motionX * 0.01D + mx;
+		motionY = motionY * 0.01D + my;
+		motionZ = motionZ * 0.01D + mz;
 		x += (rand.nextFloat() - rand.nextFloat()) * 0.05F;
 		y += (rand.nextFloat() - rand.nextFloat()) * 0.05F;
 		z += (rand.nextFloat() - rand.nextFloat()) * 0.05F;
-		this.posX = this.prevPosX = x;
-		this.posY = this.prevPosY = y;
-		this.posZ = this.prevPosZ = z;
-		this.flameScale = size;
-		this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D)) + 1000;
-		this.noClip = true;
-		this.color = col;
-		this.brightness = bright;
+		posX = prevPosX = x;
+		posY = prevPosY = y;
+		posZ = prevPosZ = z;
+		flameScale = size;
+		particleMaxAge = (int) (8 / (Math.random() * 0.8 + 0.2)) + 1000;
+		noClip = true;
+		color = col;
+		brightness = bright;
 	}
 
-	public void renderParticle(Tessellator par1Tessellator, float partialTicks, float rx, float rxz, float rz, float ryz, float rxy) {
-		float ipx = (float)((this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks) - this.interpPosX);
-		float ipy = (float)((this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks) - this.interpPosY);
-		float ipz = (float)((this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks) - this.interpPosZ);
-		float scale = this.flameScale / 10; 
+	@Override
+	public void renderParticle(Tessellator par1Tessellator, float partialRenderTicks, float rx, float rxz, float rz, float ryz, float rxy) {
+		float currentX = (float) (prevPosX + (posX - prevPosX) * partialRenderTicks);
+		float currentY = (float) (prevPosY + (posY - prevPosY) * partialRenderTicks);
+		float currentZ = (float) (prevPosZ + (posZ - prevPosZ) * partialRenderTicks);
 
-		par1Tessellator.setBrightness(this.brightness);
+		float ipx = (float) (currentX - interpPosX);
+		float ipy = (float) (currentY - interpPosY);
+		float ipz = (float) (currentZ - interpPosZ);
+		float scale = (prevFlameScale + (flameScale - prevFlameScale) * partialRenderTicks) / 10;
 
-		float a = (float)(color >> 24 & 0xff) / 255F - (float) ((10.0f - Minecraft.getMinecraft().renderViewEntity.getDistance(posX, posY, posZ) + 10.0f) / 10.0f);
-		float r = (float)(color >> 16 & 0xff) / 255F;
-		float g = (float)(color >> 8 & 0xff) / 255F;
-		float b = (float)(color & 0xff) / 255F;
+		par1Tessellator.setBrightness(brightness);
+
+		float distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialRenderTicks), 10, 20);
+		float a = (color >>> 24 & 0xFF) / 255F - MathHelper.sin(MathUtils.PI / 20 * distance);
+		float r = (color >> 16 & 0xFF) / 255F;
+		float g = (color >> 8 & 0xFF) / 255F;
+		float b = (color & 0xFF) / 255F;
 
 		par1Tessellator.setColorRGBA_F(r, g, b, a);
 		par1Tessellator.addVertexWithUV(ipx - rx * scale - ryz * scale, ipy - rxz * scale, ipz - rz * scale - rxy * scale, 0.0D, 1.0D);
 		par1Tessellator.addVertexWithUV(ipx - rx * scale + ryz * scale, ipy + rxz * scale, ipz - rz * scale + rxy * scale, 1.0D, 1.0D);
 		par1Tessellator.addVertexWithUV(ipx + rx * scale + ryz * scale, ipy + rxz * scale, ipz + rz * scale + rxy * scale, 1.0D, 0.0D);
-		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale, ipz + rz * scale - rxy * scale, 0.0D, 0.0D);        
+		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale, ipz + rz * scale - rxy * scale, 0.0D, 0.0D);
+	}
+
+	private static float getDistanceToViewer(float x, float y, float z, float partialRenderTicks) {
+		EntityLivingBase entity = Minecraft.getMinecraft().renderViewEntity;
+		partialRenderTicks = 0;
+		float dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
+		float dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
+		float dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
+		return MathHelper.sqrt_float(dx * dx + dy * dy + dz * dz);
 	}
 
 	@Override
 	public void onUpdate() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+		prevFlameScale = flameScale;
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		moveEntity(motionX, motionY, motionZ);
 
-		this.motionX *= 0.95999997854232788D;
-		this.motionZ *= 0.95999997854232788D;
+		motionX *= 0.96;
+		motionZ *= 0.96;
 
-		if (this.particleAge++ >= this.particleMaxAge || this.flameScale <= 0) {
+		if (particleAge++ >= particleMaxAge || flameScale <= 0) {
 			setDead();
 		}
-		if(this.particleAge != 0) {
-			if(this.flameScale > 0) {
-				this.flameScale -= 0.025;
+		if (particleAge != 0) {
+			if (flameScale > 0) {
+				flameScale -= 0.025;
 			}
-			this.motionY += 0.00008;
+			motionY += 0.00008;
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		moveEntity(motionX, motionY, motionZ);
 	}
 }
