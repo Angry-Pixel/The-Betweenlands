@@ -1,7 +1,13 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,7 +15,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.*;
+import thebetweenlands.items.AxeBL;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.PickaxeBL;
+import thebetweenlands.items.SpadeBL;
+import thebetweenlands.items.SwordBL;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	
@@ -61,6 +72,11 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	protected void func_145780_a(int x, int y, int z, Block block) {
+		playSound("mob.spider.step", 0.15F, 2.0F);
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (!worldObj.isRemote) {
@@ -104,6 +120,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
 		if (!worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && canAttack) {
+			worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:crabSnip", 1F, 1F);
 			aggroCooldown = 0;
 		}
 	}

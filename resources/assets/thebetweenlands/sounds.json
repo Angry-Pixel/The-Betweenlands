@@ -313,6 +313,13 @@
     ]
 
   },
+    "crabSnip": {
+    "category": "hostile",
+    "sounds": [
+      "crabSnip"
+    ]
+
+  },
   "sorry": {
     "category": "player",
     "sounds": [
