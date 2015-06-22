@@ -63,7 +63,6 @@ public class EntityWispFX extends EntityFX {
 
 	private static float getDistanceToViewer(float x, float y, float z, float partialRenderTicks) {
 		EntityLivingBase entity = Minecraft.getMinecraft().renderViewEntity;
-		partialRenderTicks = 0;
 		float dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
 		float dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
 		float dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
