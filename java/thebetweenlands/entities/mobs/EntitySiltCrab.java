@@ -110,7 +110,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 				if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
 					return super.attackEntityFrom(source, damage);
 				} else {
-					return super.attackEntityFrom(source, MathHelper.ceiling_float_int((float) damage * 0.5F));
+					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));
 				}
 		}
 		return super.attackEntityFrom(source, damage);
@@ -118,9 +118,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		super.onCollideWithPlayer(player);
 		if (!worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && canAttack) {
-			worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:crabSnip", 1F, 1F);
 			aggroCooldown = 0;
 		}
 	}

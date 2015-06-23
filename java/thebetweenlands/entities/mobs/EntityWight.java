@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 import thebetweenlands.items.*;
 
 public class EntityWight extends EntityMob implements IEntityBL {
-
 	private EntityAIAttackOnCollide meleeAttack = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false);
-	EntityPlayer previousTarget;
+	private EntityPlayer previousTarget;
+	private boolean updateHasBeenSeen = false;
 
 	public EntityWight(World world) {
 		super(world);
@@ -95,18 +95,24 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	private void setTargetSpotted(EntityPlayer target, boolean hasBeenSeen) {
 		if (hasBeenSeen) {
-			tasks.addTask(1, meleeAttack);
-			setAttackTarget(target);
-			previousTarget = target;
+			if (!updateHasBeenSeen) {
+				updateHasBeenSeen = true;
+				tasks.addTask(1, meleeAttack);
+				setAttackTarget(target);
+				previousTarget = target;
+			}
 			if (getAnimation() > 0)
 				setAnimation(getAnimation() - 0.1F);
 
 		} else {
-			setAttackTarget(null);
+			if (updateHasBeenSeen) {
+				updateHasBeenSeen = false;
+				setAttackTarget(null);
+				tasks.removeTask(meleeAttack);
+			}
 			if (getAnimation() < 1)
 				setAnimation(getAnimation() + 0.1F);
-			tasks.removeTask(meleeAttack);
-			if (getAnimation() == 0) {
+			if (getAnimation() == 0 && previousTarget != null) {
 				previousTarget = null;
 			}
 		}
@@ -144,7 +150,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
 					return super.attackEntityFrom(source, damage);
 				} else {
-					return super.attackEntityFrom(source, MathHelper.ceiling_float_int((float) damage * 0.5F));
+					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));
 				}
 		}
 		return super.attackEntityFrom(source, damage);

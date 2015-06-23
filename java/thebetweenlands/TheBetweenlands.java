@@ -3,7 +3,6 @@ package thebetweenlands;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -16,11 +15,13 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.server.CommandTickSpeed;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.entity.AttackTargetSyncHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
+import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -31,6 +32,7 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.network.packets.PacketAnimatorProgress;
+import thebetweenlands.network.packets.PacketAttackTarget;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
@@ -110,6 +112,7 @@ public class TheBetweenlands
         packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
         packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
         packetRegistry.registerPacket(PacketTickspeed.class, (byte) 4);
+        packetRegistry.registerPacket(PacketAttackTarget.class, (byte) 5);
 
 	}
 
@@ -148,6 +151,8 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
+		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
+		MinecraftForge.EVENT_BUS.register(new AttackTargetSyncHandler());
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

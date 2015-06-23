@@ -3,10 +3,12 @@ package thebetweenlands.entities.mobs;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -22,6 +24,8 @@ public class EntityDarkDruid extends EntityMob {
 	private int teleportDelay;
 	public EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
 	public EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
+
+	private EntityLivingBase tempFixTarget;
 
 	public EntityDarkDruid(World par1World) {
 		super(par1World);
@@ -56,34 +60,41 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
-		if (target != null) {
-			if (target.onGround && attackCounter == 0)
-				setAttackTarget(target);
-			if (!target.onGround && attackCounter == 0)
-				setAttackTarget(null);
+		if (!worldObj.isRemote) {
+			EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+			if (target != null) {
+				if (target.onGround && attackCounter == 0) {
+					setAttackTarget(target);
+				}
+				if (!target.onGround && attackCounter == 0) {
+					setAttackTarget(null);
+				}
+			}
 		}
-
-		if (worldObj.isRemote) {
-			if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 49F) {
-				if (attackCounter == 0) {
-					attackCounter++;
+		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget()) && getDistanceSqToEntity(getAttackTarget()) <= 49F) {
+			if (attackCounter == 0) {
+				attackCounter++;
+				if (!worldObj.isRemote) {
 					tasks.removeTask(meleeAI);
-				} else if (attackCounter < attackTimer) {
-					attackCounter++;
-					isCasting = 1;
+				}
+			} else if (attackCounter < attackTimer) {
+				attackCounter++;
+				isCasting = 1;
+				if (!worldObj.isRemote) {
 					chargeSpell(getAttackTarget());
 				}
-				if (attackCounter >= attackTimer) {
-					attackCounter = 0;
-					isCasting = 0;
+			}
+			if (attackCounter >= attackTimer) {
+				attackCounter = 0;
+				isCasting = 0;
+				if (!worldObj.isRemote) {
 					castSpell(getAttackTarget());
 					tasks.addTask(2, meleeAI);
 				}
-			} else {
-				attackCounter = 0;
-				isCasting = 0;
 			}
+		} else {
+			attackCounter = 0;
+			isCasting = 0;
 		}
 
 		if (getAttackTarget() != null)
@@ -91,16 +102,29 @@ public class EntityDarkDruid extends EntityMob {
 
 		if (worldObj.isRemote && isCasting == 1)
 			spawnParticles();
-		dataWatcher.updateObject(20, (byte) isCasting);
+		dataWatcher.updateObject(20, isCasting);
 
 		if (!worldObj.isRemote && isEntityAlive() && getAttackTarget() != null)
 			if (getAttackTarget().getDistanceSqToEntity(this) > 36.0D && isCasting == 0 && teleportDelay++ >= 20 && getAttackTarget().onGround)
 				teleportNearEntity(getAttackTarget());
 	}
 
+	@Override
+	public void setAttackTarget(EntityLivingBase attackTarget) {
+		if (tempFixTarget != attackTarget) {
+			super.setAttackTarget(attackTarget);
+			tempFixTarget = attackTarget;
+		}
+	}
+
+	@Override
+	public void setRevengeTarget(EntityLivingBase attackTarget) {
+		setAttackTarget(attackTarget);
+	}
+
 	protected boolean teleportNearEntity(Entity entity) {
 		double targetX = entity.posX + (rand.nextDouble() - 0.5D) * 6.0D;
-		double targetY = entity.posY + (double) (rand.nextInt(3) - 1);
+		double targetY = entity.posY + (rand.nextInt(3) - 1);
 		double targetZ = entity.posZ + (rand.nextDouble() - 0.5D) * 6.0D;
 		return teleportTo(targetX, targetY, targetZ);
 	}
@@ -194,12 +218,14 @@ public class EntityDarkDruid extends EntityMob {
 			entity.motionZ *= 0D;
 		}
 		entity.motionY = 0.1D;
+		entity.velocityChanged = true;
 	}
 
 	public void castSpell(Entity entity) {
 		entity.motionX = 0.5D * Math.signum(entity.posX - posX);
 		entity.motionZ = 0.5D * Math.signum(entity.posZ - posZ);
 		entity.motionY = 1.5D;
+		entity.velocityChanged = true;
 	}
 
 	@Override

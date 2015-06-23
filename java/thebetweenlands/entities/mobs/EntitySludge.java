@@ -85,17 +85,11 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void updateEntityActionState() {
-		despawnEntity();
-		EntityPlayer entityplayer = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
-
-		if (entityplayer != null) {
-			faceEntity(entityplayer, 10.0F, 20.0F);
-			setAttackTarget(entityplayer);
-		}
+		super.updateEntityActionState();
 
 		if ((onGround || this.isInWater()) && sludgeJumpDelay-- <= 0) {
 			sludgeJumpDelay = getJumpDelay();
-			if (entityplayer != null)
+			if (getAttackTarget() != null)
 				sludgeJumpDelay /= 3;
 			isJumping = true;
 			moveStrafing = 1.0F - rand.nextFloat() * 2.0F;
