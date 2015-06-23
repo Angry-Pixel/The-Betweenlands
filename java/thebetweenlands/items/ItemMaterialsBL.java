@@ -108,7 +108,7 @@ public class ItemMaterialsBL extends Item {
 		MOSS("moss"), MUD_BRICK("mudBrick"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
 		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
 		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"), 
-		GROUND_WEEDWOOD_BARK("groundWeedwoodBark"), RUBBER_BALL("rubber"), DRIED_SWAMP_REED_DUST("driedSwampReedDust");
+		GROUND_WEEDWOOD_BARK("groundWeedwoodBark"), RUBBER_BALL("rubber"), DRIED_SWAMP_REED_DUST("driedSwampReedDust"), MANDRAKE_ROOT("mandrakeRoot");
 
 		public final String iconName;
 

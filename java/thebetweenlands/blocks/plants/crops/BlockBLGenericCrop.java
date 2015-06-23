@@ -17,6 +17,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -56,13 +57,17 @@ public class BlockBLGenericCrop extends BlockCrops {
 	
 	public ItemStack getSeedDrops() {
 		if(type.equals("middleFruitBush"))
-			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);	
+			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
+		if(type.equals("mandrake"))
+			return new ItemStack(BLItemRegistry.mandrakeSeeds, 1, 0);
 		return null;	
 	}
 		
 	public ItemStack getCropDrops() {
 		if(type.equals("middleFruitBush"))
-			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);	
+			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
+		if(type.equals("mandrake"))
+			return ItemMaterialsBL.createStack(EnumMaterialsBL.MANDRAKE_ROOT, 1);
 		return null;	
 	}
 	
