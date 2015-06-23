@@ -84,7 +84,7 @@ public final class MathUtils {
 		int minutes = (int) angle;
 		angle -= (int) angle;
 		angle *= 60;
-		return String.format("%s°%s'%.3f\"", degrees, minutes, angle);
+		return String.format("%s\u00B0%s'%.3f\"", degrees, minutes, angle);
 	}
 
 	public static float mod(float a, float b) {
