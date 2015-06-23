@@ -137,7 +137,7 @@ public class BLItemRegistry {
         ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow);
-        ModCreativeTabs.plants.setTab(middleFruitSeeds);
+        ModCreativeTabs.plants.setTab(middleFruitSeeds, mandrakeSeeds);
     }
 
     private static void registerItems() {

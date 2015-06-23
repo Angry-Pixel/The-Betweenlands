@@ -75,6 +75,7 @@ tile.thebetweenlands.farmedDirt_7.name=Decayed Composted Swamp Dirt
 tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Grass
 
 tile.thebetweenlands.middleFruitBush.name=Purple Pear Bush
+tile.thebetweenlands.mandrake.name=Mandrake
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -382,6 +383,8 @@ item.thebetweenlands.plantTonic.name=Plant Tonic
 item.thebetweenlands.rubber.name=Solid Rubber
 item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
 item.thebetweenlands.driedSwampReedDust.name=Dried Swamp Reed Dust
+item.thebetweenlands.mandrakeSeeds.name=Mandrake Seeds
+item.thebetweenlands.mandrakeRoot.name=Mandrake Root
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
