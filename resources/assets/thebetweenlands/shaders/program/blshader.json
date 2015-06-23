@@ -22,6 +22,7 @@
         { "name": "OutSize",        "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
         { "name": "zNear",          "type": "float",     "count": 1,  "values": [ 0.001 ] },
         { "name": "zFar",           "type": "float",     "count": 1,  "values": [ 200.0 ] },
+        { "name": "FogMode",        "type": "float",     "count": 1,  "values": [ 0.0 ] },
         { "name": "LightSourcesX",  "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                                                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
         { "name": "LightSourcesY",  "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,

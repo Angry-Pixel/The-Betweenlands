@@ -10,6 +10,8 @@ import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.event.render.FogHandler;
+
 import javax.vecmath.Matrix4f;
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -114,6 +116,10 @@ public class CShaderInt extends Shader {
 		this.pShaderManager.func_147984_b("InSize").func_148087_a((float)this.framebufferIn.framebufferTextureWidth, (float)this.framebufferIn.framebufferTextureHeight);
 		this.pShaderManager.func_147984_b("OutSize").func_148087_a(f1, f2);
 		this.pShaderManager.func_147984_b("Time").func_148090_a(partialTicks);
+		
+		//TODO: Make this safe in case another mod changes the fog mode after world rendering
+		this.pShaderManager.func_147984_b("FogMode").func_148090_a(GL11.glGetInteger(GL11.GL_FOG_MODE));
+		
 		Minecraft minecraft = Minecraft.getMinecraft();
 		this.pShaderManager.func_147984_b("ScreenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
 		this.wrapper.updateShader(this);
@@ -121,6 +127,10 @@ public class CShaderInt extends Shader {
 		this.framebufferOut.framebufferClear();
 		this.framebufferOut.bindFramebuffer(false);
 
+		//Just to make sure the correct fog values are used in case another mod changes the fog values
+		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
+		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd());
+		
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		tessellator.setColorOpaque_I(-1);

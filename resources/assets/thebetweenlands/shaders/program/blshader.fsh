@@ -1,5 +1,9 @@
 #version 120
 
+//Definitions
+#define GL_EXP 2048
+#define GL_LINEAR 9729
+
 //Sampler that holds the rendered world
 uniform sampler2D DiffuseSampler;
 
@@ -27,6 +31,9 @@ uniform float   LightColorsB[32];
 uniform float   LightRadii[32];
 uniform float   LightSources;
 
+//Fog mode
+uniform float FogMode;
+
 //Cam pos
 uniform vec3 CamPos;
 
@@ -51,6 +58,23 @@ vec3 getFragPos(sampler2D depthMap) {
     fragRelPos.xyz /= fragRelPos.w;
     
     return fragRelPos.xyz;
+}
+
+//Returns the fog color multiplier for a fragment
+float getFogMultiplier(vec3 fragPos) {
+    if(FogMode == GL_LINEAR) {
+        //Calculate linear fog
+        return clamp((length(fragPos) - gl_Fog.start) * gl_Fog.scale, 0.0F, 1.0F);
+    } else if(FogMode == GL_EXP) {
+        //Calculate exponential fog
+        return 1.0F - clamp(exp(-gl_Fog.density * length(fragPos)), 0.0F, 1.0F);
+    }
+    return 0.0F;
+}
+
+//Applies fog to the color of a fragment
+vec4 applyFog(vec3 fragPos, vec4 color) {
+    return mix(color, vec4(0, 0, 0, 0), getFogMultiplier(fragPos));
 }
 
 void main() {
@@ -108,12 +132,14 @@ void main() {
             //Calculate distortion and color multiplier
             distortion = true;
             distortionMultiplier += 1.5F / (pow(fragCamDist2 - fragCamDist, 2) / 100.0F + 1.0F);
-            colorMultiplier *= 0.95F;
+            
+            //Calculate color multiplier (affected by fog)
+            colorMultiplier *= 1.0F - mix(0.1F, 0.0F, getFogMultiplier(fragPos2));
             
             //Calculate color distortion
             float fragDistortion = (fragPos2.y + CamPos.y + (cos(fragPos2.x + CamPos.x) * sin(fragPos2.z + CamPos.z)) * 2.0F) * 8.0F;
             float colorDistortion = (sin(fragDistortion + MSTime / 300.0F) / 800.0F);
-            color += vec4(GBuff1Col.rgb * colorDistortion * 5.0F, 1.0F);
+            color += applyFog(fragPos2, vec4(GBuff1Col.rgb * colorDistortion * 5.0F, 1.0F));
         }
         
         //Apply intersection glow
@@ -125,11 +151,9 @@ void main() {
                 dstMultiplier = 3000.0F;
             }
             float dsCol = pow((0.1F - dist / 2.0F), dstFalloff) * dstMultiplier;
-            color += vec4(GBuff1Col.rgb * dsCol, 0.0F);
+            color += applyFog(fragPos2, vec4(GBuff1Col.rgb * dsCol, 0.0F));
         }
     }
-    
-    
     
     
     
@@ -141,6 +165,8 @@ void main() {
         color += vec4(texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
     }
     
-    //Return calculated color
+    
+    
+    //Return final color
     gl_FragColor = color * colorMultiplier;
 }

@@ -118,6 +118,7 @@ public class FogHandler {
 			this.renderFogEnd = this.currentFogEnd;
 			this.renderFogStart = (float) (prevRenderFogStart + (this.renderFogStart - prevRenderFogStart) * partialTicks);
 			this.renderFogEnd = (float) (prevRenderFogEnd + (this.renderFogEnd - prevRenderFogEnd) * partialTicks);
+			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
 			GL11.glFogf(GL11.GL_FOG_START, this.renderFogStart);
 			GL11.glFogf(GL11.GL_FOG_END, this.renderFogEnd);
 		}
