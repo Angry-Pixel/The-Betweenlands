@@ -13,8 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelDarkDruid extends ModelBase {
 	private final ModelRenderer beard;
-	private final ModelRenderer rightarm;
-	private final ModelRenderer rightcuff;
+	private final ModelRenderer rightArm;
+	private final ModelRenderer rightCuff;
 	private final ModelRenderer body;
 	private final ModelRenderer leftArm;
 	private final ModelRenderer leftCuff;
@@ -42,14 +42,14 @@ public class ModelDarkDruid extends ModelBase {
 		beard.addBox(-1.5F, -1F, -4.5F, 3, 2, 1);
 		beard.setRotationPoint(0F, 0F, 0F);
 		setRotation(beard, 0F, 0F, 0F);
-		rightarm = new ModelRenderer(this, 0, 92);
-		rightarm.addBox(-5F, -2F, -2F, 5, 12, 5);
-		rightarm.setRotationPoint(-3F, 2F, 0F);
-		setRotation(rightarm, 0F, 0F, 0F);
-		rightcuff = new ModelRenderer(this, 0, 84);
-		rightcuff.addBox(-5.5F, 10F, -2.5F, 6, 2, 6);
-		rightcuff.setRotationPoint(-3F, 2F, 0F);
-		setRotation(rightcuff, 0F, 0F, 0F);
+		rightArm = new ModelRenderer(this, 0, 92);
+		rightArm.addBox(-5F, -2F, -2F, 5, 12, 5);
+		rightArm.setRotationPoint(-3F, 2F, 0F);
+		setRotation(rightArm, 0F, 0F, 0F);
+		rightCuff = new ModelRenderer(this, 0, 84);
+		rightCuff.addBox(-5.5F, 10F, -2.5F, 6, 2, 6);
+		rightCuff.setRotationPoint(-3F, 2F, 0F);
+		setRotation(rightCuff, 0F, 0F, 0F);
 		body = new ModelRenderer(this, 32, 107);
 		body.addBox(-4F, 0F, -3F, 8, 13, 8);
 		body.setRotationPoint(0F, 0F, 0F);
@@ -128,8 +128,8 @@ public class ModelDarkDruid extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
 		setRotationAngles(limbSwing, limbSwingAngle, ticksExisted, rotationYaw, rotationPitch, scale, entity);
 		beard.render(scale);
-		rightarm.render(scale);
-		rightcuff.render(scale);
+		rightArm.render(scale);
+		rightCuff.render(scale);
 		body.render(scale);
 		leftArm.render(scale);
 		leftCuff.render(scale);
@@ -162,11 +162,11 @@ public class ModelDarkDruid extends ModelBase {
 		float attackAnimationTime = druid.getAttackAnimationTime(partialRenderTicks);
 		float pitch = -MathUtils.PI / 2 + (entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialRenderTicks) * MathUtils.DEG_TO_RAD;
 		float ticksExisted = entity.ticksExisted + partialRenderTicks;
-		rightcuff.rotateAngleX = rightarm.rotateAngleX = pitch * attackAnimationTime + MathHelper.cos(swing * 0.6662F + MathUtils.PI) * 2 * speed * 0.5F * (1 - attackAnimationTime);
+		rightCuff.rotateAngleX = rightArm.rotateAngleX = pitch * attackAnimationTime + MathHelper.cos(swing * 0.6662F + MathUtils.PI) * 2 * speed * 0.5F * (1 - attackAnimationTime);
 		leftCuff.rotateAngleX = leftArm.rotateAngleX = pitch * attackAnimationTime + MathHelper.cos(swing * 0.6662F) * 2.0F * speed * 0.5F * (1 - attackAnimationTime);
-		rightcuff.rotateAngleX = rightarm.rotateAngleX += MathHelper.sin(ticksExisted * 0.4F) * 0.1F * attackAnimationTime;
+		rightCuff.rotateAngleX = rightArm.rotateAngleX += MathHelper.sin(ticksExisted * 0.4F) * 0.1F * attackAnimationTime;
 		leftCuff.rotateAngleX = leftArm.rotateAngleX += MathHelper.cos(ticksExisted * 0.4F) * 0.1F * attackAnimationTime;
-		rightcuff.rotateAngleZ = rightarm.rotateAngleZ = -MathHelper.sin(ticksExisted * 0.2F) * 0.1F * attackAnimationTime;
+		rightCuff.rotateAngleZ = rightArm.rotateAngleZ = -MathHelper.sin(ticksExisted * 0.2F) * 0.1F * attackAnimationTime;
 		leftCuff.rotateAngleZ = leftArm.rotateAngleZ = MathHelper.cos(ticksExisted * 0.2F) * 0.1F * attackAnimationTime;
 	}
 }
