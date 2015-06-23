@@ -33,7 +33,7 @@ public class OctineArmorHandler {
 					event.entityLiving.extinguish();
 				}
 				else
-					event.entityLiving.attackEntityFrom(event.source, event.ammount * damage);
+					event.ammount *= damage;
 				System.out.println("Damage: " + event.ammount * damage);
 			}
 		}
