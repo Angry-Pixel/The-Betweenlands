@@ -36,27 +36,27 @@ public class CShaderInt extends Shader {
 		try {
 			{
 				this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "field_148051_c");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "field_148051_c", "c");
 				f.setAccessible(true);
 				f.set(this, this.pShaderManager);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "field_148048_d");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "field_148048_d", "d");
 				f.setAccessible(true);
 				this.pListAuxFramebuffers = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "field_148049_e");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "field_148049_e", "e");
 				f.setAccessible(true);
 				this.pListAuxNames = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "field_148046_f");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "field_148046_f", "f");
 				f.setAccessible(true);
 				this.pListAuxWidths = (List) f.get(this);
 			}
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "field_148047_g");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "field_148047_g", "g");
 				f.setAccessible(true);
 				this.pListAuxHeights = (List) f.get(this);
 			}
@@ -77,7 +77,7 @@ public class CShaderInt extends Shader {
 	public void loadShader(float partialTicks) {
 		try {
 			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "field_148053_h");
+				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "field_148053_h", "h");
 				f.setAccessible(true);
 				this.pProjectionMatrix = (Matrix4f) f.get(this);
 			}

@@ -28,10 +28,10 @@ public class CShaderGroup extends ShaderGroup {
 	@Override
 	public void func_152765_a(TextureManager textureManager, ResourceLocation resourceLocation) throws JsonException {
 		try {
-			Field rmField = ReflectionHelper.findField(this.getClass().getSuperclass(), "resourceManager", "field_148033_b");
+			Field rmField = ReflectionHelper.findField(this.getClass().getSuperclass(), "resourceManager", "field_148033_b", "b");
 			rmField.setAccessible(true);
 			this.pResourceManager = (IResourceManager) rmField.get(this);
-			Field slField = ReflectionHelper.findField(this.getClass().getSuperclass(), "listShaders", "field_148031_d");
+			Field slField = ReflectionHelper.findField(this.getClass().getSuperclass(), "listShaders", "field_148031_d", "d");
 			slField.setAccessible(true);
 			this.pListShaders = (List) slField.get(this);
 		} catch (Exception e) {
