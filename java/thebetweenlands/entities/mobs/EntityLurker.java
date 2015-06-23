@@ -1,6 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import java.awt.Color;
 import java.util.List;
 
 import net.minecraft.block.Block;

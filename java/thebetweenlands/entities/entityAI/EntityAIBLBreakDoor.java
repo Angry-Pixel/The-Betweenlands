@@ -27,7 +27,7 @@ public class EntityAIBLBreakDoor extends EntityAIBLBlockInteract {
 
 	@Override
 	public boolean continueExecuting() {
-		double d0 = theEntity.getDistanceSq((double) entityPosX, (double) entityPosY, (double) entityPosZ);
+		double d0 = theEntity.getDistanceSq(entityPosX, entityPosY, entityPosZ);
 		return breakingTime < maxBreakingTime && !isValidBlockMeta(theEntity.worldObj, entityPosX, entityPosY, entityPosZ) && d0 < 4.0D;
 	}
 

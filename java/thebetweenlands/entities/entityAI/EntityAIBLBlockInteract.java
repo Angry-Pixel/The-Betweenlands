@@ -38,7 +38,7 @@ public abstract class EntityAIBLBlockInteract extends EntityAIBase {
 					entityPosY = pathpoint.yCoord + 1;
 					entityPosZ = pathpoint.zCoord;
 
-					if (theEntity.getDistanceSq((double) entityPosX, theEntity.posY, (double) entityPosZ) <= 2.25D) {
+					if (theEntity.getDistanceSq(entityPosX, theEntity.posY, entityPosZ) <= 2.25D) {
 						targetBlock = checkTargetBlock(entityPosX, entityPosY, entityPosZ);
 
 						if (targetBlock != null) {
@@ -66,14 +66,14 @@ public abstract class EntityAIBLBlockInteract extends EntityAIBase {
 	@Override
 	public void startExecuting() {
 		hasStoppedBlockInteraction = false;
-		entityPositionX = (float) ((double) ((float) entityPosX + 0.5F) - theEntity.posX);
-		entityPositionZ = (float) ((double) ((float) entityPosZ + 0.5F) - theEntity.posZ);
+		entityPositionX = (float) (entityPosX + 0.5F - theEntity.posX);
+		entityPositionZ = (float) (entityPosZ + 0.5F - theEntity.posZ);
 	}
 
 	@Override
 	public void updateTask() {
-		float f = (float) ((double) ((float) entityPosX + 0.5F) - theEntity.posX);
-		float f1 = (float) ((double) ((float) entityPosZ + 0.5F) - theEntity.posZ);
+		float f = (float) (entityPosX + 0.5F - theEntity.posX);
+		float f1 = (float) (entityPosZ + 0.5F - theEntity.posZ);
 		float f2 = entityPositionX * f + entityPositionZ * f1;
 
 		if (f2 < 0.0F) {
