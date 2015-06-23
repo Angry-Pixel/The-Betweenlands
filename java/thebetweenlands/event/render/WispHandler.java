@@ -39,45 +39,56 @@ public class WispHandler {
 		GL11.glPopMatrix();
 
 
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
-			if(this.sphereDispList == -2) {
-				this.sphereDispList = GL11.glGenLists(1);
-				GL11.glNewList(this.sphereDispList, GL11.GL_COMPILE);
-				new Sphere().draw(6, 30, 30);
-				GL11.glEndList();
-			}
+		if(this.sphereDispList == -2) {
+			this.sphereDispList = GL11.glGenLists(1);
+			GL11.glNewList(this.sphereDispList, GL11.GL_COMPILE);
+			new Sphere().draw(6, 30, 30);
+			GL11.glEndList();
+		}
 
-			if(this.sphereDispList >= 0) {
-				GL11.glDepthMask(true);
-				GL11.glDisable(GL11.GL_TEXTURE_2D);
-				GL11.glDisable(GL11.GL_BLEND);
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-				GL11.glColor4f(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F, 1.0F);
-				GL11.glEnable(GL11.GL_CULL_FACE);
-				GL11.glCullFace(GL11.GL_BACK);
+		if(ShaderHelper.INSTANCE.canUseShaders() && this.sphereDispList >= 0) {
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+			GL11.glColor4f(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F, 1.0F);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glCullFace(GL11.GL_BACK);
 
-				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
-				if(shader != null) {
-					GeometryBuffer gBuffer = shader.getGeometryBuffer("GBuffer1");
-					gBuffer.bind();
-					gBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
+			if(shader != null) {
+				GeometryBuffer gBuffer = shader.getGeometryBuffer("GBuffer1");
+				gBuffer.bind();
+				gBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 
-					//Render to G-Buffer 1
-					for(Entry<Entry<TileEntityWispRenderer, TileEntityWisp>, Vector3d> e : this.tileList) {
-						Vector3d pos = e.getValue();
-						GL11.glPushMatrix();
-						GL11.glTranslated(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5);
-						GL11.glCallList(this.sphereDispList);
-						GL11.glPopMatrix();
-					}
+				//Render to G-Buffer 1
+				for(Entry<Entry<TileEntityWispRenderer, TileEntityWisp>, Vector3d> e : this.tileList) {
+					Vector3d pos = e.getValue();
+					GL11.glPushMatrix();
+					GL11.glTranslated(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5);
+					GL11.glCallList(this.sphereDispList);
+					GL11.glPopMatrix();
 				}
-
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-
-				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 			}
-		} else {
 
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+		} else if(this.sphereDispList >= 0) {
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glCullFace(GL11.GL_BACK);
+			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.3F);
+			for(Entry<Entry<TileEntityWispRenderer, TileEntityWisp>, Vector3d> e : this.tileList) {
+				Vector3d pos = e.getValue();
+				GL11.glPushMatrix();
+				GL11.glTranslated(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5);
+				GL11.glCallList(this.sphereDispList);
+				GL11.glPopMatrix();
+			}
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
 
 		this.tileList.clear();
