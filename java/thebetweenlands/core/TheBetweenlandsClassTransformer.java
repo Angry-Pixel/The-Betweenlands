@@ -14,7 +14,6 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
@@ -27,6 +26,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			return writeClass(transformMinecraftServer(readClass(classBytes)));
 		} else if ((obf = "yz".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
 			return writeClass(transformEntityPlayer(readClass(classBytes), obf));
+		} else if ((obf = "sv".equals(name)) || "net.minecraft.entity.EntityLivingBase".equals(name)) {
+			return writeClass(transformEntityLivingBase(readClass(classBytes), obf));
 		}
 		return classBytes;
 	}
@@ -47,7 +48,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	private ClassNode transformMinecraftServer(ClassNode classNode) {
 		FieldNode sleepPerTickField = new FieldNode(Opcodes.ACC_PUBLIC, SLEEP_PER_TICK, "J", null, null);
 		classNode.fields.add(sleepPerTickField);
-		boolean needsRun = true, needsInit = true; 
+		boolean needsRun = true, needsInit = true;
 		for (MethodNode method : classNode.methods) {
 			if (needsInit && "<init>".equals(method.name)) {
 				needsInit = false;
@@ -87,36 +88,39 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	private ClassNode transformEntityPlayer(ClassNode classNode, boolean obf) {
 		String getHurtSoundName = obf ? "aT" : "getHurtSound";
-		String playerEventGetHurtSoundClass = "thebetweenlands/forgeevent/entity/player/PlayerEventGetHurtSound";
-		String entityPlayerClass= obf ? "yz" : "net/minecraft/entity/player/EntityPlayer";
+		String entityPlayerClass = obf ? "yz" : "net/minecraft/entity/player/EntityPlayer";
 		for (MethodNode method : classNode.methods) {
 			if (getHurtSoundName.equals(method.name) && "()Ljava/lang/String;".equals(method.desc)) {
 				InsnList insns = method.instructions;
 				insns.clear();
-				/*
-				 * 	@Override
-				 *	protected String getHurtSound() {
-			     *		PlayerEventGetHurtSound event = new PlayerEventGetHurtSound(this, "game.player.hurt");
-			     *		MinecraftForge.EVENT_BUS.post(event);
-			     *		return event.hurtSound;
-			     *	}
-				 */
-				insns.add(new TypeInsnNode(Opcodes.NEW, playerEventGetHurtSoundClass));
-				insns.add(new InsnNode(Opcodes.DUP));
 				insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
-				insns.add(new LdcInsnNode("game.player.hurt"));
-				insns.add(new MethodInsnNode(Opcodes.INVOKESPECIAL, playerEventGetHurtSoundClass, "<init>", String.format("(L%s;Ljava/lang/String;)V", entityPlayerClass), false));
-				insns.add(new VarInsnNode(Opcodes.ASTORE, 1));
-				insns.add(new FieldInsnNode(Opcodes.GETSTATIC, "net/minecraftforge/common/MinecraftForge", "EVENT_BUS", "Lcpw/mods/fml/common/eventhandler/EventBus;"));
-				insns.add(new VarInsnNode(Opcodes.ALOAD, 1));
-				insns.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "cpw/mods/fml/common/eventhandler/EventBus", "post", "(Lcpw/mods/fml/common/eventhandler/Event;)Z", false));
-				insns.add(new InsnNode(Opcodes.POP));
-				insns.add(new VarInsnNode(Opcodes.ALOAD, 1));
-				insns.add(new FieldInsnNode(Opcodes.GETFIELD, playerEventGetHurtSoundClass, "hurtSound", "Ljava/lang/String;"));
+				insns.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "onPlayerGetHurtSound", String.format("(L%s;)Ljava/lang/String;", entityPlayerClass), false));
 				insns.add(new InsnNode(Opcodes.ARETURN));
 				break;
 			}
 		}
 		return classNode;
 	}
+
+	private ClassNode transformEntityLivingBase(ClassNode classNode, boolean obf) {
+		String setAttackTargetName = obf ? "b" : "setRevengeTarget";
+		String entityLivingBaseClass = obf ? "sv" : "net/minecraft/entity/EntityLivingBase";
+		String setAttackTargetDescription = String.format("(L%s;)V", entityLivingBaseClass);
+		for (MethodNode method : classNode.methods) {
+			if (setAttackTargetName.equals(method.name) && setAttackTargetDescription.equals(method.desc)) {
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getType() == AbstractInsnNode.METHOD_INSN) {
+						MethodInsnNode methodNode = (MethodInsnNode) insnNode;
+						methodNode.owner = "thebetweenlands/forgeevent/BLForgeHooks";
+						methodNode.name = "onLivingSetRevengeTarget";
+						break;
+					}
+				}
+				break;
+			}
+		}
+		return classNode;
+	}
+
 }

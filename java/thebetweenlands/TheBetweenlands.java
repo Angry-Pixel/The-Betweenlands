@@ -15,7 +15,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.server.CommandTickSpeed;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
-import thebetweenlands.event.entity.AttackTargetSyncHandler;
+import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OctineArmorHandler;
@@ -26,6 +26,7 @@ import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
@@ -35,6 +36,7 @@ import thebetweenlands.network.packets.PacketAnimatorProgress;
 import thebetweenlands.network.packets.PacketAttackTarget;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
+import thebetweenlands.network.packets.PacketRevengeTarget;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.network.packets.PacketTickspeed;
 import thebetweenlands.proxy.CommonProxy;
@@ -76,6 +78,7 @@ public class TheBetweenlands
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
 	public static CommonPacketProxy packetProxy;
     public static File dir;
+    private static byte nextPacketId = 0;
 	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
@@ -107,13 +110,18 @@ public class TheBetweenlands
         sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
         
         //Packet Registry
-        packetRegistry.registerPacket(PacketAnimatorProgress.class, (byte) 0);
-        packetRegistry.registerPacket(PacketDruidAltarProgress.class, (byte) 1);
-        packetRegistry.registerPacket(PacketDruidTeleportParticle.class, (byte) 2);
-        packetRegistry.registerPacket(PacketSnailHatchParticle.class, (byte) 3);
-        packetRegistry.registerPacket(PacketTickspeed.class, (byte) 4);
-        packetRegistry.registerPacket(PacketAttackTarget.class, (byte) 5);
+        registerPacket(PacketAnimatorProgress.class);
+        registerPacket(PacketDruidAltarProgress.class);
+        registerPacket(PacketDruidTeleportParticle.class);
+        registerPacket(PacketSnailHatchParticle.class);
+        registerPacket(PacketTickspeed.class);
+        registerPacket(PacketRevengeTarget.class);
+        registerPacket(PacketAttackTarget.class);
 
+	}
+
+	private static void registerPacket(Class<? extends IPacket> packetClass) {
+        packetRegistry.registerPacket(packetClass, nextPacketId++);
 	}
 
 	@EventHandler
@@ -152,7 +160,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
 		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
-		MinecraftForge.EVENT_BUS.register(new AttackTargetSyncHandler());
+		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

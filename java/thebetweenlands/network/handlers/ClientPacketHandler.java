@@ -9,6 +9,7 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityBreakingFX;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.tileentity.TileEntity;
@@ -21,11 +22,11 @@ import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packets.PacketAttackTarget;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
+import thebetweenlands.network.packets.PacketRevengeTarget;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.network.packets.PacketTickspeed;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
-import thebetweenlands.utils.ObjectUtils;
 
 import com.google.common.collect.Maps;
 
@@ -134,16 +135,31 @@ public class ClientPacketHandler {
 	}
 
 	@SubscribePacket
-	public static void handleSetAttackTarget(PacketAttackTarget packet) {
+	public static void handleSetAttackTarget(PacketRevengeTarget packet) {
 		World world = FMLClientHandler.instance().getWorldClient();
-		Entity entity = world.getEntityByID(packet.getEntityId());
+		Entity entity = world.getEntityByID(packet.getAId());
 		if (entity instanceof EntityLivingBase) {
 			EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
-			Entity target = packet.getTargetId() == -1 ? null : world.getEntityByID(packet.getTargetId());
+			Entity target = packet.getBId() == -1 ? null : world.getEntityByID(packet.getBId());
 			if (target == null) {
 				entityLivingBase.setRevengeTarget(null);
 			} else if (target instanceof EntityLivingBase) {
 				entityLivingBase.setRevengeTarget((EntityLivingBase) target);
+			}
+		}
+	}
+
+	@SubscribePacket
+	public static void handleSetAttackTarget(PacketAttackTarget packet) {
+		World world = FMLClientHandler.instance().getWorldClient();
+		Entity entity = world.getEntityByID(packet.getAId());
+		if (entity instanceof EntityLiving) {
+			EntityLiving entityLiving = (EntityLiving) entity;
+			Entity target = packet.getBId() == -1 ? null : world.getEntityByID(packet.getBId());
+			if (target == null) {
+				entityLiving.setAttackTarget(null);
+			} else if (target instanceof EntityLivingBase) {
+				entityLiving.setAttackTarget((EntityLivingBase) target);
 			}
 		}
 	}
