@@ -89,30 +89,6 @@ public class DebugHandler {
 		if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
 			this.ignoreStart = !this.ignoreStart;
 		}
-		/*if(Keyboard.isKeyDown(Keyboard.KEY_Z)) {
-			try {
-				Minecraft mc = Minecraft.getMinecraft();
-				if(mc.entityRenderer.theShaderGroup == null) {
-					CShader shaderWrapper = new MainShader(
-							mc.getTextureManager(),
-							mc.getResourceManager(), mc.getFramebuffer(),
-							new ResourceLocation("thebetweenlands:shaders/config/blmain.json"),
-							new ResourceLocation("thebetweenlands:shaders/program/"),
-							new ResourceLocation("thebetweenlands:textures/shader/")
-							);
-					this.currentShader = shaderWrapper;
-					mc.entityRenderer.theShaderGroup = shaderWrapper.getShaderGroup();
-					mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-					this.useShader = true;
-				} else {
-					mc.entityRenderer.deactivateShader();
-					this.useShader = false;
-				}
-			} catch(Exception ex) {
-				this.useShader = false;
-				ex.printStackTrace();
-			}
-		}*/
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

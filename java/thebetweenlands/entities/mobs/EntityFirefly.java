@@ -9,6 +9,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -89,7 +90,6 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private boolean isCourseTraversable(double x, double y, double z, double step) {
 		double d4 = (this.waypointX - this.posX) / step;
 		double d5 = (this.waypointY - this.posY) / step;
@@ -149,7 +149,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 			if(this.lastLightX != MathHelper.floor_double(this.posX) || 
 					this.lastLightY != MathHelper.floor_double(this.posY) ||
 					this.lastLightZ != MathHelper.floor_double(this.posZ)) {
-				if(ConfigHandler.FIREFLY_LIGHTING && !ConfigHandler.USE_SHADER) {
+				if(ConfigHandler.FIREFLY_LIGHTING && !ShaderHelper.INSTANCE.canUseShaders()) {
 					this.switchOff();
 					this.lightUp(this.worldObj, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 				}
@@ -168,7 +168,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	public void setDead() {
 		super.setDead();
 		if (this.worldObj.isRemote) {
-			if(ConfigHandler.FIREFLY_LIGHTING && !ConfigHandler.USE_SHADER) {
+			if(ConfigHandler.FIREFLY_LIGHTING && !ShaderHelper.INSTANCE.canUseShaders()) {
 				switchOff();
 			}
 		}

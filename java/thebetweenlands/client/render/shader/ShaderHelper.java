@@ -21,6 +21,10 @@ public class ShaderHelper {
 	private boolean checked = false;
 	private boolean shadersSupported = false;
 	
+	public boolean canUseShaders() {
+		return this.isShaderSupported() && ConfigHandler.USE_SHADER;
+	}
+	
 	public boolean isShaderSupported() {
 		if(!this.checked){
 			this.checked = true;

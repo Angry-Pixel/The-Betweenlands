@@ -31,7 +31,7 @@ public class RenderBLArrow extends Render {
     public void renderArrow(EntityBLArrow entityArrow, double x, double y, double z, float yaw, float tick) {
         int type = entityArrow.getDataWatcher().getWatchableObjectInt(17);
         if(entityArrow.isOctineArrow)
-            if (ShaderHelper.INSTANCE.isShaderSupported())
+            if (ShaderHelper.INSTANCE.canUseShaders())
                 ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
 
         FMLClientHandler.instance().getClient().getTextureManager().bindTexture(getEntityTexture(entityArrow));

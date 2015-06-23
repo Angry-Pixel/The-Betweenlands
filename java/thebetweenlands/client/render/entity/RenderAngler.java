@@ -23,7 +23,7 @@ public class RenderAngler extends RenderLiving {
 
 	protected int setAnglerEyeBrightness(EntityAngler entity, int pass, float partialTickTime) {
 		if(pass == 1) {
-			if(ConfigHandler.USE_SHADER && ConfigHandler.FIREFLY_LIGHTING) {
+			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
 				double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
 				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff, 

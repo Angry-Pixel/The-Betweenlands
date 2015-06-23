@@ -25,7 +25,7 @@ public class RenderWight extends RenderLiving {
 	protected void preRenderCallback(EntityLivingBase entityliving, float f) {
 		scaleWight((EntityWight) entityliving, f);
 		
-		if(ConfigHandler.USE_SHADER) {
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(entityliving.posX, entityliving.posY, entityliving.posZ, 
 					10.0f, 
 					-1, 
