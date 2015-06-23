@@ -66,7 +66,7 @@ void main() {
     float distortionMultiplier = 0.0F;
     
     //Holds the calculated color
-    vec4 color = vec4(0, 0, 0, 0);
+    vec4 color = vec4(0.0F, 0.0F, 0.0F, 0.0F);
     
     
     
@@ -80,9 +80,9 @@ void main() {
         if(dist < radius) {
             if(LightColorsR[i] == -1 && LightColorsG[i] == -1 && LightColorsB[i] == -1) {
                 distortion = true;
-                distortionMultiplier += max(distortionMultiplier, 1.0 - pow(dist / radius, 4));
+                distortionMultiplier += max(distortionMultiplier, 1.0F - pow(dist / radius, 4));
             } else {
-                color += vec4(LightColorsR[i], LightColorsG[i], LightColorsB[i], 0) * (1.0 - dist / radius);
+                color += vec4(LightColorsR[i], LightColorsG[i], LightColorsB[i], 0.0F) * (1.0F - dist / radius);
             }
         }
     }
@@ -94,16 +94,29 @@ void main() {
     vec4 GBuff1Col = texture2D(GBuffer1, texCoord);
     bool inShield = GBuff1Col.a == 1.0F;
     if(inShield) {
+        //Get shield frag pos
         vec3 fragPos2 = getFragPos(GBuffer1_Depth);
+        
+        //Get depth (distance to camera) and distance between fragments
         float dist = distance(fragPos2, fragPos);
         float fragCamDist = length(fragPos);
         float fragCamDist2 = length(fragPos2);
+        
+        //Check if repeller shield is behind or in front of the diffuse fragment
         bool inBack = fragCamDist <= fragCamDist2;
         if(!inBack) {
+            //Calculate distortion and color multiplier
             distortion = true;
             distortionMultiplier += 1.5F / (pow(fragCamDist2 - fragCamDist, 2) / 100.0F + 1.0F);
-            colorMultiplier *= 0.8F;
+            colorMultiplier *= 0.95F;
+            
+            //Calculate color distortion
+            float fragDistortion = (fragPos2.y + CamPos.y + (cos(fragPos2.x + CamPos.x) * sin(fragPos2.z + CamPos.z)) * 2.0F) * 8.0F;
+            float colorDistortion = (sin(fragDistortion + MSTime / 300.0F) / 800.0F);
+            color += vec4(GBuff1Col.rgb * colorDistortion * 5.0F, 1.0F);
         }
+        
+        //Apply intersection glow
         if(dist / 2.0F < 0.1F) {
             float dstMultiplier = 200.0F;
             float dstFalloff = 2.0F;
@@ -112,7 +125,7 @@ void main() {
                 dstMultiplier = 3000.0F;
             }
             float dsCol = pow((0.1F - dist / 2.0F), dstFalloff) * dstMultiplier;
-            color += vec4(GBuff1Col.xyz * dsCol, 0.0);
+            color += vec4(GBuff1Col.rgb * dsCol, 0.0F);
         }
     }
     
@@ -124,8 +137,8 @@ void main() {
     if(!distortion) {
         color += vec4(texture2D(DiffuseSampler, texCoord));
     } else {
-        float fragDistortion = (fragPos.y + CamPos.y + (cos(fragPos.x + CamPos.x) * sin(fragPos.z + CamPos.z))) * 5;
-        color += vec4(texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300) / 800, 0) * distortionMultiplier));
+        float fragDistortion = (fragPos.y + CamPos.y + (cos(fragPos.x + CamPos.x) * sin(fragPos.z + CamPos.z))) * 5.0F;
+        color += vec4(texture2D(DiffuseSampler, texCoord + vec2(sin(fragDistortion + MSTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
     }
     
     //Return calculated color
