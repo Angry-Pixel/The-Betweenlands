@@ -223,7 +223,6 @@ public class BLBlockRegistry
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
 	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush");
-	public static final Block mandrake = new BlockBLGenericCrop("mandrake");
 
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail");
