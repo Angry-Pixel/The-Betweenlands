@@ -98,59 +98,66 @@ public class CShaderInt extends Shader {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
 		this.framebufferIn.unbindFramebuffer();
-		float f1 = (float)this.framebufferOut.framebufferTextureWidth;
-		float f2 = (float)this.framebufferOut.framebufferTextureHeight;
-		GL11.glViewport(0, 0, (int)f1, (int)f2);
-		this.pShaderManager.func_147992_a("DiffuseSampler", this.framebufferIn);
-
+		float framebufferTextureWidth = (float)this.framebufferOut.framebufferTextureWidth;
+		float framebufferTextureHeight = (float)this.framebufferOut.framebufferTextureHeight;
+		GL11.glViewport(0, 0, (int)framebufferTextureWidth, (int)framebufferTextureHeight);
+		
+		//Add samplers
+		this.pShaderManager.func_147992_a("s_diffuse", this.framebufferIn);
 		for(Entry<String, Object> samplerEntry : this.wrapper.getSamplers().entrySet()) {
-			this.pShaderManager.func_147992_a(samplerEntry.getKey(), samplerEntry.getValue());
+			this.pShaderManager.func_147992_a("s_" + samplerEntry.getKey(), samplerEntry.getValue());
 		}
 
+		//Add auxiliary targets
 		for (int i = 0; i < this.pListAuxFramebuffers.size(); ++i) {
 			this.pShaderManager.func_147992_a((String)this.pListAuxNames.get(i), this.pListAuxFramebuffers.get(i));
-			this.pShaderManager.func_147984_b("AuxSize" + i).func_148087_a((float)((Integer)this.pListAuxWidths.get(i)).intValue(), (float)((Integer)this.pListAuxHeights.get(i)).intValue());
+			this.pShaderManager.func_147984_b("u_auxSize" + i).func_148087_a((float)((Integer)this.pListAuxWidths.get(i)).intValue(), (float)((Integer)this.pListAuxHeights.get(i)).intValue());
 		}
 
-		this.pShaderManager.func_147984_b("ProjMat").func_148088_a(this.pProjectionMatrix);
-		this.pShaderManager.func_147984_b("InSize").func_148087_a((float)this.framebufferIn.framebufferTextureWidth, (float)this.framebufferIn.framebufferTextureHeight);
-		this.pShaderManager.func_147984_b("OutSize").func_148087_a(f1, f2);
-		this.pShaderManager.func_147984_b("Time").func_148090_a(partialTicks);
-		
-		//TODO: Make this safe in case another mod changes the fog mode after world rendering
-		this.pShaderManager.func_147984_b("FogMode").func_148090_a(GL11.glGetInteger(GL11.GL_FOG_MODE));
-		
+		//Add other uniforms
+		this.pShaderManager.func_147984_b("u_projMat").func_148088_a(this.pProjectionMatrix);
+		this.pShaderManager.func_147984_b("u_inSize").func_148087_a((float)this.framebufferIn.framebufferTextureWidth, (float)this.framebufferIn.framebufferTextureHeight);
+		this.pShaderManager.func_147984_b("u_outSize").func_148087_a(framebufferTextureWidth, framebufferTextureHeight);
+		this.pShaderManager.func_147984_b("u_time").func_148090_a(partialTicks);
 		Minecraft minecraft = Minecraft.getMinecraft();
-		this.pShaderManager.func_147984_b("ScreenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
+		this.pShaderManager.func_147984_b("u_screenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
+		//Just to make sure the correct fog mode is used in case another mod changes the fog mode after rendering the world
+		this.pShaderManager.func_147984_b("u_fogMode").func_148090_a(FogHandler.INSTANCE.getCurrentFogMode());
+		
+		//Update shader
 		this.wrapper.updateShader(this);
+		
+		//Upload samplers
 		this.pShaderManager.func_147995_c();
+		
+		//Clear FBO
 		this.framebufferOut.framebufferClear();
 		this.framebufferOut.bindFramebuffer(false);
 
-		//Just to make sure the correct fog values are used in case another mod changes the fog values
+		//Just to make sure the correct fog values are used in case another mod changes the fog values after rendering the world
 		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
 		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd());
 		
+		//Render texture over whole screen
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		tessellator.setColorOpaque_I(-1);
-		tessellator.addVertex(0.0D, (double)f2, 500.0D);
-		tessellator.addVertex((double)f1, (double)f2, 500.0D);
-		tessellator.addVertex((double)f1, 0.0D, 500.0D);
+		tessellator.addVertex(0.0D, (double)framebufferTextureHeight, 500.0D);
+		tessellator.addVertex((double)framebufferTextureWidth, (double)framebufferTextureHeight, 500.0D);
+		tessellator.addVertex((double)framebufferTextureWidth, 0.0D, 500.0D);
 		tessellator.addVertex(0.0D, 0.0D, 500.0D);
 		tessellator.draw();
+		
+		//Unbind textures and FBO
 		this.pShaderManager.func_147993_b();
 		this.framebufferOut.unbindFramebuffer();
 		this.framebufferIn.unbindFramebufferTexture();
 
-		Iterator iterator = this.pListAuxFramebuffers.iterator();
-
-		while (iterator.hasNext())
-		{
-			Object object = iterator.next();
-
-			if (object instanceof Framebuffer)
-			{
+		//Unbind auxiliary targets
+		Iterator itAuxTargets = this.pListAuxFramebuffers.iterator();
+		while (itAuxTargets.hasNext()) {
+			Object object = itAuxTargets.next();
+			if (object instanceof Framebuffer) {
 				((Framebuffer)object).unbindFramebufferTexture();
 			}
 		}

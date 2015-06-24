@@ -72,13 +72,13 @@ public class MainShader extends CShader {
 	public void updateBuffers(Framebuffer input) {
 		if(this.depthBuffer == null) {
 			this.depthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-			this.updateSampler("DepthSampler", this.depthBuffer);
+			this.updateSampler("diffuse_depth", this.depthBuffer);
 		}
 		if(input.framebufferWidth != this.depthBuffer.framebufferWidth
 				|| input.framebufferHeight != this.depthBuffer.framebufferHeight) {
 			this.depthBuffer.deleteFramebuffer();
 			this.depthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-			this.updateSampler("DepthSampler", this.depthBuffer);
+			this.updateSampler("diffuse_depth", this.depthBuffer);
 		}
 		input.bindFramebuffer(false);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.depthBuffer.framebufferTexture);
@@ -94,7 +94,7 @@ public class MainShader extends CShader {
 			Framebuffer geomDepthBuffer = geomBufferEntry.getValue().getGeometryDepthBuffer();
 			this.updateSampler(samplerName, geomBuffer);
 			if(geomDepthBuffer != null) {
-				this.updateSampler(samplerName + "_Depth", geomDepthBuffer);
+				this.updateSampler(samplerName + "_depth", geomDepthBuffer);
 			}
 		}
 		
@@ -110,19 +110,19 @@ public class MainShader extends CShader {
 
 	private void uploadMisc(CShaderInt shader) {
 		{
-			ShaderUniform uniform = shader.getUniform("zNear");
+			ShaderUniform uniform = shader.getUniform("u_zNear");
 			if(uniform != null) {
 				uniform.func_148090_a(0.05F);
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("zFar");
+			ShaderUniform uniform = shader.getUniform("u_zFar");
 			if(uniform != null) {
 				uniform.func_148090_a((float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F);
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("CamPos");
+			ShaderUniform uniform = shader.getUniform("u_camPos");
 			if(uniform != null) {
 				uniform.func_148095_a(
 						(float)(RenderManager.renderPosX),
@@ -131,7 +131,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("MSTime");
+			ShaderUniform uniform = shader.getUniform("u_msTime");
 			if(uniform != null) {
 				uniform.func_148090_a(System.nanoTime() / 1000000.0F);
 			}
@@ -140,25 +140,25 @@ public class MainShader extends CShader {
 
 	private void uploadMatrices(CShaderInt shader) {
 		{
-			ShaderUniform uniform = shader.getUniform("INVMVP");
+			ShaderUniform uniform = shader.getUniform("u_INVMVP");
 			if(uniform != null) {
 				uniform.func_148088_a(this.INVMVP);
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("MVP");
+			ShaderUniform uniform = shader.getUniform("u_MVP");
 			if(uniform != null) {
 				uniform.func_148088_a(this.MVP);
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("MV");
+			ShaderUniform uniform = shader.getUniform("u_MV");
 			if(uniform != null) {
 				uniform.func_148088_a(this.MV);
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("PM");
+			ShaderUniform uniform = shader.getUniform("u_PM");
 			if(uniform != null) {
 				uniform.func_148088_a(this.PM);
 			}
@@ -190,7 +190,7 @@ public class MainShader extends CShader {
 		Collections.sort(this.lightSources, lightSourceSorter);
 
 		{
-			ShaderUniform uniform = shader.getUniform("LightColorsR");
+			ShaderUniform uniform = shader.getUniform("u_lightColorsR");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -201,7 +201,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightColorsG");
+			ShaderUniform uniform = shader.getUniform("u_lightColorsG");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -212,7 +212,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightColorsB");
+			ShaderUniform uniform = shader.getUniform("u_lightColorsB");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -223,7 +223,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightSourcesX");
+			ShaderUniform uniform = shader.getUniform("u_lightSourcesX");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -234,7 +234,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightSourcesY");
+			ShaderUniform uniform = shader.getUniform("u_lightSourcesY");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -245,7 +245,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightSourcesZ");
+			ShaderUniform uniform = shader.getUniform("u_lightSourcesZ");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -256,7 +256,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightRadii");
+			ShaderUniform uniform = shader.getUniform("u_lightRadii");
 			if(uniform != null) {
 				float[] posArray = new float[32];
 				for(int i = 0; i < this.lightSources.size(); i++) {
@@ -267,7 +267,7 @@ public class MainShader extends CShader {
 			}
 		}
 		{
-			ShaderUniform uniform = shader.getUniform("LightSources");
+			ShaderUniform uniform = shader.getUniform("u_lightSources");
 			if(uniform != null) {
 				int count = this.lightSources.size();
 				if(count > 32) {

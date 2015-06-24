@@ -57,7 +57,7 @@ public class WispHandler {
 
 			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 			if(shader != null) {
-				GeometryBuffer gBuffer = shader.getGeometryBuffer("GBuffer1");
+				GeometryBuffer gBuffer = shader.getGeometryBuffer("gBuffer1");
 				gBuffer.bind();
 				gBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 

@@ -36,6 +36,10 @@ public class FogHandler {
 		return this.currentFogEnd;
 	}
 	
+	public int getCurrentFogMode() {
+		return this.fogMode;
+	}
+	
 	public boolean hasDenseFog() {
 		World world = Minecraft.getMinecraft().theWorld;
 		if(world.provider instanceof WorldProviderBetweenlands) {
@@ -57,6 +61,7 @@ public class FogHandler {
 	private float currentFogEnd;
 	private float renderFogStart;
 	private float renderFogEnd;
+	private int fogMode;
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onFogRenderEvent(RenderFogEvent event) {
@@ -118,6 +123,7 @@ public class FogHandler {
 			this.renderFogEnd = this.currentFogEnd;
 			this.renderFogStart = (float) (prevRenderFogStart + (this.renderFogStart - prevRenderFogStart) * partialTicks);
 			this.renderFogEnd = (float) (prevRenderFogEnd + (this.renderFogEnd - prevRenderFogEnd) * partialTicks);
+			this.fogMode = GL11.GL_LINEAR;
 			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
 			GL11.glFogf(GL11.GL_FOG_START, this.renderFogStart);
 			GL11.glFogf(GL11.GL_FOG_END, this.renderFogEnd);
@@ -167,6 +173,7 @@ public class FogHandler {
 			if(renderView.isInWater()) {
 				Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
 				if(block instanceof BlockSwampWater) {
+					this.fogMode = GL11.GL_EXP;
 					GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
 	                if (renderView.isPotionActive(Potion.waterBreathing)) {
 	                	event.density = 0.1F;

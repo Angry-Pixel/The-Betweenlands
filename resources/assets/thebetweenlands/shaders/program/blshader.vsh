@@ -1,20 +1,20 @@
 #version 120
 
-attribute vec4 Position;
+attribute vec4 a_position;
 
-uniform mat4 ProjMat;
-uniform vec2 InSize;
-uniform vec2 OutSize;
+uniform mat4 u_projMat;
+uniform vec2 u_inSize;
+uniform vec2 u_outSize;
 
-varying vec2 texCoord;
-varying vec2 oneTexel;
+varying vec2 v_texCoord;
+varying vec2 v_oneTexel;
 
 void main(){
-    vec4 outPos = ProjMat * vec4(Position.xy, 0.0, 1.0);
+    vec4 outPos = u_projMat * vec4(a_position.xy, 0.0, 1.0);
     gl_Position = vec4(outPos.xy, 0.2, 1.0);
 
-    oneTexel = 1.0 / InSize;
+    v_oneTexel = 1.0 / u_inSize;
 
-    texCoord = Position.xy / OutSize;
-    texCoord.y = 1.0 - texCoord.y;
+    v_texCoord = a_position.xy / u_outSize;
+    v_texCoord.y = 1.0 - v_texCoord.y;
 }
