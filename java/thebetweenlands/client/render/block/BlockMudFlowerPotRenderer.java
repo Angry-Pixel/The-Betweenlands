@@ -28,29 +28,6 @@ public class BlockMudFlowerPotRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-        if(modelConverterFlowerPot == null) {
-            modelConverterFlowerPot = new ModelConverter(
-                    modelFlowerPot,
-                    0.065D,
-                    new ModelConverter.TextureMap(64, 64, ((BlockBLFlowerPot)BLBlockRegistry.mudFlowerPot).icon),
-                    true
-            );
-        }
-
-        Tessellator tessellator = Tessellator.instance;
-        Minecraft mc = Minecraft.getMinecraft();
-        World world = Minecraft.getMinecraft().theWorld;
-        if(world != null && mc.thePlayer != null) {
-            Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(
-                    (int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
-        }
-        GL11.glDisable(GL11.GL_LIGHTING);
-        tessellator.startDrawingQuads();
-        Tessellator.instance.addTranslation(0, 1.2F, 0);
-        modelConverterFlowerPot.renderWithTessellator(Tessellator.instance);
-        Tessellator.instance.addTranslation(0, -1.2F, 0);
-        tessellator.draw();
-        GL11.glEnable(GL11.GL_LIGHTING);
     }
 
     @Override
@@ -122,7 +99,7 @@ public class BlockMudFlowerPotRenderer implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean shouldRender3DInInventory(int modelId) {
-        return true;
+        return false;
     }
 
     @Override
