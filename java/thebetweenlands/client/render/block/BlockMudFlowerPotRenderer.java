@@ -38,7 +38,7 @@ public class BlockMudFlowerPotRenderer implements ISimpleBlockRenderingHandler {
             modelConverterFlowerPot = new ModelConverter(
                     modelFlowerPot,
                     0.065D,
-                    new ModelConverter.TextureMap(64, 64, BLBlockRegistry.blockWalkWay.icon),
+                    new ModelConverter.TextureMap(64, 64, BLBlockRegistry.mudFlowerPot.icon),
                     true
             );
         }
