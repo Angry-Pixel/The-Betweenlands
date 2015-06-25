@@ -8,7 +8,6 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.tree.BlockBLSapling;
-import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.ClientProxy;
 
@@ -41,7 +39,7 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
     }
 
     @Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+    public Item getItemDropped(int meta, Random random, int fortune) {
         return BLItemRegistry.mudFlowerPot;
     }
 
@@ -120,7 +118,7 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
         ItemStack itemstack = player.inventory.getCurrentItem();
 
         if (itemstack != null && itemstack.getItem() instanceof ItemBlock) {
-            TileEntityFlowerPot tileentityflowerpot = this.func_149929_e(world, x, y, z);
+            TileEntityFlowerPot tileentityflowerpot = world.getTileEntity(x, y, z) != null && world.getTileEntity(x, y, z) instanceof TileEntityFlowerPot ? (TileEntityFlowerPot) world.getTileEntity(x, y, z) : null;
 
             if (tileentityflowerpot != null) {
                 if (tileentityflowerpot.getFlowerPotItem() != null) {
@@ -128,7 +126,7 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
                 } else {
                     Block block = Block.getBlockFromItem(itemstack.getItem());
 
-                    if (!this.func_149928_a(block, itemstack.getItemDamage())) {
+                    if (!this.isPotFlower(block, itemstack.getItemDamage())) {
                         return false;
                     } else {
                         tileentityflowerpot.func_145964_a(itemstack.getItem(), itemstack.getItemDamage());
@@ -153,13 +151,7 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
         }
     }
 
-
-    private TileEntityFlowerPot func_149929_e(World world, int x, int y, int z) {
-        TileEntity tileentity = world.getTileEntity(x, y, z);
-        return tileentity != null && tileentity instanceof TileEntityFlowerPot ? (TileEntityFlowerPot) tileentity : null;
-    }
-
-    private boolean func_149928_a(Block block, int meta) {
+    private boolean isPotFlower(Block block, int meta) {
         return !(block != BLBlockRegistry.boneset && block != BLBlockRegistry.marshMallow && block != BLBlockRegistry.nettle && block != BLBlockRegistry.nettleFlowered && block != BLBlockRegistry.buttonBush && block != BLBlockRegistry.milkweed && block != BLBlockRegistry.copperIris && block != BLBlockRegistry.blueIris && block != BLBlockRegistry.waterFlower && !(block instanceof BlockBLSapling) && block != BLBlockRegistry.marshHibiscus && block != BLBlockRegistry.pickerelWeed && block != Blocks.yellow_flower && block != Blocks.red_flower && block != Blocks.cactus && block != Blocks.brown_mushroom && block != Blocks.red_mushroom && block != Blocks.sapling && block != Blocks.deadbush) || block == Blocks.tallgrass && meta == 2;
     }
 
@@ -168,7 +160,7 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
         if (world.getTileEntity(x, y, z) instanceof TileEntityFlowerPot) {
             TileEntityFlowerPot te = ((TileEntityFlowerPot) world.getTileEntity(x, y, z));
             if (te.getFlowerPotItem() != null)
-                return new ItemStack(te.getFlowerPotItem());
+                return new ItemStack(te.getFlowerPotItem(), 1, te.getBlockMetadata());
 
         }
         return new ItemStack(BLItemRegistry.mudFlowerPot);
