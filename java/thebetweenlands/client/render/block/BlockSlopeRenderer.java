@@ -29,15 +29,15 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 		}
 		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
-		Tessellator.instance.addTranslation(0, -0.05F, 0);
+		Tessellator.instance.addTranslation(0, -0.075F, 0);
 		IIcon iconXP = block.getIcon(5, 0);
 		IIcon iconXN = block.getIcon(4, 0);
 		IIcon iconYP = block.getIcon(1, 0);
 		IIcon iconYN = block.getIcon(0, 0);
 		IIcon iconZP = block.getIcon(3, 0);
 		IIcon iconZN = block.getIcon(2, 0);
-		this.renderSlope(true, false, false, true, false, iconXP, iconXN, iconYP, iconYN, iconZP, iconZN);
-		Tessellator.instance.addTranslation(0, 0.05F, 0);
+		this.renderSlope(true, true, false, false, false, iconXP, iconXN, iconYP, iconYN, iconZP, iconZN);
+		Tessellator.instance.addTranslation(0, 0.075F, 0);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
