@@ -16,15 +16,11 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.utils.AnimationMathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityDragonFly extends EntityAmbientCreature {
-
 	public ChunkCoordinates currentFlightTarget;
-	public float wingFloat;
-	AnimationMathHelper mathWings = new AnimationMathHelper();
 	public boolean entityFlying;
 
 	public EntityDragonFly(World world) {
@@ -96,11 +92,6 @@ public class EntityDragonFly extends EntityAmbientCreature {
 
 	@Override
 	public void onUpdate() {
-		if (!isFlying()) {
-			wingFloat = 0.0F;
-		} else {
-			wingFloat = mathWings.swing(5.0F, 0.1F, false);
-		}
 		if (motionY < 0.0D) {
 			motionY *= 0.6D;
 		}

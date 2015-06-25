@@ -80,6 +80,11 @@ public class AdvancedModelRenderer extends ModelRenderer {
 		return this;
 	}
 
+	public AdvancedModelRenderer add3DTexture(float posX, float posY, float posZ, int width, int height) {
+		cubeList.add(new Model3DTexture(this, textureOffsetX, textureOffsetY, posX, posY, posZ, width, height));
+		return this;
+	}
+
 	public AdvancedModelRenderer appendChild(ModelRenderer modelRenderer) {
 		super.addChild(modelRenderer);
 		return this;
