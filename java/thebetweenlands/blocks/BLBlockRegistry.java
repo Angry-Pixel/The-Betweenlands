@@ -370,6 +370,8 @@ public class BLBlockRegistry
 	public static final Block templeBrickSlab = new BlockBLSlabStone(false, Material.rock, "templeBrick", null);
 	public static final Block templeBrickSlabDouble = new BlockBLSlabStone(true, Material.rock, "templeBrick", templeBrickSlab);
 
+	public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope");;
+	
 	public static void registerSlabs() {
 		GameRegistry.registerBlock(weedwoodPlankSlab, ItemBlockSlab.class, weedwoodPlankSlab.getUnlocalizedName(), weedwoodPlankSlab, weedwoodPlankSlabDouble, false);
 		GameRegistry.registerBlock(weedwoodPlankSlabDouble, ItemBlockSlab.class, weedwoodPlankSlabDouble.getUnlocalizedName() + "Double", weedwoodPlankSlab, weedwoodPlankSlabDouble, true);
