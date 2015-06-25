@@ -158,6 +158,6 @@ public class BlockBLFlowerPot extends BlockFlowerPot {
     }
 
     private boolean func_149928_a(Block block, int meta) {
-        return !( block != BLBlockRegistry.waterFlower && !(block instanceof BlockBLSapling) && block != BLBlockRegistry.marshHibiscus  && block != BLBlockRegistry.pickerelWeed && block != Blocks.yellow_flower && block != Blocks.red_flower && block != Blocks.cactus && block != Blocks.brown_mushroom && block != Blocks.red_mushroom && block != Blocks.sapling && block != Blocks.deadbush) || block == Blocks.tallgrass && meta == 2;
+        return !(block != BLBlockRegistry.boneset && block != BLBlockRegistry.marshMallow && block != BLBlockRegistry.nettle && block != BLBlockRegistry.nettleFlowered && block != BLBlockRegistry.buttonBush && block != BLBlockRegistry.milkweed && block != BLBlockRegistry.copperIris && block != BLBlockRegistry.blueIris && block != BLBlockRegistry.waterFlower && !(block instanceof BlockBLSapling) && block != BLBlockRegistry.marshHibiscus  && block != BLBlockRegistry.pickerelWeed && block != Blocks.yellow_flower && block != Blocks.red_flower && block != Blocks.cactus && block != Blocks.brown_mushroom && block != Blocks.red_mushroom && block != Blocks.sapling && block != Blocks.deadbush) || block == Blocks.tallgrass && meta == 2;
     }
 }
