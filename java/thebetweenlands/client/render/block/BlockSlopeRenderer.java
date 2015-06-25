@@ -86,10 +86,10 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 			metaRight = this.getBlockMeta(world, x, y, z+1);
 			if((metaBack == 2 || metaBack == 6) && metaLeft != 0 && metaLeft != 4) {
 				corner2 = false;
-			} else if((metaBack == 3 || metaBack == 7) && metaRight != 0 && metaLeft != 4) {
+			} else if((metaBack == 3 || metaBack == 7) && metaRight != 0 && metaRight != 4) {
 				corner3 = false;
 			}
-			if((metaFront == 2 || metaFront == 6) && metaRight != 0 && metaLeft != 4) {
+			if((metaFront == 2 || metaFront == 6) && metaRight != 0 && metaRight != 4) {
 				corner4 = true;
 			} else if((metaFront == 3 || metaFront == 7) && metaLeft != 0 && metaLeft != 4) {
 				corner1 = true;
@@ -105,14 +105,14 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 			metaBack = this.getBlockMeta(world, x-1, y, z);
 			metaLeft = this.getBlockMeta(world, x, y, z+1);
 			metaRight = this.getBlockMeta(world, x, y, z-1);
-			if((metaBack == 3 || metaBack == 7) && metaLeft != 1 && metaRight != 5) {
+			if((metaBack == 3 || metaBack == 7) && metaLeft != 1 && metaLeft != 5) {
 				corner4 = false;
 			} else if((metaBack == 2 || metaBack == 6) && metaRight != 1 && metaRight != 5) {
 				corner1 = false;
 			}
 			if((metaFront == 3 || metaFront == 7) && metaRight != 1 && metaRight != 5) {
 				corner2 = true;
-			} else if((metaFront == 2 || metaFront == 6) && metaLeft != 1 && metaRight != 5) {
+			} else if((metaFront == 2 || metaFront == 6) && metaLeft != 1 && metaLeft != 5) {
 				corner3 = true;
 			}
 			break;
@@ -128,10 +128,10 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 			metaRight = this.getBlockMeta(world, x-1, y, z);
 			if((metaBack == 0 || metaBack == 4) && metaRight != 2 && metaRight != 6) {
 				corner4 = false;
-			} else if((metaBack == 1 || metaBack == 5) && metaLeft != 2 && metaRight != 6) {
+			} else if((metaBack == 1 || metaBack == 5) && metaLeft != 2 && metaLeft != 6) {
 				corner3 = false;
 			}
-			if((metaFront == 0 || metaFront == 4) && metaLeft != 2 && metaRight != 6) {
+			if((metaFront == 0 || metaFront == 4) && metaLeft != 2 && metaLeft != 6) {
 				corner2 = true;
 			} else if((metaFront == 1 || metaFront == 5) && metaRight != 2 && metaRight != 6) {
 				corner1 = true;
@@ -147,14 +147,14 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 			metaBack = this.getBlockMeta(world, x, y, z-1);
 			metaLeft = this.getBlockMeta(world, x-1, y, z);
 			metaRight = this.getBlockMeta(world, x+1, y, z);
-			if((metaBack == 0 || metaBack == 4) && metaLeft != 3 && metaRight != 7) {
+			if((metaBack == 0 || metaBack == 4) && metaLeft != 3 && metaLeft != 7) {
 				corner1 = false;
 			} else if((metaBack == 1 || metaBack == 5) && metaRight != 3 && metaRight != 7) {
 				corner2 = false;
 			}
 			if((metaFront == 0 || metaFront == 4) && metaRight != 3 && metaRight != 7) {
 				corner3 = true;
-			} else if((metaFront == 1 || metaFront == 5) && metaLeft != 3 && metaRight != 7) {
+			} else if((metaFront == 1 || metaFront == 5) && metaLeft != 3 && metaLeft != 7) {
 				corner4 = true;
 			}
 			break;
