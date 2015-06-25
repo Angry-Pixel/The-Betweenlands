@@ -383,6 +383,7 @@ item.thebetweenlands.rubber.name=Solid Rubber
 item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
 item.thebetweenlands.driedSwampReedDust.name=Dried Swamp Reed Dust
 item.thebetweenlands.mandrakeSeeds.name=Mandrake Seeds
+item.thebetweenlands.mudFlowerPotItem.name=Mud Brick Flower Pot
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
