@@ -1,14 +1,18 @@
 package thebetweenlands.client.render.shader;
 
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
-
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 public class ResourceManagerWrapper implements IResourceManager {
+	private static final Field RESOURCE_DOMAIN_FIELD = ReflectionHelper.findField(ResourceLocation.class, "resourceDomain", "field_110626_a", "a");
+	private static final Field RESOURCE_PATH_FIELD = ReflectionHelper.findField(ResourceLocation.class, "resourcePath", "field_110625_b", "b");
 
 	private final IResourceManager parent;
 	private final CShader wrapper;
@@ -40,6 +44,12 @@ public class ResourceManagerWrapper implements IResourceManager {
 		} else if(location.getResourcePath().startsWith("textures/effect/")) {
 			String fileName = location.getResourcePath().replace("textures/effect/", "");
 			ResourceLocation redirected = new ResourceLocation(this.wrapper.getAssetsPath().getResourceDomain() + ":" + this.wrapper.getAssetsPath().getResourcePath() + fileName);
+			try {
+				RESOURCE_DOMAIN_FIELD.set(location, redirected.getResourceDomain());
+				RESOURCE_PATH_FIELD.set(location, redirected.getResourcePath());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return this.parent.getResource(redirected);
 		}
 		return this.parent.getResource(location);
