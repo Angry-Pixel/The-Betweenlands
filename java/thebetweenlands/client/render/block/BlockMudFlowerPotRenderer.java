@@ -2,7 +2,6 @@ package thebetweenlands.client.render.block;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFlowerPot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -16,7 +15,6 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLFlowerPot;
 import thebetweenlands.client.model.block.ModelMudFlowerPot;
-import thebetweenlands.client.model.block.ModelWalkway;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.ModelConverter;
 
