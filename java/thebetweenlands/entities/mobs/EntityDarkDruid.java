@@ -30,16 +30,16 @@ public class EntityDarkDruid extends EntityMob {
 
 	private static final int MAX_ATTACK_ANIMATION_TIME = 8;
 
+	private EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
+	private EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
+	private EntityAIWatchClosest watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
+
 	private int attackCounter;
 	private int teleportCooldown;
 	private boolean isWatching = true;
 
 	private int prevAttackAnimationTime;
 	private int attackAnimationTime;
-
-	private EntityAIAttackOnCollide meleeAI = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.23F, false);
-	private EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
-	private EntityAIWatchClosest watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
 
 	public EntityDarkDruid(World world) {
 		super(world);
@@ -163,7 +163,7 @@ public class EntityDarkDruid extends EntityMob {
 				}
 			}
 			if (validBlock) {
-				teleportCooldown = rand.nextInt(20 * 2) + 20 * 3;
+				teleportCooldown = rand.nextInt(20 * 2) + 20 * 2;
 				EntityDarkDruid newDruid = new EntityDarkDruid(worldObj);
 				newDruid.copyDataFrom(this, true);
 				newDruid.setPosition(targetX, targetY, targetZ);

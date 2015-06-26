@@ -27,11 +27,11 @@ public class EntityAIDruidTeleport extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (druid.canTeleport() && druid.getRNG().nextFloat() < 0.3F) {
-			List<EntityPlayer> nearPlayers = druid.worldObj.getEntitiesWithinAABB(EntityPlayer.class, druid.boundingBox.expand(16, 5, 16));
+		if (druid.canTeleport() && druid.getRNG().nextFloat() < 0.8F) {
+			List<EntityPlayer> nearPlayers = druid.worldObj.getEntitiesWithinAABB(EntityPlayer.class, druid.boundingBox.expand(32, 10, 32));
 			Collections.sort(nearPlayers, nearestEntitySorter);
 			for (EntityPlayer player : nearPlayers) {
-				if (player.onGround) {
+				if (player.onGround && !player.capabilities.disableDamage) {
 					entityToTeleportTo = player;
 					return true;
 				}
