@@ -198,23 +198,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		// debug walk animation
-		if (false) {
-			prevRotationYaw = rotationYaw = 0;
-			prevRotationYawHead = rotationYawHead = 0;
-			prevRenderYawOffset = renderYawOffset = 0;
-			prevRotationPitch = rotationPitch = 0;
-			prevRotationPitchBody = rotationPitchBody = 0;
-
-			prevTailPitch = tailPitch = 0;
-			prevTailYaw = tailYaw = 0;
-
-			prevLimbSwingAmount = limbSwingAmount;
-			float speed = Math.min(0.08F * 4, 1);
-			limbSwingAmount += (speed - limbSwingAmount) * 0.4F;
-			limbSwing += limbSwingAmount;
-			return;
-		}
 		prevRotationPitchBody = rotationPitchBody;
 		prevTailPitch = tailPitch;
 		prevTailYaw = tailYaw;

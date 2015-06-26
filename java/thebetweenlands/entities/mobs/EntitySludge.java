@@ -138,7 +138,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
 					return super.attackEntityFrom(source, damage);
 				} else {
-					return super.attackEntityFrom(source, MathHelper.ceiling_float_int((float) damage * 0.5F));
+					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));
 				}
 		}
 		return super.attackEntityFrom(source, damage);

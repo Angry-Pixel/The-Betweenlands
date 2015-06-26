@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.WorldSettings;
@@ -42,6 +43,12 @@ public class GuiDebugMenu extends GuiScreen {
 
 	private int nextButtonY;
 
+	private GuiButton joinDebugWorldButton;
+
+	private GuiButton deleteDebugWorldButton;
+
+	private GuiButton returnButton;
+
 	@Override
 	public void initGui() {
 		Keyboard.enableRepeatEvents(true);
@@ -50,17 +57,24 @@ public class GuiDebugMenu extends GuiScreen {
 		panoramaTexture = new DynamicTexture(256, 256);
 		panoramaResourceLocation = mc.getTextureManager().getDynamicTextureLocation("debug-background", panoramaTexture);
 		int x = width / 2 - 100, y = nextButtonY();
-		buttonList.add(new GuiButton(nextButtonId(), x, y, 138, 20, "Enter The Betweenlands"));
+		buttonList.add(joinDebugWorldButton = new GuiButton(nextButtonId(), x, y, 138, 20, "Enter The Betweenlands"));
 		worldSeedTextField = new GuiUpgradedTextField(fontRendererObj, x + 140, y + 1, 59, 18);
 		worldSeedTextField.setPlaceholder("Seed");
 		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
 		ISaveFormat saveLoader = mc.getSaveLoader();
-		ISaveHandler saveHandler = saveLoader.getSaveLoader(saveFolder, false);
-		WorldInfo existingWorldInfo = saveHandler.loadWorldInfo();
-		if (existingWorldInfo != null) {
-			worldSeedTextField.setText(String.valueOf(existingWorldInfo.getSeed()));
+		String seed = null;
+		if (DebugHandler.INSTANCE.isInDebugWorld) {
+			seed = String.valueOf(MinecraftServer.getServer().worldServers[0].getWorldInfo().getSeed());
+		} else if (saveLoader.canLoadWorld(saveFolder)) {
+			ISaveHandler saveHandler = saveLoader.getSaveLoader(saveFolder, false);
+			seed = String.valueOf(saveHandler.loadWorldInfo().getSeed());
 		}
-		buttonList.add(new GuiButton(nextButtonId(), width / 2 - 100, height - 28, "Return"));
+		if (seed != null) {
+			worldSeedTextField.setText(seed);
+			worldSeedTextField.setCursorPositionZero();
+			buttonList.add(deleteDebugWorldButton = new GuiSmallButton(nextButtonId(), x + 201, y, 20, 0));
+		}
+		buttonList.add(returnButton = new GuiButton(nextButtonId(), width / 2 - 100, height - 28, "Return"));
 	}
 
 	private void addButton(String label) {
@@ -85,13 +99,12 @@ public class GuiDebugMenu extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		switch (button.id) {
-		case 0:
-			enterDebugBetweenlandsWorld();
-			break;
-		case 1:
+		if (button == joinDebugWorldButton) {
+			joinDebugWorld();
+		} else if (button == deleteDebugWorldButton) {
+			deleteDebugWorld();
+		} else if (button == returnButton) {
 			mc.displayGuiScreen(DebugHandler.INSTANCE.previousGuiScreen);
-			break;
 		}
 	}
 
@@ -108,13 +121,7 @@ public class GuiDebugMenu extends GuiScreen {
 		}
 	}
 
-	private void enterDebugBetweenlandsWorld() {
-		if (mc.isIntegratedServerRunning()) {
-			if (mc.theWorld != null) {
-				mc.theWorld.sendQuittingDisconnectingPacket();
-			}
-			mc.loadWorld(null);
-		}
+	private void joinDebugWorld() {
 		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
 		ISaveFormat saveLoader = mc.getSaveLoader();
 		ISaveHandler saveHandler = saveLoader.getSaveLoader(saveFolder, false);
@@ -135,6 +142,20 @@ public class GuiDebugMenu extends GuiScreen {
 		}
 		mc.launchIntegratedServer(saveFolder, DebugHandler.INSTANCE.worldName, worldSettings);
 		DebugHandler.INSTANCE.isInDebugWorld = true;
+	}
+
+	private void deleteDebugWorld() {
+		if (DebugHandler.INSTANCE.isInDebugWorld) {
+			mc.loadWorld(null);
+		}
+		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
+		ISaveFormat saveLoader = mc.getSaveLoader();
+		if (saveLoader.canLoadWorld(saveFolder)) {
+			saveLoader.flushCache();
+			saveLoader.deleteWorldDirectory(saveFolder);
+		}
+		worldSeedTextField.setText("");
+		buttonList.remove(deleteDebugWorldButton);
 	}
 
 	@Override

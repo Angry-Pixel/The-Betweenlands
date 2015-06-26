@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.demo.DemoWorldManager;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -291,7 +292,7 @@ public class DebugHandler {
 	}
 
 	@SubscribeEvent
-	public void onWorldEventUnload(WorldEvent.Unload world) {
+	public void onWorldEventUnload(WorldEvent.Unload event) {
 		if (isInDebugWorld) {
 			isInDebugWorld = false;
 		}
