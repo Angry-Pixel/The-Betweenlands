@@ -1,15 +1,19 @@
 package thebetweenlands.utils;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import net.minecraft.client.model.*;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBox;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.model.PositionTextureVertex;
+import net.minecraft.client.model.TexturedQuad;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelConverter {
 	//Holds the rotation matrix
@@ -423,7 +427,7 @@ public class ModelConverter {
 			}
 		}
 	}
-
+	
 	//Holds a list of vertices and UVs of this model
 	private final List<Box> modelBoxList = new ArrayList<Box>();
 
@@ -446,8 +450,7 @@ public class ModelConverter {
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 */
 	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace) {
-		this.constructModel(model, scale, textureMap, renderDoubleFace);
-		this.rotate(1.0F, 180.0F, 0.0F, 0.0F, new Vec3(0, 0, 0));
+		this(model, scale, textureMap, renderDoubleFace, 0, 0, 0);
 	}
 
 	/**
@@ -461,8 +464,7 @@ public class ModelConverter {
 	 * @param rotationZ				Rotation around Z axis (degrees)
 	 */
 	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
-		this.constructModel(model, scale, textureMap, renderDoubleFace);
-		this.rotate(1.0F, rotationX + 180.0F, rotationY, rotationZ, new Vec3(0, 0, 0));
+		this(model, scale, textureMap, renderDoubleFace, rotationX, rotationY, rotationZ, new Vec3(0, 0, 0));
 	}
 
 	/**

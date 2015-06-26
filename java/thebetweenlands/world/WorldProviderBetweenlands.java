@@ -163,7 +163,7 @@ extends WorldProvider
 		int spawnFuzz = 100;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
-		if( !hasNoSky && !isAdventure ) {
+		if( !isAdventure ) {
 			chunkcoordinates.posX += worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
 			chunkcoordinates.posZ += worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
 			chunkcoordinates.posY = worldObj.getTopSolidOrLiquidBlock(chunkcoordinates.posX, chunkcoordinates.posZ);

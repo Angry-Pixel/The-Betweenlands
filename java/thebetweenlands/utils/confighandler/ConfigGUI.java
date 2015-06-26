@@ -18,8 +18,8 @@ public class ConfigGUI
 
 	@SuppressWarnings({ "rawtypes" })
 	private static List<IConfigElement> getElements() {
-		List<IConfigElement> list = new ArrayList<IConfigElement>(ConfigHandler.usedCategories.length);
-		for( String category : ConfigHandler.usedCategories ) {
+		List<IConfigElement> list = new ArrayList<IConfigElement>(ConfigHandler.CATEGORIES.length);
+		for( String category : ConfigHandler.CATEGORIES ) {
             list.add(new ConfigElement(ConfigHandler.INSTANCE.config.getCategory(category.toLowerCase())));
         }
 

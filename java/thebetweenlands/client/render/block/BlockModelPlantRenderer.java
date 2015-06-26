@@ -2,11 +2,9 @@ package thebetweenlands.client.render.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
 import org.lwjgl.opengl.GL11;
@@ -83,14 +81,14 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			RenderBlocks renderer) {
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glDisable(GL11.GL_LIGHTING);
-		Tessellator.instance.setColorOpaque(255, 255, 255);
+		tessellator.setColorOpaque(255, 255, 255);
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.theWorld != null && mc.thePlayer != null) {
 			tessellator.setBrightness(mc.theWorld.getLightBrightnessForSkyBlocks(
 					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
 		}
 
-		Tessellator.instance.addTranslation(0.5F, 1.5F, 0.5F);
+		tessellator.addTranslation(0.5F, 1.5F, 0.5F);
 
 		tessellator.startDrawingQuads();
 
@@ -102,7 +100,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.blackHatMushroom.modelTexture2),
 						true);
 			}
-			plantModelInvBlackHat.renderWithTessellator(Tessellator.instance);
+			plantModelInvBlackHat.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.flatHeadMushroom) {
@@ -113,7 +111,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.flatHeadMushroom.modelTexture1),
 						true);
 			}
-			plantModelInvFlatHead.renderWithTessellator(Tessellator.instance);
+			plantModelInvFlatHead.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.pitcherPlant) {
@@ -125,7 +123,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 				plantModelInvTubePlant.offsetWS(new Vec3(0, -0.7, 0));
 			}
-			plantModelInvTubePlant.renderWithTessellator(Tessellator.instance);
+			plantModelInvTubePlant.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.swampPlant) {
@@ -136,7 +134,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.swampPlant.modelTexture1),
 						true);
 			}
-			plantModelInvRegularPlant.renderWithTessellator(Tessellator.instance);
+			plantModelInvRegularPlant.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.bulbCappedMushroom) {
@@ -147,7 +145,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.bulbCappedMushroom.modelTexture1),
 						true);
 			}
-			plantModelInvBulbCappedMushroom.renderWithTessellator(Tessellator.instance);
+			plantModelInvBulbCappedMushroom.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.venusFlyTrap) {
@@ -158,7 +156,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(64, 64, BLBlockRegistry.venusFlyTrap.modelTexture),
 						true);
 			}
-			plantModelInvVenusFlyTrap.renderWithTessellator(Tessellator.instance);
+			plantModelInvVenusFlyTrap.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.volarpad) {
@@ -170,7 +168,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 				plandModelInvVolarpad.offsetWS(new Vec3(0, -1.2, 0));
 			}
-			plandModelInvVolarpad.renderWithTessellator(Tessellator.instance);
+			plandModelInvVolarpad.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.weepingBlue) {
@@ -182,7 +180,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 				plantModelInvWeepingBlue.offsetWS(new Vec3(0, -0.75, 0));
 			}
-			plantModelInvWeepingBlue.renderWithTessellator(Tessellator.instance);
+			plantModelInvWeepingBlue.renderWithTessellator(tessellator);
 		}
 
 		if(block == BLBlockRegistry.sundew) {
@@ -194,12 +192,12 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 				plantModelInvSundew.offsetWS(new Vec3(0, -0.75, 0));
 			}
-			plantModelInvSundew.renderWithTessellator(Tessellator.instance);
+			plantModelInvSundew.renderWithTessellator(tessellator);
 		}
 
 		tessellator.draw();
 
-		Tessellator.instance.addTranslation(-0.5F, -1.5F, -0.5F);
+		tessellator.addTranslation(-0.5F, -1.5F, -0.5F);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -207,15 +205,15 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
 			Block block, int modelId, RenderBlocks renderer) {
+		Tessellator tessellator = Tessellator.instance;
 
-		Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
-		Tessellator.instance.setColorOpaque(255, 255, 255);
-		Tessellator.instance.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
+		tessellator.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
+		tessellator.setColorOpaque(255, 255, 255);
+		tessellator.addTranslation(x + 0.5F, y + 1.6F, z + 0.5F);
 
 		Random rnd = new Random();
-		rnd.setSeed((long)((x+y+z)*x*y*z));
-		ModelBase model = null;
-		IIcon modelTexture = null;
+        long seed = x * 0x2FC20FL ^ y * 0x6EBFFF5L ^ z;
+		rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 		if(block == BLBlockRegistry.blackHatMushroom) {
 			if(plantModelBlackHat1 == null) {
 				plantModelBlackHat1 = new ModelConverter(
@@ -240,11 +238,11 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			}
 			int randInt = rnd.nextInt(3);
 			if(randInt == 0) {
-				plantModelBlackHat1.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
+				plantModelBlackHat1.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(tessellator);
 			} else if(randInt == 1) {
-				plantModelBlackHat2.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
+				plantModelBlackHat2.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(tessellator);
 			} else {
-				plantModelBlackHat3.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
+				plantModelBlackHat3.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(tessellator);
 			}
 		} else if(block == BLBlockRegistry.flatHeadMushroom) {
 			if(plantModelFlatHead1 == null) {
@@ -262,9 +260,9 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			if(rnd.nextInt(2) == 0) {
-				plantModelFlatHead1.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
+				plantModelFlatHead1.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(tessellator);
 			} else {
-				plantModelFlatHead2.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(Tessellator.instance);
+				plantModelFlatHead2.getModel().rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0)).renderWithTessellator(tessellator);
 			}
 		} else if(block == BLBlockRegistry.pitcherPlant && world.getBlock(x, y+1, z) == BLBlockRegistry.pitcherPlant) {
 			if(plantModelTubePlant == null) {
@@ -275,7 +273,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelTubePlant.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			plantModelTubePlant.getModel().offsetWS(offset).renderWithTessellator(tessellator);
 		} else if(block == BLBlockRegistry.swampPlant) {
 			if(plantModelRegularPlant == null) {
 				plantModelRegularPlant = new ModelConverter(
@@ -288,7 +286,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			float rotYaw = rnd.nextFloat() * 360.0F;
 			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
-			offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			offsetWS(offset).renderWithTessellator(tessellator);
 		} else if(block == BLBlockRegistry.bulbCappedMushroom) {
 			if(plantModelBulbCappedMushroom == null) {
 				plantModelBulbCappedMushroom = new ModelConverter(
@@ -299,7 +297,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			}
 			
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(tessellator);
 
 		} else if(block == BLBlockRegistry.venusFlyTrap) {
 			if(plantModelVenusFlyTrap == null) {
@@ -320,10 +318,10 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			if(meta == 0) {
 				plantModelVenusFlyTrap.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
-				.offsetWS(offset).renderWithTessellator(Tessellator.instance);
+				.offsetWS(offset).renderWithTessellator(tessellator);
 			} else {
 				plantModelVenusFlyTrapBlooming.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
-				.offsetWS(offset).renderWithTessellator(Tessellator.instance);
+				.offsetWS(offset).renderWithTessellator(tessellator);
 			}
 		} else if(block == BLBlockRegistry.volarpad) {
 			if(plantModelVolarpad1 == null) {
@@ -347,9 +345,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(256, 256, BLBlockRegistry.volarpad.modelTexture3),
 						true);
 			}
-			Random rnd2 = new Random();
-			rnd2.setSeed(x*y*z);
-			float plantHeightOffset = -rnd2.nextFloat()/1.3F;
+			float plantHeightOffset = -rnd.nextFloat()/1.3F;
 			float padRotation = rnd.nextFloat() * 360.0F;
 			int randNum = rnd.nextInt(3);
 			if(randNum == 0) {
@@ -363,7 +359,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				}
 				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
 				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
-				convertedModel.renderWithTessellator(Tessellator.instance);
+				convertedModel.renderWithTessellator(tessellator);
 			} else if(randNum == 1) {
 				Model convertedModel = plantModelVolarpad2.getModel();
 				for(Box box : convertedModel.getBoxes()) {
@@ -375,7 +371,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				}
 				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
 				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
-				convertedModel.renderWithTessellator(Tessellator.instance);
+				convertedModel.renderWithTessellator(tessellator);
 			} else {
 				Model convertedModel = plantModelVolarpad3.getModel();
 				for(Box box : convertedModel.getBoxes()) {
@@ -387,7 +383,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				}
 				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
 				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
-				convertedModel.renderWithTessellator(Tessellator.instance);
+				convertedModel.renderWithTessellator(tessellator);
 			}
 		} else if(block == BLBlockRegistry.weepingBlue && world.getBlock(x, y+1, z) == BLBlockRegistry.weepingBlue) {
 			if(plantModelWeepingBlue == null) {
@@ -398,7 +394,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelWeepingBlue.getModel().offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			plantModelWeepingBlue.getModel().offsetWS(offset).renderWithTessellator(tessellator);
 		} else if(block == BLBlockRegistry.sundew && world.getBlock(x, y+1, z) == BLBlockRegistry.sundew) {
 			if(plantModelSundew == null) {
 				plantModelSundew = new ModelConverter(
@@ -410,10 +406,10 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			double scale = rnd.nextFloat() * 0.4D + 0.6D;
 			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, -1.65F + scale/0.65F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelSundew.getModel().scale(scale, scale, scale).rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
-			.offsetWS(offset).renderWithTessellator(Tessellator.instance);
+			.offsetWS(offset).renderWithTessellator(tessellator);
 		}
 
-		Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
+		tessellator.addTranslation(-x - 0.5F, -y - 1.6F, -z - 0.5F);
 
 		return true;
 	}

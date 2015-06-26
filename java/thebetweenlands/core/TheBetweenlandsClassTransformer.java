@@ -1,10 +1,16 @@
 package thebetweenlands.core;
 
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.tree.AbstractInsnNode.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 
+import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -28,6 +34,18 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			return writeClass(transformEntityPlayer(readClass(classBytes), obf));
 		} else if ((obf = "sv".equals(name)) || "net.minecraft.entity.EntityLivingBase".equals(name)) {
 			return writeClass(transformEntityLivingBase(readClass(classBytes), obf));
+		} else if ((obf = "bao".equals(name)) || "net.minecraft.client.Minecraft".equals(name)) {
+			return writeClass(transformMinecraft(readClass(classBytes), obf));
+		} else if ((obf = "bdw".equals(name)) || "net.minecraft.client.gui.GuiScreen".equals(name)) {
+			return writeClass(transformGuiScreen(readClass(classBytes), obf));
+		} else if ((obf = "oi".equals(name)) || "net.minecraft.server.management.ServerConfigurationManager".equals(name)) {
+			byte[] data = writeClass(transformServerConfigurationManager(readClass(classBytes), obf));
+			try {
+				IOUtils.write(data, new FileOutputStream(new File("C:/Users/Paul/Documents/debug/ServerConfigurationManager.class")));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return data;
 		}
 		return classBytes;
 	}
@@ -46,7 +64,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	}
 
 	private ClassNode transformMinecraftServer(ClassNode classNode) {
-		FieldNode sleepPerTickField = new FieldNode(Opcodes.ACC_PUBLIC, SLEEP_PER_TICK, "J", null, null);
+		FieldNode sleepPerTickField = new FieldNode(ACC_PUBLIC, SLEEP_PER_TICK, "J", null, null);
 		classNode.fields.add(sleepPerTickField);
 		boolean needsRun = true, needsInit = true;
 		for (MethodNode method : classNode.methods) {
@@ -54,11 +72,11 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				needsInit = false;
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
-					if (insnNode.getOpcode() == Opcodes.RETURN) {
+					if (insnNode.getOpcode() == RETURN) {
 						InsnList initSleepPerTickInsns = new InsnList();
-						initSleepPerTickInsns.add(new VarInsnNode(Opcodes.ALOAD, 0));
+						initSleepPerTickInsns.add(new VarInsnNode(ALOAD, 0));
 						initSleepPerTickInsns.add(new LdcInsnNode(50L));
-						initSleepPerTickInsns.add(new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/server/MinecraftServer", SLEEP_PER_TICK, "J"));
+						initSleepPerTickInsns.add(new FieldInsnNode(PUTFIELD, "net/minecraft/server/MinecraftServer", SLEEP_PER_TICK, "J"));
 						method.instructions.insertBefore(insnNode, initSleepPerTickInsns);
 						break;
 					}
@@ -69,10 +87,10 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				Long fifty = Long.valueOf(50);
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
-					if (insnNode.getType() == AbstractInsnNode.LDC_INSN && fifty.equals(((LdcInsnNode) insnNode).cst)) {
+					if (insnNode.getType() == LDC_INSN && fifty.equals(((LdcInsnNode) insnNode).cst)) {
 						InsnList accessSleepPerTickInsns = new InsnList();
-						accessSleepPerTickInsns.add(new VarInsnNode(Opcodes.ALOAD, 0));
-						accessSleepPerTickInsns.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/server/MinecraftServer", SLEEP_PER_TICK, "J"));
+						accessSleepPerTickInsns.add(new VarInsnNode(ALOAD, 0));
+						accessSleepPerTickInsns.add(new FieldInsnNode(GETFIELD, "net/minecraft/server/MinecraftServer", SLEEP_PER_TICK, "J"));
 						method.instructions.insert(insnNode, accessSleepPerTickInsns);
 						method.instructions.remove(insnNode);
 						break;
@@ -93,9 +111,9 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			if (getHurtSoundName.equals(method.name) && "()Ljava/lang/String;".equals(method.desc)) {
 				InsnList insns = method.instructions;
 				insns.clear();
-				insns.add(new VarInsnNode(Opcodes.ALOAD, 0));
-				insns.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "onPlayerGetHurtSound", String.format("(L%s;)Ljava/lang/String;", entityPlayerClass), false));
-				insns.add(new InsnNode(Opcodes.ARETURN));
+				insns.add(new VarInsnNode(ALOAD, 0));
+				insns.add(new MethodInsnNode(INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "onPlayerGetHurtSound", String.format("(L%s;)Ljava/lang/String;", entityPlayerClass), false));
+				insns.add(new InsnNode(ARETURN));
 				break;
 			}
 		}
@@ -110,7 +128,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			if (setAttackTargetName.equals(method.name) && setAttackTargetDescription.equals(method.desc)) {
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
-					if (insnNode.getType() == AbstractInsnNode.METHOD_INSN) {
+					if (insnNode.getType() == METHOD_INSN) {
 						MethodInsnNode methodNode = (MethodInsnNode) insnNode;
 						methodNode.owner = "thebetweenlands/forgeevent/BLForgeHooks";
 						methodNode.name = "onLivingSetRevengeTarget";
@@ -123,4 +141,64 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		return classNode;
 	}
 
+	private ClassNode transformMinecraft(ClassNode classNode, boolean obf) {
+		String startGameName = obf ? "ag" : "startGame";
+		for (MethodNode method : classNode.methods) {
+			if (startGameName.equals(method.name) && "()V".equals(method.desc)) {
+				for (int i = method.instructions.size() - 1; i >= 0; i--) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == RETURN) {
+						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandler", "onMinecraftFinishedStarting", "()V", false));
+						break;
+					}
+				}
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformGuiScreen(ClassNode classNode, boolean obf) {
+		String handleInputName = obf ? "p" : "handleInput";
+		String handleKeyboardInputName = obf ? "l" : "handleKeyboardInput"; 
+		for (MethodNode method : classNode.methods) {
+			if (handleInputName.equals(method.name) && "()V".equals(method.desc)) {
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == INVOKEVIRTUAL) {
+						MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;
+						if (handleKeyboardInputName.equals(methodInsnNode.name) && "()V".equals(methodInsnNode.desc)) {
+							InsnList insns = new InsnList();
+							insns.add(new FieldInsnNode(GETSTATIC, "thebetweenlands/event/debugging/DebugHandler", "INSTANCE", "Lthebetweenlands/event/debugging/DebugHandler;"));
+							insns.add(new InsnNode(ACONST_NULL));
+							insns.add(new MethodInsnNode(INVOKEVIRTUAL, "thebetweenlands/event/debugging/DebugHandler", "onKeyInput", "(Lcpw/mods/fml/common/gameevent/InputEvent$KeyInputEvent;)V", false));
+							method.instructions.insert(insnNode, insns);
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformServerConfigurationManager(ClassNode classNode, boolean obf) {
+		String createPlayerForUserName = obf ? "f" : "createPlayerForUser";
+		String entityPlayerMPClass = obf ? "mw" : "net/minecraft/entity/player/EntityPlayerMP";
+		String createPlayerForUserDescription = String.format("(Lcom/mojang/authlib/GameProfile;)L%s;", entityPlayerMPClass);
+		String serverConfigurationManagerClass = obf ? "oi" : "net/minecraft/server/management/ServerConfigurationManager";
+		for (MethodNode method : classNode.methods) {
+			if (createPlayerForUserName.equals(method.name) && createPlayerForUserDescription.equals(method.desc)) {
+				method.instructions.clear();
+				method.localVariables.clear();
+				method.visitVarInsn(ALOAD, 0);
+				method.visitVarInsn(ALOAD, 1);
+				method.visitMethodInsn(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandler", "createPlayerForUser", String.format("(L%s;Lcom/mojang/authlib/GameProfile;)L%s;", serverConfigurationManagerClass, entityPlayerMPClass), false);
+				method.visitInsn(ARETURN);
+				break;
+			}
+		}
+		return classNode;
+	}
 }
