@@ -453,7 +453,7 @@ public class DecorationHelper {
 	}
 
 	public void generateGiantWeedwoodTree(int rate) {
-		if (rand.nextInt(5 * rate) != 0) {
+		if (rand.nextInt(rate) != 0) {
 			return;
 		}
 		int x = this.x + this.offsetXZ();
@@ -465,7 +465,7 @@ public class DecorationHelper {
 	}
 
 	public void generateDeadTree(int rate) {
-		if (rand.nextInt(5 * rate) != 0) {
+		if (rand.nextInt(rate) != 0) {
 			return;
 		}
 		int x = this.x + this.offsetXZ();

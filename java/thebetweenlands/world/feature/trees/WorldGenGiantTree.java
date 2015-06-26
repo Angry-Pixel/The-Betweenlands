@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -47,8 +46,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	public final boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
 		int baseRadius = rand.nextInt(6) + 13;
 		int height = rand.nextInt(getRadiusHeightRatio() * 4 + 1) + baseRadius * getRadiusHeightRatio() + 3;
-		int maxRadius = baseRadius + height / 3;
-		if (isSpaceOccupied(world, blockX, blockY, blockZ, maxRadius, height)) {
+		if (isSpaceOccupied(world, blockX, blockY, blockZ, baseRadius, height)) {
 			return false;
 		}
 		int mirrorX = rand.nextBoolean() ? -1 : 1;
@@ -93,11 +91,11 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	}
 
 	protected void generateShoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ) {
-		generateRoots(world, rand, baseRadius, height, blockX, blockY + 2, blockZ, rand.nextInt(3) + 4, false);
-		generateRoots(world, rand, baseRadius, height, blockX, blockY + 10, blockZ, rand.nextInt(3) + 3, true);
+		generateRoots(world, rand, baseRadius, height, blockY, blockX, blockY + 2, blockZ, rand.nextInt(3) + 4, false);
+		generateRoots(world, rand, baseRadius, height, blockY, blockX, blockY + 10, blockZ, rand.nextInt(3) + 3, true);
 	}
 
-	private void generateRoots(World world, Random rand, int baseRadius, int height, int blockX, int blockY, int blockZ, int rootCount, boolean high) {
+	private void generateRoots(World world, Random rand, int baseRadius, int height, int baseY, int blockX, int blockY, int blockZ, int rootCount, boolean high) {
 		float angle = 2 * (float) Math.PI / rootCount;
 		float angleOffset = rand.nextFloat() * 2 * (float) Math.PI;
 		for (int root = 0; root < rootCount; root++) {
@@ -135,15 +133,13 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 				generateRoot(world, rand, posX, posY, posZ, yaw + branchYaw - branchAngle, pitch, length - step, size, 1);
 				return;
 			}
+			if (world.getBlock((int) posX, (int) posY, (int) posZ) == weedwood) {
+				continue;
+			}
 			for (int x = -sizeRange; x <= sizeRange; x++) {
 				for (int z = -sizeRange; z <= sizeRange; z++) {
 					for (int y = -sizeRange; y <= sizeRange; y++) {
 						if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
-							Block block = world.getBlock((int) posX + x, (int) posY + y, (int) posZ + z);
-							Block above = world.getBlock((int) posX + x, (int) posY + y + 1, (int) posZ + z);
-							if (block == weedwood && above.getMaterial().isReplaceable()) {
-								continue;
-							}
 							world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
 						}
 					}

@@ -4,8 +4,6 @@ import static thebetweenlands.blocks.BLBlockRegistry.*;
 
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
