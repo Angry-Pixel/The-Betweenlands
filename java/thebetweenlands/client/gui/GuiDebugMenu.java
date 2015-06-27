@@ -154,7 +154,6 @@ public class GuiDebugMenu extends GuiScreen {
 			saveLoader.flushCache();
 			saveLoader.deleteWorldDirectory(saveFolder);
 		}
-		worldSeedTextField.setText("");
 		buttonList.remove(deleteDebugWorldButton);
 	}
 

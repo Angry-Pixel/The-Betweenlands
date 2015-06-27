@@ -91,34 +91,34 @@ public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 			}
 		}
 		int maxRadius = largeCanopy ? 16: (length < 2 ? 1 : (length * 3 / 8 + rand.nextInt(length / 4)));
-		if (maxRadius > 3) {
-			generateCanopy(world, rand, (int) posX, (int) posY, (int) posZ, maxRadius);
-		}
+		generateCanopy(world, rand, (int) posX, (int) posY, (int) posZ, maxRadius);
 	}
 
 	private void generateCanopy(World world, Random rand, int blockX, int blockY, int blockZ, int maxRadius) {
-		int branchCount = rand.nextInt(3) + 3;
-		float angleOffset = rand.nextFloat() * 2 * (float) Math.PI;
-		float angle = (float) Math.PI * 2 / branchCount;
-		float pitch = (float) Math.PI / 8;
-		float deltaY = MathHelper.sin(pitch);
-		float cosPitch = MathHelper.cos(pitch);
-		int size = 1;
-		for (int branch = 0; branch < branchCount; branch++) {
-			double posX = blockX, posY = blockY - 2, posZ = blockZ;
-			float yaw = angle * branch + angleOffset;
-			float deltaX = MathHelper.cos(yaw) * cosPitch;
-			float deltaZ = MathHelper.sin(yaw) * cosPitch;
-			int length = (int) (maxRadius * (rand.nextFloat() * (0.9F - 0.5F) + 0.5F));
-			for (int step = 0; step < length; step++) {
-				posX += deltaX;
-				posY += deltaY;
-				posZ += deltaZ;
-				for (int x = -size; x <= size; x++) {
-					for (int z = -size; z <= size; z++) {
-						for (int y = -size; y <= size; y++) {
-							if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
-								world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
+		if (maxRadius > 4) {
+			int branchCount = rand.nextInt(3) + 3;
+			float angleOffset = rand.nextFloat() * 2 * (float) Math.PI;
+			float angle = (float) Math.PI * 2 / branchCount;
+			float pitch = (float) Math.PI / 8;
+			float deltaY = MathHelper.sin(pitch);
+			float cosPitch = MathHelper.cos(pitch);
+			int size = 1;
+			for (int branch = 0; branch < branchCount; branch++) {
+				double posX = blockX, posY = blockY - 2, posZ = blockZ;
+				float yaw = angle * branch + angleOffset;
+				float deltaX = MathHelper.cos(yaw) * cosPitch;
+				float deltaZ = MathHelper.sin(yaw) * cosPitch;
+				int length = (int) (maxRadius * (rand.nextFloat() * (0.9F - 0.5F) + 0.5F));
+				for (int step = 0; step < length; step++) {
+					posX += deltaX;
+					posY += deltaY;
+					posZ += deltaZ;
+					for (int x = -size; x <= size; x++) {
+						for (int z = -size; z <= size; z++) {
+							for (int y = -size; y <= size; y++) {
+								if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
+									world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
+								}
 							}
 						}
 					}

@@ -83,10 +83,10 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 				}
 			}
 		}
+		generateShoots(world, rand, baseRadius, height, blockX, blockY, blockZ);
 		for (Fungus fungus : fungi) {
 			fungus.generate(world, rand);
 		}
-		generateShoots(world, rand, baseRadius, height, blockX, blockY, blockZ);
 		return true;
 	}
 
