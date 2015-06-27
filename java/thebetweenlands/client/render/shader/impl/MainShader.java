@@ -67,6 +67,9 @@ public class MainShader extends CShader {
 
 	public void deleteBuffers() {
 		this.depthBuffer.deleteFramebuffer();
+		for(GeometryBuffer gBuffer : this.geometryBuffers.values()) {
+			gBuffer.deleteBuffers();
+		}
 	}
 
 	public void updateBuffers(Framebuffer input) {

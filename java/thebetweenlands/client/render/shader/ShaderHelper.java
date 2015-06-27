@@ -20,17 +20,17 @@ public class ShaderHelper {
 	private ShaderGroup currentShaderGroup;
 	private boolean checked = false;
 	private boolean shadersSupported = false;
-	
+
 	public boolean canUseShaders() {
 		return this.isShaderSupported() && ConfigHandler.USE_SHADER;
 	}
-	
+
 	public boolean isShaderSupported() {
 		if(!this.checked){
 			this.checked = true;
 			ContextCapabilities contextCapabilities = GLContext.getCapabilities();
 			boolean supportsGL21 = contextCapabilities.OpenGL21;
-	        boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
+			boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
 			this.shadersSupported = OpenGlHelper.func_153193_b() && supported && OpenGlHelper.framebufferSupported;
 		}
 		return this.shadersSupported;
@@ -48,15 +48,22 @@ public class ShaderHelper {
 		if((this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup)
 				&& mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
 			MainShader shaderWrapper = this.currentShader;
-			if(this.currentShader == null) {
-				shaderWrapper = new MainShader(
-						mc.getTextureManager(),
-						mc.getResourceManager(), mc.getFramebuffer(),
-						new ResourceLocation("thebetweenlands:shaders/config/blmain.json"),
-						new ResourceLocation("thebetweenlands:shaders/program/"),
-						new ResourceLocation("thebetweenlands:textures/shader/")
-						);
+			if(shaderWrapper != null) {
+				try {
+					shaderWrapper.getShaderGroup().deleteShaderGroup();
+					shaderWrapper.deleteBuffers();
+				} catch(Exception ex) {
+					System.err.println("Failed deleting shader group!");
+					ex.printStackTrace();
+				}
 			}
+			shaderWrapper = new MainShader(
+					mc.getTextureManager(),
+					mc.getResourceManager(), mc.getFramebuffer(),
+					new ResourceLocation("thebetweenlands:shaders/config/blmain.json"),
+					new ResourceLocation("thebetweenlands:shaders/program/"),
+					new ResourceLocation("thebetweenlands:textures/shader/")
+					);
 			try {
 				if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
 					ShaderLinkHelper.setNewStaticShaderLinkHelper();
@@ -82,7 +89,7 @@ public class ShaderHelper {
 			this.currentShader.updateBuffers(Minecraft.getMinecraft().getFramebuffer());
 		}
 	}
-	
+
 	public void clearDynLights() {
 		if(ConfigHandler.USE_SHADER && !this.failedLoading && this.isShaderSupported()) {
 			if(this.currentShader != null) {
@@ -90,7 +97,7 @@ public class ShaderHelper {
 			}
 		}
 	}
-	
+
 	public void addDynLight(LightSource light) {
 		if(ConfigHandler.USE_SHADER && !this.failedLoading && this.isShaderSupported()) {
 			if(this.currentShader != null) {
@@ -98,7 +105,7 @@ public class ShaderHelper {
 			}
 		}
 	}
-	
+
 	public MainShader getCurrentShader() {
 		return this.currentShader;
 	}

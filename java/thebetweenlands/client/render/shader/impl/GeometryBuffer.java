@@ -79,4 +79,9 @@ public class GeometryBuffer {
 			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 		}
 	}
+	
+	public void deleteBuffers() {
+		if(this.geometryBuffer != null) this.geometryBuffer.deleteFramebuffer();
+		if(this.geometryDepthBuffer != null) this.geometryDepthBuffer.deleteFramebuffer();
+	}
 }
