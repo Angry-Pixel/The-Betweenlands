@@ -164,7 +164,7 @@ public class BLBlockRegistry
 	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
 	// WOOD
-	public static final Block weedwoodPlanks = new BlockWeedWoodPlanks();
+	public static final BlockWeedWoodPlanks weedwoodPlanks = new BlockWeedWoodPlanks();
 
 	// DOUBLE PLANTS
 	public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F){
