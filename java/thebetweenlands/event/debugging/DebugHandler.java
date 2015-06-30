@@ -26,7 +26,10 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.WorldSettings;
 import net.minecraft.world.demo.DemoWorldManager;
+import net.minecraft.world.storage.ISaveFormat;
+import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -94,6 +97,8 @@ public class DebugHandler {
 
 	public boolean isInDebugWorld = false;
 
+	private boolean shouldRecreateBetweenlands = false;
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
@@ -130,6 +135,9 @@ public class DebugHandler {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
 				ignoreStart = !ignoreStart;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_U) && mc.isIntegratedServerRunning() && isInDebugWorld && !shouldRecreateBetweenlands) {
+				shouldRecreateBetweenlands = true;
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_M)) {
@@ -189,6 +197,18 @@ public class DebugHandler {
 			} else {
 				mc.thePlayer.capabilities.setFlySpeed(0.1f);
 			}
+		}
+		if (shouldRecreateBetweenlands && mc.isIntegratedServerRunning()) {
+			shouldRecreateBetweenlands = false;
+			WorldInfo worldInfo = mc.getIntegratedServer().worldServers[0].getWorldInfo();
+			mc.loadWorld(null);
+			ISaveFormat saveLoader = mc.getSaveLoader();
+			saveLoader.flushCache();
+			saveLoader.deleteWorldDirectory(DebugHandler.INSTANCE.worldFolderName + File.separatorChar + "DIM" + ConfigHandler.DIMENSION_ID);
+			WorldSettings worldSettings = new WorldSettings(worldInfo);
+			worldSettings.enableCommands();
+			mc.launchIntegratedServer(DebugHandler.INSTANCE.worldFolderName, DebugHandler.INSTANCE.worldName, worldSettings);
+			isInDebugWorld = true;
 		}
 	}
 
