@@ -4,26 +4,19 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.WeightedRandom;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.network.base.SubscribePacket;
-import thebetweenlands.network.packets.PacketAnimatorProgress;
 import thebetweenlands.utils.WeightedRandomItem;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityAnimator extends TileEntityBasicInventory {
 
@@ -75,7 +68,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			}
 		} else {
 			if (getStackInSlot(0) != null && getStackInSlot(1) != null && getStackInSlot(2) != null && itemsConsumed < stackSize && (getStackInSlot(0).getItem().equals(Items.spawn_egg) || getStackInSlot(0).getItem().equals(BLItemRegistry.scroll) || getStackInSlot(0).getItem().equals(BLItemRegistry.spawnEggs))) {
-				sendProgressPacket();
 				++progress;
 				if (this.progress >= 44) {
 					this.progress = 0;
@@ -127,68 +119,28 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	private void startCraftingProcess() {
-		World world = this.getWorldObj();
-		int dim = 0;
-		if (world instanceof WorldServer) {
-			dim = ((WorldServer) world).provider.dimensionId;
-		}
 		isAnimating = true;
 		progress = 0;
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
-		// TODO: Currently not used
-		// Packet to start sound
-		// TheBetweenlands.networkWrapper.sendToAllAround(new
-		// MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -1), new
-		// TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
-		// Sets client crafting progress to 1
-		// TheBetweenlands.networkWrapper.sendToAllAround(new
-		// MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 1), new
-		// TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
-		// Does the metadata stuff for the circle animated textures
 	}
 
 	private void stopCraftingProcess() {
-		World world = this.getWorldObj();
-		int dim = 0;
-		if (world instanceof WorldServer) {
-			dim = ((WorldServer) world).provider.dimensionId;
-		}
 		isAnimating = false;
 		progress = 0;
-		worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
-		// TODO: Currently not used
-		// Packet to cancel sound
-		// TheBetweenlands.networkWrapper.sendToAllAround(new
-		// MessageAltarCraftingProgress(xCoord, yCoord, zCoord, -2), new
-		// TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
-		// Sets client crafting progress to 0
-		// TheBetweenlands.networkWrapper.sendToAllAround(new
-		// MessageAltarCraftingProgress(xCoord, yCoord, zCoord, 0), new
-		// TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
-		// Does the metadata stuff for the circle animated textures
 	}
 
-	public void sendProgressPacket() {
-		World world = this.getWorldObj();
-		int dim = 0;
-		if (world instanceof WorldServer) {
-			dim = ((WorldServer) world).provider.dimensionId;
-		}
-		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketAnimatorProgress(this)), new TargetPoint(dim, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, 64D));
+	public void sendGUIData(ContainerAnimator animator, ICrafting craft) {
+		craft.sendProgressBarUpdate(animator, 0, progress);
+		craft.sendProgressBarUpdate(animator, 1, life);
 	}
 
-	@SubscribePacket
-	public static void onProgressPacket(PacketAnimatorProgress pkt) {
-		TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(pkt.x, pkt.y, pkt.z);
-		if (te instanceof TileEntityAnimator) {
-			TileEntityAnimator tile = (TileEntityAnimator) te;
-			tile.progress = pkt.progress;
-			tile.life = pkt.life;
-			if(tile.getStackInSlot(0) != null)tile.setInventorySlotContents(0, new ItemStack(Item.getItemById(pkt.slot0ItemID), pkt.slot0Size, pkt.slot0ItemMeta));
-			if(tile.getStackInSlot(1) != null)tile.getStackInSlot(1).stackSize = pkt.slot1Size;
-			if(tile.getStackInSlot(2) != null)tile.getStackInSlot(2).stackSize = pkt.slot2Size;
-			tile.itemsConsumed = pkt.itemsConsumed;
-			tile.lifeDepleted = pkt.lifeDepleted;
+	public void getGUIData(int id, int value) {
+		switch (id) {
+		case 0:
+			progress = value;
+			break;
+		case 1:
+			life = value;
+			break;
 		}
 	}
 
@@ -199,6 +151,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("life", life);
+		nbt.setInteger("progress", progress);
 		nbt.setInteger("itemsConsumed", itemsConsumed);
 		nbt.setBoolean("lifeDepleted", lifeDepleted);
 	}
@@ -210,21 +163,22 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		life = nbt.getInteger("life");
+		progress = nbt.getInteger("progress");
 		itemsConsumed = nbt.getInteger("itemsConsumed");
 		lifeDepleted = nbt.getBoolean("lifeDepleted");
 	}
 
 	@Override
 	public Packet getDescriptionPacket() {
-		NBTTagCompound tag = new NBTTagCompound();
-		writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("life", life);
+		nbt.setInteger("progress", progress);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-		if (packet.func_148853_f() == 0)
-			readFromNBT(packet.func_148857_g());
-		// worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		life = packet.func_148857_g().getInteger("life");
+		progress = packet.func_148857_g().getInteger("progress");
 	}
 }
