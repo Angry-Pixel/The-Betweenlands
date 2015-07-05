@@ -145,7 +145,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	private void stopCraftingProcess() {
 		isAnimating = false;
 		progress = 0;
-	//	System.out.println("Crafting Process Stopped");
 	}
 
 	public void sendGUIData(ContainerAnimator animator, ICrafting craft) {
