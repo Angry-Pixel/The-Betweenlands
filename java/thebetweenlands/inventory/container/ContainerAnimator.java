@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
