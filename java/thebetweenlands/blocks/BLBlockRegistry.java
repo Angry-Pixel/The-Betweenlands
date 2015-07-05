@@ -134,7 +134,7 @@ public class BLBlockRegistry {
     public static final Block octineOre = new BlockGenericOre("octineOre", null).setLightLevel(0.875F); //setting null drops item block
     public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
     public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
-    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.LIFE_CRYSTAL);
+    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.TANGLED_ROOT);
 
     // TREES
     public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood");

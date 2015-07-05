@@ -20,7 +20,7 @@ import thebetweenlands.utils.WeightedRandomItem;
 
 public class TileEntityAnimator extends TileEntityBasicInventory {
 
-	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.LIFE_CRYSTAL), 10), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD), 20), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 30), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 40) };
+	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT), 10), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD), 20), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 30), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 40) };
 	public static final ArrayList<ItemStack> viable = new ArrayList<ItemStack>();
 
 	public TileEntityAnimator() {

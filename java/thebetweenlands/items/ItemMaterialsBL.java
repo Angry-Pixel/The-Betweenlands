@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -74,15 +76,15 @@ public class ItemMaterialsBL extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if (is.getItemDamage() == this.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage() && side == 1) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if (stack.getItemDamage() == this.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage() && side == 1) {
 			Block block = world.getBlock(x, y + 1, z);
 			if (block == Blocks.air) {
 				if (BLBlockRegistry.swampReed.canPlaceBlockOn(world.getBlock(x, y, z))) {
 					if(!world.isRemote) {
 						world.setBlock(x, y + 1, z, BLBlockRegistry.swampReed);
 						world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BLBlockRegistry.swampReed.stepSound.func_150496_b(), (BLBlockRegistry.swampReed.stepSound.getVolume() + 1.0F) / 2.0F, BLBlockRegistry.swampReed.stepSound.getPitch() * 0.8F);
-						--is.stackSize;
+						--stack.stackSize;
 					}
 					return true;
 				}
@@ -91,7 +93,7 @@ public class ItemMaterialsBL extends Item {
 					if(!world.isRemote) {
 						world.setBlock(x, y + 1, z, BLBlockRegistry.swampReedUW);
 						world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BLBlockRegistry.swampReed.stepSound.func_150496_b(), (BLBlockRegistry.swampReed.stepSound.getVolume() + 1.0F) / 2.0F, BLBlockRegistry.swampReed.stepSound.getPitch() * 0.8F);
-						--is.stackSize;
+						--stack.stackSize;
 					}
 					return true;
 				}
@@ -100,11 +102,44 @@ public class ItemMaterialsBL extends Item {
 		return false;
 	}
 
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		player.setItemInUse(stack, getMaxItemUseDuration(stack));
+		return stack;
+	}
+
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		if (stack.getItemDamage() == EnumMaterialsBL.TANGLED_ROOT.ordinal())
+			return EnumAction.eat;
+		return null;
+	}
+
+	@Override
+	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player) {
+		if (stack.getItemDamage() == EnumMaterialsBL.TANGLED_ROOT.ordinal()) {
+			stack.stackSize--;
+			world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			onFoodEaten(stack, world, player);
+		}
+		return stack;
+	}
+
+	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
+		if (!world.isRemote)
+			player.curePotionEffects(new ItemStack(Items.milk_bucket));
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 32;
+	}
+
 	public static enum EnumMaterialsBL {
 		AQUA_MIDDLE_GEM("aquaMiddleGem"), CRIMSON_MIDDLE_GEM("crimsonMiddleGem"), GREEN_MIDDLE_GEM("greenMiddleGem"), 
 		BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), 
 		LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), 
-		LIFE_CRYSTAL("lifeCrystal"), PLANT_TONIC("plantTonic"), MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), 
+		TANGLED_ROOT("tangledRoot"), PLANT_TONIC("plantTonic"), MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), 
 		MOSS("moss"), MUD_BRICK("mudBrick"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
 		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
 		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"), 
