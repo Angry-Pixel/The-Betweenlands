@@ -46,7 +46,7 @@ public class GuiAnimator extends GuiContainer {
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 
 		if (tile.getStackInSlot(1) == null)
-			renderSlot(new ItemStack(BLItemRegistry.materialsBL, 1, 11).getIconIndex(), 43, 54);
+			renderSlot(new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 43, 54);
 		else {
 			int i1 = 48 - tile.life / 10;
 			this.drawTexturedModalRect(k + 45, l + 10 + i1, 176, i1, 16, 48);

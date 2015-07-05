@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemMonsterPlacer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -21,6 +22,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.SpawnEggs;
@@ -106,7 +108,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			GL11.glTranslated(x + 0.5D, y + 0.43D, z + 0.5D);
 			GL11.glScaled(0.18D, 0.18D, 0.18D);
 			GL11.glRotatef(te.crystalRotation, 0, 1, 0);
-			ItemRenderHelper.renderItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT), 0);
+			ItemRenderHelper.renderItem(new ItemStack(BLItemRegistry.lifeCrystal), 0);
 			GL11.glPopMatrix();
 		}
 
@@ -158,7 +160,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
 			points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
 			if (te.getWorldObj().rand.nextInt(50) == 0) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getIconIndex(), 0.0003F));
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 0.0003F));
 			}
 		}
 

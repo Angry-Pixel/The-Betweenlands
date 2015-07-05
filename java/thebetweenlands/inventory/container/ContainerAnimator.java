@@ -26,7 +26,7 @@ public class ContainerAnimator extends Container {
 		this.animator = tile;
 
 		addSlotToContainer(new SlotSizeRestriction(tile, 0, 80, 24, 1));
-		addSlotToContainer(new SlotRestriction(tile, 1, 43, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 11), 1));
+		addSlotToContainer(new SlotRestriction(tile, 1, 43, 54, new ItemStack(BLItemRegistry.lifeCrystal), 1));
 		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 24), 64));
 
 		for (int j = 0; j < 3; j++)
