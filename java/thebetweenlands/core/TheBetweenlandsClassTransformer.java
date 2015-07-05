@@ -2,13 +2,8 @@ package thebetweenlands.core;
 
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.tree.AbstractInsnNode.*;
-
-import java.io.File;
-import java.io.FileOutputStream;
-
 import net.minecraft.launchwrapper.IClassTransformer;
 
-import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -39,13 +34,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		} else if ((obf = "bdw".equals(name)) || "net.minecraft.client.gui.GuiScreen".equals(name)) {
 			return writeClass(transformGuiScreen(readClass(classBytes), obf));
 		} else if ((obf = "oi".equals(name)) || "net.minecraft.server.management.ServerConfigurationManager".equals(name)) {
-			byte[] data = writeClass(transformServerConfigurationManager(readClass(classBytes), obf));
-			try {
-				IOUtils.write(data, new FileOutputStream(new File("C:/Users/Paul/Documents/debug/ServerConfigurationManager.class")));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return data;
+			return writeClass(transformServerConfigurationManager(readClass(classBytes), obf));
 		}
 		return classBytes;
 	}
