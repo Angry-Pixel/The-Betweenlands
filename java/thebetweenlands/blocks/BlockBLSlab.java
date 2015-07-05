@@ -21,7 +21,9 @@ import java.util.Random;
 public class BlockBLSlab extends BlockSlab {
 
     private final String textureName;
-    private Block dropsThis;
+    public Block dropsThis;
+    public boolean fullBlock;
+    public String name;
 
     public BlockBLSlab(boolean fullBlock, Material material, String name, Block blockDrops, String harvestTool ) {
         super(fullBlock, material);
@@ -29,11 +31,18 @@ public class BlockBLSlab extends BlockSlab {
         dropsThis = blockDrops;
         setHardness(2.0F);
         setLightOpacity(0);
+        this.fullBlock = fullBlock;
+        this.name = name;
 
         setHarvestLevel(harvestTool, 0);
         if(dropsThis == null)
             setCreativeTab(ModCreativeTabs.blocks);
-        setStepSound(Block.soundTypeWood);
+        if(material == Material.rock)
+            setStepSound(Block.soundTypeStone);
+        else if(material == Material.wood)
+            setStepSound(Block.soundTypeWood);
+        else if(material == Material.cloth)
+            setStepSound(Block.soundTypeCloth);
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
         setBlockName("thebetweenlands." + name + "Slab");
     }
