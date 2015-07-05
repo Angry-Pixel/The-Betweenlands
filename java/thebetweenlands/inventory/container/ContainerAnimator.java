@@ -9,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -26,7 +28,7 @@ public class ContainerAnimator extends Container {
 		this.animator = tile;
 
 		addSlotToContainer(new SlotSizeRestriction(tile, 0, 80, 24, 1));
-		addSlotToContainer(new SlotRestriction(tile, 1, 43, 54, new ItemStack(BLItemRegistry.lifeCrystal), 1));
+		addSlotToContainer(new Slot(tile, 1, 43, 54));
 		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, 24), 64));
 
 		for (int j = 0; j < 3; j++)
@@ -50,10 +52,10 @@ public class ContainerAnimator extends Container {
 					return null;
 				}
 			} else {
-				if (itemstack1.getItem() == BLItemRegistry.materialsBL && itemstack1.getItemDamage() == 11 && !(((Slot) this.inventorySlots.get(1)).getHasStack() || !((Slot) this.inventorySlots.get(1)).isItemValid(itemstack1))) {
+				if (itemstack1.getItem() == BLItemRegistry.materialsBL && itemstack1.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && !(((Slot) this.inventorySlots.get(1)).getHasStack() || !((Slot) this.inventorySlots.get(1)).isItemValid(itemstack1))) {
 					((Slot) this.inventorySlots.get(1)).putStack(new ItemStack(itemstack1.getItem(), 1, itemstack1.getItemDamage()));
 					--itemstack1.stackSize;
-				} else if (itemstack1.getItem() == BLItemRegistry.materialsBL && itemstack1.getItemDamage() == 24) {
+				} else if (itemstack1.getItem() == BLItemRegistry.lifeCrystal) {
 					if (!mergeItemStack(itemstack1, 2, 3, false)) {
 						return null;
 					}

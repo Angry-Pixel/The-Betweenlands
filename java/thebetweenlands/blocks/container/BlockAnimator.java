@@ -65,7 +65,7 @@ public class BlockAnimator extends BlockContainer {
 		}
 		if (world.getTileEntity(x, y, z) instanceof TileEntityAnimator) {
 			TileEntityAnimator animator = (TileEntityAnimator) world.getTileEntity(x, y, z);
-			if (animator.itemsConsumed < animator.stackSize)
+			if (animator.itemsConsumed < animator.itemCount)
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
 			else {
 				if (animator.getStackInSlot(0) != null) {
@@ -91,9 +91,8 @@ public class BlockAnimator extends BlockContainer {
 				}
 				animator.decrStackSize(0, 1);
 				animator.itemsConsumed = 0;
-				animator.lifeDepleted = false;
-				animator.isDirty = true;
 			}
+			animator.lifeDepleted = 0;	
 		}
 
 		return true;

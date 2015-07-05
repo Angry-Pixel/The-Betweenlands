@@ -2,7 +2,7 @@ package thebetweenlands.inventory.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,12 +21,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GuiAnimator extends GuiContainer {
 	private static final ResourceLocation GUI_ANIMATOR = new ResourceLocation("thebetweenlands:textures/gui/animator.png");
 	private final TileEntityAnimator tile;
-
-	public GuiAnimator(InventoryPlayer playerInventory, TileEntityAnimator tile) {
-		super(new ContainerAnimator(playerInventory, tile));
+	private EntityPlayer playerSent;
+	
+	public GuiAnimator(EntityPlayer player, TileEntityAnimator tile) {
+		super(new ContainerAnimator(player.inventory, tile));
 		this.tile = tile;
 		allowUserInput = false;
 		ySize = 168;
+		playerSent = player;
 	}
 
 	@Override
@@ -48,12 +52,12 @@ public class GuiAnimator extends GuiContainer {
 		if (tile.getStackInSlot(1) == null)
 			renderSlot(new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 43, 54);
 		else {
-			int i1 = 48 - tile.life / 10;
+			int i1 = 48 - tile.life * 12;
 			this.drawTexturedModalRect(k + 45, l + 10 + i1, 176, i1, 16, 48);
 		}
 
 		if (tile.getStackInSlot(2) == null)
-			renderSlot(new ItemStack(BLItemRegistry.materialsBL, 1, 24).getIconIndex(), 116, 54);
+			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 116, 54);
 
 		if (tile.progress > 0) {
 			int i1 = tile.progress;
@@ -75,6 +79,7 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if (this.tile.itemsConsumed >= tile.stackSize) this.mc.thePlayer.closeScreen();
+		if (tile.lifeDepleted == 1)
+			playerSent.closeScreen();
 	}
 }

@@ -158,7 +158,7 @@ public class CommonProxy
 		else if (ID == GUI_ANIMATOR) {
 			TileEntity tileentity = world.getTileEntity(x, y, z);
 			if (tileentity instanceof TileEntityAnimator)
-				return new GuiAnimator(player.inventory, (TileEntityAnimator) tileentity);
+				return new GuiAnimator(player, (TileEntityAnimator) tileentity);
 		}
 
 		else if (ID == GUI_PURIFIER) {

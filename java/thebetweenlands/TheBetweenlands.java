@@ -32,7 +32,6 @@ import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
-import thebetweenlands.network.packets.PacketAnimatorProgress;
 import thebetweenlands.network.packets.PacketAttackTarget;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
 import thebetweenlands.network.packets.PacketDruidTeleportParticle;
@@ -110,7 +109,6 @@ public class TheBetweenlands
         sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
         
         //Packet Registry
-        registerPacket(PacketAnimatorProgress.class);
         registerPacket(PacketDruidAltarProgress.class);
         registerPacket(PacketDruidTeleportParticle.class);
         registerPacket(PacketSnailHatchParticle.class);
