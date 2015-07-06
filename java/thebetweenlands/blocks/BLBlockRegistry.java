@@ -374,10 +374,10 @@ public class BLBlockRegistry {
 
     public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope");
 
-    public static void registerSlabs(BlockBLSlab slab) {
+    public static void registerSlabs(BlockBLSlab slab, String fieldName) {
         try {
             if (!slab.fullBlock) {
-                Object obj = BLBlockRegistry.class.getDeclaredField(slab.name + "SlabDouble").get(null);
+                Object obj = BLBlockRegistry.class.getDeclaredField(fieldName + "Double").get(null);
                 if (obj instanceof BlockBLSlab)
                     GameRegistry.registerBlock(slab, ItemBlockSlab.class, slab.getLocalizedName(), slab, obj, false);
             } else
@@ -406,7 +406,7 @@ public class BLBlockRegistry {
                     for (Block block : (Block[]) obj)
                         registerBlock(block);
                 else if (obj instanceof BlockBLSlab)
-                    registerSlabs((BlockBLSlab) obj);
+                    registerSlabs((BlockBLSlab) obj, f.getName());
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
