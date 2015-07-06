@@ -143,7 +143,6 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new OctineArmorHandler());
-		MinecraftForge.EVENT_BUS.register(new LurkerArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
