@@ -14,43 +14,41 @@ import thebetweenlands.recipes.BLMaterials;
 
 public class LurkerSkinArmor extends ItemArmor {
 
-	public LurkerSkinArmor(int armorType) {
-		super(BLMaterials.armorLurkerSkin, 2, armorType);
-	}
+    public LurkerSkinArmor(int armorType) {
+        super(BLMaterials.armorLurkerSkin, 2, armorType);
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		if (stack.getItem() == BLItemRegistry.lurkerSkinLeggings)
-			return "thebetweenlands:textures/armour/lurker2.png";
-		else
-			return "thebetweenlands:textures/armour/lurker1.png";
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+        if (stack.getItem() == BLItemRegistry.lurkerSkinLeggings)
+            return "thebetweenlands:textures/armour/lurker2.png";
+        else
+            return "thebetweenlands:textures/armour/lurker1.png";
+    }
 
-	@Override
-	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-		return material.getItem() == BLItemRegistry.materialsBL && material.getItemDamage() == EnumMaterialsBL.LURKER_SKIN.ordinal();
-	}
+    @Override
+    public boolean getIsRepairable(ItemStack armour, ItemStack material) {
+        return material.getItem() == BLItemRegistry.materialsBL && material.getItemDamage() == EnumMaterialsBL.LURKER_SKIN.ordinal();
+    }
 
-	@Override
-	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		ItemStack[] armor = player.inventory.armorInventory;
-		int armorPeaces = 0;
-		for (ItemStack anArmor : armor) {
-			if (anArmor != null && anArmor.getItem() instanceof LurkerSkinArmor) {
-				armorPeaces+= 1;
-			}
-		}
-		float speedMod = 1;
-		speedMod *= 1.0F + 0.2F * armorPeaces + 1;
-		if(armorPeaces > 1 && player.isInWater()){
-			player.motionX+= speedMod;
-			player.motionY+= speedMod;
-			player.motionZ+= speedMod;
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+        ItemStack[] armor = player.inventory.armorInventory;
+        int armorPeaces = 0;
+        for (ItemStack anArmor : armor) {
+            if (anArmor != null && anArmor.getItem() instanceof LurkerSkinArmor) {
+                armorPeaces += 1;
+            }
+        }
+        if (armorPeaces > 1 && player.isInWater()) {
+            player.motionX *= 1D + (0.025D * armorPeaces);
+            player.motionY *= 1D + (0.025D * armorPeaces);
+            player.motionZ *= 1D + (0.025D * armorPeaces);
 
-			if(!player.isPotionActive(Potion.waterBreathing) && armorPeaces >= 4)
-				player.addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 10));
-		}
+            if (!player.isPotionActive(Potion.waterBreathing) && armorPeaces >= 4)
+                player.addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 10));
+        }
 
-	}
+    }
 }
