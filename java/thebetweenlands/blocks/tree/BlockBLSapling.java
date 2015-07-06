@@ -115,7 +115,7 @@ public class BlockBLSapling extends BlockSapling {
 		if(type.equals("saplingRubberTree")) {
 			worldGen = new WorldGenRubberTree();
 		}
-		
+
 		if(type.equals("saplingSpiritTree")) {
 			System.out.println("Generate Spirit Tree");
 		//worldGen = new WorldGenSpiritTree();

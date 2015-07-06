@@ -23,7 +23,6 @@ public class BlockBLSlab extends BlockSlab {
     private final String textureName;
     public Block dropsThis;
     public boolean fullBlock;
-    public String name;
 
     public BlockBLSlab(boolean fullBlock, Material material, String name, Block blockDrops, String harvestTool ) {
         super(fullBlock, material);
@@ -32,7 +31,6 @@ public class BlockBLSlab extends BlockSlab {
         setHardness(2.0F);
         setLightOpacity(0);
         this.fullBlock = fullBlock;
-        this.name = name;
 
         setHarvestLevel(harvestTool, 0);
         if(dropsThis == null)
