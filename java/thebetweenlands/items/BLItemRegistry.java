@@ -119,7 +119,7 @@ public class BLItemRegistry {
     
     //MISC
     public static final Item angryPebble = new ItemAngryPebble();
-    public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll");
+    public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(1);
     public static final Item swampKelp = new Item().setUnlocalizedName("thebetweenlands.swampKelp").setTextureName("thebetweenlands:swampKelp");
     public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
     public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);

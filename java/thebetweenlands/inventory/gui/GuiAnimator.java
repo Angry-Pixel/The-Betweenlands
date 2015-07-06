@@ -3,7 +3,6 @@ package thebetweenlands.inventory.gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,10 +18,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiAnimator extends GuiContainer {
-	private static final ResourceLocation GUI_ANIMATOR = new ResourceLocation("thebetweenlands:textures/gui/animator.png");
+	private final ResourceLocation GUI_ANIMATOR = new ResourceLocation("thebetweenlands:textures/gui/animator.png");
 	private final TileEntityAnimator tile;
 	private EntityPlayer playerSent;
-	
+
 	public GuiAnimator(EntityPlayer player, TileEntityAnimator tile) {
 		super(new ContainerAnimator(player.inventory, tile));
 		this.tile = tile;
@@ -48,29 +47,25 @@ public class GuiAnimator extends GuiContainer {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
-
-		if (tile.getStackInSlot(1) == null)
-			renderSlot(new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 43, 54);
-		else {
+		if (tile.getStackInSlot(1) != null) {
 			int i1 = 48 - tile.life * 12;
 			this.drawTexturedModalRect(k + 45, l + 10 + i1, 176, i1, 16, 48);
 		}
-
-		if (tile.getStackInSlot(2) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 116, 54);
-
 		if (tile.progress > 0) {
 			int i1 = tile.progress;
-			this.drawTexturedModalRect(k + 118, l + 10 + i1, 176, i1, 16, 48);
+			drawTexturedModalRect(k + 118, l + 10 + i1, 176, i1, 16, 48);
 		}
-
+		if (tile.getStackInSlot(1) == null)
+			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 43, 54);
+		if (tile.getStackInSlot(2) == null)
+			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 116, 54);
 	}
 
 	private void renderSlot(IIcon icon, int iconX, int iconY) {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glColor4f(1f, 1f, 1f, 0.2f);
-		mc.renderEngine.bindTexture(TextureMap.locationItemsTexture);
+		mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
 		drawTexturedModelRectFromIcon(guiLeft + iconX, guiTop + iconY, icon, 16, 16);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
@@ -79,7 +74,7 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if (tile.lifeDepleted == 1)
+		if (tile.lifeDepleted)
 			playerSent.closeScreen();
 	}
 }

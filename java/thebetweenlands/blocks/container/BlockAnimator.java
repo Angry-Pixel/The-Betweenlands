@@ -92,7 +92,7 @@ public class BlockAnimator extends BlockContainer {
 				animator.decrStackSize(0, 1);
 				animator.itemsConsumed = 0;
 			}
-			animator.lifeDepleted = 0;	
+			animator.lifeDepleted = false;	
 		}
 
 		return true;
