@@ -33,10 +33,11 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 	private static final ModelAnimator model = new ModelAnimator();
 	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/animator.png");
 	public static TileEntityAnimatorRenderer instance;
-
-	private float crystalVelocity = 0.0F;
+	private RenderManager renderManager;
+	private double viewRot;
 
 	public TileEntityAnimatorRenderer() {
+		renderManager = RenderManager.instance;
 	}
 
 	@Override
@@ -66,12 +67,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		TileEntityAnimator te = (TileEntityAnimator) tileEntity;
 		Random rand = new Random();
 		ArrayList<Vector3d> points = new ArrayList<Vector3d>();
-
-		this.crystalVelocity -= 0.1F;
-		if (this.crystalVelocity <= 0.0F) {
-			this.crystalVelocity = 0.0F;
-		}
-
+		viewRot = 180D + Math.toDegrees(Math.atan2(renderManager.viewerPosX - te.xCoord - 0.5D, renderManager.viewerPosZ - te.zCoord - 0.5D));
 		int meta = te.getBlockMetadata();
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
@@ -122,7 +118,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 0.43D, z + 0.5D);
 			GL11.glScaled(0.18D, 0.18D, 0.18D);
-			GL11.glRotatef(te.crystalRotation, 0, 1, 0);
+			GL11.glRotated(viewRot, 0, 1, 0);
 			ItemRenderHelper.renderItem(new ItemStack(BLItemRegistry.lifeCrystal), 0);
 			GL11.glPopMatrix();
 		}
@@ -131,11 +127,14 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		if (te.getStackInSlot(0) != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
-			GL11.glRotatef(-te.crystalRotation, 0, 1, 0);
-			if (te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer)
+			
+			if (te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) {
 				GL11.glTranslated(0.0D, -0.5D, 0.0D);
+				GL11.glRotated(viewRot +180, 0, 1, 0);
+			}
 			if (!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) && te.getStackInSlot(0) != null) {
 				GL11.glScaled(0.3D, 0.3D, 0.3D);
+				GL11.glRotated(viewRot, 0, 1, 0);
 				ItemRenderHelper.renderItem(te.getStackInSlot(0), 0);
 			} else {
 				GL11.glScaled(0.5D, 0.5D, 0.5D);
@@ -147,7 +146,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 				if (entity != null) {
 					entity.setRotationYawHead(0F);
 					entity.rotationPitch = 0F;
-					RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 1F);
+					RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 0F);
 				}
 			}
 			GL11.glPopMatrix();

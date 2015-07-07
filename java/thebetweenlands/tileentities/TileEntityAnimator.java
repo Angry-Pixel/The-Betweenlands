@@ -1,6 +1,5 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
@@ -22,8 +21,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	private int prevStackSize = 0;
 	private Item prevItem;
 	public int progress, life, itemsConsumed = 0, itemCount = 4;
-	public float crystalVelocity = 0.0F;
-	public float crystalRotation = 0.0F;
 	public boolean lifeDepleted = false;
 
 	public TileEntityAnimator() {
@@ -32,62 +29,81 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) {
-			crystalVelocity -= Math.signum(crystalVelocity) * 0.05F;
-			crystalRotation += crystalVelocity;
-			if (crystalRotation >= 360.0F)
-				crystalRotation -= 360.0F;
-			else if (crystalRotation <= 360.0F)
-				crystalRotation += 360.0F;
-			if (Math.abs(crystalVelocity) <= 1.0F && getWorldObj().rand.nextInt(15) == 0)
-				crystalVelocity = worldObj.rand.nextFloat() * 18.0F - 9.0F;
-		} else {
-			if (inventory[1] != null && inventory[1].getItem() == BLItemRegistry.lifeCrystal)
-				life = 4 - inventory[1].getItemDamage();
-			if (inventory[0] != null && inventory[1] != null && inventory[1].getItem() == BLItemRegistry.lifeCrystal && inventory[2] != null && inventory[2].getItem() == BLItemRegistry.materialsBL && inventory[2].getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && itemsConsumed < itemCount && (inventory[0].getItem().equals(Items.spawn_egg) || inventory[0].getItem().equals(BLItemRegistry.scroll) || inventory[0].getItem().equals(BLItemRegistry.spawnEggs))) {
+		if(worldObj.isRemote)
+			return;
+		if (isCrystalInslot())
+			life = 4 - getCrystalPower();
+		if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && itemsConsumed < itemCount && isValidFocalItem()) {
+			if (isFocalItemSpawnEgg() && life >= 4 || !isFocalItemSpawnEgg() && life >= 1) {
 				++progress;
 				if (progress >= 44) {
 					progress = 0;
 					decrStackSize(2, 1);
 					itemsConsumed++;
-					if (inventory[0] == null || inventory[1] == null || inventory[2] == null || itemsConsumed >= itemCount)
+					if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2) || itemsConsumed >= itemCount)
 						progress = 0;
 				}
 			}
-			if (inventory[2] != null && !lifeDepleted) {
-				if (inventory[0] == null || inventory[1] == null) {
-					ItemStack stack2 = inventory[2].copy();
-					stack2.stackSize += itemsConsumed;
-					setInventorySlotContents(2, stack2);
-					progress = 0;
-					itemsConsumed = 0;
-				}
-			}
-			if (itemsConsumed >= itemCount && inventory[0] != null && inventory[1] != null && !lifeDepleted) {
-				if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
-					setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(worldObj.rand, items)).getItem(worldObj.rand));
-					inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
-				} else if (inventory[0].getItem() instanceof ItemMonsterPlacer)
-					inventory[1].setItemDamage(4);
-				else
-					inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
-				if (inventory[1].getItemDamage() >= 4)
-					decrStackSize(1, 1);
-				lifeDepleted = true;
+		}
+		if (isSlotInUse(2) && !lifeDepleted) {
+			if (!isSlotInUse(0) || !isSlotInUse(1)) {
+				ItemStack stack2 = inventory[2].copy();
+				stack2.stackSize += itemsConsumed;
+				setInventorySlotContents(2, stack2);
+				progress = 0;
+				itemsConsumed = 0;
 			}
 		}
-		if (prevStackSize != (inventory[0] != null ? inventory[0].stackSize : 0))
+		if (itemsConsumed >= itemCount && isSlotInUse(0) && isSlotInUse(1) && !lifeDepleted) {
+			if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
+				setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(worldObj.rand, items)).getItem(worldObj.rand));
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+			} else if (inventory[0].getItem() instanceof ItemMonsterPlacer)
+				inventory[1].setItemDamage(4);
+			else
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+			if (inventory[1].getItemDamage() >= 4)
+				decrStackSize(1, 1);
+			lifeDepleted = true;
+		}
+		if (prevStackSize != (isSlotInUse(0) ? inventory[0].stackSize : 0))
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		if (prevItem != (inventory[0] != null ? inventory[0].getItem() : null))
+		if (prevItem != (isSlotInUse(0) ? inventory[0].getItem() : null))
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		prevItem = inventory[0] != null ? inventory[0].getItem() : null;
-		prevStackSize = inventory[0] != null ? inventory[0].stackSize : 0;
+		prevItem = isSlotInUse(0) ? inventory[0].getItem() : null;
+		prevStackSize = isSlotInUse(0) ? inventory[0].stackSize : 0;
 		updateContainingBlockInfo();
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
+	}
+
+	public boolean isCrystalInslot() {
+		return isSlotInUse(1) && inventory[1].getItem() == BLItemRegistry.lifeCrystal;
+	}
+
+	public int getCrystalPower() {
+		if(isCrystalInslot())
+			return inventory[1].getItemDamage();
+		return 0;
+	}
+
+	public boolean isSulfurInslot() {
+		return isSlotInUse(2) && inventory[2].getItem() == BLItemRegistry.materialsBL && inventory[2].getItemDamage() == EnumMaterialsBL.SULFUR.ordinal();
+	}
+
+	public boolean isSlotInUse(int slot) {
+		return inventory[slot] != null;
+	}
+
+	public boolean isValidFocalItem() {
+		return inventory[0].getItem() instanceof ItemMonsterPlacer ? true : inventory[0].getItem().equals(BLItemRegistry.scroll) ? true : false;
+	}
+	
+	public boolean isFocalItemSpawnEgg() {
+		return inventory[0].getItem() instanceof ItemMonsterPlacer;
 	}
 
 	public void sendGUIData(ContainerAnimator animator, ICrafting craft) {
@@ -137,7 +153,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		nbt.setInteger("life", life);
 		nbt.setInteger("progress", progress);
 		nbt.setBoolean("lifeDepleted", lifeDepleted);
-		if(inventory[0] != null) {
+		if(isSlotInUse(0)) {
 			NBTTagCompound itemStackCompound = inventory[0].writeToNBT(new NBTTagCompound());
 			nbt.setTag("outputItem", itemStackCompound);
 		} else
