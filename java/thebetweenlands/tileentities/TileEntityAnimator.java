@@ -20,7 +20,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD), 20), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 30), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 40) };
 	private int prevStackSize = 0;
 	private Item prevItem;
-	public int progress, life, itemsConsumed = 0, itemCount = 4;
+	public int progress, life, itemsConsumed = 0, itemCount = 16;
 	public boolean lifeDepleted = false;
 
 	public TileEntityAnimator() {
@@ -36,7 +36,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && itemsConsumed < itemCount && isValidFocalItem()) {
 			if (isFocalItemSpawnEgg() && life >= 4 || !isFocalItemSpawnEgg() && life >= 1) {
 				++progress;
-				if (progress >= 44) {
+				if (progress >= 40) {
 					progress = 0;
 					decrStackSize(2, 1);
 					itemsConsumed++;

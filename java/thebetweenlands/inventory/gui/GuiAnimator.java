@@ -48,12 +48,12 @@ public class GuiAnimator extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 		if (tile.getStackInSlot(1) != null) {
-			int i1 = 48 - tile.life * 12;
-			this.drawTexturedModalRect(k + 45, l + 10 + i1, 176, i1, 16, 48);
+			int i1 = 40 - tile.life * 10;
+			this.drawTexturedModalRect(k + 48, l + 10 + i1, 179 , 3 + i1, 6, 40);
 		}
 		if (tile.progress > 0) {
 			int i1 = tile.progress;
-			drawTexturedModalRect(k + 118, l + 10 + i1, 176, i1, 16, 48);
+			drawTexturedModalRect(k + 121, l + 10 + i1, 179, 3 + i1, 6, 40);
 		}
 		if (tile.getStackInSlot(1) == null)
 			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 43, 54);
