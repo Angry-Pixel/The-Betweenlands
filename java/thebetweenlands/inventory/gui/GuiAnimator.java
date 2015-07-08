@@ -26,7 +26,8 @@ public class GuiAnimator extends GuiContainer {
 		super(new ContainerAnimator(player.inventory, tile));
 		this.tile = tile;
 		allowUserInput = false;
-		ySize = 168;
+		xSize = 174;
+		ySize = 164;
 		playerSent = player;
 	}
 
@@ -49,16 +50,25 @@ public class GuiAnimator extends GuiContainer {
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 		if (tile.getStackInSlot(1) != null) {
 			int i1 = 40 - tile.life * 10;
-			this.drawTexturedModalRect(k + 48, l + 10 + i1, 179 , 3 + i1, 6, 40);
+			this.drawTexturedModalRect(k + 39, l + 8 + i1, 175, 2 + i1, 6, 42);
 		}
 		if (tile.progress > 0) {
 			int i1 = tile.progress;
-			drawTexturedModalRect(k + 121, l + 10 + i1, 179, 3 + i1, 6, 40);
+			drawTexturedModalRect(k + 129, l + 8 + i1, 175, 2 + i1, 6, 42);
+			if (tile.itemsConsumed <= 16) {
+				int i2 = tile.itemsConsumed;
+				drawTexturedModalRect(k + 51, l + 65, 182, 18, i2 * 2, 2);
+				drawTexturedModalRect(k + 123 - i2 * 2, l + 65, 254 - i2 * 2, 18, i2 * 2, 2);
+			}
+			if (tile.itemsConsumed > 16 && tile.itemsConsumed <= 32) {
+				int i2 = tile.itemsConsumed;
+				drawTexturedModalRect(k + 51, l + 65 - i2 + 16, 182, 18 - i2 + 16, 72, 2 + i2 - 16);
+			}
 		}
 		if (tile.getStackInSlot(1) == null)
-			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 43, 54);
+			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 34, 57);
 		if (tile.getStackInSlot(2) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 116, 54);
+			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 124, 57);
 	}
 
 	private void renderSlot(IIcon icon, int iconX, int iconY) {

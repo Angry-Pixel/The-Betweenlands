@@ -25,15 +25,15 @@ public class ContainerAnimator extends Container {
 		int i = (numRows - 4) * 18;
 		animator = tile;
 
-		addSlotToContainer(new SlotSizeRestriction(tile, 0, 80, 24, 1));
-		addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 43, 54, new ItemStack(BLItemRegistry.lifeCrystal), 1));
-		addSlotToContainer(new SlotRestriction(tile, 2, 116, 54, new ItemStack(BLItemRegistry.materialsBL, 1, EnumMaterialsBL.SULFUR.ordinal()), 64));
+		addSlotToContainer(new SlotSizeRestriction(tile, 0, 79, 23, 1));
+		addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 34, 57, new ItemStack(BLItemRegistry.lifeCrystal), 1));
+		addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(BLItemRegistry.materialsBL, 1, EnumMaterialsBL.SULFUR.ordinal()), 64));
 
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 9; k++)
-				addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 120 + j * 18 + i));
+				addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 7 + k * 18, 119 + j * 18 + i));
 		for (int j = 0; j < 9; j++)
-			addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 178 + i));
+			addSlotToContainer(new Slot(playerInventory, j, 7 + j * 18, 177 + i));
 	}
 
 	@Override
