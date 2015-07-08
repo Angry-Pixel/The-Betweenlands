@@ -62,8 +62,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 				inventory[1].setItemDamage(4);
 			else
 				inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
-			if (inventory[1].getItemDamage() >= 4)
-				decrStackSize(1, 1);
 			lifeDepleted = true;
 		}
 		if (prevStackSize != (isSlotInUse(0) ? inventory[0].stackSize : 0))
