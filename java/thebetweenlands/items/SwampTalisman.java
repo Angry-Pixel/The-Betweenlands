@@ -71,14 +71,16 @@ public class SwampTalisman
 			if (!player.canPlayerEdit(x, y, z, meta, is))
 				return false;
 			else {
-				Block block = world.getBlock(x, y, z);
-				if (block instanceof BlockSapling) {
-					world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-					player.setLocationAndAngles(x + 0.5D, y + 2D, z + 0.5D, player.rotationYaw, player.rotationPitch);
-                    new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z);
+				if (is.getItem().getDamage(is) == 0) {
+					Block block = world.getBlock(x, y, z);
+					if (block instanceof BlockSapling) {
+						world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+						player.setLocationAndAngles(x + 0.5D, y + 2D, z + 0.5D, player.rotationYaw, player.rotationPitch);
+						new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z);
+					}
+					is.damageItem(1, player);
+					return true;
 				}
-				is.damageItem(1, player);
-				return true;
 			}
 		}
 		return false;

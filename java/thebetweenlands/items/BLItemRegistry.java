@@ -8,6 +8,9 @@ import net.minecraft.item.*;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.items.loot.ItemExplorerHat;
+import thebetweenlands.items.loot.ItemRingOfPower;
+import thebetweenlands.items.loot.ItemVoodooDoll;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -124,6 +127,12 @@ public class BLItemRegistry {
     public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
     public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);
     public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(ModCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
+
+    //LOOT
+    public static final Item voodooDoll = new ItemVoodooDoll();
+    public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorerHat");
+    public static final Item ringOfPower = new ItemRingOfPower();
+
     public static void init() {
         initCreativeTabs();
         registerItems();
@@ -134,9 +143,9 @@ public class BLItemRegistry {
         ModCreativeTabs.items.setTab(swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, swampKelp, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal);
-        ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest);
+        ModCreativeTabs.specials.setTab(testItem, spawnEggs, angryPebble, scroll, soundTest, voodooDoll, ringOfPower);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
-        ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow);
+        ModCreativeTabs.gears.setTab(lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat);
         ModCreativeTabs.plants.setTab(middleFruitSeeds);
     }
 

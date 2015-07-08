@@ -16,6 +16,7 @@ import thebetweenlands.command.server.CommandTickSpeed;
 import thebetweenlands.commands.CommandToggleEvent;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
+import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.player.*;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -147,6 +148,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
+		MinecraftForge.EVENT_BUS.register(new PowerRingHandler());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
