@@ -66,7 +66,7 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return 36000;
+		return 100000;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 
 		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
 			float power = maxUseDuration / 10.0F;
-			power = (power * power + power * 2.0F) / 3.0F;
+			power = (power * power + power * 2.0F) / 2.0F;
 
 			power *= (DecayableItemHelper.getModifier(stack) - 0.5F) * 2 + 0.15F;
 
@@ -97,7 +97,7 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 			if (power > 1.0F)
 				power = 1.0F;
 
-			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power);
+			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power * 2.0f);
 			if (!world.isRemote) {
 				if (poisonedAnglerToothArrow)
 					entityarrow.getDataWatcher().updateObject(17, 1);

@@ -37,7 +37,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	private Item arrows;
 	private int ticksInGround;
 	private int ticksInAir;
-	private double damage = 1.0D;
+	private double damage = 2.0D;
 	private int knockbackStrength;
 	public boolean isOctineArrow;
 	public boolean isPoisonedAnglerToothArrow;
