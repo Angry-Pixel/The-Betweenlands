@@ -77,8 +77,6 @@ public class DebugHandler {
 		SLEEP_PER_TICK_FIELD = sleepPerTickField;
 	}
 
-	private static Minecraft mc = Minecraft.getMinecraft();
-
 	public String worldFolderName = ".debug_world";
 
 	public String worldName = "Debug World";
@@ -105,6 +103,7 @@ public class DebugHandler {
 		if (!ConfigHandler.DEBUG || !Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			return;
 		}
+		Minecraft mc = Minecraft.getMinecraft();
 		if (mc.theWorld != null) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
 				fullBright = !fullBright;
@@ -154,10 +153,10 @@ public class DebugHandler {
 
 	private void saveAndLogImage(int glTextureId, String fileName, String name) {
 		File outFile = saveImage(glTextureId, fileName);
-        ChatComponentText chatComponent = new ChatComponentText("Saved " + name);
+		ChatComponentText chatComponent = new ChatComponentText("Saved " + name);
 		chatComponent.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, outFile.getAbsolutePath()));
-        chatComponent.getChatStyle().setUnderlined(true);
-		mc.ingameGUI.getChatGUI().printChatMessage(chatComponent);
+		chatComponent.getChatStyle().setUnderlined(true);
+		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage(chatComponent);
 	}
 
 	private File saveImage(int glTextureId, String file) {
@@ -191,6 +190,7 @@ public class DebugHandler {
 		if (!ConfigHandler.DEBUG || event.phase == TickEvent.Phase.START) {
 			return;
 		}
+		Minecraft mc = Minecraft.getMinecraft();
 		if (mc.thePlayer != null) {
 			if (fastFlight) {
 				mc.thePlayer.capabilities.setFlySpeed(1.0f);
@@ -215,6 +215,7 @@ public class DebugHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
+		Minecraft mc = Minecraft.getMinecraft();
 		if (ConfigHandler.DEBUG && !mc.gameSettings.showDebugInfo) {
 			mc.fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(mc.thePlayer), 2, 10, 0xFFFFFFFF);
@@ -280,7 +281,7 @@ public class DebugHandler {
 
 	public static void onMinecraftFinishedStarting() {
 		if (ConfigHandler.DEBUG && ConfigHandler.DEBUG_MENU_ON_START) {
-			mc.displayGuiScreen(new GuiDebugMenu());
+			Minecraft.getMinecraft().displayGuiScreen(new GuiDebugMenu());
 		}
 	}
 
