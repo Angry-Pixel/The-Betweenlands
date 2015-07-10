@@ -9,5 +9,6 @@ public class ItemRingOfPower extends Item {
     public ItemRingOfPower() {
         this.maxStackSize = 1;
         this.setUnlocalizedName("thebetweenlands.ringOfPower");
+        setTextureName("thebetweenlands:ringOfPower");
     }
 }
