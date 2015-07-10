@@ -20,12 +20,16 @@ import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityBush;
+import thebetweenlands.tileentities.TileEntityCauldron;
+import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
@@ -53,6 +57,10 @@ public class CommonProxy
         registerTileEntity(TileEntityBush.class, "weedWoodBush");
         registerTileEntity(TileEntityAnimator.class, "animator");
         registerTileEntity(TileEntityPurifier.class, "purifier");
+        registerTileEntity(TileEntityCompostBin.class, "compostBin");
+        registerTileEntity(TileEntityAlembic.class, "alembic");
+        registerTileEntity(TileEntityCauldron.class, "cauldron");
+        registerTileEntity(TileEntityPestleAndMortar.class, "pestleAndMortar");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
