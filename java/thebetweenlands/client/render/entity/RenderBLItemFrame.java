@@ -77,7 +77,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
         this.renderBlocks.clearOverrideBlockTexture();
         this.renderBlocks.unlockBlockBounds();
         GL11.glPopMatrix();
-        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.icon);
+        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.getIcon(0, 0));
         GL11.glPushMatrix();
         this.renderBlocks.overrideBlockBounds(0.0D, (double) (0.5F - f2), (double) (0.5F - f2), (double) (f + 1.0E-4F), (double) (f + 0.5F - f2), (double) (0.5F + f2));
         this.renderBlocks.renderBlockAsItem(block, 0, 1.0F);
@@ -114,7 +114,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
         this.renderBlocks.clearOverrideBlockTexture();
         this.renderBlocks.unlockBlockBounds();
         GL11.glPopMatrix();
-        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.icon);
+        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.getIcon(0, 0));
         GL11.glPushMatrix();
         this.renderBlocks.overrideBlockBounds(0.0D, (double)(0.5F - f2), (double)(0.5F - f2), (double)(f + 1.0E-4F), (double)(f + 0.5F - f2), (double)(0.5F + f2));
         this.renderBlocks.renderBlockAsItem(block, 0, 1.0F);

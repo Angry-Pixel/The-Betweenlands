@@ -8,6 +8,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
@@ -167,7 +168,9 @@ public class BLBlockRegistry {
     public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
     // WOOD
-    public static final BlockWeedWoodPlanks weedwoodPlanks = new BlockWeedWoodPlanks();
+    public static final Block weedwoodPlanks = new BlockGenericPlanks("weedwoodPlanks", Material.wood);
+    public static final Block rubberTreePlanks = new BlockGenericPlanks("rubberTreePlanks", Material.wood);
+    public static final Block purpleRainPlanks = new BlockGenericPlanks("purpleRainPlanks", Material.wood);
 
     // DOUBLE PLANTS
     public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F) {
@@ -295,15 +298,13 @@ public class BLBlockRegistry {
     public static final Block dungeonWall = new BlockBLGenericDeco("dungeonWall", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
     public static final BlockTemplePillar templePillar = new BlockTemplePillar();
     public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
-    public static final Block rubberTreePlanks = new BlockBLGenericDeco("rubberTreePlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
-    public static final Block purpleRainPlanks = new BlockBLGenericDeco("purpleRainPlanks", Material.wood).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeWood);
     public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
     public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
     public static final Block deepWaterCoralBlock = new BlockBLGenericDeco("deepWaterCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
     public static final BlockRubberTap rubberTap = new BlockRubberTap();
 
     public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");
-    ;
+
     public static final Block blockWoodChipPath = new BlockWoodChipPath();
     public static final BlockWalkway blockWalkWay = new BlockWalkway();
     public static final Block blockTotem = new BlockTotem();
@@ -434,6 +435,14 @@ public class BLBlockRegistry {
 
     private static void registerProperties() {
         //for fire etc
+    	Blocks.fire.setFireInfo(weedwoodPlanks, 5, 20);
+    	Blocks.fire.setFireInfo(rubberTreePlanks, 5, 20);
+    	Blocks.fire.setFireInfo(purpleRainPlanks, 5, 20);
+
+    	weedwoodPlanks.setHarvestLevel("axe", 0);
+    	rubberTreePlanks.setHarvestLevel("axe", 0);
+    	purpleRainPlanks.setHarvestLevel("axe", 0);
+
         aquaMiddleGemOre.setHarvestLevel("shovel", 0);
         crimsonMiddleGemOre.setHarvestLevel("shovel", 0);
         greenMiddleGemOre.setHarvestLevel("shovel", 0);
