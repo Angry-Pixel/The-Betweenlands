@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -13,6 +14,8 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterRootRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
 import java.util.Random;
 
@@ -59,7 +62,27 @@ public class BlockRootUW extends BlockSwampWater {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		this.checkAndDropBlock(world, x, y, z);
+		this.checkAndDropBlock(world, x, y, z);			
+	}
+	
+	@Override
+	public int getDamageValue(World world, int x, int y, int z) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+	}
+
+	@Override
+	public int quantityDropped(Random rnd) {
+        return 1;
+    }
+	
+	@Override
+	public int damageDropped(int p_149692_1_) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+    }
+	
+	@Override
+	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItem();
 	}
 
     @Override
