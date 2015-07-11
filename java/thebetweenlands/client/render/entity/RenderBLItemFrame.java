@@ -5,14 +5,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureCompass;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.RenderItemFrame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,9 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.MapData;
+
 import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.EntityBLItemFrame;
 
@@ -37,7 +41,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
 
     @Override
     public void updateIcons(IIconRegister iconRegister) {
-        this.icon = iconRegister.registerIcon("thebetweenlands:weedwoodItemframe_background");
+        this.icon = iconRegister.registerIcon("thebetweenlands:weedwoodItemFrameBackground");
     }
 
     public void renderItemFrame(EntityBLItemFrame entity, double x, double y, double z, float yaw, float tick) {
@@ -61,12 +65,11 @@ public class RenderBLItemFrame extends RenderItemFrame {
         this.func_147914_a(entity, x + (double) ((float) Direction.offsetX[entity.hangingDirection] * 0.3F), y - 0.25D, z + (double) ((float) Direction.offsetZ[entity.hangingDirection] * 0.3F));
     }
 
-
     private void renderEntity(EntityBLItemFrame entityBLItemFrame) {
         GL11.glPushMatrix();
         GL11.glRotatef(entityBLItemFrame.rotationYaw, 0.0F, 1.0F, 0.0F);
         this.renderManager.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        Block block = Blocks.planks;
+        Block block = BLBlockRegistry.weedwoodPlanks;
         float f = 0.0625F;
         float f1 = 1.0F;
         float f2 = f1 / 2.0F;
@@ -77,7 +80,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
         this.renderBlocks.clearOverrideBlockTexture();
         this.renderBlocks.unlockBlockBounds();
         GL11.glPopMatrix();
-        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.icon);
+        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.getIcon(0, 0));
         GL11.glPushMatrix();
         this.renderBlocks.overrideBlockBounds(0.0D, (double) (0.5F - f2), (double) (0.5F - f2), (double) (f + 1.0E-4F), (double) (f + 0.5F - f2), (double) (0.5F + f2));
         this.renderBlocks.renderBlockAsItem(block, 0, 1.0F);
@@ -103,7 +106,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
         GL11.glPushMatrix();
         GL11.glRotatef(entityBLItemFrame.rotationYaw, 0.0F, 1.0F, 0.0F);
         this.renderManager.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-        Block block = Blocks.planks;
+        Block block = BLBlockRegistry.weedwoodPlanks;
         float f = 0.0625F;
         float f1 = 0.75F;
         float f2 = f1 / 2.0F;
@@ -114,7 +117,7 @@ public class RenderBLItemFrame extends RenderItemFrame {
         this.renderBlocks.clearOverrideBlockTexture();
         this.renderBlocks.unlockBlockBounds();
         GL11.glPopMatrix();
-        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.icon);
+        this.renderBlocks.setOverrideBlockTexture(BLBlockRegistry.weedwoodPlanks.getIcon(0, 0));
         GL11.glPushMatrix();
         this.renderBlocks.overrideBlockBounds(0.0D, (double)(0.5F - f2), (double)(0.5F - f2), (double)(f + 1.0E-4F), (double)(f + 0.5F - f2), (double)(0.5F + f2));
         this.renderBlocks.renderBlockAsItem(block, 0, 1.0F);
@@ -280,6 +283,6 @@ public class RenderBLItemFrame extends RenderItemFrame {
 
     @Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        return mapBackgroundTextures;
+        return null;
     }
 }
