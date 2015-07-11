@@ -63,6 +63,12 @@ tile.thebetweenlands.octineBlockPressurePlate.name=Octine Pressure Plate
 tile.thebetweenlands.weedwoodLever.name=Weedwood Lever
 tile.thebetweenlands.mudFlowerPot.name=Mud Brick Flower Pot
 tile.thebetweenlands.weedwoodPlanksPressurePlate.name=Weedwood Pressure Plate
+tile.thebetweenlands.compostBin.name=Compost Bin
+tile.thebetweenlands.pestleAndMortar.name=Pestle and Mortar
+tile.thebetweenlands.alembic.name=Alembic
+tile.thebetweenlands.cauldron.name=Octine Cauldron
+
+
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -149,6 +155,8 @@ tile.thebetweenlands.limestoneBricks.name=Limestone Bricks
 tile.thebetweenlands.limestoneTiles.name=Limestone Tiles
 tile.thebetweenlands.chiseledLimestone.name=Chiseled Limestone
 tile.thebetweenlands.polishedLimestone.name=Polished Limestone
+tile.thebetweenlands.dentrothyst_0.name=Green Dentothryst
+tile.thebetweenlands.dentrothyst_1.name=Orange Dentothryst
 
 tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
 tile.thebetweenlands.walkway.name=Weedwood Walkway
@@ -177,6 +185,7 @@ tile.thebetweenlands.limestoneBricksSlab.name=Limestone Brick Slab
 tile.thebetweenlands.smoothBetweenstoneSlab.name=Smooth Betweenstone Slab
 tile.thebetweenlands.solidTarSlab.name=Solid Tar Slab
 tile.thebetweenlands.templeBrickSlab.name=Temple Brick Slab
+tile.thebetweenlands.thatchSlab.name=Thatch Slab
 tile.thebetweenlands.limestoneBrickWall.name=Limestone Brick Wall
 tile.thebetweenlands.limestoneBrickStairs.name=Limestone Brick Stairs
 tile.thebetweenlands.betweenstoneBrickStairs.name=Betweenstone Brick Stairs
@@ -310,6 +319,7 @@ item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 
 item.thebetweenlands.sapBall.name=Ball of Sap
 item.thebetweenlands.rottenFood.name=Rotten Food
+item.thebetweenlands.tangledRoot.name=Tangled Root
 
 item.thebetweenlands.anglerMeatRaw.name=Raw Angler Meat
 item.thebetweenlands.anglerMeatCooked.name=Angler Meat Steak
@@ -384,6 +394,11 @@ item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
 item.thebetweenlands.driedSwampReedDust.name=Dried Swamp Reed Dust
 item.thebetweenlands.mandrakeSeeds.name=Mandrake Seeds
 item.thebetweenlands.mudFlowerPotItem.name=Mud Brick Flower Pot
+item.thebetweenlands.weedwoodItemFrame.name=Weedwood Item Frame
+
+item.thebetweenlands.explorerHat.name=Explorer's Hat
+item.thebetweenlands.voodooDoll.name=Voodoo Doll
+item.thebetweenlands.ringOfPower.name=Ring Of Power
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
@@ -427,8 +442,8 @@ decay.2=Moderately corroded
 decay.3=Very corroded
 decay.4=Extremely corroded
 decay.5=Completely corroded
-arrow.caution=Use with caution
-arrow.stunning=Stunningly good
+arrow.caution=Use with caution!
+arrow.stunning=Causes paralysis
 
 # Commands
 commands.tickspeed.success=Set tickspeed to %s ticks per second
