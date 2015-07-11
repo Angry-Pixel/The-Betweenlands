@@ -266,4 +266,16 @@ public class AdvancedModelRenderer extends ModelRenderer {
 	public RotationOrder getRotationOrder() {
 		return rotationOrder;
 	}
+
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
+	}
+
+	public void setScaleZ(float scaleZ) {
+		this.scaleZ = scaleZ;
+	}
 }
