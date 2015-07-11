@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -11,11 +12,11 @@ import thebetweenlands.entities.mobs.EntitySwampHag;
 @SideOnly(Side.CLIENT)
 public class ModelSwampHag extends MowzieModelBase {
     MowzieModelRenderer body_base;
-    MowzieModelRenderer neck;
-    MowzieModelRenderer body_top;
+    AdvancedModelRenderer neck;
+    AdvancedModelRenderer body_top;
     MowzieModelRenderer toadstool1;
     MowzieModelRenderer mushroomstem;
-    MowzieModelRenderer armright;
+    AdvancedModelRenderer armright;
     MowzieModelRenderer legright1;
     MowzieModelRenderer legleft1;
     MowzieModelRenderer body_inner;
@@ -78,7 +79,7 @@ public class ModelSwampHag extends MowzieModelBase {
         body_inner = new MowzieModelRenderer(this, 42, 44);
         body_inner.setRotationPoint(0.0F, 0.0F, 0.0F);
         body_inner.addBox(-4.0F, -1.5F, -0.5F, 8, 9, 5, 0.0F);
-        neck = new MowzieModelRenderer(this, 70, 0);
+        neck = new AdvancedModelRenderer(this, 70, 0);
         neck.setRotationPoint(-0.7F, -7.4F, 0.0F);
         neck.addBox(-2.0F, -4.0F, -2.0F, 4, 5, 4, 0.0F);
         setRotation(neck, 0.8196066167365371F, 0.045553093477052F, -0.045553093477052F);
@@ -89,7 +90,7 @@ public class ModelSwampHag extends MowzieModelBase {
         toadstool2.setRotationPoint(0.0F, -3.0F, 0.0F);
         toadstool2.addBox(-2.5F, 0.0F, -3.0F, 6, 1, 3, 0.0F);
         setRotation(toadstool2, 0.0F, -0.22759093446006054F, 0.0F);
-        body_top = new MowzieModelRenderer(this, 0, 17);
+        body_top = new AdvancedModelRenderer(this, 0, 17);
         body_top.setRotationPoint(0.0F, 0.0F, 0.0F);
         body_top.addBox(-6.0F, -8.0F, -2.0F, 12, 8, 8, 0.0F);
         setRotation(body_top, 0.18203784098300857F, 0.136659280431156F, -0.091106186954104F);
@@ -116,7 +117,7 @@ public class ModelSwampHag extends MowzieModelBase {
         head1.setRotationPoint(0.0F, -2.0F, 0.5F);
         head1.addBox(-4.0F, -6.0F, -8.5F, 8, 6, 8, 0.0F);
         setRotation(head1, -0.9560913642424937F, 0.045553093477052F, 0.045553093477052F);
-        armright = new MowzieModelRenderer(this, 42, 0);
+        armright = new AdvancedModelRenderer(this, 42, 0);
         armright.setRotationPoint(-7.0F, -6.0F, 2.0F);
         armright.addBox(-0.5F, -1.0F, -1.5F, 2, 16, 3, 0.0F);
         legright1 = new MowzieModelRenderer(this, 42, 20);
@@ -215,7 +216,7 @@ public class ModelSwampHag extends MowzieModelBase {
 		head1.rotateAngleX = rotationPitch / (180F / (float)Math.PI) - 0.8196066167365371F;
 		head1.rotateAngleZ = rotationPitch / (180F / (float)Math.PI)  + 0.045553093477052F;
 		if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
-			armright.rotateAngleX += -((float) Math.PI / 2F);
+			armright.rotateAngleX += -((float) Math.PI / 2.5F);
 		}
 //		else {
 //			armright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAngle;
@@ -261,5 +262,21 @@ public class ModelSwampHag extends MowzieModelBase {
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
 
         //Idle animations
+        body_top.setScaleX((float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        body_top.setScaleY((float) (1 + 0.08 * Math.sin(hag.ticksExisted * 0.07)));
+        body_top.setScaleZ((float) (1 + 0.08 * Math.sin(hag.ticksExisted * 0.07)));
+
+        neck.setScaleX(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        neck.setScaleY(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        neck.setScaleZ(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+
+        armright.setScaleX(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        armright.setScaleY(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        armright.setScaleZ(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+
+        walk(body_top, 0.07f, 0.05f, false, 1, 0, hag.ticksExisted, 1);
+        walk(neck, 0.07f, 0.05f, false, 0.5f, 0, hag.ticksExisted, 1);
+        walk(head1, 0.07f, 0.05f, false, 0f, 0, hag.ticksExisted, 1);
+        walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, hag.ticksExisted, 1);
     }
 }

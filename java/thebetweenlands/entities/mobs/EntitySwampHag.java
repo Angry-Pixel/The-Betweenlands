@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -131,7 +132,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 			jawFloat = animationTalk.swing(0.4F, 1.2F, false);
 		super.onLivingUpdate();	
 	}
-	
+
 	public void setShouldJawMove(boolean jawState) {
 		dataWatcher.updateObject(20, (byte) (jawState ? 1 : 0));
 		if (jawState)
@@ -169,5 +170,10 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		}
 		return super.attackEntityFrom(source, damage);
 	}
-	
+
+	@Override
+	public boolean attackEntityAsMob(Entity p_70652_1_) {
+		attackTick = 0;
+		return super.attackEntityAsMob(p_70652_1_);
+	}
 }

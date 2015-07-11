@@ -1,26 +1,24 @@
 package thebetweenlands.client.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TextureOffset;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
-
 import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.utils.MathUtils;
 import thebetweenlands.utils.RotationOrder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
  * @author Paul Fulham
  *
  */
-public class AdvancedModelRenderer extends ModelRenderer {
+public class AdvancedModelRenderer extends MowzieModelRenderer {
 	protected int textureOffsetX;
 	protected int textureOffsetY;
 
