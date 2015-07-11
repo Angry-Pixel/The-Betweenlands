@@ -1,6 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
@@ -169,11 +168,5 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 				}
 		}
 		return super.attackEntityFrom(source, damage);
-	}
-
-	@Override
-	public boolean attackEntityAsMob(Entity p_70652_1_) {
-		attackTick = 0;
-		return super.attackEntityAsMob(p_70652_1_);
 	}
 }
