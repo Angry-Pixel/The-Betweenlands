@@ -34,6 +34,7 @@ import thebetweenlands.network.packets.PacketRevengeTarget;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.network.packets.PacketTickspeed;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.recipes.CompostRegistry;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.PotionHelper;
@@ -138,6 +139,8 @@ public class TheBetweenlands
 		PotionHelper.initPotionArray();
 		PotionHelper.registerPotions();
 		System.out.println("boogaaa" + PotionHelper.petrify.id);
+
+		CompostRegistry.registerCompostItems();
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);

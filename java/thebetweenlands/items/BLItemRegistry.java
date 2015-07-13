@@ -130,6 +130,7 @@ public class BLItemRegistry {
     public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
     public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);
     public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(ModCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
+    public static final Item compost = new ItemCompost().setUnlocalizedName("thebetweenlands.compost");
 
     //LOOT
     public static final Item voodooDoll = new ItemVoodooDoll();
