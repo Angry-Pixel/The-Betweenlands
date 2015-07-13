@@ -18,6 +18,7 @@ public class RecipeHandler {
 		registerRecipes();
 		registerSmelting();
 		registerPurifierRecipes();
+		registerPestleAndMortarRecipes();
 	}
 
 	private static void registerRecipes() {
@@ -242,4 +243,10 @@ public class RecipeHandler {
 		PurifierRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GREEN_MIDDLE_GEM), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
 		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.farmedDirt, 1, 0), new ItemStack(BLBlockRegistry.swampDirt));
 	}
+
+	private static void registerPestleAndMortarRecipes() {
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED_DUST));
+		PestleAndMortarRecipe.addRecipe(new ItemStack(BLBlockRegistry.weedwoodBark), ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK));	
+	}
+
 }
