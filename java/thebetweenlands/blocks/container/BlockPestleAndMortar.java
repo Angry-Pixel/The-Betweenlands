@@ -1,9 +1,12 @@
 package thebetweenlands.blocks.container;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
@@ -59,10 +62,9 @@ public class BlockPestleAndMortar extends BlockContainer {
 		}
 		return true;
 	}
-/* TODO actually make this have an inventory
+
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int meta) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		IInventory tile = (IInventory) world.getTileEntity(x, y, z);
 		if (tile != null)
 			for (int i = 0; i < tile.getSizeInventory(); i++) {
@@ -81,7 +83,7 @@ public class BlockPestleAndMortar extends BlockContainer {
 			}
 		super.breakBlock(world, x, y, z, block, meta);
 	}
-*/
+
 	@Override
 	public int getRenderType() {
 		return - 1;
