@@ -9,8 +9,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,8 +55,7 @@ public class BlockPestleAndMortar extends BlockContainer {
 			}
 			
 			if (tile != null)
-				System.out.println("Gui opens here :P");
-				//player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PESTLE_AND_MORTAR, world, x, y, z);
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PESTLE_AND_MORTAR, world, x, y, z);
 		}
 		return true;
 	}

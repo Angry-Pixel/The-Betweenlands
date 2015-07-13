@@ -11,6 +11,7 @@ import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
+import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
 import thebetweenlands.inventory.gui.GuiAnimator;
@@ -18,6 +19,7 @@ import thebetweenlands.inventory.gui.GuiBLCrafting;
 import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
+import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityAlembic;
@@ -46,6 +48,7 @@ public class CommonProxy
     public static final int GUI_BL_DUAL_FURNACE = 5;
     public static final int GUI_ANIMATOR = 6;
     public static final int GUI_PURIFIER = 7;
+    public static final int GUI_PESTLE_AND_MORTAR = 8;
 
     public void registerTileEntities() {
         registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -125,12 +128,17 @@ public class CommonProxy
 				return new ContainerPurifier(player.inventory, (TileEntityPurifier) tileentity);
 		}
 
+		else if (ID == GUI_PESTLE_AND_MORTAR) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPestleAndMortar)
+				return new ContainerPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+		}
+
         return null;
     }
 
     @Override
     //FIXME TODO use a switch block! PLEASE
-    //FIXME TODO PLEASE shove this into the ClientProxy!
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if( ID == GUI_DRUID_ALTAR ) {
             TileEntity tileentity = world.getTileEntity(x, y, z);
@@ -173,6 +181,12 @@ public class CommonProxy
 			TileEntity tileentity = world.getTileEntity(x, y, z);
 			if (tileentity instanceof TileEntityPurifier)
 				return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
+		}
+
+		else if (ID == GUI_PESTLE_AND_MORTAR) {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPestleAndMortar)
+				return new GuiPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
 		}
 
         return null;
