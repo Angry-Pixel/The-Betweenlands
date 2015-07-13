@@ -245,8 +245,8 @@ public class RecipeHandler {
 	}
 
 	private static void registerPestleAndMortarRecipes() {
-		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED_DUST));
-		PestleAndMortarRecipe.addRecipe(new ItemStack(BLBlockRegistry.weedwoodBark), ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK));	
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED_DUST), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
 	}
 
 }

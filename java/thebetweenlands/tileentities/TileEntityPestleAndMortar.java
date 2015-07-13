@@ -30,8 +30,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			return;
 		ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
 		if (pestleInstalled() && !outputIsFull()) {
-			if (output != null && inventory[2] == null || output != null
-					&& inventory[2] != null && inventory[2].isItemEqual(output)) {
+			if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				progress++;
 				if (progress > 84) {
 					if (inventory[0] != null)
@@ -59,7 +58,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	}
 
 	public boolean pestleInstalled() {
-		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.materialsBL && getStackInSlot(0).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
+		return getStackInSlot(1) != null && getStackInSlot(1).getItem() == BLItemRegistry.materialsBL && getStackInSlot(1).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(1).stackSize >= 1;
 	}
 
 	private boolean outputIsFull() {
