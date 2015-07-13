@@ -25,7 +25,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		if (worldObj.isRemote)
 			return;
 		++progress;
-		if (progress >= 84)
+		if (progress > 84)
 			progress = 0;
 	}
 	
