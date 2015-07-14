@@ -10,6 +10,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.items.BLItemRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,6 +70,17 @@ public class BlockBLLog extends BlockLog {
 		else
 			iconTop = iconRegister.registerIcon(getTextureName()+"Top");
 	}
+	
+	  @Override
+	  public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+	   if (!world.isRemote)
+	    if ("rottenWeedwoodBark".equals(type) && world.rand.nextInt(3) == 0) {
+	     EntityTermite entity = new EntityTermite(world);
+	     entity.setLocationAndAngles(x + 0.5D, y, z + 0.5D, 0.0F, 0.0F);
+	     world.spawnEntityInWorld(entity);
+	    }
+	   super.onBlockDestroyedByPlayer(world, x, y, z, meta);
+	  }	  
 
 	public String getType(){
 		return type;
