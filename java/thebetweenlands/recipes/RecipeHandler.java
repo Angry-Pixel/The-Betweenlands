@@ -251,8 +251,8 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
 	}
 
-	public static void registerCompostItems(){
-		CompostRecipe.addRecipe(10, 12000,Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
+	private static void registerCompostItems(){
+		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
 	}
 
 }

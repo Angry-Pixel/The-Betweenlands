@@ -1,16 +1,7 @@
 package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityBloodSnail;
-import thebetweenlands.entities.mobs.EntityDragonFly;
-import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityLeech;
-import thebetweenlands.entities.mobs.EntityLurker;
-import thebetweenlands.entities.mobs.EntityMireSnail;
-import thebetweenlands.entities.mobs.EntitySiltCrab;
-import thebetweenlands.entities.mobs.EntitySwampHag;
-import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorPatchyIslands;
@@ -49,6 +40,7 @@ extends BiomeGenBaseBetweenlands
     	spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
     	spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
     	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
-    	spawnableMonsterList.add(new SpawnListEntry(EntitySiltCrab.class, 30, 1, 2));
+    	spawnableMonsterList.add(new SpawnListEntry(EntitySiltCrab.class, 50, 1, 2));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
 	}
 }

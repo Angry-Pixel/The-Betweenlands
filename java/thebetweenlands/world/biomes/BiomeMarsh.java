@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -42,6 +43,7 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 20, 1, 1));
 		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
 	}
 
 	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};

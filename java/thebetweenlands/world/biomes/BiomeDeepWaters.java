@@ -1,11 +1,7 @@
 package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityLurker;
-import thebetweenlands.entities.mobs.EntitySwampHag;
-import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorDeepWaters;
@@ -42,5 +38,6 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 5, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
 	}
 }
