@@ -54,12 +54,12 @@ public class BlockCompostBin extends BlockContainer {
 
 			if (player.getCurrentEquippedItem() != null) {
 				ItemStack stack = player.getCurrentEquippedItem();
-				int compostAmount = CompostRecipe.hasCompostValue(stack);
-				if(compostAmount > 0) {
-					if(tile.addItemToBin(stack, compostAmount, true) == 1) {
-						tile.addItemToBin(stack, compostAmount, false);
+				CompostRecipe compostRecipe = CompostRecipe.hasCompostValue(stack);
+				if(compostRecipe != null) {
+					if(tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true) == 1) {
+						tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, false);
 						player.inventory.consumeInventoryItem(stack.getItem());
-					} else if(tile.addItemToBin(stack, compostAmount, true) == -1){
+					} else if(tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true) == -1){
 						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
 					} else {
 						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.max.items")));

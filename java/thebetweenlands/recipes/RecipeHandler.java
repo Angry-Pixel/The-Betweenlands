@@ -252,7 +252,7 @@ public class RecipeHandler {
 	}
 
 	public static void registerCompostItems(){
-		CompostRecipe.addRecipe(10, Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
+		CompostRecipe.addRecipe(10, 12000,Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
 	}
 
 }
