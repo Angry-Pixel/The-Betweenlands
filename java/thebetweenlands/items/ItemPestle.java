@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemPestle extends Item { //Place Holder Code
+public class ItemPestle extends Item {
 	@SideOnly(Side.CLIENT)
 	private IIcon iconStatic, iconAnimated;
 
@@ -22,7 +22,7 @@ public class ItemPestle extends Item { //Place Holder Code
 		maxStackSize = 1;
 		setUnlocalizedName("thebetweenlands.pestle");
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
