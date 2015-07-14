@@ -40,10 +40,10 @@ public class ContainerPestleAndMortar extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 			if (slotIndex > 2) {
-				if (stack1.getItem() == BLItemRegistry.lifeCrystal)
+				if (stack1.getItem() == BLItemRegistry.pestle)
 					if (!mergeItemStack(stack1, 1, 2, true))
 						return null;
-				if (stack1.getItem() != BLItemRegistry.lifeCrystal)
+				if (stack1.getItem() != BLItemRegistry.pestle)
 					if (!mergeItemStack(stack1, 0, 1, true))
 						return null;
 			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))

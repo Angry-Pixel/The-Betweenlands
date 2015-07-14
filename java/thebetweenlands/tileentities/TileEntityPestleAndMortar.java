@@ -8,7 +8,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.recipes.PestleAndMortarRecipe;
 
 public class TileEntityPestleAndMortar extends TileEntityBasicInventory { 
@@ -19,8 +18,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	}
 	
 	@Override
-    public boolean canUpdate()
-    {
+    public boolean canUpdate() {
         return true;
     }
 
@@ -32,6 +30,8 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		if (pestleInstalled() && !outputIsFull()) {
 			if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				progress++;
+				if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
+					getStackInSlot(1).getTagCompound().setBoolean("active", true);
 				if (progress > 84) {
 					if (inventory[0] != null)
 						if (--inventory[0].stackSize <= 0)
@@ -40,16 +40,17 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 						inventory[2] = output.copy();
 					else if (inventory[2].isItemEqual(output))
 						inventory[2].stackSize += output.stackSize;
-
+					inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
 					progress = 0;
+					if(inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+						getStackInSlot(1).getTagCompound().setBoolean("active", false);
 					markDirty();
 				}
 			}
 		}
 
-		if(progress > 0) {
+		if(progress > 0)
 			markDirty();
-		}
 
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
 			progress = 0;
@@ -58,7 +59,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	}
 
 	public boolean pestleInstalled() {
-		return getStackInSlot(1) != null && getStackInSlot(1).getItem() == BLItemRegistry.materialsBL && getStackInSlot(1).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(1).stackSize >= 1;
+		return getStackInSlot(1) != null && getStackInSlot(1).getItem() == BLItemRegistry.pestle;
 	}
 
 	private boolean outputIsFull() {
@@ -76,7 +77,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
