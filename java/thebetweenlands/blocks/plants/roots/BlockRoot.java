@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
@@ -49,9 +51,24 @@ public class BlockRoot extends Block {
 		this.checkAndDropBlock(world, x, y, z);
 	}
 	
-    @Override
+	@Override
+	public int getDamageValue(World world, int x, int y, int z) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+	}
+
+	@Override
+	public int quantityDropped(Random rnd) {
+        return 1;
+    }
+	
+	@Override
+	public int damageDropped(int p_149692_1_) {
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+    }
+	
+	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return null;
+		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItem();
 	}
     
 	protected void checkAndDropBlock(World world, int x, int y, int z) {

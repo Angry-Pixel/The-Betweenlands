@@ -3,14 +3,16 @@ package thebetweenlands.blocks.container;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.recipes.CompostRegistry;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,10 +50,27 @@ public class BlockCompostBin extends BlockContainer {
 				return false;
 
 			if (player.getCurrentEquippedItem() != null) {
-				//place holder
-				return true;
+				ItemStack stack = player.getCurrentEquippedItem();
+				int compostAmount = CompostRegistry.hasCompostValue(stack);
+				if(compostAmount > 0) {
+					if(tile.addItemToBin(stack, compostAmount, true)) {
+						tile.addItemToBin(stack, compostAmount, false);
+						player.inventory.consumeInventoryItem(stack.getItem());
+					} else {
+						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
+					}
+				}else {
+					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.cannot")));
+				}
+			} else {
+				int compostAmount = tile.compostedAmount;
+				if(compostAmount >= 25){
+					world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, new ItemStack(BLItemRegistry.compost)));
+					tile.removeCompost(25);
+				} else {
+					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.enough")));
+				}
 			}
-			System.out.println("Compost Bin Right Clicked");
 		}
 		return true;
 	}
@@ -97,4 +116,6 @@ public class BlockCompostBin extends BlockContainer {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityCompostBin();
 	}
+
+
 }
