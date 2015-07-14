@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.container;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -7,15 +9,16 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.recipes.CompostRegistry;
+import thebetweenlands.recipes.CompostRecipe;
 import thebetweenlands.tileentities.TileEntityCompostBin;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCompostBin extends BlockContainer {
 
@@ -51,13 +54,15 @@ public class BlockCompostBin extends BlockContainer {
 
 			if (player.getCurrentEquippedItem() != null) {
 				ItemStack stack = player.getCurrentEquippedItem();
-				int compostAmount = CompostRegistry.hasCompostValue(stack);
+				int compostAmount = CompostRecipe.hasCompostValue(stack);
 				if(compostAmount > 0) {
-					if(tile.addItemToBin(stack, compostAmount, true)) {
+					if(tile.addItemToBin(stack, compostAmount, true) == 1) {
 						tile.addItemToBin(stack, compostAmount, false);
 						player.inventory.consumeInventoryItem(stack.getItem());
-					} else {
+					} else if(tile.addItemToBin(stack, compostAmount, true) == -1){
 						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
+					} else {
+						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.max.items")));
 					}
 				}else {
 					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.cannot")));

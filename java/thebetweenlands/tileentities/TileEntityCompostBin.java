@@ -7,9 +7,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityCompostBin extends TileEntity {
 
-    private ItemStack[] inventory = new ItemStack[10];
-    private int[] processes = new int[10];
-    private int[] compostAmount = new int[10];
+    private int macItems = 10;
+    private ItemStack[] inventory = new ItemStack[macItems];
+    private int[] processes = new int[macItems];
+    private int[] compostAmount = new int[macItems];
 
     public int totalCompostAmount, compostedAmount, maxCompostAmount = 100;
     int processTime = 120;
@@ -19,8 +20,6 @@ public class TileEntityCompostBin extends TileEntity {
         if (worldObj.isRemote) return;
         for (int i = 0; i < inventory.length; i++) {
             if(inventory[i] != null) {
-                System.out.println("process: " +  processes[i]);
-                System.out.println("total compost: " +  totalCompostAmount);
                 if (processes[i] >= processTime) {
                     compostedAmount += compostAmount[i];
                     inventory[i] = null;
@@ -41,7 +40,7 @@ public class TileEntityCompostBin extends TileEntity {
         return false;
     }
 
-    public boolean addItemToBin(ItemStack stack, int compostAmount, boolean doSimulate) {
+    public int addItemToBin(ItemStack stack, int compostAmount, boolean doSimulate) {
         if (totalCompostAmount + compostAmount <= maxCompostAmount) {
             if(!doSimulate) {
                 for (int i = 0; i < this.inventory.length; i++) {
@@ -50,11 +49,12 @@ public class TileEntityCompostBin extends TileEntity {
                         this.compostAmount[i] = compostAmount;
                         processes[i] = 0;
                         totalCompostAmount += compostAmount;
-                        return true;
+                        return 1;
                     }
                 }
+                return 0;
             }
-            return true;
+            return 1;
         } else if(totalCompostAmount <= maxCompostAmount){
             if(!doSimulate){
                 compostAmount = maxCompostAmount - totalCompostAmount;
@@ -64,13 +64,14 @@ public class TileEntityCompostBin extends TileEntity {
                         this.compostAmount[i] = compostAmount;
                         processes[i] = 0;
                         totalCompostAmount += compostAmount;
-                        return true;
+                        return 1;
                     }
                 }
+                return 0;
             }
-            return true;
+            return 1;
         }
-        return false;
+        return -1;
     }
 
 
