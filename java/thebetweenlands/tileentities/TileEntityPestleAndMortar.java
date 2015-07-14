@@ -53,6 +53,8 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			markDirty();
 
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
+			if(inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+				getStackInSlot(1).getTagCompound().setBoolean("active", false);
 			progress = 0;
 			markDirty();
 		}

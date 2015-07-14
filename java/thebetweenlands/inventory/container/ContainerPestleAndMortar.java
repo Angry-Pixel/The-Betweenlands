@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.inventory.slot.SlotPestle;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import cpw.mods.fml.relauncher.Side;
@@ -22,7 +23,7 @@ public class ContainerPestleAndMortar extends Container {
 		pestleAndMortar = tile;
 
 		addSlotToContainer(new Slot(tile, 0, 35, 23));
-		addSlotToContainer(new Slot(tile, 1, 79, 23));
+		addSlotToContainer(new SlotPestle(tile, 1, 79, 23));
 		addSlotToContainer(new Slot(tile, 2, 123, 23));
 
 		for (int j = 0; j < 3; j++)
@@ -39,6 +40,12 @@ public class ContainerPestleAndMortar extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
+			if (slotIndex == 1) {
+				if (stack1.getItem() == BLItemRegistry.pestle) {
+					if(stack1.getTagCompound().getBoolean("active"))
+						stack1.getTagCompound().setBoolean("active", false);
+				}
+			}
 			if (slotIndex > 2) {
 				if (stack1.getItem() == BLItemRegistry.pestle)
 					if (!mergeItemStack(stack1, 1, 2, true))
@@ -46,11 +53,12 @@ public class ContainerPestleAndMortar extends Container {
 				if (stack1.getItem() != BLItemRegistry.pestle)
 					if (!mergeItemStack(stack1, 0, 1, true))
 						return null;
-			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
+			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false)) 
 				return null;
 			if (stack1.stackSize == 0)
 				slot.putStack(null);
 			else
+				
 				slot.onSlotChanged();
 			if (stack1.stackSize != stack.stackSize)
 				slot.onPickupFromSlot(player, stack1);
