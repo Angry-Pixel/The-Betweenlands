@@ -2,6 +2,7 @@ package thebetweenlands.recipes;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -19,6 +20,7 @@ public class RecipeHandler {
 		registerSmelting();
 		registerPurifierRecipes();
 		registerPestleAndMortarRecipes();
+		registerCompostItems();
 	}
 
 	private static void registerRecipes() {
@@ -247,6 +249,10 @@ public class RecipeHandler {
 	private static void registerPestleAndMortarRecipes() {
 		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED_DUST), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
 		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
+	}
+
+	public static void registerCompostItems(){
+		CompostRecipe.addRecipe(10, 12000,Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
 	}
 
 }
