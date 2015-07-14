@@ -43,7 +43,7 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 20, 1, 1));
 		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 
 	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};

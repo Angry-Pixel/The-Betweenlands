@@ -37,7 +37,7 @@ public class BiomeSwampLands
         spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 40, 2, 6));
         spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
         spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
-        spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
+        spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
     }
 
 	/*@Override

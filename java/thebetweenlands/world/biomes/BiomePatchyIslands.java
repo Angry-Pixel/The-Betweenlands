@@ -41,6 +41,6 @@ extends BiomeGenBaseBetweenlands
     	spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
     	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
     	spawnableMonsterList.add(new SpawnListEntry(EntitySiltCrab.class, 50, 1, 2));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 }

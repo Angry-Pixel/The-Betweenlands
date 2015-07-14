@@ -38,7 +38,7 @@ extends BiomeGenBaseBetweenlands
         spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 25, 2, 4));
         spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
     	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 20, 1, 2));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;
