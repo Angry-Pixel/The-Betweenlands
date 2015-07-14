@@ -274,7 +274,35 @@ public class RecipeHandler {
 			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
 		for (ItemStack stack:OreDictionary.getOres("listAllfruit"))
 			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("glowstone"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
 		CompostRecipe.addRecipe(100, 1, BLItemRegistry.testItem);
+		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.wallPlants));
+		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.wallPlants), 1);
+		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BLBlockRegistry.rottenWeedwoodBark));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.boneset));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.marshMallow));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.nettle));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.nettleFlowered));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.buttonBush));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.milkweed));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.copperIris));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.blueIris));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.waterFlower));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.marshHibiscus));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.pickerelWeed));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.yellow_flower));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.red_flower));
+		CompostRecipe.addRecipe(6, 12000, Item.getItemFromBlock(Blocks.cactus));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.brown_mushroom));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.red_mushroom));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling));
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 1);
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 2);
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 3);
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 4);
+		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 5);
+
 	}
 
 }
