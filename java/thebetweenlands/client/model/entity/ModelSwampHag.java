@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
@@ -206,7 +207,6 @@ public class ModelSwampHag extends MowzieModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-        setToInitPose();
 		EntitySwampHag hag = (EntitySwampHag) entity;
 
 		jaw.rotateAngleX = hag.jawFloat;
@@ -260,23 +260,30 @@ public class ModelSwampHag extends MowzieModelBase {
         flap(neck, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0.5f, 0.1f, limbSwing, limbSwingAngle);
         flap(head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAngle);
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
+    }
 
-        //Idle animations
-        body_top.setScaleX((float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
-        body_top.setScaleY((float) (1 + 0.08 * Math.sin(hag.ticksExisted * 0.07)));
-        body_top.setScaleZ((float) (1 + 0.08 * Math.sin(hag.ticksExisted * 0.07)));
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float p_78086_2_, float p_78086_3_, float partialRenderTicks) {
+        super.setLivingAnimations(entity, p_78086_2_, p_78086_3_, partialRenderTicks);
+        setToInitPose();
 
-        neck.setScaleX(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
-        neck.setScaleY(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
-        neck.setScaleZ(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        float frame = entity.ticksExisted + partialRenderTicks;
+        body_top.setScaleX((float) (1 + 0.08*Math.sin(frame * 0.07)));
+        body_top.setScaleY((float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        body_top.setScaleZ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
 
-        armright.setScaleX(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
-        armright.setScaleY(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
-        armright.setScaleZ(1/(float) (1 + 0.08*Math.sin(hag.ticksExisted * 0.07)));
+        neck.setScaleX(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        neck.setScaleY(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        neck.setScaleZ(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
 
-        walk(body_top, 0.07f, 0.05f, false, 1, 0, hag.ticksExisted, 1);
-        walk(neck, 0.07f, 0.05f, false, 0.5f, 0, hag.ticksExisted, 1);
-        walk(head1, 0.07f, 0.05f, false, 0f, 0, hag.ticksExisted, 1);
-        walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, hag.ticksExisted, 1);
+        armright.setScaleX(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        armright.setScaleY(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        armright.setScaleZ(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+
+        walk(body_top, 0.07f, 0.05f, false, 1, 0, frame, 1);
+        walk(neck, 0.07f, 0.05f, false, 0.5f, 0, frame, 1);
+        walk(head1, 0.07f, 0.05f, false, 0f, 0, frame, 1);
+        walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, frame, 1);
+        flap(armright, 0.07f, 0.1f, true, 0.5f, 0.15f, frame, 1);
     }
 }
