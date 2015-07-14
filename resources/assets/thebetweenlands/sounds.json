@@ -250,7 +250,6 @@
     "sounds": [
       "squish"
     ]
-
   },
   "lurkerLiving1": {
     "category": "hostile",
@@ -318,7 +317,42 @@
     "sounds": [
       "crabSnip"
     ]
-
+  },
+    "geckoLiving1": {
+    "category": "hostile",
+    "sounds": [
+      "geckoLiving1"
+    ]
+  },
+    "geckoLiving2": {
+    "category": "hostile",
+    "sounds": [
+      "geckoLiving2"
+    ]
+  },
+    "geckoLiving3": {
+    "category": "hostile",
+    "sounds": [
+      "geckoLiving3"
+    ]
+  },
+    "geckoLiving4": {
+    "category": "hostile",
+    "sounds": [
+      "geckoLiving4"
+    ]
+  },
+    "geckoHurt": {
+    "category": "hostile",
+    "sounds": [
+      "geckoHurt"
+    ]
+  },
+    "geckoDeath": {
+    "category": "hostile",
+    "sounds": [
+      "geckoDeath"
+    ]
   },
   "sorry": {
     "category": "player",

@@ -24,4 +24,20 @@ public class EntityGecko extends EntityCreature implements IEntityBL {
     public boolean isAIEnabled() {
         return true;
     }
+    
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:geckoLiving" + randomSound;
+	}
+
+	@Override
+	protected String getHurtSound() {
+		return "thebetweenlands:geckoHurt";
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:geckoDeath";
+	}
 }
