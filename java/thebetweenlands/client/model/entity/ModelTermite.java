@@ -41,7 +41,7 @@ public class ModelTermite extends MowzieModelBase {
     public MowzieModelRenderer legright_f2;
     public MowzieModelRenderer legright_m2;
     public MowzieModelRenderer legright_b2;
-    private MowzieModelRenderer[] tail = {leaf1b, leaf1, tail1, body4, body3, body2, body1};
+    private MowzieModelRenderer[] tail;
 
     public ModelTermite() {
         this.textureWidth = 128;
@@ -191,6 +191,8 @@ public class ModelTermite extends MowzieModelBase {
         
         parts = new MowzieModelRenderer[] {body_base, head, legleft_f1, legleft_m1, legleft_b1, legright_f1, legright_m1, legright_b1, body1, body2, body3, body4, tail1, leaf1, leaf1b, jawleft, jawright, jawmid, sensorleft1, sensorright1, leafcrane1, sensorleft1b, sensorright1b, leafcrane1b, legleft_f2, legleft_m2, legleft_b2, legright_f2, legright_m2, legright_b2};
         setInitPose();
+
+        tail = new MowzieModelRenderer[]{tail1, body4, body3, body2, body1};
     }
 
     @Override
