@@ -2,6 +2,7 @@ package thebetweenlands.items;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,13 +15,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemPestle extends Item { //Place Holder Code
 	@SideOnly(Side.CLIENT)
-	private IIcon iconAnimated;
+	private IIcon iconStatic, iconAnimated;
 
 	public ItemPestle() {
         setMaxDamage(128);
 		maxStackSize = 1;
 		setUnlocalizedName("thebetweenlands.pestle");
-		setTextureName("thebetweenlands:pestle");
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -29,21 +29,22 @@ public class ItemPestle extends Item { //Place Holder Code
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
 		list.add("Place Pestle in Mortar");
 	}
-/* TODO make this work
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
-		iconAnimated = reg.registerIcon(getIconString() + "Animated");
+		iconStatic = reg.registerIcon("thebetweenlands:pestle");
+		iconAnimated = reg.registerIcon("thebetweenlands:pestleAnimated");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int pass) {
+	public IIcon getIconIndex(ItemStack stack) {
 		if(hasTag(stack) && stack.getTagCompound().getBoolean("active"))
 			return iconAnimated;
-		return itemIcon;
+		return iconStatic;
 	}
-*/
+
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int tick, boolean map) {
 		if (!stack.hasTagCompound())
