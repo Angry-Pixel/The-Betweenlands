@@ -41,7 +41,7 @@ public class ModelTermite extends MowzieModelBase {
     public MowzieModelRenderer legright_f2;
     public MowzieModelRenderer legright_m2;
     public MowzieModelRenderer legright_b2;
-    private MowzieModelRenderer[] tail;
+    private MowzieModelRenderer[] tail = {leaf1b, leaf1, tail1, body4, body3, body2, body1};
 
     public ModelTermite() {
         this.textureWidth = 128;
@@ -79,7 +79,7 @@ public class ModelTermite extends MowzieModelBase {
         this.legleft_f2.addBox(-0.5F, 0.0F, -0.5F, 1, 6, 1, 0.0F);
         this.setRotateAngle(legleft_f2, 0.0F, 0.0F, 1.3658946726107624F);
         this.legleft_b1 = new MowzieModelRenderer(this, 60, 16);
-        this.legleft_b1.setRotationPoint(0F, 0F, 0F);
+        this.legleft_b1.setRotationPoint(2.5F, 20.0F, -2.5F);
         this.legleft_b1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legleft_b1, 0.8196066167365371F, 0.40980330836826856F, -1.8212510744560826F);
         this.legright_b2 = new MowzieModelRenderer(this, 75, 16);
@@ -119,7 +119,7 @@ public class ModelTermite extends MowzieModelBase {
         this.legright_f2.addBox(-0.5F, 0.0F, -0.5F, 1, 6, 1, 0.0F);
         this.setRotateAngle(legright_f2, 0.0F, 0.0F, -1.3658946726107624F);
         this.legleft_m1 = new MowzieModelRenderer(this, 60, 8);
-        this.legleft_m1.setRotationPoint(0F, 0F, 0F);
+        this.legleft_m1.setRotationPoint(2.5F, 20.1F, -3.5F);
         this.legleft_m1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legleft_m1, 0.18203784098300857F, 0.136659280431156F, -1.9123572614101867F);
         this.leafcrane1b = new MowzieModelRenderer(this, 37, 14);
@@ -131,7 +131,7 @@ public class ModelTermite extends MowzieModelBase {
         this.sensorright1b.addBox(-3.5F, 0.0F, -4.0F, 4, 0, 4, 0.0F);
         this.setRotateAngle(sensorright1b, 0.7285004297824331F, 0.0F, 0.0F);
         this.legright_f1 = new MowzieModelRenderer(this, 70, 0);
-        this.legright_f1.setRotationPoint(0F, 0F, 0F);
+        this.legright_f1.setRotationPoint(-2.5F, 20.0F, -4.5F);
         this.legright_f1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legright_f1, -0.7285004297824331F, 0.31869712141416456F, 1.6845917940249266F);
         this.sensorright1 = new MowzieModelRenderer(this, 36, 5);
@@ -151,11 +151,11 @@ public class ModelTermite extends MowzieModelBase {
         this.jawright.addBox(-2.0F, -0.5F, -3.0F, 2, 1, 4, 0.0F);
         this.setRotateAngle(jawright, -0.18203784098300857F, -0.22759093446006054F, -0.31869712141416456F);
         this.legright_b1 = new MowzieModelRenderer(this, 70, 16);
-        this.legright_b1.setRotationPoint(0F, 0F, 0F);
+        this.legright_b1.setRotationPoint(-2.5F, 20.0F, -2.5F);
         this.legright_b1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legright_b1, 0.8196066167365371F, -0.40980330836826856F, 1.8212510744560826F);
         this.legleft_f1 = new MowzieModelRenderer(this, 60, 0);
-        this.legleft_f1.setRotationPoint(0F, 0F, 0F);
+        this.legleft_f1.setRotationPoint(2.5F, 20.0F, -4.5F);
         this.legleft_f1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legleft_f1, -0.7285004297824331F, -0.31869712141416456F, -1.6845917940249266F);
         this.leaf1b = new MowzieModelRenderer(this, -4, 52);
@@ -163,7 +163,7 @@ public class ModelTermite extends MowzieModelBase {
         this.leaf1b.addBox(-2.5F, 0.0F, 0.0F, 5, 0, 4, 0.0F);
         this.setRotateAngle(leaf1b, 0.18203784098300857F, 0.0F, 0.0F);
         this.legright_m1 = new MowzieModelRenderer(this, 70, 8);
-        this.legright_m1.setRotationPoint(0F, 0F, 0F);
+        this.legright_m1.setRotationPoint(-2.5F, 20.1F, -3.5F);
         this.legright_m1.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
         this.setRotateAngle(legright_m1, 0.18203784098300857F, -0.136659280431156F, 1.9123572614101867F);
         this.head.addChild(this.sensorleft1);
@@ -188,11 +188,9 @@ public class ModelTermite extends MowzieModelBase {
         this.head.addChild(this.jawleft);
         this.head.addChild(this.jawright);
         this.leaf1.addChild(this.leaf1b);
-
+        
         parts = new MowzieModelRenderer[] {body_base, head, legleft_f1, legleft_m1, legleft_b1, legright_f1, legright_m1, legright_b1, body1, body2, body3, body4, tail1, leaf1, leaf1b, jawleft, jawright, jawmid, sensorleft1, sensorright1, leafcrane1, sensorleft1b, sensorright1b, leafcrane1b, legleft_f2, legleft_m2, legleft_b2, legright_f2, legright_m2, legright_b2};
         setInitPose();
-
-        tail = new MowzieModelRenderer[] {tail1, body4, body3, body2, body1};
     }
 
     @Override
@@ -219,21 +217,8 @@ public class ModelTermite extends MowzieModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        faceTarget(head, 1, f3, f4);
-
-        f = entity.ticksExisted;
-        f1 = 0.4f;
-
-        float globalSpeed = 1;
-        float globalDegree = 1;
-
-        //walk(legleft_f1, 1 * globalSpeed, 1f * globalDegree, false, 0, 0, f, f1);
-        swing(legleft_f1, 0.5f * globalSpeed, 1f * globalDegree, false, 0, 0, f, f1);
-        walk(legleft_m1, 1 * globalSpeed, 1f * globalDegree, false, 1, 0, f, f1);
-        walk(legleft_b1, 1 * globalSpeed, 1f * globalDegree, false, 2, 0, f, f1);
-
+    public void setRotationAngles(float p_78087_1_, float p_78087_2_, float p_78087_3_, float p_78087_4_, float p_78087_5_, float p_78087_6_, Entity p_78087_7_) {
+        super.setRotationAngles(p_78087_1_, p_78087_2_, p_78087_3_, p_78087_4_, p_78087_5_, p_78087_6_, p_78087_7_);
     }
 
     @Override
