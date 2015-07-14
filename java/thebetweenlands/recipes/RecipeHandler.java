@@ -252,7 +252,29 @@ public class RecipeHandler {
 	}
 
 	private static void registerCompostItems(){
-		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain));
+		for (ItemStack stack:OreDictionary.getOres("treeSapling"))
+			CompostRecipe.addRecipe(5, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("treeLeaves"))
+			CompostRecipe.addRecipe(5, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("foodMushroom"))
+			CompostRecipe.addRecipe(3, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("cropWheat"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("cropPotato"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("cropCarrot"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("listAllseed"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("listAllveggie"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("listAllgrain"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("listAllberry"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		for (ItemStack stack:OreDictionary.getOres("listAllfruit"))
+			CompostRecipe.addRecipe(2, 12000, stack.getItem(), stack.getItemDamage());
+		CompostRecipe.addRecipe(100, 1, BLItemRegistry.testItem);
 	}
 
 }
