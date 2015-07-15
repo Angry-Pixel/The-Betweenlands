@@ -1,13 +1,11 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.block.Block;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.recipes.PestleAndMortarRecipe;
@@ -34,9 +32,11 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				progress++;
 				if(progress == 1)
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:grind", 2F, 1F);
-				if(progress == 64 || progress == 84)
-					worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord, zCoord, Block.getIdFromBlock(BLBlockRegistry.weedwoodLeaves));
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:grind", 1F, 1F);
+				if(progress == 64 || progress == 84) {
+					worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.grass", 0.5F, 1F);
+					worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.stone", 1F, 1F);
+				}
 				if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
 					getStackInSlot(1).getTagCompound().setBoolean("active", true);
 				if (progress > 84) {
