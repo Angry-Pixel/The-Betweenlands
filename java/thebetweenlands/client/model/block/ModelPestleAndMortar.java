@@ -134,9 +134,12 @@ public class ModelPestleAndMortar extends ModelBase {
         mortarbottom_huehue.render(0.0625F);
         mortarpiece_l.render(0.0625F);
         groundwaste.render(0.0625F);
-        pestle1.render(0.0625F);
         mortarpiece_r.render(0.0625F);
         mortarpiece_f.render(0.0625F);
+    }
+
+    public void renderPestle() {
+    	pestle1.render(0.0625F);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

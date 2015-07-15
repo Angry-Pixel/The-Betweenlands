@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.container;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -15,6 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import cpw.mods.fml.relauncher.Side;
@@ -46,14 +49,18 @@ public class BlockPestleAndMortar extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityPestleAndMortar ) {
-			TileEntityPestleAndMortar tile = (TileEntityPestleAndMortar ) world.getTileEntity(x, y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityPestleAndMortar) {
+			TileEntityPestleAndMortar tile = (TileEntityPestleAndMortar) world.getTileEntity(x, y, z);
 
 			if (player.isSneaking())
 				return false;
 
-			if (player.getCurrentEquippedItem() != null) {
-				//place holder for pestle item
+			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.pestle) {
+				if(tile.getStackInSlot(1) == null) {
+					tile.setInventorySlotContents(1, player.getCurrentEquippedItem());
+					tile.hasPestle = true;
+					player.setCurrentItemOrArmor(0, null);
+				}
 				return true;
 			}
 			
@@ -82,6 +89,18 @@ public class BlockPestleAndMortar extends BlockContainer {
 				}
 			}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		TileEntityPestleAndMortar tile = (TileEntityPestleAndMortar) world.getTileEntity(x, y, z);
+		if (tile.progress > 0 && rand.nextInt(3) == 0) {
+			float f = x + 0.5F;
+			float f1 = y + 1.1F + rand.nextFloat() * 6.0F / 16.0F;
+			float f2 = z + 0.5F;
+			world.spawnParticle("happyVillager", f, f1, f2, 0.0D, 0.0D, 0.0D);
+		}
 	}
 
 	@Override

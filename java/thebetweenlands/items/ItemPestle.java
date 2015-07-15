@@ -28,6 +28,12 @@ public class ItemPestle extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
 		list.add("Place Pestle in Mortar");
+		list.add(Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "% Remaining: " + (getMaxDamage() - getDamage(stack)) +" more uses." );
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return false;
 	}
 
 	@Override
