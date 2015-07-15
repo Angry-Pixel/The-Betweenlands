@@ -407,6 +407,12 @@
     "sounds": [
       "purifier"
     ]
+  },
+  "grind": {
+    "category": "block",
+    "sounds": [
+      "grind"
+    ]
   },  
   "music.blDimension": {
     "category": "music",
