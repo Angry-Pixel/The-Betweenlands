@@ -43,9 +43,17 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 		if(mortar.hasPestle) {
 			//basic animation - don't know if anything fancier is needed tbh
 			GL11.glPushMatrix();
-			GL11.glRotatef(mortar.progress * 4.2857142857142857142857142857143F, 0.0F, 1F, 0F);
-			if(mortar.progress %6 == 0)
-				GL11.glTranslatef(0F, -0.02F, 0F);
+			float rise = (float)(mortar.progress -42F) * -0.03F;
+			if(mortar.progress <= 42)
+				GL11.glRotatef(mortar.progress * 4.2857142857142857142857142857143F * 2F, 0.0F, 1F, 0F);
+			if(mortar.progress > 42 && mortar.progress < 54)
+				GL11.glTranslatef(0F, rise, 0F);
+			if(mortar.progress >= 54 && mortar.progress < 64)
+				GL11.glTranslatef(0F, -0.63F - rise, 0F);
+			if(mortar.progress >= 64 && mortar.progress < 74)
+				GL11.glTranslatef(0F, 0.63F + rise, 0F);
+			if(mortar.progress >= 74 && mortar.progress < 84)
+				GL11.glTranslatef(0F, -1.23F - rise, 0F);
 			model.renderPestle();
 			GL11.glPopMatrix();
 		}
