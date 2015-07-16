@@ -133,7 +133,7 @@ public class ModelGecko extends MowzieModelBase {
         faceTarget(head, 1, f3, f4);
 
 //        f = entity.ticksExisted;
-//        f1 = 0.4f;
+        if (f1 > 0.4) f1 = 0.4f;
 
         float globalSpeed = 1f;
         float globalDegree = 1;
