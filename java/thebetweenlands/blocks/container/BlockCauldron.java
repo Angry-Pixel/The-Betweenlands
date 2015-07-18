@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.container;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -11,8 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.tileentities.TileEntityCauldron;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCauldron extends BlockContainer {
 
@@ -78,6 +83,31 @@ public class BlockCauldron extends BlockContainer {
 				}
 			}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if (world.getTileEntity(x, y, z) instanceof TileEntityCauldron) {
+			TileEntityCauldron cauldron = (TileEntityCauldron) world.getTileEntity(x, y, z);
+			if (cauldron.getWaterAmount() > 0) {
+				int amount = cauldron.waterTank.getFluidAmount();
+				int capacity = cauldron.waterTank.getCapacity();
+				float size = 1F / capacity * amount;
+				float xx = (float) x + 0.5F;
+				float yy = (float) (y + 0.35F + size * 0.5F);
+				float zz = (float) z + 0.5F;
+				float fixedOffset = 0.25F;
+				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
+				if(rand.nextInt(3) == 0) {
+					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+				}
+				TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+			}
+		}
 	}
 
 	@Override
