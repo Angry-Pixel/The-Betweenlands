@@ -1,11 +1,19 @@
 package thebetweenlands.client.render.tileentity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelCauldron;
 import thebetweenlands.tileentities.TileEntityCauldron;
 import cpw.mods.fml.relauncher.Side;
@@ -40,6 +48,77 @@ public class TileEntityCauldronRenderer extends TileEntitySpecialRenderer {
 				break;
 		}
 		model.render();
+		GL11.glPushMatrix();
+		GL11.glRotatef(cauldron.stirProgress * 4, 0.0F, 1F, 0F);
+		model.renderSpoon();
+		GL11.glPopMatrix();
+		GL11.glPopMatrix();
+		renderStirCount("Stir: " + cauldron.stirCount, x, y, z);
+		
+		int amount = cauldron.waterTank.getFluidAmount();
+		int capacity = cauldron.waterTank.getCapacity();
+		float size = 1F / capacity * amount;
+		if (amount >= 100) {
+			Tessellator tess = Tessellator.instance;
+			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
+			
+			GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(770, 771);
+			bindTexture(TextureMap.locationBlocksTexture);
+			float tx = (float) x + 0.0F;
+			float ty = (float) (y + 0.35F + size * 0.5F);
+			float tz = (float) z + 0.0F;
+			tess.addTranslation(tx, ty, tz);
+			tess.startDrawingQuads();
+			tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
+			tess.addVertexWithUV(0.1875, 0, 0.1875, waterIcon.getMinU(), waterIcon.getMinV());
+			tess.addVertexWithUV(0.1875, 0, 0.8125, waterIcon.getMinU(), waterIcon.getMaxV());
+			tess.addVertexWithUV(0.8125, 0, 0.8125, waterIcon.getMaxU(), waterIcon.getMaxV());
+			tess.addVertexWithUV(0.8125, 0, 0.1875, waterIcon.getMaxU(), waterIcon.getMinV());
+			tess.draw();
+			tess.addTranslation(-tx, -ty, -tz);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
+		}
+	}
+	
+	private void renderStirCount(String count, double x, double y, double z) {
+		float scale = 0.02666667F;
+		float height = 0.8F;
+
+		GL11.glPushMatrix();
+		GL11.glTranslated(x + 0.5F, y + height + 0.75F, z + 0.5F);
+		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(-RenderManager.instance.playerViewY, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(RenderManager.instance.playerViewX, 1.0F, 0.0F, 0.0F);
+		GL11.glScalef(-scale, -scale, scale);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(false);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		Tessellator tessellator = Tessellator.instance;
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+		tessellator.startDrawingQuads();
+		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
+		int width = fontrenderer.getStringWidth(count) / 2;
+		tessellator.setColorRGBA_F(0.0F, 0.0F, 0.0F, 0.25F);
+		tessellator.addVertex(-width - 1, -1, 0.0D);
+		tessellator.addVertex(-width - 1, 8, 0.0D);
+		tessellator.addVertex(width + 1, 8, 0.0D);
+		tessellator.addVertex(width + 1, -1, 0.0D);
+		tessellator.draw();
+
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, 553648127);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(true);
+		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, -1);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
 }

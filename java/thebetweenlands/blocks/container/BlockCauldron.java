@@ -1,34 +1,28 @@
 package thebetweenlands.blocks.container;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.tileentities.TileEntityCauldron;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCauldron extends BlockContainer {
 
 	public BlockCauldron() {
-		super(Material.rock);
+		super(Material.iron);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.cauldron");
 		setCreativeTab(ModCreativeTabs.blocks);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return BLBlockRegistry.betweenstone.getIcon(0, 0);
+		setBlockTextureName("thebetweenlands:octineBlock");
 	}
 
 	@Override
@@ -44,24 +38,29 @@ public class BlockCauldron extends BlockContainer {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityCauldron) {
 			TileEntityCauldron tile = (TileEntityCauldron) world.getTileEntity(x, y, z);
 
-			if (player.isSneaking())
-				return false;
-
-			if (player.getCurrentEquippedItem() != null) {
-				//place holder
+			if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
+				tile.stirProgress = 0;
 				return true;
 			}
-			
-			if (tile != null)
-				System.out.println("Cauldron Gui opens here :P");
-				//player.openGui(TheBetweenlands.instance, CommonProxy.GUI_CAULDRON, world, x, y, z);
+
+			if (player.getCurrentEquippedItem() != null) {
+				//Fluid filling
+				ItemStack oldItem = player.getCurrentEquippedItem();
+				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
+				world.markBlockForUpdate(x, y, z);
+				if (!player.capabilities.isCreativeMode)
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
+				if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+					return true;
+				
+				// TODO Items right clicked added to tile inventory slots 0 - 3 :P
+			}
 		}
 		return true;
 	}
-/* TODO actually make this have an inventory
+
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int meta) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		IInventory tile = (IInventory) world.getTileEntity(x, y, z);
 		if (tile != null)
 			for (int i = 0; i < tile.getSizeInventory(); i++) {
@@ -80,7 +79,7 @@ public class BlockCauldron extends BlockContainer {
 			}
 		super.breakBlock(world, x, y, z, block, meta);
 	}
-*/
+
 	@Override
 	public int getRenderType() {
 		return - 1;

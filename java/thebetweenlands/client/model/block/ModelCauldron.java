@@ -96,7 +96,6 @@ public class ModelCauldron extends ModelBase {
         cauldroncorner1.render(0.0625F);
         cauldronpiece2.render(0.0625F);
         leg2.render(0.0625F);
-        spoon_bottom.render(0.0625F);
         leg3.render(0.0625F);
         cauldronpiece3.render(0.0625F);
         cauldronpiece1.render(0.0625F);
@@ -105,6 +104,10 @@ public class ModelCauldron extends ModelBase {
         cauldronpiece4.render(0.0625F);
         leg1.render(0.0625F);
         cauldroncorner3.render(0.0625F);
+    }
+ 
+    public void renderSpoon() { 
+        spoon_bottom.render(0.0625F);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
