@@ -94,6 +94,12 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		return bucket;
 	}
 
+	private void extractFluids(FluidStack fluid) {
+		if (fluid.isFluidEqual(waterTank.getFluid()))
+			waterTank.drain(fluid.amount, true);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
 	public int getWaterAmount() {
 		return waterTank.getFluidAmount();
 	}
