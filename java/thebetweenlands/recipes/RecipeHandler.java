@@ -10,6 +10,8 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemMaterialsCrushed;
+import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
@@ -126,7 +128,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.deepWaterCoralBlock, 4), "xx", "xx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.hugeMushroomTop, 4), "xx", "xx", 'x',  BLItemRegistry.bulbCappedMushroomItem);
 		
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemMaterialsCrushed.createStack(EnumMaterialsCrushed.GROUND_WEEDWOOD_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 3), "##", "##", "##", '#', "plankWeedwood"));
@@ -251,8 +253,8 @@ public class RecipeHandler {
 	}
 
 	private static void registerPestleAndMortarRecipes() {
-		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED_DUST), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
-		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsCrushed.createStack(EnumMaterialsCrushed.GROUND_DRIED_SWAMP_REED), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsCrushed.createStack(EnumMaterialsCrushed.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
 	}
 
 	private static void registerCompostItems(){

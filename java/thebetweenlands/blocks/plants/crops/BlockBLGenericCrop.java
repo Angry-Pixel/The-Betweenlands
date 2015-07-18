@@ -18,6 +18,7 @@ import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -98,7 +99,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && !(meta >= 8)) {
-			if (stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.DRIED_SWAMP_REED_DUST.ordinal()) {
+			if (stack.getItem() == BLItemRegistry.materialCrushed && stack.getItemDamage() == EnumMaterialsCrushed.GROUND_DRIED_SWAMP_REED.ordinal()) {
 				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
 					if (!world.isRemote)
 						world.playAuxSFX(2005, x, y, z, 0);
