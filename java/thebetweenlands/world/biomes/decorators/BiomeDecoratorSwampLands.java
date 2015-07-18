@@ -22,11 +22,11 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 
 			helper.generateWeedwoodTree(60);
 
-			helper.generateWeedwoodBush(130);
+			helper.generateWeedwoodBush(70);
 			helper.generateRubberTree(50);
 			helper.generateSapTree(50);
-			helper.generateRoots(7.0D, 2);
-			helper.generateReeds(2000);
+			helper.generateRoots(10.0D, 2);
+			helper.generateReeds(1200);
 			helper.generateSwampPlant(80);
 			helper.generateVenusFlyTrap(10);
 			helper.generatePitcherPlant(20);
@@ -52,8 +52,10 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 								break;
 							}
 							Block cBlock = this.world.getBlock(px, py-yo, pz);
-							if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass) {
-								if(this.world.isAirBlock(px, py-yo+1, pz)) {
+							if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass ||
+									cBlock == BLBlockRegistry.swampDirt || cBlock == BLBlockRegistry.mud ||
+									cBlock == BLBlockRegistry.weedwoodLog) {
+								if(this.world.isAirBlock(px, py-yo+1, pz) && this.world.rand.nextInt(10) <= 5) {
 									this.world.setBlock(px, py-yo+1, pz, BLBlockRegistry.fallenLeaves);
 									break;
 								}

@@ -25,7 +25,9 @@ public class BiomeSwampLands
         this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
         this.setFillerBlockHeight((byte) 1);
         this.addFeature(new FlatLandNoiseFeature())
-                .addFeature(new PatchNoiseFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BLBlockRegistry.swampGrass))
+                .addFeature(new PatchNoiseFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BLBlockRegistry.swampGrass))
+                .addFeature(new PatchNoiseFeature(0.74D, 0.74D, BLBlockRegistry.swampDirt))
+                .addFeature(new PatchNoiseFeature(0.79D, 0.79D, BLBlockRegistry.mud))
                 .addFeature(new AlgaeNoiseFeature());
         this.waterColorMultiplier = 0x184220;
 

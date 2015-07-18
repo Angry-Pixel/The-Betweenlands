@@ -104,7 +104,9 @@ void main() {
         if(dist < radius) {
             if(u_lightColorsR[i] == -1 && u_lightColorsG[i] == -1 && u_lightColorsB[i] == -1) {
                 distortion = true;
-                distortionMultiplier += max(distortionMultiplier, 1.0F - pow(dist / radius, 4));
+				if(distortionMultiplier < 0.6F) {
+					distortionMultiplier += max(distortionMultiplier, 1.0F - pow(dist / radius, 4));
+				}
             } else {
                 color += vec4(u_lightColorsR[i], u_lightColorsG[i], u_lightColorsB[i], 0.0F) * (1.0F - dist / radius);
             }
