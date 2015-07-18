@@ -70,7 +70,7 @@ public class BlockPestleAndMortar extends BlockContainer {
 					world.setBlock(x, y+1, z, BLBlockRegistry.lifeCrystal);
 					int life = (int)Math.floor(TileEntityLifeCrystal.MAX_LIFE - (BLItemRegistry.lifeCrystal.getDamage(player.getCurrentEquippedItem()) / 4.0F * TileEntityLifeCrystal.MAX_LIFE));
 					BLBlockRegistry.lifeCrystal.setLife(world, x, y+1, z, life);
-					//player.setCurrentItemOrArmor(0, null);
+					player.setCurrentItemOrArmor(0, null);
 					return true;
 				}
 			}

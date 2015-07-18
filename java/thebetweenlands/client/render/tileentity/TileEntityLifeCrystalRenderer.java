@@ -25,9 +25,8 @@ public class TileEntityLifeCrystalRenderer extends TileEntitySpecialRenderer {
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 0.8D + Math.sin(System.nanoTime() / 1000000000.0F) / 8.0D, z + 0.5D);
-		GL11.glRotated(180, 1, 0, 0);
-		GL11.glRotated(-viewRot, 0, 1, 0);
+		GL11.glTranslated(x + 0.5D, y + 0.42D + Math.sin(System.nanoTime() / 1000000000.0F) / 8.0D, z + 0.5D);
+		GL11.glRotated(viewRot, 0, 1, 0);
 		GL11.glScaled(0.25, 0.25, 0.25);
 		GL11.glColor4f(1, 1, 1, 0.25F + (((TileEntityLifeCrystal)tile).getLife() / (float)TileEntityLifeCrystal.MAX_LIFE) / 2.0F);
 		ItemRenderHelper.renderItem(new ItemStack(BLItemRegistry.lifeCrystal, 1, life), 0);
