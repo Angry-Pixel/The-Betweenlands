@@ -356,6 +356,7 @@ public class BLBlockRegistry {
 
     // OTHER THINGS
     public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
+    public static final BlockLifeCrystal lifeCrystal = new BlockLifeCrystal();
 
     // SLABS
     public static final BlockBLSlab weedwoodPlankSlab = new BlockBLSlab(false, Material.wood, "weedwoodPlanks", null, "axe");

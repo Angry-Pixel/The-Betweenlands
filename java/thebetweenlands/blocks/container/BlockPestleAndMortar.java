@@ -19,6 +19,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.tileentities.TileEntityLifeCrystal;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -52,18 +53,28 @@ public class BlockPestleAndMortar extends BlockContainer {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityPestleAndMortar) {
 			TileEntityPestleAndMortar tile = (TileEntityPestleAndMortar) world.getTileEntity(x, y, z);
 
-			if (player.isSneaking())
+			if (player.isSneaking()) {
+				tile.manualGrinding = true;
 				return false;
-
-			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.pestle) {
-				if(tile.getStackInSlot(1) == null) {
-					tile.setInventorySlotContents(1, player.getCurrentEquippedItem());
-					tile.hasPestle = true;
-					player.setCurrentItemOrArmor(0, null);
-				}
-				return true;
 			}
-			
+
+			if (player.getCurrentEquippedItem() != null) {
+				if(player.getCurrentEquippedItem().getItem() == BLItemRegistry.pestle) {
+					if(tile.getStackInSlot(1) == null) {
+						tile.setInventorySlotContents(1, player.getCurrentEquippedItem());
+						tile.hasPestle = true;
+						player.setCurrentItemOrArmor(0, null);
+					}
+					return true;
+				} else if(hitY == 1.0F && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal && world.isAirBlock(x, y+1, z)) {
+					world.setBlock(x, y+1, z, BLBlockRegistry.lifeCrystal);
+					int life = (int)Math.floor(TileEntityLifeCrystal.MAX_LIFE - (BLItemRegistry.lifeCrystal.getDamage(player.getCurrentEquippedItem()) / 4.0F * TileEntityLifeCrystal.MAX_LIFE));
+					BLBlockRegistry.lifeCrystal.setLife(world, x, y+1, z, life);
+					//player.setCurrentItemOrArmor(0, null);
+					return true;
+				}
+			}
+
 			if (tile != null)
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PESTLE_AND_MORTAR, world, x, y, z);
 		}
