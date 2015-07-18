@@ -90,7 +90,7 @@ public class BlockCauldron extends BlockContainer {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityCauldron) {
 			TileEntityCauldron cauldron = (TileEntityCauldron) world.getTileEntity(x, y, z);
-			if (cauldron.getWaterAmount() > 0) {
+			if (cauldron.getWaterAmount() > 0  && cauldron.temp > 0) {
 				int amount = cauldron.waterTank.getFluidAmount();
 				int capacity = cauldron.waterTank.getCapacity();
 				float size = 1F / capacity * amount;
@@ -99,13 +99,17 @@ public class BlockCauldron extends BlockContainer {
 				float zz = (float) z + 0.5F;
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-				if(rand.nextInt(3) == 0) {
+				if(rand.nextInt((101 - cauldron.temp))/4 == 0) {
+					TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+					if (rand.nextInt(10) == 0 && cauldron.temp > 70)
+						world.playSound(xx, yy, zz, "liquid.lava", 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
+				}
+				if (cauldron.temp >= 100) {
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 				}
-				TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
 			}
 		}
 	}

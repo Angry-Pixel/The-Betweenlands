@@ -1,5 +1,6 @@
 package thebetweenlands.tileentities;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -19,6 +20,7 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 3);
 	public int stirProgress = 90;
 	public int stirCount;
+	public int temp;
 
 	public TileEntityCauldron() {
 		super(4, "pestleAndMortar");
@@ -42,6 +44,18 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		if (stirProgress < 90) {
 			stirProgress++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.fire && temp < 100 && getWaterAmount() > 0) {
+			if(worldObj.getWorldTime()%12 == 0) {
+				temp++;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+		}
+		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) != Blocks.fire && temp > 0) {
+			if(worldObj.getWorldTime()%6 == 0) {
+				temp--;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
 		}
 	}
 
@@ -118,6 +132,7 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("stirCount", stirCount);
+		nbt.setInteger("temp", temp);
 	}
 
 	@Override
@@ -126,6 +141,7 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		stirProgress = nbt.getInteger("stirProgress");
 		stirCount = nbt.getInteger("stirCount");
+		temp = nbt.getInteger("temp");
 	}
 
 	@Override
@@ -134,6 +150,7 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("stirCount", stirCount);
+		nbt.setInteger("temp", temp);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -142,6 +159,7 @@ public class TileEntityCauldron extends TileEntityBasicInventory implements IFlu
 		waterTank.readFromNBT(packet.func_148857_g().getCompoundTag("waterTank"));
 		stirProgress = packet.func_148857_g().getInteger("stirProgress");
 		stirCount = packet.func_148857_g().getInteger("stirCount");
+		temp = packet.func_148857_g().getInteger("temp");
 	}
 
 }
