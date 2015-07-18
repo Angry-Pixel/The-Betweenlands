@@ -3,6 +3,7 @@ package thebetweenlands.client.model.entity;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
 
@@ -195,18 +196,18 @@ public class ModelTermite extends MowzieModelBase {
         tail = new MowzieModelRenderer[]{tail1, body4, body3, body2, body1};
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        super.render(entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.body_base.render(f5);
-        this.legleft_b1.render(f5);
-        this.head.render(f5);
-        this.legleft_m1.render(f5);
-        this.legright_f1.render(f5);
-        this.legright_b1.render(f5);
-        this.legleft_f1.render(f5);
-        this.legright_m1.render(f5);
+	@Override
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
+		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+        this.body_base.render(unitPixel);
+        this.legleft_b1.render(unitPixel);
+        this.head.render(unitPixel);
+        this.legleft_m1.render(unitPixel);
+        this.legright_f1.render(unitPixel);
+        this.legright_b1.render(unitPixel);
+        this.legleft_f1.render(unitPixel);
+        this.legright_m1.render(unitPixel);
     }
 
     /**
@@ -218,16 +219,30 @@ public class ModelTermite extends MowzieModelBase {
         modelRenderer.rotateAngleZ = z;
     }
 
-    @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-    }
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		float movement = MathHelper.cos(limbSwing * 1.25F + (float) Math.PI) * 2F * limbSwingAngle *0.5F;
+		legright_f1.rotateAngleZ = movement + 1.95F;
+		legright_m1.rotateAngleZ = -movement + 1.95F;
+		legright_b1.rotateAngleZ = movement + 1.95F;
+		legleft_f1.rotateAngleZ = movement - 1.95F;
+		legleft_m1.rotateAngleZ = -movement - 1.95F;
+		legleft_b1.rotateAngleZ = movement - 1.95F;
+		
+		legright_f1.rotateAngleY = movement;
+		legright_m1.rotateAngleY = -movement;
+		legright_b1.rotateAngleY = movement;
+		legleft_f1.rotateAngleY = movement;
+		legleft_m1.rotateAngleY = -movement;
+		legleft_b1.rotateAngleY = movement;
+	}
 
     @Override
-    public void setLivingAnimations(EntityLivingBase p_78086_1_, float p_78086_2_, float p_78086_3_, float p_78086_4_) {
-        super.setLivingAnimations(p_78086_1_, p_78086_2_, p_78086_3_, p_78086_4_);
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+        super.setLivingAnimations(entity, swing, speed, partialRenderTicks);
         setToInitPose();
-        float frame = p_78086_1_.ticksExisted + p_78086_4_;
+        float frame = entity.ticksExisted + partialRenderTicks;
         float mandibleControl = (float) ((Math.sin(0.1 * frame - Math.cos(0.1 * frame)) + 1) / 2);
         chainWave(tail, 0.4f, 0.1f, 0, frame, 1);
         chainSwing(tail, 0.2f, 0.2f, 1, frame, 1);
