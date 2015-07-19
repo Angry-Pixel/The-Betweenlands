@@ -21,10 +21,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public int stirProgress = 90;
 	public int stirCount;
 	public int temp;
-
+	public float objectVelocity;
+	public float objectRotation;
+	
 	public TileEntityInfuser() {
 		super(4, "infuser");
-		// 4 slots for ingredients (0 - 3)
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
 	}
 
@@ -35,8 +36,17 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote)
+		if (worldObj.isRemote) {
+				objectVelocity -= Math.signum(objectVelocity) * 0.05F;
+				objectRotation += objectVelocity;
+				if (objectRotation >= 360.0F)
+					objectRotation -= 360.0F;
+				else if (this.objectRotation <= 360.0F)
+					objectRotation += 360.0F;
+				if (Math.abs(objectVelocity) <= 1.0F && getWorldObj().rand.nextInt(15) == 0)
+					objectVelocity = worldObj.rand.nextFloat() * 18.0F - 9.0F;
 			return;
+		}
 		if (stirProgress == 0) {
 			stirCount++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -151,6 +161,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("stirCount", stirCount);
 		nbt.setInteger("temp", temp);
+		for (int i = 0; i < getSizeInventory(); i++) {
+		if(inventory[i] != null) {
+			NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
+			nbt.setTag("crushedItem" + i, itemStackCompound);
+		} else
+			nbt.setTag("crushedItem" + i, null);
+		}
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -160,6 +177,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		stirProgress = packet.func_148857_g().getInteger("stirProgress");
 		stirCount = packet.func_148857_g().getInteger("stirCount");
 		temp = packet.func_148857_g().getInteger("temp");
+		for (int i = 0; i < getSizeInventory(); i++) {
+		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("crushedItem" + i);
+		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+			inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
+		else
+			inventory[i] = null;
+		}
 	}
 
 }

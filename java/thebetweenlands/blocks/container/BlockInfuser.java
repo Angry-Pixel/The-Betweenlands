@@ -15,6 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,8 +50,7 @@ public class BlockInfuser extends BlockContainer {
 				return true;
 			}
 
-			if (player.getCurrentEquippedItem() != null) {
-				//Fluid filling
+			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater) {
 				ItemStack oldItem = player.getCurrentEquippedItem();
 				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
 				world.markBlockForUpdate(x, y, z);
@@ -57,8 +58,18 @@ public class BlockInfuser extends BlockContainer {
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
 				if (!ItemStack.areItemStacksEqual(oldItem, newItem))
 					return true;
-				
-				// TODO Items right clicked added to tile inventory slots 0 - 3 :P
+			}
+
+			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed) {
+				ItemStack crushedItem = player.getCurrentEquippedItem();
+				for (int i = 0; i < tile.getSizeInventory(); i++) {
+					if(tile.getStackInSlot(i) == null) {
+						tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
+						player.getCurrentEquippedItem().stackSize--;
+						world.markBlockForUpdate(x, y, z);
+						return true;
+					}
+				}
 			}
 		}
 		return true;

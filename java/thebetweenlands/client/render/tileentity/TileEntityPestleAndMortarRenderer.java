@@ -19,8 +19,6 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 
 	private final ModelPestleAndMortar model = new ModelPestleAndMortar();
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/pestleAndMortar.png");
-	private float crystalVelocity = 0.0F;
-	
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
@@ -47,7 +45,6 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 		}
 		model.render();
 		if(mortar.hasPestle) {
-			//basic animation - don't know if anything fancier is needed tbh
 			GL11.glPushMatrix();
 			float rise = (float)(mortar.progress -42F) * -0.03F;
 			if(mortar.progress <= 42)
@@ -64,10 +61,6 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
-		
-		crystalVelocity -= 0.1F;
-		if (crystalVelocity <= 0.0F)
-			crystalVelocity = 0.0F;
 
 		if (mortar.getStackInSlot(3) != null) {
 			GL11.glPushMatrix();

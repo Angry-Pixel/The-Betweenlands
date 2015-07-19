@@ -16,6 +16,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelInfuser;
 import thebetweenlands.tileentities.TileEntityInfuser;
+import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -81,6 +82,59 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
+
+		if (infuser.getStackInSlot(0) != null) {
+			float yy = (float) (y + 0.3F + size * 0.5F);
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.625D, yy, z + 0.375D);
+			GL11.glPushMatrix();
+			GL11.glScaled(0.15D, 0.15D, 0.15D);
+			if (amount >= 100)
+				GL11.glRotatef(infuser.objectRotation + 90F, 0, 1, 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(0), 0);
+			GL11.glPopMatrix();
+			GL11.glPopMatrix();
+		}
+
+		if (infuser.getStackInSlot(1) != null) {
+			float yy = (float) (y + 0.3F + size * 0.5F);
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.375D, yy, z + 0.625D);
+			GL11.glPushMatrix();
+			GL11.glScaled(0.15D, 0.15D, 0.15D);
+			if (amount >= 100)
+				GL11.glRotatef(-infuser.objectRotation, 0, 1, 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(1), 0);
+			GL11.glPopMatrix();
+			GL11.glPopMatrix();
+		}
+
+		if (infuser.getStackInSlot(2) != null) {
+			float yy = (float) (y + 0.3F + size * 0.5F);
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.375D, yy, z + 0.375D);
+			GL11.glPushMatrix();
+			GL11.glScaled(0.15D, 0.15D, 0.15D);
+			if (amount >= 100)
+				GL11.glRotatef(infuser.objectRotation, 0, 1, 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(2), 0);
+			GL11.glPopMatrix();
+			GL11.glPopMatrix();
+		}
+
+		if (infuser.getStackInSlot(3) != null) {
+			float yy = (float) (y + 0.3F + size * 0.5F);
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.625D, yy, z + 0.625D);
+			GL11.glPushMatrix();
+			GL11.glScaled(0.15D, 0.15D, 0.15D);
+			if (amount >= 100)
+				GL11.glRotatef(-infuser.objectRotation + 45F, 0, 1, 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(3), 0);
+			GL11.glPopMatrix();
+			GL11.glPopMatrix();
+		}
+
 	}
 	
 	private void renderStirCount(String count, double x, double y, double z) {
