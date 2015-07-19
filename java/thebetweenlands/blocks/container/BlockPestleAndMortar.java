@@ -19,7 +19,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.CommonProxy;
-import thebetweenlands.tileentities.TileEntityLifeCrystal;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,9 +52,10 @@ public class BlockPestleAndMortar extends BlockContainer {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityPestleAndMortar) {
 			TileEntityPestleAndMortar tile = (TileEntityPestleAndMortar) world.getTileEntity(x, y, z);
 
-			if (player.isSneaking()) {
+			if (player.getCurrentEquippedItem() == null && !player.isSneaking()) {
 				tile.manualGrinding = true;
-				return false;
+				world.markBlockForUpdate(x, y, z);
+				return true;
 			}
 
 			if (player.getCurrentEquippedItem() != null) {
@@ -66,16 +66,17 @@ public class BlockPestleAndMortar extends BlockContainer {
 						player.setCurrentItemOrArmor(0, null);
 					}
 					return true;
-				} else if(hitY == 1.0F && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal && world.isAirBlock(x, y+1, z)) {
-					world.setBlock(x, y+1, z, BLBlockRegistry.lifeCrystal);
-					int life = (int)Math.floor(TileEntityLifeCrystal.MAX_LIFE - (BLItemRegistry.lifeCrystal.getDamage(player.getCurrentEquippedItem()) / 4.0F * TileEntityLifeCrystal.MAX_LIFE));
-					BLBlockRegistry.lifeCrystal.setLife(world, x, y+1, z, life);
-					player.setCurrentItemOrArmor(0, null);
+				}
+				if(player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
+					if(tile.getStackInSlot(3) == null) {
+						tile.setInventorySlotContents(3, player.getCurrentEquippedItem());
+						player.setCurrentItemOrArmor(0, null);
+					}
 					return true;
 				}
 			}
 
-			if (tile != null)
+			if (tile != null && player.isSneaking())
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PESTLE_AND_MORTAR, world, x, y, z);
 		}
 		return true;

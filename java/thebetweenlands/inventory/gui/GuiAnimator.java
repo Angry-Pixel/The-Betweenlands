@@ -49,7 +49,7 @@ public class GuiAnimator extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 		if (tile.getStackInSlot(1) != null) {
-			int i1 = 40 - tile.life * 10;
+			int i1 = 40 - tile.life /3;
 			this.drawTexturedModalRect(k + 39, l + 8 + i1, 175, 2 + i1, 6, 42);
 		}
 		if (tile.progress > 0) {

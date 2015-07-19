@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.recipes.PestleAndMortarRecipe;
@@ -15,12 +14,15 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	
 	public int progress;
 	public boolean hasPestle;
+	public boolean hasCrystal;
 	public boolean manualGrinding = false;
-	
+	public float crystalVelocity = 0.0F;
+	public float crystalRotation = 0.0F;
+
 	public TileEntityPestleAndMortar() {
-		super(3, "pestleAndMortar");
+		super(4, "pestleAndMortar");
 	}
-	
+
 	@Override
     public boolean canUpdate() {
         return true;
@@ -28,69 +30,91 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote)
+		if (worldObj.isRemote) {
+			if (hasCrystal) {
+				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
+				crystalRotation += this.crystalVelocity;
+				if (crystalRotation >= 360.0F)
+					crystalRotation -= 360.0F;
+				else if (this.crystalRotation <= 360.0F)
+					this.crystalRotation += 360.0F;
+				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0)
+					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+			}
 			return;
-		ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
-		if (this.isGrinding()) {
-				progress++;
-				if(progress == 1)
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:grind", 1F, 1F);
-				if(progress == 64 || progress == 84) {
-					worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.grass", 0.5F, 1F);
-					worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.stone", 1F, 1F);
-				}
-				if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
-					getStackInSlot(1).getTagCompound().setBoolean("active", true);
-				if (progress > 84) {
-					if (inventory[0] != null)
-						if (--inventory[0].stackSize <= 0)
-							inventory[0] = null;
-					if (inventory[2] == null)
-						inventory[2] = output.copy();
-					else if (inventory[2].isItemEqual(output))
-						inventory[2].stackSize += output.stackSize;
-					inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
-					progress = 0;
-					this.manualGrinding = false;
-					boolean hasCrystal = this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) == BLBlockRegistry.lifeCrystal && BLBlockRegistry.lifeCrystal.getLife(this.worldObj, this.xCoord, this.yCoord+1, this.zCoord) > 0;
-					if(hasCrystal) {
-						BLBlockRegistry.lifeCrystal.decrLife(this.worldObj, this.xCoord, this.yCoord+1, this.zCoord);
-					}
-					if(inventory[1].getItemDamage() >= inventory[1].getMaxDamage()) {
-						inventory[1] = null;
-						hasPestle = false;
-					}
-					markDirty();
-				}
-		} else {
-			if(inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
-				getStackInSlot(1).getTagCompound().setBoolean("active", false);
-			progress = 0;
-			markDirty();
 		}
-
-		if(progress > 0)
+		ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
+		if (pestleInstalled() && !outputIsFull()) {
+			if(isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
+				if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
+					progress++;
+					if (progress == 1)
+						worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:grind", 1F, 1F);
+					if (progress == 64 || progress == 84) {
+						worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.grass", 0.5F, 1F);
+						worldObj.playSoundEffect(xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, "dig.stone", 1F, 1F);
+					}
+					if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
+						getStackInSlot(1).getTagCompound().setBoolean("active", true);
+					if (progress > 84) {
+						if (inventory[0] != null)
+							if (--inventory[0].stackSize <= 0)
+								inventory[0] = null;
+						if (inventory[2] == null)
+							inventory[2] = output.copy();
+						else if (inventory[2].isItemEqual(output))
+							inventory[2].stackSize += output.stackSize;
+						inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+						progress = 0;
+						manualGrinding = false;
+						if (inventory[1].getItemDamage() >= inventory[1].getMaxDamage()) {
+							inventory[1] = null;
+							hasPestle = false;
+						}
+						if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+							getStackInSlot(1).getTagCompound().setBoolean("active", false);
+						markDirty();
+					}
+				}
+			}
+		}
+		if (progress > 0)
 			markDirty();
-		
-		if(pestleInstalled()) {
+		if (pestleInstalled()) {
 			hasPestle = true;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-		else {
+		} else {
 			hasPestle = false;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-			
 		if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
-			if(inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+			if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
 				getStackInSlot(1).getTagCompound().setBoolean("active", false);
 			progress = 0;
 			markDirty();
+		}
+		if (getStackInSlot(3) == null && progress > 0 && !manualGrinding) {
+			if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+				getStackInSlot(1).getTagCompound().setBoolean("active", false);
+			progress = 0;
+			markDirty();
+		}
+		if(isCrystalInstalled()) {
+			hasCrystal = true;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		else {
+			hasCrystal = false;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 
 	public boolean pestleInstalled() {
 		return getStackInSlot(1) != null && getStackInSlot(1).getItem() == BLItemRegistry.pestle;
+	}
+	
+	public boolean isCrystalInstalled() {
+		return getStackInSlot(3) != null && getStackInSlot(3).getItem() == BLItemRegistry.lifeCrystal && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
 	}
 
 	private boolean outputIsFull() {
@@ -108,19 +132,13 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			break;
 		}
 	}
-	
-	public boolean isGrinding() {
-		ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
-		boolean canGrind = pestleInstalled() && !outputIsFull() && (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output));
-		boolean hasCrystal = this.worldObj.getBlock(this.xCoord, this.yCoord+1, this.zCoord) == BLBlockRegistry.lifeCrystal && BLBlockRegistry.lifeCrystal.getLife(this.worldObj, this.xCoord, this.yCoord+1, this.zCoord) > 0;
-		return (this.manualGrinding || hasCrystal) && canGrind;
-	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("progress", progress);
 		nbt.setBoolean("hasPestle", hasPestle);
+		nbt.setBoolean("hasCrystal", hasCrystal);
 		nbt.setBoolean("manualGrinding", manualGrinding);
 	}
 
@@ -129,6 +147,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		super.readFromNBT(nbt);
 		progress = nbt.getInteger("progress");
 		hasPestle = nbt.getBoolean("hasPestle");
+		hasCrystal = nbt.getBoolean("hasCrystal");
 		manualGrinding = nbt.getBoolean("manualGrinding");
 	}
 
@@ -137,7 +156,13 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("progress", progress);
 		nbt.setBoolean("hasPestle", hasPestle);
+		nbt.setBoolean("hasCrystal", hasCrystal);
 		nbt.setBoolean("manualGrinding", manualGrinding);
+		if(inventory[3] != null) {
+			NBTTagCompound itemStackCompound = inventory[3].writeToNBT(new NBTTagCompound());
+			nbt.setTag("outputItem", itemStackCompound);
+		} else
+			nbt.setTag("outputItem", null);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -145,6 +170,12 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		progress = packet.func_148857_g().getInteger("progress");
 		hasPestle = packet.func_148857_g().getBoolean("hasPestle");
+		hasCrystal = packet.func_148857_g().getBoolean("hasCrystal");
 		manualGrinding = packet.func_148857_g().getBoolean("manualGrinding");
+		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("outputItem");
+		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+			inventory[3] = ItemStack.loadItemStackFromNBT(itemStackCompound);
+		else
+			inventory[3] = null;
 	}
 }

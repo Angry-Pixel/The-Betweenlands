@@ -16,7 +16,7 @@ public class ItemLifeCrystal extends Item { //Place Holder Code
 	private IIcon[] icons;
 
 	public ItemLifeCrystal() {
-        setMaxDamage(4);
+        setMaxDamage(128);
 		maxStackSize = 1;
 	}
 
@@ -24,7 +24,7 @@ public class ItemLifeCrystal extends Item { //Place Holder Code
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		list.add(100 - 25 * getDamage(stack) + "% Remaining");
+		list.add(Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "% Remaining");
 	}
 
 	@Override
@@ -41,9 +41,19 @@ public class ItemLifeCrystal extends Item { //Place Holder Code
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int meta) {
-		if (meta < 0 || meta >= this.icons.length)
+	public IIcon getIconFromDamage(int damage) {
+		if (damage < 0 || damage > getMaxDamage())
 			return null;
-		return this.icons[meta];
+		if(damage == getMaxDamage())
+			return icons[4];
+		if(damage > 96 && damage < getMaxDamage())
+			return icons[3];
+		if(damage > 64 && damage <= 96)
+			return icons[2];
+		if(damage > 32 && damage <= 64)
+			return icons[1];
+		if(damage >= 0 && damage <= 32)
+			return icons[0];
+		return icons[0];
 	}
 }

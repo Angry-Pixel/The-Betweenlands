@@ -1,13 +1,16 @@
 package thebetweenlands.client.render.tileentity;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.block.ModelPestleAndMortar;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
+import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -16,11 +19,14 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 
 	private final ModelPestleAndMortar model = new ModelPestleAndMortar();
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/pestleAndMortar.png");
+	private float crystalVelocity = 0.0F;
+	
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
 		TileEntityPestleAndMortar mortar = (TileEntityPestleAndMortar) tile;
 		int meta = mortar.getBlockMetadata();
+
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -58,5 +64,18 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 			GL11.glPopMatrix();
 		}
 		GL11.glPopMatrix();
+		
+		crystalVelocity -= 0.1F;
+		if (crystalVelocity <= 0.0F)
+			crystalVelocity = 0.0F;
+
+		if (mortar.getStackInSlot(3) != null) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
+			GL11.glScaled(0.2D, 0.2D, 0.2D);
+			GL11.glRotatef(mortar.crystalRotation, 0, 1, 0);
+			ItemRenderHelper.renderItem(new ItemStack(BLItemRegistry.lifeCrystal, 1, mortar.getStackInSlot(3).getItemDamage()), 0);
+			GL11.glPopMatrix();
+		}
 	}
 }

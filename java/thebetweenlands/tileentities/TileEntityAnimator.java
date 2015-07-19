@@ -32,7 +32,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		if(worldObj.isRemote)
 			return;
 		if (isCrystalInslot())
-			life = 4 - getCrystalPower();
+			life = 128 - getCrystalPower();
 		if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && itemsConsumed < itemCount && isValidFocalItem()) {
 			if (isFocalItemSpawnEgg() && life >= 4 || !isFocalItemSpawnEgg() && life >= 1) {
 				++progress;
@@ -57,11 +57,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		if (itemsConsumed >= itemCount && isSlotInUse(0) && isSlotInUse(1) && !lifeDepleted) {
 			if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
 				setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(worldObj.rand, items)).getItem(worldObj.rand));
-				inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + 32);
 			} else if (inventory[0].getItem() instanceof ItemMonsterPlacer)
-				inventory[1].setItemDamage(4);
+				inventory[1].setItemDamage(128);
 			else
-				inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + 32);
 			lifeDepleted = true;
 		}
 		if (prevStackSize != (isSlotInUse(0) ? inventory[0].stackSize : 0))
