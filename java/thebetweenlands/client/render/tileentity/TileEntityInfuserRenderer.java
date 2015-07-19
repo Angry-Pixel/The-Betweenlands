@@ -14,21 +14,21 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.model.block.ModelCauldron;
-import thebetweenlands.tileentities.TileEntityCauldron;
+import thebetweenlands.client.model.block.ModelInfuser;
+import thebetweenlands.tileentities.TileEntityInfuser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityCauldronRenderer extends TileEntitySpecialRenderer {
+public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 
-	private final ModelCauldron model = new ModelCauldron();
-	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/cauldron.png");
+	private final ModelInfuser model = new ModelInfuser();
+	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/infuser.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
-		TileEntityCauldron cauldron = (TileEntityCauldron) tile;
-		int meta = cauldron.getBlockMetadata();
+		TileEntityInfuser infuser = (TileEntityInfuser) tile;
+		int meta = infuser.getBlockMetadata();
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -49,14 +49,14 @@ public class TileEntityCauldronRenderer extends TileEntitySpecialRenderer {
 		}
 		model.render();
 		GL11.glPushMatrix();
-		GL11.glRotatef(cauldron.stirProgress * 4, 0.0F, 1F, 0F);
+		GL11.glRotatef(infuser.stirProgress * 4, 0.0F, 1F, 0F);
 		model.renderSpoon();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-		renderStirCount("Stir: " + cauldron.stirCount, x, y, z);
+		renderStirCount("Stir: " + infuser.stirCount, x, y, z);
 		
-		int amount = cauldron.waterTank.getFluidAmount();
-		int capacity = cauldron.waterTank.getCapacity();
+		int amount = infuser.waterTank.getFluidAmount();
+		int capacity = infuser.waterTank.getCapacity();
 		float size = 1F / capacity * amount;
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;

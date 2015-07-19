@@ -28,7 +28,7 @@ import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityBush;
-import thebetweenlands.tileentities.TileEntityCauldron;
+import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
@@ -63,7 +63,7 @@ public class CommonProxy
         registerTileEntity(TileEntityPurifier.class, "purifier");
         registerTileEntity(TileEntityCompostBin.class, "compostBin");
         registerTileEntity(TileEntityAlembic.class, "alembic");
-        registerTileEntity(TileEntityCauldron.class, "cauldron");
+        registerTileEntity(TileEntityInfuser.class, "infuser");
         registerTileEntity(TileEntityPestleAndMortar.class, "pestleAndMortar");
         registerTileEntity(TileEntityLifeCrystal.class, "lifeCrystalBlock");
     }

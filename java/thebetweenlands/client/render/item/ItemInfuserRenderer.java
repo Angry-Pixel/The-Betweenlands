@@ -7,15 +7,15 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.client.model.block.ModelCauldron;
+import thebetweenlands.client.model.block.ModelInfuser;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ItemCauldronRenderer implements IItemRenderer {
-	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/cauldron.png");
-	private final ModelCauldron model = new ModelCauldron();
+public class ItemInfuserRenderer implements IItemRenderer {
+	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/infuser.png");
+	private final ModelInfuser model = new ModelInfuser();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {

@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelCauldron extends ModelBase {
+public class ModelInfuser extends ModelBase {
     ModelRenderer cauldronpiece1;
     ModelRenderer cauldronpiece2;
     ModelRenderer cauldronpiece3;
@@ -25,7 +25,7 @@ public class ModelCauldron extends ModelBase {
     ModelRenderer spoon_handle;
     ModelRenderer spoon_end;
 
-    public ModelCauldron() {
+    public ModelInfuser() {
         textureWidth = 128;
         textureHeight = 64;
         cauldroncorner4 = new ModelRenderer(this, 27, 34);

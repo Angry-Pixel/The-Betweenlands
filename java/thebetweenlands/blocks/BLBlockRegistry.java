@@ -17,7 +17,7 @@ import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
-import thebetweenlands.blocks.container.BlockCauldron;
+import thebetweenlands.blocks.container.BlockInfuser;
 import thebetweenlands.blocks.container.BlockCompostBin;
 import thebetweenlands.blocks.container.BlockPestleAndMortar;
 import thebetweenlands.blocks.container.BlockPurifier;
@@ -267,7 +267,7 @@ public class BLBlockRegistry {
     public static final Block purifier = new BlockPurifier();
     public static final Block compostBin = new BlockCompostBin();
     public static final Block alembic = new BlockAlembic();
-    public static final Block cauldron = new BlockCauldron();
+    public static final Block infuser = new BlockInfuser();
     public static final Block pestleAndMortar = new BlockPestleAndMortar();
     public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
     public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);

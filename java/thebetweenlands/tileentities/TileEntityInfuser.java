@@ -15,15 +15,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
 
-public class TileEntityCauldron extends TileEntityBasicInventory implements IFluidHandler {
+public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
 
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 3);
 	public int stirProgress = 90;
 	public int stirCount;
 	public int temp;
 
-	public TileEntityCauldron() {
-		super(4, "pestleAndMortar");
+	public TileEntityInfuser() {
+		super(4, "infuser");
 		// 4 slots for ingredients (0 - 3)
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
 	}

@@ -15,17 +15,17 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.tileentities.TileEntityCauldron;
+import thebetweenlands.tileentities.TileEntityInfuser;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockCauldron extends BlockContainer {
+public class BlockInfuser extends BlockContainer {
 
-	public BlockCauldron() {
+	public BlockInfuser() {
 		super(Material.iron);
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setBlockName("thebetweenlands.cauldron");
+		setBlockName("thebetweenlands.infuser");
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockTextureName("thebetweenlands:octineBlock");
 	}
@@ -40,8 +40,8 @@ public class BlockCauldron extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityCauldron) {
-			TileEntityCauldron tile = (TileEntityCauldron) world.getTileEntity(x, y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
+			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 
 			if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
 				tile.stirProgress = 0;
@@ -88,23 +88,23 @@ public class BlockCauldron extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		if (world.getTileEntity(x, y, z) instanceof TileEntityCauldron) {
-			TileEntityCauldron cauldron = (TileEntityCauldron) world.getTileEntity(x, y, z);
-			if (cauldron.getWaterAmount() > 0  && cauldron.temp > 0) {
-				int amount = cauldron.waterTank.getFluidAmount();
-				int capacity = cauldron.waterTank.getCapacity();
+		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
+			TileEntityInfuser infuser = (TileEntityInfuser) world.getTileEntity(x, y, z);
+			if (infuser.getWaterAmount() > 0  && infuser.temp > 0) {
+				int amount = infuser.waterTank.getFluidAmount();
+				int capacity = infuser.waterTank.getCapacity();
 				float size = 1F / capacity * amount;
 				float xx = (float) x + 0.5F;
 				float yy = (float) (y + 0.35F + size * 0.5F);
 				float zz = (float) z + 0.5F;
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-				if(rand.nextInt((101 - cauldron.temp))/4 == 0) {
+				if(rand.nextInt((101 - infuser.temp))/4 == 0) {
 					TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
-					if (rand.nextInt(10) == 0 && cauldron.temp > 70)
+					if (rand.nextInt(10) == 0 && infuser.temp > 70)
 						world.playSound(xx, yy, zz, "liquid.lava", 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}
-				if (cauldron.temp >= 100) {
+				if (infuser.temp >= 100) {
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
@@ -131,6 +131,6 @@ public class BlockCauldron extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityCauldron();
+		return new TileEntityInfuser();
 	}
 }
