@@ -40,32 +40,45 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
+
 		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 
-			if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
-				tile.stirProgress = 0;
-				return true;
-			}
-
-			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater) {
-				ItemStack oldItem = player.getCurrentEquippedItem();
-				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
-				world.markBlockForUpdate(x, y, z);
-				if (!player.capabilities.isCreativeMode)
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-				if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+			if (!player.isSneaking()) {
+				if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
+					tile.stirProgress = 0;
 					return true;
+				}
+
+				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater) {
+					ItemStack oldItem = player.getCurrentEquippedItem();
+					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
+					world.markBlockForUpdate(x, y, z);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
+					if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+						return true;
+				}
+
+				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed) {
+					ItemStack crushedItem = player.getCurrentEquippedItem();
+					for (int i = 0; i < tile.getSizeInventory(); i++) {
+						if(tile.getStackInSlot(i) == null) {
+							tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
+							player.getCurrentEquippedItem().stackSize--;
+							world.markBlockForUpdate(x, y, z);
+							return true;
+						}
+					}
+				}
 			}
 
-			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed) {
-				ItemStack crushedItem = player.getCurrentEquippedItem();
+			if(player.isSneaking()) {
 				for (int i = 0; i < tile.getSizeInventory(); i++) {
-					if(tile.getStackInSlot(i) == null) {
-						tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
-						player.getCurrentEquippedItem().stackSize--;
+					if(tile.getStackInSlot(i) != null) {
+						if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(i)))
+							player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem()), false);
+						tile.setInventorySlotContents(i, null);
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
