@@ -61,7 +61,7 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		model.renderSpoon();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-		renderStirCount("Stir: " + infuser.stirCount, x, y, z);
+		renderStirCount("Stir: " + infuser.stirCount + " Temp: "+ infuser.temp, x, y, z);
 		
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
@@ -89,79 +89,27 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
-
-		if (infuser.getStackInSlot(0) != null) {
-			float yy = (float) (y + 0.3F + size * 0.5F);
+		int itemBob = infuser.itemBob;
+		int stirProgress = infuser.stirProgress;
+		double itemY = y + 0.3D + size * 0.5D;
+		renderItemInSlot(infuser, 0, x + 0.5625D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
+		renderItemInSlot(infuser, 1, x + 0.4375D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
+		renderItemInSlot(infuser, 2, x + 0.4375D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
+		renderItemInSlot(infuser, 3, x + 0.5625D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
+		
+	}
+	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
+		if (infuser.getStackInSlot(slotIndex) != null) {
 			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.5625D, yy, z + 0.4375D);
+			GL11.glTranslated(x, y, z);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100) {
-				GL11.glTranslated(0D, infuser.itemBob * 0.01D, 0D);
-				if(infuser.stirProgress < 90)
-					GL11.glRotated(viewRot - infuser.stirProgress * 4D + 45D, 0, 1, 0);
-				else
-					GL11.glRotated(viewRot + 45D, 0, 1, 0);
-			}
-			ItemRenderHelper.renderItem(infuser.getStackInSlot(0), 0);
+			GL11.glTranslated(0D, itemBob, 0D);
+			GL11.glRotated(rotation, 0, 1, 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
 		}
-
-		if (infuser.getStackInSlot(1) != null) {
-			float yy = (float) (y + 0.3F + size * 0.5F);
-			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.4375D, yy, z + 0.5625D);
-			GL11.glPushMatrix();
-			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100) {
-				GL11.glTranslated(0D, (-infuser.itemBob + 20) * 0.01D, 0D);
-				if(infuser.stirProgress < 90)
-					GL11.glRotated(viewRot - infuser.stirProgress * 4D + 45D, 0, 1, 0);
-				else
-					GL11.glRotated(viewRot + 45D, 0, 1, 0);
-			}
-			ItemRenderHelper.renderItem(infuser.getStackInSlot(1), 0);
-			GL11.glPopMatrix();
-			GL11.glPopMatrix();
-		}
-
-		if (infuser.getStackInSlot(2) != null) {
-			float yy = (float) (y + 0.3F + size * 0.5F);
-			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.4375D, yy, z + 0.4375D);
-			GL11.glPushMatrix();
-			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100) {
-				GL11.glTranslated(0D, infuser.itemBob * 0.01D, 0D);
-				if(infuser.stirProgress < 90)
-					GL11.glRotated(viewRot - infuser.stirProgress * 4D - 45D, 0, 1, 0);
-				else
-					GL11.glRotated(viewRot - 45D, 0, 1, 0);
-			}
-			ItemRenderHelper.renderItem(infuser.getStackInSlot(2), 0);
-			GL11.glPopMatrix();
-			GL11.glPopMatrix();
-		}
-
-		if (infuser.getStackInSlot(3) != null) {
-			float yy = (float) (y + 0.3F + size * 0.5F);
-			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.5625D, yy, z + 0.5625D);
-			GL11.glPushMatrix();
-			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100) {
-				GL11.glTranslated(0D, (-infuser.itemBob + 20) * 0.01D, 0D);
-				if(infuser.stirProgress < 90)
-					GL11.glRotated(viewRot - infuser.stirProgress * 4D - 45D, 0, 1, 0);
-				else
-					GL11.glRotated(viewRot - 45D, 0, 1, 0);
-			}
-			ItemRenderHelper.renderItem(infuser.getStackInSlot(3), 0);
-			GL11.glPopMatrix();
-			GL11.glPopMatrix();
-		}
-
 	}
 	
 	private void renderStirCount(String count, double x, double y, double z) {
