@@ -23,7 +23,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public int temp;
 	public float objectVelocity;
 	public float objectRotation;
-	
+	public int itemBob;
+	public boolean countUp = true;
+
 	public TileEntityInfuser() {
 		super(4, "infuser");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
@@ -45,6 +47,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					objectRotation += 360.0F;
 				if (Math.abs(objectVelocity) <= 1.0F && getWorldObj().rand.nextInt(15) == 0)
 					objectVelocity = worldObj.rand.nextFloat() * 18.0F - 9.0F;
+				if(countUp && itemBob <= 20) {
+					itemBob++;
+					if(itemBob == 20)
+						countUp = false;
+				}
+				if(!countUp && itemBob >= 0) {
+					itemBob--;
+					if(itemBob == 0)
+						countUp = true;
+				}	
 			return;
 		}
 		if (stirProgress == 0) {

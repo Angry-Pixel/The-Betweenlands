@@ -25,11 +25,18 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 
 	private final ModelInfuser model = new ModelInfuser();
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/infuser.png");
+	private RenderManager renderManager;
+	private double viewRot;
+
+	public TileEntityInfuserRenderer() {
+		renderManager = RenderManager.instance;
+	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
 		TileEntityInfuser infuser = (TileEntityInfuser) tile;
 		int meta = infuser.getBlockMetadata();
+		viewRot = 180D + Math.toDegrees(Math.atan2(renderManager.viewerPosX - infuser.xCoord - 0.5D, renderManager.viewerPosZ - infuser.zCoord - 0.5D));
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -86,11 +93,16 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		if (infuser.getStackInSlot(0) != null) {
 			float yy = (float) (y + 0.3F + size * 0.5F);
 			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.625D, yy, z + 0.375D);
+			GL11.glTranslated(x + 0.5625D, yy, z + 0.4375D);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100)
-				GL11.glRotatef(infuser.objectRotation + 90F, 0, 1, 0);
+			if (amount >= 100) {
+				GL11.glTranslated(0D, infuser.itemBob * 0.01D, 0D);
+				if(infuser.stirProgress < 90)
+					GL11.glRotated(viewRot - infuser.stirProgress * 4D + 45D, 0, 1, 0);
+				else
+					GL11.glRotated(viewRot + 45D, 0, 1, 0);
+			}
 			ItemRenderHelper.renderItem(infuser.getStackInSlot(0), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
@@ -99,11 +111,16 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		if (infuser.getStackInSlot(1) != null) {
 			float yy = (float) (y + 0.3F + size * 0.5F);
 			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.375D, yy, z + 0.625D);
+			GL11.glTranslated(x + 0.4375D, yy, z + 0.5625D);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100)
-				GL11.glRotatef(-infuser.objectRotation, 0, 1, 0);
+			if (amount >= 100) {
+				GL11.glTranslated(0D, (-infuser.itemBob + 20) * 0.01D, 0D);
+				if(infuser.stirProgress < 90)
+					GL11.glRotated(viewRot - infuser.stirProgress * 4D + 45D, 0, 1, 0);
+				else
+					GL11.glRotated(viewRot + 45D, 0, 1, 0);
+			}
 			ItemRenderHelper.renderItem(infuser.getStackInSlot(1), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
@@ -112,11 +129,16 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		if (infuser.getStackInSlot(2) != null) {
 			float yy = (float) (y + 0.3F + size * 0.5F);
 			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.375D, yy, z + 0.375D);
+			GL11.glTranslated(x + 0.4375D, yy, z + 0.4375D);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100)
-				GL11.glRotatef(infuser.objectRotation, 0, 1, 0);
+			if (amount >= 100) {
+				GL11.glTranslated(0D, infuser.itemBob * 0.01D, 0D);
+				if(infuser.stirProgress < 90)
+					GL11.glRotated(viewRot - infuser.stirProgress * 4D - 45D, 0, 1, 0);
+				else
+					GL11.glRotated(viewRot - 45D, 0, 1, 0);
+			}
 			ItemRenderHelper.renderItem(infuser.getStackInSlot(2), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
@@ -125,11 +147,16 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		if (infuser.getStackInSlot(3) != null) {
 			float yy = (float) (y + 0.3F + size * 0.5F);
 			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.625D, yy, z + 0.625D);
+			GL11.glTranslated(x + 0.5625D, yy, z + 0.5625D);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
-			if (amount >= 100)
-				GL11.glRotatef(-infuser.objectRotation + 45F, 0, 1, 0);
+			if (amount >= 100) {
+				GL11.glTranslated(0D, (-infuser.itemBob + 20) * 0.01D, 0D);
+				if(infuser.stirProgress < 90)
+					GL11.glRotated(viewRot - infuser.stirProgress * 4D - 45D, 0, 1, 0);
+				else
+					GL11.glRotated(viewRot - 45D, 0, 1, 0);
+			}
 			ItemRenderHelper.renderItem(infuser.getStackInSlot(3), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
