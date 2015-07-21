@@ -4,14 +4,18 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.tileentities.TileEntityInfuser;
 import cpw.mods.fml.common.eventhandler.Event;
 
 public class ItemWeedwoodBucket extends Item {
@@ -86,6 +90,21 @@ public class ItemWeedwoodBucket extends Item {
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
 					}
 
+					if (block == BLBlockRegistry.infuser && player.isSneaking()) {
+						TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
+						if(tile != null && !tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+							tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+							return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
+						}
+						 if(tile != null && tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+							 //TODO copy ItemStacks from slots before they are removed
+							 tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+							 return new ItemStack(Items.diamond); // TODO Return weedwood infusion bucket with copied ItemStacks recored as NBT 
+						 }
+						else
+							return stack;
+					}
+
 				} else {
 					if (pos.sideHit == 0)
 						y--;
@@ -113,7 +132,6 @@ public class ItemWeedwoodBucket extends Item {
 					}
 				}
 			}
-
 			return stack;
 		}
 	}

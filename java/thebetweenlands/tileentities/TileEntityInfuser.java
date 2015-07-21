@@ -141,9 +141,15 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return bucket;
 	}
 
-	private void extractFluids(FluidStack fluid) {
+	public void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
+		if (getWaterAmount() == 0 && hasInfusion) {
+			for (int i = 0; i < getSizeInventory(); i++) {
+				setInventorySlotContents(i, null);
+			}
+			hasInfusion = false;
+		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 

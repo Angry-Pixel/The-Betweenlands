@@ -49,7 +49,6 @@ public class BlockInfuser extends BlockContainer {
 					tile.stirProgress = 0;
 					return true;
 				}
-
 				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater && !tile.hasInfusion) {
 					ItemStack oldItem = player.getCurrentEquippedItem();
 					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
@@ -59,7 +58,6 @@ public class BlockInfuser extends BlockContainer {
 					if (!ItemStack.areItemStacksEqual(oldItem, newItem))
 						return true;
 				}
-
 				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed && !tile.hasInfusion) {
 					ItemStack crushedItem = player.getCurrentEquippedItem();
 					for (int i = 0; i < tile.getSizeInventory(); i++) {
