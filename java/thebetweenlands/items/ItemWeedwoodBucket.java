@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -96,9 +97,16 @@ public class ItemWeedwoodBucket extends Item {
 							return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
 						}
 						 if(tile != null && tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
-							 //TODO copy ItemStacks from slots before they are removed
+							 ItemStack infusionBucket = new ItemStack(BLItemRegistry.weedwoodBucketInfusion);
+							 infusionBucket.setTagCompound(new NBTTagCompound());
+							 infusionBucket.getTagCompound().setString("Infused", "Infused");
+							 for (int i = 0; i < tile.getSizeInventory(); i++) {
+								 ItemStack stackInSlot = tile.getStackInSlot(i);
+								 if (stackInSlot != null)
+									 infusionBucket.getTagCompound().setString("crushedItem" + i, tile.getStackInSlot(i).getDisplayName());
+							 }
 							 tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
-							 return new ItemStack(BLItemRegistry.weedwoodBucketInfusion); // TODO Return weedwood infusion bucket with copied ItemStacks recored as NBT 
+							 return infusionBucket;
 						 }
 						else
 							return stack;
