@@ -79,7 +79,10 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			float tz = (float) z + 0.0F;
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
-			tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
+			if(!infuser.hasInfusion)
+				tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
+			else
+				tess.setColorRGBA_F(0.5F, 0.0F, 0.5F, 1.0F);
 			tess.addVertexWithUV(0.1875, 0, 0.1875, waterIcon.getMinU(), waterIcon.getMinV());
 			tess.addVertexWithUV(0.1875, 0, 0.8125, waterIcon.getMinU(), waterIcon.getMaxV());
 			tess.addVertexWithUV(0.8125, 0, 0.8125, waterIcon.getMaxU(), waterIcon.getMaxV());
@@ -106,7 +109,8 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
 			GL11.glTranslated(0D, itemBob, 0D);
 			GL11.glRotated(rotation, 0, 1, 0);
-			ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
+			if (!infuser.hasInfusion)
+				ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
 		}
