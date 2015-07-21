@@ -79,12 +79,12 @@ public class ItemWeedwoodBucket extends Item {
 						stack.stackSize--;
 						return stack;
 					}
-					
+
 					if (block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);
 					}
-					
+
 					if (block == BLBlockRegistry.swampWater && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
