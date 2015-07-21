@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
@@ -99,7 +98,7 @@ public class ItemWeedwoodBucket extends Item {
 						 if(tile != null && tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
 							 //TODO copy ItemStacks from slots before they are removed
 							 tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
-							 return new ItemStack(Items.diamond); // TODO Return weedwood infusion bucket with copied ItemStacks recored as NBT 
+							 return new ItemStack(BLItemRegistry.weedwoodBucketInfusion); // TODO Return weedwood infusion bucket with copied ItemStacks recored as NBT 
 						 }
 						else
 							return stack;
