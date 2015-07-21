@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeedwoodBucketInfusion extends Item {
+
 	public ItemWeedwoodBucketInfusion() {
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("thebetweenlands.weedwoodBucketInfusion");

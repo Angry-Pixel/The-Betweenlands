@@ -102,6 +102,7 @@ public class ItemWeedwoodBucket extends Item {
 							 infusionBucket.getTagCompound().setString("Infused", "Infused");
 							 for (int i = 0; i < tile.getSizeInventory(); i++) {
 								 ItemStack stackInSlot = tile.getStackInSlot(i);
+								 //TODO this will eventually be properties not the item name
 								 if (stackInSlot != null)
 									 infusionBucket.getTagCompound().setString("crushedItem" + i, tile.getStackInSlot(i).getDisplayName());
 							 }
