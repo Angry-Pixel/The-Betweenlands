@@ -32,6 +32,7 @@ public class BLEntityRegistry
 		registerEntity(18, EntityBLItemFrame.class, "itemFrameBL");
 		registerEntity(19, EntityGecko.class, "gecko", 0x283320, 0x827856);
 		registerEntity(20, EntityTermite.class, "termite", 0x283320, 0x827856);
+		registerEntity(21, EntityGiantToad.class, "toad", 0x283320, 0x827856);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
