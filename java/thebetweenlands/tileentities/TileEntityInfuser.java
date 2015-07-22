@@ -149,6 +149,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				setInventorySlotContents(i, null);
 			}
 			hasInfusion = false;
+			temp = 0;
 		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
