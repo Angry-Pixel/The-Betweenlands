@@ -61,7 +61,7 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		model.renderSpoon();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-		renderStirCount("Stir: " + infuser.stirCount + " Temp: "+ infuser.temp, x, y, z);
+		renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
 		
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();

@@ -1,11 +1,13 @@
 package thebetweenlands.tileentities;
 
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -19,8 +21,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 3);
 	public int stirProgress = 90;
-	public int stirCount;
 	public int temp;
+	public int evaporation;
 	public float objectVelocity;
 	public float objectRotation;
 	public int itemBob;
@@ -60,10 +62,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}	
 			return;
 		}
-		if (stirProgress == 0) {
-			stirCount++;
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
+
 		if (stirProgress < 90) {
 			stirProgress++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -77,6 +76,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
 			}
+			evaporation = 0;
 		}
 		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.fire && temp < 100 && getWaterAmount() > 0) {
 			if(worldObj.getWorldTime()%12 == 0) {
@@ -89,6 +89,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				temp--;
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
+		}
+		if(temp == 100) {
+			evaporation++;
+			if(evaporation >= 600 && getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+				extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+			}
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
 
@@ -135,6 +142,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			int amountFilled = fill(ForgeDirection.UNKNOWN, fluid, false);
 			if (amountFilled == fluid.amount) {
 				fill(ForgeDirection.UNKNOWN, fluid, true);
+				if(temp >= 3) {
+					temp = temp - temp / 3;
+					evaporation = 0;
+				}
 				return FluidContainerRegistry.drainFluidContainer(bucket);
 			}
 		}
@@ -144,11 +155,20 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
-		if (getWaterAmount() == 0 && hasInfusion) {
-			for (int i = 0; i < getSizeInventory(); i++) {
-				setInventorySlotContents(i, null);
+		if (getWaterAmount() == 0) {
+			if (hasInfusion) {
+				for (int i = 0; i < getSizeInventory(); i++) {
+					setInventorySlotContents(i, null);
+				}
+				if (evaporation >= 600) {
+					// TODO Make this a toxic cloud entity - a job for Sam's expert render skills :P
+					EntityPig piggy = new EntityPig(worldObj);
+					piggy.setLocationAndAngles(xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, MathHelper.wrapAngleTo180_float(worldObj.rand.nextFloat() * 360.0F), 0.0F);
+					worldObj.spawnEntityInWorld(piggy);
+				}
 			}
 			hasInfusion = false;
+			evaporation = 0;
 			temp = 0;
 		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -171,7 +191,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		super.writeToNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("stirCount", stirCount);
+		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 	}
@@ -181,7 +201,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		super.readFromNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		stirProgress = nbt.getInteger("stirProgress");
-		stirCount = nbt.getInteger("stirCount");
+		evaporation = nbt.getInteger("evaporationt");
 		temp = nbt.getInteger("temp");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 	}
@@ -191,7 +211,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("stirCount", stirCount);
+		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		for (int i = 0; i < getSizeInventory(); i++) {
@@ -208,7 +228,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		waterTank.readFromNBT(packet.func_148857_g().getCompoundTag("waterTank"));
 		stirProgress = packet.func_148857_g().getInteger("stirProgress");
-		stirCount = packet.func_148857_g().getInteger("stirCount");
+		evaporation = packet.func_148857_g().getInteger("evaporation");
 		temp = packet.func_148857_g().getInteger("temp");
 		hasInfusion = packet.func_148857_g().getBoolean("hasInfusion");
 		for (int i = 0; i < getSizeInventory(); i++) {
