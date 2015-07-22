@@ -40,32 +40,43 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
+
 		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 
-			if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
-				tile.stirProgress = 0;
-				return true;
-			}
-
-			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater) {
-				ItemStack oldItem = player.getCurrentEquippedItem();
-				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
-				world.markBlockForUpdate(x, y, z);
-				if (!player.capabilities.isCreativeMode)
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-				if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+			if (!player.isSneaking()) {
+				if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
+					tile.stirProgress = 0;
 					return true;
+				}
+				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater && !tile.hasInfusion) {
+					ItemStack oldItem = player.getCurrentEquippedItem();
+					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
+					world.markBlockForUpdate(x, y, z);
+					if (!player.capabilities.isCreativeMode)
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
+					if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+						return true;
+				}
+				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed && !tile.hasInfusion) {
+					ItemStack crushedItem = player.getCurrentEquippedItem();
+					for (int i = 0; i < tile.getSizeInventory(); i++) {
+						if(tile.getStackInSlot(i) == null) {
+							tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
+							player.getCurrentEquippedItem().stackSize--;
+							world.markBlockForUpdate(x, y, z);
+							return true;
+						}
+					}
+				}
 			}
 
-			if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed) {
-				ItemStack crushedItem = player.getCurrentEquippedItem();
+			if(player.isSneaking() && !tile.hasInfusion) {
 				for (int i = 0; i < tile.getSizeInventory(); i++) {
-					if(tile.getStackInSlot(i) == null) {
-						tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
-						player.getCurrentEquippedItem().stackSize--;
+					if(tile.getStackInSlot(i) != null) {
+						if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(i)))
+							player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem()), false);
+						tile.setInventorySlotContents(i, null);
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
@@ -77,10 +88,11 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-		IInventory tile = (IInventory) world.getTileEntity(x, y, z);
-		if (tile != null)
-			for (int i = 0; i < tile.getSizeInventory(); i++) {
-				ItemStack stack = tile.getStackInSlot(i);
+		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
+		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
+		if (tileInventory != null && !tile.hasInfusion)
+			for (int i = 0; i < tileInventory.getSizeInventory(); i++) {
+				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
 					if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 						float f = 0.7F;
@@ -111,7 +123,10 @@ public class BlockInfuser extends BlockContainer {
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				if(rand.nextInt((101 - infuser.temp))/4 == 0) {
-					TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+					if(!infuser.hasInfusion)
+						TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+					else
+						TheBetweenlands.proxy.spawnCustomParticle("bubbleInfusion", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
 					if (rand.nextInt(10) == 0 && infuser.temp > 70)
 						world.playSound(xx, yy, zz, "liquid.lava", 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}

@@ -6,12 +6,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.tileentities.TileEntityInfuser;
 import cpw.mods.fml.common.eventhandler.Event;
 
 public class ItemWeedwoodBucket extends Item {
@@ -75,15 +79,38 @@ public class ItemWeedwoodBucket extends Item {
 						stack.stackSize--;
 						return stack;
 					}
-					
+
 					if (block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);
 					}
-					
+
 					if (block == BLBlockRegistry.swampWater && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
+					}
+
+					if (block == BLBlockRegistry.infuser && player.isSneaking()) {
+						TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
+						if(tile != null && !tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+							tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+							return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
+						}
+						 if(tile != null && tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+							 ItemStack infusionBucket = new ItemStack(BLItemRegistry.weedwoodBucketInfusion);
+							 infusionBucket.setTagCompound(new NBTTagCompound());
+							 infusionBucket.getTagCompound().setString("Infused", "Infused");
+							 for (int i = 0; i < tile.getSizeInventory(); i++) {
+								 ItemStack stackInSlot = tile.getStackInSlot(i);
+								 //TODO this will eventually be properties not the item name
+								 if (stackInSlot != null)
+									 infusionBucket.getTagCompound().setString("crushedItem" + i, tile.getStackInSlot(i).getDisplayName());
+							 }
+							 tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
+							 return infusionBucket;
+						 }
+						else
+							return stack;
 					}
 
 				} else {
@@ -113,7 +140,6 @@ public class ItemWeedwoodBucket extends Item {
 					}
 				}
 			}
-
 			return stack;
 		}
 	}

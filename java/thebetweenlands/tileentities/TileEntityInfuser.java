@@ -23,7 +23,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public int temp;
 	public float objectVelocity;
 	public float objectRotation;
-	
+	public int itemBob;
+	public boolean countUp = true;
+	public boolean hasInfusion = false;
+
 	public TileEntityInfuser() {
 		super(4, "infuser");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
@@ -45,6 +48,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					objectRotation += 360.0F;
 				if (Math.abs(objectVelocity) <= 1.0F && getWorldObj().rand.nextInt(15) == 0)
 					objectVelocity = worldObj.rand.nextFloat() * 18.0F - 9.0F;
+				if(countUp && itemBob <= 20) {
+					itemBob++;
+					if(itemBob == 20)
+						countUp = false;
+				}
+				if(!countUp && itemBob >= 0) {
+					itemBob--;
+					if(itemBob == 0)
+						countUp = true;
+				}	
 			return;
 		}
 		if (stirProgress == 0) {
@@ -54,6 +67,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		if (stirProgress < 90) {
 			stirProgress++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		if (stirProgress == 89) {
+			if(temp == 100 && !hasInfusion) {
+				if (inventory[0] == null || inventory[1] == null || inventory[2] == null || inventory[3] == null)
+					return;
+				else {
+					hasInfusion = true;
+					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+				}
+			}
 		}
 		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.fire && temp < 100 && getWaterAmount() > 0) {
 			if(worldObj.getWorldTime()%12 == 0) {
@@ -118,9 +141,15 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return bucket;
 	}
 
-	private void extractFluids(FluidStack fluid) {
+	public void extractFluids(FluidStack fluid) {
 		if (fluid.isFluidEqual(waterTank.getFluid()))
 			waterTank.drain(fluid.amount, true);
+		if (getWaterAmount() == 0 && hasInfusion) {
+			for (int i = 0; i < getSizeInventory(); i++) {
+				setInventorySlotContents(i, null);
+			}
+			hasInfusion = false;
+		}
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
@@ -143,6 +172,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("stirCount", stirCount);
 		nbt.setInteger("temp", temp);
+		nbt.setBoolean("hasInfusion", hasInfusion);
 	}
 
 	@Override
@@ -152,6 +182,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		stirProgress = nbt.getInteger("stirProgress");
 		stirCount = nbt.getInteger("stirCount");
 		temp = nbt.getInteger("temp");
+		hasInfusion = nbt.getBoolean("hasInfusion");
 	}
 
 	@Override
@@ -161,6 +192,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("stirCount", stirCount);
 		nbt.setInteger("temp", temp);
+		nbt.setBoolean("hasInfusion", hasInfusion);
 		for (int i = 0; i < getSizeInventory(); i++) {
 		if(inventory[i] != null) {
 			NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
@@ -177,6 +209,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		stirProgress = packet.func_148857_g().getInteger("stirProgress");
 		stirCount = packet.func_148857_g().getInteger("stirCount");
 		temp = packet.func_148857_g().getInteger("temp");
+		hasInfusion = packet.func_148857_g().getBoolean("hasInfusion");
 		for (int i = 0; i < getSizeInventory(); i++) {
 		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("crushedItem" + i);
 		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
