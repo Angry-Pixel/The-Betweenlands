@@ -102,10 +102,9 @@ public class ItemWeedwoodBucket extends Item {
 							 infusionBucket.getTagCompound().setString("Infused", "Infused");
 							 for (int i = 0; i < tile.getSizeInventory(); i++) {
 								 ItemStack stackInSlot = tile.getStackInSlot(i);
-								 //TODO this will eventually be properties not the item name
-								 if (stackInSlot != null)
-									 infusionBucket.getTagCompound().setString("crushedItem" + i, tile.getStackInSlot(i).getDisplayName());
-							 }
+								 if (stackInSlot != null)  // Now sends the actual ItemStack so properties can be read dynamically
+									 infusionBucket.getTagCompound().setTag("crushedItem" + i, stackInSlot.writeToNBT(new NBTTagCompound()));
+								 }
 							 tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
 							 return infusionBucket;
 						 }

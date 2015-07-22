@@ -12,7 +12,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeedwoodBucketInfusion extends Item {
-
 	public ItemWeedwoodBucketInfusion() {
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("thebetweenlands.weedwoodBucketInfusion");
@@ -26,10 +25,13 @@ public class ItemWeedwoodBucketInfusion extends Item {
 		if (hasTag(stack))
 			if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("Infused")) {
 				list.add(EnumChatFormatting.GREEN + "Infusion Contains:");
-				list.add(stack.getTagCompound().getString("crushedItem0"));
-				list.add(stack.getTagCompound().getString("crushedItem1"));
-				list.add(stack.getTagCompound().getString("crushedItem2"));
-				list.add(stack.getTagCompound().getString("crushedItem3"));
+				// Below display name usage is for debug purposes.
+				// Now the actual crushed item's ItemStack is stored in the bucket NBT,
+				// properties will be retrieved in the Alembic's TE logic (TODO)
+				list.add(ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("crushedItem0")).getDisplayName());
+				list.add(ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("crushedItem1")).getDisplayName());
+				list.add(ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("crushedItem2")).getDisplayName());
+				list.add(ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("crushedItem3")).getDisplayName());
 			} else
 				list.add("This Infusion Contains Nothing");
 	}
