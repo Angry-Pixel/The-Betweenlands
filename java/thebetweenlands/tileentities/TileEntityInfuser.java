@@ -97,6 +97,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+		if(temp < 100 && evaporation > 0) {
+			evaporation--;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
 	}
 
 	@Override
