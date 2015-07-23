@@ -92,7 +92,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		if(temp == 100) {
 			evaporation++;
-			if(evaporation >= 600 && getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+			if(evaporation == 600 && getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
 				extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
 			}
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -164,7 +164,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				for (int i = 0; i < getSizeInventory(); i++) {
 					setInventorySlotContents(i, null);
 				}
-				if (evaporation >= 600) {
+				if (evaporation == 600) {
 					// TODO Make this a toxic cloud entity - a job for Sam's expert render skills :P
 					EntityPig piggy = new EntityPig(worldObj);
 					piggy.setLocationAndAngles(xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, MathHelper.wrapAngleTo180_float(worldObj.rand.nextFloat() * 360.0F), 0.0F);
@@ -172,9 +172,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}
 			}
 			hasInfusion = false;
-			evaporation = 0;
 			temp = 0;
 		}
+		evaporation = 0;
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
