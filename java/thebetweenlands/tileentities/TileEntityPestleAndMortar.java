@@ -65,6 +65,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 						else if (inventory[2].isItemEqual(output))
 							inventory[2].stackSize += output.stackSize;
 						inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+						inventory[3].setItemDamage(inventory[3].getItemDamage() + 1);
 						progress = 0;
 						manualGrinding = false;
 						if (inventory[1].getItemDamage() >= inventory[1].getMaxDamage()) {

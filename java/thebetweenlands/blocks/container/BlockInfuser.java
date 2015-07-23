@@ -60,7 +60,7 @@ public class BlockInfuser extends BlockContainer {
 				}
 				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed && !tile.hasInfusion) {
 					ItemStack crushedItem = player.getCurrentEquippedItem();
-					for (int i = 0; i < tile.getSizeInventory(); i++) {
+					for (int i = 0; i < 4; i++) {
 						if(tile.getStackInSlot(i) == null) {
 							tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
 							player.getCurrentEquippedItem().stackSize--;
@@ -69,10 +69,17 @@ public class BlockInfuser extends BlockContainer {
 						}
 					}
 				}
+				if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
+					if(tile.getStackInSlot(4) == null) {
+						tile.setInventorySlotContents(4, player.getCurrentEquippedItem());
+						player.setCurrentItemOrArmor(0, null);
+					}
+					return true;
+				}
 			}
 
 			if(player.isSneaking() && !tile.hasInfusion) {
-				for (int i = 0; i < tile.getSizeInventory(); i++) {
+				for (int i = 0; i < 4; i++) {
 					if(tile.getStackInSlot(i) != null) {
 						if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(i)))
 							player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem()), false);
@@ -82,16 +89,28 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 			}
+			
+			if(player.isSneaking() && tile.hasInfusion) {
+				if(tile.getStackInSlot(4) != null) {
+					if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(4)))
+						player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(4).getItem()), false);
+						tile.setInventorySlotContents(4, null);
+						world.markBlockForUpdate(x, y, z);
+						return true;
+				}
+			}
 		}
 		return true;
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		if(world.isRemote)
+			return;
 		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
 		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 		if (tileInventory != null && !tile.hasInfusion)
-			for (int i = 0; i < tileInventory.getSizeInventory(); i++) {
+			for (int i = 0; i < 4; i++) {
 				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
 					if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
@@ -105,6 +124,20 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 			}
+		if (tileInventory != null) {
+			ItemStack stack = tileInventory.getStackInSlot(4);
+			if (stack != null) {
+				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+					float f = 0.7F;
+					double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, stack);
+					entityitem.delayBeforeCanPickup = 10;
+					world.spawnEntityInWorld(entityitem);
+				}
+			}
+		}
 		super.breakBlock(world, x, y, z, block, meta);
 	}
 
