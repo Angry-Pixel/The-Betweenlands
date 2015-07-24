@@ -178,7 +178,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			waterTank.drain(fluid.amount, true);
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
-				for (int i = 0; i < getSizeInventory(); i++) {
+				for (int i = 0; i < 4; i++) {
 					setInventorySlotContents(i, null);
 				}
 				if (evaporation == 600) {
