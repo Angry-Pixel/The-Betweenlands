@@ -44,7 +44,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) {
-			if (hasCrystal) {
+			if (isCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
 				crystalRotation += this.crystalVelocity;
 				if (crystalRotation >= 360.0F)
