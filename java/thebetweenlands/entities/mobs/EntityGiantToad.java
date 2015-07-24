@@ -1,26 +1,31 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.model.ControlledAnimation;
 
 /**
  * Created by jnad325 on 7/14/15.
  */
 public class EntityGiantToad extends EntityCreature implements IEntityBL {
     float angle = 0;
+    int leapOffset;
+    public ControlledAnimation leapingAnim = new ControlledAnimation(4);
     public EntityGiantToad(World worldObj)
     {
         super(worldObj);
         getNavigator().setAvoidsWater(true);
         tasks.addTask(0, new EntityAISwimming(this));
-        tasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
         tasks.addTask(5, new EntityAIWander(this, 0));
-        //tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        //tasks.addTask(7, new EntityAILookIdle(this));
+        tasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, false));
+
+        leapOffset = rand.nextInt(29);
     }
 
     @Override
@@ -31,9 +36,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (getAttackTarget() != null) getNavigator().tryMoveToEntityLiving(getAttackTarget(), 0);
         if (getNavigator().getPath() != null && !getNavigator().getPath().isFinished() && onGround)
         {
-            if (ticksExisted % 30 == 0)
+            if (ticksExisted % 30 == leapOffset)
             {
                 int index = getNavigator().getPath().getCurrentPathIndex();
                 if (index < getNavigator().getPath().getCurrentPathLength()) {
@@ -54,5 +60,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
                 }
             }
         }
+        if (onGround) leapingAnim.decreaseTimer();
+        else leapingAnim.increaseTimer();
     }
 }
