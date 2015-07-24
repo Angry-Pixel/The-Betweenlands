@@ -1,10 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
@@ -20,9 +17,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
         super(worldObj);
         getNavigator().setAvoidsWater(true);
         tasks.addTask(0, new EntityAISwimming(this));
-        tasks.addTask(5, new EntityAIWander(this, 0.3));
-        tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(7, new EntityAILookIdle(this));
+        tasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+        tasks.addTask(5, new EntityAIWander(this, 0));
+        //tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        //tasks.addTask(7, new EntityAILookIdle(this));
     }
 
     @Override
@@ -43,18 +41,18 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
                     float x = (float) (nextHopSpot.xCoord - posX);
                     float y = (float) (nextHopSpot.yCoord - posY);
                     float z = (float) (nextHopSpot.zCoord - posZ);
-                    angle = (float) Math.atan(z / x);
-                    motionY += 0.5;
-                    motionX += 0.3 * MathHelper.cos(angle);
-                    motionZ += 0.3 * MathHelper.sin(angle);
+                    angle = (float) (Math.atan2(z, x));
+                    float distance = (float) Math.sqrt(x*x + z*z);
+                    if (distance > 1) {
+                        motionY += 0.5;
+                        motionX += 0.3 * MathHelper.cos(angle);
+                        motionZ += 0.3 * MathHelper.sin(angle);
+                    }
+                    else {
+                        getNavigator().clearPathEntity();
+                    }
                 }
             }
-            else
-            {
-                motionX = 0; //This doesn't quite work?
-                motionZ = 0;
-            }
         }
-        rotationYaw = (float) (angle * 180/Math.PI - 90);
     }
 }
