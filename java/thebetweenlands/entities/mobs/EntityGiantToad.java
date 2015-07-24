@@ -10,7 +10,6 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.model.ControlledAnimation;
-import thebetweenlands.utils.MathUtils;
 
 /**
  * Created by jnad325 on 7/14/15.
