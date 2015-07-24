@@ -276,4 +276,8 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 	public void setScaleZ(float scaleZ) {
 		this.scaleZ = scaleZ;
 	}
+
+	public void setScale(float scale) {
+		scaleX = scaleY = scaleZ = scale;
+	}
 }
