@@ -90,7 +90,7 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 			
-			if(player.isSneaking() && tile.hasInfusion) {
+			if(player.isSneaking() && tile.hasInfusion || player.isSneaking() && tile.getStackInSlot(0) == null) {
 				if(tile.getStackInSlot(4) != null) {
 					if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(4)))
 						player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(4).getItem()), false);
