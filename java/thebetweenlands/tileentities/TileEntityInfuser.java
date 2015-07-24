@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.items.BLItemRegistry;
 
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
 
@@ -23,14 +24,15 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public int stirProgress = 90;
 	public int temp;
 	public int evaporation;
-	public float objectVelocity;
-	public float objectRotation;
 	public int itemBob;
 	public boolean countUp = true;
 	public boolean hasInfusion = false;
+	public boolean hasCrystal;
+	public float crystalVelocity;
+	public float crystalRotation;
 
 	public TileEntityInfuser() {
-		super(4, "infuser");
+		super(5, "infuser");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
 	}
 
@@ -42,14 +44,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote) {
-				objectVelocity -= Math.signum(objectVelocity) * 0.05F;
-				objectRotation += objectVelocity;
-				if (objectRotation >= 360.0F)
-					objectRotation -= 360.0F;
-				else if (this.objectRotation <= 360.0F)
-					objectRotation += 360.0F;
-				if (Math.abs(objectVelocity) <= 1.0F && getWorldObj().rand.nextInt(15) == 0)
-					objectVelocity = worldObj.rand.nextFloat() * 18.0F - 9.0F;
+			if (hasCrystal) {
+				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
+				crystalRotation += this.crystalVelocity;
+				if (crystalRotation >= 360.0F)
+					crystalRotation -= 360.0F;
+				else if (this.crystalRotation <= 360.0F)
+					this.crystalRotation += 360.0F;
+				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0)
+					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+			}
 				if(countUp && itemBob <= 20) {
 					itemBob++;
 					if(itemBob == 20)
@@ -59,7 +63,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					itemBob--;
 					if(itemBob == 0)
 						countUp = true;
-				}	
+				}
+
 			return;
 		}
 
@@ -99,6 +104,18 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		if(temp < 100 && evaporation > 0) {
 			evaporation--;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		if(isCrystalInstalled() && inventory[4].getItemDamage() < inventory[4].getMaxDamage()) {
+			if (temp == 100 && evaporation == 500 && stirProgress >= 90 && hasInfusion) {
+				inventory[4].setItemDamage(inventory[4].getItemDamage() + 1);
+				stirProgress = 0;
+			}
+			hasCrystal = true;
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		else {
+			hasCrystal = false;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 	}
@@ -190,6 +207,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return waterTank.getFluid() != null ? (int) ((float) waterTank.getFluid().amount / (float) waterTank.getCapacity() * scale) : 0;
 	}
 
+	public boolean isCrystalInstalled() {
+		return inventory[4] != null && inventory[4].getItem() == BLItemRegistry.lifeCrystal && inventory[4].getItemDamage() <= inventory[4].getMaxDamage();
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -198,6 +219,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
 		nbt.setBoolean("hasInfusion", hasInfusion);
+		nbt.setBoolean("hasCrystal", hasCrystal);
 	}
 
 	@Override
@@ -208,6 +230,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		evaporation = nbt.getInteger("evaporationt");
 		temp = nbt.getInteger("temp");
 		hasInfusion = nbt.getBoolean("hasInfusion");
+		hasCrystal = nbt.getBoolean("hasCrystal");
 	}
 
 	@Override
@@ -218,7 +241,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
 		nbt.setBoolean("hasInfusion", hasInfusion);
-		for (int i = 0; i < getSizeInventory(); i++) {
+		nbt.setBoolean("hasCrystal", hasCrystal);
+		for (int i = 0; i < 4; i++) {
 		if(inventory[i] != null) {
 			NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
 			nbt.setTag("crushedItem" + i, itemStackCompound);
@@ -235,7 +259,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		evaporation = packet.func_148857_g().getInteger("evaporation");
 		temp = packet.func_148857_g().getInteger("temp");
 		hasInfusion = packet.func_148857_g().getBoolean("hasInfusion");
-		for (int i = 0; i < getSizeInventory(); i++) {
+		hasCrystal = packet.func_148857_g().getBoolean("hasCrystal");
+		for (int i = 0; i < 4; i++) {
 		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("crushedItem" + i);
 		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
 			inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);

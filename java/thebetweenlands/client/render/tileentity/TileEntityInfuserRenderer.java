@@ -94,11 +94,13 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		}
 		int itemBob = infuser.itemBob;
 		int stirProgress = infuser.stirProgress;
+		float crystalRotation = infuser.crystalRotation;
 		double itemY = y + 0.3D + size * 0.5D;
 		renderItemInSlot(infuser, 0, x + 0.5625D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
 		renderItemInSlot(infuser, 1, x + 0.4375D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
 		renderItemInSlot(infuser, 2, x + 0.4375D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
 		renderItemInSlot(infuser, 3, x + 0.5625D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
+		renderItemInSlot(infuser, 4, x + 0.5, y + 1.43D, z + 0.5D, 0D, crystalRotation);
 		
 	}
 	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
@@ -109,7 +111,9 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
 			GL11.glTranslated(0D, itemBob, 0D);
 			GL11.glRotated(rotation, 0, 1, 0);
-			if (!infuser.hasInfusion)
+			if (!infuser.hasInfusion && slotIndex != 4)
+				ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
+			if (slotIndex == 4)
 				ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
