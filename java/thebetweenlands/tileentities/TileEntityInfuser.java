@@ -227,7 +227,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		super.readFromNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		stirProgress = nbt.getInteger("stirProgress");
-		evaporation = nbt.getInteger("evaporationt");
+		evaporation = nbt.getInteger("evaporation");
 		temp = nbt.getInteger("temp");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
