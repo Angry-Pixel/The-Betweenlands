@@ -1,14 +1,12 @@
 package thebetweenlands.client.render.tileentity;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.block.ModelPestleAndMortar;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -65,9 +63,10 @@ public class TileEntityPestleAndMortarRenderer extends TileEntitySpecialRenderer
 		if (mortar.getStackInSlot(3) != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
-			GL11.glScaled(0.2D, 0.2D, 0.2D);
+			GL11.glScaled(0.15D, 0.15D, 0.15D);
+			GL11.glTranslated(0D, mortar.itemBob * 0.01F, 0D);
 			GL11.glRotatef(mortar.crystalRotation, 0, 1, 0);
-			ItemRenderHelper.renderItem(new ItemStack(BLItemRegistry.lifeCrystal, 1, mortar.getStackInSlot(3).getItemDamage()), 0);
+			ItemRenderHelper.renderItem(mortar.getStackInSlot(3), 0);
 			GL11.glPopMatrix();
 		}
 	}

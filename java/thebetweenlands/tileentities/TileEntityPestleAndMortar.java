@@ -16,8 +16,10 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	public boolean hasPestle;
 	public boolean hasCrystal;
 	public boolean manualGrinding = false;
-	public float crystalVelocity = 0.0F;
-	public float crystalRotation = 0.0F;
+	public float crystalVelocity;
+	public float crystalRotation;
+	public int itemBob;
+	public boolean countUp = true;
 
 	public TileEntityPestleAndMortar() {
 		super(4, "pestleAndMortar");
@@ -40,6 +42,16 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 					this.crystalRotation += 360.0F;
 				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0)
 					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+				if(countUp && itemBob <= 20) {
+					itemBob++;
+					if(itemBob == 20)
+						countUp = false;
+				}
+				if(!countUp && itemBob >= 0) {
+					itemBob--;
+					if(itemBob == 0)
+						countUp = true;
+				}
 			}
 			return;
 		}
@@ -65,7 +77,8 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 						else if (inventory[2].isItemEqual(output))
 							inventory[2].stackSize += output.stackSize;
 						inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
-						inventory[3].setItemDamage(inventory[3].getItemDamage() + 1);
+						if(!manualGrinding)
+							inventory[3].setItemDamage(inventory[3].getItemDamage() + 1);
 						progress = 0;
 						manualGrinding = false;
 						if (inventory[1].getItemDamage() >= inventory[1].getMaxDamage()) {

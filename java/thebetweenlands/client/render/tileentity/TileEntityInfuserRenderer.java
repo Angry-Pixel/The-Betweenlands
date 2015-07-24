@@ -61,7 +61,9 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		model.renderSpoon();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-		renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
+
+		// TODO this here for debug please leave
+	//	renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
 		
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
@@ -69,7 +71,6 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.instance;
 			IIcon waterIcon = ((BlockSwampWater)BLBlockRegistry.swampWater).getWaterIcon(1);
-			
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(770, 771);
@@ -100,12 +101,13 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		renderItemInSlot(infuser, 1, x + 0.4375D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
 		renderItemInSlot(infuser, 2, x + 0.4375D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
 		renderItemInSlot(infuser, 3, x + 0.5625D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
-		renderItemInSlot(infuser, 4, x + 0.5, y + 1.43D, z + 0.5D, 0D, crystalRotation);
+		renderItemInSlot(infuser, 4, x + 0.5, y + 1.43D, z + 0.5D, itemBob * 0.01D, crystalRotation);
 		
 	}
 	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
 		if (infuser.getStackInSlot(slotIndex) != null) {
 			GL11.glPushMatrix();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glTranslated(x, y, z);
 			GL11.glPushMatrix();
 			GL11.glScaled(0.15D, 0.15D, 0.15D);

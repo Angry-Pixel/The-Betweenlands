@@ -54,17 +54,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0)
 					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
 			}
-				if(countUp && itemBob <= 20) {
-					itemBob++;
-					if(itemBob == 20)
-						countUp = false;
-				}
-				if(!countUp && itemBob >= 0) {
-					itemBob--;
-					if(itemBob == 0)
-						countUp = true;
-				}
-
+			if(countUp && itemBob <= 20) {
+				itemBob++;
+				if(itemBob == 20)
+					countUp = false;
+			}
+			if(!countUp && itemBob >= 0) {
+				itemBob--;
+				if(itemBob == 0)
+					countUp = true;
+			}
 			return;
 		}
 
@@ -242,12 +241,12 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("temp", temp);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
-		for (int i = 0; i < 4; i++) {
-		if(inventory[i] != null) {
-			NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
-			nbt.setTag("crushedItem" + i, itemStackCompound);
-		} else
-			nbt.setTag("crushedItem" + i, null);
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if(inventory[i] != null) {
+				NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
+				nbt.setTag("slotItem" + i, itemStackCompound);
+			} else
+				nbt.setTag("slotItem" + i, null);
 		}
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
@@ -260,12 +259,12 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		temp = packet.func_148857_g().getInteger("temp");
 		hasInfusion = packet.func_148857_g().getBoolean("hasInfusion");
 		hasCrystal = packet.func_148857_g().getBoolean("hasCrystal");
-		for (int i = 0; i < 4; i++) {
-		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("crushedItem" + i);
-		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
-			inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
-		else
-			inventory[i] = null;
+		for (int i = 0; i < getSizeInventory(); i++) {
+			NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("slotItem" + i);
+			if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+				inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
+			else
+				inventory[i] = null;
 		}
 	}
 
