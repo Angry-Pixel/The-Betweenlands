@@ -36,11 +36,11 @@ public class ModelPestleAndMortar extends ModelBase {
         driedherb1 = new ModelRenderer(this, 60, 47);
         driedherb1.setRotationPoint(6.0F, 12.0F, 0.0F);
         driedherb1.addBox(0.0F, -1.0F, -3.0F, 0, 6, 6, 0.0F);
-        setRotateAngle(driedherb1, 0.136659280431156F, 0.0F, -0.136659280431156F);
+        setRotateAngle(driedherb1, -0.136659280431156F, 3.142F, -0.136659280431156F);
         fancypiece3 = new ModelRenderer(this, 81, 30);
         fancypiece3.setRotationPoint(0.0F, 2.0F, 5.5F);
         fancypiece3.addBox(-5.0F, 0.0F, 0.0F, 10, 5, 0, 0.0F);
-        setRotateAngle(fancypiece3, 0.091106186954104F, 0.0F, 0.0F);
+        setRotateAngle(fancypiece3, -0.091106186954104F, 3.142F, 0.0F);
         standardbrace1 = new ModelRenderer(this, 60, 0);
         standardbrace1.setRotationPoint(0.0F, 12.0F, 0.0F);
         standardbrace1.addBox(-6.0F, 0.0F, -6.0F, 12, 2, 12, 0.0F);
@@ -54,7 +54,7 @@ public class ModelPestleAndMortar extends ModelBase {
         fancypiece4 = new ModelRenderer(this, 81, 26);
         fancypiece4.setRotationPoint(5.5F, 2.0F, 0.0F);
         fancypiece4.addBox(0.0F, 0.0F, -5.0F, 0, 5, 10, 0.0F);
-        setRotateAngle(fancypiece4, 0.0F, 0.0F, -0.091106186954104F);
+        setRotateAngle(fancypiece4, 0.0F, 3.142F, -0.091106186954104F);
         fancypiece2 = new ModelRenderer(this, 60, 26);
         fancypiece2.setRotationPoint(-5.5F, 2.0F, 0.0F);
         fancypiece2.addBox(0.0F, 0.0F, -5.0F, 0, 5, 10, 0.0F);
