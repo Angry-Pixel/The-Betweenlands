@@ -11,9 +11,9 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 
+import thebetweenlands.client.render.shader.GeometryBuffer;
+import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.impl.GeometryBuffer;
-import thebetweenlands.client.render.shader.impl.MainShader;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.tileentities.TileEntityWisp;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

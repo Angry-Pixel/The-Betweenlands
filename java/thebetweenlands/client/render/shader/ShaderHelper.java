@@ -8,8 +8,7 @@ import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GLContext;
-import thebetweenlands.client.render.shader.impl.LightSource;
-import thebetweenlands.client.render.shader.impl.MainShader;
+
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class ShaderHelper {
@@ -60,8 +59,8 @@ public class ShaderHelper {
 			shaderWrapper = new MainShader(
 					mc.getTextureManager(),
 					mc.getResourceManager(), mc.getFramebuffer(),
-					new ResourceLocation("thebetweenlands:shaders/config/blmain.json"),
-					new ResourceLocation("thebetweenlands:shaders/program/"),
+					new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
+					new ResourceLocation("thebetweenlands:shaders/mc/program/"),
 					new ResourceLocation("thebetweenlands:textures/shader/")
 					);
 			try {

@@ -8,8 +8,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.impl.LightSource;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 

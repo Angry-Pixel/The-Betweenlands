@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader;
+package thebetweenlands.client.render.shader.base;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader.impl;
+package thebetweenlands.client.render.shader;
 
 public class LightSource {
 	public final double x, y, z;

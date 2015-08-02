@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader.impl;
+package thebetweenlands.client.render.shader;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -19,11 +19,10 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.shader.base.CShader;
+import thebetweenlands.client.render.shader.base.CShaderInt;
 
 import org.lwjgl.opengl.GL11;
-
-import thebetweenlands.client.render.shader.CShader;
-import thebetweenlands.client.render.shader.CShaderInt;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;

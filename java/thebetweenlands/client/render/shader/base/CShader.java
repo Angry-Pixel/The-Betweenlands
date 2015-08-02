@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader;
+package thebetweenlands.client.render.shader.base;
 
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
