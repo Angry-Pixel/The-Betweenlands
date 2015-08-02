@@ -422,6 +422,7 @@ entity.thebetweenlands.lurker.name=Lurker
 entity.thebetweenlands.gecko.name=Gecko
 entity.thebetweenlands.termite.name=Termite
 entity.thebetweenlands.toad.name=Giant Toad
+entity.thebetweenlands.meleeGuardian.name=Temple Guardian
 
 entity.thebetweenlands.snailPoisonJet.name=Snail Poison Jet
 
