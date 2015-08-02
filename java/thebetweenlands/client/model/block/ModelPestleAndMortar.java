@@ -15,7 +15,6 @@ public class ModelPestleAndMortar extends ModelBase {
     ModelRenderer pestle1;
     ModelRenderer standardbrace1;
     ModelRenderer groundwaste;
-    ModelRenderer driedherb1;
     ModelRenderer pestle2;
     ModelRenderer pestle3;
     ModelRenderer leg1;
@@ -26,17 +25,31 @@ public class ModelPestleAndMortar extends ModelBase {
     ModelRenderer fancypiece2;
     ModelRenderer fancypiece3;
     ModelRenderer fancypiece4;
-    ModelRenderer driedherb1a;
-    ModelRenderer driedherb1b;
-    ModelRenderer driedherb1c;
-
+/*  ModelRenderer driedherb1;
+	ModelRenderer driedherb1a;
+	ModelRenderer driedherb1b;
+	ModelRenderer driedherb1c;
+*/ 
     public ModelPestleAndMortar() {
         textureWidth = 128;
         textureHeight = 64;
-        driedherb1 = new ModelRenderer(this, 60, 47);
+/*		driedherb1 = new ModelRenderer(this, 60, 47);
         driedherb1.setRotationPoint(6.0F, 12.0F, 0.0F);
         driedherb1.addBox(0.0F, -1.0F, -3.0F, 0, 6, 6, 0.0F);
         setRotateAngle(driedherb1, -0.136659280431156F, 3.142F, -0.136659280431156F);
+        driedherb1a = new ModelRenderer(this, 73, 47);
+        driedherb1a.setRotationPoint(0.0F, 5.0F, 0.0F);
+        driedherb1a.addBox(0.0F, 0.0F, -3.0F, 0, 4, 6, 0.0F);
+        setRotateAngle(driedherb1a, -0.045553093477052F, 0.0F, 0.091106186954104F);
+        driedherb1b = new ModelRenderer(this, 86, 48);
+        driedherb1b.setRotationPoint(0.0F, 0.0F, 0.0F);
+        driedherb1b.addBox(0.0F, 0.0F, -2.5F, 0, 6, 5, 0.0F);
+        setRotateAngle(driedherb1b, -0.091106186954104F, 0.0F, -0.136659280431156F);
+        driedherb1c = new ModelRenderer(this, 97, 48);
+        driedherb1c.setRotationPoint(0.0F, 0.0F, 0.0F);
+        driedherb1c.addBox(0.0F, -1.0F, -2.5F, 0, 7, 5, 0.0F);
+        setRotateAngle(driedherb1c, -0.22759093446006054F, 0.22759093446006054F, -0.136659280431156F);
+*/
         fancypiece3 = new ModelRenderer(this, 81, 30);
         fancypiece3.setRotationPoint(0.0F, 2.0F, 5.5F);
         fancypiece3.addBox(-5.0F, 0.0F, 0.0F, 10, 5, 0, 0.0F);
@@ -44,10 +57,6 @@ public class ModelPestleAndMortar extends ModelBase {
         standardbrace1 = new ModelRenderer(this, 60, 0);
         standardbrace1.setRotationPoint(0.0F, 12.0F, 0.0F);
         standardbrace1.addBox(-6.0F, 0.0F, -6.0F, 12, 2, 12, 0.0F);
-        driedherb1c = new ModelRenderer(this, 97, 48);
-        driedherb1c.setRotationPoint(0.0F, 0.0F, 0.0F);
-        driedherb1c.addBox(0.0F, -1.0F, -2.5F, 0, 7, 5, 0.0F);
-        setRotateAngle(driedherb1c, -0.22759093446006054F, 0.22759093446006054F, -0.136659280431156F);
         mortarpiece_b = new ModelRenderer(this, 17, 17);
         mortarpiece_b.setRotationPoint(0.0F, 8.0F, 3.0F);
         mortarpiece_b.addBox(-5.0F, 0.0F, 0.0F, 10, 10, 2, 0.0F);
@@ -62,10 +71,6 @@ public class ModelPestleAndMortar extends ModelBase {
         mortarbottom_huehue = new ModelRenderer(this, 0, 35);
         mortarbottom_huehue.setRotationPoint(0.0F, 14.0F, 0.0F);
         mortarbottom_huehue.addBox(-4.0F, 0.0F, -4.0F, 8, 6, 8, 0.0F);
-        driedherb1b = new ModelRenderer(this, 86, 48);
-        driedherb1b.setRotationPoint(0.0F, 0.0F, 0.0F);
-        driedherb1b.addBox(0.0F, 0.0F, -2.5F, 0, 6, 5, 0.0F);
-        setRotateAngle(driedherb1b, -0.091106186954104F, 0.0F, -0.136659280431156F);
         leg4 = new ModelRenderer(this, 87, 15);
         leg4.setRotationPoint(5.0F, 1.0F, 5.0F);
         leg4.addBox(-1.1F, 0.0F, -1.1F, 2, 12, 2, 0.0F);
@@ -81,10 +86,6 @@ public class ModelPestleAndMortar extends ModelBase {
         mortarpiece_l = new ModelRenderer(this, 0, 17);
         mortarpiece_l.setRotationPoint(3.0F, 8.0F, 0.0F);
         mortarpiece_l.addBox(0.0F, 0.0F, -3.0F, 2, 10, 6, 0.0F);
-        driedherb1a = new ModelRenderer(this, 73, 47);
-        driedherb1a.setRotationPoint(0.0F, 5.0F, 0.0F);
-        driedherb1a.addBox(0.0F, 0.0F, -3.0F, 0, 4, 6, 0.0F);
-        setRotateAngle(driedherb1a, -0.045553093477052F, 0.0F, 0.091106186954104F);
         groundwaste = new ModelRenderer(this, 51, 42);
         groundwaste.setRotationPoint(0.0F, 23.9F, 0.0F);
         groundwaste.addBox(-3.0F, 0.0F, -4.0F, 10, 0, 10, 0.0F);
@@ -113,14 +114,16 @@ public class ModelPestleAndMortar extends ModelBase {
         pestle2.setRotationPoint(0.0F, -4.0F, 0.0F);
         pestle2.addBox(-1.0F, -6.0F, -1.0F, 2, 6, 2, 0.0F);
         standardbrace1.addChild(fancypiece3);
-        driedherb1.addChild(driedherb1c);
+
+/*		driedherb1.addChild(driedherb1a);
+		driedherb1.addChild(driedherb1b);
+		driedherb1.addChild(driedherb1c);
+*/ 
         standardbrace1.addChild(fancypiece4);
         standardbrace1.addChild(fancypiece2);
-        driedherb1.addChild(driedherb1b);
         standardbrace1.addChild(leg4);
         standardbrace1.addChild(leg2);
         standardbrace1.addChild(leg3);
-        driedherb1.addChild(driedherb1a);
         standardbrace1.addChild(fancypiece1);
         pestle2.addChild(pestle3);
         standardbrace1.addChild(leg1);
@@ -128,7 +131,7 @@ public class ModelPestleAndMortar extends ModelBase {
     }
 
     public void render() { 
-        driedherb1.render(0.0625F);
+//		driedherb1.render(0.0625F);
         standardbrace1.render(0.0625F);
         mortarpiece_b.render(0.0625F);
         mortarbottom_huehue.render(0.0625F);
