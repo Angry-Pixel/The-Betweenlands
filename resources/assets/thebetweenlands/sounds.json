@@ -354,6 +354,54 @@
       "geckoDeath"
     ]
   },
+    "templeGuardianMeleeLiving1": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianMeleeLiving1"
+    ]
+  },
+    "templeGuardianMeleeLiving2": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianMeleeLiving2"
+    ]
+  },
+    "templeGuardianMeleeLiving3": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianMeleeLiving3"
+    ]
+  },
+    "templeGuardianMeleeLiving4": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianMeleeLiving4"
+    ]
+  },
+    "templeGuardianHurt1": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianHurt1"
+    ]
+  },
+    "templeGuardianHurt2": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianHurt2"
+    ]
+  },
+    "templeGuardianHurt3": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianHurt3"
+    ]
+  },
+    "templeGuardianDeath": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianDeath"
+    ]
+  },
   "sorry": {
     "category": "player",
     "sounds": [
