@@ -132,7 +132,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.nose.addBox(-1.0F, -4.0F, -1.0F, 2, 4, 1, 0.0F);
         this.setRotateAngle(nose, -0.136659280431156F, 0.0F, 0.0F);
         this.armouredskirt_backedge = new MowzieModelRenderer(this, 60, 42);
-        this.armouredskirt_backedge.setRotationPoint(0.0F, 5.0F, 2.0F);
+        this.armouredskirt_backedge.setRotationPoint(0.0F, 5.0F, 0.0F);
         this.armouredskirt_backedge.addBox(-3.0F, 0.0F, -2.0F, 6, 1, 2, 0.0F);
         this.edge4b = new MowzieModelRenderer(this, 48, 86);
         this.edge4b.setRotationPoint(1.0F, 0.0F, 0.0F);
