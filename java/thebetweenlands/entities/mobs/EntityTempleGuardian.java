@@ -17,7 +17,7 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
         tasks.addTask(5, new EntityAIWander(this, 0.3D));
         tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(7, new EntityAILookIdle(this));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.4D, false));
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
     }
 
