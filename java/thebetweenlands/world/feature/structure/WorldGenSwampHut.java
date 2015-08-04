@@ -18,7 +18,9 @@ public class WorldGenSwampHut implements IWorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
 	private Block plank = (BlockGenericPlanks) BLBlockRegistry.weedwoodPlanks;
 	private Block stairs = BLBlockRegistry.weedwoodPlankStairs;
+	private Block roof = BLBlockRegistry.thatchSlope;
 	private Block bricks = BLBlockRegistry.betweenstoneBricks;
+	private Block thatchBlock = BLBlockRegistry.thatch;
 	Block fence = BLBlockRegistry.weedwoodPlankFence;
 
     private int length = -1;
@@ -137,26 +139,26 @@ public class WorldGenSwampHut implements IWorldGenerator {
     	   rotatedBeam(world, rand, x, y + 7, z, 11, 4, plank, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
 
     	  // roof left
-    	   rotatedBeam(world, rand, x, y + 11, z, 3, 7, stairs, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 4, direction);
-    	   rotatedBeam(world, rand, x, y + 10, z, 3, 6, stairs, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 4, direction);
-    	   rotatedBeam(world, rand, x, y + 9, z, 3, 5, stairs, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 3, direction);
-    	   rotatedBeam(world, rand, x, y + 8, z, 3, 4, stairs, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 2, direction);
-    	   rotatedBeam(world, rand, x, y + 10, z, 3, 7, stairs, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
-    	   rotatedBeam(world, rand, x, y + 9, z, 3, 6, stairs, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
-    	   rotatedBeam(world, rand, x, y + 8, z, 3, 5, stairs, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 11, z, 3, 7, roof, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 4, direction);
+    	   rotatedBeam(world, rand, x, y + 10, z, 3, 6, roof, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 4, direction);
+    	   rotatedBeam(world, rand, x, y + 9, z, 3, 5, roof, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 3, direction);
+    	   rotatedBeam(world, rand, x, y + 8, z, 3, 4, roof, direction == 0 ? 2 : direction == 1 ? 0: direction == 2 ? 3 : 1, 2, direction);
+    	   rotatedBeam(world, rand, x, y + 10, z, 3, 7, roof, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 9, z, 3, 6, roof, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 8, z, 3, 5, roof, direction == 0 ? 7 : direction == 1 ? 5: direction == 2 ? 6 : 4, 1, direction);
 
      	  // roof right
-    	   rotatedBeam(world, rand, x, y + 11, z, 3, 8, stairs, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 4, direction);
-    	   rotatedBeam(world, rand, x, y + 10, z, 3, 9, stairs, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 4, direction);
-    	   rotatedBeam(world, rand, x, y + 9, z, 3, 10, stairs, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 3, direction);
-    	   rotatedBeam(world, rand, x, y + 8, z, 3, 11, stairs, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 2, direction);
-    	   rotatedBeam(world, rand, x, y + 10, z, 3, 8, stairs, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
-    	   rotatedBeam(world, rand, x, y + 9, z, 3, 9, stairs, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
-    	   rotatedBeam(world, rand, x, y + 8, z, 3, 10, stairs, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 11, z, 3, 8, roof, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 4, direction);
+    	   rotatedBeam(world, rand, x, y + 10, z, 3, 9, roof, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 4, direction);
+    	   rotatedBeam(world, rand, x, y + 9, z, 3, 10, roof, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 3, direction);
+    	   rotatedBeam(world, rand, x, y + 8, z, 3, 11, roof, direction == 0 ? 3 : direction == 1 ? 1: direction == 2 ? 2 : 0, 2, direction);
+    	   rotatedBeam(world, rand, x, y + 10, z, 3, 8, roof, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 9, z, 3, 9, roof, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 8, z, 3, 10, roof, direction == 0 ? 6 : direction == 1 ? 4: direction == 2 ? 7 : 5, 1, direction);
 
     	   //roof apex 
-    	   rotatedBeam(world, rand, x, y + 11, z, 7, 7, plank, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
-    	   rotatedBeam(world, rand, x, y + 11, z, 7, 8, plank, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 11, z, 7, 7, thatchBlock, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
+    	   rotatedBeam(world, rand, x, y + 11, z, 7, 8, thatchBlock, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
 
        }
        
