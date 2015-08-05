@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,5 +36,11 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 	@Override
 	protected String getDeathSound() {
 		return "thebetweenlands:templeGuardianDeath";
+	}
+	
+	@Override
+	protected void func_145780_a(int x, int y, int z, Block block) { // playStepSound
+		int randomSound = rand.nextInt(3) + 1;
+		playSound("thebetweenlands:templeGuardianStep" + randomSound, 1F, 1F);
 	}
 }

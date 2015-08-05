@@ -378,6 +378,60 @@
       "templeGuardianMeleeLiving4"
     ]
   },
+    "templeGuardianBerserkerLiving1": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerLiving1"
+    ]
+  },
+    "templeGuardianBerserkerLiving2": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerLiving2"
+    ]
+  },
+    "templeGuardianBerserkerLiving3": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerLiving3"
+    ]
+  },
+    "templeGuardianBerserkerLiving4": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerLiving4"
+    ]
+  },
+    "templeGuardianBerserkerCharge": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerCharge"
+    ]
+  },
+    "templeGuardianBerserkerImpact": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianBerserkerImpact"
+    ]
+  },
+    "templeGuardianStep1": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianStep1"
+    ]
+  },
+    "templeGuardianStep2": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianStep2"
+    ]
+  },
+    "templeGuardianStep3": {
+    "category": "hostile",
+    "sounds": [
+      "templeGuardianStep3"
+    ]
+  },
     "templeGuardianHurt1": {
     "category": "hostile",
     "sounds": [
