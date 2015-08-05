@@ -87,6 +87,8 @@ public class DebugHandler {
 
 	public boolean ignoreStart = true;
 
+	public boolean debugDeferredEffect = false;
+	
 	private float lightTable[];
 
 	public GuiScreen previousGuiScreen;
@@ -132,6 +134,9 @@ public class DebugHandler {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_T)) {
 				ignoreStart = !ignoreStart;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+				debugDeferredEffect = !debugDeferredEffect;
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_U) && mc.isIntegratedServerRunning() && isInDebugWorld && !shouldRecreateBetweenlands) {
 				shouldRecreateBetweenlands = true;
