@@ -17,8 +17,9 @@ import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
-import thebetweenlands.blocks.container.BlockInfuser;
 import thebetweenlands.blocks.container.BlockCompostBin;
+import thebetweenlands.blocks.container.BlockInfuser;
+import thebetweenlands.blocks.container.BlockLootPot;
 import thebetweenlands.blocks.container.BlockPestleAndMortar;
 import thebetweenlands.blocks.container.BlockPurifier;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
@@ -347,6 +348,7 @@ public class BLBlockRegistry {
     public static final Block octinePressurePlate = new BlockBLPressurePlate("octineBlock", Material.rock, BlockPressurePlate.Sensitivity.players);
     public static final Block weedwoodLever = new BlockBLLever();
     public static final BlockBLFlowerPot mudFlowerPot = new BlockBLFlowerPot();
+    public static final Block lootPot = new BlockLootPot();
 
     //DOORS
     public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
