@@ -76,6 +76,7 @@ public class BlockLootPot extends BlockContainer {
 			TileEntityLootPot tile = (TileEntityLootPot) world.getTileEntity(x,y, z);
 			if (tile != null && !world.isRemote) {
 				tile.setPotModelType((byte) world.rand.nextInt(3));
+				tile.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.markBlockForUpdate(x, y, z);
 			}
 		}

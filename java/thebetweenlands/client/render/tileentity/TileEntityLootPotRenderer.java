@@ -32,7 +32,7 @@ public class TileEntityLootPotRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5D, y + 1.5F, z + 0.5D);
 				GL11.glScalef(1F, -1F, -1F);
-				GL11.glRotatef(180F, 0.0F, 1F, 0F);
+				GL11.glRotatef(180F + tile.getModelRotationOffset(), 0.0F, 1F, 0F);
 				getModelToRender(type);
 				GL11.glPopMatrix();
 				break;
@@ -40,7 +40,7 @@ public class TileEntityLootPotRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5D, y + 1.5F, z + 0.5D);
 				GL11.glScalef(1F, -1F, -1F);
-				GL11.glRotatef(0F, 0.0F, 1F, 0F);
+				GL11.glRotatef(tile.getModelRotationOffset(), 0.0F, 1F, 0F);
 				getModelToRender(type);
 				GL11.glPopMatrix();
 				break;
@@ -48,7 +48,7 @@ public class TileEntityLootPotRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5D, y + 1.5F, z + 0.5D);
 				GL11.glScalef(1F, -1F, -1F);
-				GL11.glRotatef(90F, 0.0F, 1F, 0F);
+				GL11.glRotatef(90F + tile.getModelRotationOffset(), 0.0F, 1F, 0F);
 				getModelToRender(type);
 				GL11.glPopMatrix();
 				break;
@@ -56,7 +56,7 @@ public class TileEntityLootPotRenderer extends TileEntitySpecialRenderer {
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5D, y + 1.5F, z + 0.5D);
 				GL11.glScalef(1F, -1F, -1F);
-				GL11.glRotatef(-90F, 0.0F, 1F, 0F);
+				GL11.glRotatef(-90F + tile.getModelRotationOffset(), 0.0F, 1F, 0F);
 				getModelToRender(type);
 				GL11.glPopMatrix();
 				break;
