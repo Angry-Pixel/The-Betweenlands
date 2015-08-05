@@ -8,11 +8,11 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelMeleeGuardian;
 
 @SideOnly(Side.CLIENT)
-public class RenderTempleGuardian extends RenderLiving {
-	private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/meleeGuardianNA.png");
+public class RenderMeleeGuardian extends RenderLiving {
+	private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/meleeGuardianActive.png");
 
-	public RenderTempleGuardian() {
-		super(new ModelMeleeGuardian(), 1.0F);
+	public RenderMeleeGuardian() {
+		 super(new ModelMeleeGuardian(), 1.0F);
 	}
 
 	@Override

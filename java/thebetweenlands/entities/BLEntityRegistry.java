@@ -34,6 +34,7 @@ public class BLEntityRegistry
 		registerEntity(20, EntityTermite.class, "termite", 0x283320, 0x827856);
 		registerEntity(21, EntityGiantToad.class, "toad", 0x283320, 0x827856);
 		registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", 0x283320, 0x827856);
+		registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", 0x283320, 0x827856);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

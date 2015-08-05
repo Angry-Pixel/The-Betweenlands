@@ -113,7 +113,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, new RenderGecko());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, new RenderTermite());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderGiantToad());
-		RenderingRegistry.registerEntityRenderingHandler(EntityTempleGuardian.class, new RenderTempleGuardian());
+		RenderingRegistry.registerEntityRenderingHandler(EntityMeleeGuardian.class, new RenderMeleeGuardian());
+		RenderingRegistry.registerEntityRenderingHandler(EntityBerserkerGuardian.class, new RenderBerserkerGuardian());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLItemFrame.class, new RenderBLItemFrame());
 
 		//Tile Entity Renderer
