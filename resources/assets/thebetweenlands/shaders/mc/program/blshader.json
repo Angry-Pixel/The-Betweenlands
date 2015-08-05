@@ -10,8 +10,10 @@
     "samplers": [
         { "name": "s_diffuse" },
         { "name": "s_diffuse_depth" },
-        { "name": "s_gBuffer1" },
-        { "name": "s_gBuffer1_depth" }
+        { "name": "s_repellerShield" },
+        { "name": "s_repellerShield_depth" },
+        { "name": "s_gasParticles" },
+        { "name": "s_gasParticles_depth" }
     ],
     "uniforms": [
         { "name": "u_projMat",          "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },

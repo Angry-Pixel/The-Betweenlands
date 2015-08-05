@@ -26,6 +26,7 @@ import org.lwjgl.opengl.GL11;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;
+	private Framebuffer blitBuffer;
 	private List<LightSource> lightSources = new ArrayList<LightSource>();
 	private Matrix4f INVMVP;
 	private Matrix4f MVP;
@@ -52,6 +53,14 @@ public class MainShader extends CShader {
 		return geomBuffer;
 	}
 
+	/**
+	 * Returns a fullscreen blit FBO
+	 * @return
+	 */
+	public Framebuffer getBlitBuffer() {
+		return this.blitBuffer;
+	}
+	
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
 	}
@@ -88,6 +97,15 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureWidth, 
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
+		
+		if(this.blitBuffer == null) {
+			this.blitBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
+		}
+		if(input.framebufferWidth != this.blitBuffer.framebufferWidth
+				|| input.framebufferHeight != this.blitBuffer.framebufferHeight) {
+			this.blitBuffer.deleteFramebuffer();
+			this.blitBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
+		}
 
 		for(Entry<String, GeometryBuffer> geomBufferEntry : this.geometryBuffers.entrySet()) {
 			geomBufferEntry.getValue().update(input);

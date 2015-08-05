@@ -11,8 +11,10 @@ uniform sampler2D s_diffuse;
 uniform sampler2D s_diffuse_depth;
 
 //G-Buffers
-uniform sampler2D s_gBuffer1;
-uniform sampler2D s_gBuffer1_depth;
+uniform sampler2D s_repellerShield;
+uniform sampler2D s_repellerShield_depth;
+uniform sampler2D s_gasParticles;
+uniform sampler2D s_gasParticles_depth;
 
 //Matrix to transform screen space coordinates to world space coordinates
 uniform mat4 u_INVMVP;
@@ -116,12 +118,12 @@ void main() {
     
     
     
-    //////// G-Buffer 1 - Repeller shield ////////
-    vec4 GBuff1Col = texture2D(s_gBuffer1, v_texCoord);
-    bool inShield = GBuff1Col.a == 1.0F;
+    //////// Repeller shield ////////
+    vec4 repellerShieldBuffCol = texture2D(s_repellerShield, v_texCoord);
+    bool inShield = repellerShieldBuffCol.a != 0.0F;
     if(inShield) {
         //Get shield frag pos
-        vec3 fragPos2 = getFragPos(s_gBuffer1_depth);
+        vec3 fragPos2 = getFragPos(s_repellerShield_depth);
         
 		//Holds calculated shield color
 		vec4 shieldFragColor = vec4(0.0F, 0.0F, 0.0F, 0.0F);
@@ -144,7 +146,7 @@ void main() {
             //Calculate color distortion
             float fragDistortion = (fragPos2.y + u_camPos.y + (cos(fragPos2.x + u_camPos.x) * sin(fragPos2.z + u_camPos.z)) * 2.0F) * 8.0F;
             float colorDistortion = ((sin(fragDistortion + u_msTime / 300.0F) + 1.0F) / 800.0F);
-            shieldFragColor += vec4(GBuff1Col.rgb * colorDistortion * 10.0F, 1.0F);
+            shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 1.0F);
         }
         
         //Apply intersection glow
@@ -156,7 +158,7 @@ void main() {
                 dstMultiplier = 3000.0F;
             }
             float dsCol = pow((0.1F - dist / 2.0F), dstFalloff) * dstMultiplier;
-            shieldFragColor += vec4(GBuff1Col.rgb * dsCol, 1.0F);
+            shieldFragColor += vec4(repellerShieldBuffCol.rgb * dsCol, 1.0F);
         }
 		
 		//Applies fogged shield color to the fragment color
@@ -164,6 +166,30 @@ void main() {
     }
     
     
+	
+	
+	//////// Gas Particles ////////
+	vec4 gasParticlesBuffCol = texture2D(s_gasParticles, v_texCoord);
+	bool inGas = gasParticlesBuffCol.a != 0.0F;
+    if(inGas) {
+		//Get gas frag pos
+        vec3 fragPos2 = getFragPos(s_gasParticles_depth);
+		
+		//Get depth (distance to camera)
+        float fragCamDist = length(fragPos);
+        float fragCamDist2 = length(fragPos2);
+        
+        //Check if repeller shield is behind or in front of the diffuse fragment
+        bool inBack = fragCamDist <= fragCamDist2;
+        if(!inBack) {
+			color += applyFog(fragPos2, gasParticlesBuffCol);
+			distortion = true;
+			distortionMultiplier += 1.5F;
+			/////WIP stuff/////
+		}
+	}
+	
+	
     
     //////// Distortion and diffuse texel ////////
     if(!distortion) {

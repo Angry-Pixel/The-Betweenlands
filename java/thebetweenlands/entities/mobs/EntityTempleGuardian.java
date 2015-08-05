@@ -27,12 +27,6 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
     }
     
 	@Override
-	protected String getLivingSound() {
-		int randomSound = rand.nextInt(3) + 1;
-		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
-	}
-
-	@Override
 	protected String getHurtSound() {
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:templeGuardianHurt" + randomSound;

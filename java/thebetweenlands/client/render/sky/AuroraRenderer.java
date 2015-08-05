@@ -105,8 +105,8 @@ public class AuroraRenderer {
 			for(int si = 0; si < subSegments; si++) {
 				prevDirection = new Vector2d(this.currDirection.x, this.currDirection.y);
 				
-				float dirXNoise = this.interpolatedNoise(randNoiseOffset * 10 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 10000000000.0D)))) * 0.1F - 0.05F;
-				float dirYNoise = this.interpolatedNoise(randNoiseOffset * 20 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 10000000000.0D)) * 5)) * 0.1F - 0.05F;
+				float dirXNoise = this.interpolatedNoise(randNoiseOffset * 10 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 7000000000.0D)))) * 0.1F - 0.05F;
+				float dirYNoise = this.interpolatedNoise(randNoiseOffset * 20 + 0.01F * ((i + (si) / (float)subSegments + (float)(System.nanoTime() / 7000000000.0D)) * 5)) * 0.1F - 0.05F;
 				
 				this.currDirection = new Vector2d(this.currDirection.x + dirXNoise, this.currDirection.y + dirYNoise);
 				this.currDirection.normalize();
@@ -123,14 +123,14 @@ public class AuroraRenderer {
 				double umin = ((si+1) / (float)subSegments);
 				double umax = ((si) / (float)subSegments);
 
-				float alphaGradMultiplier = 1.0F;
-				float alphaGradMultiplierNext = 1.0F;
+				float salphaGradMultiplier = 1.0F;
+				float salphaGradMultiplierNext = 1.0F;
 				if(i == 0) {
-					alphaGradMultiplier = 1.0F / subSegments * si;
-					alphaGradMultiplierNext = 1.0F / subSegments * (si + 1);
+					salphaGradMultiplier = 1.0F / subSegments * si;
+					salphaGradMultiplierNext = 1.0F / subSegments * (si + 1);
 				} else if(i == segments - 1) {
-					alphaGradMultiplier = 1.0F / subSegments * (subSegments - si);
-					alphaGradMultiplierNext = 1.0F / subSegments * (subSegments - (si + 1));
+					salphaGradMultiplier = 1.0F / subSegments * (subSegments - si);
+					salphaGradMultiplierNext = 1.0F / subSegments * (subSegments - (si + 1));
 				}
 				
 				for(int gi = 0; gi < cGradients - 1; gi++) {
@@ -142,6 +142,16 @@ public class AuroraRenderer {
 					
 					Vector4f bottomGradient = colorGradients.get(gi);
 					Vector4f topGradient = colorGradients.get(gi+1);
+					
+					double camDist = Minecraft.getMinecraft().renderViewEntity.getDistance(segStopX, Minecraft.getMinecraft().renderViewEntity.posY, segStopZ);
+					float alphaGradMultiplier = (float) (salphaGradMultiplier);
+					float alphaGradMultiplierNext = (float) (salphaGradMultiplierNext);
+					float viewDist = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0F - 10.0F;
+					
+					if(camDist > viewDist) {
+						alphaGradMultiplier *= 10.0F / (camDist - (viewDist - 10.0F));
+						alphaGradMultiplierNext *= 10.0F / (camDist - (viewDist - 10.0F));
+					}
 					
 					//Front face
 					tessellator.setColorRGBA_F(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier);

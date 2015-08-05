@@ -1,4 +1,4 @@
-package thebetweenlands.commands;
+package thebetweenlands.command;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,13 +28,13 @@ public class CommandToggleEvent extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "commands.blevent.usage";
+		return "command.blevent.usage";
 	}
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length < 1) {
-			throw new CommandException("commands.blevent.usage");
+			throw new CommandException("command.blevent.usage");
 		}
 		switch (args[0]) {
 		case "toggle":
@@ -50,13 +50,13 @@ public class CommandToggleEvent extends CommandBase {
 			processList(sender);
 			break;
 		default:
-			throw new CommandException("commands.blevent.usage");
+			throw new CommandException("command.blevent.usage");
 		}
 	}
 
 	private void checkArg(String[] args, int length, String usage) {
 		if (args.length < length) {
-			throw new CommandException("commands.blevent.usage." + usage);
+			throw new CommandException("command.blevent.usage." + usage);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class CommandToggleEvent extends CommandBase {
 		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		boolean isActive = event.isActive();
 		event.setActive(!isActive, true);
-		func_152373_a(sender, this, "commands.blevent.success." + (isActive ? "off" : "on"), eventName);
+		func_152373_a(sender, this, "command.blevent.success." + (isActive ? "off" : "on"), eventName);
 	}
 
 	private void processOn(ICommandSender sender, String[] args) {
@@ -80,7 +80,7 @@ public class CommandToggleEvent extends CommandBase {
 			for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
 				event.setActive(false, true);
 			}
-			func_152373_a(sender, this, "commands.blevent.success.alloff");
+			func_152373_a(sender, this, "command.blevent.success.alloff");
 		} else {
 			processEventState(sender, func_82360_a(sender, args, 1), false);
 		}
@@ -94,10 +94,10 @@ public class CommandToggleEvent extends CommandBase {
 	private void processEventState(ICommandSender sender, String eventName, boolean isActive) {
 		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		if (event.isActive() == isActive) {
-			throw new CommandException("commands.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
+			throw new CommandException("command.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
 		} else {
 			event.setActive(isActive, true);
-			func_152373_a(sender, this, "commands.blevent.success." + (isActive ? "on" : "off"), eventName);
+			func_152373_a(sender, this, "command.blevent.success." + (isActive ? "on" : "off"), eventName);
 		}
 	}
 
@@ -127,7 +127,7 @@ public class CommandToggleEvent extends CommandBase {
 		if (world.provider instanceof WorldProviderBetweenlands) {
 			return ((WorldProviderBetweenlands) world.provider).getWorldData().getEnvironmentEventRegistry();
 		} else {
-			throw new CommandException("commands.blevent.failure.wrongdimension");
+			throw new CommandException("command.blevent.failure.wrongdimension");
 		}
 	}
 
@@ -135,7 +135,7 @@ public class CommandToggleEvent extends CommandBase {
 		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		EnvironmentEvent event = environmentEventRegistry.forName(eventName);
 		if (event == null) {
-			throw new CommandException("commands.blevent.failure.unknown", eventName);
+			throw new CommandException("command.blevent.failure.unknown", eventName);
 		}
 		return event;
 	}

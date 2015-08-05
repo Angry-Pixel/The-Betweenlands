@@ -10,4 +10,10 @@ public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntity
     {
         super(worldObj);
     }
+    
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
+	}
 }

@@ -7,42 +7,36 @@ import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 
-public class DecayManager
-{
-	public static int getDecayLevel(EntityPlayer player)
-	{
+public class DecayManager {
+	public static int getDecayLevel(EntityPlayer player) {
 		EntityPropertiesDecay property = ((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId()));
-		if(property != null) {
+		if (property != null) {
 			return property.decayLevel;
 		}
 		return 0;
 	}
 
-	public static int setDecayLevel(int decayLevel, EntityPlayer player)
-	{
+	public static int setDecayLevel(int decayLevel, EntityPlayer player) {
 		if (decayLevel < 0) return 0;
 		((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel = decayLevel > 20 ? 20 : decayLevel;
-		if (FMLCommonHandler.instance().getEffectiveSide().isClient()) TheBetweenlands.networkWrapper.sendToServer(new MessageSyncPlayerDecay(decayLevel));
+		if (FMLCommonHandler.instance().getEffectiveSide().isClient())
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSyncPlayerDecay(decayLevel));
 		return ((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel;
 	}
 
-	public static int resetDecay(EntityPlayer player)
-	{
+	public static int resetDecay(EntityPlayer player) {
 		return setDecayLevel(0, player);
 	}
 
-	public static float getPlayerHearts(EntityPlayer player)
-	{
+	public static float getPlayerHearts(EntityPlayer player) {
 		return Math.min(20f - (14 - getDecayLevel(player) * 14 / 20), 20f);
 	}
 
-	public static boolean enableDecay(EntityPlayer player)
-	{
+	public static boolean enableDecay(EntityPlayer player) {
 		return player.dimension == ModInfo.DIMENSION_ID && !player.capabilities.isCreativeMode;
 	}
 
-	public static int getCorruptionLevel(EntityPlayer player)
-	{
+	public static int getCorruptionLevel(EntityPlayer player) {
 		if (!enableDecay(player)) return 0;
 		return 10 - getDecayLevel(player) / 2;
 	}

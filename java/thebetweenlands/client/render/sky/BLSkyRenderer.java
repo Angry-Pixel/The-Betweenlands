@@ -391,8 +391,7 @@ public class BLSkyRenderer extends IRenderHandler
 		GL11.glPushMatrix();
 		GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ);
 		for(AuroraRenderer aurora : this.auroras) {
-			double dist = aurora.getDistance(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ);
-			aurora.render((float)(180.0F - dist) / 180.0F, gradients);
+			aurora.render(0.4F, gradients);
 		}
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);

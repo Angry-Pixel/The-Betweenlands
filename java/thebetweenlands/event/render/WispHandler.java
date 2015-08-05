@@ -38,7 +38,6 @@ public class WispHandler {
 		}
 		GL11.glPopMatrix();
 
-
 		/*if(this.sphereDispList == -2) {
 			this.sphereDispList = GL11.glGenLists(1);
 			GL11.glNewList(this.sphereDispList, GL11.GL_COMPILE);
@@ -57,7 +56,7 @@ public class WispHandler {
 
 			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 			if(shader != null) {
-				GeometryBuffer gBuffer = shader.getGeometryBuffer("gBuffer1");
+				GeometryBuffer gBuffer = shader.getGeometryBuffer("repellerShield");
 				gBuffer.bind();
 				gBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 
@@ -94,12 +93,16 @@ public class WispHandler {
 		if(ShaderHelper.INSTANCE.canUseShaders()) {
 			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 			if(shader != null) {
-				GeometryBuffer gBuffer = shader.getGeometryBuffer("gBuffer1");
-				gBuffer.bind();
-				gBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
-				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+				GeometryBuffer repellerShieldBuffer = shader.getGeometryBuffer("repellerShield");
+				repellerShieldBuffer.bind();
+				repellerShieldBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+				GeometryBuffer gasParticlesBuffer = shader.getGeometryBuffer("gasParticles");
+				gasParticlesBuffer.bind();
+				gasParticlesBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 			}
 		}
+		
 		this.tileList.clear();
 	}
 }
