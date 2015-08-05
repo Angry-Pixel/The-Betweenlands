@@ -3,6 +3,7 @@ package thebetweenlands.world.feature.structure;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -22,6 +23,7 @@ public class WorldGenSwampHut implements IWorldGenerator {
 	private Block bricks = BLBlockRegistry.betweenstoneBricks;
 	private Block thatchBlock = BLBlockRegistry.thatch;
 	Block fence = BLBlockRegistry.weedwoodPlankFence;
+	Block door = BLBlockRegistry.doorWeedwood;
 
     private int length = -1;
     private int width = -1;
@@ -161,12 +163,79 @@ public class WorldGenSwampHut implements IWorldGenerator {
     	   rotatedBeam(world, rand, x, y + 11, z, 7, 8, thatchBlock, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
 
        }
-       
+
+       System.out.println("Added Hut at: " + x + " " + z); 
+       	// door/extension(s)
+       boolean leftExtension = rand.nextBoolean();
+       boolean rightExtension = rand.nextBoolean();
+       boolean frontExtension = rand.nextBoolean();
+       boolean backExtension = rand.nextBoolean();
+
+       if(!leftExtension && !rightExtension && !frontExtension && !backExtension) {
+    	   System.out.println("Door can only be on main building");
+       }
+
+    //   if(frontExtension) {
+    //	   addExtention(world, rand,  x, y, z, 0);
+    //	   System.out.println("Has Front Wing");
+    //   }
+
+       if(leftExtension) {
+    	   addExtention(world, rand,  x, y, z, 1);
+    	   System.out.println("Has Left Wing");
+       }
+
+       if(backExtension) {
+    	   addExtention(world, rand,  x, y, z, 2);
+    	   System.out.println("Has Back Wing");
+       }
+
+       if(rightExtension) {
+    	   addExtention(world, rand,  x, y, z, 3);
+    	   System.out.println("Has Right Wing");
+       }
+
         System.out.println("Added Hut at: " + x + " " + z);
         return true;
     }
-    
-    public void rotatedBeam(World world, Random rand, int x, int y, int z, int a, int b, Block blockType, int blockMeta, int size, int direction) {
+
+    private void addExtention(World world, Random rand, int x, int y, int z, int direction) {
+    	//frame
+    	rotatedBeam(world, rand, x, y + 2, z, 2, 6, log, direction == 0 || direction == 2 ? 4 : 8, 3, direction);
+    	rotatedBeam(world, rand, x, y + 2, z, 2, 9, log, direction == 0 || direction == 2 ? 4 : 8, 3, direction);
+
+    	for(int beamHeight = 0; beamHeight < 2; beamHeight++) {
+    		rotatedBeam(world, rand, x, y + beamHeight, z, 1, 6, log, 0, 1, direction);
+    		rotatedBeam(world, rand, x, y + beamHeight, z, 1, 9, log, 0, 1, direction);
+    		rotatedBeam(world, rand, x, y + beamHeight, z, 4, 6, log, 0, 1, direction);
+    		rotatedBeam(world, rand, x, y + beamHeight, z, 4, 9, log, 0, 1, direction);
+    	}
+
+    	for(int beamLength = 0; beamLength < 4; beamLength++)
+    		rotatedBeam(world, rand, x, y + 2, z, 1, 6 + beamLength, log, direction == 0 || direction == 2 ? 8 : 4, 1, direction);
+
+    	// air gap
+    	for(int beamLength = 0; beamLength < 2; beamLength++)
+    		for(int beamHeight = 0; beamHeight < 3; beamHeight++)
+    			rotatedBeam(world, rand, x, y + beamHeight, z, 5, 7 + beamLength, Blocks.air, 0, 1, direction);
+
+    	//windows side
+    	for(int beamLength = 0; beamLength < 2; beamLength++) {
+    		rotatedBeam(world, rand, x, y, z, 1, 7 + beamLength, bricks, direction == 0 || direction == 2 ? 8 : 4, 1, direction);
+    		rotatedBeam(world, rand, x, y + 1, z, 1, 7 + beamLength, fence, direction == 0 || direction == 2 ? 8 : 4, 1, direction);
+    	}
+    	//windows back
+		rotatedBeam(world, rand, x, y, z, 2, 6, bricks, direction == 0 || direction == 2 ? 4 : 8, 2, direction);
+		rotatedBeam(world, rand, x, y + 1, z, 2, 6, fence, direction == 0 || direction == 2 ? 4 : 8, 2, direction);
+
+		//front door
+		rotatedBeam(world, rand, x, y, z, 2, 9, bricks, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
+		rotatedBeam(world, rand, x, y + 1, z, 2, 9, plank, direction == 0 || direction == 2 ? 4 : 8, 1, direction);
+		//rotatedBeam(world, rand, x, y, z, 3, 9, door, direction == 1 ? 3 : direction == 3 ? 1 : 2, 1, direction);
+		//rotatedBeam(world, rand, x, y +1, z, 3, 9, door, direction == 1 ? 8 : 9, 1, direction);
+	}
+
+	public void rotatedBeam(World world, Random rand, int x, int y, int z, int a, int b, Block blockType, int blockMeta, int size, int direction) {
     	switch (direction) {
     	case 0 :
     		for(int xx = x + a; xx < x + a + size; xx++)
