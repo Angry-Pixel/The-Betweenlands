@@ -16,15 +16,4 @@ public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntity
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
 	}
-
-	@Override
-	protected String getHurtSound() {
-		int randomSound = rand.nextInt(3) + 1;
-		return "thebetweenlands:templeGuardianHurt" + randomSound;
-	}
-
-	@Override
-	protected String getDeathSound() {
-		return "thebetweenlands:templeGuardianDeath";
-	}
 }
