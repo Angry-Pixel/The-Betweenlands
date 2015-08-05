@@ -16,7 +16,6 @@ public class PowerRingHandler {
     @SubscribeEvent
     public void powerRingHandler(LivingHurtEvent event) {
         if(event.source.getEntity() instanceof EntityLivingBase){
-            System.out.println("sadsd");
             EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
             boolean checkForPlayer = true;
             if(attacker.getHeldItem() != null && attacker.getHeldItem().getItem() instanceof ItemRingOfPower){

@@ -20,7 +20,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import thebetweenlands.world.feature.gen.MapGenCavesBetweenlandsNew;
+import thebetweenlands.world.feature.gen.cave.MapGenCavesBetweenlandsExperimental;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
@@ -72,7 +72,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 	/////// Terrain gen features ///////
 	//private MapGenBase caveGenerator = new MapGenCavesBetweenlands();
-	private MapGenBase caveGenerator = new MapGenCavesBetweenlandsNew();
+	private MapGenBase caveGenerator;
 
 	private NoiseGeneratorSimplex treeNoise;
 
@@ -87,6 +87,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		
 		//Initializes the noise generators
 		this.initializeNoiseGen(seed);
+		caveGenerator = new MapGenCavesBetweenlandsExperimental(seed);
 	}
 
 
@@ -200,7 +201,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 		BiomeGenBase biome = worldObj.getBiomeGenForCoords(blockX + 16, blockZ + 16);
 
-		if( biome instanceof BiomeGenBaseBetweenlands ) {
+		if (biome instanceof BiomeGenBaseBetweenlands) {
 			BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands) biome;
 			this.rand.setSeed(this.worldObj.getSeed());
 			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
