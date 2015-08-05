@@ -5,7 +5,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
-
 public class TileEntityLootPot extends TileEntityBasicInventory {
 	private byte modelType;
 	private int rotationOffset;
@@ -22,10 +21,10 @@ public class TileEntityLootPot extends TileEntityBasicInventory {
 
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote && !updated) {
+		if (!worldObj.isRemote && !updated) {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			updated = true;
-		}	
+		}
 	}
 
 	public void setPotModelType(byte type) {
@@ -71,6 +70,5 @@ public class TileEntityLootPot extends TileEntityBasicInventory {
 		modelType = packet.func_148857_g().getByte("modelType");
 		rotationOffset = packet.func_148857_g().getInteger("rotationOffset");
 	}
-
 
 }
