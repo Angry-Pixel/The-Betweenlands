@@ -1,16 +1,14 @@
 package thebetweenlands.event.debugging;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.nio.IntBuffer;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.UUID;
-
-import javax.imageio.ImageIO;
-
+import com.google.common.collect.Lists;
+import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.ReflectionHelper.UnableToFindFieldException;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GLAllocation;
@@ -32,16 +30,17 @@ import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.aspect.IAspect;
 import thebetweenlands.client.gui.GuiDebugMenu;
 import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.manager.AspectManager;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.network.packets.PacketTickspeed;
 import thebetweenlands.proxy.ClientProxy;
@@ -50,16 +49,15 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
-import com.google.common.collect.Lists;
-import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.ReflectionHelper.UnableToFindFieldException;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.IntBuffer;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.UUID;
 
 public class DebugHandler {
 	public static final DebugHandler INSTANCE = new DebugHandler();
@@ -246,6 +244,14 @@ public class DebugHandler {
 			}
 			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, 42, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, 50, 0xFFFFFFFF);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void itemTooltip(ItemTooltipEvent event) {
+		for (IAspect aspect : AspectManager.getAspectsFromStack(event.itemStack)) {
+			event.toolTip.add(aspect.getName());
 		}
 	}
 
