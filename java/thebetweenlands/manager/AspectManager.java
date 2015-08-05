@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.aspect.IAspect;
+import thebetweenlands.aspect.*;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class AspectManager {
 		NBTTagList list = itemStack.getTagCompound().getTagList("aspects", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound aspectTag = list.getCompoundTagAt(i);
-			IAspect aspect = aspectMap.get(aspectTag.getString("aspectName"));
+			IAspect aspect = aspectMap.get(aspectTag.getString("aspectName").toLowerCase());
 			aspect.readFromNBT(aspectTag);
 			aspects.add(aspect);
 		}
@@ -61,8 +61,26 @@ public class AspectManager {
 		return false;
 	}
 
+	public static void registerAspects(IAspect... aspects) {
+		for (IAspect aspect : aspects) {
+			registerAspect(aspect);
+		}
+	}
+
 	public static void registerAspect(IAspect aspect) {
-		if (aspectMap.containsKey(aspect.getName())) CrashReport.makeCrashReport(null, "Can't register aspect " + aspect.getName());
-		aspectMap.put(aspect.getName(), aspect);
+		if (aspectMap.containsKey(aspect.getName().toLowerCase())) CrashReport.makeCrashReport(null, "Can't register aspect " + aspect.getName());
+		aspectMap.put(aspect.getName().toLowerCase(), aspect);
+	}
+
+	public static IAspect getAspectByName(String name) {
+		if (aspectMap.containsKey(name.toLowerCase())) {
+			return aspectMap.get(name.toLowerCase());
+		} else {
+			return null;
+		}
+	}
+
+	static {
+		registerAspects(new AspectAzuwynn(), new AspectByariis(), new AspectByrginaz(), new AspectCelawynn(), new AspectDayuniis(), new AspectFergalaz(), new AspectFirnalaz(), new AspectFreiwynn(), new AspectGeoliirgaz(), new AspectOrdaniis(), new AspectYeowynn(), new AspectYunugaz());
 	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.command.server;
+package thebetweenlands.command;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -23,18 +23,18 @@ public class CommandTickSpeed extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "commands.tickspeed.usage";
+		return "command.tickspeed.usage";
 	}
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if (args.length < 1) {
-			throw new CommandException("commands.tickspeed.usage");
+			throw new CommandException("command.tickspeed.usage");
 		}
 		float ticksPerSecond = parseFloat(args[0]);
 		DebugHandler.setSleepPerTick((long) (1000 / ticksPerSecond));
 		TheBetweenlands.networkWrapper.sendToAll(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketTickspeed(ticksPerSecond)));
-        func_152373_a(sender, this, "commands.tickspeed.success", String.valueOf(ticksPerSecond));
+        func_152373_a(sender, this, "command.tickspeed.success", String.valueOf(ticksPerSecond));
 	}
 
 	public static float parseFloat(String string) {
@@ -42,12 +42,12 @@ public class CommandTickSpeed extends CommandBase {
 			float value = Float.parseFloat(string);
 
 			if (!Floats.isFinite(value)) {
-				throw new NumberInvalidException("commands.generic.num.invalid", string);
+				throw new NumberInvalidException("command.generic.num.invalid", string);
 			} else {
 				return value;
 			}
 		} catch (NumberFormatException numberformatexception) {
-			throw new NumberInvalidException("commands.generic.num.invalid", string);
+			throw new NumberInvalidException("command.generic.num.invalid", string);
 		}
 	}
 }
