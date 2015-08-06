@@ -354,9 +354,9 @@ public class BLBlockRegistry {
     public static final Block bluritePressurePlate = new BlockBLPressurePlate("bluriteBlock", Material.rock, BlockPressurePlate.Sensitivity.players);
     public static final Block weedwoodLever = new BlockBLLever();
     public static final BlockBLFlowerPot mudFlowerPot = new BlockBLFlowerPot();
-    public static final Block lootPot = new BlockLootPot1();
-    public static final Block lootPot1 = new BlockLootPot2();
-    public static final Block lootPot2 = new BlockLootPot3();
+    public static final Block lootPot1 = new BlockLootPot1();
+    public static final Block lootPot2 = new BlockLootPot2();
+    public static final Block lootPot3 = new BlockLootPot3();
 
     //DOORS
     public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
