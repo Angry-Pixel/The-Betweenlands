@@ -96,7 +96,7 @@ public class BlockLootPot1 extends BlockContainer {
 			rotationMeta = 4;
 		world.setBlockMetadataWithNotify(x, y, z, rotationMeta, 3);
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot1) {
@@ -106,18 +106,8 @@ public class BlockLootPot1 extends BlockContainer {
 				for (int i = 0; i < 3; i++) {
 					if (tile.getStackInSlot(i) == null) {
 						tile.setInventorySlotContents(i, new ItemStack(item.getItem(), 1, item.getItemDamage()));
-						player.getCurrentEquippedItem().stackSize--;
-						world.markBlockForUpdate(x, y, z);
-						return true;
-					}
-				}
-			}
-			if (player.isSneaking()) {
-				for (int i = 0; i < 3; i++) {
-					if (tile.getStackInSlot(i) != null) {
-						if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(i)))
-							player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem()), false);
-						tile.setInventorySlotContents(i, null);
+						if (!player.capabilities.isCreativeMode)
+							player.getCurrentEquippedItem().stackSize--;
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
