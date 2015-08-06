@@ -7,15 +7,15 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.client.model.block.ModelLootPot1;
+import thebetweenlands.client.model.block.ModelLootPot2;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ItemLootPotRenderer implements IItemRenderer {
-	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/lootPot1.png");
-	private final ModelLootPot1 model = new ModelLootPot1();
+public class ItemLootPot2Renderer implements IItemRenderer {
+	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/lootPot2.png");
+	private final ModelLootPot2 model = new ModelLootPot2();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {

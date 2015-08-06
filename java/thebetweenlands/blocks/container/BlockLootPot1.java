@@ -21,10 +21,12 @@ import thebetweenlands.tileentities.TileEntityLootPot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockLootPot extends BlockContainer {
+public class BlockLootPot1 extends BlockContainer {
 
-	public BlockLootPot() {
+	public BlockLootPot1() {
 		super(Material.glass);
+		setHardness(1.0F);
+		setStepSound(soundTypeGlass);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.lootPot");
 	}
@@ -37,7 +39,8 @@ public class BlockLootPot extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		return Blocks.stained_hardened_clay.getIcon(side, 3);
+		
+		return Blocks.stained_hardened_clay.getIcon(side, 1);
 	}
 
 	@Override
@@ -75,7 +78,7 @@ public class BlockLootPot extends BlockContainer {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot) {
 			TileEntityLootPot tile = (TileEntityLootPot) world.getTileEntity(x,y, z);
 			if (tile != null && !world.isRemote) {
-				tile.setPotModelType((byte) world.rand.nextInt(3));
+				tile.setPotModelType((byte) 0);
 				tile.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.markBlockForUpdate(x, y, z);
 			}

@@ -79,7 +79,9 @@ import thebetweenlands.client.render.item.ItemAnimatorRenderer;
 import thebetweenlands.client.render.item.ItemCompostBinRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemInfuserRenderer;
-import thebetweenlands.client.render.item.ItemLootPotRenderer;
+import thebetweenlands.client.render.item.ItemLootPot2Renderer;
+import thebetweenlands.client.render.item.ItemLootPot3Renderer;
+import thebetweenlands.client.render.item.ItemLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
@@ -238,7 +240,9 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.alembic), new ItemAlembicRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.infuser), new ItemInfuserRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.pestleAndMortar), new ItemPestleAndMortarRenderer());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot), new ItemLootPotRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot), new ItemLootPot1Renderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot1), new ItemLootPot2Renderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot2), new ItemLootPot3Renderer());
 
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());
