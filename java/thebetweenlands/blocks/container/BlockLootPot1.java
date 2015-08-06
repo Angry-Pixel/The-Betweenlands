@@ -17,7 +17,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.tileentities.TileEntityLootPot;
+import thebetweenlands.entities.mobs.EntityTermite;
+import thebetweenlands.tileentities.TileEntityLootPot1;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,7 +29,7 @@ public class BlockLootPot1 extends BlockContainer {
 		setHardness(1.0F);
 		setStepSound(soundTypeGlass);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("thebetweenlands.lootPot");
+		setBlockName("thebetweenlands.lootPot1");
 	}
 
 	@Override
@@ -70,15 +71,14 @@ public class BlockLootPot1 extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityLootPot();
+		return new TileEntityLootPot1();
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack is) {
-		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot) {
-			TileEntityLootPot tile = (TileEntityLootPot) world.getTileEntity(x,y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot1) {
+			TileEntityLootPot1 tile = (TileEntityLootPot1) world.getTileEntity(x, y, z);
 			if (tile != null && !world.isRemote) {
-				tile.setPotModelType((byte) 0);
 				tile.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.markBlockForUpdate(x, y, z);
 			}
@@ -115,5 +115,16 @@ public class BlockLootPot1 extends BlockContainer {
 				}
 			}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		if (!world.isRemote)
+			if (world.rand.nextInt(3) == 0) {
+				EntityTermite entity = new EntityTermite(world);
+				entity.setLocationAndAngles(x + 0.5D, y, z + 0.5D, 0.0F, 0.0F);
+				world.spawnEntityInWorld(entity);
+			}
+		super.onBlockDestroyedByPlayer(world, x, y, z, meta);
 	}
 }

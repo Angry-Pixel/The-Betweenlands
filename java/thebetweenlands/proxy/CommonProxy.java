@@ -32,7 +32,9 @@ import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
-import thebetweenlands.tileentities.TileEntityLootPot;
+import thebetweenlands.tileentities.TileEntityLootPot1;
+import thebetweenlands.tileentities.TileEntityLootPot2;
+import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
@@ -67,7 +69,9 @@ public class CommonProxy
         registerTileEntity(TileEntityInfuser.class, "infuser");
         registerTileEntity(TileEntityPestleAndMortar.class, "pestleAndMortar");
         registerTileEntity(TileEntityLifeCrystal.class, "lifeCrystalBlock");
-        registerTileEntity(TileEntityLootPot.class, "lootPot");
+        registerTileEntity(TileEntityLootPot1.class, "lootPot1");
+        registerTileEntity(TileEntityLootPot2.class, "lootPot2");
+        registerTileEntity(TileEntityLootPot3.class, "lootPot3");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
