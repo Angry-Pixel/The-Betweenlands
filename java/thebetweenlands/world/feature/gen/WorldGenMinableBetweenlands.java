@@ -61,6 +61,7 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 
 								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3).isReplaceableOreGen(world, k2, l2, i3, this.toReplace)) {
 									world.setBlock(k2, l2, i3, this.toGen, this.mineableBlockMeta, 2);
+									System.out.println("Ore: " + this.toGen + " : Meta: "+t his.mineableBlockMeta +" : " +k2 + " : " + l2 + " : " + i3);
 								}
 							}
 						}
@@ -71,7 +72,4 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 
 		return true;
 	}
-	
-	//world.setBlock(k2, l2, i3, this.toGen, this.mineableBlockMeta, 2);
-	//System.out.println("Ore: " + this.toGen + " : Meta: "+t his.mineableBlockMeta +" : " +k2 + " : " + l2 + " : " + i3);
 }
