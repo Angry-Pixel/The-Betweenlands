@@ -442,6 +442,7 @@ itemGroup.thebetweenlands.item=The Betweenlands Items
 itemGroup.thebetweenlands.gear=The Betweenlands Gear
 itemGroup.thebetweenlands.special=The Betweenlands Specials
 itemGroup.thebetweenlands.plants=The Betweenlands Plants
+itemGroup.thebetweenlands.herbLore=The Betweenlands Herblore
 
 # Containers
 container.weedwoodChest=Weedwood Chest
