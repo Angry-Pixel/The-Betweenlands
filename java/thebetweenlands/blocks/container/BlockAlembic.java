@@ -22,7 +22,7 @@ public class BlockAlembic extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.alembic");
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.herbLore);
 	}
 
 	@Override

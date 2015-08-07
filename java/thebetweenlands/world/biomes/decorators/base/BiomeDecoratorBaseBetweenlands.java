@@ -94,7 +94,8 @@ public class BiomeDecoratorBaseBetweenlands
 	protected void generateOres() {
 		this.generateOre(20, OreGens.SULFUR, 0, 128);
 		this.generateOre(20, OreGens.OCTINE, 0, 64);
-		this.generateOre(2, OreGens.VALONITE, 0, 32);
+		this.generateOre(20, OreGens.BLURITE, 0, 64);
+		this.generateOre(5, OreGens.VALONITE, 0, 32);
 		this.generateOre(1, OreGens.LIFE_GEM, 0, 16);
 		
 		//Generate middle gems

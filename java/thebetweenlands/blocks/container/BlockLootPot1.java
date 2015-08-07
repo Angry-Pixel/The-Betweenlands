@@ -8,6 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -17,7 +18,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.tileentities.TileEntityLootPot;
+import thebetweenlands.entities.mobs.EntityTermite;
+import thebetweenlands.tileentities.TileEntityLootPot1;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,7 +30,7 @@ public class BlockLootPot1 extends BlockContainer {
 		setHardness(1.0F);
 		setStepSound(soundTypeGlass);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("thebetweenlands.lootPot");
+		setBlockName("thebetweenlands.lootPot1");
 	}
 
 	@Override
@@ -70,15 +72,14 @@ public class BlockLootPot1 extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityLootPot();
+		return new TileEntityLootPot1();
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack is) {
-		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot) {
-			TileEntityLootPot tile = (TileEntityLootPot) world.getTileEntity(x,y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot1) {
+			TileEntityLootPot1 tile = (TileEntityLootPot1) world.getTileEntity(x, y, z);
 			if (tile != null && !world.isRemote) {
-				tile.setPotModelType((byte) 0);
 				tile.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.markBlockForUpdate(x, y, z);
 			}
@@ -94,6 +95,26 @@ public class BlockLootPot1 extends BlockContainer {
 		if (rotation == 3)
 			rotationMeta = 4;
 		world.setBlockMetadataWithNotify(x, y, z, rotationMeta, 3);
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
+		if (world.getTileEntity(x, y, z) instanceof TileEntityLootPot1) {
+			TileEntityLootPot1 tile = (TileEntityLootPot1) world.getTileEntity( x, y, z);
+			if (player.getCurrentEquippedItem() != null) {
+				ItemStack item = player.getCurrentEquippedItem();
+				for (int i = 0; i < 3; i++) {
+					if (tile.getStackInSlot(i) == null) {
+						tile.setInventorySlotContents(i, new ItemStack(item.getItem(), 1, item.getItemDamage()));
+						if (!player.capabilities.isCreativeMode)
+							player.getCurrentEquippedItem().stackSize--;
+						world.markBlockForUpdate(x, y, z);
+						return true;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -115,5 +136,16 @@ public class BlockLootPot1 extends BlockContainer {
 				}
 			}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		if (!world.isRemote)
+			if (world.rand.nextInt(3) == 0) {
+				EntityTermite entity = new EntityTermite(world);
+				entity.setLocationAndAngles(x + 0.5D, y, z + 0.5D, 0.0F, 0.0F);
+				world.spawnEntityInWorld(entity);
+			}
+		super.onBlockDestroyedByPlayer(world, x, y, z, meta);
 	}
 }

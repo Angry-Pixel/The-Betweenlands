@@ -28,8 +28,8 @@ public class BlockInfuser extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.infuser");
-		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockTextureName("thebetweenlands:octineBlock");
+		setCreativeTab(ModCreativeTabs.herbLore);
+		setBlockTextureName("thebetweenlands:bluriteBlock");
 	}
 
 	@Override

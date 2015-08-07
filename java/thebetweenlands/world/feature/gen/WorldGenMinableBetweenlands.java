@@ -24,7 +24,7 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 		this.toReplace = blockToReplace;
 		return this;
 	}
-
+	
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		float f = rand.nextFloat() * (float)Math.PI;
 		double d0 = (double)((float)(x + 8) + MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F);
@@ -61,6 +61,7 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 
 								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3).isReplaceableOreGen(world, k2, l2, i3, this.toReplace)) {
 									world.setBlock(k2, l2, i3, this.toGen, this.mineableBlockMeta, 2);
+									System.out.println("Ore: " + this.toGen.getUnlocalizedName() + " : Meta: "+this.mineableBlockMeta +" : " + k2 + " : " + l2 + " : " + i3);
 								}
 							}
 						}
