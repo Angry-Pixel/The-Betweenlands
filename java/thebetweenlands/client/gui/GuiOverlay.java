@@ -16,8 +16,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.GaussianBlur;
 import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.manager.DecayManager;
 
 @SideOnly(Side.CLIENT)
@@ -29,7 +31,7 @@ public class GuiOverlay extends Gui
 
 	public int updateCounter;
 
-	private GaussianBlur gb = null;
+	private DeferredEffect de = null;
 	private Framebuffer tb1 = null;
 
 	@SubscribeEvent
@@ -42,10 +44,10 @@ public class GuiOverlay extends Gui
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {
-					if(this.tb1 == null) {
+					/*if(this.tb1 == null) {
 						this.tb1 = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
-						this.gb = new GaussianBlur();
-						this.gb.init();
+						this.de = new GaussianBlur();
+						this.de.init();
 					} else {
 						if(this.tb1.framebufferWidth != Minecraft.getMinecraft().displayWidth || this.tb1.framebufferHeight != Minecraft.getMinecraft().displayHeight) {
 							this.tb1.deleteFramebuffer();
@@ -54,11 +56,12 @@ public class GuiOverlay extends Gui
 					}
 
 					for(int i = 0; i < 1; i++) {
-						this.gb.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.tb1, shader.getBlitBuffer(), Minecraft.getMinecraft().getFramebuffer());
+						this.de.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.tb1, shader.getBlitBuffer(), Minecraft.getMinecraft().getFramebuffer());
 
 						ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 						GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.tb1.framebufferTexture);
+						
 						GL11.glBegin(GL11.GL_TRIANGLES);
 						GL11.glTexCoord2d(0, 1);
 						GL11.glVertex2d(0, 0);
@@ -73,7 +76,45 @@ public class GuiOverlay extends Gui
 						GL11.glTexCoord2d(0, 1);
 						GL11.glVertex2d(0, 0);
 						GL11.glEnd();
-					}
+						
+//						GL11.glBegin(GL11.GL_TRIANGLES);
+//						GL11.glTexCoord2d(0, 1);
+//						GL11.glVertex2d(0, 0);
+//						GL11.glTexCoord2d(0, 0);
+//						GL11.glVertex2d(0, sr.getScaledHeight());
+//						GL11.glTexCoord2d(1, 0);
+//						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
+//						GL11.glTexCoord2d(1, 0);
+//						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
+//						GL11.glTexCoord2d(1, 1);
+//						GL11.glVertex2d(sr.getScaledWidth(), 0);
+//						GL11.glTexCoord2d(0, 1);
+//						GL11.glVertex2d(0, 0);
+//						GL11.glEnd();
+					}*/
+					
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GL11.glEnable(GL11.GL_BLEND);
+					ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+					GL11.glPushMatrix();
+					GL11.glTranslated(0, 60, 0);
+					GL11.glColor4f(0.0F, 0.8F, 0.25F, 1.0F);
+					GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHandler.INSTANCE.getGasTextureID());
+					GL11.glBegin(GL11.GL_TRIANGLES);
+					GL11.glTexCoord2d(0, 1);
+					GL11.glVertex2d(0, 0);
+					GL11.glTexCoord2d(0, 0);
+					GL11.glVertex2d(0, 128);
+					GL11.glTexCoord2d(1, 0);
+					GL11.glVertex2d(128, 128);
+					GL11.glTexCoord2d(1, 0);
+					GL11.glVertex2d(128, 128);
+					GL11.glTexCoord2d(1, 1);
+					GL11.glVertex2d(128, 0);
+					GL11.glTexCoord2d(0, 1);
+					GL11.glVertex2d(0, 0);
+					GL11.glEnd();
+					GL11.glPopMatrix();
 				}
 			}
 		}

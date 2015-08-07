@@ -17,6 +17,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.shader.MainShader;
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.event.render.ShaderHandler;
 
 public abstract class DeferredEffect {
 	//Clear colors
@@ -45,6 +48,9 @@ public abstract class DeferredEffect {
 				stage.init();
 			}
 		}
+		if(!this.initEffect()) {
+			throw new RuntimeException("Couldn't initialize shaders for deferred effect: " + this.toString());
+		}
 		return this;
 	}
 
@@ -62,6 +68,13 @@ public abstract class DeferredEffect {
 		this.cb = b;
 		this.ca = a;
 		return this;
+	}
+
+	/**
+	 * Returns the shader program ID
+	 */
+	public final int getShaderProgram() {
+		return this.shaderProgramID;
 	}
 
 	/**
@@ -85,12 +98,16 @@ public abstract class DeferredEffect {
 	 * @param dst Destination FBO
 	 * @param prev Previous FBO
 	 */
-	public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev) {
+	public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
 		if(this.shaderProgramID == -1 || dst == null) return;
 
 		this.prevShader = 0;
 
-		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		//ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		
+		//renderWidth *= (float)scaledResolution.getScaledWidth() / (float)Minecraft.getMinecraft().displayWidth;
+		//renderHeight *= (float)scaledResolution.getScaledHeight() / (float)Minecraft.getMinecraft().displayHeight;
+		
 		if(prev != null) {
 			//Backup matrices
 			GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
@@ -100,7 +117,7 @@ public abstract class DeferredEffect {
 			//Set up 2D matrices
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
 			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, Math.ceil(scaledResolution.getScaledWidth_double()), Math.ceil(scaledResolution.getScaledHeight_double()), 0.0D, 1000.0D, 3000.0D);
+			GL11.glOrtho(0.0D, dst.framebufferWidth, dst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
 			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
@@ -110,27 +127,25 @@ public abstract class DeferredEffect {
 		}
 
 		//Bind destination FBO
-		dst.bindFramebuffer(false);
+		dst.bindFramebuffer(true);
 
 		//Clear buffers
 		GL11.glClearColor(this.cr, this.cg, this.cb, this.ca);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 
-		//Calculate render size
-		double renderWidth = Math.floor((double)dst.framebufferTextureWidth / (double)Minecraft.getMinecraft().displayWidth * (double)scaledResolution.getScaledWidth());
-		double renderHeight = Math.floor((double)dst.framebufferTextureHeight / (double)Minecraft.getMinecraft().displayHeight * (double)scaledResolution.getScaledHeight());
-
 		//Use shader
 		ARBShaderObjects.glUseProgramObjectARB(this.shaderProgramID);
 
 		//Upload sampler uniform (src texture ID)
-		ARBShaderObjects.glUniform1iARB(this.diffuseSamplerUniformID, 0);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, src);
+		if(this.diffuseSamplerUniformID >= 0) {
+			ARBShaderObjects.glUniform1iARB(this.diffuseSamplerUniformID, 0);
+			GL13.glActiveTexture(GL13.GL_TEXTURE0);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, src);
+		}
 
 		//Upload texel size uniform
-		if(this.texelSizeUniformID != -1) {
+		if(this.texelSizeUniformID >= 0) {
 			FloatBuffer texelSizeBuffer = BufferUtils.createFloatBuffer(2);
 			texelSizeBuffer.position(0);
 			texelSizeBuffer.put(1.0F / (float)Minecraft.getMinecraft().displayWidth);
@@ -139,19 +154,22 @@ public abstract class DeferredEffect {
 			ARBShaderObjects.glUniform2ARB(this.texelSizeUniformID, texelSizeBuffer);
 		}
 
+		//Uploads additional uniforms
+		this.uploadUniforms();
+
 		//Render texture
 		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glTexCoord2d(0, 1);
+		GL11.glTexCoord2d(0.0D, 1.0D);
 		GL11.glVertex2d(0, 0);
-		GL11.glTexCoord2d(0, 0);
+		GL11.glTexCoord2d(0.0D, 0.0D);
 		GL11.glVertex2d(0, renderHeight);
-		GL11.glTexCoord2d(1, 0);
+		GL11.glTexCoord2d(1.0D, 0.0D);
 		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1, 0);
+		GL11.glTexCoord2d(1.0D, 0.0D);
 		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1, 1);
+		GL11.glTexCoord2d(1.0D, 1.0D);
 		GL11.glVertex2d(renderWidth, 0);
-		GL11.glTexCoord2d(0, 1);
+		GL11.glTexCoord2d(0.0D, 1.0D);
 		GL11.glVertex2d(0, 0);
 		GL11.glEnd();
 
@@ -159,7 +177,7 @@ public abstract class DeferredEffect {
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
 			for(DeferredEffect stage : this.stages) {
 				//Render to blit buffer
-				stage.apply(dst.framebufferTexture, blitBuffer, dst, null);
+				stage.apply(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight);
 
 				//Render from blit buffer to destination buffer
 				dst.bindFramebuffer(false);
@@ -180,6 +198,9 @@ public abstract class DeferredEffect {
 				GL11.glEnd();
 			}
 		}
+		
+		//Unbind shader
+		ARBShaderObjects.glUseProgramObjectARB(0);
 
 		//Restore previous shader (or bind default)
 		ARBShaderObjects.glUseProgramObjectARB(this.prevShader);
@@ -244,7 +265,7 @@ public abstract class DeferredEffect {
 
 				//Get uniforms
 				this.diffuseSamplerUniformID = ARBShaderObjects.glGetUniformLocationARB(this.shaderProgramID, "s_diffuse");
-				this.texelSizeUniformID = ARBShaderObjects.glGetUniformLocationARB(this.shaderProgramID, "v_oneTexel");
+				this.texelSizeUniformID = ARBShaderObjects.glGetUniformLocationARB(this.shaderProgramID, "u_oneTexel");
 
 				//Unbind shader
 				ARBShaderObjects.glUseProgramObjectARB(0);
@@ -304,4 +325,10 @@ public abstract class DeferredEffect {
 	 * Used to delete additional things and free memory
 	 */
 	protected void deleteEffect() {}
+
+	/**
+	 * Used to initialize the effect with additional things such as getting uniform locations.
+	 * Return false if something during initializiation goes wrong.
+	 */
+	protected boolean initEffect() { return true; }
 }
