@@ -16,6 +16,7 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.biomes.feature.WorldGenTarPool;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
@@ -60,6 +61,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 	private final static WorldGenGiantTreeDead GEN_DEAD_TREE = new WorldGenGiantTreeDead();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
+	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -831,6 +833,19 @@ public class DecorationHelper {
 
 			if (world.isAirBlock(xx, yy, zz))
 				GEN_LICHEN_PATCH.generate(world, rand, xx, yy, zz);
+		}
+	}
+
+	public void generateTarPool(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int xx = x + offsetXZ();
+			int yy = 10 + rand.nextInt(80);
+			int zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
+				GEN_TAR_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
+				GEN_TAR_POOL.generate(world, rand, x, y, z);
+			}
 		}
 	}
 
