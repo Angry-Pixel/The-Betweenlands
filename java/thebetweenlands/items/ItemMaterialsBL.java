@@ -140,7 +140,7 @@ public class ItemMaterialsBL extends Item {
 		BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), 
 		LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), 
 		TANGLED_ROOT("tangledRoot"), PLANT_TONIC("plantTonic"), MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), 
-		MOSS("moss"), MUD_BRICK("mudBrick"), BLURITE_INGOT("bluriteIngot"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
+		MOSS("moss"), MUD_BRICK("mudBrick"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
 		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
 		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"),
 		RUBBER_BALL("rubber");

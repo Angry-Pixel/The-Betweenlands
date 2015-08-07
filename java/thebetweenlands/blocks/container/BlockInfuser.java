@@ -28,8 +28,13 @@ public class BlockInfuser extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.infuser");
+<<<<<<< HEAD
 		setCreativeTab(ModCreativeTabs.herbLore);
 		setBlockTextureName("thebetweenlands:bluriteBlock");
+=======
+		setCreativeTab(ModCreativeTabs.blocks);
+		setBlockTextureName("thebetweenlands:octineBlock");
+>>>>>>> parent of 38dcff4... bunch of shite
 	}
 
 	@Override
