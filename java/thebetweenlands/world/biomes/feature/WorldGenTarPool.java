@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 
 public class WorldGenTarPool extends WorldGenerator {
 
@@ -74,7 +75,7 @@ public class WorldGenTarPool extends WorldGenerator {
 						if (yy < 4 && !material.isSolid() && world.getBlock(x + xx, y + yy, z + zz) != fillerFluid)
 							return false;
 
-						if (yy < 4 || rand.nextBoolean() && world.getBlock(x + xx, y + yy, z + zz).getMaterial().isSolid()) //this is a problem it needs a better block check
+						if (yy < 4 || rand.nextBoolean() && world.getBlock(x + xx, y + yy, z + zz).getMaterial().isSolid() && (checkSurface(world, SurfaceType.MIXED, x + xx, y + yy, z + zz) || world.getBlock(x + xx, y + yy, z + zz) == BLBlockRegistry.betweenstone)) //this is a problem it needs a better block check
 							world.setBlock(x + xx, y + yy, z + zz, BLBlockRegistry.solidTar, 0, 2);
 					}
 				}
@@ -86,5 +87,9 @@ public class WorldGenTarPool extends WorldGenerator {
 						world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
 
 		return true;
+	}
+	
+	private final boolean checkSurface(World world, SurfaceType surfaceType, int x, int y, int z) {
+		return surfaceType.matchBlock(world.getBlock(x, y, z));
 	}
 }

@@ -23,6 +23,7 @@ import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
+import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
 import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
@@ -62,6 +63,7 @@ public class DecorationHelper {
 	private final static WorldGenGiantTreeDead GEN_DEAD_TREE = new WorldGenGiantTreeDead();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
 	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
+	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -846,6 +848,17 @@ public class DecorationHelper {
 				GEN_TAR_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
 				GEN_TAR_POOL.generate(world, rand, x, y, z);
 			}
+		}
+	}
+
+	public void generateSmallHollowLog(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+
+			if (checkSurface(SurfaceType.MIXED, x, y, z))
+				GEN_SMALL_HOLLOW_LOG.generate(world, rand, x, y, z);
 		}
 	}
 
