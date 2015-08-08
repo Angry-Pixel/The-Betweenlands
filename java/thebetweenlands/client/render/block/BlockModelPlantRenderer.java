@@ -18,7 +18,6 @@ import thebetweenlands.client.model.block.ModelBulbCappedMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom;
 import thebetweenlands.client.model.block.ModelFlatHeadMushroom2;
 import thebetweenlands.client.model.block.ModelRegularPlant;
-import thebetweenlands.client.model.block.ModelRottenLog;
 import thebetweenlands.client.model.block.ModelSundew;
 import thebetweenlands.client.model.block.ModelTubePlant;
 import thebetweenlands.client.model.block.ModelVenusFlyTrap;
@@ -74,7 +73,6 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelVolarpad modelVolarpad = new ModelVolarpad();
 	public static ModelBulbCappedMushroom modelBulbCappedMushroom = new ModelBulbCappedMushroom();
 	public static ModelSundew modelSundew = new ModelSundew();
-	public static ModelRottenLog modelRottenLog = new ModelRottenLog();
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
