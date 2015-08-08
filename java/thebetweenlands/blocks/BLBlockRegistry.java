@@ -82,12 +82,7 @@ import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.blocks.terrain.BlockTarFluid;
 import thebetweenlands.blocks.terrain.BlockWisp;
-import thebetweenlands.blocks.tree.BlockBLLeaves;
-import thebetweenlands.blocks.tree.BlockBLLog;
-import thebetweenlands.blocks.tree.BlockBLPortalFrame;
-import thebetweenlands.blocks.tree.BlockBLSapling;
-import thebetweenlands.blocks.tree.BlockRubberLog;
-import thebetweenlands.blocks.tree.BlockTreeFungus;
+import thebetweenlands.blocks.tree.*;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
@@ -174,6 +169,7 @@ public class BLBlockRegistry {
     public static final Block weedwoodPlanks = new BlockGenericPlanks("weedwoodPlanks", Material.wood);
     public static final Block rubberTreePlanks = new BlockGenericPlanks("rubberTreePlanks", Material.wood);
     public static final Block purpleRainPlanks = new BlockGenericPlanks("purpleRainPlanks", Material.wood);
+    public static final Block hollowLog = new BlockHollowLog();
 
     // DOUBLE PLANTS
     public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F) {
