@@ -10,6 +10,11 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -36,7 +41,21 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.render.TessellatorDebug;
-import thebetweenlands.client.render.block.*;
+import thebetweenlands.client.render.block.BlockBLLeverRenderer;
+import thebetweenlands.client.render.block.BlockDoorRenderer;
+import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockHollowLogRenderer;
+import thebetweenlands.client.render.block.BlockModelPlantRenderer;
+import thebetweenlands.client.render.block.BlockMudFlowerPotRenderer;
+import thebetweenlands.client.render.block.BlockRootRenderer;
+import thebetweenlands.client.render.block.BlockRubberLogRenderer;
+import thebetweenlands.client.render.block.BlockRubberTapRenderer;
+import thebetweenlands.client.render.block.BlockSlopeRenderer;
+import thebetweenlands.client.render.block.BlockStalactiteRenderer;
+import thebetweenlands.client.render.block.BlockSwampReedRenderer;
+import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
+import thebetweenlands.client.render.block.BlockWalkwayRenderer;
+import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -74,6 +93,7 @@ import thebetweenlands.client.render.item.ItemPurifierRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityCompostBinRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
@@ -133,6 +153,7 @@ import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityInfuser;
@@ -146,11 +167,6 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -223,6 +239,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot1.class, new TileEntityLootPot1Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot2.class, new TileEntityLootPot2Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot3.class, new TileEntityLootPot3Renderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSpawner.class, new TileEntityBLSpawnerRenderer());
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());

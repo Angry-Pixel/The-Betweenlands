@@ -17,7 +17,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
-import thebetweenlands.client.render.shader.effect.GaussianBlur;
+import thebetweenlands.client.render.shader.effect.SwirlEffect;
 import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.manager.DecayManager;
@@ -44,9 +44,9 @@ public class GuiOverlay extends Gui
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {
-					/*if(this.tb1 == null) {
+					if(this.tb1 == null) {
 						this.tb1 = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
-						this.de = new GaussianBlur();
+						this.de = new SwirlEffect();
 						this.de.init();
 					} else {
 						if(this.tb1.framebufferWidth != Minecraft.getMinecraft().displayWidth || this.tb1.framebufferHeight != Minecraft.getMinecraft().displayHeight) {
@@ -55,14 +55,16 @@ public class GuiOverlay extends Gui
 						}
 					}
 
+					((SwirlEffect)this.de).setAngle((float)(Math.sin(System.nanoTime() / 1000000000.0D) / 5.0D));
+					
 					for(int i = 0; i < 1; i++) {
-						this.de.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.tb1, shader.getBlitBuffer(), Minecraft.getMinecraft().getFramebuffer());
+						this.de.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.tb1, shader.getBlitBuffer(), Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 						ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 						GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.tb1.framebufferTexture);
 						
-						GL11.glBegin(GL11.GL_TRIANGLES);
+						/*GL11.glBegin(GL11.GL_TRIANGLES);
 						GL11.glTexCoord2d(0, 1);
 						GL11.glVertex2d(0, 0);
 						GL11.glTexCoord2d(0, 0.5);
@@ -75,23 +77,23 @@ public class GuiOverlay extends Gui
 						GL11.glVertex2d(sr.getScaledWidth(), 0);
 						GL11.glTexCoord2d(0, 1);
 						GL11.glVertex2d(0, 0);
-						GL11.glEnd();
+						GL11.glEnd();*/
 						
-//						GL11.glBegin(GL11.GL_TRIANGLES);
-//						GL11.glTexCoord2d(0, 1);
-//						GL11.glVertex2d(0, 0);
-//						GL11.glTexCoord2d(0, 0);
-//						GL11.glVertex2d(0, sr.getScaledHeight());
-//						GL11.glTexCoord2d(1, 0);
-//						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
-//						GL11.glTexCoord2d(1, 0);
-//						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
-//						GL11.glTexCoord2d(1, 1);
-//						GL11.glVertex2d(sr.getScaledWidth(), 0);
-//						GL11.glTexCoord2d(0, 1);
-//						GL11.glVertex2d(0, 0);
-//						GL11.glEnd();
-					}*/
+						GL11.glBegin(GL11.GL_TRIANGLES);
+						GL11.glTexCoord2d(0, 1);
+						GL11.glVertex2d(0, 0);
+						GL11.glTexCoord2d(0, 0);
+						GL11.glVertex2d(0, sr.getScaledHeight());
+						GL11.glTexCoord2d(1, 0);
+						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
+						GL11.glTexCoord2d(1, 0);
+						GL11.glVertex2d(sr.getScaledWidth(), sr.getScaledHeight());
+						GL11.glTexCoord2d(1, 1);
+						GL11.glVertex2d(sr.getScaledWidth(), 0);
+						GL11.glTexCoord2d(0, 1);
+						GL11.glVertex2d(0, 0);
+						GL11.glEnd();
+					}
 					
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glEnable(GL11.GL_BLEND);
@@ -114,6 +116,21 @@ public class GuiOverlay extends Gui
 					GL11.glTexCoord2d(0, 1);
 					GL11.glVertex2d(0, 0);
 					GL11.glEnd();
+					/*GL11.glTranslated(128, 0, 0);
+					GL11.glBegin(GL11.GL_TRIANGLES);
+					GL11.glTexCoord2d(0, 1);
+					GL11.glVertex2d(0, 0);
+					GL11.glTexCoord2d(0, 0);
+					GL11.glVertex2d(0, 128);
+					GL11.glTexCoord2d(1, 0);
+					GL11.glVertex2d(128, 128);
+					GL11.glTexCoord2d(1, 0);
+					GL11.glVertex2d(128, 128);
+					GL11.glTexCoord2d(1, 1);
+					GL11.glVertex2d(128, 0);
+					GL11.glTexCoord2d(0, 1);
+					GL11.glVertex2d(0, 0);
+					GL11.glEnd();*/
 					GL11.glPopMatrix();
 				}
 			}

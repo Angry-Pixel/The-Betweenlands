@@ -101,11 +101,14 @@ public class ShaderHandler {
 					this.gasTextureFBO = new Framebuffer(128, 128, false);
 					this.gasTextureBaseFBO = new Framebuffer(128, 128, false);
 
-					this.gasWarpEffect = new WarpEffect().setTimeScale(0.00001F).setScale(40.0F).setMultiplier(3.55F);
+					this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
 					this.gasWarpEffect.init();
 				} else {
-					this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 80.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 70.0F).setScale(40.0f).setMultiplier(3.55F).setTimeScale(0.00004F);
-
+					float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
+					float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
+					this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 80.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 70.0F)
+					.setWarpDir(warpX, warpY);
+					
 					this.gasTextureFBO.bindFramebuffer(false);
 					GL11.glClearColor(1, 1, 1, 1);
 					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);

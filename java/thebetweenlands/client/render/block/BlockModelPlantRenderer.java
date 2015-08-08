@@ -1,14 +1,16 @@
 package thebetweenlands.client.render.block;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-
-import org.lwjgl.opengl.GL11;
-
 import scala.util.Random;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom;
@@ -29,9 +31,6 @@ import thebetweenlands.utils.ModelConverter.Box;
 import thebetweenlands.utils.ModelConverter.Model;
 import thebetweenlands.utils.ModelConverter.TextureMap;
 import thebetweenlands.utils.ModelConverter.Vec3;
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
@@ -270,8 +269,11 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new TextureMap(128, 128, BLBlockRegistry.pitcherPlant.modelTexture1),
 						true);
 			}
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelTubePlant.getModel().offsetWS(offset).renderWithTessellator(tessellator);
+			float yScale = rnd.nextFloat() / 3.0F + 0.75F;
+			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, yScale * 1.5F - 1.5F, rnd.nextFloat()/2.0F - 0.25F);
+			plantModelTubePlant.getModel().scale(1, yScale, 1).
+			rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0)).
+			offsetWS(offset).renderWithTessellator(tessellator);
 		} else if(block == BLBlockRegistry.swampPlant) {
 			if(plantModelRegularPlant == null) {
 				plantModelRegularPlant = new ModelConverter(
@@ -281,9 +283,11 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			float yScale = rnd.nextFloat() / 1.5F + 1.0F;
+			float xzScale = rnd.nextFloat() / 4.0F + 1.0F;
+			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 1.5F * (yScale - 1.0F), rnd.nextFloat()/2.0F - 0.25F);
 			float rotYaw = rnd.nextFloat() * 360.0F;
-			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).
+			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).scale(xzScale, yScale, xzScale).
 			offsetWS(offset).renderWithTessellator(tessellator);
 		} else if(block == BLBlockRegistry.bulbCappedMushroom) {
 			if(plantModelBulbCappedMushroom == null) {
