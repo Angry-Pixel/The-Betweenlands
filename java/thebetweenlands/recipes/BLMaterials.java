@@ -13,6 +13,7 @@ public class BLMaterials {
 	public static ToolMaterial toolBetweenstone = EnumHelper.addToolMaterial("BETWEENSTONE", 1, 131, 4.0F, 1.0F, 5);
 	public static ToolMaterial toolOctine = EnumHelper.addToolMaterial("OCTINE", 2, 250, 6.0F, 2.0F, 14);
 	public static ToolMaterial toolValonite = EnumHelper.addToolMaterial("VALONITE", 3, 1561, 8.0F, 3.0F, 10);
+	public static ToolMaterial toolLoot = EnumHelper.addToolMaterial("LOOT", 2, 1561, 40.0F, 0.5F, 5);
 	
 	public static ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("LURKERSKIN", 5, new int[] {1, 3, 2, 1}, 0);
 	public static ArmorMaterial armorBone = EnumHelper.addArmorMaterial("SLIMYBONE", 5, new int[] {2, 5, 3, 1}, 0);
