@@ -1,28 +1,27 @@
 package thebetweenlands.world.biomes.base;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
  * @author The Erebus Team + TCB
  *
  */
-public abstract class BiomeGenBaseBetweenlands
-extends BiomeGenBase
-{
+public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements IWeightProvider {
 	protected final BiomeDecoratorBaseBetweenlands decorator;
 	protected int grassColor, foliageColor;
 	protected byte[] fogColorRGB = new byte[]{(byte) 255, (byte) 255, (byte) 255};
@@ -36,7 +35,7 @@ extends BiomeGenBase
 	protected byte underLayerBlockHeight = 2;
 	protected boolean isNoiseGenInitialized = false;
 	protected List<BiomeNoiseFeature> featureList = new ArrayList<BiomeNoiseFeature>();
-
+	private short biomeWeight;
 	/**
 	 * Creates a new Betweenlands biome.
 	 *
@@ -490,5 +489,26 @@ extends BiomeGenBase
 	 */
 	public static int getBlockArrayIndex(int x, int y, int z, int sliceSize) {
 		return (z * 16 + x) * sliceSize + y;
+	}
+	
+	/**
+	 * Sets Biome specific weighted probability.
+	 * @param weight
+	 */
+	protected final BiomeGenBaseBetweenlands setWeight(int weight) {
+		if (biomeWeight != 0)
+			throw new RuntimeException("Cannot set biome weight twice!");
+		biomeWeight = (short) weight;
+		if (getClass().getGenericSuperclass() == BiomeGenBaseBetweenlands.class)
+			BLBiomeRegistry.biomeList.add(this); // add to list once weight is known
+		return this;
+	}
+	
+	/**
+	 * Returns Biome specific weighted probability.
+	 */
+	@Override
+	public final short getWeight() {
+		return biomeWeight;
 	}
 }

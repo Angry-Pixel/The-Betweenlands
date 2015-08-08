@@ -20,6 +20,7 @@ public class BiomeSwampLands
         super(biomeID, decorator);
         this.setFogColor((byte) 10, (byte) 30, (byte) 12);
         setColors(0x314D31, 0x314D31);
+        setWeight(20);
         this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
         this.setBiomeName("Swamplands");
         this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
