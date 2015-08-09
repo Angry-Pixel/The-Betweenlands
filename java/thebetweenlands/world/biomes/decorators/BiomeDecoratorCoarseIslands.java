@@ -8,7 +8,7 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
 		helper.generateGiantWeedwoodTree(40);
-
+		//helper.generatePurpleRainTree(40);
         helper.generateWeedwoodTree(25);
 		helper.generateSapTree(30);
 		helper.generateWeedwoodBush(40);
