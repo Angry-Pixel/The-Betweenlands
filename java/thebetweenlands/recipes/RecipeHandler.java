@@ -52,6 +52,9 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.ANGLER_TOOTH), 'Y', ItemMaterialsBL.createStack(EnumMaterialsBL.DRAGONFLY_WING));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 'Y', ItemMaterialsBL.createStack(EnumMaterialsBL.DRAGONFLY_WING));
 		
+		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.MOSS, 1), ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
+		
 		// Armour
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinHelmet, 1), "###", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.LURKER_SKIN));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinChestplate, 1), "# #", "###", "###", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.LURKER_SKIN));
