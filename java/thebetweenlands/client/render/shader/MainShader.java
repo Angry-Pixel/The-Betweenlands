@@ -11,7 +11,10 @@ import java.util.Map.Entry;
 
 import javax.vecmath.Matrix4f;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -20,9 +23,9 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.shader.base.CShader;
+import thebetweenlands.client.render.shader.base.CShaderGroup;
 import thebetweenlands.client.render.shader.base.CShaderInt;
-
-import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.render.shader.effect.SwirlEffect;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;
@@ -60,7 +63,7 @@ public class MainShader extends CShader {
 	public Framebuffer getBlitBuffer() {
 		return this.blitBuffer;
 	}
-	
+
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
 	}
@@ -97,7 +100,7 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureWidth, 
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
-		
+
 		if(this.blitBuffer == null) {
 			this.blitBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
 		}
@@ -117,7 +120,7 @@ public class MainShader extends CShader {
 				this.updateSampler(samplerName + "_depth", geomDepthBuffer);
 			}
 		}
-		
+
 		input.bindFramebuffer(false);
 	}
 
@@ -332,5 +335,67 @@ public class MainShader extends CShader {
 		vecMath.m32 = mat.m32;
 		vecMath.m33 = mat.m33;
 		return vecMath;
+	} 
+
+	private SwirlEffect swirlEffect = null;
+	private float swirlAngle = 0.0F;
+	private float lastSwirlAngle = 0.0F;
+
+	public void setSwirlAngle(float swirlAngle) {
+		this.swirlAngle = swirlAngle;
+		this.lastSwirlAngle = swirlAngle;
+	}
+
+	public float getSwirlAngle() {
+		return this.swirlAngle;
+	}
+
+	@Override
+	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
+		if(this.swirlEffect == null) {
+			this.swirlEffect = (SwirlEffect) new SwirlEffect().init();
+		}
+
+		this.swirlAngle = this.swirlAngle + (this.swirlAngle - this.lastSwirlAngle) * partialTicks;
+		this.lastSwirlAngle = this.swirlAngle;
+
+		if(this.swirlAngle != 0.0F) {
+			//Render swirl to blit buffer
+			this.swirlEffect.setAngle(this.swirlAngle);
+			this.swirlEffect.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer(), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+			ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+			//Render blit buffer to main buffer
+			GL11.glPushMatrix();
+
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glLoadIdentity();
+			GL11.glOrtho(0.0D, scaledResolution.getScaledWidth_double(), scaledResolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glLoadIdentity();
+			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+
+			double renderWidth = scaledResolution.getScaledWidth();
+			double renderHeight = scaledResolution.getScaledHeight();
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer().framebufferTexture);
+			GL11.glBegin(GL11.GL_TRIANGLES);
+			GL11.glTexCoord2d(0.0D, 1.0D);
+			GL11.glVertex2d(0, 0);
+			GL11.glTexCoord2d(0.0D, 0.0D);
+			GL11.glVertex2d(0, renderHeight);
+			GL11.glTexCoord2d(1.0D, 0.0D);
+			GL11.glVertex2d(renderWidth, renderHeight);
+			GL11.glTexCoord2d(1.0D, 0.0D);
+			GL11.glVertex2d(renderWidth, renderHeight);
+			GL11.glTexCoord2d(1.0D, 1.0D);
+			GL11.glVertex2d(renderWidth, 0);
+			GL11.glTexCoord2d(0.0D, 1.0D);
+			GL11.glVertex2d(0, 0);
+			GL11.glEnd();
+
+			GL11.glPopMatrix();
+		}
 	}
 }

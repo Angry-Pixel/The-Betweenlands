@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -177,10 +178,9 @@ public class BlockTreePortal extends Block {
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
 		if (entity.ridingEntity == null && entity.riddenByEntity == null && entity.timeUntilPortal <= 0) {
-			if(entity instanceof EntityPlayerMP){
-				EntityPlayerMP player = (EntityPlayerMP) entity;
-				player.getEntityData().setBoolean("INPORTAL", true);
-			} else {
+			if(entity instanceof EntityPlayer){
+				entity.getEntityData().setBoolean("INPORTAL", true);
+			} else if(!world.isRemote) {
 				if (entity.dimension == 0)
 					TeleporterHandler.transferToBL(entity);
 				else
