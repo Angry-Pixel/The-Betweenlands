@@ -5,7 +5,10 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.audio.SoundEventAccessorComposite;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.sound.PlayStreamingSourceEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.client.audio.AmbienceBloodSky;
 import thebetweenlands.client.audio.AmbienceCaveSound;
@@ -46,13 +49,37 @@ public class AmbienceSoundPlayHandler
 						this.ambienceSoundCave = new AmbienceCaveSound(event.player);
 						Minecraft.getMinecraft().getSoundHandler().playSound(this.ambienceSoundCave);
 					}
-				} else if(this.ambienceBloodSky == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceBloodSky)) {
-					if( this.ambienceBloodSky != null ) {
-						this.ambienceBloodSky.stop();
+				} else {
+					//TODO: Improve this if you know a better way of stopping all music sounds playing currently
+					if(mc.getSoundHandler().isSoundPlaying(this.ambienceBloodSky)) {
+						float prevSoundLvl = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MUSIC);
+						Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MUSIC, 0.0F);
+						Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MUSIC, prevSoundLvl);
 					}
-					this.ambienceBloodSky = new AmbienceBloodSky(event.player);
-					Minecraft.getMinecraft().getSoundHandler().playSound(this.ambienceBloodSky);
+					if(this.ambienceBloodSky == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceBloodSky)) {
+						if( this.ambienceBloodSky != null ) {
+							this.ambienceBloodSky.stop();
+						}
+						this.ambienceBloodSky = new AmbienceBloodSky(event.player);
+						Minecraft.getMinecraft().getSoundHandler().playSound(this.ambienceBloodSky);
+					}
 				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onStreamRandomSound(PlayStreamingSourceEvent event) {
+		//TODO: I don't even know if this works.
+		SoundEventAccessorComposite soundeventaccessorcomposite = Minecraft.getMinecraft().getSoundHandler().getSound(event.sound.getPositionedSoundLocation());
+		if(soundeventaccessorcomposite.getSoundCategory() == SoundCategory.MUSIC) {
+			boolean isBloodSky = false;
+			World world = Minecraft.getMinecraft().theWorld;
+			if(world != null && world.provider instanceof WorldProviderBetweenlands) {
+				isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
+			}
+			if(isBloodSky) {
+				Minecraft.getMinecraft().getSoundHandler().stopSound(event.sound);
 			}
 		}
 	}

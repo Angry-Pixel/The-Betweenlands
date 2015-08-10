@@ -404,7 +404,8 @@ public class MainShader extends CShader {
 		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Apply god's ray
-		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, 0.95F, 0.5F, 0.1F, 0.75F).setRayPos(0.5F, 1.0F);
+		float density = 0.1F + ((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F);
+		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, 0.95F, density * 4.0F, 0.1F, 0.6F).setRayPos(0.5F, 1.0F);
 		this.godRayEffect.apply(this.getBlitBuffer("bloodSkyBlitBuffer1").framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer0"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Render to screen
