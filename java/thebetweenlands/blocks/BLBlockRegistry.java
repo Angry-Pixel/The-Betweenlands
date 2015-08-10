@@ -385,7 +385,7 @@ public class BLBlockRegistry {
     public static final BlockBLSlab thatchSlab = new BlockBLSlab(false, Material.cloth, "thatch", null, "axe");
     public static final BlockBLSlab thatchSlabDouble = new BlockBLSlab(true, Material.cloth, "thatch", thatchSlab, "axe");
 
-    public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope");
+    public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope").setCreativeTab(ModCreativeTabs.blocks);
 
     public static void registerSlabs(BlockBLSlab slab, String fieldName) {
         try {
