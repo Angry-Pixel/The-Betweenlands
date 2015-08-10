@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL21;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.glu.Project;
 
 public class GeometryBuffer {
 	private Framebuffer geometryBuffer;
@@ -22,13 +23,13 @@ public class GeometryBuffer {
 
 		//Init geometry buffer
 		if(this.geometryBuffer == null) {
-			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, true);
+			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, this.depthBuffer);
 			changed = true;
 		}
 		if(input.framebufferWidth != this.geometryBuffer.framebufferWidth
 				|| input.framebufferHeight != this.geometryBuffer.framebufferHeight) {
 			this.geometryBuffer.deleteFramebuffer();
-			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, true);
+			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, this.depthBuffer);
 			changed = true;
 		}
 

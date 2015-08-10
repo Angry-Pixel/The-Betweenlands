@@ -1,6 +1,9 @@
 package thebetweenlands.client.render.shader.effect;
 
+import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ARBShaderObjects;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +34,16 @@ public class OcclusionExtractor extends DeferredEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		ARBShaderObjects.glUniform1iARB(this.worldDepthFBOUniformID, this.worldDepth.framebufferTexture);
-		ARBShaderObjects.glUniform1iARB(this.clipPlaneDepthFBOUniformID, this.clipPlaneDepth.framebufferTexture);
+		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB + 0);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.worldDepth.framebufferTexture);
+		ARBShaderObjects.glUniform1iARB(this.worldDepthFBOUniformID, 0);
+		
+		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB + 1);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.clipPlaneDepth.framebufferTexture);
+		ARBShaderObjects.glUniform1iARB(this.clipPlaneDepthFBOUniformID, 1);
+		
+		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB );
 	}
 }
