@@ -16,6 +16,7 @@ public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 
 	@Override
 	public void update(World world) {
+		if(world.isRemote) return;
 		this.rnd = world.rand;
 		this.time--;
 		if(this.time <= 0) {

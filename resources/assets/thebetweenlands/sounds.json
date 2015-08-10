@@ -1,4 +1,10 @@
 {
+  "bloodSkyRoar": {
+    "category": "ambient",
+    "sounds": [
+      "bloodSkyRoar"
+    ]
+  },
   "druidChant": {
     "category": "block",
     "sounds": [

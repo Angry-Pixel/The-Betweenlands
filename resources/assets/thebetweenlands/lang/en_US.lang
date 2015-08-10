@@ -480,6 +480,7 @@ commands.blevent.failure.alreadyoff=The event '%s' is already off
 event.denseFog.name=Dense Fog
 event.heavyRain.name=Heavy Rain
 event.auroras.name=Auroras
+event.bloodSky.name=Blood Sky
 
 # Compost Bin
 compost.full=The compost bin is now full of compost.

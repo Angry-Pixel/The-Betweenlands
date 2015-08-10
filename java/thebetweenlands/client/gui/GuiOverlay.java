@@ -117,11 +117,11 @@ public class GuiOverlay extends Gui
 						//exposure, decay, density, weight, illuminationDecay
 						((GodRayEffect)this.de2).setOcclusionMap(this.tb1).setParams(0.8F, 0.95F, 0.5F, 0.1F, 0.75F).setRayPos(0.5F, 1.0F);
 						
-						this.de2.apply(this.tb1.framebufferTexture, shader.getBlitBuffer(), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+						this.de2.apply(this.tb1.framebufferTexture, shader.getBlitBuffer("bloodSkyBlitBuffer"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 						
 						ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
-						GL11.glBindTexture(GL11.GL_TEXTURE_2D, shader.getBlitBuffer().framebufferTexture/*this.tb1.framebufferTexture*//*BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer().framebufferTexture*/);
+						GL11.glBindTexture(GL11.GL_TEXTURE_2D, shader.getBlitBuffer("bloodSkyBlitBuffer").framebufferTexture/*this.tb1.framebufferTexture*//*BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer().framebufferTexture*/);
 						
 						/*GL11.glEnable(GL11.GL_BLEND);
 						GL11.glColor4f(1.0F, 0.1F, 0.0F, 0.45F);

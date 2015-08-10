@@ -1,6 +1,6 @@
 #version 120
 
-const int NUM_SAMPLES = 100;
+const int NUM_SAMPLES = 60;
 
 uniform sampler2D s_occlusion;
 uniform float u_godRayX;

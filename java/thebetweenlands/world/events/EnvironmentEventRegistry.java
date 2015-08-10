@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import thebetweenlands.world.events.impl.EventAuroras;
+import thebetweenlands.world.events.impl.EventBloodSky;
 import thebetweenlands.world.events.impl.EventDenseFog;
 import thebetweenlands.world.events.impl.EventHeavyRain;
 
@@ -14,11 +15,13 @@ public class EnvironmentEventRegistry {
 	public final EnvironmentEvent DENSE_FOG = new EventDenseFog(this);
 	public final EnvironmentEvent HEAVY_RAIN = new EventHeavyRain(this);
 	public final EventAuroras AURORAS = new EventAuroras(this);
-
+	public final EventBloodSky BLOODSKY = new EventBloodSky(this);
+	
 	public void init() {
 		register(DENSE_FOG);
 		register(HEAVY_RAIN);
 		register(AURORAS);
+		register(BLOODSKY);
 	}
 
 	private final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();
