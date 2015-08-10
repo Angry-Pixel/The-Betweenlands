@@ -5,6 +5,15 @@
       "bloodSkyRoar"
     ]
   },
+  "ambientBloodSky": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "ambience/ambientBloodSky",
+        "stream": true
+      }
+    ]
+  },
   "druidChant": {
     "category": "block",
     "sounds": [

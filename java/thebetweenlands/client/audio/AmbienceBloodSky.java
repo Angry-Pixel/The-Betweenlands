@@ -9,13 +9,13 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-public class AmbienceCaveSound
+public class AmbienceBloodSky
         extends MovingSound
 {
     private EntityPlayer player;
 
-    public AmbienceCaveSound(EntityPlayer entityPlayer) {
-        super(new ResourceLocation("thebetweenlands:ambientCave"));
+    public AmbienceBloodSky(EntityPlayer entityPlayer) {
+        super(new ResourceLocation("thebetweenlands:ambientBloodSky"));
         this.player = entityPlayer;
         this.repeat = true;
         this.field_147666_i = AttenuationType.NONE;
@@ -29,7 +29,7 @@ public class AmbienceCaveSound
     	if(world != null && world.provider instanceof WorldProviderBetweenlands) {
     		isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
     	}
-        if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= AmbienceSoundPlayHandler.CAVE_START || isBloodSky) {
+        if(!isBloodSky) {
             if( this.volume > 0.05F ) {
                 this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {
