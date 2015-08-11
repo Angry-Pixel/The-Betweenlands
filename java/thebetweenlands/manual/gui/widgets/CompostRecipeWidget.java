@@ -14,15 +14,15 @@ import java.util.Random;
 /**
  * Created by Bart on 9-8-2015.
  */
-public class ComporstRecipeWidget extends ManualWidgetsBase {
+public class CompostRecipeWidget extends ManualWidgetsBase {
     int currentRecipe;
 
-    int width = 34;
-    int height = 38;
+    public static int width = 34;
+    public static int height = 38;
 
     int untilUpdate = 0;
 
-    public ComporstRecipeWidget(GuiManualBase manual, int xStart, int yStart) {
+    public CompostRecipeWidget(GuiManualBase manual, int xStart, int yStart) {
         super(manual, xStart, yStart);
         Random random = new Random();
         currentRecipe = random.nextInt(CompostRecipe.compostRecipes.size());

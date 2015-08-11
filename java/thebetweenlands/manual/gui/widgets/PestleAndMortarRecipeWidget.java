@@ -19,8 +19,8 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
 
     ArrayList<ItemStack> inputs = new ArrayList<>();
 
-    int width = 106;
-    int height = 69;
+    public static int width = 106;
+    public static int height = 69;
 
     int progress = 0;
     int untilUpdate = 0;

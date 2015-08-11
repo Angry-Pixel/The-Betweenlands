@@ -24,16 +24,23 @@ public class ManualWidgetsBase {
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
 
     public GuiManualBase manual;
+    int unchangedXStart;
     int xStart;
     int yStart;
     int gridSize;
     int mouseX, mouseY;
 
 
+
     public ManualWidgetsBase(GuiManualBase manual, int xStart, int yStart) {
         this.manual = manual;
-        this.xStart = xStart;
-        this.yStart = yStart;
+        this.unchangedXStart = xStart;
+        this.xStart = manual.xStartLeftPage + xStart;
+        this.yStart = manual.yStart + yStart;
+    }
+
+    public void setPageToRight(){
+        this.xStart = manual.xStartRightPage + unchangedXStart;
     }
 
     public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {

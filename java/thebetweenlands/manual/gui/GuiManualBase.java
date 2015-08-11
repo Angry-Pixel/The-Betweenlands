@@ -23,7 +23,7 @@ public class GuiManualBase extends GuiScreen {
     public static final int WIDTH = 127;
     private static ResourceLocation pageLeft = new ResourceLocation("thebetweenlands:textures/gui/manual/blankPageLeft.png");
     private static ResourceLocation pageRight = new ResourceLocation("thebetweenlands:textures/gui/manual/blankPageRight.png");
-    public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+    //public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
 
     public int xStartLeftPage;
     public int xStartRightPage;
@@ -31,13 +31,16 @@ public class GuiManualBase extends GuiScreen {
 
     public int currentPage = 0;
 
+    public ManualEntry entry;
+
 
     @Override
     public void initGui() {
         xStartLeftPage = width / 2 - WIDTH;
         xStartRightPage = width / 2;
         yStart = (height - HEIGHT) / 2;
-        addWidgets();
+        ManualEntryRegistry.init(this);
+        entry = ManualEntryRegistry.entry1;
     }
 
     @Override
@@ -48,13 +51,12 @@ public class GuiManualBase extends GuiScreen {
         drawTexturedModalRect(xStartLeftPage, yStart, 0, 0, WIDTH, HEIGHT);
         mc.renderEngine.bindTexture(pageRight);
         drawTexturedModalRect(xStartRightPage, yStart, 0, 0, WIDTH, HEIGHT);
-        for (ManualWidgetsBase widget : widgets)
-            widget.draw(mouseX, mouseY);
+        entry.draw(mouseX, mouseY);
     }
 
 
     public void addWidgets() {
-        if (currentPage == 0) {
+        /*if (currentPage == 0) {
             ArrayList<IRecipe> recipes = new ArrayList<>();
             recipes.add(RecipeHandler.weedwoodPickAxeRecipe);
             recipes.add(RecipeHandler.betweenstonePickAxeRecipe);
@@ -89,9 +91,9 @@ public class GuiManualBase extends GuiScreen {
             widgets.add(new SmeltingRecipeWidget(this, new ItemStack(Blocks.cobblestone), xStartRightPage + 10, yStart + 10));
             widgets.add(new PurifierRecipeWidget(this, new ItemStack(BLBlockRegistry.aquaMiddleGemOre), xStartRightPage + 10, yStart + 14 + SmeltingRecipeWidget.height));
         } else if (currentPage == 2) {
-            widgets.add(new ComporstRecipeWidget(this, xStartLeftPage + 4, yStart + 10));
+            widgets.add(new CompostRecipeWidget(this, xStartLeftPage + 4, yStart + 10));
             widgets.add(new PestleAndMortarRecipeWidget(this, xStartRightPage + 2, yStart + 10, new ItemStack(BLBlockRegistry.weedwoodBark)));
-        }
+        }*/
     }
 
 
@@ -102,32 +104,23 @@ public class GuiManualBase extends GuiScreen {
                 mc.displayGuiScreen(null);
             }
         }
-        for (ManualWidgetsBase widget : widgets)
-            widget.keyTyped(c, key);
+        entry.keyTyped(c, key);
     }
 
     @Override
     protected void mouseClicked(int x, int y, int button) {
-
         if (button == 0) {
-            currentPage++;
-            widgets.clear();
-            addWidgets();
-        } else if (button == 1 && currentPage - 1 >= 0) {
-            currentPage--;
-            widgets.clear();
-            addWidgets();
-        } else
-            for (ManualWidgetsBase widget : widgets)
-                widget.mouseClicked(x, y, button);
-
+            entry.nextPage();
+        } else if (button == 1) {
+            entry.previousPage();
+        }
+        entry.mouseClicked(x, y, button);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        for (ManualWidgetsBase widget : widgets)
-            widget.updateScreen();
+        entry.updateScreen();
     }
 
     public boolean doesGuiPauseGame() {

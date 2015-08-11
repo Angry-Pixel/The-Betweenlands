@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class PictureWidget extends ManualWidgetsBase {
 
     ResourceLocation recourseLocation;
-    int width;
-    int height;
+    public int width;
+    public int height;
 
     ArrayList<String> toolTips = new ArrayList<>();
 
