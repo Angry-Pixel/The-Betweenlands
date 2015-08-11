@@ -860,7 +860,7 @@ public class DecorationHelper {
 
 			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
 				GEN_TAR_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
-				GEN_TAR_POOL.generate(world, rand, x, y, z);
+				GEN_TAR_POOL.generate(world, rand, xx, yy, zz);
 			}
 		}
 	}

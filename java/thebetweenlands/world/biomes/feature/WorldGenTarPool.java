@@ -25,10 +25,10 @@ public class WorldGenTarPool extends WorldGenerator {
 		x -= 8;
 		z -= 8;
 
-		for (; y > 10 && world.isAirBlock(x, y, z); --y)
+		for (; y > 6 && world.isAirBlock(x, y, z); --y)
 			;
 
-		if (y <= 10 || world.isAirBlock(x, y, z))
+		if (y <= 6 || world.isAirBlock(x, y, z))
 			return false;
 		y -= 4;
 		
@@ -75,8 +75,8 @@ public class WorldGenTarPool extends WorldGenerator {
 						if (yy < 4 && !material.isSolid() && world.getBlock(x + xx, y + yy, z + zz) != fillerFluid)
 							return false;
 
-						if (yy < 4 || rand.nextBoolean() && world.getBlock(x + xx, y + yy, z + zz).getMaterial().isSolid() && (checkSurface(world, SurfaceType.MIXED, x + xx, y + yy, z + zz) || world.getBlock(x + xx, y + yy, z + zz) == BLBlockRegistry.betweenstone)) //this is a problem it needs a better block check
-							world.setBlock(x + xx, y + yy, z + zz, BLBlockRegistry.solidTar, 0, 2);
+					//	if (yy < 4 || rand.nextBoolean() && world.getBlock(x + xx, y + yy, z + zz).getMaterial().isSolid() && (checkSurface(world, SurfaceType.MIXED, x + xx, y + yy, z + zz) || world.getBlock(x + xx, y + yy, z + zz) == BLBlockRegistry.betweenstone)) //this is a problem it needs a better block check
+					//		world.setBlock(x + xx, y + yy, z + zz, BLBlockRegistry.solidTar, 0, 2);
 					}
 				}
 
