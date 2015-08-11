@@ -855,7 +855,7 @@ public class DecorationHelper {
 	public void generateTarPool(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int xx = x + offsetXZ();
-			int yy = 10 + rand.nextInt(80);
+			int yy = 6 + rand.nextInt(80);
 			int zz = z + offsetXZ();
 
 			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
