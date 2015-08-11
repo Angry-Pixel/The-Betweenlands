@@ -69,7 +69,7 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 			EnvironmentEvent eevent = eeRegistry.forName(message.eventName);
 			if(eevent != null) {
 				eevent.setActive(message.active, false);
-				eevent.setLoaded();
+				if(world.isRemote) eevent.setLoaded();
 			}
 		}
 	}

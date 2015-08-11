@@ -238,6 +238,8 @@ public final class GLUProjection {
 	private double heightScale;
 	private double bra, bla, tra, tla;
 	private Line tb, bb, lb, rb;
+	private float fov;
+	private Vector3D lookVec;
 
 	/**
 	 * Updates the matrices. Needed whenever the viewport or one of the matrices has changed.
@@ -256,6 +258,7 @@ public final class GLUProjection {
 
 		//Get fov and display dimensions
 		float fov = (float)Math.toDegrees(Math.atan(1.0D / this.projection.get(5)) * 2.0D);
+		this.fov = fov;
 		this.displayWidth = this.viewport.get(2);
 		this.displayHeight = this.viewport.get(3);
 		//Getting modelview vectors
@@ -278,6 +281,7 @@ public final class GLUProjection {
 		} else {
 			pitch = -Math.toDegrees(Math.atan2(nuv.cross(uv).length(), nuv.dot(uv)));
 		}
+		this.lookVec = this.getRotationVector(yaw, pitch);
 		//Get modelview matrix and invert it
 		Matrix4f modelviewMatrix = new Matrix4f();
 		modelviewMatrix.load(this.modelview.asReadOnlyBuffer());
@@ -489,7 +493,40 @@ public final class GLUProjection {
 		Vector3D downRightfrustum = new Vector3D(fc.x - (up.x * Hfar / 2D) + (right.x * Wfar / 2D), fc.y - (up.y * Hfar / 2D) + (right.y * Wfar / 2D), fc.z - (up.z * Hfar / 2D) + (right.z * Wfar / 2D));
 		return new Vector3D[]{topLeftfrustum, downLeftfrustum, topRightfrustum, downRightfrustum};
 	}
+	
+	/**
+	 * Returns the frustrum that has been constructed with {@link GLUProjection#updateMatrices(IntBuffer, FloatBuffer, FloatBuffer, double, double)}
+	 * @return
+	 */
+	public Vector3D[] getFrustrum() {
+		return this.frustum;
+	}
 
+	/**
+	 * Returns the horizontal fov angle
+	 * @return
+	 */
+	public float getFovX() {
+		double ratio = displayWidth / displayHeight;
+		return (float) Math.toDegrees(2.0D * Math.atan(ratio * Math.tan(Math.toRadians(this.fov) / 2.0D)));
+	}
+	
+	/**
+	 * Returns the vertical fov angle
+	 * @return
+	 */
+	public float getFovY() {
+		return (float) this.fov;
+	}
+	
+	/**
+	 * Returns the normalized look vector
+	 * @return
+	 */
+	public Vector3D getLookVector() {
+		return this.lookVec;
+	}
+	
 	/**
 	 * Returns a rotated vector with the given yaw and pitch.
 	 * @param rotYaw	Yaw

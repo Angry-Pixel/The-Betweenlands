@@ -22,6 +22,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.base.CShader;
 import thebetweenlands.client.render.shader.base.CShaderGroup;
@@ -30,6 +31,11 @@ import thebetweenlands.client.render.shader.effect.GodRayEffect;
 import thebetweenlands.client.render.shader.effect.OcclusionExtractor;
 import thebetweenlands.client.render.shader.effect.SwirlEffect;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.utils.GLUProjection;
+import thebetweenlands.utils.GLUProjection.ClampMode;
+import thebetweenlands.utils.GLUProjection.Projection;
+import thebetweenlands.utils.GLUProjection.Vector3D;
+import thebetweenlands.utils.GLUProjection.Projection.Type;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.impl.EventBloodSky;
 
@@ -399,20 +405,55 @@ public class MainShader extends CShader {
 			this.godRayEffect = (GodRayEffect) new GodRayEffect().init();
 		}
 
+		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		double renderWidth = scaledResolution.getScaledWidth();
+		double renderHeight = scaledResolution.getScaledHeight();
+
+		float rayX = 0.5F;
+		float rayY = 1.0F;
+
+		Vec3 lightPos = Vec3.createVectorHelper(45, 30, 30);
+
+		//Get screen space coordinates of light source
+		Projection p = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.NONE, false);
+
+		//Get light source positions in texture coords
+		rayX = (float)(p.getX() / renderWidth);
+		rayY = 1.0F - (float)(p.getY() / renderHeight);
+
+		//Calculate angle differences
+		Vec3 lookVec = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
+		lookVec.yCoord = 0;
+		lookVec = lookVec.normalize();
+		Vec3 sLightPos = Vec3.createVectorHelper(lightPos.xCoord, 0, lightPos.zCoord).normalize();
+		float lightXZAngle = (float) Math.toDegrees(Math.acos(sLightPos.dotProduct(lookVec)));
+		float fovX = GLUProjection.getInstance().getFovX() / 2.0F;
+		float angDiff = Math.abs(lightXZAngle);
+
+		float decay = 0.96F;
+		float illuminationDecay = 0.44F;
+		float weight = 0.12F;
+
+		//Lower decay if outside of view
+		if(angDiff > fovX) {
+			float mult = ((angDiff - fovX) / 400.0F);
+			decay *= 1.0F - mult;
+			illuminationDecay *= 1.0F - mult;
+			weight *= 1.0F - mult;
+		}
+
 		//Extract occluding objects
 		this.occlusionExtractor.setFBOs(this.getDepthBuffer(), BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer());
 		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Apply god's ray
-		float density = 0.1F + ((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F);
-		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, 0.95F, density * 4.0F, 0.1F, 0.6F).setRayPos(0.5F, 1.0F);
+		float density = 0.1F + Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F);
+		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, decay, density * 4.0F, weight, illuminationDecay).setRayPos(rayX, rayY);
 		this.godRayEffect.apply(this.getBlitBuffer("bloodSkyBlitBuffer1").framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer0"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Render to screen
 		//Render blit buffer to main buffer
 		GL11.glPushMatrix();
-
-		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
@@ -421,11 +462,9 @@ public class MainShader extends CShader {
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
 
-		double renderWidth = scaledResolution.getScaledWidth();
-		double renderHeight = scaledResolution.getScaledHeight();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
-		
+
 		//Render world with tint
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(1.0F, 0.8F, 0.2F, skyTransparency);
@@ -444,10 +483,10 @@ public class MainShader extends CShader {
 		GL11.glTexCoord2d(0.0D, 1.0D);
 		GL11.glVertex2d(0, 0);
 		GL11.glEnd();
-		
+
 		//Render god's ray overlay
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(0.6F, 0.13F, 0.0F, skyTransparency / 3.0F);
+		GL11.glColor4f(0.7F, 0.1F, 0.0F, skyTransparency / 2.5F);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer("bloodSkyBlitBuffer0").framebufferTexture);
 		GL11.glBegin(GL11.GL_TRIANGLES);
 		GL11.glTexCoord2d(0.0D, 1.0D);
