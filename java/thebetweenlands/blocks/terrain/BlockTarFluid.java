@@ -1,14 +1,17 @@
 package thebetweenlands.blocks.terrain;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,6 +57,61 @@ public class BlockTarFluid extends BlockFluidClassic {
 		if (entity instanceof EntityLivingBase) {
 			entity.motionX *= 0.005D;
 			entity.motionZ *= 0.005D;
+			if(entity.motionY < 0)
+				entity.motionY *= 0.005D;
+			Block blockAbove = world.getBlock(x, y + 1, z);
+			if(blockAbove.getMaterial() == BLMaterials.tar && entity.isInsideOfMaterial(BLMaterials.tar)) {
+				((EntityLivingBase) entity).attackEntityFrom(DamageSource.drown, 2.0F);
+			}
+		}
+	}
+
+	@Override
+    public void onBlockAdded(World world, int x, int y, int z) {
+        solidifyTar(world, x, y, z);
+        super.onBlockAdded(world, x, y, z);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		solidifyTar(world, x, y, z);
+		super.onNeighborBlockChange(world, x, y, z, block);
+	}
+
+	private void solidifyTar(World world, int x, int y, int z) {
+		if (world.getBlock(x, y, z) == this) {
+			if (this.blockMaterial == BLMaterials.tar) {
+				boolean placeTar = false;
+
+				if (placeTar || world.getBlock(x, y, z - 1).getMaterial() == Material.water)
+					placeTar = true;
+
+				if (placeTar || world.getBlock(x, y, z + 1).getMaterial() == Material.water)
+					placeTar = true;
+
+				if (placeTar || world.getBlock(x - 1, y, z).getMaterial() == Material.water)
+					placeTar = true;
+
+				if (placeTar || world.getBlock(x + 1, y, z).getMaterial() == Material.water)
+					placeTar = true;
+
+				if (placeTar || world.getBlock(x, y + 1, z).getMaterial() == Material.water)
+					placeTar = true;
+
+				if (placeTar) {
+					world.setBlock(x, y, z, BLBlockRegistry.solidTar);
+					playEffects(world, x, y, z);
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void playEffects(World world, int x, int y, int z) {
+		world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+
+		for (int l = 0; l < 8; ++l) {
+			world.spawnParticle("largesmoke", (double) x + Math.random(), (double) y + 1.2D, (double) z + Math.random(), 0.0D, 0.0D, 0.0D);
 		}
 	}
 }
