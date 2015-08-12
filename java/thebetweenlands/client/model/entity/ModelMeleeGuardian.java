@@ -60,6 +60,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
     public MowzieModelRenderer helmetside_left;
     public MowzieModelRenderer helmet_back;
     public MowzieModelRenderer chest_invisible;
+    public MowzieModelRenderer headJoint;
 
     public ModelMeleeGuardian() {
         this.textureWidth = 256;
@@ -201,7 +202,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.edge4a.addBox(0.0F, -4.0F, 0.0F, 1, 8, 2, 0.0F);
         this.setRotateAngle(edge4a, 0.0F, -0.091106186954104F, 0.0F);
         this.headconnection = new MowzieModelRenderer(this, 100, 8);
-        this.headconnection.setRotationPoint(0.0F, -3.0F, -1.0F);
+        this.headconnection.setRotationPoint(0.0F, 0, 0F);
         this.headconnection.addBox(-4.0F, 0.0F, -2.0F, 8, 2, 6, 0.0F);
         this.setRotateAngle(headconnection, -0.091106186954104F, 0.0F, 0.0F);
         this.legleft_1 = new MowzieModelRenderer(this, 80, 0);
@@ -245,6 +246,8 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.armouredskirt_left.setRotationPoint(2.0F, 0.0F, 0.0F);
         this.armouredskirt_left.addBox(0.0F, 0.0F, -3.0F, 2, 5, 6, 0.0F);
         this.setRotateAngle(armouredskirt_left, 0.0F, 0.0F, -0.18203784098300857F);
+        this.headJoint = new MowzieModelRenderer(this, 0, 0);
+        this.headJoint.setRotationPoint(0.0F, -3.0F, -1.0F);
         this.shoulder_right.addChild(this.armright_1);
         this.blade1.addChild(this.blade2);
         this.legright_1.addChild(this.legright_2);
@@ -281,7 +284,8 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.helmettop.addChild(this.helmet_back);
         this.sword_handle.addChild(this.pommel2);
         this.shield_baseplate.addChild(this.edge4a);
-        this.neck.addChild(this.headconnection);
+        this.neck.addChild(this.headJoint);
+        this.headJoint.addChild(this.headconnection);
         this.waist_invisible.addChild(this.legleft_1);
         this.shield_baseplate.addChild(this.edge1a);
         this.legleft_1.addChild(this.legleft_2);
@@ -294,7 +298,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.chestpiece_left.addChild(this.shoulder_left);
         this.waist_invisible.addChild(this.armouredskirt_left);
         
-        parts = new MowzieModelRenderer[] {waist_invisible, body_base, chestpiece_right, chestpiece_left, legright_1, legleft_1, armouredskirt_back, armouredskirt_right, armouredskirt_left, neck, shoulder_right, armright_1, armright_2, sword_handle, pommel1, pommel2, guard1, blade1, guard2, guard3, blade2, shoulder_left, armleft_1, armleft_2, shield_baseplate, shieldstrap, edge1a, edge2a, edge3a, edge4a, button_huehue_butt, edge1b, edge2b, edge3b, edge4b, legright_2, footpiece_right, legleft_2, footpiece_left, armouredskirt_backedge, headconnection, headbase, facepiece, nose, helmettop, helmetside_right, helmetside_left, helmet_back, chest_invisible};
+        parts = new MowzieModelRenderer[] {waist_invisible, body_base, chestpiece_right, chestpiece_left, legright_1, legleft_1, armouredskirt_back, armouredskirt_right, armouredskirt_left, neck, shoulder_right, armright_1, armright_2, sword_handle, pommel1, pommel2, guard1, blade1, guard2, guard3, blade2, shoulder_left, armleft_1, armleft_2, shield_baseplate, shieldstrap, edge1a, edge2a, edge3a, edge4a, button_huehue_butt, edge1b, edge2b, edge3b, edge4b, legright_2, footpiece_right, legleft_2, footpiece_left, armouredskirt_backedge, headconnection, headbase, facepiece, nose, helmettop, helmetside_right, helmetside_left, helmet_back, chest_invisible, headJoint};
         setInitPose();
     }
 
@@ -315,7 +319,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        faceTarget(headbase, 1, f3, f4);
+        faceTarget(headconnection, 1, f3, f4);
     }
 
     @Override
@@ -333,10 +337,10 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         bob(waist_invisible, 1 * globalSpeed, 1f * globalHeight, false, f, f1);
         swing(chest_invisible, 0.5f * globalSpeed, 0.4f * globalDegree, true, 0, 0, f, f1);
         swing(neck, 0.5f * globalSpeed, 0.4f * globalDegree, false, 0, 0, f, f1);
-        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight, false, 0, 0.4f, f, f1);
-        walk(headconnection, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.4f, f, f1);
-        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.4f, f, f1);
-        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.4f, f, f1);
+        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight, false, 0, 0.2f, f, f1);
+        walk(headJoint, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
+        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
+        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
 
         walk(armouredskirt_back, 1 * globalSpeed, 0.3f * globalHeight, false, -1, 0.5f, f, f1);
         flap(armouredskirt_left, 1 * globalSpeed, 0.2f * globalHeight, true, -1, -0.4f, f, f1);
