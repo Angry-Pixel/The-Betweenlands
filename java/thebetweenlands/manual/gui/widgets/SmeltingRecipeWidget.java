@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -55,13 +56,13 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
         renderItem(newX + 60, newY + 16, FurnaceRecipes.smelting().getSmeltingResult(inputs.get(currentRecipe)), false);
         renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.materialsBL, 1, ItemMaterialsBL.EnumMaterialsBL.SULFUR.ordinal()), true);
         ArrayList<String> specialToolTips = new ArrayList<>();
-        specialToolTips.add("Burn time: 16000 ticks");
+        specialToolTips.add(burnTimeString.replace(".time.", "800" ));
         addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.materialsBL, 1, ItemMaterialsBL.EnumMaterialsBL.SULFUR.ordinal()), specialToolTips);
 
         if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 17 && mouseY <= yStart + 33) {
             ArrayList<String> processTooltip = new ArrayList<>();
-            processTooltip.add("Furnace recipe");
-            processTooltip.add("Process time: 10 seconds");
+            processTooltip.add(StatCollector.translateToLocal("manual.widget.smelting.recipe"));
+            processTooltip.add(processTimeSecondsString.replace(".seconds.", "10"));
             renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
         }
 

@@ -1,25 +1,30 @@
 package thebetweenlands.manual.gui;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.manual.gui.widgets.*;
 import thebetweenlands.recipes.RecipeHandler;
 
 import java.util.ArrayList;
 
 /**
- * Created by Bart on 11-8-2015.
+ * Created on 11-8-2015.
  */
 public class ManualEntryRegistry {
-    public static int craftingRecipeWidth = CraftingRecipeWidget.width;
-    public static int craftingRecipeHeight = CraftingRecipeWidget.height;
-    public static int smeltingRecipeWidth = SmeltingRecipeWidget.width;
-    public static int smeltingRecipeHeight = SmeltingRecipeWidget.height;
-    public static int compostRecipeWidth = CompostRecipeWidget.width;
-    public static int compostRecipeHeight = CompostRecipeWidget.height;
-    public static int PestleAndMortarRecipeWidth = PestleAndMortarRecipeWidget.width;
-    public static int PestleAndMortarRecipeHeight = PestleAndMortarRecipeWidget.height;
-    public static int PurifierRecipeWidth = PurifierRecipeWidget.width;
-    public static int PurifierRecipeHeight = PurifierRecipeWidget.height;
+
+    //these contain a preferred distance between 2 recipes
+    public static int craftingRecipeWidth = CraftingRecipeWidget.width + 5;
+    public static int craftingRecipeHeight = CraftingRecipeWidget.height + 5;
+    public static int smeltingRecipeWidth = SmeltingRecipeWidget.width + 5;
+    public static int smeltingRecipeHeight = SmeltingRecipeWidget.height + 5;
+    public static int compostRecipeWidth = CompostRecipeWidget.width + 5;
+    public static int compostRecipeHeight = CompostRecipeWidget.height + 5;
+    public static int PestleAndMortarRecipeWidth = PestleAndMortarRecipeWidget.width + 5;
+    public static int PestleAndMortarRecipeHeight = PestleAndMortarRecipeWidget.height + 5;
+    public static int PurifierRecipeWidth = PurifierRecipeWidget.width + 5;
+    public static int PurifierRecipeHeight = PurifierRecipeWidget.height + 5;
 
     public static ManualEntry entry1;
 
@@ -48,7 +53,7 @@ public class ManualEntryRegistry {
         recipes4.add(RecipeHandler.anglerToothArrowRecipe);
         recipes4.add(RecipeHandler.octineArrowRecipe);
 
-        entry1 = new ManualEntry(new ManualPage(new CraftingRecipeWidget(manual, recipes, 4, 10), new CraftingRecipeWidget(manual, recipes3, 4, 10 + craftingRecipeHeight + 5), new CraftingRecipeWidget(manual, recipes4, 4, 10 + craftingRecipeHeight + 10)), new ManualPage(new CraftingRecipeWidget(manual, recipes1, 4, 10)), new ManualPage(new CraftingRecipeWidget(manual, recipes2, 4, 10)));
+        entry1 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.text.test")), new ManualPage(new CraftingRecipeWidget(manual, recipes, 4, 10), new CraftingRecipeWidget(manual, recipes3, 4, 10 + craftingRecipeHeight), new CraftingRecipeWidget(manual, recipes4, 4, 10 + craftingRecipeHeight * 2)), new ManualPage(new CraftingRecipeWidget(manual, recipes1, 4, 10)), new ManualPage(new CraftingRecipeWidget(manual, recipes2, 4, 10), new SmeltingRecipeWidget(manual, new ItemStack(Blocks.cobblestone), 10, 10 + craftingRecipeHeight), new PurifierRecipeWidget(manual, new ItemStack(BLBlockRegistry.aquaMiddleGemOre), 10, 10 + craftingRecipeHeight + smeltingRecipeHeight)));
     }
 
 }

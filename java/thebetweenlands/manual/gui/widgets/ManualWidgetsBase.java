@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.manual.gui.GuiManualBase;
@@ -27,9 +28,12 @@ public class ManualWidgetsBase {
     int unchangedXStart;
     int xStart;
     int yStart;
-    int gridSize;
     int mouseX, mouseY;
 
+    public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
+    public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");
+    public static String processTimeSecondsString = StatCollector.translateToLocal("manual.widget.process.time.seconds");
+    public static String burnTimeString = StatCollector.translateToLocal("manual.widget.burn.time");
 
 
     public ManualWidgetsBase(GuiManualBase manual, int xStart, int yStart) {
@@ -90,7 +94,7 @@ public class ManualWidgetsBase {
         GL11.glColor4f(1F, 1F, 1F, 1F);
     }
 
-    public static void drawGradientRect(int par1, int par2, float z, int par3, int par4, int par5, int par6) {
+    public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {
         float var7 = (par5 >> 24 & 255) / 255F;
         float var8 = (par5 >> 16 & 255) / 255F;
         float var9 = (par5 >> 8 & 255) / 255F;
@@ -107,10 +111,10 @@ public class ManualWidgetsBase {
         Tessellator var15 = Tessellator.instance;
         var15.startDrawingQuads();
         var15.setColorRGBA_F(var8, var9, var10, var7);
-        var15.addVertex(par3, par2, z);
-        var15.addVertex(par1, par2, z);
+        var15.addVertex(par3, y, z);
+        var15.addVertex(x, y, z);
         var15.setColorRGBA_F(var12, var13, var14, var11);
-        var15.addVertex(par1, par4, z);
+        var15.addVertex(x, par4, z);
         var15.addVertex(par3, par4, z);
         var15.draw();
         GL11.glShadeModel(GL11.GL_FLAT);

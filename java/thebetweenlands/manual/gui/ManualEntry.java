@@ -60,7 +60,7 @@ public class ManualEntry {
     }
 
     public void nextPage(){
-        if(currentPage + 2 <= pages.size()){
+        if(currentPage + 2 < pages.size()){
             currentPageLeft = getNextPageLeft();
             currentPageRight = getNextPageRight();
             currentPage += 2;
@@ -86,7 +86,7 @@ public class ManualEntry {
         return pages.get(currentPage + 2);
     }
     public ManualPage getNextPageRight(){
-        if(pages.size() >= pages.size() + 2)
+        if(pages.size() >= currentPage + 2)
             return pages.get(currentPage + 3);
         return blankPage;
     }

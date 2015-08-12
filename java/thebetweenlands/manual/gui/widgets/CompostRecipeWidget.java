@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.CompostRecipe;
@@ -39,11 +40,11 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
         renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.compostBin)), false);
         if (mouseX >= xStart + 18 && mouseX <= xStart + 34 && mouseY >= yStart + 4 && mouseY <= yStart + 20) {
             ArrayList<String> processTooltip = new ArrayList<>();
-            processTooltip.add("Compost recipe");
+            processTooltip.add(StatCollector.translateToLocal("manual.widget.compost.recipe"));
             int minutes = (int) (recipe.compostTime / 20 / 60);
             int seconds = (int) ((recipe.compostTime / 20) % 60);
-            processTooltip.add("Process time: " + minutes + " minutes" + (seconds > 0 ? " and " + seconds + " seconds" : ""));
-            processTooltip.add("Compost amount: " + recipe.compostAmount + "%");
+            processTooltip.add(seconds > 0?processTimeString.replace(".minutes.", "" + minutes).replace(".seconds.", "" + seconds):processTimeMinutesString.replace(".minutes.", "" + minutes));
+            processTooltip.add(StatCollector.translateToLocal("manual.widget.compost.amount").replace(".amount.", "" + recipe.compostAmount));
             renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
         }
     }
