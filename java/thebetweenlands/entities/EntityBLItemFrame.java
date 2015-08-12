@@ -19,7 +19,19 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class EntityBLItemFrame extends EntityItemFrame {
 
-    private float itemDropChance = 1.0F;
+	public EntityBLItemFrame(World world) {
+		super(world);
+	}
+
+	public EntityBLItemFrame(World world, int x, int y, int z, int direction) {
+        super(world, x, y, z, direction);
+        NBTTagCompound nbt = new NBTTagCompound();
+        this.writeEntityToNBT(nbt);
+        this.readEntityFromNBT(nbt);
+        System.out.println(x + " " + y + " " + z);
+    }
+	
+    /*private float itemDropChance = 1.0F;
 
     public EntityBLItemFrame(World world) {
         super(world);
@@ -182,5 +194,5 @@ public class EntityBLItemFrame extends EntityItemFrame {
         }
 
         return true;
-    }
+    }*/
 }

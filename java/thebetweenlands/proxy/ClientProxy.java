@@ -10,6 +10,11 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -39,6 +44,7 @@ import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockHollowLogRenderer;
 import thebetweenlands.client.render.block.BlockModelPlantRenderer;
 import thebetweenlands.client.render.block.BlockMudFlowerPotRenderer;
 import thebetweenlands.client.render.block.BlockRootRenderer;
@@ -87,6 +93,7 @@ import thebetweenlands.client.render.item.ItemPurifierRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityCompostBinRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
@@ -137,6 +144,7 @@ import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.GLUProjectionHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
@@ -146,6 +154,7 @@ import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityInfuser;
@@ -159,15 +168,10 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER, MUDFLOWERPOT, SLOPE;
+		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER, MUDFLOWERPOT, SLOPE, HOLLOW_LOG;
 
 		private final int ID;
 
@@ -236,6 +240,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot1.class, new TileEntityLootPot1Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot2.class, new TileEntityLootPot2Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot3.class, new TileEntityLootPot3Renderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSpawner.class, new TileEntityBLSpawnerRenderer());
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
@@ -265,6 +270,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockBLLeverRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockMudFlowerPotRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 		
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
@@ -281,7 +287,8 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new DecayTextureStitchHandler());
 		FMLCommonHandler.instance().bus().register(new HeldItemTooltipHandler());
-
+		MinecraftForge.EVENT_BUS.register(GLUProjectionHandler.INSTANCE);
+		
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);

@@ -1,7 +1,14 @@
 package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorSwampLands;
@@ -20,6 +27,7 @@ public class BiomeSwampLands
         super(biomeID, decorator);
         this.setFogColor((byte) 10, (byte) 30, (byte) 12);
         setColors(0x314D31, 0x314D31);
+        setWeight(20);
         this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
         this.setBiomeName("Swamplands");
         this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);

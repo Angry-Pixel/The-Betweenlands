@@ -25,6 +25,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	public String getEventName() {
 		return "heavyRain";
 	}
+	
 	@Override
 	public int getOffTime(Random rnd) {
 		return rnd.nextInt(80000) + 45000;

@@ -11,7 +11,10 @@ import java.util.Map.Entry;
 
 import javax.vecmath.Matrix4f;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -19,14 +22,25 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.base.CShader;
+import thebetweenlands.client.render.shader.base.CShaderGroup;
 import thebetweenlands.client.render.shader.base.CShaderInt;
-
-import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.render.shader.effect.GodRayEffect;
+import thebetweenlands.client.render.shader.effect.OcclusionExtractor;
+import thebetweenlands.client.render.shader.effect.SwirlEffect;
+import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.utils.GLUProjection;
+import thebetweenlands.utils.GLUProjection.ClampMode;
+import thebetweenlands.utils.GLUProjection.Projection;
+import thebetweenlands.utils.GLUProjection.Vector3D;
+import thebetweenlands.utils.GLUProjection.Projection.Type;
+import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.events.impl.EventBloodSky;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;
-	private Framebuffer blitBuffer;
 	private List<LightSource> lightSources = new ArrayList<LightSource>();
 	private Matrix4f INVMVP;
 	private Matrix4f MVP;
@@ -35,6 +49,7 @@ public class MainShader extends CShader {
 	private FloatBuffer mvBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private FloatBuffer pmBuffer = GLAllocation.createDirectFloatBuffer(16);
 	private Map<String, GeometryBuffer> geometryBuffers = new HashMap<String, GeometryBuffer>();
+	private Map<String, Framebuffer> blitBuffers = new HashMap<String, Framebuffer>();
 
 	public MainShader(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
@@ -57,10 +72,15 @@ public class MainShader extends CShader {
 	 * Returns a fullscreen blit FBO
 	 * @return
 	 */
-	public Framebuffer getBlitBuffer() {
-		return this.blitBuffer;
+	public Framebuffer getBlitBuffer(String name) {
+		Framebuffer fbo = this.blitBuffers.get(name);
+		if(fbo == null) {
+			fbo = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, true);
+			this.blitBuffers.put(name, fbo);
+		}
+		return fbo;
 	}
-	
+
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
 	}
@@ -78,6 +98,11 @@ public class MainShader extends CShader {
 		for(GeometryBuffer gBuffer : this.geometryBuffers.values()) {
 			gBuffer.deleteBuffers();
 		}
+		this.geometryBuffers.clear();
+		for(Framebuffer fbo : this.blitBuffers.values()) {
+			fbo.deleteFramebuffer();
+		}
+		this.blitBuffers.clear();
 	}
 
 	public void updateBuffers(Framebuffer input) {
@@ -97,15 +122,6 @@ public class MainShader extends CShader {
 				this.depthBuffer.framebufferTextureWidth, 
 				this.depthBuffer.framebufferTextureHeight, 
 				0);
-		
-		if(this.blitBuffer == null) {
-			this.blitBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-		}
-		if(input.framebufferWidth != this.blitBuffer.framebufferWidth
-				|| input.framebufferHeight != this.blitBuffer.framebufferHeight) {
-			this.blitBuffer.deleteFramebuffer();
-			this.blitBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-		}
 
 		for(Entry<String, GeometryBuffer> geomBufferEntry : this.geometryBuffers.entrySet()) {
 			geomBufferEntry.getValue().update(input);
@@ -117,7 +133,17 @@ public class MainShader extends CShader {
 				this.updateSampler(samplerName + "_depth", geomDepthBuffer);
 			}
 		}
-		
+
+		for(Entry<String, Framebuffer> fboEntry : this.blitBuffers.entrySet()) {
+			Framebuffer fbo = fboEntry.getValue();
+			if(input.framebufferWidth != fbo.framebufferWidth
+					|| input.framebufferHeight != fbo.framebufferHeight) {
+				fbo.deleteFramebuffer();
+				fbo = new Framebuffer(input.framebufferWidth, input.framebufferHeight, true);
+				this.blitBuffers.put(fboEntry.getKey(), fbo);
+			}
+		}
+
 		input.bindFramebuffer(false);
 	}
 
@@ -332,5 +358,200 @@ public class MainShader extends CShader {
 		vecMath.m32 = mat.m32;
 		vecMath.m33 = mat.m33;
 		return vecMath;
+	} 
+
+	private SwirlEffect swirlEffect = null;
+	private float swirlAngle = 0.0F;
+	private float lastSwirlAngle = 0.0F;
+
+	public void setSwirlAngle(float swirlAngle) {
+		this.swirlAngle = swirlAngle;
+		this.lastSwirlAngle = swirlAngle;
+	}
+
+	public float getSwirlAngle() {
+		return this.swirlAngle;
+	}
+
+	private OcclusionExtractor occlusionExtractor = null;
+	private GodRayEffect godRayEffect = null;
+
+	@Override
+	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
+		this.applyBloodSky(partialTicks);
+		this.applySwirl(partialTicks);
+	}
+
+	private void applyBloodSky(float partialTicks) {
+		float skyTransparency = 0.0F;
+
+		World world = Minecraft.getMinecraft().theWorld;
+		if(world != null) {
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
+				EventBloodSky event = provider.getWorldData().getEnvironmentEventRegistry().BLOODSKY;
+				skyTransparency = event.getSkyTransparency(partialTicks);
+			}
+		}
+
+		if(skyTransparency <= 0.0F) {
+			return;
+		}
+
+		if(this.occlusionExtractor == null) {
+			this.occlusionExtractor = (OcclusionExtractor) new OcclusionExtractor().init();
+		}
+		if(this.godRayEffect == null) {
+			this.godRayEffect = (GodRayEffect) new GodRayEffect().init();
+		}
+
+		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		double renderWidth = scaledResolution.getScaledWidth();
+		double renderHeight = scaledResolution.getScaledHeight();
+
+		float rayX = 0.5F;
+		float rayY = 1.0F;
+
+		Vec3 lightPos = Vec3.createVectorHelper(45, 30, 30);
+
+		//Get screen space coordinates of light source
+		Projection p = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.NONE, false);
+
+		//Get light source positions in texture coords
+		rayX = (float)(p.getX() / renderWidth);
+		rayY = 1.0F - (float)(p.getY() / renderHeight);
+
+		//Calculate angle differences
+		Vec3 lookVec = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
+		lookVec.yCoord = 0;
+		lookVec = lookVec.normalize();
+		Vec3 sLightPos = Vec3.createVectorHelper(lightPos.xCoord, 0, lightPos.zCoord).normalize();
+		float lightXZAngle = (float) Math.toDegrees(Math.acos(sLightPos.dotProduct(lookVec)));
+		float fovX = GLUProjection.getInstance().getFovX() / 2.0F;
+		float angDiff = Math.abs(lightXZAngle);
+
+		float decay = 0.96F;
+		float illuminationDecay = 0.44F;
+		float weight = 0.12F;
+
+		//Lower decay if outside of view
+		if(angDiff > fovX) {
+			float mult = ((angDiff - fovX) / 400.0F);
+			decay *= 1.0F - mult;
+			illuminationDecay *= 1.0F - mult;
+			weight *= 1.0F - mult;
+		}
+
+		//Extract occluding objects
+		this.occlusionExtractor.setFBOs(this.getDepthBuffer(), BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer());
+		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+		//Apply god's ray
+		float density = 0.1F + Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F);
+		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, decay, density * 4.0F, weight, illuminationDecay).setRayPos(rayX, rayY);
+		this.godRayEffect.apply(this.getBlitBuffer("bloodSkyBlitBuffer1").framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer0"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+		//Render to screen
+		//Render blit buffer to main buffer
+		GL11.glPushMatrix();
+
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth_double(), scaledResolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glLoadIdentity();
+		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glEnable(GL11.GL_BLEND);
+
+		//Render world with tint
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(1.0F, 0.8F, 0.2F, skyTransparency);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glTexCoord2d(0.0D, 0.0D);
+		GL11.glVertex2d(0, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 1.0D);
+		GL11.glVertex2d(renderWidth, 0);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glEnd();
+
+		//Render god's ray overlay
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(0.7F, 0.1F, 0.0F, skyTransparency / 2.5F);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer("bloodSkyBlitBuffer0").framebufferTexture);
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glTexCoord2d(0.0D, 0.0D);
+		GL11.glVertex2d(0, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 1.0D);
+		GL11.glVertex2d(renderWidth, 0);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glEnd();
+
+		GL11.glPopMatrix();
+	}
+
+	private void applySwirl(float partialTicks) {
+		if(this.swirlEffect == null) {
+			this.swirlEffect = (SwirlEffect) new SwirlEffect().init();
+		}
+
+		this.swirlAngle = this.swirlAngle + (this.swirlAngle - this.lastSwirlAngle) * partialTicks;
+		this.lastSwirlAngle = this.swirlAngle;
+
+		if(this.swirlAngle != 0.0F) {
+			//Render swirl to blit buffer
+			this.swirlEffect.setAngle(this.swirlAngle);
+			this.swirlEffect.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("swirlBlitBuffer"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+			ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+
+			//Render blit buffer to main buffer
+			GL11.glPushMatrix();
+
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glLoadIdentity();
+			GL11.glOrtho(0.0D, scaledResolution.getScaledWidth_double(), scaledResolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glLoadIdentity();
+			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+
+			double renderWidth = scaledResolution.getScaledWidth();
+			double renderHeight = scaledResolution.getScaledHeight();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer("swirlBlitBuffer").framebufferTexture);
+			GL11.glBegin(GL11.GL_TRIANGLES);
+			GL11.glTexCoord2d(0.0D, 1.0D);
+			GL11.glVertex2d(0, 0);
+			GL11.glTexCoord2d(0.0D, 0.0D);
+			GL11.glVertex2d(0, renderHeight);
+			GL11.glTexCoord2d(1.0D, 0.0D);
+			GL11.glVertex2d(renderWidth, renderHeight);
+			GL11.glTexCoord2d(1.0D, 0.0D);
+			GL11.glVertex2d(renderWidth, renderHeight);
+			GL11.glTexCoord2d(1.0D, 1.0D);
+			GL11.glVertex2d(renderWidth, 0);
+			GL11.glTexCoord2d(0.0D, 1.0D);
+			GL11.glVertex2d(0, 0);
+			GL11.glEnd();
+
+			GL11.glPopMatrix();
+		}
 	}
 }

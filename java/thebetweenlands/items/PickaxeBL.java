@@ -2,6 +2,8 @@ package thebetweenlands.items;
 
 import java.util.List;
 
+import net.minecraftforge.common.ForgeHooks;
+import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.DecayableItemHelper;
 
 import com.google.common.collect.HashMultimap;
@@ -68,4 +70,5 @@ public class PickaxeBL extends ItemPickaxe implements IDecayable {
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
+
 }

@@ -16,20 +16,24 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
+import thebetweenlands.world.biomes.feature.WorldGenTarPool;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
+import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree;
 import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
+import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
 	private final static WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedWoodTree();
+	private final static WorldGenPurpleRainTree GEN_PURPLE_RAIN_TREE = new WorldGenPurpleRainTree();
 	private final static WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	private final static WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
 	private final static WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedWoodBush();
@@ -60,6 +64,8 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 	private final static WorldGenGiantTreeDead GEN_DEAD_TREE = new WorldGenGiantTreeDead();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
+	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
+	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -488,6 +494,18 @@ public class DecorationHelper {
 		}
 	}
 
+	public void generatePurpleRainTree(int attempts) {
+		if (canShortThingsGenerateHere()) {
+			for (int i = 0; i < attempts; i++) {
+				int x = this.x + this.offsetXZ();
+				int y = this.y - 8 + this.rand.nextInt(16);
+				int z = this.z + this.offsetXZ();
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+					GEN_PURPLE_RAIN_TREE.generate(this.world, this.rand, x, y, z);
+			}
+		}
+	}
+
 	public void generateSapTree(int attempts) {
 		if (canShortThingsGenerateHere()) {
 			for (int i = 0; i < attempts; i++) {
@@ -831,6 +849,30 @@ public class DecorationHelper {
 
 			if (world.isAirBlock(xx, yy, zz))
 				GEN_LICHEN_PATCH.generate(world, rand, xx, yy, zz);
+		}
+	}
+
+	public void generateTarPool(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int xx = x + offsetXZ();
+			int yy = 6 + rand.nextInt(80);
+			int zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
+				GEN_TAR_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
+				GEN_TAR_POOL.generate(world, rand, xx, yy, zz);
+			}
+		}
+	}
+
+	public void generateSmallHollowLog(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+
+			if (checkSurface(SurfaceType.MIXED, x, y, z))
+				GEN_SMALL_HOLLOW_LOG.generate(world, rand, x, y, z);
 		}
 	}
 

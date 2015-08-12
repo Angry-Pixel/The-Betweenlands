@@ -10,7 +10,10 @@ import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 public class CShaderGroup extends ShaderGroup {
 	private IResourceManager pResourceManager;
@@ -46,4 +49,15 @@ public class CShaderGroup extends ShaderGroup {
 		this.pListShaders.add(this.pListShaders.size(), shader);
 		return shader;
 	}
+	
+	@Override
+	public void loadShaderGroup(float partialTicks) {
+		super.loadShaderGroup(partialTicks);
+		
+		//Pop off the GL_TEXTURE matrix
+		GL11.glPopMatrix();
+		this.wrapper.postShader(this, partialTicks);
+		//Push matrix to prevent stack underflow
+		GL11.glPushMatrix();
+    }
 }

@@ -1,17 +1,19 @@
 package thebetweenlands.event.world;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 public class EnvironmentEventHandler {
 	public static final EnvironmentEventHandler INSTANCE = new EnvironmentEventHandler();
 
-	private static int lastSync = 0;
+	private int lastSync = 0;
 
 	//Load world data to update the events
 	@SubscribeEvent
@@ -21,15 +23,16 @@ public class EnvironmentEventHandler {
 			provider.getWorldData();
 		}
 	}
-	
+
+	//Update events on the server side
 	@SubscribeEvent
-	public void onTick(WorldTickEvent event) {
+	public void onWorldTick(WorldTickEvent event) {
 		if(event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
-			
+
 			//Always save the world data
 			provider.getWorldData().markDirty();
-			
+
 			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
 				eevent.update(event.world);
@@ -38,12 +41,26 @@ public class EnvironmentEventHandler {
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
 				}
 			}
-			lastSync++;
-			if(lastSync >= 80) {
-				lastSync = 0;
+
+			this.lastSync++;
+			if(this.lastSync >= 80) {
+				this.lastSync = 0;
 				for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
 				}
+			}
+		}
+	}
+	
+	//Update events on the client side
+	@SubscribeEvent
+	public void onTick(TickEvent.ClientTickEvent event) {
+		World world = TheBetweenlands.proxy.getClientWorld();
+		if(world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
+			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
+				if(!eevent.isLoaded()) continue;
+				eevent.update(world);
 			}
 		}
 	}

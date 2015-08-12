@@ -8,6 +8,8 @@ import java.util.Random;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4f;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
@@ -20,12 +22,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
-
-import org.lwjgl.opengl.GL11;
-
+import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.events.impl.EventAuroras;
 
 public class BLSkyRenderer extends IRenderHandler
@@ -38,8 +37,13 @@ public class BLSkyRenderer extends IRenderHandler
 
 	private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 
+	public final GeometryBuffer clipPlaneBuffer = new GeometryBuffer(true);
+	
+	public static BLSkyRenderer INSTANCE;
+	
 	public BLSkyRenderer()
 	{
+		INSTANCE = this;
 		this.starGLCallList = GLAllocation.generateDisplayLists(3);
 		GL11.glPushMatrix();
 		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
@@ -317,13 +321,32 @@ public class BLSkyRenderer extends IRenderHandler
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 
 		tessellator.startDrawingQuads();
-		tessellator.setColorRGBA(256, 256, 256, 128);
+		tessellator.setColorRGBA(255, 255, 255, 128);
 		tessellator.addVertexWithUV(-90.0D, -40.0D, -90.0D, 0.0D, 0.0D);
 		tessellator.addVertexWithUV(-90.0D, -40.0D, 90.0D, 0.0D, 1.0D);
 		tessellator.addVertexWithUV(90.0D, -40.0D, 90.0D, 1.0D, 1.0D);
 		tessellator.addVertexWithUV(90.0D, -40.0D, -90.0D, 1.0D, 0.0D);
 		tessellator.draw();
 
+		//Render clip plane (for god rays)
+		GL11.glDepthMask(true);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_FOG);
+		GL11.glColor4f(1, 1, 1, 1);
+		this.clipPlaneBuffer.bind();
+		this.clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+		tessellator.startDrawingQuads();
+		tessellator.setColorRGBA(255, 255, 255, 255);
+		tessellator.addVertex(-9000.0D, -90.0D, -9000.0D);
+		tessellator.addVertex(-9000.0D, -90.0D, 9000.0D);
+		tessellator.addVertex(9000.0D, -90.0D, 9000.0D);
+		tessellator.addVertex(9000.0D, -90.0D, -9000.0D);
+		tessellator.draw();
+		this.clipPlaneBuffer.update(Minecraft.getMinecraft().getFramebuffer());
+		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
 		GL11.glPopMatrix();
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

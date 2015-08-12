@@ -144,4 +144,10 @@ public class CShader {
 	 * @param shader		The shader that is being updated
 	 */
 	public void updateShader(CShaderInt shader) { }
+	
+	/**
+	 * This method is called after the shader has been applied.
+	 * @param shadershaderGroup		The shader group that has been applied
+	 */
+	public void postShader(CShaderGroup shaderGroup, float partialTicks) { }
 }

@@ -56,6 +56,13 @@ public abstract class EnvironmentEvent {
 		this.active = active;
 		if(markDirty) this.markDirty();
 	}
+	
+	/**
+	 * Sets the event data to be loaded
+	 */
+	public void setLoaded() {
+		this.loaded = true;
+	}
 
 	/**
 	 * Called every world tick.

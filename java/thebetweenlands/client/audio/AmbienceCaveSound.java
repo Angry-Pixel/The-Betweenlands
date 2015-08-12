@@ -1,10 +1,13 @@
 package thebetweenlands.client.audio;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class AmbienceCaveSound
         extends MovingSound
@@ -21,7 +24,12 @@ public class AmbienceCaveSound
 
     @Override
     public void update() {
-        if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= AmbienceSoundPlayHandler.CAVE_START ) {
+    	boolean isBloodSky = false;
+    	World world = Minecraft.getMinecraft().theWorld;
+    	if(world != null && world.provider instanceof WorldProviderBetweenlands) {
+    		isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
+    	}
+        if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= AmbienceSoundPlayHandler.CAVE_START || isBloodSky) {
             if( this.volume > 0.05F ) {
                 this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {

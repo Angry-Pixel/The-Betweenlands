@@ -8,6 +8,8 @@ uniform float u_timeScale;
 uniform float u_multiplier;
 uniform float u_xOffset;
 uniform float u_yOffset;
+uniform float u_warpX;
+uniform float u_warpY;
 
 vec4 mod289(vec4 x) {
 	return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -114,6 +116,7 @@ float fbm(vec2 P, int octaves, float lacunarity, float gain) {
 	for(i = 0; i < octaves; i+=1)
 	{
 		amp *= gain; 
+		//sum += amp * pnoise(pp, vec2(1.0, 1.0));
 		sum += amp * cnoise(pp);
 		pp *= lacunarity;
 	}
@@ -135,13 +138,15 @@ float pattern2( in vec2 p, out vec2 q, out vec2 r , in float time) {
 	float g = 0.4;
 	int oc = 10; 
 
-	q.x = fbm( p + vec2(time,time),oc,l,g);
-	q.y = fbm( p + vec2(5.2*time,1.3*time) ,oc,l,g);
+	vec2 warpDir = vec2(u_warpX, u_warpY);
+	
+	q.x = fbm(p + vec2(time,time) * warpDir,oc,l,g);
+	q.y = fbm(p + vec2(5.2*time,1.3*time) * warpDir,oc,l,g);
 
-	r.x = fbm( p + 4.0*q + vec2(1.7,9.2),oc,l,g );
-	r.y = fbm( p + 4.0*q + vec2(8.3,2.8) ,oc,l,g);
+	r.x = fbm(p + 4.0*q + vec2(1.7,9.2) * warpDir,oc,l,g);
+	r.y = fbm(p + 4.0*q + vec2(8.3,2.8) * warpDir,oc,l,g);
 
-	return fbm( p + 4.0*r ,oc,l,g);
+	return fbm(p + 4.0*r ,oc,l,g);
 }
 
 void main(){
