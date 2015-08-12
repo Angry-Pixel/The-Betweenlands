@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.lwjgl.opengl.GL11;
@@ -57,13 +58,13 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
 
             if (recipe instanceof ShapedRecipes) {
                 ShapedRecipes shaped = (ShapedRecipes) recipe;
-                recipeType = "Shaped crafting recipe";
+                recipeType = StatCollector.translateToLocal("manual.widget.crafting.shaped.recipe");
                 for (int y = 0; y < shaped.recipeHeight; y++)
                     for (int x = 0; x < shaped.recipeWidth; x++)
                         renderItem(newX + 18 * x, newY + 18 * y, shaped.recipeItems[y * shaped.recipeWidth + x], false);
             } else if (recipe instanceof ShapedOreRecipe) {
                 ShapedOreRecipe shaped = (ShapedOreRecipe) recipe;
-                recipeType = "Shaped crafting recipe";
+                recipeType = StatCollector.translateToLocal("manual.widget.crafting.shaped.recipe");
                 int width = (Integer) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 4);
                 int height = (Integer) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 5);
 
@@ -75,7 +76,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                     }
             } else if (recipe instanceof ShapelessRecipes) {
                 ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
-                recipeType = "Shapeless crafting recipe";
+                recipeType = StatCollector.translateToLocal("manual.widget.crafting.shapeless.recipe");
                 drawGrid:
                 {
                     for (int y = 0; y < 3; y++)
@@ -88,7 +89,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                 }
             } else if (recipe instanceof ShapelessOreRecipe) {
                 ShapelessOreRecipe shapeless = (ShapelessOreRecipe) recipe;
-                recipeType = "Shapeless crafting recipe";
+                recipeType = StatCollector.translateToLocal("manual.widget.crafting.shapeless.recipe");
                 drawGrid:
                 {
                     for (int y = 0; y < 3; y++)

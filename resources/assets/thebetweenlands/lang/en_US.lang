@@ -487,3 +487,25 @@ compost.full=The compost bin is now full of compost.
 compost.max.items=You cannot compost any more items yet.
 compost.cannot=This item cannot be turned into compost.
 compost.not.enough=There is not enough compost yet.
+
+#manual
+manual.text.test=This /color:0x800000 might color/ be a /tooltip: long tooltip/ text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl
+
+manual.widget.process.time=Process time: .minutes. minutes and .seconds. seconds
+manual.widget.process.time.seconds=Process time: .seconds. seconds
+manual.widget.process.time.minutes=Process time: .minutes. minutes
+manual.widget.burn.time=Burn time: .time. seconds
+
+manual.widget.compost.recipe=Compost recipe
+manual.widget.compost.amount=Compost amount: .amount.%
+
+manual.widget.crafting.shaped.recipe=Shaped crafting recipe
+manual.widget.crafting.shapeless.recipe=Shapeless crafting recipe
+
+manual.widget.pam.optional=Optional
+manual.widget.pam.recipe=Pestle and mortal recipe
+
+manual.widget.purifier.recipe=Purifier recipe
+manual.widget.purifier.process.time=Process time: .seconds. seconds
+
+manual.widget.smelting.recipe=Furnace recipe

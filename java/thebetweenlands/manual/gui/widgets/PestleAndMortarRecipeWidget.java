@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.gui.GuiManualBase;
@@ -53,12 +54,12 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
         renderItem(xStart + 89, yStart + 29, PestleAndMortarRecipe.getOutput(inputs.get(currentRecipe)), false);
         renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true);
         ArrayList<String> extraToolTips = new ArrayList<>();
-        extraToolTips.add("Optional");
+        extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
         addSpecialItemTooltip(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), extraToolTips);
         renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false);
         if (mouseX >= xStart + 11 && mouseX <= xStart + 85 && mouseY >= yStart + 62 && mouseY <= yStart + 68) {
             ArrayList<String> recipeToolTips = new ArrayList<>();
-            recipeToolTips.add("Pestle and mortal recipe");
+            recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
             renderTooltip(mouseX, mouseY, recipeToolTips, 0xffffff, 0xf0100010);
         }
     }

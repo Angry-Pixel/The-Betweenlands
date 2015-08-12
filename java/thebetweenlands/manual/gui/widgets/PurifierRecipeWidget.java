@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -58,8 +59,8 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
 
         if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
             ArrayList<String> processTooltip = new ArrayList<>();
-            processTooltip.add("Purifier recipe");
-            processTooltip.add("Process time: 21.6 seconds");
+            processTooltip.add(StatCollector.translateToLocal("manual.widget.purifier.recipe"));
+            processTooltip.add(processTimeSecondsString.replace(".seconds.", "21.6"));
             renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
         }
     }
