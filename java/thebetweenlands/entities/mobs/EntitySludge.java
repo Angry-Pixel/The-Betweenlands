@@ -94,7 +94,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 			isJumping = true;
 			moveStrafing = 1.0F - rand.nextFloat() * 2.0F;
 			moveForward = 1;
-			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);  
+			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 		} else {
 			isJumping = false;
 			if (onGround)
@@ -103,7 +103,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 
 		if (this.rand.nextFloat() < 0.8F && this.isInWater()) {
 			this.isJumping = true;
-			this.motionY += 0.01D;
+			//this.motionY += 0.01D;
 		}
 	}
 

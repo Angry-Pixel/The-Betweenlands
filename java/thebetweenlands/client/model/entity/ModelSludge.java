@@ -2,75 +2,75 @@ package thebetweenlands.client.model.entity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.model.MowzieModelBase;
+import thebetweenlands.client.model.MowzieModelRenderer;
 
 @SideOnly(Side.CLIENT)
-public class ModelSludge extends ModelBase {
-	ModelRenderer head1;
-	ModelRenderer head2;
-	ModelRenderer jaw;
-	ModelRenderer teeth;
-	ModelRenderer spine;
-	ModelRenderer spinepiece;
-	ModelRenderer slime1;
-	ModelRenderer slime2;
-	ModelRenderer slime3;
+public class ModelSludge extends MowzieModelBase {
+	MowzieModelRenderer head1;
+	MowzieModelRenderer head2;
+	MowzieModelRenderer jaw;
+	MowzieModelRenderer teeth;
+	MowzieModelRenderer spine;
+	MowzieModelRenderer spinepiece;
+	MowzieModelRenderer slime1;
+	MowzieModelRenderer slime2;
+	MowzieModelRenderer slime3;
 
 	public ModelSludge() {
 		textureWidth = 128;
 		textureHeight = 64;
 
-		head1 = new ModelRenderer(this, 0, 0);
-		head1.addBox(-4F, -6F, -8F, 8, 6, 8);
-		head1.setRotationPoint(0F, 15F, 3F);
-		setRotation(head1, -0.0743572F, 0F, -0.1115358F);
-		head2 = new ModelRenderer(this, 0, 16);
-		head2.addBox(-3F, 0F, -3F, 6, 2, 3);
-		head2.setRotationPoint(0F, 15F, 3F);
-		setRotation(head2, -0.074351F, 0F, -0.111544F);
-		jaw = new ModelRenderer(this, 0, 22);
-		jaw.addBox(-4F, -1F, -8F, 8, 2, 7);
-		jaw.setRotationPoint(0F, 15F, 3F);
-		setRotation(jaw, 0.5205068F, 0F, 0.0371705F);
-		teeth = new ModelRenderer(this, 0, 32);
-		teeth.addBox(-4F, 0F, -8F, 8, 1, 5);
-		teeth.setRotationPoint(0F, 15F, 4F);
-		setRotation(teeth, -0.0743572F, 0F, -0.1115358F);
-		spine = new ModelRenderer(this, 0, 39);
-		spine.addBox(-1F, 0F, -2F, 2, 3, 2);
-		spine.setRotationPoint(0F, 15F, 3F);
-		setRotation(spine, 0.2602503F, 0F, 0F);
-		spinepiece = new ModelRenderer(this, 0, 45);
-		spinepiece.addBox(-1F, 0F, -1F, 2, 1, 2);
-		spinepiece.setRotationPoint(0F, 19F, 3F);
-		setRotation(spinepiece, 0F, 0F, 0.2230717F);
-		slime1 = new ModelRenderer(this, 40, 0);
-		slime1.addBox(-9F, -7F, -9F, 18, 14, 18);
-		slime1.setRotationPoint(0F, 15F, 0F);
-		setRotation(slime1, 0F, 0F, 0F);
-		slime2 = new ModelRenderer(this, 40, 32);
-		slime2.addBox(-7F, -9F, -7F, 14, 2, 14);
-		slime2.setRotationPoint(0F, 15F, 0F);
-		setRotation(slime2, 0F, 0F, 0F);
-		slime3 = new ModelRenderer(this, 40, 48);
-		slime3.addBox(-7F, 7F, -7F, 14, 2, 14);
-		slime3.setRotationPoint(0F, 15F, 0F);
-		setRotation(slime3, 0F, 0F, 0F);
+		this.head2 = new MowzieModelRenderer(this, 0, 16);
+		this.head2.setRotationPoint(0.0F, 15.0F, 3.0F);
+		this.head2.addBox(-3.0F, 0.0F, -3.0F, 6, 2, 3, -0.01F);
+		this.setRotation(head2, -0.07435102760791776F, 0.0F, -0.11154399067163465F);
+		this.jaw = new MowzieModelRenderer(this, 0, 22);
+		this.jaw.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.jaw.addBox(-4.0F, -1.0F, -8.0F, 8, 2, 7, 0.0F);
+		this.setRotation(jaw, 0.5940400797409059F, -0.01100643542294784F, 0.1483095853034341F);
+		this.slime2 = new MowzieModelRenderer(this, 40, 32);
+		this.slime2.setRotationPoint(0.0F, 15.0F, 0.0F);
+		this.slime2.addBox(-7.0F, -9.0F, -7.0F, 14, 2, 14, 0.0F);
+		this.teeth = new MowzieModelRenderer(this, 0, 32);
+		this.teeth.setRotationPoint(0.0F, -0.07428254352663011F, 0.9972372354295702F);
+		this.teeth.addBox(-4.0F, 0.0F, -8.0F, 8, 1, 5, 0.0F);
+		this.spine = new MowzieModelRenderer(this, 0, 39);
+		this.spine.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.spine.addBox(-1.0F, 0.0F, -2.0F, 2, 3, 2, 0.0F);
+		this.setRotation(spine, 0.33414092254743283F, -0.008268694238004389F, 0.11123836025835071F);
+		this.slime3 = new MowzieModelRenderer(this, 40, 48);
+		this.slime3.setRotationPoint(0.0F, 15.0F, 0.0F);
+		this.slime3.addBox(-7.0F, 7.0F, -7.0F, 14, 2, 14, 0.0F);
+		this.slime1 = new MowzieModelRenderer(this, 40, 0);
+		this.slime1.setRotationPoint(0.0F, 15.0F, 0.0F);
+		this.slime1.addBox(-9.0F, -7.0F, -9.0F, 18, 14, 18, 0.0F);
+		this.spinepiece = new MowzieModelRenderer(this, 0, 45);
+		this.spinepiece.setRotationPoint(0.0F, 3.865302432904631F, -1.0292896104505997F);
+		this.spinepiece.addBox(-1.0F, 0.0F, -1.0F, 2, 1, 2, 0.0F);
+		this.setRotation(spinepiece, -0.25407912408104716F, 0.056957253174300816F, 0.21579472540118327F);
+		this.head1 = new MowzieModelRenderer(this, 0, 0);
+		this.head1.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.head1.addBox(-4.0F, -6.0F, -8.0F, 8, 6, 8, 0.0F);
+		this.head2.addChild(this.jaw);
+		this.head1.addChild(this.teeth);
+		this.head2.addChild(this.spine);
+		this.spine.addChild(this.spinepiece);
+		this.head2.addChild(this.head1);
+		
+		parts = new MowzieModelRenderer[] {head1, head2, jaw, teeth, spine, spinepiece, slime1, slime2, slime3};
+		setInitPose();
 	}
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		head1.render(unitPixel);
 		head2.render(unitPixel);
-		jaw.render(unitPixel);
-		teeth.render(unitPixel);
-		spine.render(unitPixel);
-		spinepiece.render(unitPixel);
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -92,4 +92,20 @@ public class ModelSludge extends ModelBase {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 	}
 
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float f, float f1, float pticks) {
+		setToInitPose();
+		float frame = entity.ticksExisted + pticks;
+		MowzieModelRenderer[] spineParts = new MowzieModelRenderer[] {spine, spinepiece};
+
+		float controller = (float) (0.5 * Math.sin(frame * 0.1f) * Math.sin(frame * 0.1f)) + 0.5f;
+
+		head2.rotationPointY += 1.5f;
+		walk(jaw, 1f, 0.3f * controller, false, 0, -0.2f * controller, frame, 1f);
+		bob(head2, 0.5f, 1f * controller, false, frame, 1f);
+		chainWave(spineParts, 0.5f, 0.2f * controller, -2, frame, 1f);
+		chainFlap(spineParts, 0.25f, 0.4f * controller, -2, frame, 1f);
+		head2.rotationPointX += 2 * Math.sin(frame * 0.25) * controller;
+		flap(head2, 0.25f, 0.2f * controller, false, 0, 0, frame, 1f);
+	}
 }
