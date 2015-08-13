@@ -59,10 +59,16 @@ public class GeometryBuffer {
 	}
 
 	public Framebuffer getGeometryBuffer() {
+		if(this.geometryBuffer == null) {
+			this.geometryBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, this.depthBuffer);
+		}
 		return this.geometryBuffer;
 	}
 
 	public Framebuffer getGeometryDepthBuffer() {
+		if(this.geometryBuffer == null) {
+			this.geometryBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
+		}
 		return this.geometryDepthBuffer;
 	}
 

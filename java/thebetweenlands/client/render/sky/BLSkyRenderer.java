@@ -39,11 +39,10 @@ public class BLSkyRenderer extends IRenderHandler
 
 	public final GeometryBuffer clipPlaneBuffer = new GeometryBuffer(true);
 	
-	public static BLSkyRenderer INSTANCE;
+	public static final BLSkyRenderer INSTANCE = new BLSkyRenderer();
 	
 	public BLSkyRenderer()
 	{
-		INSTANCE = this;
 		this.starGLCallList = GLAllocation.generateDisplayLists(3);
 		GL11.glPushMatrix();
 		GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);

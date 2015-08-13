@@ -90,6 +90,9 @@ public class MainShader extends CShader {
 	}
 
 	public Framebuffer getDepthBuffer() {
+		if(this.depthBuffer == null) {
+			this.depthBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
+		}
 		return this.depthBuffer;
 	}
 

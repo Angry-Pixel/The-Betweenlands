@@ -29,9 +29,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class WorldProviderBetweenlands
 extends WorldProvider
 {
-	@SideOnly(Side.CLIENT)
-	private BLSkyRenderer skyRenderer;
-
 	public static final int LAYER_HEIGHT = 80;
 
 	@SideOnly(Side.CLIENT)
@@ -226,7 +223,6 @@ extends WorldProvider
 	@Override
 	public IRenderHandler getSkyRenderer()
 	{
-		if (skyRenderer == null) skyRenderer = new BLSkyRenderer();
-		return skyRenderer;
+		return BLSkyRenderer.INSTANCE;
 	}
 }
