@@ -21,6 +21,7 @@ import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.gen.cave.MapGenCavesBetweenlandsExperimental;
+import thebetweenlands.world.feature.structure.WorldGenTarPoolDungeons;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
@@ -209,7 +210,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		} else {
 			biome.decorate(this.worldObj, this.rand, blockX, blockZ);
 		}
-
+		for (int attempt = 0; attempt < 3; ++attempt)
+			new WorldGenTarPoolDungeons().generate(worldObj, rand, blockX + rand.nextInt(16) + 8, rand.nextInt(70) + 10, blockZ + rand.nextInt(16) + 8);
 		BlockFalling.fallInstantly = false;
 	}
 

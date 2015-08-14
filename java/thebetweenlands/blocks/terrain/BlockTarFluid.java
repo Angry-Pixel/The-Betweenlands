@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -54,7 +55,7 @@ public class BlockTarFluid extends BlockFluidClassic {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (entity instanceof EntityLivingBase) {
+		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast)) {
 			entity.motionX *= 0.005D;
 			entity.motionZ *= 0.005D;
 			if(entity.motionY < 0)

@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import thebetweenlands.world.biomes.feature.WorldGenTarPool;
 
 public class TestItem extends ItemSword {
-	private final WorldGenTarPool genPool = new WorldGenTarPool();
     public TestItem() {
         super(Item.ToolMaterial.IRON);
     }
@@ -26,8 +25,7 @@ public class TestItem extends ItemSword {
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if( !world.isRemote && player.isSneaking() ) {
-        	genPool.prepare((rand.nextDouble() + 0.7D) * 1.5D);
-        	genPool.generate(world, rand, x, y, z);
+        	new WorldGenTarPool().generate(world, rand, x, y, z);
             return true;
         }
         return false;

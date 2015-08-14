@@ -8,14 +8,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.items.*;
+import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.items.AxeBL;
+import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.PickaxeBL;
+import thebetweenlands.items.SpadeBL;
+import thebetweenlands.items.SwordBL;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public EntityTarBeast(World world) {
 		super(world);
 		setSize(1.25F, 2.5F);
+		stepHeight = 2.0F;
 	}
 
 	@Override
@@ -29,7 +35,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox);
+		return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && worldObj.getBlock((int)posX, (int)posY, (int)posZ) == BLBlockRegistry.tarFluid;
 	}
 
 	@Override

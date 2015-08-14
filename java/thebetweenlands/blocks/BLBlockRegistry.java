@@ -64,6 +64,7 @@ import thebetweenlands.blocks.stalactite.BlockStalactite;
 import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
+import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
@@ -82,7 +83,13 @@ import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.blocks.terrain.BlockTarFluid;
 import thebetweenlands.blocks.terrain.BlockWisp;
-import thebetweenlands.blocks.tree.*;
+import thebetweenlands.blocks.tree.BlockBLLeaves;
+import thebetweenlands.blocks.tree.BlockBLLog;
+import thebetweenlands.blocks.tree.BlockBLPortalFrame;
+import thebetweenlands.blocks.tree.BlockBLSapling;
+import thebetweenlands.blocks.tree.BlockHollowLog;
+import thebetweenlands.blocks.tree.BlockRubberLog;
+import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
@@ -358,6 +365,7 @@ public class BLBlockRegistry {
 
     // OTHER THINGS
     public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
+    public static final Block tarBeastSpawner = new BlockTarBeastSpawner("tarBeast");
     public static final BlockLifeCrystal lifeCrystal = new BlockLifeCrystal();
     public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 
