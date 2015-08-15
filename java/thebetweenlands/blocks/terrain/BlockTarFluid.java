@@ -68,9 +68,9 @@ public class BlockTarFluid extends BlockFluidClassic {
 	}
 
 	@Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-        solidifyTar(world, x, y, z);
-        super.onBlockAdded(world, x, y, z);
+	public void onBlockAdded(World world, int x, int y, int z) {
+		solidifyTar(world, x, y, z);
+		super.onBlockAdded(world, x, y, z);
 	}
 
 	@Override
@@ -101,7 +101,9 @@ public class BlockTarFluid extends BlockFluidClassic {
 
 				if (placeTar) {
 					world.setBlock(x, y, z, BLBlockRegistry.solidTar);
-					playEffects(world, x, y, z);
+					if(world.isRemote) {
+						playEffects(world, x, y, z);
+					}
 				}
 			}
 		}

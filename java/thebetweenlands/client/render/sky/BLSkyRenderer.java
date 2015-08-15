@@ -66,7 +66,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		this.skyDispListStart = GLAllocation.generateDisplayLists(2);
 
 		//Render sky 1 to display list
-		this.skyDispList1 = this.skyDispListStart + 1;
+		this.skyDispList1 = this.skyDispListStart + 0;
 		GL11.glNewList(this.skyDispList1, GL11.GL_COMPILE);
 		tessellator.startDrawingQuads();
 		for (int tileX = -tileCount * tileSize; tileX <= tileCount * tileSize; tileX += tileCount) {
@@ -82,7 +82,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		//Render sky 2 to display list
 		skyY = -16.0F;
-		this.skyDispList2 = this.skyDispListStart + 2;
+		this.skyDispList2 = this.skyDispListStart + 1;
 		GL11.glNewList(this.skyDispList2, GL11.GL_COMPILE);
 		tessellator.startDrawingQuads();
 		for (int tileX = -tileCount * tileSize; tileX <= tileCount * tileSize; tileX += tileCount) {

@@ -42,8 +42,12 @@ public class PlayerPortalHandler {
 				nbt.setInteger("PORTALTIMER", 120);
 			}
 		}
-		if(event.entity == Minecraft.getMinecraft().thePlayer) {
+		if(event.entity.worldObj.isRemote && event.entity == TheBetweenlands.proxy.getClientPlayer()) {
 			boolean inPortal = event.entity.getEntityData().getBoolean("INPORTAL");
+			if(inPortal) {
+				int timer = event.entity.getEntityData().getInteger("PORTALTIMER");
+				TheBetweenlands.proxy.playPortalSounds(event.entity, timer);
+			}
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {
@@ -65,11 +69,6 @@ public class PlayerPortalHandler {
 						}
 					}
 				}
-			}
-			if(inPortal) {
-				int timer = event.entity.getEntityData().getInteger("PORTALTIMER");
-				if(timer == 0) event.entity.getEntityData().setInteger("PORTALTIMER", 120);
-				TheBetweenlands.proxy.playPortalSounds(event.entity, timer);
 			}
 		}
 	}
