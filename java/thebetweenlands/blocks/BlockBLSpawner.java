@@ -16,6 +16,7 @@ public class BlockBLSpawner extends BlockMobSpawner {
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.blSpawner");
 		setCreativeTab(ModCreativeTabs.blocks);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	public static void setMob(World world, int x, int y, int z, String mobName) {

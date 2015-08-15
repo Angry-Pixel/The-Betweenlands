@@ -32,6 +32,7 @@ public class BlockPurifier extends BlockContainer {
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.purifier");
 		setCreativeTab(ModCreativeTabs.blocks);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

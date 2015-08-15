@@ -23,6 +23,7 @@ public class BlockAlembic extends BlockContainer {
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.alembic");
 		setCreativeTab(ModCreativeTabs.herbLore);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

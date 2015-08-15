@@ -31,6 +31,7 @@ public class BlockPestleAndMortar extends BlockContainer {
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.pestleAndMortar");
 		setCreativeTab(ModCreativeTabs.herbLore);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

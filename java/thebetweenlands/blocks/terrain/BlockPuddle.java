@@ -25,9 +25,9 @@ public class BlockPuddle extends Block {
 		setHardness(0.1F);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.puddle");
-		setBlockTextureName("thebetweenlands:puddle");
 		setBlockBounds(0, 0.0F, 0, 1.0F, 0.07F, 1.0F);
 		setTickRandomly(true);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

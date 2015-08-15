@@ -37,6 +37,7 @@ public class BlockAnimator extends BlockContainer {
 		setStepSound(soundTypeStone);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.animator");
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

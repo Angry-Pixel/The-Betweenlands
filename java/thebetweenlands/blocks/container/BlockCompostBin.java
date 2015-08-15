@@ -28,6 +28,7 @@ public class BlockCompostBin extends BlockContainer {
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.compostBin");
 		setCreativeTab(ModCreativeTabs.blocks);
+		setBlockTextureName("thebetweenlands:weedwood");
 	}
 
 	@Override

@@ -26,6 +26,7 @@ public class BlockLifeCrystal extends BlockContainer {
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.lifeCrystalBlock");
 		setHardness(1.0F);
+		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 
 	@Override

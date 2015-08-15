@@ -23,10 +23,6 @@ import java.util.UUID;
 public class DecayEventHandler {
 	public static DecayEventHandler INSTANCE = new DecayEventHandler();
 
-	public PotionEffect slowness_0 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true);
-	public PotionEffect slowness_1 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 1, true);
-	public PotionEffect slowness_2 = new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true);
-
 	public Map<UUID, Integer> corruptionBuffer = Maps.newHashMap();
 
 	@SubscribeEvent
@@ -58,27 +54,41 @@ public class DecayEventHandler {
 	}
 
 	@SubscribeEvent
+	public void useItemStart(PlayerUseItemEvent.Start event) {
+		if (DecayManager.enableDecay(event.entityPlayer) && event.item.getItem() instanceof IDecayFood && DecayManager.getDecayLevel(event.entityPlayer) >= 20) {
+			event.duration = -1;
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
 	public void playerTick(TickEvent.PlayerTickEvent event) {
 		if (DecayManager.enableDecay(event.player)) {
 			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(DecayManager.getPlayerHearts(event.player));
 
-			if (DecayManager.getDecayLevel(event.player) <= 4)
-				event.player.addPotionEffect(slowness_2);
-			else if (DecayManager.getDecayLevel(event.player) <= 8)
-				event.player.addPotionEffect(slowness_1);
-			else if (DecayManager.getDecayLevel(event.player) <= 12)
-				event.player.addPotionEffect(slowness_0);
+			if (DecayManager.getDecayLevel(event.player) <= 4) {
+				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true));
+				event.player.jumpMovementFactor = 0.0F;
+			} else if (DecayManager.getDecayLevel(event.player) <= 7) {
+				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 1, true));
+				event.player.jumpMovementFactor = 0.002F;
+			} else if (DecayManager.getDecayLevel(event.player) <= 10) {
+				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true));
+			}
 
 			// Oli, if you ever want to change decay speed, change the number
 			// that the ticksExisted is divided by.
-			// Right now every multiple of 2048 the decay level is decreased by 1
-			if (event.player.ticksExisted % 2048 == 0) {
+			// Right now every multiple of 2500 the decay level is decreased by 1
+			int decayTicks = 2500;
+			if(event.player.isInWater()) decayTicks = decayTicks / 3 * 2;
+			if (event.player.ticksExisted % decayTicks == 0) {
 				DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
 			}
-		} else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d)
+		} else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20d) {
 			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20d);
-		else if (event.player.isPotionActive(Potion.moveSlowdown.getId()))
+		} else if (event.player.isPotionActive(Potion.moveSlowdown.getId())) {
 			event.player.removePotionEffect(Potion.moveSlowdown.getId());
+		}
 
 		if (event.player.worldObj.isRemote) {
 			if (!corruptionBuffer.containsKey(event.player.getPersistentID())) {
