@@ -18,7 +18,7 @@ public class EntityAltarCraftingFX extends EntityFX {
 		this.motionX = this.motionY = this.motionZ = 0;
 		this.target = target;
 		this.startPoint = new Vector3d(x, y, z);
-		this.endPoint = new Vector3d(target.xCoord + 0.5D, target.yCoord + TileEntityDruidAltarRenderer.FINAL_HEIGHT + 1.05D, target.zCoord + 0.5D);
+		this.endPoint = new Vector3d(target.xCoord + 0.5D, target.yCoord + TileEntityDruidAltar.FINAL_HEIGHT + 1.05D, target.zCoord + 0.5D);
 		float colorMulti = this.rand.nextFloat() * 0.3F;
         this.particleScale = 1.0f;
         this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;

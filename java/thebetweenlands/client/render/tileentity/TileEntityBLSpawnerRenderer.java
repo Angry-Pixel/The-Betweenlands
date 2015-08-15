@@ -2,10 +2,12 @@ package thebetweenlands.client.render.tileentity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityMobSpawnerRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.client.model.block.ModelSpawnerCrystal;
 import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.utils.LightingUtil;
@@ -18,7 +20,6 @@ public class TileEntityBLSpawnerRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
 		TileEntityBLSpawner te = (TileEntityBLSpawner)tileEntity;
 		float interpolatedCounter = -(te.counter + (te.counter - te.lastCounter) * partialTicks);
-		te.lastCounter = te.counter;
 		
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -36,6 +37,9 @@ public class TileEntityBLSpawnerRenderer extends TileEntitySpecialRenderer {
 		this.bindTexture(TEXTURE);
 		
 		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glTranslated(x + 0.45F, y + 1.8F + (float)Math.sin(counter1) / 5.0F, z + 0.45F);
 		GL11.glTranslatef(0.025F, -0.5F, 0.025F);
 		GL11.glRotatef(180F, 0F, 0F, 1F);

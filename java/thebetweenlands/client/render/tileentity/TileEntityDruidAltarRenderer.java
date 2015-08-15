@@ -33,8 +33,6 @@ extends TileEntitySpecialRenderer
 
 	public static TileEntityDruidAltarRenderer instance;
 
-	public final static double FINAL_HEIGHT = 2.0D;
-
 	public TileEntityDruidAltarRenderer() {
 	}
 
@@ -91,13 +89,11 @@ extends TileEntitySpecialRenderer
 		GL11.glPopMatrix();
 
 		//Update rotation
-		float prevRotation = tile.renderRotation;
-		tile.renderRotation = tile.rotation;
-		tile.renderRotation = prevRotation + (tile.renderRotation - prevRotation) * partialTicks;
-
+		float renderRotation = tile.rotation + (tile.rotation - tile.prevRotation) * partialTicks;
+		
 		//Render floating stones
 		GL11.glPushMatrix();
-		renderStones(x, y, z, tile.renderRotation);
+		renderStones(x, y, z, renderRotation);
 		GL11.glPopMatrix();
 
 		//Full brightness for items
@@ -105,20 +101,16 @@ extends TileEntitySpecialRenderer
 
 		//Animate the 4 talisman pieces
 		if( tile.blockMetadata == 1 && tile.craftingProgress != 0 ) {
-			float prevYOff = tile.renderYOffset;
-			double yOff = (double) tile.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * FINAL_HEIGHT + 1.0D;
-			tile.renderYOffset = (float) yOff;
-			tile.renderYOffset = prevYOff + (tile.renderYOffset - prevYOff) * partialTicks;
-			yOff = tile.renderYOffset;
-			if( yOff > FINAL_HEIGHT + 1.0D ) {
-				yOff = FINAL_HEIGHT + 1.0D;
+			double yOff = tile.renderYOffset + (tile.renderYOffset - tile.prevRenderYOffset) * partialTicks;
+			if( yOff > TileEntityDruidAltar.FINAL_HEIGHT + 1.0D ) {
+				yOff = TileEntityDruidAltar.FINAL_HEIGHT + 1.0D;
 			}
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 3.1D, z + 0.5D);
-			GL11.glRotated(tile.renderRotation * 2.0D, 0, 1, 0);
-			double shineScale = 0.04f * Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 12);
+			GL11.glRotated(renderRotation * 2.0D, 0, 1, 0);
+			double shineScale = 0.04f * Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 12);
 			GL11.glScaled(shineScale, shineScale, shineScale);
-			this.renderShine((float) Math.sin(Math.toRadians(tile.renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 12)));
+			this.renderShine((float) Math.sin(Math.toRadians(renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 12)));
 			GL11.glPopMatrix();
 			boolean exit = false;
 			for( int xi = 0; xi < 2; xi++ ) {
@@ -137,13 +129,13 @@ extends TileEntitySpecialRenderer
 					Vector3d midVec = new Vector3d(x + 0.5D, 0, z + 0.5D);
 					Vector3d diffVec = new Vector3d(x + xOff, 0, z + zOff);
 					diffVec.sub(midVec);
-					double rProgress = 1.0D - Math.pow(1.0D - (FINAL_HEIGHT + 1.0D - yOff) / FINAL_HEIGHT, 6);
+					double rProgress = 1.0D - Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 6);
 					diffVec.scale(rProgress);
 					midVec.add(diffVec);
 					GL11.glPushMatrix();
 					GL11.glTranslated(midVec.x, y + yOff, midVec.z);
 					GL11.glScaled(0.3f, 0.3f, 0.3f);
-					GL11.glRotated(-tile.renderRotation * 2.0D, 0, y, 0);
+					GL11.glRotated(-renderRotation * 2.0D, 0, y, 0);
 					ItemRenderHelper.renderItem(item, 0);
 					GL11.glPopMatrix();
 				}
@@ -158,15 +150,15 @@ extends TileEntitySpecialRenderer
 		if( itemTalisman != null ) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 3.1D, z + 0.5D);
-			GL11.glRotated(tile.renderRotation * 2.0D, 0, 1, 0);
+			GL11.glRotated(renderRotation * 2.0D, 0, 1, 0);
 			double shineScale = 0.04f;
 			GL11.glScaled(shineScale, shineScale, shineScale);
-			this.renderShine((float) Math.sin(Math.toRadians(tile.renderRotation)) / 2.0f - 0.2f, 80);
+			this.renderShine((float) Math.sin(Math.toRadians(renderRotation)) / 2.0f - 0.2f, 80);
 			GL11.glPopMatrix();
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 3.0D, z + 0.5D);
 			GL11.glScaled(0.3f, 0.3f, 0.3f);
-			GL11.glRotated(-tile.renderRotation * 2.0D, 0, 1, 0);
+			GL11.glRotated(-renderRotation * 2.0D, 0, 1, 0);
 			ItemRenderHelper.renderItem(itemTalisman, 0);
 			GL11.glPopMatrix();
 		}
@@ -183,7 +175,7 @@ extends TileEntitySpecialRenderer
 		
 		float lighting = 150f;
 		if( tile.blockMetadata == 1 ) {
-			lighting = (float) Math.sin(Math.toRadians(tile.renderRotation) * 4.0f) * 105.0f + 150.0f;
+			lighting = (float) Math.sin(Math.toRadians(renderRotation) * 4.0f) * 105.0f + 150.0f;
 		}
 		LightingUtil.INSTANCE.setLighting((int)lighting);
 		
@@ -198,7 +190,7 @@ extends TileEntitySpecialRenderer
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
-		renderStones(x, y, z, tile.renderRotation);
+		renderStones(x, y, z, renderRotation);
 		GL11.glPopMatrix();
 		
 		GL11.glDisable(GL11.GL_BLEND);

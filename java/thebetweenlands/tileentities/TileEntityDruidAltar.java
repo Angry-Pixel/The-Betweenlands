@@ -27,12 +27,16 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	@SideOnly(Side.CLIENT)
 	public float rotation;
 	@SideOnly(Side.CLIENT)
-	public float renderRotation;
+	public float prevRotation;
 	@SideOnly(Side.CLIENT)
 	public float renderYOffset;
 	@SideOnly(Side.CLIENT)
+	public float prevRenderYOffset;
+	@SideOnly(Side.CLIENT)
 	private static final float ROTATION_SPEED = 2.0F;
-
+	@SideOnly(Side.CLIENT)
+	public final static double FINAL_HEIGHT = 2.0D;
+	
 	public int craftingProgress = 0;
 	private boolean circleShouldRevert = true;
 	private int[] damageValues = {0, 0, 0, 0};
@@ -52,14 +56,16 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		}
 		
 		if (worldObj.isRemote) {
+			prevRotation = rotation;
 			rotation += ROTATION_SPEED;
 			if (rotation >= 360.0F) {
 				rotation -= 360.0F;
-				renderRotation -= 360.0F;
 			}
 			if (craftingProgress != 0) {
 				++craftingProgress;
 			}
+			prevRenderYOffset = renderYOffset;
+			renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * FINAL_HEIGHT + 1.0D);
 		} else {
 			if (craftingProgress != 0) {
 				//Sync clients every second

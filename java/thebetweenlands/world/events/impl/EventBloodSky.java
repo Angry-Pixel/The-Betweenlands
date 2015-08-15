@@ -18,15 +18,12 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	}
 
 	public void setSkyTransparency(float transparency) {
+		this.lastSkyTransparency = this.skyTransparency;
 		this.skyTransparency = transparency;
-		this.lastSkyTransparency = transparency;
 	}
 	
 	public float getSkyTransparency(float partialTicks) {
-		float lastTransparenty = this.skyTransparency;
-		this.skyTransparency = this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks;
-		this.lastSkyTransparency = lastTransparenty;
-		return this.skyTransparency;
+		return this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks;
 	}
 	
 	@Override
