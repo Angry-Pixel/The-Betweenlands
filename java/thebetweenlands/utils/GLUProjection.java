@@ -238,7 +238,8 @@ public final class GLUProjection {
 	private double heightScale;
 	private double bra, bla, tra, tla;
 	private Line tb, bb, lb, rb;
-	private float fov;
+	private float fovY;
+	private float fovX;
 	private Vector3D lookVec;
 
 	/**
@@ -258,9 +259,10 @@ public final class GLUProjection {
 
 		//Get fov and display dimensions
 		float fov = (float)Math.toDegrees(Math.atan(1.0D / this.projection.get(5)) * 2.0D);
-		this.fov = fov;
+		this.fovY = fov;
 		this.displayWidth = this.viewport.get(2);
 		this.displayHeight = this.viewport.get(3);
+		this.fovX = (float) Math.toDegrees(2.0D * Math.atan((this.displayWidth / this.displayHeight) * Math.tan(Math.toRadians(this.fovY) / 2.0D)));
 		//Getting modelview vectors
 		Vector3D ft = new Vector3D(this.modelview.get(12), this.modelview.get(13), this.modelview.get(14));
 		Vector3D lv = new Vector3D(this.modelview.get(0), this.modelview.get(1), this.modelview.get(2));
@@ -433,7 +435,7 @@ public final class GLUProjection {
 
 	/**
 	 * Performs a frustum check.
-	 * @param frustumCorners		Frustum coordinates
+	 * @param frustumCorners		Frustum corners
 	 * @param frustumPos			Frustum position
 	 * @param x						X position
 	 * @param y						Y position
@@ -442,10 +444,10 @@ public final class GLUProjection {
 	 */
 	public boolean[] doFrustumCheck(Vector3D[] frustumCorners, Vector3D frustumPos, double x, double y, double z) {
 		Vector3D point = new Vector3D(x, y, z);
-		boolean c1 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[2], frustumCorners[0]}, point);
+		boolean c1 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[3], frustumCorners[0]}, point);
 		boolean c2 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[0], frustumCorners[1]}, point);
-		boolean c3 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[1], frustumCorners[3]}, point);
-		boolean c4 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[3], frustumCorners[2]}, point);
+		boolean c3 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[1], frustumCorners[2]}, point);
+		boolean c4 = crossPlane(new Vector3D[]{frustumPos, frustumCorners[2], frustumCorners[3]}, point);
 		return new boolean[]{c1, c2, c3, c4};
 	}
 
@@ -466,7 +468,12 @@ public final class GLUProjection {
 	}
 
 	/**
-	 * Returns the frustum coordinates.
+	 * Returns the frustum corner points
+	 * 0 -------- 3
+	 * |          |
+	 * |          |
+	 * 1 -------- 2
+	 * 
 	 * @param x					X position
 	 * @param y					Y position
 	 * @param z					Z position
@@ -474,31 +481,36 @@ public final class GLUProjection {
 	 * @param rotationPitch		Pitch
 	 * @param fov				FOV
 	 * @param farDistance		Far plane distance
-	 * @param ratio				(Display Width) / (Display Height)
+	 * @param aspectRatio		(Display width) / (Display height)
 	 * @return
 	 */
-	public Vector3D[] getFrustum(double x, double y, double z, double rotationYaw, double rotationPitch, double fov, double farDistance, double ratio) {
+	public Vector3D[] getFrustum(double x, double y, double z, double rotationYaw, double rotationPitch, double fov, double farDistance, double aspectRatio) {
 		Vector3D viewVec = this.getRotationVector(rotationYaw, rotationPitch).snormalize();
-		double Hfar = 2D * Math.tan(Math.toRadians(fov / 2D)) * farDistance;
-		double Wfar = Hfar * ratio;
+		double hFar = 2D * Math.tan(Math.toRadians(fov / 2D)) * farDistance;
+		double wFar = hFar * aspectRatio;
 		Vector3D view = this.getRotationVector(rotationYaw, rotationPitch).snormalize();
 		Vector3D up = this.getRotationVector(rotationYaw, rotationPitch - 90).snormalize();
 		Vector3D right = this.getRotationVector(rotationYaw + 90, 0).snormalize();
 		Vector3D camPos = new Vector3D(x, y, z);
 		Vector3D view_camPos_product = view.add(camPos);
 		Vector3D fc = new Vector3D(view_camPos_product.x * farDistance, view_camPos_product.y * farDistance, view_camPos_product.z * farDistance);
-		Vector3D topLeftfrustum = new Vector3D(fc.x + (up.x * Hfar / 2D) - (right.x * Wfar / 2D), fc.y + (up.y * Hfar / 2D) - (right.y * Wfar / 2D), fc.z + (up.z * Hfar / 2D) - (right.z * Wfar / 2D));
-		Vector3D downLeftfrustum = new Vector3D(fc.x - (up.x * Hfar / 2D) - (right.x * Wfar / 2D), fc.y - (up.y * Hfar / 2D) - (right.y * Wfar / 2D), fc.z - (up.z * Hfar / 2D) - (right.z * Wfar / 2D));
-		Vector3D topRightfrustum = new Vector3D(fc.x + (up.x * Hfar / 2D) + (right.x * Wfar / 2D), fc.y + (up.y * Hfar / 2D) + (right.y * Wfar / 2D), fc.z + (up.z * Hfar / 2D) + (right.z * Wfar / 2D));
-		Vector3D downRightfrustum = new Vector3D(fc.x - (up.x * Hfar / 2D) + (right.x * Wfar / 2D), fc.y - (up.y * Hfar / 2D) + (right.y * Wfar / 2D), fc.z - (up.z * Hfar / 2D) + (right.z * Wfar / 2D));
-		return new Vector3D[]{topLeftfrustum, downLeftfrustum, topRightfrustum, downRightfrustum};
+		Vector3D topLeftfrustum = new Vector3D(fc.x + (up.x * hFar / 2D) - (right.x * wFar / 2D), fc.y + (up.y * hFar / 2D) - (right.y * wFar / 2D), fc.z + (up.z * hFar / 2D) - (right.z * wFar / 2D));
+		Vector3D downLeftfrustum = new Vector3D(fc.x - (up.x * hFar / 2D) - (right.x * wFar / 2D), fc.y - (up.y * hFar / 2D) - (right.y * wFar / 2D), fc.z - (up.z * hFar / 2D) - (right.z * wFar / 2D));
+		Vector3D topRightfrustum = new Vector3D(fc.x + (up.x * hFar / 2D) + (right.x * wFar / 2D), fc.y + (up.y * hFar / 2D) + (right.y * wFar / 2D), fc.z + (up.z * hFar / 2D) + (right.z * wFar / 2D));
+		Vector3D downRightfrustum = new Vector3D(fc.x - (up.x * hFar / 2D) + (right.x * wFar / 2D), fc.y - (up.y * hFar / 2D) + (right.y * wFar / 2D), fc.z - (up.z * hFar / 2D) + (right.z * wFar / 2D));
+		return new Vector3D[]{topLeftfrustum, downLeftfrustum, downRightfrustum, topRightfrustum};
 	}
 	
 	/**
-	 * Returns the frustrum that has been constructed with {@link GLUProjection#updateMatrices(IntBuffer, FloatBuffer, FloatBuffer, double, double)}
+	 * Returns the frustum that has been constructed with {@link GLUProjection#updateMatrices(IntBuffer, FloatBuffer, FloatBuffer, double, double)}
+	 * 0 -------- 3
+	 * |          |
+	 * |          |
+	 * 1 -------- 2
+	 * 
 	 * @return
 	 */
-	public Vector3D[] getFrustrum() {
+	public Vector3D[] getFrustum() {
 		return this.frustum;
 	}
 
@@ -507,8 +519,7 @@ public final class GLUProjection {
 	 * @return
 	 */
 	public float getFovX() {
-		double ratio = displayWidth / displayHeight;
-		return (float) Math.toDegrees(2.0D * Math.atan(ratio * Math.tan(Math.toRadians(this.fov) / 2.0D)));
+		return this.fovX;
 	}
 	
 	/**
@@ -516,7 +527,7 @@ public final class GLUProjection {
 	 * @return
 	 */
 	public float getFovY() {
-		return (float) this.fov;
+		return this.fovY;
 	}
 	
 	/**
