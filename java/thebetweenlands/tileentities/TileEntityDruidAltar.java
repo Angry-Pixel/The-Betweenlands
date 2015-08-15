@@ -60,6 +60,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 			rotation += ROTATION_SPEED;
 			if (rotation >= 360.0F) {
 				rotation -= 360.0F;
+				prevRotation -= 360.0F;
 			}
 			if (craftingProgress != 0) {
 				++craftingProgress;
