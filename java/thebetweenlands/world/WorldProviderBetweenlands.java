@@ -1,9 +1,12 @@
 package thebetweenlands.world;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -18,8 +21,6 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -224,5 +225,20 @@ extends WorldProvider
 	public IRenderHandler getSkyRenderer()
 	{
 		return BLSkyRenderer.INSTANCE;
+	}
+	
+	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+		return this.getWorldData().getEnvironmentEventRegistry();
+	}
+	
+	/**
+	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
+	 * @param world
+	 */
+	public static final WorldProviderBetweenlands getProvider(World world) {
+		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
+			return (WorldProviderBetweenlands) world.provider;
+		}
+		return null;
 	}
 }

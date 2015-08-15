@@ -28,6 +28,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.player.*;
+import thebetweenlands.event.world.BloodSkyHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -149,7 +150,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
 		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
 		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
-
+		MinecraftForge.EVENT_BUS.register(BloodSkyHandler.INSTANCE);
+		
 		RecipeHandler.init();
 		TeleporterHandler.init();
 		// Add the other door recipes back

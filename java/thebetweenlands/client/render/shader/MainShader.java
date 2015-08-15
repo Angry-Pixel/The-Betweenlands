@@ -460,7 +460,7 @@ public class MainShader extends CShader {
 
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth_double(), scaledResolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
@@ -468,10 +468,32 @@ public class MainShader extends CShader {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
 
-		//Render world with tint
+		//Render world to blit buffer
+		this.getBlitBuffer("bloodSkyBlitBuffer2").bindFramebuffer(false);
+		GL11.glClearColor(0, 0, 0, 0);
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glTexCoord2d(0.0D, 0.0D);
+		GL11.glVertex2d(0, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glVertex2d(renderWidth, renderHeight);
+		GL11.glTexCoord2d(1.0D, 1.0D);
+		GL11.glVertex2d(renderWidth, 0);
+		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glVertex2d(0, 0);
+		GL11.glEnd();
+		//Render blit buffer to screen
+		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(1.0F, 0.8F, 0.2F, skyTransparency);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getFramebuffer().framebufferTexture);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer("bloodSkyBlitBuffer2").framebufferTexture);
 		GL11.glBegin(GL11.GL_TRIANGLES);
 		GL11.glTexCoord2d(0.0D, 1.0D);
 		GL11.glVertex2d(0, 0);
