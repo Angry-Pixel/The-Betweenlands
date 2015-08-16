@@ -135,6 +135,7 @@ import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityLeafFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntitySplashFX;
+import thebetweenlands.entities.particles.EntityTarBeastDrip;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.event.debugging.DebugHandler;
@@ -368,6 +369,11 @@ public class ClientProxy extends CommonProxy {
 
 		if (particleName.equals("splashTarBeast")) {
 			fx = new EntityBreakingFX(world, x, y, z, vecX, vecY, vecZ, Items.slime_ball, 0);
+			fx.setRBGColorF(0F, 0F, 0F);
+		}
+
+		if (particleName.equals("dripTarBeast")) {
+			fx = new EntityTarBeastDrip(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0F, 0F, 0F);
 		}
 

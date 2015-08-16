@@ -96,8 +96,8 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote && worldObj.getWorldTime()%5 == 0) 
-			renderParticles(worldObj, posX, posY + rand.nextDouble() * 2.1D, posZ, rand);
+		if (worldObj.isRemote && worldObj.getWorldTime()%10 == 0) 
+			renderParticles(worldObj, posX, posY, posZ, rand);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -108,10 +108,14 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			double velZ = 0.0D;
 			int motionX = rand.nextInt(2) * 2 - 1;
 			int motionZ = rand.nextInt(2) * 2 - 1;
+			double a = Math.toRadians(renderYawOffset);
+			double offSetX = -Math.sin(a) * 0.75D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
+			double offSetZ = Math.cos(a) * 0.75D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
 			velY = (rand.nextFloat() - 0.5D) * 0.125D;
 			velZ = rand.nextFloat() * 0.5F * motionZ;
 			velX = rand.nextFloat() * 0.5F * motionX;
-			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
+			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y + rand.nextDouble() * 2.1D, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
+			TheBetweenlands.proxy.spawnCustomParticle("dripTarBeast", world , x + offSetX, y + 1D, z + offSetZ, 0, 0, 0, 0);
 		}
 	}
 
