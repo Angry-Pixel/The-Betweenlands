@@ -93,7 +93,7 @@ public class ManualEntry {
         return pages.get(currentPage + 2);
     }
     public ManualPage getNextPageRight(){
-        if(pages.size() >= currentPage + 2)
+        if(pages.size() > currentPage + 3)
             return pages.get(currentPage + 3);
         return blankPage;
     }
