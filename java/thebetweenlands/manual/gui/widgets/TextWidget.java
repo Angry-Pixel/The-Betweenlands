@@ -17,7 +17,6 @@ public class TextWidget extends ManualWidgetsBase {
     public String text;
     public int color = 0x000000;
     public int unchangedColor = 0x000000;
-    public ArrayList<ManualToolTip> toolTips = new ArrayList<>();
 
     public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
         super(manual, xStart, yStart);
@@ -77,8 +76,10 @@ public class TextWidget extends ManualWidgetsBase {
                     widthLine = widthWord;
                 }
                 fontRenderer.drawString(word, xStart + widthLine - widthWord, yStart + lineNumber * 10, color);
-                if (!makingTooltip && tooltipWidth > 0) {
-                    addToolTip(toolTipWord, tooltipStartX, tooltipStartY, tooltipWidth, 9);
+                if (!makingTooltip && tooltipWidth > 0 && mouseX >= tooltipStartX && mouseX <= tooltipStartX + tooltipWidth && mouseY >= tooltipStartY && mouseY <= tooltipStartY + 9) {
+                    ArrayList<String> toolTipText = new ArrayList<>();
+                    toolTipText.add(toolTipWord);
+                    ManualWidgetsBase.renderTooltip(mouseX, mouseY, toolTipText, 0xffffff, 0xf0100010);
                     tooltipWidth = 0;
                     toolTipWord = "";
                     tooltipStartX = 0;
@@ -87,18 +88,8 @@ public class TextWidget extends ManualWidgetsBase {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
             }
         }
-        for (ManualToolTip toolTip:toolTips)
-            toolTip.renderTooltip(mouseX, mouseY);
     }
 
 
-    public void addToolTip(String word, int x, int y, int width, int height) {
-        ArrayList<String> toolTipText = new ArrayList<>();
-        ManualToolTip toolTip = null;
-        word = word.replace(" ", "");
-        toolTipText.add(word);
-        toolTip = new ManualToolTip(x, y, width, height, toolTipText, 0xffffff, 0xf0100010);
-        toolTips.add(toolTip);
-    }
 
 }
