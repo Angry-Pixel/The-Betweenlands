@@ -40,8 +40,8 @@ public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
 					double limit = -0.3;
 					if (y <= 10) {
 						limit = (limit + 1) / 10 * y - 1;
-					} else if (level - y <= 20) {
-						double t = 1 - (level - y) / 20;
+					}/* else if (level - y <= 20) {
+						double t = (level - y) / 20;
 						if (t > 0) {
 							double cut = seaLevelBreak.eval(x * 0.05, z * 0.05);
 							noise += (cut * 0.5 + 0.5) * t;
@@ -49,7 +49,7 @@ public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
 								noise += (seaLevel - level) / 6D;
 							} 
 						}
-					}
+					}*/
 					if (noise < limit) {
 						if (y == level) {
 							brokeSurface = true;
