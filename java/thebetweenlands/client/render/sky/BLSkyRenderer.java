@@ -26,7 +26,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.IRenderHandler;
 import thebetweenlands.client.render.shader.GeometryBuffer;
+import thebetweenlands.client.render.shader.MainShader;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.utils.LightingUtil;
 import thebetweenlands.utils.Mesh;
 import thebetweenlands.utils.Mesh.Triangle;
@@ -191,6 +194,14 @@ public class BLSkyRenderer extends IRenderHandler {
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDepthMask(false);
 		mc.renderEngine.bindTexture(SKY_TEXTURE_RES);
+
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
+			if(shader != null && shader.getStarfieldTextureID() >= 0) {
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, shader.getStarfieldTextureID());
+			}
+		}
+
 		Tessellator tessellator = Tessellator.instance;
 
 		GL11.glPushMatrix();
@@ -384,7 +395,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-		float starBrightness = world.getStarBrightness(partialTicks) * invRainStrength;
+		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
 		if (starBrightness > 0.0F) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
@@ -446,7 +457,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDepthMask(true);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, starBrightness);
+		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness);
 		this.renderSkyTexture(mc);
 
 		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {

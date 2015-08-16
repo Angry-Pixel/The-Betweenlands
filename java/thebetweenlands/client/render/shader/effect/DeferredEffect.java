@@ -137,7 +137,7 @@ public abstract class DeferredEffect {
 		ARBShaderObjects.glUseProgramObjectARB(this.shaderProgramID);
 
 		//Upload sampler uniform (src texture ID)
-		if(this.diffuseSamplerUniformID >= 0) {
+		if(this.diffuseSamplerUniformID >= 0 && src >= 0) {
 			ARBShaderObjects.glUniform1iARB(this.diffuseSamplerUniformID, 0);
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

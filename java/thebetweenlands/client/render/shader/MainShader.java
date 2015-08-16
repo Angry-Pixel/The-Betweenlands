@@ -29,8 +29,11 @@ import thebetweenlands.client.render.shader.base.CShaderGroup;
 import thebetweenlands.client.render.shader.base.CShaderInt;
 import thebetweenlands.client.render.shader.effect.GodRayEffect;
 import thebetweenlands.client.render.shader.effect.OcclusionExtractor;
+import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.client.render.shader.effect.SwirlEffect;
+import thebetweenlands.client.render.shader.effect.WarpEffect;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.event.debugging.DebugHandler;
 import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.GLUProjection.ClampMode;
 import thebetweenlands.utils.GLUProjection.Projection;
@@ -383,6 +386,8 @@ public class MainShader extends CShader {
 	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
 		this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
+
+		this.updateTextures(partialTicks);
 	}
 
 	private void applyBloodSky(float partialTicks) {
@@ -577,6 +582,62 @@ public class MainShader extends CShader {
 			GL11.glEnd();
 
 			GL11.glPopMatrix();
+		}
+	}
+
+	//Shader textures
+	private Framebuffer gasTextureBaseFBO = null;
+	private Framebuffer gasTextureFBO = null;
+	private WarpEffect gasWarpEffect = null;
+
+	private Framebuffer starfieldTextureFBO = null;
+	private StarfieldEffect starfieldEffect = null;
+
+	//Shader texture IDs
+	public int getGasTextureID() {
+		return this.gasTextureFBO != null ? this.gasTextureFBO.framebufferTexture : -1;
+	}
+	public int getStarfieldTextureID() {
+		return this.starfieldTextureFBO != null ? this.starfieldTextureFBO.framebufferTexture : -1;
+	}
+
+	private void updateTextures(float partialTicks) {
+		if(DebugHandler.INSTANCE.debugDeferredEffect) {
+			//Update gas texture
+			if(this.gasTextureFBO == null) {
+				this.gasTextureFBO = new Framebuffer(128, 128, false);
+				this.gasTextureBaseFBO = new Framebuffer(128, 128, false);
+
+				this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
+				this.gasWarpEffect.init();
+			} else {
+				float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
+				float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
+				this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 80.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 70.0F)
+				.setWarpDir(warpX, warpY);
+
+				this.gasTextureFBO.bindFramebuffer(false);
+				GL11.glClearColor(1, 1, 1, 1);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+				this.gasTextureBaseFBO.bindFramebuffer(false);
+				GL11.glClearColor(1, 1, 1, 1);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+				this.gasWarpEffect.apply(this.gasTextureBaseFBO.framebufferTexture, this.gasTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), 128.0F * 20.0F, 128.0F * 20.0F);
+			}
+		}
+
+		//Update starfield texture
+		if(this.starfieldTextureFBO == null) {
+			this.starfieldTextureFBO = new Framebuffer(512, 512, false);
+			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect().init();
+		} else {
+			float offX = (float)(Minecraft.getMinecraft().thePlayer.posX / 8000.0D);
+			float offY = (float)(-Minecraft.getMinecraft().thePlayer.posZ / 8000.0D);
+			float offZ = (float)(-Minecraft.getMinecraft().thePlayer.posY / 10000.0D);
+			this.starfieldEffect.setTimeScale(0.0000005F).setZoom(0.8F).setOffset(offX, offY, offZ);
+			this.starfieldEffect.apply(-1, this.starfieldTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), 512, 512);
 		}
 	}
 }
