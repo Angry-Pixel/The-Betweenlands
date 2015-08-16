@@ -52,25 +52,25 @@ public class TextWidget extends ManualWidgetsBase {
                     lineNumber++;
                     widthLine = 0;
                     word = "";
-                } else if (word.contains("/color:")) {
-                    color = Integer.decode(word.replace("/color:", ""));
+                } else if (word.contains("<color:")) {
+                    color = Integer.decode(word.replace("<color:", "").replace(">", ""));
                     word = "";
-                } else if (word.equals("color/")) {
+                } else if (word.equals("</color>")) {
                     color = unchangedColor;
                     word = "";
-                } else if (word.equals("/tooltip:")) {
+                } else if (word.contains("<tooltip:")) {
+                    toolTipWord = word.replace("<tooltip:", "").replace(">", "");
                     makingTooltip = true;
                     word = "";
                     tooltipStartX = xStart + widthLine;
                     tooltipStartY = yStart + lineNumber * 10;
-                } else if (word.equals("tooltip/")) {
+                } else if (word.equals("</tooltip>")) {
                     makingTooltip = false;
                     word = "";
                 } else if (widthLine + widthWord <= GuiManualBase.WIDTH - unchangedXStart) {
                     widthLine += widthWord;
                     if (makingTooltip) {
                         tooltipWidth += widthWord;
-                        toolTipWord += word;
                     }
                 } else {
                     lineNumber++;
@@ -96,13 +96,9 @@ public class TextWidget extends ManualWidgetsBase {
         ArrayList<String> toolTipText = new ArrayList<>();
         ManualToolTip toolTip = null;
         word = word.replace(" ", "");
-            if(StatCollector.translateToLocal("manual.tooltip.long").equals(word)) {
-                toolTipText.add("hehe");
-                toolTip = new ManualToolTip(x, y, width, height, toolTipText, 0xffffff, 0xf0100010);
-            }
-        if(toolTip != null && !toolTips.contains(toolTip))
-            toolTips.add(toolTip);
-
+        toolTipText.add(word);
+        toolTip = new ManualToolTip(x, y, width, height, toolTipText, 0xffffff, 0xf0100010);
+        toolTips.add(toolTip);
     }
 
 }

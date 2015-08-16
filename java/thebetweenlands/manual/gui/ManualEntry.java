@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class ManualEntry {
 
-    public  ArrayList<ManualPage> pages = new ArrayList<>();
+    public ArrayList<ManualPage> pages = new ArrayList<>();
 
     public ManualPage currentPageLeft;
     public ManualPage currentPageRight;
@@ -31,6 +31,13 @@ public class ManualEntry {
             page.setPageNumber(pageNumber);
             this.pages.add(page);
             pageNumber++;
+            for (ManualPage page1:page.setManualEntry(this)){
+                if (pageNumber == 2)
+                    currentPageRight = page1;
+                page1.setPageNumber(pageNumber);
+                this.pages.add(page1);
+                pageNumber++;
+            }
         }
     }
 

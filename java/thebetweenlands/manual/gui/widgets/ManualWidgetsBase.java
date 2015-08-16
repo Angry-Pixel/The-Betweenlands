@@ -25,9 +25,9 @@ public class ManualWidgetsBase {
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
 
     public GuiManualBase manual;
-    int unchangedXStart;
-    int xStart;
-    int yStart;
+    public int unchangedXStart;
+    public int xStart;
+    public int yStart;
     int mouseX, mouseY;
 
     public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
