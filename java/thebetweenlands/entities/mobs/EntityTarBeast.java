@@ -1,5 +1,7 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -8,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.AxeBL;
 import thebetweenlands.items.ItemMaterialsBL;
@@ -15,12 +18,14 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public EntityTarBeast(World world) {
 		super(world);
-		setSize(1.25F, 2.5F);
+		setSize(1.25F, 2F);
 		stepHeight = 2.0F;
 	}
 
@@ -86,6 +91,30 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 		}
 		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (worldObj.isRemote && worldObj.getWorldTime()%5 == 0) 
+			renderParticles(worldObj, posX, posY + rand.nextDouble() * 2.1D, posZ, rand);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void renderParticles(World world, double x, double y, double z, Random rand) {
+		for (int count = 0; count < 3; ++count) {
+			double velX = 0.0D;
+			double velY = 0.0D;
+			double velZ = 0.0D;
+			int motionX = rand.nextInt(2) * 2 - 1;
+			int motionZ = rand.nextInt(2) * 2 - 1;
+			velY = (rand.nextFloat() - 0.5D) * 0.125D;
+			velZ = rand.nextFloat() * 0.5F * motionZ;
+			velX = rand.nextFloat() * 0.5F * motionX;
+			if(rand.nextBoolean())
+				TheBetweenlands.proxy.spawnCustomParticle("bubbleTarBeast", world , x, y, z, velX, velY, velZ, 0);
+			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
+		}
 	}
 
 }

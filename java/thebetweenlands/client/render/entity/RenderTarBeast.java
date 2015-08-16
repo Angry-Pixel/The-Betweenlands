@@ -57,7 +57,7 @@ public class RenderTarBeast extends RenderLiving {
 				setRenderPassModel(renderPassModel);
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
 				GL11.glEnable(GL11.GL_BLEND);
-				float colour = 0.5F;
+				float colour = 0.75F;
 				GL11.glColor4f(colour, colour, colour, 1.0F);
 				GL11.glDisable(GL11.GL_LIGHTING);
 				GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);

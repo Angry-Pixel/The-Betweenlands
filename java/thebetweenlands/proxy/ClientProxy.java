@@ -10,14 +10,10 @@ import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.particle.EntityBreakingFX;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.particle.EntityFlameFX;
 import net.minecraft.client.particle.EntitySmokeFX;
@@ -28,6 +24,7 @@ import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
@@ -168,6 +165,11 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -357,6 +359,16 @@ public class ClientProxy extends CommonProxy {
 			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
 			fx.setRBGColorF(0.5F, 0F, 0.125F);
 			fx.setAlphaF(0.5F);
+		}
+
+		if (particleName.equals("bubbleTarBeast")) {
+			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
+			fx.setRBGColorF(0F, 0F, 0F);
+		}
+
+		if (particleName.equals("splashTarBeast")) {
+			fx = new EntityBreakingFX(world, x, y, z, vecX, vecY, vecZ, Items.slime_ball, 0);
+			fx.setRBGColorF(0F, 0F, 0F);
 		}
 
 		if( particleName.equals("steamPurifier") ) {
