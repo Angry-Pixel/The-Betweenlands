@@ -25,6 +25,7 @@ public class ConfigHandler {
 	public static boolean FIREFLY_LIGHTING;
 	public static boolean DEBUG;
 	public static boolean DEBUG_MENU_ON_START;
+	public static int SKY_RESOLUTION;
 
 	public Configuration config;
 
@@ -48,7 +49,8 @@ public class ConfigHandler {
 		WISP_QUALITY = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", CATEGORIES[1], true, "");
 		USE_SHADER = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
-
+		SKY_RESOLUTION = config.get(CATEGORIES[1], "Sky texture resolution (only when shaders are enabled)", 1024).getInt(1024);
+		
 		// Replaced with false by gradle for release version
 		DEBUG = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
 		DEBUG_MENU_ON_START = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");

@@ -12,7 +12,7 @@ import thebetweenlands.world.events.impl.EventDenseFog;
 import thebetweenlands.world.events.impl.EventHeavyRain;
 
 public class EnvironmentEventRegistry {
-	public final EnvironmentEvent DENSE_FOG = new EventDenseFog(this);
+	public final EventDenseFog DENSE_FOG = new EventDenseFog(this);
 	public final EnvironmentEvent HEAVY_RAIN = new EventHeavyRain(this);
 	public final EventAuroras AURORAS = new EventAuroras(this);
 	public final EventBloodSky BLOODSKY = new EventBloodSky(this);

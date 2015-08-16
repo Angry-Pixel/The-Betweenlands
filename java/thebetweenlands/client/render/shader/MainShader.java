@@ -38,6 +38,7 @@ import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.GLUProjection.ClampMode;
 import thebetweenlands.utils.GLUProjection.Projection;
 import thebetweenlands.utils.GLUProjection.Vector3D;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.utils.GLUProjection.Projection.Type;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.impl.EventBloodSky;
@@ -630,14 +631,14 @@ public class MainShader extends CShader {
 
 		//Update starfield texture
 		if(this.starfieldTextureFBO == null) {
-			this.starfieldTextureFBO = new Framebuffer(1024, 1024, false);
+			this.starfieldTextureFBO = new Framebuffer(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION, false);
 			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect().init();
 		} else {
 			float offX = (float)(Minecraft.getMinecraft().thePlayer.posX / 8000.0D);
 			float offY = (float)(-Minecraft.getMinecraft().thePlayer.posZ / 8000.0D);
 			float offZ = (float)(-Minecraft.getMinecraft().thePlayer.posY / 10000.0D);
 			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
-			this.starfieldEffect.apply(-1, this.starfieldTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), 1024, 1024);
+			this.starfieldEffect.apply(-1, this.starfieldTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION);
 		}
 	}
 }

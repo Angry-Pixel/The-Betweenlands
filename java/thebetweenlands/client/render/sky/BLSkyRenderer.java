@@ -396,6 +396,12 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
 		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
+		float fade = 1.0F;
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.theWorld);
+		if(provider != null) {
+			fade = provider.getEnvironmentEventRegistry().DENSE_FOG.getFade(partialTicks) * 0.95F + 0.05F;
+		}
+		starBrightness *= fade;
 		if (starBrightness > 0.0F) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
