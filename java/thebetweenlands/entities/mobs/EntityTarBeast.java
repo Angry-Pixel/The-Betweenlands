@@ -111,8 +111,6 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			velY = (rand.nextFloat() - 0.5D) * 0.125D;
 			velZ = rand.nextFloat() * 0.5F * motionZ;
 			velX = rand.nextFloat() * 0.5F * motionX;
-			if(rand.nextBoolean())
-				TheBetweenlands.proxy.spawnCustomParticle("bubbleTarBeast", world , x, y, z, velX, velY, velZ, 0);
 			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
 		}
 	}
