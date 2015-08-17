@@ -1,11 +1,15 @@
 package thebetweenlands.client.model.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
+
+import org.lwjgl.opengl.GL11;
+
+import thebetweenlands.entities.mobs.EntitySporeling;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelSporeling extends ModelBase {
@@ -80,6 +84,7 @@ public class ModelSporeling extends ModelBase {
 	public void render(Entity entity, float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, prevLimbSwing, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, prevLimbSwing, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		EntitySporeling sporeling = (EntitySporeling) entity;
 		torso.render(unitPixel);
 		legleft1.render(unitPixel);
 		legright1.render(unitPixel);
@@ -88,10 +93,23 @@ public class ModelSporeling extends ModelBase {
 		roots.render(unitPixel);
 		armleft.render(unitPixel);
 		armright.render(unitPixel);
-		head1.render(unitPixel);
-		head2.render(unitPixel);
-		eyeleft.render(unitPixel);
-		eyeright.render(unitPixel);
+		if(sporeling.getIsFalling()) {
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0F, 0.125F, -1.125F);
+			GL11.glScalef(2F, 1F, 2F);
+			GL11.glRotatef(29.822046437F, 1, 0, 0);
+			head1.render(unitPixel);
+			head2.render(unitPixel);
+			eyeleft.render(unitPixel);
+			eyeright.render(unitPixel);
+			GL11.glPopMatrix();
+		}
+		else {
+			head1.render(unitPixel);
+			head2.render(unitPixel);
+			eyeleft.render(unitPixel);
+			eyeright.render(unitPixel);
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

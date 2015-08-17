@@ -3,8 +3,14 @@ package thebetweenlands.entities.mobs;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -12,7 +18,7 @@ import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
 public class EntitySporeling extends EntityCreature {
-
+	public boolean isFalling;
 	public EntitySporeling(World world) {
 		super(world);
 		setSize(0.3F, 0.6F);
@@ -46,6 +52,27 @@ public class EntitySporeling extends EntityCreature {
 	}
 
 	@Override
+	public void onUpdate() {
+		if (!onGround && motionY < 0D && worldObj.getBlock((int)posX, (int)posY - 1, (int)posZ) == Blocks.air) {
+			motionY *= 0.7D;
+			renderYawOffset += 10;
+			setIsFalling(true);
+		}
+		else
+			if(getIsFalling())
+				setIsFalling(false);
+		super.onUpdate();
+	}
+
+	public boolean getIsFalling() {
+		return isFalling;
+	}
+
+	private void setIsFalling(boolean state) {
+		isFalling = state;
+	}
+
+	@Override
 	public boolean getCanSpawnHere() {
 		float light = getBrightness(1.0F);
 		if (light >= 0F)
@@ -55,6 +82,10 @@ public class EntitySporeling extends EntityCreature {
 
 	private boolean isOnShelfFungus() {
 		return worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)) == BLBlockRegistry.treeFungus;
+	}
+
+	@Override
+	protected void fall(float damage) {
 	}
 
 	@Override
