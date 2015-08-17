@@ -634,9 +634,9 @@ public class MainShader extends CShader {
 			this.starfieldTextureFBO = new Framebuffer(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION, false);
 			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect().init();
 		} else {
-			float offX = (float)(Minecraft.getMinecraft().thePlayer.posX / 8000.0D);
-			float offY = (float)(-Minecraft.getMinecraft().thePlayer.posZ / 8000.0D);
-			float offZ = (float)(-Minecraft.getMinecraft().thePlayer.posY / 10000.0D);
+			float offX = (float)(RenderManager.renderPosX / 8000.0D);
+			float offY = (float)(-RenderManager.renderPosZ / 8000.0D);
+			float offZ = (float)(-RenderManager.renderPosY / 10000.0D);
 			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
 			this.starfieldEffect.apply(-1, this.starfieldTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION);
 		}
