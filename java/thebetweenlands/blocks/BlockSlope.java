@@ -23,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockSlope extends BlockStairs {
 	public BlockSlope(Block block, int meta) {
 		super(block, meta);
-		this.setLightOpacity(0);
+		//this.setLightOpacity(0);
 	}
 
 	@Override

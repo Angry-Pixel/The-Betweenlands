@@ -166,13 +166,167 @@ public class BlockSlopeRenderer implements ISimpleBlockRenderingHandler {
 		IIcon iconYN = block.getIcon(world, x, y, z, 0);
 		IIcon iconZP = block.getIcon(world, x, y, z, 3);
 		IIcon iconZN = block.getIcon(world, x, y, z, 2);
-		this.renderSlope(corner1, corner2, corner3, corner4, upsidedown, iconXP, iconXN, iconYP, iconYN, iconZP, iconZN);
+		this.renderSlope(world, x, y, z, corner1, corner2, corner3, corner4, upsidedown, iconXP, iconXN, iconYP, iconYN, iconZP, iconZN);
 
 		tessellator.addTranslation(-x, -y, -z);
 
 		return true;
 	}
 
+	public void renderSlope(IBlockAccess blockAccess, int x, int y, int z, boolean corner1, boolean corner2, boolean corner3, boolean corner4, boolean upsidedown, IIcon iconXP, IIcon iconXN, IIcon iconYP, IIcon iconYN, IIcon iconZP, IIcon iconZN) {
+		float cornerHeight1 = corner1 ? 1.0F : this.slopeEdge;
+		float cornerHeight2 = corner2 ? 1.0F : this.slopeEdge;
+		float cornerHeight3 = corner3 ? 1.0F : this.slopeEdge;
+		float cornerHeight4 = corner4 ? 1.0F : this.slopeEdge;
+
+		Tessellator tessellator = Tessellator.instance;
+
+		if(!upsidedown) {
+			//z- face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 0, iconZN.getMinU(), iconZN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, cornerHeight1, 0, iconZN.getMinU(), iconZN.getInterpolatedV(cornerHeight1*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight2, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, cornerHeight2, 0, iconZN.getMaxU(), iconZN.getInterpolatedV(cornerHeight2*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 0, iconZN.getMaxU(), iconZN.getMinV());
+
+			//z+ face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 1, iconZP.getMinU(), iconZP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 1, iconZP.getMaxU(), iconZP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight3, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, cornerHeight3, 1, iconZP.getMaxU(), iconZP.getInterpolatedV(cornerHeight3*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight4, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, cornerHeight4, 1, iconZP.getMinU(), iconZP.getInterpolatedV(cornerHeight4*16.0F));
+
+			//x- face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 0, iconXN.getMinU(), iconXN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight2, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, cornerHeight2, 0, iconXN.getMinU(), iconXN.getInterpolatedV(cornerHeight2*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight3, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, cornerHeight3, 1, iconXN.getMaxU(), iconXN.getInterpolatedV(cornerHeight3*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 1, iconXN.getMaxU(), iconXN.getMinV());
+
+			//x+ face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 0, iconXP.getMinU(), iconXP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 1, iconXP.getMaxU(), iconXP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight4, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, cornerHeight4, 1, iconXP.getMaxU(), iconXP.getInterpolatedV(cornerHeight4*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, cornerHeight1, 0, iconXP.getMinU(), iconXP.getInterpolatedV(cornerHeight1*16.0F));
+
+			//top face
+			if((corner2 || corner4) && (!corner1 && !corner3) || (corner1 == corner3)) {
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight4, 1) * 15.0F));
+				tessellator.addVertexWithUV(0, cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight3, 1) * 15.0F));
+				tessellator.addVertexWithUV(1, cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight2, 0) * 15.0F));
+				tessellator.addVertexWithUV(1, cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight1, 0) * 15.0F));
+				tessellator.addVertexWithUV(0, cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
+			} else {
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight1, 0) * 15.0F));
+				tessellator.addVertexWithUV(0, cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, cornerHeight4, 1) * 15.0F));
+				tessellator.addVertexWithUV(0, cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight3, 1) * 15.0F));
+				tessellator.addVertexWithUV(1, cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, cornerHeight2, 0) * 15.0F));
+				tessellator.addVertexWithUV(1, cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
+			}
+
+			//bottom face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 0, iconYN.getMinU(), iconYN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 0, iconYN.getMinU(), iconYN.getMaxV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 0, 1, iconYN.getMaxU(), iconYN.getMaxV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 0, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 0, 1, iconYN.getMaxU(), iconYN.getMinV());
+		} else {
+			//z- face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 0, iconZN.getMinU(), iconZN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 0, iconZN.getMaxU(), iconZN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight2, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 1-cornerHeight2, 0, iconZN.getMaxU(), iconZN.getInterpolatedV(cornerHeight2*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 1-cornerHeight1, 0, iconZN.getMinU(), iconZN.getInterpolatedV(cornerHeight1*16.0F));
+
+			//z+ face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 1, iconZP.getMinU(), iconZP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight4, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 1-cornerHeight4, 1, iconZP.getMinU(), iconZP.getInterpolatedV(cornerHeight4*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight3, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 1-cornerHeight3, 1, iconZP.getMaxU(), iconZP.getInterpolatedV(cornerHeight3*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 1, iconZP.getMaxU(), iconZP.getMinV());
+
+			//x- face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 0, iconXN.getMinU(), iconXN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 1, iconXN.getMaxU(), iconXN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight3, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 1-cornerHeight3, 1, iconXN.getMaxU(), iconXN.getInterpolatedV(cornerHeight3*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight2, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 1-cornerHeight2, 0, iconXN.getMinU(), iconXN.getInterpolatedV(cornerHeight2*16.0F));
+			
+
+			//x+ face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 0, iconXP.getMinU(), iconXP.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 1-cornerHeight1, 0, iconXP.getMinU(), iconXP.getInterpolatedV(cornerHeight1*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight4, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 1-cornerHeight4, 1, iconXP.getMaxU(), iconXP.getInterpolatedV(cornerHeight4*16.0F));
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 1, iconXP.getMaxU(), iconXP.getMinV());
+
+			//bottom face
+			if((corner2 || corner4) && (!corner1 && !corner3) || (corner1 == corner3)) {
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight4, 1) * 15.0F));
+				tessellator.addVertexWithUV(0, 1-cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight1, 0) * 15.0F));
+				tessellator.addVertexWithUV(0, 1-cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight2, 0) * 15.0F));
+				tessellator.addVertexWithUV(1, 1-cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight3, 1) * 15.0F));
+				tessellator.addVertexWithUV(1, 1-cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
+			} else {
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight1, 0) * 15.0F));
+				tessellator.addVertexWithUV(0, 1-cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight2, 0) * 15.0F));
+				tessellator.addVertexWithUV(1, 1-cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1-cornerHeight3, 1) * 15.0F));
+				tessellator.addVertexWithUV(1, 1-cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
+				tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1-cornerHeight4, 1) * 15.0F));
+				tessellator.addVertexWithUV(0, 1-cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
+			}
+
+			//top face
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 0, iconYN.getMinU(), iconYN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 0, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(0, 1, 1, iconYN.getMaxU(), iconYN.getMinV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 1) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 1, iconYN.getMaxU(), iconYN.getMaxV());
+			tessellator.setBrightness((int)(AOHelper.getBrightness(blockAccess, x, y, z, 1, 1, 0) * 15.0F));
+			tessellator.addVertexWithUV(1, 1, 0, iconYN.getMinU(), iconYN.getMaxV());
+		}
+	}
+	
 	public void renderSlope(boolean corner1, boolean corner2, boolean corner3, boolean corner4, boolean upsidedown, IIcon iconXP, IIcon iconXN, IIcon iconYP, IIcon iconYN, IIcon iconZP, IIcon iconZN) {
 		float cornerHeight1 = corner1 ? 1.0F : this.slopeEdge;
 		float cornerHeight2 = corner2 ? 1.0F : this.slopeEdge;

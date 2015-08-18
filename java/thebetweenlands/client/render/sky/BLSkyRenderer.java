@@ -531,14 +531,15 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDepthMask(false);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 			GL11.glCallList(this.skyDispListStart);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		} else {
 			this.renderSkyTexture(mc);
@@ -549,5 +550,8 @@ public class BLSkyRenderer extends IRenderHandler {
 				this.renderAuroras(mc);
 			}
 		}
+		
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glColor4f(1, 1, 1, 1);
 	}
 }

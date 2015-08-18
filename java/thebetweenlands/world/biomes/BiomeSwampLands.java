@@ -35,7 +35,7 @@ public class BiomeSwampLands
         this.addFeature(new FlatLandNoiseFeature())
                 .addFeature(new PatchNoiseFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BLBlockRegistry.swampGrass))
                 .addFeature(new PatchNoiseFeature(0.74D, 0.74D, BLBlockRegistry.swampDirt))
-                .addFeature(new PatchNoiseFeature(0.79D, 0.79D, BLBlockRegistry.mud))
+                .addFeature(new PatchNoiseFeature(0.65D, 0.65D, BLBlockRegistry.mud, 1.0D / 1.35D, 1.72D))
                 .addFeature(new AlgaeNoiseFeature());
         this.waterColorMultiplier = 0x184220;
 

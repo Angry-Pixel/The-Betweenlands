@@ -52,6 +52,11 @@ public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 		this.time = this.getData().getInteger("time");
 	}
 
+	@Override
+	public void setDefaults() {
+		this.time = this.getOffTime(new Random());
+	}
+	
 	/**
 	 * Returns how many ticks the event is not active.
 	 * @param rnd

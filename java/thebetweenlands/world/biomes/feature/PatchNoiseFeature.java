@@ -15,12 +15,22 @@ public class PatchNoiseFeature extends BiomeNoiseFeature {
 	private NoiseGeneratorPerlin mudNoiseGen;
 	private double[] mudNoise = new double[256];
 	private double scaleX, scaleY;
+	private double mult = 1.0D / 1.6D;
+	private double offset = 1.5D;
 	private Block block;
 	
 	public PatchNoiseFeature(double scaleX, double scaleY, Block block) {
 		this.scaleX = scaleX;
 		this.scaleY = scaleY;
 		this.block = block;
+	}
+	
+	public PatchNoiseFeature(double scaleX, double scaleY, Block block, double mult, double offset) {
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
+		this.block = block;
+		this.mult = mult;
+		this.offset = offset;
 	}
 	
 	@Override
@@ -39,7 +49,7 @@ public class PatchNoiseFeature extends BiomeNoiseFeature {
 			byte[] chunkMeta, BiomeGenBaseBetweenlands biome, ChunkProviderBetweenlands provider, 
 			BiomeGenBase[] chunksForGeneration, Random rng) {
 		int sliceSize = chunkBlocks.length / 256;
-		if(this.mudNoise[x * 16 + z] / 1.6f + 1.5f <= 0) {
+		if(this.mudNoise[x * 16 + z] * this.mult + this.offset <= 0) {
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;
 			for(int yo = 0; yo < WorldProviderBetweenlands.LAYER_HEIGHT + 20; yo++) {
 				Block currentBlock = chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y - yo, z, sliceSize)];

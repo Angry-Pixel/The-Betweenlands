@@ -11,11 +11,12 @@ public abstract class EnvironmentEvent {
 	private boolean active = false;
 	private boolean dirty = false;
 	private boolean loaded = false;
+	private boolean initialized = false;
 
 	public EnvironmentEvent(EnvironmentEventRegistry registry) {
 		this.registry = registry;
 	}
-	
+
 	/**
 	 * Returns whether this event is currently active.
 	 * @return
@@ -39,7 +40,7 @@ public abstract class EnvironmentEvent {
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
-	
+
 	/**
 	 * Returns whether this event is marked as dirty.
 	 * @return
@@ -56,7 +57,7 @@ public abstract class EnvironmentEvent {
 		this.active = active;
 		if(markDirty) this.markDirty();
 	}
-	
+
 	/**
 	 * Sets the event data to be loaded
 	 */
@@ -94,10 +95,24 @@ public abstract class EnvironmentEvent {
 	 */
 	public final void readFromNBT(NBTTagCompound compound) {
 		this.nbtt = compound.getCompoundTag(ModInfo.ID + ":environmentEvent:" + this.getEventName());
+		this.initialized = this.nbtt.getBoolean("initialized");
+		//Initialize and set default values
+		if(!this.initialized) {
+			this.nbtt.setBoolean("active", false);
+			this.setDefaults();
+			this.saveEventData();
+			this.nbtt.setBoolean("initialized", true);
+			this.initialized = true;
+		}
 		this.active = this.nbtt.getBoolean("active");
 		this.loadEventData();
 		this.loaded = true;
 	}
+
+	/**
+	 * Sets the default values when the event is first loaded from the save file.
+	 */
+	public void setDefaults() { }
 
 	/**
 	 * Saves additional event data.
@@ -114,13 +129,13 @@ public abstract class EnvironmentEvent {
 	 * @param buffer
 	 */
 	public void loadEventPacket(ByteBuf buffer) { }
-	
+
 	/**
 	 * Saves event data to the sync packet.
 	 * @param buffer
 	 */
 	public void sendEventPacket(ByteBuf buffer) { }
-	
+
 	/**
 	 * Returns whether the data of this event has already been loaded.
 	 * @return
