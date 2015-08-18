@@ -18,10 +18,9 @@ public class RenderTarBeast extends RenderLiving {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/tarBeast.png");
 	private final ResourceLocation eyeTexture = new ResourceLocation("thebetweenlands:textures/entity/tarBeastEyes.png");
 	private final ResourceLocation overlayTexture = new ResourceLocation("thebetweenlands:textures/entity/tarBeastOverlay.png");
-	ModelTarBeast renderPassModel = new ModelTarBeast();
+	private final ModelTarBeast renderPassModel = new ModelTarBeast();
 	public RenderTarBeast() {
 		super(new ModelTarBeast(), 0.7F);
-		//setRenderPassModel(new ModelTarBeast());
 	}
 
 	protected int setTarBeastEyeBrightness(EntityTarBeast entity, int pass, float partialTickTime) {
@@ -59,12 +58,11 @@ public class RenderTarBeast extends RenderLiving {
 				setRenderPassModel(renderPassModel);
 				renderPassModel.drippingtar1_keepstraight.showModel = false;
 				renderPassModel.drippingtar2_keepstraight.showModel = false;
+				renderPassModel.teeth_keepstraight.showModel = false;
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				//GL11.glEnable(GL11.GL_BLEND);
 				float colour = 0.5F;
 				GL11.glColor4f(colour, colour, colour, 1.0F);
 				GL11.glDisable(GL11.GL_LIGHTING);
-				//GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 				return 1;
 			}
 
@@ -73,7 +71,6 @@ public class RenderTarBeast extends RenderLiving {
 				GL11.glLoadIdentity();
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
 				GL11.glEnable(GL11.GL_LIGHTING);
-				//GL11.glDisable(GL11.GL_BLEND);
 			}
 
 		return setTarBeastEyeBrightness((EntityTarBeast) entityliving, pass, partialTickTime);

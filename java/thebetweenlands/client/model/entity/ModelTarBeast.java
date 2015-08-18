@@ -1,11 +1,11 @@
 package thebetweenlands.client.model.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelTarBeast extends MowzieModelBase {
@@ -177,7 +177,7 @@ public class ModelTarBeast extends MowzieModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-        setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, rotationPitch, entity);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         this.waistJoint.render(unitPixel);
     }
 
@@ -188,8 +188,8 @@ public class ModelTarBeast extends MowzieModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+        super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         setToInitPose();
 //        f = entity.ticksExisted;
 //        f1 = 1f;
@@ -198,34 +198,34 @@ public class ModelTarBeast extends MowzieModelBase {
         float globalDegree = 1.8f;
         float globalHeight = 1.8f;
 
-        faceTarget(neck, 2, f3, f4);
-        faceTarget(headbase, 2, f3, f4);
+        faceTarget(neck, 2, rotationYaw, rotationPitch);
+        faceTarget(headbase, 2, rotationYaw, rotationPitch);
 
-        waistJoint.rotationPointY += 5 * f1;
-        bob(waistJoint, 1 * globalSpeed, 1.5f* globalHeight, false, f, f1);
-        walk(waist, 1 * globalSpeed, 0.1f * globalHeight, false, 0.75f, 0.1f, f, f1);
-        walk(body_base, 1 * globalSpeed, 0.1f * globalHeight, false, 0.75f, 0.05f, f, f1);
-        walk(chestpiece_invisible, 1 * globalSpeed, 0.05f * globalHeight, false, 0.75f, 0.05f, f, f1);
-        walk(neck, 1 * globalSpeed, 0.15f * globalHeight, true, 0.5f + 0.75f, -0.1f, f, f1);
-        walk(headbase, 1 * globalSpeed, 0.15f * globalHeight, true, 0.5f + 0.75f, -0.1f, f, f1);
-        walk(shoulder_right, 1 * globalSpeed, 0.25f * globalHeight, true, 0.75f, -0.25f, f, f1);
+        waistJoint.rotationPointY += 5 * limbSwingAngle;
+        bob(waistJoint, 1 * globalSpeed, 1.5f* globalHeight, false, limbSwing, limbSwingAngle);
+        walk(waist, 1 * globalSpeed, 0.1f * globalHeight, false, 0.75f, 0.1f, limbSwing, limbSwingAngle);
+        walk(body_base, 1 * globalSpeed, 0.1f * globalHeight, false, 0.75f, 0.05f, limbSwing, limbSwingAngle);
+        walk(chestpiece_invisible, 1 * globalSpeed, 0.05f * globalHeight, false, 0.75f, 0.05f, limbSwing, limbSwingAngle);
+        walk(neck, 1 * globalSpeed, 0.15f * globalHeight, true, 0.5f + 0.75f, -0.1f, limbSwing, limbSwingAngle);
+        walk(headbase, 1 * globalSpeed, 0.15f * globalHeight, true, 0.5f + 0.75f, -0.1f, limbSwing, limbSwingAngle);
+        walk(shoulder_right, 1 * globalSpeed, 0.25f * globalHeight, true, 0.75f, -0.25f, limbSwing, limbSwingAngle);
 
-        walk(legleft1, 1f * globalSpeed, 1.3f * globalDegree, false, 0 + 0.7f, 0.1f, f, f1);
-        walk(legright1, 1f * globalSpeed, 1.3f * globalDegree, false, 0, 0.1f, f, f1);
-        walk(legleft2, 1f * globalSpeed, 1.2f * globalDegree, true, 0.5f + 0.7f, 0.5f, f, f1);
-        walk(legright2, 1f * globalSpeed, 1.2f * globalDegree, true, 0.5f, 0.5f, f, f1);
+        walk(legleft1, 1f * globalSpeed, 1.3f * globalDegree, false, 0 + 0.7f, 0.1f, limbSwing, limbSwingAngle);
+        walk(legright1, 1f * globalSpeed, 1.3f * globalDegree, false, 0, 0.1f, limbSwing, limbSwingAngle);
+        walk(legleft2, 1f * globalSpeed, 1.2f * globalDegree, true, 0.5f + 0.7f, 0.5f, limbSwing, limbSwingAngle);
+        walk(legright2, 1f * globalSpeed, 1.2f * globalDegree, true, 0.5f, 0.5f, limbSwing, limbSwingAngle);
 
-        walk(shoulder_right, 1 * globalSpeed, 0.4f * globalDegree, true, 0.75f, 0.2f, f, f1);
-        walk(armright_2, 1 * globalSpeed, 0.5f * globalDegree, true, 1.5f + 0.75f, -0.7f, f, f1);
+        walk(shoulder_right, 1 * globalSpeed, 0.4f * globalDegree, true, 0.75f, 0.2f, limbSwing, limbSwingAngle);
+        walk(armright_2, 1 * globalSpeed, 0.5f * globalDegree, true, 1.5f + 0.75f, -0.7f, limbSwing, limbSwingAngle);
 
-        flap(shoulder_left, 1 * globalSpeed, 0.2f * globalHeight, true, 1, -0.8f, f, f1);
-        flap(armleft_2, 1 * globalSpeed, 0.2f * globalHeight, true, 0, 0.3f, f, f1);
+        flap(shoulder_left, 1 * globalSpeed, 0.2f * globalHeight, true, 1, -0.8f, limbSwing, limbSwingAngle);
+        flap(armleft_2, 1 * globalSpeed, 0.2f * globalHeight, true, 0, 0.3f, limbSwing, limbSwingAngle);
 
-        walk(jaw, 1 * globalSpeed, 0.3f * globalHeight, true, 1, 0f, f, f1);
-        walk(drippingtar1_keepstraight, 1 * globalSpeed, 0.3f * globalHeight, false, 1, 0f, f, f1);
+        walk(jaw, 1 * globalSpeed, 0.3f * globalHeight, true, 1, 0f, limbSwing, limbSwingAngle);
+        walk(drippingtar1_keepstraight, 1 * globalSpeed, 0.3f * globalHeight, false, 1, 0f, limbSwing, limbSwingAngle);
 
-        walk(drippingtar2_keepstraight, 1 * globalSpeed, 0.2f * globalHeight, true, 0.75f + 1, 0.2f, f, f1);
-        walk(teeth_keepstraight, 1 * globalSpeed, 0.4f * globalHeight, true, 0.75f + 1, 0.2f, f, f1);
-        walk(drippingtar1_keepstraight, 1 * globalSpeed, 0.4f * globalHeight, true, 0.75f + 0, 0.2f, f, f1);
+        walk(drippingtar2_keepstraight, 1 * globalSpeed, 0.2f * globalHeight, true, 0.75f + 1, 0.2f, limbSwing, limbSwingAngle);
+        walk(teeth_keepstraight, 1 * globalSpeed, 0.4f * globalHeight, true, 0.75f + 1, 0.2f, limbSwing, limbSwingAngle);
+        walk(drippingtar1_keepstraight, 1 * globalSpeed, 0.4f * globalHeight, true, 0.75f + 0, 0.2f, limbSwing, limbSwingAngle);
     }
 }
