@@ -2,21 +2,14 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IMob {
@@ -34,13 +27,12 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, (byte) 0);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(2D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(1D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(3.0D);
 	}
 
@@ -75,11 +67,7 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 
 	@Override
     public boolean isInWater() {
-        return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
-    }
-
-    public boolean isGrounded() {
-        return !isInWater() && worldObj.getBlock((int) posX, (int) posY + 1, (int) posZ) == Blocks.air && worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ).isCollidable();
+        return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this) || worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
     }
 
 	@Override
@@ -93,24 +81,6 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
         	}
             renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
             rotationYaw = renderYawOffset;
-        }
-        else {
-        	moveProgress = animation.swing(2F, 0.4F, false);
-            if (!worldObj.isRemote) {
-            	if(!onGround)
-            	{
-                motionX = 0.0D;
-                motionY -= 0.08D;
-                motionY *= 0.9800000190734863D;
-                motionZ = 0.0D;
-                }
-            	else if(onGround) {
-            		setIsLeaping(false);
-					motionY += 0.4F;
-					motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
-					motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
-				}
-            }
         }
     }
 
@@ -136,28 +106,21 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 			currentSwimTarget = null;
 
 		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 10.0F)
-			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(4) + 1, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
+			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(3) + 1, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
 
 		swimToTarget();
 	}
 
 	protected void swimToTarget() {
 		double targetX = currentSwimTarget.posX + 0.5D - posX;
-		double targetY = currentSwimTarget.posY - posY;
+		double targetY = currentSwimTarget.posY +0.5D - posY;
 		double targetZ = currentSwimTarget.posZ + 0.5D - posZ;
-		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.10000000149011612D;
-		motionY += (Math.signum(targetY) * 0.599999988079071D - motionY) * 0.010000000149011612D;
+		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.010000000149011612D;
+		motionY += (Math.signum(targetY) * 0.3D - motionY) * 0.010000000149011612D;
 		motionY -= 0.01D;
-		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.10000000149011612D;
+		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.010000000149011612D;
 		moveForward = 0.5F;
-	}
-	
-	public boolean isLeaping() {
-		return dataWatcher.getWatchableObjectByte(20) == 1;
-	}
-	
-	public void setIsLeaping(boolean leaping) {
-		dataWatcher.updateObject(20, (byte) (leaping ? 1 : 0));
+
 	}
 
 }
