@@ -9,7 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GLContext;
 
+import thebetweenlands.client.render.shader.base.CShaderGroup;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class ShaderHelper {
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
@@ -44,39 +46,55 @@ public class ShaderHelper {
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		if((this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup)
-				&& mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
-			MainShader shaderWrapper = this.currentShader;
-			if(shaderWrapper != null) {
-				try {
-					shaderWrapper.getShaderGroup().deleteShaderGroup();
-					shaderWrapper.deleteBuffers();
-				} catch(Exception ex) {
-					System.err.println("Failed deleting shader group!");
-					ex.printStackTrace();
+		if(mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
+			if(this.isRequired()) {
+				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup) {
+					MainShader shaderWrapper = this.currentShader;
+					if(shaderWrapper != null && this.needsReload()) {
+						try {
+							shaderWrapper.getShaderGroup().deleteShaderGroup();
+							shaderWrapper.deleteBuffers();
+						} catch(Exception ex) {
+							System.err.println("Failed deleting shader group!");
+							ex.printStackTrace();
+						}
+					}
+					if(shaderWrapper == null || this.needsReload()) {
+						shaderWrapper = new MainShader(
+								mc.getTextureManager(),
+								mc.getResourceManager(), mc.getFramebuffer(),
+								new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
+								new ResourceLocation("thebetweenlands:shaders/mc/program/"),
+								new ResourceLocation("thebetweenlands:textures/shader/")
+								);
+					}
+					try {
+						if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
+							ShaderLinkHelper.setNewStaticShaderLinkHelper();
+						}
+						mc.entityRenderer.theShaderGroup = shaderWrapper.getShaderGroup();
+						this.currentShaderGroup = mc.entityRenderer.theShaderGroup;
+						this.currentShader = shaderWrapper;
+						mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+					} catch (JsonException e) {
+						this.failedLoading = true;
+						System.err.println("Failed loading shader files!");
+						e.printStackTrace();
+					}
 				}
-			}
-			shaderWrapper = new MainShader(
-					mc.getTextureManager(),
-					mc.getResourceManager(), mc.getFramebuffer(),
-					new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
-					new ResourceLocation("thebetweenlands:shaders/mc/program/"),
-					new ResourceLocation("thebetweenlands:textures/shader/")
-					);
-			try {
-				if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
-					ShaderLinkHelper.setNewStaticShaderLinkHelper();
-				}
-				mc.entityRenderer.theShaderGroup = shaderWrapper.getShaderGroup();
-				this.currentShaderGroup = mc.entityRenderer.theShaderGroup;
-				this.currentShader = shaderWrapper;
-				mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-			} catch (JsonException e) {
-				this.failedLoading = true;
-				System.err.println("Failed loading shader files!");
-				e.printStackTrace();
+			} else if(mc.entityRenderer.theShaderGroup instanceof CShaderGroup) {
+				mc.entityRenderer.theShaderGroup = null;
 			}
 		}
+	}
+
+	private boolean isRequired() {
+		Minecraft mc = Minecraft.getMinecraft();
+		return (mc.thePlayer != null && mc.thePlayer.getEntityData().getBoolean("INPORTAL")) || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
+	}
+
+	private boolean needsReload() {
+		return false;
 	}
 
 	public void updateShader() {
