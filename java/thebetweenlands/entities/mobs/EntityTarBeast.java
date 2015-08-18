@@ -1,7 +1,7 @@
 package thebetweenlands.entities.mobs;
 
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -12,14 +12,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
@@ -96,7 +92,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote && worldObj.getWorldTime()%10 == 0) 
+		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);
 	}
 
@@ -114,7 +110,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			velY = (rand.nextFloat() - 0.5D) * 0.125D;
 			velZ = rand.nextFloat() * 0.5F * motionZ;
 			velX = rand.nextFloat() * 0.5F * motionX;
-			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y + rand.nextDouble() * 2.1D, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
+			TheBetweenlands.proxy.spawnCustomParticle("splashTarBeast", world , x, y + rand.nextDouble() * 1.9D, z, velX * 0.15D, velY * 0.1D, velZ * 0.15D, 0);
 			TheBetweenlands.proxy.spawnCustomParticle("dripTarBeast", world , x + offSetX, y + 1.2D, z + offSetZ, 0, 0, 0, 0);
 		}
 	}
