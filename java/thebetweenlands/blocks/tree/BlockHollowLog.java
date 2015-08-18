@@ -91,7 +91,6 @@ public class BlockHollowLog extends Block {
 
         Random random = new Random();
         int meta = random.nextInt(4) + (l == 0 || l == 2 ? 0 : 4);
-        System.out.println(meta);
         world.setBlockMetadataWithNotify(x, y, z, meta, 2);
     }
 
