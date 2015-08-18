@@ -231,7 +231,7 @@ public class ModelSwampHag extends MowzieModelBase {
 //        limbSwing = hag.ticksExisted;
 //        limbSwingAngle = 0.4F;
 
-        float globalSpeed = 1.5f;
+        float globalSpeed = 1.7f;
         float globalDegree = 1.8f;
         float legDegree = 1.8f;
         float inverseFrequency = 4 /(globalSpeed);
