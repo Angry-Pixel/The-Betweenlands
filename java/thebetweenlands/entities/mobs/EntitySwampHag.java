@@ -57,7 +57,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(5D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
