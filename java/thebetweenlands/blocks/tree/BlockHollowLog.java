@@ -1,8 +1,7 @@
 package thebetweenlands.blocks.tree;
 
-import java.util.List;
-import java.util.Random;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -16,17 +15,20 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Bart on 8-8-2015.
  */
 public class BlockHollowLog extends Block {
     @SideOnly(Side.CLIENT)
-    private IIcon iconTop, iconSide, iconMoss;
+    private IIcon iconHoles, iconNoHoles, iconSide, iconMoss;
+
 
     public BlockHollowLog() {
         super(Material.wood);
@@ -38,13 +40,14 @@ public class BlockHollowLog extends Block {
 
     @Override
     public IIcon getIcon(int side, int meta) {
-        return side == 0 || side == 1 ? iconTop : (side == 2 || side == 3) && meta == 1 || (side == 4 || side == 5) && meta == 0 ? iconSide : iconMoss;
+        return side == 0 ? (meta == 0 || meta == 1 || meta == 4 || meta == 5 ? iconNoHoles : iconHoles) : side == 1 ? (meta == 0 || meta == 2 || meta == 4 || meta == 6 ? iconNoHoles : iconHoles) : (side == 2 || side == 3) && meta > 3 || (side == 4 || side == 5) && meta <= 3 ? iconSide : iconMoss;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-        iconTop = reg.registerIcon("thebetweenlands:rottenLog2");
+        iconNoHoles = reg.registerIcon("thebetweenlands:rottenLog1");
+        iconHoles = reg.registerIcon("thebetweenlands:rottenLog2");
         iconSide = reg.registerIcon("thebetweenlands:rottenLog3");
         iconMoss = reg.registerIcon("thebetweenlands:rottenLog4");
     }
@@ -86,7 +89,10 @@ public class BlockHollowLog extends Block {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack is) {
         int l = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
-        world.setBlockMetadataWithNotify(x, y, z, l == 0 || l == 2 ? 0 : 1, 2);
+        Random random = new Random();
+        int meta = random.nextInt(4) + (l == 0 || l == 2 ? 0 : 4);
+        System.out.println(meta);
+        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
     }
 
     @Override
@@ -112,5 +118,13 @@ public class BlockHollowLog extends Block {
     @Override
     public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
         return true;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+        if (world.rand.nextInt(2000) == 0) {
+            TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        }
     }
 }

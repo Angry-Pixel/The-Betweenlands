@@ -20,7 +20,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
-import thebetweenlands.world.feature.gen.cave.MapGenCavesBetweenlandsExperimental;
+import thebetweenlands.world.feature.gen.cave.MapGenCavesBetweenlands;
 import thebetweenlands.world.feature.structure.WorldGenTarPoolDungeons;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -88,7 +88,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		
 		//Initializes the noise generators
 		this.initializeNoiseGen(seed);
-		caveGenerator = new MapGenCavesBetweenlandsExperimental(seed);
+		caveGenerator = new MapGenCavesBetweenlands(seed);
 	}
 
 

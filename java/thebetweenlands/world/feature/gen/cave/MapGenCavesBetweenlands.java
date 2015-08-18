@@ -1,25 +1,34 @@
 package thebetweenlands.world.feature.gen.cave;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.MapGenBase;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.MathUtils;
+import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 
-public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
+import com.google.common.collect.Lists;
+
+public class MapGenCavesBetweenlands extends MapGenBase {
 	private OpenSimplexNoise cave;
 	private OpenSimplexNoise seaLevelBreak;
 	private FractalOpenSimplexNoise form;
 	private int seaLevel = 81;
 
-	public MapGenCavesBetweenlandsExperimental(long seed) {
+	private List<BiomeGenBaseBetweenlands> noBreakBiomes;
+
+	public MapGenCavesBetweenlands(long seed) {
 		cave = new OpenSimplexNoise(seed);
 		seaLevelBreak = new OpenSimplexNoise(seed + 1);
 		form = new FractalOpenSimplexNoise(seed + 2, 4, 0.1);
+		noBreakBiomes = Lists.newArrayList(BLBiomeRegistry.deepWater, BLBiomeRegistry.coarseIslands, BLBiomeRegistry.marsh1, BLBiomeRegistry.marsh2, BLBiomeRegistry.patchyIslands);
 	}
 
 	@Override
@@ -31,6 +40,8 @@ public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
 		for (int bx = 0; bx < 16; bx++) {
 			for (int bz = 0; bz < 16; bz++) {
 				int x = cx + bx, z = cz + bz;
+				BiomeGenBase biome = world.getBiomeGenForCoords(z, x);
+				boolean shouldntBreak = noBreakBiomes.contains(biome);
 				int xzIndex = (bz * 16 + bx) * slice;
 				int level = 0;
 				while (!(blocks[xzIndex + level] != null && blocks[xzIndex + level++].getMaterial().isLiquid()) && level < seaLevel);
@@ -50,6 +61,12 @@ public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
 							} 
 						}
 					}*/
+					int surfaceDist = level - y;
+					int lead = 20;
+					if (surfaceDist <= lead) {
+						double s = shouldntBreak ? (1 - surfaceDist / lead) * 1.25 : ((seaLevelBreak.eval(x * 0.05, z * 0.05) * 0.5) + 0.5) * 0.5;
+						noise += s;
+					}
 					if (noise < limit) {
 						if (y == level) {
 							brokeSurface = true;
@@ -69,7 +86,7 @@ public class MapGenCavesBetweenlandsExperimental extends MapGenBase {
 						double f2 = Math.sqrt(Math.pow(0.5, 2) - Math.pow(h - 0.5, 2));
 						int height = (int) ((f1 + f2) / 1.4576 * 3);
 						for (int dy = -1; dy < height; dy++) {
-							blocks[xzIndex + y + dy] = BLBlockRegistry.swampDirt;
+							blocks[xzIndex + y + dy] = dy < height - 1 ? BLBlockRegistry.swampDirt : BLBlockRegistry.swampGrass;
 						}
 					}
 				}

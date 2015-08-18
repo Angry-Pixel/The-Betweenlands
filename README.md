@@ -14,11 +14,9 @@ Finish all currently unfinished stuff
 Specifically the following
 - Sludge AI (issue #54)
 - Portal finishing touches (issue #134)
-- Purple Rain Tree (issue #150)
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
 - Rotten Logs (issue #149)
-- Sporeling AI tweaks (issue #141)
 - Tar liquid and pools (issue #109)
 - Finishing missing textures (e.g. Explorer's Hat, HL things)
 

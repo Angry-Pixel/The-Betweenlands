@@ -9,8 +9,6 @@ import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.Minecraft;
@@ -29,8 +27,7 @@ import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.event.render.FogHandler;
-import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.utils.LightingUtil;
+import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.Mesh;
 import thebetweenlands.utils.Mesh.Triangle;
 import thebetweenlands.utils.Mesh.Triangle.Vertex;
@@ -66,10 +63,16 @@ public class BLSkyRenderer extends IRenderHandler {
 		int tileSize = 256 / tileCount + 2;
 		float skyY = 16.0F;
 
-		this.skyDispListStart = GLAllocation.generateDisplayLists(2);
+		this.skyDispListStart = GLAllocation.generateDisplayLists(3);
+
+		//Render sky dome
+		this.skyDispList1 = this.skyDispListStart + 0;
+		GL11.glNewList(this.skyDispListStart, GL11.GL_COMPILE);
+		this.createSkyDispList();
+		GL11.glEndList();
 
 		//Render sky 1 to display list
-		this.skyDispList1 = this.skyDispListStart + 0;
+		this.skyDispList1 = this.skyDispListStart + 1;
 		GL11.glNewList(this.skyDispList1, GL11.GL_COMPILE);
 		tessellator.startDrawingQuads();
 		for (int tileX = -tileCount * tileSize; tileX <= tileCount * tileSize; tileX += tileCount) {
@@ -85,7 +88,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		//Render sky 2 to display list
 		skyY = -16.0F;
-		this.skyDispList2 = this.skyDispListStart + 1;
+		this.skyDispList2 = this.skyDispListStart + 2;
 		GL11.glNewList(this.skyDispList2, GL11.GL_COMPILE);
 		tessellator.startDrawingQuads();
 		for (int tileX = -tileCount * tileSize; tileX <= tileCount * tileSize; tileX += tileCount) {
@@ -185,6 +188,63 @@ public class BLSkyRenderer extends IRenderHandler {
 		vertX = rotVertZ2 * xzRotX - rotVertZ * xzRotY;
 		vertZ = rotVertZ * xzRotX + rotVertZ2 * xzRotY;
 		return new Vertex(farX + vertX, farY + rotVertX2, farZ + vertZ, new Vector3D(0, -1, 0), color);
+	}
+
+	private void createSkyDispList() {
+		double tileSize = 5.0D;
+		GLUProjection.Vector3D yOffset = new GLUProjection.Vector3D(0, 2, 0);
+		GLUProjection.Vector3D cp = new GLUProjection.Vector3D(0, -20, 0);
+		double radius = 50.0D;
+		int tiles = 30;
+		GL11.glPushMatrix();
+		GL11.glBegin(GL11.GL_TRIANGLES);
+		//Renders tiles and then normalizes their vertices to create a texture mapped dome
+		for(int tx = -tiles; tx < tiles; tx++) {
+			for(int tz = -tiles; tz < tiles; tz++) {
+				/*
+				 * 1-----4
+				 * |     |
+				 * 2-----3
+				 */
+				GLUProjection.Vector3D tp1 = new GLUProjection.Vector3D(tx * tileSize, 0, tz * tileSize);
+				tp1 = cp.add(tp1.sub(cp).normalized().mul(radius)).add(yOffset);
+
+				GLUProjection.Vector3D tp2 = new GLUProjection.Vector3D((tx) * tileSize, 0, (tz + 1) * tileSize);
+				tp2 = cp.add(tp2.sub(cp).normalized().mul(radius)).add(yOffset);
+
+				GLUProjection.Vector3D tp3 = new GLUProjection.Vector3D((tx + 1) * tileSize, 0, (tz + 1) * tileSize);
+				tp3 = cp.add(tp3.sub(cp).normalized().mul(radius)).add(yOffset);
+
+				GLUProjection.Vector3D tp4 = new GLUProjection.Vector3D((tx + 1) * tileSize, 0, (tz) * tileSize);
+				tp4 = cp.add(tp4.sub(cp).normalized().mul(radius)).add(yOffset);
+
+				double u00 = (tp1.x) / (radius * 2.0D) + 0.5D;
+				double u10 = (tp4.x) / (radius * 2.0D) + 0.5D;
+				double u11 = (tp3.x) / (radius * 2.0D) + 0.5D;
+				double u01 = (tp2.x) / (radius * 2.0D) + 0.5D;
+
+				double v00 = 1 - ((tp1.z) / (radius * 2.0D) + 0.5D);
+				double v10 = 1 - ((tp4.z) / (radius * 2.0D) + 0.5D);
+				double v11 = 1 - ((tp3.z) / (radius * 2.0D) + 0.5D);
+				double v01 = 1 - ((tp2.z) / (radius * 2.0D) + 0.5D);
+
+				GL11.glTexCoord2d(u00, v00);
+				GL11.glVertex3d(tp1.x, tp1.y, tp1.z);
+				GL11.glTexCoord2d(u11, v11);
+				GL11.glVertex3d(tp3.x, tp3.y, tp3.z);
+				GL11.glTexCoord2d(u01, v01);
+				GL11.glVertex3d(tp2.x, tp2.y, tp2.z);
+
+				GL11.glTexCoord2d(u11, v11);
+				GL11.glVertex3d(tp3.x, tp3.y, tp3.z);
+				GL11.glTexCoord2d(u00, v00);
+				GL11.glVertex3d(tp1.x, tp1.y, tp1.z);
+				GL11.glTexCoord2d(u10, v10);
+				GL11.glVertex3d(tp4.x, tp4.y, tp4.z);
+			}
+		}
+		GL11.glEnd();
+		GL11.glPopMatrix();
 	}
 
 	private void renderSkyTexture(Minecraft mc) {
@@ -395,6 +455,8 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
+		boolean useShaderSky = ShaderHelper.INSTANCE.canUseShaders() && ShaderHelper.INSTANCE.getCurrentShader() != null && ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID() >= 0;
+
 		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
 		float fade = 1.0F;
 		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.theWorld);
@@ -402,10 +464,12 @@ public class BLSkyRenderer extends IRenderHandler {
 			fade = provider.getEnvironmentEventRegistry().DENSE_FOG.getFade(partialTicks) * 0.95F + 0.05F;
 		}
 		starBrightness *= fade;
-		if (starBrightness > 0.0F) {
+		if (starBrightness > 0.0F && !useShaderSky) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 			this.starMesh.render();
+			GL14.glBlendColor(1, 1, 1, 1);
+			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 		}
 
 		GL11.glPopMatrix();
@@ -462,9 +526,23 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glPopMatrix();
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDepthMask(true);
-		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness);
-		this.renderSkyTexture(mc);
+		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
+		if(useShaderSky) {
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+			RenderHelper.disableStandardItemLighting();
+			GL11.glDepthMask(false);
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+			GL11.glCallList(this.skyDispListStart);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			GL11.glDepthMask(true);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+		} else {
+			this.renderSkyTexture(mc);
+		}
 
 		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
 			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
