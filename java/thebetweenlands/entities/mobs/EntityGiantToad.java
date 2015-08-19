@@ -1,10 +1,8 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
@@ -24,7 +22,6 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(5, new EntityAIWander(this, 0));
-		tasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, false));
 		leapOffset = rand.nextInt(29);
 	}
 

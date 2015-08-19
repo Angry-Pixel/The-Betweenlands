@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
+import thebetweenlands.entities.mobs.EntitySludge;
 
 @SideOnly(Side.CLIENT)
 public class ModelSludge extends MowzieModelBase {
@@ -69,16 +70,19 @@ public class ModelSludge extends MowzieModelBase {
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		head2.render(unitPixel);
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		slime1.render(unitPixel);
-		slime2.render(unitPixel);
-		slime3.render(unitPixel);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
+		if (((EntitySludge)entity).getActive())
+		{
+			setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+			head2.render(unitPixel);
+			GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			slime1.render(unitPixel);
+			slime2.render(unitPixel);
+			slime3.render(unitPixel);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

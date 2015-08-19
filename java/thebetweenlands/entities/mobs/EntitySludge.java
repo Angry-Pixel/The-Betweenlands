@@ -54,9 +54,18 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		prevSquishFactor = squishFactor;
 		boolean flag = onGround;
 		super.onUpdate();
-		if (onGround && !flag) {
-			squishAmount = -0.5F;
-			//TODO Make some nice particles I guess
+		//TODO: Make this work???
+		if (getAttackTarget() == null) {
+			setActive(false);
+		}
+		else setActive(true);
+
+		setActive(true);
+
+		if (getActive()) {
+			if (onGround && !flag) {
+				squishAmount = -0.5F;
+				//TODO Make some nice particles I guess
 			/*	for (int j = 0; j < 8; ++j) {
 				float f = rand.nextFloat() * (float) Math.PI * 2.0F;
 				float f1 = rand.nextFloat() * 0.5F + 0.5F;
@@ -64,18 +73,24 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				float f3 = MathHelper.cos(f) * 0.5F * f1;
 				worldObj.spawnParticle("cloud", posX + f2, boundingBox.minY, posZ + f3, 0.0D, 0.0D, 0.0D);
 			}*/
-			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F); 
+			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 		} else if (!onGround && flag)
 			squishAmount = 1.0F;
 
 		alterSquishAmount();
-		
+
 		int bx = MathHelper.floor_double(this.posX);
 		int by = MathHelper.floor_double(this.posY);
 		int bz = MathHelper.floor_double(this.posZ);
-		if(this.worldObj.getBlock(bx, by, bz) == Blocks.air && 
+		if (this.worldObj.getBlock(bx, by, bz) == Blocks.air &&
 				BLBlockRegistry.sludge.canPlaceBlockAt(this.worldObj, bx, by, bz)) {
 			BLBlockRegistry.sludge.generateBlockTemporary(this.worldObj, bx, by, bz);
+		}
+	}
+		else {
+			motionX = 0;
+			motionZ = 0;
+			motionY = 0;
 		}
 	}
 
@@ -142,5 +157,19 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				}
 		}
 		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(20, (byte) 0);
+	}
+
+	public void setActive(boolean active) {
+		dataWatcher.updateObject(20, (byte) (active ? 1 : 0));
+	}
+
+	public boolean getActive() {
+		return dataWatcher.getWatchableObjectByte(20) == 1;
 	}
 }
