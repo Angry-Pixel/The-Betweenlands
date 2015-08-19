@@ -182,10 +182,10 @@ public class BlockStalactite extends Block
         t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
         t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
         // left
-        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ - halfSize, u0, v1);
-        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
-        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
-        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
+        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
+        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ - halfSize, u0, v1);
+        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
+        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
         // right
         t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
         t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ + halfSize, u0, v1);
