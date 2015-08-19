@@ -36,6 +36,7 @@ public class BLEntityRegistry
 		registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", 0x283320, 0x827856);
 		registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", 0x283320, 0x827856);
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0x243B0B, 0x00FFFF);
+		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
