@@ -76,7 +76,19 @@ extends WorldProvider
 			}
 		}
 
-		float m = FogHandler.INSTANCE.hasDenseFog() ? 80.0f : 0.0f;
+		final int transitionStart = WorldProviderBetweenlands.LAYER_HEIGHT - 10;
+		final int transitionEnd = WorldProviderBetweenlands.LAYER_HEIGHT - 25;
+		float m = 0;
+		if (FogHandler.INSTANCE.hasDenseFog()) {
+			float y = (float) player.posY;
+			if (y < transitionStart) {
+				if (transitionEnd < y) {
+					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
+				}
+			} else {
+				m = 80;
+			}
+		}
 
 		for(int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];
