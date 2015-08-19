@@ -36,11 +36,6 @@ public class BlockStalactite extends Block
         return false;
     }
 
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z)
-    {
-        return null;
-    }
-
     public int getRenderType()
     {
         return ClientProxy.BlockRenderIDs.STALACTITE.id();
