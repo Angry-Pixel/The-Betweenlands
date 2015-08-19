@@ -10,6 +10,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.model.ControlledAnimation;
 import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
@@ -21,6 +22,8 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	public float squishAmount;
 	public float squishFactor;
 	public float prevSquishFactor;
+
+	public ControlledAnimation scale = new ControlledAnimation(5);
 
 	public EntitySludge(World world) {
 		super(world);
@@ -58,7 +61,6 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		prevSquishFactor = squishFactor;
 		boolean flag = onGround;
 		super.onUpdate();
-		//TODO: Make this work???
 		if (isClientWorld()) {
 			if (getIsPlayerNearby(7, 3, 7, 7)) {
 				if (!getActive()) {
@@ -66,8 +68,9 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 					motionY += 0.6;
 				}
 			}
-			else setActive(false);
 		}
+		if (getActive()) scale.increaseTimer();
+		else scale.decreaseTimer();
 
 //		setActive(true);
 

@@ -21,6 +21,7 @@ public class ModelSludge extends MowzieModelBase {
 	MowzieModelRenderer slime1;
 	MowzieModelRenderer slime2;
 	MowzieModelRenderer slime3;
+	private float scale;
 
 	public ModelSludge() {
 		textureWidth = 128;
@@ -70,19 +71,17 @@ public class ModelSludge extends MowzieModelBase {
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-		if (((EntitySludge)entity).getActive())
-		{
-			setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-			head2.render(unitPixel);
-			GL11.glPushMatrix();
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			slime1.render(unitPixel);
-			slime2.render(unitPixel);
-			slime3.render(unitPixel);
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glPopMatrix();
-		}
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		GL11.glScalef(scale, scale, scale);
+		head2.render(unitPixel);
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		slime1.render(unitPixel);
+		slime2.render(unitPixel);
+		slime3.render(unitPixel);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -99,6 +98,7 @@ public class ModelSludge extends MowzieModelBase {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float f, float f1, float pticks) {
 		setToInitPose();
+		scale = ((EntitySludge)entity).scale.getAnimationProgressSinSqrt(1);
 		float frame = entity.ticksExisted + pticks;
 		MowzieModelRenderer[] spineParts = new MowzieModelRenderer[] {spine, spinepiece};
 
