@@ -58,6 +58,7 @@ import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
 import thebetweenlands.client.render.entity.RenderBLItemFrame;
 import thebetweenlands.client.render.entity.RenderBerserkerGuardian;
+import thebetweenlands.client.render.entity.RenderBlindCaveFish;
 import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
@@ -110,6 +111,7 @@ import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntitySnailPoisonJet;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
+import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
@@ -205,6 +207,7 @@ public class ClientProxy extends CommonProxy {
 		//Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderAngler());
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, new RenderBlindCaveFish());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, new RenderSludge());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderSwampHag());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, new RenderTarBeast());
