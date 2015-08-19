@@ -55,48 +55,6 @@ public class GuiManualBase extends GuiScreen {
     }
 
 
-    public void addWidgets() {
-        /*if (currentPage == 0) {
-            ArrayList<IRecipe> recipes = new ArrayList<>();
-            recipes.add(RecipeHandler.weedwoodPickAxeRecipe);
-            recipes.add(RecipeHandler.betweenstonePickAxeRecipe);
-            recipes.add(RecipeHandler.octinePickAxeRecipe);
-            recipes.add(RecipeHandler.valonitePickAxeRecipe);
-            widgets.add(new CraftingRecipeWidget(this, recipes, xStartLeftPage + 4, yStart + 10));
-            ArrayList<IRecipe> recipes1 = new ArrayList<>();
-            recipes1.add(RecipeHandler.weedwoodAxeRecipe);
-            recipes1.add(RecipeHandler.betweenstoneAxeRecipe);
-            recipes1.add(RecipeHandler.octineAxeRecipe);
-            recipes1.add(RecipeHandler.valoniteAxeRecipe);
-            widgets.add(new CraftingRecipeWidget(this, recipes1, xStartRightPage + 4, yStart + 10));
-            ArrayList<IRecipe> recipes2 = new ArrayList<>();
-            recipes2.add(RecipeHandler.weedwoodShovelRecipe);
-            recipes2.add(RecipeHandler.betweenstoneShovelRecipe);
-            recipes2.add(RecipeHandler.octineShovelRecipe);
-            recipes2.add(RecipeHandler.valoniteShovelRecipe);
-            widgets.add(new CraftingRecipeWidget(this, recipes2, xStartLeftPage + 4, yStart + 10 + CraftingRecipeWidget.height + 4));
-            ArrayList<IRecipe> recipes3 = new ArrayList<>();
-            recipes3.add(RecipeHandler.weedwoodSwordRecipe);
-            recipes3.add(RecipeHandler.betweenstoneSwordRecipe);
-            recipes3.add(RecipeHandler.octineSwordRecipe);
-            recipes3.add(RecipeHandler.valoniteSwordRecipe);
-            widgets.add(new CraftingRecipeWidget(this, recipes3, xStartRightPage + 4, yStart + 10 + CraftingRecipeWidget.height + 4));
-            widgets.add(new CraftingRecipeWidget(this, RecipeHandler.weedwoodBowRecipe, xStartLeftPage + 4, yStart + 10 + CraftingRecipeWidget.height * 2 + 8));
-            ArrayList<IRecipe> recipes4 = new ArrayList<>();
-            recipes4.add(RecipeHandler.anglerToothArrowRecipe);
-            recipes4.add(RecipeHandler.octineArrowRecipe);
-            widgets.add(new CraftingRecipeWidget(this, recipes4, xStartRightPage + 4, yStart + 10 + CraftingRecipeWidget.height * 2 + 8));
-        } else if (currentPage == 1) {
-            widgets.add(new CraftingRecipeWidget(this, RecipeHandler.weedwoodDoorRecipe, xStartLeftPage + 4, yStart + 10));
-            widgets.add(new SmeltingRecipeWidget(this, new ItemStack(Blocks.cobblestone), xStartRightPage + 10, yStart + 10));
-            widgets.add(new PurifierRecipeWidget(this, new ItemStack(BLBlockRegistry.aquaMiddleGemOre), xStartRightPage + 10, yStart + 14 + SmeltingRecipeWidget.height));
-        } else if (currentPage == 2) {
-            widgets.add(new CompostRecipeWidget(this, xStartLeftPage + 4, yStart + 10));
-            widgets.add(new PestleAndMortarRecipeWidget(this, xStartRightPage + 2, yStart + 10, new ItemStack(BLBlockRegistry.weedwoodBark)));
-        }*/
-    }
-
-
     @Override
     protected void keyTyped(char c, int key) {
         switch (key) {

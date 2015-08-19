@@ -22,16 +22,16 @@ public class ManualPage {
 
     public ManualEntry entry;
 
-    public ManualPage( ManualWidgetsBase... widgets){
+    public ManualPage(ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
     }
 
-    public ArrayList<ManualPage> setManualEntry(ManualEntry entry){
+    public ArrayList<ManualPage> setManualEntry(ManualEntry entry) {
         ArrayList<ManualPage> pages = new ArrayList<>();
         this.entry = entry;
 
-        for(ManualWidgetsBase widget:widgets){
-            if(widget instanceof TextWidget){
+        for (ManualWidgetsBase widget : widgets) {
+            if (widget instanceof TextWidget) {
                 FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
                 String[] words = ((TextWidget) widget).text.split(" ");
 
@@ -41,52 +41,108 @@ public class ManualPage {
 
                 int heightPage = 0;
 
+                boolean makingItalic = false;
+                boolean makingBold = false;
+                boolean makingUnderlined = false;
+                boolean makingStrikerThrough = false;
+                boolean makingObfuscated = false;
+                boolean makingColor = false;
+                String color = "";
+                boolean makingTooltip = false;
+                String tooltip = "";
+
                 for (String word : words) {
                     int widthWord = fontRenderer.getStringWidth(word + " ");
-                    if (word.equals("/n/")) {
-                        heightPage += 9;
+                    
+                    
+                    if (word.contains("/n/")) {
+                        heightPage += fontRenderer.FONT_HEIGHT;
                         widthLine = 0;
-                    } else if (word.contains("<color:") || word.equals("</color>") || word.contains("<tooltip:") || word.equals("</tooltip>")) {
+                    } else if (word.contains("<color:")) {
+                        color = word;
+                        makingColor = true;
+                        widthLine += 0;
+                    } else if (word.contains("</color>")) {
+                        color = "";
+                        makingColor = false;
+                        widthLine += 0;
+                    } else if (word.contains("<tooltip:")) {
+                        tooltip = word;
+                        makingTooltip = true;
+                        widthLine += 0;
+                    } else if (word.contains("</tooltip>")) {
+                        tooltip = "";
+                        makingTooltip = false;
+                        widthLine += 0;
+                    } else if (word.contains("<italic>")) {
+                        makingItalic = true;
+                        widthLine += 0;
+                    } else if (word.contains("</italic>")) {
+                        makingItalic = false;
+                        widthLine += 0;
+                    } else if (word.contains("<bold>")) {
+                        makingBold = true;
+                        widthLine += 0;
+                    } else if (word.contains("</bold>")) {
+                        makingBold = false;
+                        widthLine += 0;
+                    } else if (word.contains("<underlined>")) {
+                        makingUnderlined = true;
+                        widthLine += 0;
+                    } else if (word.contains("</underlined>")) {
+                        makingUnderlined = false;
+                        widthLine += 0;
+                    } else if (word.contains("<strikerThrough>")) {
+                        makingStrikerThrough = true;
+                        widthLine += 0;
+                    } else if (word.contains("</strikerThrough>")) {
+                        makingStrikerThrough = false;
+                        widthLine += 0;
+                    } else if (word.contains("<obfuscated>")) {
+                        makingObfuscated = true;
+                        widthLine += 0;
+                    } else if (word.contains("</obfuscated>")) {
+                        makingObfuscated = false;
                         widthLine += 0;
                     } else if (widthLine + widthWord <= GuiManualBase.WIDTH - widget.unchangedXStart) {
                         widthLine += widthWord;
                     } else {
-                        heightPage += 9;
-                        if(heightPage > GuiManualBase.HEIGHT - widget.yStart - 10) {
+                        heightPage += fontRenderer.FONT_HEIGHT;
+                        if (heightPage > GuiManualBase.HEIGHT - widget.yStart - 5) {
                             heightPage = 0;
-                            if(page > 0)
+                            if (page > 0)
                                 pages.add(new ManualPage(new TextWidget(widget.manual, widget.unchangedXStart, widget.yStart, text)));
                             else
-                                ((TextWidget) widget).text = text;
+                                ((TextWidget) widget).text = text + " <end>";
                             page++;
-                            text = "";
+                            text = "" + (makingItalic?" <italic>":"") + (makingBold?" <bold>":"") + (makingColor?" " + color:"") + (makingObfuscated?" <obfuscated>":"") + (makingStrikerThrough?" <strikerThrough>":"") + (makingTooltip?" " + tooltip:"") + (makingUnderlined?" <underlined>":"");
                         }
                         widthLine = widthWord;
                     }
                     text += word + " ";
                 }
-                if(page > 0 && (widthLine > 0 || heightPage > 0))
+                if (page > 0 && (widthLine > 0 || heightPage > 0))
                     pages.add(new ManualPage(new TextWidget(widget.manual, 5, 5, text)));
             }
         }
         return pages;
     }
 
-    public void setPageNumber(int pageNumber){
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
-        rightPage = pageNumber%2 == 0;
+        rightPage = pageNumber % 2 == 0;
 
-        for (ManualWidgetsBase widget:widgets)
-            if(rightPage)
+        for (ManualWidgetsBase widget : widgets)
+            if (rightPage)
                 widget.setPageToRight();
     }
 
 
-    public void clear(){
+    public void clear() {
         widgets.clear();
     }
 
-    public void draw(int mouseX, int mouseY){
+    public void draw(int mouseX, int mouseY) {
         for (ManualWidgetsBase widget : widgets)
             widget.draw(mouseX, mouseY);
     }

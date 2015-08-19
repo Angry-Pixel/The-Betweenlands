@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.manual.gui.GuiManualBase;
@@ -41,30 +42,91 @@ public class TextWidget extends ManualWidgetsBase {
 
             int tooltipWidth = 0;
             boolean makingTooltip = false;
+            boolean makingTooltipWord = false;
+
+            boolean italic = false;
+            boolean bold = false;
+            boolean underlined = false;
+            boolean strikerThrough = false;
+            boolean obfuscated = false;
+
             String toolTipWord = "";
             int tooltipStartX = 0;
             int tooltipStartY = 0;
 
             for (String word : words) {
                 int widthWord = fontRenderer.getStringWidth(word + " ");
-                if (word.equals("/n/")) {
+
+
+                word = "" + (italic?EnumChatFormatting.ITALIC:"") + (bold?EnumChatFormatting.BOLD:"") + (underlined?EnumChatFormatting.UNDERLINE:"") + (strikerThrough?EnumChatFormatting.STRIKETHROUGH:"")  + (obfuscated?EnumChatFormatting.OBFUSCATED:"") + word + " ";
+                if(word.contains("<end>")) {
+                    tooltipWidth = 0;
+                    makingTooltip = false;
+                    makingTooltipWord = false;
+
+                    italic = false;
+                    bold = false;
+                    underlined = false;
+                    strikerThrough = false;
+                    obfuscated = false;
+                    word ="";
+                } else if(makingTooltipWord) {
+                    if(word.contains(">")){
+                        makingTooltipWord = false;
+                        toolTipWord += " " + word.replace(">", "").replace(" ", "").replace("" + EnumChatFormatting.ITALIC, "").replace("" + EnumChatFormatting.BOLD, "").replace("" + EnumChatFormatting.UNDERLINE, "").replace("" + EnumChatFormatting.STRIKETHROUGH, "").replace("" + EnumChatFormatting.OBFUSCATED, "");
+                    } else
+                        toolTipWord += " " + word.replace(" ", "").replace("" + EnumChatFormatting.ITALIC, "").replace("" + EnumChatFormatting.BOLD, "").replace("" + EnumChatFormatting.UNDERLINE, "").replace("" + EnumChatFormatting.STRIKETHROUGH, "").replace("" + EnumChatFormatting.OBFUSCATED, "");
+                    word = "";
+                } else if (word.contains("/n/")) {
                     lineNumber++;
                     widthLine = 0;
                     word = "";
                 } else if (word.contains("<color:")) {
-                    color = Integer.decode(word.replace("<color:", "").replace(">", ""));
+                    color = Integer.decode(word.replace("<color:", "").replace(">", "").replace(" ", "").replace("" + EnumChatFormatting.ITALIC, "").replace("" + EnumChatFormatting.BOLD, "").replace("" + EnumChatFormatting.UNDERLINE, "").replace("" + EnumChatFormatting.STRIKETHROUGH, "").replace("" + EnumChatFormatting.OBFUSCATED, ""));
                     word = "";
-                } else if (word.equals("</color>")) {
+                } else if (word.contains("</color>")) {
                     color = unchangedColor;
                     word = "";
                 } else if (word.contains("<tooltip:")) {
-                    toolTipWord = word.replace("<tooltip:", "").replace(">", "");
+                    if(!word.contains(">"))
+                        makingTooltipWord = true;
+                    toolTipWord = word.replace("<tooltip:", "").replace(">", "").replace(" ", "").replace("" + EnumChatFormatting.ITALIC, "").replace("" + EnumChatFormatting.BOLD, "").replace("" + EnumChatFormatting.UNDERLINE, "").replace("" + EnumChatFormatting.STRIKETHROUGH, "").replace("" + EnumChatFormatting.OBFUSCATED, "");
                     makingTooltip = true;
                     word = "";
                     tooltipStartX = xStart + widthLine;
                     tooltipStartY = yStart + lineNumber * 10;
-                } else if (word.equals("</tooltip>")) {
+                } else if (word.contains("</tooltip>")) {
                     makingTooltip = false;
+                    word = "";
+                } else  if (word.contains("<italic>")){
+                    italic = true;
+                    word = "";
+                } else  if (word.contains("</italic>")){
+                    italic = false;
+                    word = "";
+                } else  if (word.contains("<bold>")){
+                    bold = true;
+                    word = "";
+                } else  if (word.contains("</bold>")){
+                    bold = false;
+                    word = "";
+                }else  if (word.contains("<underlined>")){
+                    underlined = true;
+                    word = "";
+                } else  if (word.contains("</underlined>")){
+                    underlined = false;
+                    word = "";
+                }else  if (word.contains("<strikerThrough>")){
+                    strikerThrough = true;
+                    word = "";
+                } else  if (word.contains("</strikerThrough>")){
+                    strikerThrough = false;
+                    word = "";
+                } else  if (word.contains("<obfuscated>")){
+                    obfuscated = true;
+                    word = "";
+                } else  if (word.contains("</obfuscated>")){
+                    obfuscated = false;
                     word = "";
                 } else if (widthLine + widthWord <= GuiManualBase.WIDTH - unchangedXStart) {
                     widthLine += widthWord;
@@ -75,7 +137,8 @@ public class TextWidget extends ManualWidgetsBase {
                     lineNumber++;
                     widthLine = widthWord;
                 }
-                fontRenderer.drawString(word, xStart + widthLine - widthWord, yStart + lineNumber * 10, color);
+
+                fontRenderer.drawString(word, xStart + widthLine - widthWord, yStart + lineNumber * fontRenderer.FONT_HEIGHT, color);
                 if (!makingTooltip && tooltipWidth > 0 && mouseX >= tooltipStartX && mouseX <= tooltipStartX + tooltipWidth && mouseY >= tooltipStartY && mouseY <= tooltipStartY + 9) {
                     ArrayList<String> toolTipText = new ArrayList<>();
                     toolTipText.add(toolTipWord);
