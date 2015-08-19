@@ -1,11 +1,11 @@
 package thebetweenlands.client.model.entity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelTarBeast extends MowzieModelBase {
@@ -177,7 +177,7 @@ public class ModelTarBeast extends MowzieModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+        setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, rotationPitch, entity);
         this.waistJoint.render(unitPixel);
     }
 
@@ -188,8 +188,8 @@ public class ModelTarBeast extends MowzieModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
-        super.setRotationAngles(f, f1, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         setToInitPose();
 //        f = entity.ticksExisted;
 //        f1 = 1f;
@@ -198,8 +198,8 @@ public class ModelTarBeast extends MowzieModelBase {
         float globalDegree = 1.8f;
         float globalHeight = 1.8f;
 
-        faceTarget(neck, 2, rotationYaw, rotationPitch);
-        faceTarget(headbase, 2, rotationYaw, rotationPitch);
+//        faceTarget(neck, 2, f3, f4);
+        faceTarget(headbase, 2, f3, f4);
 
         waistJoint.rotationPointY += 5 * f1;
         bob(waistJoint, 1 * globalSpeed, 1.5f* globalHeight, false, f, f1);

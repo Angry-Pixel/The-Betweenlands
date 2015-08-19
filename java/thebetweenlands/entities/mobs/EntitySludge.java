@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +12,9 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.*;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
@@ -55,12 +59,17 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		boolean flag = onGround;
 		super.onUpdate();
 		//TODO: Make this work???
-		if (getAttackTarget() == null) {
-			setActive(false);
+		if (isClientWorld()) {
+			if (getIsPlayerNearby(7, 3, 7, 7)) {
+				if (!getActive()) {
+					setActive(true);
+					motionY += 0.6;
+				}
+			}
+			else setActive(false);
 		}
-		else setActive(true);
 
-		setActive(true);
+//		setActive(true);
 
 		if (getActive()) {
 			if (onGround && !flag) {
@@ -129,7 +138,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
-		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
+		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player) && getActive()) {
 			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
 				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
 				player.motionX = 0.0D;
@@ -171,5 +180,17 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 
 	public boolean getActive() {
 		return dataWatcher.getWatchableObjectByte(20) == 1;
+	}
+
+	public boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius)
+	{
+		List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(distanceX, distanceY, distanceZ));
+		ArrayList<EntityPlayer> listEntityPlayers = new ArrayList<EntityPlayer>();
+		for (Entity entityNeighbor : list)
+		{
+			if (entityNeighbor instanceof EntityPlayer && getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer)entityNeighbor).capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(entityNeighbor)))
+				return true;
+		}
+		return false;
 	}
 }
