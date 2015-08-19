@@ -32,7 +32,7 @@ public class BlockRoot extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return super.canPlaceBlockAt(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z));
 	}
 
 	@Override

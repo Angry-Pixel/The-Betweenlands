@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packets.PacketAttackTarget;
 import thebetweenlands.network.packets.PacketDruidAltarProgress;
@@ -46,9 +47,9 @@ public class ClientPacketHandler {
 			for (int a = 0; a < 360; a += 4)
 			{
 				double ang = a * Math.PI / 180D;
-				TheBetweenlands.proxy.spawnCustomParticle("smoke", world, packet.x - MathHelper.sin((float) ang) * 0.25D, packet.y, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
-				TheBetweenlands.proxy.spawnCustomParticle("smoke", world, packet.x -MathHelper.sin((float) ang) * 0.25D, packet.y + 0.5D, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
-				TheBetweenlands.proxy.spawnCustomParticle("smoke", world, packet.x -MathHelper.sin((float) ang) * 0.25D, packet.y + 1D, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
+				BLParticle.SMOKE.spawn(world, packet.x - MathHelper.sin((float) ang) * 0.25D, packet.y, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
+				BLParticle.SMOKE.spawn(world, packet.x -MathHelper.sin((float) ang) * 0.25D, packet.y + 0.5D, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
+				BLParticle.SMOKE.spawn(world, packet.x -MathHelper.sin((float) ang) * 0.25D, packet.y + 1D, packet.z + MathHelper.cos((float) ang) * 0.25D, -MathHelper.sin((float) ang) * 0.1D, 0.01D, MathHelper.cos((float) ang) * 0.1, 0);
 			}
 		}
 	}
@@ -99,7 +100,7 @@ public class ClientPacketHandler {
 									if (block == BLBlockRegistry.druidStone1 || block == BLBlockRegistry.druidStone2 || 
 											block == BLBlockRegistry.druidStone3 || block == BLBlockRegistry.druidStone4 || 
 											block == BLBlockRegistry.druidStone5) {
-										TheBetweenlands.proxy.spawnCustomParticle("altarcrafting", world, te.xCoord + x, te.yCoord + y, te.zCoord + z, 0, 0, 0, 1.0F, teda);
+										BLParticle.ALTAR_CRAFTING.spawn(world, te.xCoord + x, te.yCoord + y, te.zCoord + z, 0, 0, 0, 1.0F, teda);
 									}
 								}
 							}

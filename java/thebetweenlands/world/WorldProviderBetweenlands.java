@@ -32,6 +32,10 @@ extends WorldProvider
 {
 	public static final int LAYER_HEIGHT = 80;
 
+	public static final int WATER_HEIGHT = 25;
+
+	public static final int CAVE_START = LAYER_HEIGHT - 10;
+
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
 
@@ -74,7 +78,19 @@ extends WorldProvider
 			}
 		}
 
-		float m = FogHandler.INSTANCE.hasDenseFog() ? 80.0f : 0.0f;
+		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
+		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
+		float m = 0;
+		if (FogHandler.INSTANCE.hasDenseFog()) {
+			float y = (float) player.posY;
+			if (y < transitionStart) {
+				if (transitionEnd < y) {
+					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
+				}
+			} else {
+				m = 80;
+			}
+		}
 
 		for(int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];

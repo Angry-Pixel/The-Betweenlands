@@ -23,8 +23,6 @@ public class AmbienceSoundPlayHandler
 	private AmbienceBloodSky ambienceBloodSky;
 	private int bloodSkyAmbienceTimer = 0;
 
-	public static final int CAVE_START = WorldProviderBetweenlands.LAYER_HEIGHT - 10;
-
 	@SubscribeEvent
 	public void onPlayerCltTick(PlayerTickEvent event) {
 		if( event.phase == Phase.START && event.side == Side.CLIENT ) {
@@ -36,14 +34,14 @@ public class AmbienceSoundPlayHandler
 					isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
 				}
 				if(!isBloodSky) {
-					if( event.player.posY >= CAVE_START && (this.ambienceSoundSwamp == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundSwamp)) ) {
+					if( event.player.posY >= WorldProviderBetweenlands.CAVE_START && (this.ambienceSoundSwamp == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundSwamp)) ) {
 						if( this.ambienceSoundSwamp != null ) {
 							this.ambienceSoundSwamp.stop();
 						}
 						this.ambienceSoundSwamp = new AmbienceSwampSound(event.player);
 						Minecraft.getMinecraft().getSoundHandler().playSound(ambienceSoundSwamp);
 					}
-					if( event.player.posY < CAVE_START && (ambienceSoundCave == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundCave)) ) {
+					if( event.player.posY < WorldProviderBetweenlands.CAVE_START && (ambienceSoundCave == null || !mc.getSoundHandler().isSoundPlaying(this.ambienceSoundCave)) ) {
 						if( this.ambienceSoundCave != null ) {
 							this.ambienceSoundCave.stop();
 						}

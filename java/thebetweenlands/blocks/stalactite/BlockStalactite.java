@@ -1,219 +1,231 @@
 package thebetweenlands.blocks.stalactite;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.Point2D;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-import java.util.Random;
+public class BlockStalactite extends Block {
+	@SideOnly(Side.CLIENT)
+	private IIcon topIcon, bottomIcon;
 
-public class BlockStalactite extends Block
-{
-    @SideOnly(Side.CLIENT)
-    private IIcon topIcon, bottomIcon;
+	public BlockStalactite(Material material) {
+		super(material);
+	}
 
-    public BlockStalactite(Material material)
-    {
-        super(material);
-    }
+	@Override
+	public int quantityDropped(int meta, int fortune, Random random) {
+		return 0;
+	}
 
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		return super.canPlaceBlockAt(world, x, y, z) && (canPlaceBlockOn(world.getBlock(x, y - 1, z)) || canPlaceBlockOn(world.getBlock(x, y + 1, z)));
+	}
 
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
+	@Override
+	public boolean canBlockStay(World world, int x, int y, int z) {
+		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) || canPlaceBlockOn(world.getBlock(x, y + 1, z));
+	}
 
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z)
-    {
-        return null;
-    }
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		checkAndDropBlock(world, x, y, z);
+	}
 
-    public int getRenderType()
-    {
-        return ClientProxy.BlockRenderIDs.STALACTITE.id();
-    }
+	protected void checkAndDropBlock(World world, int x, int y, int z) {
+		if (!canBlockStay(world, x, y, z)) {
+			dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
+			world.notifyBlockChange(x, y, z, Blocks.air);
+		}
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister par1IconRegister)
-    {
-        blockIcon = par1IconRegister.registerIcon("thebetweenlands:stalacmite_middle");
-        topIcon = par1IconRegister.registerIcon("thebetweenlands:stalacmite_top");
-        bottomIcon = par1IconRegister.registerIcon("thebetweenlands:stalacmite_bottom");
-    }
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == this || block.isOpaqueCube();
+	}
 
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int i, int j)
-    {
-        switch(i)
-        {
-            case 0: return topIcon;
-            case 1: return bottomIcon;
-            default: return blockIcon;
-        }
-    }
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(World world, int x, int y, int z, Random random)
-    {
-        int md = world.getBlockMetadata(x, y, z);
-        if (md == 1 && random.nextInt(10) == 0)
-        {
-            StalactiteHelper core = StalactiteHelper.getValsFor(x, y, z);
-            double midHeight = 0.2 + random.nextDouble() * 0.4;
-            Point2D mid = core.getMidway(midHeight);
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
 
-            float dripRange = 0.1f;
-            double d5 = x + mid.x + StalactiteHelper.randRange(random, -dripRange, dripRange);
-            double d7 = (double)y + midHeight;
-            double d6 = z + mid.y + StalactiteHelper.randRange(random, -dripRange, dripRange);
+	@Override
+	public int getRenderType() {
+		return ClientProxy.BlockRenderIDs.STALACTITE.id();
+	}
 
-            world.spawnParticle("dripWater", d5, d7, d6, 0.0D, 0.0D, 0.0D);
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		blockIcon = iconRegister.registerIcon("thebetweenlands:stalacmite_middle");
+		topIcon = iconRegister.registerIcon("thebetweenlands:stalacmite_top");
+		bottomIcon = iconRegister.registerIcon("thebetweenlands:stalacmite_bottom");
+	}
 
-    public void onBlockAdded(World world, int x, int y, int z)
-    {
-        if (world.getBlock(x, y - 1, z) == Blocks.air)
-        {
-            world.setBlockMetadataWithNotify(x, y, z, 1, 0x02);
-        }
-    }
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int metadata) {
+		switch (side) {
+		case 0:
+			return topIcon;
+		case 1:
+			return bottomIcon;
+		default:
+			return blockIcon;
+		}
+	}
 
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor)
-    {
-        StalactiteData info = StalactiteData.getData(world, x, y, z);
-        int md = world.getBlockMetadata(x, y, z);
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random random) {
+		int md = world.getBlockMetadata(x, y, z);
+		if (md == 1 && random.nextInt(10) == 0) {
+			StalactiteHelper core = StalactiteHelper.getValsFor(x, y, z);
+			double midHeight = 0.2 + random.nextDouble() * 0.4;
+			Point2D mid = core.getMidway(midHeight);
 
-        if (info.noTop && info.noBottom)
-        {
-            //todo
-        }
-        else if (md == 0 && info.noBottom && info.distDown == 0)
-        {
-            world.setBlockMetadataWithNotify(x, y, z, 1, 0x02);
-        }
-        else if (md == 1 && (!info.noBottom || info.distDown > 0))
-        {
-            world.setBlockMetadataWithNotify(x, y, z, 0, 0x02);
-        }
-    }
+			float dripRange = 0.1F;
+			double sx = x + mid.x + StalactiteHelper.randRange(random, -dripRange, dripRange);
+			double sy = y + midHeight;
+			double sz = z + mid.y + StalactiteHelper.randRange(random, -dripRange, dripRange);
 
-    public static boolean renderBlock(Block block, int x, int y, int z, IBlockAccess blockAccess)
-    {
-        StalactiteData info = StalactiteData.getData(blockAccess, x, y, z);
-        return renderBlock(block, info.posX, info.posY, info.posZ, info.noBottom, info.distDown, info.noTop, info.distUp, block.getMixedBrightnessForBlock(blockAccess, x, y, z));
-    }
+			BLParticle.STALACTITE_WATER_DRIP.spawn(world, sx, sy, sz);
+		}
+	}
 
-    public static boolean renderBlock(Block block, int _x, int _y, int _z, boolean noBottom, int distDown, boolean noTop, int distUp, int brightness)
-    {
-        int totalHeight = 1 + distDown + distUp;
-        float distToMidBottom, distToMidTop;
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		if (world.getBlock(x, y - 1, z) == Blocks.air) {
+			world.setBlockMetadataWithNotify(x, y, z, 1, 0x02);
+		}
+	}
 
-        double squareAmount = 1.2D;
-        double halfTotalHeightSQ;
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
+		checkAndDropBlock(world, x, y, z);
+		StalactiteData info = StalactiteData.getData(world, x, y, z);
+		int md = world.getBlockMetadata(x, y, z);
 
-        if(noTop)
-        {
-            halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-            distToMidBottom = Math.abs(distUp + 1);
-            distToMidTop = Math.abs(distUp);
-        }
-        else if(noBottom)
-        {
-            halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-            distToMidBottom = Math.abs(distDown);
-            distToMidTop = Math.abs(distDown + 1);
-        }
-        else
-        {
-            float halfTotalHeight = totalHeight * 0.5F;
-            halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
-            distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
-            distToMidTop = Math.abs(halfTotalHeight - distUp);
-        }
+		if (info.noTop && info.noBottom) {
+			//todo
+		} else if (md == 0 && info.noBottom && info.distDown == 0) {
+			world.setBlockMetadataWithNotify(x, y, z, 1, 2);
+		} else if (md == 1 && (!info.noBottom || info.distDown > 0)) {
+			world.setBlockMetadataWithNotify(x, y, z, 0, 2);
+		}
+	}
 
-        int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
-        int minValTop = (noTop && distUp == 0) ? 0 : 1;
-        int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
-        int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
+	public static boolean renderBlock(Block block, int x, int y, int z, IBlockAccess world) {
+		StalactiteData info = StalactiteData.getData(world, x, y, z);
+		return renderBlock(block, info.posX, info.posY, info.posZ, info.noBottom, info.distDown, info.noTop, info.distUp, block.getMixedBrightnessForBlock(world, x, y, z));
+	}
 
-        int iconId = (distUp == 0 && !noTop)? 0 : ((distDown == 0 && !noBottom) ? 1 : 2);
-        IIcon icon = block.getIcon(iconId, 0);
-        float u0 = icon.getMinU();
-        float u1 = icon.getMaxU();
-        float v0 = icon.getMinV();
-        float v1 = icon.getMaxV();
+	public static boolean renderBlock(Block block, int x, int y, int z, boolean noBottom, int distDown, boolean noTop, int distUp, int brightness) {
+		int totalHeight = 1 + distDown + distUp;
+		float distToMidBottom, distToMidTop;
 
-        double halfSize, halfSizeTexW;
-        double halfSize1, halfSizeTex1;
-        halfSize = (double) scaledValBottom / 16;
-        halfSizeTexW = halfSize * (u1 - u0);
-        halfSize1 = (double) (scaledValTop) / 16;
-        halfSizeTex1 = halfSize1 * (u1 - u0);
+		double squareAmount = 1.2D;
+		double halfTotalHeightSQ;
 
-        StalactiteHelper core = StalactiteHelper.getValsFor(_x, _y, _z);
+		if (noTop) {
+			halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+			distToMidBottom = Math.abs(distUp + 1);
+			distToMidTop = Math.abs(distUp);
+		} else if (noBottom) {
+			halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+			distToMidBottom = Math.abs(distDown);
+			distToMidTop = Math.abs(distDown + 1);
+		} else {
+			float halfTotalHeight = totalHeight * 0.5F;
+			halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
+			distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
+			distToMidTop = Math.abs(halfTotalHeight - distUp);
+		}
 
-        Tessellator t = Tessellator.instance;
-        t.setBrightness(brightness);
-        float f = 0.9F;
-        t.setColorOpaque_F(f, f, f);
+		int minValBottom = noBottom && distDown == 0 ? 0 : 1;
+		int minValTop = noTop && distUp == 0 ? 0 : 1;
+		int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
+		int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
-        // front
-        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
-        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ + halfSize, u0, v1);
-        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ + halfSize1, u0, v0);
-        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
-        // back
-        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
-        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ - halfSize, u0, v1);
-        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
-        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
-        // left
-        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ - halfSize, u0, v1);
-        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
-        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
-        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
-        // right
-        t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
-        t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ + halfSize, u0, v1);
-        t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ + halfSize1, u0, v0);
-        t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
+		int iconId = distUp == 0 && !noTop ? 0 : distDown == 0 && !noBottom ? 1 : 2;
+		IIcon icon = block.getIcon(iconId, 0);
+		float u0 = icon.getMinU();
+		float u1 = icon.getMaxU();
+		float v0 = icon.getMinV();
+		float v1 = icon.getMaxV();
 
-        icon = block.getIcon(2, 0);
-        u0 = icon.getMinU();
-        v0 = icon.getMinV();
+		double halfSize, halfSizeTexW;
+		double halfSize1, halfSizeTex1;
+		halfSize = (double) scaledValBottom / 16;
+		halfSizeTexW = halfSize * (u1 - u0);
+		halfSize1 = (double) scaledValTop / 16;
+		halfSizeTex1 = halfSize1 * (u1 - u0);
 
-        // top
-        if(distUp == 0)
-        {
-            t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0);
-            t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
-            t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0 + halfSizeTex1 * 2);
-            t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ - halfSize1, u0, v0 + halfSizeTex1 * 2);
-        }
+		StalactiteHelper core = StalactiteHelper.getValsFor(x, y, z);
 
-        // bottom
-        if(distDown == 0)
-        {
-            t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0);
-            t.addVertexWithUV(_x + core.bX - halfSize, _y, _z + core.bZ - halfSize, u0, v0);
-            t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ - halfSize, u0, v0 + halfSizeTexW * 2);
-            t.addVertexWithUV(_x + core.bX + halfSize, _y, _z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0 + halfSizeTexW * 2);
-        }
+		Tessellator t = Tessellator.instance;
+		t.setBrightness(brightness);
+		float f = 0.9F;
+		t.setColorOpaque_F(f, f, f);
 
-        return true;
-    }
+		// front
+		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
+		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0, v1);
+		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0, v0);
+		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
+		// back
+		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
+		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0, v1);
+		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
+		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
+		// left
+		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
+		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0, v1);
+		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
+		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
+		// right
+		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
+		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0, v1);
+		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0, v0);
+		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
+
+		icon = block.getIcon(2, 0);
+		u0 = icon.getMinU();
+		v0 = icon.getMinV();
+
+		// top
+		if (distUp == 0) {
+			t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
+			t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
+			t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0 + halfSizeTex1 * 2);
+			t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0 + halfSizeTex1 * 2);
+		}
+
+		// bottom
+		if (distDown == 0) {
+			t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0);
+			t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0, v0);
+			t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0, v0 + halfSizeTexW * 2);
+			t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0 + halfSizeTexW * 2);
+		}
+
+		return true;
+	}
 }

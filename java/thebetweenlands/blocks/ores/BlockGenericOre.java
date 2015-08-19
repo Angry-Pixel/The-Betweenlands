@@ -12,6 +12,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -81,6 +82,9 @@ public class BlockGenericOre extends Block {
 		if (type.equals("sulfurOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
 		
+		else if (type.equals("bluriteOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
 		else if (type.equals("valoniteOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
 		
@@ -120,9 +124,9 @@ public class BlockGenericOre extends Block {
 
 				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
 					if(type.equals("octineOre"))
-						TheBetweenlands.proxy.spawnCustomParticle("flame", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+						BLParticle.FLAME.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
 					else if(type.equals("sulfurOre"))
-						TheBetweenlands.proxy.spawnCustomParticle("sulfurOre", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+						BLParticle.SULFUR_ORE.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
 				}
 			}
 		}

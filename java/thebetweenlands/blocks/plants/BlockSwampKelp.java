@@ -16,6 +16,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
@@ -113,7 +114,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(world.rand.nextInt(35) == 0) {
-			TheBetweenlands.proxy.spawnCustomParticle("waterBug", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+			BLParticle.WATER_BUG.spawn(world, x, y, z);
 		}
 	}
 }

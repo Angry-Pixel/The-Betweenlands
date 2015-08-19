@@ -21,6 +21,7 @@ tile.thebetweenlands.sulfurTorch.name=Sulfur Torch
 tile.thebetweenlands.aquaMiddleGemOre.name=Aqua Middle Gem Ore
 tile.thebetweenlands.crimsonMiddleGemOre.name=Crimson Middle Gem Ore
 tile.thebetweenlands.greenMiddleGemOre.name=Green Middle Gem Ore
+tile.thebetweenlands.bluriteOre.name=Blurite Ore
 tile.thebetweenlands.octineOre.name=Octine Ore
 tile.thebetweenlands.sulfurOre.name=Sulfur Ore
 tile.thebetweenlands.valoniteOre.name=Valonite Ore
@@ -52,14 +53,14 @@ tile.thebetweenlands.rubberTreePlanksFenceGate.name=Rubber Tree Plank Fence Gate
 tile.thebetweenlands.purpleRainPlanksFenceGate.name=Purple Rain Plank Fence Gate
 tile.thebetweenlands.weedwoodJukebox.name=Weedwood Jukebox
 tile.thebetweenlands.weedwoodLadder.name=Weedwood Ladder
-tile.thebetweenlands.dooroctine.name=Octine Door
+tile.thebetweenlands.dooroctine.name=Blurite Door
 tile.thebetweenlands.weedwoodTrapDoor.name=Weedwood Trapdoor
-tile.thebetweenlands.octineTrapDoor.name=Octine Trapdoor
+tile.thebetweenlands.octineTrapDoor.name=Blurite Trapdoor
 tile.thebetweenlands.weedwoodPlanksButton.name=Weedwood Button
 tile.thebetweenlands.smoothBetweenstoneButton.name=Betweenstone Button
 tile.thebetweenlands.weedwoodPlanksPressurePlate.name=Weedwood Pressure Plate
 tile.thebetweenlands.betweenstonePressurePlate.name=Betweenstone Pressure Plate
-tile.thebetweenlands.octineBlockPressurePlate.name=Octine Pressure Plate
+tile.thebetweenlands.bluriteBlockPressurePlate.name=Blurite Pressure Plate
 tile.thebetweenlands.weedwoodLever.name=Weedwood Lever
 tile.thebetweenlands.mudFlowerPot.name=Mud Brick Flower Pot
 tile.thebetweenlands.weedwoodPlanksPressurePlate.name=Weedwood Pressure Plate
@@ -67,8 +68,6 @@ tile.thebetweenlands.compostBin.name=Compost Bin
 tile.thebetweenlands.pestleAndMortar.name=Mortar
 tile.thebetweenlands.alembic.name=Alembic
 tile.thebetweenlands.infuser.name=Infuser
-
-
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -130,11 +129,14 @@ tile.thebetweenlands.carvedTempleBrick.name=Chiseled Temple Brick
 tile.thebetweenlands.cragrockBrick.name=Cragrock Bricks
 tile.thebetweenlands.cragTiles.name=Cragrock Tiles
 tile.thebetweenlands.dungeonTile.name=Dungeon Tile
+tile.thebetweenlands.bronzeCircleBrick.name=Bronze Circle Brick
+tile.thebetweenlands.silverCircleBrick.name=Silver Circle Brick
 tile.thebetweenlands.goldCircleBrick.name=Gold Circle Brick
 tile.thebetweenlands.smoothBetweenstone.name=Smooth Betweenstone
 tile.thebetweenlands.smoothTempleBrick.name=Smooth Temple Brick
 tile.thebetweenlands.solidTar.name=Solid Tar
 tile.thebetweenlands.sulphurBlock.name=Sulfur Block
+tile.thebetweenlands.bluriteBlock.name=Blurite Block
 tile.thebetweenlands.octineBlock.name=Octine Block
 tile.thebetweenlands.valoniteBlock.name=Valonite Block
 tile.thebetweenlands.templeBrick.name=Temple Bricks
@@ -161,13 +163,10 @@ tile.thebetweenlands.dentrothyst_1.name=Orange Dentothryst
 tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
 tile.thebetweenlands.walkway.name=Weedwood Walkway
 
-<<<<<<< HEAD
 tile.thebetweenlands.lootPot1.name=Pot of Chance
 tile.thebetweenlands.lootPot2.name=Pot of Chance
 tile.thebetweenlands.lootPot3.name=Pot of Chance
 
-=======
->>>>>>> parent of 38dcff4... bunch of shite
 tile.thebetweenlands.choca.name=Chock-A-Block
 
 # Stairs, Slabs, Walls, Fences
@@ -375,6 +374,7 @@ item.thebetweenlands.mireCoral.name=Mire Coral
 item.thebetweenlands.deepWaterCoral.name=Deep Water Coral
 item.thebetweenlands.moss.name=Moss
 item.thebetweenlands.mudBrick.name=Mud Brick
+item.thebetweenlands.bluriteIngot.name=Blurite Ingot
 item.thebetweenlands.octineIngot.name=Octine Ingot
 item.thebetweenlands.rottenBark.name=Rotten Bark
 item.thebetweenlands.slimyBone.name=Slimy Bone
@@ -489,7 +489,7 @@ compost.cannot=This item cannot be turned into compost.
 compost.not.enough=There is not enough compost yet.
 
 #manual
-manual.text.test=This <color:0x800000> might </color> be a <tooltip:hehe> long </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
+manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
 
 manual.widget.process.time=Process time: .minutes. minutes and .seconds. seconds
 manual.widget.process.time.seconds=Process time: .seconds. seconds

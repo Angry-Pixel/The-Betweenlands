@@ -18,6 +18,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.utils.MathUtils;
@@ -163,7 +164,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				double motionX = dx * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
 				double motionY = ring * 0.3F + rand.nextDouble() * 0.1;
 				double motionZ = dz * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
-				TheBetweenlands.proxy.spawnCustomParticle("splash", worldObj, x, y, z, motionX, motionY, motionZ, 1, waterColorMultiplier);
+				BLParticle.SPLASH.spawn(worldObj, x, y, z, motionX, motionY, motionZ, 1, waterColorMultiplier);
 			}
 		}
 	}
@@ -176,7 +177,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		Block block = worldObj.getBlock(blockX, blockY, blockZ);
 		if (block.getMaterial().isLiquid()) {
 			int r = 255, g = 255, b = 255;
-			// TODO: autmatically build a map of all liquid blocks to the average color of there texture to get color from
+			// TODO: automatically build a map of all liquid blocks to the average color of there texture to get color from
 			if (block == BLBlockRegistry.swampWater) {
 				r = 147;
 				g = 132;

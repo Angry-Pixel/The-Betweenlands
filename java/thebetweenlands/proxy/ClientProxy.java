@@ -309,7 +309,7 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	@Override
+	/*@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {
 		EntityFX fx = null;
 
@@ -430,7 +430,7 @@ public class ClientProxy extends CommonProxy {
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-	}
+	}*/
 
 	@Override
 	public World getClientWorld() {

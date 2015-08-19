@@ -18,10 +18,8 @@ public class WorldGenSmallHollowLog extends WorldGenerator {
         for (int a = 0; a < len; a++)
             if (!world.isAirBlock(x + offsetX * a, y, z + offsetZ * a) || world.isAirBlock(x + offsetX * a, y - 1, z + offsetZ * a))
                 return false;
-
         for (int a = 0; a < len; a++)
-            world.setBlock(x + offsetX * a, y, z + offsetZ * a, BLBlockRegistry.hollowLog, offsetX == 0 ? 0 : 1, 2);
-
+            world.setBlock(x + offsetX * a, y, z + offsetZ * a, BLBlockRegistry.hollowLog, offsetX == 0 ? rand.nextInt(4) : rand.nextInt(4) + 4, 2);
         return true;
     }
 }

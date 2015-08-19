@@ -16,6 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -140,7 +141,7 @@ public class BlockBLLeaves extends BlockLeaves {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(world.rand.nextInt(200) == 0) {
 			if(world.isAirBlock(x, y-1, z)) {
-				TheBetweenlands.proxy.spawnCustomParticle("leaf", world, x + rand.nextFloat(), y, z + rand.nextFloat(), 0.0D, 0.0D, 0.0D, 0);
+				BLParticle.LEAF.spawn(world, x + rand.nextFloat(), y, z + rand.nextFloat());
 			}
 		}
 	}

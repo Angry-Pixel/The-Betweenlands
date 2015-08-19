@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -33,18 +34,15 @@ public class BlockDampTorch extends BlockTorch {
         double offSetXZ = rand.nextDouble() * 0.5D - rand.nextDouble() * 0.5D;
 
         if (meta == 1)
-    		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX - offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
-
+    		BLParticle.SMOKE.spawn(world, posX - offSetXZ, posY + offSetY, posZ);
         else if (meta == 2)
-    		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX + offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
-
+        	BLParticle.SMOKE.spawn(world, posX + offSetXZ, posY + offSetY, posZ);
         else if (meta == 3)
-    		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX, posY + offSetY, posZ - offSetXZ, 0.0D, 0.0D, 0.0D, 0);
-
+        	BLParticle.SMOKE.spawn(world, posX, posY + offSetY, posZ - offSetXZ);
         else if (meta == 4)
-    		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX, posY + offSetY, posZ + offSetXZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SMOKE.spawn(world, posX, posY + offSetY, posZ + offSetXZ);
         else
-    		TheBetweenlands.proxy.spawnCustomParticle("smoke", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SMOKE.spawn(world, posX, posY, posZ);
     }
 
 }

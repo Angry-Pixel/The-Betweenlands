@@ -6,6 +6,9 @@ public class OreGens {
 	public static final WorldGenMinableBetweenlands SULFUR = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.sulfurOre, 0, 16, BLBlockRegistry.betweenstone);
 	
+	public static final WorldGenMinableBetweenlands BLURITE = 
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.bluriteOre, 0, 8, BLBlockRegistry.betweenstone);
+	
 	public static final WorldGenMinableBetweenlands OCTINE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.octineOre, 0, 8, BLBlockRegistry.betweenstone);
 	

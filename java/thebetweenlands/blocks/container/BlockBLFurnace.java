@@ -20,6 +20,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
@@ -173,19 +174,19 @@ public class BlockBLFurnace extends BlockContainer {
             float f4 = rand.nextFloat() * 0.6F - 0.3F;
 
             if (meta == 1) {
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, 0);
+            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f - f3), (double)f1, (double)(f2 + f4));
                 world.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
             }
             else if (meta == 3) {
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, 0);
+            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f3), (double)f1, (double)(f2 + f4));
                 world.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
             }
             else if (meta == 2) {
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D, 0);
+            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f4), (double)f1, (double)(f2 - f3));
                 world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
             }
             else if (meta == 0) {
-            	TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D, 0);
+            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f4), (double)f1, (double)(f2 + f3));
                 world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
             }
         }

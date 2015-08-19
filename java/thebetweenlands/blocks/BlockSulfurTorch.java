@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -31,27 +32,27 @@ public class BlockSulfurTorch extends BlockTorch {
         double offSetXZ = rand.nextDouble() * 0.5D - rand.nextDouble() * 0.5D;
 
         if (meta == 1)
-    		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX - offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
+    		BLParticle.SULFUR_TORCH.spawn(world, posX - offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
 
         else if (meta == 2)
-    		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX + offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SULFUR_TORCH.spawn(world, posX + offSetXZ, posY + offSetY, posZ, 0.0D, 0.0D, 0.0D, 0);
 
         else if (meta == 3)
-    		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY + offSetY, posZ - offSetXZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SULFUR_TORCH.spawn(world, posX, posY + offSetY, posZ - offSetXZ, 0.0D, 0.0D, 0.0D, 0);
 
         else if (meta == 4)
-    		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY + offSetY, posZ + offSetXZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SULFUR_TORCH.spawn(world, posX, posY + offSetY, posZ + offSetXZ, 0.0D, 0.0D, 0.0D, 0);
         else
-    		TheBetweenlands.proxy.spawnCustomParticle("sulfurTorch", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        	BLParticle.SULFUR_TORCH.spawn(world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
    
         if(world.rand.nextInt(20) == 0 && world.canBlockSeeTheSky(x, y, z)) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
-        		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOSQUITO.spawn(world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
         	} else if(particle == 1) {
-        		TheBetweenlands.proxy.spawnCustomParticle("fly", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.FLY.spawn(world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
         	} else {
-        		TheBetweenlands.proxy.spawnCustomParticle("moth", world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOTH.spawn(world, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
         	}
         }
     }
