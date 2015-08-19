@@ -32,14 +32,31 @@ public class BlockPuddle extends Block {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rnd) {
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(!world.isRemote && !eeRegistry.HEAVY_RAIN.isActive()) {
+		if(!world.isRemote) {
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+				if(!eeRegistry.HEAVY_RAIN.isActive()) {
+					world.setBlock(x, y, z, Blocks.air);
+				} else if(world.canBlockSeeTheSky(x, y, z)) {
+					world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) + rnd.nextInt(6), 2);
+				}
+			} else {
 				world.setBlock(x, y, z, Blocks.air);
 			}
-		} else {
-			world.setBlock(x, y, z, Blocks.air);
+			if(world.getBlockMetadata(x, y, z) > 2) {
+				world.setBlockMetadataWithNotify(x, y, z, world.getBlockMetadata(x, y, z) - 3, 2);
+				for(int xo = -1; xo <= 1; xo++) {
+					for(int zo = -1; zo <= 1; zo++) {
+						if((xo == 0 && zo == 0) || xo*xo == zo*zo) continue;
+						if(world.isAirBlock(x+xo, y, z+zo) && BLBlockRegistry.puddle.canPlaceBlockAt(world, x+xo, y, z+zo)) {
+							world.setBlock(x+xo, y, z+zo, BLBlockRegistry.puddle);
+						} else if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.puddle) {
+							world.setBlockMetadataWithNotify(x+xo, y, z+zo, world.getBlockMetadata(x+xo, y, z+zo) + rnd.nextInt(6), 2);
+						}
+					}
+				}
+			}
 		}
 	}
 
