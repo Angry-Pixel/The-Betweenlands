@@ -19,10 +19,10 @@ public class WorldGenSpeleothem extends WorldGenerator {
 			while (world.getBlock(x, y - height, z) == Blocks.air) {
 				height++;
 			}
-			boolean hasStalagmite = world.getBlock(x, y - height, z) == stone;
 			if (height < 3) {
 				return false;
 			}
+			boolean hasStalagmite = world.getBlock(x, y - height, z) == stone;
 			int length = random.nextInt(height < 11 ? height / 2 : 5) + 1;
 			boolean isColumn = length == height / 2;
 			for (int dy = 0; dy < length; dy++) {

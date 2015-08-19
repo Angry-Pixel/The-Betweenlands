@@ -62,7 +62,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 					int surfaceDist = level - y;
 					int lead = 20;
 					if (surfaceDist <= lead) {
-						double s = shouldntBreak ? (1 - surfaceDist / lead) * 1.25 : ((seaLevelBreak.eval(x * 0.05, z * 0.05) * 0.5) + 0.5) * 0.5;
+						double s = (shouldntBreak ? 1 : (seaLevelBreak.eval(x * 0.05, z * 0.05) * 0.5 + 0.5)) * 0.5 * (1 - surfaceDist / (float) lead);
 						noise += s;
 					}
 					if (noise < limit) {
