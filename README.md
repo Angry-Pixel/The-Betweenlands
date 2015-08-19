@@ -16,7 +16,6 @@ Specifically the following
 - Portal finishing touches (issue #134)
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
-- Rotten Logs (issue #149)
 - Tar liquid and pools (issue #109)
 - Finishing missing textures (e.g. Explorer's Hat, HL things)
 
@@ -26,11 +25,9 @@ ___________________________________________
 September:
 
 Continue working on caves and temples
-- Cave entrances
 - Overgrown parts in caves
 - Limestone caves
 - Cave mobs (mini bosses not included)
-- Underground lakes
 - Stagnant water
 
 - Temple generation
