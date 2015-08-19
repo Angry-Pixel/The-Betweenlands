@@ -1,7 +1,7 @@
 package thebetweenlands.entities.mobs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -10,13 +10,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.items.*;
+import thebetweenlands.items.AxeBL;
+import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-
-import java.util.Random;
+import thebetweenlands.items.PickaxeBL;
+import thebetweenlands.items.SpadeBL;
+import thebetweenlands.items.SwordBL;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
@@ -72,7 +75,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 0F);
+		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_DRIP), 0F);
+	}
+
+	@Override
+	protected void dropRareDrop(int looting) {
+		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_BEAST_HEART), 0F);
 	}
 
 	@Override
