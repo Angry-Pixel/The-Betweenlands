@@ -55,7 +55,7 @@ public class ItemCompostBinRenderer implements IItemRenderer {
 			GL11.glRotatef(180F, 1F, 0F, 0F);
 			GL11.glRotatef(0F, 0F, 1F, 0F);
 			GL11.glScaled(size, size, size);
-			model.render();
+			model.render(0);
 			GL11.glPopMatrix();
 		} else {
 			GL11.glPushMatrix();
@@ -63,7 +63,7 @@ public class ItemCompostBinRenderer implements IItemRenderer {
 			GL11.glRotatef(180F, 1F, 0F, 0F);
 			GL11.glRotatef(-90F, 0F, 1F, 0F);
 			GL11.glScaled(size, size, size);
-			model.render();
+			model.render(0);
 			GL11.glPopMatrix();
 		}
 	}
@@ -74,7 +74,7 @@ public class ItemCompostBinRenderer implements IItemRenderer {
 		GL11.glRotatef(180F, 1F, 0F, 0F);
 		GL11.glRotatef(90F, 0F, 1F, 0F);
 		GL11.glScaled(size, size, size);
-		model.render();
+		model.render(0);
 		GL11.glPopMatrix();
 	}
 }

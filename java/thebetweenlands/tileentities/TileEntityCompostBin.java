@@ -3,6 +3,9 @@ package thebetweenlands.tileentities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityCompostBin extends TileEntity {
@@ -14,13 +17,24 @@ public class TileEntityCompostBin extends TileEntity {
     private int compostTime[] = new int[maxItems];
     public int totalCompostAmount, compostedAmount, maxCompostAmount = 100;
 
+    public boolean open = false;
+    public float litAngle = 0.0f;
+
 
     @Override
     public void updateEntity() {
         if (worldObj.isRemote) return;
+        if (open && litAngle + 10f <= 90f) {
+            litAngle += 10f;
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        } else if (litAngle - 10f >= 0f) {
+            litAngle -= 10;
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        }
         for (int i = 0; i < inventory.length; i++) {
-            if(inventory[i] != null) {
+            if (inventory[i] != null) {
                 if (processes[i] >= compostTime[i]) {
+                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
                     compostedAmount += compostAmount[i];
                     inventory[i] = null;
                     processes[i] = 0;
@@ -32,8 +46,8 @@ public class TileEntityCompostBin extends TileEntity {
         }
     }
 
-    public boolean removeCompost(int amount){
-        if(compostedAmount >= amount){
+    public boolean removeCompost(int amount) {
+        if (compostedAmount >= amount) {
             compostedAmount -= amount;
             totalCompostAmount -= amount;
             return true;
@@ -110,6 +124,8 @@ public class TileEntityCompostBin extends TileEntity {
 
         totalCompostAmount = nbt.getInteger("totalCompostAmount");
         compostedAmount = nbt.getInteger("compostedAmount");
+        open = nbt.getBoolean("open");
+        litAngle = nbt.getFloat("litAngle");
 
     }
 
@@ -157,5 +173,20 @@ public class TileEntityCompostBin extends TileEntity {
         nbt.setTag("Processes", processTags);
         nbt.setTag("Compost", compostTags);
         nbt.setTag("CompostTime", compostTimeTags);
+        nbt.setBoolean("open", open);
+        nbt.setFloat("litAngle", litAngle);
+    }
+
+    @Override
+    public Packet getDescriptionPacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
+        NBTTagCompound nbt = packet.func_148857_g();
+        readFromNBT(nbt);
     }
 }

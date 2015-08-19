@@ -39,7 +39,7 @@ public class TileEntityCompostBinRenderer extends TileEntitySpecialRenderer {
 				GL11.glRotatef(-90F, 0.0F, 1F, 0F);
 				break;
 		}
-		model.render();
+		model.render(bin.litAngle);
 		GL11.glPopMatrix();
 	}
 }

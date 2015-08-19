@@ -4,12 +4,13 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ModelCompostBin extends ModelBase {
     ModelRenderer binpiece_r;
     ModelRenderer binpiece_l;
-    ModelRenderer bintop;
+    public ModelRenderer bintop;
     ModelRenderer binpiece_b;
     ModelRenderer support1;
     ModelRenderer support2;
@@ -82,14 +83,20 @@ public class ModelCompostBin extends ModelBase {
         net2.addChild(net3);
     }
 
-    public void render() { 
+    public void render(float litAngle) {
         binpiece_l.render(0.0625F);
-        bintop.render(0.0625F);
         support1.render(0.0625F);
         binpiece_b.render(0.0625F);
         support2.render(0.0625F);
         binpiece_r.render(0.0625F);
         net1.render(0.0625F);
+        if(litAngle > 80) {
+            bintop.offsetX = 0.06f;
+        } else {
+            bintop.offsetX = 0f;
+        }
+        bintop.rotateAngleZ = (float)Math.toRadians(litAngle);
+        bintop.render(0.0625F);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
