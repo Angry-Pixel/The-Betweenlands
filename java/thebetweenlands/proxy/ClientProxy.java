@@ -83,6 +83,7 @@ import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemTarminionRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
@@ -104,6 +105,7 @@ import thebetweenlands.entities.EntityAngryPebble;
 import thebetweenlands.entities.EntityBLArrow;
 import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntitySnailPoisonJet;
+import thebetweenlands.entities.EntityThrownTarminion;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -137,6 +139,7 @@ import thebetweenlands.event.render.GLUProjectionHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.network.handlers.ClientPacketHandler;
@@ -220,6 +223,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBerserkerGuardian.class, new RenderBerserkerGuardian());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLItemFrame.class, new RenderBLItemFrame());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, new RenderTarminion());
+		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, new ItemTarminionRenderer());
 
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -250,6 +254,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot1), new ItemLootPot1Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot2), new ItemLootPot2Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot3), new ItemLootPot3Renderer());
+		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.tarminion, new ItemTarminionRenderer());
 
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());

@@ -69,6 +69,17 @@ public class ModelTarminion extends ModelBase {
 		armleft.render(unitPixel);
 		armright.render(unitPixel);
 	}
+	
+	public void render() {
+		torso.render(0.0625F);
+		legleft1.render(0.0625F);
+		legright1.render(0.0625F);
+		legleft2.render(0.0625F);
+		legright2.render(0.0625F);
+		roots.render(0.0625F);
+		armleft.render(0.0625F);
+		armright.render(0.0625F);
+	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
