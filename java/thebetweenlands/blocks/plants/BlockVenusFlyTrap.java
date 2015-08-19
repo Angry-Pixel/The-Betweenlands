@@ -8,6 +8,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
@@ -60,7 +61,7 @@ public class BlockVenusFlyTrap extends BlockBLSmallPlants {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(world.rand.nextInt(35) == 0) {
-			TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+			BLParticle.FLY.spawn(world, x, y, z);
 		}
 	}
 }

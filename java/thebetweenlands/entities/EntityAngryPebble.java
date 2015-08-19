@@ -6,6 +6,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 
 public class EntityAngryPebble extends EntityThrowable {
 
@@ -32,7 +33,7 @@ public class EntityAngryPebble extends EntityThrowable {
 				double particleY = MathHelper.floor_double(posY) + rand.nextFloat();
 				double particleZ = MathHelper.floor_double(posZ) + rand.nextFloat();
 				for (int count = 0; count < 10; count++)
-					TheBetweenlands.proxy.spawnCustomParticle("flame", worldObj, particleX, particleY, particleZ, 0, 0, 0, 0);
+					BLParticle.FLAME.spawn(worldObj, particleX, particleY, particleZ);
 			}
 			
 			if (!worldObj.isRemote) {

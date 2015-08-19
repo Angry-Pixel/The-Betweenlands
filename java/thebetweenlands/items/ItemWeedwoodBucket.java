@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
@@ -80,17 +81,17 @@ public class ItemWeedwoodBucket extends Item {
 						return stack;
 					}
 
-					if (block == BLBlockRegistry.tarFluid && meta == 0) {
+					if (!world.isRemote && block == BLBlockRegistry.tarFluid && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketTar);
 					}
 
-					if (block == BLBlockRegistry.swampWater && meta == 0) {
+					if (!world.isRemote && !world.isRemote && block == BLBlockRegistry.swampWater && meta == 0) {
 						world.setBlockToAir(x, y, z);
 						return addBucketToPlayer(stack, player, BLItemRegistry.weedwoodBucketWater);
 					}
 
-					if (block == BLBlockRegistry.infuser && player.isSneaking()) {
+					if (!world.isRemote && block == BLBlockRegistry.infuser && player.isSneaking()) {
 						TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 						if(tile != null && !tile.hasInfusion && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
 							tile.extractFluids(new FluidStack(BLFluidRegistry.swampWater, FluidContainerRegistry.BUCKET_VOLUME));
@@ -129,7 +130,7 @@ public class ItemWeedwoodBucket extends Item {
 					if (!player.canPlayerEdit(x, y, z, pos.sideHit, stack))
 						return stack;
 
-					if (tryPlaceContainedLiquid(world, x, y, z) && !player.capabilities.isCreativeMode) {
+					if (!world.isRemote && tryPlaceContainedLiquid(world, x, y, z) && !player.capabilities.isCreativeMode) {
 						stack.stackSize--;
 						if (stack.stackSize <= 0)
 							return new ItemStack(BLItemRegistry.weedwoodBucket);

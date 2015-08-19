@@ -16,6 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.entityAI.EntityAIDruidTeleport;
 import thebetweenlands.entities.entityAI.EntityAIHurtByTargetDruid;
 import thebetweenlands.entities.entityAI.EntityAINearestAttackableTargetDruid;
@@ -213,7 +214,7 @@ public class EntityDarkDruid extends EntityMob {
 		double motionX = -Math.sin(yaw) * y * 0.2 * (rand.nextDouble() * 0.7 + 0.3) + rand.nextDouble() * 0.05 - 0.025;
 		double motionY = Math.sin(-rotationPitch * MathUtils.DEG_TO_RAD) + rand.nextDouble() * 0.25 - 0.125;
 		double motionZ = Math.cos(yaw) * y * 0.2 * (rand.nextDouble() * 0.7 + 0.3) + rand.nextDouble() * 0.05 - 0.025;
-		TheBetweenlands.proxy.spawnCustomParticle("druidmagic", worldObj, posX + offsetX, posY + offsetY, posZ + offsetZ, motionX, motionY, motionZ, rand.nextFloat() + 0.5F);
+		BLParticle.DRUID_MAGIC.spawn(worldObj, posX + offsetX, posY + offsetY, posZ + offsetZ, motionX, motionY, motionZ, rand.nextFloat() + 0.5F);
 	}
 
 	public void chargeSpell(Entity entity) {

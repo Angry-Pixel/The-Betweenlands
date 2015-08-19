@@ -18,6 +18,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -225,7 +226,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 					if (l == 5 && !world.getBlock(x - 1, y, z).isOpaqueCube())
 						particleX = x - pixel;
 					if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
-						TheBetweenlands.proxy.spawnCustomParticle("dirtDecay", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+						BLParticle.DIRT_DECAY.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
 					}
 				}
 			}

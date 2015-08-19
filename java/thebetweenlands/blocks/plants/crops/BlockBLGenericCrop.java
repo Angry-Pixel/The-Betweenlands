@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -229,7 +230,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 						particleX = x - pixel;
 
 					if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
-						TheBetweenlands.proxy.spawnCustomParticle("dirtDecay", world, particleX, particleY, particleZ, 0, 0, 0, 0);
+						BLParticle.DIRT_DECAY.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
 					}
 				}
 			}

@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.items.ItemImprovedRubberBoots;
 import thebetweenlands.items.ItemRubberBoots;
@@ -464,12 +465,12 @@ public class BlockSwampWater extends BlockFluidClassic {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(rand.nextInt(2500) == 0) {
 			if(world.getBlock(x, y + 2, z) == BLBlockRegistry.swampWater) {
-				TheBetweenlands.proxy.spawnCustomParticle("fish", world, x, y, z, 0, 0, 0, 0);
+				BLParticle.FISH.spawn(world, x, y, z);
 			} else if(world.getBlock(x, y - 1, z) == BLBlockRegistry.mud) {
 				if(rand.nextInt(2) == 0) {
-					TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y + 1.5, z, 0, 0, 0, 0);
+					BLParticle.MOSQUITO.spawn(world, x, y + 1.5, z);
 				} else {
-					TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1.5, z, 0, 0, 0, 0);
+					BLParticle.FLY.spawn(world, x, y + 1.5, z);
 				}
 			}
 		}

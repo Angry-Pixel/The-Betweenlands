@@ -8,6 +8,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -73,11 +74,11 @@ public class BlockBlubCappedMushroomHead extends Block {
         if(world.rand.nextInt(150) == 0) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
-        		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOSQUITO.spawn(world, x, y, z);
         	} else if(particle == 1) {
-        		TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.FLY.spawn(world, x, y, z);
         	} else {
-        		TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOTH.spawn(world, x, y, z);
         	}
         }
     }

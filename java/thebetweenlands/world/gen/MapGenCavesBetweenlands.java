@@ -62,7 +62,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 					int surfaceDist = level - y;
 					int lead = 20;
 					if (surfaceDist <= lead) {
-						double s = (shouldntBreak ? 1 : (seaLevelBreak.eval(x * 0.05, z * 0.05) * 0.5 + 0.5)) * 0.5 * (1 - surfaceDist / (float) lead);
+						double s = (shouldntBreak ? 2.5F : (seaLevelBreak.eval(x * 0.05, z * 0.05) * 0.5 + 0.5)) * 0.5 * (1 - surfaceDist / (float) lead);
 						noise += s;
 					}
 					if (noise < limit) {
@@ -73,7 +73,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 						if (blocks[index] == null || blocks[index].getMaterial().isLiquid()) {
 							continue;
 						}
-						blocks[index] = y > WorldProviderBetweenlands.WATER_HEIGHT ? Blocks.air : Blocks.water;
+						blocks[index] = y > WorldProviderBetweenlands.WATER_HEIGHT ? Blocks.air : BLBlockRegistry.swampWater;
 					} else if (y == level && noise < limit + 0.5) {
 						double h = MathUtils.linearTransformd(noise, limit, limit + 0.5, 0, 1);
 						if (h < 0.5) {

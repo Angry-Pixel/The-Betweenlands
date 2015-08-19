@@ -18,6 +18,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityPurifier;
@@ -119,20 +120,20 @@ public class BlockPurifier extends BlockContainer {
             float fixedOffset = 0.25F;
             float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 
-            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx - fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+            	BLParticle.STEAM_PURIFIER.spawn(world, (double)(xx - fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx - fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+                BLParticle.STEAM_PURIFIER.spawn(world, (double)(xx + fixedOffset), (double)y + 0.5D, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + fixedOffset), (double)yy, (double)(zz + randomOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+                BLParticle.STEAM_PURIFIER.spawn(world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz - fixedOffset), 0.0D, 0.0D, 0.0D);
 
-            	TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+                BLParticle.STEAM_PURIFIER.spawn(world, (double)(xx + randomOffset), (double)y + 0.5D, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
                 world.spawnParticle("flame", (double)(xx + randomOffset), (double)yy, (double)(zz + fixedOffset), 0.0D, 0.0D, 0.0D);
                 
                 if (world.isAirBlock(x, y + 1, z))
-                	TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, y + 1, zz, 0.1D, 0.0D, 0.1D, 0);
+                	BLParticle.BUBBLE_PRUIFIER.spawn( world, xx, y + 1, zz, 0.1D, 0.0D, 0.1D, 0);
             }
 		}
     }

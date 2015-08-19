@@ -12,6 +12,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -78,6 +79,6 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	@SideOnly(Side.CLIENT)
 	public void trailParticles(World world, double x, double y, double z, Random rand) {
 		for (int count = 0; count < 5; ++count)
-			TheBetweenlands.proxy.spawnCustomParticle("snailPoison", worldObj, x, y, z, 0.0D, 0.0D, 0.0D, 0, 0);
+			BLParticle.SNAIL_POSION.spawn(worldObj, x, y, z, 0.0D, 0.0D, 0.0D, 0, 0);
 	}
 }

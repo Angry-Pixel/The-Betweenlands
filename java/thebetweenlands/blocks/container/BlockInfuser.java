@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsCrushed;
@@ -40,8 +41,7 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-
-		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
+		if (!world.isRemote && world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 
 			if (!player.isSneaking()) {
@@ -157,17 +157,17 @@ public class BlockInfuser extends BlockContainer {
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				if(rand.nextInt((101 - infuser.temp))/4 == 0) {
 					if(!infuser.hasInfusion)
-						TheBetweenlands.proxy.spawnCustomParticle("bubblePurifier", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+						BLParticle.BUBBLE_INFUSION.spawn(world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
 					else
-						TheBetweenlands.proxy.spawnCustomParticle("bubbleInfusion", world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
+						BLParticle.BUBBLE_INFUSION.spawn(world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
 					if (rand.nextInt(10) == 0 && infuser.temp > 70)
 						world.playSound(xx, yy, zz, "liquid.lava", 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}
 				if (infuser.temp >= 100) {
-					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
-					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
-					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
-					TheBetweenlands.proxy.spawnCustomParticle("steamPurifier", world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 				}
 			}
 		}

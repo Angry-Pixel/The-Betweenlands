@@ -12,6 +12,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -118,7 +119,7 @@ public class BlockDruidStone
 					particleX = x - pixel;
 
 				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1)
-					TheBetweenlands.proxy.spawnCustomParticle("druidmagicbig", world, particleX, particleY, particleZ, (rand.nextFloat() - rand.nextFloat()) *0.1, 0, (rand.nextFloat() - rand.nextFloat())*0.1, rand.nextFloat() + 0.5F);
+					BLParticle.DRUID_MAGIC_BIG.spawn(world, particleX, particleY, particleZ, (rand.nextFloat() - rand.nextFloat()) *0.1, 0, (rand.nextFloat() - rand.nextFloat())*0.1, rand.nextFloat() + 0.5F);
 			}
 		}
 	}

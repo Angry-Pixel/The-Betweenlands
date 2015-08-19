@@ -10,6 +10,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -68,11 +69,11 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants {
         if(world.rand.nextInt(22) == 0) {
         	int particle = rand.nextInt(3);
         	if(particle == 0) {
-        		TheBetweenlands.proxy.spawnCustomParticle("mosquito", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOSQUITO.spawn(world, x, y, z);
         	} else if(particle == 1) {
-        		TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.FLY.spawn(world, x, y, z);
         	} else {
-        		TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+        		BLParticle.MOTH.spawn(world, x, y, z);
         	}
         }
     }

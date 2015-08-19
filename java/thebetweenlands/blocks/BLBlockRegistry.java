@@ -90,6 +90,7 @@ import thebetweenlands.blocks.tree.BlockBLSapling;
 import thebetweenlands.blocks.tree.BlockHollowLog;
 import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
@@ -185,7 +186,7 @@ public class BLBlockRegistry {
         @SideOnly(Side.CLIENT)
         public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
             if (world.rand.nextInt(35) == 0) {
-                TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y + 1, z, 0.0D, 0.0D, 0.0D, 0);
+                BLParticle.FLY.spawn(world, x, y + 1, z);
             }
         }
     }.setRenderType(BlockRenderIDs.MODEL_PLANT.id());
@@ -196,9 +197,9 @@ public class BLBlockRegistry {
         public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
             if (world.rand.nextInt(15) == 0) {
                 if (world.rand.nextInt(6) != 0) {
-                    TheBetweenlands.proxy.spawnCustomParticle("fly", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+                	BLParticle.FLY.spawn(world, x, y, z);
                 } else {
-                    TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+                    BLParticle.MOTH.spawn(world, x, y, z);
                 }
             }
         }
@@ -269,7 +270,7 @@ public class BLBlockRegistry {
     public static final Block furnaceBLLit = new BlockBLFurnace(true).setBlockName("thebetweenlands.furnaceBLLit").setLightLevel(0.875F);
     public static final Block dualFurnaceBL = new BlockBLDualFurnace(false).setBlockName("thebetweenlands.dualFurnaceBL");
     public static final Block dualFurnaceBLLit = new BlockBLDualFurnace(true).setBlockName("thebetweenlands.dualFurnaceBLLit").setLightLevel(0.875F);
-    public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
+    public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0.75F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
     public static final Block animator = new BlockAnimator();
     public static final Block purifier = new BlockPurifier();
     public static final Block compostBin = new BlockCompostBin();

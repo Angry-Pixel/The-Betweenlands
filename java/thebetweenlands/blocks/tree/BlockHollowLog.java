@@ -16,6 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy;
 
@@ -123,7 +124,7 @@ public class BlockHollowLog extends Block {
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
         if (world.rand.nextInt(2000) == 0) {
-            TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y, z, 0.0D, 0.0D, 0.0D, 0);
+            BLParticle.MOTH.spawn(world, x, y, z);
         }
     }
 }

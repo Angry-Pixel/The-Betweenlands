@@ -12,6 +12,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 import java.util.Random;
@@ -127,7 +128,7 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(world.rand.nextInt(40) == 0) {
-			TheBetweenlands.proxy.spawnCustomParticle("moth", world, x, y + 1.5, z, 0.0D, 0.0D, 0.0D, 0);
+			BLParticle.MOTH.spawn(world, x, y + 1.5, z, 0.0D, 0.0D, 0.0D, 0);
 		}
 	}
 }
