@@ -92,8 +92,8 @@ public class FogHandler {
 			}
 			
 			//Underground fog
-			if(renderView.posY < (WorldProviderBetweenlands.LAYER_HEIGHT - 10)) {
-				float multiplier = ((float)((WorldProviderBetweenlands.LAYER_HEIGHT - 10) - renderView.posY) / (WorldProviderBetweenlands.LAYER_HEIGHT - 10));
+			if(renderView.posY < WorldProviderBetweenlands.CAVE_START) {
+				float multiplier = ((float)(WorldProviderBetweenlands.CAVE_START - renderView.posY) / WorldProviderBetweenlands.CAVE_START);
 				multiplier = 1.0F - multiplier;
 				multiplier *= Math.pow(multiplier, 6);
 				multiplier = multiplier * 0.9F + 0.1F;

@@ -34,6 +34,8 @@ extends WorldProvider
 
 	public static final int WATER_HEIGHT = 25;
 
+	public static final int CAVE_START = LAYER_HEIGHT - 10;
+
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
 
@@ -76,8 +78,8 @@ extends WorldProvider
 			}
 		}
 
-		final int transitionStart = WorldProviderBetweenlands.LAYER_HEIGHT - 10;
-		final int transitionEnd = WorldProviderBetweenlands.LAYER_HEIGHT - 25;
+		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
+		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
 		float m = 0;
 		if (FogHandler.INSTANCE.hasDenseFog()) {
 			float y = (float) player.posY;

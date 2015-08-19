@@ -224,14 +224,14 @@ public class DebugHandler {
 			mc.fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(mc.thePlayer), 2, 10, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(mc.thePlayer), 2, 18, 0xFFFFFFFF);
 			float fog = FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2;
-			mc.fontRenderer.drawString("Fog: " + DECIMAL_FORMAT.format(fog) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (mc.thePlayer.posY < WorldProviderBetweenlands.LAYER_HEIGHT - 10 ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Fog: " + DECIMAL_FORMAT.format(fog) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
 			float lightLevel = 0.0F;
 			World world = mc.theWorld;
 			if (world != null) {
 				WorldProvider provider = world.provider;
 				lightLevel += provider.lightBrightnessTable[0];
 			}
-			mc.fontRenderer.drawString("Base Light: " + lightLevel + (mc.thePlayer.posY < WorldProviderBetweenlands.LAYER_HEIGHT - 10 ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Base Light: " + lightLevel + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
 			String activeEvents = "";
 			if (world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;

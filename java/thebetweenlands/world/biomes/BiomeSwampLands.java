@@ -28,7 +28,7 @@ public class BiomeSwampLands
         this.setFogColor((byte) 10, (byte) 30, (byte) 12);
         setColors(0x314D31, 0x314D31);
         setWeight(20);
-        this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 10, 0);
+        this.setHeightAndVariation(WorldProviderBetweenlands.CAVE_START, 0);
         this.setBiomeName("Swamplands");
         this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
         this.setFillerBlockHeight((byte) 1);
@@ -52,7 +52,7 @@ public class BiomeSwampLands
 
 	/*@Override
     public int getRootHeight(int x, int z) {
-		return WorldProviderBetweenlands.LAYER_HEIGHT - 10;
+		return WorldProviderBetweenlands.CAVE_START;
 	}
 
 	@Override

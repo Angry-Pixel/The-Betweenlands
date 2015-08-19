@@ -29,7 +29,7 @@ public class AmbienceCaveSound
     	if(world != null && world.provider instanceof WorldProviderBetweenlands) {
     		isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
     	}
-        if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= AmbienceSoundPlayHandler.CAVE_START || isBloodSky) {
+        if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY >= WorldProviderBetweenlands.CAVE_START || isBloodSky) {
             if( this.volume > 0.05F ) {
                 this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {
