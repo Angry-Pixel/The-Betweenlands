@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -47,8 +47,8 @@ public class FogHandler {
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			boolean denseFog = false;
 			if((!ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive()) ||
-					(DebugHandler.INSTANCE.denseFog && ConfigHandler.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
-					(!DebugHandler.INSTANCE.denseFog && ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())) {
+					(DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
+					(!DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())) {
 				denseFog = true;
 			}
 			return denseFog;

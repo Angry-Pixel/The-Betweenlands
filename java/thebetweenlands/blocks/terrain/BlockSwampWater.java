@@ -17,18 +17,21 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.items.ItemImprovedRubberBoots;
-import thebetweenlands.items.ItemRubberBoots;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSwampWater extends BlockFluidClassic {
+	private static final int DEEP_COLOR_R = 19;
+	private static final int DEEP_COLOR_G = 24;
+	private static final int DEEP_COLOR_B = 68;
+
 	@SideOnly(Side.CLIENT)
 	protected IIcon stillIcon, flowingIcon;
 
@@ -121,20 +124,34 @@ public class BlockSwampWater extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int colorMultiplier(IBlockAccess blockAccess, int x, int y, int z) {
-		int avgRed = 0;
-		int avgGreen = 0;
-		int avgBlue = 0;
-
-		for (int xOff = -1; xOff <= 1; ++xOff) {
-			for (int yOff = -1; yOff <= 1; ++yOff) {
-				int colorMultiplier = blockAccess.getBiomeGenForCoords(x + yOff, z + xOff).getWaterColorMultiplier();
-				avgRed += (colorMultiplier & 16711680) >> 16;
-			avgGreen += (colorMultiplier & 65280) >> 8;
-			avgBlue += colorMultiplier & 255;
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
+				int colorMultiplier = blockAccess.getBiomeGenForCoords(x + dz, z + dx).getWaterColorMultiplier();
+				r += (colorMultiplier & 0xFF0000) >> 16;
+				g += (colorMultiplier & 0x00FF00) >> 8;
+				b += colorMultiplier & 0x0000FF;
 			}
 		}
-
-		return (avgRed / 9 & 255) << 16 | (avgGreen / 9 & 255) << 8 | avgBlue / 9 & 255;
+		r /= 9;
+		g /= 9;
+		b /= 9;
+		float depth = 0;
+		if (y > WorldProviderBetweenlands.CAVE_START) {
+			depth = 1;
+		} else {
+			if (y < WorldProviderBetweenlands.WATER_HEIGHT) {
+				depth = 0;
+			} else {
+				depth = (y - WorldProviderBetweenlands.WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.WATER_HEIGHT);
+			}
+		}
+		r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);	
+		g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
+		b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
+		return r << 16 | g << 8 | b;
 	}
 
 	@Override

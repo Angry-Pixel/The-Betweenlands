@@ -2,7 +2,7 @@ package thebetweenlands.event.render;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldProvider;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +16,7 @@ public class BrightnessHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTick(PlayerTickEvent event) {
-		if(event.side == Side.SERVER || DebugHandler.INSTANCE.fullBright) return;
+		if(event.side == Side.SERVER || DebugHandlerClient.INSTANCE.fullBright) return;
 		EntityPlayer player = event.player;
 		if(player.dimension == ConfigHandler.DIMENSION_ID && player.worldObj != null) {
 			if(player.worldObj.provider instanceof WorldProviderBetweenlands) {

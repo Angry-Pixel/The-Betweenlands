@@ -59,8 +59,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 
-public class DebugHandler {
-	public static final DebugHandler INSTANCE = new DebugHandler();
+public class DebugHandlerClient extends DebugHandlerCommon {
+	public static final DebugHandlerClient INSTANCE = new DebugHandlerClient();
 
 	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0");
 
@@ -207,10 +207,10 @@ public class DebugHandler {
 			mc.loadWorld(null);
 			ISaveFormat saveLoader = mc.getSaveLoader();
 			saveLoader.flushCache();
-			saveLoader.deleteWorldDirectory(DebugHandler.INSTANCE.worldFolderName + File.separatorChar + "DIM" + ConfigHandler.DIMENSION_ID);
+			saveLoader.deleteWorldDirectory(DebugHandlerClient.INSTANCE.worldFolderName + File.separatorChar + "DIM" + ConfigHandler.DIMENSION_ID);
 			WorldSettings worldSettings = new WorldSettings(worldInfo);
 			worldSettings.enableCommands();
-			mc.launchIntegratedServer(DebugHandler.INSTANCE.worldFolderName, DebugHandler.INSTANCE.worldName, worldSettings);
+			mc.launchIntegratedServer(DebugHandlerClient.INSTANCE.worldFolderName, DebugHandlerClient.INSTANCE.worldName, worldSettings);
 			isInDebugWorld = true;
 		}
 	}
@@ -296,36 +296,15 @@ public class DebugHandler {
 		}
 	}
 
-	public static EntityPlayerMP createPlayerForUser(ServerConfigurationManager serverConfigurationManager, GameProfile gameProfile) {
-		UUID uuid = EntityPlayer.func_146094_a(gameProfile);
-		ArrayList sameUUIDPlayers = Lists.newArrayList();
-		for (int i = 0; i < serverConfigurationManager.playerEntityList.size(); i++) {
-			EntityPlayerMP player = (EntityPlayerMP) serverConfigurationManager.playerEntityList.get(i);
-			if (player.getUniqueID().equals(uuid)) {
-				sameUUIDPlayers.add(player);
-			}
-		}
-		Iterator<EntityPlayerMP> playerIterator = sameUUIDPlayers.iterator();
-		while (playerIterator.hasNext()) {
-			EntityPlayerMP player = playerIterator.next();
-			player.playerNetServerHandler.kickPlayerFromServer("You logged in from another location");
-		}
-		int dimensionId = INSTANCE.isInDebugWorld ? ConfigHandler.DIMENSION_ID : 0;
-		MinecraftServer mcServer = serverConfigurationManager.getServerInstance();
-		ItemInWorldManager itemInWorldManager;
-		WorldServer world = mcServer.worldServerForDimension(dimensionId);
-		if (mcServer.isDemo()) {
-			itemInWorldManager = new DemoWorldManager(world);
-		} else {
-			itemInWorldManager = new ItemInWorldManager(world);
-		}
-		return new EntityPlayerMP(mcServer, world, gameProfile, itemInWorldManager);
-	}
-
 	@SubscribeEvent
 	public void onWorldEventUnload(WorldEvent.Unload event) {
 		if (isInDebugWorld) {
 			isInDebugWorld = false;
 		}
+	}
+
+	@Override
+	public boolean isInDebugWorld() {
+		return isInDebugWorld;
 	}
 }

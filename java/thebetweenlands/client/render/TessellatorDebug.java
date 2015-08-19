@@ -2,7 +2,7 @@ package thebetweenlands.client.render;
 
 import java.lang.reflect.Field;
 
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
@@ -27,7 +27,7 @@ public class TessellatorDebug extends Tessellator {
 	}
 
 	private void checkStart() {
-		if (DebugHandler.INSTANCE.ignoreStart) {
+		if (DebugHandlerClient.INSTANCE.ignoreStart) {
 			return;
 		}
 		try {

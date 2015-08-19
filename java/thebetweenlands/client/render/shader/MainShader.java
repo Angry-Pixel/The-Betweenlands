@@ -33,7 +33,7 @@ import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.client.render.shader.effect.SwirlEffect;
 import thebetweenlands.client.render.shader.effect.WarpEffect;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.GLUProjection.ClampMode;
 import thebetweenlands.utils.GLUProjection.Projection;
@@ -603,7 +603,7 @@ public class MainShader extends CShader {
 	}
 
 	private void updateTextures(float partialTicks) {
-		if(DebugHandler.INSTANCE.debugDeferredEffect) {
+		if(DebugHandlerClient.INSTANCE.debugDeferredEffect) {
 			//Update gas texture
 			if(this.gasTextureFBO == null) {
 				this.gasTextureFBO = new Framebuffer(128, 128, false);

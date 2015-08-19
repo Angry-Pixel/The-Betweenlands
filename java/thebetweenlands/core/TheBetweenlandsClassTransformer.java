@@ -137,7 +137,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				for (int i = method.instructions.size() - 1; i >= 0; i--) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
 					if (insnNode.getOpcode() == RETURN) {
-						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandler", "onMinecraftFinishedStarting", "()V", false));
+						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandlerClient", "onMinecraftFinishedStarting", "()V", false));
 						break;
 					}
 				}
@@ -158,9 +158,9 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;
 						if (handleKeyboardInputName.equals(methodInsnNode.name) && "()V".equals(methodInsnNode.desc)) {
 							InsnList insns = new InsnList();
-							insns.add(new FieldInsnNode(GETSTATIC, "thebetweenlands/event/debugging/DebugHandler", "INSTANCE", "Lthebetweenlands/event/debugging/DebugHandler;"));
+							insns.add(new FieldInsnNode(GETSTATIC, "thebetweenlands/event/debugging/DebugHandlerClient", "INSTANCE", "Lthebetweenlands/event/debugging/DebugHandlerClient;"));
 							insns.add(new InsnNode(ACONST_NULL));
-							insns.add(new MethodInsnNode(INVOKEVIRTUAL, "thebetweenlands/event/debugging/DebugHandler", "onKeyInput", "(Lcpw/mods/fml/common/gameevent/InputEvent$KeyInputEvent;)V", false));
+							insns.add(new MethodInsnNode(INVOKEVIRTUAL, "thebetweenlands/event/debugging/DebugHandlerClient", "onKeyInput", "(Lcpw/mods/fml/common/gameevent/InputEvent$KeyInputEvent;)V", false));
 							method.instructions.insert(insnNode, insns);
 							break;
 						}
@@ -183,7 +183,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				method.localVariables.clear();
 				method.visitVarInsn(ALOAD, 0);
 				method.visitVarInsn(ALOAD, 1);
-				method.visitMethodInsn(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandler", "createPlayerForUser", String.format("(L%s;Lcom/mojang/authlib/GameProfile;)L%s;", serverConfigurationManagerClass, entityPlayerMPClass), false);
+				method.visitMethodInsn(INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "createPlayerForUser", String.format("(L%s;Lcom/mojang/authlib/GameProfile;)L%s;", serverConfigurationManagerClass, entityPlayerMPClass), false);
 				method.visitInsn(ARETURN);
 				break;
 			}

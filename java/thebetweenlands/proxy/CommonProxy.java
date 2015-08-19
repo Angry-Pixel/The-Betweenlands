@@ -6,6 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
+import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
@@ -224,4 +225,8 @@ public class CommonProxy
     public void spawnThem() { }
     
     public void playPortalSounds(Entity entity, int timer) { }
+
+    public DebugHandlerCommon getDebugHandler() {
+    	return DebugHandlerCommon.INSTANCE;
+    }
 }

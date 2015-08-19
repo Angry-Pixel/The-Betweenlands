@@ -18,7 +18,7 @@ import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.manager.DecayManager;
 
 @SideOnly(Side.CLIENT)
@@ -45,7 +45,7 @@ public class GuiOverlay extends Gui
 		}*/
 
 		//Just some shader debugging stuff. Applies gaussian blur to the top half of the screen
-		if(DebugHandler.INSTANCE.debugDeferredEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
+		if(DebugHandlerClient.INSTANCE.debugDeferredEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {

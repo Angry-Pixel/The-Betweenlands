@@ -128,7 +128,8 @@ import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
@@ -285,8 +286,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(GLUProjectionHandler.INSTANCE);
 		
 		if (ConfigHandler.DEBUG) {
-			FMLCommonHandler.instance().bus().register(DebugHandler.INSTANCE);
-			MinecraftForge.EVENT_BUS.register(DebugHandler.INSTANCE);
+			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
+			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
 			Field tessellatorInstanceField = ReflectionHelper.findField(Tessellator.class, "instance", "field_78398_a", "a");
 			try {
 				ReflectionHelper.findField(Field.class, "modifiers").setInt(tessellatorInstanceField, tessellatorInstanceField.getModifiers() & ~Modifier.FINAL);
@@ -566,4 +567,8 @@ public class ClientProxy extends CommonProxy {
 			}
 		}
 	}
+
+    public DebugHandlerCommon getDebugHandler() {
+    	return DebugHandlerClient.INSTANCE;
+    }
 }

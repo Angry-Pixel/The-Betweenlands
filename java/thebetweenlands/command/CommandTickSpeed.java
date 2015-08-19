@@ -5,7 +5,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.network.packets.PacketTickspeed;
 
 import com.google.common.primitives.Floats;
@@ -32,7 +32,7 @@ public class CommandTickSpeed extends CommandBase {
 			throw new CommandException("command.tickspeed.usage");
 		}
 		float ticksPerSecond = parseFloat(args[0]);
-		DebugHandler.setSleepPerTick((long) (1000 / ticksPerSecond));
+		DebugHandlerClient.setSleepPerTick((long) (1000 / ticksPerSecond));
 		TheBetweenlands.networkWrapper.sendToAll(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketTickspeed(ticksPerSecond)));
         func_152373_a(sender, this, "command.tickspeed.success", String.valueOf(ticksPerSecond));
 	}

@@ -20,7 +20,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
-import thebetweenlands.event.debugging.DebugHandler;
+import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.lib.ModInfo;
 
 public class GuiDebugMenu extends GuiScreen {
@@ -60,10 +60,10 @@ public class GuiDebugMenu extends GuiScreen {
 		buttonList.add(joinDebugWorldButton = new GuiButton(nextButtonId(), x, y, 138, 20, "Enter The Betweenlands"));
 		worldSeedTextField = new GuiUpgradedTextField(fontRendererObj, x + 140, y + 1, 59, 18);
 		worldSeedTextField.setPlaceholder("Seed");
-		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
+		String saveFolder = DebugHandlerClient.INSTANCE.worldFolderName;
 		ISaveFormat saveLoader = mc.getSaveLoader();
 		String seed = null;
-		if (DebugHandler.INSTANCE.isInDebugWorld) {
+		if (DebugHandlerClient.INSTANCE.isInDebugWorld) {
 			seed = String.valueOf(MinecraftServer.getServer().worldServers[0].getWorldInfo().getSeed());
 		} else if (saveLoader.canLoadWorld(saveFolder)) {
 			ISaveHandler saveHandler = saveLoader.getSaveLoader(saveFolder, false);
@@ -104,7 +104,7 @@ public class GuiDebugMenu extends GuiScreen {
 		} else if (button == deleteDebugWorldButton) {
 			deleteDebugWorld();
 		} else if (button == returnButton) {
-			mc.displayGuiScreen(DebugHandler.INSTANCE.previousGuiScreen);
+			mc.displayGuiScreen(DebugHandlerClient.INSTANCE.previousGuiScreen);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class GuiDebugMenu extends GuiScreen {
 	}
 
 	private void joinDebugWorld() {
-		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
+		String saveFolder = DebugHandlerClient.INSTANCE.worldFolderName;
 		ISaveFormat saveLoader = mc.getSaveLoader();
 		ISaveHandler saveHandler = saveLoader.getSaveLoader(saveFolder, false);
 		WorldInfo existingWorldInfo = saveHandler.loadWorldInfo();
@@ -140,15 +140,15 @@ public class GuiDebugMenu extends GuiScreen {
 			worldSettings = new WorldSettings(seed, WorldSettings.GameType.CREATIVE, true, false, WorldType.DEFAULT);
 			worldSettings.enableCommands();
 		}
-		mc.launchIntegratedServer(saveFolder, DebugHandler.INSTANCE.worldName, worldSettings);
-		DebugHandler.INSTANCE.isInDebugWorld = true;
+		mc.launchIntegratedServer(saveFolder, DebugHandlerClient.INSTANCE.worldName, worldSettings);
+		DebugHandlerClient.INSTANCE.isInDebugWorld = true;
 	}
 
 	private void deleteDebugWorld() {
-		if (DebugHandler.INSTANCE.isInDebugWorld) {
+		if (DebugHandlerClient.INSTANCE.isInDebugWorld) {
 			mc.loadWorld(null);
 		}
-		String saveFolder = DebugHandler.INSTANCE.worldFolderName;
+		String saveFolder = DebugHandlerClient.INSTANCE.worldFolderName;
 		ISaveFormat saveLoader = mc.getSaveLoader();
 		if (saveLoader.canLoadWorld(saveFolder)) {
 			saveLoader.flushCache();
@@ -161,7 +161,7 @@ public class GuiDebugMenu extends GuiScreen {
 	protected void keyTyped(char character, int keyCode) {
 		if (keyCode == 1) {
 			mc.setIngameFocus();
-			mc.displayGuiScreen(DebugHandler.INSTANCE.previousGuiScreen);
+			mc.displayGuiScreen(DebugHandlerClient.INSTANCE.previousGuiScreen);
 		} else {
 			worldSeedTextField.textboxKeyTyped(character, keyCode);
 		}
