@@ -81,6 +81,9 @@ public class BlockGenericOre extends Block {
 		if (type.equals("sulfurOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
 		
+		else if (type.equals("bluriteOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
+		
 		else if (type.equals("valoniteOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
 		
