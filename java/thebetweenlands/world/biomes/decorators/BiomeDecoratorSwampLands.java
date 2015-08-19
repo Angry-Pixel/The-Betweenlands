@@ -16,6 +16,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 
 			helper.generateTarPool(60); //TODO work out a good number
 
+			helper.generateSpeleothems(60);
 			helper.generateGiantWeedwoodTree(20);
 
 			helper.generateDeadTree(10);

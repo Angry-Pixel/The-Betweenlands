@@ -1,4 +1,4 @@
-package thebetweenlands.world.feature.gen.cave;
+package thebetweenlands.world.gen;
 
 public class FractalOpenSimplexNoise {
 	private OpenSimplexNoise[] octaves;

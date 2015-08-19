@@ -32,6 +32,8 @@ extends WorldProvider
 {
 	public static final int LAYER_HEIGHT = 80;
 
+	public static final int WATER_HEIGHT = 25;
+
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
 

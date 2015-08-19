@@ -13,10 +13,12 @@ import thebetweenlands.blocks.plants.BlockSwampReed;
 import thebetweenlands.blocks.plants.BlockWaterFlower;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
+import thebetweenlands.utils.CubicBezier;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenTarPool;
+import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
@@ -66,6 +68,7 @@ public class DecorationHelper {
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
 	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
 	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
+	private final static WorldGenSpeleothem GEN_SPELEOTHEM = new WorldGenSpeleothem();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -873,6 +876,18 @@ public class DecorationHelper {
 
 			if (checkSurface(SurfaceType.MIXED, x, y, z))
 				GEN_SMALL_HOLLOW_LOG.generate(world, rand, x, y, z);
+		}
+	}
+
+	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0);
+
+	public void generateSpeleothems(int attempts) {
+		while (attempts --> 0) {
+			int x = this.x + offsetXZ();
+			float v = SPELEOTHEM_Y_CDF.eval(rand.nextFloat());
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int z = this.z + offsetXZ();
+			GEN_SPELEOTHEM.generate(world, rand, x, y, z);
 		}
 	}
 

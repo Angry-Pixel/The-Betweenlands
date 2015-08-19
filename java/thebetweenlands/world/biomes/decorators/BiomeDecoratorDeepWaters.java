@@ -7,6 +7,7 @@ public class BiomeDecoratorDeepWaters extends BiomeDecoratorBaseBetweenlands {
 	public void postChunkGen(int pass) {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
+		helper.generateSpeleothems(60);
 		helper.generateWisp(1);
 		helper.generateFlowerPatch(10.0D);
 		helper.generateMireCoral(15.0D);

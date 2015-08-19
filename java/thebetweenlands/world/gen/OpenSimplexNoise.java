@@ -1,4 +1,4 @@
-package thebetweenlands.world.feature.gen.cave;
+package thebetweenlands.world.gen;
 
 /*
  * OpenSimplex (Simplectic) Noise in Java.
