@@ -1,5 +1,6 @@
-package thebetweenlands.manual.gui;
+package thebetweenlands.manual.gui.entries;
 
+import thebetweenlands.manual.gui.ManualPage;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
 
 import java.util.ArrayList;

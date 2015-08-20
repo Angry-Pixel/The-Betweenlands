@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui;
+package thebetweenlands.manual.gui.entries;
 
 /**
  * Created by Bart on 20-8-2015.

@@ -2,6 +2,7 @@ package thebetweenlands.manual.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
 import thebetweenlands.manual.gui.widgets.TextWidget;
 
@@ -41,6 +42,8 @@ public class ManualPage {
 
                 int heightPage = 0;
 
+                int textHeight = fontRenderer.FONT_HEIGHT;
+
                 boolean makingItalic = false;
                 boolean makingBold = false;
                 boolean makingUnderlined = false;
@@ -50,13 +53,17 @@ public class ManualPage {
                 String color = "";
                 boolean makingTooltip = false;
                 String tooltip = "";
+                boolean makingScaled = false;
+                String scaleWord = "";
+                float scale = 1f;
+
 
                 for (String word : words) {
-                    int widthWord = fontRenderer.getStringWidth(word + " ");
-                    
-                    
+                    int widthWord = (int) Math.ceil(fontRenderer.getStringWidth(word + " ") * scale);
+
+
                     if (word.contains("/n/")) {
-                        heightPage += fontRenderer.FONT_HEIGHT;
+                        heightPage += textHeight;
                         widthLine = 0;
                     } else if (word.contains("<color:")) {
                         color = word;
@@ -104,6 +111,16 @@ public class ManualPage {
                     } else if (word.contains("</obfuscated>")) {
                         makingObfuscated = false;
                         widthLine += 0;
+                    } else if (word.contains("<scale:")) {
+                        makingScaled = true;
+                        widthLine += 0;
+                        scaleWord = word;
+                        scale = Float.parseFloat(word.replace("<scale:", "").replace(">", ""));
+                    } else if (word.contains("</scale>")) {
+                        makingScaled = false;
+                        scale = 1f;
+                        widthLine += 0;
+                        scaleWord = "";
                     } else if (widthLine + widthWord <= GuiManualBase.WIDTH - widget.unchangedXStart) {
                         widthLine += widthWord;
                     } else {
@@ -115,7 +132,7 @@ public class ManualPage {
                             else
                                 ((TextWidget) widget).text = text + " <end>";
                             page++;
-                            text = "" + (makingItalic?" <italic>":"") + (makingBold?" <bold>":"") + (makingColor?" " + color:"") + (makingObfuscated?" <obfuscated>":"") + (makingStrikerThrough?" <strikerThrough>":"") + (makingTooltip?" " + tooltip:"") + (makingUnderlined?" <underlined>":"");
+                            text = "" + (makingScaled ? " " + scaleWord + " " : "") + (makingItalic ? " <italic>" : "") + (makingBold ? " <bold>" : "") + (makingColor ? " " + color : "") + (makingObfuscated ? " <obfuscated>" : "") + (makingStrikerThrough ? " <strikerThrough>" : "") + (makingTooltip ? " " + tooltip : "") + (makingUnderlined ? " <underlined>" : "");
                         }
                         widthLine = widthWord;
                     }

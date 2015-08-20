@@ -1,9 +1,13 @@
-package thebetweenlands.manual.gui;
+package thebetweenlands.manual.gui.entries;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemCompost;
+import thebetweenlands.manual.gui.GuiManualBase;
+import thebetweenlands.manual.gui.ManualPage;
 import thebetweenlands.manual.gui.widgets.*;
 import thebetweenlands.recipes.RecipeHandler;
 

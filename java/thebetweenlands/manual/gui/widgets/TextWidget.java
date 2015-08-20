@@ -24,6 +24,11 @@ public class TextWidget extends ManualWidgetsBase {
         text = StatCollector.translateToLocal(unlocalizedText);
     }
 
+    public TextWidget(GuiManualBase manual, int xStart, int yStart, String localizedText, boolean localized) {
+        super(manual, xStart, yStart);
+        text = localizedText;
+    }
+
     public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText, int color) {
         super(manual, xStart, yStart);
         text = StatCollector.translateToLocal(unlocalizedText);
@@ -54,8 +59,12 @@ public class TextWidget extends ManualWidgetsBase {
             int tooltipStartX = 0;
             int tooltipStartY = 0;
 
+            float scale = 1f;
+
+            int height = fontRenderer.FONT_HEIGHT;
+
             for (String word : words) {
-                int widthWord = fontRenderer.getStringWidth(word + " ");
+                int widthWord = (int)Math.ceil(fontRenderer.getStringWidth(word + " ") * scale);
 
 
                 word = "" + (italic?EnumChatFormatting.ITALIC:"") + (bold?EnumChatFormatting.BOLD:"") + (underlined?EnumChatFormatting.UNDERLINE:"") + (strikerThrough?EnumChatFormatting.STRIKETHROUGH:"")  + (obfuscated?EnumChatFormatting.OBFUSCATED:"") + word + " ";
@@ -70,6 +79,7 @@ public class TextWidget extends ManualWidgetsBase {
                     strikerThrough = false;
                     obfuscated = false;
                     word ="";
+                    scale = 1f;
                 } else if(makingTooltipWord) {
                     if(word.contains(">")){
                         makingTooltipWord = false;
@@ -128,6 +138,16 @@ public class TextWidget extends ManualWidgetsBase {
                 } else  if (word.contains("</obfuscated>")){
                     obfuscated = false;
                     word = "";
+                } else if (word.contains("<scale:")){
+                    scale = Float.parseFloat(word.replace("<scale:", "").replace(">", ""));
+                    GL11.glScalef(scale, scale, scale);
+                    height *= scale;
+                    word = "";
+                } else if (word.contains("</scale>")){
+                    GL11.glScalef(1f, 1f, 1f);
+                    height = fontRenderer.FONT_HEIGHT;
+                    scale = 1f;
+                    word = "";
                 } else if (widthLine + widthWord <= GuiManualBase.WIDTH - unchangedXStart) {
                     widthLine += widthWord;
                     if (makingTooltip) {
@@ -138,7 +158,7 @@ public class TextWidget extends ManualWidgetsBase {
                     widthLine = widthWord;
                 }
 
-                fontRenderer.drawString(word, xStart + widthLine - widthWord, yStart + lineNumber * fontRenderer.FONT_HEIGHT, color);
+                fontRenderer.drawString(word, xStart + widthLine - widthWord, yStart + lineNumber * height, color);
                 if (!makingTooltip && tooltipWidth > 0 && mouseX >= tooltipStartX && mouseX <= tooltipStartX + tooltipWidth && mouseY >= tooltipStartY && mouseY <= tooltipStartY + 9) {
                     ArrayList<String> toolTipText = new ArrayList<>();
                     toolTipText.add(toolTipWord);
@@ -149,6 +169,7 @@ public class TextWidget extends ManualWidgetsBase {
                     tooltipStartY = 0;
                 }
                 GL11.glColor4f(1F, 1F, 1F, 1F);
+                GL11.glScalef(1f, 1f, 1f);
             }
         }
     }
