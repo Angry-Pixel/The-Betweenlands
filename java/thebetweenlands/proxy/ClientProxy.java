@@ -282,6 +282,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new BLMusicHandler());
 		FMLCommonHandler.instance().bus().register(BrightnessHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);

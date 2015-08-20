@@ -22,7 +22,7 @@ public class BLBiomeRegistry {
 
 	public static void init() {
 		for (int id : new int[] { ConfigHandler.BIOME_ID_SWAMPLANDS, ConfigHandler.BIOME_ID_COARSE_ISLANDS, ConfigHandler.BIOME_ID_DEEP_WATER, ConfigHandler.BIOME_ID_PATCHY_ISLANDS, ConfigHandler.BIOME_ID_MARSH1, ConfigHandler.BIOME_ID_MARSH2 })
-			if (id >= 128)
+			if (id >= 128 && ConfigHandler.BIOME_ID_LIMIT)
 				throw new RuntimeException("Betweenlands biome IDs cannot be higher than 127!");
 
 		// CREATE BIOMES

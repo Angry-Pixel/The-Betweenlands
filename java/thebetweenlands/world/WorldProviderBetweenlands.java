@@ -13,6 +13,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.event.render.FogHandler;
@@ -38,6 +39,8 @@ extends WorldProvider
 
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
+	@SideOnly(Side.CLIENT)
+	private double[] lastFogColor;
 
 	private boolean allowHostiles, allowAnimals;
 
@@ -61,59 +64,13 @@ extends WorldProvider
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Vec3 getFogColor(float celestialAngle, float partialTickTime) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		BiomeGenBase biome = worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
-		byte[] targetFogColor;
-
-		if( biome instanceof BiomeGenBaseBetweenlands ) {
-			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB().clone();
-		} else {
-			targetFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
+		if(this.currentFogColor == null || this.lastFogColor == null) {
+			this.initFogColors(Minecraft.getMinecraft().thePlayer);
 		}
-
-		if(this.currentFogColor == null) {
-			this.currentFogColor = new double[3];
-			for( int a = 0; a < 3; a++ ) {
-				this.currentFogColor[a] = targetFogColor[a];
-			}
-		}
-
-		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
-		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
-		float m = 0;
-		if (FogHandler.INSTANCE.hasDenseFog()) {
-			float y = (float) player.posY;
-			if (y < transitionStart) {
-				if (transitionEnd < y) {
-					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
-				}
-			} else {
-				m = 80;
-			}
-		}
-
-		for(int i = 0; i < 3; i++) {
-			int diff = 255 - targetFogColor[i];
-			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
-		}
-
-		for(int a = 0; a < 3; a++) {
-			if(this.currentFogColor[a] != targetFogColor[a]) {
-				if(this.currentFogColor[a] < targetFogColor[a]) {
-					this.currentFogColor[a] += 0.025D;
-					if(this.currentFogColor[a] > targetFogColor[a]) {
-						this.currentFogColor[a] = targetFogColor[a];
-					}
-				} else if(this.currentFogColor[a] > targetFogColor[a]) {
-					this.currentFogColor[a] -= 0.025D;
-					if(this.currentFogColor[a] < targetFogColor[a]) {
-						this.currentFogColor[a] = targetFogColor[a];
-					}
-				}
-			}
-		}
-
-		return Vec3.createVectorHelper(currentFogColor[0] / 255D, currentFogColor[1] / 255D, currentFogColor[2] / 255D);
+		double r = this.currentFogColor[0] + (this.currentFogColor[0] - this.lastFogColor[0]) * partialTickTime;
+		double g = this.currentFogColor[1] + (this.currentFogColor[1] - this.lastFogColor[1]) * partialTickTime;
+		double b = this.currentFogColor[2] + (this.currentFogColor[2] - this.lastFogColor[2]) * partialTickTime;
+		return Vec3.createVectorHelper(r / 255D, g / 255D, b / 255D);
 	}
 
 	@Override
@@ -205,7 +162,7 @@ extends WorldProvider
 		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
 		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
 		this.worldObj.getWorldInfo().setThundering(false);
-        this.worldObj.prevRainingStrength = this.worldObj.rainingStrength;
+		this.worldObj.prevRainingStrength = this.worldObj.rainingStrength;
 		if(!this.worldObj.isRemote) {
 			float rainingStrength = this.worldObj.rainingStrength;
 			if(eeRegistry.HEAVY_RAIN.isActive()) {
@@ -224,6 +181,85 @@ extends WorldProvider
 				}
 			}
 			this.worldObj.rainingStrength = rainingStrength;
+		} else {
+			this.updateFogColors();
+		}
+	}
+
+	private byte[] getTargetFogColor(EntityPlayer player) {
+		BiomeGenBase biome = this.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
+		byte[] targetFogColor;
+
+		if( biome instanceof BiomeGenBaseBetweenlands ) {
+			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB().clone();
+		} else {
+			targetFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
+		}
+		
+		return targetFogColor;
+	}
+	
+	private void initFogColors(EntityPlayer player) {
+		byte[] targetFogColor = this.getTargetFogColor(player);
+
+		if(this.currentFogColor == null) {
+			this.currentFogColor = new double[3];
+			for(int i = 0; i < 3; i++) {
+				this.currentFogColor[i] = targetFogColor[i];
+			}
+		}
+
+		if(this.lastFogColor == null) {
+			this.lastFogColor = new double[3];
+		} else {
+			for(int i = 0; i < 3; i++) {
+				this.lastFogColor[i] = this.currentFogColor[i];
+			}
+		}
+	}
+
+	private void updateFogColors() {
+		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+
+		if(player == null) return;
+
+		this.initFogColors(player);
+
+		byte[] targetFogColor = this.getTargetFogColor(player);
+		
+		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
+		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
+		float m = 0;
+		if (FogHandler.INSTANCE.hasDenseFog()) {
+			float y = (float) player.posY;
+			if (y < transitionStart) {
+				if (transitionEnd < y) {
+					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
+				}
+			} else {
+				m = 80;
+			}
+		}
+
+		for(int i = 0; i < 3; i++) {
+			int diff = 255 - targetFogColor[i];
+			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
+		}
+
+		for(int a = 0; a < 3; a++) {
+			if(this.currentFogColor[a] != targetFogColor[a]) {
+				if(this.currentFogColor[a] < targetFogColor[a]) {
+					this.currentFogColor[a] += 0.2D;
+					if(this.currentFogColor[a] > targetFogColor[a]) {
+						this.currentFogColor[a] = targetFogColor[a];
+					}
+				} else if(this.currentFogColor[a] > targetFogColor[a]) {
+					this.currentFogColor[a] -= 0.2D;
+					if(this.currentFogColor[a] < targetFogColor[a]) {
+						this.currentFogColor[a] = targetFogColor[a];
+					}
+				}
+			}
 		}
 	}
 
@@ -235,18 +271,18 @@ extends WorldProvider
 		this.worldObj.getWorldInfo().setThundering(false);
 		super.calculateInitialWeather();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer()
 	{
 		return BLSkyRenderer.INSTANCE;
 	}
-	
+
 	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.getWorldData().getEnvironmentEventRegistry();
 	}
-	
+
 	/**
 	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
 	 * @param world
