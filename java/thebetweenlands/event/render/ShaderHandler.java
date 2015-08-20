@@ -19,31 +19,15 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
-	private Method mERrenderHand;
-	private boolean cancelOverlay = false;
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
 		if(!ShaderHelper.INSTANCE.canUseShaders()) return;
 
-		//Small fix for hand depth buffer issues because the hand is rendered after the depth buffer has been cleared
-		if(this.mERrenderHand == null) {
-			try {
-				this.mERrenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, new Class[]{float.class, int.class});
-				this.mERrenderHand.setAccessible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		GL11.glPushMatrix();
-		this.cancelOverlay = true;
-		try {
-			this.mERrenderHand.invoke(Minecraft.getMinecraft().entityRenderer, event.partialTicks, event.renderPass);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		this.cancelOverlay = false;
+		//Small fix for hand depth buffer issues because the hand is rendered after the depth buffer has been cleared
+		OverlayHandler.INSTANCE.renderHand(event.partialTicks, event.renderPass);
 		GL11.glPopMatrix();
 
 		if(ShaderHelper.INSTANCE.canUseShaders()) {
@@ -62,16 +46,6 @@ public class ShaderHandler {
 	public void onPostRender(TickEvent.RenderTickEvent event) {
 		if(ShaderHelper.INSTANCE.canUseShaders() && event.phase == Phase.END && ShaderHelper.INSTANCE.canUseShaders()) {
 			ShaderHelper.INSTANCE.clearDynLights();
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
-			if(this.cancelOverlay && event.overlayType == OverlayType.WATER) {
-				event.setCanceled(true);
-			}
 		}
 	}
 }

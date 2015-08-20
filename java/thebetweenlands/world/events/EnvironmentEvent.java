@@ -11,7 +11,6 @@ public abstract class EnvironmentEvent {
 	private boolean active = false;
 	private boolean dirty = false;
 	private boolean loaded = false;
-	private boolean initialized = false;
 
 	public EnvironmentEvent(EnvironmentEventRegistry registry) {
 		this.registry = registry;
@@ -86,7 +85,7 @@ public abstract class EnvironmentEvent {
 	public final void writeToNBT(NBTTagCompound compound) {
 		this.nbtt.setBoolean("active", this.active);
 		this.saveEventData();
-		compound.setTag(ModInfo.ID + ":environmentEvent:" + this.getEventName(), this.nbtt);
+		compound.setTag("environmentEvent:" + this.getEventName(), this.nbtt);
 	}
 
 	/**
@@ -94,16 +93,7 @@ public abstract class EnvironmentEvent {
 	 * @param compound
 	 */
 	public final void readFromNBT(NBTTagCompound compound) {
-		this.nbtt = compound.getCompoundTag(ModInfo.ID + ":environmentEvent:" + this.getEventName());
-		this.initialized = this.nbtt.getBoolean("initialized");
-		//Initialize and set default values
-		if(!this.initialized) {
-			this.nbtt.setBoolean("active", false);
-			this.setDefaults();
-			this.saveEventData();
-			this.nbtt.setBoolean("initialized", true);
-			this.initialized = true;
-		}
+		this.nbtt = compound.getCompoundTag("environmentEvent:" + this.getEventName());
 		this.active = this.nbtt.getBoolean("active");
 		this.loadEventData();
 		this.loaded = true;

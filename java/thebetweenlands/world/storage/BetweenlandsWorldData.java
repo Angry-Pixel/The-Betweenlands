@@ -33,18 +33,24 @@ public class BetweenlandsWorldData extends WorldSavedData {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.data = compound.getCompoundTag(ModInfo.ID + ":worldData");
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.readFromNBT(compound);
+			event.readFromNBT(this.data);
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound compound) {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.writeToNBT(compound);
+			event.writeToNBT(this.data);
 		}
 		compound.setTag(ModInfo.ID + ":worldData", this.data);
 	}
 
+	private void setDefaults() {
+		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			event.setDefaults();
+		}
+	}
+	
 	public NBTTagCompound getData() {
 		return this.data;
 	}
@@ -59,6 +65,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		BetweenlandsWorldData result = (BetweenlandsWorldData)storage.loadData(BetweenlandsWorldData.class, ModInfo.ID);
 		if (result == null) {
 			result = new BetweenlandsWorldData();
+			result.setDefaults();
 			storage.setData(ModInfo.ID, result);
 		}
 		CACHE.put(world, result);
