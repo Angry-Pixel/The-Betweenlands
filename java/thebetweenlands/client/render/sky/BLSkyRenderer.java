@@ -66,12 +66,12 @@ public class BLSkyRenderer extends IRenderHandler {
 		this.skyDispListStart = GLAllocation.generateDisplayLists(3);
 
 		//Render sky dome
-		this.skyDispList1 = this.skyDispListStart + 0;
 		GL11.glNewList(this.skyDispListStart, GL11.GL_COMPILE);
 		this.createSkyDispList();
 		GL11.glEndList();
 
 		//Render sky 1 to display list
+		skyY = -50.0F;
 		this.skyDispList1 = this.skyDispListStart + 1;
 		GL11.glNewList(this.skyDispList1, GL11.GL_COMPILE);
 		tessellator.startDrawingQuads();
@@ -520,10 +520,10 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glColor3f(skyR, skyG, skyB);
 		}
 
-		GL11.glPushMatrix();
+		/*GL11.glPushMatrix();
 		GL11.glTranslatef(0.0F, -((float)(horizon - 16.0D)), 0.0F);
 		GL11.glCallList(this.skyDispList2);
-		GL11.glPopMatrix();
+		GL11.glPopMatrix();*/
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
