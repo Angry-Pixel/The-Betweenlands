@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -150,10 +151,10 @@ public class FogHandler {
 							MathHelper.floor_double(renderView.posX),
 							MathHelper.floor_double(renderView.posZ));
 					if(biome instanceof BiomeGenBaseBetweenlands) {
-						int colorMultiplier = biome.getWaterColorMultiplier();
-						event.red = ((colorMultiplier & 16711680) >> 16) / 255.0F / 3.0F;
-						event.green = ((colorMultiplier & 65280) >> 8) / 255.0F / 3.0F;
-						event.blue = (colorMultiplier & 255) / 255.0F / 3.0F;
+						int colorMultiplier = BLBlockRegistry.swampWater.colorMultiplier(world, MathHelper.floor_double(renderView.posX), MathHelper.floor_double(renderView.posY), MathHelper.floor_double(renderView.posZ));
+						event.red = (float)(colorMultiplier >> 16 & 255) / 255.0F;
+						event.green = (float)(colorMultiplier >> 8 & 255) / 255.0F;
+						event.blue = (float)(colorMultiplier & 255) / 255.0F;
 					}
 				}
 			}
