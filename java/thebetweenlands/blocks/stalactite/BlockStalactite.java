@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
@@ -17,6 +18,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockStalactite extends Block {
+	private static final int TOP = 0;
+
+	private static final int BOTTOM = 1;
+
+	private static final int MIDDLE = 2;
+
 	@SideOnly(Side.CLIENT)
 	private IIcon topIcon, bottomIcon;
 
@@ -36,7 +43,8 @@ public class BlockStalactite extends Block {
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) || canPlaceBlockOn(world.getBlock(x, y + 1, z));
+		StalactiteData info = StalactiteData.getData(world, x, y, z);
+		return !info.noBottom || !info.noTop;
 	}
 
 	@Override
@@ -82,14 +90,7 @@ public class BlockStalactite extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int metadata) {
-		switch (side) {
-		case 0:
-			return topIcon;
-		case 1:
-			return bottomIcon;
-		default:
-			return blockIcon;
-		}
+		return side == TOP ? topIcon : side == BOTTOM ? bottomIcon : blockIcon;
 	}
 
 	@Override
@@ -123,9 +124,7 @@ public class BlockStalactite extends Block {
 		StalactiteData info = StalactiteData.getData(world, x, y, z);
 		int md = world.getBlockMetadata(x, y, z);
 
-		if (info.noTop && info.noBottom) {
-			//todo
-		} else if (md == 0 && info.noBottom && info.distDown == 0) {
+		if (md == 0 && info.noBottom && info.distDown == 0) {
 			world.setBlockMetadataWithNotify(x, y, z, 1, 2);
 		} else if (md == 1 && (!info.noBottom || info.distDown > 0)) {
 			world.setBlockMetadataWithNotify(x, y, z, 0, 2);
@@ -138,92 +137,142 @@ public class BlockStalactite extends Block {
 	}
 
 	public static boolean renderBlock(Block block, int x, int y, int z, boolean noBottom, int distDown, boolean noTop, int distUp, int brightness) {
-		int totalHeight = 1 + distDown + distUp;
+		int height = 1 + distDown + distUp;
 		float distToMidBottom, distToMidTop;
 
-		double squareAmount = 1.2D;
-		double halfTotalHeightSQ;
+		double exp = 1.2;
+		double scale;
 
 		if (noTop) {
-			halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-			distToMidBottom = Math.abs(distUp + 1);
-			distToMidTop = Math.abs(distUp);
+			scale = Math.pow(height, exp);
+			distToMidBottom = distUp + 1;
+			distToMidTop = distUp;
 		} else if (noBottom) {
-			halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-			distToMidBottom = Math.abs(distDown);
-			distToMidTop = Math.abs(distDown + 1);
+			scale = Math.pow(height, exp);
+			distToMidBottom = distDown;
+			distToMidTop = distDown + 1;
 		} else {
-			float halfTotalHeight = totalHeight * 0.5F;
-			halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
+			float halfTotalHeight = height * 0.5F;
+			scale = Math.pow(halfTotalHeight, exp);
 			distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
 			distToMidTop = Math.abs(halfTotalHeight - distUp);
 		}
 
 		int minValBottom = noBottom && distDown == 0 ? 0 : 1;
 		int minValTop = noTop && distUp == 0 ? 0 : 1;
-		int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
-		int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
-		int iconId = distUp == 0 && !noTop ? 0 : distDown == 0 && !noBottom ? 1 : 2;
-		IIcon icon = block.getIcon(iconId, 0);
-		float u0 = icon.getMinU();
-		float u1 = icon.getMaxU();
-		float v0 = icon.getMinV();
-		float v1 = icon.getMaxV();
+		double bottomWidth = ((int) (Math.pow(distToMidBottom, exp) / scale * (8 - minValBottom)) + minValBottom) / 16D;
+		double topWidth = ((int) (Math.pow(distToMidTop, exp) / scale * (8 - minValTop)) + minValTop) / 16D;
 
-		double halfSize, halfSizeTexW;
-		double halfSize1, halfSizeTex1;
-		halfSize = (double) scaledValBottom / 16;
-		halfSizeTexW = halfSize * (u1 - u0);
-		halfSize1 = (double) scaledValTop / 16;
-		halfSizeTex1 = halfSize1 * (u1 - u0);
+		boolean hasTop = distUp == 0 && !noTop;
+		boolean hasBottom = distDown == 0 && !noBottom;
+
+		int tex = hasTop ? TOP : hasBottom ? BOTTOM : MIDDLE;
+
+		IIcon icon = block.getIcon(tex, 0);
+
+		float u1 = icon.getMinU();
+		float u2 = icon.getMaxU();
+		float v1 = icon.getMinV();
+		float v2 = icon.getMaxV();
+
+		double texBottomWidth = bottomWidth * (u2 - u1) * 2;
+		double texTopWidth = topWidth * (u2 - u1) * 2;
 
 		StalactiteHelper core = StalactiteHelper.getValsFor(x, y, z);
 
+		if (hasTop) {
+			core.tX = 0.5;
+			core.tZ = 0.5;
+		}
+
+		if (hasBottom) {
+			core.bX = 0.5;
+			core.bZ = 0.5;
+		}
+
 		Tessellator t = Tessellator.instance;
 		t.setBrightness(brightness);
-		float f = 0.9F;
-		t.setColorOpaque_F(f, f, f);
+		t.setColorRGBA(255, 255, 255, 255);
+
+		float nx, ny, nz, length;
 
 		// front
-		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
-		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0, v1);
-		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0, v0);
-		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
-		// back
-		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
-		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0, v1);
-		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
-		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
-		// left
-		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0 + halfSizeTexW * 2, v1);
-		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0, v1);
-		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
-		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0 + halfSizeTex1 * 2, v0);
-		// right
-		t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v1);
-		t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0, v1);
-		t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0, v0);
-		t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
+		nx = 1;
+		ny = (float) ((core.tX - topWidth) - (core.bX - bottomWidth));
+		nz = 0;
+		length = MathHelper.sqrt_float(1 + ny * ny);
+		nx /= length;
+		ny /= length;
+		t.setNormal(nx, ny, nz);
 
-		icon = block.getIcon(2, 0);
-		u0 = icon.getMinU();
-		v0 = icon.getMinV();
+		t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ - bottomWidth, u1 + texBottomWidth, v2);
+		t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ + bottomWidth, u1, v2);
+		t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ + topWidth, u1, v1);
+		t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ - topWidth, u1 + texTopWidth, v1);
+
+		// back
+		nx = 1;
+		ny = -(float) ((core.tX + topWidth) - (core.bX + bottomWidth));
+		nz = 0;
+		length = MathHelper.sqrt_float(1 + ny * ny);
+		nx /= length;
+		ny /= length;
+		t.setNormal(nx, ny, nz);
+
+		t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ + bottomWidth, u1 + texBottomWidth, v2);
+		t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ - bottomWidth, u1, v2);
+		t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ - topWidth, u1, v1);
+		t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ + topWidth, u1 + texTopWidth, v1);
+
+		// left
+		nx = 0;
+		ny = (float) ((core.tZ - topWidth) - (core.bZ - bottomWidth));
+		nz = 1;
+		length = MathHelper.sqrt_float(1 + ny * ny);
+		ny /= length;
+		nz /= length;
+		t.setNormal(nx, ny, nz);
+
+		t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ - bottomWidth, u1 + texBottomWidth, v2);
+		t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ - bottomWidth, u1, v2);
+		t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ - topWidth, u1, v1);
+		t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ - topWidth, u1 + texTopWidth, v1);
+
+		// right
+		nx = 0;
+		ny = -(float) ((core.tZ + topWidth) - (core.bZ + bottomWidth));
+		nz = 1;
+		length = MathHelper.sqrt_float(1 + ny * ny);
+		ny /= length;
+		nz /= length;
+		t.setNormal(nx, ny, nz);
+
+		t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ + bottomWidth, u1 + texBottomWidth, v2);
+		t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ + bottomWidth, u1, v2);
+		t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ + topWidth, u1, v1);
+		t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ + topWidth, u1 + texTopWidth, v1);
+
+		icon = block.getIcon(MIDDLE, 0);
+		u1 = icon.getMinU();
+		v1 = icon.getMinV();
 
 		// top
 		if (distUp == 0) {
-			t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0);
-			t.addVertexWithUV(x + core.tX - halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
-			t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0 + halfSizeTex1 * 2);
-			t.addVertexWithUV(x + core.tX + halfSize1, y + 1, z + core.tZ - halfSize1, u0, v0 + halfSizeTex1 * 2);
+			t.setNormal(0, 1, 0);
+			t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ - topWidth, u1, v1);
+			t.addVertexWithUV(x + core.tX - topWidth, y + 1, z + core.tZ + topWidth, u1 + texTopWidth, v1);
+			t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ + topWidth, u1 + texTopWidth, v1 + texTopWidth);
+			t.addVertexWithUV(x + core.tX + topWidth, y + 1, z + core.tZ - topWidth, u1, v1 + texTopWidth);
 		}
 
 		// bottom
 		if (distDown == 0) {
-			t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0);
-			t.addVertexWithUV(x + core.bX - halfSize, y, z + core.bZ - halfSize, u0, v0);
-			t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ - halfSize, u0, v0 + halfSizeTexW * 2);
-			t.addVertexWithUV(x + core.bX + halfSize, y, z + core.bZ + halfSize, u0 + halfSizeTexW * 2, v0 + halfSizeTexW * 2);
+			t.setNormal(0, -1, 0);
+			t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ + bottomWidth, u1 + texBottomWidth, v1);
+			t.addVertexWithUV(x + core.bX - bottomWidth, y, z + core.bZ - bottomWidth, u1, v1);
+			t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ - bottomWidth, u1, v1 + texBottomWidth);
+			t.addVertexWithUV(x + core.bX + bottomWidth, y, z + core.bZ + bottomWidth, u1 + texBottomWidth, v1 + texBottomWidth);
 		}
 
 		return true;
