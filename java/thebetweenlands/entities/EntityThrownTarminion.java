@@ -54,11 +54,10 @@ public class EntityThrownTarminion extends EntityThrowable {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(!onGround) {
-		if (worldObj.isRemote) {
-			BLParticle.DRIP_TAR_BEAST.spawn(worldObj, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
-			}
-		}
+		if(!onGround)
+			if (worldObj.isRemote)
+				BLParticle.DRIP_TAR_BEAST.spawn(worldObj, posX, posY, posZ, 0.0D, 0.0D, 0.0D, 0);
+
 		if (rotationticks < 360F) {
 			rotationticks += 5F;
 			if (rotationticks >= 360F)

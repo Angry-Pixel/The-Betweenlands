@@ -79,7 +79,7 @@ public class EntityTarminion extends EntityCreature {
 	public void onUpdate() {
 		super.onUpdate();
 		if(!worldObj.isRemote)
-			if(ticksExisted > 120)
+			if(ticksExisted > 1200)
 				setDead();
 		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);
