@@ -40,6 +40,7 @@ import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -77,6 +78,7 @@ public class CommonProxy
         registerTileEntity(TileEntityLootPot2.class, "lootPot2");
         registerTileEntity(TileEntityLootPot3.class, "lootPot3");
         registerTileEntity(TileEntityBLSpawner.class, "blSpawner");
+        registerTileEntity(TileEntityTarBeastSpawner.class, "tarBeastSpawner");
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

@@ -11,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
@@ -370,7 +369,7 @@ public class BLBlockRegistry {
 
     // OTHER THINGS
     public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
-    public static final Block tarBeastSpawner = new BlockTarBeastSpawner("tarBeast");
+    public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
     public static final BlockLifeCrystal lifeCrystal = new BlockLifeCrystal();
     public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 

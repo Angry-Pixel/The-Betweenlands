@@ -1,16 +1,28 @@
 package thebetweenlands.blocks.structure;
 
-import thebetweenlands.blocks.BlockSpawner;
+import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 
-public class BlockTarBeastSpawner extends BlockSpawner {
+public class BlockTarBeastSpawner extends BlockMobSpawner {
 
-	public BlockTarBeastSpawner(String mobName) {
-		super("thebetweenlands." + mobName);
+	public BlockTarBeastSpawner() {
+		super();
+		disableStats();
+		setHardness(5.0F);
+		setStepSound(soundTypeMetal);
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.tarBeastSpawner");
-		//setBlockTextureName("thebetweenlands:tarBeastSpawner");
+		setBlockTextureName("thebetweenlands:solidTar");
 		setCreativeTab(ModCreativeTabs.blocks);
 	}
 
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		TileEntityTarBeastSpawner tile = new TileEntityTarBeastSpawner();
+		tile.func_145881_a().setEntityName("thebetweenlands.tarBeast");
+		return tile;
+	}
 }
