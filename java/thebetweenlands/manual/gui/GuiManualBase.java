@@ -7,8 +7,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.input.Keyboard;
+
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.manual.gui.entries.ManualEntry;
+import thebetweenlands.manual.gui.entries.ManualEntryRegistry;
 import thebetweenlands.manual.gui.widgets.*;
 import thebetweenlands.recipes.RecipeHandler;
 
