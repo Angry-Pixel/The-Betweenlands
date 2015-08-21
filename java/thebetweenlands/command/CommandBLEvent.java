@@ -106,6 +106,9 @@ public class CommandBLEvent extends CommandBase {
 			throw new CommandException("command.blevent.failure.alreadydisabled");
 		}
 		environmentEventRegistry.disable();
+		for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
+			event.setActive(false, true);
+		}
 		func_152373_a(sender, this, "command.blevent.success.disable");
 	}
 

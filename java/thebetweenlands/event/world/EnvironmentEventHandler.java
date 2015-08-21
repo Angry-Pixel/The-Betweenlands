@@ -9,6 +9,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
+import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 public class EnvironmentEventHandler {
 	public static final EnvironmentEventHandler INSTANCE = new EnvironmentEventHandler();
@@ -33,9 +34,12 @@ public class EnvironmentEventHandler {
 			//Always save the world data
 			provider.getWorldData().markDirty();
 
-			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
+			EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
+			for(EnvironmentEvent eevent : reg.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
-				eevent.update(event.world);
+				if (reg.isEnabled()) {
+					eevent.update(event.world);
+				}
 				if(eevent.isDirty()) {
 					eevent.setDirty(false);
 					TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
@@ -58,7 +62,8 @@ public class EnvironmentEventHandler {
 		World world = TheBetweenlands.proxy.getClientWorld();
 		if(world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
+			EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
+			for(EnvironmentEvent eevent : reg.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
 				eevent.update(world);
 			}
