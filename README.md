@@ -12,7 +12,6 @@ Finish all currently unfinished stuff
 - Gen features
 
 Specifically the following
-- Sludge AI (issue #54)
 - Portal finishing touches (issue #134)
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
