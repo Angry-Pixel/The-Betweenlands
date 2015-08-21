@@ -80,6 +80,7 @@ public class BlockHollowLogRenderer implements ISimpleBlockRenderingHandler {
         renderer.renderFaceYPos(BLBlockRegistry.hollowLog, x, y, z, BLBlockRegistry.hollowLog.getIcon(1, world.getBlockMetadata(x, y, z)));
         
         renderer.uvRotateEast = renderer.uvRotateWest = renderer.uvRotateTop = renderer.uvRotateBottom = 0;
+        renderer.renderAllFaces = false;
         
         return true;
     }
