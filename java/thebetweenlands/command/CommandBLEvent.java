@@ -12,9 +12,8 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
-public class CommandToggleEvent extends CommandBase {
-	private List<String> childCommands = Arrays.asList("toggle", "on", "off", "list");
-	private List<String> modifyCommands = Arrays.asList("toggle", "on", "off");
+public class CommandBLEvent extends CommandBase {
+	private List<String> childCommands = Arrays.asList("toggle", "on", "off", "list", "enable", "disable");
 
 	@Override
 	public String getCommandName() {
@@ -48,6 +47,12 @@ public class CommandToggleEvent extends CommandBase {
 			break;
 		case "list":
 			processList(sender);
+			break;
+		case "enable":
+			processEnable(sender, args);
+			break;
+		case "disable":
+			processDisable(sender, args);
 			break;
 		default:
 			throw new CommandException("command.blevent.usage");
@@ -84,6 +89,24 @@ public class CommandToggleEvent extends CommandBase {
 		} else {
 			processEventState(sender, func_82360_a(sender, args, 1), false);
 		}
+	}
+
+	private void processEnable(ICommandSender sender, String[] args) {
+		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		if (environmentEventRegistry.isEnabled()) {
+			throw new CommandException("command.blevent.failure.alreadyenabled");
+		}
+		environmentEventRegistry.enable();
+		func_152373_a(sender, this, "command.blevent.success.enable");
+	}
+
+	private void processDisable(ICommandSender sender, String[] args) {
+		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		if (environmentEventRegistry.isDisabled()) {
+			throw new CommandException("command.blevent.failure.alreadydisabled");
+		}
+		environmentEventRegistry.disable();
+		func_152373_a(sender, this, "command.blevent.success.disable");
 	}
 
 	private void processList(ICommandSender sender) {

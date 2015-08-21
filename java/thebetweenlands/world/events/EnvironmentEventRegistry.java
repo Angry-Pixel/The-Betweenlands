@@ -26,6 +26,8 @@ public class EnvironmentEventRegistry {
 
 	private final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();
 
+	private boolean disabled = false;
+
 	public void register(EnvironmentEvent event) {
 		REGISTERED_EVENTS.put(event.getEventName(), event);
 	}
@@ -84,5 +86,25 @@ public class EnvironmentEventRegistry {
 			list.append(eventName);
 		}
 		return list.toString();
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
+	}
+
+	public void enable() {
+		disabled = false;
+	}
+
+	public void disable() {
+		disabled = true;
+	}
+
+	public boolean isEnabled() {
+		return !disabled;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
 	}
 }

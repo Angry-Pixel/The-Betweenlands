@@ -77,6 +77,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 	private NoiseGeneratorSimplex treeNoise;
 
+	private NoiseGeneratorSimplex speleothemDensityNoise;
+
 	public ChunkProviderBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
 		this.worldObj = world;
 		this.baseBlock = baseBlock;
@@ -262,6 +264,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
         this.noiseGen6 = (NoiseGeneratorOctaves)noiseGens[5];*/
 
 		treeNoise = new NoiseGeneratorSimplex(rand);
+
+		speleothemDensityNoise = new NoiseGeneratorSimplex(rand);
 	}
 
 	/**
@@ -709,5 +713,9 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 	public double evalTreeNoise(double x, double z) {
 		return treeNoise.func_151605_a(x, z);
+	}
+
+	public double evalSpeleothemDensityNoise(double x, double z) {
+		return speleothemDensityNoise.func_151605_a(x, z);
 	}
 }

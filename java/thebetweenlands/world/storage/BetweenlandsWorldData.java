@@ -35,6 +35,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.readFromNBT(this.data);
 		}
+		environmentEventRegistry.setDisabled(data.getBoolean("eventsDisabled"));
 	}
 
 	@Override
@@ -42,6 +43,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.writeToNBT(this.data);
 		}
+		data.setBoolean("eventsDisabled", environmentEventRegistry.isDisabled());
 		compound.setTag(ModInfo.ID + ":worldData", this.data);
 	}
 

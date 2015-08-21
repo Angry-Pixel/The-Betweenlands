@@ -7,7 +7,7 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 	public void postChunkGen(int pass) {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		helper.generateSpeleothems(60);
+		helper.populateCave();
 		helper.generateGiantWeedwoodTree(40);
 		//helper.generatePurpleRainTree(40);
         helper.generateWeedwoodTree(25);

@@ -10,6 +10,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 
 public class WorldGenSpeleothem extends WorldGenerator {
 	private Block stone = BLBlockRegistry.betweenstone;
+
 	private Block speleothem = BLBlockRegistry.stalactite;
 
 	@Override

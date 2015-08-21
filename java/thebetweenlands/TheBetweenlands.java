@@ -23,7 +23,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandAspect;
 import thebetweenlands.command.CommandTickSpeed;
-import thebetweenlands.command.CommandToggleEvent;
+import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
@@ -166,7 +166,7 @@ public class TheBetweenlands
 
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandToggleEvent());
+		event.registerServerCommand(new CommandBLEvent());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
 			event.registerServerCommand(new CommandAspect());

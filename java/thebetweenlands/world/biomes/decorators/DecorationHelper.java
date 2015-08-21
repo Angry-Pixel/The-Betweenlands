@@ -19,6 +19,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenTarPool;
 import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
+import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
@@ -69,11 +70,13 @@ public class DecorationHelper {
 	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
 	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 	private final static WorldGenSpeleothem GEN_SPELEOTHEM = new WorldGenSpeleothem();
+	private final static WorldGenThorns GEN_THORNS = new WorldGenThorns();
 
 	private final Random rand;
 	private final int x, y, z;
 	private final World world;
 	private final boolean centerOffset;
+	private ChunkProviderBetweenlands provider;
 
 	public DecorationHelper(Random rand, World world, int x, int y, int z, boolean centerOffset) {
 		this.rand = rand;
@@ -82,6 +85,7 @@ public class DecorationHelper {
 		this.z = z;
 		this.world = world;
 		this.centerOffset = centerOffset;
+		provider = ((ChunkProviderBetweenlands) ((WorldServer) world).theChunkProviderServer.currentChunkProvider);
 	}
 
 	private final int offsetXZ() {
@@ -879,9 +883,15 @@ public class DecorationHelper {
 		}
 	}
 
-	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0);
+	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
+
+	public void populateCave() {
+		generateSpeleothems(60);
+		generateThorns(100);
+	}
 
 	public void generateSpeleothems(int attempts) {
+		attempts += getSpeleothemAttemptAdditive();
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
 			float v = SPELEOTHEM_Y_CDF.eval(rand.nextFloat());
@@ -891,10 +901,24 @@ public class DecorationHelper {
 		}
 	}
 
-	private boolean canShortThingsGenerateHere() {
-		if (world.provider instanceof WorldProviderBetweenlands) {
-			return ((ChunkProviderBetweenlands) ((WorldServer) world).theChunkProviderServer.currentChunkProvider).evalTreeNoise(x * 0.01, z * 0.01) > -0.25;
+	public void generateThorns(int attempts) {
+		int successCount = 0;
+		while (attempts --> 0) {
+			int x = this.x + offsetXZ();
+			int y = rand.nextInt(WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.WATER_HEIGHT);
+			int z = this.z + offsetXZ();
+			if (GEN_THORNS.generate(world, rand, x, y, z)) {
+				successCount++;
+			}
 		}
-		return true;
+//		System.out.println(successCount);
+	}
+
+	private boolean canShortThingsGenerateHere() {
+		return provider.evalTreeNoise(x * 0.01, z * 0.01) > -0.25;
+	}
+
+	private int getSpeleothemAttemptAdditive() {
+		return (int) ((provider.evalSpeleothemDensityNoise(x * 0.03, z * 0.03) * 0.5 + 0.5) * 20);
 	}
 }
