@@ -76,6 +76,8 @@ public class BlockCompostBin extends BlockContainer {
 				if(compostAmount >= 25){
 					world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, new ItemStack(BLItemRegistry.compost)));
 					tile.removeCompost(25);
+				} else if(tile.totalCompostAmount >= 25 && compostAmount <= 25) {
+					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.ready")));
 				} else {
 					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.enough")));
 				}
