@@ -51,7 +51,7 @@ public class BlockCompostBin extends BlockContainer {
 			TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(x, y, z);
 
 			boolean open = tile.open;
-			if(!open){
+			if(!open && !(player.isSneaking() && player.getCurrentEquippedItem() == null)){
 				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.open")));
 			}else if (player.isSneaking() && player.getCurrentEquippedItem() == null) {
 				world.markBlockForUpdate(x, y, z);
