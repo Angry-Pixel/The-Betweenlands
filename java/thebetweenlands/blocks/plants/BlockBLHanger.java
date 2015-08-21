@@ -84,7 +84,7 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 		canBlockStay(world, x, y, z);
 	}
 
-	private boolean isValidBlock(Block block) {
+	protected boolean isValidBlock(Block block) {
 		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block instanceof BlockBLHanger;
 	}
 

@@ -114,7 +114,7 @@ public class BlockStalactite extends Block {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		if (world.getBlock(x, y - 1, z) == Blocks.air) {
-			world.setBlockMetadataWithNotify(x, y, z, 1, 0x02);
+			world.setBlockMetadataWithNotify(x, y, z, 1, 2);
 		}
 	}
 

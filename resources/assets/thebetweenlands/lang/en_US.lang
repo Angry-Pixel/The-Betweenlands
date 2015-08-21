@@ -269,6 +269,8 @@ tile.thebetweenlands.portalBarkFrame_15.name=Portal Frame
 tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
 
+tile.thebetweenlands.caveMoss.name=Cave Moss
+
 # Items
 item.thebetweenlands.testItem.name=Test Item
 item.thebetweenlands.monsterPlacer.name=Spawn %s

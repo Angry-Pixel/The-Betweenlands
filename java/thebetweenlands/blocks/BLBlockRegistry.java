@@ -34,6 +34,7 @@ import thebetweenlands.blocks.plants.BlockBlubCappedMushroomHead;
 import thebetweenlands.blocks.plants.BlockBlubCappedMushroomStalk;
 import thebetweenlands.blocks.plants.BlockBogBean;
 import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
+import thebetweenlands.blocks.plants.BlockCaveMoss;
 import thebetweenlands.blocks.plants.BlockDeepWaterCoral;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockGoldenClub;
@@ -236,6 +237,8 @@ public class BLBlockRegistry {
     public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
     public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
     public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush");
+
+    public static final Block caveMoss = new BlockCaveMoss();
 
     // SMALL PLANTS
     public static final Block catTail = new BlockBLSmallPlants("cattail");
