@@ -129,6 +129,9 @@ public class CommandBLEvent extends CommandBase {
 
 	@Override
 	public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+		if (!(sender.getEntityWorld().provider instanceof WorldProviderBetweenlands)) {
+			return null;
+		}
 		List<String> completions = null;
 		if (args.length == 1) {
 			completions = childCommands;
