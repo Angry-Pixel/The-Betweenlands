@@ -136,6 +136,7 @@ public class BLItemRegistry {
     public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
     public static final Item manual = new ItemManual().setUnlocalizedName("thebetweenlands.manual");
     public static final Item tarminion = new ItemTarminion().setUnlocalizedName("thebetweenlands.tarminion");
+    public static final Item caveMoss = new Item().setUnlocalizedName("thebetweenlands.caveMossItem").setTextureName("thebetweenlands:caveMoss").setCreativeTab(ModCreativeTabs.plants);
 
     //LOOT
     public static final Item voodooDoll = new ItemVoodooDoll();
