@@ -24,7 +24,7 @@ import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
 
 public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO add BL loot items etc.
-	
+
 	public static final WeightedLootList loot = new WeightedLootList(new LootItemStack[] {
 			new LootItemStack(Items.book).setAmount(1, 4).setWeight(18),
 			new LootItemStack(Items.paper).setAmount(2, 6).setWeight(16),
@@ -91,7 +91,7 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO add BL loo
 					if ((yy == y - 1 || yy == y + height + 1) && !mat.isSolid())
 						return false;
 				}
-		
+
 		for (int x1 = x - halfSize; x1 <= x + halfSize; x1++)
 			for (int z1 = z - halfSize; z1 <= z + halfSize; z1++)
 				for (int y1 = y; y1 < y + height; y1++) {
