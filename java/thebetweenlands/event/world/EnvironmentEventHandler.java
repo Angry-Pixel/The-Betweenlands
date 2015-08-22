@@ -37,7 +37,10 @@ public class EnvironmentEventHandler {
 			EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
 			for(EnvironmentEvent eevent : reg.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
-				if (reg.isEnabled()) {
+				if (reg.isDisabled()) {
+					eevent.setActive(false, eevent.isActive());
+					eevent.setDefaults();
+				} else {
 					eevent.update(event.world);
 				}
 				if(eevent.isDirty()) {
@@ -55,7 +58,7 @@ public class EnvironmentEventHandler {
 			}
 		}
 	}
-	
+
 	//Update events on the client side
 	@SubscribeEvent
 	public void onTick(TickEvent.ClientTickEvent event) {

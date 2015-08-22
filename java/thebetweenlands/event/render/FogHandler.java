@@ -71,7 +71,7 @@ public class FogHandler {
 	@SubscribeEvent
 	public void onFogRenderEvent(RenderFogEvent event) {
 		World world = TheBetweenlands.proxy.getClientWorld();
-		if(world == null) {
+		if(world == null || world.provider instanceof WorldProviderBetweenlands == false) {
 			return;
 		} else if(world.isRemote) {
 			this.farPlaneDistance = event.farPlaneDistance;
@@ -91,7 +91,7 @@ public class FogHandler {
 		World world = TheBetweenlands.proxy.getClientWorld();
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		
-		if(world == null || player == null || this.farPlaneDistance == 0.0F) return;
+		if(world == null || player == null || this.farPlaneDistance == 0.0F || player.dimension != ConfigHandler.DIMENSION_ID) return;
 		
 		BiomeGenBase biome = world.getBiomeGenForCoords(
 				MathHelper.floor_double(player.posX),
@@ -152,7 +152,7 @@ public class FogHandler {
 	@SubscribeEvent
 	public void onFogColor(FogColors event) {
 		World world = FMLClientHandler.instance().getWorldClient();
-		if(world == null) {
+		if(world == null || world.provider instanceof WorldProviderBetweenlands == false) {
 			return;
 		} else if(world.isRemote) {
 			EntityLivingBase renderView = Minecraft.getMinecraft().renderViewEntity;
@@ -179,7 +179,7 @@ public class FogHandler {
 	@SubscribeEvent
 	public void onFogDensity(FogDensity event) {
 		World world = FMLClientHandler.instance().getWorldClient();
-		if(world == null) {
+		if(world == null || world.provider instanceof WorldProviderBetweenlands == false) {
 			return;
 		} else if(world.isRemote) {
 			EntityLivingBase renderView = Minecraft.getMinecraft().renderViewEntity;
