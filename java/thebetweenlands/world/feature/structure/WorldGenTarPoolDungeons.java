@@ -56,7 +56,6 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 							world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstone);
 						if (rand.nextInt(20) == 0) {
 							int randDirection = rand.nextInt(4) + 2;
-							System.out.println("Pot Direction: " + randDirection);
 							world.setBlock(x + xx, yy, z + zz, getRandomBlock(rand), randDirection, 3);
 						}
 					}
