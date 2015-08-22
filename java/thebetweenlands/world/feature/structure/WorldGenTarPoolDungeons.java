@@ -38,9 +38,13 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 			for (int xx = halfSize * -1; xx <= halfSize; ++xx) {
 				for (int zz = halfSize * -1; zz <= halfSize; ++zz) {
 					double dSq = xx * xx + zz * zz;
-					if (Math.round(Math.sqrt(dSq)) == halfSize - 2 && yy >= y + 1)
+					if (Math.round(Math.sqrt(dSq)) == halfSize - 2 && yy >= y + 1) {
 						world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstoneTiles);
-					if (Math.round(Math.sqrt(dSq)) >= halfSize - 1 && yy <= y + 2)
+						if (rand.nextBoolean() && yy == y + 2)
+							if ((xx % 4 == 0 || zz % 4 == 0 || xx % 3 == 0 || zz % 3 == 0 ) && world.getBlock(x + xx,  y + 6, z + zz) == BLBlockRegistry.betweenstone)
+								placePillar(world, x + xx, y + 3, z + zz, rand);
+					}
+					if (Math.round(Math.sqrt(dSq)) <= halfSize && Math.round(Math.sqrt(dSq)) >= halfSize -1 && yy <= y + 2)
 						world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstone);
 					if (Math.round(Math.sqrt(dSq)) < halfSize - 2 && yy >= y + 1)
 						world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.tarFluid);
@@ -57,4 +61,11 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 		System.out.println("Tar Pool Dungeon Here: " + x + " " + y + " " + z);
 		return true;
 	}
+
+	private void placePillar(World world, int x, int y, int z, Random rand) {
+		int randHeight = rand.nextInt(3);
+		for (int yy = y; randHeight + y >= yy; ++yy)
+			world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickWall, 0, 3);
+	}
+
 }
