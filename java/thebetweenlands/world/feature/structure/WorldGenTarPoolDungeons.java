@@ -1,15 +1,80 @@
 package thebetweenlands.world.feature.structure;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.EnchantmentData;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.loot.IPostProcess;
+import thebetweenlands.world.loot.LootItemStack;
+import thebetweenlands.world.loot.LootUtil;
+import thebetweenlands.world.loot.WeightedLootList;
 
-public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
+public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO add BL loot items etc.
+	
+	public static final WeightedLootList loot = new WeightedLootList(new LootItemStack[] {
+			new LootItemStack(Items.book).setAmount(1, 4).setWeight(18),
+			new LootItemStack(Items.paper).setAmount(2, 6).setWeight(16),
+			new LootItemStack(Blocks.web).setAmount(2, 7).setWeight(13),
+			new LootItemStack(Items.enchanted_book).setWeight(8),
+			new LootItemStack(Items.golden_pickaxe).setWeight(3),
+			new LootItemStack(Items.iron_pickaxe).setWeight(2),
+			 new LootItemStack(Items.stone_pickaxe).setWeight(1),
+			 new LootItemStack(Items.golden_shovel).setWeight(3),
+			 new LootItemStack(Items.iron_shovel).setWeight(2),
+			 new LootItemStack(Items.stone_shovel).setWeight(1),
+			 new LootItemStack(Items.golden_axe).setWeight(3),
+			 new LootItemStack(Items.iron_axe).setWeight(2),
+			 new LootItemStack(Items.stone_axe).setWeight(1),
+			 new LootItemStack(Items.golden_sword).setWeight(3),
+			 new LootItemStack(Items.iron_sword).setWeight(2),
+			 new LootItemStack(Items.stone_sword).setWeight(1),
+			 new LootItemStack(Items.iron_chestplate).setWeight(2),
+			 new LootItemStack(Items.golden_chestplate).setWeight(1),
+			 new LootItemStack(Items.iron_helmet).setWeight(2),
+			 new LootItemStack(Items.golden_helmet).setWeight(1),
+			 new LootItemStack(Items.iron_leggings).setWeight(2),
+			 new LootItemStack(Items.golden_leggings).setWeight(1),
+			 new LootItemStack(Items.iron_boots).setWeight(2),
+			 new LootItemStack(Items.golden_boots).setWeight(1)
+			 }).setPostProcessor(new IPostProcess() {
+ 
+					@SuppressWarnings("rawtypes")
+					@Override
+					public ItemStack postProcessItem(ItemStack is, Random rand) {
+						if (is.getItem() == Items.enchanted_book || rand.nextBoolean() && (is.getItem() instanceof ItemTool || is.getItem() instanceof ItemArmor || is.getItem() instanceof ItemSword)) {
+							boolean enchBook = is.getItem() == Items.enchanted_book;
+							if (enchBook)
+								is.func_150996_a(Items.book);
+							List enchList = EnchantmentHelper.buildEnchantmentList(rand, is, 7 + rand.nextInt(10));
+							if (enchBook)
+								is.func_150996_a(Items.enchanted_book);
+
+							if (enchList != null && enchList.size() > 0)
+								for (int a = 0; a < enchList.size(); ++a) {
+									EnchantmentData data = (EnchantmentData) enchList.get(a);
+									if (is.getItem() == Items.enchanted_book)
+										Items.enchanted_book.addEnchantment(is, data);
+									else
+										is.addEnchantment(data.enchantmentobj, data.enchantmentLevel);
+								}
+						}
+						return is;
+					}
+				});
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
@@ -54,9 +119,12 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 							world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.solidTar);
 						else
 							world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstone);
-						if (rand.nextInt(20) == 0) {
+						if (rand.nextInt(18) == 0) {
 							int randDirection = rand.nextInt(4) + 2;
 							world.setBlock(x + xx, yy, z + zz, getRandomBlock(rand), randDirection, 3);
+							TileEntityTarLootPot1 lootPot = (TileEntityTarLootPot1) world.getTileEntity(x + xx, yy, z + zz);
+							if (lootPot != null)
+								LootUtil.generateLoot(lootPot, rand, loot, 1, 3);
 						}
 					}
 				}
