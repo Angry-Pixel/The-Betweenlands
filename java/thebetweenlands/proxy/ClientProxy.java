@@ -83,6 +83,9 @@ import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
+import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
+import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemTarminionRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
@@ -99,6 +102,9 @@ import thebetweenlands.client.render.tileentity.TileEntityLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityPestleAndMortarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityPurifierRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarBeastSpawnerRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityTarLootPot1Renderer;
+import thebetweenlands.client.render.tileentity.TileEntityTarLootPot2Renderer;
+import thebetweenlands.client.render.tileentity.TileEntityTarLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.client.tooltips.HeldItemTooltipHandler;
@@ -159,6 +165,9 @@ import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
+import thebetweenlands.tileentities.TileEntityTarLootPot1;
+import thebetweenlands.tileentities.TileEntityTarLootPot2;
+import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
@@ -245,6 +254,9 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot3.class, new TileEntityLootPot3Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSpawner.class, new TileEntityBLSpawnerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarBeastSpawner.class, new TileEntityTarBeastSpawnerRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot1.class, new TileEntityTarLootPot1Renderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot2.class, new TileEntityTarLootPot2Renderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new TileEntityTarLootPot3Renderer());
 
 		//Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
@@ -259,6 +271,9 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot2), new ItemLootPot2Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.lootPot3), new ItemLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.tarminion, new ItemTarminionRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot1), new ItemTarLootPot1Renderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot2), new ItemTarLootPot2Renderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());

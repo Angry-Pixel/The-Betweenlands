@@ -2,6 +2,7 @@ package thebetweenlands.world.feature.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -48,11 +49,16 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 						world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstone);
 					if (Math.round(Math.sqrt(dSq)) < halfSize - 2 && yy >= y + 1)
 						world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.tarFluid);
-					if (Math.round(Math.sqrt(dSq)) <= halfSize - 2 && yy == y) {
+					if (Math.round(Math.sqrt(dSq)) < halfSize - 2 && yy == y) {
 						if (rand.nextBoolean() && rand.nextBoolean())
 							world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.solidTar);
 						else
 							world.setBlock(x + xx, yy, z + zz, BLBlockRegistry.betweenstone);
+						if (rand.nextInt(20) == 0) {
+							int randDirection = rand.nextInt(4) + 2;
+							System.out.println("Pot Direction: " + randDirection);
+							world.setBlock(x + xx, yy, z + zz, getRandomBlock(rand), randDirection, 3);
+						}
 					}
 				}
 			}
@@ -67,5 +73,14 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO
 		for (int yy = y; randHeight + y >= yy; ++yy)
 			world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickWall, 0, 3);
 	}
+
+    private Block getRandomBlock(Random rand) {
+        switch(rand.nextInt(3)) {
+            case 0: return BLBlockRegistry.tarLootPot1;
+            case 1: return BLBlockRegistry.tarLootPot2;
+            case 2: return BLBlockRegistry.tarLootPot3;
+            default: return BLBlockRegistry.tarLootPot1;
+        }
+    }
 
 }

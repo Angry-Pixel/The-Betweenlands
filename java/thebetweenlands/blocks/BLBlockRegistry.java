@@ -23,6 +23,9 @@ import thebetweenlands.blocks.container.BlockLootPot2;
 import thebetweenlands.blocks.container.BlockLootPot3;
 import thebetweenlands.blocks.container.BlockPestleAndMortar;
 import thebetweenlands.blocks.container.BlockPurifier;
+import thebetweenlands.blocks.container.BlockTarLootPot1;
+import thebetweenlands.blocks.container.BlockTarLootPot2;
+import thebetweenlands.blocks.container.BlockTarLootPot3;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
@@ -363,6 +366,9 @@ public class BLBlockRegistry {
     public static final Block lootPot1 = new BlockLootPot1();
     public static final Block lootPot2 = new BlockLootPot2();
     public static final Block lootPot3 = new BlockLootPot3();
+    public static final Block tarLootPot1 = new BlockTarLootPot1();
+    public static final Block tarLootPot2 = new BlockTarLootPot2();
+    public static final Block tarLootPot3 = new BlockTarLootPot3();
 
     //DOORS
     public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
