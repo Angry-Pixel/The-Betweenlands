@@ -18,6 +18,7 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenTarPool;
+import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
 import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
 import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
@@ -71,6 +72,7 @@ public class DecorationHelper {
 	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 	private final static WorldGenSpeleothem GEN_SPELEOTHEM = new WorldGenSpeleothem();
 	private final static WorldGenThorns GEN_THORNS = new WorldGenThorns();
+	private final static WorldGenCaveMoss GEN_CAVE_MOSS = new WorldGenCaveMoss();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -885,9 +887,14 @@ public class DecorationHelper {
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 
+	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
+
+	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
+
 	public void populateCave() {
 		generateSpeleothems(60);
-		generateThorns(100);
+		generateThorns(200);
+		generateCaveMoss(150);
 	}
 
 	public void generateSpeleothems(int attempts) {
@@ -902,16 +909,23 @@ public class DecorationHelper {
 	}
 
 	public void generateThorns(int attempts) {
-		int successCount = 0;
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
-			int y = rand.nextInt(WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.WATER_HEIGHT);
+			float v = THORNS_Y_CDF.eval(rand.nextFloat());
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
-			if (GEN_THORNS.generate(world, rand, x, y, z)) {
-				successCount++;
-			}
+			GEN_THORNS.generate(world, rand, x, y, z);
 		}
-//		System.out.println(successCount);
+	}
+
+	public void generateCaveMoss(int attempts) {
+		while (attempts --> 0) {
+			int x = this.x + offsetXZ();
+			float v = CAVE_MOSS_Y_CDF.eval(rand.nextFloat());
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int z = this.z + offsetXZ();
+			GEN_CAVE_MOSS.generate(world, rand, x, y, z);
+		}
 	}
 
 	private boolean canShortThingsGenerateHere() {

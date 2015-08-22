@@ -9,8 +9,8 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityStalactiteWaterDripFX extends EntityFX {
-	public EntityStalactiteWaterDripFX(World world, double x, double y, double z) {
+public class EntityCaveWaterDripFX extends EntityFX {
+	public EntityCaveWaterDripFX(World world, double x, double y, double z) {
 		super(world, x, y, z, 0, 0, 0);
 		motionX = motionY = motionZ = 0;
 		particleRed = 0.2F;

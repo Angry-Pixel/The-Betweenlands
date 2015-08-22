@@ -23,7 +23,7 @@ import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityLeafFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntitySplashFX;
-import thebetweenlands.entities.particles.EntityStalactiteWaterDripFX;
+import thebetweenlands.entities.particles.EntityCaveWaterDripFX;
 import thebetweenlands.entities.particles.EntityTarBeastDrip;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.relauncher.Side;
@@ -123,7 +123,7 @@ public enum BLParticle {
 			return new Object[] { data.length == 0 || !(data[0] instanceof Integer) ? 0xFFFFFF : (int) data[0] };
 		}
 	},
-	STALACTITE_WATER_DRIP(EntityStalactiteWaterDripFX.class, ParticleArgs.NONE);
+	CAVE_WATER_DRIP(EntityCaveWaterDripFX.class, ParticleArgs.NONE);
 
 	private static final int REGULAR_ARG_NUM = 4;
 

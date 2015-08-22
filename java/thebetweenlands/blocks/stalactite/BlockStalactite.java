@@ -107,7 +107,7 @@ public class BlockStalactite extends Block {
 			double sy = y + midHeight;
 			double sz = z + mid.y + StalactiteHelper.randRange(random, -dripRange, dripRange);
 
-			BLParticle.STALACTITE_WATER_DRIP.spawn(world, sx, sy, sz);
+			BLParticle.CAVE_WATER_DRIP.spawn(world, sx, sy, sz);
 		}
 	}
 

@@ -411,6 +411,8 @@ item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
 item.thebetweenlands.ringOfPower.name=Ring Of Power
 
+item.thebetweenlands.caveMossItem.name=Cave Moss
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler
