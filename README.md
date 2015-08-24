@@ -12,10 +12,8 @@ Finish all currently unfinished stuff
 - Gen features
 
 Specifically the following
-- Portal finishing touches (issue #134)
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
-- Tar liquid and pools (issue #109)
 - Finishing missing textures (e.g. Explorer's Hat, HL things)
 
 This does not include cave gen or mob spawning.
