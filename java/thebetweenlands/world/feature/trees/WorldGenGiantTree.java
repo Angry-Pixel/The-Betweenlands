@@ -1,11 +1,13 @@
 package thebetweenlands.world.feature.trees;
 
-import static thebetweenlands.blocks.BLBlockRegistry.*;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwood;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwoodBark;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -110,6 +112,7 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	private void generateRoot(World world, Random rand, float posX, float posY, float posZ, float yaw, float pitch, int length, float startSize, float endSize) {
 		float yawDelta = 0, pitchDelta = 0;
 		int branchPoint = rand.nextBoolean() ? length / 2 + rand.nextInt(length / 4) : -1;
+		int minX = 30_000_000, minY = 255, minZ = 30_000_000, maxX = -30_000_000, maxY = 0, maxZ = -30_000_000;
 		for (int step = 0; step < length; step++) {
 			float cosPitch = MathHelper.cos(pitch);
 			posX += MathHelper.cos(yaw) * cosPitch;
@@ -131,16 +134,66 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 				float branchAngle = rand.nextFloat() * (float) Math.PI / 4 + (float) Math.PI / 4;
 				generateRoot(world, rand, posX, posY, posZ, yaw + branchYaw + branchAngle, pitch, length - step, size, 1);
 				generateRoot(world, rand, posX, posY, posZ, yaw + branchYaw - branchAngle, pitch, length - step, size, 1);
-				return;
+				break;
 			}
 			if (world.getBlock((int) posX, (int) posY, (int) posZ) == weedwood) {
 				continue;
 			}
+			float sizeSq = size * size;
 			for (int x = -sizeRange; x <= sizeRange; x++) {
 				for (int z = -sizeRange; z <= sizeRange; z++) {
 					for (int y = -sizeRange; y <= sizeRange; y++) {
-						if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
-							world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
+						float dist = x * x + y * y + z * z;
+						if (dist <= sizeSq) {
+							int bx = (int) posX + x; 
+							int by = (int) posY + y; 
+							int bz = (int) posZ + z; 
+							world.setBlock(bx, by, bz, weedwoodBark);
+							if (bx < minX) minX = bx;
+							if (by < minY) minY = by;
+							if (bz < minZ) minZ = bz;
+							if (bx > maxX) maxX = bx;
+							if (by > maxY) maxY = by;
+							if (bz > maxZ) maxZ = bz;
+						}
+					}
+				}
+			}
+		}
+		makeBarkInsideNotBark(world, minX, minY, minZ, maxX, maxY, maxZ);
+	}
+
+	protected void makeBarkInsideNotBark(World world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+		for (int x = minX; x <= maxX; x++) {
+			for (int y = minY; y <= maxY; y++) {
+				for (int z = minZ; z <= maxZ; z++) {
+					/*if (
+						x == minX && y == minY ||
+						x == maxX && y == minY ||
+						z == minZ && y == minY ||
+						z == maxZ && y == minY ||
+						x == minX && y == maxY ||
+						x == maxX && y == maxY ||
+						z == minZ && y == maxY ||
+						z == maxZ && y == maxY ||
+						x == minX && z == minZ ||
+						x == maxX && z == minZ ||
+						x == maxX && z == maxZ ||
+						x == minX && z == maxZ
+					) {
+						world.setBlock(x, y, z, Blocks.gold_block);
+					}*/
+					if (world.getBlock(x, y, z) == weedwoodBark) {
+						Block t;
+						if (
+							((t = world.getBlock(x + 1, y, z)) == weedwoodBark || t == weedwood) &&
+							((t = world.getBlock(x - 1, y, z)) == weedwoodBark || t == weedwood) &&
+							((t = world.getBlock(x, y + 1, z)) == weedwoodBark || t == weedwood) &&
+							((t = world.getBlock(x, y - 1, z)) == weedwoodBark || t == weedwood) &&
+							((t = world.getBlock(x, y, z + 1)) == weedwoodBark || t == weedwood) &&
+							((t = world.getBlock(x, y, z - 1)) == weedwoodBark || t == weedwood)
+						) {
+							world.setBlock(x, y, z, weedwood);
 						}
 					}
 				}

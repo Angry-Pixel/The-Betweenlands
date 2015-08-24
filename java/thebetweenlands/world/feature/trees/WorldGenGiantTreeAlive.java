@@ -1,6 +1,10 @@
 package thebetweenlands.world.feature.trees;
 
-import static thebetweenlands.blocks.BLBlockRegistry.*;
+import static thebetweenlands.blocks.BLBlockRegistry.hanger;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwood;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwoodBark;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwoodLeaves;
+import static thebetweenlands.blocks.BLBlockRegistry.weedwoodLog;
 
 import java.util.Random;
 
@@ -52,6 +56,7 @@ public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 		} else if (largeCanopy) {
 			endSize = startSize * 0.75F;
 		}
+		int minX = 30_000_000, minY = 255, minZ = 30_000_000, maxX = -30_000_000, maxY = 0, maxZ = -30_000_000;
 		for (int step = 0; step < length; step++) {
 			float along = step / (float) length;
 			float cosPitch = MathHelper.cos(pitch);
@@ -78,18 +83,29 @@ public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 			for (int x = -sizeRange; x <= sizeRange; x++) {
 				for (int z = -sizeRange; z <= sizeRange; z++) {
 					for (int y = -sizeRange; y <= sizeRange; y++) {
-						if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
+						float dist = MathHelper.sqrt_float(x * x + y * y + z * z);
+						if (dist <= size) {
 							Block block = world.getBlock((int) posX + x, (int) posY + y, (int) posZ + z);
 							Block above = world.getBlock((int) posX + x, (int) posY + y + 1, (int) posZ + z);
 							if (block == weedwood && above.getMaterial().isReplaceable()) {
 								continue;
 							}
-							world.setBlock((int) posX + x, (int) posY + y, (int) posZ + z, weedwoodBark);
+							int bx = (int) posX + x; 
+							int by = (int) posY + y; 
+							int bz = (int) posZ + z; 
+							world.setBlock(bx, by, bz, weedwoodBark);
+							if (bx < minX) minX = bx;
+							if (by < minY) minY = by;
+							if (bz < minZ) minZ = bz;
+							if (bx > maxX) maxX = bx;
+							if (by > maxY) maxY = by;
+							if (bz > maxZ) maxZ = bz;
 						}
 					}
 				}
 			}
 		}
+		makeBarkInsideNotBark(world, minX, minY, minZ, maxX, maxY, maxZ);
 		int maxRadius = largeCanopy ? 16: (length < 2 ? 1 : (length * 3 / 8 + rand.nextInt(length / 4)));
 		generateCanopy(world, rand, (int) posX, (int) posY, (int) posZ, maxRadius);
 	}
