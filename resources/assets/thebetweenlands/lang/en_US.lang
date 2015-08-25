@@ -519,3 +519,5 @@ manual.widget.purifier.recipe=Purifier recipe
 manual.widget.purifier.process.time=Process time: .seconds. seconds
 
 manual.widget.smelting.recipe=Furnace recipe
+
+talisman.noplace=The space is not large enough

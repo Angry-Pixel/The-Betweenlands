@@ -1,7 +1,10 @@
 package thebetweenlands.world.feature.trees;
 
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockTreePortal;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
@@ -25,8 +28,11 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
-					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube())
+					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube()) {
+						if(TheBetweenlands.proxy.getClientPlayer() != null)
+							TheBetweenlands.proxy.getClientPlayer().addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal("talisman.noplace")));
 						return false;
+					}
 
 		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
 		
