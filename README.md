@@ -14,7 +14,7 @@ Finish all currently unfinished stuff
 Specifically the following
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
-- Finishing missing textures (e.g. Explorer's Hat, HL things)
+- Tar Beast AI
 
 This does not include cave gen or mob spawning.
 ___________________________________________
