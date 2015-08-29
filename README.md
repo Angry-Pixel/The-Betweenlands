@@ -15,6 +15,7 @@ Specifically the following
 - Finish off the Compost Bin (issue #170)
 - Gecko AI (issue #152)
 - Tar Beast AI
+- Loot Items for Tar beast Mini- Dungeon
 
 This does not include cave gen or mob spawning.
 ___________________________________________
