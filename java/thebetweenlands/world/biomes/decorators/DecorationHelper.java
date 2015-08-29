@@ -17,7 +17,7 @@ import thebetweenlands.utils.CubicBezier;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
-import thebetweenlands.world.biomes.feature.WorldGenTarPool;
+import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
 import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
 import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
 import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
@@ -68,7 +68,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_BOTTLE_BRUSH_GRASS = new WorldGenTallGrass(BLBlockRegistry.bottleBrushGrass, 1);
 	private final static WorldGenGiantTreeDead GEN_DEAD_TREE = new WorldGenGiantTreeDead();
 	private final static WorldGenHugeMushroom GEN_HUGE_MUSHROOM = new WorldGenHugeMushroom();
-	private final static WorldGenTarPool GEN_TAR_POOL = new WorldGenTarPool();
+	private final static WorldGenFluidPool GEN_LIQUID_POOL = new WorldGenFluidPool();
 	private final static WorldGenSmallHollowLog GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 	private final static WorldGenSpeleothem GEN_SPELEOTHEM = new WorldGenSpeleothem();
 	private final static WorldGenThorns GEN_THORNS = new WorldGenThorns();
@@ -868,12 +868,24 @@ public class DecorationHelper {
 			int zz = z + offsetXZ();
 
 			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
-				GEN_TAR_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
-				GEN_TAR_POOL.generate(world, rand, xx, yy, zz);
+				GEN_LIQUID_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
+				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.tarFluid);
 			}
 		}
 	}
 
+	public void generateStagnantWaterPool(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int xx = x + offsetXZ();
+			int yy = 6 + rand.nextInt(40);
+			int zz = z + offsetXZ();
+
+			if (checkSurface(SurfaceType.UNDERGROUND, xx, yy, zz)) {
+				GEN_LIQUID_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
+				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.stagnantWaterFluid);
+			}
+		}
+	}
 	public void generateSmallHollowLog(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();
