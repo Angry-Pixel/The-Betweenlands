@@ -98,7 +98,8 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
 		topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
-		bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
+		if(!name.equals("Sundew"))
+			bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
 	}
 
 	@Override
