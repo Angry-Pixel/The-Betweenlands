@@ -32,6 +32,11 @@ public class BlockStagnantWater extends BlockFluidClassic {
     }
 
     @Override
+    public IIcon getIcon(int side, int meta) {
+        return side == 0 || side == 1 ? stillIcon : flowingIcon;
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
         stillIcon = register.registerIcon("thebetweenlands:stagnantWater");
