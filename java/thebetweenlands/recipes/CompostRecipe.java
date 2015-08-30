@@ -17,14 +17,14 @@ public class CompostRecipe {
     public int itemDamage;
     public int compostTime;
 
-    public CompostRecipe(int compostAmount, int compostTime, Item compostItem, int itemDamage){
+    public CompostRecipe(int compostAmount, int compostTime, Item compostItem, int itemDamage) {
         this.compostAmount = compostAmount;
         this.compostTime = compostTime;
         this.compostItem = compostItem;
         this.itemDamage = itemDamage;
     }
 
-    public CompostRecipe(int compostAmount, int compostTime, Item compostItem){
+    public CompostRecipe(int compostAmount, int compostTime, Item compostItem) {
         this.compostAmount = compostAmount;
         this.compostTime = compostTime;
         this.compostItem = compostItem;
@@ -32,21 +32,26 @@ public class CompostRecipe {
     }
 
 
-
-    public static void addRecipe(int compostAmount, int compostTime, Item compostItem, int meta){
+    public static void addRecipe(int compostAmount, int compostTime, Item compostItem, int meta) {
         compostRecipes.add(new CompostRecipe(compostAmount, compostTime, compostItem, meta));
     }
-    public static void addRecipe(int compostAmount, int compostTime, Item compostItem){
+
+    public static void addRecipe(int compostAmount, int compostTime, Item compostItem) {
         compostRecipes.add(new CompostRecipe(compostAmount, compostTime, compostItem));
     }
 
-    public static Item getItem(Block block){
+    public static void addRecipe(int compostAmount, int compostTime, ArrayList<ItemStack> compostItems) {
+        for (ItemStack compostItem : compostItems)
+            compostRecipes.add(new CompostRecipe(compostAmount, compostTime, compostItem.getItem(), compostItem.getItemDamage()));
+    }
+
+    public static Item getItem(Block block) {
         return Item.getItemFromBlock(block);
     }
 
-    public static CompostRecipe hasCompostValue(ItemStack stack){
-        for(CompostRecipe compostRecipe: compostRecipes){
-            if(compostRecipe.compostItem == stack.getItem() && compostRecipe.itemDamage == stack.getItemDamage())
+    public static CompostRecipe hasCompostValue(ItemStack stack) {
+        for (CompostRecipe compostRecipe : compostRecipes) {
+            if (compostRecipe.compostItem == stack.getItem() && compostRecipe.itemDamage == stack.getItemDamage())
                 return compostRecipe;
         }
         return null;

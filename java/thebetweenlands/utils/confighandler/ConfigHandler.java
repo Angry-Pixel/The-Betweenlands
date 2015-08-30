@@ -4,11 +4,15 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.recipes.RecipeBuffers;
+
+import java.io.File;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General" };
+	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General", "CustomRecipes"};
 
 	//////// Values ///////
 	public static int DIMENSION_ID;
@@ -30,10 +34,14 @@ public class ConfigHandler {
 	public static int SKY_RESOLUTION;
 
 	public Configuration config;
+	public Configuration recipe;
 
 	public void loadConfig(FMLPreInitializationEvent event) {
-		config = new Configuration(event.getSuggestedConfigurationFile());
+		String path = event.getSuggestedConfigurationFile().getPath();
+		config = new Configuration(new File(path.replace("thebetweenlands.cfg", "thebetweenlands/mainConfig.cfg")));
 		config.load();
+		recipe = new Configuration(new File(path.replace("thebetweenlands.cfg", "thebetweenlands/recipeConfig.cfg")));
+		recipe.load();
 		syncConfigs();
 	}
 
@@ -53,13 +61,45 @@ public class ConfigHandler {
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", CATEGORIES[1], true, "");
 		USE_SHADER = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
 		SKY_RESOLUTION = config.get(CATEGORIES[1], "Sky texture resolution (only when shaders are enabled)", 1024).getInt(1024);
-		
+
 		// Replaced with false by gradle for release version
 		DEBUG = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
 		DEBUG_MENU_ON_START = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
 
+
+		//recipes
+		recipe.addCustomCategoryComment("CompostRecipes", "Custom extra compost 'recipes'. Syntax: \n modid:input:compost:time[:'metadata': metadata], \n" +
+				" replace modid with the mod id, 'oredictionary' for a oredictionary item or 'id' to use a item id \n" +
+				" examples: \n" +
+				"  oredictionary:treeSapling:5:12000\n" +
+				"  minecraft:diamond:100:10\n" +
+				"  thebetweenlands:purpleRainLog:10:10\n" +
+				"  id:5:10:10:1");
+		Property propValuesCompost = recipe.get("CompostRecipes", CATEGORIES[3], new String[]{});
+		RecipeBuffers.bufferCompost = propValuesCompost.getStringList();
+
+		recipe.addCustomCategoryComment("PestleAndMortarRecipes", " Custom extra pestle and mortar 'recipes'. Syntax: \n modid:input:modid:output[:'ouputAmount':amount][:'inputAmount':amount][:'metaInput':metadata][:'metaOutput':metadata] \n" +
+				" replace modid with the mod id, 'oredictionary' for a oredictionary item or 'id' to use a item id \n" +
+				" examples: \n" +
+				"  minecraft:dirt:id:7[:ouputAmount:21][:metaInput:2][:metaOutput:7]\n" +
+				"  oredictionary:treeSapling:thebetweenlands:purpleRainLog[:ouputAmount:21][:metaInput:2][:metaOutput:7]");
+		Property propValuesPAM = recipe.get("PestleAndMortarRecipes", CATEGORIES[3], new String[]{});
+		RecipeBuffers.bufferPAM = propValuesPAM.getStringList();
+
+		recipe.addCustomCategoryComment("PurifierRecipes", " Custom extra purifier 'recipes'. Syntax: \n modid:input:modid:output[:'ouputAmount':amount][:'inputAmount':amount][:'metaInput':metadata][:'metaOutput':metadata] \n" +
+				" replace modid with the mod id, 'oredictionary' for a oredictionary item or 'id' to use a item id \n" +
+				" examples: \n" +
+				"  minecraft:dirt:id:7[:ouputAmount:21][:metaInput:2][:metaOutput:7]\n" +
+				"  oredictionary:treeSapling:thebetweenlands:purpleRainLog[:ouputAmount:21][:metaInput:2][:metaOutput:7]");
+		Property propValuesPurifier= recipe.get("PurifierRecipes", CATEGORIES[3], new String[]{});
+		RecipeBuffers.bufferPurify = propValuesPurifier.getStringList();
+
 		if (config.hasChanged()) {
 			config.save();
+		}
+
+		if (recipe.hasChanged()) {
+			recipe.save();
 		}
 	}
 
