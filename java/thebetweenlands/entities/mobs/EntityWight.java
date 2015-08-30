@@ -75,13 +75,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public void onUpdate() {
 		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 12.0D);
 
-		if(target != null && !target.isSneaking())
+		if(target != null && !target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask))
 			setTargetSpotted(target, true);
 
-		if(target != null && target != previousTarget && target.isSneaking())
+		if(target != null && target != previousTarget && target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask))
 			setTargetSpotted(target, false);
 
-		if(target == null && previousTarget != null)
+		if((target == null && previousTarget != null) || (target != null && target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask))
 			setTargetSpotted(target, false);
 
 		if (!worldObj.isRemote && getAttackTarget() != null)
@@ -94,7 +94,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	private void setTargetSpotted(EntityPlayer target, boolean hasBeenSeen) {
-		if (hasBeenSeen) {
+		if (hasBeenSeen  ){
 			if (!updateHasBeenSeen) {
 				updateHasBeenSeen = true;
 				tasks.addTask(1, meleeAttack);
