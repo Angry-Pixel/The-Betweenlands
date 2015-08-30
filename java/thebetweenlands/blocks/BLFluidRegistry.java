@@ -30,7 +30,7 @@ public class BLFluidRegistry {
 	public static Fluid swampWaterRoot = new Fluid("swampWaterRoot").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterRoot");
 	public static Fluid swampWaterDeepWaterCoral = new Fluid("swampWaterDeepWaterCoral").setDensity(1000).setViscosity(1000).setUnlocalizedName("swampWaterDeepWaterCoral");
 	public static Fluid tarFluid = new Fluid("tarFluid").setDensity(2000).setViscosity(2000).setUnlocalizedName("tarFluid");
-	public static Fluid stagnantWater = new Fluid("stagnantWater").setDensity(2000).setViscosity(2000).setUnlocalizedName("stagnantWater");
+	public static Fluid stagnantWater = new Fluid("stagnantWater").setDensity(1200).setViscosity(1200).setLuminosity(8).setUnlocalizedName("stagnantWater");
 
 
 	private BLFluidRegistry() {
@@ -51,6 +51,7 @@ public class BLFluidRegistry {
 
 		FluidContainerRegistry.registerFluidContainer(tarFluid, new ItemStack(BLItemRegistry.weedwoodBucketTar), new ItemStack(BLItemRegistry.weedwoodBucket));
 		FluidContainerRegistry.registerFluidContainer(swampWater, new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.weedwoodBucket));
+		FluidContainerRegistry.registerFluidContainer(stagnantWater, new ItemStack(BLItemRegistry.weedwoodStagnantWater), new ItemStack(BLItemRegistry.weedwoodBucket));
 	}
 
 	@SubscribeEvent

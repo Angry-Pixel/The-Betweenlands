@@ -46,7 +46,7 @@ public class WorldGenFluidPool extends WorldGenerator {
             return false;
         y -= 4;
 
-        boolean[] placeTarFluid = new boolean[2048];
+        boolean[] placeFluid = new boolean[2048];
 
         int xx;
 
@@ -67,7 +67,7 @@ public class WorldGenFluidPool extends WorldGenerator {
                         double dist = d6 * d6 + d7 * d7 + d8 * d8;
 
                         if (dist < 1D)
-                            placeTarFluid[(xx * 16 + zz) * 8 + yy] = true;
+                            placeFluid[(xx * 16 + zz) * 8 + yy] = true;
                     }
         }
 
@@ -78,7 +78,7 @@ public class WorldGenFluidPool extends WorldGenerator {
         for (xx = 0; xx < 16; ++xx)
             for (zz = 0; zz < 16; ++zz)
                 for (yy = 0; yy < 8; ++yy) {
-                    flag = !placeTarFluid[(xx * 16 + zz) * 8 + yy] && (xx < 15 && placeTarFluid[((xx + 1) * 16 + zz) * 8 + yy] || xx > 0 && placeTarFluid[((xx - 1) * 16 + zz) * 8 + yy] || zz < 15 && placeTarFluid[(xx * 16 + zz + 1) * 8 + yy] || zz > 0 && placeTarFluid[(xx * 16 + zz - 1) * 8 + yy] || yy < 7 && placeTarFluid[(xx * 16 + zz) * 8 + yy + 1] || yy > 0 && placeTarFluid[(xx * 16 + zz) * 8 + yy - 1]);
+                    flag = !placeFluid[(xx * 16 + zz) * 8 + yy] && (xx < 15 && placeFluid[((xx + 1) * 16 + zz) * 8 + yy] || xx > 0 && placeFluid[((xx - 1) * 16 + zz) * 8 + yy] || zz < 15 && placeFluid[(xx * 16 + zz + 1) * 8 + yy] || zz > 0 && placeFluid[(xx * 16 + zz - 1) * 8 + yy] || yy < 7 && placeFluid[(xx * 16 + zz) * 8 + yy + 1] || yy > 0 && placeFluid[(xx * 16 + zz) * 8 + yy - 1]);
 
                     if (flag) {
                         Material material = world.getBlock(x + xx, y + yy, z + zz).getMaterial();
@@ -97,10 +97,9 @@ public class WorldGenFluidPool extends WorldGenerator {
         for (xx = 0; xx < 16; ++xx)
             for (zz = 0; zz < 16; ++zz)
                 for (yy = 0; yy < 8; ++yy)
-                    if (placeTarFluid[(xx * 16 + zz) * 8 + yy])
+                    if (placeFluid[(xx * 16 + zz) * 8 + yy])
                         world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
 
-        System.out.println("Generated " + fillerFluid.getLocalizedName() +  " pool at: " + x + " " + y + " " + z);
         return true;
     }
 
