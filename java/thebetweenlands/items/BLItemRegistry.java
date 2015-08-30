@@ -134,7 +134,7 @@ public class BLItemRegistry {
     public static final Item compost = new ItemCompost().setUnlocalizedName("thebetweenlands.compost");
     public static final Item pestle = new ItemPestle().setUnlocalizedName("thebetweenlands.pestle");
     public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
-    public static final Item manual = new ItemManual().setUnlocalizedName("thebetweenlands.manual");
+    public static final Item manual = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("manual");
     public static final Item tarminion = new ItemTarminion().setUnlocalizedName("thebetweenlands.tarminion");
     public static final Item caveMoss = new Item().setUnlocalizedName("thebetweenlands.caveMossItem").setTextureName("thebetweenlands:caveMoss").setCreativeTab(ModCreativeTabs.plants);
 

@@ -24,6 +24,9 @@ import thebetweenlands.recipes.BLMaterials;
  */
 public class BlockStagnantWater extends BlockFluidClassic {
 
+
+    int timer = 15;
+
     @SideOnly(Side.CLIENT)
     protected IIcon stillIcon, flowingIcon;
     public BlockStagnantWater() {
@@ -46,7 +49,12 @@ public class BlockStagnantWater extends BlockFluidClassic {
     @Override
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
         if (entity instanceof EntityPlayer) {
-            DecayManager.setDecayLevel(DecayManager.getDecayLevel((EntityPlayer) entity) - 1, (EntityPlayer) entity);
+            if (timer == 0) {
+                DecayManager.setDecayLevel(DecayManager.getDecayLevel((EntityPlayer) entity) - 1, (EntityPlayer) entity);
+                timer = 10;
+            }
+            else
+                timer--;
         }
     }
 
