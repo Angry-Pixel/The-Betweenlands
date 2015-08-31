@@ -7,83 +7,106 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
 
-public class TileEntityCompostBin extends TileEntity {
+public class TileEntityCompostBin extends TileEntity
+{
+    public static final int COMPOST_PER_ITEM = 25;
 
     public static final float MAX_OPEN = 90f;
     public static final float MIN_OPEN = 0f;
     public static final float OPEN_SPEED = 10f;
     public static final float CLOSE_SPEED = 10f;
 
-    private int maxItems = 10;
+    private int maxItems = 10, maxCompostAmount = 100;
+
+    public int compostedAmount;
+    public boolean open = false;
+    public float litAngle = 0.0f;
     private ItemStack[] inventory = new ItemStack[maxItems];
     private int[] processes = new int[maxItems];
     private int[] compostAmount = new int[maxItems];
     private int compostTime[] = new int[maxItems];
-    public int totalCompostAmount, compostedAmount, maxCompostAmount = 100;
-
-    public boolean open = false;
-    public float litAngle = 0.0f;
-
 
     @Override
-    public void updateEntity() {
-        if (open)
-            litAngle = Math.min(litAngle + OPEN_SPEED, MAX_OPEN);
-        else
-            litAngle = Math.max(litAngle - CLOSE_SPEED, MIN_OPEN);
+    public void updateEntity()
+    {
+        litAngle = open ? Math.min(litAngle + OPEN_SPEED, MAX_OPEN) : Math.max(litAngle - CLOSE_SPEED, MIN_OPEN);
 
-        if (!worldObj.isRemote) {
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] != null) {
-                    if (processes[i] >= compostTime[i]) {
-                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        if (!worldObj.isRemote)
+        {
+            for (int i = 0; i < inventory.length; i++)
+            {
+                if (inventory[i] != null)
+                {
+                    if (processes[i] >= compostTime[i])
+                    {
                         compostedAmount += compostAmount[i];
                         inventory[i] = null;
                         processes[i] = 0;
                         compostTime[i] = 0;
                         compostAmount[0] = 0;
-                    } else
+
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        markDirty();
+                    }
+                    else
                         processes[i]++;
                 }
             }
         }
     }
 
-    public boolean removeCompost(int amount) {
-        if (compostedAmount >= amount) {
+    public boolean removeCompost(int amount)
+    {
+        if (compostedAmount >= amount)
+        {
             compostedAmount -= amount;
-            totalCompostAmount -= amount;
             return true;
         }
         return false;
     }
 
-    public int addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate) {
-        if (totalCompostAmount + compostAmount <= maxCompostAmount) {
-            for (int i = 0; i < this.inventory.length; i++) {
-                if (inventory[i] == null) {
-                    if (!doSimulate) {
-                        this.inventory[i] = stack;
+    public int addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate)
+    {
+        if (getTotalCompostAmount() + compostAmount <= maxCompostAmount)
+        {
+            for (int i = 0; i < this.inventory.length; i++)
+            {
+                if (inventory[i] == null)
+                {
+                    if (!doSimulate)
+                    {
+                        this.inventory[i] = stack.copy();
+                        this.inventory[i].stackSize = 1;
                         this.compostAmount[i] = compostAmount;
                         this.compostTime[i] = compostTime;
                         processes[i] = 0;
-                        totalCompostAmount += compostAmount;
+
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        markDirty();
                     }
                     return 1;
                 }
             }
-        } else if (totalCompostAmount < maxCompostAmount) {
-            int newCompostAmount = maxCompostAmount - totalCompostAmount;
-            for (int i = 0; i < this.inventory.length; i++) {
-                if (inventory[i] == null) {
-                    if (!doSimulate) {
-                        this.inventory[i] = stack;
+        }
+        else if (getTotalCompostAmount() < maxCompostAmount)
+        {
+            int newCompostAmount = maxCompostAmount - getTotalCompostingAmount();
+            for (int i = 0; i < this.inventory.length; i++)
+            {
+                if (inventory[i] == null)
+                {
+                    if (!doSimulate)
+                    {
+                        this.inventory[i] = stack.copy();
+                        this.inventory[i].stackSize = 1;
                         this.compostAmount[i] = newCompostAmount;
                         this.compostTime[i] = compostTime;
                         processes[i] = 0;
 
-                        totalCompostAmount = maxCompostAmount;
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        markDirty();
                     }
                     return 1;
                 }
@@ -95,38 +118,42 @@ public class TileEntityCompostBin extends TileEntity {
 
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(NBTTagCompound nbt)
+    {
         super.readFromNBT(nbt);
-        NBTTagList inventoryTags = nbt.getTagList("Items", 10);
-        NBTTagList processTags = nbt.getTagList("Processes", 10);
-        NBTTagList compostTags = nbt.getTagList("Compost", 10);
-        NBTTagList compostTimeTags = nbt.getTagList("CompostTime", 10);
+        NBTTagList inventoryTags = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        NBTTagList processTags = nbt.getTagList("Processes", Constants.NBT.TAG_COMPOUND);
+        NBTTagList compostTags = nbt.getTagList("Compost", Constants.NBT.TAG_COMPOUND);
+        NBTTagList compostTimeTags = nbt.getTagList("CompostTime", Constants.NBT.TAG_COMPOUND);
         this.inventory = new ItemStack[inventory.length];
 
-        for (int i = 0; i < inventoryTags.tagCount(); i++) {
+        for (int i = 0; i < inventoryTags.tagCount(); i++)
+        {
             NBTTagCompound data = inventoryTags.getCompoundTagAt(i);
             int j = data.getByte("Slot") & 255;
             this.inventory[j] = ItemStack.loadItemStackFromNBT(data);
         }
 
-        for (int i = 0; i < processTags.tagCount(); i++) {
+        for (int i = 0; i < processTags.tagCount(); i++)
+        {
             NBTTagCompound data = processTags.getCompoundTagAt(i);
             int j = data.getByte("Slot") & 255;
             this.processes[j] = data.getInteger("processes");
         }
-        for (int i = 0; i < compostTags.tagCount(); i++) {
+        for (int i = 0; i < compostTags.tagCount(); i++)
+        {
             NBTTagCompound data = processTags.getCompoundTagAt(i);
             int j = data.getByte("Slot") & 255;
             this.processes[j] = data.getInteger("compostAmount");
         }
 
-        for (int i = 0; i < compostTimeTags.tagCount(); i++) {
+        for (int i = 0; i < compostTimeTags.tagCount(); i++)
+        {
             NBTTagCompound data = processTags.getCompoundTagAt(i);
             int j = data.getByte("Slot") & 255;
             this.compostTime[j] = data.getInteger("compostTime");
         }
 
-        totalCompostAmount = nbt.getInteger("totalCompostAmount");
         compostedAmount = nbt.getInteger("compostedAmount");
         open = nbt.getBoolean("open");
         litAngle = nbt.getFloat("litAngle");
@@ -134,15 +161,18 @@ public class TileEntityCompostBin extends TileEntity {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public void writeToNBT(NBTTagCompound nbt)
+    {
         super.writeToNBT(nbt);
         NBTTagList inventoryTags = new NBTTagList();
         NBTTagList processTags = new NBTTagList();
         NBTTagList compostTags = new NBTTagList();
         NBTTagList compostTimeTags = new NBTTagList();
 
-        for (int i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] != null) {
+        for (int i = 0; i < this.inventory.length; i++)
+        {
+            if (this.inventory[i] != null)
+            {
                 NBTTagCompound data = new NBTTagCompound();
                 data.setByte("Slot", (byte) i);
                 inventory[i].writeToNBT(data);
@@ -150,28 +180,30 @@ public class TileEntityCompostBin extends TileEntity {
             }
         }
 
-        for (int i = 0; i < this.processes.length; i++) {
+        for (int i = 0; i < this.processes.length; i++)
+        {
             NBTTagCompound data = new NBTTagCompound();
             data.setByte("Slot", (byte) i);
             data.setInteger("processes", processes[i]);
             processTags.appendTag(data);
         }
 
-        for (int i = 0; i < this.compostAmount.length; i++) {
+        for (int i = 0; i < this.compostAmount.length; i++)
+        {
             NBTTagCompound data = new NBTTagCompound();
             data.setByte("Slot", (byte) i);
             data.setInteger("compostAmount", compostAmount[i]);
             compostTags.appendTag(data);
         }
 
-        for (int i = 0; i < this.compostTime.length; i++) {
+        for (int i = 0; i < this.compostTime.length; i++)
+        {
             NBTTagCompound data = new NBTTagCompound();
             data.setByte("Slot", (byte) i);
             data.setInteger("compostTime", compostTime[i]);
             compostTags.appendTag(data);
         }
 
-        nbt.setInteger("totalCompostAmount", totalCompostAmount);
         nbt.setInteger("compostedAmount", compostedAmount);
         nbt.setTag("Items", inventoryTags);
         nbt.setTag("Processes", processTags);
@@ -182,15 +214,49 @@ public class TileEntityCompostBin extends TileEntity {
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public Packet getDescriptionPacket()
+    {
         NBTTagCompound tag = new NBTTagCompound();
         writeToNBT(tag);
         return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-        NBTTagCompound nbt = packet.func_148857_g();
-        readFromNBT(nbt);
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+    {
+        readFromNBT(packet.func_148857_g());
+    }
+
+    public float getLitAngle(float lerp)
+    {
+        return open ? Math.min(litAngle + OPEN_SPEED * lerp, MAX_OPEN) : Math.max(litAngle - CLOSE_SPEED * lerp, MIN_OPEN);
+    }
+
+    public int getTotalCompostAmount()
+    {
+        return getTotalCompostingAmount() + getTotalCompostedAmount();
+    }
+
+    public int getTotalCompostedAmount()
+    {
+        return compostedAmount;
+    }
+
+    public int getTotalCompostingAmount()
+    {
+        int c = 0;
+        for (int i = 0; i < compostAmount.length; i++)
+            c += compostAmount[i];
+        return c;
+    }
+
+    public int getSizeInventory()
+    {
+        return inventory.length;
+    }
+
+    public ItemStack getStackInSlot(int slot)
+    {
+        return inventory[slot];
     }
 }
