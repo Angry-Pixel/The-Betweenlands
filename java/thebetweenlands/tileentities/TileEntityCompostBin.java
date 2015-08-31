@@ -10,6 +10,11 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityCompostBin extends TileEntity {
 
+    public static final float MAX_OPEN = 90f;
+    public static final float MIN_OPEN = 0f;
+    public static final float OPEN_SPEED = 10f;
+    public static final float CLOSE_SPEED = 10f;
+
     private int maxItems = 10;
     private ItemStack[] inventory = new ItemStack[maxItems];
     private int[] processes = new int[maxItems];
@@ -23,25 +28,24 @@ public class TileEntityCompostBin extends TileEntity {
 
     @Override
     public void updateEntity() {
-        if (worldObj.isRemote) return;
-        if (open && litAngle + 10f <= 90f) {
-            litAngle += 10f;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        } else if (litAngle - 10f >= 0f) {
-            litAngle -= 10;
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-        }
-        for (int i = 0; i < inventory.length; i++) {
-            if (inventory[i] != null) {
-                if (processes[i] >= compostTime[i]) {
-                    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-                    compostedAmount += compostAmount[i];
-                    inventory[i] = null;
-                    processes[i] = 0;
-                    compostTime[i] = 0;
-                    compostAmount[0] = 0;
-                } else
-                    processes[i]++;
+        if (open)
+            litAngle = Math.min(litAngle + OPEN_SPEED, MAX_OPEN);
+        else
+            litAngle = Math.max(litAngle - CLOSE_SPEED, MIN_OPEN);
+
+        if (!worldObj.isRemote) {
+            for (int i = 0; i < inventory.length; i++) {
+                if (inventory[i] != null) {
+                    if (processes[i] >= compostTime[i]) {
+                        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+                        compostedAmount += compostAmount[i];
+                        inventory[i] = null;
+                        processes[i] = 0;
+                        compostTime[i] = 0;
+                        compostAmount[0] = 0;
+                    } else
+                        processes[i]++;
+                }
             }
         }
     }

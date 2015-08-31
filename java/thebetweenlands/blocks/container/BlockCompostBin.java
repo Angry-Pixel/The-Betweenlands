@@ -54,8 +54,8 @@ public class BlockCompostBin extends BlockContainer {
 			if(!open && !(player.isSneaking() && player.getCurrentEquippedItem() == null)){
 				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.open")));
 			}else if (player.isSneaking() && player.getCurrentEquippedItem() == null) {
-				world.markBlockForUpdate(x, y, z);
 				tile.open = !tile.open;
+				world.markBlockForUpdate(x, y, z);
 			} else if (player.getCurrentEquippedItem() != null) {
 				ItemStack stack = player.getCurrentEquippedItem();
 				CompostRecipe compostRecipe = CompostRecipe.hasCompostValue(stack);
