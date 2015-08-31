@@ -25,6 +25,7 @@ public class RecipeBuffers {
 
     private static void compostRecipeBuffer() {
         for (String aBuffer : bufferCompost) {
+            aBuffer = aBuffer.replace("[", "").replace("}", "");
             String[] split = aBuffer.split(":");
             if (split.length >= 4 && split.length <= 5) {
                 String arg1, arg2, arg3, arg4, arg5;
@@ -54,6 +55,7 @@ public class RecipeBuffers {
 
     private static void pestleAndMortarRecipeBuffer() {
         for (String aBuffer : bufferPAM) {
+            aBuffer = aBuffer.replace("[", "").replace("}", "");
             String[] split = aBuffer.split(":");
             if (split.length >= 4 && split.length <= 12) {
                 String arg1, arg2, arg3, arg4;
@@ -119,14 +121,16 @@ public class RecipeBuffers {
                 }
 
                 for (ItemStack stackInput : input)
-                    for (ItemStack stackOutput : output)
-                        PestleAndMortarRecipe.addRecipe(stackInput, stackOutput);
+                    for (ItemStack stackOutput : output) {
+                        PestleAndMortarRecipe.addRecipe(stackOutput, stackInput);
+                    }
             }
         }
     }
 
     private static void purifierRecipeBuffer() {
         for (String aBuffer : bufferPurify) {
+            aBuffer = aBuffer.replace("[", "").replace("}", "");
             String[] split = aBuffer.split(":");
             if (split.length >= 4 && split.length <= 12) {
                 String arg1, arg2, arg3, arg4;
@@ -193,7 +197,7 @@ public class RecipeBuffers {
 
                 for (ItemStack stackInput : input)
                     for (ItemStack stackOutput : output)
-                        PurifierRecipe.addRecipe(stackInput, stackOutput);
+                        PurifierRecipe.addRecipe(stackOutput, stackInput);
             }
         }
     }
