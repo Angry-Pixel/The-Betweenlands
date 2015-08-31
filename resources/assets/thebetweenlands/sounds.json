@@ -530,6 +530,12 @@
     "sounds": [
       "grind"
     ]
+  },
+  "fig": {
+    "category": "player",
+    "sounds": [
+      "fig"
+    ]
   },  
   "music.blDimension": {
     "category": "music",
