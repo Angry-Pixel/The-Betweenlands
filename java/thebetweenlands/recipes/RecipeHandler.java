@@ -54,7 +54,6 @@ public class RecipeHandler {
 		registerPurifierRecipes();
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
-		RecipeBuffers.init();
 	}
 
 	private static void registerRecipes() {

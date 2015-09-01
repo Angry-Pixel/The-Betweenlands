@@ -154,6 +154,7 @@ public class TheBetweenlands
 		
 		RecipeHandler.init();
 		TeleporterHandler.init();
+		ConfigHandler.userRecipes();
 		// Add the other door recipes back
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
 	}
