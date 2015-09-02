@@ -11,20 +11,22 @@ import net.minecraftforge.common.util.Constants;
 
 public class TileEntityCompostBin extends TileEntity
 {
+    public static final int MAX_COMPOST_AMOUNT = 100;
     public static final int COMPOST_PER_ITEM = 25;
+    public static final int MAX_ITEMS = 10;
 
     public static final float MAX_OPEN = 90f;
     public static final float MIN_OPEN = 0f;
     public static final float OPEN_SPEED = 10f;
     public static final float CLOSE_SPEED = 10f;
+
     public int compostedAmount;
     public boolean open = false;
     public float litAngle = 0.0f;
-    private int maxItems = 10, maxCompostAmount = 100;
-    private ItemStack[] inventory = new ItemStack[maxItems];
-    private int[] processes = new int[maxItems];
-    private int[] compostAmounts = new int[maxItems];
-    private int compostTimes[] = new int[maxItems];
+    private ItemStack[] inventory = new ItemStack[MAX_ITEMS];
+    private int[] processes = new int[MAX_ITEMS];
+    private int[] compostAmounts = new int[MAX_ITEMS];
+    private int compostTimes[] = new int[MAX_ITEMS];
 
     public static int[] readIntArrayFixedSize(String id, int length, NBTTagCompound compound)
     {
@@ -58,6 +60,16 @@ public class TileEntityCompostBin extends TileEntity
                         processes[i]++;
                 }
             }
+
+            // Fall down
+            for (int i = 1; i < inventory.length; i++)
+            {
+                if (inventory[i - 1] == null && inventory[i] != null)
+                {
+                    inventory[i - 1] = inventory[i];
+                    inventory[i] = null;
+                }
+            }
         }
     }
 
@@ -73,7 +85,8 @@ public class TileEntityCompostBin extends TileEntity
 
     public int addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate)
     {
-        if (getTotalCompostAmount() + compostAmount <= maxCompostAmount)
+        compostTime = 5;
+        if (getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT)
         {
             for (int i = 0; i < this.inventory.length; i++)
             {
@@ -94,9 +107,9 @@ public class TileEntityCompostBin extends TileEntity
                 }
             }
         }
-        else if (getTotalCompostAmount() < maxCompostAmount)
+        else if (getTotalCompostAmount() < MAX_COMPOST_AMOUNT)
         {
-            int newCompostAmount = maxCompostAmount - getTotalCompostingAmount();
+            int newCompostAmount = MAX_COMPOST_AMOUNT - getTotalCompostingAmount();
             for (int i = 0; i < this.inventory.length; i++)
             {
                 if (inventory[i] == null)
@@ -204,8 +217,8 @@ public class TileEntityCompostBin extends TileEntity
     public int getTotalCompostingAmount()
     {
         int c = 0;
-        for (int i = 0; i < compostAmounts.length; i++)
-            c += compostAmounts[i];
+        for (int compostAmount : compostAmounts)
+            c += compostAmount;
         return c;
     }
 
