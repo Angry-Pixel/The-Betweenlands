@@ -1,5 +1,7 @@
 package thebetweenlands.world;
 
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,6 +12,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
@@ -18,11 +21,13 @@ import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
 import thebetweenlands.world.biomes.WorldGenRedirect;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.feature.structure.WorldGenTarPoolDungeons;
 import thebetweenlands.world.gen.MapGenCavesBetweenlands;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ChunkProviderBetweenlands implements IChunkProvider
 {
@@ -86,7 +91,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		this.layerHeight = layerHeight;
 
 		//Registers the redirection IWorldGenerator that calls decorator#postTerrainGen
-		GameRegistry.registerWorldGenerator(new WorldGenRedirect(), 0);
+		//Temporarily removed to test another way of decorating
+		//GameRegistry.registerWorldGenerator(new WorldGenRedirect(), 0);
 		
 		//Initializes the noise generators
 		this.initializeNoiseGen(seed);
@@ -185,7 +191,7 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		}
 
 		chunk.generateSkylightMap();
-		chunk.resetRelightChecks();
+		//chunk.resetRelightChecks();
 
 		return chunk;
 	}
@@ -195,6 +201,8 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		return this.provideChunk(x, z);
 	}
 
+	private WorldGenRedirect biomeDecorator = new WorldGenRedirect();
+	
 	@Override
 	public void populate(IChunkProvider cp, int x, int z) {
 		BlockFalling.fallInstantly = true;
@@ -202,19 +210,31 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		int blockX = x * 16;
 		int blockZ = z * 16;
 
+		this.rand.setSeed(this.worldObj.getSeed());
+		this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
+		
 		BiomeGenBase biome = worldObj.getBiomeGenForCoords(blockX + 16, blockZ + 16);
 
+		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(cp, this.worldObj, this.rand, x, z, false));
+		
 		if (biome instanceof BiomeGenBaseBetweenlands) {
 			BiomeGenBaseBetweenlands bgbb = (BiomeGenBaseBetweenlands) biome;
-			this.rand.setSeed(this.worldObj.getSeed());
-			this.rand.setSeed(x * (this.rand.nextLong() / 2L * 2L + 1L) + z * (this.rand.nextLong() / 2L * 2L + 1L) ^ this.worldObj.getSeed());
 			bgbb.postChunkPopulate(this.worldObj, this.rand, blockX, blockZ);
 		} else {
 			biome.decorate(this.worldObj, this.rand, blockX, blockZ);
 		}
 		for (int attempt = 0; attempt < 3; ++attempt)
 			new WorldGenTarPoolDungeons().generate(worldObj, rand, blockX + rand.nextInt(16) + 8, rand.nextInt(70) + 10, blockZ + rand.nextInt(16) + 8);
+		
 		BlockFalling.fallInstantly = false;
+		
+		if (TerrainGen.populate(cp, worldObj, rand, x, z, false, ANIMALS)) {
+			SpawnerAnimals.performWorldGenSpawning(this.worldObj, biome, blockX + 8, blockZ + 8, 16, 16, this.rand);
+        }
+		
+		this.biomeDecorator.generate(this.rand, x, z, this.worldObj, cp, this.worldObj.getChunkProvider());
+		
+		MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Post(cp, this.worldObj, this.rand, x, z, false));
 	}
 
 	/**
