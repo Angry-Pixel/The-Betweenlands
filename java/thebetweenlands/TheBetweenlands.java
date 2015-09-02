@@ -151,10 +151,10 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
 		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
 		MinecraftForge.EVENT_BUS.register(BloodSkyHandler.INSTANCE);
-		
+
 		RecipeHandler.init();
 		TeleporterHandler.init();
-		ConfigHandler.userRecipes();
+
 		// Add the other door recipes back
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
 	}

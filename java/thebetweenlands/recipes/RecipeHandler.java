@@ -15,6 +15,7 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
 import cpw.mods.fml.common.registry.GameRegistry;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class RecipeHandler {
 		registerRecipes();
 		registerSmelting();
 		registerPurifierRecipes();
+		ConfigHandler.userRecipes();
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
 	}

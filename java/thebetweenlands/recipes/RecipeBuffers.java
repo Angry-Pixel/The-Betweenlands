@@ -78,7 +78,7 @@ public class RecipeBuffers {
                                     metaInput = jsonReader.nextInt();
                                     break;
                                 case "metaOutput":
-                                    metaInput = jsonReader.nextInt();
+                                    metaOutput = jsonReader.nextInt();
                                     break;
                             }
                         }
