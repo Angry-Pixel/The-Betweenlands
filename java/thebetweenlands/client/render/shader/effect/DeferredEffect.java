@@ -25,14 +25,12 @@ public abstract class DeferredEffect {
 	//Clear colors
 	private float cr, cg, cb, ca;
 
-	//Buffers to restore matrices
-	private FloatBuffer modelview = GLAllocation.createDirectFloatBuffer(16);
-	private FloatBuffer projection = GLAllocation.createDirectFloatBuffer(16);
-	private int prevShader = 0;
-
 	//Additional stages
 	private DeferredEffect[] stages;
 
+	//Buffers
+	private static final FloatBuffer TEXEL_SIZE_BUFFER = BufferUtils.createFloatBuffer(2);
+	
 	private int shaderProgramID = -1;
 	private int diffuseSamplerUniformID = -1;
 	private int texelSizeUniformID = -1;
@@ -94,25 +92,25 @@ public abstract class DeferredEffect {
 	 * Applies the effect to a texture and renders it to the destination FBO.
 	 * Handles perspective only. Blending, texture mode, lighting etc. have to be
 	 * handled manually.
-	 * @param src Source texture ID
+	 * @param src Source texture ID (optional)
 	 * @param dst Destination FBO
-	 * @param prev Previous FBO
+	 * @param prev Previous FBO (optional)
+	 * @param renderWidth Render width in pixels (relative to dst FBO size)
+	 * @param renderHeight Render height in pixels (relative to dst FBO size)
 	 */
 	public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
+		this.apply(src, dst, blitBuffer, prev, renderWidth, renderHeight, true);
+	}
+	
+	private final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore) {
 		if(this.shaderProgramID == -1 || dst == null) return;
 
-		this.prevShader = 0;
-
-		//ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-		
-		//renderWidth *= (float)scaledResolution.getScaledWidth() / (float)Minecraft.getMinecraft().displayWidth;
-		//renderHeight *= (float)scaledResolution.getScaledHeight() / (float)Minecraft.getMinecraft().displayHeight;
-		
-		if(prev != null) {
+		if(restore) {
 			//Backup matrices
-			GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, projection);
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, modelview);
-			this.prevShader = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glPushMatrix();
+			GL11.glPushAttrib(GL11.GL_VIEWPORT_BIT);
+			GL11.glPushAttrib(GL11.GL_TRANSFORM_BIT);
 
 			//Set up 2D matrices
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -121,9 +119,6 @@ public abstract class DeferredEffect {
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
 			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-
-			//Backup previous shader
-			GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 		}
 
 		//Bind destination FBO
@@ -146,12 +141,11 @@ public abstract class DeferredEffect {
 
 		//Upload texel size uniform
 		if(this.texelSizeUniformID >= 0) {
-			FloatBuffer texelSizeBuffer = BufferUtils.createFloatBuffer(2);
-			texelSizeBuffer.position(0);
-			texelSizeBuffer.put(1.0F / (float)Minecraft.getMinecraft().displayWidth);
-			texelSizeBuffer.put(1.0F / (float)Minecraft.getMinecraft().displayHeight);
-			texelSizeBuffer.flip();
-			ARBShaderObjects.glUniform2ARB(this.texelSizeUniformID, texelSizeBuffer);
+			TEXEL_SIZE_BUFFER.position(0);
+			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayWidth);
+			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayHeight);
+			TEXEL_SIZE_BUFFER.flip();
+			ARBShaderObjects.glUniform2ARB(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
 		}
 
 		//Uploads additional uniforms
@@ -177,7 +171,7 @@ public abstract class DeferredEffect {
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
 			for(DeferredEffect stage : this.stages) {
 				//Render to blit buffer
-				stage.apply(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight);
+				stage.apply(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight, false);
 
 				//Render from blit buffer to destination buffer
 				dst.bindFramebuffer(false);
@@ -202,20 +196,14 @@ public abstract class DeferredEffect {
 		//Unbind shader
 		ARBShaderObjects.glUseProgramObjectARB(0);
 
-		//Restore previous shader (or bind default)
-		ARBShaderObjects.glUseProgramObjectARB(this.prevShader);
-
-		if(prev != null) {
+		if(restore) {
 			//Restore matrices
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glLoadMatrix(this.projection);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glLoadMatrix(this.modelview);
+			GL11.glPopAttrib();
+			GL11.glPopAttrib();
+			GL11.glPopMatrix();
 
 			//Bind previous FBO
-			prev.bindFramebuffer(true);
+			if(prev != null) prev.bindFramebuffer(true);
 		}
 	}
 

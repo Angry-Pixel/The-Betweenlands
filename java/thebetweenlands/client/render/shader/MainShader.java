@@ -385,6 +385,14 @@ public class MainShader extends CShader {
 
 	@Override
 	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
+		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glLoadIdentity();
+		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+		
 		this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
 
@@ -462,15 +470,6 @@ public class MainShader extends CShader {
 
 		//Render to screen
 		//Render blit buffer to main buffer
-		GL11.glPushMatrix();
-
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
 
@@ -533,8 +532,6 @@ public class MainShader extends CShader {
 		GL11.glTexCoord2d(0.0D, 1.0D);
 		GL11.glVertex2d(0, 0);
 		GL11.glEnd();
-
-		GL11.glPopMatrix();
 	}
 
 	private void applySwirl(float partialTicks) {
@@ -554,13 +551,6 @@ public class MainShader extends CShader {
 
 			//Render blit buffer to main buffer
 			GL11.glPushMatrix();
-
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, scaledResolution.getScaledWidth_double(), scaledResolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
 
 			double renderWidth = scaledResolution.getScaledWidth();
 			double renderHeight = scaledResolution.getScaledHeight();
