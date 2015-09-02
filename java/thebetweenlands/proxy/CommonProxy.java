@@ -5,8 +5,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
+import thebetweenlands.event.world.BloodSkyHandler;
+import thebetweenlands.event.world.PopulationHandler;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
@@ -85,6 +88,8 @@ public class CommonProxy
         registerTileEntity(TileEntityTarLootPot1.class, "tarLootPot1");
         registerTileEntity(TileEntityTarLootPot2.class, "tarLootPot2");
         registerTileEntity(TileEntityTarLootPot3.class, "tarLootPot3");
+        
+        MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
