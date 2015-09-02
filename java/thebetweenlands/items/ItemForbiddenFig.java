@@ -40,13 +40,15 @@ public class ItemForbiddenFig
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
 
-        if (player != null && world.isRemote) {
+        if(player != null) {
+        	 if(world.isRemote) {
 			player.addChatMessage(new ChatComponentText("Cursed are those who eat the Forbidden Fig!"));
-            player.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 1200, 1));
-            player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 1200, 1));
 			world.playSoundAtEntity(player, "thebetweenlands:fig", 0.7F, 0.8F);
-			
-			 
+        } else {
+            player.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 1200, 1));
+            player.addPotionEffect(new PotionEffect(Potion.weakness.getId(), 1200, 1));			 
         }
     }
+}
+    
 }
