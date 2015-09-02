@@ -13,151 +13,90 @@ import java.util.ArrayList;
  * Created by bart on 22-7-2015.
  */
 public class RecipeBuffers {
-
-
-    public static String[] bufferCompost;
-    public static String[] bufferPAM;
-    public static String[] bufferPurify;
-
-    /*public static void init() {
-        compostRecipeBuffer();
-        pestleAndMortarRecipeBuffer();
-        purifierRecipeBuffer();
-    }*/
-
-
     public static void readJson(JsonReader jsonReader) throws IOException {
         while (jsonReader.hasNext()) {
             String recipeName = jsonReader.nextName();
             jsonReader.beginObject();
-            switch (recipeName) {
-                case "compost":
+            while (jsonReader.hasNext()) {
+                String name = jsonReader.nextName();
+                System.out.println(name);
+                if (name.contains("recipe")) {
+                    jsonReader.beginObject();
+                    String inputType = "";
+                    String inputItem = "";
+                    int compostTime = 0;
+                    int compostAmount = 0;
+                    String outputType = "";
+                    String outputItem = "";
+                    int metaInput = 0;
+                    int metaOutput = 0;
+                    int inputAmount = 0;
+                    int outputAmount = 0;
                     while (jsonReader.hasNext()) {
-                        String name = jsonReader.nextName();
-                        System.out.println(name);
-                        if (name.contains("recipe")) {
-                            jsonReader.beginObject();
-                            String inputType = "";
-                            String inputItem = "";
-                            int compostTime = 0;
-                            int compostAmount = 0;
-                            int meta = 0;
-                            while (jsonReader.hasNext()) {
-                                String n = jsonReader.nextName();
-                                if (n.equals("inputType")) {
+                        if (recipeName.equals("compost")) {
+                            String n = jsonReader.nextName();
+                            switch (n) {
+                                case "inputType":
                                     inputType = jsonReader.nextString();
-                                }
-                                if (n.equals("inputItem")) {
+                                    break;
+                                case "inputItem":
                                     inputItem = jsonReader.nextString();
-                                }
-                                if (n.equals("compostTime")) {
+                                    break;
+                                case "compostTime":
                                     compostTime = jsonReader.nextInt();
-                                }
-                                if (n.equals("compostAmount")) {
+                                    break;
+                                case "compostAmount":
                                     compostAmount = jsonReader.nextInt();
-                                }
-                                if (n.equals("meta")) {
-                                    meta = jsonReader.nextInt();
-                                }
+                                    break;
+                                case "meta":
+                                case "metaInput":
+                                    metaInput = jsonReader.nextInt();
+                                    break;
                             }
-                            compostRecipeBuffer(inputType, inputItem, compostTime, compostAmount, meta);
-                            jsonReader.endObject();
-                        }
-                    }
-                    break;
-                case "pam":
-                case "pestleAndMortar":
-                    while (jsonReader.hasNext()) {
-                        String name = jsonReader.nextName();
-                        System.out.println(name);
-                        if (name.contains("recipe")) {
-                            jsonReader.beginObject();
-                            String inputType = "";
-                            String inputItem = "";
-                            String outputType = "";
-                            String outputItem = "";
-                            int metaInput = 0;
-                            int metaOutput = 0;
-                            int inputAmount = 0;
-                            int outputAmount = 0;
-                            while (jsonReader.hasNext()) {
-                                String n = jsonReader.nextName();
-                                if (n.equals("inputType")) {
+                        } else if (recipeName.equals("pam") || recipeName.equals("pestleAndMortar") || recipeName.equals("purifier")) {
+                            String n = jsonReader.nextName();
+                            switch (n) {
+                                case "inputType":
                                     inputType = jsonReader.nextString();
-                                }
-                                if (n.equals("inputItem")) {
+                                    break;
+                                case "inputItem":
                                     inputItem = jsonReader.nextString();
-                                }
-                                if (n.equals("outputType")) {
+                                    break;
+                                case "outputType":
                                     outputType = jsonReader.nextString();
-                                }
-                                if (n.equals("outputItem")) {
+                                    break;
+                                case "outputItem":
                                     outputItem = jsonReader.nextString();
-                                }
-                                if (n.equals("inputAmount")) {
+                                    break;
+                                case "inputAmount":
                                     inputAmount = jsonReader.nextInt();
-                                }
-                                if (n.equals("outputAmount")) {
+                                    break;
+                                case "outputAmount":
                                     outputAmount = jsonReader.nextInt();
-                                }
-                                if (n.equals("metaInput")) {
+                                    break;
+                                case "metaInput":
                                     metaInput = jsonReader.nextInt();
-                                }
-                                if (n.equals("metaOutput")) {
+                                    break;
+                                case "metaOutput":
                                     metaInput = jsonReader.nextInt();
-                                }
+                                    break;
                             }
-                            pestleAndMortarRecipeBuffer(inputType, inputItem, outputType, outputItem, inputAmount, outputAmount, metaInput, metaOutput);
-                            jsonReader.endObject();
                         }
                     }
-                    break;
-                case "purifier":
-                    while (jsonReader.hasNext()) {
-                        String name = jsonReader.nextName();
-                        System.out.println(name);
-                        if (name.contains("recipe")) {
-                            jsonReader.beginObject();
-                            String inputType = "";
-                            String inputItem = "";
-                            String outputType = "";
-                            String outputItem = "";
-                            int metaInput = 0;
-                            int metaOutput = 0;
-                            int inputAmount = 0;
-                            int outputAmount = 0;
-                            while (jsonReader.hasNext()) {
-                                String n = jsonReader.nextName();
-                                if (n.equals("inputType")) {
-                                    inputType = jsonReader.nextString();
-                                }
-                                if (n.equals("inputItem")) {
-                                    inputItem = jsonReader.nextString();
-                                }
-                                if (n.equals("outputType")) {
-                                    outputType = jsonReader.nextString();
-                                }
-                                if (n.equals("outputItem")) {
-                                    outputItem = jsonReader.nextString();
-                                }
-                                if (n.equals("inputAmount")) {
-                                    inputAmount = jsonReader.nextInt();
-                                }
-                                if (n.equals("outputAmount")) {
-                                    outputAmount = jsonReader.nextInt();
-                                }
-                                if (n.equals("metaInput")) {
-                                    metaInput = jsonReader.nextInt();
-                                }
-                                if (n.equals("metaOutput")) {
-                                    metaInput = jsonReader.nextInt();
-                                }
-                            }
+                    switch (recipeName) {
+                        case "compost":
+                            compostRecipeBuffer(inputType, inputItem, compostTime, compostAmount, metaInput);
+                            break;
+                        case "pam":
+                        case "pestleAndMortar":
                             pestleAndMortarRecipeBuffer(inputType, inputItem, outputType, outputItem, inputAmount, outputAmount, metaInput, metaOutput);
-                            jsonReader.endObject();
-                        }
+                            break;
+                        case "purifier":
+                            purifierRecipeBuffer(inputType, inputItem, outputType, outputItem, inputAmount, outputAmount, metaInput, metaOutput);
+                            break;
                     }
-                    break;
+                    jsonReader.endObject();
+                }
             }
             jsonReader.endObject();
         }
@@ -166,7 +105,7 @@ public class RecipeBuffers {
 
     private static void compostRecipeBuffer(String inputType, String inputItem, int compostTime, int compostAmount, int meta) {
         if (inputType.toLowerCase().equals("oredictionary")) {
-            if (OreDictionary.getOres(inputItem).size() > 0 && Integer.parseInt(inputItem) > 0 && Integer.parseInt(inputItem) > 0)
+            if (OreDictionary.getOres(inputItem).size() > 0 && compostTime > 0 && compostAmount > 0)
                 CompostRecipe.addRecipe(compostTime, compostAmount, OreDictionary.getOres(inputItem));
         } else if (inputType.toLowerCase().equals("id")) {
             if (Item.getItemById(Integer.getInteger(inputItem)) != null && compostTime > 0 && compostAmount > 0 && meta >= 0)
