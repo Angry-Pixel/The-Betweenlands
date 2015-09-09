@@ -2,10 +2,12 @@ package thebetweenlands.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 
@@ -34,5 +36,27 @@ public class BlockBLPane extends BlockPane {
     public IIcon func_150097_e()
     {
         return this.iconSide;
+    }
+    
+    @Override
+    public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
+        Block block = iblockaccess.getBlock(x, y, z);
+        return block != BLBlockRegistry.siltGlas;
+    }
+
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderBlockPass ()
+    {
+        return 1;
     }
 }
