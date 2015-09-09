@@ -32,6 +32,7 @@ import thebetweenlands.event.world.BloodSkyHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.mods.RecurrentComplexModule;
 import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
@@ -157,6 +158,8 @@ public class TheBetweenlands
 
 		// Add the other door recipes back
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
+
+		RecurrentComplexModule.init();
 	}
 
 	@EventHandler
