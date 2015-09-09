@@ -156,6 +156,7 @@ public class RecipeHandler {
 		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "oxo", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.animator), "xxx", "shs", "bbb", 'x', BLBlockRegistry.weedwoodPlanks, 's', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'h', new ItemStack(BLItemRegistry.wightsHeart), 'b' ,new ItemStack(BLBlockRegistry.betweenstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pestleAndMortar), "x x", "xxx", "s s", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 's', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
 		
