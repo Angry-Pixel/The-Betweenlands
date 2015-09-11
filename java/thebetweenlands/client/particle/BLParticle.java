@@ -41,6 +41,7 @@ public enum BLParticle {
 	},
 	SMOKE(EntitySmokeFX.class),
 	FLAME(EntityFlameFX.class),
+	BLACK_FLAME(EntityFlameFX.class, 0.1f, 0.1f, 0.1f),
 	SULFUR_TORCH(EntitySmokeFX.class, 1, 0.9294F, 0, ParticleArgs.V0_V0_V0),
 	SULFUR_ORE(EntitySpellParticleFX.class, 1, 0.9294F, 0),
 	SNAIL_POSION(EntitySpellParticleFX.class, 1, 0, 0),
@@ -94,28 +95,28 @@ public enum BLParticle {
 			@Override
 			protected Object[] getAdditionalArgs(World world, Object... data) {
 				return new Object[] { 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
-			}	
+			}
 	},
 	MOSQUITO(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/mosquito.png");
 			@Override
 			protected Object[] getAdditionalArgs(World world, Object... data) {
 				return new Object[] { 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
-			}	
+			}
 	},
 	WATER_BUG(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/waterBug.png");
 			@Override
 			protected Object[] getAdditionalArgs(World world, Object... data) {
 				return new Object[] { 400, 0.03F, 0.002F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, true, texture, 2 };
-			}	
+			}
 	},
 	LEAF(EntityLeafFX.class, ParticleArgs.NONE, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/leaf.png");
 			@Override
 			protected Object[] getAdditionalArgs(World world, Object... data) {
 				return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5 };
-			}	
+			}
 	},
 	SPLASH(EntitySplashFX.class, ParticleArgs.VX_VY_VZ, int.class) {
 		@Override
