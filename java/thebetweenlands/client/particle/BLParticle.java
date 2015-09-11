@@ -41,7 +41,7 @@ public enum BLParticle {
 	},
 	SMOKE(EntitySmokeFX.class),
 	FLAME(EntityFlameFX.class),
-	BLACK_FLAME(EntityFlameFX.class, 0.1f, 0.1f, 0.1f),
+	GREEN_FLAME(EntityFlameFX.class, 0.1f, 1, 0.1f),
 	SULFUR_TORCH(EntitySmokeFX.class, 1, 0.9294F, 0, ParticleArgs.V0_V0_V0),
 	SULFUR_ORE(EntitySpellParticleFX.class, 1, 0.9294F, 0),
 	SNAIL_POSION(EntitySpellParticleFX.class, 1, 0, 0),
