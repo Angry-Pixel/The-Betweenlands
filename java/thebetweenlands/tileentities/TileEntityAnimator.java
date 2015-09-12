@@ -55,7 +55,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			}
 		}
 		if (itemsConsumed >= itemCount && isSlotInUse(0) && isSlotInUse(1) && !lifeDepleted) {
-			if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
+			if (inventory[0].getItem().equals(BLItemRegistry.materialsBL) && inventory[0].getItemDamage() == EnumMaterialsBL.TAR_BEAST_HEART.ordinal()) {
+				setInventorySlotContents(0, ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_BEAST_HEART_ANIMATED));
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + 32);
+			}
+			else if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
 				setInventorySlotContents(0, ((WeightedRandomItem) WeightedRandom.getRandomItem(worldObj.rand, items)).getItem(worldObj.rand));
 				inventory[1].setItemDamage(inventory[1].getItemDamage() + 32);
 			} else if (inventory[0].getItem() instanceof ItemMonsterPlacer)
@@ -97,7 +101,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isValidFocalItem() {
-		return inventory[0].getItem() instanceof ItemMonsterPlacer ? true : inventory[0].getItem().equals(BLItemRegistry.scroll) ? true : false;
+		return inventory[0].getItem() instanceof ItemMonsterPlacer ? true : inventory[0].getItem().equals(BLItemRegistry.scroll) ? true : inventory[0].getItem().equals(BLItemRegistry.materialsBL) && inventory[0].getItemDamage() == EnumMaterialsBL.TAR_BEAST_HEART.ordinal() ? true: false;
 	}
 	
 	public boolean isFocalItemSpawnEgg() {
