@@ -48,9 +48,9 @@ public class ItemSkullMask extends ItemArmor {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		int width = resolution.getScaledWidth();
-		int height = resolution.getScaledHeight();
-		float offset = -(float) width / height / 2 + 0.5F;
+		float width = resolution.getScaledWidth();
+		float height = resolution.getScaledHeight();
+		float offset = 0.5F - width / height / 2;
 		tessellator.addVertexWithUV(0, height, -90, offset, 1);
 		tessellator.addVertexWithUV(width, height, -90, 1 - offset, 1);
 		tessellator.addVertexWithUV(width, 0, -90, 1 - offset, 0);

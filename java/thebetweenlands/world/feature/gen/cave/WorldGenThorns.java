@@ -26,6 +26,8 @@ public class WorldGenThorns extends WorldGenCave {
 
 	private static final int MIN_LENGTH = 2;
 
+	private static final int MAX_HEIGHT = 8;
+
 	public WorldGenThorns() {
 		this(false);
 	}
@@ -107,7 +109,7 @@ public class WorldGenThorns extends WorldGenCave {
 			setBlockAndNotifyAdequately(world, bx, by, bz, thorns, metadata);
 			if (metadata > 0 && location.getHeight() > 1) {
 				int hangingMetadata = facesWithThorns[random.nextInt(sideCount)];
-				int length = random.nextInt(location.getHeight() - 1) + 1;
+				int length = random.nextInt(location.getHeight() > MAX_HEIGHT ? MAX_HEIGHT : location.getHeight() - 1) + 1;
 				for (int n = 1; n < length; n++) {
 					setBlockAndNotifyAdequately(world, bx, by - n, bz, thorns, hangingMetadata);
 				}
