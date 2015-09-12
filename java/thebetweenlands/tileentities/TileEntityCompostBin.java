@@ -95,7 +95,6 @@ public class TileEntityCompostBin extends TileEntity
 
     public int addItemToBin(ItemStack stack, int compostAmount, int compostTime, boolean doSimulate)
     {
-        System.out.println("3" + totalCompostAmount);
         if (getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT)
         {
             for (int i = 0; i < this.inventory.length; i++)
@@ -237,6 +236,7 @@ public class TileEntityCompostBin extends TileEntity
     {
         return inventory.length;
     }
+
 
     public ItemStack getStackInSlot(int slot)
     {
