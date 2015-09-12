@@ -99,7 +99,7 @@ public class BlockCompostBin extends BlockContainer
                     world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, new ItemStack(BLItemRegistry.compost)));
                     tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM);
                 }
-                else if (tile.getTotalCompostedAmount() <= TileEntityCompostBin.COMPOST_PER_ITEM && tile.getTotalCompostAmount() >= 25)
+                else if (tile.getTotalCompostAmount() > tile.getTotalCompostedAmount())
                 {
                     player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.ready")));
                 }
