@@ -30,8 +30,8 @@ public class RecipeBuffers {
                     String outputItem = "";
                     int metaInput = 0;
                     int metaOutput = 0;
-                    int inputAmount = 0;
-                    int outputAmount = 0;
+                    int inputAmount = 1;
+                    int outputAmount = 1;
                     while (jsonReader.hasNext()) {
                         if (recipeName.equals("compost")) {
                             String n = jsonReader.nextName();
