@@ -1,5 +1,7 @@
 package thebetweenlands.recipes;
 
+import java.util.List;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -14,10 +16,8 @@ import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
-import cpw.mods.fml.common.registry.GameRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import java.util.List;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeHandler {
 
@@ -248,6 +248,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 1), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 2));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 2), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 3));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 3), "ttt", "tht", "ttt", 't', ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_DRIP), 'h', ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_BEAST_HEART_ANIMATED));
 	}
 
 	private static void registerSmelting() {
