@@ -25,7 +25,7 @@ public class ItemAnimatorRenderer
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         switch( type ) {
             case ENTITY:
-                GL11.glScaled(0.75, 0.75, 0.75);
+                GL11.glScaled(1F, 1F, 1F);
                 render(stack, -0.25F, -0.25F, -0.25F);
                 break;
             case EQUIPPED:

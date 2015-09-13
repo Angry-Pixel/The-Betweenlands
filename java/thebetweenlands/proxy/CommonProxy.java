@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
-import thebetweenlands.event.world.BloodSkyHandler;
 import thebetweenlands.event.world.PopulationHandler;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
@@ -37,6 +36,7 @@ import thebetweenlands.tileentities.TileEntityBush;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityInfuser;
+import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityLootPot2;
@@ -88,6 +88,7 @@ public class CommonProxy
         registerTileEntity(TileEntityTarLootPot1.class, "tarLootPot1");
         registerTileEntity(TileEntityTarLootPot2.class, "tarLootPot2");
         registerTileEntity(TileEntityTarLootPot3.class, "tarLootPot3");
+        registerTileEntity(TileEntityItemShelf.class, "itemShelf");
         
         MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
     }
