@@ -30,7 +30,7 @@ public class BlockItemShelf extends BlockContainer {
 		setHardness(1.0F);
 		setStepSound(soundTypeWood);
 		setCreativeTab(ModCreativeTabs.blocks);
-		setBlockName("thebetweenlands.weedwoodItemShelf");
+		setBlockName("thebetweenlands.itemShelf");
 	}
 
 	@Override
@@ -118,19 +118,76 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		// TODO hit detection for specific quarter of shelf
 		if (world.getTileEntity(x, y, z) instanceof TileEntityItemShelf) {
 			TileEntityItemShelf tile = (TileEntityItemShelf) world.getTileEntity( x, y, z);
-			if (player.getCurrentEquippedItem() != null) {
+			int slotClicked = -1; // imaginary slot of -1 to prevent derp
+			if (metadata == 3) {
+				if (hitX >= 0 && hitX <= 0.46875 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 0;
+				if (hitX >= 0.53125 && hitX <= 1 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 1;
+				if (hitX >= 0 && hitX <= 0.46875 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 2;
+				if (hitX >= 0.53125 && hitX <= 1 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 3;
+			}
+			if (metadata == 2) {
+				if (hitX >= 0 && hitX <= 0.46875 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 1;
+				if (hitX >= 0.53125 && hitX <= 1 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 0;
+				if (hitX >= 0 && hitX <= 0.46875 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 3;
+				if (hitX >= 0.53125 && hitX <= 1 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 2;
+			}
+			if (metadata == 4) {
+				if (hitZ >= 0 && hitZ <= 0.46875 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 0;
+				if (hitZ >= 0.53125 && hitZ <= 1 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 1;
+				if (hitZ >= 0 && hitZ <= 0.46875 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 2;
+				if (hitZ >= 0.53125 && hitZ <= 1 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 3;
+			}
+			if (metadata == 5) {
+				if (hitZ >= 0 && hitZ <= 0.46875 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 1;
+				if (hitZ >= 0.53125 && hitZ <= 1 && hitY >= 0.5625 && hitY <= 1)
+					slotClicked = 0;
+				if (hitZ >= 0 && hitZ <= 0.46875 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 3;
+				if (hitZ >= 0.53125 && hitZ <= 1 && hitY >= 0.0625 && hitY <= 0.5)
+					slotClicked = 2;
+			}
+			if (player.getCurrentEquippedItem() != null && slotClicked != -1) {
 				ItemStack item = player.getCurrentEquippedItem();
-				for (int i = 0; i < 4; i++) {
-					if (tile.getStackInSlot(i) == null) {
-						tile.setInventorySlotContents(i, new ItemStack(item.getItem(), 1, item.getItemDamage()));
-						if (!player.capabilities.isCreativeMode)
-							player.getCurrentEquippedItem().stackSize--;
-						world.markBlockForUpdate(x, y, z);
-						return true;
+				if (tile.getStackInSlot(slotClicked) == null) {
+					tile.setInventorySlotContents(slotClicked, new ItemStack(item.getItem(), 1, item.getItemDamage()));
+					if (!player.capabilities.isCreativeMode)
+						player.getCurrentEquippedItem().stackSize--;
+					world.markBlockForUpdate(x, y, z);
+					return true;
+				}
+			}
+			if (player.getCurrentEquippedItem() == null && slotClicked != -1) {
+				if (tile.getStackInSlot(slotClicked) != null) {
+					ItemStack stack = tile.getStackInSlot(slotClicked);
+					if (!world.isRemote) {
+						EntityItem entityitem = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack);
+						entityitem.delayBeforeCanPickup = 10;
+						entityitem.hoverStart = 0.0F;
+						entityitem.rotationYaw = -player.rotationYaw;
+						world.spawnEntityInWorld(entityitem);
+						double moveX = ((player.posX - entityitem.posX) - entityitem.motionX) * 0.000001D;
+						double moveY = 0;
+						double moveZ = ((player.posZ - entityitem.posZ) - entityitem.motionZ) * 0.000001D;
+						entityitem.moveEntity(moveX, moveY, moveZ);
+						tile.setInventorySlotContents(slotClicked, null);
 					}
+					world.markBlockForUpdate(x, y, z);
+					return true;
 				}
 			}
 		}
