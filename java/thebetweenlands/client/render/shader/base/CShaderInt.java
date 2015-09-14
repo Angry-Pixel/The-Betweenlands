@@ -1,5 +1,14 @@
 package thebetweenlands.client.render.shader.base;
 
+import java.lang.reflect.Field;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.vecmath.Matrix4f;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,15 +17,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.Shader;
 import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.event.render.FogHandler;
-
-import javax.vecmath.Matrix4f;
-import java.lang.reflect.Field;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 
 public class CShaderInt extends Shader {
 	private CShaderManager pShaderManager;
@@ -27,7 +28,29 @@ public class CShaderInt extends Shader {
 	private List pListAuxHeights;
 	private final CShader wrapper;
 	private final String shaderName;
-	
+
+	private static final Field f_manager;
+	private static final Field f_listAuxFramebuffers;
+	private static final Field f_listAuxNames;
+	private static final Field f_listAuxWidths;
+	private static final Field f_listAuxHeights;
+	private static final Field f_projectionMatrix;
+
+	static {
+		f_manager = ReflectionHelper.findField(Shader.class, "manager", "field_148051_c", "c");
+		f_manager.setAccessible(true);
+		f_listAuxFramebuffers = ReflectionHelper.findField(Shader.class, "listAuxFramebuffers", "field_148048_d", "d");
+		f_listAuxFramebuffers.setAccessible(true);
+		f_listAuxNames = ReflectionHelper.findField(Shader.class, "listAuxNames", "field_148049_e", "e");
+		f_listAuxNames.setAccessible(true);
+		f_listAuxWidths = ReflectionHelper.findField(Shader.class, "listAuxWidths", "field_148046_f", "f");
+		f_listAuxWidths.setAccessible(true);
+		f_listAuxHeights = ReflectionHelper.findField(Shader.class, "listAuxHeights", "field_148047_g", "g");
+		f_listAuxHeights.setAccessible(true);
+		f_projectionMatrix = ReflectionHelper.findField(Shader.class, "projectionMatrix", "field_148053_h", "h");
+		f_projectionMatrix.setAccessible(true);
+	}
+
 	public CShaderInt(IResourceManager resourceLocation, String shaderName,
 			Framebuffer frameBufferIn, Framebuffer frameBufferOut, CShader wrapper)
 					throws JsonException {
@@ -36,32 +59,12 @@ public class CShaderInt extends Shader {
 		this.wrapper = wrapper;
 		this.wrapper.addShader(this);
 		try {
-			{
-				this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "manager", "field_148051_c", "c");
-				f.setAccessible(true);
-				f.set(this, this.pShaderManager);
-			}
-			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxFramebuffers", "field_148048_d", "d");
-				f.setAccessible(true);
-				this.pListAuxFramebuffers = (List) f.get(this);
-			}
-			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxNames", "field_148049_e", "e");
-				f.setAccessible(true);
-				this.pListAuxNames = (List) f.get(this);
-			}
-			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxWidths", "field_148046_f", "f");
-				f.setAccessible(true);
-				this.pListAuxWidths = (List) f.get(this);
-			}
-			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "listAuxHeights", "field_148047_g", "g");
-				f.setAccessible(true);
-				this.pListAuxHeights = (List) f.get(this);
-			}
+			this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
+			f_manager.set(this, this.pShaderManager);
+			this.pListAuxFramebuffers = (List) f_listAuxFramebuffers.get(this);
+			this.pListAuxNames = (List) f_listAuxNames.get(this);
+			this.pListAuxWidths = (List) f_listAuxWidths.get(this);
+			this.pListAuxHeights = (List) f_listAuxHeights.get(this);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -70,19 +73,15 @@ public class CShaderInt extends Shader {
 	public String getName() {
 		return this.shaderName;
 	}
-	
+
 	public ShaderUniform getUniform(String name) {
 		return this.pShaderManager.func_147991_a(name);
 	}
-	
+
 	@Override
 	public void loadShader(float partialTicks) {
 		try {
-			{
-				Field f = ReflectionHelper.findField(this.getClass().getSuperclass(), "projectionMatrix", "field_148053_h", "h");
-				f.setAccessible(true);
-				this.pProjectionMatrix = (Matrix4f) f.get(this);
-			}
+			this.pProjectionMatrix = (Matrix4f) f_projectionMatrix.get(this);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -101,7 +100,7 @@ public class CShaderInt extends Shader {
 		float framebufferTextureWidth = (float)this.framebufferOut.framebufferTextureWidth;
 		float framebufferTextureHeight = (float)this.framebufferOut.framebufferTextureHeight;
 		GL11.glViewport(0, 0, (int)framebufferTextureWidth, (int)framebufferTextureHeight);
-		
+
 		//Add samplers
 		this.pShaderManager.func_147992_a("s_diffuse", this.framebufferIn);
 		for(Entry<String, Object> samplerEntry : this.wrapper.getSamplers().entrySet()) {
@@ -123,13 +122,13 @@ public class CShaderInt extends Shader {
 		this.pShaderManager.func_147984_b("u_screenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
 		//Just to make sure the correct fog mode is used in case another mod changes the fog mode after rendering the world
 		this.pShaderManager.func_147984_b("u_fogMode").func_148090_a(FogHandler.INSTANCE.getCurrentFogMode());
-		
+
 		//Update shader
 		this.wrapper.updateShader(this);
-		
+
 		//Upload samplers
 		this.pShaderManager.func_147995_c();
-		
+
 		//Clear FBO
 		this.framebufferOut.framebufferClear();
 		this.framebufferOut.bindFramebuffer(false);
@@ -137,7 +136,7 @@ public class CShaderInt extends Shader {
 		//Just to make sure the correct fog values are used in case another mod changes the fog values after rendering the world
 		GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
 		GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd());
-		
+
 		//Render texture over whole screen
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
@@ -147,7 +146,7 @@ public class CShaderInt extends Shader {
 		tessellator.addVertex((double)framebufferTextureWidth, 0.0D, 500.0D);
 		tessellator.addVertex(0.0D, 0.0D, 500.0D);
 		tessellator.draw();
-		
+
 		//Unbind textures and FBO
 		this.pShaderManager.func_147993_b();
 		this.framebufferOut.unbindFramebuffer();
