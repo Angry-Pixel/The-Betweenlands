@@ -2,6 +2,8 @@ package thebetweenlands.client.render.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockWall;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -13,7 +15,10 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
+import thebetweenlands.blocks.plants.BlockBLSmallPlants;
+import thebetweenlands.blocks.terrain.BlockWisp;
 import thebetweenlands.client.model.block.ModelItemShelf;
+import thebetweenlands.items.ItemTarminion;
 import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -88,23 +93,42 @@ public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
 			GL11.glTranslated(x, y, z);
 			GL11.glRotatef(rotation, 0.0F, 1F, 0F);
 			GL11.glPushMatrix();
+
 			if (stack.getItem() instanceof ItemBlock && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(stack.getItem()).getRenderType()) && !(Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer)) {
 				GL11.glTranslated(0, -0.1, 0);
 				GL11.glRotatef(-90, 0.0F, 1F, 0F);
+
+				if(Block.getBlockFromItem(stack.getItem()) instanceof BlockWall)
+					GL11.glRotatef(90, 0.0F, 1F, 0F);
+
+				if(Block.getBlockFromItem(stack.getItem()) instanceof BlockBLSmallPlants && Block.getBlockFromItem(stack.getItem()).getRenderType() != 1)
+					GL11.glTranslated(-0.125, -0.1, -0.125);
+
+				if(Block.getBlockFromItem(stack.getItem()) instanceof BlockDoublePlant&& Block.getBlockFromItem(stack.getItem()).getRenderType() != 1)
+					GL11.glTranslated(-0.125, -0.05, -0.125);
+
 				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, stack);
 				entityitem.getEntityItem().stackSize = 1;
 				entityitem.hoverStart = 0.0F;
 				RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, rotation, 0.0F);
 			}
-			else if (stack.getItem() instanceof ItemBlock && Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer) {
+			else if (stack.getItem() instanceof ItemBlock && Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer || stack.getItem() instanceof ItemTarminion) {
 				GL11.glTranslated(0, -0.1, 0);
 				GL11.glRotatef(90, 0.0F, 1F, 0F);
+
+				if(stack.getItem() instanceof ItemTarminion) {
+					GL11.glTranslated(0, -0.22, 0);
+					GL11.glRotatef(90, 0.0F, 1F, 0F);
+				}
+
+				if(Block.getBlockFromItem(stack.getItem()) instanceof BlockWisp)
+					GL11.glRotatef(-90, 0.0F, 1F, 0F);
+
 				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, stack);
 				entityitem.getEntityItem().stackSize = 1;
 				entityitem.hoverStart = 0.0F;
 				RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, rotation, 0.0F);
-			}
-			else {
+			} else {
 				GL11.glTranslated(0, -0.03, 0);
 				GL11.glScaled(0.25D, 0.25D, 0.25D);
 				ItemRenderHelper.renderItem(stack, 0);
