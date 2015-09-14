@@ -1,9 +1,13 @@
 package thebetweenlands.client.render.tileentity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -77,23 +81,33 @@ public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
 	}
 
 	private void renderItemInSlot(TileEntityItemShelf shelf, int slotIndex, double x, double y, double z, float rotation) {
-		if (shelf.getStackInSlot(slotIndex) != null) {
+		ItemStack stack = shelf.getStackInSlot(slotIndex);
+		if (stack != null) {
 			GL11.glPushMatrix();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			GL11.glTranslated(x, y, z);
 			GL11.glRotatef(rotation, 0.0F, 1F, 0F);
 			GL11.glPushMatrix();
-			if (shelf.getStackInSlot(slotIndex).getItem() instanceof ItemBlock) {
+			if (stack.getItem() instanceof ItemBlock && RenderBlocks.renderItemIn3d(Block.getBlockFromItem(stack.getItem()).getRenderType()) && !(Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer)) {
 				GL11.glTranslated(0, -0.1, 0);
-				GL11.glRotatef(90, 0.0F, 1F, 0F);
-				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, shelf.getStackInSlot(slotIndex));
+				GL11.glRotatef(-90, 0.0F, 1F, 0F);
+				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, stack);
 				entityitem.getEntityItem().stackSize = 1;
 				entityitem.hoverStart = 0.0F;
 				RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, rotation, 0.0F);
-			} else {
+			}
+			else if (stack.getItem() instanceof ItemBlock && Block.getBlockFromItem(stack.getItem()) instanceof BlockContainer) {
+				GL11.glTranslated(0, -0.1, 0);
+				GL11.glRotatef(90, 0.0F, 1F, 0F);
+				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, stack);
+				entityitem.getEntityItem().stackSize = 1;
+				entityitem.hoverStart = 0.0F;
+				RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, rotation, 0.0F);
+			}
+			else {
 				GL11.glTranslated(0, -0.03, 0);
 				GL11.glScaled(0.25D, 0.25D, 0.25D);
-				ItemRenderHelper.renderItem(shelf.getStackInSlot(slotIndex), 0);
+				ItemRenderHelper.renderItem(stack, 0);
 			}
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
