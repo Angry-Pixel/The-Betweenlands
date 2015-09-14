@@ -152,7 +152,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octinePressurePlate), "xx", 'x', BLBlockRegistry.bluriteBlock);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.MUD_BRICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.itemShelf, 3), "xxx ", "   ", "xxx", 'x', BLBlockRegistry.weedwoodPlankSlab);
 		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
