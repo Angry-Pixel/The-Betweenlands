@@ -1,5 +1,10 @@
 package thebetweenlands.blocks.container;
 
+import static net.minecraftforge.common.util.ForgeDirection.EAST;
+import static net.minecraftforge.common.util.ForgeDirection.NORTH;
+import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
+import static net.minecraftforge.common.util.ForgeDirection.WEST;
+
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -87,7 +92,31 @@ public class BlockItemShelf extends BlockContainer {
 		if (rotation == 3)
 			rotationMeta = 4;
 		world.setBlockMetadataWithNotify(x, y, z, rotationMeta, 3);
-		System.out.println("Meta: "+ rotationMeta);
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		return  world.isSideSolid(x - 1, y, z, EAST) || world.isSideSolid(x + 1, y, z, WEST) || world.isSideSolid(x, y, z - 1, SOUTH) || world.isSideSolid(x, y, z + 1, NORTH);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbour) {
+		int meta = world.getBlockMetadata(x, y, z);
+		boolean flag = false;
+		if (meta == 2 && world.isSideSolid(x, y, z + 1, NORTH))
+			flag = true;
+		if (meta == 3 && world.isSideSolid(x, y, z - 1, SOUTH))
+			flag = true;
+		if (meta == 4 && world.isSideSolid(x + 1, y, z, WEST))
+			flag = true;
+		if (meta == 5 && world.isSideSolid(x - 1, y, z, EAST))
+			flag = true;
+		if (!flag) {
+			breakBlock(world, x, y, z, this, 0);
+			dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlockToAir(x, y, z);
+		}
+		super.onNeighborBlockChange(world, x, y, z, neighbour);
 	}
 
 	@Override
