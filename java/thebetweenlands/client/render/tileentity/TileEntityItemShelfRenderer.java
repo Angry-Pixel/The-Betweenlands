@@ -122,7 +122,7 @@ public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
 				}
 
 				if(Block.getBlockFromItem(stack.getItem()) instanceof BlockWisp)
-					GL11.glRotatef(-90, 0.0F, 1F, 0F);
+					GL11.glRotatef(-rotation -90, 0.0F, 1F, 0F);
 
 				EntityItem entityitem = new EntityItem(shelf.getWorldObj(), 0.0D, 0.0D, 0.0D, stack);
 				entityitem.getEntityItem().stackSize = 1;
