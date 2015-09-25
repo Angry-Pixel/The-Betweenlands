@@ -27,6 +27,7 @@ import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
+import thebetweenlands.event.entity.VolarPadGlideHandler;
 import thebetweenlands.event.player.*;
 import thebetweenlands.event.world.BloodSkyHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
@@ -146,6 +147,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		MinecraftForge.EVENT_BUS.register(new PowerRingHandler());
+		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
