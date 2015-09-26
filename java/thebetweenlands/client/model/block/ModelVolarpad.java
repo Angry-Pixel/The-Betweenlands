@@ -201,10 +201,9 @@ public class ModelVolarpad extends ModelBase {
 		this.stalk3.addChild(this.stalk4);
 	}
 
-	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-		this.stalk1.render(f5);
-		this.roots.render(f5);
+	public void render() {
+		this.stalk1.render(0.0625F);
+		this.roots.render(0.0625F);
 	}
 
 	/**

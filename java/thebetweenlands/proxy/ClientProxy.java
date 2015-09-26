@@ -73,21 +73,7 @@ import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderTarminion;
 import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.entity.RenderWight;
-import thebetweenlands.client.render.item.ItemAlembicRenderer;
-import thebetweenlands.client.render.item.ItemAnimatorRenderer;
-import thebetweenlands.client.render.item.ItemCompostBinRenderer;
-import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
-import thebetweenlands.client.render.item.ItemInfuserRenderer;
-import thebetweenlands.client.render.item.ItemLootPot1Renderer;
-import thebetweenlands.client.render.item.ItemLootPot2Renderer;
-import thebetweenlands.client.render.item.ItemLootPot3Renderer;
-import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
-import thebetweenlands.client.render.item.ItemPurifierRenderer;
-import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
-import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
-import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
-import thebetweenlands.client.render.item.ItemTarminionRenderer;
-import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.item.*;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
@@ -277,6 +263,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot1), new ItemTarLootPot1Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot2), new ItemTarLootPot2Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
+		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 
 		//Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());
