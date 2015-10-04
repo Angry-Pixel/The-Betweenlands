@@ -59,6 +59,7 @@ public class BLEntityRegistry
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0x243B0B, 0x00FFFF);
 		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E);
 		registerEntity(26, EntityThrownTarminion.class, "thrownTarminion");
+		registerEntity(27, EntityWeedWoodBoat.class, "weedwoodBoat");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
