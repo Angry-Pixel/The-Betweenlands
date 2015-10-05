@@ -108,6 +108,7 @@ public class EntityDarkDruid extends EntityMob {
 				if (attackAnimationTime < MAX_ATTACK_ANIMATION_TIME) {
 					attackAnimationTime++;
 				}
+				spawnParticles();
 			} else {
 				if (attackAnimationTime > 0) {
 					attackAnimationTime--;
@@ -116,9 +117,6 @@ public class EntityDarkDruid extends EntityMob {
 		} else {
 			if (getAttackTarget() != null) {
 				faceEntity(getAttackTarget(), 100, 100);
-			}
-			if (isCasting()) {
-				spawnParticles();
 			}
 			if (teleportCooldown > 0) {
 				teleportCooldown--;
