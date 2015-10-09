@@ -38,42 +38,80 @@ public class RenderTarBeast extends RenderLiving {
 
 		return -1;
 	}
-	
+
 	@Override
 	protected int shouldRenderPass(EntityLivingBase entityliving, int pass, float partialTickTime) {
 		EntityTarBeast tarBeast = (EntityTarBeast) entityliving;
+
+		if (tarBeast.isInvisible()) {
+			GL11.glDepthMask(false);
+		} else {
+			GL11.glDepthMask(true);
+		}
+
+		if (pass == 0) {
+			float scrollTimer = tarBeast.ticksExisted + partialTickTime;
+			bindTexture(overlayTexture);
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			float yScroll = scrollTimer * 0.002F;
+			GL11.glTranslatef(0F, -yScroll, 0.0F);
+			setRenderPassModel(renderPassModel);
+			renderPassModel.drippingtar1_keepstraight.showModel = false;
+			renderPassModel.drippingtar2_keepstraight.showModel = false;
+			renderPassModel.teeth_keepstraight.showModel = false;
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			float colour = 0.5F;
+			GL11.glColor4f(colour, colour, colour, 1.0F);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			
+			return 1;
+		}
+
+		if (pass == 1) {
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			
+			return -1;
+		}
 		
-			if (tarBeast.isInvisible())
-				GL11.glDepthMask(false);
-			else
-				GL11.glDepthMask(true);
-
-			if (pass == 0) {
-				float scrollTimer = tarBeast.ticksExisted + partialTickTime;
-				bindTexture(overlayTexture);
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				float yScroll = scrollTimer * 0.002F;
-				GL11.glTranslatef(0F, -yScroll, 0.0F);
-				setRenderPassModel(renderPassModel);
-				renderPassModel.drippingtar1_keepstraight.showModel = false;
-				renderPassModel.drippingtar2_keepstraight.showModel = false;
-				renderPassModel.teeth_keepstraight.showModel = false;
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				float colour = 0.5F;
-				GL11.glColor4f(colour, colour, colour, 1.0F);
-				GL11.glDisable(GL11.GL_LIGHTING);
-				return 1;
-			}
-
-			if (pass == 1) {
-				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				GL11.glLoadIdentity();
-				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glEnable(GL11.GL_LIGHTING);
-			}
+		if(pass == 2) {
+			this.setRenderPassModel(this.mainModel);
+			bindTexture(this.texture);
+			float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.002F) + 1.0F;
+			
+			GL11.glPushMatrix();
+			
+			GL11.glScalef(scale, scale, scale);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(1, 1, 1, 0.6F);
+			
+			return 1;
+		}
+		
+		if(pass == 3) {
+			GL11.glPopMatrix();
+			
+			this.setRenderPassModel(this.mainModel);
+			bindTexture(this.texture);
+			float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.004F) + 1.0F;
+			GL11.glScalef(scale, scale, scale);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glColor4f(1, 1, 1, 0.3F);
+			
+			return 1;
+		}
 
 		return setTarBeastEyeBrightness((EntityTarBeast) entityliving, pass, partialTickTime);
+	}
+	
+	@Override
+	protected void preRenderCallback(EntityLivingBase entity, float partialTickTime) {
+		super.preRenderCallback(entity, partialTickTime);
 	}
 
 	@Override
