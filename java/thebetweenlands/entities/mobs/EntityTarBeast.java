@@ -8,6 +8,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,9 +29,12 @@ import thebetweenlands.items.SwordBL;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
+	public static final IAttribute SHED_COOLDOWN_ATTRIB = (new RangedAttribute("bl.shedCooldown", 70.0D, 10.0D, Double.MAX_VALUE)).setDescription("Shed Cooldown");
+	public static final IAttribute SHED_SPEED_ATTRIB = (new RangedAttribute("bl.shedSpeed", 10.0D, 0.0D, Double.MAX_VALUE)).setDescription("Shedding Speed");
+	
 	private int shedCooldown = 0;
 	private int sheddingProgress = 0;
-	public final static int SHEDDING_DW = 2;
+	public final static int SHEDDING_DW = 20;
 
 	public EntityTarBeast(World world) {
 		super(world);
@@ -50,6 +55,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(8.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
+		
+		this.getAttributeMap().registerAttribute(SHED_COOLDOWN_ATTRIB);
+		this.getAttributeMap().registerAttribute(SHED_SPEED_ATTRIB);
 	}
 
 	@Override
@@ -131,19 +140,20 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
 		if (worldObj.isRemote) {
 			if(ticksExisted % 10 == 0) {
 				renderParticles(worldObj, posX, posY, posZ, rand);
 			}
 
-			if(this.sheddingProgress > 10) {
+			if(this.sheddingProgress > this.getSheddingSpeed()) {
 				this.sheddingProgress = 0;
 
 				for(int i = 0; i < 5; i++) {
 					this.worldObj.playSoundAtEntity(this, "thebetweenlands:tarBeastStep", 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.8F);
 				}
 
-				for(int i = 0; i < 50; i++) {
+				for(int i = 0; i < 200; i++) {
 					Random rnd = worldObj.rand;
 					float rx = rnd.nextFloat() * 4.0F - 2.0F;
 					float ry = rnd.nextFloat() * 4.0F - 2.0F;
@@ -152,6 +162,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					vec.normalize();
 					BLParticle.SPLASH_TAR_BEAST.spawn(this.worldObj, this.posX + rx + 0.5F, this.posY + ry, this.posZ + rz + 0.5F, vec.x * 0.5F, vec.y * 0.5F, vec.z * 0.5F, 1);
 				}
+			} else if(this.isShedding() || this.sheddingProgress > 0) {
+				this.sheddingProgress++;
+			} else {
+				this.sheddingProgress = 0;
 			}
 		}
 
@@ -162,10 +176,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 			if(this.shedCooldown == 0 && this.getEntityToAttack() != null && this.getEntityToAttack().getDistanceToEntity(this) < 6.0D && this.canEntityBeSeen(this.getEntityToAttack())) {
 				this.setShedding(true);
-				this.shedCooldown = 60 + this.worldObj.rand.nextInt(50);
+				this.shedCooldown = this.getSheddingCooldown() + this.worldObj.rand.nextInt(this.getSheddingCooldown() / 2);
 			}
 
-			if(this.sheddingProgress > 10) {
+			if(this.sheddingProgress > this.getSheddingSpeed()) {
 				this.sheddingProgress = 0;
 				this.setShedding(false);
 				if(this.getEntityToAttack() != null) {
@@ -176,17 +190,17 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 							if(((EntityPlayer)e).isBlocking()) continue;
 						}
 						double dst = e.getDistanceToEntity(this);
-						float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue() / dst * 6.0F);
+						float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue() / dst * 7.0F);
 						e.attackEntityFrom(DamageSource.causeMobDamage(this), dmg);
 					}
 				}
 			}
-		}
 
-		if(this.isShedding() || (this.sheddingProgress > 0 && this.sheddingProgress < 10)) {
-			this.sheddingProgress++;
-		} else {
-			this.sheddingProgress = 0;
+			if(this.isShedding()) {
+				this.sheddingProgress++;
+			} else {
+				this.sheddingProgress = 0;
+			}
 		}
 	}
 
@@ -219,5 +233,13 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public int getSheddingProgress() {
 		return this.sheddingProgress;
+	}
+	
+	public int getSheddingCooldown() {
+		return (int)this.getEntityAttribute(SHED_COOLDOWN_ATTRIB).getAttributeValue();
+	}
+	
+	public int getSheddingSpeed() {
+		return (int)this.getEntityAttribute(SHED_SPEED_ATTRIB).getAttributeValue();
 	}
 }
