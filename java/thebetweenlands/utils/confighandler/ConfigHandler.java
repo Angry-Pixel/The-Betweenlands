@@ -25,6 +25,7 @@ public class ConfigHandler {
 	public static int BIOME_ID_PATCHY_ISLANDS;
 	public static int BIOME_ID_MARSH1;
 	public static int BIOME_ID_MARSH2;
+	public static int BIOME_ID_SLUDGE_PLAINS;
 	public static boolean BIOME_ID_LIMIT;
 	public static int DIMENSION_BRIGHTNESS;
 	public static int WISP_QUALITY;
@@ -53,6 +54,7 @@ public class ConfigHandler {
 		BIOME_ID_PATCHY_ISLANDS = config.get(CATEGORIES[0], "Patchy Islands Biome ID", 53).getInt(53);
 		BIOME_ID_MARSH1 = config.get(CATEGORIES[0], "Marsh 1 Biome ID", 54).getInt(54);
 		BIOME_ID_MARSH2 = config.get(CATEGORIES[0], "Marsh 2 Biome ID", 55).getInt(55);
+		BIOME_ID_SLUDGE_PLAINS = config.get(CATEGORIES[0], "Marsh 2 Biome ID", 56).getInt(56);
 		BIOME_ID_LIMIT = config.getBoolean("Biome ID Limit", CATEGORIES[0], true, "Prevents any biome IDs higher than 127. Setting this to false \nis NOT recommended unless you know what you're doing!");
 		DIMENSION_BRIGHTNESS = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 60).setMinValue(0).setMaxValue(100).getInt(60);
 

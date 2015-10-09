@@ -497,7 +497,7 @@ public class DecorationHelper {
 				int x = this.x + this.offsetXZ();
 				int y = this.y - 8 + this.rand.nextInt(16);
 				int z = this.z + this.offsetXZ();
-				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
+				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)|| this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 					GEN_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 			}
 		}

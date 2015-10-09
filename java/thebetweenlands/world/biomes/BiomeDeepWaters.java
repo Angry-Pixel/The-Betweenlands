@@ -26,14 +26,14 @@ extends BiomeGenBaseBetweenlands
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 20, 10);
 		this.setBiomeName("Deep Waters");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
-		this.setFillerBlockHeight((byte)5);
+		this.setFillerBlockHeight((byte) 5);
 		this.waterColorMultiplier = 0x1b3944;
 		this.addFeature(new DeepWaterNoiseFeature())
 		.addFeature(new SiltNoiseFeature())
 		.addFeature(new AlgaeNoiseFeature())
 		.addFeature(new CragSpiresNoiseFeature());
 
-        spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
+		spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
 		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));

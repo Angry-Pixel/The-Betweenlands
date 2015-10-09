@@ -63,7 +63,8 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 			BLBiomeRegistry.coarseIslands,
 			BLBiomeRegistry.marsh1,
 			BLBiomeRegistry.marsh2,
-			BLBiomeRegistry.patchyIslands
+			BLBiomeRegistry.patchyIslands,
+			BLBiomeRegistry.sludgePlains
 		);
 	}
 
