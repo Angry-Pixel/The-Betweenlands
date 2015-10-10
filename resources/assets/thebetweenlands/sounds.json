@@ -116,6 +116,12 @@
       "swampHagDeath"
     ]
   },
+  "tarBeastSuck": {
+    "category": "hostile",
+    "sounds": [
+      "tarBeastSuck"
+    ]
+  },
   "tarBeastLiving1": {
     "category": "hostile",
     "sounds": [

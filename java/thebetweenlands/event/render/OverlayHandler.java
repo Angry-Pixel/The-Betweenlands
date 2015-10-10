@@ -1,6 +1,7 @@
 package thebetweenlands.event.render;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,6 +23,7 @@ import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.recipes.BLMaterials;
 
 public class OverlayHandler {
@@ -30,9 +32,9 @@ public class OverlayHandler {
 	private Method mERrenderHand;
 	private boolean cancelOverlay = false;
 
-
 	private static final ResourceLocation RES_UNDERWATER_OVERLAY = new ResourceLocation("textures/misc/underwater.png");
-
+	private static final ResourceLocation RES_TAR_OVERLAY = new ResourceLocation("textures/blocks/tar.png");
+	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
@@ -78,7 +80,9 @@ public class OverlayHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		World world = Minecraft.getMinecraft().theWorld;
 		Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, player, (float) event.partialTicks);
-		if(player != null && block.getMaterial() == BLMaterials.tar && !this.cancelOverlay) {
+		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, player.boundingBox.expand(-0.25F, -0.25F, -0.25F));
+		boolean inTar = (block.getMaterial() == BLMaterials.tar || (entitiesInside != null && entitiesInside.size() > 0));
+		if(player != null && inTar && !this.cancelOverlay) {
 			event.setCanceled(true);
 
 			GL11.glPushMatrix();
@@ -90,9 +94,10 @@ public class OverlayHandler {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 			Minecraft mc = Minecraft.getMinecraft();
-			mc.getTextureManager().bindTexture(RES_UNDERWATER_OVERLAY);
-			GL11.glColor4f(1, 1, 1, 1);
+			mc.getTextureManager().bindTexture(new ResourceLocation("thebetweenlands:textures/blocks/tar.png"));
+			GL11.glColor4f(1, 1, 1, 0.975F);
 
+			GL11.glScaled(1, 20, 1);
 			this.renderWarpedTextureOverlay(event.partialTicks);
 
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

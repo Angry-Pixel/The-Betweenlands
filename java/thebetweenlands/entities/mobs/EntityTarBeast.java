@@ -15,6 +15,8 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -35,7 +37,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public static final IAttribute SUCK_COOLDOWN_ATTRIB = (new RangedAttribute("bl.suckCooldown", 400.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Cooldown");
 	public static final IAttribute SUCK_LENGTH_ATTRIB = (new RangedAttribute("bl.suckLength", 100.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Length");
-	
+
 	private int shedCooldown = (int)SHED_COOLDOWN_ATTRIB.getDefaultValue();
 	private int sheddingProgress = 0;
 	public final static int SHEDDING_STATE_DW = 20;
@@ -63,7 +65,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(8.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 
@@ -157,13 +159,8 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			if(ticksExisted % 10 == 0) {
 				renderParticles(worldObj, posX, posY, posZ, rand);
 			}
-
 			if(this.sheddingProgress > this.getSheddingSpeed()) {
 				this.sheddingProgress = 0;
-
-				for(int i = 0; i < 5; i++) {
-					this.worldObj.playSoundAtEntity(this, "thebetweenlands:tarBeastStep", 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.8F);
-				}
 
 				for(int i = 0; i < 200; i++) {
 					Random rnd = worldObj.rand;
@@ -179,7 +176,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			} else {
 				this.sheddingProgress = 0;
 			}
-			
+
 			if(this.isSucking()) {
 				for(int i = 0; i < 5; i++) {
 					Random rnd = worldObj.rand;
@@ -188,7 +185,6 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					float rz = rnd.nextFloat() * 8.0F - 4.0F;
 					Vector3D vec = new Vector3D(rx, ry, rz);
 					vec = vec.normalized();
-					//BLParticle.SPLASH_TAR_BEAST.spawn(this.worldObj, this.posX + rx + 0.5F, this.posY + ry, this.posZ + rz + 0.5F, vec.x * 0.5F, vec.y * 0.5F, vec.z * 0.5F, 1);
 					this.worldObj.spawnParticle("largesmoke", this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
 				}
 			}
@@ -206,6 +202,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 
 				if(this.sheddingProgress > this.getSheddingSpeed()) {
+					this.playSound("thebetweenlands:tarBeastLiving" + (rand.nextInt(3) + 1), 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
+					for(int i = 0; i < 8; i++) {
+						this.playSound("thebetweenlands:tarBeastStep" + (rand.nextInt(3) + 1), 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+					}
 					this.sheddingProgress = 0;
 					this.setShedding(false);
 					if(this.getEntityToAttack() != null) {
@@ -218,6 +218,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 							double dst = e.getDistanceToEntity(this);
 							float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue() / dst * 7.0F);
 							e.attackEntityFrom(DamageSource.causeMobDamage(this), dmg);
+							e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), (int)(20 + (1.0F - dst / 6.0F) * 150), 1, true));
 						}
 					}
 				}
@@ -228,35 +229,50 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.sheddingProgress = 0;
 				}
 			}
-			
+
 			if(this.suckingCooldown > 0) {
 				this.suckingCooldown--;
 			}
-			
+
 			if(!this.isShedding()) {
 				if(this.suckingCooldown == 0 && this.getEntityToAttack() != null && this.getEntityToAttack().getDistanceToEntity(this) < 6.0D && this.canEntityBeSeen(this.getEntityToAttack())) {
 					this.setSucking(true);
 					this.suckingCooldown = this.getSuckingCooldown() + this.worldObj.rand.nextInt(this.getSuckingCooldown() / 2);
 					this.suckingMaxProgress = (int)this.getEntityAttribute(SUCK_LENGTH_ATTRIB).getAttributeValue();
+					this.playSound("thebetweenlands:tarBeastSuck", 1F, 1F);
 				}
-				
+
 				if(this.suckingProgress > this.suckingMaxProgress) {
 					this.setSucking(false);
 					this.suckingProgress = 0;
 				}
-				
+
 				if(this.isSucking()) {
 					this.suckingProgress++;
-					
+
 					List<Entity> affectedEntities = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, this.boundingBox.expand(6.0F, 6.0F, 6.0F));
 					for(Entity e : affectedEntities) {
 						if(e == this || e.getDistanceToEntity(this) > 6.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vector3D vec = new Vector3D(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
 						vec = vec.normalized();
-						float mod = 1.0F - e.getDistanceToEntity(this) / 6.0F;
+						float dst = e.getDistanceToEntity(this);
+						float mod = 1.0F - dst / 6.0F;
+						if(e instanceof EntityPlayer) {
+							if(((EntityPlayer)e).isBlocking()) mod *= 0.18F;
+						}
 						e.motionX += vec.x * 0.2F * mod;
 						e.motionY += vec.y * 0.2F * mod;
 						e.motionZ += vec.z * 0.2F * mod;
+						if(dst < 1.0F && e instanceof EntityLivingBase) {
+							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.weakness.getId(), 20, 3, true));
+							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 20, 4, true));
+							e.motionX *= 0.01F;
+							e.motionY *= 0.01F;
+							e.motionZ *= 0.01F;
+							if(e instanceof EntityPlayer) {
+								((EntityPlayer)e).jumpMovementFactor = 0.0F;
+							}
+						}
 						e.velocityChanged = true;
 					}
 				} else {
@@ -285,6 +301,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		}
 	}
 
+	@Override
+	protected void collideWithEntity(Entity e) {
+        if(!this.isSucking()) e.applyEntityCollision(this);
+    }
+	
 	public boolean isShedding() {
 		return this.getDataWatcher().getWatchableObjectByte(SHEDDING_STATE_DW) == 1;
 	}
