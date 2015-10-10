@@ -41,20 +41,18 @@ public class RenderWight extends RenderLiving {
 	protected int shouldRenderPass(EntityLivingBase entityliving, int pass, float partialTickTime) {
 		EntityWight wight = (EntityWight) entityliving;
 		
-		if(pass == 1) {
+		if(pass == 0) {
 			GL11.glScalef(0.9F, 0.9F, 0.9F);
-			
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glColorMask(false, false, false, false);
+			GL11.glColor4f(1, 1, 1, 1);
 			return 1;
-		} else if(pass == 2) {
+		} else if(pass == 1) {
 			GL11.glColorMask(true, true, true, true);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glColor4f(1F, 1F, 1F, 1F - wight.getAnimation() * 0.5F);
 			return 1;
-		} else {
-			GL11.glColor4f(1, 1, 1, 1);
 		}
 		
 		return -1;
