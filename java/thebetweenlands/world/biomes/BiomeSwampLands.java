@@ -8,6 +8,7 @@ import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -41,7 +42,7 @@ public class BiomeSwampLands
 
         spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
         spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
-        // spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
+        spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
         spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
         spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
         spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 40, 2, 6));

@@ -33,7 +33,7 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x1b3944;
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
-		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
         spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 25, 2, 4));

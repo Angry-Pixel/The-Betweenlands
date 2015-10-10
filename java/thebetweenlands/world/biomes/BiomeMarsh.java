@@ -8,6 +8,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -42,7 +43,7 @@ extends BiomeGenBaseBetweenlands
 
         spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 20, 1, 1));
-		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}

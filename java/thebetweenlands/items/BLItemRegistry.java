@@ -149,7 +149,7 @@ public class BLItemRegistry {
     public static final Item voodooDoll = new ItemVoodooDoll().setMaxDamage(4);
     public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
     public static final Item ringOfPower = new ItemRingOfPower();
-    public static final Item swiftPick = new PickaxeBL(BLMaterials.toolLoot).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
+    public static final Item swiftPick = new ItemSwiftPick(BLMaterials.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
     public static final Item wightsBane = new SwordBL(BLMaterials.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.wightsBane").setTextureName("thebetweenlands:wightsBane");
     public static final Item skullMask = new ItemSkullMask().setUnlocalizedName("thebetweenlands.skullMask").setTextureName("thebetweenlands:skullMask");
     public static final Item tribalPants = new ItemArmor(ItemArmor.ArmorMaterial.CLOTH, 0, 2).setUnlocalizedName("thebetweenlands.tribalPants").setTextureName("thebetweenlands:tribalPants");

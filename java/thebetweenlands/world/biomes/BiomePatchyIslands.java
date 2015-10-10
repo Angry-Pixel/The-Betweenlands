@@ -1,7 +1,18 @@
 package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityDragonFly;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityLurker;
+import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntitySiltCrab;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorPatchyIslands;
@@ -32,7 +43,7 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x184220;
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
-		// spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1)); TODO
+		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
     	spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 20, 2, 4));
