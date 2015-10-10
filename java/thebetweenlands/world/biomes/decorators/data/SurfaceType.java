@@ -29,7 +29,7 @@ public enum SurfaceType {
             case PEAT:
                 return block == BLBlockRegistry.peat;
             case MIXED:
-                return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.deadGrass;
+                return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.deadGrass || block == BLBlockRegistry.mud;
             case UNDERGROUND:
                 return block == BLBlockRegistry.betweenstone;
             default:
