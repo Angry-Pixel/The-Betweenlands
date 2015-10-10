@@ -563,10 +563,8 @@ public class DecorationHelper {
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
 			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
-				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)) {
-					this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 0, 2);
-					this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 8, 2);
-				}
+				this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 0, 2);
+				this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 8, 2);
 			}
 		}
 	}

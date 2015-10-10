@@ -14,7 +14,6 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
 	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
-	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
@@ -27,8 +26,7 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 				for (int yy = y + 2; yy < y + height; yy++)
 					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube())
 						return false;
-		
-		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
+
 		
 		for (int yy = y; yy < y + height; ++yy) {
 			if (yy % 5 == 0 && radius > 1)
@@ -129,23 +127,6 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 		}
 	}
 
-	private void createMainCanopy(World world, Random rand, int x, int y, int z, int maxRadius) {
-		for (int x1 = x - maxRadius; x1 <= x + maxRadius; x1++)
-			for (int z1 = z - maxRadius; z1 <= z + maxRadius; z1++)
-				for (int y1 = y; y1 < y + maxRadius; y1++) {
-					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.5D);
-					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
-						if (world.getBlock(x1, y1, z1) != log && rand.nextInt(5) != 0)
-							world.setBlock(x1, y1, z1, leaves);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > y)
-						if (world.getBlock(x1, y1, z1) != log)
-							world.setBlock(x1, y1, z1, log);
-					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == y)
-						if (world.getBlock(x1, y1, z1) != log)
-							for (int i = 1; i < 1 + rand.nextInt(3); i++)
-								world.setBlock(x1, y1 - i, z1, leaves);
-				}
-	}
 
 	private void createBranch(World world, Random rand, int x, int y, int z, int dir, boolean root, int branchLength) {
 		int meta = dir;
