@@ -64,7 +64,7 @@ public class RenderTarBeast extends RenderLiving {
 			float colour = 0.5F;
 			GL11.glColor4f(colour, colour, colour, 1.0F);
 			GL11.glDisable(GL11.GL_LIGHTING);
-			
+
 			return 1;
 		}
 
@@ -73,42 +73,72 @@ public class RenderTarBeast extends RenderLiving {
 			GL11.glLoadIdentity();
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glEnable(GL11.GL_LIGHTING);
-			
+
 			return -1;
 		}
-		
-		if(pass == 2) {
-			this.setRenderPassModel(this.mainModel);
-			bindTexture(this.texture);
-			float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.002F) + 1.0F;
-			
-			GL11.glPushMatrix();
-			
-			GL11.glScalef(scale, scale, scale);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glColor4f(1, 1, 1, 0.6F);
-			
-			return 1;
+
+		if(tarBeast.isShedding()) {
+			if(pass == 2) {
+				this.setRenderPassModel(this.mainModel);
+				bindTexture(this.texture);
+				float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.002F) + 1.0F;
+
+				GL11.glPushMatrix();
+
+				GL11.glScalef(scale, scale, scale);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glColor4f(1, 1, 1, 0.6F);
+
+				return 1;
+			}
+
+			if(pass == 3) {
+				GL11.glPopMatrix();
+
+				this.setRenderPassModel(this.mainModel);
+				bindTexture(this.texture);
+				float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.004F) + 1.0F;
+				GL11.glScalef(scale, scale, scale);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glColor4f(1, 1, 1, 0.3F);
+
+				return 1;
+			}
 		}
-		
-		if(pass == 3) {
-			GL11.glPopMatrix();
+
+		if(tarBeast.isPreparing()) {
+			if(pass == 2) {
+				this.setRenderPassModel(this.mainModel);
+				bindTexture(this.texture);
+				float scale = (float)((1.0F - (tarBeast.ticksExisted % 8) / 8.0F) * 0.15F + 1.0F);
+
+				GL11.glScalef(scale, scale, scale);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glColor4f(1, 1, 1, 0.6F);
+
+				return 1;
+			}
 			
-			this.setRenderPassModel(this.mainModel);
-			bindTexture(this.texture);
-			float scale = (float)(tarBeast.getSheddingProgress()*tarBeast.getSheddingProgress() * 0.004F) + 1.0F;
-			GL11.glScalef(scale, scale, scale);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glColor4f(1, 1, 1, 0.3F);
-			
-			return 1;
+			if(pass == 3) {
+				this.setRenderPassModel(this.mainModel);
+				bindTexture(this.texture);
+				float scale = (float)((1.0F - (tarBeast.ticksExisted % 8) / 8.0F) * 0.2F + 1.05F);
+
+				GL11.glScalef(scale, scale, scale);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glColor4f(1, 1, 1, 0.3F);
+
+				return 1;
+			}
 		}
 
 		return setTarBeastEyeBrightness((EntityTarBeast) entityliving, pass, partialTickTime);
 	}
-	
+
 	@Override
 	protected void preRenderCallback(EntityLivingBase entity, float partialTickTime) {
 		super.preRenderCallback(entity, partialTickTime);
