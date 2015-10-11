@@ -43,7 +43,6 @@ extends BiomeGenBaseBetweenlands
 
         spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
