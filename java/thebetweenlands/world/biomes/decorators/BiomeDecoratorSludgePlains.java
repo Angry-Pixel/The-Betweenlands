@@ -12,11 +12,8 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBaseBetweenlands {
         DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
         helper.populateCave();
 
-        helper.generateReeds(6);
-        helper.generateSmallHollowLog(10);
+        helper.generateSmallHollowLog(5);
         helper.generateSmalWeedwoodTree(4);
-        helper.generateRottenLog(2);
-        helper.generateTarPool(4);
-        helper.generateStagnantWaterPool(5);
+        helper.generateTarPool(100);
     }
 }

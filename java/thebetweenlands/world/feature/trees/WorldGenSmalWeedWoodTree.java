@@ -11,8 +11,8 @@ import thebetweenlands.blocks.tree.BlockBLLog;
 import java.util.Random;
 
 public class WorldGenSmalWeedWoodTree extends WorldGenerator {
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.weedwoodLog;
-	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.weedwoodBark;
+	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
+	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
 	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 
