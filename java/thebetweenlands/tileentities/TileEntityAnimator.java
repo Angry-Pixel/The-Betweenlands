@@ -158,11 +158,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		nbt.setInteger("life", life);
 		nbt.setInteger("progress", progress);
 		nbt.setBoolean("lifeDepleted", lifeDepleted);
+		NBTTagCompound outputItemCompound = new NBTTagCompound();
 		if(isSlotInUse(0)) {
-			NBTTagCompound itemStackCompound = inventory[0].writeToNBT(new NBTTagCompound());
-			nbt.setTag("outputItem", itemStackCompound);
-		} else
-			nbt.setTag("outputItem", null);
+			inventory[0].writeToNBT(outputItemCompound);
+		}
+		nbt.setTag("outputItem", outputItemCompound);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -172,7 +172,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		progress = packet.func_148857_g().getInteger("progress");
 		lifeDepleted = packet.func_148857_g().getBoolean("lifeDepleted");
 		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("outputItem");
-		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+		if(itemStackCompound.getShort("id") != 0)
 			inventory[0] = ItemStack.loadItemStackFromNBT(itemStackCompound);
 		else
 			inventory[0] = null;
