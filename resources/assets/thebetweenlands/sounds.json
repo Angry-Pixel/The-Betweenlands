@@ -339,27 +339,12 @@
       "crabSnip"
     ]
   },
-    "geckoLiving1": {
+    "geckoLiving": {
     "category": "hostile",
     "sounds": [
-      "geckoLiving1"
-    ]
-  },
-    "geckoLiving2": {
-    "category": "hostile",
-    "sounds": [
-      "geckoLiving2"
-    ]
-  },
-    "geckoLiving3": {
-    "category": "hostile",
-    "sounds": [
-      "geckoLiving3"
-    ]
-  },
-    "geckoLiving4": {
-    "category": "hostile",
-    "sounds": [
+      "geckoLiving1",
+      "geckoLiving2",
+      "geckoLiving3",
       "geckoLiving4"
     ]
   },

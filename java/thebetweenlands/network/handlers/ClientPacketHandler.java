@@ -26,12 +26,14 @@ import thebetweenlands.network.packets.PacketDruidTeleportParticle;
 import thebetweenlands.network.packets.PacketRevengeTarget;
 import thebetweenlands.network.packets.PacketSnailHatchParticle;
 import thebetweenlands.network.packets.PacketTickspeed;
+import thebetweenlands.network.packets.PacketWeedWoodBushRustle;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 import com.google.common.collect.Maps;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -162,6 +164,16 @@ public class ClientPacketHandler {
 			} else if (target instanceof EntityLivingBase) {
 				entityLiving.setAttackTarget((EntityLivingBase) target);
 			}
+		}
+	}
+
+	@SubscribePacket
+	public static void handleWeedWoodBushRustle(PacketWeedWoodBushRustle packet) {
+		World world = FMLClientHandler.instance().getWorldClient();
+		int leafCount = 48;
+		float x = packet.getX() + 0.5F, y = packet.getY() + 0.5F, z = packet.getZ() + 0.5F;
+		while (leafCount --> 0) {
+			BLParticle.RUSTLE_LEAF.spawn(world, x, y, z);
 		}
 	}
 }

@@ -107,6 +107,7 @@ public class TheBetweenlands
         registerPacket(PacketTickspeed.class);
         registerPacket(PacketRevengeTarget.class);
         registerPacket(PacketAttackTarget.class);
+        registerPacket(PacketWeedWoodBushRustle.class);
 
 	}
 

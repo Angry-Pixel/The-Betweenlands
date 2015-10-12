@@ -1,6 +1,7 @@
 package thebetweenlands.client.particle;
 
 import java.lang.reflect.Constructor;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityBreakingFX;
@@ -19,12 +20,13 @@ import scala.actors.threadpool.Arrays;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityBLBubbleFX;
 import thebetweenlands.entities.particles.EntityBugFX;
+import thebetweenlands.entities.particles.EntityCaveWaterDripFX;
 import thebetweenlands.entities.particles.EntityDruidCastingFX;
 import thebetweenlands.entities.particles.EntityLeafFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntitySplashFX;
-import thebetweenlands.entities.particles.EntityCaveWaterDripFX;
 import thebetweenlands.entities.particles.EntityTarBeastDrip;
+import thebetweenlands.entities.particles.EntityWeedWoodRustleFX;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -64,6 +66,7 @@ public enum BLParticle {
 	STEAM_PURIFIER(EntitySmokeFX.class, 1, 1, 1, ParticleArgs.V0_V0_V0),
 	PORTAL(EntityPortalFX.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/portal.png");
+
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, texture, 6 };
@@ -74,6 +77,7 @@ public enum BLParticle {
 			new ResourceLocation("thebetweenlands:textures/particle/moth1.png"),
 			new ResourceLocation("thebetweenlands:textures/particle/moth2.png")
 		};
+
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, false, textures[world.rand.nextInt(textures.length)], 2 };
@@ -85,6 +89,7 @@ public enum BLParticle {
 			new ResourceLocation("thebetweenlands:textures/particle/fish2.png"),
 			new ResourceLocation("thebetweenlands:textures/particle/fish3.png")
 		};
+
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, textures[world.rand.nextInt(textures.length)], 1 };
@@ -92,31 +97,35 @@ public enum BLParticle {
 	},
 	FLY(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/fly.png");
-			@Override
-			protected Object[] getAdditionalArgs(World world, Object... data) {
-				return new Object[] { 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
-			}
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[] { 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
+		}
 	},
 	MOSQUITO(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/mosquito.png");
-			@Override
-			protected Object[] getAdditionalArgs(World world, Object... data) {
-				return new Object[] { 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
-			}
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[] { 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2 };
+		}
 	},
 	WATER_BUG(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/waterBug.png");
-			@Override
-			protected Object[] getAdditionalArgs(World world, Object... data) {
-				return new Object[] { 400, 0.03F, 0.002F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, true, texture, 2 };
-			}
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[] { 400, 0.03F, 0.002F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, true, texture, 2 };
+		}
 	},
 	LEAF(EntityLeafFX.class, ParticleArgs.NONE, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/leaf.png");
-			@Override
-			protected Object[] getAdditionalArgs(World world, Object... data) {
-				return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5 };
-			}
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5 };
+		}
 	},
 	SPLASH(EntitySplashFX.class, ParticleArgs.VX_VY_VZ, int.class) {
 		@Override
@@ -124,7 +133,8 @@ public enum BLParticle {
 			return new Object[] { data.length == 0 || !(data[0] instanceof Integer) ? 0xFFFFFF : (int) data[0] };
 		}
 	},
-	CAVE_WATER_DRIP(EntityCaveWaterDripFX.class, ParticleArgs.NONE);
+	CAVE_WATER_DRIP(EntityCaveWaterDripFX.class, ParticleArgs.NONE),
+	RUSTLE_LEAF(EntityWeedWoodRustleFX.class, ParticleArgs.NONE);
 
 	private static final int REGULAR_ARG_NUM = 4;
 
@@ -179,8 +189,7 @@ public enum BLParticle {
 		return new Object[0];
 	}
 
-	protected void onSpawn(EntityFX entityFX) {
-	}
+	protected void onSpawn(EntityFX entityFX) {}
 
 	private static Class<?>[] getArgumentTypes(ParticleArgs args, Class<?>[] additionalArgTypes) {
 		Class<?>[] argumentTypes = new Class<?>[REGULAR_ARG_NUM + args.getArgumentCount() + additionalArgTypes.length];
