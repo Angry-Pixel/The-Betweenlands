@@ -15,6 +15,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -36,12 +37,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public static final IAttribute SHED_SPEED_ATTRIB = (new RangedAttribute("bl.shedSpeed", 10.0D, 0.0D, Double.MAX_VALUE)).setDescription("Shedding Speed");
 
 	public static final IAttribute SUCK_COOLDOWN_ATTRIB = (new RangedAttribute("bl.suckCooldown", 400.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Cooldown");
-	public static final IAttribute SUCK_SPEED_ATTRIB = (new RangedAttribute("bl.suckPreparationSpeed", 34.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Preparation Speed");
-	public static final IAttribute SUCK_LENGTH_ATTRIB = (new RangedAttribute("bl.suckLength", 100.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Length");
+	public static final IAttribute SUCK_SPEED_ATTRIB = (new RangedAttribute("bl.suckPreparationSpeed", 40.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Preparation Speed");
+	public static final IAttribute SUCK_LENGTH_ATTRIB = (new RangedAttribute("bl.suckLength", 130.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Length");
 
 	private int shedCooldown = (int)SHED_COOLDOWN_ATTRIB.getDefaultValue();
 	private int sheddingProgress = 0;
-	public final static int SHEDDING_STATE_DW = 20;
+	public static final int SHEDDING_STATE_DW = 20;
 
 	private int suckingCooldown = (int)SUCK_COOLDOWN_ATTRIB.getDefaultValue();
 	private int suckingPreparation = 0;
@@ -64,9 +65,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(5.0D);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.65D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(100.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 
@@ -112,7 +113,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		nbt.setInteger("sheddingProgress", this.sheddingProgress);
 		nbt.setByte("sheddingState", this.getDataWatcher().getWatchableObjectByte(SHEDDING_STATE_DW));
 		
-		nbt.setInteger("suckingCooldown", this.shedCooldown);
+		nbt.setInteger("suckingCooldown", this.suckingCooldown);
 		nbt.setInteger("suckingPreparation", this.suckingPreparation);
 		nbt.setInteger("suckingProgress", this.suckingProgress);
 		nbt.setByte("suckingState", this.getDataWatcher().getWatchableObjectByte(SUCKING_STATE_DW));
@@ -249,7 +250,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			}
 
 			if(!this.isShedding()) {
-				if(this.suckingCooldown == 0 && this.getEntityToAttack() != null && this.getEntityToAttack().getDistanceToEntity(this) < 9.0D && this.canEntityBeSeen(this.getEntityToAttack())) {
+				if(this.suckingCooldown == 0 && this.getEntityToAttack() != null && this.getEntityToAttack().getDistanceToEntity(this) <= 10.0D && this.canEntityBeSeen(this.getEntityToAttack())) {
 					this.setPreparing();
 				}
 				
@@ -273,29 +274,32 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isSucking()) {
 					this.suckingProgress++;
 
-					List<Entity> affectedEntities = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, this.boundingBox.expand(8.0F, 8.0F, 8.0F));
+					List<Entity> affectedEntities = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, this.boundingBox.expand(10.0F, 10.0F, 10.0F));
 					for(Entity e : affectedEntities) {
-						if(e == this || e.getDistanceToEntity(this) > 8.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
+						if(e == this || e.getDistanceToEntity(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vector3D vec = new Vector3D(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
 						vec = vec.normalized();
 						float dst = e.getDistanceToEntity(this);
-						float mod = 1.0F - dst / 9.0F;
+						float mod = (float) Math.pow(1.0F - dst / 13.0F, 1.2D);
 						if(e instanceof EntityPlayer) {
 							if(((EntityPlayer)e).isBlocking()) mod *= 0.18F;
 						}
-						e.motionX += vec.x * 0.14F * mod;
-						e.motionY += vec.y * 0.14F * mod;
-						e.motionZ += vec.z * 0.14F * mod;
 						if(dst < 1.0F && e instanceof EntityLivingBase) {
 							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.weakness.getId(), 20, 3, true));
-							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 20, 4, true));
-							e.motionX *= 0.01F;
-							e.motionY *= 0.01F;
-							e.motionZ *= 0.01F;
+							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 20, 3, true));
+							e.motionX *= 0.008F;
+							e.motionY *= 0.008F;
+							e.motionZ *= 0.008F;
 							if(e instanceof EntityPlayer) {
 								((EntityPlayer)e).jumpMovementFactor = 0.0F;
 							}
+							if(this.ticksExisted % 12 == 0) {
+								e.attackEntityFrom(DamageSource.drown, 1);
+							}
 						}
+						e.motionX += vec.x * 0.18F * mod;
+						e.motionY += vec.y * 0.18F * mod;
+						e.motionZ += vec.z * 0.18F * mod;
 						e.velocityChanged = true;
 					}
 					getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.75D);
@@ -307,6 +311,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		}
 	}
 
+	@Override
+	protected boolean isMovementBlocked() {
+        return super.isMovementBlocked() || this.isSucking();
+    }
+	
 	@SideOnly(Side.CLIENT)
 	public void renderParticles(World world, double x, double y, double z, Random rand) {
 		for (int count = 0; count < 3; ++count) {
@@ -328,7 +337,14 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void collideWithEntity(Entity e) {
-        if(!this.isSucking()) e.applyEntityCollision(this);
+        if(!this.isSucking()) {
+        	e.applyEntityCollision(this);
+        }
+    }
+	
+	@Override
+	public boolean canBePushed() {
+        return super.canBePushed() && !this.isSucking();
     }
 	
 	public boolean isShedding() {
