@@ -3,6 +3,7 @@ package thebetweenlands.world.feature.plants;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 
 import java.util.Random;
@@ -13,7 +14,6 @@ public class WorldGenWeedWoodBush extends WorldGenerator {
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		Block block;
-
 		do {
 			block = world.getBlock(x, y, z);
 			if (!(block.isLeaves(world, x, y, z) || block.isAir(world, x, y, z))) {
@@ -21,23 +21,25 @@ public class WorldGenWeedWoodBush extends WorldGenerator {
 			}
 			--y;
 		} while (y > 0);
-
-		Block block1 = world.getBlock(x, y, z);
 		++y;
+
 		this.setBlockAndNotifyAdequately(world, x, y, z, BLBlockRegistry.weedwoodBush, 0);
 
-		for (int l = y; l <= y + 2; ++l) {
-			int i1 = l - y;
-			int j1 = 2 - i1;
+		for (int by = y; by <= y + (world.rand.nextInt(2) == 0 ? world.rand.nextInt(4) + 1 : 1); ++by) {
+			int yo = by - y;
+			int radius = (int)((world.rand.nextInt(3) - yo) / (world.rand.nextFloat() * (yo * 2 + 1) * 0.1 + 1.0));
 
-			for (int k1 = x - j1; k1 <= x + j1; ++k1) {
-				int l1 = k1 - x;
+			for (int bx = x - radius; bx <= x + radius; ++bx) {
+				int xo = bx - x;
 
-				for (int i2 = z - j1; i2 <= z + j1; ++i2) {
-					int j2 = i2 - z;
+				for (int bz = z - radius; bz <= z + radius; ++bz) {
+					int zo = bz - z;
 
-					if ((Math.abs(l1) != j1 || Math.abs(j2) != j1 || rand.nextInt(2) != 0) && world.getBlock(k1, l, i2).canBeReplacedByLeaves(world, k1, l, i2)) {
-						this.setBlockAndNotifyAdequately(world, k1, l, i2, BLBlockRegistry.weedwoodBush, 0);
+					if ((Math.abs(xo) != radius || Math.abs(zo) != radius || rand.nextInt(4) == 0) && world.getBlock(bx, by, bz).canBeReplacedByLeaves(world, bx, by, bz) && rand.nextInt((int)((xo*xo+zo*zo)*1.5+1)) < 2) {
+						Block blockBelow = world.getBlock(bx, by - 1, bz);
+						if(blockBelow == BLBlockRegistry.weedwoodBush || blockBelow.isSideSolid(world, bx, by - 1, bz, ForgeDirection.UP)) {
+							this.setBlockAndNotifyAdequately(world, bx, by, bz, BLBlockRegistry.weedwoodBush, 0);
+						}
 					}
 				}
 			}
