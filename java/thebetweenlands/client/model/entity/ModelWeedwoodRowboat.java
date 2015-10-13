@@ -1,7 +1,11 @@
 package thebetweenlands.client.model.entity;
 
+import java.util.List;
+
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
 
 public class ModelWeedwoodRowboat extends ModelBase {
@@ -80,6 +84,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 	public ModelWeedwoodRowboat() {
 		textureWidth = 256;
 		textureHeight = 128;
+		init();
+	}
+
+	private void init() {
 		backrimdetail2 = new ModelRenderer(this, 70, 110);
 		backrimdetail2.setRotationPoint(0.0F, 0.0F, 3.0F);
 		backrimdetail2.addBox(-2.0F, -10.0F, 0.0F, 4, 12, 2, 0.0F);
@@ -183,7 +191,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		backrim2.setRotationPoint(0.0F, -16.0F, 0.0F);
 		backrim2.addBox(-2.0F, -4.0F, -1.0F, 4, 4, 11, 0.0F);
 		oarlockLeft = new ModelRenderer(this, 200, 0);
-		oarlockLeft.setRotationPoint(0.0F, -6.0F, 0.0F);
+		oarlockLeft.setRotationPoint(0.0F, -6.0F, -5.0F);
 		oarlockLeft.addBox(0.0F, -3.0F, 0.0F, 2, 3, 4, 0.0F);
 		oarLoomRight = new ModelRenderer(this, 180, 8);
 		oarLoomRight.setRotationPoint(-1.0F, -1.0F, 2.0F);
@@ -194,8 +202,12 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullBow.addBox(-4.0F, -2.0F, -2.0F, 8, 2, 6, 0.0F);
 		setRotateAngle(hullBow, 0.045553093477052F, 0.0F, 0.0F);
 		oarlockRight = new ModelRenderer(this, 180, 0);
-		oarlockRight.setRotationPoint(0.0F, -6.0F, 0.0F);
+		oarlockRight.setRotationPoint(0.0F, -6.0F, -5.0F);
 		oarlockRight.addBox(-2.0F, -3.0F, 0.0F, 2, 3, 4, 0.0F);
+		ModelRenderer seat = new ModelRenderer(this, 100, 60);
+		seat.setRotationPoint(0, -10, 1);
+		seat.addBox(-6, 0, 0, 12, 2, 5);
+		hullBottom.addChild(seat);
 		backrimdetail.addChild(backrimdetail2);
 		hullStern.addChild(piece3rb);
 		keel.addChild(fillupback1);
@@ -226,6 +238,27 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleLeft.addChild(oarlockRight);
 	}
 
+	private void reconstructModel() {
+		deleteDisplayList(keel);
+		deleteDisplayList(hullBottom);
+		deleteDisplayList(hullBottomLeft);
+		deleteDisplayList(hullBottomRight);
+		deleteDisplayList(hullBow);
+		deleteDisplayList(hullStern);
+		deleteDisplayList(hullGunwaleLeft);
+		deleteDisplayList(hullGunwaleRight);
+		init();
+	}
+
+	private void deleteDisplayList(ModelRenderer model) {
+		if (ReflectionHelper.getPrivateValue(ModelRenderer.class, model, "compiled") == Boolean.TRUE) {
+			GLAllocation.deleteDisplayLists((int) ReflectionHelper.getPrivateValue(ModelRenderer.class, model, 11));
+			for (ModelRenderer modelRenderer: (List<ModelRenderer>) model.childModels) {
+				deleteDisplayList(modelRenderer);
+			}
+		}
+	}
+
 	private void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
@@ -234,6 +267,9 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float swing, float speed, float age, float yaw, float pitch, float scale) {
+		/*if (entity.ticksExisted % 20 == 0) {
+			reconstructModel();
+		}*/
 		keel.render(scale);
 		hullBottom.render(scale);
 		hullBottomLeft.render(scale);

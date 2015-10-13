@@ -48,7 +48,7 @@ public class EntityWeedwoodRowboat extends Entity {
 		super(world);
 		speedMultiplier = 0.07;
 		preventEntitySpawning = true;
-		setSize(1.3F, 0.8F);
+		setSize(1.3F, 0.9F);
 		yOffset = height / 2;
 	}
 
@@ -116,7 +116,7 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0;
+		return -0.05;
 	}
 
 	@Override
@@ -351,8 +351,8 @@ public class EntityWeedwoodRowboat extends Entity {
 	@Override
 	public void updateRiderPosition() {
 		if (riddenByEntity != null) {
-			double dx = Math.cos(rotationYaw * Math.PI / 180) * 0.4;
-			double dz = Math.sin(rotationYaw * Math.PI / 180) * 0.4;
+			double dx = Math.cos(rotationYaw * Math.PI / 180) * -0.2;
+			double dz = Math.sin(rotationYaw * Math.PI / 180) * -0.2;
 			riddenByEntity.setPosition(posX + dx, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + dz);
 		}
 	}
