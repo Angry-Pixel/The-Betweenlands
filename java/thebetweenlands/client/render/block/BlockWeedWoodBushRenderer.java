@@ -257,7 +257,8 @@ public class BlockWeedWoodBushRenderer implements ISimpleBlockRenderingHandler {
 			tessellator.addTranslation(0.5f, 0.0f, 0.5f);
 			Random rnd = new Random();
 			if(world != null) {
-				rnd.setSeed(x << 16 | y << 8 | z);
+				long seed = x * 0x2FC20FL ^ y * 0x6EBFFF5L ^ z;
+				rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 			} else {
 				rnd.setSeed(0);
 			}
