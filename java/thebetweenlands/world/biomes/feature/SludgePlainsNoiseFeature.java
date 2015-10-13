@@ -49,12 +49,12 @@ public class SludgePlainsNoiseFeature extends BiomeNoiseFeature {
                 break;
             }
         }
-        int depth = (int)((layerHeight - lowestBlock) / 4.0D);
+        int depth = (int)((layerHeight - lowestBlock) / 6.5D);
         for(int y = lowestBlock; y < layerHeight - depth; y++) {
             chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
         }
-        double noise = this.noise[x * 16 + z] / 10.0f;
-        int height = (int)(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) + 2);
+        double noise = this.noise[x * 16 + z] / 8.0f;
+        int height = (int)(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) + 3);
         for(int y = layerHeight - depth; y < height; y++) {
             chunkBlocks[BiomeGenBaseBetweenlands.getBlockArrayIndex(x, y, z, sliceSize)] = provider.baseBlock;
         }

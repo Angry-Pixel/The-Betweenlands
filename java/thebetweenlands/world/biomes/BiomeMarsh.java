@@ -41,10 +41,10 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x485E18;
 
-        spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
+		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
+		spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 
 	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};

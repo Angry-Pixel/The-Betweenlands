@@ -33,12 +33,12 @@ extends BiomeGenBaseBetweenlands
 		this.waterColorMultiplier = 0x1b3944;
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
-        spawnableMonsterList.add(new SpawnListEntry(EntityDragonFly.class, 25, 2, 4));
-        spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
+		spawnableCreatureList.add(new SpawnListEntry(EntityDragonFly.class, 25, 2, 4));
+        spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
     	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
+    	spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;

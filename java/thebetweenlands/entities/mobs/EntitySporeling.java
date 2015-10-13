@@ -2,6 +2,7 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -9,6 +10,7 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -74,14 +76,19 @@ public class EntitySporeling extends EntityCreature {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		float light = getBrightness(1.0F);
-		if (light >= 0F)
-			return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox) && isOnShelfFungus();
-		return super.getCanSpawnHere();
+		boolean canSpawn = worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox) && isOnShelfFungus();
+		return canSpawn;
 	}
 
 	private boolean isOnShelfFungus() {
 		return worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)) == BLBlockRegistry.treeFungus;
+	}
+
+	//To prevent wrong spawns on chunk generate because the spawning system is broken and doesn't check getCanSpawnHere() on chunk generate...
+	@Override
+	public IEntityLivingData onSpawnWithEgg(IEntityLivingData entityData) {
+		if(!this.isOnShelfFungus()) this.setDead();
+		return super.onSpawnWithEgg(entityData);
 	}
 
 	@Override

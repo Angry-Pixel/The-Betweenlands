@@ -2,7 +2,12 @@ package thebetweenlands.world.biomes.base;
 
 import thebetweenlands.utils.WeightedList;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.world.biomes.*;
+import thebetweenlands.world.biomes.BiomeCoarseIslands;
+import thebetweenlands.world.biomes.BiomeDeepWaters;
+import thebetweenlands.world.biomes.BiomeMarsh;
+import thebetweenlands.world.biomes.BiomePatchyIslands;
+import thebetweenlands.world.biomes.BiomeSludgePlains;
+import thebetweenlands.world.biomes.BiomeSwampLands;
 import thebetweenlands.world.biomes.feature.Marsh1NoiseFeature;
 import thebetweenlands.world.biomes.feature.Marsh2NoiseFeature;
 

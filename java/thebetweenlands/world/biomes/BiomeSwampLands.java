@@ -1,5 +1,6 @@
 package thebetweenlands.world.biomes;
 
+import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
@@ -43,12 +44,13 @@ public class BiomeSwampLands
         spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
         spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
         spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
-        spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
+        spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
         spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
-        spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 40, 2, 6));
+        spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 15, 2, 6));
         spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
         spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
-        spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
+        spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
+        spawnableWaterCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 200, 1, 1));
     }
 
 	/*@Override

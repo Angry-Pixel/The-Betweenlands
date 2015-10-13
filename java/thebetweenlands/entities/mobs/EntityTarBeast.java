@@ -15,11 +15,11 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
@@ -80,7 +80,23 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && worldObj.getBlock((int)posX, (int)posY, (int)posZ) == BLBlockRegistry.tarFluid;
+		boolean isDifficultyValid = this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL;
+		//Couldn't find any better way to make them spawn on liquid tar
+		this.setLocationAndAngles(this.posX + 8 - this.rand.nextInt(16), this.posY + 8 - this.rand.nextInt(16), this.posZ + 8 - this.rand.nextInt(16), this.rotationYaw, this.rotationPitch);
+		if(isDifficultyValid) {
+			int bx = MathHelper.floor_double(posX);
+			int by = MathHelper.floor_double(posY);
+			int bz = MathHelper.floor_double(posZ);
+			boolean isInTar = 
+					worldObj.getBlock((int)bx, (int)by, (int)bz) == BLBlockRegistry.tarFluid &&
+					worldObj.getBlock((int)bx - 1, (int)by, (int)bz) == BLBlockRegistry.tarFluid &&
+					worldObj.getBlock((int)bx + 1, (int)by, (int)bz) == BLBlockRegistry.tarFluid &&
+					worldObj.getBlock((int)bx, (int)by, (int)bz - 1) == BLBlockRegistry.tarFluid &&
+					worldObj.getBlock((int)bx, (int)by, (int)bz + 1) == BLBlockRegistry.tarFluid;
+			boolean canSpawn = worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && isInTar;
+			return canSpawn;
+		}
+		return false;
 	}
 
 	@Override
@@ -112,12 +128,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		nbt.setInteger("shedCooldown", this.shedCooldown);
 		nbt.setInteger("sheddingProgress", this.sheddingProgress);
 		nbt.setByte("sheddingState", this.getDataWatcher().getWatchableObjectByte(SHEDDING_STATE_DW));
-		
+
 		nbt.setInteger("suckingCooldown", this.suckingCooldown);
 		nbt.setInteger("suckingPreparation", this.suckingPreparation);
 		nbt.setInteger("suckingProgress", this.suckingProgress);
 		nbt.setByte("suckingState", this.getDataWatcher().getWatchableObjectByte(SUCKING_STATE_DW));
-		
+
 		super.writeEntityToNBT(nbt);
 	}
 
@@ -126,12 +142,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		this.shedCooldown = nbt.getInteger("shedCooldown");
 		this.sheddingProgress = nbt.getInteger("sheddingProgress");
 		this.getDataWatcher().updateObject(SHEDDING_STATE_DW, nbt.getByte("sheddingState"));
-		
+
 		this.suckingCooldown = nbt.getInteger("suckingCooldown");
 		this.suckingPreparation = nbt.getInteger("suckingPreparation");
 		this.suckingProgress = nbt.getInteger("suckingProgress");
 		this.getDataWatcher().updateObject(SUCKING_STATE_DW, nbt.getByte("suckingState"));
-		
+
 		super.readEntityFromNBT(nbt);
 	}
 
@@ -206,7 +222,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		}
 
 		if(!worldObj.isRemote) {
-			if(this.shedCooldown > 0) {
+			if(this.shedCooldown > 0 && this.getEntityToAttack() != null) {
 				this.shedCooldown--;
 			}
 
@@ -245,7 +261,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 			}
 
-			if(this.suckingCooldown > 0) {
+			if(this.suckingCooldown > 0 && this.getEntityToAttack() != null) {
 				this.suckingCooldown--;
 			}
 
@@ -253,19 +269,19 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.suckingCooldown == 0 && this.getEntityToAttack() != null && this.getEntityToAttack().getDistanceToEntity(this) <= 10.0D && this.canEntityBeSeen(this.getEntityToAttack())) {
 					this.setPreparing();
 				}
-				
+
 				if(this.isPreparing()) {
 					this.suckingPreparation++;
-					
+
 					if(this.suckingPreparation > this.getEntityAttribute(SUCK_SPEED_ATTRIB).getAttributeValue()) {
 						this.suckingPreparation = 0;
-						
+
 						this.setSucking(true);
 						this.suckingCooldown = this.getSuckingCooldown() + this.worldObj.rand.nextInt(this.getSuckingCooldown() / 2);
 						this.playSound("thebetweenlands:tarBeastSuck", 1F, 1F);
 					}
 				}
-				
+
 				if(this.suckingProgress > (int)this.getEntityAttribute(SUCK_LENGTH_ATTRIB).getAttributeValue()) {
 					this.setSucking(false);
 					this.suckingProgress = 0;
@@ -313,9 +329,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected boolean isMovementBlocked() {
-        return super.isMovementBlocked() || this.isSucking();
-    }
-	
+		return super.isMovementBlocked() || this.isSucking();
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void renderParticles(World world, double x, double y, double z, Random rand) {
 		for (int count = 0; count < 3; ++count) {
@@ -337,16 +353,16 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void collideWithEntity(Entity e) {
-        if(!this.isSucking()) {
-        	e.applyEntityCollision(this);
-        }
-    }
-	
+		if(!this.isSucking()) {
+			e.applyEntityCollision(this);
+		}
+	}
+
 	@Override
 	public boolean canBePushed() {
-        return super.canBePushed() && !this.isSucking();
-    }
-	
+		return super.canBePushed() && !this.isSucking();
+	}
+
 	public boolean isShedding() {
 		return this.getDataWatcher().getWatchableObjectByte(SHEDDING_STATE_DW) == 1;
 	}
@@ -374,7 +390,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public boolean isSucking() {
 		return this.getDataWatcher().getWatchableObjectByte(SUCKING_STATE_DW) == 1;
 	}
-	
+
 	public boolean isPreparing() {
 		return this.getDataWatcher().getWatchableObjectByte(SUCKING_STATE_DW) == 2;
 	}
@@ -382,7 +398,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public void setSucking(boolean sucking) {
 		this.getDataWatcher().updateObject(SUCKING_STATE_DW, (byte)(sucking ? 1 : 0));
 	}
-	
+
 	public void setPreparing() {
 		this.getDataWatcher().updateObject(SUCKING_STATE_DW, (byte)2);
 	}

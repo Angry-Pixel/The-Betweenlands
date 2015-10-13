@@ -33,11 +33,11 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature())
 		.addFeature(new CragSpiresNoiseFeature());
 
-		spawnableMonsterList.add(new SpawnListEntry(EntityFirefly.class, 100, 10, 20));
+		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, 0, 0));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 5, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
+		spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 100, 5, 8));
 	}
 }

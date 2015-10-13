@@ -58,7 +58,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 							if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass ||
 									cBlock == BLBlockRegistry.swampDirt || cBlock == BLBlockRegistry.mud ||
 									cBlock == BLBlockRegistry.weedwoodLog) {
-								if(this.world.isAirBlock(px, py-yo+1, pz) && this.world.rand.nextInt(10) <= 5) {
+								if(this.world.isAirBlock(px, py-yo+1, pz) && this.world.rand.nextInt(3) == 0) {
 									this.world.setBlock(px, py-yo+1, pz, BLBlockRegistry.fallenLeaves);
 									break;
 								}
