@@ -8,6 +8,8 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorSludgePlains;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
+import thebetweenlands.world.biomes.feature.FlatLandNoiseFeature;
+import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
 import thebetweenlands.world.biomes.feature.SludgePlainsNoiseFeature;
 
 /**
@@ -26,14 +28,17 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 		setWeight(20);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT + 8, 2);
 		this.setBiomeName("Sludge Plains");
-		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.mud, BLBlockRegistry.mud, BLBlockRegistry.swampDirt, BLBlockRegistry.betweenlandsBedrock);
-		this.setFillerBlockHeight((byte) 1);
-		this.addFeature(new SludgePlainsNoiseFeature());
-		this.waterColorMultiplier = 0x002f06;
+		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.sludgyDirt, BLBlockRegistry.mud, BLBlockRegistry.swampDirt, BLBlockRegistry.betweenlandsBedrock);
+        this.setFillerBlockHeight((byte) 1);
+        this.addFeature(new FlatLandNoiseFeature())
+                .addFeature(new PatchNoiseFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BLBlockRegistry.sludgyDirt))
+                .addFeature(new PatchNoiseFeature(0.74D, 0.74D, BLBlockRegistry.swampDirt))
+                .addFeature(new PatchNoiseFeature(0.65D, 0.65D, BLBlockRegistry.mud, 1.0D / 1.35D, 1.72D));
+		this.waterColorMultiplier = 0x29220A;
 
 		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 40, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 50, 1, 1));
 		spawnableCaveCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 300, 1, 1));
 	}
 }

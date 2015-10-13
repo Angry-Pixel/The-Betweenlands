@@ -17,6 +17,8 @@ extends Block
 {
 	@SideOnly(Side.CLIENT)
 	private IIcon topIcon;
+	@SideOnly(Side.CLIENT)
+	private IIcon sideIcon;
 
 	public BlockDeadGrass() {
 		super(Material.grass);
@@ -31,17 +33,21 @@ extends Block
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if( side == 1 ) {
+		if( side == 2 || side == 3 || side == 4 || side == 5 ) {
+			return this.sideIcon;
+		} else if( side == 1 ) {
 			return this.topIcon;
 		}
-		return this.blockIcon;
+
+        return this.blockIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		this.blockIcon = reg.registerIcon("thebetweenlands:swampDirt");
-		this.topIcon = reg.registerIcon("thebetweenlands:deadGrassTop");
+        this.blockIcon = reg.registerIcon("thebetweenlands:swampDirt");
+        this.sideIcon = reg.registerIcon("thebetweenlands:deadGrassSide");
+        this.topIcon = reg.registerIcon("thebetweenlands:deadGrassTop");
 	}
 
 	@Override
