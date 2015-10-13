@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.network.packets.PacketSnailHatchParticle;
+import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityMireSnailEgg extends EntityAnimal {

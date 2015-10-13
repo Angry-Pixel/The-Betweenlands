@@ -6,7 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.event.debugging.DebugHandlerClient;
-import thebetweenlands.network.packets.PacketTickspeed;
+import thebetweenlands.network.packet.server.PacketTickspeed;
 
 import com.google.common.primitives.Floats;
 

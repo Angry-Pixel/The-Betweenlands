@@ -1,17 +1,18 @@
-package thebetweenlands.network.packets;
+package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
+import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.network.base.IPacket;
 
-public class PacketSnailHatchParticle implements IPacket {
-	public PacketSnailHatchParticle() { }
+public class PacketDruidTeleportParticle implements IPacket {
+	public PacketDruidTeleportParticle() { }
 	
 	public double x, y, z;
 	
-	public PacketSnailHatchParticle(double x, double y, double z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+	public PacketDruidTeleportParticle(EntityDarkDruid druid) {
+		this.x = druid.posX;
+		this.y = druid.posY;
+		this.z = druid.posZ;
 	}
 	
 	@Override

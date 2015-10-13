@@ -1,5 +1,6 @@
-package thebetweenlands.network.packets;
+package thebetweenlands.network.packet.server;
 
+import thebetweenlands.network.packet.PacketEntityIdTuple;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 

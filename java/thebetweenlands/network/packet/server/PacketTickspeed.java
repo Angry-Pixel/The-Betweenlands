@@ -1,4 +1,4 @@
-package thebetweenlands.network.packets;
+package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
 import thebetweenlands.network.base.IPacket;

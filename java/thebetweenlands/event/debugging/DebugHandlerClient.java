@@ -2,6 +2,7 @@ package thebetweenlands.event.debugging;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -32,9 +33,11 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.world.WorldEvent;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.aspect.IAspect;
 import thebetweenlands.client.gui.GuiDebugMenu;
@@ -42,7 +45,7 @@ import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.manager.AspectManager;
 import thebetweenlands.manager.DecayManager;
-import thebetweenlands.network.packets.PacketTickspeed;
+import thebetweenlands.network.packet.server.PacketTickspeed;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -50,6 +53,7 @@ import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.Field;

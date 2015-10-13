@@ -11,8 +11,8 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.forgeevent.entity.LivingSetRevengeTargetEvent;
 import thebetweenlands.network.base.IPacket;
-import thebetweenlands.network.packets.PacketAttackTarget;
-import thebetweenlands.network.packets.PacketRevengeTarget;
+import thebetweenlands.network.packet.server.PacketAttackTarget;
+import thebetweenlands.network.packet.server.PacketRevengeTarget;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 

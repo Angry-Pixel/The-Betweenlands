@@ -20,7 +20,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
 import thebetweenlands.network.base.SubscribePacket;
-import thebetweenlands.network.packets.PacketDruidAltarProgress;
+import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 

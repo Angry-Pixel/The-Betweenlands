@@ -129,19 +129,15 @@ public class EntityWeedwoodRowboat extends Entity {
 			setDamageTaken(getDamageTaken() + amount * 10);
 			setBeenAttacked();
 			boolean attackerIsCreativeMode = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
-
 			if (attackerIsCreativeMode || getDamageTaken() > 40) {
 				if (riddenByEntity != null) {
 					riddenByEntity.mountEntity(this);
 				}
-
 				if (!attackerIsCreativeMode) {
 					func_145778_a(BLItemRegistry.weedwoodRowboat, 1, 0);
 				}
-
 				setDead();
 			}
-
 			return true;
 		} else {
 			return true;
@@ -189,6 +185,10 @@ public class EntityWeedwoodRowboat extends Entity {
 		velocityX = motionX = x;
 		velocityY = motionY = y;
 		velocityZ = motionZ = z;
+	}
+
+	public void updatePilotControls(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
+		
 	}
 
 	@Override

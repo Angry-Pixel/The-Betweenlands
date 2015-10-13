@@ -22,7 +22,7 @@ import thebetweenlands.entities.entityAI.EntityAIHurtByTargetDruid;
 import thebetweenlands.entities.entityAI.EntityAINearestAttackableTargetDruid;
 import thebetweenlands.items.SwampTalisman;
 import thebetweenlands.items.SwampTalisman.EnumTalisman;
-import thebetweenlands.network.packets.PacketDruidTeleportParticle;
+import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
 import thebetweenlands.utils.MathUtils;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 

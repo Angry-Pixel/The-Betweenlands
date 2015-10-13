@@ -17,7 +17,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntityGecko;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.network.packets.PacketWeedWoodBushRustle;
+import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBushUncollidableEntity {

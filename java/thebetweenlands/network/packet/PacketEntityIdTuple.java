@@ -1,4 +1,4 @@
-package thebetweenlands.network.packets;
+package thebetweenlands.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
