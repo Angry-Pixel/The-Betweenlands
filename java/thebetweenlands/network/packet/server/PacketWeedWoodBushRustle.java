@@ -5,13 +5,15 @@ import thebetweenlands.network.base.IPacket;
 
 public class PacketWeedWoodBushRustle implements IPacket {
 	private int x, y, z;
+	private float strength;
 
 	public PacketWeedWoodBushRustle() {}
 
-	public PacketWeedWoodBushRustle(int x, int y, int z) {
+	public PacketWeedWoodBushRustle(int x, int y, int z, float strength) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.strength = strength;
 	}
 
 	@Override
@@ -19,6 +21,7 @@ public class PacketWeedWoodBushRustle implements IPacket {
 		buffer.writeInt(x);
 		buffer.writeInt(y);
 		buffer.writeInt(z);
+		buffer.writeFloat(strength);
 	}
 
 	@Override
@@ -26,6 +29,7 @@ public class PacketWeedWoodBushRustle implements IPacket {
 		x = buffer.readInt();
 		y = buffer.readInt();
 		z = buffer.readInt();
+		strength = buffer.readFloat();
 	}
 
 	public int getX() {
@@ -38,5 +42,9 @@ public class PacketWeedWoodBushRustle implements IPacket {
 
 	public int getZ() {
 		return z;
+	}
+	
+	public float getStrength() {
+		return strength;
 	}
 }

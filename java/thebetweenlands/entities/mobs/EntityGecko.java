@@ -73,7 +73,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	public void startHiding() {
 		setHiding(true);
 		playSound(ModInfo.ID + ":geckoHide", 0.5F, rand.nextFloat() * 0.3F + 0.9F);
-		sendRustleEffect();
+		sendRustleEffect(1.0F);
 		setPosition(hidingBushX + 0.5, hidingBushY + 0.25, hidingBushZ + 0.5);
 		timeHiding = 0;
 	}
@@ -96,11 +96,11 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		return worldObj.getBlock(hidingBushX, hidingBushY, hidingBushZ) == BLBlockRegistry.weedwoodBush;
 	}
 
-	private void sendRustleEffect() {
+	private void sendRustleEffect(float strength) {
 		if (!isWeedWoodBushAtHidingSpot()) {
 			return;
 		}
-		PacketWeedWoodBushRustle packet = new PacketWeedWoodBushRustle(hidingBushX, hidingBushY, hidingBushZ);
+		PacketWeedWoodBushRustle packet = new PacketWeedWoodBushRustle(hidingBushX, hidingBushY, hidingBushZ, strength);
 		TargetPoint target = new TargetPoint(dimension, posX, posY, posZ, 16);
 		TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(packet), target);
 	}
@@ -125,6 +125,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 					timeHiding++;
 					if (rand.nextFloat() < 0.01F) {
 						playSound(ModInfo.ID + ":geckoHide", rand.nextFloat() * 0.05F + 0.02F, rand.nextFloat() * 0.2F + 0.8F);
+						if(rand.nextFloat() < 0.3F) sendRustleEffect((rand.nextFloat() + 0.2F) * 0.06F);
 					}
 					if (timeHiding > MIN_HIDE_TIME) {
 						List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, boundingBox.expand(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));

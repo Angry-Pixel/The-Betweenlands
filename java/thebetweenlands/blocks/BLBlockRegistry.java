@@ -82,6 +82,7 @@ import thebetweenlands.blocks.terrain.BlockPuddle;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSlimyDirt;
 import thebetweenlands.blocks.terrain.BlockSlimyGrass;
+import thebetweenlands.blocks.terrain.BlockSludgyDirt;
 import thebetweenlands.blocks.terrain.BlockStagnantWater;
 import thebetweenlands.blocks.terrain.BlockSwampDirt;
 import thebetweenlands.blocks.terrain.BlockSwampGrass;
@@ -137,6 +138,7 @@ public class BLBlockRegistry {
     public static final Block purpleFallenLeaves = new BlockBLFallenLeaves("purpleFallenLeaves");
     public static final Block slimyGrass = new BlockSlimyGrass();
     public static final Block slimyDirt = new BlockSlimyDirt();
+    public static final Block sludgyDirt = new BlockSludgyDirt();
     public static final Block tarFluid = new BlockTarFluid();
     public static final Block stagnantWaterFluid = new BlockStagnantWater();
     public static final Block puddle = new BlockPuddle();

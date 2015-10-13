@@ -170,7 +170,7 @@ public class ClientPacketHandler {
 	@SubscribePacket
 	public static void handleWeedWoodBushRustle(PacketWeedWoodBushRustle packet) {
 		World world = FMLClientHandler.instance().getWorldClient();
-		int leafCount = 48;
+		int leafCount = (int)(47 * packet.getStrength()) + 1;
 		float x = packet.getX() + 0.5F, y = packet.getY() + 0.5F, z = packet.getZ() + 0.5F;
 		while (leafCount --> 0) {
 			BLParticle.RUSTLE_LEAF.spawn(world, x, y, z);
