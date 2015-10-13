@@ -16,6 +16,8 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 
 	private boolean oarSquareRight;
 
+	public MessageWeedwoodRowboatInput() {}
+
 	public MessageWeedwoodRowboatInput(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
 		this.oarStrokeLeft = oarStrokeLeft;
 		this.oarStrokeRight = oarStrokeRight;
