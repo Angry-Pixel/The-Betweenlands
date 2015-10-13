@@ -33,7 +33,7 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
-import thebetweenlands.client.input.WeedwoodRowboatInputHandler;
+import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -327,7 +327,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new HeldItemTooltipHandler());
 		MinecraftForge.EVENT_BUS.register(GLUProjectionHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(OverlayHandler.INSTANCE);
-		WeedwoodRowboatInputHandler.INSTANCE.registerKeyBinding();
+		WeedwoodRowboatHandler.INSTANCE.init();
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);

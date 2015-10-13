@@ -1,49 +1,101 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelWeedwoodRowboat;
+import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.lib.ModInfo;
 
 public class RenderWeedwoodRowboat extends Render {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/weedwoodRowboat.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/entity/weedwoodRowboat.png");
 
-	protected ModelWeedwoodRowboat modelBoat;
+	public static boolean notRenderingPilot = true;
+
+	private ModelWeedwoodRowboat model;
+
+	private int maskId = -1;
 
 	public RenderWeedwoodRowboat() {
-		modelBoat = new ModelWeedwoodRowboat();
+		model = new ModelWeedwoodRowboat();
 		shadowSize = 0;
 	}
 
-	public void doRender(Entity entity, double x, double y, double z, float p_76986_8_, float p_76986_9_) {
-		EntityBoat boat = (EntityBoat) entity;
+	public void doRender(Entity entity, double x, double y, double z, float yaw, float delta) {
+		EntityWeedwoodRowboat boat = (EntityWeedwoodRowboat) entity;
+		renderPilot(boat, delta);
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) y + 1, (float) z);
-		GL11.glRotatef(180.0F - p_76986_8_, 0.0F, 1.0F, 0.0F);
-		float f2 = boat.getTimeSinceHit() - p_76986_9_;
-		float f3 = boat.getDamageTaken() - p_76986_9_;
-		GL11.glRotatef(90f, 0f, 1f, 0f);
-
-		if (f3 < 0.0F) {
-			f3 = 0.0F;
+		GL11.glRotatef(270 - yaw, 0, 1, 0);
+		float timeSinceHit = boat.getTimeSinceHit() - delta;
+		float damageTaken = boat.getDamageTaken() - delta;
+		if (damageTaken < 0) {
+			damageTaken = 0;
 		}
-
-		if (f2 > 0.0F) {
-			GL11.glRotatef(MathHelper.sin(f2) * f2 * f3 / 10.0F * boat.getForwardDirection(), 1.0F, 0.0F, 0.0F);
+		if (timeSinceHit > 0) {
+			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 1, 0, 0);
 		}
-
-		float f4 = 0.75F;
-		GL11.glScalef(f4, f4, f4);
-		GL11.glScalef(1.0F / f4, 1.0F / f4, 1.0F / f4);
+		GL11.glPushMatrix();
 		bindEntityTexture(entity);
-		GL11.glScalef(-1.0F, -1.0F, 1.0F);
-		modelBoat.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		GL11.glScalef(-1, -1, 1);
+		model.render(entity, 0, 0, 0, 0, 0, 0.0625F);
 		GL11.glPopMatrix();
+		renderWaterMask();
+		GL11.glPopMatrix();
+	}
+
+	private void renderPilot(EntityWeedwoodRowboat boat, float delta) {
+		Entity pilot = boat.riddenByEntity;
+		if (pilot == null) {
+			return;
+		}
+		Minecraft mc = Minecraft.getMinecraft();
+		if (pilot != mc.thePlayer || mc.gameSettings.thirdPersonView != 0) {
+			notRenderingPilot = false;
+			renderManager.renderEntitySimple(pilot, delta);
+			notRenderingPilot = true;
+		}
+	}
+
+	private void renderWaterMask() {
+		if (maskId == -1) {
+			maskId = GLAllocation.generateDisplayLists(1);
+			GL11.glNewList(maskId, GL11.GL_COMPILE);
+			Tessellator tessellator = Tessellator.instance;
+			tessellator.startDrawingQuads();
+			double y = -0.687;
+			double midWidth = 0.55;
+			double midDepth = 0.65;
+			double endWidth = 0.4;
+			double endDepth = 0.16;
+			double endOffset = 0.81;
+			tessellator.addVertex(-midWidth, y, midDepth);
+			tessellator.addVertex(midWidth, y, midDepth);
+			tessellator.addVertex(midWidth, y, -midDepth);
+			tessellator.addVertex(-midWidth, y, -midDepth);
+			tessellator.addVertex(-endWidth, y, endDepth - endOffset);
+			tessellator.addVertex(endWidth, y, endDepth - endOffset);
+			tessellator.addVertex(endWidth, y, -endDepth - endOffset);
+			tessellator.addVertex(-endWidth, y, -endDepth - endOffset);
+			tessellator.addVertex(-endWidth, y, endDepth + endOffset);
+			tessellator.addVertex(endWidth, y, endDepth + endOffset);
+			tessellator.addVertex(endWidth, y, -endDepth + endOffset);
+			tessellator.addVertex(-endWidth, y, -endDepth + endOffset);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glColorMask(false, false, false, false);
+			tessellator.draw();
+			GL11.glColorMask(true, true, true, true);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glEndList();
+		}
+		GL11.glCallList(maskId);
 	}
 
 	protected ResourceLocation getEntityTexture(Entity entity) {

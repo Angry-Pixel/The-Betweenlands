@@ -6,8 +6,7 @@ package thebetweenlands.utils;
  *
  */
 public final class MathUtils {
-	private MathUtils() {
-	}
+	private MathUtils() {}
 
 	public static final float TAU = (float) (2 * StrictMath.PI);
 
