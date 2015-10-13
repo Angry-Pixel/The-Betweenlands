@@ -1,6 +1,7 @@
 package thebetweenlands.proxy;
 
-import java.awt.Graphics;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,6 +33,7 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.client.input.WeedwoodRowboatInputHandler;
 import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -47,8 +50,49 @@ import thebetweenlands.client.render.block.BlockSwampReedRenderer;
 import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
 import thebetweenlands.client.render.block.BlockWalkwayRenderer;
 import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
-import thebetweenlands.client.render.entity.*;
-import thebetweenlands.client.render.item.*;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderAngryPebble;
+import thebetweenlands.client.render.entity.RenderBLArrow;
+import thebetweenlands.client.render.entity.RenderBLItemFrame;
+import thebetweenlands.client.render.entity.RenderBerserkerGuardian;
+import thebetweenlands.client.render.entity.RenderBlindCaveFish;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderDragonFly;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderGecko;
+import thebetweenlands.client.render.entity.RenderGiantToad;
+import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderLurker;
+import thebetweenlands.client.render.entity.RenderMeleeGuardian;
+import thebetweenlands.client.render.entity.RenderMireSnail;
+import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
+import thebetweenlands.client.render.entity.RenderSludge;
+import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSporeling;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderTarBeast;
+import thebetweenlands.client.render.entity.RenderTarminion;
+import thebetweenlands.client.render.entity.RenderTermite;
+import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
+import thebetweenlands.client.render.entity.RenderWight;
+import thebetweenlands.client.render.item.ItemAlembicRenderer;
+import thebetweenlands.client.render.item.ItemAnimatorRenderer;
+import thebetweenlands.client.render.item.ItemCompostBinRenderer;
+import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
+import thebetweenlands.client.render.item.ItemInfuserRenderer;
+import thebetweenlands.client.render.item.ItemLootPot1Renderer;
+import thebetweenlands.client.render.item.ItemLootPot2Renderer;
+import thebetweenlands.client.render.item.ItemLootPot3Renderer;
+import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
+import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
+import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
+import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
+import thebetweenlands.client.render.item.ItemTarminionRenderer;
+import thebetweenlands.client.render.item.ItemVolarKiteRenderer;
+import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
@@ -70,7 +114,12 @@ import thebetweenlands.client.render.tileentity.TileEntityTarLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.client.tooltips.HeldItemTooltipHandler;
-import thebetweenlands.entities.*;
+import thebetweenlands.entities.EntityAngryPebble;
+import thebetweenlands.entities.EntityBLArrow;
+import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.entities.EntitySnailPoisonJet;
+import thebetweenlands.entities.EntityThrownTarminion;
+import thebetweenlands.entities.EntityWeedwoodRowboat;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -106,6 +155,7 @@ import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.lib.ModInfo;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.manager.TextureManager;
 import thebetweenlands.network.handlers.ClientPacketHandler;
@@ -152,12 +202,17 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	private static final ResourceLocation PLAYER_CORRUPTION_TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/player/playerCorruption.png");
+
+	private BufferedImage playerCorruptionImg = null;
+
 	public static RenderDragonFly dragonFlyRenderer;
 
 	public static TimerDebug debugTimer;
 
 	@Override
-	public void preInit() {
+	public void init() {
+		super.init();
 		//Register packet handlers
 		try {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ClientPacketHandler.class, Side.CLIENT);
@@ -195,7 +250,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLItemFrame.class, new RenderBLItemFrame());
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, new RenderTarminion());
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, new ItemTarminionRenderer());
-		RenderingRegistry.registerEntityRenderingHandler(EntityWeedWoodBoat.class, new RenderWeedwoodBoat());
+		RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, new RenderWeedwoodRowboat());
 
 		//Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -253,7 +308,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockMudFlowerPotRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
-		
+
 		//Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
 		AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
@@ -272,7 +327,8 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new HeldItemTooltipHandler());
 		MinecraftForge.EVENT_BUS.register(GLUProjectionHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(OverlayHandler.INSTANCE);
-		
+		WeedwoodRowboatInputHandler.INSTANCE.registerKeyBinding();
+
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
@@ -287,129 +343,6 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	/*@Override
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {
-		EntityFX fx = null;
-
-		if( particleName.equals("druidmagic") ) {
-			fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
-		}
-
-		if( particleName.equals("druidmagicbig") ) {
-			fx = new EntityDruidCastingFX(world, x, y, z, vecX, vecY, vecZ, scale);
-			fx.setRBGColorF(0F, 1F, 1F);
-		}
-
-		if( particleName.equals("altarcrafting") ) {
-			fx = new EntityAltarCraftingFX(world, x, y, z, scale, (TileEntityDruidAltar)data[0]);
-		}
-
-		if( particleName.equals("smoke") ) {
-			fx = new EntitySmokeFX(world, x, y, z, vecX, vecY, vecZ);
-		}
-
-		if( particleName.equals("flame") ) {
-			fx = new EntityFlameFX(world, x, y, z, vecX, vecY, vecZ);
-		}
-
-		if( particleName.equals("sulfurTorch") ) {
-			fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
-			fx.setRBGColorF(1F, 0.9294F, 0F);
-		}
-
-		if (particleName.equals("sulfurOre")) {
-			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(1F, 0.9294F, 0F);
-		}
-
-		if (particleName.equals("snailPoison")) {
-			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(1F, 0F, 0F);
-		}
-
-		if (particleName.equals("dirtDecay")) {
-			fx = new EntitySpellParticleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
-		}
-
-		if (particleName.equals("bubblePurifier")) {
-			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0.306F, 0.576F, 0.192F);
-		}
-		
-		if (particleName.equals("bubbleInfusion")) {
-			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0.5F, 0F, 0.125F);
-			fx.setAlphaF(0.5F);
-		}
-
-		if (particleName.equals("bubbleTarBeast")) {
-			fx = new EntityBLBubbleFX(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0F, 0F, 0F);
-		}
-
-		if (particleName.equals("splashTarBeast")) {
-			fx = new EntityBreakingFX(world, x, y, z, vecX, vecY, vecZ, Items.slime_ball, 0);
-			fx.setRBGColorF(0F, 0F, 0F);
-		}
-
-		if (particleName.equals("dripTarBeast")) {
-			fx = new EntityTarBeastDrip(world, x, y, z, vecX, vecY, vecZ);
-			fx.setRBGColorF(0F, 0F, 0F);
-		}
-
-		if( particleName.equals("steamPurifier") ) {
-			fx = new EntitySmokeFX(world, x, y, z, 0F, 0F, 0F);
-			fx.setRBGColorF(1F, 1F, 1F);
-		}
-
-		if( particleName.equals("portal") ) {
-			fx = new EntityPortalFX(world, x, y, z, vecX, vecY, vecZ, 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/portal.png"), 6);
-		}
-
-		if(particleName.equals("moth")) {
-			if(world.rand.nextBoolean()) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/moth1.png"), 2);
-			} else {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/moth2.png"), 2);
-			}
-		}
-
-		if(particleName.equals("fish")) {
-			int fishParticle = world.rand.nextInt(3);
-			if(fishParticle  == 0) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish1.png"), 1);
-			} else if(fishParticle == 1) {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish2.png"), 1);
-			} else {
-				fx = new EntityBugFX(world, x, y, z, 400, 0.02F, 0.005F, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/fish3.png"), 1);
-			}
-		}
-
-		if(particleName.equals("fly")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/fly.png"), 2);
-		}
-
-		if(particleName.equals("mosquito")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.05F, 0.025F, 0.1F * world.rand.nextFloat(), 0xFFFFFFFF, false, new ResourceLocation("thebetweenlands:textures/particle/mosquito.png"), 2);
-		}
-
-		if(particleName.equals("waterBug")) {
-			fx = new EntityBugFX(world, x, y, z, 400, 0.03F, 0.02F, 0.2F * world.rand.nextFloat(), 0xFFFFFFFF, true, new ResourceLocation("thebetweenlands:textures/particle/waterbug.png"), 2);
-		}
-
-		if(particleName.equals("leaf")) {
-			fx = new EntityLeafFX(world, x, y, z, 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, new ResourceLocation("thebetweenlands:textures/particle/leaf.png"), 5);
-		}
-
-		if (particleName.equals("splash")) {
-			fx = new EntitySplashFX(world, x, y, z, vecX, vecY, vecZ, data.length == 0 || !(data[0] instanceof Integer) ? 0xFFFFFF : (int) data[0]);
-		}
-
-		if (fx != null)
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-	}*/
-
 	@Override
 	public World getClientWorld() {
 		return Minecraft.getMinecraft().theWorld;
@@ -421,34 +354,40 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void corruptPlayerSkin(EntityPlayer player, int level)
-	{
+	public void corruptPlayerSkin(EntityPlayer player, int level) {
 		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
-		if (level == 0 || !DecayManager.enableDecay(entityPlayer))
-		{
+		if (level == 0 || !DecayManager.enableDecay(entityPlayer)) {
 			uncorruptPlayerSkin(entityPlayer);
 			return;
 		}
-
-		try
-		{
-			if (!hasBackup(entityPlayer)) backupPlayerSkin(entityPlayer);
-
-			BufferedImage skin = TextureManager.getPlayerSkin(entityPlayer);
-			BufferedImage corruption = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation("thebetweenlands:textures/player/playerCorruption.png")).getInputStream());
-
-			if (skin == null) return;
-			BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
-			Graphics g = corruptedSkin.getGraphics();
-			g.drawImage(skin, 0, 0, null);
-			for (int i = 0; i < level - 1; i++) g.drawImage(corruption, 0, 0, null);
-
-			uploadPlayerSkin(entityPlayer, corruptedSkin);
+		if (!hasBackup(entityPlayer)) {
+			backupPlayerSkin(entityPlayer);
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+		BufferedImage skin = TextureManager.getPlayerSkin(entityPlayer);
+		if (skin == null) {
+			return;
 		}
+		BufferedImage corruption = getPlayerCorruptionTexture();
+		BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = corruptedSkin.createGraphics();
+		g.drawImage(skin, 0, 0, null);
+		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8F * level / 10);
+		g.setComposite(alphaComposite);
+		g.drawImage(corruption, 0, 0, null);
+		uploadPlayerSkin(entityPlayer, corruptedSkin);
+	}
+
+	private BufferedImage getPlayerCorruptionTexture() {
+		if (playerCorruptionImg == null) {
+			try {
+				playerCorruptionImg = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(PLAYER_CORRUPTION_TEXTURE).getInputStream());
+			} catch (IOException e) {
+				playerCorruptionImg = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
+				e.printStackTrace();
+				// TODO: better logging
+			}
+		}
+		return playerCorruptionImg;
 	}
 
 	@Override

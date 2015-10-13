@@ -132,11 +132,10 @@ public class TheBetweenlands
 			CraftingManager.getInstance().getRecipeList().remove(recipe);
 
 		proxy.registerTileEntities();
-		proxy.preInit();
+		proxy.init();
 
 		PotionHelper.initPotionArray();
 		PotionHelper.registerPotions();
-		System.out.println("boogaaa" + PotionHelper.petrify.id);
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);

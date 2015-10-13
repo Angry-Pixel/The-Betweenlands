@@ -420,6 +420,8 @@ item.thebetweenlands.skullMask.name=Skull Mask
 
 item.thebetweenlands.caveMossItem.name=Cave Moss
 
+item.thebetweenlands.weedwoodRowboat.name=Weedwood Rowboat
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler
@@ -445,7 +447,7 @@ entity.thebetweenlands.berserkerGuardian.name=Temple Guardian
 
 entity.thebetweenlands.snailPoisonJet.name=Snail Poison Jet
 
-# Others
+# Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
 itemGroup.thebetweenlands.item=The Betweenlands Items
 itemGroup.thebetweenlands.gear=The Betweenlands Gear
@@ -507,7 +509,7 @@ compost.not.enough=There is not enough compost yet.
 compost.not.open=The compost is not open.
 compost.not.ready=Your items are composting.
 
-#manual
+# Manual
 manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
 
 manual.widget.process.time=Process time: .minutes. minutes and .seconds. seconds
@@ -530,3 +532,13 @@ manual.widget.purifier.process.time=Process time: .seconds. seconds
 manual.widget.smelting.recipe=Furnace recipe
 
 talisman.noplace=The space is not large enough
+
+# Key Binding
+key.categories.weedwoodRowboat=Weedwood Rowboat
+
+key.weedwoodRowboat.oar.stroke.left=Stroke Left Oar
+key.weedwoodRowboat.oar.stroke.right=Stroke Right Oar
+
+key.weedwoodRowboat.oar.square.left=Square Left Oar
+key.weedwoodRowboat.oar.square.right=Square Right Oar
+e

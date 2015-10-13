@@ -89,25 +89,19 @@ public class CommonProxy
         registerTileEntity(TileEntityTarLootPot2.class, "tarLootPot2");
         registerTileEntity(TileEntityTarLootPot3.class, "tarLootPot3");
         registerTileEntity(TileEntityItemShelf.class, "itemShelf");
-        
-        MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
     }
 
     private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
         GameRegistry.registerTileEntity(cls, "tile.thebetweenlands." + baseName);
     }
 
-    public void preInit() {
-        // unused serverside see ClientProxy for implementation
+    public void init() {
+        MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
     }
-    
+
     public void postInit() {
         // unused serverside see ClientProxy for implementation
     }
-
-    /*public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale, Object... data) {
-        // unused serverside see ClientProxy for implementation
-    }*/
 
     @Override
     //FIXME TODO use a switch block! PLEASE
