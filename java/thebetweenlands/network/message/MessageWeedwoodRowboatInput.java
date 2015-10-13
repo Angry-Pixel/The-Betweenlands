@@ -52,7 +52,7 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 	private IMessage onMessage(MessageContext ctx) {
 		EntityPlayer player = ctx.getServerHandler().playerEntity;
 		if (player.ridingEntity instanceof EntityWeedwoodRowboat) {
-			EntityWeedwoodRowboat rowboat = ((EntityWeedwoodRowboat) player.riddenByEntity); 
+			EntityWeedwoodRowboat rowboat = ((EntityWeedwoodRowboat) player.ridingEntity); 
 			rowboat.updatePilotControls(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
 		}
 		return null;
