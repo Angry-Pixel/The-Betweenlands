@@ -52,7 +52,7 @@ public class WeedwoodRowboatHandler {
 
 	@SubscribeEvent
 	public void onKeyInputEvent(KeyInputEvent event) {
-		if (hasControlInputChanged()) {
+		if (pollKeyInput()) {
 			boolean oarStrokeLeft = this.oarStrokeLeft.isPressed();
 			boolean oarStrokeRight = this.oarStrokeRight.isPressed();
 			boolean oarSquareLeft = this.oarSquareLeft.isPressed();
@@ -65,13 +65,12 @@ public class WeedwoodRowboatHandler {
 		}
 	}
 
-	private boolean hasControlInputChanged() {
+	private boolean pollKeyInput() {
+		boolean changed = false;
 		for (KeyBindingBL keyBinding : keyBindings) {
-			if (keyBinding.hasStateChanged()) {
-				return true;
-			}
+			changed |= keyBinding.pollStateChange();
 		}
-		return false;
+		return changed;
 	}
 
 	@SubscribeEvent

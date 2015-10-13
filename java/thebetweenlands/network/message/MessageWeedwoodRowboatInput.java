@@ -39,9 +39,9 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 	public void fromBytes(ByteBuf buf) {
 		byte bitset = buf.readByte();
 		oarStrokeLeft = (bitset & 1) == 1;
-		oarStrokeRight = (bitset & 2) == 1;
-		oarSquareLeft = (bitset & 4) == 1;
-		oarSquareRight = (bitset & 8) == 1;
+		oarStrokeRight = (bitset & 2) == 2;
+		oarSquareLeft = (bitset & 4) == 4;
+		oarSquareRight = (bitset & 8) == 8;
 	}
 
 	@Override
