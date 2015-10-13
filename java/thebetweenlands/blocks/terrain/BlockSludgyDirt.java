@@ -9,11 +9,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.items.ItemRubberBoots;
 import thebetweenlands.items.SpadeBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -62,9 +64,15 @@ public class BlockSludgyDirt
     }
 	
 	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		float f = 0.125F;
+		return AxisAlignedBB.getBoundingBox((double)x, (double)y, (double)z, (double)(x + 1), (double)((float)(y + 1) - f), (double)(z + 1));
+	}
+
+	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-    		entity.setInWeb();
-    	}
+		entity.setInWeb();
+	}
 	
     @Override
     public boolean renderAsNormalBlock() {

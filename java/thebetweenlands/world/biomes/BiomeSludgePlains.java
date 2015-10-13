@@ -28,13 +28,13 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 		setWeight(20);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT + 8, 2);
 		this.setBiomeName("Sludge Plains");
-		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.sludgyDirt, BLBlockRegistry.mud, BLBlockRegistry.swampDirt, BLBlockRegistry.betweenlandsBedrock);
+		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.mud, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
         this.setFillerBlockHeight((byte) 1);
         this.addFeature(new FlatLandNoiseFeature())
                 .addFeature(new PatchNoiseFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BLBlockRegistry.sludgyDirt))
                 .addFeature(new PatchNoiseFeature(0.74D, 0.74D, BLBlockRegistry.swampDirt))
                 .addFeature(new PatchNoiseFeature(0.65D, 0.65D, BLBlockRegistry.mud, 1.0D / 1.35D, 1.72D));
-		this.waterColorMultiplier = 0x29220A;
+		this.waterColorMultiplier = 0x3A2F0B;
 
 		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
