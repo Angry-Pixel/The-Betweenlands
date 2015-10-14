@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -33,7 +34,8 @@ public class OverlayHandler {
 	private boolean cancelOverlay = false;
 
 	private static final ResourceLocation RES_UNDERWATER_OVERLAY = new ResourceLocation("textures/misc/underwater.png");
-	private static final ResourceLocation RES_TAR_OVERLAY = new ResourceLocation("textures/blocks/tar.png");
+	private static final ResourceLocation RES_TAR_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/tar.png");
+	private static final ResourceLocation RES_MUD_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/mud.png");
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -77,12 +79,19 @@ public class OverlayHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityLivingBase view = Minecraft.getMinecraft().renderViewEntity;
 		World world = Minecraft.getMinecraft().theWorld;
-		Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, player, (float) event.partialTicks);
-		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, player.boundingBox.expand(-0.25F, -0.25F, -0.25F));
-		boolean inTar = (block.getMaterial() == BLMaterials.tar || (entitiesInside != null && entitiesInside.size() > 0));
-		if(player != null && inTar && !this.cancelOverlay) {
+		if(view == null || world == null) return;
+		Block viewBlock = ActiveRenderInfo.getBlockAtEntityViewpoint(world, view, (float) event.partialTicks);
+		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
+		boolean inTar = (viewBlock.getMaterial() == BLMaterials.tar || (entitiesInside != null && entitiesInside.size() > 0));
+		int bx = MathHelper.floor_double(view.posX);
+        int by = MathHelper.floor_double(view.posY);
+        int bz = MathHelper.floor_double(view.posZ);
+		Block block = world.getBlock(bx, by, bz);
+		boolean inMud = block.getMaterial() == BLMaterials.mud;
+		boolean inBlock = inTar || inMud;
+		if(inBlock && !this.cancelOverlay) {
 			event.setCanceled(true);
 
 			GL11.glPushMatrix();
@@ -94,10 +103,15 @@ public class OverlayHandler {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 			Minecraft mc = Minecraft.getMinecraft();
-			mc.getTextureManager().bindTexture(new ResourceLocation("thebetweenlands:textures/blocks/tar.png"));
-			GL11.glColor4f(1, 1, 1, 0.975F);
+			if(inTar) {
+				mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
+				GL11.glColor4f(1, 1, 1, 0.985F);
+				GL11.glScaled(1, 20, 1);
+			} else if(inMud) {
+				GL11.glColor4f(0.25F, 0.25F, 0.25F, 1);
+				mc.getTextureManager().bindTexture(RES_MUD_OVERLAY);
+			}
 
-			GL11.glScaled(1, 20, 1);
 			this.renderWarpedTextureOverlay(event.partialTicks);
 
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
