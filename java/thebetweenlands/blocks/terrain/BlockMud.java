@@ -76,7 +76,26 @@ public class BlockMud extends Block {
 	}
 
 	@Override
+	public boolean isBlockSolid(IBlockAccess world, int x, int y, int z, int side) {
+		return true;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return true;
+	}
+
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		ForgeDirection dir = ForgeDirection.getOrientation(side);
+		Block block = blockAccess.getBlock(x, y, z);
+		if(block == this) return false;
+		return side == 0 && this.minY > 0.0D ? true : (side == 1 && this.maxY < 1.0D ? true : (side == 2 && this.minZ > 0.0D ? true : (side == 3 && this.maxZ < 1.0D ? true : (side == 4 && this.minX > 0.0D ? true : (side == 5 && this.maxX < 1.0D ? true : !blockAccess.getBlock(x, y, z).isOpaqueCube())))));
 	}
 }

@@ -15,6 +15,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -310,7 +311,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 			if(side == 1) {
 				return true;
 			} else {
-				return !block.isOpaqueCube();
+				return !block.isOpaqueCube() && !block.isSideSolid(world, x, y, z, ForgeDirection.getOrientation(side));
 			}
 		}
 		return (block.getMaterial() == this.getMaterial() || this.canConnectTo(block)) ? false : super.shouldSideBeRendered(world, x, y, z, side);
