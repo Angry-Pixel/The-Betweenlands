@@ -94,4 +94,15 @@ public final class BezierUtils {
 		}
 		return points;
 	}
+
+	public static float[][] derivative(float[][] controlPoints) {
+		float[][] derivative = new float[controlPoints.length - 1][controlPoints[0].length];
+		for (int i = 0; i < derivative.length; i++) {
+			float[] point = derivative[i];
+			for (int n =  0; n < point.length; n++) {
+				point[n] = derivative.length * (controlPoints[i + 1][n] - controlPoints[i][n]);
+			}
+		}
+		return derivative;
+	}
 }
