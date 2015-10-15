@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterRootRenderer;
@@ -46,12 +47,12 @@ public class BlockRootUW extends BlockSwampWater {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && this.canPlaceBlockOn(world, world.getBlock(x, y-1, z), x, y-1, z);
 	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return this.canPlaceBlockOn(world, world.getBlock(x, y-1, z), x, y-1, z);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class BlockRootUW extends BlockSwampWater {
 		}
 	}
 
-	protected boolean canPlaceBlockOn(Block block) {
-		return block instanceof BlockRootUW || block == this || block.isOpaqueCube();
+	protected boolean canPlaceBlockOn(World world, Block block, int x, int y, int z) {
+		return block instanceof BlockRoot || block == this || block.isSideSolid(world, x, y, z, ForgeDirection.UP);
 	}
 }

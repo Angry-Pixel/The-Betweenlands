@@ -13,6 +13,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.ItemRubberBoots;
@@ -63,9 +64,19 @@ public class BlockMud extends Block {
 			}
 		}
 	}
-	
+
+	@Override
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+		return true;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
 	@Override
 	public boolean isOpaqueCube() {
-        return false;
-    }
+		return false;
+	}
 }
