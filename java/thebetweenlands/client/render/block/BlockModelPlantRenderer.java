@@ -1,17 +1,16 @@
 package thebetweenlands.client.render.block;
 
-import org.lwjgl.opengl.GL11;
+import java.util.Random;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
-import scala.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom;
 import thebetweenlands.client.model.block.ModelBlackHatMushroom2;
@@ -31,6 +30,9 @@ import thebetweenlands.utils.ModelConverter.Box;
 import thebetweenlands.utils.ModelConverter.Model;
 import thebetweenlands.utils.ModelConverter.TextureMap;
 import thebetweenlands.utils.ModelConverter.Vec3;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {

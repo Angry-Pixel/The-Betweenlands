@@ -1,7 +1,7 @@
 package thebetweenlands.client.particle;
 
 import java.lang.reflect.Constructor;
-import java.util.Random;
+import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityBreakingFX;
@@ -16,7 +16,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import scala.actors.threadpool.Arrays;
 import thebetweenlands.entities.particles.EntityAltarCraftingFX;
 import thebetweenlands.entities.particles.EntityBLBubbleFX;
 import thebetweenlands.entities.particles.EntityBugFX;

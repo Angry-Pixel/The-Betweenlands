@@ -1,21 +1,17 @@
 package thebetweenlands.client.render.sky;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
-
-import scala.util.Random;
 
 public class AuroraRenderer {
 	private double x, y, z;
