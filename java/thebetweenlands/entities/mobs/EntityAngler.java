@@ -205,13 +205,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 				motionY = 0.8D;
 			}
 	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.equals(DamageSource.inWall))
-			return false;
-		return super.attackEntityFrom(source, damage);
-	}
 	
 	public boolean isLeaping() {
 		return dataWatcher.getWatchableObjectByte(20) == 1;

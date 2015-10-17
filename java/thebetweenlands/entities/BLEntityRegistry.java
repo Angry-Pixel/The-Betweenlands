@@ -1,5 +1,6 @@
 package thebetweenlands.entities;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
@@ -17,6 +18,7 @@ import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -26,7 +28,6 @@ import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.items.SpawnEggs;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BLEntityRegistry
 {
@@ -60,6 +61,7 @@ public class BLEntityRegistry
 		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E);
 		registerEntity(26, EntityThrownTarminion.class, "thrownTarminion");
 		registerEntity(27, EntityWeedwoodRowboat.class, "weedwoodBoat");
+		registerEntity(28, EntityPeatMummy.class, "peatMummy", 0x000000, 0x2E2E2E);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {

@@ -9,6 +9,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -26,6 +33,7 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.AxeBL;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
@@ -33,18 +41,18 @@ import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
 
-	public static final IAttribute SHED_COOLDOWN_ATTRIB = (new RangedAttribute("bl.shedCooldown", 70.0D, 10.0D, Double.MAX_VALUE)).setDescription("Shed Cooldown");
-	public static final IAttribute SHED_SPEED_ATTRIB = (new RangedAttribute("bl.shedSpeed", 10.0D, 0.0D, Double.MAX_VALUE)).setDescription("Shedding Speed");
+	public static final IAttribute SHED_COOLDOWN_ATTRIB = (new RangedAttribute("bl.shedCooldown", 70.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Shed Cooldown");
+	public static final IAttribute SHED_SPEED_ATTRIB = (new RangedAttribute("bl.shedSpeed", 10.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Shedding Speed");
 
-	public static final IAttribute SUCK_COOLDOWN_ATTRIB = (new RangedAttribute("bl.suckCooldown", 400.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Cooldown");
-	public static final IAttribute SUCK_SPEED_ATTRIB = (new RangedAttribute("bl.suckPreparationSpeed", 40.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Preparation Speed");
-	public static final IAttribute SUCK_LENGTH_ATTRIB = (new RangedAttribute("bl.suckLength", 130.0D, 0.0D, Double.MAX_VALUE)).setDescription("Sucking Length");
+	public static final IAttribute SUCK_COOLDOWN_ATTRIB = (new RangedAttribute("bl.suckCooldown", 400.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Sucking Cooldown");
+	public static final IAttribute SUCK_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.suckPreparationSpeed", 40.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Sucking Preparation Speed");
+	public static final IAttribute SUCK_LENGTH_ATTRIB = (new RangedAttribute("bl.suckLength", 130.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Sucking Length");
 
-	private int shedCooldown = (int)SHED_COOLDOWN_ATTRIB.getDefaultValue();
+	private int shedCooldown = (int) SHED_COOLDOWN_ATTRIB.getDefaultValue();
 	private int sheddingProgress = 0;
 	public static final int SHEDDING_STATE_DW = 20;
 
-	private int suckingCooldown = (int)SUCK_COOLDOWN_ATTRIB.getDefaultValue();
+	private int suckingCooldown = (int) SUCK_COOLDOWN_ATTRIB.getDefaultValue();
 	private int suckingPreparation = 0;
 	private int suckingProgress = 0;
 	public static final int SUCKING_STATE_DW = 21;
@@ -52,7 +60,13 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public EntityTarBeast(World world) {
 		super(world);
 		setSize(1.25F, 2F);
-		stepHeight = 2.0F;
+		
+		this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+		this.tasks.addTask(2, new EntityAIWander(this, 1D));
+		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(4, new EntityAILookIdle(this));
+		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 	}
 
 	@Override
@@ -74,7 +88,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		this.getAttributeMap().registerAttribute(SHED_COOLDOWN_ATTRIB);
 		this.getAttributeMap().registerAttribute(SHED_SPEED_ATTRIB);
 		this.getAttributeMap().registerAttribute(SUCK_COOLDOWN_ATTRIB);
-		this.getAttributeMap().registerAttribute(SUCK_SPEED_ATTRIB);
+		this.getAttributeMap().registerAttribute(SUCK_PREPARATION_SPEED_ATTRIB);
 		this.getAttributeMap().registerAttribute(SUCK_LENGTH_ATTRIB);
 	}
 
@@ -222,6 +236,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		}
 
 		if(!worldObj.isRemote) {
+			if(this.isInsideOfMaterial(BLMaterials.tar)) {
+				this.stepHeight = 2.0F;
+			} else {
+				this.stepHeight = 0.75F;
+			}
+			
 			if(this.shedCooldown > 0 && this.getEntityToAttack() != null) {
 				this.shedCooldown--;
 			}
@@ -273,7 +293,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isPreparing()) {
 					this.suckingPreparation++;
 
-					if(this.suckingPreparation > this.getEntityAttribute(SUCK_SPEED_ATTRIB).getAttributeValue()) {
+					if(this.suckingPreparation > this.getEntityAttribute(SUCK_PREPARATION_SPEED_ATTRIB).getAttributeValue()) {
 						this.suckingPreparation = 0;
 
 						this.setSucking(true);

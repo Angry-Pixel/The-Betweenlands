@@ -19,7 +19,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-public class EntitySporeling extends EntityCreature {
+public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public boolean isFalling;
 	public EntitySporeling(World world) {
 		super(world);

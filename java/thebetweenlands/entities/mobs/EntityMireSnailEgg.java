@@ -11,7 +11,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
-public class EntityMireSnailEgg extends EntityAnimal {
+public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	public float pulseFloat;
 	AnimationMathHelper pulse = new AnimationMathHelper();
 	public EntityMireSnailEgg(World world) {

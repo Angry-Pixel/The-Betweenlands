@@ -47,20 +47,4 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	protected String getDeathSound() {
 		return "thebetweenlands:squish";
 	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
-					return super.attackEntityFrom(source, damage);
-				} else {
-					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));
-				}
-		}
-		return super.attackEntityFrom(source, damage);
-	}
-
 }

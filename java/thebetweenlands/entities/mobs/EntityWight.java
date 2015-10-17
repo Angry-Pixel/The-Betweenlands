@@ -1,14 +1,17 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.items.*;
+import thebetweenlands.items.BLItemRegistry;
 
 public class EntityWight extends EntityMob implements IEntityBL {
 	private EntityAIAttackOnCollide meleeAttack = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false);
@@ -149,10 +152,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if (heldItem != null)
 				if (heldItem.getItem() == BLItemRegistry.wightsBane) {
 					return super.attackEntityFrom(source, this.getHealth());
-				} else if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
-					return super.attackEntityFrom(source, damage);
-				} else {
-					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));
 				}
 		}
 		return super.attackEntityFrom(source, damage);
