@@ -29,7 +29,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	public static final IAttribute CHARGING_COOLDOWN_ATTRIB = (new RangedAttribute("bl.chargingCooldown", 160.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Cooldown");
 	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.chargingPreparationSpeed", 70.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
-	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 80.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
+	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
 	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.5D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
@@ -55,7 +55,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		setSize(1.0F, 1.0F);
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
 		this.tasks.addTask(3, new EntityAIWander(this, 1D));
 		this.tasks.addTask(4, new EntityAILookIdle(this));
@@ -69,7 +69,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(80.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 
 		this.getAttributeMap().registerAttribute(SPAWN_LENGTH_ATTRIB);
