@@ -753,7 +753,7 @@ public class DecorationHelper {
 				Block blockAbove = world.getBlock(x, y + 1, z);
 				Block blockAbove2 = world.getBlock(x, y + 2, z);
 				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
-				if ((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.mud) && hasSpace) {
 					if (world.rand.nextInt(patchProbability) == 0) {
 						BlockRoot.generateRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
@@ -770,7 +770,7 @@ public class DecorationHelper {
 				Block blockAbove = world.getBlock(x, y + 1, z);
 				Block blockAbove2 = world.getBlock(x, y + 2, z);
 				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
-				if ((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.mud) && hasSpace) {
 					if (world.rand.nextInt(patchProbability) == 0) {
 						BlockRoot.generateRootPatch(world, x, y + 1, z, 60, 15);
 					} else {
