@@ -21,7 +21,7 @@ public enum SurfaceType {
             case GRASS:
                 return block == Blocks.grass || block == Blocks.mycelium;
             case DIRT:
-                return block == BLBlockRegistry.swampDirt || block == Blocks.dirt || block == BLBlockRegistry.mud;
+                return block == BLBlockRegistry.swampDirt || block == Blocks.dirt || block == BLBlockRegistry.mud || block == BLBlockRegistry.sludgyDirt;
             case SAND:
                 return block == Blocks.sand;
             case WATER:
@@ -29,7 +29,7 @@ public enum SurfaceType {
             case PEAT:
                 return block == BLBlockRegistry.peat;
             case MIXED:
-                return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.deadGrass || block == BLBlockRegistry.mud;
+                return block == Blocks.grass || block == Blocks.dirt || block == Blocks.sand || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.deadGrass || block == BLBlockRegistry.mud || block == BLBlockRegistry.peat || block == BLBlockRegistry.sludgyDirt;
             case UNDERGROUND:
                 return block == BLBlockRegistry.betweenstone;
             default:
