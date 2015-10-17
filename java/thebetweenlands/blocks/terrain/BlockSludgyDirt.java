@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
@@ -88,5 +89,11 @@ public class BlockSludgyDirt
     public int getRenderBlockPass ()
     {
         return 1;
+    }
+    
+    @Override
+    public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
+        Block block = iblockaccess.getBlock(x, y, z);
+        return block != BLBlockRegistry.sludgyDirt;
     }
 }
