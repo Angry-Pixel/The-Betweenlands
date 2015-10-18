@@ -4,11 +4,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
@@ -40,6 +42,14 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	private boolean wasSet = false;
 
+	public static boolean isSpoopy(World world) {
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+		if(provider != null) {
+			return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
+		}
+		return false;
+	}
+	
 	@Override
 	public String getEventName() {
 		return "Spook";

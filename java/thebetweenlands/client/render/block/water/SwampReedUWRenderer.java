@@ -1,20 +1,17 @@
-package thebetweenlands.client.render.block;
+package thebetweenlands.client.render.block.water;
 
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
-@SideOnly(Side.CLIENT)
-public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
+public class SwampReedUWRenderer implements IWaterRenderer {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID,
 			RenderBlocks renderer) {
@@ -46,12 +43,7 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean shouldRender3DInInventory(int modelId) {
-		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return BlockRenderIDs.SWAMP_REED.id();
+	public IIcon getIcon() {
+		return BLBlockRegistry.swampReed.getIcons(0) != null ? BLBlockRegistry.swampReed.getIcons(0) : BLBlockRegistry.swampReed.getIcons(1);
 	}
 }

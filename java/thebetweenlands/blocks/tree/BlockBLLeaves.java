@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLLeaves extends BlockLeaves {
 
@@ -69,11 +69,8 @@ public class BlockBLLeaves extends BlockLeaves {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
-		if(provider != null) {
-			if(provider.getEnvironmentEventRegistry().SPOOPY.isActive()) {
-				return Minecraft.getMinecraft().gameSettings.fancyGraphics ? spoopyIcon : spoopyFastIcon;
-			}
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLeaves") || this.type.equals("sapTreeLeaves") || this.type.equals("rubberTreeLeaves"))) {
+			return Minecraft.getMinecraft().gameSettings.fancyGraphics ? spoopyIcon : spoopyFastIcon;
 		}
 		return Minecraft.getMinecraft().gameSettings.fancyGraphics ? blockIcon : fastIcon;
 	}
@@ -94,8 +91,10 @@ public class BlockBLLeaves extends BlockLeaves {
 	public void registerBlockIcons(IIconRegister reg) {
 		blockIcon = reg.registerIcon(getTextureName() + "Fancy");
 		fastIcon = reg.registerIcon(getTextureName() + "Fast");
-		spoopyIcon = reg.registerIcon(getTextureName() + "FancySpoopy");
-		spoopyFastIcon = reg.registerIcon(getTextureName() + "FastSpoopy");
+		if(this.type.equals("weedwoodLeaves") || this.type.equals("sapTreeLeaves") || this.type.equals("rubberTreeLeaves")) {
+			spoopyIcon = reg.registerIcon(getTextureName() + "FancySpoopy");
+			spoopyFastIcon = reg.registerIcon(getTextureName() + "FastSpoopy");
+		}
 	}
 
 	@Override

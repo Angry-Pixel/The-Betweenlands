@@ -60,7 +60,7 @@ import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
-import thebetweenlands.blocks.plants.DoubleHeightPlant;
+import thebetweenlands.blocks.plants.BlockDoubleHeightPlant;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -189,7 +189,7 @@ public class BLBlockRegistry {
     public static final Block hollowLog = new BlockHollowLog();
 
     // DOUBLE PLANTS
-    public static final DoubleHeightPlant sundew = new DoubleHeightPlant("Sundew", 0.8F) {
+    public static final BlockDoubleHeightPlant sundew = new BlockDoubleHeightPlant("Sundew", 0.8F) {
         @Override
         @SideOnly(Side.CLIENT)
         public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
@@ -198,8 +198,8 @@ public class BLBlockRegistry {
             }
         }
     }.setRenderType(BlockRenderIDs.MODEL_PLANT.id());
-    public static final Block doubleSwampTallgrass = new DoubleHeightPlant("DoubleSwampTallgrass", 0.8F);
-    public static final Block phragmites = new DoubleHeightPlant("Phragmites", 0.8F) {
+    public static final Block doubleSwampTallgrass = new BlockDoubleHeightPlant("DoubleSwampTallgrass", 0.8F);
+    public static final Block phragmites = new BlockDoubleHeightPlant("Phragmites", 0.8F) {
         @Override
         @SideOnly(Side.CLIENT)
         public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
@@ -212,9 +212,9 @@ public class BLBlockRegistry {
             }
         }
     };
-    public static final Block tallCattail = new DoubleHeightPlant("TallCattail", 0.8F);
-    public static final Block cardinalFlower = new DoubleHeightPlant("CardinalFlower", 0.8F);
-    public static final Block broomsedge = new DoubleHeightPlant("BroomSedge", 0.8F);
+    public static final Block tallCattail = new BlockDoubleHeightPlant("TallCattail", 0.8F);
+    public static final Block cardinalFlower = new BlockDoubleHeightPlant("CardinalFlower", 0.8F);
+    public static final Block broomsedge = new BlockDoubleHeightPlant("BroomSedge", 0.8F);
     public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
     public static final BlockPitcherPlant pitcherPlant = new BlockPitcherPlant();
 
