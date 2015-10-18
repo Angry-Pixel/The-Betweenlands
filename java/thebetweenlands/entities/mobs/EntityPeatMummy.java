@@ -384,4 +384,21 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public float getScreamingProgress() {
 		return 1.0F / SCREAMING_TIMER_MAX * this.screamTimer;
 	}
+	
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:peatMummyLiving" + randomSound;
+	}
+
+	@Override
+	protected String getHurtSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:peatMummyHurt" + randomSound;
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:peatMummyDeath";
+	}
 }
