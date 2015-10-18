@@ -45,13 +45,9 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final int CHARGING_STATE_DW = 21;
 
 	//Scream timer is only used for the screen shake and is client side only.
-	@SideOnly(Side.CLIENT)
 	private int screamTimer = 0;
-	@SideOnly(Side.CLIENT)
 	private boolean screaming = false;
-	@SideOnly(Side.CLIENT)
 	private boolean wasScreaming = false;
-	@SideOnly(Side.CLIENT)
 	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
 
