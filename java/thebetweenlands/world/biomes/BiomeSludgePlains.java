@@ -37,9 +37,10 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 		this.waterColorMultiplier = 0x3A2F0B;
 
 		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 75, 1, 1));
-        spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
-		spawnableCaveCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 300, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 4, -1, -1));
+		spawnableMonsterList.add(new SpawnListEntry(EntitySludge.class, 135, 1, 1));
+        spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 40, 1, 1));
+		spawnableCaveCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 18, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityPeatMummy.class, 24, -1, -1));
 	}
 }

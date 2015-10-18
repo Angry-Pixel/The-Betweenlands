@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -199,7 +200,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	@SuppressWarnings("rawtypes")
 	public boolean canAttackClass(Class entity) {
-		return EntityLeech.class != entity;
+		return entity != EntityLeech.class && (entity == EntityPlayer.class || entity == EntityPlayerMP.class || entity == EntitySwampHag.class);
 	}
 
 	public int getBloodConsumed() {

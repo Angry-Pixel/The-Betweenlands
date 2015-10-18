@@ -131,7 +131,6 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO add BL loo
 			}
 		}
 		world.setBlock(x + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), y, z + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), BLBlockRegistry.tarBeastSpawner, 0, 3);
-		System.out.println("Tar Pool Dungeon Here: " + x + " " + y + " " + z);
 		return true;
 	}
 

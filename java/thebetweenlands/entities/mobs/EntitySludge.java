@@ -1,21 +1,22 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.ControlledAnimation;
-import thebetweenlands.items.*;
+import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
@@ -27,8 +28,12 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 
 	public EntitySludge(World world) {
 		super(world);
+
+		this.tasks.addTask(0, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+
 		isImmuneToFire = true;
-		setSize(1.0F, 1.0F);
+		setSize(1.0F, 1.5F);
 		sludgeJumpDelay = rand.nextInt(20) + 10;
 	}
 
@@ -61,48 +66,49 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		prevSquishFactor = squishFactor;
 		boolean flag = onGround;
 		super.onUpdate();
-		if (isClientWorld()) {
-			if (getIsPlayerNearby(7, 3, 7, 7)) {
+		if (!this.worldObj.isRemote) {
+			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.worldObj.rand.nextInt(1900) == 0) {
 				if (!getActive()) {
 					setActive(true);
 					motionY += 0.6;
 				}
 			}
+
+			if (getActive()) {
+				if (onGround && !flag) {
+					squishAmount = -0.5F;
+					playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
+				} else if (!onGround && flag) {
+					squishAmount = 1.0F;
+				}
+
+				alterSquishAmount();
+
+				int bx = MathHelper.floor_double(this.posX);
+				int by = MathHelper.floor_double(this.posY);
+				int bz = MathHelper.floor_double(this.posZ);
+				if (this.worldObj.getBlock(bx, by, bz) == Blocks.air &&
+						BLBlockRegistry.sludge.canPlaceBlockAt(this.worldObj, bx, by, bz)) {
+					BLBlockRegistry.sludge.generateBlockTemporary(this.worldObj, bx, by, bz);
+				}
+
+				if(getAttackTarget() == null && this.worldObj.rand.nextInt(350) == 0) {
+					this.setActive(false);
+				}
+			} else {
+				motionX = 0;
+				motionZ = 0;
+				motionY = 0;
+			}
 		}
-		if (getActive()) scale.increaseTimer();
-		else scale.decreaseTimer();
 
-//		setActive(true);
-
-		if (getActive()) {
-			if (onGround && !flag) {
-				squishAmount = -0.5F;
-				//TODO Make some nice particles I guess
-			/*	for (int j = 0; j < 8; ++j) {
-				float f = rand.nextFloat() * (float) Math.PI * 2.0F;
-				float f1 = rand.nextFloat() * 0.5F + 0.5F;
-				float f2 = MathHelper.sin(f) * 0.5F * f1;
-				float f3 = MathHelper.cos(f) * 0.5F * f1;
-				worldObj.spawnParticle("cloud", posX + f2, boundingBox.minY, posZ + f3, 0.0D, 0.0D, 0.0D);
-			}*/
-			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
-		} else if (!onGround && flag)
-			squishAmount = 1.0F;
-
-		alterSquishAmount();
-
-		int bx = MathHelper.floor_double(this.posX);
-		int by = MathHelper.floor_double(this.posY);
-		int bz = MathHelper.floor_double(this.posZ);
-		if (this.worldObj.getBlock(bx, by, bz) == Blocks.air &&
-				BLBlockRegistry.sludge.canPlaceBlockAt(this.worldObj, bx, by, bz)) {
-			BLBlockRegistry.sludge.generateBlockTemporary(this.worldObj, bx, by, bz);
-		}
-	}
-		else {
-			motionX = 0;
-			motionZ = 0;
-			motionY = 0;
+		//Update animation
+		if(this.worldObj.isRemote) {
+			if (getActive()) {
+				scale.increaseTimer();
+			} else {
+				scale.decreaseTimer();
+			}
 		}
 	}
 
@@ -111,26 +117,41 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	protected boolean isMovementBlocked() {
+		return super.isMovementBlocked() || !this.getActive();
+	}
+
+	@Override
 	protected void updateEntityActionState() {
 		super.updateEntityActionState();
 
+		if(this.worldObj.isRemote) return;
+
+		if(getAttackTarget() == null) {
+			EntityPlayer newTarget = this.worldObj.getClosestVulnerablePlayerToEntity(this, 8.0D);
+			if(newTarget != null) {
+				this.setAttackTarget(newTarget);
+			}
+		}
+
 		if ((onGround || this.isInWater()) && sludgeJumpDelay-- <= 0) {
 			sludgeJumpDelay = getJumpDelay();
-			if (getAttackTarget() != null)
-				sludgeJumpDelay /= 3;
+			if (getAttackTarget() != null) {
+				sludgeJumpDelay /= 3.0F;
+			}
 			isJumping = true;
-			moveStrafing = 1.0F - rand.nextFloat() * 2.0F;
+			moveStrafing = getAttackTarget() == null ? (1.0F - rand.nextFloat() * 2.0F) : ((1.0F - rand.nextFloat() * 2.0F) / 10.0F);
 			moveForward = 1;
 			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 		} else {
 			isJumping = false;
-			if (onGround)
+			if (onGround) {
 				moveStrafing = moveForward = 0.0F;
+			}
 		}
 
 		if (this.rand.nextFloat() < 0.8F && this.isInWater()) {
 			this.isJumping = true;
-			//this.motionY += 0.01D;
 		}
 	}
 
@@ -159,7 +180,12 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(20, (byte) 0);
+		dataWatcher.addObject(20, (byte) (this.worldObj.rand.nextInt(5) == 0 ? 1 : 0));
+	}
+
+	@Override
+	public boolean canBePushed() {
+		return false;
 	}
 
 	public void setActive(boolean active) {
@@ -170,13 +196,12 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		return dataWatcher.getWatchableObjectByte(20) == 1;
 	}
 
-	public boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius)
-	{
+	public boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
 		List<Entity> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(distanceX, distanceY, distanceZ));
 		ArrayList<EntityPlayer> listEntityPlayers = new ArrayList<EntityPlayer>();
 		for (Entity entityNeighbor : list)
 		{
-			if (entityNeighbor instanceof EntityPlayer && getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer)entityNeighbor).capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(entityNeighbor)))
+			if (entityNeighbor instanceof EntityPlayer && getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer)entityNeighbor).capabilities.disableDamage && !worldObj.isRemote && getEntitySenses().canSee(entityNeighbor)))
 				return true;
 		}
 		return false;
