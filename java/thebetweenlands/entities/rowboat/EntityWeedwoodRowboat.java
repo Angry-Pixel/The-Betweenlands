@@ -1,11 +1,9 @@
 package thebetweenlands.entities.rowboat;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -14,6 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
@@ -33,7 +32,13 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	private static final int DAMAGE_TAKEN_ID = 19;
 
-	private static final float CATCH_POINT_Z = 2;
+	private static final int[] OAR_ROTATION_IDS = { 20, 21 };
+
+	private static final int LEFT_OAR = 0;
+
+	private static final int RIGHT_OAR = 1;
+
+	/*private static final float CATCH_POINT_Z = 2;
 
 	private static final float CATCH_POINT_X = 0.1875F;
 
@@ -77,21 +82,47 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	protected static final float STROKE_SQUARE_POSITION = STROKE_DRIVE / 2;
 
-	protected static final int STROKE_SQUARE_TIME = 20;
+	protected static final int STROKE_SQUARE_TIME = 20;*/
 
 	private boolean hadPlayer;
 
-	private Oar leftOar;
+	/*private Oar leftOar;
 
-	private Oar rightOar;
+	private Oar rightOar;*/
+
+	private final float[] f = new float[2];
+
+	private final int[] g = new int[2];
+
+	private final float[] h = new float[2];
+
+	private float ao;
+
+	private float ap;
+
+	private float aq;
+
+	private float ar;
+
+	private double boatX;
+
+	private double boatY;
+
+	private double boatZ;
+
+	private float boatYaw;
+
+	private float boatPitch;
+
+	private int boatPosRotationIncrements;
 
 	public EntityWeedwoodRowboat(World world) {
 		super(world);
 		preventEntitySpawning = true;
 		setSize(2, 0.9F);
 		yOffset = height / 2;
-		leftOar = new Oar();
-		rightOar = new Oar();
+//		leftOar = new Oar();
+//		rightOar = new Oar();
 	}
 
 	public EntityWeedwoodRowboat(World world, double x, double y, double z) {
@@ -109,31 +140,10 @@ public class EntityWeedwoodRowboat extends Entity {
 	protected void entityInit() {
 		dataWatcher.addObject(TIME_SINCE_HIT_ID, 0);
 		dataWatcher.addObject(FORWARD_DIRECTION_ID, 1);
-		dataWatcher.addObject(DAMAGE_TAKEN_ID, (float) 0);
-	}
-
-	public void setDamageTaken(float damage) {
-		dataWatcher.updateObject(DAMAGE_TAKEN_ID, damage);
-	}
-
-	public float getDamageTaken() {
-		return dataWatcher.getWatchableObjectFloat(DAMAGE_TAKEN_ID);
-	}
-
-	public void setTimeSinceHit(int time) {
-		dataWatcher.updateObject(TIME_SINCE_HIT_ID, time);
-	}
-
-	public int getTimeSinceHit() {
-		return dataWatcher.getWatchableObjectInt(TIME_SINCE_HIT_ID);
-	}
-
-	public void setForwardDirection(int direction) {
-		dataWatcher.updateObject(FORWARD_DIRECTION_ID, direction);
-	}
-
-	public int getForwardDirection() {
-		return dataWatcher.getWatchableObjectInt(FORWARD_DIRECTION_ID);
+		dataWatcher.addObject(DAMAGE_TAKEN_ID,  0F);
+		for (int i = 0; i < OAR_ROTATION_IDS.length; i++) {
+			dataWatcher.addObject(OAR_ROTATION_IDS[i], 0F);
+		}
 	}
 
 	@Override
@@ -180,10 +190,13 @@ public class EntityWeedwoodRowboat extends Entity {
 				}
 				setDead();
 			}
-			return true;
-		} else {
-			return true;
 		}
+		return true;
+	}
+
+	@Override
+	public ItemStack getPickedResult(MovingObjectPosition target) {
+		return new ItemStack(BLItemRegistry.weedwoodRowboat);
 	}
 
 	@Override
@@ -198,88 +211,26 @@ public class EntityWeedwoodRowboat extends Entity {
 		return !isDead;
 	}
 
-	public void updateControls(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
-		leftOar.updateControls(oarStrokeLeft, oarSquareLeft);
-		rightOar.updateControls(oarStrokeRight, oarSquareRight);
+	@Override
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int rotationIncrements) {
+		boatX = x;
+		boatY = y;
+		boatZ = z;
+		boatYaw = yaw;
+		boatPitch = pitch;
+		boatPosRotationIncrements = rotationIncrements;
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if (worldObj.isRemote) {
-			boolean hasPlayer = riddenByEntity instanceof EntityPlayer;
-			if (!this.hadPlayer && hasPlayer) {
-				TheBetweenlands.proxy.onPlayerEnterWeedwoodRowboat();
-			} else if (this.hadPlayer && !hasPlayer) {
-				TheBetweenlands.proxy.onPlayerLeaveWeedwoodRowboat();
-			}
-			this.hadPlayer = hasPlayer;
-			doSplash();
-		} else {
-			if (getTimeSinceHit() > 0) {
-				setTimeSinceHit(getTimeSinceHit() - 1);
-			}
-			if (getDamageTaken() > 0) {
-				setDamageTaken(getDamageTaken() - 1);
-			}
-			byte depth = 5;
-			double buoyancy = 0;
-			for (int i = 0; i < depth; ++i) {
-				double minY = boundingBox.minY + (boundingBox.maxY - boundingBox.minY) * i / depth - 0.125;
-				double maxY = boundingBox.minY + (boundingBox.maxY - boundingBox.minY) * (i + 1) / depth - 0.125;
-				AxisAlignedBB box = AxisAlignedBB.getBoundingBox(boundingBox.minX, minY, boundingBox.minZ, boundingBox.maxX, maxY, boundingBox.maxZ);
-				if (worldObj.isAABBInMaterial(box, Material.water)) {
-					buoyancy += 0.6 / depth;
-				}
-			}
-			doBlockBreak();
-			leftOar.update();
-			rightOar.update();
-			float leftForce = leftOar.getForce();
-			float rightForce = leftOar.getForce();
-//			System.out.printf("%s %s\n", leftForce, rightForce);
-			float a = (leftForce - rightForce) / (-2 * CATCH_POINT_Z);
-			float c = (leftForce + rightForce) / 2 + CATCH_POINT_X;
-			float vecX;
-			float vecZ = 0;
-			if (a == 0) {
-				vecX = leftForce + rightForce;
-			} else {
-				float b = -1 / a;
-				float d = CATCH_POINT_X;
-				vecZ = (d - c) / (a - b);
-				vecX = a * vecZ + c - CATCH_POINT_X;
-			}
-			float force = MathHelper.sqrt_float(vecX * vecX + vecZ * vecZ) * (vecX > 0 ? 1 : -1);
-			float theta = (float) Math.atan2(vecX, vecZ) * MathUtils.RAD_TO_DEG - 90;
-			if (buoyancy < 1) {
-				motionY += 0.04 * (buoyancy * 2 - 1);
-			} else {
-				if (motionY < 0) {
-					motionY /= 2;
-				}
-				motionY += 0.007;
-			}
-			if (onGround) {
-				motionX *= 0.5;
-				motionY *= 0.5;
-				motionZ *= 0.5;
-			}
-			setRotation(rotationYaw, rotationPitch);
-			List<Entity> collidingEntities = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.2, 0, 0.2));
-			if (!collidingEntities.isEmpty()) {
-				for (int i = 0; i < collidingEntities.size(); ++i) {
-					Entity entity = collidingEntities.get(i);
-					if (entity != riddenByEntity && entity.canBePushed() && entity instanceof EntityWeedwoodRowboat) {
-						entity.applyEntityCollision(this);
-					}
-				}
-			}
-			if (riddenByEntity != null && riddenByEntity.isDead) {
-				riddenByEntity = null;
-			}
-		}
-		moveEntity(motionX, motionY, motionZ);
+	public void setVelocity(double x, double y, double z) {}
+
+	public void updateControls(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
+		//leftOar.updateControls(oarStrokeLeft, oarSquareLeft);
+		//rightOar.updateControls(oarStrokeRight, oarSquareRight);
+	}
+
+	private boolean bo() {
+		return !(worldObj.isRemote ^ riddenByEntity instanceof EntityPlayer);
 	}
 
 	private void doSplash() {
@@ -334,6 +285,59 @@ public class EntityWeedwoodRowboat extends Entity {
 	}
 
 	@Override
+	public void onUpdate() {
+		if (getTimeSinceHit() > 0) {
+			setTimeSinceHit(getTimeSinceHit() - 1);
+		}
+		if (getDamageTaken() > 0) {
+			setDamageTaken(getDamageTaken() - 1);
+		}
+		prevPosX = posX;
+		prevPosY = posY;
+		prevPosZ = posZ;
+	}
+
+	private void s() {
+		// TODO
+	}
+
+	private void t() {
+		// TODO
+	}
+
+	private void u() {
+		if (riddenByEntity != null) {
+			if (aq < 25) {
+				Vec3 param_40 = Vec3.createVectorHelper(3, 0, 0);
+				Vec3 param_41 = Vec3.createVectorHelper(0, 0, 0);
+				Vec3 param_42 = Vec3.createVectorHelper(0, 0, 0);
+				float param_43 = a(LEFT_OAR);
+				float param_44 = a(LEFT_OAR);
+				if (param_43 > 0) {
+					
+				}
+			}
+		}
+	}
+
+	public boolean k() {
+		return ao > 1;
+	}
+
+	public float a(int side) {
+		return 0.01375F * f[side]; // magic number
+	}
+
+	public void a(int side, float value) {
+		float rotation = getOarRotation(side) + value;
+		final float max = 1000;
+		if (rotation > max) {
+			rotation -= max;
+		}
+		dataWatcher.updateObject(OAR_ROTATION_IDS[side], rotation);
+	}
+
+	@Override
 	public void updateRiderPosition() {
 		if (riddenByEntity != null) {
 			double dx = Math.cos(rotationYaw * Math.PI / 180) * -0.2;
@@ -359,8 +363,64 @@ public class EntityWeedwoodRowboat extends Entity {
 		return 0;
 	}
 
-	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target) {
-		return new ItemStack(BLItemRegistry.weedwoodRowboat);
+	public float getOarRotation(int side) {
+		return dataWatcher.getWatchableObjectFloat(OAR_ROTATION_IDS[side]);
+	}
+
+	public float joinOarRotation(int side, float value) {
+		float rotationA = this.h[side];
+		float rotationB = getOarRotation(side);
+		return MathUtils.joinFloat(rotationA, rotationB, value);
+	}
+
+	public void setDamageTaken(float damage) {
+		dataWatcher.updateObject(DAMAGE_TAKEN_ID, damage);
+	}
+
+	public float getDamageTaken() {
+		return dataWatcher.getWatchableObjectFloat(DAMAGE_TAKEN_ID);
+	}
+
+	public void setTimeSinceHit(int time) {
+		dataWatcher.updateObject(TIME_SINCE_HIT_ID, time);
+	}
+
+	public int getTimeSinceHit() {
+		return dataWatcher.getWatchableObjectInt(TIME_SINCE_HIT_ID);
+	}
+
+	public void setForwardDirection(int direction) {
+		dataWatcher.updateObject(FORWARD_DIRECTION_ID, direction);
+	}
+
+	public int getForwardDirection() {
+		return dataWatcher.getWatchableObjectInt(FORWARD_DIRECTION_ID);
+	}
+
+	public void setOarRotation(float left, float right) {
+		dataWatcher.updateObject(OAR_ROTATION_IDS[LEFT_OAR], left);
+		dataWatcher.updateObject(OAR_ROTATION_IDS[RIGHT_OAR], right);
+	}
+
+	public boolean stroke(int side, boolean param_85, boolean param_86) {
+		float param_87 = f[side];
+		int param_88 = g[side];
+		param_88++;
+		boolean param_90 = false;
+		if (param_85 || param_88 < 10) {
+			if (!param_86 && param_85 && param_88 >= 10) {
+				param_87 = 1;
+				param_88 = 0;
+				dataWatcher.updateObject(OAR_ROTATION_IDS[side], 0);
+			} else {
+				param_87 = Math.max(param_87 - 0.05F, 0.55F);
+			}
+		} else {
+			param_87 = Math.max(param_87 - 0.1F, 0);
+			param_90 = param_87 > 0;
+		}
+		g[side] = param_88;
+		f[side] = param_87;
+		return param_90;
 	}
 }

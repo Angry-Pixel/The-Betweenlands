@@ -28,7 +28,7 @@ public class Oar {
 		this.square = square;
 	}
 
-	protected void update() {
+	/*protected void update() {
 		prevStrokeProgress = strokeProgress;
 		prevForce = force;
 		prevSquareTick = squareTick;
@@ -61,7 +61,7 @@ public class Oar {
 				squareTick--;
 			}
 		}
-	}
+	}*/
 
 	private void progress(float progress) {
 		strokeProgress += progress;
@@ -75,13 +75,13 @@ public class Oar {
 		prevPitch = pitch;
 	}
 
-	private float getDisplacement() {
+	/*private float getDisplacement() {
 		float resistance = 0;
 		if (strokeProgress <= STROKE_DRIVE) {
 			resistance = (1 - (float) Math.pow(Math.abs(strokeProgress / (MathUtils.PI * STROKE_RATIO) - 1), STROKE_DRIVE_STEEPNESS)) * BLADE_RESISTANCE;
 		}
 		return resistance;
-	}
+	}*/
 
 	protected float getForce() {
 		return force;

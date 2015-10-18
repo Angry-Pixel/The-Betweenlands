@@ -251,7 +251,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 	}
 
 	private void deleteDisplayList(ModelRenderer model) {
-		if (ReflectionHelper.getPrivateValue(ModelRenderer.class, model, "compiled") == Boolean.TRUE) {
+		if (ReflectionHelper.getPrivateValue(ModelRenderer.class, model, 10) == Boolean.TRUE) {
 			GLAllocation.deleteDisplayLists((int) ReflectionHelper.getPrivateValue(ModelRenderer.class, model, 11));
 			for (ModelRenderer modelRenderer: (List<ModelRenderer>) model.childModels) {
 				deleteDisplayList(modelRenderer);

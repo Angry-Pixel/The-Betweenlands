@@ -517,6 +517,11 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
+	public DebugHandlerCommon getDebugHandler() {
+		return DebugHandlerClient.INSTANCE;
+	}
+
+	@Override
 	public void onPlayerEnterWeedwoodRowboat() {
 		if (ConfigHandler.rowboatView) {
 			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.switchTo();
@@ -528,11 +533,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void onPlayerLeaveWeedwoodRowboat() {
 		Perspective.FIRST_PERSON.switchTo();
-	}
-
-	@Override
-	public DebugHandlerCommon getDebugHandler() {
-		return DebugHandlerClient.INSTANCE;
 	}
 
 	@Override
