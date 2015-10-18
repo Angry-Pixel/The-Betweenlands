@@ -12,7 +12,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class BlockWeepingBlue extends DoubleHeightPlant {
+public class BlockWeepingBlue extends BlockDoubleHeightPlant {
 	public IIcon modelTexture1;
 
 	public BlockWeepingBlue() {

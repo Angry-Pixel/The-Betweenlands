@@ -402,19 +402,26 @@ public class MainShader extends CShader {
 	private void applyBloodSky(float partialTicks) {
 		float skyTransparency = 0.0F;
 
+		boolean hasBeat = false;
+		
 		World world = Minecraft.getMinecraft().theWorld;
 		if(world != null) {
 			if(world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
-				EventBloodSky event = provider.getWorldData().getEnvironmentEventRegistry().BLOODSKY;
-				skyTransparency = event.getSkyTransparency(partialTicks);
+				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().BLOODSKY.getSkyTransparency(partialTicks);
+				if(skyTransparency > 0.01F) {
+					hasBeat = true;
+				}
+				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().SPOOPY.getSkyTransparency(partialTicks);
 			}
 		}
 
-		if(skyTransparency <= 0.0F) {
+		if(skyTransparency <= 0.01F) {
 			return;
+		} else if(skyTransparency > 1.0F) {
+			skyTransparency = 1.0F;
 		}
-
+		
 		if(this.occlusionExtractor == null) {
 			this.occlusionExtractor = (OcclusionExtractor) new OcclusionExtractor().init();
 		}
@@ -459,12 +466,21 @@ public class MainShader extends CShader {
 			weight *= 1.0F - mult;
 		}
 
+		Framebuffer worldDepthBuffer = this.getDepthBuffer();
+		Framebuffer clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer();
+		
+		if(worldDepthBuffer == null || clipPlaneBuffer == null) return; //FBOs not yet ready
+		
 		//Extract occluding objects
-		this.occlusionExtractor.setFBOs(this.getDepthBuffer(), BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer());
+		this.occlusionExtractor.setFBOs(worldDepthBuffer, clipPlaneBuffer);
 		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Apply god's ray
-		float density = 0.1F + Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F);
+		float beat = 0.0F;
+		if(hasBeat) {
+			beat = Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F);
+		}
+		float density = 0.1F + beat;
 		this.godRayEffect.setOcclusionMap(this.getBlitBuffer("bloodSkyBlitBuffer1")).setParams(0.8F, decay, density * 4.0F, weight, illuminationDecay).setRayPos(rayX, rayY);
 		this.godRayEffect.apply(this.getBlitBuffer("bloodSkyBlitBuffer1").framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer0"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 

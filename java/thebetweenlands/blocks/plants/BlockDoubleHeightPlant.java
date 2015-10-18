@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -16,24 +17,25 @@ import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
+public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@SideOnly(Side.CLIENT)
-	public IIcon topIcon, bottomIcon;
+	public IIcon topIcon, bottomIcon, spoopyTopIcon, spoopyBottomIcon;
 	private final String name;
 	Random rnd = new Random();
 
 	private int renderType = -1;
 	
-	public DoubleHeightPlant(String name) {
+	public BlockDoubleHeightPlant(String name) {
 		this(name, 1);
 	}
 
-	public DoubleHeightPlant(String name, float width) {
+	public BlockDoubleHeightPlant(String name, float width) {
 		this.name = name;
 		setCreativeTab(ModCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
@@ -43,7 +45,7 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 		setBlockName("thebetweenlands." + name.substring(0, 1).toLowerCase() + name.substring(1));
 	}
 
-	public DoubleHeightPlant setRenderType(int renderType) {
+	public BlockDoubleHeightPlant setRenderType(int renderType) {
 		this.renderType = renderType;
 		return this;
 	}
@@ -85,12 +87,18 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("DoubleSwampTallgrass")) {
+			return spoopyTopIcon;
+		}
 		return topIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("DoubleSwampTallgrass")) {
+			return func_149887_c(world.getBlockMetadata(x, y, z)) ? spoopyTopIcon : spoopyBottomIcon;
+		}
 		return func_149887_c(world.getBlockMetadata(x, y, z)) ? topIcon : bottomIcon;
 	}
 
@@ -100,6 +108,10 @@ public class DoubleHeightPlant extends BlockDoublePlant implements IShearable {
 		topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
 		if(!name.equals("Sundew"))
 			bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
+		if(this.name.equals("DoubleSwampTallgrass")) {
+			spoopyTopIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "TopSpoopy");
+			spoopyBottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "BottomSpoopy");
+		}
 	}
 
 	@Override

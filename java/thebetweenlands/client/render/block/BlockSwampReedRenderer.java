@@ -27,7 +27,7 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
 		}
 		tessellator.startDrawingQuads();
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, -0.5, -0.5, -0.5, 1.0f);
+		renderer.drawCrossedSquares(BLBlockRegistry.swampReed.getIcons(1), -0.5, -0.5, -0.5, 1.0f);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -37,10 +37,10 @@ public class BlockSwampReedRenderer implements ISimpleBlockRenderingHandler {
 			Block block, int modelId, RenderBlocks renderer) {
 		Tessellator.instance.setColorOpaque(255, 255, 255);
 		Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
-		renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReed, x, y, z, 1.0f);
+		renderer.drawCrossedSquares(BLBlockRegistry.swampReed.getIcons(1), x, y, z, 1.0f);
 		Block blockAbove = world.getBlock(x, y+1, z);
 		if(blockAbove == BLBlockRegistry.swampWater || blockAbove == Blocks.air) {
-			renderer.drawCrossedSquares(BLBlockRegistry.swampReedUW.iconSwampReedTop, x, y+1, z, 1.0f);
+			renderer.drawCrossedSquares(BLBlockRegistry.swampReed.getIcons(0), x, y+1, z, 1.0f);
 		}
 		return true;
 	}

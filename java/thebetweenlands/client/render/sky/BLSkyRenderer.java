@@ -34,6 +34,7 @@ import thebetweenlands.utils.Mesh.Triangle.Vertex;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.impl.EventAuroras;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BLSkyRenderer extends IRenderHandler {
 	//private int starDispList;
@@ -41,7 +42,8 @@ public class BLSkyRenderer extends IRenderHandler {
 	private int skyDispListStart;
 	private int skyDispList1;
 	private int skyDispList2;
-	private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
+	private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/skyTexture.png");
+	private static final ResourceLocation SKY_SPOOPY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
 	private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 	public final GeometryBuffer clipPlaneBuffer = new GeometryBuffer(true);
 	public static final BLSkyRenderer INSTANCE = new BLSkyRenderer();
@@ -247,7 +249,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glPopMatrix();
 	}
 
-	private void renderSkyTexture(Minecraft mc) {
+	private void renderSkyTexture(Minecraft mc, boolean renderClipPlane) {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -267,31 +269,33 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glPushMatrix();
 		GL11.glRotatef(180.0F, 1.0F, 0.0F, 0.0F);
 
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(-90.0D, -40.0D, -90.0D, 0.0D, 0.0D);
-		tessellator.addVertexWithUV(-90.0D, -40.0D, 90.0D, 0.0D, 1.0D);
-		tessellator.addVertexWithUV(90.0D, -40.0D, 90.0D, 1.0D, 1.0D);
-		tessellator.addVertexWithUV(90.0D, -40.0D, -90.0D, 1.0D, 0.0D);
-		tessellator.draw();
-
-		//Render clip plane (for god rays)
-		GL11.glDepthMask(true);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_FOG);
-		GL11.glColor4f(1, 1, 1, 1);
-		this.clipPlaneBuffer.bind();
-		this.clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
-		tessellator.startDrawingQuads();
-		tessellator.setColorRGBA(255, 255, 255, 255);
-		tessellator.addVertex(-9000.0D, -90.0D, -9000.0D);
-		tessellator.addVertex(-9000.0D, -90.0D, 9000.0D);
-		tessellator.addVertex(9000.0D, -90.0D, 9000.0D);
-		tessellator.addVertex(9000.0D, -90.0D, -9000.0D);
-		tessellator.draw();
-		this.clipPlaneBuffer.update(Minecraft.getMinecraft().getFramebuffer());
-		Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
-		GL11.glColor4f(1, 1, 1, 1);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		if(!renderClipPlane) {
+			tessellator.startDrawingQuads();
+			tessellator.addVertexWithUV(-90.0D, -40.0D, -90.0D, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(-90.0D, -40.0D, 90.0D, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(90.0D, -40.0D, 90.0D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(90.0D, -40.0D, -90.0D, 1.0D, 0.0D);
+			tessellator.draw();
+		} else {
+			//Render clip plane (for god rays)
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_TEXTURE_2D);
+			GL11.glDisable(GL11.GL_FOG);
+			GL11.glColor4f(1, 1, 1, 1);
+			this.clipPlaneBuffer.bind();
+			this.clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+			tessellator.startDrawingQuads();
+			tessellator.setColorRGBA(255, 255, 255, 255);
+			tessellator.addVertex(-9000.0D, -90.0D, -9000.0D);
+			tessellator.addVertex(-9000.0D, -90.0D, 9000.0D);
+			tessellator.addVertex(9000.0D, -90.0D, 9000.0D);
+			tessellator.addVertex(9000.0D, -90.0D, -9000.0D);
+			tessellator.draw();
+			this.clipPlaneBuffer.update(Minecraft.getMinecraft().getFramebuffer());
+			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+		}
 
 		GL11.glPopMatrix();
 		GL11.glDepthMask(true);
@@ -542,7 +546,32 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		} else {
-			this.renderSkyTexture(mc);
+			this.renderSkyTexture(mc, false);
+		}
+		
+		this.renderSkyTexture(mc, true);
+
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glEnable(GL11.GL_FOG);
+			mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE_RES);
+			GL11.glPushMatrix();
+			GL11.glRotatef(-120, 0, 1, 0);
+			GL11.glRotatef(-10, 1, 0, 0);
+			GL11.glTranslated(0, 50, 0);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			RenderHelper.disableStandardItemLighting();
+			GL11.glDepthMask(false);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+			GL11.glCallList(this.skyDispListStart);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glPopMatrix();
 		}
 
 		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
@@ -550,7 +579,7 @@ public class BLSkyRenderer extends IRenderHandler {
 				this.renderAuroras(mc);
 			}
 		}
-		
+
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1, 1, 1, 1);
 	}
