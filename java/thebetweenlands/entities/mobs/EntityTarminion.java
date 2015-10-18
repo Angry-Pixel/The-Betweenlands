@@ -22,7 +22,7 @@ import thebetweenlands.client.particle.BLParticle;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityTarminion extends EntityCreature {
+public class EntityTarminion extends EntityCreature implements IEntityBL {
 	private boolean playOnce = true;
 	public EntityTarminion(World world) {
 		super(world);

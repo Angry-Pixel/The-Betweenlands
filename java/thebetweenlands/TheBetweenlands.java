@@ -16,6 +16,7 @@ import thebetweenlands.command.CommandAspect;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.entity.VolarPadGlideHandler;
@@ -168,7 +169,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
 		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
 		MinecraftForge.EVENT_BUS.register(BloodSkyHandler.INSTANCE);
-
+		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
+		
 		RecipeHandler.init();
 		TeleporterHandler.init();
 

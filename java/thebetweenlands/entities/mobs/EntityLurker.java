@@ -376,6 +376,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			List<EntityLurker> nearLurkers = worldObj.getEntitiesWithinAABB(EntityLurker.class, boundingBox.expand(16, 16, 16));
 			for (EntityLurker fellowLurker : nearLurkers) {
 				// Thou shouldst joineth me! F'r thither is a great foe comest!
+				// RE: lol
 				fellowLurker.showDeadlyAffectionTowards(attacker);
 			}
 		}

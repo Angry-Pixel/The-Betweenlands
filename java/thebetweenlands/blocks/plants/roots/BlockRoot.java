@@ -32,12 +32,12 @@ public class BlockRoot extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return super.canPlaceBlockAt(world, x, y, z) && this.canPlaceBlockOn(world, world.getBlock(x, y-1, z), x, y-1, z);
 	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		return this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return this.canPlaceBlockOn(world, world.getBlock(x, y-1, z), x, y-1, z);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class BlockRoot extends Block {
 		}
 	}
 
-	protected boolean canPlaceBlockOn(Block block) {
-		return block instanceof BlockRootUW || block == this || block.isOpaqueCube();
+	protected boolean canPlaceBlockOn(World world, Block block, int x, int y, int z) {
+		return block instanceof BlockRootUW || block == this || block.isSideSolid(world, x, y, z, ForgeDirection.UP);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class BlockRoot extends Block {
 				Block blockAbove = world.getBlock(bx, by+1, bz);
 				Block blockAbove2 = world.getBlock(bx, by+2, bz);
 				boolean hasSpace = blockAbove == Blocks.air && blockAbove2 == Blocks.air;
-				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass) && hasSpace) {
+				if((cBlock == BLBlockRegistry.swampGrass || cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.mud) && hasSpace) {
 					generateRoot(world, bx, by+1, bz, world.rand.nextInt(6) + 2);
 				}
 			}

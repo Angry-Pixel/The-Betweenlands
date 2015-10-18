@@ -266,6 +266,8 @@ public class BLBlockRegistry {
     public static final Block blueEyedGrass = new BlockBLSmallPlants("blueEyedGrass");
     public static final Block boneset = new BlockBLSmallPlants("boneset");
     public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass");
+    public static final Block sludgecreep = new BlockBLSmallPlants("sludgecreep");
+    public static final Block deadWeedwoodBush = new BlockBLSmallPlants("deadWeedwoodBush");
 
     // UNDERGROWTH
     public static final Block hanger = new BlockBLHanger("hanger");

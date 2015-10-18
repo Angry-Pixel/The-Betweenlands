@@ -17,9 +17,9 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
-		int radius = rand.nextInt(1) + 1;
-		int height = rand.nextInt(5) + 5;
-		int maxRadius = 6;
+		int radius = rand.nextInt(2) + 3;
+		int height = rand.nextInt(2) + 15;
+		int maxRadius = 9;
 
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
@@ -42,51 +42,51 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 				}
 
 			if (yy == y + height/2 + 2) {
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z, 1, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z, 2, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x, yy - rand.nextInt(1), z + radius + 1, 3, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x, yy - rand.nextInt(1), z - radius - 1, 4, false, rand.nextInt(2) + 2);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z, 1, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z, 2, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x, yy - rand.nextInt(1), z + radius + 1, 3, false, rand.nextInt(2) + 4);
+				createBranch(world, rand, x, yy - rand.nextInt(1), z - radius - 1, 4, false, rand.nextInt(2) + 4);
 
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z + radius + 1, 5, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z - radius - 1, 6, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z + radius + 1, 7, false, rand.nextInt(2) + 2);
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z - radius - 1, 8, false, rand.nextInt(2) + 2);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z + radius + 1, 5, false, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z - radius - 1, 6, false, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z + radius + 1, 7, false, rand.nextInt(2) + 3);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z - radius - 1, 8, false, rand.nextInt(2) + 3);
 			}
 			
 			if (yy == y + height/2 + 4) {
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z, 1, 3);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z, 2, 3);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(1), z + radius + 1, 3, 3);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(1), z - radius - 1, 4, 3);
+				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z, 1, 4);
+				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z, 2, 4);
+				createSmallBranch(world, rand, x, yy - rand.nextInt(1), z + radius + 1, 3, 4);
+				createSmallBranch(world, rand, x, yy - rand.nextInt(1), z - radius - 1, 4, 4);
+
+				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z + radius + 1, 5, 3);
+				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z - radius - 1, 6, 3);
+				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z + radius + 1, 7, 3);
+				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z - radius - 1, 8, 3);
+			}
+			
+			if (yy == y + height/2 + 7) {
+				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 2);
+				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 2);
+				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, 2);
+				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, 2);
 
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z + radius + 1, 5, 2);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z - radius - 1, 6, 2);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z + radius + 1, 7, 2);
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z - radius - 1, 8, 2);
 			}
-			
-			if (yy == y + height/2 + 7) {
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 1);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 1);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, 1);
-				createSmallBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, 1);
-
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z + radius + 1, 5, 1);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z - radius - 1, 6, 1);
-				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(1), z + radius + 1, 7, 1);
-				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(1), z - radius - 1, 8, 1);
-			}
 
 			if (yy == y + 1) {
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, true, rand.nextInt(2) + 2);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(3), z, 1, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(3), z, 2, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x, yy - rand.nextInt(3), z + radius + 1, 3, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x, yy - rand.nextInt(3), z - radius - 1, 4, true, rand.nextInt(2) + 3);
 
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, true, rand.nextInt(2) + 2);
-				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 2);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z + radius + 1, 5, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z - radius - 1, 6, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, true, rand.nextInt(2) + 3);
+				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
 		return true;

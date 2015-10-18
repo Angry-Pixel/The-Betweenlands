@@ -19,7 +19,7 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityDragonFly extends EntityAmbientCreature {
+public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
 	public ChunkCoordinates currentFlightTarget;
 	public boolean entityFlying;
 
