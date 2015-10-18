@@ -43,13 +43,15 @@ public class EventSpoopy extends EnvironmentEvent {
 	private boolean wasSet = false;
 
 	public static boolean isSpoopy(World world) {
-		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
-		if(provider != null) {
-			return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
+		if(world != null) {
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+			if(provider != null) {
+				return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
+			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String getEventName() {
 		return "Spook";
