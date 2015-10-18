@@ -35,6 +35,8 @@ public class ConfigHandler {
 	public static boolean DEBUG_MENU_ON_START;
 	public static int SKY_RESOLUTION;
 
+	public static boolean rowboatView;
+
 	public Configuration config;
 	public static String path = "";
 
@@ -67,6 +69,12 @@ public class ConfigHandler {
 		DEBUG = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
 		DEBUG_MENU_ON_START = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
 
+		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
+
+		save();
+	}
+
+	public void save() {
 		if (config.hasChanged()) {
 			config.save();
 		}

@@ -10,7 +10,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
+import thebetweenlands.entities.WeedwoodBushUncollidableEntity;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
@@ -32,7 +32,7 @@ public class BlockWeedWoodBush extends Block {
 
 	@Override
 	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bounds, List boxes, Entity entity) {
-		if (entity instanceof WeedWoodBushUncollidableEntity) {
+		if (entity instanceof WeedwoodBushUncollidableEntity) {
 			return;
 		}
 		super.addCollisionBoxesToList(world, x, y, z, bounds, boxes, entity);

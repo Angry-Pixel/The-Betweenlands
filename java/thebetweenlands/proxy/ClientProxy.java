@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -33,6 +34,7 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
+import thebetweenlands.client.perspective.Perspective;
 import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -118,7 +120,6 @@ import thebetweenlands.entities.EntityBLArrow;
 import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntitySnailPoisonJet;
 import thebetweenlands.entities.EntityThrownTarminion;
-import thebetweenlands.entities.EntityWeedwoodRowboat;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -143,6 +144,7 @@ import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.render.BrightnessHandler;
@@ -188,7 +190,25 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
-		DOUBLE_PLANTS, RUBBER_LOG, WEEDWOOD_BUSH, SWAMP_WATER, SWAMP_REED, STALACTITE, ROOT, MODEL_PLANT, GOLDEN_CLUB, BOG_BEAN, MARSH_MARIGOLD, WATER_WEEDS, DOOR, WALKWAY, RUBBER_TAP, LEVER, MUDFLOWERPOT, SLOPE, HOLLOW_LOG;
+		DOUBLE_PLANTS,
+		RUBBER_LOG,
+		WEEDWOOD_BUSH,
+		SWAMP_WATER,
+		SWAMP_REED,
+		STALACTITE,
+		ROOT,
+		MODEL_PLANT,
+		GOLDEN_CLUB,
+		BOG_BEAN,
+		MARSH_MARIGOLD,
+		WATER_WEEDS,
+		DOOR,
+		WALKWAY,
+		RUBBER_TAP,
+		LEVER,
+		MUDFLOWERPOT,
+		SLOPE,
+		HOLLOW_LOG;
 
 		private final int ID;
 
@@ -212,7 +232,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void init() {
 		super.init();
-		//Register packet handlers
+		// Register packet handlers
 		try {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ClientPacketHandler.class, Side.CLIENT);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
@@ -221,7 +241,7 @@ public class ClientProxy extends CommonProxy {
 			e.printStackTrace();
 		}
 
-		//Mob Entity Renderer
+		// Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderAngler());
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, new RenderBlindCaveFish());
@@ -251,7 +271,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, new ItemTarminionRenderer());
 		RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, new RenderWeedwoodRowboat());
 
-		//Tile Entity Renderer
+		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLCraftingTable.class, new TileEntityBLWorkbenchRenderer());
@@ -273,7 +293,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new TileEntityTarLootPot3Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new TileEntityItemShelfRenderer());
 
-		//Item Entity Renderer
+		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.animator), new ItemAnimatorRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.weedwoodChest), new ItemWeedWoodChestRenderer());
@@ -291,7 +311,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 
-		//Block Renderer
+		// Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberLogRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockWeedWoodBushRenderer());
@@ -308,7 +328,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 
-		//Events
+		// Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
 		AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
 		FMLCommonHandler.instance().bus().register(ambientHandler);
@@ -390,42 +410,38 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void uncorruptPlayerSkin(EntityPlayer player)
-	{
+	public void uncorruptPlayerSkin(EntityPlayer player) {
 		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
 		BufferedImage image = getOriginalPlayerSkin(entityPlayer);
-		if (image != null) uploadPlayerSkin(entityPlayer, image);
+		if (image != null) {
+			uploadPlayerSkin(entityPlayer, image);
+		}
 	}
 
-	public boolean hasBackup(AbstractClientPlayer player)
-	{
+	public boolean hasBackup(AbstractClientPlayer player) {
 		return new File("skinbackup" + File.separator + player.getCommandSenderName() + ".png").exists();
 	}
 
-	private void backupPlayerSkin(AbstractClientPlayer entityPlayer)
-	{
+	private void backupPlayerSkin(AbstractClientPlayer entityPlayer) {
 		BufferedImage bufferedImage = TextureManager.getPlayerSkin(entityPlayer);
 
 		File file = new File("skinbackup");
 		file.mkdir();
 		File skinFile = new File(file, entityPlayer.getCommandSenderName() + ".png");
-		try
-		{
+		try {
 			skinFile.createNewFile();
-			if (bufferedImage != null) ImageIO.write(bufferedImage, "PNG", skinFile);
-		}
-		catch (IOException e)
-		{
+			if (bufferedImage != null) {
+				ImageIO.write(bufferedImage, "PNG", skinFile);
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void uploadPlayerSkin(AbstractClientPlayer player, BufferedImage bufferedImage)
-	{
+	private void uploadPlayerSkin(AbstractClientPlayer player, BufferedImage bufferedImage) {
 		ITextureObject textureObject = Minecraft.getMinecraft().renderEngine.getTexture(player.getLocationSkin());
 
-		if (textureObject == null)
-		{
+		if (textureObject == null) {
 			textureObject = new ThreadDownloadImageData(null, String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", StringUtils.stripControlCodes(player.getCommandSenderName())), AbstractClientPlayer.locationStevePng, new ImageBufferDownload());
 			Minecraft.getMinecraft().renderEngine.loadTexture(player.getLocationSkin(), textureObject);
 		}
@@ -433,17 +449,15 @@ public class ClientProxy extends CommonProxy {
 		TextureManager.uploadTexture(textureObject, bufferedImage);
 	}
 
-	private BufferedImage getOriginalPlayerSkin(AbstractClientPlayer entityPlayer)
-	{
+	private BufferedImage getOriginalPlayerSkin(AbstractClientPlayer entityPlayer) {
 		File file = new File("skinbackup" + File.separator + entityPlayer.getCommandSenderName() + ".png");
 		BufferedImage bufferedImage = null;
 
-		try
-		{
-			if (file.exists()) bufferedImage = ImageIO.read(file);
-		}
-		catch (IOException e)
-		{
+		try {
+			if (file.exists()) {
+				bufferedImage = ImageIO.read(file);
+			}
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -454,47 +468,73 @@ public class ClientProxy extends CommonProxy {
 	public void updateWispParticles(TileEntityWisp te) {
 		Iterator<Object> i = te.particleList.iterator();
 		while (i.hasNext()) {
-			if(((EntityWispFX)i.next()).isDead) {
+			if (((EntityWispFX) i.next()).isDead) {
 				i.remove();
 			}
 		}
-		for(Object particle : te.particleList) {
-			((EntityWispFX)particle).onUpdate();
+		for (Object particle : te.particleList) {
+			((EntityWispFX) particle).onUpdate();
 		}
 	}
 
 	@Override
 	public void spawnThem() {
-		if(Minecraft.getMinecraft().thePlayer.dimension != ConfigHandler.DIMENSION_ID) return;
-		if(FogHandler.INSTANCE.hasDenseFog() && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
-			int probability = (int)(FogHandler.INSTANCE.getCurrentFogEnd()) / 2 + 16;
-			if(Minecraft.getMinecraft().theWorld.rand.nextInt(probability) == 0) {
+		if (Minecraft.getMinecraft().thePlayer.dimension != ConfigHandler.DIMENSION_ID) {
+			return;
+		}
+		if (FogHandler.INSTANCE.hasDenseFog() && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
+			int probability = (int) FogHandler.INSTANCE.getCurrentFogEnd() / 2 + 16;
+			if (Minecraft.getMinecraft().theWorld.rand.nextInt(probability) == 0) {
 				double xOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;
 				double zOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;
 				double sx = Minecraft.getMinecraft().renderViewEntity.posX + xOff;
 				double sz = Minecraft.getMinecraft().renderViewEntity.posZ + zOff;
-				double sy = Minecraft.getMinecraft().theWorld.getHeightValue((int)sx, (int)sz) + 1.0f + Minecraft.getMinecraft().theWorld.rand.nextFloat() * 2.5f;
-				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityThemFX(
-						Minecraft.getMinecraft().theWorld, sx, sy, sz));
+				double sy = Minecraft.getMinecraft().theWorld.getHeightValue((int) sx, (int) sz) + 1.0f + Minecraft.getMinecraft().theWorld.rand.nextFloat() * 2.5f;
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityThemFX(Minecraft.getMinecraft().theWorld, sx, sy, sz));
 			}
 		}
 	}
 
 	@Override
-	public void playPortalSounds(Entity entity, int timer) { 
-		if(entity instanceof EntityPlayerSP){
-			EntityPlayerSP player = (EntityPlayerSP)entity;
-			if(timer < 120) {
+	public void playPortalSounds(Entity entity, int timer) {
+		if (entity instanceof EntityPlayerSP) {
+			EntityPlayerSP player = (EntityPlayerSP) entity;
+			if (timer < 120) {
 				player.closeScreen();
-				if (timer == 119)
+				if (timer == 119) {
 					player.playSound("thebetweenlands:portalTrigger", 1.0F, 0.8F);
-				if(timer == 2)
+				}
+				if (timer == 2) {
 					player.playSound("thebetweenlands:portalTravel", 1.25f, 0.8f);
+				}
 			}
 		}
 	}
 
-    public DebugHandlerCommon getDebugHandler() {
-    	return DebugHandlerClient.INSTANCE;
-    }
+	@Override
+	public void onPlayerEnterWeedwoodRowboat() {
+		if (ConfigHandler.rowboatView) {
+			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.switchTo();
+		} else {
+			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE.switchTo();
+		}
+	}
+
+	@Override
+	public void onPlayerLeaveWeedwoodRowboat() {
+		Perspective.FIRST_PERSON.switchTo();
+	}
+
+	@Override
+	public DebugHandlerCommon getDebugHandler() {
+		return DebugHandlerClient.INSTANCE;
+	}
+
+	@Override
+	public void updateRiderYawInWeedwoodRowboat(EntityWeedwoodRowboat rowboat, EntityLivingBase rider) {
+		if (WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
+			rider.rotationYaw += (rowboat.rotationYaw - rider.rotationYaw - 90) * 0.2F;
+			rider.rotationPitch *= 0.8F;
+		}
+	}
 }

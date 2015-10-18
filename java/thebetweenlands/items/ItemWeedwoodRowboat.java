@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 
 public class ItemWeedwoodRowboat extends Item {
     public ItemWeedwoodRowboat() {

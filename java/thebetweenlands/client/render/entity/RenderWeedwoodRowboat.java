@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelWeedwoodRowboat;
-import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.lib.ModInfo;
 
 public class RenderWeedwoodRowboat extends Render {

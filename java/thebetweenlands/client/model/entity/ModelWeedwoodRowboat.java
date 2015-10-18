@@ -2,11 +2,11 @@ package thebetweenlands.client.model.entity;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelWeedwoodRowboat extends ModelBase {
 	public ModelRenderer keel;
