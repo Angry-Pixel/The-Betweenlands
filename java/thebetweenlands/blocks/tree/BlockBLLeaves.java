@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.tree;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -14,18 +16,20 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-
-import java.util.Random;
+import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class BlockBLLeaves extends BlockLeaves {
 
 	private String type;
 	@SideOnly(Side.CLIENT)
 	private IIcon fastIcon;
+	@SideOnly(Side.CLIENT)
+	private IIcon spoopyIcon;
+	@SideOnly(Side.CLIENT)
+	private IIcon spoopyFastIcon;
 	private boolean placedByPlayer;
 
 	public BlockBLLeaves(String blockName) {
@@ -65,6 +69,12 @@ public class BlockBLLeaves extends BlockLeaves {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+		if(provider != null) {
+			if(provider.getEnvironmentEventRegistry().SPOOPY.isActive()) {
+				return Minecraft.getMinecraft().gameSettings.fancyGraphics ? spoopyIcon : spoopyFastIcon;
+			}
+		}
 		return Minecraft.getMinecraft().gameSettings.fancyGraphics ? blockIcon : fastIcon;
 	}
 
@@ -84,6 +94,8 @@ public class BlockBLLeaves extends BlockLeaves {
 	public void registerBlockIcons(IIconRegister reg) {
 		blockIcon = reg.registerIcon(getTextureName() + "Fancy");
 		fastIcon = reg.registerIcon(getTextureName() + "Fast");
+		spoopyIcon = reg.registerIcon(getTextureName() + "FancySpoopy");
+		spoopyFastIcon = reg.registerIcon(getTextureName() + "FastSpoopy");
 	}
 
 	@Override

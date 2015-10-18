@@ -10,18 +10,21 @@ import thebetweenlands.world.events.impl.EventAuroras;
 import thebetweenlands.world.events.impl.EventBloodSky;
 import thebetweenlands.world.events.impl.EventDenseFog;
 import thebetweenlands.world.events.impl.EventHeavyRain;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class EnvironmentEventRegistry {
 	public final EventDenseFog DENSE_FOG = new EventDenseFog(this);
 	public final EnvironmentEvent HEAVY_RAIN = new EventHeavyRain(this);
 	public final EventAuroras AURORAS = new EventAuroras(this);
 	public final EventBloodSky BLOODSKY = new EventBloodSky(this);
+	public final EventSpoopy SPOOPY = new EventSpoopy(this);
 	
 	public void init() {
 		register(DENSE_FOG);
 		register(HEAVY_RAIN);
 		register(AURORAS);
 		register(BLOODSKY);
+		register(SPOOPY);
 	}
 
 	private final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();
