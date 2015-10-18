@@ -459,8 +459,13 @@ public class MainShader extends CShader {
 			weight *= 1.0F - mult;
 		}
 
+		Framebuffer worldDepthBuffer = this.getDepthBuffer();
+		Framebuffer clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer();
+		
+		if(worldDepthBuffer == null || clipPlaneBuffer == null) return; //FBOs not yet ready
+		
 		//Extract occluding objects
-		this.occlusionExtractor.setFBOs(this.getDepthBuffer(), BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer());
+		this.occlusionExtractor.setFBOs(worldDepthBuffer, clipPlaneBuffer);
 		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
 		//Apply god's ray
