@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
@@ -14,6 +15,7 @@ import thebetweenlands.world.events.EnvironmentEventRegistry;
 public class EventSpoopy extends EnvironmentEvent {
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 21, 0, 0).getTime().getTime();
 
+	private World world;
 	private World lastWorld;
 	private boolean chatSent = false;
 	private float skyTransparency = 0.0F;
@@ -45,10 +47,18 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		if(active && TheBetweenlands.proxy.getClientWorld() != null && this.lastWorld != TheBetweenlands.proxy.getClientWorld() && TheBetweenlands.proxy.getClientPlayer() != null) {
+		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			player.addChatMessage(new ChatComponentText("You feel a chill in the air... the haunting season has begun!"));
+		}
+		//Mark blocks in range for render update to update block textures
+		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
+			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+			int px = MathHelper.floor_double(player.posX) - 256;
+			int py = MathHelper.floor_double(player.posY) - 256;
+			int pz = MathHelper.floor_double(player.posZ) - 256;
+			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
 		super.setActive(active, markDirty);
 	}
@@ -56,6 +66,7 @@ public class EventSpoopy extends EnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
+		this.world = world;
 		if(!world.isRemote) {
 			long dayDiff = this.getDayDiff();
 			if(dayDiff >= 0 && dayDiff <= 11) {
