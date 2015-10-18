@@ -54,7 +54,7 @@ public class BlockBLLog extends BlockLog {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getSideIcon(int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark"))) {
 			return this.spoopyIconSide;
 		}
 		return iconSide;
@@ -63,7 +63,7 @@ public class BlockBLLog extends BlockLog {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getTopIcon(int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark"))) {
 			return this.spoopyIconTop;
 		}
 		return iconTop;
@@ -77,9 +77,13 @@ public class BlockBLLog extends BlockLog {
 			iconTop = iconSide;
 		else
 			iconTop = iconRegister.registerIcon(getTextureName()+"Top");
-		if(type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog")) {
+		if(type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark")) {
 			this.spoopyIconSide = iconRegister.registerIcon(getTextureName()+"Spoopy");
-			this.spoopyIconTop = iconRegister.registerIcon(getTextureName()+"TopSpoopy");
+			if(type.equals("weedwoodBark")) {
+				this.spoopyIconTop = this.spoopyIconSide;
+			} else {
+				this.spoopyIconTop = iconRegister.registerIcon(getTextureName()+"TopSpoopy");
+			}
 		}
 	}
 

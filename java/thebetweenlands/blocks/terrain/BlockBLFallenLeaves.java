@@ -88,6 +88,7 @@ public class BlockBLFallenLeaves extends BlockBush{
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
+		super.registerBlockIcons(reg);
 		spoopyIcon = reg.registerIcon(this.getTextureName() + "Spoopy");
 	}
 
