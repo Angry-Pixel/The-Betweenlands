@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTallGrass;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,9 @@ import java.util.Random;
 public class BlockBLSmallPlants extends BlockTallGrass {
 	protected final String name;
 
+	@SideOnly(Side.CLIENT)
+	private IIcon spoopyBlockIcon;
+	
 	public BlockBLSmallPlants(String type) {
 		super();
 		name = type;
@@ -103,6 +108,9 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("swampTallGrass")) {
+			return spoopyBlockIcon;
+		}
 		return blockIcon;
 	}
 
@@ -110,6 +118,9 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		blockIcon = iconRegister.registerIcon("thebetweenlands:" + name);
+		if(this.name.equals("swampTallGrass")) {
+			spoopyBlockIcon = iconRegister.registerIcon("thebetweenlands:" + name + "Spoopy");
+		}
 	}
 
 }

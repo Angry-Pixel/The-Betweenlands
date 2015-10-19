@@ -3,21 +3,31 @@ package thebetweenlands.blocks.plants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class BlockBLHanger extends BlockBush  implements IShearable {
 	private String type;
 
+	@SideOnly(Side.CLIENT)
+	private IIcon spoopyIcon;
+	
 	public BlockBLHanger(String blockName) {
     	super(Material.plants);
         setHardness(0.0F);
@@ -84,6 +94,22 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 		canBlockStay(world, x, y, z);
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister reg) {
+		super.registerBlockIcons(reg);
+		spoopyIcon = reg.registerIcon(this.getTextureName() + "Spoopy");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			return spoopyIcon;
+		}
+		return super.getIcon(side, meta);
+	}
+	
 	protected boolean isValidBlock(Block block) {
 		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block instanceof BlockBLHanger;
 	}

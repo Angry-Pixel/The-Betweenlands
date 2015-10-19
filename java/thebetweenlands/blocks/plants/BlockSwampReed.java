@@ -1,10 +1,14 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -13,19 +17,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-
-import java.util.ArrayList;
-import java.util.Random;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockSwampReed extends BlockBush implements IPlantable {
-	public IIcon top, bottom;
+	@SideOnly(Side.CLIENT)
+	public IIcon top, bottom, spoopyTop, spoopyBottom;
 
 	public BlockSwampReed() {
 		super(Material.coral);
@@ -131,12 +133,18 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			return spoopyTop;
+		}
 		return top;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			return (world.getBlockMetadata(x, y, z) & 8) != 0 ? spoopyTop : spoopyBottom;
+		}
 		return (world.getBlockMetadata(x, y, z) & 8) != 0 ? top : bottom;
 	}
 
@@ -145,6 +153,27 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	public void registerBlockIcons(IIconRegister reg) {
 		top = reg.registerIcon("thebetweenlands:swampReedTop");
 		bottom = reg.registerIcon("thebetweenlands:swampReedBottom");
+		spoopyTop = reg.registerIcon("thebetweenlands:swampReedTopSpoopy");
+		spoopyBottom = reg.registerIcon("thebetweenlands:swampReedBottomSpoopy");
+	}
+
+	public IIcon getIcons(int i) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			switch(i) {
+			case 0:
+				return this.spoopyTop;
+			case 1:
+				return this.spoopyBottom;
+			}
+		} else {
+			switch(i) {
+			case 0:
+				return this.top;
+			case 1:
+				return this.bottom;
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -184,7 +213,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 			}
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {

@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -7,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -15,17 +16,12 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
+import thebetweenlands.client.render.block.water.SwampReedUWRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
-import java.util.Random;
-
 public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
-	public IIcon iconSwampReed;
-	public IIcon iconSwampReedTop;
-
 	public BlockSwampReedUW() {
 		super(BLFluidRegistry.swampWaterReed, Material.water);
 		setStepSound(Block.soundTypeGrass);
@@ -41,9 +37,7 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconSwampReed = iconRegister.registerIcon("thebetweenlands:swampReedBottom");
-		this.iconSwampReedTop = iconRegister.registerIcon("thebetweenlands:swampReedTop");
-		this.setSpecialRenderer(new WaterSimplePlantRenderer(this.iconSwampReed, this.iconSwampReedTop));
+		this.setSpecialRenderer(new SwampReedUWRenderer());
 		super.registerBlockIcons(iconRegister);
 	}
 
@@ -85,27 +79,27 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 
 	@Override
 	public int quantityDropped(Random rnd) {
-        return 1;
-    }
-	
+		return 1;
+	}
+
 	@Override
 	public int damageDropped(int p_149692_1_) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
-    }
-	
+	}
+
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItem();
 	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
-	
-    @Override
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return false;
+	}
+
+	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-    	this.checkAndDropBlock(world, x, y, z);
+		this.checkAndDropBlock(world, x, y, z);
 		if (world.isAirBlock(x, y + 1, z) || world.getBlock(x, y + 1, z) == BLBlockRegistry.swampWater) {
 			int meta = world.getBlockMetadata(x, y, z);
 			if (meta == 10) {
@@ -120,7 +114,7 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 			}
 		}
 	}
-    
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);

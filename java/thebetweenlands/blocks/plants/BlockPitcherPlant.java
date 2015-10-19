@@ -12,7 +12,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
 
-public class BlockPitcherPlant extends DoubleHeightPlant {
+public class BlockPitcherPlant extends BlockDoubleHeightPlant {
 	public IIcon modelTexture1;
 
 	public BlockPitcherPlant() {

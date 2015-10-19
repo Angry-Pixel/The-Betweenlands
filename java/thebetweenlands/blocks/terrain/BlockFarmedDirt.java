@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +17,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
@@ -24,8 +26,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.block.ItemBlockGeneric;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
@@ -36,7 +37,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public int DECAY_TIME = 10, DUG_SOIL_REVERT_TIME = 10;
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
-	private IIcon sideIconDirt, sideIconGrass;
+	@SideOnly(Side.CLIENT)
+	private IIcon sideIconDirt, sideIconGrass, iconFertGrassSpoopy, iconFertGrassDecayedSpoopy, iconDugSwampGrassSpoopy;
 
 	public BlockFarmedDirt() {
 		super(Material.ground);
@@ -50,19 +52,19 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-			int meta = getDamageValue(world, x, y, z);
-			ItemStack stack = player.getCurrentEquippedItem();
-			if (stack !=null && stack.getItem() instanceof SpadeBL) {
-				if (!world.isRemote) {
-					if(meta == PURE_SWAMP_DIRT) {
-						world.setBlockMetadataWithNotify(x, y, z, DUG_PURE_SWAMP_DIRT, 3);
-						world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
-						world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
-						stack.damageItem(1, player);
-					}
+		int meta = getDamageValue(world, x, y, z);
+		ItemStack stack = player.getCurrentEquippedItem();
+		if (stack !=null && stack.getItem() instanceof SpadeBL) {
+			if (!world.isRemote) {
+				if(meta == PURE_SWAMP_DIRT) {
+					world.setBlockMetadataWithNotify(x, y, z, DUG_PURE_SWAMP_DIRT, 3);
+					world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, stepSound.getStepResourcePath(), (stepSound.getVolume() + 1.0F) / 2.0F, stepSound.getPitch() * 0.8F);
+					world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
+					stack.damageItem(1, player);
 				}
-				return true;
-			}	
+			}
+			return true;
+		}	
 		if (stack != null && stack.getItem() == BLItemRegistry.materialsBL && stack.getItemDamage() == EnumMaterialsBL.COMPOST.ordinal()) {
 			if (!world.isRemote) {
 				if (meta == DUG_SWAMP_DIRT || meta == DUG_SWAMP_GRASS) {
@@ -109,7 +111,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			drops.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.swampDirt), 1, 0));
 		if(meta == DUG_SWAMP_GRASS || meta == FERT_GRASS || meta == FERT_GRASS_DECAYED)
 			drops.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.swampGrass), 1, 0));
-		
+
 		return drops;
 	}
 
@@ -143,6 +145,10 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		int i = 0;
 		for (String path : iconPaths)
 			icons[i++] = reg.registerIcon("thebetweenlands:" + path);
+
+		iconFertGrassSpoopy = reg.registerIcon("thebetweenlands:fertGrassSpoopy");
+		iconFertGrassDecayedSpoopy = reg.registerIcon("thebetweenlands:fertGrassDecayedSpoopy");
+		iconDugSwampGrassSpoopy = reg.registerIcon("thebetweenlands:dugSwampGrassSpoopy");
 	}
 
 	@Override
@@ -166,9 +172,24 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				return sideIconDirt;
 		if(meta == DUG_SWAMP_GRASS || meta == FERT_GRASS || meta == FERT_GRASS_DECAYED)
 			if (side == 1)
-				return icons[meta];
+				if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+					switch(meta) {
+					case DUG_SWAMP_GRASS:
+						return this.iconDugSwampGrassSpoopy;
+					case FERT_GRASS:
+						return this.iconFertGrassSpoopy;
+					case FERT_GRASS_DECAYED:
+						return this.iconFertGrassDecayedSpoopy;
+					}
+				} else {
+					return icons[meta];
+				}
 			else
-				return sideIconGrass;
+				if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+					return BLBlockRegistry.swampGrass.getIcon(2, 0);
+				} else {
+					return sideIconGrass;
+				}
 		return icons[meta];
 	}
 

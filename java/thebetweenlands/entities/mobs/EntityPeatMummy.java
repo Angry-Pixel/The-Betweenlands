@@ -1,5 +1,8 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,13 +25,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_RANGE_ATTRIB = (new RangedAttribute("bl.spawnRange", 8.0D, 0, Double.MAX_VALUE)).setDescription("Spawning Range");
 
 	public static final IAttribute CHARGING_COOLDOWN_ATTRIB = (new RangedAttribute("bl.chargingCooldown", 160.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Cooldown");
-	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.chargingPreparationSpeed", 70.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
+	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.chargingPreparationSpeed", 60.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
 	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
 	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.5D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
 	public static final float BASE_SPEED = 0.2F;
-	public static final float BASE_DAMAGE = 6.0F;
+	public static final float BASE_DAMAGE = 8.0F;
 
 	private float prevYOffset = 0.0F;
 	public static final int SPAWNING_STATE_DW = 20;
@@ -38,15 +41,22 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	private int chargingTime = 0;
 	public static final int CHARGING_STATE_DW = 21;
 
+	//Scream timer is only used for the screen shake and is client side only.
 	private int screamTimer = 0;
 	private boolean screaming = false;
 	private boolean wasScreaming = false;
-	//TODO: Adjust to length of screaming sound (20 per second). Used for screen shake
+	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
 
+	private static final List<Block> SPAWN_BLOCKS = new ArrayList<Block>();
+	static {
+		SPAWN_BLOCKS.add(BLBlockRegistry.mud);
+		SPAWN_BLOCKS.add(BLBlockRegistry.peat);
+	}
+	
 	public EntityPeatMummy(World world) {
 		super(world);
-		setSize(1.0F, 1.0F);
+		setSize(1.5F, 1.3F);
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
@@ -61,7 +71,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(80.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
@@ -120,14 +130,14 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 			if(this.shouldUpdateState()) {
 				if(this.getSpawningState() == 0) {
-					//TODO: Play sound
+					this.playSound("thebetweenlands:peatMummyEmerge", 1.2F, 1.0F);
 				}
 				this.updateSpawningState();
 			} else if(this.getSpawningProgress() != 0.0F) {
 				this.setSpawningFinished();
 			}
 
-			if(this.isInMud() && this.getSpawningProgress() != 1.0F) {
+			if(this.isInValidSpawnPad() && this.getSpawningProgress() != 1.0F) {
 				this.yOffset = this.getCurrentOffset();
 				this.motionY = 0;
 				this.motionX = 0;
@@ -167,7 +177,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 				if(this.chargingCooldown == 0) {
 					this.chargingCooldown = this.getChargingCooldown() + this.worldObj.rand.nextInt(this.getChargingCooldown() / 2);
-					//TODO: Play sound
+					this.playSound("thebetweenlands:peatMummyCharge", 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					this.setChargingState(1);
 				}
 			} else if(this.isPreparing()){
@@ -213,13 +223,11 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		return this.getEntityToAttack() != null;
 	}
 
-	public boolean isInMud() {
+	public boolean isInValidSpawnPad() {
 		double initialPosY = this.posY - this.yOffset;
 		int ebx = MathHelper.floor_double(this.posX);
-		int eby = MathHelper.floor_double(initialPosY); //Ignore offset, want to check if there is mud at the initial position
+		int eby = MathHelper.floor_double(initialPosY); //Ignore offset, want to check at the initial position
 		int ebz = MathHelper.floor_double(this.posZ);
-
-		Block spawnBlock = BLBlockRegistry.mud;
 
 		boolean inMud = true;
 
@@ -228,7 +236,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				for(int x = -1; x <= 1; x++) {
 					for(int z = -1; z <= 1; z++) {
 						Block cb = this.worldObj.getBlock(ebx + x, eby + y, ebz + z);
-						if(!(y == -1 ? (cb == spawnBlock) : (cb.isOpaqueCube() || cb == spawnBlock))) {
+						if(!(y == -1 ? (SPAWN_BLOCKS.contains(cb)) : (cb.isOpaqueCube() || SPAWN_BLOCKS.contains(cb)))) {
 							inMud = false;
 							break checkLoop;
 						}
@@ -283,7 +291,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.isInMud();
+		return super.getCanSpawnHere() && this.isInValidSpawnPad();
 	}
 
 	@Override
@@ -301,6 +309,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		}
 		return super.attackEntityAsMob(entity);
 	}
+	
+	@Override
+	public void playLivingSound() {
+        if(this.getSpawningProgress() == 1.0F) {
+        	super.playLivingSound();
+        }
+    }
 
 	public float getCurrentOffset() {
 		return (float) ((-this.getSpawnOffset() + this.getSpawningProgress() * this.getSpawnOffset()));
@@ -377,5 +392,22 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	@SideOnly(Side.CLIENT)
 	public float getScreamingProgress() {
 		return 1.0F / SCREAMING_TIMER_MAX * this.screamTimer;
+	}
+	
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:peatMummyLiving" + randomSound;
+	}
+
+	@Override
+	protected String getHurtSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:peatMummyHurt" + randomSound;
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:peatMummyDeath";
 	}
 }
