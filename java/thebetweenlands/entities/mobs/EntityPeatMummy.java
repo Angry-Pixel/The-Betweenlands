@@ -109,7 +109,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(/*110.0D*/2);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
