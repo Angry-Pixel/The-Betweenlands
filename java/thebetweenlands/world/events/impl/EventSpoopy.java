@@ -29,7 +29,7 @@ public class EventSpoopy extends EnvironmentEvent {
 	}
 
 	public float getSkyTransparency(float partialTicks) {
-		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 3.0F;
+		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
 	}
 
 	public EventSpoopy(EnvironmentEventRegistry registry) {
