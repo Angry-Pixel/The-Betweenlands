@@ -39,7 +39,6 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.DecayTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
-import thebetweenlands.client.perspective.Perspective;
 import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -158,6 +157,7 @@ import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.GLUProjectionHandler;
+import thebetweenlands.event.render.ItemTextureTicker;
 import thebetweenlands.event.render.OverlayHandler;
 import thebetweenlands.event.render.ScreenShakeHandler;
 import thebetweenlands.event.render.ShaderHandler;
@@ -352,6 +352,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(OverlayHandler.INSTANCE);
 		WeedwoodRowboatHandler.INSTANCE.init();
 		FMLCommonHandler.instance().bus().register(ScreenShakeHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ItemTextureTicker.INSTANCE);
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);

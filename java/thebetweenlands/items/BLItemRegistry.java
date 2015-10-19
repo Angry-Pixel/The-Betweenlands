@@ -4,7 +4,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.*;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemReed;
+import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
@@ -12,8 +18,6 @@ import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
 import thebetweenlands.recipes.BLMaterials;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLItemRegistry {
     public static final List<Item> ITEMS = new ArrayList<Item>();
@@ -130,6 +134,7 @@ public class BLItemRegistry {
     public static final Item doorOctine = new ItemBLDoor(BLBlockRegistry.doorOctine);
     
     //MISC
+    public static final ItemShimmerStone shimmerStone = new ItemShimmerStone();
     public static final Item angryPebble = new ItemAngryPebble();
     public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(1);
     public static final Item swampKelp = new Item().setUnlocalizedName("thebetweenlands.swampKelp").setTextureName("thebetweenlands:swampKelp");
@@ -164,7 +169,7 @@ public class BLItemRegistry {
         ModCreativeTabs.items.setTab(weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, swampKelp, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig);
-        ModCreativeTabs.specials.setTab(tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);
+        ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
         ModCreativeTabs.plants.setTab(middleFruitSeeds);
