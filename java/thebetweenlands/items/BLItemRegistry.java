@@ -128,6 +128,9 @@ public class BLItemRegistry {
     public static final Item bulbCappedMushroomItem = new ItemBulbCappedMushroom().setUnlocalizedName("thebetweenlands.bulbCappedMushroomItem").setTextureName("thebetweenlands:bulbCappedMushroom");
     public static final Item friedSwampKelp = new ItemFood(5, 8.0F, false).setUnlocalizedName("thebetweenlands.friedSwampKelp").setTextureName("thebetweenlands:friedSwampKelp");
     public static final Item forbiddenFig = new ItemForbiddenFig().setUnlocalizedName("thebetweenlands.forbiddenFig").setTextureName("thebetweenlands:forbiddenFig");
+    public static final Item candyBlue = new ItemFood(3, 10F, false).setUnlocalizedName("thebetweenlands.candyBlue").setTextureName("thebetweenlands:sweetBlue");
+    public static final Item candyRed = new ItemFood(3, 10F, false).setUnlocalizedName("thebetweenlands.candyRed").setTextureName("thebetweenlands:sweetRed");
+    public static final Item candyYellow = new ItemFood(3, 10F, false).setUnlocalizedName("thebetweenlands.candyYellow").setTextureName("thebetweenlands:sweetYellow");
     
     //DOORS
     public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
@@ -168,7 +171,7 @@ public class BLItemRegistry {
     private static void initCreativeTabs() {
         ModCreativeTabs.items.setTab(weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, swampKelp, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
-                                     wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig);
+                                     wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
         ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
