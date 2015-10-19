@@ -61,6 +61,7 @@ implements ISubBlocksBlock
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
 		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
 			switch(meta) {

@@ -157,6 +157,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 		spoopyBottom = reg.registerIcon("thebetweenlands:swampReedBottomSpoopy");
 	}
 
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcons(int i) {
 		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
 			switch(i) {

@@ -138,6 +138,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
 		sideIconDirt = reg.registerIcon("thebetweenlands:swampDirt");
 		sideIconGrass = reg.registerIcon("thebetweenlands:swampGrassSide");
@@ -152,6 +153,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
 		if (meta < PURE_SWAMP_DIRT || meta >= icons.length + 2)
 			return null;
@@ -225,6 +227,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;
 		int meta = getDamageValue(world, x, y, z);

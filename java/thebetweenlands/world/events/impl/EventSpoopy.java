@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
@@ -44,7 +43,7 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	public static boolean isSpoopy(World world) {
 		if(world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
 			if(provider != null) {
 				return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
 			}
