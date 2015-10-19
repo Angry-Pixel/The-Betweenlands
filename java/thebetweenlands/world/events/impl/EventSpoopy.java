@@ -14,7 +14,7 @@ import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 public class EventSpoopy extends EnvironmentEvent {
-	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 21, 0, 0).getTime().getTime();
+	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
 	private World world;
 	private World lastWorld;
