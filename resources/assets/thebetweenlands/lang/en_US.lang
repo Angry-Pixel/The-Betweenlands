@@ -196,6 +196,12 @@ tile.thebetweenlands.limestoneBrickWall.name=Limestone Brick Wall
 tile.thebetweenlands.limestoneBrickStairs.name=Limestone Brick Stairs
 tile.thebetweenlands.betweenstoneBrickStairs.name=Betweenstone Brick Stairs
 tile.thebetweenlands.betweenstoneBrickWall.name=Betweenstone Brick Wall
+tile.thebetweenlands.sludgyDirt.name=Sludgy Dirt
+tile.thebetweenlands.tarLootPot1.name=Pot of Chance
+tile.thebetweenlands.tarLootPot2.name=Pot of Chance
+tile.thebetweenlands.tarLootPot3.name=Pot of Chance
+tile.thebetweenlands.tarBeastSpawner.name=Tar Beast Spawner
+tile.thebetweenlands.thatchSlope.name=Thatch Roof
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
@@ -410,6 +416,10 @@ item.thebetweenlands.forbiddenFig.name=Forbidden Fig
 item.thebetweenlands.tarBeastHeart.name=Tar Beast Heart
 item.thebetweenlands.tarBeastHeartAnimated.name=Animated Tar Beast Heart
 item.thebetweenlands.tarDrip.name=Tar Drip
+item.thebetweenlands.candyBlue.name=Blue Candy
+item.thebetweenlands.candyRed.name=Red Candy
+item.thebetweenlands.candyYellow.name=Yellow Candy
+item.thebetweenlands.weedwoodBucketInfusion.name=Weedwood Stagnant Water Bucket
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
