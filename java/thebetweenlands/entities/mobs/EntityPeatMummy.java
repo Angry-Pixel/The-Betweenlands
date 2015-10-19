@@ -27,7 +27,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute CHARGING_COOLDOWN_ATTRIB = (new RangedAttribute("bl.chargingCooldown", 160.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Cooldown");
 	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.chargingPreparationSpeed", 60.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
 	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
-	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.5D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
+	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.55D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
 	public static final float BASE_SPEED = 0.2F;
@@ -56,8 +56,10 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	
 	public EntityPeatMummy(World world) {
 		super(world);
-		setSize(1.5F, 1.3F);
+		setSize(0.6F, 1.55F);
 
+		this.getNavigator().setCanSwim(true);
+		
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
 		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
