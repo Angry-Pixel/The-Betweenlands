@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -17,13 +18,14 @@ import thebetweenlands.client.perspective.rowboat.PerspectiveWeedwoodRowboatFirs
 import thebetweenlands.client.perspective.rowboat.PerspectiveWeedwoodRowboatThirdPerson;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
-import thebetweenlands.forgeevent.client.GetMouseOverEvent;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
+import thebetweenlands.forgeevent.client.GetMouseOverEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class WeedwoodRowboatHandler {
 	public static final WeedwoodRowboatHandler INSTANCE = new WeedwoodRowboatHandler();
@@ -130,5 +132,23 @@ public class WeedwoodRowboatHandler {
 
 	private boolean shouldPreventWorldInteraction() {
 		return isPlayerInRowboat() && WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective();
+	}
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) {
+			return;
+		}
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (player == null) {
+			return;
+		}
+		if (player.ridingEntity instanceof EntityWeedwoodRowboat) {
+			return;
+		}
+		Perspective perspective = Perspective.getCurrentPerspective();
+		if (perspective == WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE || perspective == WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE) {
+			Perspective.FIRST_PERSON.switchTo();
+		}
 	}
 }

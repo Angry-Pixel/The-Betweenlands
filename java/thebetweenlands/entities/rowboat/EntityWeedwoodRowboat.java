@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
@@ -23,10 +22,10 @@ import thebetweenlands.utils.MathUtils;
 
 /*
  * Useful links:
- * 	https://en.wikipedia.org/wiki/Glossary_of_rowing_terms
- * 	https://en.wikipedia.org/wiki/Glossary_of_nautical_terms
- * 	https://en.wikipedia.org/wiki/List_of_ship_directions
- * 	https://en.wikipedia.org/wiki/Anatomy_of_a_rowing_stroke
+ * https://en.wikipedia.org/wiki/Glossary_of_rowing_terms
+ * https://en.wikipedia.org/wiki/Glossary_of_nautical_terms
+ * https://en.wikipedia.org/wiki/List_of_ship_directions
+ * https://en.wikipedia.org/wiki/Anatomy_of_a_rowing_stroke
  */
 public class EntityWeedwoodRowboat extends Entity {
 	private static final int TIME_SINCE_HIT_ID = 17;
@@ -53,7 +52,7 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	private float bobTime;
 
-	private float aq;
+	private float submergeTicks;
 
 	private float rotationalVelocity;
 
@@ -99,7 +98,7 @@ public class EntityWeedwoodRowboat extends Entity {
 	protected void entityInit() {
 		dataWatcher.addObject(TIME_SINCE_HIT_ID, 0);
 		dataWatcher.addObject(FORWARD_DIRECTION_ID, 1);
-		dataWatcher.addObject(DAMAGE_TAKEN_ID,  0F);
+		dataWatcher.addObject(DAMAGE_TAKEN_ID, 0F);
 		for (int i = 0; i < OAR_ROTATION_IDS.length; i++) {
 			dataWatcher.addObject(OAR_ROTATION_IDS[i], 0F);
 		}
@@ -131,6 +130,46 @@ public class EntityWeedwoodRowboat extends Entity {
 	}
 
 	@Override
+	public boolean canBeCollidedWith() {
+		return !isDead;
+	}
+
+	@Override
+	public float getShadowSize() {
+		return 0;
+	}
+
+	@Override
+	public ItemStack getPickedResult(MovingObjectPosition target) {
+		return new ItemStack(BLItemRegistry.weedwoodRowboat);
+	}
+
+	@Override
+	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int rotationIncrements) {
+		boatX = x;
+		boatY = y;
+		boatZ = z;
+		boatYaw = yaw;
+		boatPitch = pitch;
+		boatPosRotationIncrements = rotationIncrements;
+	}
+
+	@Override
+	public void setVelocity(double x, double y, double z) {}
+
+	@Override
+	public boolean interactFirst(EntityPlayer player) {
+		if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer && riddenByEntity != player) {
+			return true;
+		} else {
+			if (!worldObj.isRemote) {
+				player.mountEntity(this);
+			}
+			return true;
+		}
+	}
+
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (isEntityInvulnerable()) {
 			return false;
@@ -154,71 +193,15 @@ public class EntityWeedwoodRowboat extends Entity {
 	}
 
 	@Override
-	public ItemStack getPickedResult(MovingObjectPosition target) {
-		return new ItemStack(BLItemRegistry.weedwoodRowboat);
-	}
-
-	@Override
 	public void performHurtAnimation() {
 		setForwardDirection(-getForwardDirection());
 		setTimeSinceHit(10);
 		setDamageTaken(getDamageTaken() * 11);
 	}
 
-	@Override
-	public boolean canBeCollidedWith() {
-		return !isDead;
-	}
-
-	@Override
-	public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int rotationIncrements) {
-		boatX = x;
-		boatY = y;
-		boatZ = z;
-		boatYaw = yaw;
-		boatPitch = pitch;
-		boatPosRotationIncrements = rotationIncrements;
-	}
-
-	@Override
-	public void setVelocity(double x, double y, double z) {}
-
 	public void updateControls(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
 		this.oarStrokeLeft = oarStrokeLeft;
 		this.oarStrokeRight = oarStrokeRight;
-	}
-
-	private void doSplash() {
-		double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
-		if (velocity > 0.2625) {
-			double vecX = Math.cos(rotationYaw * Math.PI / 180);
-			double vecZ = Math.sin(rotationYaw * Math.PI / 180);
-			for (int p = 0; p < 1 + velocity * 60; p++) {
-				double near = rand.nextFloat() * 2 - 1;
-				double far = (rand.nextInt(2) * 2 - 1) * 0.7;
-				if (rand.nextBoolean()) {
-					double splashX = posX - vecX * near * 0.8 + vecZ * far;
-					double splashZ = posZ - vecZ * near * 0.8 - vecX * far;
-					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
-				} else {
-					double splashX = posX + vecX + vecZ * near * 0.7;
-					double splashZ = posZ + vecZ - vecX * near * 0.7;
-					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean interactFirst(EntityPlayer player) {
-		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer && this.riddenByEntity != player) {
-			return true;
-		} else {
-			if (!this.worldObj.isRemote) {
-				player.mountEntity(this);
-			}
-			return true;
-		}
 	}
 
 	@Override
@@ -236,10 +219,9 @@ public class EntityWeedwoodRowboat extends Entity {
 			boolean hasPlayer = riddenByEntity != null;
 			if (!hadPlayer && hasPlayer) {
 				TheBetweenlands.proxy.onPlayerEnterWeedwoodRowboat();
-			} else if (hadPlayer && !hasPlayer) {
-				TheBetweenlands.proxy.onPlayerLeaveWeedwoodRowboat();
 			}
 			hadPlayer = hasPlayer;
+			doSplash();
 		} else {
 			stroke(LEFT_OAR, oarStrokeLeft, prevOarStrokeLeft);
 			stroke(RIGHT_OAR, oarStrokeRight, prevOarStrokeRight);
@@ -277,6 +259,33 @@ public class EntityWeedwoodRowboat extends Entity {
 				riddenByEntity = null;
 			}
 		}
+		prevRotationYaw = adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
+	}
+
+	private float adjustAngleForInterpolation(float angle, float prevAngle) {
+		while (angle - prevAngle < -180) {
+			prevAngle -= 360;
+		}
+		while (angle - prevAngle >= 180) {
+			prevAngle += 360;
+		}
+		return prevAngle;
+	}
+
+	@Override
+	public void updateRiderPosition() {
+		if (riddenByEntity != null) {
+			double dx = Math.cos(rotationYaw * Math.PI / 180) * -0.2;
+			double dz = Math.sin(rotationYaw * Math.PI / 180) * -0.2;
+			riddenByEntity.setPosition(posX + dx, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + dz);
+			if (riddenByEntity instanceof EntityLivingBase) {
+				EntityLivingBase rider = (EntityLivingBase) riddenByEntity;
+				rider.renderYawOffset = rotationYaw - 90;
+				rider.rotationYaw -= (prevRotationYaw - rotationYaw);
+				rider.rotationYawHead = rotationYaw - 90;
+				TheBetweenlands.proxy.updateRiderYawInWeedwoodRowboat(this, rider);
+			}
+		}
 	}
 
 	private void updatePosition() {
@@ -284,8 +293,8 @@ public class EntityWeedwoodRowboat extends Entity {
 			double x = posX + (boatX - posX) / boatPosRotationIncrements;
 			double y = posY + (boatY - posY) / boatPosRotationIncrements;
 			double z = posZ + (boatZ - posZ) / boatPosRotationIncrements;
-			rotationYaw = ((float)(rotationYaw + MathHelper.wrapAngleTo180_float(boatYaw - rotationYaw) / boatPosRotationIncrements));
-			rotationPitch = ((float)(rotationPitch + (boatPitch - rotationPitch) / boatPosRotationIncrements));
+			rotationYaw = rotationYaw + MathHelper.wrapAngleTo180_float(boatYaw - rotationYaw) / boatPosRotationIncrements;
+			rotationPitch = rotationPitch + (boatPitch - rotationPitch) / boatPosRotationIncrements;
 			boatPosRotationIncrements--;
 			setPosition(x, y, z);
 			setRotation(rotationYaw, rotationPitch);
@@ -308,14 +317,14 @@ public class EntityWeedwoodRowboat extends Entity {
 		Block blockAt = worldObj.getBlock(blockX, blockY, blockZ);
 		Block blockAbove = worldObj.getBlock(blockX, blockY + 1, blockZ);
 		if (blockAt.getMaterial() == Material.water && blockAbove.getMaterial() != Material.water) {
-			buoyancy = (1 - ((float) this.posY - blockY - 1)) * 0.9F + bobBase;
+			buoyancy = (1 - ((float) posY - blockY - 1.1F)) * 0.9F + bobBase;
 			bob = 1 + MathHelper.sin(bobTime) * 0.035F;
 			drag = 0.9F;
-			aq = 0;
+			submergeTicks = 0;
 		} else if (blockAt.getMaterial() == Material.water && blockAbove.getMaterial() == Material.water) {
 			buoyancy = 1.01F;
 			drag = 0.9F;
-			aq++;
+			submergeTicks++;
 		} else if (blockAt.getMaterial() == Material.air) {
 			Block blockBellow = worldObj.getBlock(blockX, blockY - 1, blockZ);
 			if (blockBellow.getMaterial() == Material.water) {
@@ -339,7 +348,7 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	private void applyRowForce() {
 		if (riddenByEntity != null) {
-			if (aq < 25) {
+			if (submergeTicks < 25) {
 				Vec3 rowForce = Vec3.createVectorHelper(3, 0, 0);
 				Vec3 motion = Vec3.createVectorHelper(0, 0, 0);
 				Vec3 rotation = Vec3.createVectorHelper(0, 0, 0);
@@ -349,7 +358,7 @@ public class EntityWeedwoodRowboat extends Entity {
 					if (!isDragHeavy()) {
 						Vec3 param_45 = Vec3.createVectorHelper(0, 0, leftOarForce);
 						motion = motion.addVector(0, 0, leftOarForce);
-						Vec3 cross = rowForce.crossProduct(param_45); 
+						Vec3 cross = rowForce.crossProduct(param_45);
 						rotation = rotation.addVector(cross.xCoord, cross.yCoord, cross.zCoord);
 					}
 					updateOarRotation(LEFT_OAR, leftOarForce);
@@ -358,7 +367,7 @@ public class EntityWeedwoodRowboat extends Entity {
 					if (!isDragHeavy()) {
 						Vec3 param_46 = Vec3.createVectorHelper(0, 0, rightOarForce);
 						motion = motion.addVector(0, 0, rightOarForce);
-						Vec3 cross = Vec3.createVectorHelper(-rowForce.xCoord, -rowForce.yCoord, -rowForce.zCoord).crossProduct(param_46); 
+						Vec3 cross = Vec3.createVectorHelper(-rowForce.xCoord, -rowForce.yCoord, -rowForce.zCoord).crossProduct(param_46);
 						rotation = rotation.addVector(cross.xCoord, cross.yCoord, cross.zCoord);
 					}
 					updateOarRotation(RIGHT_OAR, rightOarForce);
@@ -382,6 +391,33 @@ public class EntityWeedwoodRowboat extends Entity {
 		}
 	}
 
+	private void doSplash() {
+		if (worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY), MathHelper.floor_double(posZ)).getMaterial() != Material.water) {
+			return;
+		}
+		double motionX = boatX - posX;
+		double motionY = boatY - posY;
+		double motionZ = boatZ - posZ;
+		double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
+		if (velocity > 0.2625) {
+			double vecX = Math.cos(rotationYaw * Math.PI / 180);
+			double vecZ = Math.sin(rotationYaw * Math.PI / 180);
+			for (int p = 0; p < 1 + velocity * 60; p++) {
+				double near = rand.nextFloat() * 2 - 1;
+				double far = (rand.nextInt(2) * 2 - 1) * 0.7;
+				if (rand.nextBoolean()) {
+					double splashX = posX - vecX * near * 0.8 + vecZ * far;
+					double splashZ = posZ - vecZ * near * 0.8 - vecX * far;
+					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
+				} else {
+					double splashX = posX + vecX + vecZ * near * 0.7;
+					double splashZ = posZ + vecZ - vecX * near * 0.7;
+					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
+				}
+			}
+		}
+	}
+
 	public boolean isDragHeavy() {
 		return drag > 1;
 	}
@@ -399,40 +435,36 @@ public class EntityWeedwoodRowboat extends Entity {
 		dataWatcher.updateObject(OAR_ROTATION_IDS[side], rotation);
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if (riddenByEntity != null) {
-			double dx = Math.cos(rotationYaw * Math.PI / 180) * -0.2;
-			double dz = Math.sin(rotationYaw * Math.PI / 180) * -0.2;
-			riddenByEntity.setPosition(posX + dx, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + dz);
-			if (riddenByEntity instanceof EntityLivingBase) {
-				EntityLivingBase rider = (EntityLivingBase) riddenByEntity;
-				rider.renderYawOffset = rotationYaw - 90;
-				rider.rotationYaw -= (prevRotationYaw - rotationYaw) * 0.2F;
-				TheBetweenlands.proxy.updateRiderYawInWeedwoodRowboat(this, rider);
+	public boolean stroke(int side, boolean prevOarStroke, boolean oarStroke) {
+		float force = rowForce[side];
+		int time = rowTime[side];
+		time++;
+		boolean appliedForce = false;
+		if (prevOarStroke || time < 10) {
+			if (!oarStroke && prevOarStroke && time >= 10) {
+				force = 1;
+				time = 0;
+				dataWatcher.updateObject(OAR_ROTATION_IDS[side], 0F);
+			} else {
+				force = Math.max(force - 0.05F, 0.55F);
 			}
+		} else {
+			force = Math.max(force - 0.1F, 0);
+			appliedForce = force > 0;
 		}
+		rowTime[side] = time;
+		rowForce[side] = force;
+		return appliedForce;
 	}
 
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {}
-
-	@Override
-	public float getShadowSize() {
-		return 0;
+	public float getOarRotation(int side, float swing) {
+		float prevRotation = prevOarRotation[side];
+		float rotation = getOarRotation(side);
+		return (float) MathHelper.denormalizeClamp(prevRotation, rotation, swing);
 	}
 
 	public float getOarRotation(int side) {
 		return dataWatcher.getWatchableObjectFloat(OAR_ROTATION_IDS[side]);
-	}
-
-	public float getOarRotation(int side, float swing) {
-		float prevRotation = this.prevOarRotation[side];
-		float rotation = getOarRotation(side);
-		return (float) MathHelper.denormalizeClamp(prevRotation, rotation, swing);
 	}
 
 	public void setDamageTaken(float damage) {
@@ -459,30 +491,9 @@ public class EntityWeedwoodRowboat extends Entity {
 		return dataWatcher.getWatchableObjectInt(FORWARD_DIRECTION_ID);
 	}
 
-	public void setOarRotation(float left, float right) {
-		dataWatcher.updateObject(OAR_ROTATION_IDS[LEFT_OAR], left);
-		dataWatcher.updateObject(OAR_ROTATION_IDS[RIGHT_OAR], right);
-	}
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {}
 
-	public boolean stroke(int side, boolean prevOarStroke, boolean oarStroke) {
-		float force = rowForce[side];
-		int time = rowTime[side];
-		time++;
-		boolean appliedForce = false;
-		if (prevOarStroke || time < 10) {
-			if (!oarStroke && prevOarStroke && time >= 10) {
-				force = 1;
-				time = 0;
-				dataWatcher.updateObject(OAR_ROTATION_IDS[side], 0F);
-			} else {
-				force = Math.max(force - 0.05F, 0.55F);
-			}
-		} else {
-			force = Math.max(force - 0.1F, 0);
-			appliedForce = force > 0;
-		}
-		rowTime[side] = time;
-		rowForce[side] = force;
-		return appliedForce;
-	}
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {}
 }

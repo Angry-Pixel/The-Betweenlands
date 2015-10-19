@@ -225,8 +225,6 @@ public class CommonProxy implements IGuiHandler {
 
 	public void onPlayerEnterWeedwoodRowboat() {}
 
-	public void onPlayerLeaveWeedwoodRowboat() {}
-
 	public void updateRiderYawInWeedwoodRowboat(EntityWeedwoodRowboat rowboat, EntityLivingBase rider) {}
 
 	public DebugHandlerCommon getDebugHandler() {

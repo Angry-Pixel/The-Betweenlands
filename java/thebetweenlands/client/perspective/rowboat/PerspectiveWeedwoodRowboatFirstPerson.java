@@ -25,6 +25,9 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 
 	@Override
 	protected void applyMovement(Entity entity, float x, float y) {
+		if (entity.ridingEntity == null) {
+			return;
+		}
 		final float yawLimit = 135;
 		final float yawResistance = 45;
 		float currentPitch = entity.rotationPitch;
@@ -57,7 +60,5 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 			entity.rotationYaw = -yawLimit;
 		}
 		entity.rotationYaw += rowboatYawOffset;
-		entity.prevRotationPitch += entity.rotationPitch - currentPitch;
-		entity.prevRotationYaw += entity.rotationYaw - currentYaw;
 	}
 }

@@ -40,7 +40,7 @@ public class RenderWeedwoodRowboat extends Render {
 			damageTaken = 0;
 		}
 		if (timeSinceHit > 0) {
-			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 1, 0, 0);
+			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 0, 0, 1);
 		}
 		GL11.glPushMatrix();
 		bindEntityTexture(entity);

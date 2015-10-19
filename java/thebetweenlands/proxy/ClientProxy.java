@@ -531,14 +531,9 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void onPlayerLeaveWeedwoodRowboat() {
-		Perspective.FIRST_PERSON.switchTo();
-	}
-
-	@Override
 	public void updateRiderYawInWeedwoodRowboat(EntityWeedwoodRowboat rowboat, EntityLivingBase rider) {
-		if (WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
-			rider.rotationYaw += (rowboat.rotationYaw - rider.rotationYaw - 90) * 0.2F;
+		if (rowboat.worldObj.isRemote && WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
+			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
 	}

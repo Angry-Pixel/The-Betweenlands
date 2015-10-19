@@ -274,12 +274,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float swing, float speed, float age, float yaw, float pitch, float scale) {
-		/*if (entity.ticksExisted % 20 == 0) {
-			reconstructModel();
-		}*/
+//		if (entity.ticksExisted % 20 == 0) reconstructModel();
 		EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) entity;
-		a(rowboat, EntityWeedwoodRowboat.LEFT_OAR, swing);
-		a(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, swing);
+		animateOar(rowboat, EntityWeedwoodRowboat.LEFT_OAR, swing);
+		animateOar(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, swing);
 		keel.render(scale);
 		hullBottom.render(scale);
 		hullBottomLeft.render(scale);
@@ -290,13 +288,14 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.render(scale);
 	}
 
-	private void a(EntityWeedwoodRowboat rowboat, int side, float swing) {
-		final float param_32 = 40;
-		float param_33 = rowboat.getOarRotation(side, swing) * param_32;
+	private void animateOar(EntityWeedwoodRowboat rowboat, int side, float swing) {
+		final float scale = 40;
+		float theta = rowboat.getOarRotation(side, swing) * scale;
 		ModelRenderer oar = oars[side];
-		oar.rotateAngleX = ((float) MathHelper.denormalizeClamp(-Math.PI / 3, -Math.PI / 12, Math.sin(-param_33) + 1) / 2);
-		oar.rotateAngleY = ((float) MathHelper.denormalizeClamp(-Math.PI / 4, Math.PI / 4, Math.sin(-param_33 + 1) + 1) / 2);
+		oar.rotateAngleX = ((float) MathHelper.denormalizeClamp(-Math.PI / 3, -Math.PI / 12, Math.sin(-theta) + 1) / 2);
+		oar.rotateAngleY = ((float) MathHelper.denormalizeClamp(-Math.PI / 4, Math.PI / 4, Math.sin(-theta + 1) + 1) / 2);
 		if (side == EntityWeedwoodRowboat.RIGHT_OAR) {
+			oar.rotateAngleX = -oar.rotateAngleX;
 			oar.rotateAngleY = (MathUtils.PI - oar.rotateAngleY);
 		}
 	}
