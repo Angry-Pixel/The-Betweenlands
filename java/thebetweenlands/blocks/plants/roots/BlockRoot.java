@@ -1,9 +1,16 @@
 package thebetweenlands.blocks.plants.roots;
 
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -12,13 +19,12 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-
-import java.util.Random;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockRoot extends Block {
+	@SideOnly(Side.CLIENT)
+	public IIcon rootIcon, spoopyRootIcon;
+
 	public BlockRoot() {
 		super(Material.wood);
 		this.setTickRandomly(true);
@@ -50,7 +56,7 @@ public class BlockRoot extends Block {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		this.checkAndDropBlock(world, x, y, z);
 	}
-	
+
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
@@ -58,19 +64,19 @@ public class BlockRoot extends Block {
 
 	@Override
 	public int quantityDropped(Random rnd) {
-        return 1;
-    }
-	
+		return 1;
+	}
+
 	@Override
 	public int damageDropped(int p_149692_1_) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
-    }
-	
+	}
+
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItem();
 	}
-    
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -87,33 +93,33 @@ public class BlockRoot extends Block {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public int getRenderType() {
 		return BlockRenderIDs.ROOT.id();
 	}
-	
-	@Override
-    public boolean isWood(IBlockAccess world, int x, int y, int z) {
-        return true;
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public boolean isBlockNormalCube() {
-        return false;
-    }
 
 	@Override
-    public boolean isNormalCube() {
-        return false;
-    }
-    
+	public boolean isWood(IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean isBlockNormalCube() {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return false;
-    }
-	
+	}
+
 	public static void generateWaterRootPatch(World world, int x, int y, int z, int tries, int radius) {
 		for(int i = 0; i < tries; i++) {
 			int bx = x + world.rand.nextInt(radius) - radius/2;
@@ -129,7 +135,7 @@ public class BlockRoot extends Block {
 			}
 		}
 	}
-	
+
 	public static void generateRootPatch(World world, int x, int y, int z, int tries, int radius) {
 		for(int i = 0; i < tries; i++) {
 			int bx = x + world.rand.nextInt(radius) - radius/2;
@@ -146,7 +152,7 @@ public class BlockRoot extends Block {
 			}
 		}
 	}
-	
+
 	public static void generateRoot(World world, int x, int y, int z, int height) {
 		if(!world.isRemote) {
 			for(int yo = 0; yo < height; yo++) {
@@ -161,5 +167,22 @@ public class BlockRoot extends Block {
 				}
 			}
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister reg) {
+		super.registerBlockIcons(reg);
+		this.rootIcon = reg.registerIcon("thebetweenlands:root");
+		this.spoopyRootIcon = reg.registerIcon("thebetweenlands:rootSpoopy");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+			return spoopyRootIcon;
+		}
+		return rootIcon;
 	}
 }

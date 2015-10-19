@@ -96,7 +96,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearab
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("DoubleSwampTallgrass")) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.name.equals("DoubleSwampTallgrass") || this.name.equals("TallCattail") || this.name.equals("Phragmites"))) {
 			return func_149887_c(world.getBlockMetadata(x, y, z)) ? spoopyTopIcon : spoopyBottomIcon;
 		}
 		return func_149887_c(world.getBlockMetadata(x, y, z)) ? topIcon : bottomIcon;
@@ -108,7 +108,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearab
 		topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
 		if(!name.equals("Sundew"))
 			bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
-		if(this.name.equals("DoubleSwampTallgrass")) {
+		if(this.name.equals("DoubleSwampTallgrass") || this.name.equals("Phragmites") || this.name.equals("TallCattail")) {
 			spoopyTopIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "TopSpoopy");
 			spoopyBottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "BottomSpoopy");
 		}

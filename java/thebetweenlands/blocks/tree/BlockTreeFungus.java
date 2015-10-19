@@ -47,15 +47,17 @@ public class BlockTreeFungus extends Block {
 			} else if( side == 1 ) {
 				return this.spoopyTopIcon;
 			}
+			
+			return this.spoopyTopIcon;
 		} else {
 			if( side == 2 || side == 3 || side == 4 || side == 5 ) {
 				return this.sideIcon;
 			} else if( side == 1 ) {
 				return this.topIcon;
 			}
+			
+			return this.blockIcon;
 		}
-
-		return this.blockIcon;
 	}
 
 	@Override
