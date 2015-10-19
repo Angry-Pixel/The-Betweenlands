@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -10,7 +11,6 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -76,7 +76,19 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		boolean canSpawn = worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox) && isOnShelfFungus();
+		int by = MathHelper.floor_double(this.posY);
+		int bx = MathHelper.floor_double(this.posX);
+		int bz = MathHelper.floor_double(this.posZ);
+		for(int yo = 0; yo < 16; yo++) {
+			Block cb = this.worldObj.getBlock(bx, by - yo, bz);
+			if(cb == BLBlockRegistry.treeFungus) {
+				by = by - yo + 1;
+				break;
+			}
+		}
+		this.posY = by;
+		this.setPosition(this.posX, this.posY, this.posZ);
+		boolean canSpawn = super.getCanSpawnHere() && isOnShelfFungus();
 		return canSpawn;
 	}
 

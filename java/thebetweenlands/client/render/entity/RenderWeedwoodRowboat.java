@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.entity.ModelWeedwoodRowboat;
-import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.lib.ModInfo;
 
 public class RenderWeedwoodRowboat extends Render {
@@ -40,7 +40,7 @@ public class RenderWeedwoodRowboat extends Render {
 			damageTaken = 0;
 		}
 		if (timeSinceHit > 0) {
-			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 1, 0, 0);
+			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 0, 0, 1);
 		}
 		GL11.glPushMatrix();
 		bindEntityTexture(entity);

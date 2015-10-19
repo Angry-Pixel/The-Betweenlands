@@ -1,5 +1,7 @@
 package thebetweenlands.utils;
 
+import net.minecraft.util.MathHelper;
+
 /**
  * 
  * @author Paul Fulham

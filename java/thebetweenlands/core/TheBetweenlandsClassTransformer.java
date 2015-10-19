@@ -2,6 +2,10 @@ package thebetweenlands.core;
 
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.tree.AbstractInsnNode.*;
+
+import java.util.Iterator;
+import java.util.ListIterator;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
@@ -20,6 +24,12 @@ import org.objectweb.asm.tree.VarInsnNode;
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static final String SLEEP_PER_TICK = "sleepPerTick";
 
+	private static final String BL_FORGE_HOOKS = "thebetweenlands/forgeevent/BLForgeHooks";
+
+	private static final String DEBUG_HANDLER_CLIENT = "thebetweenlands/event/debugging/DebugHandlerClient";
+
+	private static final String PERSPECTIVE = "thebetweenlands/client/perspective/Perspective";
+
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
 		boolean obf = false;
@@ -35,6 +45,14 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			return writeClass(transformGuiScreen(readClass(classBytes), obf));
 		} else if ((obf = "oi".equals(name)) || "net.minecraft.server.management.ServerConfigurationManager".equals(name)) {
 			return writeClass(transformServerConfigurationManager(readClass(classBytes), obf));
+		} else if ((obf = "baj".equals(name)) || "net.minecraft.client.renderer.ActiveRenderInfo".equals(name)) {
+			return writeClass(transformActiveRenderInfo(readClass(classBytes), obf));
+		} else if ((obf = "blt".equals(name)) || "net.minecraft.client.renderer.EntityRenderer".equals(name)) {
+			return writeClass(transformEntityRenderer(readClass(classBytes), obf));
+		} else if ((obf = "bnn".equals(name)) || "net.minecraft.client.renderer.entity.RenderManager".equals(name)) {
+			return writeClass(transformRenderManager(readClass(classBytes), obf));
+		} else if ((obf = "sa".equals(name)) || "net.minecraft.entity.Entity".equals(name)) {
+			return writeClass(transformEntity(readClass(classBytes), obf));
 		}
 		return classBytes;
 	}
@@ -47,7 +65,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	}
 
 	private byte[] writeClass(ClassNode classNode) {
-		ClassWriter classWriter = new ClassWriter(0);
+		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();
 	}
@@ -101,7 +119,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				InsnList insns = method.instructions;
 				insns.clear();
 				insns.add(new VarInsnNode(ALOAD, 0));
-				insns.add(new MethodInsnNode(INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "onPlayerGetHurtSound", String.format("(L%s;)Ljava/lang/String;", entityPlayerClass), false));
+				insns.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "onPlayerGetHurtSound", String.format("(L%s;)Ljava/lang/String;", entityPlayerClass), false));
 				insns.add(new InsnNode(ARETURN));
 				break;
 			}
@@ -119,7 +137,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 					AbstractInsnNode insnNode = method.instructions.get(i);
 					if (insnNode.getType() == METHOD_INSN) {
 						MethodInsnNode methodNode = (MethodInsnNode) insnNode;
-						methodNode.owner = "thebetweenlands/forgeevent/BLForgeHooks";
+						methodNode.owner = BL_FORGE_HOOKS;
 						methodNode.name = "onLivingSetRevengeTarget";
 						break;
 					}
@@ -131,16 +149,69 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	}
 
 	private ClassNode transformMinecraft(ClassNode classNode, boolean obf) {
-		String startGameName = obf ? "ag" : "startGame";
+		String startGame = obf ? "ag" : "startGame";
+		String runGameLoop = obf ? "ak" : "runGameLoop";
+		String thirdPersonView = obf ? "aw" : "thirdPersonView";
+		String runTick = obf ? "p" : "runTick";
+		String isPressed = obf ? "f" : "isPressed";
+		String handlePlayerAttackInput = obf ? "al" : "func_147116_af";
+		String minecraft = obf ? "bao" : "net/minecraft/client/Minecraft";
+		String leftClickCounter = obf ? "U" : "leftClickCounter";
+		boolean needsStartGame = true;
+		boolean needsRunGameLoop = true;
+		boolean needsRunTick = true;
+		boolean needsHandlePlayerAttackInput = true;
 		for (MethodNode method : classNode.methods) {
-			if (startGameName.equals(method.name) && "()V".equals(method.desc)) {
+			if (needsStartGame && startGame.equals(method.name) && "()V".equals(method.desc)) {
 				for (int i = method.instructions.size() - 1; i >= 0; i--) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
 					if (insnNode.getOpcode() == RETURN) {
-						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, "thebetweenlands/event/debugging/DebugHandlerClient", "onMinecraftFinishedStarting", "()V", false));
+						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, DEBUG_HANDLER_CLIENT, "onMinecraftFinishedStarting", "()V", false));
 						break;
 					}
 				}
+				needsStartGame = false;
+			}
+			if (needsRunGameLoop && runGameLoop.equals(method.name) && "()V".equals(method.desc)) {
+				for (int i = method.instructions.size() - 1; i >= 0; i--) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == PUTFIELD && thirdPersonView.equals(((FieldInsnNode) insnNode).name)) {
+						method.instructions.set(insnNode.getPrevious(), new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "getInsideOpaqueBlockView", "()I", false));
+						break;
+					}
+				}
+				needsRunGameLoop = false;
+			}
+			if (needsRunTick && runTick.equals(method.name) && "()V".equals(method.desc)) {
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == INVOKEVIRTUAL && isPressed.equals(((MethodInsnNode) insnNode).name)) {
+						Iterator<AbstractInsnNode> insns = method.instructions.iterator(i + 6);
+						while (insns.hasNext()) {
+							insnNode = insns.next();
+							if (insnNode.getOpcode() == ICONST_0) {
+								method.instructions.set(insnNode, new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "cyclePerspective", "()I", false));
+								break;
+							}
+							insns.remove();
+						}
+						break;
+					}
+				}
+				needsRunTick = false;
+			}
+			if (needsHandlePlayerAttackInput && handlePlayerAttackInput.equals(method.name) && "()V".equals(method.desc)) {
+				method.localVariables.clear();
+				method.instructions.clear();
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new InsnNode(DUP));
+				method.instructions.add(new FieldInsnNode(GETFIELD, minecraft, leftClickCounter, "I"));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "handlePlayerAttackInput", "(I)I", false));
+				method.instructions.add(new FieldInsnNode(PUTFIELD, minecraft, leftClickCounter, "I"));
+				method.instructions.add(new InsnNode(RETURN));
+				needsHandlePlayerAttackInput = false;
+			}
+			if (!needsRunGameLoop && !needsStartGame && !needsRunTick && !needsHandlePlayerAttackInput) {
 				break;
 			}
 		}
@@ -158,9 +229,9 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						MethodInsnNode methodInsnNode = (MethodInsnNode) insnNode;
 						if (handleKeyboardInputName.equals(methodInsnNode.name) && "()V".equals(methodInsnNode.desc)) {
 							InsnList insns = new InsnList();
-							insns.add(new FieldInsnNode(GETSTATIC, "thebetweenlands/event/debugging/DebugHandlerClient", "INSTANCE", "Lthebetweenlands/event/debugging/DebugHandlerClient;"));
+							insns.add(new FieldInsnNode(GETSTATIC, DEBUG_HANDLER_CLIENT, "INSTANCE", 'L'+ DEBUG_HANDLER_CLIENT + ';'));
 							insns.add(new InsnNode(ACONST_NULL));
-							insns.add(new MethodInsnNode(INVOKEVIRTUAL, "thebetweenlands/event/debugging/DebugHandlerClient", "onKeyInput", "(Lcpw/mods/fml/common/gameevent/InputEvent$KeyInputEvent;)V", false));
+							insns.add(new MethodInsnNode(INVOKEVIRTUAL, DEBUG_HANDLER_CLIENT, "onKeyInput", "(Lcpw/mods/fml/common/gameevent/InputEvent$KeyInputEvent;)V", false));
 							method.instructions.insert(insnNode, insns);
 							break;
 						}
@@ -181,10 +252,149 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			if (createPlayerForUserName.equals(method.name) && createPlayerForUserDescription.equals(method.desc)) {
 				method.instructions.clear();
 				method.localVariables.clear();
-				method.visitVarInsn(ALOAD, 0);
-				method.visitVarInsn(ALOAD, 1);
-				method.visitMethodInsn(INVOKESTATIC, "thebetweenlands/forgeevent/BLForgeHooks", "createPlayerForUser", String.format("(L%s;Lcom/mojang/authlib/GameProfile;)L%s;", serverConfigurationManagerClass, entityPlayerMPClass), false);
-				method.visitInsn(ARETURN);
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new VarInsnNode(ALOAD, 1));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "createPlayerForUser", String.format("(L%s;Lcom/mojang/authlib/GameProfile;)L%s;", serverConfigurationManagerClass, entityPlayerMPClass), false));
+				method.instructions.add(new InsnNode(ARETURN));
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformActiveRenderInfo(ClassNode classNode, boolean obf) {
+		InsnList instructions = classNode.methods.get(1).instructions;
+		String owner = obf ? "baj" : "net/minecraft/client/renderer/ActiveRenderInfo";
+		String viewport = obf ? "i" : "viewport";
+		String modelview = obf ? "j" : "modelview";
+		String projection = obf ? "k" : "projection";
+		String objectCoords = obf ? "l" : "objectCoords";
+		final String fbDesc = "Ljava/nio/FloatBuffer;";
+		final String ibDesc = "Ljava/nio/IntBuffer;";
+		for (int i = 0; i < instructions.size(); i++) {
+			AbstractInsnNode insnNode = instructions.get(i);
+			if (insnNode.getOpcode() == ILOAD) {
+				Iterator<AbstractInsnNode> iter = instructions.iterator(i);
+				while (iter.hasNext()) {
+					insnNode = iter.next();
+					if (insnNode.getOpcode() == RETURN) {
+						InsnList invocation = new InsnList();
+						invocation.add(new VarInsnNode(FLOAD, 2));
+						invocation.add(new VarInsnNode(FLOAD, 3));
+						invocation.add(new FieldInsnNode(GETSTATIC, owner, modelview, fbDesc));
+						invocation.add(new FieldInsnNode(GETSTATIC, owner, projection, fbDesc));
+						invocation.add(new FieldInsnNode(GETSTATIC, owner, viewport, ibDesc));
+						invocation.add(new FieldInsnNode(GETSTATIC, owner, objectCoords, fbDesc));
+						invocation.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "updateRenderInfo", "(FF" + fbDesc + fbDesc + ibDesc + fbDesc + ")V", false));
+						instructions.insertBefore(insnNode, invocation);
+						break;
+					} else {
+						iter.remove();
+					}
+				}
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformEntityRenderer(ClassNode classNode, boolean obf) {
+		String orientCamera = obf ? "h" : "orientCamera";
+		String activeRenderInfo = obf ? "baj" : "net/minecraft/client/renderer/ActiveRenderInfo";
+		String[] objectXYZ = { obf ? "a" : "objectX", obf ? "b" : "objectY", obf ? "c" : "objectZ" };
+		String getMouseOver = obf ? "a" : "getMouseOver";
+		String entityDesc = obf ? "Lsa;" : "Lnet/minecraft/entity/Entity;";
+		String getMouseOverBLDesc = "(F)" + entityDesc;
+		String entityRenderer = obf ? "blt" : "net/minecraft/client/renderer/EntityRenderer";
+		String pointedEntity = obf ? "x" : "pointedEntity";
+		boolean needsOrientCamera = true;
+		boolean needsRenderWorld = true;
+		boolean needsGetMouseOver = true;
+		for (MethodNode method : classNode.methods) {
+			if (needsOrientCamera && orientCamera.equals(method.name) && "(F)V".equals(method.desc)) {
+				method.localVariables.clear();
+				ListIterator<AbstractInsnNode> insns = method.instructions.iterator();
+				while (insns.hasNext()) {
+					AbstractInsnNode insnNode = insns.next();
+					if (insnNode.getOpcode() == INVOKEVIRTUAL && "(DDDF)Z".equals(((MethodInsnNode) insnNode).desc)) {
+						InsnList invocation = new InsnList();
+						invocation.add(new VarInsnNode(ALOAD, 0));
+						invocation.add(new VarInsnNode(FLOAD, 1));
+						invocation.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "orient", "(F)Z", false));
+						method.instructions.insertBefore(insnNode, invocation);
+						insns.remove();
+						break;
+					}
+					insns.remove();
+				}
+				needsOrientCamera = false;
+			}
+			if (needsRenderWorld && "(FJ)V".equals(method.desc)) {
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == INVOKESTATIC && activeRenderInfo.equals(((MethodInsnNode) insnNode).owner)) {
+						InsnList addCameraPosToViewerPos = new InsnList();
+						for (int n = 0, s = 7; n < objectXYZ.length; n++, s += 2) {
+							addCameraPosToViewerPos.add(new VarInsnNode(DLOAD, s));
+							addCameraPosToViewerPos.add(new FieldInsnNode(GETSTATIC, activeRenderInfo, objectXYZ[n], "F"));
+							addCameraPosToViewerPos.add(new InsnNode(F2D));
+							addCameraPosToViewerPos.add(new InsnNode(DADD));
+							addCameraPosToViewerPos.add(new VarInsnNode(DSTORE, s));
+						}
+						method.instructions.insert(insnNode, addCameraPosToViewerPos);
+						break;
+					}
+				}
+				needsRenderWorld = false;
+			}
+			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {
+				method.localVariables.clear();
+				method.instructions.clear();
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new VarInsnNode(FLOAD, 1));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "getMouseOver", getMouseOverBLDesc, false));
+				method.instructions.add(new FieldInsnNode(PUTFIELD, entityRenderer, pointedEntity, entityDesc));
+				method.instructions.add(new InsnNode(RETURN));
+				needsGetMouseOver = false;
+			}
+			if (!needsOrientCamera && !needsRenderWorld && !needsGetMouseOver) {
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformRenderManager(ClassNode classNode, boolean obf) {
+		String cacheActiveRenderInfo = obf ? "a" : "cacheActiveRenderInfo";
+		String cacheActiveRenderInfoDesc = obf ? "(Lahb;Lbqf;Lbbu;Lsv;Lsa;Lbbj;F)V" : "(Lnet/minecraft/world/World;Lnet/minecraft/client/renderer/texture/TextureManager;Lnet/minecraft/client/gui/FontRenderer;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/entity/Entity;Lnet/minecraft/client/settings/GameSettings;F)V";
+		String fontRenderer = obf ? "r" : "fontRenderer";
+		for (MethodNode method : classNode.methods) {
+			if (cacheActiveRenderInfo.equals(method.name) && cacheActiveRenderInfoDesc.equals(method.desc)) {
+				for (int i = method.instructions.size() - 1; i >= 0; i--) {
+					AbstractInsnNode insnNode = method.instructions.get(i);
+					if (insnNode.getOpcode() == RETURN) {
+						method.instructions.insertBefore(insnNode, new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "cacheActiveRenderInfo", "()V", false));
+						break;
+					}
+				}
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformEntity(ClassNode classNode, boolean obf) {
+		String setAngles = obf ? "c" : "setAngles";
+		String entity = obf ? "sa" : "net/minecraft/entity/Entity";
+		for (MethodNode method : classNode.methods) {
+			if (setAngles.equals(method.name) && "(FF)V".equals(method.desc)) {
+				method.instructions.clear();
+				method.localVariables.clear();
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new VarInsnNode(FLOAD, 1));
+				method.instructions.add(new VarInsnNode(FLOAD, 2));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "setAngles", String.format("(L%s;FF)V", entity), false));
+				method.instructions.add(new InsnNode(RETURN));
 				break;
 			}
 		}

@@ -112,6 +112,11 @@ public class BlockHollowLog extends Block {
 		return ItemMaterialsBL.createStack(EnumMaterialsBL.ROTTEN_BARK).getItem();
 	}
 
+	@Override
+	public int damageDropped(int meta) {
+        return EnumMaterialsBL.ROTTEN_BARK.ordinal();
+    }
+	
     @Override
     public int quantityDropped(Random rand) {
         return 1 + rand.nextInt(4);

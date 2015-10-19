@@ -1,9 +1,21 @@
 package thebetweenlands.blocks.plants;
 
+import static net.minecraftforge.common.util.ForgeDirection.DOWN;
+import static net.minecraftforge.common.util.ForgeDirection.EAST;
+import static net.minecraftforge.common.util.ForgeDirection.NORTH;
+import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
+import static net.minecraftforge.common.util.ForgeDirection.UP;
+import static net.minecraftforge.common.util.ForgeDirection.WEST;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -19,21 +31,18 @@ import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockPlantSmall;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import static net.minecraftforge.common.util.ForgeDirection.*;
+import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockWallPlants extends Block implements IShearable, ISubBlocksBlock {
 
 	public static final String[] iconPaths = new String[] { "moss", "lichen" };
 
-	public static final int dataMoss = 0, dataLichen = 1;
+	public static final int META_MOSS = 0, META_LICHEN = 1;
 
 	@SideOnly(Side.CLIENT)
-	public IIcon[] icons;
+	private IIcon[] icons;
+	@SideOnly(Side.CLIENT)
+	private IIcon spoopyMoss;
 
 	public BlockWallPlants() {
 		super(Material.plants);
@@ -50,25 +59,33 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
 		icons = new IIcon[iconPaths.length];
 		int i = 0;
 		for (String path : iconPaths)
 			icons[i++] = reg.registerIcon("thebetweenlands:" + path);
+		spoopyMoss = reg.registerIcon("thebetweenlands:mossSpoopy");
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
 		if (meta < 0)
 			return null;
-		if (meta == dataMoss)
-			return icons[dataMoss];
-		if (meta == dataLichen)
-			return icons[dataLichen];
-		if (meta > 1 && meta <= 7)
-			return icons[dataMoss];
-		else
-			return icons[dataLichen];
+		if (meta == META_MOSS) {
+			if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) return spoopyMoss;
+			return icons[META_MOSS];
+		}
+		if (meta == META_LICHEN) {
+			return icons[META_LICHEN];
+		}
+		if (meta > 1 && meta <= 7) {
+			if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) return spoopyMoss;
+			return icons[META_MOSS];
+		} else {
+			return icons[META_LICHEN];
+		}
 	}
 
 	@Override
@@ -101,118 +118,118 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 		float widthMax = 0, heightMax = 0, depthMax = 0;
 
 		switch (meta) {
-			case 0:
-				widthMin = 0F;
-				heightMin = 0.875F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 1:
-				widthMin = 0F;
-				heightMin = 0.875F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 2:
-				widthMin = 0F;
-				heightMin = 0.875F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 3:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0.875F;
-				depthMax = 0F;
-				break;
-			case 4:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0.875F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 5:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0.875F;
-				break;
-			case 6:
-				widthMin = 0.875F;
-				heightMin = 0;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0;
-				depthMax = 0F;
-				break;
-			case 7:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0.875F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 8:
-				widthMin = 0F;
-				heightMin = 0.875F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 9:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0.875F;
-				depthMax = 0F;
-				break;
-			case 10:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0.875F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
-			case 11:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0F;
-				depthMax = 0.875F;
-				break;
-			case 12:
-				widthMin = 0.875F;
-				heightMin = 0;
-				depthMin = 0F;
-				widthMax = 0F;
-				heightMax = 0;
-				depthMax = 0F;
-				break;
-			case 13:
-				widthMin = 0F;
-				heightMin = 0F;
-				depthMin = 0F;
-				widthMax = 0.875F;
-				heightMax = 0F;
-				depthMax = 0F;
-				break;
+		case 0:
+			widthMin = 0F;
+			heightMin = 0.875F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 1:
+			widthMin = 0F;
+			heightMin = 0.875F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 2:
+			widthMin = 0F;
+			heightMin = 0.875F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 3:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0.875F;
+			depthMax = 0F;
+			break;
+		case 4:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0.875F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 5:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0.875F;
+			break;
+		case 6:
+			widthMin = 0.875F;
+			heightMin = 0;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0;
+			depthMax = 0F;
+			break;
+		case 7:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0.875F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 8:
+			widthMin = 0F;
+			heightMin = 0.875F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 9:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0.875F;
+			depthMax = 0F;
+			break;
+		case 10:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0.875F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
+		case 11:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0F;
+			depthMax = 0.875F;
+			break;
+		case 12:
+			widthMin = 0.875F;
+			heightMin = 0;
+			depthMin = 0F;
+			widthMax = 0F;
+			heightMax = 0;
+			depthMax = 0F;
+			break;
+		case 13:
+			widthMin = 0F;
+			heightMin = 0F;
+			depthMin = 0F;
+			widthMax = 0.875F;
+			heightMax = 0F;
+			depthMax = 0F;
+			break;
 		}
 		setBlockBounds(0F + widthMin, 0F + heightMin, 0F + depthMin, 1F - widthMax, 1F - heightMax, 1F - depthMax);
 	}
@@ -233,7 +250,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 
 	@Override
 	public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
-		if (meta == dataMoss) {
+		if (meta == META_MOSS) {
 			if (side == 0 && world.isSideSolid(x, y + 1, z, DOWN))
 				meta = 2;
 
@@ -253,7 +270,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 				meta = 7;
 		}
 
-		if (meta == dataLichen) {
+		if (meta == META_LICHEN) {
 			if (side == 0 && world.isSideSolid(x, y + 1, z, DOWN))
 				meta = 8;
 
@@ -336,9 +353,9 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		int meta = world.getBlockMetadata(x, y, z);
 		if (meta == 2 || meta == 3 || meta == 4 || meta == 5 || meta == 6 || meta == 7)
-			meta = dataMoss;
+			meta = META_MOSS;
 		if (meta == 8 || meta == 9 || meta == 10 || meta == 11 || meta == 12 || meta == 13)
-			meta = dataLichen;
+			meta = META_LICHEN;
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ret.add(new ItemStack(this, 1, meta));
 		return ret;
@@ -373,57 +390,57 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 
 					if (meta > 1 && meta <= 7)
 						switch (randomiseSide) {
-							case 0:
-								if (world.isSideSolid(xx, yy + offset, zz, DOWN) && isValidBlock(world.getBlock(xx, yy + offset, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 2, 2);
-								break;
-							case 1:
-								if (world.isSideSolid(xx, yy - offset, zz, UP) && isValidBlock(world.getBlock(xx, yy - offset, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 3, 2);
-								break;
-							case 2:
-								if (world.isSideSolid(xx, yy, zz + offset, NORTH) && isValidBlock(world.getBlock(xx, yy, zz + offset)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 4, 2);
-								break;
-							case 3:
-								if (world.isSideSolid(xx, yy, zz - offset, SOUTH) && isValidBlock(world.getBlock(xx, yy, zz - offset)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 5, 2);
-								break;
-							case 4:
-								if (world.isSideSolid(xx + offset, yy, zz, WEST) && isValidBlock(world.getBlock(xx + offset, yy, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 6, 2);
-								break;
-							case 5:
-								if (world.isSideSolid(xx - offset, yy, zz, EAST) && isValidBlock(world.getBlock(xx - offset, yy, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 7, 2);
-								break;
+						case 0:
+							if (world.isSideSolid(xx, yy + offset, zz, DOWN) && isValidBlock(world.getBlock(xx, yy + offset, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 2, 2);
+							break;
+						case 1:
+							if (world.isSideSolid(xx, yy - offset, zz, UP) && isValidBlock(world.getBlock(xx, yy - offset, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 3, 2);
+							break;
+						case 2:
+							if (world.isSideSolid(xx, yy, zz + offset, NORTH) && isValidBlock(world.getBlock(xx, yy, zz + offset)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 4, 2);
+							break;
+						case 3:
+							if (world.isSideSolid(xx, yy, zz - offset, SOUTH) && isValidBlock(world.getBlock(xx, yy, zz - offset)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 5, 2);
+							break;
+						case 4:
+							if (world.isSideSolid(xx + offset, yy, zz, WEST) && isValidBlock(world.getBlock(xx + offset, yy, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 6, 2);
+							break;
+						case 5:
+							if (world.isSideSolid(xx - offset, yy, zz, EAST) && isValidBlock(world.getBlock(xx - offset, yy, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 7, 2);
+							break;
 						}
 					else if (meta > 7 && meta <= 13)
 						switch (randomiseSide) {
-							case 0:
-								if (world.isSideSolid(xx, yy + offset, zz, DOWN) && isValidBlock(world.getBlock(xx, yy + offset, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 8, 2);
-								break;
-							case 1:
-								if (world.isSideSolid(xx, yy - offset, zz, UP) && isValidBlock(world.getBlock(xx, yy - offset, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 9, 2);
-								break;
-							case 2:
-								if (world.isSideSolid(xx, yy, zz + offset, NORTH) && isValidBlock(world.getBlock(xx, yy, zz + offset)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 10, 2);
-								break;
-							case 3:
-								if (world.isSideSolid(xx, yy, zz - offset, SOUTH) && isValidBlock(world.getBlock(xx, yy, zz - offset)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 11, 2);
-								break;
-							case 4:
-								if (world.isSideSolid(xx + offset, yy, zz, WEST) && isValidBlock(world.getBlock(xx + offset, yy, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 12, 2);
-								break;
-							case 5:
-								if (world.isSideSolid(xx - offset, yy, zz, EAST) && isValidBlock(world.getBlock(xx - offset, yy, zz)))
-									world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 13, 2);
-								break;
+						case 0:
+							if (world.isSideSolid(xx, yy + offset, zz, DOWN) && isValidBlock(world.getBlock(xx, yy + offset, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 8, 2);
+							break;
+						case 1:
+							if (world.isSideSolid(xx, yy - offset, zz, UP) && isValidBlock(world.getBlock(xx, yy - offset, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 9, 2);
+							break;
+						case 2:
+							if (world.isSideSolid(xx, yy, zz + offset, NORTH) && isValidBlock(world.getBlock(xx, yy, zz + offset)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 10, 2);
+							break;
+						case 3:
+							if (world.isSideSolid(xx, yy, zz - offset, SOUTH) && isValidBlock(world.getBlock(xx, yy, zz - offset)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 11, 2);
+							break;
+						case 4:
+							if (world.isSideSolid(xx + offset, yy, zz, WEST) && isValidBlock(world.getBlock(xx + offset, yy, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 12, 2);
+							break;
+						case 5:
+							if (world.isSideSolid(xx - offset, yy, zz, EAST) && isValidBlock(world.getBlock(xx - offset, yy, zz)))
+								world.setBlock(xx, yy, zz, BLBlockRegistry.wallPlants, 13, 2);
+							break;
 						}
 				}
 		}
@@ -435,6 +452,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return ItemBlockPlantSmall.class;
 	}
+	
 	@Override
 	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
 		if (!world.isRemote && meta > 1 && meta <= 7) {
@@ -448,4 +466,8 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 		}
 	}
 
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
 }

@@ -27,6 +27,7 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.SpawnEggs;
 
 public class BLEntityRegistry

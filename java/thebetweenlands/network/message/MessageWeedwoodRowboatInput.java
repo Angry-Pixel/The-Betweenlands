@@ -1,6 +1,6 @@
 package thebetweenlands.network.message;
 
-import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -53,7 +53,7 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 		EntityPlayer player = ctx.getServerHandler().playerEntity;
 		if (player.ridingEntity instanceof EntityWeedwoodRowboat) {
 			EntityWeedwoodRowboat rowboat = ((EntityWeedwoodRowboat) player.ridingEntity); 
-			rowboat.updatePilotControls(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
+			rowboat.updateControls(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
 		}
 		return null;
 	}

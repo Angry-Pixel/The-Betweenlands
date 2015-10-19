@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
@@ -15,7 +14,7 @@ import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
 public class EventSpoopy extends EnvironmentEvent {
-	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 21, 0, 0).getTime().getTime();
+	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
 	private World world;
 	private World lastWorld;
@@ -29,7 +28,7 @@ public class EventSpoopy extends EnvironmentEvent {
 	}
 
 	public float getSkyTransparency(float partialTicks) {
-		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 3.0F;
+		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
 	}
 
 	public EventSpoopy(EnvironmentEventRegistry registry) {
@@ -44,7 +43,7 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	public static boolean isSpoopy(World world) {
 		if(world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
 			if(provider != null) {
 				return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
 			}

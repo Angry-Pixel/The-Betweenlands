@@ -68,14 +68,14 @@ public class DecayEventHandler {
 
 			if (DecayManager.getDecayLevel(event.player) <= 4) {
 				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true));
-				event.player.jumpMovementFactor = 0.0F;
+				event.player.jumpMovementFactor = 0.001F;
 			} else if (DecayManager.getDecayLevel(event.player) <= 7) {
 				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 1, true));
 				event.player.jumpMovementFactor = 0.002F;
 			} else if (DecayManager.getDecayLevel(event.player) <= 10) {
 				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true));
 			}
-
+			
 			// Oli, if you ever want to change decay speed, change the number
 			// that the ticksExisted is divided by.
 			// Right now every multiple of 2500 the decay level is decreased by 1

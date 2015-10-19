@@ -5,31 +5,25 @@ import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.client.event.AmbienceSoundPlayHandler;
-import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.WorldProviderBetweenlands;
+import thebetweenlands.world.events.EnvironmentEvent;
 
-public class AmbienceBloodSky
-        extends MovingSound
+public class AmbienceEnvironmentEvent extends MovingSound
 {
-    private EntityPlayer player;
+    private EnvironmentEvent event;
 
-    public AmbienceBloodSky(EntityPlayer entityPlayer) {
-        super(new ResourceLocation("thebetweenlands:ambientBloodSky"));
-        this.player = entityPlayer;
+    public AmbienceEnvironmentEvent(ResourceLocation sound, EnvironmentEvent event) {
+        super(sound);
         this.repeat = true;
         this.field_147666_i = AttenuationType.NONE;
         this.volume = 0.1F;
+        this.event = event;
     }
 
     @Override
     public void update() {
-    	boolean isBloodSky = false;
-    	World world = Minecraft.getMinecraft().theWorld;
-    	if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-    		isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
-    	}
-        if(!isBloodSky) {
+    	WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(Minecraft.getMinecraft().theWorld);
+        if(provider == null || !event.isActive()) {
             if( this.volume > 0.05F ) {
                 this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {

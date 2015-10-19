@@ -3,30 +3,44 @@ package thebetweenlands.client.input;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 
 import org.lwjgl.input.Keyboard;
 
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.perspective.Perspective;
+import thebetweenlands.client.perspective.rowboat.PerspectiveWeedwoodRowboatFirstPerson;
+import thebetweenlands.client.perspective.rowboat.PerspectiveWeedwoodRowboatThirdPerson;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
-import thebetweenlands.entities.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.forgeevent.client.ClientAttackEvent;
+import thebetweenlands.forgeevent.client.GetMouseOverEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class WeedwoodRowboatHandler {
 	public static final WeedwoodRowboatHandler INSTANCE = new WeedwoodRowboatHandler();
 
+	public static final Perspective WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE = new PerspectiveWeedwoodRowboatThirdPerson();
+
+	public static final Perspective WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE = new PerspectiveWeedwoodRowboatFirstPerson();
+
 	private List<KeyBindingBL> keyBindings = new ArrayList<KeyBindingBL>();
 
-	private KeyBindingBL oarStrokeLeft = createKeyBinding("oar.stroke.left", Keyboard.KEY_Z);
+	private KeyBindingBL oarStrokeLeft = createKeyBinding("oar.stroke.left", Keyboard.KEY_X);
 
-	private KeyBindingBL oarStrokeRight = createKeyBinding("oar.stroke.right", Keyboard.KEY_X);
+	private KeyBindingBL oarStrokeRight = createKeyBinding("oar.stroke.right", Keyboard.KEY_C);
 
-	private KeyBindingBL oarSquareLeft = createKeyBinding("oar.square.left", Keyboard.KEY_C);
+	private KeyBindingBL oarSquareLeft = createKeyBinding("oar.square.left", Keyboard.KEY_Z);
 
 	private KeyBindingBL oarSquareRight = createKeyBinding("oar.square.right", Keyboard.KEY_V);
 
@@ -42,6 +56,9 @@ public class WeedwoodRowboatHandler {
 		registerKeyBinding();
 		MinecraftForge.EVENT_BUS.register(this);
 		FMLCommonHandler.instance().bus().register(this);
+		Perspective.register(WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE);
+		Perspective.register(WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE);
+		FMLCommonHandler.instance().bus().register(WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE);
 	}
 
 	private void registerKeyBinding() {
@@ -50,13 +67,18 @@ public class WeedwoodRowboatHandler {
 		}
 	}
 
+	public boolean isPlayerInRowboat() {
+		Minecraft mc = Minecraft.getMinecraft();
+		return mc.thePlayer == null ? false : mc.thePlayer.ridingEntity instanceof EntityWeedwoodRowboat;
+	}
+
 	@SubscribeEvent
 	public void onKeyInputEvent(KeyInputEvent event) {
 		if (pollKeyInput()) {
-			boolean oarStrokeLeft = this.oarStrokeLeft.isPressed();
-			boolean oarStrokeRight = this.oarStrokeRight.isPressed();
-			boolean oarSquareLeft = this.oarSquareLeft.isPressed();
-			boolean oarSquareRight = this.oarSquareRight.isPressed();
+			boolean oarStrokeLeft = this.oarStrokeLeft.isDown();
+			boolean oarStrokeRight = this.oarStrokeRight.isDown();
+			boolean oarSquareLeft = this.oarSquareLeft.isDown();
+			boolean oarSquareRight = this.oarSquareRight.isDown();
 			MessageWeedwoodRowboatInput packet = new MessageWeedwoodRowboatInput(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
 			TheBetweenlands.networkWrapper.sendToServer(packet);
 		}
@@ -77,6 +99,56 @@ public class WeedwoodRowboatHandler {
 	public void onRenderLivingEvent(RenderLivingEvent.Pre event) {
 		if (event.entity.ridingEntity instanceof EntityWeedwoodRowboat && RenderWeedwoodRowboat.notRenderingPilot) {
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onGetMouseOver(GetMouseOverEvent.Pre event) {
+		if (shouldPreventWorldInteraction()) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerUseItemEventStart(PlayerUseItemEvent.Start event) {
+		if (shouldPreventWorldInteraction()) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (shouldPreventWorldInteraction()) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerAttackEvent(ClientAttackEvent event) {
+		if (shouldPreventWorldInteraction()) {
+			event.setCanceled(true);
+		}
+	}
+
+	private boolean shouldPreventWorldInteraction() {
+		return isPlayerInRowboat() && WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective();
+	}
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) {
+			return;
+		}
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if (player == null) {
+			return;
+		}
+		if (player.ridingEntity instanceof EntityWeedwoodRowboat) {
+			return;
+		}
+		Perspective perspective = Perspective.getCurrentPerspective();
+		if (perspective == WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE || perspective == WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE) {
+			Perspective.FIRST_PERSON.switchTo();
 		}
 	}
 }

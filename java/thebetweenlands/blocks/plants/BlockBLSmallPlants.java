@@ -108,7 +108,7 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("swampTallGrass")) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.name.equals("swampTallGrass") || this.name.equals("softRush") || this.name.equals("cattail") || this.name.equals("blueEyedGrass"))) {
 			return spoopyBlockIcon;
 		}
 		return blockIcon;
@@ -118,7 +118,7 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		blockIcon = iconRegister.registerIcon("thebetweenlands:" + name);
-		if(this.name.equals("swampTallGrass")) {
+		if(this.name.equals("swampTallGrass") || this.name.equals("blueEyedGrass") || this.name.equals("cattail") || this.name.equals("softRush")) {
 			spoopyBlockIcon = iconRegister.registerIcon("thebetweenlands:" + name + "Spoopy");
 		}
 	}

@@ -14,6 +14,15 @@
       }
     ]
   },
+  "ambientSpoopy": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "ambience/ambientSpoopy",
+        "stream": true
+      }
+    ]
+  },
   "druidChant": {
     "category": "block",
     "sounds": [

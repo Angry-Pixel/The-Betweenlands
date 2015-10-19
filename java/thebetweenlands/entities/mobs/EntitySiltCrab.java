@@ -58,7 +58,8 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)) == BLBlockRegistry.silt && super.getCanSpawnHere();
+		boolean canSpawn = super.getCanSpawnHere() && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)) == BLBlockRegistry.silt;
+		return canSpawn;
 	}
 
 	@Override

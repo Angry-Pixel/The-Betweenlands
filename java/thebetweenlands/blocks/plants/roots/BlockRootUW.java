@@ -21,8 +21,6 @@ import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import java.util.Random;
 
 public class BlockRootUW extends BlockSwampWater {
-	public IIcon iconRoot;
-
 	public BlockRootUW() {
 		super(BLFluidRegistry.swampWaterRoot, Material.water);
 		setStepSound(Block.soundTypeWood);
@@ -41,7 +39,6 @@ public class BlockRootUW extends BlockSwampWater {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.iconRoot = iconRegister.registerIcon("thebetweenlands:weedwoodBark");
 		super.registerBlockIcons(iconRegister);
 	}
 

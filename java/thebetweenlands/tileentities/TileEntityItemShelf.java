@@ -30,11 +30,11 @@ public class TileEntityItemShelf extends TileEntityBasicInventory {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		for (int i = 0; i < getSizeInventory(); i++) {
+			NBTTagCompound itemStackCompound = new NBTTagCompound();
 			if(inventory[i] != null) {
-				NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
-				nbt.setTag("slotItem" + i, itemStackCompound);
-			} else
-				nbt.setTag("slotItem" + i, null);
+				inventory[i].writeToNBT(itemStackCompound);
+			}
+			nbt.setTag("slotItem" + i, itemStackCompound);
 		}
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
@@ -43,7 +43,7 @@ public class TileEntityItemShelf extends TileEntityBasicInventory {
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		for (int i = 0; i < getSizeInventory(); i++) {
 			NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("slotItem" + i);
-			if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+			if(itemStackCompound.getShort("id") != 0)
 				inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
 			else
 				inventory[i] = null;

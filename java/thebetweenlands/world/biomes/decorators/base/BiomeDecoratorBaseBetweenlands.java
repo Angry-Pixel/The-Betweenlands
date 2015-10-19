@@ -1,16 +1,17 @@
 package thebetweenlands.world.biomes.decorators.base;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.gen.OreGens;
 import thebetweenlands.world.feature.gen.WorldGenMinableBetweenlands;
-
-import java.util.Random;
 
 /**
  *
@@ -25,17 +26,17 @@ public class BiomeDecoratorBaseBetweenlands
 	protected Random rand;
 	protected int x, z;
 	protected int xx, yy, zz, attempt;
-	
+
 	public final BiomeDecoratorBaseBetweenlands setPostChunkGenPasses(int passes) {
 		this.postChunkGenPasses = passes;
 		return this;
 	}
-	
+
 	public final BiomeDecoratorBaseBetweenlands setPostChunkPopulatePasses(int passes) {
 		this.postChunkPopulatePasses = passes;
 		return this;
 	}
-	
+
 	public final int getX() {
 		return this.x;
 	}
@@ -62,7 +63,7 @@ public class BiomeDecoratorBaseBetweenlands
 			this.postChunkPopulate(i);
 		}
 	}
-	
+
 	public final void postChunkGen(World world, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
@@ -76,13 +77,13 @@ public class BiomeDecoratorBaseBetweenlands
 	public final void preChunkProvide(World world, Random rand, int chunkX, int chunkZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomes) {
 		this.preChunkProvide(world, rand, new ChunkDataAccess(chunkX, chunkZ, blocks, metadata, biomes));
 	}
-	
+
 	protected void preChunkProvide(World world, Random rand, ChunkDataAccess dataAccess) { }
-	
+
 	protected void postChunkPopulate(int pass) { }
 
 	protected void postChunkGen(int pass) { }
-	
+
 	protected final int offsetXZ() {
 		return rand.nextInt(16) + 8;
 	}
@@ -97,38 +98,43 @@ public class BiomeDecoratorBaseBetweenlands
 		this.generateOre(20, OreGens.OCTINE, 0, 64);
 		this.generateOre(2, OreGens.VALONITE, 0, 32);
 		this.generateOre(1, OreGens.LIFE_GEM, 0, 16);
-		
+
 		//Generate middle gems
-		if(this.rand.nextInt(5) == 0) {
-			int xx = this.x + this.rand.nextInt(16);
-			int zz = this.z + this.rand.nextInt(16);
-			int yy = this.world.getHeightValue(xx, zz);
-			boolean hasMud = false;
-			if(this.world.getBlock(xx, yy, zz) == BLBlockRegistry.swampWater) {
-				while(yy > 0) {
-					if(this.world.getBlock(xx, yy, zz) == BLBlockRegistry.mud) {
+		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
+		if(this.world.getBiomeGenForCoords(this.x, this.z) == BLBiomeRegistry.sludgePlains) {
+			cycles = 5 + this.rand.nextInt(3);
+		}
+		for(int i = 0; i < cycles; i++) {
+			if(this.rand.nextInt(9 / cycles + 1) == 0) {
+				int xx = this.x + this.rand.nextInt(16);
+				int zz = this.z + this.rand.nextInt(16);
+				int yy = this.world.getHeightValue(xx, zz) - 1;
+				boolean hasMud = false;
+				for(int yo = 0; yo < 16; yo++) {
+					int bx = yy + yo;
+					if(this.world.getBlock(xx, yy + yo, zz) == BLBlockRegistry.swampWater
+							&& this.world.getBlock(xx, yy + yo - 1, zz) == BLBlockRegistry.mud) {
 						hasMud = true;
+						yy = bx - 1;
+					}
+				}
+				if(hasMud) {
+					switch(this.rand.nextInt(3)) {
+					case 0:
+						this.world.setBlock(xx, yy, zz, BLBlockRegistry.aquaMiddleGemOre);
+						break;
+					case 1:
+						this.world.setBlock(xx, yy, zz, BLBlockRegistry.crimsonMiddleGemOre);
+						break;
+					case 2:
+						this.world.setBlock(xx, yy, zz, BLBlockRegistry.greenMiddleGemOre);
 						break;
 					}
-					--yy;
-				}
-			}
-			if(hasMud) {
-				switch(this.rand.nextInt(3)) {
-				case 0:
-					this.world.setBlock(xx, yy, zz, BLBlockRegistry.aquaMiddleGemOre);
-					break;
-				case 1:
-					this.world.setBlock(xx, yy, zz, BLBlockRegistry.crimsonMiddleGemOre);
-					break;
-				case 2:
-					this.world.setBlock(xx, yy, zz, BLBlockRegistry.greenMiddleGemOre);
-					break;
 				}
 			}
 		}
 	}
-	
+
 	protected void generateOre(int tries, WorldGenMinableBetweenlands oreGen, int minY, int maxY) {
 		for (int i = 0; i < tries; i++) {
 			int xx = this.x + this.rand.nextInt(16);

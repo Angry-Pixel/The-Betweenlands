@@ -8,7 +8,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -18,6 +24,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.entityAI.EntityAIApproachItem;
+import thebetweenlands.items.BLItemRegistry;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -27,7 +35,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute CHARGING_COOLDOWN_ATTRIB = (new RangedAttribute("bl.chargingCooldown", 160.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Cooldown");
 	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute("bl.chargingPreparationSpeed", 60.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
 	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
-	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.5D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
+	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.55D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
 	public static final float BASE_SPEED = 0.2F;
@@ -48,21 +56,51 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
 
+	private boolean carryShimmerstone = false;
+
 	private static final List<Block> SPAWN_BLOCKS = new ArrayList<Block>();
 	static {
 		SPAWN_BLOCKS.add(BLBlockRegistry.mud);
 		SPAWN_BLOCKS.add(BLBlockRegistry.peat);
 	}
-	
+
 	public EntityPeatMummy(World world) {
 		super(world);
-		setSize(1.5F, 1.3F);
+		setSize(0.6F, 1.55F);
+
+		this.getNavigator().setCanSwim(true);
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
-		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
-		this.tasks.addTask(3, new EntityAIWander(this, 1D));
-		this.tasks.addTask(4, new EntityAILookIdle(this));
+		this.tasks.addTask(1, new EntityAIApproachItem(this, BLItemRegistry.shimmerStone, 15, 64, 1.9F, 1.5F) {
+			@Override
+			protected double getNearSpeed() {
+				if(EntityPeatMummy.this.isCharging()) {
+					return 1.0F;
+				} else {
+					return super.getNearSpeed();
+				}
+			}
+			@Override
+			protected double getFarSpeed() {
+				if(EntityPeatMummy.this.isCharging()) {
+					return 1.0F;
+				} else {
+					return super.getFarSpeed();
+				}
+			}
+			@Override
+			protected void onPickup() {
+				EntityPeatMummy entity = EntityPeatMummy.this;
+				if(entity.isCharging()) {
+					entity.stopCharging();
+				}
+				entity.carryShimmerstone = true;
+			}
+		});
+		this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
+		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+		this.tasks.addTask(4, new EntityAIWander(this, 1D));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
 		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 	}
@@ -102,6 +140,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		nbt.setInteger("chargingPreparation", this.chargingPreparation);
 		nbt.setInteger("chargingTime", this.chargingTime);
 		nbt.setByte("chargingState", this.dataWatcher.getWatchableObjectByte(CHARGING_STATE_DW));
+		nbt.setBoolean("carryShimmerstone", this.carryShimmerstone);
 
 		super.writeEntityToNBT(nbt);
 	}
@@ -115,6 +154,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		this.chargingPreparation = nbt.getInteger("chargingPreparation");
 		this.chargingTime = nbt.getInteger("chargingTime");
 		this.dataWatcher.updateObject(CHARGING_STATE_DW, nbt.getByte("chargingState"));
+		this.carryShimmerstone = nbt.getBoolean("carryShimmerstone");
 
 		super.readEntityFromNBT(nbt);
 	}
@@ -174,7 +214,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				if(this.chargingCooldown > 0 && this.getEntityToAttack() != null) {
 					this.chargingCooldown--;
 				}
-
 				if(this.chargingCooldown == 0) {
 					this.chargingCooldown = this.getChargingCooldown() + this.worldObj.rand.nextInt(this.getChargingCooldown() / 2);
 					this.playSound("thebetweenlands:peatMummyCharge", 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
@@ -248,16 +287,16 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	}
 
 	public void updateTarget() {
-		if(this.getEntityToAttack() == null) {
-			EntityPlayer player = this.worldObj.getClosestVulnerablePlayerToEntity(this, this.getSpawningProgress() == 1.0F ? this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue() : this.getSpawningRange());
-			if(player != null) {
-				double prevPosY = this.posY;
-				this.posY = this.posY - this.yOffset;
-				if(player.canEntityBeSeen(this)) {
-					this.setTarget(player);
-				}
-				this.posY = prevPosY;
+		EntityPlayer player = this.worldObj.getClosestVulnerablePlayerToEntity(this, this.getSpawningProgress() == 1.0F ? this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue() : this.getSpawningRange());
+		if(player != null && this.getEntityToAttack() == null) {
+			double prevPosY = this.posY;
+			this.posY = this.posY - this.yOffset;
+			if(player.canEntityBeSeen(this)) {
+				this.setTarget(player);
 			}
+			this.posY = prevPosY;
+		} else if(this.getEntityToAttack() != null && player == null) {
+			this.setTarget(null);
 		}
 	}
 
@@ -302,20 +341,24 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
 		if(this.isCharging()) {
-			this.setChargingState(0);
-			this.chargingCooldown = this.getChargingCooldown() + this.worldObj.rand.nextInt(this.getChargingCooldown() / 2);
-			this.chargingPreparation = 0;
-			this.chargingTime = 0;
+			this.stopCharging();
 		}
 		return super.attackEntityAsMob(entity);
 	}
-	
+
 	@Override
 	public void playLivingSound() {
-        if(this.getSpawningProgress() == 1.0F) {
-        	super.playLivingSound();
-        }
-    }
+		if(this.getSpawningProgress() == 1.0F) {
+			super.playLivingSound();
+		}
+	}
+
+	public void stopCharging() {
+		this.setChargingState(0);
+		this.chargingCooldown = this.getChargingCooldown() + this.worldObj.rand.nextInt(this.getChargingCooldown() / 2);
+		this.chargingPreparation = 0;
+		this.chargingTime = 0;
+	}
 
 	public float getCurrentOffset() {
 		return (float) ((-this.getSpawnOffset() + this.getSpawningProgress() * this.getSpawnOffset()));
@@ -393,7 +436,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public float getScreamingProgress() {
 		return 1.0F / SCREAMING_TIMER_MAX * this.screamTimer;
 	}
-	
+
 	@Override
 	protected String getLivingSound() {
 		int randomSound = rand.nextInt(3) + 1;
@@ -409,5 +452,21 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	@Override
 	protected String getDeathSound() {
 		return "thebetweenlands:peatMummyDeath";
+	}
+
+	@Override
+	protected void dropFewItems(boolean killedByPlayer, int looting) {
+		if(this.carryShimmerstone) {
+			if(this.worldObj.rand.nextInt(8) != 0) {
+				this.dropItem(BLItemRegistry.shimmerStone, 1);
+			}
+		} else {
+			if(this.worldObj.rand.nextInt(3) == 0) {
+				this.dropItem(BLItemRegistry.shimmerStone, 1);
+				if(this.worldObj.rand.nextInt(5) == 0) {
+					this.dropItem(BLItemRegistry.shimmerStone, this.worldObj.rand.nextInt(5) + 1);
+				}
+			}
+		}
 	}
 }

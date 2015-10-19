@@ -2,84 +2,90 @@ package thebetweenlands.client.model.entity;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.utils.MathUtils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelWeedwoodRowboat extends ModelBase {
-	public ModelRenderer keel;
+	private ModelRenderer keel;
 
-	public ModelRenderer hullBottom;
+	private ModelRenderer hullBottom;
 
-	public ModelRenderer hullBottomLeft;
+	private ModelRenderer hullBottomLeft;
 
-	public ModelRenderer hullBottomRight;
+	private ModelRenderer hullBottomRight;
 
-	public ModelRenderer hullGunwaleLeft;
+	private ModelRenderer hullGunwaleLeft;
 
-	public ModelRenderer hullGunwaleRight;
+	private ModelRenderer hullGunwaleRight;
 
-	public ModelRenderer hullBow;
+	private ModelRenderer hullBow;
 
-	public ModelRenderer hullStern;
+	private ModelRenderer hullStern;
 
-	public ModelRenderer fillupback1;
+	private ModelRenderer fillupback1;
 
-	public ModelRenderer fillupfront1;
+	private ModelRenderer fillupfront1;
 
-	public ModelRenderer backrim1;
+	private ModelRenderer backrim1;
 
-	public ModelRenderer backrim2;
+	private ModelRenderer backrim2;
 
-	public ModelRenderer backrimdetail;
+	private ModelRenderer backrimdetail;
 
-	public ModelRenderer backrimdetail2;
+	private ModelRenderer backrimdetail2;
 
-	public ModelRenderer backrimdetail3;
+	private ModelRenderer backrimdetail3;
 
-	public ModelRenderer frontrim1;
+	private ModelRenderer frontrim1;
 
-	public ModelRenderer frontrim2;
+	private ModelRenderer frontrim2;
 
-	public ModelRenderer frontrimdetail1;
+	private ModelRenderer frontrimdetail1;
 
-	public ModelRenderer oarlockRight;
+	private ModelRenderer oarlockRight;
 
-	public ModelRenderer oarLoomRight;
+	private ModelRenderer oarLoomRight;
 
-	public ModelRenderer oarBladeRight;
+	private ModelRenderer oarBladeRight;
 
-	public ModelRenderer oarlockLeft;
+	private ModelRenderer oarlockLeft;
 
-	public ModelRenderer oarLoomLeft;
+	private ModelRenderer oarLoomLeft;
 
-	public ModelRenderer oarBladeLeft;
+	private ModelRenderer oarBladeLeft;
 
-	public ModelRenderer piece2r;
+	private ModelRenderer[] oars;
 
-	public ModelRenderer piece2l;
+	private ModelRenderer piece2r;
 
-	public ModelRenderer piece2rb;
+	private ModelRenderer piece2l;
 
-	public ModelRenderer piece2lb;
+	private ModelRenderer piece2rb;
 
-	public ModelRenderer piece2back;
+	private ModelRenderer piece2lb;
 
-	public ModelRenderer piece2backb;
+	private ModelRenderer piece2back;
 
-	public ModelRenderer piece3l;
+	private ModelRenderer piece2backb;
 
-	public ModelRenderer piece3r;
+	private ModelRenderer piece3l;
 
-	public ModelRenderer piece3lb;
+	private ModelRenderer piece3r;
 
-	public ModelRenderer piece3rb;
+	private ModelRenderer piece3lb;
 
-	public ModelRenderer piece3front;
+	private ModelRenderer piece3rb;
 
-	public ModelRenderer piece3frontb;
+	private ModelRenderer piece3front;
+
+	private ModelRenderer piece3frontb;
 
 	public ModelWeedwoodRowboat() {
 		textureWidth = 256;
@@ -236,6 +242,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.addChild(oarlockLeft);
 		oarlockRight.addChild(oarLoomRight);
 		hullGunwaleLeft.addChild(oarlockRight);
+		oars = new ModelRenderer[] { oarLoomLeft, oarLoomRight };
 	}
 
 	private void reconstructModel() {
@@ -251,7 +258,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 	}
 
 	private void deleteDisplayList(ModelRenderer model) {
-		if (ReflectionHelper.getPrivateValue(ModelRenderer.class, model, "compiled") == Boolean.TRUE) {
+		if (ReflectionHelper.getPrivateValue(ModelRenderer.class, model, 10) == Boolean.TRUE) {
 			GLAllocation.deleteDisplayLists((int) ReflectionHelper.getPrivateValue(ModelRenderer.class, model, 11));
 			for (ModelRenderer modelRenderer: (List<ModelRenderer>) model.childModels) {
 				deleteDisplayList(modelRenderer);
@@ -267,9 +274,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float swing, float speed, float age, float yaw, float pitch, float scale) {
-		/*if (entity.ticksExisted % 20 == 0) {
-			reconstructModel();
-		}*/
+//		if (entity.ticksExisted % 20 == 0) reconstructModel();
+		EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) entity;
+		animateOar(rowboat, EntityWeedwoodRowboat.LEFT_OAR, swing);
+		animateOar(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, swing);
 		keel.render(scale);
 		hullBottom.render(scale);
 		hullBottomLeft.render(scale);
@@ -278,5 +286,17 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullStern.render(scale);
 		hullGunwaleLeft.render(scale);
 		hullGunwaleRight.render(scale);
+	}
+
+	private void animateOar(EntityWeedwoodRowboat rowboat, int side, float swing) {
+		final float scale = 40;
+		float theta = rowboat.getOarRotation(side, swing) * scale;
+		ModelRenderer oar = oars[side];
+		oar.rotateAngleX = ((float) MathHelper.denormalizeClamp(-Math.PI / 3, -Math.PI / 12, Math.sin(-theta) + 1) / 2);
+		oar.rotateAngleY = ((float) MathHelper.denormalizeClamp(-Math.PI / 4, Math.PI / 4, Math.sin(-theta + 1) + 1) / 2);
+		if (side == EntityWeedwoodRowboat.RIGHT_OAR) {
+			oar.rotateAngleX = -oar.rotateAngleX;
+			oar.rotateAngleY = (MathUtils.PI - oar.rotateAngleY);
+		}
 	}
 }

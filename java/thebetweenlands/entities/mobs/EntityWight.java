@@ -20,8 +20,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	public EntityWight(World world) {
 		super(world);
-		setSize(0.9F, 2F);
-		getNavigator().setAvoidsWater(true);
+		setSize(0.7F, 2F);
+		getNavigator().setCanSwim(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, meleeAttack);
 		tasks.addTask(2, new EntityAIWander(this, 0.3D));
@@ -46,8 +46,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(12.0D);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 12.0D);
+		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
 
 		if(target != null && !target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask))
 			setTargetSpotted(target, true);
