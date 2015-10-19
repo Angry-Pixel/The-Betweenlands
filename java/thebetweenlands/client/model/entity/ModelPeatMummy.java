@@ -2,8 +2,10 @@ package thebetweenlands.client.model.entity;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
+import thebetweenlands.entities.mobs.EntityPeatMummy;
 
 public class ModelPeatMummy extends MowzieModelBase {
     public MowzieModelRenderer body_base;
@@ -34,10 +36,12 @@ public class ModelPeatMummy extends MowzieModelBase {
     public MowzieModelRenderer armright2;
     public MowzieModelRenderer armleft;
     public MowzieModelRenderer armleft2;
+    public MowzieModelRenderer modelBase;
 
     public ModelPeatMummy() {
         this.textureWidth = 128;
         this.textureHeight = 64;
+        this.modelBase = new MowzieModelRenderer(this, 0, 0);
         this.teeth1 = new MowzieModelRenderer(this, 82, 30);
         this.teeth1.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.teeth1.addBox(-2.5F, -2.0F, -7.7F, 5, 1, 6, 0.0F);
@@ -168,15 +172,16 @@ public class ModelPeatMummy extends MowzieModelBase {
         this.armrightJoint.addChild(this.armright);
         this.legleft.addChild(this.legleft2);
         this.shoulderBase.addChild(this.armrightJoint);
+        modelBase.addChild(body_base);
         
-        parts = new MowzieModelRenderer[] {body_base, buttJoint, shoulderJoint, sexybutt, legright, legleft, legright2, legleft2, shoulderBase, shoulderright, shoulderleft, neck, armright, armleft, head1, head2, jaw, teeth2, hair, teeth1, cheecktissueright, cheecktissue2, armright2, armleft2, legleftJoint, legrightJoint, armleftJoint, armrightJoint};
+        parts = new MowzieModelRenderer[] {body_base, buttJoint, shoulderJoint, sexybutt, legright, legleft, legright2, legleft2, shoulderBase, shoulderright, shoulderleft, neck, armright, armleft, head1, head2, jaw, teeth2, hair, teeth1, cheecktissueright, cheecktissue2, armright2, armleft2, legleftJoint, legrightJoint, armleftJoint, armrightJoint, modelBase};
         setInitPose();
     }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         setRotationAngles(entity, f, f1, f2, f3, f4, f5);
-        this.body_base.render(f5);
+        this.modelBase.render(f5);
     }
 
     /**
@@ -189,15 +194,8 @@ public class ModelPeatMummy extends MowzieModelBase {
     }
 
     public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        setToInitPose();
-
 //        f = entity.ticksExisted;
 //        f1 = 1f;
-
-        float globalDegree = 1.5f;
-        float wiggleDegree = 1.5f;
-        float globalSpeed = 0.6f;
-        float globalHeight = 1.5f;
 
         faceTarget(neck, 1, f3, f4);
 
@@ -205,6 +203,12 @@ public class ModelPeatMummy extends MowzieModelBase {
         if (newf1 > 0.4) newf1 = 0.4f;
         float newf12 = f1;
         if (newf12 > 0.7) newf12 = 0.7f;
+
+        float globalDegree = 1.5f;
+        float wiggleDegree = 1.5f;
+        float globalSpeed = 0.6f;
+        float globalHeight = 1.5f;
+
         body_base.rotationPointX -= wiggleDegree * globalDegree * newf1 * 3f * Math.cos(globalSpeed * f);
         swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, newf1);
         swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, newf1);
@@ -212,7 +216,8 @@ public class ModelPeatMummy extends MowzieModelBase {
         swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, newf1);
 
         walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
-        walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1.5f, -0.1f, f, f1);
+        walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
+        walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
         bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
 
         flap(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.3f, f, newf12);
@@ -232,5 +237,56 @@ public class ModelPeatMummy extends MowzieModelBase {
         walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, newf12);
         walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, newf12);
         swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, newf12);
+    }
+
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float partialRenderTicks) {
+        super.setLivingAnimations(entity, yaw, pitch, partialRenderTicks);
+        setToInitPose();
+        EntityPeatMummy mummy = (EntityPeatMummy)entity;
+        float progress = mummy.getSpawningProgress();
+        body_base.rotateAngleX -= 1 - progress;
+        armleftJoint.rotateAngleX -= 1.5 * (1 - progress);
+        armrightJoint.rotateAngleX -= 1.5 * (1 - progress);
+        modelBase.rotationPointZ += 20 * (1 - progress);
+        modelBase.rotationPointY += 10 * (1 - progress);
+
+        float globalDegree = 1.5f;
+        float wiggleDegree = 1.5f;
+        float globalSpeed = 1.3f;
+        float globalHeight = 1.5f;
+
+        float f = progress * 10;
+        float f1 = (float) (0.6f * (1/(1+Math.pow(2, 100*(progress-0.9)))));
+        if (progress == 1) f1 = 0;
+
+        body_base.rotationPointX -= wiggleDegree * globalDegree * f1 * 3f * Math.cos(globalSpeed * f);
+        swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, f1);
+        swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, f1);
+        swing(shoulderBase, globalSpeed, 0.4f * globalDegree * wiggleDegree, true, 0, 0, f, f1);
+        swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, f1);
+
+        walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
+        walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
+        walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
+        bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
+
+        flap(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.3f, f, f1);
+        walk(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.5f, f, f1);
+        walk(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
+        swing(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
+
+        flap(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, 0.3f, f, f1);
+        walk(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, true, 0- 0.8f, -0.5f, f, f1);
+        walk(legright2, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f- 0.8f, 0.3f, f, f1);
+        swing(legright2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f- 0.8f, -0.3f, f, f1);
+
+        walk(armleftJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, 0.3f, f, f1);
+        walk(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
+        swing(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
+
+        walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, f1);
+        walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, f1);
+        swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, f1);
     }
 }
