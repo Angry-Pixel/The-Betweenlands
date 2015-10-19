@@ -95,15 +95,4 @@ public final class MathUtils {
 	public static float lerpAngle(float a, float b, float t) {
 		return t * (mod(-a + b + 180, 360) - 180) + a;
 	}
-
-	public static int joinFloat(float a, float b, float c) {
-		return joinInt(MathHelper.floor_float(a * 255), MathHelper.floor_float(b * 255), MathHelper.floor_float(c * 255));
-	}
-
-	public static int joinInt(int a, int b, int c) {
-		int r = a;
-		r = (r << 8) + b;
-		r = (r << 8) + c;
-		return r;
-	}
 }

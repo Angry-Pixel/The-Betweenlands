@@ -1,5 +1,8 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -34,7 +37,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
 	public static final float BASE_SPEED = 0.2F;
-	public static final float BASE_DAMAGE = 6.0F;
+	public static final float BASE_DAMAGE = 8.0F;
 
 	private float prevYOffset = 0.0F;
 	public static final int SPAWNING_STATE_DW = 20;
@@ -51,9 +54,15 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
 
+	private static final List<Block> SPAWN_BLOCKS = new ArrayList<Block>();
+	static {
+		SPAWN_BLOCKS.add(BLBlockRegistry.mud);
+		SPAWN_BLOCKS.add(BLBlockRegistry.peat);
+	}
+	
 	public EntityPeatMummy(World world) {
 		super(world);
-		setSize(1.0F, 1.0F);
+		setSize(1.5F, 1.3F);
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
@@ -68,7 +77,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(80.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
@@ -134,7 +143,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				this.setSpawningFinished();
 			}
 
-			if(this.isInMud() && this.getSpawningProgress() != 1.0F) {
+			if(this.isInValidSpawnPad() && this.getSpawningProgress() != 1.0F) {
 				this.yOffset = this.getCurrentOffset();
 				this.motionY = 0;
 				this.motionX = 0;
@@ -220,13 +229,11 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		return this.getEntityToAttack() != null;
 	}
 
-	public boolean isInMud() {
+	public boolean isInValidSpawnPad() {
 		double initialPosY = this.posY - this.yOffset;
 		int ebx = MathHelper.floor_double(this.posX);
-		int eby = MathHelper.floor_double(initialPosY); //Ignore offset, want to check if there is mud at the initial position
+		int eby = MathHelper.floor_double(initialPosY); //Ignore offset, want to check at the initial position
 		int ebz = MathHelper.floor_double(this.posZ);
-
-		Block spawnBlock = BLBlockRegistry.mud;
 
 		boolean inMud = true;
 
@@ -235,7 +242,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				for(int x = -1; x <= 1; x++) {
 					for(int z = -1; z <= 1; z++) {
 						Block cb = this.worldObj.getBlock(ebx + x, eby + y, ebz + z);
-						if(!(y == -1 ? (cb == spawnBlock) : (cb.isOpaqueCube() || cb == spawnBlock))) {
+						if(!(y == -1 ? (SPAWN_BLOCKS.contains(cb)) : (cb.isOpaqueCube() || SPAWN_BLOCKS.contains(cb)))) {
 							inMud = false;
 							break checkLoop;
 						}
@@ -290,7 +297,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.isInMud();
+		return super.getCanSpawnHere() && this.isInValidSpawnPad();
 	}
 
 	@Override

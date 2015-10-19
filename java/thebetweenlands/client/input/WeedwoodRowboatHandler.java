@@ -34,13 +34,13 @@ public class WeedwoodRowboatHandler {
 
 	private List<KeyBindingBL> keyBindings = new ArrayList<KeyBindingBL>();
 
-	private KeyBindingBL oarStrokeLeft = createKeyBinding("oar.stroke.left", Keyboard.KEY_C);
+	private KeyBindingBL oarStrokeLeft = createKeyBinding("oar.stroke.left", Keyboard.KEY_X);
 
-	private KeyBindingBL oarStrokeRight = createKeyBinding("oar.stroke.right", Keyboard.KEY_X);
+	private KeyBindingBL oarStrokeRight = createKeyBinding("oar.stroke.right", Keyboard.KEY_C);
 
-	private KeyBindingBL oarSquareLeft = createKeyBinding("oar.square.left", Keyboard.KEY_V);
+	private KeyBindingBL oarSquareLeft = createKeyBinding("oar.square.left", Keyboard.KEY_Z);
 
-	private KeyBindingBL oarSquareRight = createKeyBinding("oar.square.right", Keyboard.KEY_Z);
+	private KeyBindingBL oarSquareRight = createKeyBinding("oar.square.right", Keyboard.KEY_V);
 
 	private WeedwoodRowboatHandler() {}
 
@@ -73,10 +73,10 @@ public class WeedwoodRowboatHandler {
 	@SubscribeEvent
 	public void onKeyInputEvent(KeyInputEvent event) {
 		if (pollKeyInput()) {
-			boolean oarStrokeLeft = this.oarStrokeLeft.isPressed();
-			boolean oarStrokeRight = this.oarStrokeRight.isPressed();
-			boolean oarSquareLeft = this.oarSquareLeft.isPressed();
-			boolean oarSquareRight = this.oarSquareRight.isPressed();
+			boolean oarStrokeLeft = this.oarStrokeLeft.isDown();
+			boolean oarStrokeRight = this.oarStrokeRight.isDown();
+			boolean oarSquareLeft = this.oarSquareLeft.isDown();
+			boolean oarSquareRight = this.oarSquareRight.isDown();
 			MessageWeedwoodRowboatInput packet = new MessageWeedwoodRowboatInput(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
 			TheBetweenlands.networkWrapper.sendToServer(packet);
 		}
