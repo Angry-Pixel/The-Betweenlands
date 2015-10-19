@@ -3,7 +3,6 @@ package thebetweenlands.core;
 import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.tree.AbstractInsnNode.*;
 
-import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -21,7 +20,6 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
-import org.objectweb.asm.util.CheckClassAdapter;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static final String SLEEP_PER_TICK = "sleepPerTick";
@@ -157,7 +155,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		String runTick = obf ? "p" : "runTick";
 		String isPressed = obf ? "f" : "isPressed";
 		String handlePlayerAttackInput = obf ? "al" : "func_147116_af";
-		String minecraft = obf ? "boa" : "net/minecraft/client/Minecraft";
+		String minecraft = obf ? "bao" : "net/minecraft/client/Minecraft";
 		String leftClickCounter = obf ? "U" : "leftClickCounter";
 		boolean needsStartGame = true;
 		boolean needsRunGameLoop = true;
@@ -308,7 +306,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		String entityDesc = obf ? "Lsa;" : "Lnet/minecraft/entity/Entity;";
 		String getMouseOverBLDesc = "(F)" + entityDesc;
 		String entityRenderer = obf ? "blt" : "net/minecraft/client/renderer/EntityRenderer";
-		String pointedEntity = obf ? "j" : "pointedEntity";
+		String pointedEntity = obf ? "x" : "pointedEntity";
 		boolean needsOrientCamera = true;
 		boolean needsRenderWorld = true;
 		boolean needsGetMouseOver = true;
