@@ -1,8 +1,14 @@
 package thebetweenlands.world.biomes;
 
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityDragonFly;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityGecko;
+import thebetweenlands.entities.mobs.EntityLurker;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.decorators.BiomeDecoratorCoarseIslands;
@@ -17,7 +23,7 @@ extends BiomeGenBaseBetweenlands
 	public BiomeCoarseIslands(int biomeID) {
 		this(biomeID, new BiomeDecoratorCoarseIslands());
 	}
-	
+
 	public BiomeCoarseIslands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID, decorator);
 		this.setFogColor((byte)10, (byte)30, (byte)12);
@@ -34,31 +40,32 @@ extends BiomeGenBaseBetweenlands
 
 		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 20, 1, 2));
-		spawnableCreatureList.add(new SpawnListEntry(EntityDragonFly.class, 25, 2, 4));
-        spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
-    	spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 20, 1, 1));
-    	spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 300, 5, 8));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
+		spawnableCreatureList.add(new SpawnListEntry(EntityDragonFly.class, 35, 2, 4));
+		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 10, 1, 1));
+		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
+		spawnableCreatureList.add(new SpawnListEntry(EntityGecko.class, 35, 1, 3));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];
-	
+
 	@Override
 	protected void initializeNoiseGenBiome(Random rng) { 
 		this.islandNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 	}
-	
+
 	@Override
 	protected void generateNoiseBiome(int chunkX, int chunkZ) { 
 		this.islandNoise = this.islandNoiseGen.func_151599_a(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 	}
-	
+
 	@Override
 	public int getRootHeight(int x, int z) {
 		return WorldProviderBetweenlands.LAYER_HEIGHT + 10;
 	}
-	
+
 	@Override
 	public int getHeightVariation(int x, int z) {
 		int cx = x % 16;
@@ -69,9 +76,9 @@ extends BiomeGenBaseBetweenlands
 		if(cz < 0) {
 			cz = (16 + cz);
 		}
-		
+
 		//System.out.println(cx + " " + cz);
-		
+
 		double noise = this.islandNoise[cx * 16 + cz] / 1.4f + 1.8f;
 		int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 		if(noise <= 0) {

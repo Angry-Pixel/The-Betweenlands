@@ -5,6 +5,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -49,8 +50,9 @@ public class BiomeSwampLands
         spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 15, 2, 6));
         spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
         spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
-        spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 300, 5, 8));
+        spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
         spawnableWaterCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 200, 1, 1));
+        spawnableCreatureList.add(new SpawnListEntry(EntityGecko.class, 30, 1, 3));
     }
 
 	/*@Override

@@ -452,6 +452,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return ItemBlockPlantSmall.class;
 	}
+	
 	@Override
 	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
 		if (!world.isRemote && meta > 1 && meta <= 7) {
@@ -465,4 +466,8 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 		}
 	}
 
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
 }
