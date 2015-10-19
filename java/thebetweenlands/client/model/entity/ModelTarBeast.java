@@ -198,9 +198,10 @@ public class ModelTarBeast extends MowzieModelBase {
         float globalDegree = 1.8f;
         float globalHeight = 1.8f;
 
-//        faceTarget(neck, 2, f3, f4);
-        faceTarget(headbase, 2, f3, f4);
-
+//        neck.rotateAngleY += (f3 / (180f / (float) Math.PI)) / 2;
+        headbase.rotateAngleY += (f3 / (180f / (float) Math.PI));
+//        neck.rotateAngleX += (f4 / (180f / (float) Math.PI)) / 2;
+        headbase.rotateAngleX += (f4 / (180f / (float) Math.PI));
         waistJoint.rotationPointY += 5 * f1;
         bob(waistJoint, 1 * globalSpeed, 1.5f* globalHeight, false, f, f1);
         walk(waist, 1 * globalSpeed, 0.1f * globalHeight, false, 0.75f, 0.1f, f, f1);
