@@ -78,8 +78,8 @@ public class DecayEventHandler {
 			
 			// Oli, if you ever want to change decay speed, change the number
 			// that the ticksExisted is divided by.
-			// Right now every multiple of 2500 the decay level is decreased by 1
-			int decayTicks = 2500;
+			// Right now every multiple of 4000 the decay level is decreased by 1
+			int decayTicks = 4000;
 			if(event.player.isInWater()) decayTicks = decayTicks / 3 * 2;
 			if (event.player.ticksExisted % decayTicks == 0) {
 				DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);

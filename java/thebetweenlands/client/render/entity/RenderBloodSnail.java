@@ -12,7 +12,7 @@ public class RenderBloodSnail extends RenderLiving {
 	private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/bloodSnail.png");
 
 	public RenderBloodSnail() {
-		super(new ModelBloodSnail(), 0.5F);
+		super(new ModelBloodSnail(), 0.2F);
 	}
 
 	@Override

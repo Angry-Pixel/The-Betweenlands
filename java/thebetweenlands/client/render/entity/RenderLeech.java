@@ -16,7 +16,7 @@ public class RenderLeech extends RenderLiving {
 	private static final ResourceLocation texture =  new ResourceLocation("thebetweenlands:textures/entity/leechHungry.png");
 
 	public RenderLeech() {
-		super(new ModelLeech(), 0.5F);
+		super(new ModelLeech(), 0.3F);
 	 }
 
     protected void preRenderCallback(EntityLivingBase entity, float par2) {

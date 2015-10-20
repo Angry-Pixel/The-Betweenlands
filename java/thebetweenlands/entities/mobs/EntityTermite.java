@@ -16,7 +16,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 
 	public EntityTermite(World world) {
 		super(world);
-		setSize(1.25F, 2.5F);
+		setSize(0.7F, 0.6F);
 	}
 
 	@Override

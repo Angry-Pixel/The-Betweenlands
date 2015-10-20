@@ -32,7 +32,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		tasks.addTask(5, new EntityAIWander(this, 0.4D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		setSize(0.8F, 0.6F);
+		setSize(0.45F, 0.55F);
 		stepHeight = 0.0F;
 	}
 
