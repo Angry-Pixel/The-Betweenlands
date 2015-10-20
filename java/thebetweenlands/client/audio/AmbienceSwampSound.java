@@ -31,7 +31,7 @@ public class AmbienceSwampSound
     		isBloodSky = ((WorldProviderBetweenlands)world.provider).getWorldData().getEnvironmentEventRegistry().BLOODSKY.isActive();
     	}
         if( this.player.dimension != ModInfo.DIMENSION_ID || this.player.posY < WorldProviderBetweenlands.CAVE_START || isBloodSky) {
-            if( this.volume > 0.05F ) {
+        	if( this.volume > 0.05F ) {
                 this.volume -= 0.02F;
                 if( this.volume < 0.05F ) {
                     this.volume = 0.05F;

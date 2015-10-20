@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.SoundEvent.SoundSourceEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.audio.AmbienceCaveSound;
 import thebetweenlands.client.audio.AmbienceEnvironmentEvent;
 import thebetweenlands.client.audio.AmbienceSwampSound;
@@ -27,7 +28,7 @@ public class AmbienceSoundPlayHandler
 
 	@SubscribeEvent
 	public void onPlayerCltTick(PlayerTickEvent event) {
-		if( event.phase == Phase.START && event.side == Side.CLIENT ) {
+		if( event.phase == Phase.START && event.side == Side.CLIENT && event.player == TheBetweenlands.proxy.getClientPlayer()) {
 			if( event.player.dimension == ModInfo.DIMENSION_ID ) {
 				Minecraft mc = Minecraft.getMinecraft();
 				boolean muteMusic = false;

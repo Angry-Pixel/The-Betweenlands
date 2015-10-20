@@ -13,7 +13,7 @@ public class ThemHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTick(PlayerTickEvent event) {
-		if(event.side == Side.SERVER || event.player.dimension != ConfigHandler.DIMENSION_ID) return;
+		if(event.side == Side.SERVER || event.player.dimension != ConfigHandler.DIMENSION_ID || event.player != TheBetweenlands.proxy.getClientPlayer()) return;
 		TheBetweenlands.proxy.spawnThem();
 	}
 }
