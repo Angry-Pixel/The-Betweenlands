@@ -1,11 +1,18 @@
 package thebetweenlands.entities.mobs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -17,9 +24,8 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.entityAI.EntityAIApproachItem;
 import thebetweenlands.items.BLItemRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -31,6 +37,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute("bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
 	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute("bl.chargingSpeed", 0.55D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute("bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
+
+	private static final int BREAK_COUNT = 5;
 
 	public static final float BASE_SPEED = 0.2F;
 	public static final float BASE_DAMAGE = 8.0F;
@@ -157,14 +165,33 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (this.worldObj.isRemote) {
+		if(this.worldObj.isRemote) {
 			if(this.getSpawningProgress() != 1.0F && this.getSpawningProgress() != 0.0F) {
 				this.yOffset = this.getCurrentOffset();
-				this.motionY = 0;
 				this.motionX = 0;
+				this.motionY = 0;
 				this.motionZ = 0;
 				if(this.getSpawningState() == this.getSpawningLength() - 1) {
 					this.setPosition(this.posX, this.posY + 0.22D, this.posZ);
+				}
+				int breakPoint = getSpawningLength() / BREAK_COUNT;
+				if ((getSpawningState() - breakPoint / 2 - 1) % breakPoint == 0) {
+					int x = MathHelper.floor_double(this.posX), y = MathHelper.floor_double(this.posY - this.yOffset), z = MathHelper.floor_double(this.posZ);
+					Block block = this.worldObj.getBlock(x, y, z);
+					int metadata = this.worldObj.getBlockMetadata(x, y, z);
+					String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + metadata;
+					double px = this.posX + this.rand.nextDouble() - 0.5F;
+					double py = this.posY - this.yOffset + this.rand.nextDouble() * 0.2 + 0.075;
+					double pz = this.posZ + this.rand.nextDouble() - 0.5F;
+					this.worldObj.playSound(this.posX, this.posY, this.posZ, block.stepSound.getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F, false);
+					for (int i = 0, amount = this.rand.nextInt(20) + 15; i < amount; i++) {
+						double ox = this.rand.nextDouble() * 0.1F - 0.05F;
+						double oz = this.rand.nextDouble() * 0.1F - 0.05F;
+						double motionX = this.rand.nextDouble() * 0.2 - 0.1;
+						double motionY = this.rand.nextDouble() * 0.25 + 0.1;
+						double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
+						this.worldObj.spawnParticle(particle, px + ox, py, pz + oz, motionX, motionY, motionZ);
+					}
 				}
 			} else {
 				this.yOffset = 0;
