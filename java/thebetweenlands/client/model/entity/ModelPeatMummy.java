@@ -240,11 +240,10 @@ public class ModelPeatMummy extends MowzieModelBase {
     }
 
     @Override
-    public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float partialRenderTicks) {
-        super.setLivingAnimations(entity, yaw, pitch, partialRenderTicks);
+    public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float delta) {
         setToInitPose();
         EntityPeatMummy mummy = (EntityPeatMummy)entity;
-        float progress = mummy.getSpawningProgress();
+        float progress = mummy.getSpawningProgress(delta);
         body_base.rotateAngleX -= 1 - progress;
         armleftJoint.rotateAngleX -= 1.5 * (1 - progress);
         armrightJoint.rotateAngleX -= 1.5 * (1 - progress);

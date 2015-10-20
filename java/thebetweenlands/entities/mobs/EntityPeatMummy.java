@@ -163,7 +163,19 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(!this.worldObj.isRemote) {
+		if (this.worldObj.isRemote) {
+			if(this.getSpawningProgress() != 1.0F && this.getSpawningProgress() != 0.0F) {
+				this.yOffset = this.getCurrentOffset();
+				this.motionY = 0;
+				this.motionX = 0;
+				this.motionZ = 0;
+				if(this.getSpawningState() == this.getSpawningLength() - 1) {
+					this.setPosition(this.posX, this.posY + 0.22D, this.posZ);
+				}
+			} else {
+				this.yOffset = 0;
+			}
+		} else {
 			this.prevYOffset = this.yOffset;
 
 			this.updateTarget();
@@ -189,18 +201,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				}
 			} else {
 				this.setSpawningFinished();
-				this.yOffset = 0;
-			}
-		} else {
-			if(this.getSpawningProgress() != 1.0F && this.getSpawningProgress() != 0.0F) {
-				this.yOffset = this.getCurrentOffset();
-				this.motionY = 0;
-				this.motionX = 0;
-				this.motionZ = 0;
-				if(this.getSpawningState() == this.getSpawningLength() - 1) {
-					this.setPosition(this.posX, this.posY + 0.22D, this.posZ);
-				}
-			} else {
 				this.yOffset = 0;
 			}
 		}
@@ -385,6 +385,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 			return 1.0F;
 		}
 		return 1.0F / this.getSpawningLength() * this.getSpawningState();
+	}
+
+	public float getSpawningProgress(float delta) {
+		if(this.getSpawningLength() == 0) {
+			return 1.0F;
+		}
+		return 1.0F / this.getSpawningLength() * (this.getSpawningState() + (this.getSpawningState() == this.getSpawningLength() ? 0 : delta));
 	}
 
 	public void updateSpawningState() {
