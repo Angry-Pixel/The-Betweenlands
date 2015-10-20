@@ -22,23 +22,23 @@ import java.util.Random;
 
 public class BlockGenericOre extends Block {
 	private String type;
-	private EnumMaterialsBL oreDrops;
+	private ItemStack oreDrops;
 	private Random rand = new Random();
 	
-	public BlockGenericOre(String blockName, EnumMaterialsBL blockDrops) {
+	public BlockGenericOre(String blockName, ItemStack oreDrops) {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
 		setHardness(3.0F);
 		setResistance(5.0F);
 		setCreativeTab(ModCreativeTabs.blocks);
 		type = blockName;
-		oreDrops = blockDrops;
+		this.oreDrops = oreDrops;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 	}
-
+	
 	private ItemStack getOreDropped() {
-		return ItemMaterialsBL.createStack(oreDrops);
+		return this.oreDrops != null ? new ItemStack(this.oreDrops.getItem(), 1, this.oreDrops.getItemDamage()) : this.oreDrops;
 	}
 
 	@Override
@@ -82,6 +82,12 @@ public class BlockGenericOre extends Block {
 		if (type.equals("sulfurOre"))
 			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
 		
+		else if (type.equals("valoniteOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+		
+		else if (type.equals("lifeCrystalOre"))
+			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
+
 		return xpAmount;
 
 	}

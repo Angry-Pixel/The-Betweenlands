@@ -5,11 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
@@ -18,6 +22,7 @@ import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
 import thebetweenlands.blocks.container.BlockCompostBin;
 import thebetweenlands.blocks.container.BlockInfuser;
+import thebetweenlands.blocks.container.BlockItemShelf;
 import thebetweenlands.blocks.container.BlockLootPot1;
 import thebetweenlands.blocks.container.BlockLootPot2;
 import thebetweenlands.blocks.container.BlockLootPot3;
@@ -27,7 +32,6 @@ import thebetweenlands.blocks.container.BlockTarLootPot1;
 import thebetweenlands.blocks.container.BlockTarLootPot2;
 import thebetweenlands.blocks.container.BlockTarLootPot3;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
-import thebetweenlands.blocks.container.BlockItemShelf;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
@@ -40,6 +44,7 @@ import thebetweenlands.blocks.plants.BlockBogBean;
 import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
 import thebetweenlands.blocks.plants.BlockCaveMoss;
 import thebetweenlands.blocks.plants.BlockDeepWaterCoral;
+import thebetweenlands.blocks.plants.BlockDoubleHeightPlant;
 import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
 import thebetweenlands.blocks.plants.BlockGoldenClub;
 import thebetweenlands.blocks.plants.BlockMarshMarigold;
@@ -60,7 +65,6 @@ import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
-import thebetweenlands.blocks.plants.BlockDoubleHeightPlant;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -98,12 +102,11 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry {
     // LIST WITH ALL BLOCKS IN THIS CLASS
@@ -152,9 +155,9 @@ public class BLBlockRegistry {
     public static final Block greenMiddleGemOre = new BlockMiddleGemOre("greenMiddleGemOre", null);
     public static final Block octineOre = new BlockGenericOre("octineOre", null).setLightLevel(0.875F); //setting null drops item block
     public static final Block bluriteOre = new BlockGenericOre("bluriteOre", null);
-    public static final Block sulfurOre = new BlockGenericOre("sulfurOre", EnumMaterialsBL.SULFUR);
-    public static final Block valoniteOre = new BlockGenericOre("valoniteOre", EnumMaterialsBL.VALONITE_SHARD);
-    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", EnumMaterialsBL.TANGLED_ROOT);
+    public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
+    public static final Block valoniteOre = new BlockGenericOre("valoniteOre", ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
+    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", new ItemStack(BLItemRegistry.lifeCrystal));
 
     // TREES
     public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood");
