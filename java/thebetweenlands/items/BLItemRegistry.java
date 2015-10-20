@@ -154,7 +154,7 @@ public class BLItemRegistry {
     public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();
     
     //LOOT
-    public static final Item voodooDoll = new ItemVoodooDoll().setMaxDamage(4);
+    public static final Item voodooDoll = new ItemVoodooDoll();
     public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
     public static final Item ringOfPower = new ItemRingOfPower();
     public static final Item swiftPick = new ItemSwiftPick(BLMaterials.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
