@@ -1,20 +1,11 @@
 package thebetweenlands.entities.mobs;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -26,6 +17,9 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.entityAI.EntityAIApproachItem;
 import thebetweenlands.items.BLItemRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -162,7 +156,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-
 		if (this.worldObj.isRemote) {
 			if(this.getSpawningProgress() != 1.0F && this.getSpawningProgress() != 0.0F) {
 				this.yOffset = this.getCurrentOffset();

@@ -243,49 +243,80 @@ public class ModelPeatMummy extends MowzieModelBase {
     public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float delta) {
         setToInitPose();
         EntityPeatMummy mummy = (EntityPeatMummy)entity;
-        float progress = mummy.getSpawningProgress(delta);
-        body_base.rotateAngleX -= 1 - progress;
-        armleftJoint.rotateAngleX -= 1.5 * (1 - progress);
-        armrightJoint.rotateAngleX -= 1.5 * (1 - progress);
-        modelBase.rotationPointZ += 20 * (1 - progress);
-        modelBase.rotationPointY += 10 * (1 - progress);
+        float spawningProgress = mummy.getSpawningProgress(delta);
+        body_base.rotateAngleX -= 1 - spawningProgress;
+        armleftJoint.rotateAngleX -= 1.5 * (1 - spawningProgress);
+        armrightJoint.rotateAngleX -= 1.5 * (1 - spawningProgress);
+        modelBase.rotationPointZ += 20 * (1 - spawningProgress);
+        modelBase.rotationPointY += 10 * (1 - spawningProgress);
 
         float globalDegree = 1.5f;
         float wiggleDegree = 1.5f;
         float globalSpeed = 1.3f;
         float globalHeight = 1.5f;
 
-        float f = progress * 10;
-        float f1 = (float) (0.6f * (1/(1+Math.pow(2, 100*(progress-0.9)))));
-        if (progress == 1) f1 = 0;
+        float f = spawningProgress * 10;
+        float f1 = (float) (0.6f * (1/(1+Math.pow(2, 100*(spawningProgress-0.9)))));
+        if (spawningProgress != 1) {
 
-        body_base.rotationPointX -= wiggleDegree * globalDegree * f1 * 3f * Math.cos(globalSpeed * f);
-        swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, f1);
-        swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, f1);
-        swing(shoulderBase, globalSpeed, 0.4f * globalDegree * wiggleDegree, true, 0, 0, f, f1);
-        swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, f1);
+            body_base.rotationPointX -= wiggleDegree * globalDegree * f1 * 3f * Math.cos(globalSpeed * f);
+            swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, f1);
+            swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, f1);
+            swing(shoulderBase, globalSpeed, 0.4f * globalDegree * wiggleDegree, true, 0, 0, f, f1);
+            swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, f1);
 
-        walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
-        walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
-        walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
-        bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
+            walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
+            walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
+            walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
+            bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
 
-        flap(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.3f, f, f1);
-        walk(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.5f, f, f1);
-        walk(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
-        swing(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
+            flap(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, -0.3f, f, f1);
+            walk(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, -0.5f, f, f1);
+            walk(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
+            swing(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, f1);
 
-        flap(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, 0.3f, f, f1);
-        walk(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, true, 0- 0.8f, -0.5f, f, f1);
-        walk(legright2, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f- 0.8f, 0.3f, f, f1);
-        swing(legright2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f- 0.8f, -0.3f, f, f1);
+            flap(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, 0.3f, f, f1);
+            walk(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, true, 0 - 0.8f, -0.5f, f, f1);
+            walk(legright2, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f - 0.8f, 0.3f, f, f1);
+            swing(legright2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, -0.3f, f, f1);
 
-        walk(armleftJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, 0.3f, f, f1);
-        walk(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
-        swing(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
+            walk(armleftJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, 0.3f, f, f1);
+            walk(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
+            swing(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, f1);
 
-        walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, f1);
-        walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, f1);
-        swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, f1);
+            walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, f1);
+            walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, f1);
+            swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, f1);
+        }
+
+        float screamProgress = mummy.getScreamingProgress();
+        if (screamProgress != 0) {
+            if (screamProgress > 1) screamProgress = 1;
+            float controller = 40 * (float) (-screamProgress * (screamProgress - 1) * (screamProgress - 0.1));
+            if (controller > 0.2f) controller = 0.2f;
+            float controller2 = controller;
+            if (controller2 < 0) controller2 = 0;
+
+            body_base.rotateAngleX -= 1.6f * controller;
+            body_base.rotationPointY -= 1.6f * controller;
+            body_base.rotationPointZ -= 1.6f * controller;
+            legleftJoint.rotateAngleX += 1.6f * controller;
+            legrightJoint.rotateAngleX += 1.6f * controller;
+            armleftJoint.rotateAngleX += 1.6f * controller;
+            armrightJoint.rotateAngleX += 1.6f * controller;
+            armleftJoint.rotationPointY += 10 * controller;
+            armrightJoint.rotationPointY += 10 * controller;
+            armleftJoint.rotationPointZ += 5 * controller;
+            armrightJoint.rotationPointZ += 5 * controller;
+            armleftJoint.rotateAngleZ += 0.5 * controller;
+            armrightJoint.rotateAngleZ -= 0.5 * controller;
+            armleft2.rotateAngleX += 1 * controller;
+            armright2.rotateAngleX += 1 * controller;
+            jaw.rotateAngleX += 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
+            cheecktissue2.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
+            cheecktissue2.rotationPointY += 10 * controller;
+            cheecktissueright.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
+            cheecktissueright.rotationPointY += 10 * controller;
+        }
     }
 }
