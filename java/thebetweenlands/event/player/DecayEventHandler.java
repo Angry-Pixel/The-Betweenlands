@@ -6,6 +6,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemFood;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -55,7 +56,7 @@ public class DecayEventHandler {
 
 	@SubscribeEvent
 	public void useItemStart(PlayerUseItemEvent.Start event) {
-		if (DecayManager.enableDecay(event.entityPlayer) && event.item.getItem() instanceof IDecayFood && DecayManager.getDecayLevel(event.entityPlayer) >= 20 && !event.entityPlayer.getFoodStats().needFood()) {
+		if (DecayManager.enableDecay(event.entityPlayer) && event.item.getItem() instanceof IDecayFood && DecayManager.getDecayLevel(event.entityPlayer) >= 20 && (!event.entityPlayer.getFoodStats().needFood() || event.item.getItem() instanceof ItemFood == true)) {
 			event.duration = -1;
 			event.setCanceled(true);
 		}
