@@ -43,7 +43,7 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int yy = y - 1;
-		if (world.isAirBlock(x, yy, z) && canBlockStay(world, x, yy, z))
+		if (world.isAirBlock(x, yy, z) && canBlockStay(world, x, yy, z) && rand.nextInt(8) == 0)
 			world.setBlock(x, yy, z, this);
 	}
 
