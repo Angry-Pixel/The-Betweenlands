@@ -16,7 +16,7 @@ import thebetweenlands.entities.mobs.EntityPeatMummy;
 public class ScreenShakeHandler {
 	public static ScreenShakeHandler INSTANCE = new ScreenShakeHandler();
 
-	private float getShakeStrength() {
+	private float getShakeStrength(float delta) {
 		List<EntityPeatMummy> peatMummies = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPeatMummy.class, Minecraft.getMinecraft().renderViewEntity.boundingBox.expand(35, 35, 35));
 		float screenShake = 0.0F;
 		for(EntityPeatMummy peatMummy : peatMummies) {
@@ -26,7 +26,7 @@ public class ScreenShakeHandler {
 				if(dist >= 30.0F) {
 					continue;
 				}
-				float screamShake = (float) ((Math.sin(peatMummy.getScreamingProgress() * Math.PI) + 0.1F) * 0.15F * screamMult);
+				float screamShake = (float) ((Math.sin(peatMummy.getScreamingProgress(delta) * Math.PI) + 0.1F) * 0.15F * screamMult);
 				screenShake += screamShake;
 			}
 		}
@@ -43,7 +43,7 @@ public class ScreenShakeHandler {
 	public void onRenderTickStart(RenderTickEvent event) {
 		EntityLivingBase renderViewEntity = Minecraft.getMinecraft().renderViewEntity;
 		if(renderViewEntity == null) return;
-		float shakeStrength = this.getShakeStrength();
+		float shakeStrength = this.getShakeStrength(event.renderTickTime);
 		if((shakeStrength == 0.0F || Minecraft.getMinecraft().isGamePaused()) && !this.didShake) return;
 		if(event.phase == Phase.START) {
 			this.prevPosX = renderViewEntity.posX;

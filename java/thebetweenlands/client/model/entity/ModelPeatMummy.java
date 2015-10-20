@@ -289,7 +289,7 @@ public class ModelPeatMummy extends MowzieModelBase {
             swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, f1);
         }
 
-        float screamProgress = mummy.getScreamingProgress();
+        float screamProgress = mummy.getScreamingProgress(delta);
         if (screamProgress != 0) {
             if (screamProgress > 1) screamProgress = 1;
             float controller = 40 * (float) (-screamProgress * (screamProgress - 1) * (screamProgress - 0.1));
@@ -312,10 +312,10 @@ public class ModelPeatMummy extends MowzieModelBase {
             armrightJoint.rotateAngleZ -= 0.5 * controller;
             armleft2.rotateAngleX += 1 * controller;
             armright2.rotateAngleX += 1 * controller;
-            jaw.rotateAngleX += 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
-            cheecktissue2.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
+            jaw.rotateAngleX += 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
+            cheecktissue2.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
             cheecktissue2.rotationPointY += 10 * controller;
-            cheecktissueright.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * mummy.ticksExisted);
+            cheecktissueright.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
             cheecktissueright.rotationPointY += 10 * controller;
         }
     }

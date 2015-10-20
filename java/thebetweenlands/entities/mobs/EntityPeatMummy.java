@@ -35,16 +35,17 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final float BASE_SPEED = 0.2F;
 	public static final float BASE_DAMAGE = 8.0F;
 
-	private float prevYOffset = 0.0F;
+	private float prevYOffset;
 	public static final int SPAWNING_STATE_DW = 20;
 
 	private int chargingCooldown = (int) CHARGING_COOLDOWN_ATTRIB.getDefaultValue();
-	private int chargingPreparation = 0;
-	private int chargingTime = 0;
+	private int chargingPreparation;
+	private int chargingTime;
 	public static final int CHARGING_STATE_DW = 21;
 
 	//Scream timer is only used for the screen shake and is client side only.
-	private int screamTimer = 0;
+	private int prevScreamTimer;
+	private int screamTimer;
 	private boolean screaming = false;
 	private boolean wasScreaming = false;
 	//Adjust to length of screaming sound
@@ -202,7 +203,23 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 		////// AI //////
 
-		if(!this.worldObj.isRemote) {
+		if(this.worldObj.isRemote) {
+			if(this.isPreparing() && !this.wasScreaming && !this.screaming) {
+				this.screaming = true;
+				this.wasScreaming = true;
+			} else if(!this.isPreparing()) {
+				this.wasScreaming = false;
+			}
+			this.prevScreamTimer = this.screamTimer;
+			if(this.screaming) {
+				this.screamTimer++;
+			} else if (this.screamTimer > 0) {
+				this.screamTimer = 0;
+			}
+			if(this.screamTimer >= SCREAMING_TIMER_MAX) {
+				this.screaming = false;
+			}
+		} else {
 			if(!this.isPreparing() && !this.isCharging()) {
 				if(this.chargingCooldown > 0 && this.getEntityToAttack() != null) {
 					this.chargingCooldown--;
@@ -233,21 +250,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
 				this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
 			}
-		} else {
-			if(this.isPreparing() && !this.wasScreaming && !this.screaming) {
-				this.screaming = true;
-				this.wasScreaming = true;
-			} else if(!this.isPreparing()) {
-				this.wasScreaming = false;
-			}
-			if(this.screaming) {
-				this.screamTimer++;
-			} else {
-				this.screamTimer = 0;
-			}
-			if(this.screamTimer >= SCREAMING_TIMER_MAX) {
-				this.screaming = false;
-			}
 		}
 	}
 
@@ -260,23 +262,21 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		int ebx = MathHelper.floor_double(this.posX);
 		int eby = MathHelper.floor_double(initialPosY); //Ignore offset, want to check at the initial position
 		int ebz = MathHelper.floor_double(this.posZ);
+		return inMud(ebx, eby, ebz);
+	}
 
-		boolean inMud = true;
-
-		checkLoop:
-			for(int y = -MathHelper.ceiling_double_int(this.getSpawnOffset()); y < 0; y++) {
-				for(int x = -1; x <= 1; x++) {
-					for(int z = -1; z <= 1; z++) {
-						Block cb = this.worldObj.getBlock(ebx + x, eby + y, ebz + z);
-						if(!(y == -1 ? (SPAWN_BLOCKS.contains(cb)) : (cb.isOpaqueCube() || SPAWN_BLOCKS.contains(cb)))) {
-							inMud = false;
-							break checkLoop;
-						}
+	private boolean inMud(int ebx, int eby, int ebz) {
+		for(int y = -MathHelper.ceiling_double_int(this.getSpawnOffset()); y < 0; y++) {
+			for(int x = -1; x <= 1; x++) {
+				for(int z = -1; z <= 1; z++) {
+					Block cb = this.worldObj.getBlock(ebx + x, eby + y, ebz + z);
+					if(!(y == -1 ? (SPAWN_BLOCKS.contains(cb)) : (cb.isOpaqueCube() || SPAWN_BLOCKS.contains(cb)))) {
+						return false;
 					}
 				}
 			}
-
-		return inMud;
+		}
+		return true;
 	}
 
 	public void updateTarget() {
@@ -433,8 +433,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public float getScreamingProgress() {
-		return 1.0F / SCREAMING_TIMER_MAX * this.screamTimer;
+	public float getScreamingProgress(float delta) {
+		return 1.0F / SCREAMING_TIMER_MAX * (this.prevScreamTimer + (this.screamTimer - this.prevScreamTimer) * delta);
 	}
 
 	@Override
