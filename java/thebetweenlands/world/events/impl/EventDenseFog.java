@@ -21,7 +21,7 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(40000) + 6000;
+		return rnd.nextInt(40000) + 10000;
 	}
 
 	@Override
