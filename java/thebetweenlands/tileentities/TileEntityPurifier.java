@@ -105,12 +105,11 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("state", lightOn);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
+		NBTTagCompound itemStackCompound = new NBTTagCompound();
 		if(inventory[2] != null) {
-			NBTTagCompound itemStackCompound = inventory[2].writeToNBT(new NBTTagCompound());
-			nbt.setTag("outputItem", itemStackCompound);
-		} else {
-			nbt.setTag("outputItem", null);
+			inventory[2].writeToNBT(itemStackCompound);
 		}
+		nbt.setTag("outputItem", itemStackCompound);
 		nbt.setBoolean("isPurifying", this.isPurifying());
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
@@ -120,7 +119,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		lightOn = packet.func_148857_g().getBoolean("state");
 		waterTank.readFromNBT(packet.func_148857_g().getCompoundTag("waterTank"));
 		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("outputItem");
-		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0) {
+		if(itemStackCompound.getShort("id") != 0) {
 			inventory[2] = ItemStack.loadItemStackFromNBT(itemStackCompound);
 		} else {
 			inventory[2] = null;
@@ -171,7 +170,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public void updateEntity() {
 		if (worldObj.isRemote)
 			return;
-		
+
 		ItemStack output = PurifierRecipe.getRecipeOutput(inventory[1]);
 		if(hasFuel() && !outputIsFull()) {
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
