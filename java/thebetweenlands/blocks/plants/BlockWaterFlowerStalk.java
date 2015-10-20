@@ -34,6 +34,7 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
 		setTickRandomly(true);
 		this.canSpread = false;
+		this.canReplenish = false;
 		this.hasBoundingBox = true;
 	}
 

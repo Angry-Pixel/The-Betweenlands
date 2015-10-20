@@ -36,6 +36,7 @@ public class BlockMireCoral extends BlockSwampWater implements IPlantable {
 		setLightLevel(1.0F);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
+		this.canReplenish = false;
 	}
 
 	@Override

@@ -38,6 +38,7 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
         setLightLevel(0.875F);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
+		this.canReplenish = false;
 	}
 
 	@Override

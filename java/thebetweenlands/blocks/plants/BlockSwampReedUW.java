@@ -32,6 +32,7 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 		setTickRandomly(true);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
+		this.canReplenish = false;
 	}
 
 	@Override

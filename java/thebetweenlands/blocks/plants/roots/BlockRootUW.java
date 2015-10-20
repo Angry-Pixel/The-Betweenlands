@@ -33,6 +33,7 @@ public class BlockRootUW extends BlockSwampWater {
 		this.canSpread = false;
 		this.hasBoundingBox = true;
 		this.canCollide = true;
+		this.canReplenish = false;
 		this.setSpecialRenderer(new WaterRootRenderer());
 	}
 

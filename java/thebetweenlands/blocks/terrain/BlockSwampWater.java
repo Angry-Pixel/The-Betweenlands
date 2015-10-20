@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -25,8 +27,6 @@ import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.items.ItemImprovedRubberBoots;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSwampWater extends BlockFluidClassic {
 	private static final int DEEP_COLOR_R = 19;
@@ -39,6 +39,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 	protected boolean canSpread = true;
 	protected boolean hasBoundingBox = false;
 	protected boolean canCollide = false;
+	protected boolean canReplenish = true;
 
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<Block, IWaterRenderer>();
 
@@ -132,8 +133,8 @@ public class BlockSwampWater extends BlockFluidClassic {
 			for (int dz = -1; dz <= 1; dz++) {
 				int colorMultiplier = blockAccess.getBiomeGenForCoords(x + dz, z + dx).getWaterColorMultiplier();
 				r += (colorMultiplier & 0xFF0000) >> 16;
-				g += (colorMultiplier & 0x00FF00) >> 8;
-				b += colorMultiplier & 0x0000FF;
+			g += (colorMultiplier & 0x00FF00) >> 8;
+			b += colorMultiplier & 0x0000FF;
 			}
 		}
 		r /= 9;
@@ -221,6 +222,18 @@ public class BlockSwampWater extends BlockFluidClassic {
 		if(!this.canSpread) {
 			return;
 		}
+
+		if(this.canReplenish && !world.isAirBlock(x, y-1, z)) {
+			int adjacentSources = 0;
+			if(this.isSourceBlock(world, x+1, y, z)) adjacentSources++;
+			if(this.isSourceBlock(world, x-1, y, z)) adjacentSources++;
+			if(this.isSourceBlock(world, x, y, z+1)) adjacentSources++;
+			if(this.isSourceBlock(world, x, y, z-1)) adjacentSources++;
+			if(adjacentSources >= 2) {
+				world.setBlockMetadataWithNotify(x, y, z, 0, 2);
+			}
+		}
+
 		int quantaRemaining = quantaPerBlock - world.getBlockMetadata(x, y, z);
 		int expQuanta = -101;
 
