@@ -117,10 +117,10 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.boneLeggings, 1), "###", "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.boneBoots, 1), "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE));
 		
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineHelmet, 1), "###", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineChestplate, 1), "# #", "###", "###", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineLeggings, 1), "###", "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineBoots, 1), "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteHelmet, 1), "###", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteChestplate, 1), "# #", "###", "###", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteLeggings, 1), "###", "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteBoots, 1), "# #", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteHelmet, 1), "###", "# #", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteChestplate, 1), "# #", "###", "###", '#', ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
@@ -149,7 +149,7 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.PLANT_TONIC), new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.sapBall));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePressurePlate), "xx", 'x', BLBlockRegistry.smoothBetweenstone);
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octinePressurePlate), "xx", 'x', BLBlockRegistry.bluriteBlock);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.syrmoritePressurePlate), "xx", 'x', BLBlockRegistry.syrmoriteBlock);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.MUD_BRICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));		
@@ -157,7 +157,7 @@ public class RecipeHandler {
 		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.animator), "xxx", "shs", "bbb", 'x', BLBlockRegistry.weedwoodPlanks, 's', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK), 'h', new ItemStack(BLItemRegistry.wightsHeart), 'b' ,new ItemStack(BLBlockRegistry.betweenstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pestleAndMortar), "x x", "xxx", "s s", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 's', ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_STICK));
 		
@@ -175,8 +175,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.sulphurBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR, 9), new ItemStack(BLBlockRegistry.sulphurBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octineBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.bluriteBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
-		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT, 9), new ItemStack(BLBlockRegistry.bluriteBlock));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.syrmoriteBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
+		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT, 9), new ItemStack(BLBlockRegistry.syrmoriteBlock));
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT, 9), new ItemStack(BLBlockRegistry.octineBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.valoniteBlock), "xxx", "xxx", "xxx", 'x', ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
 		GameRegistry.addShapelessRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD, 9), new ItemStack(BLBlockRegistry.valoniteBlock));
@@ -253,7 +253,7 @@ public class RecipeHandler {
 	}
 
 	private static void registerSmelting() {
-		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.bluriteOre), ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.syrmoriteOre), ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.octineOre), ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dampTorch), new ItemStack(Blocks.torch), 0F);
 		GameRegistry.addSmelting(ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED), 0F);
@@ -272,7 +272,7 @@ public class RecipeHandler {
 
 	private static void registerOreDictionary() {
 		OreDictionary.registerOre("oreSulfur", new ItemStack(BLBlockRegistry.sulfurOre));
-		OreDictionary.registerOre("oreBlurite", new ItemStack(BLBlockRegistry.bluriteOre));
+		OreDictionary.registerOre("oreSyrmorite", new ItemStack(BLBlockRegistry.syrmoriteOre));
 		OreDictionary.registerOre("oreOctine", new ItemStack(BLBlockRegistry.octineOre));
 		OreDictionary.registerOre("oreValonite", new ItemStack(BLBlockRegistry.valoniteOre));
 		OreDictionary.registerOre("oreAquaMiddleGem", new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
@@ -303,7 +303,7 @@ public class RecipeHandler {
         OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.blackHatMushroomItem));
         OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.flatheadMushroomItem));
 
-        OreDictionary.registerOre("ingotBlurite", ItemMaterialsBL.createStack(EnumMaterialsBL.BLURITE_INGOT));
+        OreDictionary.registerOre("ingotSyrmorite", ItemMaterialsBL.createStack(EnumMaterialsBL.SYRMORITE_INGOT));
         OreDictionary.registerOre("ingotOctine", ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT));
 
 	}

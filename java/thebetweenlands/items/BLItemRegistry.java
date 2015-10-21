@@ -73,10 +73,10 @@ public class BLItemRegistry {
     public static final Item boneLeggings = new BoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings").setTextureName("thebetweenlands:boneLeggings");
     public static final Item boneBoots = new BoneArmor(3).setUnlocalizedName("thebetweenlands.boneBoots").setTextureName("thebetweenlands:boneBoots");
     
-    public static final Item octineHelmet = new OctineArmor(0).setUnlocalizedName("thebetweenlands.octineHelmet").setTextureName("thebetweenlands:octineHelmet");
-    public static final Item octineChestplate = new OctineArmor(1).setUnlocalizedName("thebetweenlands.octineChestplate").setTextureName("thebetweenlands:octineChestplate");
-    public static final Item octineLeggings = new OctineArmor(2).setUnlocalizedName("thebetweenlands.octineLeggings").setTextureName("thebetweenlands:octineLeggings");
-    public static final Item octineBoots = new OctineArmor(3).setUnlocalizedName("thebetweenlands.octineBoots").setTextureName("thebetweenlands:octineBoots");
+    public static final Item syrmoriteHelmet = new SyrmoriteArmor(0).setUnlocalizedName("thebetweenlands.syrmoriteHelmet").setTextureName("thebetweenlands:syrmoriteHelmet");
+    public static final Item syrmoriteChestplate = new SyrmoriteArmor(1).setUnlocalizedName("thebetweenlands.syrmoriteChestplate").setTextureName("thebetweenlands:syrmoriteChestplate");
+    public static final Item syrmoriteLeggings = new SyrmoriteArmor(2).setUnlocalizedName("thebetweenlands.syrmoriteLeggings").setTextureName("thebetweenlands:syrmoriteLeggings");
+    public static final Item syrmoriteBoots = new SyrmoriteArmor(3).setUnlocalizedName("thebetweenlands.syrmoriteBoots").setTextureName("thebetweenlands:syrmoriteBoots");
 
     public static final Item legendaryHelmet = new ArmorOfLegends(0).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryHelmet").setTextureName("thebetweenlands:legendaryHelmet");
     public static final Item legendaryChestplate = new ArmorOfLegends(1).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryChestplate").setTextureName("thebetweenlands:legendaryChestplate");
@@ -134,7 +134,7 @@ public class BLItemRegistry {
     
     //DOORS
     public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
-    public static final Item doorOctine = new ItemBLDoor(BLBlockRegistry.doorOctine);
+    public static final Item doorOctine = new ItemBLDoor(BLBlockRegistry.doorSyrmorite);
     
     //MISC
     public static final ItemShimmerStone shimmerStone = new ItemShimmerStone();
@@ -174,7 +174,7 @@ public class BLItemRegistry {
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
         ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
-        ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, octineHelmet, octineChestplate, octineLeggings, octineBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
+        ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
         ModCreativeTabs.plants.setTab(middleFruitSeeds);
         ModCreativeTabs.herbLore.setTab(pestle, materialCrushed, weedwoodBucketInfusion);
     }

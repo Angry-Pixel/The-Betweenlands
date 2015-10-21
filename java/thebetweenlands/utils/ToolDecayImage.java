@@ -35,8 +35,8 @@ public class ToolDecayImage {
 		new File(loc).mkdirs();
 		createTextures(new ItemStack(Items.apple), 33);
 		createTextures(new ItemStack(Items.string), 66);
-		for(int i = 1; i < new ItemStack(BLItemRegistry.octineChestplate).getMaxDamage(); i++)
-			createTextures(new ItemStack(BLItemRegistry.octineChestplate), i/33*33);
+		for(int i = 1; i < new ItemStack(BLItemRegistry.syrmoriteChestplate).getMaxDamage(); i++)
+			createTextures(new ItemStack(BLItemRegistry.syrmoriteChestplate), i/33*33);
 		createTextures(new ItemStack(BLItemRegistry.weedwoodSword), 150);
 	}
 	

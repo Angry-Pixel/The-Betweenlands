@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import thebetweenlands.items.OctineArmor;
+import thebetweenlands.items.SyrmoriteArmor;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class OctineArmorHandler {
@@ -16,7 +16,7 @@ public class OctineArmorHandler {
 				ItemStack[] armor = ((EntityPlayer) event.entityLiving).inventory.armorInventory;
 				float reductionAmount = 1F / armor.length;
 				for (int i = 0; i < armor.length; i++) {
-					if (armor[i] != null && armor[i].getItem() instanceof OctineArmor) {
+					if (armor[i] != null && armor[i].getItem() instanceof SyrmoriteArmor) {
 						damageMultiplier -= reductionAmount;
 					}
 				}
