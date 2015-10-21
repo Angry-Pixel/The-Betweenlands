@@ -74,7 +74,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	public boolean canPlaceBlockAt(World world, int x, int y, int z)
 	{
 		boolean hasWater = (world.getBlock(x - 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x + 1, y - 1, z).getMaterial() == Material.water || world.getBlock(x, y - 1, z - 1).getMaterial() == Material.water || world.getBlock(x, y - 1, z + 1).getMaterial() == Material.water);
-		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) && hasWater;
+		return canPlaceBlockOn(world.getBlock(x, y - 1, z)) && (hasWater || world.getBlock(x, y - 1, z) == this);
 	}
 
 	public static void generateReedPatch(World world, int x, int y, int z, int tries, int radius) {

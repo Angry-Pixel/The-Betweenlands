@@ -3,6 +3,7 @@ package thebetweenlands.items;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -80,7 +81,7 @@ public class ItemMaterialsBL extends Item {
 		if (stack.getItemDamage() == this.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage() && side == 1) {
 			Block block = world.getBlock(x, y + 1, z);
 			if (block == Blocks.air) {
-				if (BLBlockRegistry.swampReed.canPlaceBlockOn(world.getBlock(x, y, z))) {
+				if (BLBlockRegistry.swampReed.canPlaceBlockAt(world, x, y+1, z)) {
 					if(!world.isRemote) {
 						world.setBlock(x, y + 1, z, BLBlockRegistry.swampReed);
 						world.playSoundEffect((double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), BLBlockRegistry.swampReed.stepSound.func_150496_b(), (BLBlockRegistry.swampReed.stepSound.getVolume() + 1.0F) / 2.0F, BLBlockRegistry.swampReed.stepSound.getPitch() * 0.8F);
@@ -102,11 +103,11 @@ public class ItemMaterialsBL extends Item {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		player.setItemInUse(stack, getMaxItemUseDuration(stack));
 		return stack;
-	}
+	}*/
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
