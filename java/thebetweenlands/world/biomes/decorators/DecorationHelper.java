@@ -590,7 +590,7 @@ public class DecorationHelper {
 			int z = this.z + this.offsetXZ();
 			if (checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) && world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z)) {
 				this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 0, 2);
-				this.world.setBlock(x, y, z, BLBlockRegistry.weepingBlue, 8, 2);
+				this.world.setBlock(x, y + 1, z, BLBlockRegistry.weepingBlue, 8, 2);
 			}
 		}
 	}

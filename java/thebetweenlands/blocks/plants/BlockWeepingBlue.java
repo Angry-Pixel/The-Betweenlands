@@ -40,7 +40,9 @@ public class BlockWeepingBlue extends BlockDoubleHeightPlant {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-		world.spawnParticle("dripWater", x + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), y + 1.6F + rand.nextFloat()/2F, z + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), 0D, 0D, 0D);
+		if(world.getBlock(x, y - 1, z) != this) {
+			world.spawnParticle("dripWater", x + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), y + 1.6F + rand.nextFloat()/2F, z + 0.6F + rand.nextFloat()/3F*(rand.nextInt(2) == 0 ? 1 : -1), 0D, 0D, 0D);
+		}
 	}
 	
 	@Override

@@ -106,7 +106,7 @@ public class AmbienceSoundPlayHandler
 
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-		if( event.world.isRemote ) {
+		if(event.world.isRemote) {
 			if( this.ambienceSoundSwamp != null ) {
 				this.ambienceSoundSwamp.stop();
 				this.ambienceSoundSwamp = null;
