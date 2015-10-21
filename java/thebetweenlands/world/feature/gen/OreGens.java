@@ -13,8 +13,8 @@ public class OreGens {
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.octineOre, 0, 8, BLBlockRegistry.betweenstone);
 	
 	public static final WorldGenMinableBetweenlands VALONITE = 
-			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.valoniteOre, 0, 8, BLBlockRegistry.betweenstone);
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.valoniteOre, 0, 4, BLBlockRegistry.betweenstone);
 	
 	public static final WorldGenMinableBetweenlands LIFE_GEM = 
-			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.lifeCrystalOre, 0, 7, BLBlockRegistry.betweenstone);
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.lifeCrystalOre, 0, 1, BLBlockRegistry.betweenstone);
 }
