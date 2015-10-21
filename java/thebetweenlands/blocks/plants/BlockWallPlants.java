@@ -365,9 +365,9 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
 		int attempt = 0;
-		if (rand.nextInt(2) == 0) {
-			byte radius = 4;
-			int distance = 5;
+		if (rand.nextInt(10) == 0) {
+			byte radius = 5;
+			int distance = 3;
 			int xx;
 			int yy;
 			int zz;
@@ -449,7 +449,7 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 						}
 				}
 		}
-		if (rand.nextInt(25) == 0)
+		if (rand.nextInt(22) == 0)
 			world.setBlockToAir(x, y, z);
 	}
 
