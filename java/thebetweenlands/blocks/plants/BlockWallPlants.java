@@ -383,6 +383,11 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 			xx = x + rand.nextInt(3) - 1;
 			yy = y + rand.nextInt(3) - 1;
 			zz = z + rand.nextInt(3) - 1;
+			int offsetDir = 0;
+			if(xx != x) offsetDir++;
+			if(yy != y) offsetDir++;
+			if(zz != z) offsetDir++;
+			if(offsetDir > 1) return;
 			if (world.isAirBlock(xx, yy, zz))
 				for (attempt = 0; attempt < 6; attempt++) {
 					int offset = 1;
