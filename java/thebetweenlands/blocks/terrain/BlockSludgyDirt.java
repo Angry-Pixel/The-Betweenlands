@@ -2,13 +2,13 @@ package thebetweenlands.blocks.terrain;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
@@ -16,12 +16,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.entities.mobs.EntitySludge;
-import thebetweenlands.items.ItemRubberBoots;
-import thebetweenlands.items.SpadeBL;
+import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.world.events.impl.EventSpoopy;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSludgyDirt
         extends Block
@@ -82,7 +78,7 @@ public class BlockSludgyDirt
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		entity.setInWeb();
+		if(entity instanceof IEntityBL == false) entity.setInWeb();
 	}
 	
     @Override
