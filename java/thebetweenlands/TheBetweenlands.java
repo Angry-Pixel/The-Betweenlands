@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.aspect.AspectTest;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandAspect;
@@ -178,6 +179,8 @@ public class TheBetweenlands
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
 
 		RecurrentComplexModule.init();
+		
+		new AspectTest().init();
 	}
 
 	@EventHandler

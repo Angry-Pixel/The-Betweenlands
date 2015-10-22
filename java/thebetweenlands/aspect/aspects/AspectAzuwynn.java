@@ -1,18 +1,18 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class AspectCelawynn implements IAspect {
+public class AspectAzuwynn implements IAspect {
 	public String getName() {
-		return "Celawynn";
+		return "Azuwynn";
 	}
 
 	public String getType() {
-		return "Stomach";
+		return "Muscle";
 	}
 
 	public String getDescription() {
-		return "Has effect on the stomach. So this could have effect on the hunger bar for example.";
+		return "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {

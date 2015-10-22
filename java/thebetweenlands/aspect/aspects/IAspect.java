@@ -1,4 +1,4 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 

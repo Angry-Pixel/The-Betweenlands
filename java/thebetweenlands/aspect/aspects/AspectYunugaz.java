@@ -1,18 +1,18 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class AspectAzuwynn implements IAspect {
+public class AspectYunugaz implements IAspect {
 	public String getName() {
-		return "Azuwynn";
+		return "Yunugaz";
 	}
 
 	public String getType() {
-		return "Muscle";
+		return "Wind";
 	}
 
 	public String getDescription() {
-		return "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.";
+		return "Magical property which relates to wind. Any combination with this effect can be related to the element wind.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {

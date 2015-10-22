@@ -5,7 +5,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
-import thebetweenlands.aspect.IAspect;
+import thebetweenlands.aspect.aspects.IAspect;
 import thebetweenlands.manager.AspectManager;
 
 public class CommandAspect extends CommandBase {

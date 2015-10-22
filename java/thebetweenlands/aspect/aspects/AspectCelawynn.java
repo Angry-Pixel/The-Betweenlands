@@ -1,18 +1,18 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class AspectFergalaz implements IAspect {
+public class AspectCelawynn implements IAspect {
 	public String getName() {
-		return "Fergalaz";
+		return "Celawynn";
 	}
 
 	public String getType() {
-		return "Earth";
+		return "Stomach";
 	}
 
 	public String getDescription() {
-		return "Magical property which relates to earth. Any combination with this effect can be related to the element earth.";
+		return "Has effect on the stomach. So this could have effect on the hunger bar for example.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {

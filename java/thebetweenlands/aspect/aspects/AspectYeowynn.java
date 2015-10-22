@@ -1,18 +1,18 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class AspectDayuniis implements IAspect {
+public class AspectYeowynn implements IAspect {
 	public String getName() {
-		return "Dayuniis";
+		return "Yeowynn";
 	}
 
 	public String getType() {
-		return "Mind";
+		return "Health";
 	}
 
 	public String getDescription() {
-		return "Has effect on the player's mind and on how senses work. Could be positive, or negative (think nausea/schizophrenia).";
+		return "Has effect on the health bar, could be both negative or positive, depending on the combination.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {

@@ -1,18 +1,18 @@
-package thebetweenlands.aspect;
+package thebetweenlands.aspect.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public class AspectYeowynn implements IAspect {
+public class AspectFergalaz implements IAspect {
 	public String getName() {
-		return "Yeowynn";
+		return "Fergalaz";
 	}
 
 	public String getType() {
-		return "Health";
+		return "Earth";
 	}
 
 	public String getDescription() {
-		return "Has effect on the health bar, could be both negative or positive, depending on the combination.";
+		return "Magical property which relates to earth. Any combination with this effect can be related to the element earth.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {
