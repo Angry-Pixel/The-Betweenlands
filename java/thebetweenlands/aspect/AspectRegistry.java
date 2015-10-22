@@ -195,6 +195,11 @@ public class AspectRegistry {
 	}
 
 	public List<ItemAspect> getAspects(ItemEntry item) {
-		return this.matchedAspects.get(item);
+		for(Entry<ItemEntry, List<ItemAspect>> e : this.matchedAspects.entrySet()) {
+			if(e.getKey().equals(item)) {
+				return e.getValue();
+			}
+		}
+		return null;
 	}
 }

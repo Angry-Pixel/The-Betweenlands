@@ -1,19 +1,18 @@
 package thebetweenlands.client.render.item;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.model.entity.ModelTarminion;
 import thebetweenlands.entities.EntityThrownTarminion;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ItemTarminionRenderer extends Render implements IItemRenderer {
@@ -28,7 +27,7 @@ public class ItemTarminionRenderer extends Render implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP;
+		return type != ItemRenderType.FIRST_PERSON_MAP && !AspectOverlayRenderHelper.shouldIgnoreHook();
 	}
 
 	@Override
@@ -38,23 +37,24 @@ public class ItemTarminionRenderer extends Render implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		AspectOverlayRenderHelper.renderOverlay(type, item);
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
 		switch (type) {
-			case ENTITY:
-				render(0.0F, 2.5F, 0.0F, 1.5D, ticks);
-				break;
-			case EQUIPPED:
-				renderEquipped(0.3F, 5F, 1F, 3D, ticks);
-				break;
-			case EQUIPPED_FIRST_PERSON:
-				renderFirstPerson(0F, 4.75F, -1F, 3D, ticks);
-				break;
-			case INVENTORY:
-				renderInventory(0.1F, 4.625F, 0.0F, 3D);
-				break;
-			default:
-				break;
+		case ENTITY:
+			render(0.0F, 2.5F, 0.0F, 1.5D, ticks);
+			break;
+		case EQUIPPED:
+			renderEquipped(0.3F, 5F, 1F, 3D, ticks);
+			break;
+		case EQUIPPED_FIRST_PERSON:
+			renderFirstPerson(0F, 4.75F, -1F, 3D, ticks);
+			break;
+		case INVENTORY:
+			renderInventory(0.1F, 4.625F, 0.0F, 3D);
+			break;
+		default:
+			break;
 		}
 	}
 

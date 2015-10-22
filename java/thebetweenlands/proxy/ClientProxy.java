@@ -16,6 +16,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -27,9 +28,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
+import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
@@ -93,6 +96,7 @@ import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemAspectOverlayRenderer;
 import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
@@ -315,6 +319,19 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 
+		//Register custom item renderer for aspect overlays
+		for(Item item : BLItemRegistry.ITEMS) {
+			if(MinecraftForgeClient.getItemRenderer(new ItemStack(item), ItemRenderType.INVENTORY) == null) {
+				this.registerItemRenderer(item);
+			}
+		}
+		for(Block block : BLBlockRegistry.BLOCKS) {
+			Item blockItem = Item.getItemFromBlock(block);
+			if(MinecraftForgeClient.getItemRenderer(new ItemStack(blockItem), ItemRenderType.INVENTORY) == null) {
+				this.registerItemRenderer(blockItem);
+			}
+		}
+
 		// Block Renderer
 		RenderingRegistry.registerBlockHandler(new BlockDoublePlantRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockRubberLogRenderer());
@@ -367,6 +384,8 @@ public class ClientProxy extends CommonProxy {
 			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20), "timer", "field_71428_T", "Q");
 		}
 	}
+
+
 
 	@Override
 	public World getClientWorld() {
@@ -537,5 +556,11 @@ public class ClientProxy extends CommonProxy {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
+	}
+
+	private final ItemAspectOverlayRenderer itemAspectOverlayRenderer = new ItemAspectOverlayRenderer();
+	@Override
+	public void registerItemRenderer(Item item) { 
+		MinecraftForgeClient.registerItemRenderer(item, this.itemAspectOverlayRenderer);
 	}
 }

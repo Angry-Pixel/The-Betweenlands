@@ -25,6 +25,8 @@ import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
 
 public class AspectTest {
+	public static final AspectTest INSTANCE = new AspectTest();
+	
 	public final AspectRegistry registry = new AspectRegistry();
 
 	public void init() {

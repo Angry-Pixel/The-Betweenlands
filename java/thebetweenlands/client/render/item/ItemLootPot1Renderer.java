@@ -13,13 +13,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ItemLootPot1Renderer implements IItemRenderer {
+public class ItemLootPot1Renderer extends ItemAspectOverlayRenderer {
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/lootPot1.png");
 	private final ModelLootPot1 model = new ModelLootPot1();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP;
+		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
 	}
 
 	@Override
@@ -29,6 +29,7 @@ public class ItemLootPot1Renderer implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		super.renderItem(type, item, data);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TEXTURE);
 		switch (type) {
 			case ENTITY:

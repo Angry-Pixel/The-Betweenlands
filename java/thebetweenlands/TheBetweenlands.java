@@ -180,7 +180,7 @@ public class TheBetweenlands
 
 		RecurrentComplexModule.init();
 		
-		new AspectTest().init();
+		AspectTest.INSTANCE.init();
 	}
 
 	@EventHandler

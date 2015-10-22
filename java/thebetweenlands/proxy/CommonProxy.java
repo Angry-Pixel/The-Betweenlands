@@ -1,9 +1,12 @@
 package thebetweenlands.proxy;
 
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,8 +54,6 @@ import thebetweenlands.tileentities.TileEntityTarLootPot2;
 import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -230,4 +231,6 @@ public class CommonProxy implements IGuiHandler {
 	public DebugHandlerCommon getDebugHandler() {
 		return DebugHandlerCommon.INSTANCE;
 	}
+
+	public void registerItemRenderer(Item item) { }
 }
