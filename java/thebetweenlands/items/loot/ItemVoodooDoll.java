@@ -16,10 +16,10 @@ import net.minecraft.world.World;
  */
 public class ItemVoodooDoll extends Item {
 	public ItemVoodooDoll() {
-		this.maxStackSize = 1;
-		this.setUnlocalizedName("thebetweenlands.voodooDoll");
-		setTextureName("thebetweenlands:voodooDoll");
+		maxStackSize = 1;
 		setMaxDamage(4);
+		setUnlocalizedName("thebetweenlands.voodooDoll");
+		setTextureName("thebetweenlands:voodooDoll");
 	}
 
 	@Override
