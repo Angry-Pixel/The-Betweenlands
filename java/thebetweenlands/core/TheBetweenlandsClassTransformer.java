@@ -26,6 +26,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	private static final String BL_FORGE_HOOKS = "thebetweenlands/forgeevent/BLForgeHooks";
 
+	private static final String BL_FORGE_HOOKS_CLIENT = "thebetweenlands/forgeevent/BLForgeHooksClient";
+
 	private static final String DEBUG_HANDLER_CLIENT = "thebetweenlands/event/debugging/DebugHandlerClient";
 
 	private static final String PERSPECTIVE = "thebetweenlands/client/perspective/Perspective";
@@ -206,7 +208,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				method.instructions.add(new VarInsnNode(ALOAD, 0));
 				method.instructions.add(new InsnNode(DUP));
 				method.instructions.add(new FieldInsnNode(GETFIELD, minecraft, leftClickCounter, "I"));
-				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "handlePlayerAttackInput", "(I)I", false));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "handlePlayerAttackInput", "(I)I", false));
 				method.instructions.add(new FieldInsnNode(PUTFIELD, minecraft, leftClickCounter, "I"));
 				method.instructions.add(new InsnNode(RETURN));
 				needsHandlePlayerAttackInput = false;
@@ -352,7 +354,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				method.instructions.clear();
 				method.instructions.add(new VarInsnNode(ALOAD, 0));
 				method.instructions.add(new VarInsnNode(FLOAD, 1));
-				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS, "getMouseOver", getMouseOverBLDesc, false));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "getMouseOver", getMouseOverBLDesc, false));
 				method.instructions.add(new FieldInsnNode(PUTFIELD, entityRenderer, pointedEntity, entityDesc));
 				method.instructions.add(new InsnNode(RETURN));
 				needsGetMouseOver = false;
