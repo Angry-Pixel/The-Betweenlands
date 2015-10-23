@@ -152,6 +152,7 @@ public class BLItemRegistry {
     public static final Item caveMoss = new Item().setUnlocalizedName("thebetweenlands.caveMossItem").setTextureName("thebetweenlands:caveMoss").setCreativeTab(ModCreativeTabs.plants);
     public static final Item volarPad = new ItemVolarPad().setMaxDamage(200);
     public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();
+    public static final ItemRope rope = new ItemRope();
     
     //LOOT
     public static final Item voodooDoll = new ItemVoodooDoll();
@@ -169,7 +170,7 @@ public class BLItemRegistry {
     }
 
     private static void initCreativeTabs() {
-        ModCreativeTabs.items.setTab(weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
+        ModCreativeTabs.items.setTab(rope, weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, swampKelp, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
         ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);

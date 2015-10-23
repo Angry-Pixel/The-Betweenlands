@@ -392,6 +392,7 @@ public class BLBlockRegistry {
     public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
     public static final BlockLifeCrystal lifeCrystal = new BlockLifeCrystal();
     public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
+    public static final BlockRope rope = new BlockRope();
 
     // SLABS
     public static final BlockBLSlab weedwoodPlankSlab = new BlockBLSlab(false, Material.wood, "weedwoodPlanks", null, "axe");
