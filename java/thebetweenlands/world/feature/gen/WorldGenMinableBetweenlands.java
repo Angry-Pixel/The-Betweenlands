@@ -70,9 +70,8 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 							for (int i3 = k1; i3 <= j2; ++i3) {
 								double d14 = (i3 + 0.5D - d8) / (d10 / 2.0D);
 
-								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3).isReplaceableOreGen(world, k2, l2, i3, this.toReplace)) {
+								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3).isReplaceableOreGen(world, k2, l2, i3, this.toReplace) && this.canGenerate(world, k2, l2, i3)) {
 									world.setBlock(k2, l2, i3, this.toGen, this.mineableBlockMeta, 2);
-									//	System.out.println("Ore: " + this.toGen.getUnlocalizedName() + " : Meta: "+this.mineableBlockMeta +" : " + k2 + " : " + l2 + " : " + i3);
 								}
 							}
 						}
@@ -81,6 +80,10 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 			}
 		}
 
+		return true;
+	}
+	
+	protected boolean canGenerate(World world, int x, int y, int z) {
 		return true;
 	}
 }

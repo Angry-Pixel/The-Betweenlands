@@ -8,7 +8,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.gen.OreGens;
@@ -98,7 +97,7 @@ public class BiomeDecoratorBaseBetweenlands
 		this.generateOre(10, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(2, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(3, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
