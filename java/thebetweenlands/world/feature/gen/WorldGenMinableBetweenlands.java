@@ -17,7 +17,7 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 
 	public WorldGenMinableBetweenlands prepare(Block block, int meta, int numberOfBlocks, Block blockToReplace, boolean findBlockToReplace) {
 		this.toGen = block;
-		this.numberOfBlocks = numberOfBlocks;
+		this.numberOfBlocks = numberOfBlocks + 2;
 		this.toReplace = blockToReplace;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class WorldGenMinableBetweenlands extends WorldGenerator {
 
 		return true;
 	}
-	
+
 	protected boolean canGenerate(World world, int x, int y, int z) {
 		return true;
 	}
