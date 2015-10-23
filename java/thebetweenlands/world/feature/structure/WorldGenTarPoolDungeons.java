@@ -81,7 +81,7 @@ public class WorldGenTarPoolDungeons extends WorldGenerator { // TODO add BL loo
 		byte height = 10;
 		int halfSize = 7;
 
-		if (y + height + 1 >= WorldProviderBetweenlands.LAYER_HEIGHT - height || y - 1 <= WorldProviderBetweenlands.WATER_HEIGHT + height)
+		if (y + height + 1 >= WorldProviderBetweenlands.LAYER_HEIGHT - height || y - 1 <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT + height)
 			return false;
 
 		for (int xx = x - halfSize - 1; xx <= x + halfSize + 1; ++xx)

@@ -144,10 +144,10 @@ public class BlockSwampWater extends BlockFluidClassic {
 		if (y > WorldProviderBetweenlands.CAVE_START) {
 			depth = 1;
 		} else {
-			if (y < WorldProviderBetweenlands.WATER_HEIGHT) {
+			if (y < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
 				depth = 0;
 			} else {
-				depth = (y - WorldProviderBetweenlands.WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.WATER_HEIGHT);
+				depth = (y - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 			}
 		}
 		r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);	

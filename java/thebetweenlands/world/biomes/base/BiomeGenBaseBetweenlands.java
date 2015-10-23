@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.world.ChunkProviderBetweenlands;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  *
@@ -45,16 +48,16 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public BiomeGenBaseBetweenlands(int biomeID, BiomeDecoratorBaseBetweenlands decorator) {
 		super(biomeID);
 		this.decorator = decorator;
-		this.fillerBlock = Blocks.dirt;
-		this.topBlock = Blocks.grass;
-		this.baseBlock = Blocks.stone;
+		this.fillerBlock = BLBlockRegistry.swampDirt;
+		this.topBlock = BLBlockRegistry.swampGrass;
+		this.baseBlock = BLBlockRegistry.betweenstone;
 		this.underLayerTopBlock = Blocks.dirt;
 		this.spawnableCaveCreatureList.clear();
 		this.spawnableCreatureList.clear();
 		this.spawnableMonsterList.clear();
 		this.spawnableWaterCreatureList.clear();
 		//this.setDisableRain();
-        this.setTemperatureRainfall(2.0f, 0.0f);
+		this.setTemperatureRainfall(2.0f, 0.0f);
 	}
 
 	/**
@@ -66,7 +69,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.featureList.add(feature);
 		return this;
 	}
-	
+
 	/**
 	 * Sets the filler block height
 	 *
@@ -77,7 +80,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.fillerBlockHeight = fillerBlockHeight;
 		return this;
 	}
-	
+
 	/**
 	 * Sets the under layer block height
 	 *
@@ -161,7 +164,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.rootHeight = ((float) height / 128.0f + this.heightVariation) * 4.0f - 2.0f;
 		return this;
 	}
-	
+
 	//public abstract int getRootHeight(int x, int z);
 	//public abstract int getHeightVariation(int x, int z);
 
@@ -200,7 +203,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public void postChunkPopulate(World world, Random rand, int x, int z) {
 		this.decorator.postChunkPopulate(world, rand, x, z);
 	}
-	
+
 	/**
 	 * Generates additional biome content after decoration and population
 	 * Called from an IWorldGenerator.
@@ -222,7 +225,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public final void preChunkProvide(World world, Random rand, int chunkX, int chunkZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomes) {
 		this.decorator.preChunkProvide(world, rand, chunkX, chunkZ, blocks, metadata, biomes);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	/**
@@ -285,33 +288,37 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	 * @param rng Seeded Random
 	 */
 	public final void initializeNoiseGen(Random rng) {
+		if(this.baseBlockLayerVariationNoiseGen == null) {
+			this.baseBlockLayerVariationNoiseGen = new NoiseGeneratorPerlin(rng, 4);
+		}
 		this.isNoiseGenInitialized = true;
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.initializeNoiseGen(rng, this);
 		}
 		this.initializeNoiseGenBiome(rng);
 	}
-	
-	
+
+
 	/**
 	 * Initializes additional noise generators. Can be overridden by the biome.
 	 * @param rng Seeded Random
 	 */
 	protected void initializeNoiseGenBiome(Random rng) { }
-	
+
 	/**
 	 * Generates the noise fields.
 	 * @param chunkX
 	 * @param chunkZ
 	 */
 	public final void generateNoise(int chunkX, int chunkZ) { 
+		this.baseBlockLayerVariationNoise = this.baseBlockLayerVariationNoiseGen.func_151599_a(this.baseBlockLayerVariationNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.generateNoise(chunkX, chunkZ, this);
 		}
 		this.generateNoiseBiome(chunkX, chunkZ);
 	}
-	
-	
+
+
 	/**
 	 * Generates the noise fields. Can be overridden by the biome.
 	 * @param chunkX
@@ -323,8 +330,16 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	 * Returns the base block of this biome
 	 * @return Block
 	 */
-	public final Block getBaseBlock() {
-		return this.baseBlock;
+	public Block getBaseBlock(int y) {
+		return y > WorldProviderBetweenlands.PITSTONE_HEIGHT ? this.baseBlock : BLBlockRegistry.pitstone;
+	}
+
+	/**
+	 * Returns the base block meta of this biome
+	 * @return Block
+	 */
+	public byte getBaseBlockMeta(int y) {
+		return y > WorldProviderBetweenlands.PITSTONE_HEIGHT ? this.baseBlockMeta : 0;
 	}
 
 	/**
@@ -334,12 +349,14 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public final Block getUnderLayerBlock() {
 		return this.underLayerTopBlock;
 	}
-	
+
 	protected Block[] currentChunkBlocks;
 	protected byte[] currentChunkMeta;
 	protected ChunkProviderBetweenlands currentProvider;
 	protected BiomeGenBase[] currentBiomesForGeneration;
-	
+	private NoiseGeneratorPerlin baseBlockLayerVariationNoiseGen;
+	private double[] baseBlockLayerVariationNoise = new double[256];
+
 	/**
 	 * Replaces the default terrain gen blocks with the blocks of this biome.
 	 *
@@ -363,7 +380,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.currentChunkMeta = blockMeta;
 		this.currentProvider = chunkProvider;
 		this.currentBiomesForGeneration = biomesForGeneration;
-		
+
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.currentBiomesForGeneration = biomesForGeneration;
 			feature.currentProvider = chunkProvider;
@@ -371,11 +388,11 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 			feature.setChunkAndWorld((blockX-(blockX&15))/16, (blockZ-(blockZ&15))/16, world);
 			feature.preReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider, biomesForGeneration, rng);
 		}
-		
+
 		if(!this.preReplaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ)) {
 			return;
 		}
-		
+
 		//Chunk width * height
 		int sliceSize = chunkBlocks.length / 256;
 
@@ -386,7 +403,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		int blocksBelow = -1;
 		//Amount of blocks below the first block under the layer
 		int blocksBelowLayer = -1;
-		
+
 		for( int y = 255; y >= 0; --y ) {
 			//Block array index of the current x, y, z position
 			int cIndex = this.getBlockArrayIndex(inChunkX, y, inChunkZ, sliceSize);
@@ -403,21 +420,27 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 
 			//Block is either null, air or the layer block
 			if( currentBlock == null || currentBlock.getMaterial() == Material.air ||
-					currentBlock == chunkProvider.layerBlock ) {
+					currentBlock == chunkProvider.layerBlock) {
 				blocksBelow = -1;
 				continue;
 			} else {
 				blocksBelow++;
 			}
-			
+
 			if(currentBlock != chunkProvider.baseBlock) {
 				continue;
 			}
 
+			int baseBlockVariationLayer = (int) (Math.abs(this.baseBlockLayerVariationNoise[inChunkX * 16 + inChunkZ] * 0.7F));
+			int layerBlockY = y - baseBlockVariationLayer;
+			if(layerBlockY < 0) {
+				layerBlockY = 0;
+			}
+
 			//Generate base block patch
 			if( this.hasBaseBlockPatches && baseBlockNoiseRN <= 0 ) {
-				chunkBlocks[cIndex] = this.baseBlock;
-				blockMeta[cIndex] = this.baseBlockMeta;
+				chunkBlocks[cIndex] = this.getBaseBlock(layerBlockY);
+				blockMeta[cIndex] = this.getBaseBlockMeta(layerBlockY);
 				return;
 			}
 
@@ -431,7 +454,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 			if(currentBlock == chunkProvider.baseBlock && blockAbove == chunkProvider.layerBlock) {
 				blocksBelowLayer++;
 			}
-			
+
 			if(blocksBelowLayer <= this.underLayerBlockHeight && blocksBelowLayer >= 0) {
 				//Generate under layer top block
 				chunkBlocks[cIndex] = this.underLayerTopBlock;
@@ -444,20 +467,20 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 				//Generate filler block
 				chunkBlocks[cIndex] = this.fillerBlock;
 				blockMeta[cIndex] = this.fillerBlockMeta;
-			} else if( currentBlock == chunkProvider.baseBlock ) {
+			} else if( currentBlock == chunkProvider.baseBlock) {
 				//Generate base block
-				chunkBlocks[cIndex] = this.baseBlock;
-				blockMeta[cIndex] = this.baseBlockMeta;
+				chunkBlocks[cIndex] = this.getBaseBlock(layerBlockY);
+				blockMeta[cIndex] = this.getBaseBlockMeta(layerBlockY);
 			}
 		}
-		
+
 		for(BiomeNoiseFeature feature : this.featureList) {
 			feature.postReplaceStackBlocks(inChunkX, inChunkZ, this.currentChunkBlocks, this.currentChunkMeta, this, chunkProvider, biomesForGeneration, rng);
 		}
-		
+
 		this.postReplaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ);
 	}
-	
+
 	/**
 	 * Called before the base terrain blocks are replaced with the blocks of this biome. Return false to cancel block replacement.
 	 * @param blockX
@@ -469,7 +492,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	protected boolean preReplaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ) {
 		return true;
 	}
-	
+
 	/**
 	 * Called after the base terrain blocks have been replaced with the blocks of this biome.
 	 * @param blockX
@@ -490,7 +513,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public static int getBlockArrayIndex(int x, int y, int z, int sliceSize) {
 		return (z * 16 + x) * sliceSize + y;
 	}
-	
+
 	/**
 	 * Sets Biome specific weighted probability.
 	 * @param weight
@@ -503,7 +526,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 			BLBiomeRegistry.biomeList.add(this); // add to list once weight is known
 		return this;
 	}
-	
+
 	/**
 	 * Returns Biome specific weighted probability.
 	 */

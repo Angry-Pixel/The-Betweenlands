@@ -99,7 +99,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 						if (blocks[index] == null || blocks[index].getMaterial().isLiquid()) {
 							continue;
 						}
-						blocks[index] = y > WorldProviderBetweenlands.WATER_HEIGHT ? Blocks.air : BLBlockRegistry.swampWater;
+						blocks[index] = y > WorldProviderBetweenlands.CAVE_WATER_HEIGHT ? Blocks.air : BLBlockRegistry.swampWater;
 					} else if (y == level && noise < limit + RIDGE_EXTENTS) {
 						double h = MathUtils.linearTransformd(noise, limit, limit + RIDGE_EXTENTS, 0, 1);
 						if (h < 0.5) {

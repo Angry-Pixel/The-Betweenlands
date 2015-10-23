@@ -82,6 +82,7 @@ import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.blocks.terrain.BlockMud;
 import thebetweenlands.blocks.terrain.BlockPeat;
+import thebetweenlands.blocks.terrain.BlockPitstone;
 import thebetweenlands.blocks.terrain.BlockPuddle;
 import thebetweenlands.blocks.terrain.BlockSilt;
 import thebetweenlands.blocks.terrain.BlockSlimyDirt;
@@ -117,6 +118,7 @@ public class BLBlockRegistry {
 
     // TERRAIN
     public static final Block betweenstone = new BlockBetweenstone();
+    public static final Block pitstone = new BlockPitstone();
     public static final Block limestone = new BlockBLGenericDeco("limestone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
     public static final Block genericStone = new BlockGenericStone();
     public static final Block druidStone1 = new BlockDruidStone("druidStone1");

@@ -1,16 +1,16 @@
 package thebetweenlands.utils;
 
-import net.minecraft.world.gen.NoiseGeneratorPerlin;
-
 import java.util.Random;
+
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class FogGenerator {
 	public static final FogGenerator INSTANCE = new FogGenerator();
-	
+
 	private int lastCX, lastCZ;
 	private NoiseGeneratorPerlin fogNoiseGen;
 	private double[] fogChunkNoise = new double[256];
-	
+
 	/**
 	 * Returns the fog range based on a noise generator and the given position.
 	 * @param x

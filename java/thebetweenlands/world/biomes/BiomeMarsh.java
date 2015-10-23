@@ -7,9 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
-import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySporeling;
-import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.FogGenerator;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -49,11 +47,12 @@ extends BiomeGenBaseBetweenlands
 	}
 
 	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getFogStart(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
+		if(viewEntity.posY <= WorldProviderBetweenlands.CAVE_START) return super.getFogStart(farPlaneDistance);
 		float noise = FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[0];
 		byte[] targetFogColor = this.fogColorRGB.clone();
 		float m = (float) ((50 - noise) / 5.0f);
@@ -74,12 +73,15 @@ extends BiomeGenBaseBetweenlands
 	@SideOnly(Side.CLIENT)
 	public float getFogEnd(float farPlaneDistance) {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
+		if(viewEntity.posY <= WorldProviderBetweenlands.CAVE_START) return super.getFogEnd(farPlaneDistance);
 		return FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[1];
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public byte[] getFogRGB() {
+		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
+		if(viewEntity.posY <= WorldProviderBetweenlands.CAVE_START) return super.getFogRGB();
 		return this.recalculatedFogColor;
 	}
 }

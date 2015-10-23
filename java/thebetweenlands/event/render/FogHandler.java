@@ -45,7 +45,7 @@ public class FogHandler {
 
 	public boolean hasDenseFog() {
 		World world = Minecraft.getMinecraft().theWorld;
-		if(world.provider instanceof WorldProviderBetweenlands) {
+		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().thePlayer.posY > WorldProviderBetweenlands.CAVE_START) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			boolean denseFog = false;
@@ -64,6 +64,8 @@ public class FogHandler {
 	private float currentFogEnd = -1.0F;
 	private float lastFogStart = -1.0F;
 	private float lastFogEnd = -1.0F;
+	private float currentFogColorMultiplier = 1.0F;
+	private float lastFogColorMultiplier = 1.0F;
 	private float farPlaneDistance = 0.0F;
 	private int fogMode;
 	@SideOnly(Side.CLIENT)
@@ -111,13 +113,20 @@ public class FogHandler {
 		}
 
 		//Underground fog
+		float multiplier = 1.0F;
 		if(player.posY < WorldProviderBetweenlands.CAVE_START) {
-			float multiplier = ((float)(WorldProviderBetweenlands.CAVE_START - player.posY) / WorldProviderBetweenlands.CAVE_START);
+			multiplier = ((float)(WorldProviderBetweenlands.CAVE_START - player.posY) / WorldProviderBetweenlands.CAVE_START);
 			multiplier = 1.0F - multiplier;
-			multiplier *= Math.pow(multiplier, 6);
-			multiplier = multiplier * 0.9F + 0.1F;
+			multiplier *= Math.pow(multiplier, 8.5);
+			multiplier = multiplier * 0.95F + 0.05F;
+			if(player.posY <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
+				float targettedMultiplier = 0.3F;
+				if(multiplier < targettedMultiplier) {
+					multiplier += Math.pow(((targettedMultiplier - multiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - player.posY)), 0.85F);
+				}
+			}
 			fogStart *= multiplier;
-			fogEnd *= multiplier;
+			fogEnd *= multiplier * 1.5F;
 		}
 
 		if(this.currentFogStart < 0.0F || this.currentFogEnd < 0.0F) {
@@ -125,28 +134,41 @@ public class FogHandler {
 			this.currentFogEnd = fogEnd;
 		}
 
+		float fogDistIncrMultiplier = player.posY <= WorldProviderBetweenlands.CAVE_START ? 2.0F : 1.0F;
 		this.lastFogStart = this.currentFogStart;
 		this.lastFogEnd = this.currentFogEnd;
-
-		if(Math.abs(this.currentFogStart - fogStart) > 0.1f) {
-			float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/this.farPlaneDistance/3.0f;
+		if(Math.abs(this.currentFogStart - fogStart) > fogDistIncrMultiplier) {
+			float currentFogStartIncr = Math.abs(this.currentFogStart - fogStart)/this.farPlaneDistance/2.0f*fogDistIncrMultiplier;
 			if(this.currentFogStart > fogStart) {
 				this.currentFogStart-=currentFogStartIncr;
 			} else if(this.currentFogStart < fogStart) {
 				this.currentFogStart+=currentFogStartIncr;
 			}
 		}
-		if(Math.abs(this.currentFogEnd - fogEnd) > 0.1f) {
-			float currentFogEndIncr = Math.abs(this.currentFogEnd - fogEnd)/this.farPlaneDistance/3.0f;
+		if(Math.abs(this.currentFogEnd - fogEnd) > fogDistIncrMultiplier) {
+			float currentFogEndIncr = Math.abs(this.currentFogEnd - fogEnd)/this.farPlaneDistance/2.0f*fogDistIncrMultiplier;
 			if(this.currentFogEnd > fogEnd) {
 				this.currentFogEnd-=currentFogEndIncr;
 			} else if(this.currentFogEnd < fogEnd) {
 				this.currentFogEnd+=currentFogEndIncr;
 			}
 		}
+
+		this.lastFogColorMultiplier = this.currentFogColorMultiplier;
+		float targettedFogColorMultiplier = MathHelper.clamp_float(multiplier * 2.0F, 0.0F, 1.0F);
+		float fogColorMultiplierIncr = 0.005F;
+		if(Math.abs(this.currentFogColorMultiplier - targettedFogColorMultiplier) > fogColorMultiplierIncr) {
+			if(this.currentFogColorMultiplier > targettedFogColorMultiplier) {
+				this.currentFogColorMultiplier-=fogColorMultiplierIncr;
+			} else if(this.currentFogColorMultiplier < targettedFogColorMultiplier) {
+				this.currentFogColorMultiplier+=fogColorMultiplierIncr;
+			}
+		} else {
+			this.currentFogColorMultiplier = targettedFogColorMultiplier;
+		}
 	}
 
-	////// Underwater fog fix //////
+	////// Underwater fog fix & Dark fog in caves //////
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onFogColor(FogColors event) {
@@ -159,6 +181,7 @@ public class FogHandler {
 				return;
 			}
 			Block block = ActiveRenderInfo.getBlockAtEntityViewpoint(world, renderView, (float) event.renderPartialTicks);
+			float fogColorMultiplier = (float) (this.currentFogColorMultiplier + (this.currentFogColorMultiplier - this.lastFogColorMultiplier) * event.renderPartialTicks);
 			if(block instanceof BlockSwampWater) {
 				BiomeGenBase biome = world.getBiomeGenForCoords(
 						MathHelper.floor_double(renderView.posX),
@@ -168,7 +191,15 @@ public class FogHandler {
 					event.red = (float)(colorMultiplier >> 16 & 255) / 255.0F;
 					event.green = (float)(colorMultiplier >> 8 & 255) / 255.0F;
 					event.blue = (float)(colorMultiplier & 255) / 255.0F;
+					double waterFogColorMultiplier = Math.pow(fogColorMultiplier, 6);
+					event.red *= waterFogColorMultiplier;
+					event.green *= waterFogColorMultiplier;
+					event.blue *= waterFogColorMultiplier;
 				}
+			} else {
+				event.red *= fogColorMultiplier;
+				event.green *= fogColorMultiplier;
+				event.blue *= fogColorMultiplier;
 			}
 		}
 	}

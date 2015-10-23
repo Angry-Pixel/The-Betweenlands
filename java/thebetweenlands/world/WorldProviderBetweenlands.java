@@ -25,7 +25,7 @@ import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 /**
  *
- * @author The Erebus Team
+ * @author A long time ago in a galaxy far, far away: The Erebus Team
  *
  */
 public class WorldProviderBetweenlands
@@ -33,7 +33,9 @@ extends WorldProvider
 {
 	public static final int LAYER_HEIGHT = 80;
 
-	public static final int WATER_HEIGHT = 25;
+	public static final int CAVE_WATER_HEIGHT = 20;
+
+	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 14;
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
 
@@ -195,10 +197,10 @@ extends WorldProvider
 		} else {
 			targetFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
 		}
-		
+
 		return targetFogColor;
 	}
-	
+
 	private void initFogColors(EntityPlayer player) {
 		byte[] targetFogColor = this.getTargetFogColor(player);
 
@@ -226,7 +228,7 @@ extends WorldProvider
 		this.initFogColors(player);
 
 		byte[] targetFogColor = this.getTargetFogColor(player);
-		
+
 		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
 		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
 		float m = 0;

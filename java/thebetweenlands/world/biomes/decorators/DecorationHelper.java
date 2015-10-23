@@ -947,7 +947,7 @@ public class DecorationHelper {
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
 			float v = SPELEOTHEM_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_SPELEOTHEM.generate(world, rand, x, y, z);
 		}
@@ -957,7 +957,7 @@ public class DecorationHelper {
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
 			float v = THORNS_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_THORNS.generate(world, rand, x, y, z);
 		}
@@ -967,7 +967,7 @@ public class DecorationHelper {
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
 			float v = CAVE_MOSS_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_CAVE_MOSS.generate(world, rand, x, y, z);
 		}
@@ -977,7 +977,7 @@ public class DecorationHelper {
 		while (attempts --> 0) {
 			int x = this.x + offsetXZ();
 			float v = CAVE_HANGERS_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.WATER_HEIGHT) + WorldProviderBetweenlands.WATER_HEIGHT + 0.5F);
+			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_CAVE_HANGERS.generate(world, rand, x, y, z);
 		}
