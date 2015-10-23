@@ -171,6 +171,8 @@ public class TextWidget extends ManualWidgetsBase {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glScalef(1f, 1f, 1f);
             }
+            GL11.glColor4f(1F, 1F, 1F, 1F);
+            GL11.glScalef(1f, 1f, 1f);
         }
     }
 

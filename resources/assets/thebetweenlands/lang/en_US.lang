@@ -543,6 +543,8 @@ manual.widget.purifier.process.time=Process time: .seconds. seconds
 
 manual.widget.smelting.recipe=Furnace recipe
 
+manual.arrow.title=<scale:1> Arrows </scale>
+
 talisman.noplace=The space is not large enough
 
 # Key Binding
