@@ -21,6 +21,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -33,6 +34,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	private boolean playOnce = true;
 	private String ownerUUID = null;
+	private int despawnTicks = 0;
 
 	public EntityTarminion(World world) {
 		super(world);
@@ -101,11 +103,24 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(!worldObj.isRemote)
-			if(ticksExisted > 1200)
-				setDead();
+		if(!worldObj.isRemote) {
+			this.despawnTicks++;
+			if(despawnTicks > 1200) setDead();
+		}
 		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		nbt.setInteger("despawnTicks", this.despawnTicks);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		this.despawnTicks = nbt.getInteger("despawnTicks");
 	}
 
 	@Override
