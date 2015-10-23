@@ -16,7 +16,7 @@ public class RenderTarminion extends RenderLiving {
 	private final ModelTarminion renderPassModel = new ModelTarminion();
 
 	public RenderTarminion() {
-		super(new ModelTarminion(), 0.3F);
+		super(new ModelTarminion(), 0.16F);
 	}
 	
 	@Override

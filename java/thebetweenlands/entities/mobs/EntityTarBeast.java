@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -33,10 +32,10 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.AxeBL;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
-import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
+import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
@@ -61,7 +60,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		super(world);
 		setSize(1.25F, 2F);
 		
-		this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+		this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 		this.tasks.addTask(2, new EntityAIWander(this, 1D));
 		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(4, new EntityAILookIdle(this));

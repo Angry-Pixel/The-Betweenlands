@@ -1,22 +1,19 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.items.*;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 
 public class EntityTermite extends EntityMob implements IEntityBL {
 
 	public EntityTermite(World world) {
 		super(world);
 		setSize(0.7F, 0.6F);
+		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 	}
 
 	@Override

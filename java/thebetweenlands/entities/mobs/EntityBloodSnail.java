@@ -31,7 +31,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		setSize(0.3F, 0.3F);
 		stepHeight = 0.0F;
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false));
+		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 0.5D, false));
 		tasks.addTask(2, new EntityAIWander(this, 0.5D));
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));

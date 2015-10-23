@@ -1,6 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -10,17 +11,12 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.AxeBL;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	
@@ -37,6 +33,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		tasks.addTask(1, runAway);
 		tasks.addTask(2, new EntityAIWander(this, 0.7D));
 		tasks.addTask(3, new EntityAILookIdle(this));
+		tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		targetTasks.addTask(1, target);
 		stepHeight = 2;
