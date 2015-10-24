@@ -3,8 +3,10 @@ package thebetweenlands.inventory.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
@@ -52,5 +54,19 @@ public class GuiBLDualFurnace extends GuiContainer {
             i1 = tileFurnace.getCookProgressScaled2(24);
             drawTexturedModalRect(k + 79, l + 109, 176, 14, i1 + 1, 16);
         }
-    }
+        if (tileFurnace.getStackInSlot(6) == null)
+			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX).getIconIndex(), 26, 39);
+        if (tileFurnace.getStackInSlot(7) == null)
+			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX).getIconIndex(), 26, 110);
+	}
+
+	private void renderSlot(IIcon icon, int iconX, int iconY) {
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glColor4f(1f, 1f, 1f, 0.2f);
+		mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
+		drawTexturedModelRectFromIcon(guiLeft + iconX, guiTop + iconY, icon, 16, 16);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
+	}
 }

@@ -160,7 +160,7 @@ public class BLBlockRegistry {
     public static final Block syrmoriteOre = new BlockGenericOre("syrmoriteOre", null);
     public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
     public static final Block valoniteOre = new BlockGenericOre("valoniteOre", ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
-    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", new ItemStack(BLItemRegistry.lifeCrystal));
+    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", new ItemStack(BLItemRegistry.lifeCrystal)).setLightLevel(0.8F);
 
     // TREES
     public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood");

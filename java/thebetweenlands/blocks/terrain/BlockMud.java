@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemRubberBoots;
 import thebetweenlands.recipes.BLMaterials;
 
@@ -32,7 +33,8 @@ public class BlockMud extends Block {
 
 	public boolean canEntityWalkOnMud(Entity entity) {
 		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
-		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk;
+		boolean hasLurkerArmor = entity.isInWater() && entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() == BLItemRegistry.lurkerSkinBoots;
+		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor;
 	}
 
 	@Override
