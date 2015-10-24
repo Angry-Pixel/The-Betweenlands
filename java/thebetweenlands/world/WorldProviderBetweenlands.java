@@ -15,6 +15,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.IRenderHandler;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
@@ -188,21 +189,29 @@ extends WorldProvider
 		}
 	}
 
-	private byte[] getTargetFogColor(EntityPlayer player) {
+	private int[] getTargetFogColor(EntityPlayer player) {
 		BiomeGenBase biome = this.worldObj.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
-		byte[] targetFogColor;
+		int[] targetFogColor;
 
 		if( biome instanceof BiomeGenBaseBetweenlands ) {
 			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB().clone();
 		} else {
-			targetFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
+			targetFogColor = new int[]{(int) 255, (int) 255, (int) 255};
+		}
+
+		if(!ShaderHelper.INSTANCE.canUseShaders()) {
+			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()) {
+				targetFogColor = new int[] {(int) (0.74F * 255), (int) (0.18F * 255), (int) (0.08F * 255)};
+			} else if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
+				targetFogColor = new int[] {(int) (0.4F * 255), (int) (0.22F * 255), (int) (0.08F * 255)};
+			}
 		}
 
 		return targetFogColor;
 	}
 
 	private void initFogColors(EntityPlayer player) {
-		byte[] targetFogColor = this.getTargetFogColor(player);
+		int[] targetFogColor = this.getTargetFogColor(player);
 
 		if(this.currentFogColor == null) {
 			this.currentFogColor = new double[3];
@@ -227,7 +236,7 @@ extends WorldProvider
 
 		this.initFogColors(player);
 
-		byte[] targetFogColor = this.getTargetFogColor(player);
+		int[] targetFogColor = this.getTargetFogColor(player);
 
 		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
 		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
@@ -242,10 +251,16 @@ extends WorldProvider
 				m = 80;
 			}
 		}
+		if(!ShaderHelper.INSTANCE.canUseShaders()) {
+			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()
+					|| WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
+				m = 0;
+			}
+		}
 
 		for(int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];
-			targetFogColor[i] = (byte) (targetFogColor[i] + (diff / 255.0D * m));
+			targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
 		}
 
 		for(int a = 0; a < 3; a++) {

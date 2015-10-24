@@ -385,6 +385,8 @@ public class MainShader extends CShader {
 
 	@Override
 	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
+		if(!ShaderHelper.INSTANCE.canUseShaders()) return;
+		
 		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();

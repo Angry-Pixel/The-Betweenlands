@@ -27,7 +27,7 @@ import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements IWeightProvider {
 	protected final BiomeDecoratorBaseBetweenlands decorator;
 	protected int grassColor, foliageColor;
-	protected byte[] fogColorRGB = new byte[]{(byte) 255, (byte) 255, (byte) 255};
+	protected int[] fogColorRGB = new int[]{(int) 255, (int) 255, (int) 255};
 	protected Block bottomBlock = Blocks.bedrock;
 	protected Block underLayerTopBlock, baseBlock;
 	protected int bottomBlockHeight = 0;
@@ -251,7 +251,7 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	 * Returns the fog RGB color.
 	 * @return byte[3]
 	 */
-	public byte[] getFogRGB() {
+	public int[] getFogRGB() {
 		return this.fogColorRGB;
 	}
 

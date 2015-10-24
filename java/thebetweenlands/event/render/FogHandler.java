@@ -64,8 +64,8 @@ public class FogHandler {
 	private float currentFogEnd = -1.0F;
 	private float lastFogStart = -1.0F;
 	private float lastFogEnd = -1.0F;
-	private float currentFogColorMultiplier = 1.0F;
-	private float lastFogColorMultiplier = 1.0F;
+	private float currentFogColorMultiplier = -1.0F;
+	private float lastFogColorMultiplier = -1.0F;
 	private float farPlaneDistance = 0.0F;
 	private int fogMode;
 	@SideOnly(Side.CLIENT)
@@ -154,8 +154,12 @@ public class FogHandler {
 			}
 		}
 
-		this.lastFogColorMultiplier = this.currentFogColorMultiplier;
 		float targettedFogColorMultiplier = MathHelper.clamp_float(multiplier * 2.0F, 0.0F, 1.0F);
+		if(this.currentFogColorMultiplier < 0.0F) {
+			this.currentFogColorMultiplier = targettedFogColorMultiplier;
+			this.lastFogColorMultiplier = targettedFogColorMultiplier;
+		}
+		this.lastFogColorMultiplier = this.currentFogColorMultiplier;
 		float fogColorMultiplierIncr = 0.005F;
 		if(Math.abs(this.currentFogColorMultiplier - targettedFogColorMultiplier) > fogColorMultiplierIncr) {
 			if(this.currentFogColorMultiplier > targettedFogColorMultiplier) {

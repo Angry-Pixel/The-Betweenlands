@@ -50,7 +50,7 @@ extends BiomeGenBaseBetweenlands
 		spawnableMonsterList.add(new SpawnListEntry(EntityPeatMummy.class, 14, 1, 1));
 	}
 
-	private byte[] recalculatedFogColor = new byte[]{(byte) 255, (byte) 255, (byte) 255};
+	private int[] recalculatedFogColor = new int[]{(int) 255, (int) 255, (int) 255};
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -58,7 +58,7 @@ extends BiomeGenBaseBetweenlands
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
 		if(viewEntity.posY <= WorldProviderBetweenlands.CAVE_START) return super.getFogStart(farPlaneDistance);
 		float noise = FogGenerator.INSTANCE.getFogRange(viewEntity.posX, viewEntity.posZ, farPlaneDistance, Minecraft.getMinecraft().theWorld.getSeed())[0];
-		byte[] targetFogColor = this.fogColorRGB.clone();
+		int[] targetFogColor = this.fogColorRGB.clone();
 		float m = (float) ((50 - noise) / 5.0f);
 		if(m < 0) {
 			m = 0.0f;
@@ -83,7 +83,7 @@ extends BiomeGenBaseBetweenlands
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public byte[] getFogRGB() {
+	public int[] getFogRGB() {
 		EntityLivingBase viewEntity = Minecraft.getMinecraft().renderViewEntity;
 		if(viewEntity.posY <= WorldProviderBetweenlands.CAVE_START) return super.getFogRGB();
 		return this.recalculatedFogColor;
