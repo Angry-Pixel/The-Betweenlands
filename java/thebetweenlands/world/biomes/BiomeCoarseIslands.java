@@ -2,6 +2,7 @@ package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
+import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
@@ -38,14 +39,18 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x1b3944;
 
-		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
 		spawnableCreatureList.add(new SpawnListEntry(EntityDragonFly.class, 35, 2, 4));
 		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 10, 1, 1));
-		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
 		spawnableCreatureList.add(new SpawnListEntry(EntityGecko.class, 35, 1, 3));
+
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 10, 1, 1));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 500, 2, 5));
+
+		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
+
+		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;

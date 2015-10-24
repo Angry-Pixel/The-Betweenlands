@@ -21,9 +21,9 @@ import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
-    private ChunkCoordinates currentSwimTarget;
-    AnimationMathHelper animation = new AnimationMathHelper();
-    public float moveProgress;
+	private ChunkCoordinates currentSwimTarget;
+	AnimationMathHelper animation = new AnimationMathHelper();
+	public float moveProgress;
 
 	public EntityAngler(World world) {
 		super(world);
@@ -57,7 +57,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	protected String getDeathSound() {
 		return "thebetweenlands:anglerDeath";
 	}
-	
+
 	@Override
 	protected void func_145780_a(int x, int y, int z, Block block) {
 		if (rand.nextInt(10) == 0)
@@ -85,56 +85,58 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.getBlock((int) posX, (int) posY, (int) posZ) == BLBlockRegistry.swampWater;
+		return worldObj.difficultySetting != EnumDifficulty.PEACEFUL && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) == BLBlockRegistry.swampWater;
 	}
 
 	@Override
-    public boolean isInWater() {
-        return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
-    }
+	public boolean isInWater() {
+		return worldObj.handleMaterialAcceleration(boundingBox, Material.water, this);
+	}
 
-    public boolean isGrounded() {
-        return !isInWater() && worldObj.getBlock((int) posX, (int) posY + 1, (int) posZ) == Blocks.air && worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ).isCollidable();
-    }
+	public boolean isGrounded() {
+		return !isInWater() && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 1), MathHelper.floor_double(posZ)) == Blocks.air && worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)).isCollidable();
+	}
 
 	@Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-        EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
-        setTarget(target);
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
 
-        if (isInWater()) {
-        	moveProgress = animation.swing(1.2F, 0.4F, false);
-        	if (!worldObj.isRemote) {
-    			if (getEntityToAttack() != null) {
-    				currentSwimTarget = new ChunkCoordinates((int) getEntityToAttack().posX, (int) ((int) getEntityToAttack().posY + getEntityToAttack().getEyeHeight()), (int) getEntityToAttack().posZ);
-    				swimToTarget();
-    			}
-    			else
-    				swimAbout();
-        	}
-            renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
-            rotationYaw = renderYawOffset;
-        }
-        else {
-        	moveProgress = animation.swing(2F, 0.4F, false);
-            if (!worldObj.isRemote) {
-            	if(!onGround)
-            	{
-                motionX = 0.0D;
-                motionY -= 0.08D;
-                motionY *= 0.9800000190734863D;
-                motionZ = 0.0D;
-                }
-            	else if(onGround) {
-            		setIsLeaping(false);
-					motionY += 0.4F;
-					motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
-					motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
+		if(!this.worldObj.isRemote) {
+			EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+			setTarget(target);
+
+			if (isInWater()) {
+				moveProgress = animation.swing(1.2F, 0.4F, false);
+				if (!worldObj.isRemote) {
+					if (getEntityToAttack() != null) {
+						currentSwimTarget = new ChunkCoordinates((int) getEntityToAttack().posX, (int) ((int) getEntityToAttack().posY + getEntityToAttack().getEyeHeight()), (int) getEntityToAttack().posZ);
+						swimToTarget();
+					}
+					else
+						swimAbout();
 				}
-            }
-        }
-    }
+				renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
+				rotationYaw = renderYawOffset;
+			} else {
+				moveProgress = animation.swing(2F, 0.4F, false);
+				if (!worldObj.isRemote) {
+					if(!onGround)
+					{
+						motionX = 0.0D;
+						motionY -= 0.08D;
+						motionY *= 0.9800000190734863D;
+						motionZ = 0.0D;
+					}
+					else if(onGround) {
+						setIsLeaping(false);
+						motionY += 0.4F;
+						motionX += (rand.nextFloat()-rand.nextFloat())* 0.3F;
+						motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
+					}
+				}
+			}
+		}
+	}
 
 	@Override
 	public void onUpdate() {
@@ -165,19 +167,19 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 			currentSwimTarget = null;
 
 		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 10.0F)
-			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(4) + 1, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
+			currentSwimTarget = new ChunkCoordinates((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(6) + 2, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
 
 		swimToTarget();
 	}
 
 	protected void swimToTarget() {
 		double targetX = currentSwimTarget.posX + 0.5D - posX;
-		double targetY = currentSwimTarget.posY - posY;
+		double targetY = currentSwimTarget.posY + 0.5D - posY;
 		double targetZ = currentSwimTarget.posZ + 0.5D - posZ;
-		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.10000000149011612D;
-		motionY += (Math.signum(targetY) * 0.599999988079071D - motionY) * 0.010000000149011612D;
+		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.1D;
+		motionY += (Math.signum(targetY) * 0.4D - motionY) * 0.08D;
 		motionY -= 0.01D;
-		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.10000000149011612D;
+		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.1D;
 		moveForward = 0.5F;
 	}
 
@@ -186,12 +188,12 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		super.onCollideWithPlayer(player);
 		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
 			if(getDistanceToEntity(player) <= 1.5F)
-			if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
-				player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
-			}
+				if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY) {
+					player.attackEntityFrom(DamageSource.causeMobDamage(this), 1F);
+				}
 		}
 	}
-	
+
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
 		if (distance > 2.0F && distance < 6.0F && entity.boundingBox.maxY >= boundingBox.minY && entity.boundingBox.minY <= boundingBox.maxY && rand.nextInt(3) == 0)
@@ -205,11 +207,11 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 				motionY = 0.8D;
 			}
 	}
-	
+
 	public boolean isLeaping() {
 		return dataWatcher.getWatchableObjectByte(20) == 1;
 	}
-	
+
 	public void setIsLeaping(boolean leaping) {
 		dataWatcher.updateObject(20, (byte) (leaping ? 1 : 0));
 	}

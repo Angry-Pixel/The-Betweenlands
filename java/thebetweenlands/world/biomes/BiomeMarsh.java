@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -40,9 +41,12 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x485E18;
 
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
 		spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
+		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
+
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 500, 2, 5));
+
+		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityPeatMummy.class, 14, 1, 1));
 	}
 

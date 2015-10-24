@@ -13,7 +13,7 @@ public class RenderBlindCaveFish extends RenderLiving {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/blindCaveFish.png");
 
 	public RenderBlindCaveFish() {
-		super(new ModelBlindCaveFish(), 0.5F);
+		super(new ModelBlindCaveFish(), 0.2F);
 	}
 	
 	@Override
