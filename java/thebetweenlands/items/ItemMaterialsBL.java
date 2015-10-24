@@ -2,8 +2,9 @@ package thebetweenlands.items;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMaterialsBL extends Item {
 	public static ItemStack createStack(EnumMaterialsBL materialsBL) {
@@ -153,6 +152,30 @@ public class ItemMaterialsBL extends Item {
 		}
 
 		public static final EnumMaterialsBL[] VALUES = values();
+	}
+
+	public static boolean isIngotFromOre(ItemStack input, ItemStack output) {
+		if(input == null || output == null) return false;
+		return isOre(input) && isIngot(output);
+	}
+
+	public static boolean isOre(ItemStack stack) {
+		if(stack == null) return false;
+		return stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.octineOre)
+				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.syrmoriteOre)
+				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.sulfurOre)
+				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.valoniteOre)
+				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.lifeCrystalOre);
+	}
+
+	public static boolean isIngot(ItemStack stack) {
+		if(stack == null) return false;
+		return (stack.getItem() instanceof ItemMaterialsBL 
+				&& (stack.getItemDamage() == EnumMaterialsBL.OCTINE_INGOT.ordinal()
+				|| stack.getItemDamage() == EnumMaterialsBL.SYRMORITE_INGOT.ordinal()
+				|| stack.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()
+				|| stack.getItemDamage() == EnumMaterialsBL.VALONITE_SHARD.ordinal()))
+				|| stack.getItem() == BLItemRegistry.lifeCrystal;
 	}
 
 	// Slimy Bonemeal

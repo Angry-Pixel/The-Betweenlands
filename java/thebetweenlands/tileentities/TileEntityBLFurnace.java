@@ -9,7 +9,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -240,14 +245,16 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 			else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
 				furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(furnaceItemStacks[3] != null) {
-				boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
-				if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
-					furnaceItemStacks[2].stackSize++;
+			if(ItemMaterialsBL.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
+				if(furnaceItemStacks[3] != null) {
+					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
+						furnaceItemStacks[2].stackSize++;
+					}
+					--furnaceItemStacks[3].stackSize;
+					if (furnaceItemStacks[3].stackSize <= 0)
+						furnaceItemStacks[3] = null;
 				}
-				--furnaceItemStacks[3].stackSize;
-				if (furnaceItemStacks[3].stackSize <= 0)
-					furnaceItemStacks[3] = null;
 			}
 
 			--furnaceItemStacks[0].stackSize;
