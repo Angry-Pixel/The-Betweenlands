@@ -265,36 +265,42 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	}
 
 	private ClassNode transformActiveRenderInfo(ClassNode classNode, boolean obf) {
-		InsnList instructions = classNode.methods.get(1).instructions;
 		String owner = obf ? "baj" : "net/minecraft/client/renderer/ActiveRenderInfo";
 		String viewport = obf ? "i" : "viewport";
 		String modelview = obf ? "j" : "modelview";
 		String projection = obf ? "k" : "projection";
 		String objectCoords = obf ? "l" : "objectCoords";
+		String updateRenderInfo = obf ? "a" : "updateRenderInfo";
+		String updateRenderInfoDesc = obf ? "(Lyz;Z)V" : "(Lnet/minecraft/entity/player/EntityPlayer;Z)V";
 		final String fbDesc = "Ljava/nio/FloatBuffer;";
 		final String ibDesc = "Ljava/nio/IntBuffer;";
-		for (int i = 0; i < instructions.size(); i++) {
-			AbstractInsnNode insnNode = instructions.get(i);
-			if (insnNode.getOpcode() == ILOAD) {
-				Iterator<AbstractInsnNode> iter = instructions.iterator(i);
-				while (iter.hasNext()) {
-					insnNode = iter.next();
-					if (insnNode.getOpcode() == RETURN) {
-						InsnList invocation = new InsnList();
-						invocation.add(new VarInsnNode(FLOAD, 2));
-						invocation.add(new VarInsnNode(FLOAD, 3));
-						invocation.add(new FieldInsnNode(GETSTATIC, owner, modelview, fbDesc));
-						invocation.add(new FieldInsnNode(GETSTATIC, owner, projection, fbDesc));
-						invocation.add(new FieldInsnNode(GETSTATIC, owner, viewport, ibDesc));
-						invocation.add(new FieldInsnNode(GETSTATIC, owner, objectCoords, fbDesc));
-						invocation.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "updateRenderInfo", "(FF" + fbDesc + fbDesc + ibDesc + fbDesc + ")V", false));
-						instructions.insertBefore(insnNode, invocation);
+		for (MethodNode method : classNode.methods) {
+			if (updateRenderInfo.equals(method.name) && updateRenderInfoDesc.equals(method.desc)) {
+				InsnList instructions = method.instructions;
+				for (int i = 0; i < instructions.size(); i++) {
+					AbstractInsnNode insnNode = instructions.get(i);
+					if (insnNode.getOpcode() == ILOAD) {
+						Iterator<AbstractInsnNode> iter = instructions.iterator(i);
+						while (iter.hasNext()) {
+							insnNode = iter.next();
+							if (insnNode.getOpcode() == RETURN) {
+								InsnList invocation = new InsnList();
+								invocation.add(new VarInsnNode(FLOAD, 2));
+								invocation.add(new VarInsnNode(FLOAD, 3));
+								invocation.add(new FieldInsnNode(GETSTATIC, owner, modelview, fbDesc));
+								invocation.add(new FieldInsnNode(GETSTATIC, owner, projection, fbDesc));
+								invocation.add(new FieldInsnNode(GETSTATIC, owner, viewport, ibDesc));
+								invocation.add(new FieldInsnNode(GETSTATIC, owner, objectCoords, fbDesc));
+								invocation.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "updateRenderInfo", "(FF" + fbDesc + fbDesc + ibDesc + fbDesc + ")V", false));
+								instructions.insertBefore(insnNode, invocation);
+								break;
+							} else {
+								iter.remove();
+							}
+						}
 						break;
-					} else {
-						iter.remove();
 					}
 				}
-				break;
 			}
 		}
 		return classNode;
