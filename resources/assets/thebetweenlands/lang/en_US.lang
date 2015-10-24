@@ -69,6 +69,8 @@ tile.thebetweenlands.compostBin.name=Compost Bin
 tile.thebetweenlands.pestleAndMortar.name=Mortar
 tile.thebetweenlands.alembic.name=Alembic
 tile.thebetweenlands.infuser.name=Infuser
+tile.thebetweenlands.hollowLog.name=Hollow Log
+tile.thebetweenlands.itemShelf.name=Item Shelf
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -295,6 +297,7 @@ tile.thebetweenlands.furnaceBL.name=Sulfur Furnace
 tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
 
 tile.thebetweenlands.caveMoss.name=Cave Moss
+tile.thebetweenlands.caveGrass.name=Cave Grass
 
 # Items
 item.thebetweenlands.testItem.name=Test Item
@@ -348,6 +351,14 @@ item.thebetweenlands.valoniteHelmet.name=Valonite Helmet
 item.thebetweenlands.valoniteChestplate.name=Valonite Chestplate
 item.thebetweenlands.valoniteLeggings.name=Valonite Leggings
 item.thebetweenlands.valoniteBoots.name=Valonite Boots
+
+item.thebetweenlands.legendaryHelmet.name=Legendary Helmet
+item.thebetweenlands.legendaryChestplate.name=Legendary Chestplate
+item.thebetweenlands.legendaryLeggings.name=Legendary Leggings
+item.thebetweenlands.legendaryBoots.name=Legendary Boots
+
+item.thebetweenlands.rubberBoots.name=Rubber Boots
+item.thebetweenlands.rubberBootsImproved.name=Improved Rubber Boots
 
 item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 
@@ -417,12 +428,13 @@ item.thebetweenlands.weedwoodBowl.name=Weedwood Bowl
 item.thebetweenlands.weedwoodBucket.name=Weedwood Bucket
 item.thebetweenlands.weedwoodBucketWater.name=Weedwood Water Bucket
 item.thebetweenlands.weedwoodBucketTar.name=Weedwood Tar Bucket
+item.thebetweenlands.weedwoodBucketStagnantWater.name=Weedwood Stagnant Water Bucket
+item.thebetweenlands.volarkite.name=Volarkite
 item.thebetweenlands.anglerToothArrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisonedAnglerToothArrow.name=Poison Angler Tooth Arrow
 item.thebetweenlands.octineArrow.name=Octine Arrow
 item.thebetweenlands.basiliskArrow.name=Basilisk Arrow
 item.thebetweenlands.swampKelp.name=Swamp Kelp
-item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
 item.thebetweenlands.plantTonic.name=Plant Tonic
 item.thebetweenlands.rubber.name=Solid Rubber
 item.thebetweenlands.bucketOfRubber.name=Bucket of Liquid Rubber
@@ -448,9 +460,33 @@ item.thebetweenlands.swiftPickaxe.name=Swift Pickaxe
 item.thebetweenlands.wightsBane.name=Wight's Bane
 item.thebetweenlands.skullMask.name=Skull Mask
 
+item.thebetweenlands.tarminion.name=Tar Minion
+
+item.thebetweenlands.shimmerStone.name=Shimmerstone
+
 item.thebetweenlands.caveMossItem.name=Cave Moss
 
 item.thebetweenlands.weedwoodRowboat.name=Weedwood Rowboat
+
+# Ground items
+item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
+item.thebetweenlands.groundCatTail.name=Ground Cattail
+item.thebetweenlands.groundSwampTallGrass.name=Ground Swamp Tallgrass
+item.thebetweenlands.groundShoots.name=Ground Shoots
+item.thebetweenlands.groundArrowArum.name=Ground Arrow Arum
+item.thebetweenlands.groundButtonBush.name=Ground Button Bush
+item.thebetweenlands.groundMarshHibiscus.name=Ground Marsh Hibiscus
+item.thebetweenlands.groundPickerelWeed.name=Ground Pickerel Weed
+item.thebetweenlands.groundSoftRush.name=Ground Soft Rush
+item.thebetweenlands.groundMarshMallow.name=Ground Marsh Mallow
+item.thebetweenlands.groundMilkweed.name=Ground Milkweed
+item.thebetweenlands.groundBlueIris.name=Ground Blue Iris
+item.thebetweenlands.groundCopperIris.name=Ground Copper Iris
+item.thebetweenlands.groundBlueEyedGrass.name=Ground Blue Eyed Grass
+item.thebetweenlands.groundBoneset.name=Ground Boneset
+item.thebetweenlands.groundBottleBrushGrass.name=Ground Bottle Brush Grass
+item.thebetweenlands.groundDriedSwampReed.name=Ground Weedwood Bark
+item.thebetweenlands.groundWeedwoodBark.name=Ground Dried Swamp Reed
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
@@ -474,7 +510,9 @@ entity.thebetweenlands.termite.name=Termite
 entity.thebetweenlands.toad.name=Giant Toad
 entity.thebetweenlands.meleeGuardian.name=Temple Guardian
 entity.thebetweenlands.berserkerGuardian.name=Temple Guardian
-
+entity.thebetweenlands.blindCaveFish.name=Blind Cave Fish
+entity.thebetweenlands.tarminion.name=Tar Minion
+entity.thebetweenlands.peatMummy.name=Peat Mummy
 entity.thebetweenlands.snailPoisonJet.name=Snail Poison Jet
 
 # Creative Tabs
