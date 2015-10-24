@@ -543,7 +543,8 @@ manual.widget.purifier.process.time=Process time: .seconds. seconds
 
 manual.widget.smelting.recipe=Furnace recipe
 
-manual.arrow.title=<scale:1> Arrows </scale>
+manual.arrow.title=<scale:1.5> <underlined> <color:0x9F3DAD> Arrows </color> </underlined> </scale>
+manual.arrow.description=These are some magical arrows added by The Betweenlands. They are get able as loot or simply by crafting them.
 
 talisman.noplace=The space is not large enough
 

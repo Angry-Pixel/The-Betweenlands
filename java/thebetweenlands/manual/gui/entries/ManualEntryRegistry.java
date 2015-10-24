@@ -64,7 +64,7 @@ public class ManualEntryRegistry {
         arrows.add(new ItemStack(BLItemRegistry.poisonedAnglerToothArrow));
 
         entry1 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.text.test")), new ManualPage(new CraftingRecipeWidget(manual, recipes, 4, 10), new CraftingRecipeWidget(manual, recipes3, 4, 10 + craftingRecipeHeight), new CraftingRecipeWidget(manual, recipes4, 4, 10 + craftingRecipeHeight * 2)), new ManualPage(new CraftingRecipeWidget(manual, recipes1, 4, 10)), new ManualPage(new CraftingRecipeWidget(manual, recipes2, 4, 10), new SmeltingRecipeWidget(manual, new ItemStack(Blocks.cobblestone), 10, 10 + craftingRecipeHeight), new PurifierRecipeWidget(manual, new ItemStack(BLBlockRegistry.aquaMiddleGemOre), 10, 10 + craftingRecipeHeight + smeltingRecipeHeight)));
-        entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 37, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 4, 10)));
+        entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 5, 10)));
     }
 
 }

@@ -66,7 +66,6 @@ public class TextWidget extends ManualWidgetsBase {
             for (String word : words) {
                 int widthWord = (int)Math.ceil(fontRenderer.getStringWidth(word + " ") * scale);
 
-
                 word = "" + (italic?EnumChatFormatting.ITALIC:"") + (bold?EnumChatFormatting.BOLD:"") + (underlined?EnumChatFormatting.UNDERLINE:"") + (strikerThrough?EnumChatFormatting.STRIKETHROUGH:"")  + (obfuscated?EnumChatFormatting.OBFUSCATED:"") + word + " ";
                 if(word.contains("<end>")) {
                     tooltipWidth = 0;
@@ -171,8 +170,6 @@ public class TextWidget extends ManualWidgetsBase {
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 GL11.glScalef(1f, 1f, 1f);
             }
-            GL11.glColor4f(1F, 1F, 1F, 1F);
-            GL11.glScalef(1f, 1f, 1f);
         }
     }
 
