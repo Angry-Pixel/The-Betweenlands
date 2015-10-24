@@ -483,6 +483,14 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+		if(this.canCollide) {
+			return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY, (double)z + this.maxZ);
+		}
+		return null;
+	}
+
+	@Override
 	public boolean isCollidable() {
 		return this.canCollide;
 	}

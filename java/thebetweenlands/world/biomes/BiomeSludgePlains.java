@@ -41,9 +41,9 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 
 		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
 
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 500, 2, 5));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 100, 2, 5));
 
-		spawnableCaveCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 18, 1, 1));
+		spawnableCaveCreatureList.add(new SpawnListEntry(EntityTarBeast.class, 12, 1, 1));
 
 		spawnableMonsterList.add(new SpawnListEntry(EntityPeatMummy.class, 12, -1, -1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 4, -1, -1));

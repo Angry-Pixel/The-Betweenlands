@@ -5,13 +5,13 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.base.ChunkDataAccess;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.feature.gen.OreGens;
-import thebetweenlands.world.feature.gen.WorldGenMinableBetweenlands;
 
 /**
  *
@@ -101,7 +101,7 @@ public class BiomeDecoratorBaseBetweenlands
 		this.generateOre(1, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, OreGens.SMOOTH_PITSTONE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(3, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(12, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(200, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
@@ -139,7 +139,7 @@ public class BiomeDecoratorBaseBetweenlands
 		}
 	}
 
-	protected void generateOre(int tries, WorldGenMinableBetweenlands oreGen, int minY, int maxY) {
+	protected void generateOre(int tries, WorldGenerator oreGen, int minY, int maxY) {
 		for (int i = 0; i < tries; i++) {
 			int xx = this.x + this.rand.nextInt(16);
 			int yy = this.rand.nextInt(maxY) + this.rand.nextInt(maxY) + (minY - maxY);

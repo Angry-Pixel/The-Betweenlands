@@ -95,6 +95,7 @@ import thebetweenlands.blocks.terrain.BlockSwampGrass;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.blocks.terrain.BlockTarFluid;
 import thebetweenlands.blocks.terrain.BlockWisp;
+import thebetweenlands.blocks.terrain.lifeCrystal.BlockLifeCrystalOre;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 import thebetweenlands.blocks.tree.BlockBLPortalFrame;
@@ -160,7 +161,7 @@ public class BLBlockRegistry {
     public static final Block syrmoriteOre = new BlockGenericOre("syrmoriteOre", null);
     public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR));
     public static final Block valoniteOre = new BlockGenericOre("valoniteOre", ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD));
-    public static final Block lifeCrystalOre = new BlockGenericOre("lifeCrystalOre", new ItemStack(BLItemRegistry.lifeCrystal)).setLightLevel(0.8F);
+    public static final BlockLifeCrystalOre lifeCrystalOre = (BlockLifeCrystalOre) new BlockLifeCrystalOre().setLightLevel(0.4F);
 
     // TREES
     public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood");
@@ -405,7 +406,7 @@ public class BLBlockRegistry {
     // OTHER THINGS
     public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
     public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
-    public static final BlockLifeCrystal lifeCrystal = new BlockLifeCrystal();
+    public static final BlockLifeCrystalBlock lifeCrystalBlock = new BlockLifeCrystalBlock();
     public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
     public static final BlockRope rope = new BlockRope();
 

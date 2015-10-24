@@ -19,9 +19,9 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemBlockGeneric;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
 
-public class BlockLifeCrystal extends BlockContainer {
+public class BlockLifeCrystalBlock extends BlockContainer {
 
-	public BlockLifeCrystal() {
+	public BlockLifeCrystalBlock() {
 		super(Material.glass);
 		setCreativeTab(ModCreativeTabs.blocks);
 		setBlockName("thebetweenlands.lifeCrystalBlock");

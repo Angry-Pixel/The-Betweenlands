@@ -45,7 +45,7 @@ extends BiomeGenBaseBetweenlands
 
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 10, 1, 1));
 		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 500, 2, 5));
+		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 100, 2, 5));
 
 		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
 
