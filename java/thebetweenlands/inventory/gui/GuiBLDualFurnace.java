@@ -8,6 +8,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
+import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 
 @SideOnly(Side.CLIENT)

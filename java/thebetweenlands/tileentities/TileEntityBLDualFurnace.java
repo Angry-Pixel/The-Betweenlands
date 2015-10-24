@@ -23,7 +23,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
     private static final int[] slotsTop = new int[] {0, 3};
     private static final int[] slotsBottom = new int[] {2, 1, 5, 4};
     private static final int[] slotsSides = new int[] {1, 4};
-    private ItemStack[] furnaceItemStacks = new ItemStack[6];
+    private ItemStack[] furnaceItemStacks = new ItemStack[8];
     public int furnaceBurnTime;
     public int currentItemBurnTime;
     public int furnaceCookTime;
@@ -305,6 +305,16 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
             else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
                 furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
+            if(furnaceItemStacks[6] != null) {
+				boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+				if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
+					furnaceItemStacks[2].stackSize++;
+				}
+				--furnaceItemStacks[6].stackSize;
+				if (furnaceItemStacks[6].stackSize <= 0)
+					furnaceItemStacks[6] = null;
+			}
+            
             --furnaceItemStacks[0].stackSize;
 
             if (furnaceItemStacks[0].stackSize <= 0)
@@ -322,6 +332,16 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
             else if (furnaceItemStacks[5].getItem() == itemstack.getItem())
                 furnaceItemStacks[5].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
+            if(furnaceItemStacks[7] != null) {
+				boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+				if(useFlux && furnaceItemStacks[5].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[5].stackSize + 1 <= furnaceItemStacks[5].getMaxStackSize()) {
+					furnaceItemStacks[5].stackSize++;
+				}
+				--furnaceItemStacks[7].stackSize;
+				if (furnaceItemStacks[7].stackSize <= 0)
+					furnaceItemStacks[7] = null;
+			}
+            
             --furnaceItemStacks[3].stackSize;
 
             if (furnaceItemStacks[3].stackSize <= 0)

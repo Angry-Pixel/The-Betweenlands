@@ -11,6 +11,7 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
+import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
@@ -26,6 +27,8 @@ public class ContainerBLFurnace extends Container {
         addSlotToContainer(new Slot(tile, 0, 56, 17));
         addSlotToContainer(new Slot(tile, 1, 56, 53));
         addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 35));
+        Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), 64);
+        addSlotToContainer(fluxSlot);
         int i;
 
         for (i = 0; i < 3; ++i)

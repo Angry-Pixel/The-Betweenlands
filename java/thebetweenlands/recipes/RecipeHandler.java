@@ -337,6 +337,9 @@ public class RecipeHandler {
 	private static void registerPestleAndMortarRecipes() {
 		PestleAndMortarRecipe.addRecipe(ItemMaterialsCrushed.createStack(EnumMaterialsCrushed.GROUND_DRIED_SWAMP_REED), ItemMaterialsBL.createStack(EnumMaterialsBL.DRIED_SWAMP_REED));
 		PestleAndMortarRecipe.addRecipe(ItemMaterialsCrushed.createStack(EnumMaterialsCrushed.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));	
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), new ItemStack(BLBlockRegistry.limestone));
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), new ItemStack(BLBlockRegistry.chiseledLimestone));
+		PestleAndMortarRecipe.addRecipe(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), new ItemStack(BLBlockRegistry.polishedLimestone));
 	}
 
 	private static void registerCompostItems(){
