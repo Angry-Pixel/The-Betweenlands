@@ -24,6 +24,9 @@ public class OreGens {
 	
 	public static final WorldGenMinableBetweenlands VALONITE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.valoniteOre, 0, 2, BLBlockRegistry.pitstone, false);
+	
+	public static final WorldGenMinableBetweenlands SMOOTH_PITSTONE = 
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.smoothPitstone, 0, 25, BLBlockRegistry.pitstone, false);
 
 	public static final WorldGenMinableBetweenlands LIFE_GEM = 
 			new WorldGenMinableBetweenlands() {

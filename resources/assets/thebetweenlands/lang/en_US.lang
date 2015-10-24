@@ -1,5 +1,6 @@
 # Blocks
 tile.thebetweenlands.betweenstone.name=Betweenstone
+tile.thebetweenlands.pitstone.name=Pitstone
 tile.thebetweenlands.genericStone_0.name=Corrupt Betweenstone
 tile.thebetweenlands.genericStone_1.name=Cragrock
 tile.thebetweenlands.genericStone_2.name=Mossy Cragrock Top
@@ -159,6 +160,22 @@ tile.thebetweenlands.chiseledLimestone.name=Chiseled Limestone
 tile.thebetweenlands.polishedLimestone.name=Polished Limestone
 tile.thebetweenlands.dentrothyst_0.name=Green Dentothryst
 tile.thebetweenlands.dentrothyst_1.name=Orange Dentothryst
+tile.thebetweenlands.limestoneStairs.name=Limestone Stairs
+tile.thebetweenlands.limestoneSlab.name=Limestone Slab
+tile.thebetweenlands.limestoneWall.name=Limestone Wall
+tile.thebetweenlands.smoothCragrockStairs.name=Smooth Cragrock Stairs
+tile.thebetweenlands.smoothCragrockSlab.name=Smooth Cragrock Slab
+tile.thebetweenlands.smoothCragrockWall.name=Smooth Cragrock Wall
+tile.thebetweenlands.smoothPitstoneStairs.name=Smooth Pitstone Stairs
+tile.thebetweenlands.smoothPitstoneSlab.name=Smooth Pitstone Slab
+tile.thebetweenlands.smoothPitstoneWall.name=Smooth Pitstone Wall
+tile.thebetweenlands.pitstoneBrickStairs.name=Pitstone Brick Stairs
+tile.thebetweenlands.pitstoneBricksSlab.name=Pitstone Brick Slab
+tile.thebetweenlands.pitstoneBrickWall.name=Pitstone Brick Wall
+tile.thebetweenlands.smoothPitstone.name=Smooth Pitstone
+tile.thebetweenlands.chiseledPitstone.name=Chiseled Pitstone
+tile.thebetweenlands.pitstoneBricks.name=Pitstone Bricks
+tile.thebetweenlands.pitstoneTiles.name=Pitstone Tiles
 
 tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
 tile.thebetweenlands.walkway.name=Weedwood Walkway

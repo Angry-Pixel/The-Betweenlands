@@ -333,9 +333,12 @@ public class BLBlockRegistry {
     public static final Block deepWaterCoralBlock = new BlockBLGenericDeco("deepWaterCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
     public static final BlockRubberTap rubberTap = new BlockRubberTap();
     public static final Block itemShelf = new BlockItemShelf();
-
+    public static final Block smoothPitstone = new BlockBLGenericDeco("smoothPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+    public static final Block pitstoneBricks = new BlockBLGenericDeco("pitstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+    public static final Block pitstoneTiles = new BlockBLGenericDeco("pitstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+    public static final Block chiseledPitstone = new BlockBLGenericDeco("chiseledPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone); 
     public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");
-
+    
     public static final Block blockWoodChipPath = new BlockWoodChipPath();
     public static final BlockWalkway blockWalkWay = new BlockWalkway();
     public static final Block blockTotem = new BlockTotem();
@@ -350,19 +353,27 @@ public class BLBlockRegistry {
     public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
     public static final Block cragrockBrickStairs = new BlockBLStairs(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockBrickStairs");
     public static final Block limestoneBrickStairs = new BlockBLStairs(limestoneBricks, 0).setBlockName("thebetweenlands.limestoneBrickStairs");
-    public static final Block smoothBetweenstoneStairs = new BlockBLStairs(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneStairs");
+    public static final Block limestoneStairs = new BlockBLStairs(limestone, 0).setBlockName("thebetweenlands.limestoneStairs");
+    public static final Block smoothBetweenstoneStairs = new BlockBLStairs(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneStairs"); 
+    public static final Block smoothCragrockStairs = new BlockBLStairs(smoothCragrock, 0).setBlockName("thebetweenlands.smoothCragrockStairs");
+    public static final Block smoothPitstoneStairs = new BlockBLStairs(smoothPitstone, 0).setBlockName("thebetweenlands.smoothPitstoneStairs");
     public static final Block solidTarStairs = new BlockBLStairs(solidTar, 0).setBlockName("thebetweenlands.solidTarStairs");
     public static final Block templeBrickStairs = new BlockBLStairs(templeBrick, 0).setBlockName("thebetweenlands.templeBrickStairs");
     public static final Block weedwoodPlankStairs = new BlockBLStairs(weedwoodPlanks, 0).setBlockName("thebetweenlands.weedwoodPlankStairs");
     public static final Block rubberTreePlankStairs = new BlockBLStairs(rubberTreePlanks, 0).setBlockName("thebetweenlands.rubberTreePlankStairs");
     public static final Block purpleRainPlankStairs = new BlockBLStairs(purpleRainPlanks, 0).setBlockName("thebetweenlands.purpleRainPlankStairs");
+    public static final Block pitstoneBrickStairs = new BlockBLStairs(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickStairs");
     public static final Block betweenstoneBrickWall = new BlockBLWall(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickWall");
     public static final Block mudBrickWall = new BlockBLWall(mudBrick, 0).setBlockName("thebetweenlands.mudBrickWall");
     public static final Block cragrockWall = new BlockBLWall(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockWall");
     public static final Block limestoneBrickWall = new BlockBLWall(limestoneBricks, 0).setBlockName("thebetweenlands.limestoneBrickWall");
+    public static final Block limestoneWall = new BlockBLWall(limestone, 0).setBlockName("thebetweenlands.limestoneWall");
     public static final Block smoothBetweenstoneWall = new BlockBLWall(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneWall");
+    public static final Block smoothCragrockWall = new BlockBLWall(smoothCragrock, 0).setBlockName("thebetweenlands.smoothCragrockWall");
+    public static final Block smoothPitstoneWall = new BlockBLWall(smoothPitstone, 0).setBlockName("thebetweenlands.smoothPitstoneWall");
     public static final Block solidTarWall = new BlockBLWall(solidTar, 0).setBlockName("thebetweenlands.solidTarWall");
     public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
+    public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");  
     public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
     public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
     public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
@@ -413,12 +424,20 @@ public class BLBlockRegistry {
     public static final BlockBLSlab cragrockBrickSlabDouble = new BlockBLSlab(true, Material.rock, "cragrockBrick", cragrockBrickSlab, "pickaxe");
     public static final BlockBLSlab limestoneBrickSlab = new BlockBLSlab(false, Material.rock, "limestoneBricks", null, "pickaxe");
     public static final BlockBLSlab limestoneBrickSlabDouble = new BlockBLSlab(true, Material.rock, "limestoneBricks", limestoneBrickSlab, "pickaxe");
+    public static final BlockBLSlab limestoneSlab = new BlockBLSlab(false, Material.rock, "limestone", null, "pickaxe");
+    public static final BlockBLSlab limestoneSlabDouble = new BlockBLSlab(true, Material.rock, "limestone", limestoneSlab, "pickaxe");
     public static final BlockBLSlab smoothBetweenstoneSlab = new BlockBLSlab(false, Material.rock, "smoothBetweenstone", null, "pickaxe");
     public static final BlockBLSlab smoothBetweenstoneSlabDouble = new BlockBLSlab(true, Material.rock, "smoothBetweenstone", smoothBetweenstoneSlab, "pickaxe");
+    public static final BlockBLSlab smoothCragrockSlab = new BlockBLSlab(false, Material.rock, "smoothCragrock", null, "pickaxe");
+    public static final BlockBLSlab smoothCragrockSlabDouble = new BlockBLSlab(true, Material.rock, "smoothCragrock", smoothCragrockSlab, "pickaxe");
+    public static final BlockBLSlab smoothPitstoneSlab = new BlockBLSlab(false, Material.rock, "smoothPitstone", null, "pickaxe");
+    public static final BlockBLSlab smoothPitstoneSlabDouble = new BlockBLSlab(true, Material.rock, "smoothPitstone", smoothPitstoneSlab, "pickaxe");
     public static final BlockBLSlab solidTarSlab = new BlockBLSlab(false, Material.rock, "solidTar", null, "pickaxe");
     public static final BlockBLSlab solidTarSlabDouble = new BlockBLSlab(true, Material.rock, "solidTar", solidTarSlab, "pickaxe");
     public static final BlockBLSlab templeBrickSlab = new BlockBLSlab(false, Material.rock, "templeBrick", null, "pickaxe");
     public static final BlockBLSlab templeBrickSlabDouble = new BlockBLSlab(true, Material.rock, "templeBrick", templeBrickSlab, "pickaxe");
+    public static final BlockBLSlab pitstoneBrickSlab = new BlockBLSlab(false, Material.rock, "pitstoneBricks", null, "pickaxe");
+    public static final BlockBLSlab pitstoneBrickSlabDouble = new BlockBLSlab(true, Material.rock, "pitstoneBricks", pitstoneBrickSlab, "pickaxe");
     public static final BlockBLSlab thatchSlab = new BlockBLSlab(false, Material.cloth, "thatch", null, "axe");
     public static final BlockBLSlab thatchSlabDouble = new BlockBLSlab(true, Material.cloth, "thatch", thatchSlab, "axe");
 
