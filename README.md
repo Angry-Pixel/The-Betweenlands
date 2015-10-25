@@ -1,4 +1,5 @@
-The Betweenlands
+*The Betweenlands*
+A large and expansion mod for Minecraft that adds a whole new dimension to the game, with new blocks, items, mobs, strucutres, biomes, sounds, mechanics and more.
 
 To do for First Release:
 (Pssst this is top secret stuff, you shouldn't be reading this)
