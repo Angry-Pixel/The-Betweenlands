@@ -1,5 +1,8 @@
 package thebetweenlands.tileentities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -16,6 +19,11 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
+import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.elixirs.ElixirRecipe;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
 
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
@@ -33,6 +41,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	private boolean hasCrystal = false;
 	private float crystalVelocity = 0.0F;
 	private float crystalRotation = 0.0F;
+	private ElixirRecipe infusingRecipe = null;
+	private boolean checkedRecipe = false;
 
 	public TileEntityInfuser() {
 		super(MAX_INGREDIENTS + 2, "infuser");
@@ -46,6 +56,17 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public void updateEntity() {
+		if(this.hasInfusion) {
+			if(!this.checkedRecipe) {
+				this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
+				this.checkedRecipe = true;
+			}
+			this.infusionTime++;
+		} else {
+			this.checkedRecipe = false;
+			this.infusionTime = 0;
+		}
+		
 		if (worldObj.isRemote) {
 			if (isCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
@@ -72,6 +93,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			return;
 		}
 
+		//To keep infusion time on client in sync
+		if(this.infusionTime % 20 == 0) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+		
 		if (stirProgress < 90) {
 			stirProgress++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -84,11 +110,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}
 			}
 			evaporation = 0;
-		}
-		if(this.hasInfusion) {
-			this.infusionTime++;
-		} else {
-			this.infusionTime = 0;
 		}
 		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.fire && temp < 100 && getWaterAmount() > 0) {
 			if(worldObj.getWorldTime()%12 == 0) {
@@ -188,6 +209,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 					setInventorySlotContents(i, null);
 				}
+				this.infusingRecipe = null;
 				if (evaporation == 600) {
 					// TODO Make this a toxic cloud entity - a job for Sam's expert render skills :P
 					EntityPig piggy = new EntityPig(worldObj);
@@ -225,6 +247,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
+		nbt.setInteger("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
 	}
@@ -236,6 +259,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		stirProgress = nbt.getInteger("stirProgress");
 		evaporation = nbt.getInteger("evaporation");
 		temp = nbt.getInteger("temp");
+		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
 	}
@@ -247,6 +271,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("evaporation", evaporation);
 		nbt.setInteger("temp", temp);
+		nbt.setInteger("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
 		for (int i = 0; i < getSizeInventory(); i++) {
@@ -265,6 +290,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		stirProgress = packet.func_148857_g().getInteger("stirProgress");
 		evaporation = packet.func_148857_g().getInteger("evaporation");
 		temp = packet.func_148857_g().getInteger("temp");
+		infusionTime = packet.func_148857_g().getInteger("infusionTime");
 		hasInfusion = packet.func_148857_g().getBoolean("hasInfusion");
 		hasCrystal = packet.func_148857_g().getBoolean("hasCrystal");
 		for (int i = 0; i < getSizeInventory(); i++) {
@@ -281,6 +307,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			if(inventory[i] != null) return true;
 		}
 		return false;
+	}
+
+	public List<IAspect> getInfusingAspects() {
+		List<IAspect> infusingAspects = new ArrayList<IAspect>();
+		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
+			if(inventory[i] != null) {
+				infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(new ItemEntry(inventory[i])));
+			}
+		}
+		return infusingAspects;
 	}
 
 	public boolean hasFullIngredients() {
@@ -320,5 +356,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	public void setStirProgress(int progress) {
 		this.stirProgress = progress;
+	}
+
+	public ElixirRecipe getInfusingRecipe() {
+		return this.infusingRecipe;
 	}
 }

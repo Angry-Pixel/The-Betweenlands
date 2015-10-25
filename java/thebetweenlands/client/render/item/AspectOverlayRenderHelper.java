@@ -17,10 +17,10 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
+import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.ItemAspect;
+import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import net.minecraftforge.client.MinecraftForgeClient;
-import thebetweenlands.aspect.AspectRegistry.ItemEntry;
-import thebetweenlands.aspect.AspectRecipes;
-import thebetweenlands.aspect.ItemAspect;
 
 public class AspectOverlayRenderHelper {
 	private static RenderItem renderItem = new RenderItem();
@@ -61,7 +61,7 @@ public class AspectOverlayRenderHelper {
 									GL11.glTranslated(0, 0, 200);
 									int yOffset = 0;
 									int width = 0;
-									List<ItemAspect> aspects = AspectRecipes.INSTANCE.registry.getAspects(new ItemEntry(itemStack));
+									List<ItemAspect> aspects = AspectRecipes.REGISTRY.getItemAspects(new ItemEntry(itemStack));
 									GL11.glEnable(GL11.GL_TEXTURE_2D);
 									GL11.glEnable(GL11.GL_BLEND);
 									if(aspects != null && aspects.size() > 0) {

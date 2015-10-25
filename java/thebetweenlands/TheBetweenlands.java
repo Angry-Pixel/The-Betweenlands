@@ -10,7 +10,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import thebetweenlands.aspect.AspectRecipes;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandAspect;
@@ -30,6 +29,7 @@ import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
+import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.mods.RecurrentComplexModule;
@@ -179,8 +179,6 @@ public class TheBetweenlands
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);
 
 		RecurrentComplexModule.init();
-		
-		AspectRecipes.INSTANCE.init();
 	}
 
 	@EventHandler

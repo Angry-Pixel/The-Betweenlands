@@ -11,6 +11,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsBL;
 import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
@@ -56,6 +58,8 @@ public class RecipeHandler {
 		ConfigHandler.userRecipes();
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
+		AspectRecipes.init();
+		ElixirRecipes.init();
 	}
 
 	private static void registerRecipes() {

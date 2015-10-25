@@ -39,10 +39,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.aspect.aspects.IAspect;
 import thebetweenlands.client.gui.GuiDebugMenu;
 import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.herblore.aspects.IAspect;
 import thebetweenlands.manager.AspectManager;
 import thebetweenlands.manager.DecayManager;
 import thebetweenlands.network.packet.server.PacketTickspeed;

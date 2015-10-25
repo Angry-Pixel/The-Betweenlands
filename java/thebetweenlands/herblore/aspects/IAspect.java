@@ -1,4 +1,4 @@
-package thebetweenlands.aspect.aspects;
+package thebetweenlands.herblore.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 

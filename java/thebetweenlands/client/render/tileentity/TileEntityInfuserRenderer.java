@@ -64,7 +64,8 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		// TODO this here for debug please leave
-		renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime(), x, y, z);
+		String elixirName = infuser.getInfusingRecipe() != null ? infuser.getInfusingRecipe().name : " N/A";
+		renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
 
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
@@ -81,10 +82,35 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			float tz = (float) z + 0.0F;
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
-			if(!infuser.hasInfusion())
+			if(!infuser.hasInfusion()) {
 				tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
-			else
-				tess.setColorRGBA_F(0.5F, 0.0F, 0.5F, 1.0F);
+			} else {
+				if(infuser.getInfusingRecipe() != null) {
+					if(infuser.getInfusionTime() > infuser.getInfusingRecipe().idealInfusionTime + infuser.getInfusingRecipe().infusionTimeVariation) {
+						float[] failedColor = infuser.getInfusingRecipe().getRGBA(infuser.getInfusingRecipe().infusionFailedColor);
+						tess.setColorRGBA_F(failedColor[0], failedColor[1], failedColor[2], failedColor[3]);
+					} else if(infuser.getInfusionTime() > infuser.getInfusingRecipe().idealInfusionTime - infuser.getInfusingRecipe().infusionTimeVariation
+							&& infuser.getInfusionTime() < infuser.getInfusingRecipe().idealInfusionTime + infuser.getInfusingRecipe().infusionTimeVariation) {
+						float[] finishedColor = infuser.getInfusingRecipe().getRGBA(infuser.getInfusingRecipe().infusionFinishedColor);
+						tess.setColorRGBA_F(finishedColor[0], finishedColor[1], finishedColor[2], finishedColor[3]);
+					} else {
+						float startR = 0.2F;
+						float startG = 0.6F;
+						float startB = 0.4F;
+						float startA = 0.9F;
+						float[] targetColor = infuser.getInfusingRecipe().getRGBA(infuser.getInfusingRecipe().infusionGradient);
+						int targetTime = infuser.getInfusingRecipe().idealInfusionTime - infuser.getInfusingRecipe().infusionTimeVariation;
+						float infusingPercentage = (float)infuser.getInfusionTime() / (float)targetTime;
+						float interpR = startR + (targetColor[0] - startR) * infusingPercentage;
+						float interpG = startG + (targetColor[1] - startG) * infusingPercentage;
+						float interpB = startB + (targetColor[2] - startB) * infusingPercentage;
+						float interpA = startA + (targetColor[3] - startA) * infusingPercentage;
+						tess.setColorRGBA_F(interpR, interpG, interpB, interpA);
+					}
+				} else {
+					tess.setColorRGBA_F(0.5F, 0.0F, 0.5F, 1.0F);
+				}
+			}
 			tess.addVertexWithUV(0.1875, 0, 0.1875, waterIcon.getMinU(), waterIcon.getMinV());
 			tess.addVertexWithUV(0.1875, 0, 0.8125, waterIcon.getMinU(), waterIcon.getMaxV());
 			tess.addVertexWithUV(0.8125, 0, 0.8125, waterIcon.getMaxU(), waterIcon.getMaxV());

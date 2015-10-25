@@ -1,4 +1,4 @@
-package thebetweenlands.aspect;
+package thebetweenlands.herblore.aspects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,9 +11,33 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.aspect.aspects.IAspect;
+import thebetweenlands.herblore.aspects.list.AspectAzuwynn;
+import thebetweenlands.herblore.aspects.list.AspectByariis;
+import thebetweenlands.herblore.aspects.list.AspectByrginaz;
+import thebetweenlands.herblore.aspects.list.AspectCelawynn;
+import thebetweenlands.herblore.aspects.list.AspectDayuniis;
+import thebetweenlands.herblore.aspects.list.AspectFergalaz;
+import thebetweenlands.herblore.aspects.list.AspectFirnalaz;
+import thebetweenlands.herblore.aspects.list.AspectFreiwynn;
+import thebetweenlands.herblore.aspects.list.AspectGeoliirgaz;
+import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
+import thebetweenlands.herblore.aspects.list.AspectYeowynn;
+import thebetweenlands.herblore.aspects.list.AspectYunugaz;
 
 public class AspectRegistry {
+	public static final IAspect AZUWYNN = new AspectAzuwynn();
+	public static final IAspect BYARIIS = new AspectByariis();
+	public static final IAspect BYRGINAZ = new AspectByrginaz();
+	public static final IAspect CELAWYNN = new AspectCelawynn();
+	public static final IAspect DAYUNIIS = new AspectDayuniis();
+	public static final IAspect FERGALAZ = new AspectFergalaz();
+	public static final IAspect FIRNALAZ = new AspectFirnalaz();
+	public static final IAspect FREIWYNN = new AspectFreiwynn();
+	public static final IAspect GEOLIIRGAZ = new AspectGeoliirgaz();
+	public static final IAspect ORDANIIS = new AspectOrdaniis();
+	public static final IAspect YEOWYNN = new AspectYeowynn();
+	public static final IAspect YUNUGAZ = new AspectYunugaz();
+	
 	public static enum AspectTier {
 		COMMON, UNCOMMON, RARE
 	}
@@ -200,12 +224,25 @@ public class AspectRegistry {
 		return possibleAspects.size();
 	}
 
-	public List<ItemAspect> getAspects(ItemEntry item) {
+	public List<ItemAspect> getItemAspects(ItemEntry item) {
 		for(Entry<ItemEntry, List<ItemAspect>> e : this.matchedAspects.entrySet()) {
 			if(e.getKey().equals(item)) {
 				return e.getValue();
 			}
 		}
 		return new ArrayList<ItemAspect>();
+	}
+
+	public List<IAspect> getAspects(ItemEntry item) {
+		List<IAspect> aspects = new ArrayList<IAspect>();
+		for(Entry<ItemEntry, List<ItemAspect>> e : this.matchedAspects.entrySet()) {
+			if(e.getKey().equals(item)) {
+				for(ItemAspect ia : e.getValue()) {
+					aspects.add(ia.aspect);
+				}
+				break;
+			}
+		}
+		return aspects;
 	}
 }

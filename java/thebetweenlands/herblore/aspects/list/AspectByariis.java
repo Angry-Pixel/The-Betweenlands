@@ -1,6 +1,7 @@
-package thebetweenlands.aspect.aspects;
+package thebetweenlands.herblore.aspects.list;
 
 import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.herblore.aspects.IAspect;
 
 public class AspectByariis implements IAspect {
 	public String getName() {

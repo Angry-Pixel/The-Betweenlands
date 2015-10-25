@@ -1,8 +1,7 @@
-package thebetweenlands.aspect;
+package thebetweenlands.herblore.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import thebetweenlands.aspect.aspects.IAspect;
 
 public class ItemAspect {
 	public final IAspect aspect;

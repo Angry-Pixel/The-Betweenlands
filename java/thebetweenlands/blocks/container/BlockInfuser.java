@@ -15,10 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.aspect.AspectRecipes;
-import thebetweenlands.aspect.AspectRegistry.ItemEntry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
@@ -60,7 +60,7 @@ public class BlockInfuser extends BlockContainer {
 						return true;
 					}
 				}
-				if (player.getCurrentEquippedItem() != null && AspectRecipes.INSTANCE.registry.getAspects(new ItemEntry(player.getCurrentEquippedItem())).size() > 0 && !tile.hasInfusion()) {
+				if (player.getCurrentEquippedItem() != null && AspectRecipes.REGISTRY.getItemAspects(new ItemEntry(player.getCurrentEquippedItem())).size() > 0 && !tile.hasInfusion()) {
 					ItemStack crushedItem = player.getCurrentEquippedItem();
 					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {
