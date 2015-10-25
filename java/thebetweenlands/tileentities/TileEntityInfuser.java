@@ -20,6 +20,8 @@ import thebetweenlands.items.BLItemRegistry;
 
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
 
+	public final static int MAX_INGREDIENTS = 6;
+	
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 3);
 	public int stirProgress = 90;
 	public int temp;
@@ -32,7 +34,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public float crystalRotation;
 
 	public TileEntityInfuser() {
-		super(5, "infuser");
+		super(MAX_INGREDIENTS + 2, "infuser");
 		waterTank.setFluid(new FluidStack(BLFluidRegistry.swampWater, 0));
 	}
 
@@ -73,9 +75,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		if (stirProgress == 89) {
 			if(temp == 100 && !hasInfusion) {
-				if (inventory[0] == null || inventory[1] == null || inventory[2] == null || inventory[3] == null)
-					return;
-				else {
+				if(this.hasIngredients()) {
 					hasInfusion = true;
 					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				}
@@ -105,9 +105,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			evaporation--;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		if(isCrystalInstalled() && inventory[4].getItemDamage() < inventory[4].getMaxDamage()) {
+		if(isCrystalInstalled() && inventory[MAX_INGREDIENTS + 1].getItemDamage() < inventory[MAX_INGREDIENTS + 1].getMaxDamage()) {
 			if (temp == 100 && evaporation == 500 && stirProgress >= 90 && hasInfusion) {
-				inventory[4].setItemDamage(inventory[4].getItemDamage() + 1);
+				inventory[MAX_INGREDIENTS + 1].setItemDamage(inventory[MAX_INGREDIENTS + 1].getItemDamage() + 1);
 				stirProgress = 0;
 			}
 			hasCrystal = true;
@@ -177,7 +177,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			waterTank.drain(fluid.amount, true);
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 					setInventorySlotContents(i, null);
 				}
 				if (evaporation == 600) {
@@ -207,7 +207,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	public boolean isCrystalInstalled() {
-		return inventory[4] != null && inventory[4].getItem() == BLItemRegistry.lifeCrystal && inventory[4].getItemDamage() <= inventory[4].getMaxDamage();
+		return inventory[MAX_INGREDIENTS + 1] != null && inventory[MAX_INGREDIENTS + 1].getItem() == BLItemRegistry.lifeCrystal && inventory[MAX_INGREDIENTS + 1].getItemDamage() <= inventory[MAX_INGREDIENTS + 1].getMaxDamage();
 	}
 
 	@Override
@@ -268,4 +268,17 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 	}
 
+	public boolean hasIngredients() {
+		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
+			if(inventory[i] != null) return true;
+		}
+		return false;
+	}
+	
+	public boolean hasFullIngredients() {
+		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
+			if(inventory[i] == null) return false;
+		}
+		return true;
+	}
 }

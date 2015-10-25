@@ -1,5 +1,11 @@
 package thebetweenlands.client.render.tileentity;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,16 +15,11 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelInfuser;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.utils.ItemRenderHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
@@ -42,18 +43,18 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScalef(1F, -1F, -1F);
 		switch (meta) {
-			case 2:
-				GL11.glRotatef(180F, 0.0F, 1F, 0F);
-				break;
-			case 3:
-				GL11.glRotatef(0F, 0.0F, 1F, 0F);
-				break;
-			case 4:
-				GL11.glRotatef(90F, 0.0F, 1F, 0F);
-				break;
-			case 5:
-				GL11.glRotatef(-90F, 0.0F, 1F, 0F);
-				break;
+		case 2:
+			GL11.glRotatef(180F, 0.0F, 1F, 0F);
+			break;
+		case 3:
+			GL11.glRotatef(0F, 0.0F, 1F, 0F);
+			break;
+		case 4:
+			GL11.glRotatef(90F, 0.0F, 1F, 0F);
+			break;
+		case 5:
+			GL11.glRotatef(-90F, 0.0F, 1F, 0F);
+			break;
 		}
 		model.render();
 		GL11.glPushMatrix();
@@ -63,8 +64,8 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		// TODO this here for debug please leave
-	//	renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
-		
+			renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
+
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
 		float size = 1F / capacity * amount;
@@ -97,12 +98,13 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		int stirProgress = infuser.stirProgress;
 		float crystalRotation = infuser.crystalRotation;
 		double itemY = y + 0.3D + size * 0.5D;
-		renderItemInSlot(infuser, 0, x + 0.5625D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
-		renderItemInSlot(infuser, 1, x + 0.4375D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D);
-		renderItemInSlot(infuser, 2, x + 0.4375D, itemY, z + 0.4375D, amount >= 100 ? itemBob * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
-		renderItemInSlot(infuser, 3, x + 0.5625D, itemY, z + 0.5625D, amount >= 100 ? (-itemBob + 20) * 0.01D : 0D, stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D - 45D : viewRot - 45D);
-		renderItemInSlot(infuser, 4, x + 0.5, y + 1.43D, z + 0.5D, itemBob * 0.01D, crystalRotation);
-		
+		Random rand = new Random();
+		rand.setSeed((long) (tile.xCoord + tile.yCoord + tile.zCoord));
+		for(int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
+			float randRot = rand.nextFloat() * 360.0F;
+			renderItemInSlot(infuser, i, x + 0.5D - 0.2D + rand.nextFloat() * 0.4D, itemY, z + 0.5D - 0.2D + rand.nextFloat() * 0.4D, amount >= 100 ? (i % 2 == 0 ? (itemBob * 0.01D) : ((-itemBob + 20) * 0.01D)) : 0.0D, (stirProgress < 90 && amount >= 100 ? viewRot - stirProgress * 4D + 45D : viewRot + 45D) + randRot);
+		}
+		renderItemInSlot(infuser, TileEntityInfuser.MAX_INGREDIENTS + 1, x + 0.5, y + 1.43D, z + 0.5D, itemBob * 0.01D, crystalRotation);
 	}
 	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
 		if (infuser.getStackInSlot(slotIndex) != null) {
@@ -113,15 +115,12 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glScaled(0.15D, 0.15D, 0.15D);
 			GL11.glTranslated(0D, itemBob, 0D);
 			GL11.glRotated(rotation, 0, 1, 0);
-			if (!infuser.hasInfusion && slotIndex != 4)
-				ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
-			if (slotIndex == 4)
-				ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
+			ItemRenderHelper.renderItem(infuser.getStackInSlot(slotIndex), 0);
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
 		}
 	}
-	
+
 	private void renderStirCount(String count, double x, double y, double z) {
 		float scale = 0.02666667F;
 		float height = 0.8F;

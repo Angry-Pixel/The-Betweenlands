@@ -2,6 +2,8 @@ package thebetweenlands.blocks.container;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -13,14 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.tileentities.TileEntityInfuser;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockInfuser extends BlockContainer {
 
@@ -53,14 +52,16 @@ public class BlockInfuser extends BlockContainer {
 					ItemStack oldItem = player.getCurrentEquippedItem();
 					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
 					world.markBlockForUpdate(x, y, z);
-					if (!player.capabilities.isCreativeMode)
+					if (!player.capabilities.isCreativeMode) {
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-					if (!ItemStack.areItemStacksEqual(oldItem, newItem))
+					}
+					if (!ItemStack.areItemStacksEqual(oldItem, newItem)) {
 						return true;
+					}
 				}
 				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed && !tile.hasInfusion) {
 					ItemStack crushedItem = player.getCurrentEquippedItem();
-					for (int i = 0; i < 4; i++) {
+					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {
 							tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
 							player.getCurrentEquippedItem().stackSize--;
@@ -70,33 +71,33 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 				if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
-					if(tile.getStackInSlot(4) == null) {
-						tile.setInventorySlotContents(4, player.getCurrentEquippedItem());
+					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
+						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, player.getCurrentEquippedItem());
 						player.setCurrentItemOrArmor(0, null);
 					}
 					return true;
 				}
 			}
 
+			if(player.isSneaking()) {
+				if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) != null) {
+					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItem(), 1, tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItemDamage()), false);
+					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
+					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
+					world.markBlockForUpdate(x, y, z);
+					return true;
+				}
+			}
+
 			if(player.isSneaking() && !tile.hasInfusion) {
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 					if(tile.getStackInSlot(i) != null) {
-						if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(i)))
-							player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem()), false);
+						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem(), 1, tile.getStackInSlot(i).getItemDamage()), false);
+						if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
 						tile.setInventorySlotContents(i, null);
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
-				}
-			}
-			
-			if(player.isSneaking() && tile.hasInfusion || player.isSneaking() && tile.getStackInSlot(0) == null) {
-				if(tile.getStackInSlot(4) != null) {
-					if (!player.inventory.addItemStackToInventory(tile.getStackInSlot(4)))
-						player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(4).getItem()), false);
-						tile.setInventorySlotContents(4, null);
-						world.markBlockForUpdate(x, y, z);
-						return true;
 				}
 			}
 		}
@@ -110,7 +111,7 @@ public class BlockInfuser extends BlockContainer {
 		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
 		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 		if (tileInventory != null && !tile.hasInfusion)
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
 					if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
@@ -125,7 +126,7 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 		if (tileInventory != null) {
-			ItemStack stack = tileInventory.getStackInSlot(4);
+			ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS);
 			if (stack != null) {
 				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 					float f = 0.7F;
