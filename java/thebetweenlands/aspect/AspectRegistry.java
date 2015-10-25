@@ -79,7 +79,7 @@ public class AspectRegistry {
 		public boolean matchItem(Item item) {
 			return this.item.equals(item);
 		}
-		
+
 		@Override
 		public boolean equals(Object obj) {
 			if(obj instanceof ItemEntry) {
@@ -103,6 +103,10 @@ public class AspectRegistry {
 	}
 
 	public void addAspectsToItem(ItemEntryAspects entry) {
+		this.addAspectsToItem(entry, 1);
+	}
+
+	public void addAspectsToItem(ItemEntryAspects entry, int aspectCount) {
 		ItemEntry itemEntry = entry.item;
 		for(Entry<ItemEntry, List<ItemEntryAspects>> e : this.registeredItems.entrySet()) {
 			if(e.getKey().equals(itemEntry)) {
@@ -115,7 +119,9 @@ public class AspectRegistry {
 			entryList = new ArrayList<ItemEntryAspects>();
 			this.registeredItems.put(entry.item, entryList);
 		}
-		entryList.add(entry);
+		for(int i = 0; i < aspectCount; i++) {
+			entryList.add(entry);
+		}
 	}
 
 	public void loadAspects(long seed) {

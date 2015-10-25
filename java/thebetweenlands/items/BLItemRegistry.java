@@ -144,7 +144,6 @@ public class BLItemRegistry {
     public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
     public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);
     public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(ModCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
-    public static final Item compost = new ItemCompost().setUnlocalizedName("thebetweenlands.compost");
     public static final Item pestle = new ItemPestle().setUnlocalizedName("thebetweenlands.pestle");
     public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
     public static final Item manual = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("manual");
