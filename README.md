@@ -3,13 +3,7 @@
 
 *BL SCHEDULE*
 
-August:
-
 Finish all currently unfinished stuff
-- Mob AI
-- Mob Stats
-- Unfinished blocks
-- Gen features
 
 Specifically the following
 - Finish off the Compost Bin (issue #170)
@@ -17,13 +11,6 @@ Specifically the following
 
 This does not include cave gen or mob spawning.
 ___________________________________________
-
-September:
-
-Continue working on caves and temples
-- Overgrown parts in caves
-- Limestone caves
-- Cave mobs (mini bosses not included)
 
 - Temple generation
 - Loot blocks
@@ -33,8 +20,6 @@ Continue working on caves and temples
 
 Temple Generation does not include the boss rooms or puzzle/trapped rooms, as they will be done later.
 ___________________________________________
-
-October:
 
 Continue working on Herblore and Temple stuff and other small features
 - Herblore aspects
@@ -50,12 +35,10 @@ Continue working on Herblore and Temple stuff and other small features
 - weedwood Boat
 - Volarpad Kite
 - Tools
-- Other small items and blocks (beds?)
+- Other small items and blocks (Moss Beds ftw)
 
 The set of Herblore potions can always be expanded later on.
 ___________________________________________
-
-November:
 
 Start work on the NPCs, some mini-bosses and collectables
 - Settlement buildings
@@ -76,8 +59,6 @@ Start work on the NPCs, some mini-bosses and collectables
 
 NPC services, quests and currency balancing will be done later.
 ___________________________________________
-
-December:
 
 Finish the NPCs, start on quests, achievements, lore and the Guidebook.
 - NPC services
