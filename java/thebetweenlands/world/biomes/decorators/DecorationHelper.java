@@ -19,7 +19,6 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
 import thebetweenlands.world.feature.gen.cave.WorldGenCaveGrass;
-import thebetweenlands.world.feature.gen.cave.WorldGenCaveHangers;
 import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
 import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
 import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
@@ -78,7 +77,6 @@ public class DecorationHelper {
 	private final static WorldGenCaveGrass GEN_CAVE_GRASS = new WorldGenCaveGrass();
 	private final static WorldGenThorns GEN_THORNS = new WorldGenThorns();
 	private final static WorldGenCaveMoss GEN_CAVE_MOSS = new WorldGenCaveMoss();
-	private final static WorldGenCaveHangers GEN_CAVE_HANGERS = new WorldGenCaveHangers();
 	private final static WorldGenTallGrass GEN_SLUDGECREEP = new WorldGenTallGrass(BLBlockRegistry.sludgecreep, 1);
 	private final static WorldGenTallGrass GEN_DEAD_WEEDWOOD_BUSH = new WorldGenTallGrass(BLBlockRegistry.deadWeedwoodBush, 1);
 
@@ -941,8 +939,6 @@ public class DecorationHelper {
 
 	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 
-	private static final CubicBezier CAVE_HANGERS_Y_CDF = new CubicBezier(0, 1, 0, 1);
-
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
 
 	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -951,7 +947,6 @@ public class DecorationHelper {
 		generateSpeleothems(60);
 		generateThorns(200);
 		generateCaveMoss(100);
-		generateCaveHangers(100);
 		generateCaveGrass(120);
 	}
 
@@ -993,16 +988,6 @@ public class DecorationHelper {
 			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_CAVE_MOSS.generate(world, rand, x, y, z);
-		}
-	}
-
-	public void generateCaveHangers(int attempts) {
-		while (attempts --> 0) {
-			int x = this.x + offsetXZ();
-			float v = CAVE_HANGERS_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
-			int z = this.z + offsetXZ();
-			GEN_CAVE_HANGERS.generate(world, rand, x, y, z);
 		}
 	}
 

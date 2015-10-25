@@ -12,7 +12,7 @@ public class WorldGenSpeleothem extends WorldGenerator {
 	private Block speleothem = BLBlockRegistry.stalactite;
 
 	private boolean isBlockSupported(Block block) {
-		return block == BLBlockRegistry.betweenstone || block == BLBlockRegistry.pitstone;
+		return block == BLBlockRegistry.betweenstone;
 	}
 
 	@Override

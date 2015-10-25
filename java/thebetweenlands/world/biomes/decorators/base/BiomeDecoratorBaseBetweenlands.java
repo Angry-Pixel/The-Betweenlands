@@ -96,10 +96,8 @@ public class BiomeDecoratorBaseBetweenlands
 		this.generateOre(22, OreGens.SULFUR, 0, 128);
 		this.generateOre(10, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);	
-		this.generateOre(10, OreGens.SMOOTH_BETWEENSTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(1, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, OreGens.SMOOTH_PITSTONE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(3, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(200, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 

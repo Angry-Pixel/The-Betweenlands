@@ -21,17 +21,11 @@ public class OreGens {
 	public static final WorldGenMinableBetweenlands SWAMP_DIRT = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.swampDirt, 0, 25, BLBlockRegistry.betweenstone, true);
 
-	public static final WorldGenMinableBetweenlands SMOOTH_BETWEENSTONE = 
-			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.smoothBetweenstone, 0, 25, BLBlockRegistry.betweenstone, true);
-
 	public static final WorldGenMinableBetweenlands LIMESTONE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.limestone, 0, 100, BLBlockRegistry.betweenstone, true);
 
 	public static final WorldGenMinableBetweenlands VALONITE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.valoniteOre, 0, 2, BLBlockRegistry.pitstone, false);
-
-	public static final WorldGenMinableBetweenlands SMOOTH_PITSTONE = 
-			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.smoothPitstone, 0, 25, BLBlockRegistry.pitstone, false);
 
 	public static final WorldGenerator LIFE_GEM = 
 			new WorldGenerator() {
