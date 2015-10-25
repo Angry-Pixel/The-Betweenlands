@@ -172,6 +172,7 @@ public class BLItemRegistry {
     public static final Item marshFire = new ItemBLRecord("MarshFire");
     public static final Item mysteriousRecord = new ItemBLRecord("16612");
 
+    public static final ItemElixir elixir = new ItemElixir();
 
     public static void init() {
         initCreativeTabs();
@@ -187,7 +188,7 @@ public class BLItemRegistry {
         ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
         ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
         ModCreativeTabs.plants.setTab(middleFruitSeeds);
-        ModCreativeTabs.herbLore.setTab(pestle, materialCrushed, weedwoodBucketInfusion);
+        ModCreativeTabs.herbLore.setTab(pestle, materialCrushed, weedwoodBucketInfusion, elixir);
     }
 
     private static void registerItems() {
