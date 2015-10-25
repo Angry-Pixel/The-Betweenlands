@@ -653,6 +653,69 @@
         "stream": true
       }
     ]
+  }, 
+  "records.Astatos": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/Astatos",
+			"stream": true
+		}
+	]
+  },
+  "records.BetweenYouAndMe": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/BetweenYouAndMe",
+			"stream": true
+		}
+	]
+  },
+  "records.ChristmasOnTheMarsh": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/ChristmasOnTheMarsh",
+			"stream": true
+		}
+	]
+  },
+  "records.HagDance": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/HagDance",
+			"stream": true
+		}
+	]
+  },
+  "records.MarshFire": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/MarshFire",
+			"stream": true
+		}
+	]
+  },
+  "records.TheExplorer": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/TheExplorer",
+			"stream": true
+		}
+	]
+  },
+  "records.Tribal": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/Tribal",
+			"stream": true
+		}
+	]
   }
   
 }
