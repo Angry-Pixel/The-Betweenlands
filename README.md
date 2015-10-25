@@ -12,6 +12,7 @@ Unfinished stuff:
 - Farming models
 - Purple Rain tree (which will be called differently)
 - Temple Guardians
+- Proper mob spawning
 
 New Stuff (High priority):
 - Temple generation
@@ -29,6 +30,7 @@ New Stuff (Low priority)
 - More Loot
 - Dreadful Peatmummy mini-boss
 - Some collectibles
+- Achievements
 - More mobs e.g Stalker
 
-Furthermore we should keep polishing things and playtest often to find bugs and polish balancing
+Furthermore we should keep polishing things and playtest often to find bugs and polish balancing.
