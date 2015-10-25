@@ -64,8 +64,8 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		// TODO this here for debug please leave
-		String elixirName = infuser.getInfusingRecipe() != null ? infuser.getInfusingRecipe().name : " N/A";
-		renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
+		//String elixirName = infuser.getInfusingRecipe() != null ? infuser.getInfusingRecipe().name : " N/A";
+		//renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
 
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();

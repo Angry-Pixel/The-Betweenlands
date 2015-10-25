@@ -127,7 +127,7 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 		if (tileInventory != null) {
-			ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS);
+			ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
 			if (stack != null) {
 				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
 					float f = 0.7F;

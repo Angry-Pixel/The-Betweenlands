@@ -63,10 +63,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			this.infusionTime++;
 		} else {
+			this.infusingRecipe = null;
 			this.checkedRecipe = false;
 			this.infusionTime = 0;
 		}
-		
 		if (worldObj.isRemote) {
 			if (isCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
@@ -97,7 +97,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		if(this.infusionTime % 20 == 0) {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		
+
 		if (stirProgress < 90) {
 			stirProgress++;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -134,8 +134,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			evaporation--;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		if(isCrystalInstalled() && inventory[MAX_INGREDIENTS + 1].getItemDamage() < inventory[MAX_INGREDIENTS + 1].getMaxDamage()) {
-			if (temp == 100 && evaporation == 500 && stirProgress >= 90 && hasInfusion) {
+		if(isCrystalInstalled()) {
+			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion) {
 				inventory[MAX_INGREDIENTS + 1].setItemDamage(inventory[MAX_INGREDIENTS + 1].getItemDamage() + 1);
 				stirProgress = 0;
 			}

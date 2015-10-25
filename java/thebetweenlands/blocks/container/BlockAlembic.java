@@ -1,8 +1,13 @@
 package thebetweenlands.blocks.container;
 
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -10,10 +15,10 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityAlembic;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAlembic extends BlockContainer {
 
@@ -40,48 +45,51 @@ public class BlockAlembic extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityAlembic) {
-			TileEntityAlembic tile = (TileEntityAlembic) world.getTileEntity(x, y, z);
+		if (!world.isRemote) {
+			if (world.getTileEntity(x, y, z) instanceof TileEntityAlembic) {
+				TileEntityAlembic tile = (TileEntityAlembic) world.getTileEntity(x, y, z);
 
-			if (player.isSneaking())
-				return false;
+				if (player.isSneaking())
+					return false;
 
-			if (player.getCurrentEquippedItem() != null) {
-				//place holder
-				return true;
+				if (player.getCurrentEquippedItem() != null) {
+					ItemStack heldStack = player.getCurrentEquippedItem();
+					if(heldStack.getItem() == BLItemRegistry.weedwoodBucketInfusion) {
+						if(!tile.isFull()) {
+							tile.addInfusion(heldStack);
+							player.setCurrentItemOrArmor(0, null);
+						}
+					}
+				}
+				if(tile.hasFinished()) {
+					ItemStack result = tile.getElixir();
+					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(result, false);
+					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
+				}
 			}
-			
-			if (tile != null)
-				System.out.println("Alembic Gui opens here :P");
-				//player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ALEMBIC, world, x, y, z);
 		}
 		return true;
 	}
-/* TODO actually make this have an inventory
+
+
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block,
-			int meta) {
-		IInventory tile = (IInventory) world.getTileEntity(x, y, z);
-		if (tile != null)
-			for (int i = 0; i < tile.getSizeInventory(); i++) {
-				ItemStack stack = tile.getStackInSlot(i);
-				if (stack != null) {
-					if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
-						float f = 0.7F;
-						double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, stack);
-						entityitem.delayBeforeCanPickup = 10;
-						world.spawnEntityInWorld(entityitem);
-					}
-				}
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if (world.getTileEntity(x, y, z) instanceof TileEntityAlembic) {
+			TileEntityAlembic alembic = (TileEntityAlembic) world.getTileEntity(x, y, z);
+			if (alembic.isRunning()) {
+				float xx = (float) x + 0.5F;
+				float yy = (float) (y + 0.35F + rand.nextFloat() * 0.5F);
+				float zz = (float) z + 0.5F;
+				float fixedOffset = 0.25F;
+				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
+				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 			}
-		super.breakBlock(world, x, y, z, block, meta);
+		}
 	}
-*/
 	@Override
 	public int getRenderType() {
 		return - 1;
