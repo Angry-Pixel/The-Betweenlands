@@ -80,18 +80,8 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 
-			if(player.isSneaking()) {
-				if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) != null) {
-					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItem(), 1, tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItemDamage()), false);
-					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
-					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
-					world.markBlockForUpdate(x, y, z);
-					return true;
-				}
-			}
-
 			if(player.isSneaking() && !tile.hasInfusion()) {
-				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
+				for (int i = TileEntityInfuser.MAX_INGREDIENTS; i >= 0; i--) {
 					if(tile.getStackInSlot(i) != null) {
 						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem(), 1, tile.getStackInSlot(i).getItemDamage()), false);
 						if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
@@ -99,6 +89,16 @@ public class BlockInfuser extends BlockContainer {
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
+				}
+			}
+
+			if(player.isSneaking()) {
+				if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) != null) {
+					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItem(), 1, tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItemDamage()), false);
+					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
+					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
+					world.markBlockForUpdate(x, y, z);
+					return true;
 				}
 			}
 		}

@@ -11,6 +11,7 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.herblore.aspects.list.AspectArmaniis;
 import thebetweenlands.herblore.aspects.list.AspectAzuwynn;
 import thebetweenlands.herblore.aspects.list.AspectByariis;
 import thebetweenlands.herblore.aspects.list.AspectByrginaz;
@@ -22,10 +23,12 @@ import thebetweenlands.herblore.aspects.list.AspectFreiwynn;
 import thebetweenlands.herblore.aspects.list.AspectGeoliirgaz;
 import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
 import thebetweenlands.herblore.aspects.list.AspectYeowynn;
+import thebetweenlands.herblore.aspects.list.AspectYihinren;
 import thebetweenlands.herblore.aspects.list.AspectYunugaz;
 
 public class AspectRegistry {
 	public static final IAspect AZUWYNN = new AspectAzuwynn();
+	public static final IAspect ARMANIIS = new AspectArmaniis();
 	public static final IAspect BYARIIS = new AspectByariis();
 	public static final IAspect BYRGINAZ = new AspectByrginaz();
 	public static final IAspect CELAWYNN = new AspectCelawynn();
@@ -37,6 +40,7 @@ public class AspectRegistry {
 	public static final IAspect ORDANIIS = new AspectOrdaniis();
 	public static final IAspect YEOWYNN = new AspectYeowynn();
 	public static final IAspect YUNUGAZ = new AspectYunugaz();
+	public static final IAspect YIHINREN = new AspectYihinren();
 	
 	public static enum AspectTier {
 		COMMON, UNCOMMON, RARE

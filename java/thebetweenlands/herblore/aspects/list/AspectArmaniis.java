@@ -3,17 +3,17 @@ package thebetweenlands.herblore.aspects.list;
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.herblore.aspects.IAspect;
 
-public class AspectOrdaniis implements IAspect {
+public class AspectArmaniis implements IAspect {
 	public String getName() {
-		return "Ordaniis";
+		return "Armaniis";
 	}
 
 	public String getType() {
-		return "Enhance";
+		return "Desire";
 	}
 
 	public String getDescription() {
-		return "Needs new decription";
+		return "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.";
 	}
 
 	public void readFromNBT(NBTTagCompound tagCompound) {

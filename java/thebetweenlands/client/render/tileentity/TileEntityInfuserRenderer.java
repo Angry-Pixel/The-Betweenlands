@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelInfuser;
+import thebetweenlands.herblore.elixirs.ElixirRecipe;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.utils.ItemRenderHelper;
 
@@ -64,8 +66,9 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 
 		// TODO this here for debug please leave
-		//String elixirName = infuser.getInfusingRecipe() != null ? infuser.getInfusingRecipe().name : " N/A";
-		//renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
+		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infuser.getInfusingAspects());
+		String elixirName = recipe != null ? recipe.name : " N/A";
+		renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
 
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
