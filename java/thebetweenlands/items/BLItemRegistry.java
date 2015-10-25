@@ -170,6 +170,7 @@ public class BLItemRegistry {
     public static final Item tribal = new ItemBLRecord("Tribal");
     public static final Item hagDance = new ItemBLRecord("HagDance");
     public static final Item marshFire = new ItemBLRecord("MarshFire");
+    public static final Item mysteriousRecord = new ItemBLRecord("16612");
 
 
     public static void init() {
