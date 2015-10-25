@@ -21,17 +21,18 @@ import thebetweenlands.items.BLItemRegistry;
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
 
 	public final static int MAX_INGREDIENTS = 6;
-	
+
 	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 3);
-	public int stirProgress = 90;
-	public int temp;
-	public int evaporation;
-	public int itemBob;
-	public boolean countUp = true;
-	public boolean hasInfusion = false;
-	public boolean hasCrystal;
-	public float crystalVelocity;
-	public float crystalRotation;
+	private int infusionTime = 0;
+	private int stirProgress = 90;
+	private int temp = 0;
+	private int evaporation = 0;
+	private int itemBob = 0;
+	private boolean countUp = true;
+	private boolean hasInfusion = false;
+	private boolean hasCrystal = false;
+	private float crystalVelocity = 0.0F;
+	private float crystalRotation = 0.0F;
 
 	public TileEntityInfuser() {
 		super(MAX_INGREDIENTS + 2, "infuser");
@@ -49,12 +50,14 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			if (isCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
 				crystalRotation += this.crystalVelocity;
-				if (crystalRotation >= 360.0F)
+				if (crystalRotation >= 360.0F) {
 					crystalRotation -= 360.0F;
-				else if (this.crystalRotation <= 360.0F)
+				} else if (this.crystalRotation <= 360.0F) {
 					this.crystalRotation += 360.0F;
-				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0)
+				}
+				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorldObj().rand.nextInt(15) == 0) {
 					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+				}
 			}
 			if(countUp && itemBob <= 20) {
 				itemBob++;
@@ -81,6 +84,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}
 			}
 			evaporation = 0;
+		}
+		if(this.hasInfusion) {
+			this.infusionTime++;
+		} else {
+			this.infusionTime = 0;
 		}
 		if(worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.fire && temp < 100 && getWaterAmount() > 0) {
 			if(worldObj.getWorldTime()%12 == 0) {
@@ -112,8 +120,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			hasCrystal = true;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-		else {
+		} else {
 			hasCrystal = false;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
@@ -173,8 +180,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	public void extractFluids(FluidStack fluid) {
-		if (fluid.isFluidEqual(waterTank.getFluid()))
+		if (fluid.isFluidEqual(waterTank.getFluid())) {
 			waterTank.drain(fluid.amount, true);
+		}
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
@@ -274,11 +282,43 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		return false;
 	}
-	
+
 	public boolean hasFullIngredients() {
 		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if(inventory[i] == null) return false;
 		}
 		return true;
+	}
+
+	public int getInfusionTime() {
+		return this.infusionTime;
+	}
+
+	public float getCrystalRotation() {
+		return this.crystalRotation;
+	}
+
+	public int getEvaporation() {
+		return this.evaporation;
+	}
+
+	public boolean hasInfusion() {
+		return this.hasInfusion;
+	}
+
+	public int getItemBob() {
+		return this.itemBob;
+	}
+
+	public int getStirProgress() {
+		return this.stirProgress;
+	}
+
+	public int getTemperature() {
+		return this.temp;
+	}
+
+	public void setStirProgress(int progress) {
+		this.stirProgress = progress;
 	}
 }

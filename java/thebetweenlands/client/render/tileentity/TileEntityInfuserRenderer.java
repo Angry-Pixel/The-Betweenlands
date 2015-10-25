@@ -58,13 +58,13 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		}
 		model.render();
 		GL11.glPushMatrix();
-		GL11.glRotatef(infuser.stirProgress * 4, 0.0F, 1F, 0F);
+		GL11.glRotatef(infuser.getStirProgress() * 4, 0.0F, 1F, 0F);
 		model.renderSpoon();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 
 		// TODO this here for debug please leave
-			renderStirCount("Evap: " + infuser.evaporation + " Temp: "+ infuser.temp, x, y, z);
+		renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime(), x, y, z);
 
 		int amount = infuser.waterTank.getFluidAmount();
 		int capacity = infuser.waterTank.getCapacity();
@@ -81,7 +81,7 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			float tz = (float) z + 0.0F;
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
-			if(!infuser.hasInfusion)
+			if(!infuser.hasInfusion())
 				tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
 			else
 				tess.setColorRGBA_F(0.5F, 0.0F, 0.5F, 1.0F);
@@ -94,9 +94,9 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
-		int itemBob = infuser.itemBob;
-		int stirProgress = infuser.stirProgress;
-		float crystalRotation = infuser.crystalRotation;
+		int itemBob = infuser.getItemBob();
+		int stirProgress = infuser.getStirProgress();
+		float crystalRotation = infuser.getCrystalRotation();
 		double itemY = y + 0.3D + size * 0.5D;
 		Random rand = new Random();
 		rand.setSeed((long) (tile.xCoord + tile.yCoord + tile.zCoord));

@@ -24,8 +24,8 @@ import thebetweenlands.aspect.aspects.AspectYunugaz;
 import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.items.ItemMaterialsCrushed.EnumMaterialsCrushed;
 
-public class AspectTest {
-	public static final AspectTest INSTANCE = new AspectTest();
+public class AspectRecipes {
+	public static final AspectRecipes INSTANCE = new AspectRecipes();
 	
 	public final AspectRegistry registry = new AspectRegistry();
 

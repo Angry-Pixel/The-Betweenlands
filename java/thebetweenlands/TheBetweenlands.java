@@ -10,7 +10,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import thebetweenlands.aspect.AspectTest;
+import thebetweenlands.aspect.AspectRecipes;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandAspect;
@@ -180,7 +180,7 @@ public class TheBetweenlands
 
 		RecurrentComplexModule.init();
 		
-		AspectTest.INSTANCE.init();
+		AspectRecipes.INSTANCE.init();
 	}
 
 	@EventHandler

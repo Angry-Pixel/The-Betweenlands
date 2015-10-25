@@ -15,10 +15,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.aspect.AspectRecipes;
+import thebetweenlands.aspect.AspectRegistry.ItemEntry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsCrushed;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
 public class BlockInfuser extends BlockContainer {
@@ -44,11 +45,11 @@ public class BlockInfuser extends BlockContainer {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
 
 			if (!player.isSneaking()) {
-				if (tile != null && player.getCurrentEquippedItem() == null && tile.stirProgress >= 90) {
-					tile.stirProgress = 0;
+				if (tile != null && player.getCurrentEquippedItem() == null && tile.getStirProgress() >= 90) {
+					tile.setStirProgress(0);
 					return true;
 				}
-				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater && !tile.hasInfusion) {
+				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.weedwoodBucketWater && !tile.hasInfusion()) {
 					ItemStack oldItem = player.getCurrentEquippedItem();
 					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
 					world.markBlockForUpdate(x, y, z);
@@ -59,7 +60,7 @@ public class BlockInfuser extends BlockContainer {
 						return true;
 					}
 				}
-				if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemMaterialsCrushed && !tile.hasInfusion) {
+				if (player.getCurrentEquippedItem() != null && AspectRecipes.INSTANCE.registry.getAspects(new ItemEntry(player.getCurrentEquippedItem())).size() > 0 && !tile.hasInfusion()) {
 					ItemStack crushedItem = player.getCurrentEquippedItem();
 					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {
@@ -89,7 +90,7 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 
-			if(player.isSneaking() && !tile.hasInfusion) {
+			if(player.isSneaking() && !tile.hasInfusion()) {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 					if(tile.getStackInSlot(i) != null) {
 						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem(), 1, tile.getStackInSlot(i).getItemDamage()), false);
@@ -110,7 +111,7 @@ public class BlockInfuser extends BlockContainer {
 			return;
 		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
 		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
-		if (tileInventory != null && !tile.hasInfusion)
+		if (tileInventory != null && !tile.hasInfusion())
 			for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
@@ -147,7 +148,7 @@ public class BlockInfuser extends BlockContainer {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if (world.getTileEntity(x, y, z) instanceof TileEntityInfuser) {
 			TileEntityInfuser infuser = (TileEntityInfuser) world.getTileEntity(x, y, z);
-			if (infuser.getWaterAmount() > 0  && infuser.temp > 0) {
+			if (infuser.getWaterAmount() > 0  && infuser.getTemperature() > 0) {
 				int amount = infuser.waterTank.getFluidAmount();
 				int capacity = infuser.waterTank.getCapacity();
 				float size = 1F / capacity * amount;
@@ -156,15 +157,15 @@ public class BlockInfuser extends BlockContainer {
 				float zz = (float) z + 0.5F;
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-				if(rand.nextInt((101 - infuser.temp))/4 == 0) {
-					if(!infuser.hasInfusion)
+				if(rand.nextInt((101 - infuser.getTemperature()))/4 == 0) {
+					if(!infuser.hasInfusion())
 						BLParticle.BUBBLE_INFUSION.spawn(world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
 					else
 						BLParticle.BUBBLE_INFUSION.spawn(world, xx, yy, zz, 0.1D, 0.0D, 0.1D, 0);
-					if (rand.nextInt(10) == 0 && infuser.temp > 70)
+					if (rand.nextInt(10) == 0 && infuser.getTemperature() > 70)
 						world.playSound(xx, yy, zz, "liquid.lava", 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}
-				if (infuser.temp >= 100) {
+				if (infuser.getTemperature() >= 100) {
 					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 					BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);

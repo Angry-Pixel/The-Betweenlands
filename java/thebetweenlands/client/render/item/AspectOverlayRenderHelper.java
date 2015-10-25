@@ -19,7 +19,7 @@ import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import thebetweenlands.aspect.AspectRegistry.ItemEntry;
-import thebetweenlands.aspect.AspectTest;
+import thebetweenlands.aspect.AspectRecipes;
 import thebetweenlands.aspect.ItemAspect;
 
 public class AspectOverlayRenderHelper {
@@ -61,7 +61,7 @@ public class AspectOverlayRenderHelper {
 									GL11.glTranslated(0, 0, 200);
 									int yOffset = 0;
 									int width = 0;
-									List<ItemAspect> aspects = AspectTest.INSTANCE.registry.getAspects(new ItemEntry(itemStack));
+									List<ItemAspect> aspects = AspectRecipes.INSTANCE.registry.getAspects(new ItemEntry(itemStack));
 									GL11.glEnable(GL11.GL_TEXTURE_2D);
 									GL11.glEnable(GL11.GL_BLEND);
 									if(aspects != null && aspects.size() > 0) {

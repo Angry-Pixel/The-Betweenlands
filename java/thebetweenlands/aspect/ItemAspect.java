@@ -12,13 +12,4 @@ public class ItemAspect {
 		this.aspect = aspect;
 		this.amount = amount;
 	}
-	
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		NBTTagCompound aspectData = new NBTTagCompound();
-		NBTTagList aspectList = aspectData.getTagList("aspectList", 0);
-	}
-
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		
-	}
 }

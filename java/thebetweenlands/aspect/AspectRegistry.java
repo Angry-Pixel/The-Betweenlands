@@ -206,6 +206,6 @@ public class AspectRegistry {
 				return e.getValue();
 			}
 		}
-		return null;
+		return new ArrayList<ItemAspect>();
 	}
 }
