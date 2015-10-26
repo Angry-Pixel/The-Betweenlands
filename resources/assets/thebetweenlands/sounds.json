@@ -708,11 +708,74 @@
 		}
 	]
   },
-  "records.Tribal": {
+  "records.BeneathAGreenSky": {
 	"catagory": "record",
 	"sounds": [
 		{
-			"name": "records/Tribal",
+			"name": "records/BeneathAGreenSky",
+			"stream": true
+		}
+	]
+  },
+  "records.DJWightsMixtape": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/DJWightsMixtape",
+			"stream": true
+		}
+	]
+  },
+  "records.LonelyFire": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/LonelyFire",
+			"stream": true
+		}
+	]
+  },
+  "records.Onwards": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/Onwards",
+			"stream": true
+		}
+	]
+  },
+  "records.StuckInTheMud": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/StuckInTheMud",
+			"stream": true
+		}
+	]
+  },
+  "records.WanderingWisps": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/WanderingWisps",
+			"stream": true
+		}
+	]
+  },
+  "records.Waterlogged": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/Waterlogged",
+			"stream": true
+		}
+	]
+  },
+  "records.Ancient": {
+	"catagory": "record",
+	"sounds": [
+		{
+			"name": "records/Ancient",
 			"stream": true
 		}
 	]

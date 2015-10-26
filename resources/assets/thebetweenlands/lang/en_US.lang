@@ -459,6 +459,23 @@ item.thebetweenlands.swiftPickaxe.name=Swift Pickaxe
 item.thebetweenlands.wightsBane.name=Wight's Bane
 item.thebetweenlands.skullMask.name=Skull Mask
 
+item.thebetweenlands.recordHagDance.name=Music Disc
+item.thebetweenlands.recordMarshFire.name=Music Disc
+
+item.thebetweenlands.recordAstatos.name=The Legendary Disc
+item.thebetweenlands.recordChristmasOnTheMarsh.name=Frosty Disc
+item.thebetweenlands.recordTheExplorer.name=Explorer's Disc
+item.thebetweenlands.recordBetweenYouAndMe.name=Tribeman's Disc
+item.thebetweenlands.record16612.name=Mysterious Disc
+
+item.thebetweenlands.recordAstatos.desc=Voog2 - Astatos
+item.thebetweenlands.recordBetweenYouAndMe.desc=Voog2 - Between You And Me
+item.thebetweenlands.recordChristmasOnTheMarsh.desc=Voog2 - Christmas On The Marsh
+item.thebetweenlands.recordTheExplorer.desc=Voog2 - The Explorer
+item.thebetweenlands.recordHagDance.desc=Voog2 - Hag Dance
+item.thebetweenlands.recordMarshFire.desc=Voog2 - Wetland Fire
+item.thebetweenlands.record16612.desc=...
+
 item.thebetweenlands.tarminion.name=Tar Minion
 
 item.thebetweenlands.shimmerStone.name=Shimmerstone
