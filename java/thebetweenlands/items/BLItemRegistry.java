@@ -165,7 +165,7 @@ public class BLItemRegistry {
     //DISCS
     public static final Item astatos = new ItemBLRecord("Astatos");
     public static final Item betweenYouAndMe = new ItemBLRecord("BetweenYouAndMe");
-    public static final Item christmasOnTheMarch = new ItemBLRecord("ChristmasOnTheMarsh");
+    public static final Item christmasOnTheMarsh = new ItemBLRecord("ChristmasOnTheMarsh");
     public static final Item theExplorer = new ItemBLRecord("TheExplorer");
     public static final Item tribal = new ItemBLRecord("Tribal");
     public static final Item hagDance = new ItemBLRecord("HagDance");
@@ -181,7 +181,7 @@ public class BLItemRegistry {
     }
 
     private static void initCreativeTabs() {
-        ModCreativeTabs.items.setTab(astatos, betweenYouAndMe, christmasOnTheMarch, theExplorer, tribal, hagDance, marshFire, rope, weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
+        ModCreativeTabs.items.setTab(astatos, betweenYouAndMe, christmasOnTheMarsh, theExplorer, tribal, hagDance, marshFire, mysteriousRecord, rope, weedwoodRowboat, volarPad, swampTalisman, materialsBL, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
                                      snailFleshCooked, swampKelp, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
                                      wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
         ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion);
