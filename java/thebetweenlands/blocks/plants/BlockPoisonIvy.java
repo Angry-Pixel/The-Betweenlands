@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockPoisonIvy extends BlockVine implements IShearable {
@@ -35,7 +36,7 @@ public class BlockPoisonIvy extends BlockVine implements IShearable {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if(!world.isRemote && entity instanceof EntityLivingBase && world.rand.nextInt(200) == 0){
+		if(!world.isRemote && entity instanceof EntityLivingBase && world.rand.nextInt(200) == 0 && !ElixirRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entity)){
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.poison.getId(), 50, 25));			
 		}
 	}
