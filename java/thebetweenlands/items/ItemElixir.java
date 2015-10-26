@@ -90,7 +90,7 @@ public class ItemElixir extends Item {
 			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
 			int duration = this.getElixirDuration(stack);
 			int strength = this.getElixirStrength(stack);
-			player.addPotionEffect(effect.createEffect(duration == -1 ? 200 : duration, strength == -1 ? 0 : strength));
+			player.addPotionEffect(effect.createEffect(duration == -1 ? 1200 : duration, strength == -1 ? 0 : strength));
 		}
 
 		//Add empty dentrothyst vial
