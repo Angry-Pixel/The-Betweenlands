@@ -63,8 +63,10 @@ public class ElixirClientHandler {
 		private final Vec3 pos;
 		private Vec3 nextPos;
 		private final Entity entity;
-		private TrailPos(Vec3 pos, Entity entity) {
+		private final int index;
+		private TrailPos(Vec3 pos, int index, Entity entity) {
 			this.pos = pos;
+			this.index = index;
 			this.entity = entity;
 		}
 	}
@@ -96,9 +98,10 @@ public class ElixirClientHandler {
 				EntityTrail trail = this.getTrail(e);
 				trail.update(strength);
 				TrailPos lastPos = null;
-				for(Vec3 pos : trail.cachedPositions) {
+				for(int i = 0; i < trail.cachedPositions.size(); i++) {
+					Vec3 pos = trail.cachedPositions.get(i);
 					if(lastPos != null) lastPos.nextPos = pos;
-					TrailPos tp = new TrailPos(pos, e);
+					TrailPos tp = new TrailPos(pos, i, e);
 					availablePositions.add(tp);
 					lastPos = tp;
 				}
@@ -109,15 +112,36 @@ public class ElixirClientHandler {
 			int pointCount = Math.min(maxPointCount, availablePositions.size());
 			int crawlTicks = 80;
 			for(int i = 0; i < pointCount; i++) {
-				if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)pointCount * (float)i)) % crawlTicks == 0) {
-					Vec3 pos = availablePositions.get(i).pos;
-					float xx = (float) pos.xCoord + 0.5F;
-					float yy = (float) pos.yCoord + world.rand.nextFloat() * 0.1F;
-					float zz = (float) pos.zCoord + 0.5F;
-					//System.out.println(pos.xCoord + " " + pos.yCoord + " " + pos.zCoord);
-					float fixedOffset = 0.25F;
-					float randomOffset = world.rand.nextFloat() * 0.2F - 0.1F;
-					BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+				TrailPos tp = availablePositions.get(i);
+				if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)tp.index)) % crawlTicks == 0) {
+					Vec3 pos = tp.pos;
+					if(tp.nextPos != null) {
+						int subSegments = 10;
+						Vec3 nextPos = tp.nextPos;
+						for(int s = 0; s <= subSegments; s++) {
+							if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)(tp.index + s / (float)subSegments))) % crawlTicks == 0) {
+								double xx = (double) pos.xCoord + 0.5F;
+								double yy = (double) pos.yCoord;
+								double zz = (double) pos.zCoord + 0.5F;
+								double xx2 = (double) nextPos.xCoord + 0.5F;
+								double yy2 = (double) nextPos.yCoord;
+								double zz2 = (double) nextPos.zCoord + 0.5F;
+								double xxi = xx + (xx2 - xx) / (double)subSegments * s;
+								double yyi = yy + (yy2 - yy) / (double)subSegments * s;
+								double zzi = zz + (zz2 - zz) / (double)subSegments * s;
+								float fixedOffset = 0.0F;
+								float randomOffset = 0;
+								BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) (xxi - fixedOffset), (double) yyi, (double) (zzi + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+							}
+						}
+					} else {
+						double xx = (float) pos.xCoord + 0.5F;
+						double yy = (float) pos.yCoord + world.rand.nextFloat() * 0.05F;
+						double zz = (float) pos.zCoord + 0.5F;
+						float fixedOffset = 0.25F;
+						float randomOffset = world.rand.nextFloat() * 0.1F - 0.01F;
+						BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					}
 				}
 			}
 			Iterator<Entry<Entity, EntityTrail>> it = this.entityTrails.entrySet().iterator();
