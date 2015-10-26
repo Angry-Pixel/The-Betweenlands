@@ -1,5 +1,6 @@
 package thebetweenlands.event.elixirs;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,10 +13,13 @@ import java.util.Map.Entry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
@@ -85,68 +89,92 @@ public class ElixirClientHandler {
 		}
 	};
 
+	private final Method f_swingHand = ReflectionHelper.findMethod(Minecraft.class, null, new String[]{"func_147116_af", "al"});
+	private final Method f_damageBlock = ReflectionHelper.findMethod(Minecraft.class, null, new String[]{"func_147115_a", "a"}, boolean.class);
+
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(event.phase == Phase.END) {
-			if(player != null && player.worldObj != null && player.worldObj.isRemote && player == Minecraft.getMinecraft().thePlayer && ElixirRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
-				int strength = ElixirRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
-				World world = player.worldObj;
-				List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.boundingBox.expand(50, 50, 50));
-				List<TrailPos> availablePositions = new ArrayList<TrailPos>();
-				for(Entity e : entityList) {
-					if(e == player) continue;
-					EntityTrail trail = this.getTrail(e);
-					trail.update(strength);
-					TrailPos lastPos = null;
-					for(int i = 0; i < trail.cachedPositions.size(); i++) {
-						Vec3 pos = trail.cachedPositions.get(i);
-						if(lastPos != null) lastPos.nextPos = pos;
-						TrailPos tp = new TrailPos(pos, i, e);
-						availablePositions.add(tp);
-						lastPos = tp;
-					}
-				}
-				this.playerPos = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
-				Collections.sort(availablePositions, dstSorter);
-				int maxPointCount = 200;
-				int pointCount = Math.min(maxPointCount, availablePositions.size());
-				int crawlTicks = MathHelper.floor_double(20.0F + 120.0F - 120.0F / 4.0F * strength);
-				for(int i = 0; i < pointCount; i++) {
-					TrailPos tp = availablePositions.get(i);
-					if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)tp.index)) % crawlTicks == 0) {
-						Vec3 pos = tp.pos;
-						if(tp.nextPos != null) {
-							int subSegments = 10;
-							Vec3 nextPos = tp.nextPos;
-							for(int s = 0; s <= subSegments; s++) {
-								if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)(tp.index + s / (float)subSegments))) % crawlTicks == 0) {
-									double tpx = (double) pos.xCoord + 0.5F;
-									double tpy = (double) pos.yCoord + 0.05F;
-									double tpz = (double) pos.zCoord + 0.5F;
-									double tpx2 = (double) nextPos.xCoord + 0.5F;
-									double tpy2 = (double) nextPos.yCoord;
-									double tpz2 = (double) nextPos.zCoord + 0.5F;
-									double tpxi = tpx + (tpx2 - tpx) / (double)subSegments * s;
-									double tpyi = tpy + (tpy2 - tpy) / (double)subSegments * s;
-									double tpzi = tpz + (tpz2 - tpz) / (double)subSegments * s;
-									BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpxi, (double) tpyi, (double) tpzi, 0.0D, 0.0D, 0.0D, 0);
-								}
-							}
-						} else {
-							double tpx = (double) pos.xCoord + 0.5F;
-							double tpy = (double) pos.yCoord + 0.05F;
-							double tpz = (double) pos.zCoord + 0.5F;
-							BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpx, (double) tpy, (double) tpz, 0.0D, 0.0D, 0.0D, 0);
+			if(player != null && player.worldObj != null && player.worldObj.isRemote && player == Minecraft.getMinecraft().thePlayer) {
+				if(ElixirRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
+					int strength = ElixirRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
+					World world = player.worldObj;
+					List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.boundingBox.expand(50, 50, 50));
+					List<TrailPos> availablePositions = new ArrayList<TrailPos>();
+					for(Entity e : entityList) {
+						if(e == player) continue;
+						EntityTrail trail = this.getTrail(e);
+						trail.update(strength);
+						TrailPos lastPos = null;
+						for(int i = 0; i < trail.cachedPositions.size(); i++) {
+							Vec3 pos = trail.cachedPositions.get(i);
+							if(lastPos != null) lastPos.nextPos = pos;
+							TrailPos tp = new TrailPos(pos, i, e);
+							availablePositions.add(tp);
+							lastPos = tp;
 						}
 					}
+					this.playerPos = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+					Collections.sort(availablePositions, dstSorter);
+					int maxPointCount = 200;
+					int pointCount = Math.min(maxPointCount, availablePositions.size());
+					int crawlTicks = MathHelper.floor_double(20.0F + 120.0F - 120.0F / 4.0F * strength);
+					for(int i = 0; i < pointCount; i++) {
+						TrailPos tp = availablePositions.get(i);
+						if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)tp.index)) % crawlTicks == 0) {
+							Vec3 pos = tp.pos;
+							if(tp.nextPos != null) {
+								int subSegments = 10;
+								Vec3 nextPos = tp.nextPos;
+								for(int s = 0; s <= subSegments; s++) {
+									if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)(tp.index + s / (float)subSegments))) % crawlTicks == 0) {
+										double tpx = (double) pos.xCoord + 0.5F;
+										double tpy = (double) pos.yCoord + 0.05F;
+										double tpz = (double) pos.zCoord + 0.5F;
+										double tpx2 = (double) nextPos.xCoord + 0.5F;
+										double tpy2 = (double) nextPos.yCoord;
+										double tpz2 = (double) nextPos.zCoord + 0.5F;
+										double tpxi = tpx + (tpx2 - tpx) / (double)subSegments * s;
+										double tpyi = tpy + (tpy2 - tpy) / (double)subSegments * s;
+										double tpzi = tpz + (tpz2 - tpz) / (double)subSegments * s;
+										BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpxi, (double) tpyi, (double) tpzi, 0.0D, 0.0D, 0.0D, 0);
+									}
+								}
+							} else {
+								double tpx = (double) pos.xCoord + 0.5F;
+								double tpy = (double) pos.yCoord + 0.05F;
+								double tpz = (double) pos.zCoord + 0.5F;
+								BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpx, (double) tpy, (double) tpz, 0.0D, 0.0D, 0.0D, 0);
+							}
+						}
+					}
+					Iterator<Entry<Entity, EntityTrail>> it = this.entityTrails.entrySet().iterator();
+					Entry<Entity, EntityTrail> entry;
+					while(it.hasNext() && (entry = it.next()) != null) {
+						EntityTrail trail = entry.getValue();
+						if(trail.entity == null || trail.entity.isDead || !entityList.contains(entry.getKey())) {
+							it.remove();
+						}
+					}
+				} else {
+					this.entityTrails.clear();
 				}
-				Iterator<Entry<Entity, EntityTrail>> it = this.entityTrails.entrySet().iterator();
-				Entry<Entity, EntityTrail> entry;
-				while(it.hasNext() && (entry = it.next()) != null) {
-					EntityTrail trail = entry.getValue();
-					if(trail.entity == null || trail.entity.isDead || !entityList.contains(entry.getKey())) {
-						it.remove();
+
+				if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player)) {
+					if(Minecraft.getMinecraft().gameSettings.keyBindAttack.getIsKeyPressed() && !player.isBlocking()) {
+						try {
+							MovingObjectPosition target = Minecraft.getMinecraft().objectMouseOver;
+							if(target == null || target.entityHit != null || target.typeOfHit == MovingObjectType.MISS) {
+								f_swingHand.invoke(Minecraft.getMinecraft());
+							} else if(target != null) {
+								if(!player.isSwingInProgress) {
+									f_damageBlock.invoke(Minecraft.getMinecraft(), true);
+								}
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			} else {

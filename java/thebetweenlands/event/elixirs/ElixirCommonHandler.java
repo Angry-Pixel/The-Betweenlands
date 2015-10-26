@@ -3,10 +3,13 @@ package thebetweenlands.event.elixirs;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 
 public class ElixirCommonHandler {
@@ -74,6 +77,24 @@ public class ElixirCommonHandler {
 			}
 		} else {
 			this.ignoreSetAttackTarget = false;
+		}
+	}
+
+	@SubscribeEvent
+	public void onBreakSpeed(BreakSpeed event) {
+		EntityPlayer player = event.entityPlayer;
+		if(player != null && ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+			event.newSpeed *= 1.0F + (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1) * 0.3F;
+		}
+	}
+
+	@SubscribeEvent
+	public void onStartUseItem(PlayerUseItemEvent.Start event) {
+		EntityPlayer player = event.entityPlayer;
+		if(player != null && ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+			float newDuration = event.duration;
+			newDuration *= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
+			event.duration = MathHelper.ceiling_float_int(newDuration);
 		}
 	}
 }
