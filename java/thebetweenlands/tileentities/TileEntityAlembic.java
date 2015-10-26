@@ -10,7 +10,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import thebetweenlands.blocks.BLBlockRegistry;
+import net.minecraft.util.MathHelper;
+import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
@@ -18,20 +19,23 @@ import thebetweenlands.herblore.aspects.IAspect;
 import thebetweenlands.herblore.aspects.ItemAspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
+import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
+import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
+import thebetweenlands.items.BLItemRegistry;
 
 public class TileEntityAlembic extends TileEntity {
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
 
-	public static final float AMOUNT_PER_VIAL = 0.2F;
+	public static final float AMOUNT_PER_VIAL = Amounts.VIAL;
 
 	private boolean running = false;
 	private int progress = 0;
 	private ItemStack infusionBucket = null;
 	private float producedAmount = 0.0F;
 	private float producableAmount = 0.0F;
-	private float producableStrength = 0.0F;
-	private float producableDuration = 0.0F;
-	private ItemStack producableItem = null;
+	private int producableStrength;
+	private int producableDuration;
+	private ElixirEffect producableElixir = null;
 
 	public void addInfusion(ItemStack bucket) {
 		this.infusionBucket = bucket;
@@ -123,23 +127,25 @@ public class TileEntityAlembic extends TileEntity {
 			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAmount += a.amount;
 		}
 		this.producableAmount = totalAmount;
-		this.producableStrength = strengthAmount;
-		this.producableDuration = durationAmount;
 		boolean isPositive = true;
 		for(IAspect a : infusionAspects) {
 			if(a == AspectRegistry.BYARIIS) {
 				isPositive = !isPositive;
 			}
 		}
-		this.producableItem = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
+		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
+		float relStrengthAmount = strengthAmount / Amounts.MAX_ASPECT_AMOUNT;
+		float relDurationAmount = durationAmount / Amounts.MAX_ASPECT_AMOUNT;
+		this.producableStrength = MathHelper.floor_float(relStrengthAmount * 4.0F);
+		this.producableDuration = recipe.baseDuration + MathHelper.floor_float(recipe.baseDuration * relDurationAmount * 2.0F);
 	}
 
 	private void addInvalidInfusion() {
 		//Invalid recipe or infusion too short or too long
-		this.producableItem = new ItemStack(BLBlockRegistry.swampDirt);
+		this.producableElixir = ElixirRegistry.EFFECT_TEST;
 		this.producableAmount = 0.2F;
-		this.producableDuration = 0.0F;
-		this.producableStrength = 0.0F;
+		this.producableDuration = 0;
+		this.producableStrength = 0;
 	}
 
 	private List<IAspect> getInfusionAspects(List<ItemStack> ingredients) {
@@ -178,15 +184,15 @@ public class TileEntityAlembic extends TileEntity {
 		if(this.isFull() && this.hasFinished()) {
 			ItemStack elixir = null;
 			if(this.hasElixir()) {
-				elixir = this.createElixir(this.producableItem, this.producableStrength, this.producableDuration);
+				elixir = this.createElixir(this.producableElixir, this.producableStrength, this.producableDuration);
 			}
 			this.producedAmount -= AMOUNT_PER_VIAL;
 			if(this.producedAmount <= 0.0F || !this.hasElixir()) {
 				this.infusionBucket = null;
 				this.producableAmount = 0.0F;
-				this.producableDuration = 0.0F;
-				this.producableItem = null;
-				this.producableStrength = 0.0F;
+				this.producableDuration = 0;
+				this.producableElixir = null;
+				this.producableStrength = 0;
 				this.producedAmount = 0.0F;
 				this.progress = 0;
 			}
@@ -195,8 +201,7 @@ public class TileEntityAlembic extends TileEntity {
 		return null;
 	}
 
-	private ItemStack createElixir(ItemStack elixir, float strength, float duration) {
-		//TODO: Set NBT for strength and duration
-		return new ItemStack(elixir.getItem(), 1, elixir.getItemDamage());
+	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration) {
+		return BLItemRegistry.elixir.getElixirItem(elixir, duration, strength);
 	}
 }

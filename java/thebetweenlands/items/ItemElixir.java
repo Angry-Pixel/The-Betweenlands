@@ -10,41 +10,43 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.effects.ElixirEffect;
-import thebetweenlands.utils.PotionHelper;
+import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
+import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 
 public class ItemElixir extends Item {
-	public final List<ElixirEffect> effects = new ArrayList<ElixirEffect>();
-
-	public static final ElixirEffect TEST_EFFECT = new ElixirEffect("test");
-	public static final ElixirEffect TEST_EFFECT2 = new ElixirEffect("test2");
+	private final List<ElixirEffect> effects = new ArrayList<ElixirEffect>();
 
 	public ItemElixir() {
 		this.setUnlocalizedName("elixir");
 
-		this.effects.add(TEST_EFFECT);
-		this.effects.add(TEST_EFFECT2);
+		this.effects.addAll(ElixirRegistry.getEffects());
 
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
 
+	private ElixirEffect getElixirByID(int id) {
+		for(ElixirEffect effect : this.effects) {
+			if(id == effect.getID()) return effect;
+		}
+		return null;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
-		for (int i = 0; i < this.effects.size(); i++) {
-			list.add(new ItemStack(item, 1, i));
+		for (ElixirEffect effect : this.effects) {
+			list.add(new ItemStack(item, 1, effect.getID()));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands.elixir." + this.effects.get(stack.getItemDamage()).getEffectName();
+			return "item.thebetweenlands.elixir." + this.getElixirByID(stack.getItemDamage()).getEffectName();
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknown";
 		}
@@ -60,8 +62,14 @@ public class ItemElixir extends Item {
 		return EnumAction.drink;
 	}
 
-	public ItemStack getElixir(ElixirEffect effect) {
-		return new ItemStack(this, 1, this.effects.indexOf(effect));
+	public ItemStack getElixirItem(ElixirEffect effect, int duration, int strength) {
+		ItemStack elixirStack = new ItemStack(this, 1, effect.getID());
+		NBTTagCompound elixirData = new NBTTagCompound();
+		elixirData.setInteger("duration", duration);
+		elixirData.setInteger("strength", strength);
+		if(elixirStack.stackTagCompound == null) elixirStack.stackTagCompound = new NBTTagCompound();
+		elixirStack.stackTagCompound.setTag("elixirData", elixirData);
+		return elixirStack;
 	}
 
 	@Override
@@ -77,8 +85,8 @@ public class ItemElixir extends Item {
 		}
 
 		if (!world.isRemote) {
-			ElixirEffect effect = this.effects.get(stack.getItemDamage());
-			player.addPotionEffect(new PotionEffect(effect.getId(), effect.getDuration(), effect.getStrength()));
+			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
+			player.addPotionEffect(effect.createEffect(this.getElixirDuration(stack), this.getElixirStrength(stack)));
 		}
 
 		//Add empty dentrothyst vial
@@ -90,5 +98,21 @@ public class ItemElixir extends Item {
 		}*/
 
 		return stack;
+	}
+
+	public int getElixirDuration(ItemStack stack) {
+		if(stack.stackTagCompound.hasKey("elixirData")) {
+			NBTTagCompound elixirData = stack.stackTagCompound.getCompoundTag("elixirData");
+			return elixirData.getInteger("duration");
+		}
+		return -1;
+	}
+
+	public int getElixirStrength(ItemStack stack) {
+		if(stack.stackTagCompound.hasKey("elixirData")) {
+			NBTTagCompound elixirData = stack.stackTagCompound.getCompoundTag("elixirData");
+			return elixirData.getInteger("strength");
+		}
+		return -1;
 	}
 }
