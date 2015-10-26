@@ -4,6 +4,19 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -16,6 +29,7 @@ import thebetweenlands.command.CommandAspect;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.event.elixirs.ElixirCommonHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
@@ -29,7 +43,6 @@ import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
-import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.mods.RecurrentComplexModule;
@@ -55,19 +68,6 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.world.teleporter.TeleporterHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands
@@ -171,6 +171,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
 		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
 		
 		RecipeHandler.init();
 		TeleporterHandler.init();

@@ -9,6 +9,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -62,6 +64,12 @@ public class ElixirEffect {
 		public void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double distance) { 
 			if(this.id == this.effect.potionID) this.effect.affectEntity(attacker, target, strength, distance);
 		}
+		
+		@Override
+		public double func_111183_a(int strength, AttributeModifier attributeModifier) {
+			if(this.id == this.effect.potionID) return this.effect.getAttributeModifier(attributeModifier, strength);
+	        return super.func_111183_a(strength, attributeModifier);
+	    }
 	}
 
 	public PotionEffect createEffect(int duration, int strength) {
@@ -83,7 +91,7 @@ public class ElixirEffect {
 	public int getID() {
 		return this.effectID;
 	}
-	
+
 	public String getEffectName() {
 		return this.effectName;
 	}
@@ -95,19 +103,42 @@ public class ElixirEffect {
 	/**
 	 * Whether this effect should be applied this tick
 	 */
-	public boolean isReady(int ticks, int strength) {
+	protected boolean isReady(int ticks, int strength) {
 		return true;
 	}
 
 	/**
 	 * Effect over time
 	 */
-	public void performEffect(EntityLivingBase entity, int strength) { }
+	protected void performEffect(EntityLivingBase entity, int strength) { }
 
 	/**
 	 * Instant effect
 	 */
-	public void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double distance) { }
+	protected void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double distance) { }
+
+	/**
+	 * Calculates the modifier from the attribute and elixir strength
+	 * @param attributeModifier
+	 * @param strength
+	 * @return
+	 */
+	protected double getAttributeModifier(AttributeModifier attributeModifier, int strength) {
+		return attributeModifier.getAmount() * (double)(strength + 1);
+	}
+	
+	/**
+	 * Adds an entity attribute modifier that is applied when the potion is active.
+	 * @param attribute
+	 * @param uuid
+	 * @param modifier
+	 * @param operation
+	 * @return
+	 */
+	public ElixirEffect addAttributeModifier(IAttribute attribute, String uuid, double modifier, int operation) {
+		this.potionEffect.func_111184_a(attribute, uuid, modifier, operation);
+		return this;
+	}
 
 	public boolean isActive(EntityLivingBase entity) {
 		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
@@ -117,5 +148,25 @@ public class ElixirEffect {
 			}
 		}
 		return false;
+	}
+
+	public int getDuration(EntityLivingBase entity) {
+		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
+		for(PotionEffect effect : activePotions) {
+			if(effect.getPotionID() == this.potionID) {
+				return effect.getDuration();
+			}
+		}
+		return -1;
+	}
+
+	public int getStrength(EntityLivingBase entity) {
+		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
+		for(PotionEffect effect : activePotions) {
+			if(effect.getPotionID() == this.potionID) {
+				return effect.getAmplifier();
+			}
+		}
+		return -1;
 	}
 }

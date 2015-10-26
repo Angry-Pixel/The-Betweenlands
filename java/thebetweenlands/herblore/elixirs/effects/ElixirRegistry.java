@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
 
 public class ElixirRegistry {
@@ -11,10 +12,10 @@ public class ElixirRegistry {
 
 	//Test
 	public static final ElixirEffect EFFECT_TEST = new ElixirEffect(69, "bl.elixir.test", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png"));
-	
+
 	//Potions
 	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png"));
-	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
+	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png")).addAttributeModifier(SharedMonsterAttributes.movementSpeed, "645a98a2-7bfd-11e5-8bcf-feff819cdc9f", 0.2D, 2);
 	public static final ElixirEffect EFFECT_HEALING = new ElixirEffect(2, "bl.elixir.healing", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_RIPENING = new ElixirEffect(3, "bl.elixir.ripening", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_TOUGHSKIN = new ElixirEffect(4, "bl.elixir.toughskin", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));

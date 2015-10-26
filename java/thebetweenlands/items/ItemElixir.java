@@ -16,6 +16,8 @@ import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 
 public class ItemElixir extends Item {
+	//TODO: Make throwable
+	
 	private final List<ElixirEffect> effects = new ArrayList<ElixirEffect>();
 
 	public ItemElixir() {
@@ -86,7 +88,9 @@ public class ItemElixir extends Item {
 
 		if (!world.isRemote) {
 			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
-			player.addPotionEffect(effect.createEffect(this.getElixirDuration(stack), this.getElixirStrength(stack)));
+			int duration = this.getElixirDuration(stack);
+			int strength = this.getElixirStrength(stack);
+			player.addPotionEffect(effect.createEffect(duration == -1 ? 200 : duration, strength == -1 ? 0 : strength));
 		}
 
 		//Add empty dentrothyst vial
@@ -101,7 +105,7 @@ public class ItemElixir extends Item {
 	}
 
 	public int getElixirDuration(ItemStack stack) {
-		if(stack.stackTagCompound.hasKey("elixirData")) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("elixirData")) {
 			NBTTagCompound elixirData = stack.stackTagCompound.getCompoundTag("elixirData");
 			return elixirData.getInteger("duration");
 		}
@@ -109,7 +113,7 @@ public class ItemElixir extends Item {
 	}
 
 	public int getElixirStrength(ItemStack stack) {
-		if(stack.stackTagCompound.hasKey("elixirData")) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("elixirData")) {
 			NBTTagCompound elixirData = stack.stackTagCompound.getCompoundTag("elixirData");
 			return elixirData.getInteger("strength");
 		}
