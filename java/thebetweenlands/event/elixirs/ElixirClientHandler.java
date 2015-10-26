@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -86,71 +86,71 @@ public class ElixirClientHandler {
 	};
 
 	@SubscribeEvent
-	public void onWorldTick(PlayerTickEvent event) {
-		EntityPlayer player = event.player;
-		if(event.phase == Phase.START && player != null && player.worldObj.isRemote && player == Minecraft.getMinecraft().thePlayer && ElixirRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
-			World world = event.player.worldObj;
-			int strength = ElixirRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
-			List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.boundingBox.expand(50, 50, 50));
-			List<TrailPos> availablePositions = new ArrayList<TrailPos>();
-			for(Entity e : entityList) {
-				if(e == player) continue;
-				EntityTrail trail = this.getTrail(e);
-				trail.update(strength);
-				TrailPos lastPos = null;
-				for(int i = 0; i < trail.cachedPositions.size(); i++) {
-					Vec3 pos = trail.cachedPositions.get(i);
-					if(lastPos != null) lastPos.nextPos = pos;
-					TrailPos tp = new TrailPos(pos, i, e);
-					availablePositions.add(tp);
-					lastPos = tp;
-				}
-			}
-			this.playerPos = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
-			Collections.sort(availablePositions, dstSorter);
-			int maxPointCount = 200;
-			int pointCount = Math.min(maxPointCount, availablePositions.size());
-			int crawlTicks = 80;
-			for(int i = 0; i < pointCount; i++) {
-				TrailPos tp = availablePositions.get(i);
-				if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)tp.index)) % crawlTicks == 0) {
-					Vec3 pos = tp.pos;
-					if(tp.nextPos != null) {
-						int subSegments = 10;
-						Vec3 nextPos = tp.nextPos;
-						for(int s = 0; s <= subSegments; s++) {
-							if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)(tp.index + s / (float)subSegments))) % crawlTicks == 0) {
-								double xx = (double) pos.xCoord + 0.5F;
-								double yy = (double) pos.yCoord;
-								double zz = (double) pos.zCoord + 0.5F;
-								double xx2 = (double) nextPos.xCoord + 0.5F;
-								double yy2 = (double) nextPos.yCoord;
-								double zz2 = (double) nextPos.zCoord + 0.5F;
-								double xxi = xx + (xx2 - xx) / (double)subSegments * s;
-								double yyi = yy + (yy2 - yy) / (double)subSegments * s;
-								double zzi = zz + (zz2 - zz) / (double)subSegments * s;
-								float fixedOffset = 0.0F;
-								float randomOffset = 0;
-								BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) (xxi - fixedOffset), (double) yyi, (double) (zzi + randomOffset), 0.0D, 0.0D, 0.0D, 0);
-							}
-						}
-					} else {
-						double xx = (float) pos.xCoord + 0.5F;
-						double yy = (float) pos.yCoord + world.rand.nextFloat() * 0.05F;
-						double zz = (float) pos.zCoord + 0.5F;
-						float fixedOffset = 0.25F;
-						float randomOffset = world.rand.nextFloat() * 0.1F - 0.01F;
-						BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+	public void onClientTick(ClientTickEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(event.phase == Phase.END) {
+			if(player != null && player.worldObj != null && player.worldObj.isRemote && player == Minecraft.getMinecraft().thePlayer && ElixirRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
+				int strength = ElixirRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
+				World world = player.worldObj;
+				List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.boundingBox.expand(50, 50, 50));
+				List<TrailPos> availablePositions = new ArrayList<TrailPos>();
+				for(Entity e : entityList) {
+					if(e == player) continue;
+					EntityTrail trail = this.getTrail(e);
+					trail.update(strength);
+					TrailPos lastPos = null;
+					for(int i = 0; i < trail.cachedPositions.size(); i++) {
+						Vec3 pos = trail.cachedPositions.get(i);
+						if(lastPos != null) lastPos.nextPos = pos;
+						TrailPos tp = new TrailPos(pos, i, e);
+						availablePositions.add(tp);
+						lastPos = tp;
 					}
 				}
-			}
-			Iterator<Entry<Entity, EntityTrail>> it = this.entityTrails.entrySet().iterator();
-			Entry<Entity, EntityTrail> entry;
-			while(it.hasNext() && (entry = it.next()) != null) {
-				EntityTrail trail = entry.getValue();
-				if(trail.entity == null || trail.entity.isDead || !entityList.contains(entry.getKey())) {
-					it.remove();
+				this.playerPos = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
+				Collections.sort(availablePositions, dstSorter);
+				int maxPointCount = 200;
+				int pointCount = Math.min(maxPointCount, availablePositions.size());
+				int crawlTicks = MathHelper.floor_double(20.0F + 120.0F - 120.0F / 4.0F * strength);
+				for(int i = 0; i < pointCount; i++) {
+					TrailPos tp = availablePositions.get(i);
+					if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)tp.index)) % crawlTicks == 0) {
+						Vec3 pos = tp.pos;
+						if(tp.nextPos != null) {
+							int subSegments = 10;
+							Vec3 nextPos = tp.nextPos;
+							for(int s = 0; s <= subSegments; s++) {
+								if((player.ticksExisted - MathHelper.floor_float((float)crawlTicks / (float)EntityTrail.MAX_CACHE_SIZE * (float)(tp.index + s / (float)subSegments))) % crawlTicks == 0) {
+									double tpx = (double) pos.xCoord + 0.5F;
+									double tpy = (double) pos.yCoord + 0.05F;
+									double tpz = (double) pos.zCoord + 0.5F;
+									double tpx2 = (double) nextPos.xCoord + 0.5F;
+									double tpy2 = (double) nextPos.yCoord;
+									double tpz2 = (double) nextPos.zCoord + 0.5F;
+									double tpxi = tpx + (tpx2 - tpx) / (double)subSegments * s;
+									double tpyi = tpy + (tpy2 - tpy) / (double)subSegments * s;
+									double tpzi = tpz + (tpz2 - tpz) / (double)subSegments * s;
+									BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpxi, (double) tpyi, (double) tpzi, 0.0D, 0.0D, 0.0D, 0);
+								}
+							}
+						} else {
+							double tpx = (double) pos.xCoord + 0.5F;
+							double tpy = (double) pos.yCoord + 0.05F;
+							double tpz = (double) pos.zCoord + 0.5F;
+							BLParticle.BUBBLE_PRUIFIER.spawn(world, (double) tpx, (double) tpy, (double) tpz, 0.0D, 0.0D, 0.0D, 0);
+						}
+					}
 				}
+				Iterator<Entry<Entity, EntityTrail>> it = this.entityTrails.entrySet().iterator();
+				Entry<Entity, EntityTrail> entry;
+				while(it.hasNext() && (entry = it.next()) != null) {
+					EntityTrail trail = entry.getValue();
+					if(trail.entity == null || trail.entity.isDead || !entityList.contains(entry.getKey())) {
+						it.remove();
+					}
+				}
+			} else {
+				this.entityTrails.clear();
 			}
 		}
 	}

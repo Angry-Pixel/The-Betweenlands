@@ -23,7 +23,7 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_TOUGHSKIN = new ElixirEffect(4, "bl.elixir.toughskin", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_FEASTING = new ElixirFeasting(5, "bl.elixir.feasting", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_HUNTERSSENSE = new ElixirEffect(6, "bl.elixir.huntersSense", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
-	public static final ElixirEffect EFFECT_MASKING = new ElixirEffect(7, "bl.elixir.masking", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
+	public static final ElixirMasking EFFECT_MASKING = new ElixirMasking(7, "bl.elixir.masking", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SWIFTARM = new ElixirEffect(8, "bl.elixir.swiftarm", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_CATSEYES = new ElixirEffect(9, "bl.elixir.catsEyes", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SAGITTARIUS = new ElixirEffect(10, "bl.elixir.sagittarius", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));

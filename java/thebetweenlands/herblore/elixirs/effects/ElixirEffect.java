@@ -183,6 +183,7 @@ public class ElixirEffect {
 	}
 
 	public boolean isActive(EntityLivingBase entity) {
+		if(entity == null) return false;
 		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
 		for(PotionEffect effect : activePotions) {
 			if(effect.getPotionID() == this.potionID) {
@@ -193,6 +194,7 @@ public class ElixirEffect {
 	}
 
 	public int getDuration(EntityLivingBase entity) {
+		if(entity == null) return -1;
 		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
 		for(PotionEffect effect : activePotions) {
 			if(effect.getPotionID() == this.potionID) {
@@ -203,6 +205,7 @@ public class ElixirEffect {
 	}
 
 	public int getStrength(EntityLivingBase entity) {
+		if(entity == null) return -1;
 		Collection<PotionEffect> activePotions = entity.getActivePotionEffects();
 		for(PotionEffect effect : activePotions) {
 			if(effect.getPotionID() == this.potionID) {
