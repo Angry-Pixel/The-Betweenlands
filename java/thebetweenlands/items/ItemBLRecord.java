@@ -27,7 +27,7 @@ public class ItemBLRecord extends ItemRecord {
         this.recordName = name;
         this.maxStackSize = 1;
         records.put(recordName, this);
-        this.setUnlocalizedName("betweenlands.record" + name);
+        this.setUnlocalizedName("thebetweenlands.record" + name);
     }
 
     @Override
@@ -63,6 +63,6 @@ public class ItemBLRecord extends ItemRecord {
 
     @Override
     public ResourceLocation getRecordResource(String name) {
-        return new ResourceLocation("thebetweenlands:" + name);
+        return new ResourceLocation("thebetweenlands:record" + name);
     }
 }
