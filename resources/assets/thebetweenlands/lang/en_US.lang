@@ -460,20 +460,36 @@ item.thebetweenlands.wightsBane.name=Wight's Bane
 item.thebetweenlands.skullMask.name=Skull Mask
 
 item.thebetweenlands.recordHagDance.name=Music Disc
-item.thebetweenlands.recordMarshFire.name=Music Disc
-item.thebetweenlands.recordAstatos.name=The Legendary Disc
+item.thebetweenlands.recordLonelyFire.name=Music Disc
+item.thebetweenlands.recordOnwards.name=Music Disc
+item.thebetweenlands.recordBeneathAGreenSky.name=Music Disc
+item.thebetweenlands.recordStuckInTheMud.name=Music Disc
+item.thebetweenlands.recordWaterlogged.name=Music Disc
+item.thebetweenlands.recordWanderingWisps.name=Music Disc
+item.thebetweenlands.recorLonelyFire.name=Music Disc
+item.thebetweenlands.recordAstatos.name=Legendary Disc
 item.thebetweenlands.recordChristmasOnTheMarsh.name=Frosty Disc
 item.thebetweenlands.recordTheExplorer.name=Explorer's Disc
 item.thebetweenlands.recordBetweenYouAndMe.name=Tribeman's Disc
 item.thebetweenlands.record16612.name=Mysterious Disc
+item.thebetweenlands.recordAncient.name=Temple Disc
+item.thebetweenlands.recordDJWightsMixtape.name=DJ Wight's Hot New Mixtape
 
 item.thebetweenlands.recordAstatos.desc=Voog2 - Astatos
 item.thebetweenlands.recordBetweenYouAndMe.desc=Voog2 - Between You And Me
 item.thebetweenlands.recordChristmasOnTheMarsh.desc=Voog2 - Christmas On The Marsh
 item.thebetweenlands.recordTheExplorer.desc=Voog2 - The Explorer
 item.thebetweenlands.recordHagDance.desc=Voog2 - Hag Dance
-item.thebetweenlands.recordMarshFire.desc=Voog2 - Wetland Fire
+item.thebetweenlands.recordLonelyFire.desc=Voog2 - Lonely Fire
 item.thebetweenlands.record16612.desc=...
+item.thebetweenlands.recordBeneathAGreenSky.desc=Voog2 - Beneath A Green Sky
+item.thebetweenlands.recordOnwards.desc=Voog2 - Onwards
+item.thebetweenlands.recordDJWightsMixtape.desc=Voog2 - Rave In A Cave
+item.thebetweenlands.recordStuckInTheMud.desc=Voog2 - Stuck In The Mud
+item.thebetweenlands.recordWaterlogged.desc=Voog2 - Waterlogged
+item.thebetweenlands.recordWanderingWisps.desc=Voog2 - Wandering Wisps
+item.thebetweenlands.recordLonelyFire.desc=Voog2 - Lonely Fire
+item.thebetweenlands.recordAncient.desc=Voog2 - Ancient
 
 item.thebetweenlands.tarminion.name=Tar Minion
 
