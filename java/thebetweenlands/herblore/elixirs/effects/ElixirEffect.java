@@ -50,6 +50,11 @@ public class ElixirEffect {
 		}
 
 		@Override
+		public boolean isInstant() {
+			return this.effect.isInstant();
+		}
+
+		@Override
 		@SideOnly(Side.CLIENT)
 		public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 			if(this.icon != null) {
@@ -156,6 +161,14 @@ public class ElixirEffect {
 	protected void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double distance) { }
 
 	/**
+	 * Whether this affect should be applied instantly
+	 * @return
+	 */
+	protected boolean isInstant() {
+		return false;
+	}
+
+	/**
 	 * Calculates the modifier from the attribute and elixir strength
 	 * @param attributeModifier
 	 * @param strength
@@ -213,5 +226,20 @@ public class ElixirEffect {
 			}
 		}
 		return -1;
+	}
+
+	public PotionEffect getPotionEffect(EntityLivingBase entity) {
+		if(entity.isPotionActive(this.potionID)) {
+			return entity.getActivePotionEffect(this.potionEffect);
+		}
+		return null;
+	}
+	
+	public void removeElixir(EntityLivingBase entity) {
+		entity.removePotionEffect(this.potionID);
+	}
+	
+	public ElixirPotionEffect getPotionEffect() {
+		return this.potionEffect;
 	}
 }

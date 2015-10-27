@@ -1,4 +1,4 @@
-package thebetweenlands.herblore.elixirs.effects;
+package thebetweenlands.herblore.elixirs;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -8,6 +8,13 @@ import java.util.List;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.herblore.elixirs.effects.ElixirCatsEye;
+import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
+import thebetweenlands.herblore.elixirs.effects.ElixirFeasting;
+import thebetweenlands.herblore.elixirs.effects.ElixirHealing;
+import thebetweenlands.herblore.elixirs.effects.ElixirMasking;
+import thebetweenlands.herblore.elixirs.effects.ElixirRipening;
+import thebetweenlands.herblore.elixirs.effects.ElixirSwiftarm;
 
 public class ElixirRegistry {
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
@@ -16,7 +23,7 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_TEST = new ElixirEffect(69, "bl.elixir.test", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png"));
 
 	//Potions
-	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png"));
+	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png")).addAttributeModifier(SharedMonsterAttributes.attackDamage, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.0D, 2);
 	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png")).addAttributeModifier(SharedMonsterAttributes.movementSpeed, "645a98a2-7bfd-11e5-8bcf-feff819cdc9f", 0.2D, 2);
 	public static final ElixirEffect EFFECT_HEALING = new ElixirHealing(2, "bl.elixir.healing", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_RIPENING = new ElixirRipening(3, "bl.elixir.ripening", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
@@ -25,7 +32,7 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_HUNTERSSENSE = new ElixirEffect(6, "bl.elixir.huntersSense", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirMasking EFFECT_MASKING = new ElixirMasking(7, "bl.elixir.masking", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SWIFTARM = new ElixirSwiftarm(8, "bl.elixir.swiftarm", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
-	public static final ElixirEffect EFFECT_CATSEYES = new ElixirEffect(9, "bl.elixir.catsEyes", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
+	public static final ElixirEffect EFFECT_CATSEYES = new ElixirCatsEye(9, "bl.elixir.catsEyes", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SAGITTARIUS = new ElixirEffect(10, "bl.elixir.sagittarius", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SPIDERBREED = new ElixirEffect(11, "bl.elixir.spiderbreed", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_LIGHTWEIGHT = new ElixirEffect(12, "bl.elixir.lightweight", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));

@@ -5,7 +5,6 @@ import java.util.List;
 
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspect;
-import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 
 public class ElixirRecipes {
 	private static final List<ElixirRecipe> REGISTERED_RECIPES = new ArrayList<ElixirRecipe>();

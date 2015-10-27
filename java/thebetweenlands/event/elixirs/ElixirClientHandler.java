@@ -14,6 +14,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,8 +24,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 
 public class ElixirClientHandler {
 	public static final ElixirClientHandler INSTANCE = new ElixirClientHandler();
@@ -183,15 +186,20 @@ public class ElixirClientHandler {
 		}
 	}
 
-	/*@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onLivingUpdate(LivingUpdateEvent event) {
-
-	}
-
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderWorld(RenderWorldLastEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(player != null && player.worldObj != null) {
+			if(ElixirRegistry.EFFECT_SAGITTARIUS.isActive(player)) {
+				ArrowPredictionRenderer.render(Math.min((ElixirRegistry.EFFECT_SAGITTARIUS.getStrength(player) + 1) / 3.0F, 1.0F));
+			}
+		}
+	}
+
+	/*@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onLivingUpdate(LivingUpdateEvent event) {
 
 	}*/
 }

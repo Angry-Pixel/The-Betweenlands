@@ -12,8 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
-import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 
 public class ItemElixir extends Item {
 	//TODO: Make throwable

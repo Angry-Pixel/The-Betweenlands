@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockPoisonIvy extends BlockVine implements IShearable {

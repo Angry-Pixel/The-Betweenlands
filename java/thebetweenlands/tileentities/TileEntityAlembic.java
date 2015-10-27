@@ -19,8 +19,8 @@ import thebetweenlands.herblore.aspects.IAspect;
 import thebetweenlands.herblore.aspects.ItemAspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
-import thebetweenlands.herblore.elixirs.effects.ElixirRegistry;
 import thebetweenlands.items.BLItemRegistry;
 
 public class TileEntityAlembic extends TileEntity {
