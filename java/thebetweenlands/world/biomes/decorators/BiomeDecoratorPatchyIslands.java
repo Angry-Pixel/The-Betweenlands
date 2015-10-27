@@ -28,5 +28,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.marshMarigold);
 		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.bogBean);
 		helper.generateOneDeep(14, 6, 10, BLBlockRegistry.goldenClub);
+		helper.generateStagnantWaterPool(5);
 	}
 }

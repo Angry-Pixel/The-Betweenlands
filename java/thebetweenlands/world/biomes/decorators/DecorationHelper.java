@@ -907,7 +907,7 @@ public class DecorationHelper {
 
 			if (checkSurface(SurfaceType.MIXED, xx, yy, zz)) {
 				GEN_LIQUID_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
-				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.tarFluid);
+				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.tarFluid, false);
 			}
 		}
 	}
@@ -920,7 +920,7 @@ public class DecorationHelper {
 
 			if (checkSurface(SurfaceType.UNDERGROUND, xx, yy, zz)) {
 				GEN_LIQUID_POOL.prepare((rand.nextDouble() + 0.7D) * 1.5D);
-				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.stagnantWaterFluid);
+				GEN_LIQUID_POOL.generatePool(world, rand, xx, yy, zz, BLBlockRegistry.stagnantWaterFluid, true);
 			}
 		}
 	}

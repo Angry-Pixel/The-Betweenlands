@@ -17,14 +17,16 @@ public class WorldGenFluidPool extends WorldGenerator {
     private double size;
 
     private int minHeight = 6;
+    private boolean destroyBlocks = false;
 
     public void prepare(double size) {
         this.size = size;
     }
 
 
-    public boolean generatePool(World world, Random rand, int x, int y, int z, Block fluid) {
+    public boolean generatePool(World world, Random rand, int x, int y, int z, Block fluid, boolean destroyBlocks) {
         fillerFluid = fluid;
+        this.destroyBlocks = destroyBlocks;
         return generate(world, rand, x, y, z);
     }
 
@@ -42,7 +44,7 @@ public class WorldGenFluidPool extends WorldGenerator {
         while (world.isAirBlock(x, y, z) && y > minHeight)
             y--;
 
-        if (y <= minHeight || world.isAirBlock(x, y, z))
+        if (y <= minHeight || (world.isAirBlock(x, y, z) && !destroyBlocks))
             return false;
         y -= 4;
 
@@ -99,7 +101,6 @@ public class WorldGenFluidPool extends WorldGenerator {
                 for (yy = 0; yy < 8; ++yy)
                     if (placeFluid[(xx * 16 + zz) * 8 + yy])
                         world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
-
         return true;
     }
 
