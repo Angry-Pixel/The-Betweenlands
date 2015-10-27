@@ -63,6 +63,6 @@ public class ItemBLRecord extends ItemRecord {
 
     @Override
     public ResourceLocation getRecordResource(String name) {
-        return new ResourceLocation("thebetweenlands:record" + name);
+        return new ResourceLocation("thebetweenlands:" + name);
     }
 }
