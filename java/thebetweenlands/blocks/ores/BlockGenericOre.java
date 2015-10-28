@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 import java.util.ArrayList;
 import java.util.Random;

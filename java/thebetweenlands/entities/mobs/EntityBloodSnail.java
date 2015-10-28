@@ -21,8 +21,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntitySnailPoisonJet;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class EntityBloodSnail extends EntityMob implements IEntityBL {
 
@@ -63,12 +63,12 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (isBurning())
-			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
 		else
-			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
 
 		if (rand.nextBoolean())
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.BLOOD_SNAIL_SHELL, 1), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.BLOOD_SNAIL_SHELL, 1), 0.0F);
 	}
 
 	@Override

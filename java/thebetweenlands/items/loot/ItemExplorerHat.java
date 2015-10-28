@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
 import thebetweenlands.recipes.BLMaterials;
 
 /**

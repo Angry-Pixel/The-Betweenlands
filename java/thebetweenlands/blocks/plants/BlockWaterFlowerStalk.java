@@ -17,8 +17,8 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 import java.util.Random;
 
@@ -84,7 +84,7 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
+		return ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItemDamage();
 	}
 
     @Override

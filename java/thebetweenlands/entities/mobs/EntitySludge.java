@@ -16,8 +16,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.ControlledAnimation;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
@@ -58,7 +58,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (rand.nextInt(5) == 0)
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL, 3 + looting), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLUDGE_BALL, 3 + looting), 0.0F);
 	}
 
 	@Override

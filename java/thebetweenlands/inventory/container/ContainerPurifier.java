@@ -7,7 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
@@ -36,7 +36,7 @@ public class ContainerPurifier extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 			if (slotIndex > 2) {
-				if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()) {
+				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
 					if (!mergeItemStack(stack1, 0, 1, false))
 						return null;
 				} else if (!mergeItemStack(stack1, 1, 2, true))

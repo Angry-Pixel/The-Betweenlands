@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class ItemNettleSoup extends ItemFood {
 
@@ -14,7 +14,7 @@ public class ItemNettleSoup extends ItemFood {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.WEEDWOOD_BOWL);
+		return ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL);
 	}
 
 	@Override

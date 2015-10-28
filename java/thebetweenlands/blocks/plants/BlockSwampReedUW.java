@@ -18,8 +18,8 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.SwampReedUWRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 	public BlockSwampReedUW() {
@@ -75,7 +75,7 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
+		return ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItemDamage();
 	}
 
 	@Override
@@ -85,12 +85,12 @@ public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 
 	@Override
 	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItemDamage();
+		return ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItemDamage();
 	}
 
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED).getItem();
+		return ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItem();
 	}
 
 	@Override

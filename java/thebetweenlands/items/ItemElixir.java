@@ -5,19 +5,26 @@ import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.herblore.elixirs.ElixirRecipe;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 
 public class ItemElixir extends Item {
 	//TODO: Make throwable
-	
+
+	@SideOnly(Side.CLIENT)
+	private IIcon iconLiquid;
+
 	private final List<ElixirEffect> effects = new ArrayList<ElixirEffect>();
 
 	public ItemElixir() {
@@ -28,6 +35,8 @@ public class ItemElixir extends Item {
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
+
+		this.setTextureName("thebetweenlands:strictlyHerblore/misc/vialGreen");
 	}
 
 	private ElixirEffect getElixirByID(int id) {
@@ -35,6 +44,41 @@ public class ItemElixir extends Item {
 			if(id == effect.getID()) return effect;
 		}
 		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister reg) {
+		super.registerIcons(reg);
+		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialLiquid");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int pass) {
+		if(pass == 0) {
+			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
+			if(effect != null) {
+				ElixirRecipe recipe = ElixirRecipes.getFromEffect(effect);
+				if(recipe != null) {
+					return recipe.infusionFinishedColor;
+				}
+			}
+		}
+		return 0xFFFFFFFF;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamageForRenderPass(int damage, int pass)
+	{
+		return pass == 0 ? this.iconLiquid : super.getIconFromDamageForRenderPass(damage, pass);
 	}
 
 	@Override

@@ -12,8 +12,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 
 @SideOnly(Side.CLIENT)
@@ -49,7 +49,7 @@ public class GuiBLFurnace extends GuiContainer {
 		}
 
 		if (tileFurnace.getStackInSlot(3) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX).getIconIndex(), 26, 35);
+			renderSlot(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX).getIconIndex(), 26, 35);
 	}
 
 	private void renderSlot(IIcon icon, int iconX, int iconY) {

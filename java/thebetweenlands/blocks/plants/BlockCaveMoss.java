@@ -1,28 +1,24 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.stalactite.StalactiteHelper;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.utils.Point2D;
-import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
 
-public class BlockCaveMoss extends BlockBush {
+public class BlockCaveMoss extends BlockBush implements IShearable {
 	private IIcon lower;
 
 	public BlockCaveMoss() {
@@ -59,11 +55,6 @@ public class BlockCaveMoss extends BlockBush {
 	@Override
 	public int quantityDropped(int meta, int fortune, Random random) {
 		return random.nextInt(2);
-	}
-
-	@Override
-	public Item getItemDropped(int id, Random random, int fortune) {
-		return BLItemRegistry.caveMoss;
 	}
 
 	@Override
@@ -108,5 +99,23 @@ public class BlockCaveMoss extends BlockBush {
 
 	protected boolean isValidBlock(Block block) {
 		return block == BLBlockRegistry.betweenstone || block == this;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return item.getItem() == BLItemRegistry.sickle;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(new ItemStack(BLItemRegistry.caveMoss));
+		return dropList;
 	}
 }

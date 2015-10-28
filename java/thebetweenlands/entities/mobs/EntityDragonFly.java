@@ -14,8 +14,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -78,7 +78,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 		int chance = rand.nextInt(4) + rand.nextInt(1 + looting);
 		int amount;
 		for (amount = 0; amount < chance; ++amount) {
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.DRAGONFLY_WING, 4), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING, 4), 0.0F);
 		}
 	}
 

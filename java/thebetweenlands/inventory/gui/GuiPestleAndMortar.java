@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 
 public class GuiPestleAndMortar extends GuiContainer {
@@ -35,7 +35,7 @@ public class GuiPestleAndMortar extends GuiContainer {
 		drawTexturedModalRect(xx + 45, yy + 69, 0, 166, progress, 6);
 		
 		if (pestleAndMortar.getStackInSlot(3) == null)
-			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 79, 8);
+			renderSlot(ItemGeneric.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 79, 8);
 	}
 
 	@Override

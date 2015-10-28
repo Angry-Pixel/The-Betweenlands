@@ -1,5 +1,8 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -12,17 +15,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
-
-import java.util.ArrayList;
-import java.util.Random;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 	public IIcon iconWaterPlantBottom;
@@ -85,6 +85,19 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		this.checkAndDropBlock(world, x, y, z);
+		if (world.getBlock(x, y + 1, z) == BLBlockRegistry.swampWater) {
+			int meta = world.getBlockMetadata(x, y, z);
+			if (meta == 10) {
+				if(world.isAirBlock(x, y + 1, z)) {
+					world.setBlock(x, y + 1, z, BLBlockRegistry.swampKelp);
+				} else {
+					world.setBlock(x, y + 1, z, this);
+				}
+				world.setBlockMetadataWithNotify(x, y, z, 0, 4);
+			} else {
+				world.setBlockMetadataWithNotify(x, y, z, meta + 1, 4);
+			}
+		}
 	}
 
 	@Override
@@ -103,7 +116,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(BLItemRegistry.swampKelp, 1 + fortune));
+		drops.add(ItemGeneric.createStack(EnumItemGeneric.SWAMP_KELP, 1 + fortune));
 		return drops;
 	}
 

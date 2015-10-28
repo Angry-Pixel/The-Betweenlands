@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -198,9 +198,9 @@ public class BlockRubberTap extends Block {
 		if(world.isRemote) return new ArrayList<ItemStack>();
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		if(meta < 5) {
-			drops.add(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucket, 1, 0));
+			drops.add(ItemGeneric.createStack(BLItemRegistry.weedwoodBucket, 1, 0));
 		} else {
-			drops.add(ItemMaterialsBL.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0));
+			drops.add(ItemGeneric.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0));
 		}
 		return drops;
 	}

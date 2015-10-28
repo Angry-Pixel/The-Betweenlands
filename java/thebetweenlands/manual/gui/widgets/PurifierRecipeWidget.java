@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.PurifierRecipe;
 
@@ -54,7 +54,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         renderItem(newX, newY, inputs.get(currentRecipe), false);
-        renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.materialsBL, 1, ItemMaterialsBL.EnumMaterialsBL.SULFUR.ordinal()), false);
+        renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
         renderItem(newX + 60, newY + 20, PurifierRecipe.getRecipeOutput(inputs.get(currentRecipe)), false);
 
         if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {

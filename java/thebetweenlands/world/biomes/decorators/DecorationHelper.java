@@ -639,8 +639,8 @@ public class DecorationHelper {
 				int z = this.z + this.offsetXZ();
 				Block cBlock = this.world.getBlock(x, y, z);
 				if (cBlock == BLBlockRegistry.swampWater) {
-					if (BLBlockRegistry.waterWeedsSmall.canPlaceBlockAt(this.world, x, y, z)) {
-						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeedsSmall, 0, 3);
+					if (BLBlockRegistry.waterWeeds.canPlaceBlockAt(this.world, x, y, z)) {
+						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeeds, 0, 3);
 					}
 				}
 			}
@@ -651,8 +651,8 @@ public class DecorationHelper {
 				int z = this.z + this.offsetXZ();
 				Block cBlock = this.world.getBlock(x, y, z);
 				if (cBlock == BLBlockRegistry.swampWater) {
-					if (BLBlockRegistry.waterWeedsSmall.canPlaceBlockAt(this.world, x, y, z)) {
-						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeedsSmall, 0, 3);
+					if (BLBlockRegistry.waterWeeds.canPlaceBlockAt(this.world, x, y, z)) {
+						this.world.setBlock(x, y, z, BLBlockRegistry.waterWeeds, 0, 3);
 					}
 				}
 			}
@@ -842,7 +842,7 @@ public class DecorationHelper {
 						blockAbove = world.getBlock(bx, by+1, bz);
 						if (block == BLBlockRegistry.mud && blockAbove == BLBlockRegistry.swampWater) {
 							for(int yo = 1; yo < this.rand.nextInt(WorldProviderBetweenlands.LAYER_HEIGHT - by + 1); yo++) {
-								this.world.setBlock(bx, by+yo, bz, BLBlockRegistry.waterWeeds);
+								this.world.setBlock(bx, by+yo, bz, BLBlockRegistry.swampKelp);
 							}
 						}
 					}

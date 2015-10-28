@@ -20,8 +20,8 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -47,7 +47,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(ItemMaterialsBL.createStack(EnumMaterialsBL.SWAMP_REED, 1 + fortune));
+		drops.add(ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED, 1 + fortune));
 		return drops;
 	}
 

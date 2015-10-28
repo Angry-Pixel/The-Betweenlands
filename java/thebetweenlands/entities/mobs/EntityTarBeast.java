@@ -30,8 +30,8 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.PickaxeBL;
 import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.SwordBL;
@@ -172,12 +172,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_DRIP), 0F);
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 0F);
 	}
 
 	@Override
 	protected void dropRareDrop(int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_BEAST_HEART), 0F);
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART), 0F);
 	}
 
 	@Override

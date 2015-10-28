@@ -16,8 +16,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.CompostRecipe;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 
@@ -97,7 +97,7 @@ public class BlockCompostBin extends BlockContainer
 			{
 				if (tile.getTotalCompostedAmount() >= TileEntityCompostBin.COMPOST_PER_ITEM)
 				{
-					world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, ItemMaterialsBL.createStack(EnumMaterialsBL.COMPOST)));
+					world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, ItemGeneric.createStack(EnumItemGeneric.COMPOST)));
 					tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM);
 				}
 				else if (tile.getTotalCompostAmount() > tile.getTotalCompostedAmount())

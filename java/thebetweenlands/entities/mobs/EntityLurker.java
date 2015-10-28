@@ -20,8 +20,8 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -451,7 +451,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.LURKER_SKIN, 3), 0F);
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN, 3), 0F);
 	}
 
 	@Override

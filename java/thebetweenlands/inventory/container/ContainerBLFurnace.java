@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import thebetweenlands.inventory.slot.SlotRestriction;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 
 public class ContainerBLFurnace extends Container {
@@ -27,7 +27,7 @@ public class ContainerBLFurnace extends Container {
         addSlotToContainer(new Slot(tile, 0, 56, 17));
         addSlotToContainer(new Slot(tile, 1, 56, 53));
         addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 35));
-        Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), 64);
+        Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
         addSlotToContainer(fluxSlot);
         int i;
 
@@ -107,7 +107,7 @@ public class ContainerBLFurnace extends Container {
                     if (!mergeItemStack(itemstack1, 0, 1, false))
                         return null;
                 }
-                else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMaterialsBL && itemstack.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()) {
+                else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
                     if (!mergeItemStack(itemstack1, 1, 2, false))
                         return null;
                 }

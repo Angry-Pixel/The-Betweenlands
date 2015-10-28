@@ -1,30 +1,28 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ISyrmoriteShearable;
 
-import java.util.Random;
-
-public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
+public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyrmoriteShearable {
 	public IIcon iconWaterWeeds;
 
 	public BlockWaterWeeds() {
@@ -108,5 +106,10 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable {
 		if(world.rand.nextInt(35) == 0) {
 			BLParticle.WATER_BUG.spawn(world, x, y, z);
 		}
+	}
+
+	@Override
+	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

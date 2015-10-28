@@ -11,8 +11,8 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import thebetweenlands.inventory.slot.SlotRestriction;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 
 public class ContainerBLDualFurnace extends Container {
@@ -30,13 +30,13 @@ public class ContainerBLDualFurnace extends Container {
 		addSlotToContainer(new Slot(tile, 0, 56, 21));
 		addSlotToContainer(new Slot(tile, 1, 56, 57));
 		addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 39));
-		Slot fluxSlot1 = new SlotRestriction(tile, 6, 26, 39, ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), 64);
+		Slot fluxSlot1 = new SlotRestriction(tile, 6, 26, 39, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
 		addSlotToContainer(fluxSlot1);
 
 		addSlotToContainer(new Slot(tile, 3, 56, 92));
 		addSlotToContainer(new Slot(tile, 4, 56, 128));
 		addSlotToContainer(new SlotFurnace(inventory.player, tile, 5, 116, 110));
-		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX), 64);
+		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
 		addSlotToContainer(fluxSlot2);
 
 		int i;
@@ -143,7 +143,7 @@ public class ContainerBLDualFurnace extends Container {
 					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 3, 4, false))
 						return null;
 				}
-				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMaterialsBL && itemstack.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()) {
+				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
 					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 4, 5, false))
 						return null;
 				}

@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
@@ -28,7 +28,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIPanic(this, 0.4D));
 		tasks.addTask(2, new EntityAIMate(this, 0.4D));
-		tasks.addTask(3, new EntityAITempt(this, 0.4D, ItemMaterialsBL.createStack(EnumMaterialsBL.SLUDGE_BALL).getItem(), false));
+		tasks.addTask(3, new EntityAITempt(this, 0.4D, ItemGeneric.createStack(EnumItemGeneric.SLUDGE_BALL).getItem(), false));
 		tasks.addTask(5, new EntityAIWander(this, 0.4D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
@@ -93,12 +93,12 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (isBurning())
-			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
 		else
-			entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
 		
 		if (rand.nextBoolean())
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.MIRE_SNAIL_SHELL, 1), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.MIRE_SNAIL_SHELL, 1), 0.0F);
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean isBreedingItem(ItemStack is) {
-		return is != null && is.getItem() == BLItemRegistry.materialsBL && is.getItemDamage() == EnumMaterialsBL.SLUDGE_BALL.ordinal();
+		return is != null && is.getItem() == BLItemRegistry.itemsGeneric && is.getItemDamage() == EnumItemGeneric.SLUDGE_BALL.ordinal();
 	}
 
 	@Override

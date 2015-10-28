@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.PurifierRecipe;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler {
@@ -222,7 +222,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	}
 
 	public boolean hasFuel() {
-		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.materialsBL && getStackInSlot(0).getItemDamage() == EnumMaterialsBL.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
+		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.itemsGeneric && getStackInSlot(0).getItemDamage() == EnumItemGeneric.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
 	}
 
 	private boolean outputIsFull() {

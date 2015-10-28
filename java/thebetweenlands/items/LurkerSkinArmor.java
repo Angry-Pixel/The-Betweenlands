@@ -10,7 +10,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.BLMaterials;
 
 public class LurkerSkinArmor extends ItemArmor {
@@ -30,7 +30,7 @@ public class LurkerSkinArmor extends ItemArmor {
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-		return material.getItem() == BLItemRegistry.materialsBL && material.getItemDamage() == EnumMaterialsBL.LURKER_SKIN.ordinal();
+		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.LURKER_SKIN.ordinal();
 	}
 
 	@Override

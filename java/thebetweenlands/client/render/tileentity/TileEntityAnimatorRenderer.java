@@ -23,8 +23,8 @@ import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.SpawnEggs;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
@@ -107,7 +107,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 				GL11.glScaled(0.125D, 0.125D, 0.125D);
 				GL11.glRotated(90, 1, 0, 0);
 				GL11.glRotated(rand.nextFloat() * 360.0F, 0, 0, 1);
-				ItemRenderHelper.renderItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 0);
+				ItemRenderHelper.renderItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 0);
 				GL11.glPopMatrix();
 			}
 			GL11.glPopMatrix();
@@ -161,7 +161,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
 			points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
 			if (te.getWorldObj().rand.nextInt(15) == 0) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 0.01F));
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, ItemGeneric.createStack(EnumItemGeneric.SULFUR).getIconIndex(), 0.01F));
 			}
 		}
 

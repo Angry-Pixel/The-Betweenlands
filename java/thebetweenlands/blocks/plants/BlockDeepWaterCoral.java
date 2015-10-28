@@ -1,5 +1,8 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -7,22 +10,24 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ISyrmoriteShearable;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 
-import java.util.Random;
-
-public class BlockDeepWaterCoral extends BlockSwampWater implements IPlantable {
+public class BlockDeepWaterCoral extends BlockSwampWater implements IPlantable, IShearable, ISyrmoriteShearable {
 	public IIcon iconDeepWaterCoral;
 
 	public BlockDeepWaterCoral() {
@@ -85,22 +90,7 @@ public class BlockDeepWaterCoral extends BlockSwampWater implements IPlantable {
 
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL).getItemDamage();
-	}
-
-	@Override
-	public int quantityDropped(Random rnd) {
-        return 1;
-    }
-	
-	@Override
-	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL).getItemDamage();
-    }
-	
-	@Override
-	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.DEEP_WATER_CORAL).getItem();
+		return ItemGenericPlantDrop.createStack(EnumItemPlantDrop.DEEP_WATER_CORAL).getItemDamage();
 	}
 
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
@@ -112,5 +102,28 @@ public class BlockDeepWaterCoral extends BlockSwampWater implements IPlantable {
 
 	public boolean canPlaceBlockOn(Block block) {
 		return block == BLBlockRegistry.mud;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return item.getItem() == BLItemRegistry.sickle;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.DEEP_WATER_CORAL));
+		return dropList;
+	}
+
+	@Override
+	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

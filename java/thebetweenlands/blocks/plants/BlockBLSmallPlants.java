@@ -1,5 +1,9 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -15,21 +19,22 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ISyrmoriteShearable;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-public class BlockBLSmallPlants extends BlockTallGrass {
+public class BlockBLSmallPlants extends BlockTallGrass implements IShearable, ISyrmoriteShearable {
 	protected final String name;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon spoopyBlockIcon;
-	
+
 	public BlockBLSmallPlants(String type) {
 		super();
 		name = type;
@@ -80,12 +85,6 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		return ret;
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public int getRenderColor(int meta) {
 		return 0xFFFFFF;
@@ -122,4 +121,73 @@ public class BlockBLSmallPlants extends BlockTallGrass {
 		}
 	}
 
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return item.getItem() == BLItemRegistry.sickle;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		switch(this.name) {
+		case "arrowArum":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));
+			break;
+		case "blueEyedGrass":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BLUE_EYED_GRASS_FLOWERS));
+			break;
+		case "blueIris":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BLUE_IRIS_PETAL));
+			break;
+		case "boneset":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BONESET_FLOWERS));
+			break;
+		case "bottleBrushGrass":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BOTTLE_BRUSH_GRASS_BLADES));
+			break;
+		case "buttonBush":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BUTTON_BUSH_FLOWERS));
+			break;
+		case "cattail":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CATTAIL_HEAD));
+			break;
+		case "copperIris":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.COPPER_IRIS_PETALS));
+			break;
+		case "marshHibiscus":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER));
+			break;
+		case "marshMallow":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_MALLOW_FLOWER));
+			break;
+		case "nettle":
+		case "nettleFlowered":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
+			break;
+		case "pickerelWeed":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PICKEREL_WEED_FLOWER));
+			break;
+		case "shoots":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SHOOT_LEAVES));
+			break;
+		case "sludgecreep":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SLUDGECREEP_LEAVES));
+			break;
+		case "softRush":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SOFT_RUSH_LEAVES));
+			break;
+		}
+		return dropList;
+	}
+
+	@Override
+	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
 }

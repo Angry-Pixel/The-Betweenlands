@@ -15,8 +15,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
@@ -76,9 +76,9 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		if (recentlyHit) {
 			for (count = 0; count < amount; ++count) {
 				if (rand.nextBoolean())
-					entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.ANGLER_TOOTH, 3), 0.0F);
+					entityDropItem(ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH, 3), 0.0F);
 				else
-					entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.anglerMeatRaw, 1, 0), 0.0F);
+					entityDropItem(ItemGeneric.createStack(BLItemRegistry.anglerMeatRaw, 1, 0), 0.0F);
 			}
 		}
 	}

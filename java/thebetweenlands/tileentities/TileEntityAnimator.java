@@ -11,13 +11,13 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.WeightedRandom;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.WeightedRandomItem;
 
 public class TileEntityAnimator extends TileEntityBasicInventory {
 
-	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.VALONITE_SHARD), 20), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.OCTINE_INGOT), 30), new WeightedRandomItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR), 40) };
+	public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
 	private int prevStackSize = 0;
 	private Item prevItem;
 	public int progress, life, itemsConsumed = 0, itemCount = 32;
@@ -55,8 +55,8 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			}
 		}
 		if (itemsConsumed >= itemCount && isSlotInUse(0) && isSlotInUse(1) && !lifeDepleted) {
-			if (inventory[0].getItem().equals(BLItemRegistry.materialsBL) && inventory[0].getItemDamage() == EnumMaterialsBL.TAR_BEAST_HEART.ordinal()) {
-				setInventorySlotContents(0, ItemMaterialsBL.createStack(EnumMaterialsBL.TAR_BEAST_HEART_ANIMATED));
+			if (inventory[0].getItem().equals(BLItemRegistry.itemsGeneric) && inventory[0].getItemDamage() == EnumItemGeneric.TAR_BEAST_HEART.ordinal()) {
+				setInventorySlotContents(0, ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
 				inventory[1].setItemDamage(inventory[1].getItemDamage() + 32);
 			}
 			else if (inventory[0].getItem().equals(BLItemRegistry.scroll)) {
@@ -93,7 +93,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isSulfurInslot() {
-		return isSlotInUse(2) && inventory[2].getItem() == BLItemRegistry.materialsBL && inventory[2].getItemDamage() == EnumMaterialsBL.SULFUR.ordinal();
+		return isSlotInUse(2) && inventory[2].getItem() == BLItemRegistry.itemsGeneric && inventory[2].getItemDamage() == EnumItemGeneric.SULFUR.ordinal();
 	}
 
 	public boolean isSlotInUse(int slot) {
@@ -101,7 +101,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isValidFocalItem() {
-		return inventory[0].getItem() instanceof ItemMonsterPlacer ? true : inventory[0].getItem().equals(BLItemRegistry.scroll) ? true : inventory[0].getItem().equals(BLItemRegistry.materialsBL) && inventory[0].getItemDamage() == EnumMaterialsBL.TAR_BEAST_HEART.ordinal() ? true: false;
+		return inventory[0].getItem() instanceof ItemMonsterPlacer ? true : inventory[0].getItem().equals(BLItemRegistry.scroll) ? true : inventory[0].getItem().equals(BLItemRegistry.itemsGeneric) && inventory[0].getItemDamage() == EnumItemGeneric.TAR_BEAST_HEART.ordinal() ? true: false;
 	}
 	
 	public boolean isFocalItemSpawnEgg() {

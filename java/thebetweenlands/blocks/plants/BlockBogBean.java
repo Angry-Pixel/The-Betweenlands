@@ -1,25 +1,33 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ISyrmoriteShearable;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 
-import java.util.Random;
-
-public class BlockBogBean extends BlockSwampWater implements IPlantable {
+public class BlockBogBean extends BlockSwampWater implements IPlantable, IShearable, ISyrmoriteShearable {
 	public IIcon iconBogBeanBottom;
 	public IIcon iconBogBeanTop;
 
@@ -81,11 +89,11 @@ public class BlockBogBean extends BlockSwampWater implements IPlantable {
 		this.checkAndDropBlock(world, x, y, z);
 	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
-	
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return false;
+	}
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -96,5 +104,28 @@ public class BlockBogBean extends BlockSwampWater implements IPlantable {
 
 	protected boolean canPlaceBlockOn(Block block) {
 		return block instanceof BlockBogBean || block == BLBlockRegistry.mud;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return item.getItem() == BLItemRegistry.sickle;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BOG_BEAN_FLOWER));
+		return dropList;
+	}
+
+	@Override
+	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

@@ -16,8 +16,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntitySwampHag extends EntityMob implements IEntityBL {
@@ -157,6 +157,6 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SLIMY_BONE, 3), 0F);
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 3), 0F);
 	}
 }

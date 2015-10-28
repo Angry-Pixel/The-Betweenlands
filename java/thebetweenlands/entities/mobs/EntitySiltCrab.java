@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	
@@ -66,7 +66,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemMaterialsBL.createStack(BLItemRegistry.siltCrabClaw, 2, 0), 0.0F);
+		entityDropItem(ItemGeneric.createStack(BLItemRegistry.siltCrabClaw, 2, 0), 0.0F);
 	}
 
 	@Override

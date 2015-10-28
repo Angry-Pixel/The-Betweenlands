@@ -1,5 +1,9 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -16,21 +20,21 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ISyrmoriteShearable;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearable {
+public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearable, ISyrmoriteShearable {
 	@SideOnly(Side.CLIENT)
 	public IIcon topIcon, bottomIcon, spoopyTopIcon, spoopyBottomIcon;
 	private final String name;
 	Random rnd = new Random();
 
 	private int renderType = -1;
-	
+
 	public BlockDoubleHeightPlant(String name) {
 		this(name, 1);
 	}
@@ -49,29 +53,9 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearab
 		this.renderType = renderType;
 		return this;
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-	}
-
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
-		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		if (world.rand.nextInt(8) != 0)
-			return drops;
-
-		if ("Sundew".equals(name))
-			drops.add(new ItemStack(this, 1));
-		
-		if ("CardinalFlower".equals(name))
-			drops.add(new ItemStack(this, 1));
-		
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		if (!"DoubleSwampTallgrass".equals(name)) ret.add(new ItemStack(this));
-		if (!"Phragmites".equals(name)) ret.add(new ItemStack(this));
-		if (!"TallCattail".equals(name)) ret.add(new ItemStack(this));
-		if (!"Broomsedge".equals(name)) ret.add(new ItemStack(this));
-		return drops;
 	}
 
 	@Override
@@ -128,14 +112,41 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IShearab
 	}
 
 	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-		return true;
+		return item.getItem() == BLItemRegistry.sickle;
 	}
 
 	@Override
 	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(this, 1, world.getBlockMetadata(x, y, z) & 7));
-		return ret;
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		switch(this.name) {
+		case "BroomSedge":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BROOM_SEDGE_LEAVES));
+			break;
+		case "CardinalFlower":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CARDINAL_FLOWER_PETALS));
+			break;
+		case "Phragmites":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PHRAGMITE_STEMS));
+			break;
+		case "Sundew":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SUNDEW_HEAD));
+			break;
+		case "DoubleSwampTallgrass":
+			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES));
+			break;
+		}
+		return dropList;
+	}
+
+	@Override
+	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

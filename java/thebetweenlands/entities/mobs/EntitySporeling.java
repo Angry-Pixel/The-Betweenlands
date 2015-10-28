@@ -16,8 +16,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public boolean isFalling;
@@ -132,7 +132,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		int chance = rand.nextInt(4) + rand.nextInt(1 + looting);
 		int amount;
 		for (amount = 0; amount < chance; ++amount)
-			entityDropItem(ItemMaterialsBL.createStack(EnumMaterialsBL.SPORES), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SPORES), 0.0F);
 	}
 
 	@Override

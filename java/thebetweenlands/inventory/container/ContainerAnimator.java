@@ -10,7 +10,7 @@ import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.inventory.slot.SlotRestrictionNoMeta;
 import thebetweenlands.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,7 +27,7 @@ public class ContainerAnimator extends Container {
 
 		addSlotToContainer(new SlotSizeRestriction(tile, 0, 79, 23, 1));
 		addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 34, 57, new ItemStack(BLItemRegistry.lifeCrystal), 1));
-		addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(BLItemRegistry.materialsBL, 1, EnumMaterialsBL.SULFUR.ordinal()), 64));
+		addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.ordinal()), 64));
 
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 9; k++)
@@ -44,13 +44,13 @@ public class ContainerAnimator extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 			if (slotIndex > 2) {
-				if (stack1.getItem() == BLItemRegistry.materialsBL && stack1.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal())
+				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.ordinal())
 					if (!mergeItemStack(stack1, 2, 3, true))
 						return null;
 				if (stack1.getItem() == BLItemRegistry.lifeCrystal)
 					if (!mergeItemStack(stack1, 1, 2, true))
 						return null;
-				if (stack1.stackSize == 1 && stack1 != new ItemStack(BLItemRegistry.materialsBL, 1, EnumMaterialsBL.SULFUR.ordinal()) && stack1.getItem() != BLItemRegistry.lifeCrystal)
+				if (stack1.stackSize == 1 && stack1 != new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.ordinal()) && stack1.getItem() != BLItemRegistry.lifeCrystal)
 					if (!mergeItemStack(stack1, 0, 1, true))
 						return null;
 			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))

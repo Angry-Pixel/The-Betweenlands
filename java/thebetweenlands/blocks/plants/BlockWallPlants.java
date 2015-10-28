@@ -29,7 +29,8 @@ import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.block.ItemBlockPlantSmall;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -345,23 +346,6 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-		return true;
-	}
-
-	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		int meta = world.getBlockMetadata(x, y, z);
-		if (meta == 2 || meta == 3 || meta == 4 || meta == 5 || meta == 6 || meta == 7)
-			meta = META_MOSS;
-		if (meta == 8 || meta == 9 || meta == 10 || meta == 11 || meta == 12 || meta == 13)
-			meta = META_LICHEN;
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(this, 1, meta));
-		return ret;
-	}
-
-	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = world.getBlockMetadata(x, y, z);
 		int attempt = 0;
@@ -457,22 +441,34 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	public Class<? extends ItemBlock> getItemBlockClass() {
 		return ItemBlockPlantSmall.class;
 	}
-	
-	@Override
-	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
-		if (!world.isRemote && meta > 1 && meta <= 7) {
-			int dropChance = 4;
-			if(fortune > 0 && fortune <= 4){
-				dropChance -= fortune;
-			}
-			if(world.rand.nextInt(dropChance) == 0){
-				this.dropBlockAsItem(world, x, y, z, new ItemStack(BLItemRegistry.materialsBL, 1, 15));
-			}
-		}
-	}
 
 	@Override
 	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		return drops;
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		int meta = world.getBlockMetadata(x, y, z);
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		if (meta == 2 || meta == 3 || meta == 4 || meta == 5 || meta == 6 || meta == 7) {
+			meta = META_MOSS;
+			ret.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS));
+		} else if (meta == 8 || meta == 9 || meta == 10 || meta == 11 || meta == 12 || meta == 13) {
+			meta = META_LICHEN;
+			ret.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.LICHEN));
+		}
+		return ret;
 	}
 }

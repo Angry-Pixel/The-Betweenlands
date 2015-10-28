@@ -10,8 +10,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 
 @SideOnly(Side.CLIENT)
@@ -55,9 +55,9 @@ public class GuiBLDualFurnace extends GuiContainer {
             drawTexturedModalRect(k + 79, l + 109, 176, 14, i1 + 1, 16);
         }
         if (tileFurnace.getStackInSlot(6) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX).getIconIndex(), 26, 39);
+			renderSlot(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX).getIconIndex(), 26, 39);
         if (tileFurnace.getStackInSlot(7) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.LIMESTONE_FLUX).getIconIndex(), 26, 110);
+			renderSlot(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX).getIconIndex(), 26, 110);
 	}
 
 	private void renderSlot(IIcon icon, int iconX, int iconY) {

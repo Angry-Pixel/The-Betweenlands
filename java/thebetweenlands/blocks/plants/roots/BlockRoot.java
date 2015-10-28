@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -59,7 +59,7 @@ public class BlockRoot extends Block {
 
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+		return ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT).getItemDamage();
 	}
 
 	@Override
@@ -69,12 +69,12 @@ public class BlockRoot extends Block {
 
 	@Override
 	public int damageDropped(int p_149692_1_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItemDamage();
+		return ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT).getItemDamage();
 	}
 
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
-		return ItemMaterialsBL.createStack(EnumMaterialsBL.TANGLED_ROOT).getItem();
+		return ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT).getItem();
 	}
 
 	protected void checkAndDropBlock(World world, int x, int y, int z) {

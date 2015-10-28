@@ -23,6 +23,8 @@ public class TileEntityAlembicRenderer extends TileEntitySpecialRenderer {
 		int meta = alembic.getBlockMetadata();
 		bindTexture(TEXTURE);
 		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScalef(1F, -1F, -1F);
 		switch (meta) {

@@ -20,8 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 
 public class TileEntityBLDualFurnace extends TileEntity implements ISidedInventory
 {
@@ -310,7 +310,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
 				furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(ItemMaterialsBL.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
+			if(ItemGeneric.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[6] != null) {
 					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
 					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
@@ -339,7 +339,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			else if (furnaceItemStacks[5].getItem() == itemstack.getItem())
 				furnaceItemStacks[5].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(ItemMaterialsBL.isIngotFromOre(furnaceItemStacks[3], furnaceItemStacks[5])) {
+			if(ItemGeneric.isIngotFromOre(furnaceItemStacks[3], furnaceItemStacks[5])) {
 				if(furnaceItemStacks[7] != null) {
 					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
 					if(useFlux && furnaceItemStacks[5].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[5].stackSize + 1 <= furnaceItemStacks[5].getMaxStackSize()) {
@@ -382,7 +382,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD")) return 200;
 			if (item == Items.stick) return 100;
 			if (item == Items.coal) return 1600;
-			if (item instanceof ItemMaterialsBL && itemstack.getItemDamage() == EnumMaterialsBL.SULFUR.ordinal()) return 1600;
+			if (item instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) return 1600;
 			if (item == Items.lava_bucket) return 20000;
 			if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
 			if (item == Items.blaze_rod) return 2400;

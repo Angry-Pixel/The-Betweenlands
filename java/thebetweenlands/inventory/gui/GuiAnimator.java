@@ -10,8 +10,8 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemMaterialsBL;
-import thebetweenlands.items.ItemMaterialsBL.EnumMaterialsBL;
+import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -66,9 +66,9 @@ public class GuiAnimator extends GuiContainer {
 			}
 		}
 		if (tile.getStackInSlot(1) == null)
-			renderSlot(ItemMaterialsBL.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 34, 57);
+			renderSlot(ItemGeneric.createStack(BLItemRegistry.lifeCrystal, 1, 0).getIconIndex(), 34, 57);
 		if (tile.getStackInSlot(2) == null)
-			renderSlot(ItemMaterialsBL.createStack(EnumMaterialsBL.SULFUR).getIconIndex(), 124, 57);
+			renderSlot(ItemGeneric.createStack(EnumItemGeneric.SULFUR).getIconIndex(), 124, 57);
 	}
 
 	private void renderSlot(IIcon icon, int iconX, int iconY) {
