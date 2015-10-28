@@ -46,7 +46,7 @@ public class ElixirCommonHandler {
 	@SubscribeEvent
 	public void onSetAttackTarget(LivingSetAttackTargetEvent event) {
 		if(!this.ignoreSetAttackTarget) {
-			if(((EntityLiving)event.entityLiving).getAttackTarget() != null && !ElixirRegistry.EFFECT_MASKING.canEntityBeSeenBy(((EntityLiving)event.entityLiving).getAttackTarget(), event.entityLiving)) {
+			if(event.entityLiving instanceof EntityLiving && ((EntityLiving)event.entityLiving).getAttackTarget() != null && !ElixirRegistry.EFFECT_MASKING.canEntityBeSeenBy(((EntityLiving)event.entityLiving).getAttackTarget(), event.entityLiving)) {
 				this.ignoreSetAttackTarget = true;
 				((EntityLiving)event.entityLiving).setAttackTarget(null);
 			}
