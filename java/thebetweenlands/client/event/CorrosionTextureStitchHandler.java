@@ -23,7 +23,7 @@ public class CorrosionTextureStitchHandler {
 					for (int i = 0; i < icons.length; i++) {
 						for (int n = 0; n < CorrodibleItemHelper.CORROSION_STAGE_COUNT; n++) {
 							String iconName = icons[i].getIconName();
-							String corrosionIconName = iconName + "_decay_" + n;
+							String corrosionIconName = iconName + "_corrosion_" + n;
 							TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionIconName, iconName, n);
 							e.map.setTextureEntry(corrosionIconName, corrosionTexture);
 							corrosionIcons[i][n] = corrosionTexture;

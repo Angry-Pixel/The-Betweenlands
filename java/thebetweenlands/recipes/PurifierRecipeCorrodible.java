@@ -15,7 +15,7 @@ class PurifierRecipeCorrodible extends PurifierRecipe {
 	public ItemStack getOutput(ItemStack input) {
 		ItemStack output = ItemStack.copyItemStack(input);
 		output.stackSize = 1;
-		output.setTagInfo("Decay", new NBTTagInt(0));
+		output.setTagInfo("Corrosion", new NBTTagInt(0));
 		return output;
 	}
 }

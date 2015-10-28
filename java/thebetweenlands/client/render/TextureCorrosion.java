@@ -28,7 +28,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	private static final Random RANDOM = new Random(0);
 
-	private static final ResourceLocation CORROSION_RESOURCE = new ResourceLocation(ModInfo.ID, "textures/items/toolDecay.png");
+	private static final ResourceLocation CORROSION_RESOURCE = new ResourceLocation(ModInfo.ID, "textures/items/toolCorrosion.png");
 	private static int[] corrosionPixels;
 	private static int corrosionWidth;
 	private static int corrosionHeight;

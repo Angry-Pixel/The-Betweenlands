@@ -1,33 +1,19 @@
 package thebetweenlands.items;
 
-import java.util.Arrays;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL14;
 
 import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import thebetweenlands.client.event.CorrosionTextureStitchHandler;
-import thebetweenlands.utils.CorrodibleItemHelper;
-import thebetweenlands.utils.IDecayFood;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class AxeBL extends ItemAxe implements ICorrodible {
 	private float damageVsEntity;

@@ -24,7 +24,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ToolCorrosionImage {	
-	static ResourceLocation corrosionResource = new ResourceLocation(ModInfo.ID, "textures/items/toolDecay.png");
+	static ResourceLocation corrosionResource = new ResourceLocation(ModInfo.ID, "textures/items/toolCorrosion.png");
 	static Random rand = new Random();
 	static IIconRegister iconRegister;
 	static IIcon iicon;
@@ -44,8 +44,8 @@ public class ToolCorrosionImage {
 	public static void createTextures(ItemStack stack, int alpha) throws IOException {
 		IResourceManager rm = Minecraft.getMinecraft().getResourceManager();
 		ResourceLocation ingot;
-		BufferedImage icon, overlay, decay = ImageIO.read(rm.getResource(corrosionResource).getInputStream());
-		File image = new File(loc + File.separator + stack.getDisplayName().toLowerCase().replace(" ", "_")+"_decayed_"+alpha+".png");
+		BufferedImage icon, overlay, corrosion = ImageIO.read(rm.getResource(corrosionResource).getInputStream());
+		File image = new File(loc + File.separator + stack.getDisplayName().toLowerCase().replace(" ", "_")+"_corroded_"+alpha+".png");
 		if (!image.exists() && stack != null && Item.getIdFromItem(stack.getItem()) > 0 && stack.getIconIndex() != null) {
 			try {
 				ingot = getLocation(stack, stack, false);
@@ -59,10 +59,10 @@ public class ToolCorrosionImage {
 			for (int i = 0; i < width; i++)
 				for (int j = 0; j < height; j++) {
 					int toolRGB = icon.getRGB(i, j);
-					int decayRGB = decay.getRGB(i, j);
-					if(rand.nextBoolean()) decayRGB = decayRGB & 0x00ffffff; // make the image transparent.
-					else decayRGB = decayRGB & (16777215*(alpha + 1) + alpha); // make the image semi-transparent.
-					if(toolRGB>>24 != 0x00) overlay.setRGB(i, j, decayRGB);
+					int corrosionRGB = corrosion.getRGB(i, j);
+					if(rand.nextBoolean()) corrosionRGB = corrosionRGB & 0x00ffffff; // make the image transparent.
+					else corrosionRGB = corrosionRGB & (16777215*(alpha + 1) + alpha); // make the image semi-transparent.
+					if(toolRGB>>24 != 0x00) overlay.setRGB(i, j, corrosionRGB);
 					else overlay.setRGB(i, j, toolRGB);
 				}
 			ImageIO.write(overlay, "png", image);

@@ -40,7 +40,7 @@ public class HeldItemTooltipHandler {
 	private static final List<ExclusionEntryClass> CLASS_EXCLUSIONS = new ArrayList<ExclusionEntryClass>();
 	private static final List<String> NULL_EXCLUSIONS = new ArrayList<String>(0);
 	static {
-		registerExclusion(ICorrodible.class, Arrays.asList("Decay"));
+		registerExclusion(ICorrodible.class, Arrays.asList("Corrosion"));
 	}
 
 	/**

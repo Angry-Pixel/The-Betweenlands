@@ -563,12 +563,12 @@ tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.purifier.name=Purifier
 
 # Tooltips
-decay.0=Good as new!
-decay.1=Slightly corroded
-decay.2=Moderately corroded
-decay.3=Very corroded
-decay.4=Extremely corroded
-decay.5=Completely corroded
+corrosion.0=Good as new!
+corrosion.1=Slightly corroded
+corrosion.2=Moderately corroded
+corrosion.3=Very corroded
+corrosion.4=Extremely corroded
+corrosion.5=Completely corroded
 arrow.caution=Use with caution!
 arrow.stunning=Causes paralysis
 

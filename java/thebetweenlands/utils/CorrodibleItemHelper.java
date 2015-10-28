@@ -29,15 +29,15 @@ public final class CorrodibleItemHelper {
 	public static int getCorrosion(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
-			if (tagCompound.hasKey("Decay", 3)) {
-				return tagCompound.getInteger("Decay");
+			if (tagCompound.hasKey("Corrosion", 3)) {
+				return tagCompound.getInteger("Corrosion");
 			}
 		}
 		return 0;
 	}
 
 	public static void setCorrosion(ItemStack itemStack, int corrosion) {
-		itemStack.setTagInfo("Decay", new NBTTagInt(corrosion));
+		itemStack.setTagInfo("Corrosion", new NBTTagInt(corrosion));
 	}
 
 	public static float getModifier(ItemStack itemStack) {
@@ -74,7 +74,7 @@ public final class CorrodibleItemHelper {
 
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		int corrosion = getCorrosion(itemStack);
-		StringBuilder corrosionInfo = new StringBuilder("decay.");
+		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
 		corrosionInfo.append(getCorrosionStage(corrosion));
 		corrosionInfo.replace(0, corrosionInfo.length(), StatCollector.translateToLocal(corrosionInfo.toString()));
 		if (advancedItemTooltips) {
