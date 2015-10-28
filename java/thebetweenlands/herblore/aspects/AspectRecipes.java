@@ -1,5 +1,6 @@
 package thebetweenlands.herblore.aspects;
 
+import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.AspectRegistry.AspectEntry;
 import thebetweenlands.herblore.aspects.AspectRegistry.AspectTier;
 import thebetweenlands.herblore.aspects.AspectRegistry.AspectType;
@@ -66,17 +67,17 @@ public class AspectRecipes {
 
 	private static void registerAspects() {
 		//TODO: Set tiers and types
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.AZUWYNN, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.BYARIIS, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.BYRGINAZ, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.CELAWYNN, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.DAYUNIIS, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FERGALAZ, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FIRNALAZ, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FREIWYNN, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.GEOLIIRGAZ, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.ORDANIIS, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.YEOWYNN, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
-		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.YUNUGAZ, 	AspectTier.COMMON, AspectType.HERB, 1.0F));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.AZUWYNN, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.BYARIIS, 	AspectTier.COMMON, AspectType.HERB, Amounts.MEDIUM_HIGH));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.BYRGINAZ, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.CELAWYNN, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.DAYUNIIS, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FERGALAZ, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FIRNALAZ, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FREIWYNN, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.GEOLIIRGAZ, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.ORDANIIS, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.YEOWYNN, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.YUNUGAZ, 	AspectTier.COMMON, AspectType.HERB, Amounts.LOW_MEDIUM));
 	}
 }

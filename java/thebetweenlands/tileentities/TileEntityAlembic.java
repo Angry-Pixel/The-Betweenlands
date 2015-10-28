@@ -118,7 +118,7 @@ public class TileEntityAlembic extends TileEntity {
 			return;
 		}
 		List<ItemAspect> infusionItemAspects = this.getInfusionItemAspects(infusionIngredients);
-		float totalAmount = 0.2F; //Base amount
+		float totalAmount = Amounts.VERY_LOW; //Base amount
 		float strengthAmount = 0.0F;
 		float durationAmount = 0.0F;
 		for(ItemAspect a : infusionItemAspects) {
@@ -126,11 +126,21 @@ public class TileEntityAlembic extends TileEntity {
 			if(recipe.strengthAspect != null && a.aspect == recipe.strengthAspect) strengthAmount += a.amount;
 			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAmount += a.amount;
 		}
+		int recipeByariis = 0;
+		for(IAspect a : recipe.aspects) {
+			if(a == AspectRegistry.BYARIIS) {
+				recipeByariis++;
+			}
+		}
 		this.producableAmount = totalAmount;
 		boolean isPositive = true;
 		for(IAspect a : infusionAspects) {
 			if(a == AspectRegistry.BYARIIS) {
-				isPositive = !isPositive;
+				if(recipeByariis <= 0) {
+					isPositive = !isPositive;
+				} else {
+					recipeByariis--;
+				}
 			}
 		}
 		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
