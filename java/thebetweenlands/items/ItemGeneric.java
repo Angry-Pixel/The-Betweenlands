@@ -153,7 +153,7 @@ public class ItemGeneric extends Item {
 		BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), 
 		LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), 
 		TANGLED_ROOT("tangledRoot"), PLANT_TONIC("plantTonic"), 
-		MOSS("moss"), MUD_BRICK("mudBrick"), SYRMORITE_INGOT("syrmoriteIngot"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
+		MUD_BRICK("mudBrick"), SYRMORITE_INGOT("syrmoriteIngot"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
 		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), SPORES("spores"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
 		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"),
 		RUBBER_BALL("rubber"), TAR_BEAST_HEART("tarBeastHeart"),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated"), TAR_DRIP("tarDrip"), LIMESTONE_FLUX("limestoneFlux"),

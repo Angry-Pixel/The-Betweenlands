@@ -17,6 +17,8 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.ItemGenericPlantDrop;
+import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 
 public class BlockCaveMoss extends BlockBush implements IShearable {
 	private IIcon lower;
@@ -115,7 +117,7 @@ public class BlockCaveMoss extends BlockBush implements IShearable {
 	@Override
 	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
-		dropList.add(new ItemStack(BLItemRegistry.caveMoss));
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS));
 		return dropList;
 	}
 }

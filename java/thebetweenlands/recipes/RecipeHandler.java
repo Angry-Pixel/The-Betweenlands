@@ -112,7 +112,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
-		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGeneric.createStack(EnumItemGeneric.MOSS, 1), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
 
 		// Armour
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinHelmet, 1), "###", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));

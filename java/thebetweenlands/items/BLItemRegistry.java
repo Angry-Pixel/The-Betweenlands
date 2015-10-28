@@ -152,7 +152,6 @@ public class BLItemRegistry {
 	public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
 	public static final Item manual = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("manual");
 	public static final Item tarminion = new ItemTarminion().setUnlocalizedName("thebetweenlands.tarminion");
-	public static final Item caveMoss = new Item().setUnlocalizedName("thebetweenlands.caveMossItem").setTextureName("thebetweenlands:caveMoss").setCreativeTab(ModCreativeTabs.plants);
 	public static final Item volarPad = new ItemVolarPad().setMaxDamage(200);
 	public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();
 	public static final ItemRope rope = new ItemRope();
