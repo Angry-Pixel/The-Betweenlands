@@ -19,19 +19,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.utils.DecayableItemHelper;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.Lists;
 
-public class TextureDecay extends TextureAtlasSprite {
+public class TextureCorrosion extends TextureAtlasSprite {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final Random RANDOM = new Random(0);
 
-	private static final ResourceLocation DECAY_RESOURCE = new ResourceLocation(ModInfo.ID, "textures/items/toolDecay.png");
-	private static int[] decayPixels;
-	private static int decayWidth;
-	private static int decayHeight;
+	private static final ResourceLocation CORROSION_RESOURCE = new ResourceLocation(ModInfo.ID, "textures/items/toolDecay.png");
+	private static int[] corrosionPixels;
+	private static int corrosionWidth;
+	private static int corrosionHeight;
 
 	private AnimationMetadataSection animationMetadata;
 
@@ -39,12 +39,12 @@ public class TextureDecay extends TextureAtlasSprite {
 
 	private String baseIconName;
 
-	private int decayAmount;
+	private int corrosionAmount;
 
-	public TextureDecay(String iconName, String baseIconName, int decayAmount) {
+	public TextureCorrosion(String iconName, String baseIconName, int corrosionAmount) {
 		super(iconName);
 		this.baseIconName = baseIconName;
-		this.decayAmount = decayAmount;
+		this.corrosionAmount = corrosionAmount;
 		seed = baseIconName.hashCode();
 	}
 
@@ -55,14 +55,14 @@ public class TextureDecay extends TextureAtlasSprite {
 		tickCounter = 0;
 	}
 
-	private void loadDecayPixels(IResourceManager manager) {
-		BufferedImage decayImg;
+	private void loadCorrosionPixels(IResourceManager manager) {
+		BufferedImage corrosionImg;
 		try {
-			decayImg = ImageIO.read(manager.getResource(DECAY_RESOURCE).getInputStream());
-			decayPixels = new int[decayImg.getWidth() * decayImg.getHeight()];
-			decayImg.getRGB(0, 0, decayImg.getWidth(), decayImg.getHeight(), decayPixels, 0, decayImg.getWidth());
-			decayWidth = decayImg.getWidth();
-			decayHeight = decayImg.getHeight();
+			corrosionImg = ImageIO.read(manager.getResource(CORROSION_RESOURCE).getInputStream());
+			corrosionPixels = new int[corrosionImg.getWidth() * corrosionImg.getHeight()];
+			corrosionImg.getRGB(0, 0, corrosionImg.getWidth(), corrosionImg.getHeight(), corrosionPixels, 0, corrosionImg.getWidth());
+			corrosionWidth = corrosionImg.getWidth();
+			corrosionHeight = corrosionImg.getHeight();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -75,8 +75,8 @@ public class TextureDecay extends TextureAtlasSprite {
 
 	@Override
 	public boolean load(IResourceManager manager, ResourceLocation location) {
-		if (decayPixels == null) {
-			loadDecayPixels(manager);
+		if (corrosionPixels == null) {
+			loadCorrosionPixels(manager);
 		}
 		location = new ResourceLocation(baseIconName);
 		ResourceLocation resourcelocation1 = completeResourceLocation(location, 0);
@@ -115,17 +115,17 @@ public class TextureDecay extends TextureAtlasSprite {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				int pixel = mipmapLevels[0][x + y * width];
-				int decay = 0;
+				int corrosion = 0;
 				if (pixel >>> 24 != 0 && RANDOM.nextBoolean()) {
-					decay = decayPixels[(x % width % decayWidth) + (y % width % decayWidth) * decayWidth];
+					corrosion = corrosionPixels[(x % width % corrosionWidth) + (y % width % corrosionWidth) * corrosionWidth];
 				}
 				int r1 = pixel >> 16 & 0xFF;
 				int g1 = pixel >> 8 & 0xFF;
 				int b1 = pixel & 0xFF;
-				float alpha = decayAmount / (float) (DecayableItemHelper.DECAY_STAGE_COUNT - 1) * ((decay >>> 24 & 0xFF) / 255F);
-				int r2 = decay >> 16 & 0xFF;
-				int g2 = decay >> 8 & 0xFF;
-				int b2 = decay & 0xFF;
+				float alpha = corrosionAmount / (float) (CorrodibleItemHelper.CORROSION_STAGE_COUNT - 1) * ((corrosion >>> 24 & 0xFF) / 255F);
+				int r2 = corrosion >> 16 & 0xFF;
+				int g2 = corrosion >> 8 & 0xFF;
+				int b2 = corrosion & 0xFF;
 				pixel &= 0xFF000000;
 				pixel |= (int) (alpha * r2 + (1 - alpha) * r1 + 0.5F) << 16;
 				pixel |= (int) (alpha * g2 + (1 - alpha) * g1 + 0.5F) << 8;

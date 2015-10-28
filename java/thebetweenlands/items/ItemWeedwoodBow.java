@@ -16,17 +16,17 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.EntityBLArrow;
-import thebetweenlands.utils.DecayableItemHelper;
+import thebetweenlands.utils.CorrodibleItemHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemWeedwoodBow extends ItemBow implements IDecayable {
+public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 	public static final int ANIMATION_LENGTH = 3;
 
 	private IIcon[] iconArray;
 
-	private IIcon[][] decayIcons;
+	private IIcon[][] corrosionIcons;
 
 	public ItemWeedwoodBow() {
 	}
@@ -47,14 +47,14 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
 		if (usingItem != null) {
 			int time = 36000 - useRemaining;
-			return decayIcons[time < 6 ? 1 : time < 10 ? 2 : 3][DecayableItemHelper.getDecayStage(usingItem)];
+			return corrosionIcons[time < 6 ? 1 : time < 10 ? 2 : 3][CorrodibleItemHelper.getCorrosionStage(usingItem)];
 		}
-		return decayIcons[0][DecayableItemHelper.getDecayStage(stack)];
+		return corrosionIcons[0][CorrodibleItemHelper.getCorrosionStage(stack)];
 	}
 
 	@Override
 	public IIcon getIconIndex(ItemStack stack) {
-		return decayIcons[0][DecayableItemHelper.getDecayStage(stack)];
+		return corrosionIcons[0][CorrodibleItemHelper.getCorrosionStage(stack)];
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 			float power = maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 2.0F;
 
-			power *= (DecayableItemHelper.getModifier(stack) - 0.5F) * 2 + 0.15F;
+			power *= (CorrodibleItemHelper.getModifier(stack) - 0.5F) * 2 + 0.15F;
 
 			if (power < 0.1F)
 				return;
@@ -181,17 +181,17 @@ public class ItemWeedwoodBow extends ItemBow implements IDecayable {
 	}
 
 	@Override
-	public void setDecayIcons(IIcon[][] decayIcons) {
-		this.decayIcons = decayIcons;
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		this.corrosionIcons = corrosionIcons;
 	}
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		DecayableItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrodibleItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
-		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }

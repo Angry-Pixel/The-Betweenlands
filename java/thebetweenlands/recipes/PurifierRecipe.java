@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 
 public abstract class PurifierRecipe {
 	private static final List<PurifierRecipe> RECIPES = new ArrayList<PurifierRecipe>();
-	private static final PurifierRecipeDecayable DECAYABLE_ITEMS_RECIPE = new PurifierRecipeDecayable();
+	private static final PurifierRecipeCorrodible CORRODIBLE_ITEMS_RECIPE = new PurifierRecipeCorrodible();
 
 	public abstract ItemStack getOutput(ItemStack input);
 
@@ -28,8 +28,8 @@ public abstract class PurifierRecipe {
 				return recipe.getOutput(input);
 			}
 		}
-		if (DECAYABLE_ITEMS_RECIPE.matches(input)) {
-			return DECAYABLE_ITEMS_RECIPE.getOutput(input);
+		if (CORRODIBLE_ITEMS_RECIPE.matches(input)) {
+			return CORRODIBLE_ITEMS_RECIPE.getOutput(input);
 		}
 		return null;
 	}

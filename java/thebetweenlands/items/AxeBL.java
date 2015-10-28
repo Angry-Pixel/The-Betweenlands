@@ -10,8 +10,8 @@ import org.lwjgl.opengl.GL14;
 import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import thebetweenlands.client.event.DecayTextureStitchHandler;
-import thebetweenlands.utils.DecayableItemHelper;
+import thebetweenlands.client.event.CorrosionTextureStitchHandler;
+import thebetweenlands.utils.CorrodibleItemHelper;
 import thebetweenlands.utils.IDecayFood;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -29,10 +29,10 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class AxeBL extends ItemAxe implements IDecayable {
+public class AxeBL extends ItemAxe implements ICorrodible {
 	private float damageVsEntity;
 
-	private IIcon[] decayIcons;
+	private IIcon[] corrosionIcons;
 
 	public AxeBL(ToolMaterial material) {
 		super(material);
@@ -41,7 +41,7 @@ public class AxeBL extends ItemAxe implements IDecayable {
 
 	@Override
 	public IIcon getIconIndex(ItemStack stack) {
-		return decayIcons[DecayableItemHelper.getDecayStage(stack)];
+		return corrosionIcons[CorrodibleItemHelper.getCorrosionStage(stack)];
 	}
 
 	@Override
@@ -55,27 +55,27 @@ public class AxeBL extends ItemAxe implements IDecayable {
 	}
 
 	@Override
-	public void setDecayIcons(IIcon[][] decayIcons) {
-		this.decayIcons = decayIcons[0];
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		this.corrosionIcons = corrosionIcons[0];
 	}
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		DecayableItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrodibleItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
 	public float getDigSpeed(ItemStack stack, Block block, int meta) {
-		return DecayableItemHelper.getDigSpeed(super.getDigSpeed(stack, block, meta), stack, block, meta);
+		return CorrodibleItemHelper.getDigSpeed(super.getDigSpeed(stack, block, meta), stack, block, meta);
 	}
 
 	@Override
 	public Multimap getAttributeModifiers(ItemStack stack) {
-        return DecayableItemHelper.getAttributeModifiers(stack, ItemTool.field_111210_e, damageVsEntity);
+        return CorrodibleItemHelper.getAttributeModifiers(stack, ItemTool.field_111210_e, damageVsEntity);
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
-		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }

@@ -18,15 +18,15 @@ import thebetweenlands.manager.DecayManager;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-public final class DecayableItemHelper {
-	public static final int MAX_DECAY = 255;
-	public static final String TOOLTIP_PART = "/" + MAX_DECAY + ")";
-	public static final int DECAY_STAGE_COUNT = 6;
+public final class CorrodibleItemHelper {
+	public static final int MAX_CORROSION = 255;
+	public static final String TOOLTIP_PART = "/" + MAX_CORROSION + ")";
+	public static final int CORROSION_STAGE_COUNT = 6;
 
-	private DecayableItemHelper() {
+	private CorrodibleItemHelper() {
 	}
 
-	public static int getDecay(ItemStack itemStack) {
+	public static int getCorrosion(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
 			if (tagCompound.hasKey("Decay", 3)) {
@@ -36,12 +36,12 @@ public final class DecayableItemHelper {
 		return 0;
 	}
 
-	public static void setDecay(ItemStack itemStack, int decay) {
-		itemStack.setTagInfo("Decay", new NBTTagInt(decay));
+	public static void setCorrosion(ItemStack itemStack, int corrosion) {
+		itemStack.setTagInfo("Decay", new NBTTagInt(corrosion));
 	}
 
 	public static float getModifier(ItemStack itemStack) {
-		return (-0.5F * (getDecay(itemStack) / (float) MAX_DECAY) + 1);
+		return (-0.5F * (getCorrosion(itemStack) / (float) MAX_CORROSION) + 1);
 	}
 
 	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, Block block, int meta) {
@@ -58,8 +58,8 @@ public final class DecayableItemHelper {
 		if (world.isRemote) {
 			return;
 		}
-		int decay = getDecay(itemStack);
-		if (decay < MAX_DECAY) {
+		int corrosion = getCorrosion(itemStack);
+		if (corrosion < MAX_CORROSION) {
 			float probability = holder.isInWater() ? 0.0075F : 0.0025F;
 			if (holder instanceof EntityPlayer) {
 				probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 1.025F : 1;
@@ -67,29 +67,29 @@ public final class DecayableItemHelper {
 				probability *= (1 - playerDecay * 0.5F);
 			}
 			if (world.rand.nextFloat() < probability) {
-				setDecay(itemStack, decay + 1);
+				setCorrosion(itemStack, corrosion + 1);
 			}
 		}
 	}
 
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
-		int decay = getDecay(itemStack);
-		StringBuilder decayInfo = new StringBuilder("decay.");
-		decayInfo.append(getDecayStage(decay));
-		decayInfo.replace(0, decayInfo.length(), StatCollector.translateToLocal(decayInfo.toString()));
+		int corrosion = getCorrosion(itemStack);
+		StringBuilder corrosionInfo = new StringBuilder("decay.");
+		corrosionInfo.append(getCorrosionStage(corrosion));
+		corrosionInfo.replace(0, corrosionInfo.length(), StatCollector.translateToLocal(corrosionInfo.toString()));
 		if (advancedItemTooltips) {
-			decayInfo.append(" (");
-			decayInfo.append(decay);
-			decayInfo.append(TOOLTIP_PART);
+			corrosionInfo.append(" (");
+			corrosionInfo.append(corrosion);
+			corrosionInfo.append(TOOLTIP_PART);
 		}
-		lines.add(decayInfo.toString());
+		lines.add(corrosionInfo.toString());
 	}
 
-	public static int getDecayStage(ItemStack itemStack) {
-		return getDecayStage(getDecay(itemStack));
+	public static int getCorrosionStage(ItemStack itemStack) {
+		return getCorrosionStage(getCorrosion(itemStack));
 	}
 
-	public static int getDecayStage(int decay) {
-		return (10 * decay + 630) / 635;
+	public static int getCorrosionStage(int corrosion) {
+		return (10 * corrosion + 630) / 635;
 	}
 }

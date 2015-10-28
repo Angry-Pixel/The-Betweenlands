@@ -2,8 +2,8 @@ package thebetweenlands.items;
 
 import net.minecraft.util.IIcon;
 
-public interface IDecayable {
+public interface ICorrodible {
 	public IIcon[] getIcons();
 
-	public void setDecayIcons(IIcon[][] decayIcons);
+	public void setCorrosionIcons(IIcon[][] corrosionIcons);
 }

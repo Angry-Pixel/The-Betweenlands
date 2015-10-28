@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.items.IDecayable;
+import thebetweenlands.items.ICorrodible;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -40,7 +40,7 @@ public class HeldItemTooltipHandler {
 	private static final List<ExclusionEntryClass> CLASS_EXCLUSIONS = new ArrayList<ExclusionEntryClass>();
 	private static final List<String> NULL_EXCLUSIONS = new ArrayList<String>(0);
 	static {
-		registerExclusion(IDecayable.class, Arrays.asList("Decay"));
+		registerExclusion(ICorrodible.class, Arrays.asList("Decay"));
 	}
 
 	/**

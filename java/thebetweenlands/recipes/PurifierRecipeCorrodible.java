@@ -2,13 +2,13 @@ package thebetweenlands.recipes;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagInt;
-import thebetweenlands.items.IDecayable;
-import thebetweenlands.utils.DecayableItemHelper;
+import thebetweenlands.items.ICorrodible;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
-class PurifierRecipeDecayable extends PurifierRecipe {
+class PurifierRecipeCorrodible extends PurifierRecipe {
 	@Override
 	public boolean matches(ItemStack stack) {
-		return stack != null && stack.getItem() instanceof IDecayable && DecayableItemHelper.getDecay(stack) > 0;
+		return stack != null && stack.getItem() instanceof ICorrodible && CorrodibleItemHelper.getCorrosion(stack) > 0;
 	}
 
 	@Override

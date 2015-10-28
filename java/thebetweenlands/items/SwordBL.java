@@ -11,13 +11,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.utils.DecayableItemHelper;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-public class SwordBL extends ItemSword implements IDecayable {
-	private IIcon[] decayIcons;
+public class SwordBL extends ItemSword implements ICorrodible {
+	private IIcon[] corrosionIcons;
 
 	private float attackDamageWeaponModifier;
 
@@ -37,7 +37,7 @@ public class SwordBL extends ItemSword implements IDecayable {
 
 	@Override
 	public IIcon getIconIndex(ItemStack stack) {
-		return decayIcons[DecayableItemHelper.getDecayStage(stack)];
+		return corrosionIcons[CorrodibleItemHelper.getCorrosionStage(stack)];
 	}
 
 	@Override
@@ -51,25 +51,25 @@ public class SwordBL extends ItemSword implements IDecayable {
 	}
 
 	@Override
-	public void setDecayIcons(IIcon[][] decayIcons) {
-		this.decayIcons = decayIcons[0];
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		this.corrosionIcons = corrosionIcons[0];
 	}
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		DecayableItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrodibleItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
 	public Multimap getAttributeModifiers(ItemStack itemStack) {
 		Multimap multimap = HashMultimap.create();
-		AttributeModifier attributeModifier = new AttributeModifier(field_111210_e, "Weapon modifier", attackDamageWeaponModifier * DecayableItemHelper.getModifier(itemStack), 0);
+		AttributeModifier attributeModifier = new AttributeModifier(field_111210_e, "Weapon modifier", attackDamageWeaponModifier * CorrodibleItemHelper.getModifier(itemStack), 0);
 		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), attributeModifier);
 		return multimap;
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
-		DecayableItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }
