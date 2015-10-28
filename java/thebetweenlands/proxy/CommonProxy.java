@@ -13,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
+import thebetweenlands.event.world.AspectLoadHandler;
 import thebetweenlands.event.world.PopulationHandler;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.inventory.container.ContainerBLCraftingTable;
@@ -106,6 +107,7 @@ public class CommonProxy implements IGuiHandler {
 
 	public void init() {
 		MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(AspectLoadHandler.INSTANCE);
 	}
 
 	public void postInit() {

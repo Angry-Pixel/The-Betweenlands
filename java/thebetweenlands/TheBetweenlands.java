@@ -50,6 +50,7 @@ import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
@@ -84,14 +85,14 @@ public class TheBetweenlands
 	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer();
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
 	public static CommonPacketProxy packetProxy;
-    public static File dir;
-    private static byte nextPacketId = 0;
+	public static File dir;
+	private static byte nextPacketId = 0;
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
-        dir = event.getModConfigurationDirectory();
+		dir = event.getModConfigurationDirectory();
 
 		//BL Registry
 		BLFluidRegistry.init();
@@ -109,26 +110,27 @@ public class TheBetweenlands
 
 		//Message Registry
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-        networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
-        networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
-        networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
-        networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
+		networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
+		networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
+		networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
+		networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
+		networkWrapper.registerMessage(MessageLoadAspects.class, MessageLoadAspects.class, 6, Side.CLIENT);
 
-        sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
+		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 
-        //Packet Registry
-        registerPacket(PacketDruidAltarProgress.class);
-        registerPacket(PacketDruidTeleportParticle.class);
-        registerPacket(PacketSnailHatchParticle.class);
-        registerPacket(PacketTickspeed.class);
-        registerPacket(PacketRevengeTarget.class);
-        registerPacket(PacketAttackTarget.class);
-        registerPacket(PacketWeedWoodBushRustle.class);
+		//Packet Registry
+		registerPacket(PacketDruidAltarProgress.class);
+		registerPacket(PacketDruidTeleportParticle.class);
+		registerPacket(PacketSnailHatchParticle.class);
+		registerPacket(PacketTickspeed.class);
+		registerPacket(PacketRevengeTarget.class);
+		registerPacket(PacketAttackTarget.class);
+		registerPacket(PacketWeedWoodBushRustle.class);
 
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
-        packetRegistry.registerPacket(packetClass, nextPacketId++);
+		packetRegistry.registerPacket(packetClass, nextPacketId++);
 	}
 
 	@EventHandler
@@ -173,7 +175,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
-		
+
 		RecipeHandler.init();
 		TeleporterHandler.init();
 

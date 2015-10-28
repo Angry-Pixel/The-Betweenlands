@@ -41,7 +41,7 @@ public class AspectRegistry {
 	public static final IAspect YEOWYNN = new AspectYeowynn();
 	public static final IAspect YUNUGAZ = new AspectYunugaz();
 	public static final IAspect YIHINREN = new AspectYihinren();
-	
+
 	public static enum AspectTier {
 		COMMON, UNCOMMON, RARE
 	}
@@ -153,8 +153,6 @@ public class AspectRegistry {
 	}
 
 	public void loadAspects(long seed) {
-		//TODO: Currently depends on the order of the registered item and aspect entries
-
 		Random rnd = new Random();
 		rnd.setSeed(seed);
 
@@ -175,7 +173,23 @@ public class AspectRegistry {
 			for(ItemAspect itemAspect : itemAspects) {
 				this.removeAvailableAspect(itemAspect, availableAspects);
 			}
-			this.matchedAspects.put(itemStack, itemAspects);
+			List<ItemAspect> mergedAspects = new ArrayList<ItemAspect>(itemAspects.size());
+			for(ItemAspect aspect : itemAspects) {
+				ItemAspect mergedAspect = null;
+				for(ItemAspect ma : mergedAspects) {
+					if(ma.aspect == aspect.aspect) {
+						mergedAspect = ma;
+						break;
+					}
+				}
+				if(mergedAspect == null) {
+					mergedAspects.add(aspect);
+				} else {
+					mergedAspects.remove(mergedAspect);
+					mergedAspects.add(new ItemAspect(mergedAspect.aspect, mergedAspect.amount + aspect.amount));
+				}
+			}
+			this.matchedAspects.put(itemStack, mergedAspects);
 		}
 	}
 
@@ -212,7 +226,6 @@ public class AspectRegistry {
 			itemAspects.add(new ItemAspect(randomAspect.aspect, baseAmount + baseAmount * matchingItemEntry.amountVaration * (rnd.nextFloat() * 2.0F - 1.0F)));
 			foundMatches = true;
 		}
-		//TODO: Merge down same aspects into one aspect with combined amount
 		return foundMatches;
 	}
 
