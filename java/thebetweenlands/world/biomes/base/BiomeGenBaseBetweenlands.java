@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.tree.BlockBLSapling;
 import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -534,4 +535,21 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	public final short getWeight() {
 		return biomeWeight;
 	}
+
+
+	@Override
+	public void addDefaultFlowers() {
+		addFlower(BLBlockRegistry.boneset, 0, 10);
+		addFlower(BLBlockRegistry.marshMallow, 0, 10);
+		addFlower(BLBlockRegistry.nettle, 0, 10);
+		addFlower(BLBlockRegistry.nettleFlowered, 0, 10);
+		addFlower(BLBlockRegistry.buttonBush, 0, 10);
+		addFlower(BLBlockRegistry.milkweed, 0, 10);
+		addFlower(BLBlockRegistry.copperIris, 0, 10);
+		addFlower(BLBlockRegistry.blueIris, 0, 10);
+		addFlower(BLBlockRegistry.waterFlower, 0, 10);
+		addFlower(BLBlockRegistry.marshHibiscus, 0, 10);
+		addFlower(BLBlockRegistry.pickerelWeed, 0, 10);
+	}
+
 }

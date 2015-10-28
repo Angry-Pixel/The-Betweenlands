@@ -1,5 +1,6 @@
 package thebetweenlands.world.biomes;
 
+import net.minecraft.block.Block;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -91,4 +92,5 @@ extends BiomeGenBaseBetweenlands
 		}
 		return 0;
 	}*/
+
 }

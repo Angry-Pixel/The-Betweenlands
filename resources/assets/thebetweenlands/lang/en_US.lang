@@ -516,8 +516,8 @@ item.thebetweenlands.groundCopperIris.name=Ground Copper Iris
 item.thebetweenlands.groundBlueEyedGrass.name=Ground Blue Eyed Grass
 item.thebetweenlands.groundBoneset.name=Ground Boneset
 item.thebetweenlands.groundBottleBrushGrass.name=Ground Bottle Brush Grass
-item.thebetweenlands.groundDriedSwampReed.name=Ground Weedwood Bark
-item.thebetweenlands.groundWeedwoodBark.name=Ground Dried Swamp Reed
+item.thebetweenlands.groundDriedSwampReed.name=Ground Dried Swamp Reed
+item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
