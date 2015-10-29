@@ -11,6 +11,9 @@ import java.util.Random;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.world.World;
 import thebetweenlands.herblore.aspects.list.AspectArmaniis;
 import thebetweenlands.herblore.aspects.list.AspectAzuwynn;
 import thebetweenlands.herblore.aspects.list.AspectByariis;
@@ -25,6 +28,7 @@ import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
 import thebetweenlands.herblore.aspects.list.AspectYeowynn;
 import thebetweenlands.herblore.aspects.list.AspectYihinren;
 import thebetweenlands.herblore.aspects.list.AspectYunugaz;
+import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectRegistry {
 	public static final IAspect AZUWYNN = new AspectAzuwynn();
@@ -55,12 +59,14 @@ public class AspectRegistry {
 		public final AspectTier tier;
 		public final AspectType type;
 		public float baseAmount;
+		public String aspectName;
 
 		public AspectEntry(IAspect aspect, AspectTier tier, AspectType type, float baseAmount) {
 			this.aspect = aspect;
 			this.tier = tier;
 			this.type = type;
 			this.baseAmount = baseAmount;
+			this.aspectName = this.aspect.getName();
 		}
 
 		public boolean matchEntry(ItemEntryAspects itemEntry) {
@@ -73,6 +79,7 @@ public class AspectRegistry {
 		public final AspectTier tier;
 		public final AspectType type;
 		public final float amountMultiplier, amountVaration;
+		public final String itemName;
 
 		public ItemEntryAspects(ItemEntry item, AspectTier tier, AspectType type, float amountMultiplier, float amountVariation) {
 			this.item = item;
@@ -80,12 +87,14 @@ public class AspectRegistry {
 			this.type = type;
 			this.amountMultiplier = amountMultiplier;
 			this.amountVaration = amountVariation;
+			this.itemName = this.item.item.getUnlocalizedName();
 		}
 	}
 
 	public static final class ItemEntry {
 		public final Item item;
 		public final int damage;
+		private List<ItemEntryAspects> itemAspects;
 
 		public ItemEntry(Item item, int damage) {
 			this.item = item;
@@ -115,6 +124,10 @@ public class AspectRegistry {
 				return itemEntry.item.equals(this.item) && itemEntry.damage == this.damage;
 			}
 			return super.equals(obj);
+		}
+
+		public List<ItemEntryAspects> getItemAspectEntries() {
+			return this.itemAspects;
 		}
 	}
 
@@ -147,16 +160,115 @@ public class AspectRegistry {
 			entryList = new ArrayList<ItemEntryAspects>();
 			this.registeredItems.put(entry.item, entryList);
 		}
+		entry.item.itemAspects = entryList;
 		for(int i = 0; i < aspectCount; i++) {
 			entryList.add(entry);
 		}
 	}
 
-	public void loadAspects(long seed) {
+	public AspectEntry getAspectEntryFromName(String name) {
+		for(AspectEntry aspect : this.registeredAspects) {
+			if(aspect.aspect.getName().equals(name)) {
+				return aspect;
+			}
+		}
+		return null;
+	}
+
+	public ItemEntry getItemEntryFromName(String name, int damage) {
+		for(ItemEntry e : this.registeredItems.keySet()) {
+			if(e.item.getUnlocalizedName().equals(name) && e.damage == damage) {
+				return e;
+			}
+		}
+		return null;
+	}
+
+	public static long getAspectsSeed(long worldSeed) {
+		Random rnd = new Random();
+		rnd.setSeed(worldSeed);
+		return rnd.nextLong();
+	}
+
+	public void loadAspects(World world) {
+		long seed = getAspectsSeed(world.getSeed());
+		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
+		if(worldData != null && worldData.getData() != null && worldData.getData().hasKey("aspects")) {
+			NBTTagCompound aspectsCompound = worldData.getData().getCompoundTag("aspects");
+			this.loadAspects(aspectsCompound);
+			//System.out.println("Loaded aspects: ");
+			/*for(Entry<ItemEntry, List<ItemAspect>> entry : this.matchedAspects.entrySet()) {
+				System.out.println(entry.getKey().item.getUnlocalizedName() + " ");
+			}*/
+			this.updateAspects(seed);
+			//System.out.println("Updated aspects: ");
+			/*for(Entry<ItemEntry, List<ItemAspect>> entry : this.matchedAspects.entrySet()) {
+				System.out.println(entry.getKey().item.getUnlocalizedName() + " ");
+			}*/
+		} else {
+			this.generateAspects(seed);
+		}
+		NBTTagCompound savedAspects = new NBTTagCompound();
+		this.saveAspects(savedAspects);
+		worldData.getData().setTag("aspects", savedAspects);
+		worldData.markDirty();
+	}
+
+	public void loadAspects(NBTTagCompound nbt) {
+		this.matchedAspects.clear();
+		NBTTagList entryList = (NBTTagList) nbt.getTag("entries");
+		entryIT:
+			for(int i = 0; i < entryList.tagCount(); i++) {
+				NBTTagCompound entryCompound = entryList.getCompoundTagAt(i);
+				String itemName = entryCompound.getString("item");
+				int itemDamage = entryCompound.getInteger("damage");
+				//System.out.println("Getting item entry: " + itemName);
+				ItemEntry itemEntry = this.getItemEntryFromName(itemName, itemDamage);
+				if(itemEntry == null) {
+					//System.out.println("Failed getting item entry");
+					continue;
+				}
+				NBTTagList aspectList = (NBTTagList) entryCompound.getTag("aspects");
+				List<ItemAspect> itemAspects = new ArrayList<ItemAspect>();
+				for(int c = 0; c < aspectList.tagCount(); c++) {
+					NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(c);
+					ItemAspect aspect = ItemAspect.readFromNBT(aspectCompound);
+					if(aspect == null) {
+						//System.out.println("Failed getting aspect");
+						continue entryIT;
+					}
+					itemAspects.add(aspect);
+				}
+				this.matchedAspects.put(itemEntry, itemAspects);
+			}
+	}
+
+	private void saveAspects(NBTTagCompound nbt) {
+		NBTTagList entryList = new NBTTagList();
+		for(Entry<ItemEntry, List<ItemAspect>> entry : this.matchedAspects.entrySet()) {
+			ItemEntry itemEntry = entry.getKey();
+			List<ItemAspect> itemAspects = entry.getValue();
+			NBTTagCompound entryCompound = new NBTTagCompound();
+			entryCompound.setString("item", itemEntry.item.getUnlocalizedName());
+			entryCompound.setInteger("damage", itemEntry.damage);
+			NBTTagList aspectList = new NBTTagList();
+			for(ItemAspect aspect : itemAspects) {
+				aspectList.appendTag(aspect.writeToNBT(new NBTTagCompound()));
+			}
+			entryCompound.setTag("aspects", aspectList);
+			entryList.appendTag(entryCompound);
+		}
+		nbt.setTag("entries", entryList);
+	}
+
+	public void generateAspects(long seed) {
+		this.matchedAspects.clear();
+		this.updateAspects(seed);
+	}
+
+	private void updateAspects(long seed) {
 		Random rnd = new Random();
 		rnd.setSeed(seed);
-
-		this.matchedAspects.clear();
 
 		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(this.registeredAspects.size());
 		availableAspects.addAll(this.registeredAspects);
@@ -165,6 +277,9 @@ public class AspectRegistry {
 
 		for(Entry<ItemEntry, List<ItemEntryAspects>> item : this.registeredItems.entrySet()) {
 			ItemEntry itemStack = item.getKey();
+			if(this.matchedAspects.containsKey(itemStack)) {
+				continue;
+			}
 			List<ItemEntryAspects> itemEntries = item.getValue();
 			List<ItemAspect> itemAspects = new ArrayList<ItemAspect>(itemEntries.size());
 			if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
