@@ -261,7 +261,17 @@ public class AspectRegistry {
 		nbt.setTag("entries", entryList);
 	}
 
-	public void generateAspects(long seed) {
+	public void resetAspects(World world) {
+		long seed = getAspectsSeed(world.getSeed());
+		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
+		this.generateAspects(seed);
+		NBTTagCompound savedAspects = new NBTTagCompound();
+		this.saveAspects(savedAspects);
+		worldData.getData().setTag("aspects", savedAspects);
+		worldData.markDirty();
+	}
+
+	private void generateAspects(long seed) {
 		this.matchedAspects.clear();
 		this.updateAspects(seed);
 	}

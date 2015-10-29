@@ -25,7 +25,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.command.CommandAspect;
+import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
@@ -196,7 +196,7 @@ public class TheBetweenlands
 		event.registerServerCommand(new CommandBLEvent());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
-			event.registerServerCommand(new CommandAspect());
+			event.registerServerCommand(new CommandResetAspects());
 		}
 	}
 }
