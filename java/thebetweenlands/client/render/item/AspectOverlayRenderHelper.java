@@ -23,7 +23,7 @@ import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class AspectOverlayRenderHelper {
-	private static RenderItem renderItem = new RenderItem();
+	public static RenderItem renderItem = new RenderItem();
 	private static Method f_isMouseOverSlot = ReflectionHelper.findMethod(GuiContainer.class, null, new String[]{"isMouseOverSlot", "func_146981_a", "a"}, Slot.class, int.class, int.class);
 	private static boolean ignoreHook = false;
 

@@ -1,34 +1,80 @@
 package thebetweenlands.client.render.block;
 
+import java.lang.reflect.Field;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
+import thebetweenlands.client.render.item.AspectOverlayRenderHelper;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
+	private Field f_renderItem1 = ReflectionHelper.findField(GuiIngame.class, "itemRenderer", "field_73841_b", "i");
+	private Field f_renderBlocks1 = ReflectionHelper.findField(RenderItem.class, "renderBlocksRi", "field_147913_i", "i");
+	private Field f_renderBlocks2 = ReflectionHelper.findField(Render.class, "field_147909_c", "c");
 
 	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID,
-			RenderBlocks renderer) {
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		IWaterRenderer specialRenderer = ((BlockSwampWater)block).getSpecialRenderer();
 		if(specialRenderer != null) {
-			specialRenderer.renderInventoryBlock(block, metadata, modelID, renderer);
+			if(specialRenderer.getIcon() != null) {
+				boolean isInInventory = false;
+				try {
+					//I'm sorry
+					RenderItem renderItem1 = (RenderItem) f_renderItem1.get(Minecraft.getMinecraft().ingameGUI);
+					RenderBlocks renderBlocks1 = (RenderBlocks) f_renderBlocks1.get(renderItem1);
+					RenderBlocks renderBlocks2 = (RenderBlocks) f_renderBlocks2.get(renderItem1);
+					RenderItem renderItem2 = AspectOverlayRenderHelper.renderItem;
+					RenderBlocks renderBlocks3 = (RenderBlocks) f_renderBlocks1.get(renderItem2);
+					isInInventory = renderBlocks1 == renderer || renderBlocks2 == renderer || renderBlocks3 == renderer;
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+				if(isInInventory) {
+					GL11.glPushMatrix();
+					GL11.glDisable(GL11.GL_LIGHTING);
+					GL11.glRotatef(-45, 1, 0, -1);
+					GL11.glRotatef(-45, 0, 1, 0);
+					IIcon icon = specialRenderer.getIcon();
+					double size = 0.82D;
+					Tessellator tessellator = Tessellator.instance;
+					tessellator.setColorOpaque(255, 255, 255);
+					tessellator.startDrawingQuads();
+					tessellator.addVertexWithUV(0, size, size, icon.getMinU(), icon.getMinV());
+					tessellator.addVertexWithUV(0, -size, size, icon.getMinU(), icon.getMaxV());
+					tessellator.addVertexWithUV(0, -size, -size, icon.getMaxU(), icon.getMaxV());
+					tessellator.addVertexWithUV(0, size, -size, icon.getMaxU(), icon.getMinV());
+					tessellator.draw();
+					GL11.glEnable(GL11.GL_LIGHTING);
+					GL11.glPopMatrix();
+				} else {
+					specialRenderer.renderInventoryBlock(block, metadata, modelID, renderer);
+				}
+			} else {
+				specialRenderer.renderInventoryBlock(block, metadata, modelID, renderer);
+			}
 		}
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(IBlockAccess blockAccess, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		BlockSwampWater swampWaterBlock = (BlockSwampWater) block;
-		
+
 		Tessellator tessellator = Tessellator.instance;
 		int colorMultiplier = block.colorMultiplier(blockAccess, x, y, z);
 		float colorR = (float)(colorMultiplier >> 16 & 255) / 255.0F;
@@ -294,7 +340,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean shouldRender3DInInventory(int modelId) {
-		return false;
+		return true;
 	}
 
 	@Override
