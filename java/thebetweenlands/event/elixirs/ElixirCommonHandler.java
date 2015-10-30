@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -107,6 +108,17 @@ public class ElixirCommonHandler {
 				living.fallDistance = 0.0F;
 			}
 		}
+
+		if(ElixirRegistry.EFFECT_LIGHTWEIGHT.isActive(living) && !living.isInWater()) {
+			Block blockBelow = living.worldObj.getBlock(MathHelper.floor_double(living.posX), MathHelper.floor_double(living.boundingBox.minY - 0.1D), MathHelper.floor_double(living.posZ));
+			if(blockBelow.getMaterial().isLiquid()) {
+				float relStrength = Math.min((ElixirRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 4.0F, 1.0F);
+				living.motionX *= 0.1F + relStrength * 0.9F;
+				living.motionZ *= 0.1F + relStrength * 0.9F;
+				if(living.motionY < 0.0D) living.motionY = 0.0D;
+				living.onGround = true;
+			}
+		}
 	}
 	private boolean isEntityOnWall(EntityLivingBase entity) {
 		AxisAlignedBB bb = entity.boundingBox.expand(0.05D, 0.05D, 0.05D);
@@ -125,5 +137,14 @@ public class ElixirCommonHandler {
 			}
 		}
 		return false;
+	}
+
+	@SubscribeEvent
+	public void onLivingJump(LivingJumpEvent event) {
+		EntityLivingBase living = event.entityLiving;
+		if(ElixirRegistry.EFFECT_LIGHTWEIGHT.isActive(living)) {
+			float relStrength = Math.min((ElixirRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 9.0F, 0.4F);
+			living.motionY *= 1.0F + relStrength;
+		}
 	}
 }
