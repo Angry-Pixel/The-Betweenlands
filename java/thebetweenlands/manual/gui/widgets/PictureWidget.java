@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.manual.gui.GuiManualBase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Bart on 9-8-2015.
@@ -34,6 +35,16 @@ public class PictureWidget extends ManualWidgetsBase {
         this.width = width;
         this.height = height;
         this.toolTips = toolTips;
+    }
+
+    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, String toolTipsSplit) {
+        super(manual, xStart, yStart);
+        this.recourseLocation = new ResourceLocation(recourseLocation);
+        this.width = width;
+        this.height = height;
+
+        String[] splits = toolTipsSplit.split("/");
+        Collections.addAll(toolTips, splits);
     }
 
     @Override

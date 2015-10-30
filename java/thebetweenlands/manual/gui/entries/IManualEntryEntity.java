@@ -1,5 +1,7 @@
 package thebetweenlands.manual.gui.entries;
 
+import net.minecraft.entity.Entity;
+
 /**
  * Created by Bart on 20-8-2015.
  */
@@ -10,12 +12,15 @@ public interface IManualEntryEntity {
     //If any of these don't have to do with the Entity return null
 
     String manualPictureLocation();
+    int pictureWidth();
+    int pictureHeight();
 
     String manualStats();
 
-    String manualSpawnDescription();
 
-    String manualLore();
+    //split at '/'
+    String manualName();
 
-    String manualTrivia();
+    //don't null plz
+    Entity getEntity();
 }

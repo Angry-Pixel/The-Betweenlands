@@ -1,6 +1,5 @@
 package thebetweenlands.manual.gui.entries;
 
-import com.sun.istack.internal.NotNull;
 import net.minecraft.item.Item;
 
 /**
@@ -21,7 +20,7 @@ public interface IManualEntryItem {
 
     String manualName(int meta);
 
-    @NotNull
+    //don't return null plz
     Item getItem();
 
 
