@@ -8,9 +8,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
 
-public class TestItem extends ItemSword {
+public class TestItem extends ItemSword implements IManualEntryItem {
     public TestItem() {
         super(Item.ToolMaterial.IRON);
     }
@@ -31,5 +32,20 @@ public class TestItem extends ItemSword {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String manualName(int meta) {
+        return "testItem";
+    }
+
+    @Override
+    public Item getItem() {
+        return this;
+    }
+
+    @Override
+    public int recipeType(int meta) {
+        return 3;
     }
 }

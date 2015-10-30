@@ -27,12 +27,12 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     int untilUpdate = 0;
     int currentRecipe = 0;
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, int xStart, int yStart, ItemStack input) {
+    public PestleAndMortarRecipeWidget(GuiManualBase manual, ItemStack input, int xStart, int yStart) {
         super(manual, xStart, yStart);
         inputs.add(input);
     }
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, int xStart, int yStart, ArrayList<ItemStack> inputs) {
+    public PestleAndMortarRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> inputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
         this.inputs = inputs;
     }

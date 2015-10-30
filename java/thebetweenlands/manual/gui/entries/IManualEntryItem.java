@@ -1,7 +1,7 @@
 package thebetweenlands.manual.gui.entries;
 
+import com.sun.istack.internal.NotNull;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 
 /**
  * Created by Bart on 20-8-2015.
@@ -21,5 +21,16 @@ public interface IManualEntryItem {
 
     String manualName(int meta);
 
+    @NotNull
     Item getItem();
+
+
+    /*
+    0 = furnace
+    1 = purifier
+    2 = pam
+    3 = compost
+    4 = crafting/no recipe
+     */
+    int recipeType(int meta);
 }

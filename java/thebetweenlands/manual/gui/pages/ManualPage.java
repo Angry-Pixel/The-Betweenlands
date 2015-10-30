@@ -1,7 +1,8 @@
-package thebetweenlands.manual.gui;
+package thebetweenlands.manual.gui.pages;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
 import thebetweenlands.manual.gui.widgets.TextWidget;

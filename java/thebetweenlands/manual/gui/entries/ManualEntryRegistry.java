@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemCompost;
+import thebetweenlands.items.TestItem;
 import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.manual.gui.ManualPage;
+import thebetweenlands.manual.gui.pages.ManualPage;
 import thebetweenlands.manual.gui.widgets.*;
 import thebetweenlands.recipes.RecipeHandler;
 
@@ -32,6 +32,7 @@ public class ManualEntryRegistry {
 
     public static ManualEntry entry1;
     public static ManualEntry entry2;
+    public static ManualEntry entry3;
 
     public static void init(GuiManualBase manual) {
         ArrayList<IRecipe> recipes = new ArrayList<>();
@@ -66,6 +67,7 @@ public class ManualEntryRegistry {
         entry1 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.text.test")), new ManualPage(new CraftingRecipeWidget(manual, recipes, 4, 10), new CraftingRecipeWidget(manual, recipes3, 4, 10 + craftingRecipeHeight), new CraftingRecipeWidget(manual, recipes4, 4, 10 + craftingRecipeHeight * 2)), new ManualPage(new CraftingRecipeWidget(manual, recipes1, 4, 10)), new ManualPage(new CraftingRecipeWidget(manual, recipes2, 4, 10), new SmeltingRecipeWidget(manual, new ItemStack(Blocks.cobblestone), 10, 10 + craftingRecipeHeight), new PurifierRecipeWidget(manual, new ItemStack(BLBlockRegistry.aquaMiddleGemOre), 10, 10 + craftingRecipeHeight + smeltingRecipeHeight)));
         //entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 5, 10)));
         entry2 = new ManualEntryItem(arrows, "arrow", manual, new CraftingRecipeWidget(manual, recipes4, 5, 10));
+        entry3 = new ManualEntryItem((IManualEntryItem)BLItemRegistry.testItem, manual);
     }
 
 }
