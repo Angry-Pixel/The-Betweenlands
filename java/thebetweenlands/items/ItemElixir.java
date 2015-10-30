@@ -23,12 +23,12 @@ public class ItemElixir extends Item {
 	//TODO: Make throwable
 
 	@SideOnly(Side.CLIENT)
-	private IIcon iconLiquid;
+	private IIcon iconLiquid, iconVialOrange;
 
 	private final List<ElixirEffect> effects = new ArrayList<ElixirEffect>();
 
 	public ItemElixir() {
-		this.setUnlocalizedName("elixir");
+		this.setUnlocalizedName("item.thebetweenlands.elixir");
 
 		this.effects.addAll(ElixirRegistry.getEffects());
 
@@ -46,18 +46,23 @@ public class ItemElixir extends Item {
 		return null;
 	}
 
+	private ElixirEffect getElixirFromItem(ItemStack stack) {
+		return this.getElixirByID(stack.getItemDamage() / 2);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
 		super.registerIcons(reg);
 		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialLiquid");
+		this.iconVialOrange = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialOrange");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack stack, int pass) {
 		if(pass == 0) {
-			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
+			ElixirEffect effect = this.getElixirFromItem(stack);
 			if(effect != null) {
 				ElixirRecipe recipe = ElixirRecipes.getFromEffect(effect);
 				if(recipe != null) {
@@ -76,23 +81,29 @@ public class ItemElixir extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-	{
+	public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
 		return pass == 0 ? this.iconLiquid : super.getIconFromDamageForRenderPass(damage, pass);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamage(int damage) {
+		return damage % 2 == 0 ? this.itemIcon : this.iconVialOrange;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (ElixirEffect effect : this.effects) {
-			list.add(new ItemStack(item, 1, effect.getID()));
+			list.add(new ItemStack(item, 1, effect.getID() * 2));
+			list.add(new ItemStack(item, 1, effect.getID() * 2 + 1));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands.elixir." + this.getElixirByID(stack.getItemDamage()).getEffectName();
+			return "item.thebetweenlands.elixir." + this.getElixirFromItem(stack).getEffectName();
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknown";
 		}
@@ -108,8 +119,17 @@ public class ItemElixir extends Item {
 		return EnumAction.drink;
 	}
 
-	public ItemStack getElixirItem(ElixirEffect effect, int duration, int strength) {
-		ItemStack elixirStack = new ItemStack(this, 1, effect.getID());
+	/**
+	 * Creates an item stack with the specified effect, duration, strength and vial type.
+	 * Vial types: 0 = green, 1 = orange
+	 * @param effect
+	 * @param duration
+	 * @param strength
+	 * @param vialType
+	 * @return
+	 */
+	public ItemStack getElixirItem(ElixirEffect effect, int duration, int strength, int vialType) {
+		ItemStack elixirStack = new ItemStack(this, 1, effect.getID() * 2 + vialType);
 		NBTTagCompound elixirData = new NBTTagCompound();
 		elixirData.setInteger("duration", duration);
 		elixirData.setInteger("strength", strength);
@@ -131,19 +151,19 @@ public class ItemElixir extends Item {
 		}
 
 		if (!world.isRemote) {
-			ElixirEffect effect = this.getElixirByID(stack.getItemDamage());
+			ElixirEffect effect = this.getElixirFromItem(stack);
 			int duration = this.getElixirDuration(stack);
 			int strength = this.getElixirStrength(stack);
 			player.addPotionEffect(effect.createEffect(duration == -1 ? 1200 : duration, strength == -1 ? 0 : strength));
 		}
 
 		//Add empty dentrothyst vial
-		/*if (!player.capabilities.isCreativeMode) {
+		if (!player.capabilities.isCreativeMode) {
 			if (stack.stackSize <= 0) {
-				return new ItemStack(Items.glass_bottle);
+				return BLItemRegistry.dentrothystVial.createStack(stack.getItemDamage() % 2 == 0 ? 1 : 2);
 			}
-			player.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle));
-		}*/
+			player.inventory.addItemStackToInventory(BLItemRegistry.dentrothystVial.createStack(stack.getItemDamage() % 2 == 0 ? 1 : 2));
+		}
 
 		return stack;
 	}

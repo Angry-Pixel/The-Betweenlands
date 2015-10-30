@@ -190,12 +190,19 @@ public class TileEntityAlembic extends TileEntity {
 		return this.running;
 	}
 
-	public ItemStack getElixir() {
+	/**
+	 * Creates an item stack with the elixir in the alembic.
+	 * Vial types: 0 = green, 1 = orange
+	 * @param vialType
+	 * @return
+	 */
+	public ItemStack getElixir(int vialType) {
 		if(this.isFull() && this.hasFinished()) {
 			ItemStack elixir = null;
 			if(this.hasElixir()) {
-				elixir = this.createElixir(this.producableElixir, this.producableStrength, this.producableDuration);
+				elixir = this.createElixir(this.producableElixir, this.producableStrength, this.producableDuration, vialType);
 			}
+			System.out.println(this.producedAmount + " " + AMOUNT_PER_VIAL);
 			this.producedAmount -= AMOUNT_PER_VIAL;
 			if(this.producedAmount <= 0.0F || !this.hasElixir()) {
 				this.infusionBucket = null;
@@ -211,7 +218,7 @@ public class TileEntityAlembic extends TileEntity {
 		return null;
 	}
 
-	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration) {
-		return BLItemRegistry.elixir.getElixirItem(elixir, duration, strength);
+	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, int vialType) {
+		return BLItemRegistry.elixir.getElixirItem(elixir, duration, strength, vialType);
 	}
 }

@@ -162,6 +162,9 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));		
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.itemShelf, 3), "xxx", "   ", "xxx", 'x', BLBlockRegistry.weedwoodPlankSlab);
+		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(0, 3), "x x", " x ", 'x', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst), 1, 0));
+		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), "x x", " x ", 'x', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst), 1, 1));
+
 
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
@@ -339,6 +342,7 @@ public class RecipeHandler {
 		PurifierRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.CRIMSON_MIDDLE_GEM), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
 		PurifierRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.GREEN_MIDDLE_GEM), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
 		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.farmedDirt, 1, 0), new ItemStack(BLBlockRegistry.swampDirt));
+		PurifierRecipe.addRecipe(BLItemRegistry.dentrothystVial.createStack(0), BLItemRegistry.dentrothystVial.createStack(1));
 	}
 
 	private static void registerPestleAndMortarRecipes() {

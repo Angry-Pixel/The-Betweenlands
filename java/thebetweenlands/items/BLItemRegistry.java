@@ -183,6 +183,7 @@ public class BLItemRegistry {
 	public static final Item waterlogged = new ItemBLRecord("Waterlogged");
 
 	public static final ItemElixir elixir = new ItemElixir();
+	public static final ItemDentrothystVial dentrothystVial = new ItemDentrothystVial();
 
 	public static void init() {
 		initCreativeTabs();
@@ -198,7 +199,7 @@ public class BLItemRegistry {
 		ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
 		ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
 		ModCreativeTabs.plants.setTab(middleFruitSeeds);
-		ModCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir);
+		ModCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir, dentrothystVial);
 	}
 
 	private static void registerItems() {

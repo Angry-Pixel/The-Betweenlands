@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.MathHelper;
@@ -14,9 +15,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.util.ForgeDirection;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
-import cpw.mods.fml.common.IWorldGenerator;
 
 public abstract class WorldGenGiantTree implements IWorldGenerator {
 	private static final int MIN_TRUNK_RADIUS = 2;
@@ -186,13 +187,13 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 					if (world.getBlock(x, y, z) == weedwoodBark) {
 						Block t;
 						if (
-							((t = world.getBlock(x + 1, y, z)) == weedwoodBark || t == weedwood) &&
-							((t = world.getBlock(x - 1, y, z)) == weedwoodBark || t == weedwood) &&
-							((t = world.getBlock(x, y + 1, z)) == weedwoodBark || t == weedwood) &&
-							((t = world.getBlock(x, y - 1, z)) == weedwoodBark || t == weedwood) &&
-							((t = world.getBlock(x, y, z + 1)) == weedwoodBark || t == weedwood) &&
-							((t = world.getBlock(x, y, z - 1)) == weedwoodBark || t == weedwood)
-						) {
+								((t = world.getBlock(x + 1, y, z)) == weedwoodBark || t == weedwood) &&
+								((t = world.getBlock(x - 1, y, z)) == weedwoodBark || t == weedwood) &&
+								((t = world.getBlock(x, y + 1, z)) == weedwoodBark || t == weedwood) &&
+								((t = world.getBlock(x, y - 1, z)) == weedwoodBark || t == weedwood) &&
+								((t = world.getBlock(x, y, z + 1)) == weedwoodBark || t == weedwood) &&
+								((t = world.getBlock(x, y, z - 1)) == weedwoodBark || t == weedwood)
+								) {
 							world.setBlock(x, y, z, weedwood);
 						}
 					}
@@ -230,7 +231,12 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 	}
 
 	protected void placeWood(World world, Random rand, int radius, int height, int blockX, int blockY, int blockZ, int dx, int dy, int dz) {
-		world.setBlock(blockX + dx, blockY + dy, blockZ + dz, weedwood);
+		boolean isDentrothyst = dy < 40 ? (rand.nextInt(dy * 2 + 60) == 0 ? true : false) : false;
+		if(isDentrothyst) {
+			world.setBlock(blockX + dx, blockY + dy, blockZ + dz, BLBlockRegistry.dentrothyst, rand.nextInt(20) == 0 ? 1 : 0, 2);
+		} else {
+			world.setBlock(blockX + dx, blockY + dy, blockZ + dz, weedwood);
+		}
 	}
 
 	protected void placeBark(World world, Random rand, int radius, int height, int blockX, int blockY, int blockZ, int dx, int dy, int dz) {

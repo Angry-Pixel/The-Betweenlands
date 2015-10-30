@@ -13,5 +13,5 @@ public class Amounts {
 
 	public static float MAX_ASPECT_AMOUNT = VERY_HIGH * TileEntityInfuser.MAX_INGREDIENTS;
 
-	public static float VIAL = MAX_ASPECT_AMOUNT / TileEntityInfuser.MAX_INGREDIENTS * 2.25F;
+	public static float VIAL = MAX_ASPECT_AMOUNT / TileEntityInfuser.MAX_INGREDIENTS * MEDIUM;
 }
