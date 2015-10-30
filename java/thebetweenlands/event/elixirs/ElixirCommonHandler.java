@@ -1,9 +1,14 @@
 package thebetweenlands.event.elixirs;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
@@ -71,5 +76,54 @@ public class ElixirCommonHandler {
 			newDuration *= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
 			event.duration = MathHelper.ceiling_float_int(newDuration);
 		}
+	}
+
+	@SubscribeEvent
+	public void onEntityUpdate(LivingUpdateEvent event) {
+		EntityLivingBase living = event.entityLiving;
+		if(ElixirRegistry.EFFECT_SPIDERBREED.isActive(living)) {
+			int strength = ElixirRegistry.EFFECT_SPIDERBREED.getStrength(living);
+			float relStrength = Math.min((strength + 1) / 4.0F, 1.0F);
+			Vec3 lookVec = living.getLookVec().normalize();
+			if(living.moveForward < 0.0F) {
+				lookVec.yCoord *= -1;
+			}
+			if((!living.onGround || this.isEntityOnWall(living)) && (living.isCollidedHorizontally || living.isCollidedVertically)) {
+				if(living instanceof EntityPlayer) {
+					living.motionY = lookVec.yCoord * 0.22F * relStrength;
+				} else {
+					living.motionY = 0.22F * relStrength;
+				}
+			}
+			if(!living.onGround && this.isEntityOnWall(living)) {
+				if(living.motionY < 0.0F && (lookVec.yCoord > 0.0F || (living.moveForward == 0.0F && living.moveStrafing == 0.0F))) {
+					living.motionY *= 0.9F - relStrength * 0.5F;
+				}
+				if(living.isSneaking()) {
+					living.motionY *= 0.15F * (1.0F - relStrength);
+				}
+				living.motionX *= relStrength;
+				living.motionZ *= relStrength;
+				living.fallDistance = 0.0F;
+			}
+		}
+	}
+	private boolean isEntityOnWall(EntityLivingBase entity) {
+		AxisAlignedBB bb = entity.boundingBox.expand(0.05D, 0.05D, 0.05D);
+		int mX = MathHelper.floor_double(bb.minX);
+		int mY = MathHelper.floor_double(bb.minY + 0.06D);
+		int mZ = MathHelper.floor_double(bb.minZ);
+		for (int y2 = mY; y2 < bb.maxY - 0.06D; y2++) {
+			for (int x2 = mX; x2 < bb.maxX; x2++) {
+				for (int z2 = mZ; z2 < bb.maxZ; z2++) {
+					Block block = entity.worldObj.getBlock(x2, y2, z2);
+					if (block != null && block.isCollidable()) {
+						AxisAlignedBB boundingBox = block.getCollisionBoundingBoxFromPool(entity.worldObj, x2, y2, z2);
+						if(boundingBox != null && boundingBox.intersectsWith(bb)) return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
