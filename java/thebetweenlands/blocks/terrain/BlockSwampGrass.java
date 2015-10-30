@@ -109,13 +109,13 @@ public class BlockSwampGrass
     }
 
     @Override
-    public boolean func_149851_a(World p_149851_1_, int p_149851_2_, int p_149851_3_, int p_149851_4_, boolean p_149851_5_) {
-        return true;
+    public boolean func_149851_a(World world, int x, int y, int z, boolean p_149851_5_) {
+        return false;
     }
 
     @Override
-    public boolean func_149852_a(World p_149852_1_, Random p_149852_2_, int p_149852_3_, int p_149852_4_, int p_149852_5_) {
-        return true;
+    public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+        return false;
     }
 
     @Override
@@ -139,7 +139,7 @@ public class BlockSwampGrass
                         continue;
                     }
                 } else if (world.getBlock(i1, j1, k1) == Blocks.air) {
-                    if (rand.nextInt(8) != 0) {
+                    if (rand.nextInt(6) != 0) {
                         if (BLBlockRegistry.swampTallGrass.canBlockStay(world, i1, j1, k1)) {
                             world.setBlock(i1, j1, k1, BLBlockRegistry.swampTallGrass, 1, 3);
                         }
