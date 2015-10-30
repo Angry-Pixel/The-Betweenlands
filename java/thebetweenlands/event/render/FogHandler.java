@@ -23,6 +23,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -106,10 +107,16 @@ public class FogHandler {
 			fogEnd = bgbb.getFogEnd(this.farPlaneDistance);
 		}
 
+
+		float uncloudedStrength = 0.0F;
+		if(ElixirRegistry.EFFECT_UNCLOUDED.isActive(player)) {
+			uncloudedStrength = Math.min((ElixirRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
+		}
+
 		//Dense fog
 		if(this.hasDenseFog()) {
-			fogStart /= 5.0f;
-			fogEnd /= 3.0f;
+			fogStart /= 5.0f / (1.0F + uncloudedStrength * 4.0F);
+			fogEnd /= 3.0f / (1.0F + uncloudedStrength * 2.0F);
 		}
 
 		//Underground fog
@@ -125,8 +132,8 @@ public class FogHandler {
 					multiplier += Math.pow(((targettedMultiplier - multiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - player.posY)), 0.85F);
 				}
 			}
-			fogStart *= multiplier;
-			fogEnd *= multiplier * 1.5F;
+			fogStart *= Math.min(multiplier * (1.0F + uncloudedStrength * (1.0F / multiplier - 1.0F)), 1.0F);
+			fogEnd *= Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
 		}
 
 		if(this.currentFogStart < 0.0F || this.currentFogEnd < 0.0F) {
