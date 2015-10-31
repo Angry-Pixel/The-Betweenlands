@@ -122,7 +122,6 @@ public class LifeCrystalRenderer implements IWaterRenderer {
 		t.addVertexWithUV(_x + core.tX + halfSize1, _y + 1, _z + core.tZ + halfSize1, u0, v0);
 		t.addVertexWithUV(_x + core.tX - halfSize1, _y + 1, _z + core.tZ + halfSize1, u0 + halfSizeTex1 * 2, v0);
 
-		icon = block.getIcon(2, 0);
 		u0 = icon.getMinU();
 		v0 = icon.getMinV();
 
@@ -149,6 +148,6 @@ public class LifeCrystalRenderer implements IWaterRenderer {
 
 	@Override
 	public IIcon getIcon() {
-		return BLBlockRegistry.pitstone.getIcon(0, 0);
+		return null;
 	}
 }

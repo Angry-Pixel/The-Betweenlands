@@ -50,6 +50,7 @@ public class BetweenlandsWorldData extends WorldSavedData {
 	private void setDefaults() {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.setDefaults();
+			event.setLoaded();
 		}
 	}
 	

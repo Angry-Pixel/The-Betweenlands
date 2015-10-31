@@ -80,7 +80,7 @@ public class EventSpoopy extends EnvironmentEvent {
 		this.world = world;
 		if(!world.isRemote) {
 			long dayDiff = this.getDayDiff();
-			if(dayDiff >= 0 && dayDiff <= 11) {
+			if(dayDiff >= 0 && dayDiff <= 8) {
 				if(!this.isActive() && !this.wasSet) {
 					this.setActive(true, true);
 					this.wasSet = true;
