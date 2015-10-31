@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import thebetweenlands.entities.EntityAngryPebble;
+import thebetweenlands.entities.projectiles.EntityAngryPebble;
 
 public class ItemAngryPebble extends Item {
 

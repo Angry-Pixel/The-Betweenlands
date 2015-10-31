@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.model.entity.ModelTarminion;
-import thebetweenlands.entities.EntityThrownTarminion;
+import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 
 @SideOnly(Side.CLIENT)
 public class ItemTarminionRenderer extends Render implements IItemRenderer {

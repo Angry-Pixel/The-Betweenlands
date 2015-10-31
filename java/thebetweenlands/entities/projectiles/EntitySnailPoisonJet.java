@@ -1,4 +1,4 @@
-package thebetweenlands.entities;
+package thebetweenlands.entities.projectiles;
 
 import java.util.Random;
 

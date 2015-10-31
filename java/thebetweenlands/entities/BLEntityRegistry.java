@@ -27,6 +27,11 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.projectiles.EntityAngryPebble;
+import thebetweenlands.entities.projectiles.EntityBLArrow;
+import thebetweenlands.entities.projectiles.EntityElixir;
+import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
+import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.SpawnEggs;
 
@@ -48,7 +53,7 @@ public class BLEntityRegistry
 		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x804E3D, 0x3D6F80);
 		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg");
 		registerEntity(13, EntityAngryPebble.class, "angryPebble");
-		registerEntity(14, EntityBLArrow.class, "anglerToothArrow");
+		registerEntity(14, EntityBLArrow.class, "blArrow", 64, 20, true);
 		registerEntity(15, EntitySiltCrab.class, "siltCrab", 0x086A87, 0xB43104);
 		registerEntity(16, EntitySnailPoisonJet.class, "snailPoisonJet");
 		registerEntity(17, EntityLurker.class, "lurker", 0x283320, 0x827856);
@@ -59,14 +64,24 @@ public class BLEntityRegistry
 		registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", 0x283320, 0x827856);
 		registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", 0x283320, 0x827856);
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0x243B0B, 0x00FFFF);
-		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E);
+		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 10, true);
 		registerEntity(26, EntityThrownTarminion.class, "thrownTarminion");
 		registerEntity(27, EntityWeedwoodRowboat.class, "weedwoodBoat");
 		registerEntity(28, EntityPeatMummy.class, "peatMummy", 0x000000, 0x2E2E2E);
+		registerEntity(29, EntityElixir.class, "thrownElixir", 64, 10, true);
+	}
+
+	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
+		EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.instance, trackingRange, trackingFrequency, velocityUpdates);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
-		EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.instance, 256, 1, true);
+		EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.instance, 64, 5, true);
+	}
+
+	private static final void registerEntity(int id, Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
+		registerEntity(id, entityClass, name, trackingRange, trackingFrequency, velocityUpdates);
+		SpawnEggs.registerSpawnEgg(entityClass, name, id, eggBackgroundColor, eggForegroundColor);
 	}
 
 	private static final void registerEntity(int id, Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor) {

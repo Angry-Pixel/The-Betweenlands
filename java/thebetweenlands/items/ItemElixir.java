@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.entities.projectiles.EntityElixir;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
@@ -140,7 +142,17 @@ public class ItemElixir extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		if(!player.isSneaking()) {
+			player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		} else {
+			if (!player.capabilities.isCreativeMode) {
+				--stack.stackSize;
+			}
+			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			if (!world.isRemote) {
+				world.spawnEntityInWorld(new EntityElixir(world, player, stack));
+			}
+		}
 		return stack;
 	}
 
@@ -166,6 +178,13 @@ public class ItemElixir extends Item {
 		}
 
 		return stack;
+	}
+
+	public void applyEffect(ItemStack stack, EntityLivingBase entity, double modifier) {
+		ElixirEffect effect = this.getElixirFromItem(stack);
+		int strength = this.getElixirStrength(stack);
+		int duration = this.getElixirDuration(stack);
+		entity.addPotionEffect(effect.createEffect(duration == -1 ? 1200 : (int)(duration * modifier), strength == -1 ? 0 : strength));
 	}
 
 	public int getElixirDuration(ItemStack stack) {

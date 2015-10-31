@@ -1,7 +1,10 @@
-package thebetweenlands.items;
+package thebetweenlands.items.bow;
 
 import java.util.List;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,11 +18,9 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
-import thebetweenlands.entities.EntityBLArrow;
+import thebetweenlands.entities.projectiles.EntityBLArrow;
+import thebetweenlands.items.ICorrodible;
 import thebetweenlands.utils.CorrodibleItemHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 	public static final int ANIMATION_LENGTH = 3;
@@ -78,12 +79,19 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 		maxUseDuration = event.charge;
 
 		boolean canShoot = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
-		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
-		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
-		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
-		boolean basiliskArrow = player.inventory.hasItem(BLItemRegistry.basiliskArrow);
 
-		if (canShoot || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
+		EnumArrowType type = null;
+		ItemBLArrow arrowItem = null;
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack currentStack = player.inventory.mainInventory[i];
+			if(currentStack != null && currentStack.getItem() instanceof ItemBLArrow) {
+				arrowItem =  ((ItemBLArrow)currentStack.getItem());
+				type = arrowItem.getType();
+				break;
+			}
+		}
+
+		if (canShoot || type != null) {
 			float power = maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 2.0F;
 
@@ -97,45 +105,40 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 
 			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power * 2.0f);
 			if (!world.isRemote) {
-				if (poisonedAnglerToothArrow)
-					entityarrow.getDataWatcher().updateObject(17, 1);
-				else if (octineArrow)
-					entityarrow.getDataWatcher().updateObject(17, 2);
-				else if (basiliskArrow)
-					entityarrow.getDataWatcher().updateObject(17, 3);
+				entityarrow.setArrowType(type);
 			}
-			if (power == 1.0F)
+			if (power == 1.0F) {
 				entityarrow.setIsCritical(true);
+			}
 
 			int powerEnchant = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
 
-			if (powerEnchant > 0)
+			if (powerEnchant > 0) {
 				entityarrow.setDamage(entityarrow.getDamage() + (double) powerEnchant * 0.5D + 0.5D);
+			}
 
 			int punchEnchant = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
 
-			if (punchEnchant > 0)
+			if (punchEnchant > 0) {
 				entityarrow.setKnockbackStrength(punchEnchant);
+			}
 
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0)
+			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0) {
 				entityarrow.setFire(100);
+			}
 
 			stack.damageItem(1, player);
 			world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + power * 0.5F);
 
-			if (canShoot)
+			if (player.capabilities.isCreativeMode) {
 				entityarrow.canBePickedUp = 2;
-			else if (poisonedAnglerToothArrow)
-				player.inventory.consumeInventoryItem(BLItemRegistry.poisonedAnglerToothArrow);
-			else if (octineArrow)
-				player.inventory.consumeInventoryItem(BLItemRegistry.octineArrow);
-			else if (basiliskArrow)
-				player.inventory.consumeInventoryItem(BLItemRegistry.basiliskArrow);
-			else
-				player.inventory.consumeInventoryItem(BLItemRegistry.anglerToothArrow);
+			} else if (arrowItem != null) {
+				player.inventory.consumeInventoryItem(arrowItem);
+			}
 
-			if (!world.isRemote)
+			if (!world.isRemote) {
 				world.spawnEntityInWorld(entityarrow);
+			}
 		}
 	}
 
@@ -164,11 +167,16 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 			return event.result;
 		}
 
-		boolean anglerToothArrow = player.inventory.hasItem(BLItemRegistry.anglerToothArrow);
-		boolean poisonedAnglerToothArrow = player.inventory.hasItem(BLItemRegistry.poisonedAnglerToothArrow);
-		boolean octineArrow = player.inventory.hasItem(BLItemRegistry.octineArrow);
-		boolean basiliskArrow = player.inventory.hasItem(BLItemRegistry.basiliskArrow);
-		if (player.capabilities.isCreativeMode || anglerToothArrow || poisonedAnglerToothArrow || octineArrow || basiliskArrow) {
+		EnumArrowType type = null;
+		for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+			ItemStack currentStack = player.inventory.mainInventory[i];
+			if(currentStack != null && currentStack.getItem() instanceof ItemBLArrow) {
+				type = ((ItemBLArrow)currentStack.getItem()).getType();
+				break;
+			}
+		}
+
+		if (player.capabilities.isCreativeMode || type != null) {
 			player.setItemInUse(item, this.getMaxItemUseDuration(item));
 		}
 

@@ -19,7 +19,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.entities.EntitySnailPoisonJet;
+import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemGeneric;
 import thebetweenlands.items.ItemGeneric.EnumItemGeneric;

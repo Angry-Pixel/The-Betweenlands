@@ -158,7 +158,7 @@ public class ElixirEffect {
 	/**
 	 * Instant effect
 	 */
-	protected void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double distance) { }
+	protected void affectEntity(EntityLivingBase attacker, EntityLivingBase target, int strength, double multiplier) { }
 
 	/**
 	 * Whether this affect should be applied instantly

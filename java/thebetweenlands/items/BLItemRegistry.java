@@ -14,6 +14,9 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.items.bow.EnumArrowType;
+import thebetweenlands.items.bow.ItemBLArrow;
+import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
@@ -36,10 +39,10 @@ public class BLItemRegistry {
 	public static final Item weedwoodAxe = new AxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodAxe").setTextureName("thebetweenlands:weedWoodAxe");
 	public static final Item weedwoodShovel = new SpadeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
 	public static final Item weedwoodBow = new ItemWeedwoodBow().setUnlocalizedName("thebetweenlands.weedwoodBow").setTextureName("thebetweenlands:weedwoodBow");
-	public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow").setUnlocalizedName("thebetweenlands.anglerToothArrow").setTextureName("thebetweenlands:anglerToothArrowItem");
-	public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow").setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
-	public static final Item octineArrow = new ItemBLArrow("octineArrow").setUnlocalizedName("thebetweenlands.octineArrow");
-	public static final Item basiliskArrow = new ItemBLArrow("basiliskArrow").setUnlocalizedName("thebetweenlands.basiliskArrow");
+	public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow", EnumArrowType.DEFAULT).setUnlocalizedName("thebetweenlands.anglerToothArrow").setTextureName("thebetweenlands:anglerToothArrowItem");
+	public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow", EnumArrowType.ANGLER_POISON).setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
+	public static final Item octineArrow = new ItemBLArrow("octineArrow", EnumArrowType.OCTINE).setUnlocalizedName("thebetweenlands.octineArrow");
+	public static final Item basiliskArrow = new ItemBLArrow("basiliskArrow", EnumArrowType.BASILISK).setUnlocalizedName("thebetweenlands.basiliskArrow");
 
 	public static final Item betweenstoneSword = new SwordBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
 	public static final Item betweenstonePickaxe = new PickaxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstonePickaxe").setTextureName("thebetweenlands:betweenstonePickaxe");

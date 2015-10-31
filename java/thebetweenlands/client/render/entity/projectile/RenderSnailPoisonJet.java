@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.entity;
+package thebetweenlands.client.render.entity.projectile;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
