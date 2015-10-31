@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import thebetweenlands.items.BLItemRegistry;
 
 public class TabSpecialItems
         extends CreativeTabBetweenlands
@@ -14,7 +15,7 @@ public class TabSpecialItems
 
     @Override
     public Item getTabIconItem() {
-        return Items.enchanted_book;
+        return BLItemRegistry.shimmerStone;
     }
 
     @Override
