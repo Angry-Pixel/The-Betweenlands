@@ -28,9 +28,8 @@ public class ItemRope extends Item {
                 stack.stackSize--;
                 return true;
             }
-        } else if (world.getBlock(x, y, z).isSideSolid(world, x, y, z, ForgeDirection.getOrientation(side))) {
-            ForgeDirection direction = ForgeDirection.getOrientation(side);
-            world.setBlock(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, BLBlockRegistry.rope);
+        } else if (world.getBlock(x, y, z).isSideSolid(world, x, y, z, ForgeDirection.DOWN) && world.getBlock(x, y - 1, z) == Blocks.air) {
+            world.setBlock(x, y - 1, z, BLBlockRegistry.rope);
             stack.stackSize--;
             return true;
         }
