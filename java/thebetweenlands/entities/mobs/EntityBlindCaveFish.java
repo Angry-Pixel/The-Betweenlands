@@ -1,7 +1,6 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
@@ -78,13 +77,18 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 
 		if(!this.worldObj.isRemote) {
 			if (isInWater()) {
-				moveProgress = animation.swing(1.2F, 0.4F, false);
 				if (!worldObj.isRemote) {
 					swimAbout();
 				}
+				this.velocityChanged = true;
+			}
+		} else {
+			if (isInWater()) {
+				moveProgress = animation.swing(1.2F, 0.4F, false);
 				renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
 				rotationYaw = renderYawOffset;
-				this.velocityChanged = true;
+			} else {
+				moveProgress = animation.swing(2F, 0.4F, false);
 			}
 		}
 	}

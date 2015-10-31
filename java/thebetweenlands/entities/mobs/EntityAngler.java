@@ -106,7 +106,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 			setTarget(target);
 
 			if (isInWater()) {
-				moveProgress = animation.swing(1.2F, 0.4F, false);
 				if (!worldObj.isRemote) {
 					if (getEntityToAttack() != null) {
 						currentSwimTarget = new ChunkCoordinates((int) getEntityToAttack().posX, (int) ((int) getEntityToAttack().posY + getEntityToAttack().getEyeHeight()), (int) getEntityToAttack().posZ);
@@ -115,10 +114,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 					else
 						swimAbout();
 				}
-				renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
-				rotationYaw = renderYawOffset;
 			} else {
-				moveProgress = animation.swing(2F, 0.4F, false);
 				if (!worldObj.isRemote) {
 					if(!onGround)
 					{
@@ -134,6 +130,14 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 						motionZ += (rand.nextFloat()-rand.nextFloat())* 0.3F;
 					}
 				}
+			}
+		} else {
+			if (isInWater()) {
+				moveProgress = animation.swing(1.2F, 0.4F, false);
+				renderYawOffset += (-((float)Math.atan2(motionX, motionZ)) * 180.0F / (float)Math.PI - renderYawOffset) * 0.1F;
+				rotationYaw = renderYawOffset;
+			} else {
+				moveProgress = animation.swing(2F, 0.4F, false);
 			}
 		}
 	}
