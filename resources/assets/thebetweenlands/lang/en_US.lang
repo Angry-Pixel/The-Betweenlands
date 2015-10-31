@@ -242,7 +242,7 @@ tile.thebetweenlands.waterFlowerStalk.name=Water Flower Stalk
 tile.thebetweenlands.waterFlower.name=Water Flower
 tile.thebetweenlands.thorns.name=Thorns
 tile.thebetweenlands.poisonIvy.name=Poison Ivy
-tile.thebetweenlands.swampTallGrass.name=Swamp Tallgrass
+tile.thebetweenlands.swampTallgrass.name=Swamp Tallgrass
 tile.thebetweenlands.doubleSwampTallgrass.name=Double Swamp Tallgrass
 tile.thebetweenlands.pitcherPlant.name=Pitcher Plant
 tile.thebetweenlands.venusFlyTrap.name=Venus Fly Trap
@@ -502,7 +502,7 @@ item.thebetweenlands.weedwoodRowboat.name=Weedwood Rowboat
 # Ground items
 item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
 item.thebetweenlands.groundCatTail.name=Ground Cattail
-item.thebetweenlands.groundSwampTallGrass.name=Ground Swamp Tallgrass
+item.thebetweenlands.groundSwampTallgrass.name=Ground Swamp Tallgrass
 item.thebetweenlands.groundShoots.name=Ground Shoots
 item.thebetweenlands.groundArrowArum.name=Ground Arrow Arum
 item.thebetweenlands.groundButtonBush.name=Ground Button Bush
