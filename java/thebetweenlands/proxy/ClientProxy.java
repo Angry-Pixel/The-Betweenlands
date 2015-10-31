@@ -163,6 +163,7 @@ import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.event.render.FovHandler;
 import thebetweenlands.event.render.GLUProjectionHandler;
 import thebetweenlands.event.render.ItemTextureTicker;
 import thebetweenlands.event.render.OverlayHandler;
@@ -376,6 +377,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(ItemTextureTicker.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirClientHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);

@@ -20,16 +20,13 @@ public class EntityElixir extends EntityThrowable {
 		this.getDataWatcher().addObject(20, new ItemStack(BLItemRegistry.elixir));
 	}
 
-	public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir) {
+	public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir, float strength) {
 		super(world, thrower);
 		this.elixirStack = elixir;
 		this.getDataWatcher().addObject(20, elixir);
-	}
-
-	public EntityElixir(World world, double x, double y, double z, ItemStack elixir) {
-		super(world, x, y, z);
-		this.elixirStack = elixir;
-		this.getDataWatcher().addObject(20, elixir);
+		this.motionX *= strength;
+		this.motionY *= strength;
+		this.motionZ *= strength;
 	}
 
 	public ItemStack getElixirStack() {

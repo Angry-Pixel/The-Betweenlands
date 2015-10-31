@@ -162,7 +162,6 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(BLItemRegistry.weedwoodBow);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		MinecraftForge.EVENT_BUS.register(new PowerRingHandler());
 		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());

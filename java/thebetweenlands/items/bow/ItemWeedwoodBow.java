@@ -2,7 +2,6 @@ package thebetweenlands.items.bow;
 
 import java.util.List;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,7 +13,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
@@ -105,7 +103,7 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 
 			EntityBLArrow entityarrow = new EntityBLArrow(world, player, power * 2.0f);
 			if (!world.isRemote) {
-				entityarrow.setArrowType(type);
+				entityarrow.setArrowType(type != null ? type : EnumArrowType.DEFAULT);
 			}
 			if (power == 1.0F) {
 				entityarrow.setIsCritical(true);
@@ -140,23 +138,6 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 				world.spawnEntityInWorld(entityarrow);
 			}
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onUpdateFOV(FOVUpdateEvent event) {
-		float fov = event.fov;
-		if (event.entity.isUsingItem() && event.entity.getItemInUse().getItem() == this) {
-			int duration = event.entity.getItemInUseDuration();
-			float multiplier = duration / 10.0F;
-			if (multiplier > 1.0F) {
-				multiplier = 1.0F;
-			} else {
-				multiplier *= multiplier;
-			}
-			fov = 1.0F - multiplier * 0.15F;
-		}
-		event.newfov = fov;
 	}
 
 	@Override

@@ -112,15 +112,28 @@ public class ItemElixir extends Item {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 32;
-	}
-
-	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("throwing") && stack.stackTagCompound.getBoolean("throwing")) {
+			return EnumAction.bow;
+		}
 		return EnumAction.drink;
 	}
 
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int inUseCount) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("throwing") && stack.stackTagCompound.getBoolean("throwing")) {
+			if (!player.capabilities.isCreativeMode) {
+				--stack.stackSize;
+			}
+			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			if (!world.isRemote) {
+				int useCount = this.getMaxItemUseDuration(stack) - inUseCount;
+				float strength = Math.min(0.4F + useCount / 15.0F, 2.0F);
+				world.spawnEntityInWorld(new EntityElixir(world, player, stack, strength));
+			}
+		}
+	}
+	
 	/**
 	 * Creates an item stack with the specified effect, duration, strength and vial type.
 	 * Vial types: 0 = green, 1 = orange
@@ -141,18 +154,20 @@ public class ItemElixir extends Item {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(!player.isSneaking()) {
-			player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
-		} else {
-			if (!player.capabilities.isCreativeMode) {
-				--stack.stackSize;
-			}
-			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-			if (!world.isRemote) {
-				world.spawnEntityInWorld(new EntityElixir(world, player, stack));
-			}
+	public int getMaxItemUseDuration(ItemStack stack) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("throwing") && stack.stackTagCompound.getBoolean("throwing")) {
+			return 100000;
 		}
+		return 32;
+	}
+	
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if(stack.stackTagCompound == null) {
+			stack.stackTagCompound = new NBTTagCompound();
+		}
+		stack.stackTagCompound.setBoolean("throwing", player.isSneaking());
+		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
 		return stack;
 	}
 
