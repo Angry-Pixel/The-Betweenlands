@@ -11,15 +11,9 @@ public class ElixirCatsEye extends ElixirEffect {
 	}
 
 	@Override
-	protected boolean isInstant() {
-		return true;
-	}
-
-	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(this.getDuration(entity) > 0) {
+		if(entity.getActivePotionEffect(Potion.nightVision) == null || entity.getActivePotionEffect(Potion.nightVision).getDuration() != this.getDuration(entity)) {
 			entity.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), this.getDuration(entity), strength));
-			this.removeElixir(entity);
 		}
 	}
 }
