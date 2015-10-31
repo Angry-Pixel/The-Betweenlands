@@ -39,7 +39,7 @@ public class BLItemRegistry {
 	public static final Item weedwoodAxe = new AxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodAxe").setTextureName("thebetweenlands:weedWoodAxe");
 	public static final Item weedwoodShovel = new SpadeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
 	public static final Item weedwoodBow = new ItemWeedwoodBow().setUnlocalizedName("thebetweenlands.weedwoodBow").setTextureName("thebetweenlands:weedwoodBow");
-	public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow", EnumArrowType.DEFAULT).setUnlocalizedName("thebetweenlands.anglerToothArrow").setTextureName("thebetweenlands:anglerToothArrowItem");
+	public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow", EnumArrowType.DEFAULT).setUnlocalizedName("thebetweenlands.anglerToothArrow");
 	public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow", EnumArrowType.ANGLER_POISON).setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
 	public static final Item octineArrow = new ItemBLArrow("octineArrow", EnumArrowType.OCTINE).setUnlocalizedName("thebetweenlands.octineArrow");
 	public static final Item basiliskArrow = new ItemBLArrow("basiliskArrow", EnumArrowType.BASILISK).setUnlocalizedName("thebetweenlands.basiliskArrow");
