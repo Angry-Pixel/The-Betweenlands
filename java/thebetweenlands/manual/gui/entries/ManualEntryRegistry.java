@@ -4,6 +4,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.TestItem;
 import thebetweenlands.manual.gui.GuiManualBase;
@@ -33,6 +34,7 @@ public class ManualEntryRegistry {
     public static ManualEntry entry1;
     public static ManualEntry entry2;
     public static ManualEntry entry3;
+    public static ManualEntry entry4;
 
     public static void init(GuiManualBase manual) {
         ArrayList<IRecipe> recipes = new ArrayList<>();
@@ -68,6 +70,7 @@ public class ManualEntryRegistry {
         //entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 5, 10)));
         entry2 = new ManualEntryItem(arrows, "arrow", manual, new CraftingRecipeWidget(manual, recipes4, 5, 10));
         entry3 = new ManualEntryItem((IManualEntryItem)BLItemRegistry.testItem, manual);
+        entry4 = new ManualEntryEntity(new EntityFirefly(manual.mc.theWorld), manual);
     }
 
 }

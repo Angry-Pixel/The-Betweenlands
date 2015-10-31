@@ -13,6 +13,6 @@ import java.util.ArrayList;
 public class ManualEntryEntity extends ManualEntry {
 
     public ManualEntryEntity(IManualEntryEntity entity, GuiManualBase manual){
-        super(new ManualPage(new TextWidget(manual, 5, 5, "manual." + entity.manualName() + ".title"), new PictureWidget(manual, 5, 10, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())), new ManualPage(new TextWidget(manual, 5, 5, "manual." + entity.manualName() + ".description")));
+        super(new ManualPage(new TextWidget(manual, 5, 5, "manual." + entity.manualName() + ".title"), new PictureWidget(manual, (127 / 2) - (entity.pictureWidth()/2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())), new ManualPage(new TextWidget(manual, 5, 5, "manual." + entity.manualName() + ".description")));
     }
 }
