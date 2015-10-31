@@ -5,6 +5,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
@@ -118,6 +120,11 @@ public class ElixirCommonHandler {
 				if(living.motionY < 0.0D) living.motionY = 0.0D;
 				living.onGround = true;
 			}
+		}
+
+		if(ElixirRegistry.EFFECT_CATSEYES.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), ElixirRegistry.EFFECT_CATSEYES.getDuration(living), ElixirRegistry.EFFECT_CATSEYES.getStrength(living)));
+			ElixirRegistry.EFFECT_CATSEYES.removeElixir(living);
 		}
 	}
 	private boolean isEntityOnWall(EntityLivingBase entity) {

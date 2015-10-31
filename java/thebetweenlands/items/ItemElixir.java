@@ -184,7 +184,7 @@ public class ItemElixir extends Item {
 		ElixirEffect effect = this.getElixirFromItem(stack);
 		int strength = this.getElixirStrength(stack);
 		int duration = this.getElixirDuration(stack);
-		entity.addPotionEffect(effect.createEffect(duration == -1 ? 1200 : (int)(duration * modifier), strength == -1 ? 0 : strength));
+		entity.addPotionEffect(effect.createEffect(duration == -1 ? (int)(1200 * modifier) : (int)(duration * modifier), strength == -1 ? 0 : strength));
 	}
 
 	public int getElixirDuration(ItemStack stack) {

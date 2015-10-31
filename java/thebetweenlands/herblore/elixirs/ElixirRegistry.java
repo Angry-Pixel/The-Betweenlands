@@ -8,7 +8,6 @@ import java.util.List;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.herblore.elixirs.effects.ElixirCatsEye;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.herblore.elixirs.effects.ElixirFeasting;
 import thebetweenlands.herblore.elixirs.effects.ElixirHealing;
@@ -32,7 +31,7 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_HUNTERSSENSE = new ElixirEffect(6, "bl.elixir.huntersSense", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirMasking EFFECT_MASKING = new ElixirMasking(7, "bl.elixir.masking", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SWIFTARM = new ElixirSwiftarm(8, "bl.elixir.swiftarm", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
-	public static final ElixirEffect EFFECT_CATSEYES = new ElixirCatsEye(9, "bl.elixir.catsEyes", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
+	public static final ElixirEffect EFFECT_CATSEYES = new ElixirEffect(9, "bl.elixir.catsEyes", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SAGITTARIUS = new ElixirEffect(10, "bl.elixir.sagittarius", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_SPIDERBREED = new ElixirEffect(11, "bl.elixir.spiderbreed", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_LIGHTWEIGHT = new ElixirEffect(12, "bl.elixir.lightweight", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
