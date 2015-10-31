@@ -87,7 +87,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-		if (world.getBlock(x, y, z).isAir(world, x, y, z)) return true;
+		if (world.getBlock(x, y, z).isAir(world, x, y, z) || !this.canSpread) return true;
 
 		Block block = world.getBlock(x, y, z);
 
@@ -496,7 +496,7 @@ public class BlockSwampWater extends BlockFluidClassic {
 	}
 
 	public boolean canConnectTo(Block block) {
-		return block == this || block == BLBlockRegistry.swampWater || SPECIAL_RENDERERS.containsKey(block);
+		return block == this || block == BLBlockRegistry.swampWater || block instanceof BlockSwampWater || SPECIAL_RENDERERS.containsKey(block);
 	}
 
 	@Override
