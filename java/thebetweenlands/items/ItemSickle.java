@@ -19,7 +19,7 @@ public class ItemSickle extends Item {
 		this.setUnlocalizedName("thebetweenlands.sickle");
 		this.setTextureName("thebetweenlands:strictlyHerblore/tools/sickle");
 		this.setMaxStackSize(1);
-		this.setMaxDamage(500);
+		this.setMaxDamage(2500);
 		ModCreativeTabs.herbLore.setTab(this);
 	}
 
