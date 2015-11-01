@@ -19,15 +19,13 @@ public class TextWidget extends ManualWidgetsBase {
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
 		super(manual, xStart, yStart);
-		//TODO: Fix container position
-		this.textContainer = new TextContainer(90, 25, 120, 0, StatCollector.translateToLocal(unlocalizedText));
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 0, StatCollector.translateToLocal(unlocalizedText));
 		this.init();
 	}
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String text, boolean localized) {
 		super(manual, xStart, yStart);
-		//TODO: Fix container position
-		this.textContainer = new TextContainer(90, 25, 120, 0, localized ? text : StatCollector.translateToLocal(text));
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 0, localized ? text : StatCollector.translateToLocal(text));
 		this.init();
 	}
 
