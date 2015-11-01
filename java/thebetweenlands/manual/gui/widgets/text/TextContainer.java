@@ -330,9 +330,6 @@ public class TextContainer {
 			return;
 		}
 
-		this.currentScale = 1.0F;
-		this.currentColor = 0x808080;
-
 		String[] words = parsedText.split(" ");
 		int wordIndex = 0;
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -342,6 +339,7 @@ public class TextContainer {
 		int xCursor = 0;
 		int yCursor = 0;
 		int lastWordXCursor = 0;
+		int lastFontHeight = (int)(fontHeight * this.currentScale);
 		for(int i = 0; i < words.length; i++) {
 			String word = words[i];
 			if(word.length() > 0) {
@@ -387,7 +385,8 @@ public class TextContainer {
 				if(xCursor + renderStrWidth > xOffsetMax) {
 					xCursor = 0;
 					lastWordXCursor = 0;
-					yCursor += fontHeight;
+					yCursor += lastFontHeight;
+					lastFontHeight = renderStrHeight;
 				}
 
 				int renderX = (int) ((xOffset + xCursor) / this.currentScale);
