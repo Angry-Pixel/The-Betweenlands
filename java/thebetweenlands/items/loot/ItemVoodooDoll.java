@@ -1,7 +1,5 @@
 package thebetweenlands.items.loot;
 
-import java.util.List;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,11 +8,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
+
+import java.util.List;
 
 /**
  * Created by Bart on 8-7-2015.
  */
-public class ItemVoodooDoll extends Item {
+public class ItemVoodooDoll extends Item implements IManualEntryItem {
 	public ItemVoodooDoll() {
 		maxStackSize = 1;
 		setMaxDamage(4);
@@ -40,5 +41,20 @@ public class ItemVoodooDoll extends Item {
 			}
 		}
 		return stack;
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "voodooDoll";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{6};
 	}
 }

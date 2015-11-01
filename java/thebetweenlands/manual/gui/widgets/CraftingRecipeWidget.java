@@ -3,7 +3,9 @@ package thebetweenlands.manual.gui.widgets;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.item.crafting.ShapelessRecipes;
@@ -23,19 +25,19 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     public static int height = 54;
     public static int width = 116;
     private static ResourceLocation craftingGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/craftingGrid.png");
-    ArrayList<IRecipe> recipes = new ArrayList<>();
+    ArrayList<ItemStack> outputs = new ArrayList<>();
 
     int currentRecipe = 0;
     int untilUpdate = 0;
 
-    public CraftingRecipeWidget(GuiManualBase manual, IRecipe recipe, int xStart, int yStart) {
+    public CraftingRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.recipes.add(recipe);
+        this.outputs.add(output);
     }
 
-    public CraftingRecipeWidget(GuiManualBase manual, ArrayList<IRecipe> recipes, int xStart, int yStart) {
+    public CraftingRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.recipes = recipes;
+        this.outputs = outputs;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        IRecipe recipe = recipes.get(currentRecipe);
+        IRecipe recipe = getRecipe(outputs.get(currentRecipe));
         String recipeType = "";
         if (recipe != null) {
 
@@ -116,7 +118,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
-            if (currentRecipe + 1 < recipes.size()) {
+            if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;
@@ -129,7 +131,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
         if (untilUpdate >= 200) {
-            if (currentRecipe + 1 < recipes.size()) {
+            if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;
@@ -137,5 +139,19 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
             untilUpdate = 0;
         } else
             untilUpdate++;
+    }
+
+    public IRecipe getRecipe(ItemStack output){
+        for (Object obj: CraftingManager.getInstance().getRecipeList()){
+            if(obj instanceof IRecipe){
+                if(matches(((IRecipe) obj).getRecipeOutput(), output))
+                    return (IRecipe)obj;
+            }
+        }
+        return null;
+    }
+
+    private boolean matches(ItemStack itemStack1, ItemStack itemstack2) {
+        return itemstack2.getItem() == itemStack1.getItem() && itemstack2.getItemDamage() == itemStack1.getItemDamage();
     }
 }

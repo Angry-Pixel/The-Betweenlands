@@ -2,34 +2,26 @@ package thebetweenlands.manual.gui.entries;
 
 import net.minecraft.item.Item;
 
+
 /**
  * Created by Bart on 20-8-2015.
  */
 //TODO implement this in all items
 public interface IManualEntryItem {
-    //If any of these don't have to do with the Item return null
-
-
-    /* UNUSED
-    String manualStats(int meta);
-
-    String manualLore(int meta);
-
-    String manualTrivia(int meta);
-    */
 
     String manualName(int meta);
 
-    //don't return null plz
     Item getItem();
 
 
     /*
-    0 = furnace
-    1 = purifier
-    2 = pam
-    3 = compost
-    4 = crafting/no recipe
+    0 = no recipe
+    1 = furnace
+    2 = crafting
+    3 = pam
+    4 = compost
+    5 = purifier
+    6 = loot
      */
-    int recipeType(int meta);
+    int[] recipeType(int meta);
 }

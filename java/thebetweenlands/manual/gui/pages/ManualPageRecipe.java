@@ -12,23 +12,40 @@ import java.util.Collections;
  */
 public class ManualPageRecipe extends ManualPage {
 
-    public ManualPageRecipe(GuiManualBase manual, IManualEntryItem item, ManualWidgetsBase... recipes){
-        switch (item.recipeType(0)) {
-            case 0:
-                this.widgets.add(new SmeltingRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10));
-                break;
-            case 1:
-                this.widgets.add(new PurifierRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10));
-                break;
-            case 2:
-                this.widgets.add(new PestleAndMortarRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10));
-                break;
-            case 3:
-                this.widgets.add(new CompostRecipeWidget(manual, 5, 10));
-                break;
-            default:
-                Collections.addAll(this.widgets, recipes);
-                break;
+    public static int craftingRecipeHeight = CraftingRecipeWidget.height + 5;
+    public static int smeltingRecipeHeight = SmeltingRecipeWidget.height + 5;
+    public static int compostRecipeHeight = CompostRecipeWidget.height + 5;
+    public static int pestleAndMortarRecipeHeight = PestleAndMortarRecipeWidget.height + 5;
+    public static int purifierRecipeHeight = PurifierRecipeWidget.height + 5;
+
+    public ManualPageRecipe(GuiManualBase manual, IManualEntryItem item, ManualWidgetsBase... recipes) {
+        int height = 0;
+        for (int i:item.recipeType(0)) {
+            switch (i) {
+                case 1:
+                    this.widgets.add(new SmeltingRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    height +=smeltingRecipeHeight;
+                    break;
+                case 2:
+                    this.widgets.add(new CraftingRecipeWidget(manual,new ItemStack(item.getItem()), 5, 10 + height));
+                    height += craftingRecipeHeight;
+                    break;
+                case 3:
+                    this.widgets.add(new PestleAndMortarRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    height +=pestleAndMortarRecipeHeight;
+                    break;
+                case 4:
+                    this.widgets.add(new CompostRecipeWidget(manual, 5, 10 + height));
+                    height +=compostRecipeHeight;
+                    break;
+                case 5:
+                    this.widgets.add(new PurifierRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    height += purifierRecipeHeight;
+                    break;
+                default:
+                    Collections.addAll(this.widgets, recipes);
+                    break;
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ public class TestItem extends ItemSword implements IManualEntryItem {
     }
 
     @Override
-    public int recipeType(int meta) {
-        return 3;
+    public int[] recipeType(int meta) {
+        return new int[]{4};
     }
 }

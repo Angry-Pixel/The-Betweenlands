@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     private static ResourceLocation pamGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/pamGrid.png");
 
-    ArrayList<ItemStack> inputs = new ArrayList<>();
+    ArrayList<ItemStack> outputs = new ArrayList<>();
 
     public static int width = 106;
     public static int height = 69;
@@ -27,14 +27,14 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     int untilUpdate = 0;
     int currentRecipe = 0;
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, ItemStack input, int xStart, int yStart) {
+    public PestleAndMortarRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        inputs.add(input);
+        outputs.add(output);
     }
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> inputs, int xStart, int yStart) {
+    public PestleAndMortarRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.inputs = inputs;
+        this.outputs = outputs;
     }
 
 
@@ -50,8 +50,8 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(xStart + 1, yStart + 29, inputs.get(currentRecipe), false);
-        renderItem(xStart + 89, yStart + 29, PestleAndMortarRecipe.getOutput(inputs.get(currentRecipe)), false);
+        renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false);
+        renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false);
         renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true);
         ArrayList<String> extraToolTips = new ArrayList<>();
         extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
@@ -74,7 +74,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
                 drawForeGround();
             } else {
                 progress = 0;
-                if (currentRecipe + 1 < inputs.size())
+                if (currentRecipe + 1 < outputs.size())
                     currentRecipe++;
                 else
                     currentRecipe = 0;
@@ -86,7 +86,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
-            if (currentRecipe + 1 < inputs.size()) {
+            if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;
