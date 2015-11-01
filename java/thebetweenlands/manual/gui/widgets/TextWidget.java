@@ -1,44 +1,230 @@
 package thebetweenlands.manual.gui.widgets;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.manual.gui.GuiManualBase;
-
-import java.util.ArrayList;
 
 /**
  * Created by Bart on 12-8-2015.
  */
 public class TextWidget extends ManualWidgetsBase {
-    public String text;
-    public int color = 0x000000;
-    public int unchangedColor = 0x000000;
+	private static class TooltipArea {
+		private final int x, y, width, height;
+		private final String text;
+		private TooltipArea(int x, int y, int width, int height, String text) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.text = text;
+		}
+		private boolean isInside(int mouseX, int mouseY) {
+			return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+		}
+	}
 
-    public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
-        super(manual, xStart, yStart);
-        text = StatCollector.translateToLocal(unlocalizedText);
-    }
+	private static class TextComponentType {
+		private final String type, argument;
+		private final boolean closing;
+		private TextComponentType(String type, String argument, boolean closing) {
+			this.type = type;
+			this.argument = argument;
+			this.closing = closing;
+		}
+	}
 
-    public TextWidget(GuiManualBase manual, int xStart, int yStart, String localizedText, boolean localized) {
-        super(manual, xStart, yStart);
-        text = localizedText;
-    }
+	public String unparsedText;
 
-    public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText, int color) {
-        super(manual, xStart, yStart);
-        text = StatCollector.translateToLocal(unlocalizedText);
-        this.color = color;
-        this.unchangedColor = color;
-    }
+	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
+		super(manual, xStart, yStart);
+		this.unparsedText = StatCollector.translateToLocal(unlocalizedText);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void drawForeGround() {
+	public TextWidget(GuiManualBase manual, int xStart, int yStart, String text, boolean localized) {
+		super(manual, xStart, yStart);
+		this.unparsedText = localized ? text : StatCollector.translateToLocal(text);
+	}
+
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void drawForeGround() {
+		Stack<Float> scaleStack = new Stack<Float>();
+		Stack<Integer> colorStack = new Stack<Integer>();
+		Stack<TooltipArea> tooltipStack = new Stack<TooltipArea>();
+		Map<Integer, List<String>> componentMap = new HashMap<Integer, List<String>>();
+		char[] textChars = this.unparsedText.toCharArray();
+		StringBuilder parsedTextBuffer = new StringBuilder(textChars.length);
+		StringBuilder textComponentBuffer = new StringBuilder();
+		boolean componentBody = false;
+		boolean wasSpace = false;
+		int wordIndex = 1;
+		for(int i = 0; i < textChars.length; i++) {
+			char currentChar = textChars[i];
+			if(currentChar == '<') {
+				componentBody = true;
+			}
+			if(!componentBody) {
+				parsedTextBuffer.append(currentChar);
+			} else if(currentChar != '<' && currentChar != '>') {
+				textComponentBuffer.append(currentChar);
+			}
+			if(!componentBody) {
+				if(currentChar == ' ' && !wasSpace) {
+					wasSpace = true;
+				} else if(currentChar != ' ' && wasSpace) {
+					wasSpace = false;
+					wordIndex++;
+				}
+			}
+			if(currentChar == '>' && componentBody) {
+				if(!wasSpace && parsedTextBuffer.length() > 0 && i + 1 < textChars.length && textChars[i + 1] != ' ') {
+					parsedTextBuffer.append(" ");
+					wasSpace = true;
+				}
+				componentBody = false;
+				String textComponent = textComponentBuffer.toString();
+				List<String> componentList = componentMap.get(wordIndex);
+				if(componentList == null) {
+					componentList = new ArrayList<String>();
+					componentMap.put(wordIndex, componentList);
+				}
+				componentList.add(textComponent);
+				textComponentBuffer = new StringBuilder();
+			}
+		}
+		String parsedText = parsedTextBuffer.toString();
+		String[] words = parsedText.split(" ");
+		wordIndex = 0;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		int spaceWidth = fontRenderer.getStringWidth(" ");
+		int fontHeight = fontRenderer.FONT_HEIGHT;
+		int xOffset = 90;
+		int yOffset = 25;
+		int xOffsetMax = 120;
+		int xCursor = 0;
+		int yCursor = 0;
+		float currentScale = 1.0F;
+		scaleStack.push(currentScale);
+		int currentColor = 0x808080;
+		colorStack.push(currentColor);
+		for(int i = 0; i < words.length; i++) {
+			String word = words[i];
+			if(word.length() > 0) {
+				int strWidth = fontRenderer.getStringWidth(word);
+				if(xCursor + strWidth > xOffsetMax) {
+					xCursor = 0;
+					yCursor += fontHeight;
+				}
+
+				List<TextComponentType> wordComponentTypes = this.getTextComponentTypesForWord(componentMap, wordIndex);
+
+				for(TextComponentType componentType : wordComponentTypes) {
+					if(componentType.type.equals("scale")) {
+						if(!componentType.closing) {
+							float scale = Float.parseFloat(componentType.argument);
+							scaleStack.push(scale);
+							currentScale = scale;
+						} else {
+							scaleStack.pop();
+							currentScale = scaleStack.peek();
+						}
+					}
+				}
+
+				int renderX = (int) ((xOffset + xCursor) / currentScale);
+				int renderY = (int) ((yOffset + yCursor) / currentScale);
+				int renderStrWidth = (int) (strWidth * currentScale);
+				int renderSpaceWidth = (int) (spaceWidth * currentScale);
+				int renderStrHeight = (int) (fontHeight * currentScale);
+
+				for(TextComponentType componentType : wordComponentTypes) {
+					switch(componentType.type) {
+					case "color":
+						if(!componentType.closing) {
+							int color = Integer.decode(componentType.argument);
+							colorStack.push(color);
+							currentColor = color;
+						} else {
+							colorStack.pop();
+							currentColor = colorStack.peek();
+						}
+						break;
+					case "tooltip":
+						if(!componentType.closing) {
+							tooltipStack.push(new TooltipArea(xOffset + xCursor, yOffset + yCursor, renderStrWidth, renderStrHeight, componentType.argument));
+						} else {
+							tooltipStack.pop();
+						}
+						break;
+					}
+				}
+
+				if(tooltipStack.size() > 0) {
+					Iterator<TooltipArea> tooltipIT = tooltipStack.iterator();
+					List<String> tooltipLines = new ArrayList<String>();
+					while(tooltipIT.hasNext()) {
+						TooltipArea tooltip = tooltipIT.next();
+						if(tooltip.isInside(this.mouseX, this.mouseY)) {
+							tooltipLines.add(tooltip.text);
+						}
+					}
+					ManualWidgetsBase.renderTooltip(this.mouseX, this.mouseY, tooltipLines, 0xffffff, 0xf0100010);
+				}
+
+				GL11.glPushMatrix();
+				GL11.glScalef(currentScale, currentScale, 1.0F);
+				fontRenderer.drawString(word, renderX, renderY, currentColor);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glPopMatrix();
+
+				xCursor += renderStrWidth;
+				xCursor += renderSpaceWidth;
+
+				wordIndex++;
+			} else {
+				xCursor += spaceWidth;
+			}
+		}
+	}
+
+	private List<TextComponentType> getTextComponentTypesForWord(Map<Integer, List<String>> componentMap, int wordIndex) {
+		List<TextComponentType> componentTypeList = new ArrayList<TextComponentType>();
+		List<String> textComponents = componentMap.get(wordIndex);
+		if(textComponents != null) {
+			for(String textComponent : textComponents) {
+				if(textComponent != null) {
+					String componentType = textComponent;
+					String argument = null;
+					if(textComponent.contains(":")) {
+						componentType = textComponent.split(":")[0];
+						argument = textComponent.split(":")[1];
+					}
+					boolean isClosing = false;
+					if(componentType.startsWith("/")) {
+						isClosing = true;
+						componentType = componentType.substring(1, componentType.length());
+					}
+					componentTypeList.add(new TextComponentType(componentType, argument, isClosing));
+				}
+			}
+		}
+		return componentTypeList;
+	}
+
+	/*
         int widthLine = 0;
         if (text != null) {
             String[] words = text.split(" ");
@@ -171,8 +357,6 @@ public class TextWidget extends ManualWidgetsBase {
                 GL11.glScalef(1f, 1f, 1f);
             }
         }
-    }
-
-
+	 */
 
 }

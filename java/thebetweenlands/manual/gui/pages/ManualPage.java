@@ -35,7 +35,7 @@ public class ManualPage {
         for (ManualWidgetsBase widget : widgets) {
             if (widget instanceof TextWidget) {
                 FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
-                String[] words = ((TextWidget) widget).text.split(" ");
+                String[] words = ((TextWidget) widget).unparsedText.split(" ");
 
                 int widthLine = 0;
                 String text = "";
@@ -131,7 +131,7 @@ public class ManualPage {
                             if (page > 0)
                                 pages.add(new ManualPage(new TextWidget(widget.manual, widget.unchangedXStart, widget.yStart, text)));
                             else
-                                ((TextWidget) widget).text = text + " <end>";
+                                ((TextWidget) widget).unparsedText = text + " <end>";
                             page++;
                             text = "" + (makingScaled ? " " + scaleWord + " " : "") + (makingItalic ? " <italic>" : "") + (makingBold ? " <bold>" : "") + (makingColor ? " " + color : "") + (makingObfuscated ? " <obfuscated>" : "") + (makingStrikerThrough ? " <strikerThrough>" : "") + (makingTooltip ? " " + tooltip : "") + (makingUnderlined ? " <underlined>" : "");
                         }

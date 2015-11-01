@@ -47,7 +47,7 @@ public class ManualWidgetsBase {
         this.xStart = manual.xStartRightPage + unchangedXStart;
     }
 
-    public static void renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
+    public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
@@ -88,10 +88,14 @@ public class ManualWidgetsBase {
                 var7 += 10;
             }
             GL11.glEnable(GL11.GL_DEPTH_TEST);
+            
+            return var7 + 12;
         }
         if (!lighting)
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
         GL11.glColor4f(1F, 1F, 1F, 1F);
+        
+        return 0;
     }
 
     public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {

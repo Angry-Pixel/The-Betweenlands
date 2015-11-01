@@ -44,7 +44,7 @@ public class GuiManualBase extends GuiScreen {
         xStartRightPage = width / 2;
         yStart = (height - HEIGHT) / 2;
         ManualEntryRegistry.init(this);
-        entry = ManualEntryRegistry.entry4;
+        entry = ManualEntryRegistry.entry1;
     }
 
     @Override
