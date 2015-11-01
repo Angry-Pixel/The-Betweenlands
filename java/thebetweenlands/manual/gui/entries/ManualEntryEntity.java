@@ -3,7 +3,7 @@ package thebetweenlands.manual.gui.entries;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.pages.ManualPage;
 import thebetweenlands.manual.gui.widgets.PictureWidget;
-import thebetweenlands.manual.gui.widgets.TextWidget;
+import thebetweenlands.manual.gui.widgets.text.TextWidget;
 
 import java.util.ArrayList;
 

@@ -5,6 +5,7 @@ import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.pages.ManualPage;
 import thebetweenlands.manual.gui.pages.ManualPageRecipe;
 import thebetweenlands.manual.gui.widgets.*;
+import thebetweenlands.manual.gui.widgets.text.TextWidget;
 
 import java.util.ArrayList;
 

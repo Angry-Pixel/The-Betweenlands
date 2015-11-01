@@ -28,7 +28,9 @@ public class ManualWidgetsBase {
     public int unchangedXStart;
     public int xStart;
     public int yStart;
-    int mouseX, mouseY;
+    protected int mouseX;
+
+	protected int mouseY;
 
     public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
     public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");

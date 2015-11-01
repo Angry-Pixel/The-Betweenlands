@@ -1,19 +1,20 @@
 package thebetweenlands.manual.gui.entries;
 
+import java.util.ArrayList;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.TestItem;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.pages.ManualPage;
-import thebetweenlands.manual.gui.widgets.*;
-import thebetweenlands.recipes.RecipeHandler;
-
-import java.util.ArrayList;
+import thebetweenlands.manual.gui.widgets.CompostRecipeWidget;
+import thebetweenlands.manual.gui.widgets.CraftingRecipeWidget;
+import thebetweenlands.manual.gui.widgets.PestleAndMortarRecipeWidget;
+import thebetweenlands.manual.gui.widgets.PurifierRecipeWidget;
+import thebetweenlands.manual.gui.widgets.SmeltingRecipeWidget;
+import thebetweenlands.manual.gui.widgets.text.TextWidget;
 
 /**
  * Created on 11-8-2015.
@@ -73,7 +74,7 @@ public class ManualEntryRegistry {
         gems.add(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.GREEN_MIDDLE_GEM));
 
 
-
+        entry1 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.text.test2")));
         //entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 5, 10)));
         entry2 = new ManualEntryItem(gems, "gems", manual, new PurifierRecipeWidget(manual, gems, 5, 10));
         entry3 = new ManualEntryItem((IManualEntryItem)BLItemRegistry.testItem, manual);
