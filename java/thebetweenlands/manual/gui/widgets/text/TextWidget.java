@@ -43,7 +43,7 @@ public class TextWidget extends ManualWidgetsBase {
 		this.textContainer.registerFormat(new TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
 
 		try {
-			this.textContainer.build();
+			this.textContainer.parse();
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -52,10 +52,6 @@ public class TextWidget extends ManualWidgetsBase {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawForeGround() {
-		try {
-			this.textContainer.render(this.mouseX, this.mouseY);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
+		this.textContainer.render(this.mouseX, this.mouseY);
 	}
 }

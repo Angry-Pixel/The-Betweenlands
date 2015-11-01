@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 import org.lwjgl.opengl.GL11;
@@ -57,10 +58,10 @@ public class TextContainer {
 		}
 	}
 
-	private static class TextComponentType {
+	private static class TextFormatType {
 		private final String type, argument;
 		private final boolean closing;
-		private TextComponentType(String type, String argument, boolean closing) {
+		private TextFormatType(String type, String argument, boolean closing) {
 			this.type = type;
 			this.argument = argument;
 			this.closing = closing;
@@ -179,6 +180,7 @@ public class TextContainer {
 	private Map<String, Stack<TextFormat>> textFormatComponentStacks = new HashMap<String, Stack<TextFormat>>();
 	private Map<Integer, List<String>> componentMap = new HashMap<Integer, List<String>>();
 	private String parsedText = null;
+	private Exception parserError = null;
 
 	/**
 	 * Registers a text format
@@ -186,13 +188,13 @@ public class TextContainer {
 	 */
 	public void registerFormat(TextFormat format) {
 		this.textFormatComponents.put(format.type, format);
-		this.getComponentStack(format.type, this.textFormatComponentStacks).push(format);
+		this.getFormatStack(format.type, this.textFormatComponentStacks).push(format);
 	}
 
 	/**
 	 * Builds and parses the text component
 	 */
-	public void build() {
+	public void parse() throws Exception {
 		this.componentMap.clear();
 
 		char[] textChars = this.unparsedText.toCharArray();
@@ -227,7 +229,6 @@ public class TextContainer {
 					if(wasFirstWord && (textChars[i - 1] == Character.SPACE_SEPARATOR || textChars[i - 1] == ' ')) {
 						wordIndex--;
 					}
-					//System.out.println(parsedTextBuffer.toString());
 				}
 			}
 			if(currentChar == '>' && componentBody) {
@@ -239,7 +240,6 @@ public class TextContainer {
 				String textComponent = textComponentBuffer.toString();
 				int mapWordIndex = wasFirstComponent ? wordIndex - 1 : wordIndex;
 				List<String> componentList = componentMap.get(mapWordIndex);
-				//System.out.println(mapWordIndex + " " + textComponent);
 				if(componentList == null) {
 					componentList = new ArrayList<String>();
 					componentMap.put(mapWordIndex, componentList);
@@ -250,6 +250,73 @@ public class TextContainer {
 			}
 		}
 		this.parsedText = parsedTextBuffer.toString();
+		this.verify();
+	}
+
+	private void verify() throws Exception {
+		String currentStackType = null;
+		int excpWordIndex = 0;
+		try {
+			String[] words = parsedText.split(" ");
+			int wordIndex = 0;
+			for(int i = 0; i < words.length; i++) {
+				String word = words[i];
+				if(word.length() > 0) {
+					List<String> usedFormats = new ArrayList<String>();
+					List<TextFormatType> wordComponentTypes = this.getTextFormatTypesForWord(componentMap, wordIndex);
+					for(TextFormatType componentType : wordComponentTypes) {
+						TextFormat textFormat = textFormatComponents.get(componentType.type);
+						currentStackType = textFormat.type;
+						usedFormats.add(textFormat.type);
+						if(textFormat != null) {
+							Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, textFormatComponentStacks);
+							if(componentType.closing) {
+								componentStacks.pop();
+								componentStacks.peek();
+							} else {
+								if(textFormat.getPushOrder() == EnumPushOrder.FIRST) {
+									TextFormat newFormat = textFormat.create();
+									componentStacks.peek();
+									componentStacks.push(newFormat);
+								}
+							}
+						}
+					}
+					for(TextFormatType componentType : wordComponentTypes) {
+						TextFormat textFormat = textFormatComponents.get(componentType.type);
+						currentStackType = textFormat.type;
+						usedFormats.add(textFormat.type);
+						if(textFormat != null && textFormat.getPushOrder() == EnumPushOrder.SECOND) {
+							Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, textFormatComponentStacks);
+							if(!componentType.closing) {
+								TextFormat newFormat = textFormat.create();
+								componentStacks.peek();
+								componentStacks.push(newFormat);
+							}
+						}
+					}
+					wordIndex++;
+					excpWordIndex = wordIndex;
+				}
+			}
+		} catch(Exception ex) {
+			this.parserError = new Exception("Stack underflow. Stack type: " + currentStackType + " Word index: " + excpWordIndex, ex);
+			throw this.parserError;
+		}
+		for(Entry<String, Stack<TextFormat>> e : this.textFormatComponentStacks.entrySet()) {
+			if(e.getValue().size() > 1) {
+				this.parserError = new Exception("Stack overflow. Stack type: " + e.getKey() + " Stack size: " + e.getValue().size() + " Word index: " + excpWordIndex);
+				throw this.parserError;
+			}
+		}
+	}
+
+	/**
+	 * Returns true if the parsing failed
+	 * @return
+	 */
+	public boolean hasParsingFailed() {
+		return this.parserError != null;
 	}
 
 	/**
@@ -258,6 +325,11 @@ public class TextContainer {
 	 * @param mouseY Mouse Y
 	 */
 	public void render(int mouseX, int mouseY) {
+		if(this.hasParsingFailed()) {
+			Minecraft.getMinecraft().fontRenderer.drawString("Failed parsing: " + this.parserError.getMessage(), this.xOffset, this.yOffset, 0xFFFF0000);
+			return;
+		}
+
 		this.currentScale = 1.0F;
 		this.currentColor = 0x808080;
 
@@ -273,15 +345,13 @@ public class TextContainer {
 		for(int i = 0; i < words.length; i++) {
 			String word = words[i];
 			if(word.length() > 0) {
-				//System.out.println(word + " " + wordIndex);
 				List<String> usedFormats = new ArrayList<String>();
-				List<TextComponentType> wordComponentTypes = this.getTextComponentTypesForWord(componentMap, wordIndex);
-				for(TextComponentType componentType : wordComponentTypes) {
+				List<TextFormatType> wordComponentTypes = this.getTextFormatTypesForWord(componentMap, wordIndex);
+				for(TextFormatType componentType : wordComponentTypes) {
 					TextFormat textFormat = textFormatComponents.get(componentType.type);
-					//System.out.println(textFormat.type + " " + wordIndex);
 					usedFormats.add(textFormat.type);
 					if(textFormat != null) {
-						Stack<TextFormat> componentStacks = this.getComponentStack(componentType.type, textFormatComponentStacks);
+						Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, textFormatComponentStacks);
 						if(componentType.closing) {
 							componentStacks.pop().pop(this, componentStacks.peek());
 						} else {
@@ -291,7 +361,6 @@ public class TextContainer {
 								componentStacks.push(newFormat);
 							}
 						}
-						//System.out.println(textFormat.type + " " + componentStacks.size());
 					}
 				}
 
@@ -327,11 +396,11 @@ public class TextContainer {
 				int additionalSpaceWidth = xCursor - lastWordXCursor;
 				TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor - 1, renderStrWidth, renderStrHeight + 1, additionalSpaceWidth, renderSpaceWidth - 1);
 
-				for(TextComponentType componentType : wordComponentTypes) {
+				for(TextFormatType componentType : wordComponentTypes) {
 					TextFormat textFormat = textFormatComponents.get(componentType.type);
 					usedFormats.add(textFormat.type);
 					if(textFormat != null && textFormat.getPushOrder() == EnumPushOrder.SECOND) {
-						Stack<TextFormat> componentStacks = this.getComponentStack(componentType.type, textFormatComponentStacks);
+						Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, textFormatComponentStacks);
 						if(!componentType.closing) {
 							TextFormat newFormat = textFormat.create();
 							newFormat.push(this, componentStacks.peek(), componentType.argument, currentTextArea);
@@ -379,7 +448,7 @@ public class TextContainer {
 		}
 	}
 
-	private Stack<TextFormat> getComponentStack(String component, Map<String, Stack<TextFormat>> stackMap) {
+	private Stack<TextFormat> getFormatStack(String component, Map<String, Stack<TextFormat>> stackMap) {
 		Stack<TextFormat> stack = stackMap.get(component);
 		if(stack == null) {
 			stack = new Stack<TextFormat>();
@@ -388,8 +457,8 @@ public class TextContainer {
 		return stack;
 	}
 
-	private List<TextComponentType> getTextComponentTypesForWord(Map<Integer, List<String>> componentMap, int wordIndex) {
-		List<TextComponentType> componentTypeList = new ArrayList<TextComponentType>();
+	private List<TextFormatType> getTextFormatTypesForWord(Map<Integer, List<String>> componentMap, int wordIndex) {
+		List<TextFormatType> componentTypeList = new ArrayList<TextFormatType>();
 		List<String> textComponents = componentMap.get(wordIndex);
 		if(textComponents != null) {
 			for(String textComponent : textComponents) {
@@ -405,7 +474,7 @@ public class TextContainer {
 						isClosing = true;
 						componentType = componentType.substring(1, componentType.length());
 					}
-					componentTypeList.add(new TextComponentType(componentType, argument, isClosing));
+					componentTypeList.add(new TextFormatType(componentType, argument, isClosing));
 				}
 			}
 		}
