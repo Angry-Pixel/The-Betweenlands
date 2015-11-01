@@ -1,5 +1,8 @@
 package thebetweenlands.manual.gui.widgets.text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.util.EnumChatFormatting;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextArea;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat;
@@ -69,6 +72,7 @@ public class TextFormatComponents {
 	public static class TextFormatTooltip extends TextFormat {
 		private String text;
 		private TextArea area;
+		private List<TooltipArea> additionalAreas = new ArrayList<TooltipArea>();
 
 		public TextFormatTooltip(String text) {
 			super("tooltip");
@@ -83,13 +87,23 @@ public class TextFormatComponents {
 		@Override
 		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
 			this.text = argument;
-			this.area = area;
-			container.addTooltipArea(new TooltipArea(area, this.text));
+			this.area = area.withSpace();
+			container.addTooltipArea(new TooltipArea(this.area, this.text));
+		}
+
+		@Override
+		void expand(TextContainer container, TextArea area) {
+			TooltipArea newArea = new TooltipArea(area.withSpace(), this.text);
+			this.additionalAreas.add(newArea);
+			container.addTooltipArea(newArea);
 		}
 
 		@Override
 		void pop(TextContainer container, TextFormat previous) {
 			container.removeTooltipArea(new TooltipArea(this.area, this.text));
+			for(TooltipArea additionalArea : this.additionalAreas) {
+				container.removeTooltipArea(additionalArea);
+			}
 		}
 
 		@Override

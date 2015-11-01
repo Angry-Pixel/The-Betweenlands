@@ -20,14 +20,28 @@ import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat.EnumPush
 public class TextContainer {
 	public static class TextArea {
 		public final int x, y, width, height;
+		private final int additionalLeftWidth, additionalRightWidth;
 		public TextArea(int x, int y, int width, int height) {
 			this.x = x;
 			this.y = y;
 			this.width = width;
 			this.height = height;
+			this.additionalLeftWidth = 0;
+			this.additionalRightWidth = 0;
+		}
+		private TextArea(int x, int y, int width, int height, int additionalLeftWidth, int additionalRightWidth) {
+			this.x = x;
+			this.y = y;
+			this.width = width;
+			this.height = height;
+			this.additionalLeftWidth = additionalLeftWidth;
+			this.additionalRightWidth = additionalRightWidth;
 		}
 		public boolean isInside(int mouseX, int mouseY) {
-			return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
+			return mouseX >= x && mouseX <= x + width && mouseY > y && mouseY < y + height;
+		}
+		public TextArea withSpace() {
+			return new TextArea(this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
 		}
 	}
 
@@ -72,6 +86,13 @@ public class TextContainer {
 		 * @param area Text area
 		 */
 		void push(TextContainer container, TextFormat previous, String argument, TextArea area) { }
+
+		/**
+		 * Called for each word if this format is active
+		 * @param container Text container
+		 * @param area Text area
+		 */
+		void expand(TextContainer container, TextArea area) { }
 
 		/**
 		 * Called when the format is popped from the stack
@@ -179,6 +200,9 @@ public class TextContainer {
 		StringBuilder textComponentBuffer = new StringBuilder();
 		boolean componentBody = false;
 		boolean wasSpace = false;
+		boolean firstComponent = true;
+		boolean firstWord = true;
+		boolean wasFix = false;
 		int wordIndex = 1;
 		for(int i = 0; i < textChars.length; i++) {
 			char currentChar = textChars[i];
@@ -190,28 +214,39 @@ public class TextContainer {
 			} else if(currentChar != '<' && currentChar != '>') {
 				textComponentBuffer.append(currentChar);
 			}
+			boolean wasFirstComponent = firstComponent;
+			boolean wasFirstWord = firstWord;
 			if(!componentBody) {
-				if(currentChar == ' ' && !wasSpace) {
+				if((currentChar == Character.SPACE_SEPARATOR || currentChar == ' ') && !wasSpace) {
 					wasSpace = true;
-				} else if(currentChar != ' ' && wasSpace) {
+				} else if(currentChar != Character.SPACE_SEPARATOR && currentChar != ' ' && wasSpace) {
 					wasSpace = false;
+					firstComponent = false;
+					firstWord = false;
 					wordIndex++;
+					if(wasFirstWord && (textChars[i - 1] == Character.SPACE_SEPARATOR || textChars[i - 1] == ' ')) {
+						wordIndex--;
+					}
+					//System.out.println(parsedTextBuffer.toString());
 				}
 			}
 			if(currentChar == '>' && componentBody) {
-				if(!wasSpace && parsedTextBuffer.length() > 0 && i + 1 < textChars.length && textChars[i + 1] != ' ') {
+				if(!wasSpace && parsedTextBuffer.length() > 0 && i + 1 < textChars.length && textChars[i + 1] != Character.SPACE_SEPARATOR && textChars[i + 1] != ' ') {
 					parsedTextBuffer.append(" ");
 					wasSpace = true;
 				}
 				componentBody = false;
 				String textComponent = textComponentBuffer.toString();
-				List<String> componentList = componentMap.get(wordIndex);
+				int mapWordIndex = wasFirstComponent ? wordIndex - 1 : wordIndex;
+				List<String> componentList = componentMap.get(mapWordIndex);
+				//System.out.println(mapWordIndex + " " + textComponent);
 				if(componentList == null) {
 					componentList = new ArrayList<String>();
-					componentMap.put(wordIndex, componentList);
+					componentMap.put(mapWordIndex, componentList);
 				}
 				componentList.add(textComponent);
 				textComponentBuffer = new StringBuilder();
+				firstComponent = false;
 			}
 		}
 		this.parsedText = parsedTextBuffer.toString();
@@ -234,12 +269,17 @@ public class TextContainer {
 		int xOffsetMax = this.width;
 		int xCursor = 0;
 		int yCursor = 0;
+		int lastWordXCursor = 0;
 		for(int i = 0; i < words.length; i++) {
 			String word = words[i];
 			if(word.length() > 0) {
+				//System.out.println(word + " " + wordIndex);
+				List<String> usedFormats = new ArrayList<String>();
 				List<TextComponentType> wordComponentTypes = this.getTextComponentTypesForWord(componentMap, wordIndex);
 				for(TextComponentType componentType : wordComponentTypes) {
 					TextFormat textFormat = textFormatComponents.get(componentType.type);
+					//System.out.println(textFormat.type + " " + wordIndex);
+					usedFormats.add(textFormat.type);
 					if(textFormat != null) {
 						Stack<TextFormat> componentStacks = this.getComponentStack(componentType.type, textFormatComponentStacks);
 						if(componentType.closing) {
@@ -251,6 +291,7 @@ public class TextContainer {
 								componentStacks.push(newFormat);
 							}
 						}
+						//System.out.println(textFormat.type + " " + componentStacks.size());
 					}
 				}
 
@@ -276,20 +317,36 @@ public class TextContainer {
 
 				if(xCursor + renderStrWidth > xOffsetMax) {
 					xCursor = 0;
+					lastWordXCursor = 0;
 					yCursor += fontHeight;
 				}
 
 				int renderX = (int) ((xOffset + xCursor) / this.currentScale);
 				int renderY = (int) ((yOffset + yCursor) / this.currentScale);
 
+				int additionalSpaceWidth = xCursor - lastWordXCursor;
+				TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor - 1, renderStrWidth, renderStrHeight + 1, additionalSpaceWidth, renderSpaceWidth - 1);
+
 				for(TextComponentType componentType : wordComponentTypes) {
 					TextFormat textFormat = textFormatComponents.get(componentType.type);
+					usedFormats.add(textFormat.type);
 					if(textFormat != null && textFormat.getPushOrder() == EnumPushOrder.SECOND) {
 						Stack<TextFormat> componentStacks = this.getComponentStack(componentType.type, textFormatComponentStacks);
 						if(!componentType.closing) {
 							TextFormat newFormat = textFormat.create();
-							newFormat.push(this, componentStacks.peek(), componentType.argument, new TextArea(this.xOffset + xCursor, this.yOffset + yCursor, renderStrWidth, renderStrHeight));
+							newFormat.push(this, componentStacks.peek(), componentType.argument, currentTextArea);
 							componentStacks.push(newFormat);
+						}
+					}
+				}
+
+				for(Stack<TextFormat> activeFormatStack : textFormatComponentStacks.values()) {
+					if(activeFormatStack.size() > 1) {
+						for(int c = 1; c < activeFormatStack.size(); c++) {
+							TextFormat format = activeFormatStack.get(c);
+							if(!usedFormats.contains(format.type)) {
+								format.expand(this, currentTextArea);
+							}
 						}
 					}
 				}
@@ -312,6 +369,8 @@ public class TextContainer {
 
 				xCursor += renderStrWidth;
 				xCursor += renderSpaceWidth;
+
+				lastWordXCursor = xCursor;
 
 				wordIndex++;
 			} else {

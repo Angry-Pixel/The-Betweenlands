@@ -42,12 +42,20 @@ public class TextWidget extends ManualWidgetsBase {
 		this.textContainer.registerFormat(new TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
 		this.textContainer.registerFormat(new TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
 
-		this.textContainer.build();
+		try {
+			this.textContainer.build();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawForeGround() {
-		this.textContainer.render(this.mouseX, this.mouseY);
+		try {
+			this.textContainer.render(this.mouseX, this.mouseY);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
