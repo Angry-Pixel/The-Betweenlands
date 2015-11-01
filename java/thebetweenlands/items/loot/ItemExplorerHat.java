@@ -3,16 +3,20 @@ package thebetweenlands.items.loot;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 8-7-2015.
  */
-public class ItemExplorerHat extends ItemArmor {
+public class ItemExplorerHat extends ItemArmor implements IManualEntryItem {
     public ItemExplorerHat() {
         super(ArmorMaterial.CLOTH, 2, 0);
     }
@@ -21,5 +25,20 @@ public class ItemExplorerHat extends ItemArmor {
     @SideOnly(Side.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity event, int slot, String type) {
         return "thebetweenlands:textures/armour/explorerHat.png";
+    }
+
+    @Override
+    public String manualName(int meta) {
+        return "explorerHat";
+    }
+
+    @Override
+    public Item getItem() {
+        return this;
+    }
+
+    @Override
+    public int[] recipeType(int meta) {
+        return new int[]{6};
     }
 }

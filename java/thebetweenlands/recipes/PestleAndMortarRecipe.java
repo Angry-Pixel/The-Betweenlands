@@ -29,6 +29,14 @@ public class PestleAndMortarRecipe {
 		return null;
 	}
 
+	public static ItemStack getInput(ItemStack output) {
+		for (PestleAndMortarRecipe recipe : recipes)
+			if (recipe.matchesOutput(output))
+				return recipe.getInputs();
+
+		return null;
+	}
+
 	public static List<PestleAndMortarRecipe> getRecipeList() {
 		return Collections.unmodifiableList(recipes);
 	}
@@ -58,6 +66,15 @@ public class PestleAndMortarRecipe {
 	public boolean matches(ItemStack stacks) {
 		if (stacks != null)
 			if (areStacksTheSame(getInputs(), stacks)) {
+				stacks = null;
+				return true;
+			}
+		return false;
+	}
+
+	public boolean matchesOutput(ItemStack stacks) {
+		if (stacks != null)
+			if (areStacksTheSame(getOutput(), stacks)) {
 				stacks = null;
 				return true;
 			}

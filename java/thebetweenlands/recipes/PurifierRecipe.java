@@ -11,8 +11,10 @@ public abstract class PurifierRecipe {
 	private static final PurifierRecipeCorrodible CORRODIBLE_ITEMS_RECIPE = new PurifierRecipeCorrodible();
 
 	public abstract ItemStack getOutput(ItemStack input);
+	public abstract ItemStack getInput(ItemStack output);
 
 	public abstract boolean matches(ItemStack stack);
+	public abstract boolean matchesOutput(ItemStack stack);
 
 	/**
 	 * @param output what will be produced by the recipe
@@ -30,6 +32,15 @@ public abstract class PurifierRecipe {
 		}
 		if (CORRODIBLE_ITEMS_RECIPE.matches(input)) {
 			return CORRODIBLE_ITEMS_RECIPE.getOutput(input);
+		}
+		return null;
+	}
+
+	public static ItemStack getRecipeInput(ItemStack output) {
+		for (PurifierRecipe recipe : RECIPES) {
+			if (recipe.matchesOutput(output)) {
+				return recipe.getInput(output);
+			}
 		}
 		return null;
 	}

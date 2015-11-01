@@ -20,21 +20,21 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     public static int height = 58;
     public static int width = 82;
     private static ResourceLocation purifierGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/purifierGrid.png");
-    ArrayList<ItemStack> inputs = new ArrayList<>();
+    ArrayList<ItemStack> outputs = new ArrayList<>();
 
     int progress = 0;
     int untilUpdate = 0;
     int currentRecipe = 0;
 
 
-    public PurifierRecipeWidget(GuiManualBase manual, ItemStack input, int xStart, int yStart) {
+    public PurifierRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.inputs.add(input);
+        this.outputs.add(output);
     }
 
-    public PurifierRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> inputs, int xStart, int yStart) {
+    public PurifierRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.inputs = inputs;
+        this.outputs = outputs;
     }
 
     @Override
@@ -53,9 +53,9 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(newX, newY, inputs.get(currentRecipe), false);
+        renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
         renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
-        renderItem(newX + 60, newY + 20, PurifierRecipe.getRecipeOutput(inputs.get(currentRecipe)), false);
+        renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
 
         if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
             ArrayList<String> processTooltip = new ArrayList<>();
@@ -75,7 +75,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
                 drawForeGround();
             } else {
                 progress = 0;
-                if (currentRecipe + 1 < inputs.size())
+                if (currentRecipe + 1 < outputs.size())
                     currentRecipe++;
                 else
                     currentRecipe = 0;
@@ -87,7 +87,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
-            if (currentRecipe + 1 < inputs.size()) {
+            if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;

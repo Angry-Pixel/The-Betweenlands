@@ -17,9 +17,25 @@ public class PurifierRecipeStandard extends PurifierRecipe {
 	}
 
 	@Override
+	public ItemStack getInput(ItemStack output) {
+		return ItemStack.copyItemStack(input);
+	}
+
+	@Override
 	public boolean matches(ItemStack stack) {
 		if (stack != null) {
 			if (areStacksTheSame(input, stack)) {
+				stack = null;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean matchesOutput(ItemStack stack) {
+		if (stack != null) {
+			if (areStacksTheSame(output, stack)) {
 				stack = null;
 				return true;
 			}

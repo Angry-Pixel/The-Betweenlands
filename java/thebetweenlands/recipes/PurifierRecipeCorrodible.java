@@ -12,10 +12,20 @@ class PurifierRecipeCorrodible extends PurifierRecipe {
 	}
 
 	@Override
+	public boolean matchesOutput(ItemStack stack) {
+		return false;
+	}
+
+	@Override
 	public ItemStack getOutput(ItemStack input) {
 		ItemStack output = ItemStack.copyItemStack(input);
 		output.stackSize = 1;
 		output.setTagInfo("Corrosion", new NBTTagInt(0));
 		return output;
+	}
+
+	@Override
+	public ItemStack getInput(ItemStack input) {
+		return input;
 	}
 }

@@ -64,6 +64,47 @@ public class GuiManualBase extends GuiScreen {
         switch (key) {
             case Keyboard.KEY_ESCAPE: {
                 mc.displayGuiScreen(null);
+                break;
+            }
+            case Keyboard.KEY_0:{
+                entry = ManualEntryRegistry.entry;
+                break;
+            }
+            case Keyboard.KEY_1:{
+                entry = ManualEntryRegistry.entry1;
+                break;
+            }
+            case Keyboard.KEY_2:{
+                entry = ManualEntryRegistry.entry2;
+                break;
+            }
+            case Keyboard.KEY_3:{
+                entry = ManualEntryRegistry.entry3;
+                break;
+            }
+            case Keyboard.KEY_4:{
+                entry = ManualEntryRegistry.entry4;
+                break;
+            }
+            case Keyboard.KEY_5:{
+                entry = ManualEntryRegistry.entry5;
+                break;
+            }
+            case Keyboard.KEY_6:{
+                entry = ManualEntryRegistry.entry6;
+                break;
+            }
+            case Keyboard.KEY_7:{
+                entry = ManualEntryRegistry.entry7;
+                break;
+            }
+            case Keyboard.KEY_8:{
+                entry = ManualEntryRegistry.entry8;
+                break;
+            }
+            case Keyboard.KEY_9:{
+                entry = ManualEntryRegistry.entry9;
+                break;
             }
         }
         entry.keyTyped(c, key);

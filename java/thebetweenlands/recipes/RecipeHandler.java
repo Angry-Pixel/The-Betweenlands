@@ -25,33 +25,6 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class RecipeHandler {
 
-
-	public static IRecipe weedwoodPickAxeRecipe;
-	public static IRecipe weedwoodShovelRecipe;
-	public static IRecipe weedwoodAxeRecipe;
-	public static IRecipe weedwoodSwordRecipe;
-
-	public static IRecipe betweenstonePickAxeRecipe;
-	public static IRecipe betweenstoneShovelRecipe;
-	public static IRecipe betweenstoneAxeRecipe;
-	public static IRecipe betweenstoneSwordRecipe;
-
-	public static IRecipe octinePickAxeRecipe;
-	public static IRecipe octineShovelRecipe;
-	public static IRecipe octineAxeRecipe;
-	public static IRecipe octineSwordRecipe;
-
-	public static IRecipe valonitePickAxeRecipe;
-	public static IRecipe valoniteShovelRecipe;
-	public static IRecipe valoniteAxeRecipe;
-	public static IRecipe valoniteSwordRecipe;
-
-	public static IRecipe weedwoodBowRecipe;
-	public static IRecipe anglerToothArrowRecipe;
-	public static IRecipe octineArrowRecipe;
-
-	public static IRecipe weedwoodDoorRecipe;
-
 	public static void init() {
 		registerOreDictionary();
 		registerRecipes();
@@ -67,47 +40,28 @@ public class RecipeHandler {
 	private static void registerRecipes() {
 		// Tools & Weapons
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodPickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		weedwoodPickAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		weedwoodShovelRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		weedwoodAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		weedwoodSwordRecipe = getLatestAddedRecipe();
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.betweenstonePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE));
-		betweenstonePickAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.betweenstoneShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE));
-		betweenstoneShovelRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.betweenstoneAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE));
-		betweenstoneAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.betweenstoneSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE));
-		betweenstoneSwordRecipe = getLatestAddedRecipe();
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octinePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
-		octinePickAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
-		octineShovelRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
-		octineAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
-		octineSwordRecipe = getLatestAddedRecipe();
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valonitePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
-		valonitePickAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
-		valoniteShovelRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
-		valoniteAxeRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
-		valoniteSwordRecipe = getLatestAddedRecipe();
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBow, 1), " #X", "# X", " #X", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
-		weedwoodBowRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
-		anglerToothArrowRecipe = getLatestAddedRecipe();
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
-		octineArrowRecipe = getLatestAddedRecipe();
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
@@ -207,7 +161,6 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 3), "##", "##", "##", '#', "plankWeedwood"));
-		weedwoodDoorRecipe = getLatestAddedRecipe();
 
 		// Stairs, slabs, walls, fences
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricks);
@@ -440,8 +393,4 @@ public class RecipeHandler {
 
 	}
 
-	public static IRecipe getLatestAddedRecipe() {
-		List<IRecipe> list = CraftingManager.getInstance().getRecipeList();
-		return list.get(list.size() - 1);
-	}
 }
