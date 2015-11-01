@@ -21,6 +21,10 @@ public class ManualEntryItem extends ManualEntry {
         super(new ManualPage(new TextWidget(manual, 5, 5, "manual." + name + ".title"), new ItemWidget(manual, (127 / 2) - 24, 77, item, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual." + name + ".description")), new ManualPage(recipes));
     }
 
+    public ManualEntryItem(String name, ArrayList<IManualEntryItem> items, GuiManualBase manual, ManualWidgetsBase... recipes) {
+        super(new ManualPage(new TextWidget(manual, 5, 5, "manual." + name + ".title"), new ItemWidget(manual, (127 / 2) - 24, 77, 3, items)), new ManualPage(new TextWidget(manual, 5, 5, "manual." + name + ".description")), new ManualPageRecipe(manual, items, recipes));
+    }
+
     public ManualEntryItem(IManualEntryItem item, int meta, GuiManualBase manual, ManualWidgetsBase... recipes) {
         super(new ManualPage(new TextWidget(manual, 5, 5, "manual." + item.manualName(meta) + ".title"), new ItemWidget(manual, (127 / 2) - 24, 77, new ItemStack(item.getItem(), 1, meta), 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual." + item.manualName(meta) + ".description")), new ManualPage(recipes));
     }

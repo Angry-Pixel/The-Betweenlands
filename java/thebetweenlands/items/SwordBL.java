@@ -7,16 +7,18 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-public class SwordBL extends ItemSword implements ICorrodible {
+public class SwordBL extends ItemSword implements ICorrodible, IManualEntryItem {
 	private IIcon[] corrosionIcons;
 
 	private float attackDamageWeaponModifier;
@@ -71,5 +73,20 @@ public class SwordBL extends ItemSword implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return getToolMaterialName().toLowerCase() + "Sword";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
 	}
 }

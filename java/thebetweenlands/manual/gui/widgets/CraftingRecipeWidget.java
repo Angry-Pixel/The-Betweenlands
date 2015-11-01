@@ -67,8 +67,8 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
             } else if (recipe instanceof ShapedOreRecipe) {
                 ShapedOreRecipe shaped = (ShapedOreRecipe) recipe;
                 recipeType = StatCollector.translateToLocal("manual.widget.crafting.shaped.recipe");
-                int width = (Integer) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 4);
-                int height = (Integer) ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 5);
+                int width = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 4);
+                int height = ReflectionHelper.getPrivateValue(ShapedOreRecipe.class, shaped, 5);
 
                 for (int y = 0; y < height; y++)
                     for (int x = 0; x < width; x++) {

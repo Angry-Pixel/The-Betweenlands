@@ -10,6 +10,7 @@ import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.manual.gui.GuiManualBase;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,15 @@ public class ItemWidget extends ManualWidgetsBase {
     public ItemWidget(GuiManualBase manual, int xStart, int yStart, ArrayList<ItemStack> stacks, float scale) {
         super(manual, xStart, yStart);
         this.stacks = stacks;
+        this.scale = scale;
+        width = (int) (16 * scale);
+        height = (int) (16 * scale);
+    }
+
+    public ItemWidget(GuiManualBase manual, int xStart, int yStart, float scale, ArrayList<IManualEntryItem> items) {
+        super(manual, xStart, yStart);
+        for(IManualEntryItem entry:items)
+            this.stacks.add(new ItemStack(entry.getItem()));
         this.scale = scale;
         width = (int) (16 * scale);
         height = (int) (16 * scale);

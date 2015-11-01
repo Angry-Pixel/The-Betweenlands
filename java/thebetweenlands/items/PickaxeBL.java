@@ -2,7 +2,9 @@ package thebetweenlands.items;
 
 import java.util.List;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeHooks;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
@@ -21,7 +23,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class PickaxeBL extends ItemPickaxe implements ICorrodible {
+public class PickaxeBL extends ItemPickaxe implements ICorrodible, IManualEntryItem {
 	private float damageVsEntity;
 
 	private IIcon[] corrosionIcons;
@@ -69,6 +71,21 @@ public class PickaxeBL extends ItemPickaxe implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return getToolMaterialName().toLowerCase() + "Pickaxe";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
 	}
 
 }
