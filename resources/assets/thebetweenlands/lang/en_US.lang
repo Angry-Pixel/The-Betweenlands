@@ -610,7 +610,7 @@ compost.not.ready=Your items are composting.
 
 # Manual
 manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
-manual.text.test2=<tooltip:test> Tooltip   <color:0xFF0000>Color   </color></tooltip><scale:3>  Scale<tooltip:test2>Tooltip   </tooltip></scale>  Not scaled<bold>Bold<italic>Bold/Italic</bold>Italic</italic>Normal
+manual.text.test2=   <tooltip:test>Tooltip <color:0xFF0000>Color </color></tooltip><scale:3>Scale <tooltip:test2>Tooltip </tooltip></scale>Not scaled <bold>Bold <italic>Bold/Italic </bold>Italic </italic>Normal
 
 manual.widget.process.time=Process time: .minutes. minutes and .seconds. seconds
 manual.widget.process.time.seconds=Process time: .seconds. seconds
@@ -631,7 +631,7 @@ manual.widget.purifier.process.time=Process time: .seconds. seconds
 
 manual.widget.smelting.recipe=Furnace recipe
 
-manual.arrow.title=<scale:1> <underlined> <color:0x9F3DAD> Arrows </color> </underlined> </scale>
+manual.arrow.title=   <scale:0.8><underline><color:0x9F3DAD>Arrows </color></underline></scale> Test
 manual.arrow.description=These are some magical arrows added by The Betweenlands. They are get able as loot or simply by crafting them.
 
 talisman.noplace=The space is not large enough

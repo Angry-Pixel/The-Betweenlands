@@ -88,21 +88,21 @@ public class TextFormatComponents {
 		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
 			this.text = argument;
 			this.area = area.withSpace();
-			container.addTooltipArea(new TooltipArea(this.area, this.text));
+			container.addTextArea(new TooltipArea(this.area, this.text));
 		}
 
 		@Override
 		void expand(TextContainer container, TextArea area) {
 			TooltipArea newArea = new TooltipArea(area.withSpace(), this.text);
 			this.additionalAreas.add(newArea);
-			container.addTooltipArea(newArea);
+			container.addTextArea(newArea);
 		}
 
 		@Override
 		void pop(TextContainer container, TextFormat previous) {
-			container.removeTooltipArea(new TooltipArea(this.area, this.text));
+			container.removeTextArea(new TooltipArea(this.area, this.text));
 			for(TooltipArea additionalArea : this.additionalAreas) {
-				container.removeTooltipArea(additionalArea);
+				container.removeTextArea(additionalArea);
 			}
 		}
 
