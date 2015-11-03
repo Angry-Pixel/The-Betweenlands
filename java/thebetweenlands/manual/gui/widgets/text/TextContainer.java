@@ -376,7 +376,7 @@ public class TextContainer {
 					parsedTextBuffer.append(DELIMITER);
 					wasSpace = true;
 				}
-				if(!isDelimiter(textChars[i + 1]) && textChars[i + 1] != '>' && textChars[i + 1] != '<' && wasFirstComponent) {
+				if(i + 1 >= textChars.length || (!isDelimiter(textChars[i + 1]) && textChars[i + 1] != '>' && textChars[i + 1] != '<' && wasFirstComponent)) {
 					firstComponent = false;
 				}
 				componentBody = false;
@@ -463,7 +463,7 @@ public class TextContainer {
 						lastFontHeight = currentFontHeight;
 					}
 
-					if(this.spaceIndices[i] && xCursor + renderStrWidth > xOffsetMax) {
+					if(i < this.spaceIndices.length && this.spaceIndices[i] && xCursor + renderStrWidth > xOffsetMax) {
 						xCursor = 0;
 						lastWordXCursor = 0;
 						yCursor += lastFontHeight;
@@ -471,8 +471,8 @@ public class TextContainer {
 						currentFontHeight = 0;
 					}
 
-					int additionalSpaceWidth = this.spaceIndices[i] ? (xCursor - lastWordXCursor) : 0;
-					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor - 1, renderStrWidth, renderStrHeight + 1, additionalSpaceWidth, this.spaceIndices[i] ? (renderSpaceWidth - 1) : -1);
+					int additionalSpaceWidth = i < this.spaceIndices.length && this.spaceIndices[i] ? (xCursor - lastWordXCursor) : 0;
+					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor - 1, renderStrWidth, renderStrHeight + 1, additionalSpaceWidth, i < this.spaceIndices.length && this.spaceIndices[i] ? (renderSpaceWidth - 1) : -1);
 
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
@@ -510,13 +510,13 @@ public class TextContainer {
 					}
 
 					xCursor += renderStrWidth;
-					if(this.spaceIndices[i]) xCursor += renderSpaceWidth;
+					if(i < this.spaceIndices.length && this.spaceIndices[i]) xCursor += renderSpaceWidth;
 
 					lastWordXCursor = xCursor;
 
 					wordIndex++;
 				} else {
-					if(this.spaceIndices[i]) xCursor += defaultSpaceWidth;
+					if(i < this.spaceIndices.length && this.spaceIndices[i]) xCursor += defaultSpaceWidth;
 				}
 			}
 			this.textAreas.addAll(tmpTextAreas);
