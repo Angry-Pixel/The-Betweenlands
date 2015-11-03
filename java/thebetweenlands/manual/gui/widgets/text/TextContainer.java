@@ -468,10 +468,11 @@ public class TextContainer {
 
 					int prevCurrentFontHeight = currentFontHeight;
 
-					currentFontHeight = renderStrHeight > currentFontHeight ? renderStrHeight : currentFontHeight;
 					if(nextLine && lastFontHeight == -1) {
 						lastFontHeight = currentFontHeight;
 					}
+					
+					currentFontHeight = renderStrHeight > currentFontHeight ? renderStrHeight : currentFontHeight;
 
 					//This offsets combined words to a new line if necessary
 					int nextLastFontHeight = lastFontHeight;

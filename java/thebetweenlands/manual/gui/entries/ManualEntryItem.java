@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by Bart on 30-10-2015.
  */
 public class ManualEntryItem extends ManualEntry {
-    public ArrayList<ItemStack> items;
+    public ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 
     public ManualEntryItem(IManualEntryItem item, GuiManualBase manual, ManualWidgetsBase... recipes) {
         super("manual." + item.manualName(0) + ".title", new ManualPage(new TextWidget(manual, 5, 5, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(manual, (127 / 2) - 24, 77, new ItemStack(item.getItem()), 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual." + item.manualName(0) + ".description")), new ManualPageRecipe(manual, item, recipes));
