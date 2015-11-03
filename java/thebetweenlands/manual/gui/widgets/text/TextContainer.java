@@ -18,12 +18,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat.EnumPushOrder;
 
 public class TextContainer {
 	public static class TextArea {
-		public final int x, y, width, height;
+		public int x, y, width, height;
 		private final int additionalLeftWidth, additionalRightWidth;
 		public TextArea(int x, int y, int width, int height) {
 			this.x = x;
@@ -135,15 +136,14 @@ public class TextContainer {
 		abstract EnumPushOrder getPushOrder();
 	}
 
-	public static class TextSegment {
+	public static class TextSegment extends TextArea {
 		public final String text;
-		public final int x, y, color;
+		public final int color;
 		public final float scale;
 
-		public TextSegment(String text, int x, int y, int color, float scale) {
+		public TextSegment(String text, int x, int y, int width, int height, int color, float scale) {
+			super(x, y, width, height);
 			this.text = text;
-			this.x = x;
-			this.y = y;
 			this.color = color;
 			this.scale = scale;
 		}
@@ -404,6 +404,8 @@ public class TextContainer {
 			this.textAreas.clear();
 			this.textSegments.clear();
 			List<TextArea> tmpTextAreas = new ArrayList<TextArea>();
+			List<TextArea> combinedAreas = new ArrayList<TextArea>();
+			TextSegment offsetSegment = null;
 			//The END appendix is required to pop the last formats off the stack
 			String[] words = this.getSplitWords(this.parsedText + " END");
 			int wordIndex = 0;
@@ -416,8 +418,12 @@ public class TextContainer {
 			int lastWordXCursor = 0;
 			int currentFontHeight = 0;
 			int lastFontHeight = -1;
+			int prevOffsetHeight = 0;
+			int prevPrevOffsetHeight = 0;
+			boolean wasSeperateWord = false;
 			for(int i = 0; i < words.length; i++) {
 				String word = words[i];
+				boolean isSeperateWord = i < this.spaceIndices.length && this.spaceIndices[i];
 				if(word.length() > 0) {
 					List<String> usedFormats = new ArrayList<String>();
 					List<TextFormatType> wordComponentTypes = this.getTextFormatTypesForWord(this.componentMap, wordIndex);
@@ -454,25 +460,58 @@ public class TextContainer {
 					}
 
 					int strWidth = fontRenderer.getStringWidth(word);
-					int renderStrWidth = (int) (strWidth * this.currentScale);
-					int renderSpaceWidth = (int) (spaceWidth * this.currentScale);
-					int renderStrHeight = (int) (fontHeight * this.currentScale);
+					int renderStrWidth = MathHelper.floor_float(strWidth * this.currentScale);
+					int renderSpaceWidth = MathHelper.floor_float(spaceWidth * this.currentScale);
+					int renderStrHeight = MathHelper.floor_float(fontHeight * this.currentScale);
+
+					boolean nextLine = xCursor + renderStrWidth > xOffsetMax;
+
+					int prevCurrentFontHeight = currentFontHeight;
 
 					currentFontHeight = renderStrHeight > currentFontHeight ? renderStrHeight : currentFontHeight;
-					if(lastFontHeight == -1) {
+					if(nextLine && lastFontHeight == -1) {
 						lastFontHeight = currentFontHeight;
 					}
 
-					if(i < this.spaceIndices.length && this.spaceIndices[i] && xCursor + renderStrWidth > xOffsetMax) {
+					//This offsets combined words to a new line if necessary
+					int nextLastFontHeight = lastFontHeight;
+					boolean jumped = false;
+					if(isSeperateWord && nextLine && !wasSeperateWord && combinedAreas.size() > 0) {
+						TextArea firstSegment = offsetSegment;
+						offsetSegment = null;
+						int offsetX = this.xOffset - firstSegment.x;
+						int offsetY = yCursor - (firstSegment.y - this.yOffset) + prevOffsetHeight;
+						int maxHeight = 0;
+						for(TextArea segment : combinedAreas) {
+							segment.x += offsetX;
+							segment.y += offsetY;
+							if(segment.height > maxHeight) maxHeight = segment.height;
+						}
+						TextArea lastSegment = combinedAreas.get(combinedAreas.size() - 1);
+						xCursor = lastSegment.x - this.xOffset + lastSegment.width;
+						lastWordXCursor = xCursor;
+						yCursor += prevPrevOffsetHeight;
+						lastFontHeight = currentFontHeight;
+						currentFontHeight = 0;
+						combinedAreas.clear();
+						nextLine = xCursor + renderStrWidth > xOffsetMax;
+						jumped = true;
+					}
+
+					if(isSeperateWord && nextLine) {
 						xCursor = 0;
 						lastWordXCursor = 0;
 						yCursor += lastFontHeight;
 						lastFontHeight = currentFontHeight;
 						currentFontHeight = 0;
+					} else if(isSeperateWord && !nextLine) {
+						combinedAreas.clear();
 					}
 
-					int additionalSpaceWidth = i < this.spaceIndices.length && this.spaceIndices[i] ? (xCursor - lastWordXCursor) : 0;
-					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor - 1, renderStrWidth, renderStrHeight + 1, additionalSpaceWidth, i < this.spaceIndices.length && this.spaceIndices[i] ? (renderSpaceWidth - 1) : -1);
+					if(jumped) lastFontHeight = nextLastFontHeight;
+
+					int additionalSpaceWidth = isSeperateWord ? (xCursor - lastWordXCursor) : 0;
+					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? (renderSpaceWidth - 1) : -1);
 
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
@@ -500,24 +539,36 @@ public class TextContainer {
 
 					for(TextArea ta : this.getTextAreas()) {
 						if(!tmpTextAreas.contains(ta)) {
+							if(!isSeperateWord) combinedAreas.add(ta);
 							tmpTextAreas.add(ta);
 						}
 					}
 
+					prevPrevOffsetHeight = prevOffsetHeight;
+
 					//Ignore END appendix
 					if(i < words.length - 1) {
-						this.textSegments.add(new TextSegment(word, this.xOffset + xCursor, this.yOffset + yCursor, this.currentColor, this.currentScale));
+						TextSegment segment = new TextSegment(word, this.xOffset + xCursor, this.yOffset + yCursor, currentTextArea.withSpace().width, currentTextArea.height, this.currentColor, this.currentScale);
+						if(!isSeperateWord) {
+							if(offsetSegment == null) {
+								prevOffsetHeight = prevCurrentFontHeight;
+								offsetSegment = segment;
+							}
+							combinedAreas.add(segment);
+						}
+						this.textSegments.add(segment);
 					}
 
 					xCursor += renderStrWidth;
-					if(i < this.spaceIndices.length && this.spaceIndices[i]) xCursor += renderSpaceWidth;
+					if(isSeperateWord) xCursor += renderSpaceWidth;
 
 					lastWordXCursor = xCursor;
 
 					wordIndex++;
 				} else {
-					if(i < this.spaceIndices.length && this.spaceIndices[i]) xCursor += defaultSpaceWidth;
+					if(isSeperateWord) xCursor += defaultSpaceWidth;
 				}
+				wasSeperateWord = isSeperateWord;
 			}
 			this.textAreas.addAll(tmpTextAreas);
 		} catch(Exception ex) {
@@ -590,7 +641,7 @@ public class TextContainer {
 		for(TextSegment segment : this.textSegments) {
 			GL11.glPushMatrix();
 			GL11.glScalef(segment.scale, segment.scale, 1.0F);
-			Minecraft.getMinecraft().fontRenderer.drawString(segment.text, (int)(segment.x / segment.scale), (int)(segment.y / segment.scale), segment.color);
+			Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.floor_float(segment.x / segment.scale), MathHelper.floor_float(segment.y / segment.scale), segment.color);
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
@@ -601,6 +652,18 @@ public class TextContainer {
 	 */
 	public void renderBounds() {
 		Gui.drawRect(this.xOffset, this.yOffset, this.xOffset + this.width, this.yOffset + this.height, 0x80FF0000);
+		for(TextSegment segment : this.textSegments) {
+			GL11.glPushMatrix();
+			GL11.glScalef(segment.scale, segment.scale, 1.0F);
+			Gui.drawRect(MathHelper.floor_float(segment.x / segment.scale), MathHelper.floor_float(segment.y / segment.scale), MathHelper.floor_float(segment.x / segment.scale + segment.width / segment.scale), MathHelper.floor_float(segment.y / segment.scale + segment.height / segment.scale), 0x400000FF);
+			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glPopMatrix();
+		}
+		for(TextArea ta : this.getTextAreas()) {
+			if(ta instanceof TooltipArea) {
+				Gui.drawRect(ta.x, ta.y, ta.x + ta.width, ta.y + ta.height, 0x6000FF00);
+			}
+		}
 	}
 
 	/**
