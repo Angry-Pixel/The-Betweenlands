@@ -1,5 +1,6 @@
 package thebetweenlands.manual.gui.entries;
 
+import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.gui.pages.ManualPage;
 
 import java.util.ArrayList;
@@ -11,12 +12,14 @@ public class ManualEntry {
 
     public ArrayList<ManualPage> pages = new ArrayList<>();
 
+    public String entryName;
+
     public ManualPage currentPageLeft;
     public ManualPage currentPageRight;
     public int currentPage = 0;
     public ManualPage blankPage = new ManualPage();
 
-    public ManualEntry(ManualPage... pages){
+    public ManualEntry(String unlocalizedEntryName, ManualPage... pages){
         int pageNumber = 1;
         if(pages.length < 2) {
             currentPageRight = blankPage;
@@ -39,6 +42,7 @@ public class ManualEntry {
                 pageNumber++;
             }
         }
+        this.entryName = StatCollector.translateToLocal(unlocalizedEntryName);
     }
 
     public void clear(){
