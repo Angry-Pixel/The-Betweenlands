@@ -29,23 +29,23 @@ public class RenderWeedwoodRowboat extends Render {
 	}
 
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float delta) {
-		EntityWeedwoodRowboat boat = (EntityWeedwoodRowboat) entity;
-		renderPilot(boat, delta);
+		EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) entity;
+		renderPilot(rowboat, delta);
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y + 1, (float) z);
+		GL11.glTranslated(x, y + 1, z);
 		GL11.glRotatef(270 - yaw, 0, 1, 0);
-		float timeSinceHit = boat.getTimeSinceHit() - delta;
-		float damageTaken = boat.getDamageTaken() - delta;
+		float timeSinceHit = rowboat.getTimeSinceHit() - delta;
+		float damageTaken = rowboat.getDamageTaken() - delta;
 		if (damageTaken < 0) {
 			damageTaken = 0;
 		}
 		if (timeSinceHit > 0) {
-			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * boat.getForwardDirection(), 0, 0, 1);
+			GL11.glRotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * rowboat.getForwardDirection(), 0, 0, 1);
 		}
 		GL11.glPushMatrix();
 		bindEntityTexture(entity);
 		GL11.glScalef(-1, -1, 1);
-		model.render(entity, 0, 0, 0, 0, 0, 0.0625F);
+		model.render(rowboat, 0.0625F, delta);
 		GL11.glPopMatrix();
 		renderWaterMask();
 		GL11.glPopMatrix();

@@ -272,12 +272,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		modelRenderer.rotateAngleZ = z;
 	}
 
-	@Override
-	public void render(Entity entity, float swing, float speed, float age, float yaw, float pitch, float scale) {
+	public void render(EntityWeedwoodRowboat rowboat, float scale, float delta) {
 //		if (entity.ticksExisted % 20 == 0) reconstructModel();
-		EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) entity;
-		animateOar(rowboat, EntityWeedwoodRowboat.LEFT_OAR, swing);
-		animateOar(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, swing);
+		animateOar(rowboat, EntityWeedwoodRowboat.LEFT_OAR, delta);
+		animateOar(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, delta);
 		keel.render(scale);
 		hullBottom.render(scale);
 		hullBottomLeft.render(scale);

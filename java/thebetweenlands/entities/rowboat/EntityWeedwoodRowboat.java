@@ -215,6 +215,8 @@ public class EntityWeedwoodRowboat extends Entity {
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
+		prevOarRotation[LEFT_OAR] = getOarRotation(LEFT_OAR);
+		prevOarRotation[RIGHT_OAR] = getOarRotation(RIGHT_OAR);
 		if (worldObj.isRemote) {
 			boolean hasPlayer = riddenByEntity != null;
 			if (!hadPlayer && hasPlayer) {
@@ -228,8 +230,6 @@ public class EntityWeedwoodRowboat extends Entity {
 			prevOarStrokeLeft = oarStrokeLeft;
 			prevOarStrokeRight = oarStrokeRight;
 		}
-		prevOarRotation[LEFT_OAR] = getOarRotation(LEFT_OAR);
-		prevOarRotation[RIGHT_OAR] = getOarRotation(RIGHT_OAR);
 		super.onUpdate();
 		if (worldObj.isRemote) {
 			updatePosition();
@@ -259,17 +259,8 @@ public class EntityWeedwoodRowboat extends Entity {
 				riddenByEntity = null;
 			}
 		}
-		prevRotationYaw = adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
-	}
-
-	private float adjustAngleForInterpolation(float angle, float prevAngle) {
-		while (angle - prevAngle < -180) {
-			prevAngle -= 360;
-		}
-		while (angle - prevAngle >= 180) {
-			prevAngle += 360;
-		}
-		return prevAngle;
+		rotationYaw = MathHelper.wrapAngleTo180_float(rotationYaw);
+		prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
 	}
 
 	@Override
@@ -281,7 +272,7 @@ public class EntityWeedwoodRowboat extends Entity {
 			if (riddenByEntity instanceof EntityLivingBase) {
 				EntityLivingBase rider = (EntityLivingBase) riddenByEntity;
 				rider.renderYawOffset = rotationYaw - 90;
-				rider.rotationYaw -= (prevRotationYaw - rotationYaw);
+				rider.rotationYaw -= prevRotationYaw - rotationYaw;
 				rider.rotationYawHead = rotationYaw - 90;
 				TheBetweenlands.proxy.updateRiderYawInWeedwoodRowboat(this, rider);
 			}
@@ -460,6 +451,9 @@ public class EntityWeedwoodRowboat extends Entity {
 	public float getOarRotation(int side, float swing) {
 		float prevRotation = prevOarRotation[side];
 		float rotation = getOarRotation(side);
+		if (side == LEFT_OAR) {
+//			System.out.println(prevRotation != rotation);
+		}
 		return (float) MathHelper.denormalizeClamp(prevRotation, rotation, swing);
 	}
 

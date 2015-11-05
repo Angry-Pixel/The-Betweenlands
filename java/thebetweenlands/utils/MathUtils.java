@@ -95,4 +95,14 @@ public final class MathUtils {
 	public static float lerpAngle(float a, float b, float t) {
 		return t * (mod(-a + b + 180, 360) - 180) + a;
 	}
+
+	public static float adjustAngleForInterpolation(float angle, float prevAngle) {
+		while (angle - prevAngle < -180) {
+			prevAngle -= 360;
+		}
+		while (angle - prevAngle >= 180) {
+			prevAngle += 360;
+		}
+		return prevAngle;
+	}
 }

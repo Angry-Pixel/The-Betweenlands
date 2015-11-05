@@ -1,9 +1,11 @@
 package thebetweenlands.client.perspective.rowboat;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.client.perspective.Perspective;
 import thebetweenlands.client.perspective.PerspectiveFirstPerson;
+import thebetweenlands.utils.MathUtils;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerson {
@@ -31,9 +33,9 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 		final float yawLimit = 135;
 		final float yawResistance = 45;
 		float currentPitch = entity.rotationPitch;
-		float currentYaw = entity.rotationYaw;
-		float rowboatYawOffset = entity.ridingEntity.rotationYaw - 90;
-		float relativeYaw = entity.rotationYaw - rowboatYawOffset;
+		float currentYaw = MathHelper.wrapAngleTo180_float(entity.rotationYaw);
+		float rowboatYawOffset = MathHelper.wrapAngleTo180_float(entity.ridingEntity.rotationYaw - 90);
+		float relativeYaw = MathHelper.wrapAngleTo180_float(currentYaw - rowboatYawOffset);
 		float scaleX = 0.15F;
 		float scaleY = 0.15F;
 		float distanceToLimit = Math.abs(yawLimit - Math.abs(relativeYaw));
@@ -53,6 +55,7 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 			entity.rotationPitch = -pitchLimit;
 		}
 		entity.rotationYaw -= rowboatYawOffset;
+		entity.rotationYaw = MathHelper.wrapAngleTo180_float(entity.rotationYaw);
 		if (entity.rotationYaw > yawLimit) {
 			entity.rotationYaw = yawLimit;
 		}
@@ -60,5 +63,6 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 			entity.rotationYaw = -yawLimit;
 		}
 		entity.rotationYaw += rowboatYawOffset;
+		entity.prevRotationYaw = MathUtils.adjustAngleForInterpolation(entity.rotationYaw, entity.prevRotationYaw);
 	}
 }
