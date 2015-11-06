@@ -42,11 +42,12 @@ public class GuiManualBase extends GuiScreen {
 
     @Override
     public void initGui() {
+        System.out.println("init");
         xStartLeftPage = width / 2 - WIDTH;
         xStartRightPage = width / 2;
         yStart = (height - HEIGHT) / 2;
         ManualEntryRegistry.init(this);
-        entry = ManualEntryRegistry.entry5;
+        entry = ManualEntryRegistry.entry9;
     }
 
     @Override

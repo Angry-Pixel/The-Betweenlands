@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 /**
  * Created by Bart on 25-10-2015.
  */
-public class ItemBLRecord extends ItemRecord {
+public class ItemBLRecord extends ItemRecord implements IManualEntryItem {
     private static final Map records = new HashMap();
 
     public final String recordName;
@@ -64,5 +65,20 @@ public class ItemBLRecord extends ItemRecord {
     @Override
     public ResourceLocation getRecordResource(String name) {
         return new ResourceLocation("thebetweenlands:" + name);
+    }
+
+    @Override
+    public String manualName(int meta) {
+        return "record" + recordName;
+    }
+
+    @Override
+    public Item getItem() {
+        return this;
+    }
+
+    @Override
+    public int[] recipeType(int meta) {
+        return new int[]{6};
     }
 }

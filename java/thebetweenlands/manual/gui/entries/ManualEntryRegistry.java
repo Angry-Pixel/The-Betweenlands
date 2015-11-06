@@ -1,6 +1,7 @@
 package thebetweenlands.manual.gui.entries;
 
 import net.minecraft.item.ItemStack;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ItemGeneric;
@@ -22,10 +23,11 @@ public class ManualEntryRegistry {
     public static IManualEntryItem[] shovels = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodAxe, (IManualEntryItem) BLItemRegistry.betweenstoneAxe, (IManualEntryItem) BLItemRegistry.octineAxe, (IManualEntryItem) BLItemRegistry.valoniteAxe};
     public static IManualEntryItem[] axes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodShovel, (IManualEntryItem) BLItemRegistry.betweenstoneShovel, (IManualEntryItem) BLItemRegistry.octineShovel, (IManualEntryItem) BLItemRegistry.valoniteShovel};
     public static IManualEntryItem[] swords = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodSword, (IManualEntryItem) BLItemRegistry.betweenstoneSword, (IManualEntryItem) BLItemRegistry.octineSword, (IManualEntryItem) BLItemRegistry.valoniteSword};
+    public static IManualEntryItem[] records = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.astatos, (IManualEntryItem) BLItemRegistry.betweenYouAndMe, (IManualEntryItem) BLItemRegistry.christmasOnTheMarsh, (IManualEntryItem) BLItemRegistry.theExplorer, (IManualEntryItem) BLItemRegistry.hagDance, (IManualEntryItem) BLItemRegistry.lonelyFire, (IManualEntryItem) BLItemRegistry.mysteriousRecord, (IManualEntryItem) BLItemRegistry.ancient, (IManualEntryItem) BLItemRegistry.beneathAGreenSky, (IManualEntryItem) BLItemRegistry.dJWightsMixtape, (IManualEntryItem) BLItemRegistry.onwards, (IManualEntryItem) BLItemRegistry.stuckInTheMud, (IManualEntryItem) BLItemRegistry.wanderingWisps, (IManualEntryItem) BLItemRegistry.waterlogged};
+    public static IManualEntryItem[] doors = new IManualEntryItem[]{(IManualEntryItem) BLBlockRegistry.doorSyrmorite, (IManualEntryItem) BLBlockRegistry.doorWeedwood};
 
 
     public static ArrayList<ManualEntryItem> itemEntries = new ArrayList<>();
-    public static ArrayList<IManualEntryItem> itemEntryItem = new ArrayList<>();
 
 
     public static ManualEntry entry;
@@ -57,10 +59,12 @@ public class ManualEntryRegistry {
         entry5 = new ManualEntryItem(recipes4, "arrow", manual);
 
         initItemEntries(manual);
-        entry9 = itemEntries.get(itemEntries.size() - 1);
+        entry9 = new ManualEntryEntryList("title", manual, itemEntries);
     }
 
     public static void initItemEntries(GuiManualBase manual) {
+        itemEntries.clear();
+        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{ (IManualEntryItem)BLBlockRegistry.weedwoodJukebox, (IManualEntryItem)BLItemRegistry.explorerHat, (IManualEntryItem)BLItemRegistry.ringOfPower, (IManualEntryItem)BLItemRegistry.voodooDoll, (IManualEntryItem)BLItemRegistry.testItem};
         for (IManualEntryItem item : itemEntryItem)
             itemEntries.add(new ManualEntryItem(item, manual));
 
@@ -76,6 +80,7 @@ public class ManualEntryRegistry {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //TODO some way of sorting the entries by name
     }
 
 }

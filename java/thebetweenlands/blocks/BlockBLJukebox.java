@@ -14,11 +14,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
 /**
  * Created by Bart on 16-6-2015.
  */
-public class BlockBLJukebox extends BlockJukebox {
+public class BlockBLJukebox extends BlockJukebox implements IManualEntryItem {
     private IIcon topIcon;
 
     public BlockBLJukebox(String name) {
@@ -65,4 +66,18 @@ public class BlockBLJukebox extends BlockJukebox {
         this.topIcon = register.registerIcon(textureName + "_top");
     }
 
+    @Override
+    public String manualName(int meta) {
+        return "weedwoodJukebox";
+    }
+
+    @Override
+    public Item getItem() {
+        return Item.getItemFromBlock(this);
+    }
+
+    @Override
+    public int[] recipeType(int meta) {
+        return new int[]{2};
+    }
 }
