@@ -3,21 +3,18 @@ package thebetweenlands.blocks;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockRubberTap extends Block {
 	public IIcon icon;
@@ -91,7 +88,7 @@ public class BlockRubberTap extends Block {
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
 		if(world.isRemote) return;
-		
+
 		//5 min. schedule
 		world.scheduleBlockUpdate(x, y, z, this, 20*60*5);
 
@@ -202,6 +199,7 @@ public class BlockRubberTap extends Block {
 		} else {
 			drops.add(ItemGeneric.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0));
 		}
+		drops.add(ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		return drops;
 	}
 }

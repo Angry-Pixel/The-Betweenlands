@@ -18,6 +18,8 @@ import net.minecraftforge.fluids.FluidStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
 public class ItemWeedwoodBucket extends Item {
@@ -77,9 +79,22 @@ public class ItemWeedwoodBucket extends Item {
 					if (block == BLBlockRegistry.rubberTreeLog && meta == 1 && pos.sideHit >= 2 && !world.isRemote) {
 						int tx = x + (pos.sideHit == 4 ? -1 : (pos.sideHit == 5 ? 1 : 0));
 						int tz = z + (pos.sideHit == 2 ? -1 : (pos.sideHit == 3 ? 1 : 0));
-						world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
-						stack.stackSize--;
-						return stack;
+						ItemStack swampReedRopeItem =ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE);
+						boolean hasRope = player.capabilities.isCreativeMode;
+						if(!hasRope && player.inventory.hasItemStack(swampReedRopeItem)) {
+							for(int i = 0; i < player.inventory.mainInventory.length; ++i) {
+								if(player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].isItemEqual(swampReedRopeItem)) {
+									player.inventory.decrStackSize(i, 1);
+									hasRope = true;
+									break;
+								}
+							}
+						}
+						if(hasRope) {
+							world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
+							stack.stackSize--;
+							return stack;
+						}
 					}
 
 					if (!world.isRemote && block == BLBlockRegistry.tarFluid && meta == 0) {
