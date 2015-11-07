@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.terrain;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -15,9 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemBlockGeneric;
-
-import java.util.List;
+import thebetweenlands.items.block.ItemBlockGeneric;
 
 /**
  * Created by Bart on 21-6-2015.

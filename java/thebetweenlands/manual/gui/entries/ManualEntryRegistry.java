@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.pages.ManualPage;
 import thebetweenlands.manual.gui.widgets.PurifierRecipeWidget;

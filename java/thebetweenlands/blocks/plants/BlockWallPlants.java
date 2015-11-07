@@ -25,16 +25,16 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemGenericPlantDrop;
-import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.block.ItemBlockPlantSmall;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockWallPlants extends Block implements IShearable, ISubBlocksBlock {
+public class BlockWallPlants extends Block implements IHarvestable, ISubBlocksBlock {
 
 	public static final String[] iconPaths = new String[] { "moss", "lichen" };
 
@@ -454,12 +454,12 @@ public class BlockWallPlants extends Block implements IShearable, ISubBlocksBloc
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
 	}
 
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		int meta = world.getBlockMetadata(x, y, z);
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (meta == 2 || meta == 3 || meta == 4 || meta == 5 || meta == 6 || meta == 7) {

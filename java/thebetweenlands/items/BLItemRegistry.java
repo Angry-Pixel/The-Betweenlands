@@ -14,93 +14,145 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.items.armor.ItemArmorOfLegends;
+import thebetweenlands.items.armor.ItemBoneArmor;
+import thebetweenlands.items.armor.ItemImprovedRubberBoots;
+import thebetweenlands.items.armor.ItemLurkerSkinArmor;
+import thebetweenlands.items.armor.ItemRubberBoots;
+import thebetweenlands.items.armor.ItemSkullMask;
+import thebetweenlands.items.armor.ItemSyrmoriteArmor;
+import thebetweenlands.items.armor.ItemValoniteArmor;
+import thebetweenlands.items.block.ItemBLDoor;
+import thebetweenlands.items.block.ItemBLHangingEntity;
 import thebetweenlands.items.bow.EnumArrowType;
 import thebetweenlands.items.bow.ItemBLArrow;
 import thebetweenlands.items.bow.ItemWeedwoodBow;
+import thebetweenlands.items.food.ItemBlackHatMushroom;
+import thebetweenlands.items.food.ItemBulbCappedMushroom;
+import thebetweenlands.items.food.ItemFlatheadMushroom;
+import thebetweenlands.items.food.ItemForbiddenFig;
+import thebetweenlands.items.food.ItemGertsDonut;
+import thebetweenlands.items.food.ItemMarshmallow;
+import thebetweenlands.items.food.ItemMarshmallowPink;
+import thebetweenlands.items.food.ItemNettleSoup;
+import thebetweenlands.items.food.ItemRottenFood;
+import thebetweenlands.items.food.ItemSapBall;
+import thebetweenlands.items.food.ItemSapJello;
+import thebetweenlands.items.food.ItemWeepingBluePetal;
+import thebetweenlands.items.food.ItemWightHeart;
+import thebetweenlands.items.herblore.ItemDentrothystVial;
+import thebetweenlands.items.herblore.ItemElixir;
+import thebetweenlands.items.herblore.ItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
+import thebetweenlands.items.misc.ItemBLGenericSeed;
+import thebetweenlands.items.misc.ItemBLRecord;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemLifeCrystal;
+import thebetweenlands.items.misc.ItemManual;
+import thebetweenlands.items.misc.ItemRope;
+import thebetweenlands.items.misc.ItemSpawnEggs;
+import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.items.misc.ItemTestItem;
+import thebetweenlands.items.misc.ItemVolarPad;
+import thebetweenlands.items.misc.ItemWeedwoodRowboat;
+import thebetweenlands.items.throwable.ItemAngryPebble;
+import thebetweenlands.items.throwable.ItemShimmerStone;
+import thebetweenlands.items.throwable.ItemTarminion;
+import thebetweenlands.items.tools.ItemAxeBL;
+import thebetweenlands.items.tools.ItemPestle;
+import thebetweenlands.items.tools.ItemPickaxeBL;
+import thebetweenlands.items.tools.ItemSickle;
+import thebetweenlands.items.tools.ItemSpadeBL;
+import thebetweenlands.items.tools.ItemSwiftPick;
+import thebetweenlands.items.tools.ItemSwordBL;
+import thebetweenlands.items.tools.ItemSyrmoriteShears;
+import thebetweenlands.items.tools.ItemWeedwoodBucket;
+import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
+import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterials;
 
 public class BLItemRegistry {
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 
 	// BASIC MATERIALS
-	public static final Item testItem = new TestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
-	public static final Item swampTalisman = new SwampTalisman();
+	public static final Item testItem = new ItemTestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
+	public static final Item swampTalisman = new ItemSwampTalisman();
 	public static final Item itemsGeneric = new ItemGeneric();
 	public static final Item itemsGenericCrushed = new ItemGenericCrushed().setUnlocalizedName("thebetweenlands.groundStuff"); // TODO fix needing unloc name here to stop null in registry
 	public static final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setUnlocalizedName("thebetweenlands.plantDrop");
 	public static final Item lifeCrystal = new ItemLifeCrystal().setUnlocalizedName("thebetweenlands.lifeCrystal").setTextureName("thebetweenlands:lifeCrystal");
 
 	// WEAPONS TOOLS
-	public static final Item weedwoodSword = new SwordBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodSword").setTextureName("thebetweenlands:weedWoodSword");
-	public static final Item weedwoodPickaxe = new PickaxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodPickaxe").setTextureName("thebetweenlands:weedWoodPickaxe");
-	public static final Item weedwoodAxe = new AxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodAxe").setTextureName("thebetweenlands:weedWoodAxe");
-	public static final Item weedwoodShovel = new SpadeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
+	public static final Item weedwoodSword = new ItemSwordBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodSword").setTextureName("thebetweenlands:weedWoodSword");
+	public static final Item weedwoodPickaxe = new ItemPickaxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodPickaxe").setTextureName("thebetweenlands:weedWoodPickaxe");
+	public static final Item weedwoodAxe = new ItemAxeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodAxe").setTextureName("thebetweenlands:weedWoodAxe");
+	public static final Item weedwoodShovel = new ItemSpadeBL(BLMaterials.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
 	public static final Item weedwoodBow = new ItemWeedwoodBow().setUnlocalizedName("thebetweenlands.weedwoodBow").setTextureName("thebetweenlands:weedwoodBow");
 	public static final Item anglerToothArrow = new ItemBLArrow("anglerToothArrow", EnumArrowType.DEFAULT).setUnlocalizedName("thebetweenlands.anglerToothArrow");
 	public static final Item poisonedAnglerToothArrow = new ItemBLArrow("poisonedAnglerToothArrow", EnumArrowType.ANGLER_POISON).setUnlocalizedName("thebetweenlands.poisonedAnglerToothArrow");
 	public static final Item octineArrow = new ItemBLArrow("octineArrow", EnumArrowType.OCTINE).setUnlocalizedName("thebetweenlands.octineArrow");
 	public static final Item basiliskArrow = new ItemBLArrow("basiliskArrow", EnumArrowType.BASILISK).setUnlocalizedName("thebetweenlands.basiliskArrow");
 
-	public static final Item betweenstoneSword = new SwordBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
-	public static final Item betweenstonePickaxe = new PickaxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstonePickaxe").setTextureName("thebetweenlands:betweenstonePickaxe");
-	public static final Item betweenstoneAxe = new AxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneAxe").setTextureName("thebetweenlands:betweenstoneAxe");
-	public static final Item betweenstoneShovel = new SpadeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneShovel").setTextureName("thebetweenlands:betweenstoneShovel");
+	public static final Item betweenstoneSword = new ItemSwordBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
+	public static final Item betweenstonePickaxe = new ItemPickaxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstonePickaxe").setTextureName("thebetweenlands:betweenstonePickaxe");
+	public static final Item betweenstoneAxe = new ItemAxeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneAxe").setTextureName("thebetweenlands:betweenstoneAxe");
+	public static final Item betweenstoneShovel = new ItemSpadeBL(BLMaterials.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneShovel").setTextureName("thebetweenlands:betweenstoneShovel");
 
-	public static final Item octineSword = new SwordBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineSword").setTextureName("thebetweenlands:octineSword");
-	public static final Item octinePickaxe = new PickaxeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octinePickaxe").setTextureName("thebetweenlands:octinePickaxe");
-	public static final Item octineAxe = new AxeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineAxe").setTextureName("thebetweenlands:octineAxe");
-	public static final Item octineShovel = new SpadeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineShovel").setTextureName("thebetweenlands:octineShovel");
+	public static final Item octineSword = new ItemSwordBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineSword").setTextureName("thebetweenlands:octineSword");
+	public static final Item octinePickaxe = new ItemPickaxeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octinePickaxe").setTextureName("thebetweenlands:octinePickaxe");
+	public static final Item octineAxe = new ItemAxeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineAxe").setTextureName("thebetweenlands:octineAxe");
+	public static final Item octineShovel = new ItemSpadeBL(BLMaterials.toolOctine).setUnlocalizedName("thebetweenlands.octineShovel").setTextureName("thebetweenlands:octineShovel");
 
-	public static final Item valoniteSword = new SwordBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteSword").setTextureName("thebetweenlands:valoniteSword");
-	public static final Item valonitePickaxe = new PickaxeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valonitePickaxe").setTextureName("thebetweenlands:valonitePickaxe");
-	public static final Item valoniteAxe = new AxeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteAxe").setTextureName("thebetweenlands:valoniteAxe");
-	public static final Item valoniteShovel = new SpadeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteShovel").setTextureName("thebetweenlands:valoniteShovel");
+	public static final Item valoniteSword = new ItemSwordBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteSword").setTextureName("thebetweenlands:valoniteSword");
+	public static final Item valonitePickaxe = new ItemPickaxeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valonitePickaxe").setTextureName("thebetweenlands:valonitePickaxe");
+	public static final Item valoniteAxe = new ItemAxeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteAxe").setTextureName("thebetweenlands:valoniteAxe");
+	public static final Item valoniteShovel = new ItemSpadeBL(BLMaterials.toolValonite).setUnlocalizedName("thebetweenlands.valoniteShovel").setTextureName("thebetweenlands:valoniteShovel");
 
 	public static final Item weedwoodBucket = new ItemWeedwoodBucket();
 	public static final Item weedwoodBucketTar = new ItemWeedwoodBucket(BLBlockRegistry.tarFluid).setUnlocalizedName("thebetweenlands.weedwoodBucketTar").setTextureName("thebetweenlands:weedwoodBucketTar");
 	public static final Item weedwoodBucketWater = new ItemWeedwoodBucket(BLBlockRegistry.swampWater).setUnlocalizedName("thebetweenlands.weedwoodBucketWater").setTextureName("thebetweenlands:weedwoodBucketWater");
 	public static final Item weedwoodStagnantWater = new ItemWeedwoodBucket(BLBlockRegistry.stagnantWaterFluid).setUnlocalizedName("thebetweenlands.weedwoodBucketStagnantWater").setTextureName("thebetweenlands:weedwoodBucketStagnantWater");
 
-	public static final Item legendarySword = new SwordBL(BLMaterials.toolOfLegends).setUnlocalizedName("thebetweenlands.legendarySword").setTextureName("thebetweenlands:legendarySword");
+	public static final Item legendarySword = new ItemSwordBL(BLMaterials.toolOfLegends).setUnlocalizedName("thebetweenlands.legendarySword").setTextureName("thebetweenlands:legendarySword");
 
 	public static final Item sickle = new ItemSickle();
 
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
 
 	// MISC ARMOUR
-	public static final Item lurkerSkinHelmet = new LurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
-	public static final Item lurkerSkinChestplate = new LurkerSkinArmor(1).setUnlocalizedName("thebetweenlands.lurkerSkinChestplate").setTextureName("thebetweenlands:lurkerSkinChestplate");
-	public static final Item lurkerSkinLeggings = new LurkerSkinArmor(2).setUnlocalizedName("thebetweenlands.lurkerSkinLeggings").setTextureName("thebetweenlands:lurkerSkinLeggings");
-	public static final Item lurkerSkinBoots = new LurkerSkinArmor(3).setUnlocalizedName("thebetweenlands.lurkerSkinBoots").setTextureName("thebetweenlands:lurkerSkinBoots");
+	public static final Item lurkerSkinHelmet = new ItemLurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
+	public static final Item lurkerSkinChestplate = new ItemLurkerSkinArmor(1).setUnlocalizedName("thebetweenlands.lurkerSkinChestplate").setTextureName("thebetweenlands:lurkerSkinChestplate");
+	public static final Item lurkerSkinLeggings = new ItemLurkerSkinArmor(2).setUnlocalizedName("thebetweenlands.lurkerSkinLeggings").setTextureName("thebetweenlands:lurkerSkinLeggings");
+	public static final Item lurkerSkinBoots = new ItemLurkerSkinArmor(3).setUnlocalizedName("thebetweenlands.lurkerSkinBoots").setTextureName("thebetweenlands:lurkerSkinBoots");
 
-	public static final Item boneHelmet = new BoneArmor(0).setUnlocalizedName("thebetweenlands.boneHelmet").setTextureName("thebetweenlands:boneHelmet");
-	public static final Item boneChestplate = new BoneArmor(1).setUnlocalizedName("thebetweenlands.boneChestplate").setTextureName("thebetweenlands:boneChestplate");
-	public static final Item boneLeggings = new BoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings").setTextureName("thebetweenlands:boneLeggings");
-	public static final Item boneBoots = new BoneArmor(3).setUnlocalizedName("thebetweenlands.boneBoots").setTextureName("thebetweenlands:boneBoots");
+	public static final Item boneHelmet = new ItemBoneArmor(0).setUnlocalizedName("thebetweenlands.boneHelmet").setTextureName("thebetweenlands:boneHelmet");
+	public static final Item boneChestplate = new ItemBoneArmor(1).setUnlocalizedName("thebetweenlands.boneChestplate").setTextureName("thebetweenlands:boneChestplate");
+	public static final Item boneLeggings = new ItemBoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings").setTextureName("thebetweenlands:boneLeggings");
+	public static final Item boneBoots = new ItemBoneArmor(3).setUnlocalizedName("thebetweenlands.boneBoots").setTextureName("thebetweenlands:boneBoots");
 
-	public static final Item syrmoriteHelmet = new SyrmoriteArmor(0).setUnlocalizedName("thebetweenlands.syrmoriteHelmet").setTextureName("thebetweenlands:syrmoriteHelmet");
-	public static final Item syrmoriteChestplate = new SyrmoriteArmor(1).setUnlocalizedName("thebetweenlands.syrmoriteChestplate").setTextureName("thebetweenlands:syrmoriteChestplate");
-	public static final Item syrmoriteLeggings = new SyrmoriteArmor(2).setUnlocalizedName("thebetweenlands.syrmoriteLeggings").setTextureName("thebetweenlands:syrmoriteLeggings");
-	public static final Item syrmoriteBoots = new SyrmoriteArmor(3).setUnlocalizedName("thebetweenlands.syrmoriteBoots").setTextureName("thebetweenlands:syrmoriteBoots");
+	public static final Item syrmoriteHelmet = new ItemSyrmoriteArmor(0).setUnlocalizedName("thebetweenlands.syrmoriteHelmet").setTextureName("thebetweenlands:syrmoriteHelmet");
+	public static final Item syrmoriteChestplate = new ItemSyrmoriteArmor(1).setUnlocalizedName("thebetweenlands.syrmoriteChestplate").setTextureName("thebetweenlands:syrmoriteChestplate");
+	public static final Item syrmoriteLeggings = new ItemSyrmoriteArmor(2).setUnlocalizedName("thebetweenlands.syrmoriteLeggings").setTextureName("thebetweenlands:syrmoriteLeggings");
+	public static final Item syrmoriteBoots = new ItemSyrmoriteArmor(3).setUnlocalizedName("thebetweenlands.syrmoriteBoots").setTextureName("thebetweenlands:syrmoriteBoots");
 
-	public static final Item legendaryHelmet = new ArmorOfLegends(0).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryHelmet").setTextureName("thebetweenlands:legendaryHelmet");
-	public static final Item legendaryChestplate = new ArmorOfLegends(1).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryChestplate").setTextureName("thebetweenlands:legendaryChestplate");
-	public static final Item legendaryLeggings = new ArmorOfLegends(2).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryLeggings").setTextureName("thebetweenlands:legendaryLeggings");
-	public static final Item legendaryBoots = new ArmorOfLegends(3).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryBoots").setTextureName("thebetweenlands:legendaryBoots");
+	public static final Item legendaryHelmet = new ItemArmorOfLegends(0).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryHelmet").setTextureName("thebetweenlands:legendaryHelmet");
+	public static final Item legendaryChestplate = new ItemArmorOfLegends(1).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryChestplate").setTextureName("thebetweenlands:legendaryChestplate");
+	public static final Item legendaryLeggings = new ItemArmorOfLegends(2).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryLeggings").setTextureName("thebetweenlands:legendaryLeggings");
+	public static final Item legendaryBoots = new ItemArmorOfLegends(3).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryBoots").setTextureName("thebetweenlands:legendaryBoots");
 
-	public static final Item valoniteHelmet = new ValoniteArmor(0).setUnlocalizedName("thebetweenlands.valoniteHelmet").setTextureName("thebetweenlands:valoniteHelmet");
-	public static final Item valoniteChestplate = new ValoniteArmor(1).setUnlocalizedName("thebetweenlands.valoniteChestplate").setTextureName("thebetweenlands:valoniteChestplate");
-	public static final Item valoniteLeggings = new ValoniteArmor(2).setUnlocalizedName("thebetweenlands.valoniteLeggings").setTextureName("thebetweenlands:valoniteLeggings");
-	public static final Item valoniteBoots = new ValoniteArmor(3).setUnlocalizedName("thebetweenlands.valoniteBoots").setTextureName("thebetweenlands:valoniteBoots");
+	public static final Item valoniteHelmet = new ItemValoniteArmor(0).setUnlocalizedName("thebetweenlands.valoniteHelmet").setTextureName("thebetweenlands:valoniteHelmet");
+	public static final Item valoniteChestplate = new ItemValoniteArmor(1).setUnlocalizedName("thebetweenlands.valoniteChestplate").setTextureName("thebetweenlands:valoniteChestplate");
+	public static final Item valoniteLeggings = new ItemValoniteArmor(2).setUnlocalizedName("thebetweenlands.valoniteLeggings").setTextureName("thebetweenlands:valoniteLeggings");
+	public static final Item valoniteBoots = new ItemValoniteArmor(3).setUnlocalizedName("thebetweenlands.valoniteBoots").setTextureName("thebetweenlands:valoniteBoots");
 
 	public static final Item rubberBoots = new ItemRubberBoots().setUnlocalizedName("thebetweenlands.rubberBoots").setTextureName("thebetweenlands:rubberBoots");
 	public static final Item rubberBootsImproved = new ItemImprovedRubberBoots().setUnlocalizedName("thebetweenlands.rubberBootsImproved").setTextureName("thebetweenlands:rubberBoots");
 
 	// CREATIVE
-	public static final Item spawnEggs = new SpawnEggs().setUnlocalizedName("thebetweenlands.monsterPlacer").setTextureName("spawn_egg");
+	public static final Item spawnEggs = new ItemSpawnEggs().setUnlocalizedName("thebetweenlands.monsterPlacer").setTextureName("spawn_egg");
 
 	//FOOD
 	public static final Item sapBall = new ItemSapBall().setUnlocalizedName("thebetweenlands.sapBall").setTextureName("thebetweenlands:sapBall");
@@ -164,7 +216,7 @@ public class BLItemRegistry {
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
 	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item swiftPick = new ItemSwiftPick(BLMaterials.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
-	public static final Item wightsBane = new SwordBL(BLMaterials.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.wightsBane").setTextureName("thebetweenlands:wightsBane");
+	public static final Item wightsBane = new ItemSwordBL(BLMaterials.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.wightsBane").setTextureName("thebetweenlands:wightsBane");
 	public static final Item skullMask = new ItemSkullMask().setUnlocalizedName("thebetweenlands.skullMask").setTextureName("thebetweenlands:skullMask");
 	public static final Item tribalPants = new ItemArmor(ItemArmor.ArmorMaterial.CLOTH, 0, 2).setUnlocalizedName("thebetweenlands.tribalPants").setTextureName("thebetweenlands:tribalPants");
 

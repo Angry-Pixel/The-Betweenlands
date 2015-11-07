@@ -18,8 +18,8 @@ import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.items.ItemGenericCrushed.EnumItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

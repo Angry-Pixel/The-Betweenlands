@@ -7,7 +7,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {

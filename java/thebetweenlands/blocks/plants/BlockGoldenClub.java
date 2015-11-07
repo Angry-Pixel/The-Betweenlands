@@ -22,11 +22,12 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ISyrmoriteShearable;
-import thebetweenlands.items.ItemGenericPlantDrop;
-import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockGoldenClub extends BlockSwampWater implements IPlantable, IShearable, ISyrmoriteShearable {
+public class BlockGoldenClub extends BlockSwampWater implements IPlantable, IHarvestable, ISyrmoriteShearable {
 	public IIcon iconGoldenClubBottom;
 	public IIcon iconGoldenClubTop;
 
@@ -112,19 +113,24 @@ public class BlockGoldenClub extends BlockSwampWater implements IPlantable, IShe
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return item.getItem() == BLItemRegistry.sickle;
 	}
 
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GOLDEN_CLUB_FLOWERS));
 		return dropList;
 	}
 
 	@Override
-	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
 		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

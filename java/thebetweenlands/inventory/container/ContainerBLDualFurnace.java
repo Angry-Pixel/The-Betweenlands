@@ -11,8 +11,8 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import thebetweenlands.inventory.slot.SlotRestriction;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 
 public class ContainerBLDualFurnace extends Container {

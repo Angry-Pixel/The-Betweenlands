@@ -18,8 +18,8 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.SwampReedUWRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 public class BlockSwampReedUW extends BlockSwampWater implements IPlantable {
 	public BlockSwampReedUW() {

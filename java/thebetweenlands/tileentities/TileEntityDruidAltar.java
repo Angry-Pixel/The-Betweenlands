@@ -18,7 +18,7 @@ import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.EnumTalisman;
+import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 

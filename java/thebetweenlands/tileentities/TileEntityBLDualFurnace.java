@@ -20,8 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 public class TileEntityBLDualFurnace extends TileEntity implements ISidedInventory
 {

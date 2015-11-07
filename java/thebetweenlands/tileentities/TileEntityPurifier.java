@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.PurifierRecipe;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler {

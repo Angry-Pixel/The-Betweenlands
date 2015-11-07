@@ -23,9 +23,9 @@ import thebetweenlands.client.model.block.ModelAnimator;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.items.SpawnEggs;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemSpawnEggs;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
 
@@ -139,8 +139,8 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 			} else {
 				GL11.glScaled(0.5D, 0.5D, 0.5D);
 				Entity entity = null;
-				if (te.getStackInSlot(0).getItem() instanceof SpawnEggs)
-					entity = SpawnEggs.getEntity(te.getWorldObj(), x, y, z, te.getStackInSlot(0));
+				if (te.getStackInSlot(0).getItem() instanceof ItemSpawnEggs)
+					entity = ItemSpawnEggs.getEntity(te.getWorldObj(), x, y, z, te.getStackInSlot(0));
 				else
 					entity = EntityList.createEntityByID(te.getStackInSlot(0).getItemDamage(), tileEntity.getWorldObj());
 				if (entity != null) {

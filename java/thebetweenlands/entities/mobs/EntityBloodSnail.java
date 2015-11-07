@@ -21,8 +21,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 public class EntityBloodSnail extends EntityMob implements IEntityBL {
 

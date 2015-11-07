@@ -8,10 +8,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import thebetweenlands.entities.mobs.IEntityBL;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
+import thebetweenlands.items.tools.ItemAxeBL;
+import thebetweenlands.items.tools.ItemPickaxeBL;
+import thebetweenlands.items.tools.ItemSpadeBL;
+import thebetweenlands.items.tools.ItemSwordBL;
 
 public class AttackDamageHandler {
 	public static final AttackDamageHandler INSTANCE = new AttackDamageHandler();
@@ -31,7 +31,7 @@ public class AttackDamageHandler {
 				EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
 				ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
 				if (heldItem != null) {
-					boolean isUsingBLWeapon = heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL;
+					boolean isUsingBLWeapon = heldItem.getItem() instanceof ItemSwordBL || heldItem.getItem() instanceof ItemAxeBL || heldItem.getItem() instanceof ItemPickaxeBL || heldItem.getItem() instanceof ItemSpadeBL;
 					if (!isUsingBLWeapon) {
 						this.ignoreEvent = true;
 						attackedEntity.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * DAMAGE_REDUCTION));

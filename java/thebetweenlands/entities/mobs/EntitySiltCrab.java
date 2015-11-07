@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	

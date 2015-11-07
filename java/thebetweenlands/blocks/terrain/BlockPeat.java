@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemRubberBoots;
+import thebetweenlands.items.armor.ItemRubberBoots;
 
 public class BlockPeat
 extends Block

@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.plants.BlockBLSmallPlants;
 import thebetweenlands.blocks.terrain.BlockWisp;
 import thebetweenlands.client.model.block.ModelItemShelf;
-import thebetweenlands.items.ItemTarminion;
+import thebetweenlands.items.throwable.ItemTarminion;
 import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.utils.ItemRenderHelper;
 import cpw.mods.fml.relauncher.Side;

@@ -8,7 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
-import thebetweenlands.items.ItemRubberBoots;
+import thebetweenlands.items.armor.ItemRubberBoots;
 
 public class BlockSilt
         extends Block

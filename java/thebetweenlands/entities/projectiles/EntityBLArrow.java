@@ -17,15 +17,16 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.bow.EnumArrowType;
-import thebetweenlands.utils.PotionHelper;
 
 public class EntityBLArrow extends EntityArrow implements IProjectile {
 	private static final int DW_SHOOTER = 9;
 	private static final int DW_TYPE = 10;
 	private boolean checkedShooter = false;
 	private boolean inGround = false;
+	private int inGroundTicks = 0;
 
 	public EntityBLArrow(World world) {
 		super(world);
@@ -47,6 +48,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
+		nbt.setInteger("inGroundTicks", this.inGroundTicks);
 		nbt.setInteger("arrowType", this.getArrowType().ordinal());
 		nbt.setString("shooter", this.getDataWatcher().getWatchableObjectString(DW_SHOOTER));
 	}
@@ -54,6 +56,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
+		this.inGroundTicks = nbt.getInteger("inGroundTicks");
 		this.setArrowType(nbt.getInteger("arrowType"));
 		this.getDataWatcher().updateObject(DW_SHOOTER, "shooter");
 	}
@@ -69,6 +72,9 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 			} catch(Exception ex) { } finally {
 				this.checkedShooter = true;
 			}
+		}
+		if(this.inGround) {
+			this.inGroundTicks++;
 		}
 		if(!this.worldObj.isRemote && !this.inGround) {
 			MovingObjectPosition collision = getCollision(this);
@@ -86,7 +92,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 					}
 					break;
 				case BASILISK:
-					hitEntity.addPotionEffect(new PotionEffect(PotionHelper.petrify.getId(), 100));
+					hitEntity.addPotionEffect(ElixirRegistry.EFFECT_PETRIFY.createEffect(100, 1));
 					break;
 				default:
 				}
@@ -99,7 +105,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!this.worldObj.isRemote && this.inGround && this.ticksExisted > 20 && this.arrowShake <= 0) {
+		if (!this.worldObj.isRemote && this.inGround && this.inGroundTicks > 20 && this.arrowShake <= 0) {
 			boolean canPickUp = this.canBePickedUp == 1 || (this.canBePickedUp == 2 && player.capabilities.isCreativeMode);
 			if (canPickUp && !this.pickUp(player)) {
 				canPickUp = false;
@@ -140,7 +146,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 		double lastDistance = 0.0D;
 		for (int c = 0; c < entityList.size(); ++c) {
 			Entity currentEntity = (Entity)entityList.get(c);
-			if (currentEntity.canBeCollidedWith() && (currentEntity != ea.shootingEntity)) {
+			if (currentEntity.canBeCollidedWith() && (currentEntity != ea.shootingEntity || ea.ticksExisted > 5)) {
 				AxisAlignedBB entityBoundingBox = currentEntity.boundingBox.expand((double)0.35F, (double)0.35F, (double)0.35F);
 				MovingObjectPosition collision = entityBoundingBox.calculateIntercept(start, dest);
 				if (collision != null) {

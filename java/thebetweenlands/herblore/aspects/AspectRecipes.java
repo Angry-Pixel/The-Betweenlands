@@ -6,8 +6,8 @@ import thebetweenlands.herblore.aspects.AspectRegistry.AspectTier;
 import thebetweenlands.herblore.aspects.AspectRegistry.AspectType;
 import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntryAspects;
-import thebetweenlands.items.ItemGenericCrushed;
-import thebetweenlands.items.ItemGenericCrushed.EnumItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 
 public class AspectRecipes {
 	public static final AspectRegistry REGISTRY = new AspectRegistry();

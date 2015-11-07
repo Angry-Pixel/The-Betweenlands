@@ -1,5 +1,10 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
@@ -11,33 +16,27 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class BlockBLHanger extends BlockBush  implements IShearable {
+public class BlockBLHanger extends BlockBush  implements IHarvestable {
 	private String type;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon spoopyIcon;
-	
+
 	public BlockBLHanger(String blockName) {
-    	super(Material.plants);
-        setHardness(0.0F);
+		super(Material.plants);
+		setHardness(0.0F);
 		type = blockName;
 		setCreativeTab(ModCreativeTabs.plants);
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 		setStepSound(Block.soundTypeGrass);
-    	setTickRandomly(true);
-    	setBlockBounds(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
+		setTickRandomly(true);
+		setBlockBounds(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 	}
 
 	@Override
@@ -57,22 +56,22 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 		return null;
 	}
 
-    @Override
-    public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-        return true;
-    }
+	@Override
+	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
+		return true;
+	}
 
-    @Override
-    public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-        return true;
-    }
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
 
-    @Override
-    public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-        ret.add(new ItemStack(this, 1));
-        return ret;
-    }
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(new ItemStack(this, 1));
+		return ret;
+	}
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
@@ -109,7 +108,7 @@ public class BlockBLHanger extends BlockBush  implements IShearable {
 		}
 		return super.getIcon(side, meta);
 	}
-	
+
 	protected boolean isValidBlock(Block block) {
 		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block instanceof BlockBLHanger;
 	}

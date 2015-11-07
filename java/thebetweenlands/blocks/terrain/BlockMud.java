@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemRubberBoots;
+import thebetweenlands.items.armor.ItemRubberBoots;
 import thebetweenlands.recipes.BLMaterials;
 
 public class BlockMud extends Block {

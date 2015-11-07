@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.PurifierRecipe;
 

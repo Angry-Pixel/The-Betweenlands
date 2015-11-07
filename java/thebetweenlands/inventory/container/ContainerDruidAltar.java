@@ -7,7 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotDruidAltar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.SwampTalisman.EnumTalisman;
+import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {

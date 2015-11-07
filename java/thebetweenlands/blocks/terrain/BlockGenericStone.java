@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ItemBlockGeneric;
+import thebetweenlands.items.block.ItemBlockGeneric;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockGenericStone

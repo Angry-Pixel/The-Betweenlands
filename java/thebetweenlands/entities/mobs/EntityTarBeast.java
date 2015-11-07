@@ -29,12 +29,12 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.items.AxeBL;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.items.PickaxeBL;
-import thebetweenlands.items.SpadeBL;
-import thebetweenlands.items.SwordBL;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.tools.ItemAxeBL;
+import thebetweenlands.items.tools.ItemPickaxeBL;
+import thebetweenlands.items.tools.ItemSpadeBL;
+import thebetweenlands.items.tools.ItemSwordBL;
 import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
@@ -186,7 +186,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
 			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
 			if (heldItem != null)
-				if (heldItem.getItem() instanceof SwordBL || heldItem.getItem() instanceof AxeBL || heldItem.getItem() instanceof PickaxeBL || heldItem.getItem() instanceof SpadeBL) {
+				if (heldItem.getItem() instanceof ItemSwordBL || heldItem.getItem() instanceof ItemAxeBL || heldItem.getItem() instanceof ItemPickaxeBL || heldItem.getItem() instanceof ItemSpadeBL) {
 					return super.attackEntityFrom(source, damage);
 				} else {
 					return super.attackEntityFrom(source, MathHelper.ceiling_float_int(damage * 0.5F));

@@ -20,8 +20,8 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.entityAI.EntityAIDruidTeleport;
 import thebetweenlands.entities.entityAI.EntityAIHurtByTargetDruid;
 import thebetweenlands.entities.entityAI.EntityAINearestAttackableTargetDruid;
-import thebetweenlands.items.SwampTalisman;
-import thebetweenlands.items.SwampTalisman.EnumTalisman;
+import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
 import thebetweenlands.utils.MathUtils;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -236,7 +236,7 @@ public class EntityDarkDruid extends EntityMob {
 
 	@Override
 	protected void dropRareDrop(int looting) {
-		entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN, 1), 0);
+		entityDropItem(ItemSwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN, 1), 0);
 	}
 
 	@Override
@@ -244,16 +244,16 @@ public class EntityDarkDruid extends EntityMob {
 		int randomPiece = rand.nextInt(4);
 		switch (randomPiece) {
 		case 0:
-			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_1, 1), 0);
+			entityDropItem(ItemSwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_1, 1), 0);
 			break;
 		case 1:
-			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_2, 1), 0);
+			entityDropItem(ItemSwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_2, 1), 0);
 			break;
 		case 2:
-			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_3, 1), 0);
+			entityDropItem(ItemSwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_3, 1), 0);
 			break;
 		case 3:
-			entityDropItem(SwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_4, 1), 0);
+			entityDropItem(ItemSwampTalisman.createStack(EnumTalisman.SWAMP_TALISMAN_4, 1), 0);
 			break;
 		}
 	}

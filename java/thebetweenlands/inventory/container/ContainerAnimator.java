@@ -10,7 +10,7 @@ import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.inventory.slot.SlotRestrictionNoMeta;
 import thebetweenlands.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

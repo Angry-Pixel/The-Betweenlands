@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -8,18 +10,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockPoisonIvy extends BlockVine implements IShearable {
+public class BlockPoisonIvy extends BlockVine implements ISyrmoriteShearable {
 	private final int[] directionToMeta = { -1, -1, 1, 4, 8, 2 };
 
 	@SideOnly(Side.CLIENT)
@@ -65,5 +70,15 @@ public class BlockPoisonIvy extends BlockVine implements IShearable {
 
 	public int getMetaForDirection(ForgeDirection direction) {
 		return directionToMeta[direction.ordinal()];
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

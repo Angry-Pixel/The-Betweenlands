@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.SpawnEggs;
+import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import cpw.mods.fml.relauncher.Side;
@@ -79,8 +79,8 @@ public class BlockAnimator extends BlockContainer {
 				if (animator.getStackInSlot(0) != null) {
 					if (animator.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) {
 						Entity entity = null;
-						if (animator.getStackInSlot(0).getItem() instanceof SpawnEggs)
-							entity = SpawnEggs.getEntity(world, x, y, z, animator.getStackInSlot(0));
+						if (animator.getStackInSlot(0).getItem() instanceof ItemSpawnEggs)
+							entity = ItemSpawnEggs.getEntity(world, x, y, z, animator.getStackInSlot(0));
 						else
 							entity = EntityList.createEntityByID(animator.getStackInSlot(0).getItemDamage(), world);
 						EntityLiving entityliving = (EntityLiving) entity;

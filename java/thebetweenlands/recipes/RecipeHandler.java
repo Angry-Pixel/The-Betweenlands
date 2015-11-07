@@ -15,12 +15,12 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.items.ItemGenericCrushed;
-import thebetweenlands.items.ItemGenericCrushed.EnumItemGenericCrushed;
-import thebetweenlands.items.ItemGenericPlantDrop;
-import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class RecipeHandler {

@@ -1,7 +1,7 @@
 package thebetweenlands.blocks.ores;
 
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 public class BlockMiddleGemOre extends BlockGenericOre {
 	public BlockMiddleGemOre(String blockName, EnumItemGeneric oreDrops) {

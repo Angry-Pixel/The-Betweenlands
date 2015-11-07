@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import thebetweenlands.items.ItemVolarPad;
+import thebetweenlands.items.misc.ItemVolarPad;
 
 /**
  * Created by Bart on 25-9-2015.

@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.BLItemRegistry;
@@ -87,5 +88,10 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants implements IGrow
 				world.setBlock(x, y, z, this);
 			}
 		}
+	}
+	
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return false;
 	}
 }

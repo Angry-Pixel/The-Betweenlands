@@ -33,7 +33,7 @@ import thebetweenlands.entities.projectiles.EntityElixir;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
-import thebetweenlands.items.SpawnEggs;
+import thebetweenlands.items.misc.ItemSpawnEggs;
 
 public class BLEntityRegistry
 {
@@ -81,11 +81,11 @@ public class BLEntityRegistry
 
 	private static final void registerEntity(int id, Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
 		registerEntity(id, entityClass, name, trackingRange, trackingFrequency, velocityUpdates);
-		SpawnEggs.registerSpawnEgg(entityClass, name, id, eggBackgroundColor, eggForegroundColor);
+		ItemSpawnEggs.registerSpawnEgg(entityClass, name, id, eggBackgroundColor, eggForegroundColor);
 	}
 
 	private static final void registerEntity(int id, Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor) {
 		registerEntity(id, entityClass, name);
-		SpawnEggs.registerSpawnEgg(entityClass, name, id, eggBackgroundColor, eggForegroundColor);
+		ItemSpawnEggs.registerSpawnEgg(entityClass, name, id, eggBackgroundColor, eggForegroundColor);
 	}
 }

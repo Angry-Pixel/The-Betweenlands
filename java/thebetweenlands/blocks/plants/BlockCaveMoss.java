@@ -12,15 +12,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGenericPlantDrop;
-import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
 
-public class BlockCaveMoss extends BlockBush implements IShearable {
+public class BlockCaveMoss extends BlockBush implements IHarvestable {
 	private IIcon lower;
 
 	public BlockCaveMoss() {
@@ -110,12 +110,12 @@ public class BlockCaveMoss extends BlockBush implements IShearable {
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return item.getItem() == BLItemRegistry.sickle;
 	}
 
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS));
 		return dropList;

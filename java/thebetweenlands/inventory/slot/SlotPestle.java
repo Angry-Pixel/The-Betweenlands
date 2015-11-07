@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.items.ItemPestle;
+import thebetweenlands.items.tools.ItemPestle;
 
 public class SlotPestle extends Slot {
 

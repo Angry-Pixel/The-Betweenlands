@@ -12,8 +12,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 
 @SideOnly(Side.CLIENT)

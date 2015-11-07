@@ -5,13 +5,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockThorns extends BlockVine implements IShearable {
+public class BlockThorns extends BlockVine implements ISyrmoriteShearable {
 
 	public BlockThorns() {
 		super();
@@ -31,5 +32,15 @@ public class BlockThorns extends BlockVine implements IShearable {
 	@SideOnly(Side.CLIENT)
 	public int colorMultiplier(IBlockAccess access, int x, int y, int z) {
 		return 0xFFFFFF;
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

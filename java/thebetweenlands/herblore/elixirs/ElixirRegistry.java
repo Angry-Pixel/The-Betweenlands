@@ -12,6 +12,7 @@ import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.herblore.elixirs.effects.ElixirFeasting;
 import thebetweenlands.herblore.elixirs.effects.ElixirHealing;
 import thebetweenlands.herblore.elixirs.effects.ElixirMasking;
+import thebetweenlands.herblore.elixirs.effects.ElixirPetrify;
 import thebetweenlands.herblore.elixirs.effects.ElixirRipening;
 import thebetweenlands.herblore.elixirs.effects.ElixirSwiftarm;
 
@@ -21,7 +22,7 @@ public class ElixirRegistry {
 	//Test
 	public static final ElixirEffect EFFECT_TEST = new ElixirEffect(69, "bl.elixir.test", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png"));
 
-	//Potions
+	//Elixirs
 	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/blocks/swampDirt.png")).addAttributeModifier(SharedMonsterAttributes.attackDamage, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.0D, 2);
 	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png")).addAttributeModifier(SharedMonsterAttributes.movementSpeed, "645a98a2-7bfd-11e5-8bcf-feff819cdc9f", 0.2D, 2);
 	public static final ElixirEffect EFFECT_HEALING = new ElixirHealing(2, "bl.elixir.healing", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
@@ -40,7 +41,7 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_WINGS = new ElixirEffect(15, "bl.elixir.wings", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_HUNTERSSENSEMASTER = new ElixirEffect(16, "bl.elixir.huntersSenseMaster", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 
-	//Anti Potions
+	//Anti Elixirs
 	public static final ElixirEffect EFFECT_WEAKNESS = new ElixirEffect(17, "bl.elixir.weakness", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_LUMBERING = new ElixirEffect(18, "bl.elixir.lumbering", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_DRAINING = new ElixirEffect(19, "bl.elixir.draining", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
@@ -58,6 +59,9 @@ public class ElixirRegistry {
 	public static final ElixirEffect EFFECT_DEFORMED = new ElixirEffect(31, "bl.elixir.deformed", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_LIMBLESS = new ElixirEffect(32, "bl.elixir.limbless", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 	public static final ElixirEffect EFFECT_ISOLATEDSENSES = new ElixirEffect(33, "bl.elixir.isolatedSenses", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
+
+	//Other Elixirs
+	public static final ElixirEffect EFFECT_PETRIFY = new ElixirPetrify(34, "bl.elixir.petrify", new ResourceLocation("thebetweenlands:textures/blocks/swampGrassTop.png"));
 
 	static {
 		registerElixirs();

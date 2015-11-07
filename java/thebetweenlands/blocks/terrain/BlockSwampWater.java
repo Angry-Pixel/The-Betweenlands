@@ -24,7 +24,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
-import thebetweenlands.items.ItemImprovedRubberBoots;
+import thebetweenlands.items.armor.ItemImprovedRubberBoots;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.WorldProviderBetweenlands;
 

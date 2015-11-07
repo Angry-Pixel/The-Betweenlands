@@ -19,17 +19,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ISyrmoriteShearable;
-import thebetweenlands.items.ItemGenericPlantDrop;
-import thebetweenlands.items.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockBLSmallPlants extends BlockTallGrass implements IShearable, ISyrmoriteShearable {
+public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, ISyrmoriteShearable {
 	protected final String name;
 
 	@SideOnly(Side.CLIENT)
@@ -128,12 +128,12 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IShearable, IS
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return item.getItem() == BLItemRegistry.sickle;
 	}
 
 	@Override
-	public ArrayList<ItemStack> onSheared(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		switch(this.name) {
 		case "arrowArum":
@@ -187,7 +187,12 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IShearable, IS
 	}
 
 	@Override
-	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
 		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

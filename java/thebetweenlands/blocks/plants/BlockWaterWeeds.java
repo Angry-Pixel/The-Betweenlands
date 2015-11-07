@@ -20,7 +20,7 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.ISyrmoriteShearable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
 public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyrmoriteShearable {
 	public IIcon iconWaterWeeds;
@@ -109,7 +109,12 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyr
 	}
 
 	@Override
-	public ItemStack getSpecialDrop(Block block, int x, int y, int z, int meta) {
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
 		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

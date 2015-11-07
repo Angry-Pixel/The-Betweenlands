@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 
 public class GuiPestleAndMortar extends GuiContainer {

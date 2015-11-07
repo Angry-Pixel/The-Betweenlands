@@ -23,9 +23,9 @@ import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.items.SpadeBL;
 import thebetweenlands.items.block.ItemBlockGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
@@ -54,7 +54,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		int meta = getDamageValue(world, x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack !=null && stack.getItem() instanceof SpadeBL) {
+		if (stack !=null && stack.getItem() instanceof ItemSpadeBL) {
 			if (!world.isRemote) {
 				if(meta == PURE_SWAMP_DIRT) {
 					world.setBlockMetadataWithNotify(x, y, z, DUG_PURE_SWAMP_DIRT, 3);
