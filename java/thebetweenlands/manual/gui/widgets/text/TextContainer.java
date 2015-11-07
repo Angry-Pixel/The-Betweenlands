@@ -43,7 +43,7 @@ public class TextContainer {
 			this.additionalRightWidth = additionalRightWidth;
 		}
 		public boolean isInside(int mouseX, int mouseY) {
-			return mouseX >= x && mouseX <= x + width && mouseY > y && mouseY < y + height;
+			return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
 		}
 		public TextArea withSpace() {
 			return new TextArea(this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
@@ -471,7 +471,7 @@ public class TextContainer {
 					if(nextLine && lastFontHeight == -1) {
 						lastFontHeight = currentFontHeight;
 					}
-					
+
 					currentFontHeight = renderStrHeight > currentFontHeight ? renderStrHeight : currentFontHeight;
 
 					//This offsets combined words to a new line if necessary
@@ -512,7 +512,7 @@ public class TextContainer {
 					if(jumped) lastFontHeight = nextLastFontHeight;
 
 					int additionalSpaceWidth = isSeperateWord ? (xCursor - lastWordXCursor) : 0;
-					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? (renderSpaceWidth - 1) : -1);
+					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? renderSpaceWidth : 0);
 
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
@@ -642,7 +642,7 @@ public class TextContainer {
 		for(TextSegment segment : this.textSegments) {
 			GL11.glPushMatrix();
 			GL11.glScalef(segment.scale, segment.scale, 1.0F);
-			Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.floor_float(segment.x / segment.scale), MathHelper.floor_float(segment.y / segment.scale), segment.color);
+			Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int(segment.x / segment.scale), MathHelper.ceiling_float_int(segment.y / segment.scale), segment.color);
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
@@ -655,8 +655,7 @@ public class TextContainer {
 		Gui.drawRect(this.xOffset, this.yOffset, this.xOffset + this.width, this.yOffset + this.height, 0x80FF0000);
 		for(TextSegment segment : this.textSegments) {
 			GL11.glPushMatrix();
-			GL11.glScalef(segment.scale, segment.scale, 1.0F);
-			Gui.drawRect(MathHelper.floor_float(segment.x / segment.scale), MathHelper.floor_float(segment.y / segment.scale), MathHelper.floor_float(segment.x / segment.scale + segment.width / segment.scale), MathHelper.floor_float(segment.y / segment.scale + segment.height / segment.scale), 0x400000FF);
+			Gui.drawRect(segment.x, segment.y, segment.x + segment.width, segment.y + segment.height, 0x400000FF);
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
