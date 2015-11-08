@@ -1,13 +1,15 @@
 package thebetweenlands.event.player;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import thebetweenlands.items.armor.ItemLurkerSkinArmor;
 import thebetweenlands.items.armor.ItemSyrmoriteArmor;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class OctineArmorHandler {
+public class ArmorHandler {
 	@SubscribeEvent
 	public void onEntityOnFire(LivingHurtEvent event) {
 		if (event.entityLiving instanceof EntityPlayer) {
@@ -26,6 +28,23 @@ public class OctineArmorHandler {
 				} else {
 					event.ammount *= damageMultiplier;
 				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+		if(event.entityPlayer.isInWater()) {
+			boolean fullyInWater = event.entityPlayer.worldObj.getBlock((int)event.entityPlayer.posX, (int)(event.entityPlayer.boundingBox.maxY + 0.1D), (int)event.entityPlayer.posZ).getMaterial().isLiquid();
+			if(fullyInWater) {
+				ItemStack[] armor = event.entityPlayer.inventory.armorInventory;
+				int pieces = 0;
+				for (int i = 0; i < armor.length; i++) {
+					if (armor[i] != null && armor[i].getItem() instanceof ItemLurkerSkinArmor) {
+						pieces++;
+					}
+				}
+				event.newSpeed *= (5.0F * (event.entityPlayer.onGround ? 1.0F : 5.0F) / 4.0F * pieces);
 			}
 		}
 	}
