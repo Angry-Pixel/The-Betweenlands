@@ -32,7 +32,7 @@ public class ButtonWidget extends ManualWidgetsBase {
         super(manual, xStart, yStart);
         items.add(item);
         this.entry = entry;
-        this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, entry.entryName);
+        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 2, 100, 16, entry.entryName);
         this.init();
     }
 
@@ -47,7 +47,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, entry.entryName);
+        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 2, 100, 16, entry.entryName);
         this.init();
     }
 
@@ -72,6 +72,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+
         renderItem(xStart, yStart, items.get(currentItem), false);
         textContainer.render();
     }

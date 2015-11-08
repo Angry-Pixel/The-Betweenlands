@@ -12,17 +12,16 @@ public class ManualEntryEntryList extends ManualEntry {
     public ManualEntryEntryList(String unlocalizedEntryName, GuiManualBase manual, ArrayList<ManualEntryItem> entries) {
         super(unlocalizedEntryName);
 
-        if (entries.size() > 10) {
+        if (entries.size() > 8) {
             int entryAmount = entries.size();
             int times = 0;
             while (entryAmount > 0) {
                 ArrayList<ManualEntryItem> entriesTemp = new ArrayList<>();
-                entriesTemp.addAll(entries.subList(10 * times, (entryAmount > 10 ? 10 + 10 * times : 10 * times + entryAmount)));
-                System.out.println(entriesTemp.size());
+                entriesTemp.addAll(entries.subList(8 * times, (entryAmount > 8 ? 8 + 8 * times : 8 * times + entryAmount)));
                 ManualPageEntryButtons page = new ManualPageEntryButtons(manual, entriesTemp);
                 page.setPageNumber(times + 1);
                 pages.add(page);
-                entryAmount -= 10;
+                entryAmount -= 8;
                 times++;
             }
         } else {

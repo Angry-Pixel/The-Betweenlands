@@ -7,8 +7,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemBLArrow extends Item {
+public class ItemBLArrow extends Item implements IManualEntryItem {
 	private EnumArrowType type;
 
 	public ItemBLArrow(String texture, EnumArrowType type) {
@@ -28,5 +29,20 @@ public class ItemBLArrow extends Item {
 
 	public EnumArrowType getType() {
 		return this.type;
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return type.name() + "arrow";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
 	}
 }

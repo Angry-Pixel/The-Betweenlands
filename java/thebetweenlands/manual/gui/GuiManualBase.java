@@ -25,8 +25,8 @@ import java.util.ArrayList;
  * Created by Bart on 8-8-2015.
  */
 public class GuiManualBase extends GuiScreen {
-    public static final int HEIGHT = 202;
-    public static final int WIDTH = 127;
+    public static final int HEIGHT = 180;
+    public static final int WIDTH = 146;
     private static ResourceLocation pageLeft = new ResourceLocation("thebetweenlands:textures/gui/manual/blankPageLeft.png");
     private static ResourceLocation pageRight = new ResourceLocation("thebetweenlands:textures/gui/manual/blankPageRight.png");
     //public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
@@ -35,7 +35,6 @@ public class GuiManualBase extends GuiScreen {
     public int xStartRightPage;
     public int yStart;
 
-    public int currentPage = 0;
 
     public ManualEntry entry;
 
@@ -56,8 +55,20 @@ public class GuiManualBase extends GuiScreen {
         super.drawScreen(mouseX, mouseY, renderPartials);
         mc.renderEngine.bindTexture(pageLeft);
         drawTexturedModalRect(xStartLeftPage, yStart, 0, 0, WIDTH, HEIGHT);
+        if (entry.currentPage - 2 >= 0) {
+            if (!(mouseX >= xStartLeftPage + 112 && mouseX <= xStartLeftPage + 112 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 9))
+                drawTexturedModalRect(xStartLeftPage + 112, yStart + 160, 147, 0, 19, 9);
+            else
+                drawTexturedModalRect(xStartLeftPage + 112, yStart + 160, 147, 9, 19, 9);
+        }
         mc.renderEngine.bindTexture(pageRight);
         drawTexturedModalRect(xStartRightPage, yStart, 0, 0, WIDTH, HEIGHT);
+        if(entry.currentPage + 2 < entry.pages.size()) {
+            if (!(mouseX >= xStartRightPage + 14 && mouseX <= xStartRightPage + 14 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 9))
+                drawTexturedModalRect(xStartRightPage + 14, yStart + 160, 147, 0, 19, 9);
+            else
+                drawTexturedModalRect(xStartRightPage + 14, yStart + 160, 147, 9, 19, 9);
+        }
         entry.draw(mouseX, mouseY);
     }
 
@@ -115,9 +126,9 @@ public class GuiManualBase extends GuiScreen {
 
     @Override
     protected void mouseClicked(int x, int y, int button) {
-        if (button == 0) {
+        if (button == 0 && x >= xStartRightPage + 14 && x <= xStartRightPage + 14 + 19 && y >= yStart + 160 && y <= yStart + 160 + 9) {
             entry.nextPage();
-        } else if (button == 1) {
+        } else if (button == 0 && x >= xStartLeftPage + 112 && x <= xStartLeftPage + 122 + 19 && y >= yStart + 160 && y <= yStart + 160 + 9) {
             entry.previousPage();
         }
         entry.mouseClicked(x, y, button);

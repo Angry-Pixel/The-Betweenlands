@@ -24,23 +24,23 @@ public class ManualPageRecipe extends ManualPage {
         for (int i : item.recipeType(0)) {
             switch (i) {
                 case 1:
-                    this.widgets.add(new SmeltingRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    this.widgets.add(new SmeltingRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
                     height += smeltingRecipeHeight;
                     break;
                 case 2:
-                    this.widgets.add(new CraftingRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    this.widgets.add(new CraftingRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
                     height += craftingRecipeHeight;
                     break;
                 case 3:
-                    this.widgets.add(new PestleAndMortarRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    this.widgets.add(new PestleAndMortarRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
                     height += pestleAndMortarRecipeHeight;
                     break;
                 case 4:
-                    this.widgets.add(new CompostRecipeWidget(manual, 5, 10 + height));
+                    this.widgets.add(new CompostRecipeWidget(manual, 15, 10 + height));
                     height += compostRecipeHeight;
                     break;
                 case 5:
-                    this.widgets.add(new PurifierRecipeWidget(manual, new ItemStack(item.getItem()), 5, 10 + height));
+                    this.widgets.add(new PurifierRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
                     height += purifierRecipeHeight;
                     break;
                 default:
@@ -64,23 +64,23 @@ public class ManualPageRecipe extends ManualPage {
             if (itemStacks.size() > 0) {
                 switch (type) {
                     case 1:
-                        this.widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 5, 10 + height));
+                        this.widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, 10 + height));
                         height += smeltingRecipeHeight;
                         break;
                     case 2:
-                        this.widgets.add(new CraftingRecipeWidget(manual, itemStacks, 5, 10 + height));
+                        this.widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, 10 + height));
                         height += craftingRecipeHeight;
                         break;
                     case 3:
-                        this.widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 5, 10 + height));
+                        this.widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, 10 + height));
                         height += pestleAndMortarRecipeHeight;
                         break;
                     case 4:
-                        this.widgets.add(new CompostRecipeWidget(manual, 5, 10 + height));
+                        this.widgets.add(new CompostRecipeWidget(manual, 15, 10 + height));
                         height += compostRecipeHeight;
                         break;
                     case 5:
-                        this.widgets.add(new PurifierRecipeWidget(manual, itemStacks, 5, 10 + height));
+                        this.widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, 10 + height));
                         height += purifierRecipeHeight;
                         break;
                     default:

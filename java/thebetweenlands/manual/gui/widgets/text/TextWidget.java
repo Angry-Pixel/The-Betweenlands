@@ -21,14 +21,14 @@ public class TextWidget extends ManualWidgetsBase {
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, StatCollector.translateToLocal(unlocalizedText));
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 150, StatCollector.translateToLocal(unlocalizedText));
 		this.text = StatCollector.translateToLocal(unlocalizedText);
 		this.init();
 	}
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText, float scale) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, StatCollector.translateToLocal(unlocalizedText));
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 150, StatCollector.translateToLocal(unlocalizedText));
 		this.text = StatCollector.translateToLocal(unlocalizedText);
 		this.scale = scale;
 		this.init();
@@ -36,7 +36,7 @@ public class TextWidget extends ManualWidgetsBase {
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String text, boolean localized) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, localized ? text : StatCollector.translateToLocal(text));
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 150, localized ? text : StatCollector.translateToLocal(text));
 		this.text = localized ? text : StatCollector.translateToLocal(text);
 		this.init();
 	}
@@ -44,7 +44,7 @@ public class TextWidget extends ManualWidgetsBase {
 	@Override
 	public void setPageToRight() {
 		super.setPageToRight();
-		this.textContainer = new TextContainer(this.xStart, this.yStart, 120, 192, text);
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 144, text);
 		this.init();
 	}
 

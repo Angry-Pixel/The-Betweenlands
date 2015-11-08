@@ -16,7 +16,7 @@ public class ManualPageEntryButtons extends ManualPage {
     public ManualPageEntryButtons(GuiManualBase manual, ArrayList<ManualEntryItem> entries) {
         int height = 0;
         for (ManualEntryItem entryItem : entries) {
-            widgets.add(new ButtonWidget(manual, 4, 6 + height, entryItem.items, entryItem));
+            widgets.add(new ButtonWidget(manual, 15, 10 + height, entryItem.items, entryItem));
             height += 18;
         }
     }
