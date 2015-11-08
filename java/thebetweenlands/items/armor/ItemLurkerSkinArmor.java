@@ -47,13 +47,17 @@ public class ItemLurkerSkinArmor extends ItemArmor {
 			}
 		}
 		if (itemStack.getItem() == BLItemRegistry.lurkerSkinBoots && player.isInWater()) {
-			if(player.moveForward > 0) {
-				Vec3 lookVec = player.getLookVec().normalize();
-				double speed = 0.01D + 0.05D / 4.0D * armorPieces;
-				player.motionX += lookVec.xCoord * player.moveForward * speed;
-				player.motionZ += lookVec.zCoord * player.moveForward * speed;
-				player.motionY += lookVec.yCoord * player.moveForward * speed;
-				player.getFoodStats().addExhaustion(0.003F);
+			boolean fullyInWater = player.worldObj.getBlock((int)player.posX, (int)(player.boundingBox.maxY + 0.1D), (int)player.posZ).getMaterial().isLiquid();
+			if(fullyInWater) {
+				if(!player.isSneaking() && player.moveForward == 0) player.motionY = 0.0D;
+				if(player.moveForward > 0) {
+					Vec3 lookVec = player.getLookVec().normalize();
+					double speed = 0.01D + 0.05D / 4.0D * armorPieces;
+					player.motionX += lookVec.xCoord * player.moveForward * speed;
+					player.motionZ += lookVec.zCoord * player.moveForward * speed;
+					player.motionY += lookVec.yCoord * player.moveForward * speed + 0.02D;
+					player.getFoodStats().addExhaustion(0.003F);
+				}
 			}
 			if(armorPieces >= 4) {
 				if (!player.isPotionActive(Potion.waterBreathing)) {
