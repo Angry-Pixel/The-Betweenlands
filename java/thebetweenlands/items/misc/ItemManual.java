@@ -7,6 +7,8 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.proxy.CommonProxy;
 
+import java.util.List;
+
 /**
  * Created by Bart on 8-8-2015.
  */
@@ -17,4 +19,7 @@ public class ItemManual extends Item {
         player.openGui(TheBetweenlands.instance, CommonProxy.GUI_MANUAL, world, (int) player.posX, (int) player.posY, (int) player.posZ);
         return itemStack;
     }
+    
+
+
 }

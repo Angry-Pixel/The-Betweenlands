@@ -18,6 +18,7 @@ import java.util.Collections;
  * Created on 11-8-2015.
  */
 public class ManualEntryRegistry {
+    public static ArrayList<ManualEntry> ENTRIES = new ArrayList<>();
 
     public static IManualEntryItem[] pickaxes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodPickaxe, (IManualEntryItem) BLItemRegistry.betweenstonePickaxe, (IManualEntryItem) BLItemRegistry.octinePickaxe, (IManualEntryItem) BLItemRegistry.valonitePickaxe};
     public static IManualEntryItem[] shovels = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodAxe, (IManualEntryItem) BLItemRegistry.betweenstoneAxe, (IManualEntryItem) BLItemRegistry.octineAxe, (IManualEntryItem) BLItemRegistry.valoniteAxe};
@@ -28,7 +29,6 @@ public class ManualEntryRegistry {
     public static IManualEntryItem[] arrows = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.anglerToothArrow, (IManualEntryItem) BLItemRegistry.basiliskArrow, (IManualEntryItem) BLItemRegistry.octineArrow, (IManualEntryItem) BLItemRegistry.poisonedAnglerToothArrow};
     public static IManualEntryItem[] mushrooms = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.blackHatMushroomItem, (IManualEntryItem) BLItemRegistry.bulbCappedMushroomItem, (IManualEntryItem) BLItemRegistry.flatheadMushroomItem};
     public static IManualEntryItem[] boneArmor = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.boneBoots, (IManualEntryItem) BLItemRegistry.boneChestplate, (IManualEntryItem) BLItemRegistry.boneHelmet, (IManualEntryItem) BLItemRegistry.boneLeggings};
-
 
 
     public static ArrayList<ManualEntryItem> itemEntries = new ArrayList<>();
@@ -63,12 +63,16 @@ public class ManualEntryRegistry {
         entry5 = new ManualEntryItem(recipes4, "arrow", manual);
 
         initItemEntries(manual);
-        entry9 = new ManualEntryEntryList("title", manual, itemEntries);
+        entry = new ManualEntryEntryList("title", manual, itemEntries);
+
+        initEntryList();
+
+
     }
 
     public static void initItemEntries(GuiManualBase manual) {
         itemEntries.clear();
-        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{ (IManualEntryItem)BLBlockRegistry.weedwoodJukebox, (IManualEntryItem)BLItemRegistry.explorerHat, (IManualEntryItem)BLItemRegistry.ringOfPower, (IManualEntryItem)BLItemRegistry.voodooDoll, (IManualEntryItem)BLItemRegistry.testItem};
+        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.testItem};
         for (IManualEntryItem item : itemEntryItem)
             itemEntries.add(new ManualEntryItem(item, manual));
 
@@ -85,6 +89,21 @@ public class ManualEntryRegistry {
             e.printStackTrace();
         }
         //TODO some way of sorting the entries by name
+    }
+
+    public static void initEntryList() {
+        ENTRIES.addAll(itemEntries);
+        try {
+            for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
+                Object obj = f.get(null);
+                if (obj instanceof ManualEntry) {
+                    ENTRIES.add((ManualEntry) obj);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

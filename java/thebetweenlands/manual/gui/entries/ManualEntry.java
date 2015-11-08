@@ -13,6 +13,7 @@ public class ManualEntry {
     public ArrayList<ManualPage> pages = new ArrayList<>();
 
     public String entryName;
+    public String unlocalizedEntryName;
 
     public ManualPage currentPageLeft;
     public ManualPage currentPageRight;
@@ -42,6 +43,7 @@ public class ManualEntry {
                 pageNumber++;
             }
         }
+        this.unlocalizedEntryName = unlocalizedEntryName;
         this.entryName = StatCollector.translateToLocal(unlocalizedEntryName);
     }
 
