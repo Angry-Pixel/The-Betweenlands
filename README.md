@@ -1,5 +1,5 @@
 *The Betweenlands*
-A large and expansion mod for Minecraft that adds a whole new dimension to the game, with new blocks, items, mobs, strucutres, biomes, sounds, mechanics and more.
+A large and expansive mod for Minecraft by Angry Pixel that adds a whole new dimension to the game, with new blocks, items, mobs, strucutres, biomes, sounds, mechanics and more.
 
 To do for First Release:
 (Pssst this is top secret stuff, you shouldn't be reading this)
@@ -22,7 +22,6 @@ New Stuff (High priority):
 - Guidebook
 - Pitstone Structures
 - Some surface structures
-- Music Discs
 - Moss Beds for spawn points
 
 New Stuff (Low priority)
