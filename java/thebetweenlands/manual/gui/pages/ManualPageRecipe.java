@@ -21,18 +21,24 @@ public class ManualPageRecipe extends ManualPage {
 
     public ManualPageRecipe(GuiManualBase manual, IManualEntryItem item, ManualWidgetsBase... recipes) {
         int height = 0;
+        ArrayList<ItemStack> itemStacks = new ArrayList<>();
+        if (item.metas().length > 0) {
+            for (int j : item.metas())
+                itemStacks.add(new ItemStack(item.getItem(), 1, j));
+        } else 
+            itemStacks.add(new ItemStack(item.getItem()));
         for (int i : item.recipeType(0)) {
             switch (i) {
                 case 1:
-                    this.widgets.add(new SmeltingRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
+                    this.widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, 10 + height));
                     height += smeltingRecipeHeight;
                     break;
                 case 2:
-                    this.widgets.add(new CraftingRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
+                    this.widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, 10 + height));
                     height += craftingRecipeHeight;
                     break;
                 case 3:
-                    this.widgets.add(new PestleAndMortarRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
+                    this.widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, 10 + height));
                     height += pestleAndMortarRecipeHeight;
                     break;
                 case 4:
@@ -40,7 +46,7 @@ public class ManualPageRecipe extends ManualPage {
                     height += compostRecipeHeight;
                     break;
                 case 5:
-                    this.widgets.add(new PurifierRecipeWidget(manual, new ItemStack(item.getItem()), 15, 10 + height));
+                    this.widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, 10 + height));
                     height += purifierRecipeHeight;
                     break;
                 default:
@@ -57,7 +63,11 @@ public class ManualPageRecipe extends ManualPage {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
             for (IManualEntryItem item : items) {
                 for (int i : item.recipeType(0)) {
-                    if(i == type)
+                    if (item.metas().length > 0) {
+                        for (int j : item.metas())
+                            if (i == type)
+                                itemStacks.add(new ItemStack(item.getItem(), 1, j));
+                    } else if (i == type)
                         itemStacks.add(new ItemStack(item.getItem()));
                 }
             }

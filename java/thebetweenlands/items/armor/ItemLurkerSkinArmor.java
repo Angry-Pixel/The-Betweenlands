@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -15,9 +16,10 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 
-public class ItemLurkerSkinArmor extends ItemArmor {
+public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{
 
 	public ItemLurkerSkinArmor(int armorType) {
 		super(BLMaterials.armorLurkerSkin, 2, armorType);
@@ -79,5 +81,25 @@ public class ItemLurkerSkinArmor extends ItemArmor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "lurkerArmor";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

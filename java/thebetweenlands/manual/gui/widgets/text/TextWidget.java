@@ -73,4 +73,12 @@ public class TextWidget extends ManualWidgetsBase {
 		this.textContainer.render();
 		this.textContainer.renderTooltips(mouseX, mouseY);
 	}
+
+
+	@Override
+	public void resize() {
+		super.resize();
+		this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 144, text);
+		this.init();
+	}
 }

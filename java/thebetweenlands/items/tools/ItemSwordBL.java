@@ -91,4 +91,9 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	public int[] recipeType(int meta) {
 		return new int[]{2};
 	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
+	}
 }

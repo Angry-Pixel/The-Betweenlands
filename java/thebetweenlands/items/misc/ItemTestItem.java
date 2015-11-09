@@ -48,4 +48,9 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public int[] recipeType(int meta) {
         return new int[]{4};
     }
+
+    @Override
+    public int[] metas() {
+        return new int[0];
+    }
 }

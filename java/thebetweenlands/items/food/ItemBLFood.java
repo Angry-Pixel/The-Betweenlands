@@ -3,24 +3,18 @@ package thebetweenlands.items.food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import thebetweenlands.manual.gui.entries.IManualEntryItem;
-import thebetweenlands.utils.IDecayFood;
 
-public class ItemSapBall extends ItemFood implements IDecayFood, IManualEntryItem
-{
-    public ItemSapBall()
-    {
-        super(0, 0f, false);
-        setAlwaysEdible();
-    }
-
-    public int getDecayHealAmount()
-    {
-        return 2;
+/**
+ * Created by Bart on 9-11-2015.
+ */
+public class ItemBLFood extends ItemFood implements IManualEntryItem{
+    public ItemBLFood(int healAmount, float saturationModifier, boolean isWolfsFavoriteMeat) {
+        super(healAmount, saturationModifier, isWolfsFavoriteMeat);
     }
 
     @Override
     public String manualName(int meta) {
-        return "sapBall";
+        return "itemFood";
     }
 
     @Override
@@ -30,11 +24,11 @@ public class ItemSapBall extends ItemFood implements IDecayFood, IManualEntryIte
 
     @Override
     public int[] recipeType(int meta) {
-        return new int[0];
+        return new int[]{1, 2};
     }
 
     @Override
-    public int[] metas( ) {
+    public int[] metas() {
         return new int[0];
     }
 }

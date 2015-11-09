@@ -1,13 +1,15 @@
 package thebetweenlands.items.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemNettleSoup extends ItemFood {
+public class ItemNettleSoup extends ItemFood implements IManualEntryItem {
 
     public ItemNettleSoup() {
         super(10, 8.4F, false);
@@ -33,4 +35,23 @@ public class ItemNettleSoup extends ItemFood {
 		return is;
 	}
 
+	@Override
+	public String manualName(int meta) {
+		return "nettleSoup";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
+	}
 }

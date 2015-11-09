@@ -48,8 +48,9 @@ public class ManualEntry {
     }
 
     public void clear(){
-        currentPageLeft.clear();
-        currentPageRight.clear();
+        currentPageLeft = pages.get(0);
+        if (pages.size() > 1)
+            currentPageRight = pages.get(1);
     }
 
     public void draw(int mouseX, int mouseY){

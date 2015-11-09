@@ -2,8 +2,10 @@ package thebetweenlands.items.food;
 
 import java.util.List;
 
+import net.minecraft.item.Item;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.utils.IDecayFood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -17,7 +19,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemForbiddenFig
-        extends ItemFood implements IDecayFood
+        extends ItemFood implements IDecayFood, IManualEntryItem
 {
     public ItemForbiddenFig() {
         super(20, 5.0F, false);
@@ -51,5 +53,24 @@ public class ItemForbiddenFig
         }
     }
 }
-    
+
+    @Override
+    public String manualName(int meta) {
+        return "forbiddenFig";
+    }
+
+    @Override
+    public Item getItem() {
+        return this;
+    }
+
+    @Override
+    public int[] recipeType(int meta) {
+        return new int[0];
+    }
+
+    @Override
+    public int[] metas() {
+        return new int[0];
+    }
 }

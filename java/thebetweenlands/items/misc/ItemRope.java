@@ -7,11 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
 /**
  * Created by Bart on 23-10-2015.
  */
-public class ItemRope extends Item {
+public class ItemRope extends Item implements IManualEntryItem {
     public ItemRope() {
         this.setUnlocalizedName("thebetweenlands.itemRope");
         setTextureName("thebetweenlands:rope");
@@ -34,5 +35,25 @@ public class ItemRope extends Item {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String manualName(int meta) {
+        return "rope";
+    }
+
+    @Override
+    public Item getItem() {
+        return this;
+    }
+
+    @Override
+    public int[] recipeType(int meta) {
+        return new int[]{2};
+    }
+
+    @Override
+    public int[] metas( ) {
+        return new int[0];
     }
 }

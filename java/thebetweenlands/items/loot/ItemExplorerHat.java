@@ -41,4 +41,9 @@ public class ItemExplorerHat extends ItemArmor implements IManualEntryItem {
     public int[] recipeType(int meta) {
         return new int[]{6};
     }
+
+    @Override
+    public int[] metas() {
+        return new int[0];
+    }
 }

@@ -9,6 +9,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -18,9 +19,10 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.items.ICorrodible;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
-public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
+public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntryItem {
 	public static final int ANIMATION_LENGTH = 3;
 
 	private IIcon[] iconArray;
@@ -182,5 +184,25 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "weedwoodBow";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

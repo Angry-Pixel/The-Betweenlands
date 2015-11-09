@@ -19,7 +19,14 @@ public class ItemManual extends Item {
         player.openGui(TheBetweenlands.instance, CommonProxy.GUI_MANUAL, world, (int) player.posX, (int) player.posY, (int) player.posZ);
         return itemStack;
     }
-    
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+        list.add("Current entry: ");
+        if (itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("entry")) {
+            list.add(itemStack.stackTagCompound.getString("entry"));
+        }
+    }
 
 }

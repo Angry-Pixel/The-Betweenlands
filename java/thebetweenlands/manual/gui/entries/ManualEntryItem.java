@@ -17,7 +17,7 @@ public class ManualEntryItem extends ManualEntry {
     public ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 
     public ManualEntryItem(IManualEntryItem item, GuiManualBase manual, ManualWidgetsBase... recipes) {
-        super("manual." + item.manualName(0) + ".title", new ManualPage(new TextWidget(manual, 15, 10, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(manual, (GuiManualBase.WIDTH / 2) - 24, 77, new ItemStack(item.getItem()), 3)), new ManualPage(new TextWidget(manual, 16, 10, "manual." + item.manualName(0) + ".description")), new ManualPageRecipe(manual, item, recipes));
+        super("manual." + item.manualName(0) + ".title", new ManualPage(new TextWidget(manual, 15, 10, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(manual, (GuiManualBase.WIDTH / 2) - 24, 77, item, 3)), new ManualPage(new TextWidget(manual, 16, 10, "manual." + item.manualName(0) + ".description")), new ManualPageRecipe(manual, item, recipes));
         this.items.add(new ItemStack(item.getItem()));
     }
 
@@ -28,8 +28,13 @@ public class ManualEntryItem extends ManualEntry {
 
     public ManualEntryItem(String name, ArrayList<IManualEntryItem> items, GuiManualBase manual, ManualWidgetsBase... recipes) {
         super("manual." + name + ".title", new ManualPage(new TextWidget(manual, 15, 10, "manual." + name + ".title", 1.5f), new ItemWidget(manual, (GuiManualBase.WIDTH / 2) - 24, 77, 3, items)), new ManualPage(new TextWidget(manual, 16, 10, "manual." + name + ".description")), new ManualPageRecipe(manual, items, recipes));
-        for (IManualEntryItem item:items)
-            this.items.add(new ItemStack(item.getItem()));
+        for (IManualEntryItem item:items) {
+            if (item.metas().length > 0) {
+                for (int i : item.metas())
+                    this.items.add(new ItemStack(item.getItem(), 1, i));
+            } else
+                this.items.add(new ItemStack(item.getItem()));
+        }
     }
 
     public ManualEntryItem(IManualEntryItem item, int meta, GuiManualBase manual, ManualWidgetsBase... recipes) {

@@ -12,12 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
 import java.util.List;
 
 public class ItemSwampTalisman
-        extends Item
+        extends Item implements IManualEntryItem
 {
 	public static ItemStack createStack(EnumTalisman swampTalisman, int size) {
 		return new ItemStack(BLItemRegistry.swampTalisman, size, swampTalisman.ordinal());
@@ -87,8 +88,28 @@ public class ItemSwampTalisman
 		return false;
 	}
 
+	@Override
+	public String manualName(int meta) {
+		return "swampTalisman";
+	}
 
-    public enum EnumTalisman
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[0];
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[]{0, 1, 2, 3, 4, 5};
+	}
+
+
+	public enum EnumTalisman
     {
         SWAMP_TALISMAN("swampTalisman"),
         SWAMP_TALISMAN_1("swampTalisman1"),

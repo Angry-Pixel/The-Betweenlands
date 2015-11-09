@@ -9,8 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemLifeCrystal extends Item { //Place Holder Code
+public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place Holder Code
 	public static final String[] iconPaths = new String[] { "lifeCrystal0", "lifeCrystal1", "lifeCrystal2", "lifeCrystal3", "lifeCrystal4" };
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
@@ -55,5 +56,25 @@ public class ItemLifeCrystal extends Item { //Place Holder Code
 		if(damage >= 0 && damage <= 32)
 			return icons[0];
 		return icons[0];
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "lifeCrystal";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

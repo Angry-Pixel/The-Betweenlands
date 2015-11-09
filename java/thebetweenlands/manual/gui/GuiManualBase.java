@@ -76,6 +76,11 @@ public class GuiManualBase extends GuiScreen {
         }
     }
 
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        entry.clear();
+    }
 
     @Override
     protected void keyTyped(char c, int key) {

@@ -89,4 +89,9 @@ public class ItemPickaxeBL extends ItemPickaxe implements ICorrodible, IManualEn
 		return new int[]{2};
 	}
 
+	@Override
+	public int[] metas( ) {
+		return new int[0];
+	}
+
 }

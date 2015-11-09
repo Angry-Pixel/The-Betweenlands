@@ -45,4 +45,9 @@ public class ItemBoneArmor extends ItemArmor implements IManualEntryItem {
     public int[] recipeType(int meta) {
         return new int[]{2};
     }
+
+    @Override
+    public int[] metas() {
+        return new int[0];
+    }
 }

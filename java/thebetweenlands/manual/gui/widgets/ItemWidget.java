@@ -39,6 +39,19 @@ public class ItemWidget extends ManualWidgetsBase {
         height = (int) (16 * scale);
     }
 
+    public ItemWidget(GuiManualBase manual, int xStart, int yStart, IManualEntryItem entry, float scale) {
+        super(manual, xStart, yStart);
+
+        if (entry.metas().length > 0) {
+            for (int i : entry.metas())
+                this.stacks.add(new ItemStack(entry.getItem(), 1, i));
+        } else
+            this.stacks.add(new ItemStack(entry.getItem()));
+        this.scale = scale;
+        width = (int) (16 * scale);
+        height = (int) (16 * scale);
+    }
+
     public ItemWidget(GuiManualBase manual, int xStart, int yStart, ArrayList<ItemStack> stacks, float scale) {
         super(manual, xStart, yStart);
         this.stacks = stacks;
@@ -49,8 +62,13 @@ public class ItemWidget extends ManualWidgetsBase {
 
     public ItemWidget(GuiManualBase manual, int xStart, int yStart, float scale, ArrayList<IManualEntryItem> items) {
         super(manual, xStart, yStart);
-        for(IManualEntryItem entry:items)
-            this.stacks.add(new ItemStack(entry.getItem()));
+        for (IManualEntryItem entry : items) {
+            if (entry.metas().length > 0) {
+                for (int i : entry.metas())
+                    this.stacks.add(new ItemStack(entry.getItem(), 1, i));
+            } else
+                this.stacks.add(new ItemStack(entry.getItem()));
+        }
         this.scale = scale;
         width = (int) (16 * scale);
         height = (int) (16 * scale);
@@ -67,8 +85,8 @@ public class ItemWidget extends ManualWidgetsBase {
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glScalef(scale, scale, scale);
-        render.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem), (int)(xStart / scale), (int)(yStart / scale));
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem),(int)(xStart / scale), (int)(yStart / scale));
+        render.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
+        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
         RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
         GL11.glScalef(1f, 1f, 1f);
@@ -90,8 +108,6 @@ public class ItemWidget extends ManualWidgetsBase {
                 renderTooltip(mouseX, mouseY, parsedTooltip, 0xffffff, 0xf0100010);
             }
         }
-
-
     }
 
     @Override

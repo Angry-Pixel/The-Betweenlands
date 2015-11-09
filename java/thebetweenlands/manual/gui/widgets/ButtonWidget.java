@@ -103,4 +103,11 @@ public class ButtonWidget extends ManualWidgetsBase {
         } else
             untilUpdate++;
     }
+
+    @Override
+    public void resize() {
+        super.resize();
+        this.textContainer = new TextContainer(this.xStart, this.yStart, 116, 144, entry.entryName);
+        this.init();
+    }
 }

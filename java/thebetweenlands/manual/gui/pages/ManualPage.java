@@ -44,9 +44,6 @@ public class ManualPage {
 	}
 
 
-	public void clear() {
-		widgets.clear();
-	}
 
 	public void draw(int mouseX, int mouseY) {
 		for (ManualWidgetsBase widget : widgets)

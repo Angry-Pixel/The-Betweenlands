@@ -39,4 +39,9 @@ public class ItemBlackHatMushroom
     public int[] recipeType(int meta) {
         return new int[0];
     }
+
+    @Override
+    public int[] metas() {
+        return new int[0];
+    }
 }

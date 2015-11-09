@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.manual.gui.GuiManualBase;
@@ -26,11 +27,16 @@ public class ManualWidgetsBase {
 
     public GuiManualBase manual;
     public int unchangedXStart;
+    public int unchangedYStart;
     public int xStart;
     public int yStart;
     protected int mouseX;
 
-	protected int mouseY;
+    protected int mouseY;
+
+    private boolean isPageRight = false;
+
+    private int untilResize = 20;
 
     public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
     public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");
@@ -41,12 +47,14 @@ public class ManualWidgetsBase {
     public ManualWidgetsBase(GuiManualBase manual, int xStart, int yStart) {
         this.manual = manual;
         this.unchangedXStart = xStart;
+        this.unchangedYStart = yStart;
         this.xStart = manual.xStartLeftPage + xStart;
         this.yStart = manual.yStart + yStart;
     }
 
-    public void setPageToRight(){
+    public void setPageToRight() {
         this.xStart = manual.xStartRightPage + unchangedXStart;
+        this.isPageRight = true;
     }
 
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
@@ -90,13 +98,13 @@ public class ManualWidgetsBase {
                 var7 += 10;
             }
             GL11.glEnable(GL11.GL_DEPTH_TEST);
-            
+
             return var7 + 12;
         }
         if (!lighting)
             net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        
+
         return 0;
     }
 
@@ -133,8 +141,18 @@ public class ManualWidgetsBase {
     public void draw(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+        if (untilResize <= 0)
+            resize();
+        else
+            untilResize--;
         drawBackGround();
         drawForeGround();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void resize() {
+        this.xStart = (isPageRight ? manual.xStartRightPage : manual.xStartLeftPage) + unchangedXStart;
+        this.yStart = manual.yStart + unchangedYStart;
     }
 
     @SideOnly(Side.CLIENT)
@@ -148,7 +166,6 @@ public class ManualWidgetsBase {
     }
 
     public void keyTyped(char c, int key) {
-
     }
 
     @SideOnly(Side.CLIENT)

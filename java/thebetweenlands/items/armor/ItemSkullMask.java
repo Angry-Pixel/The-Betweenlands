@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +16,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Created by Bart on 11-9-2015.
  */
-public class ItemSkullMask extends ItemArmor {
+public class ItemSkullMask extends ItemArmor implements IManualEntryItem {
 	private static final ResourceLocation SKULL_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/skullMask.png");
 
 	public ItemSkullMask() {
@@ -68,5 +70,25 @@ public class ItemSkullMask extends ItemArmor {
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
 		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == ItemGeneric.EnumItemGeneric.SLIMY_BONE.ordinal();
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "skullMask";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{6};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

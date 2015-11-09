@@ -24,4 +24,7 @@ public interface IManualEntryItem {
     6 = loot
      */
     int[] recipeType(int meta);
+
+
+    int[] metas();
 }
