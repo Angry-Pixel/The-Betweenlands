@@ -42,7 +42,7 @@ public class ItemTarminion extends Item implements IManualEntryItem {
 
 	@Override
 	public String manualName(int meta) {
-		return "tarminion";
+		return "tarMinion";
 	}
 
 	@Override

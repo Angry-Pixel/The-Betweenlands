@@ -78,7 +78,7 @@ public class ManualEntryRegistry {
 
     public static void initItemEntries(GuiManualBase manual) {
         itemEntries.clear();
-        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
+        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem)ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH).getItem(), (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
         for (IManualEntryItem item : itemEntryItem)
             itemEntries.add(new ManualEntryItem(item, manual));
 
@@ -103,9 +103,9 @@ public class ManualEntryRegistry {
                 if (currentFirst == null)
                     currentFirst = entry;
                 else {
-                    String entryName = entry.entryName.toLowerCase();
+                    String entryName = entry.entryName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
                     char[] characters = entryName.toCharArray();
-                    String entryNameFirst = currentFirst.entryName.toLowerCase();
+                    String entryNameFirst = currentFirst.entryName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
                     char[] charactersFirst = entryNameFirst.toCharArray();
                     for (int i = 0; 0 < characters.length; i++) {
                         if(charactersFirst.length > i) {

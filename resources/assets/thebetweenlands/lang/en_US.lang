@@ -633,6 +633,64 @@ manual.widget.smelting.recipe=Furnace recipe
 
 manual.arrows.title=<underline>Arrows </underline>
 manual.arrows.description=These are some magical arrows added by The Betweenlands. They are get able as loot or simply by crafting them.
+manual.axes.title=<underline>Axes </underline>
+manual.axes.description=
+manual.boneArmor.title=<underline>Bone Armor </underline>
+manual.boneArmor.description=
+manual.buckets.title=<underline>Buckets </underline>
+manual.buckets.description=
+manual.doors.title=<underline>Doors </underline>
+manual.doors.description=
+manual.explorerHat.title=<underline>Explorer Hat </underline>
+manual.explorerHat.description=
+manual.food.title=<underline>Food </underline>
+manual.food.description=
+manual.legendaryArmor.title=<underline>Armor of Legends </underline>
+manual.legendaryArmor.description=
+manual.lifeCrystal.title=<underline>Life Crystal </underline>
+manual.lifeCrystal.description=
+manual.lurkerArmor.title=<underline>Lurker Armor </underline>
+manual.lurkerArmor.description=
+manual.pickaxes.title=<underline>Pickaxes </underline>
+manual.pickaxes.description=
+manual.records.title=<underline>Records </underline>
+manual.records.description=
+manual.ringOfPower.title=<underline>Ring of Power </underline>
+manual.ringOfPower.description=
+manual.rope.title=<underline>Rope </underline>
+manual.rope.description=
+manual.rubberBoots.title=<underline>Rubber Boots </underline>
+manual.rubberBoots.description=
+manual.shimmerStone.title=<underline>Shimmer Stone </underline>
+manual.shimmerStone.description=
+manual.shovels.title=<underline>Shovels </underline>
+manual.shovels.description=
+manual.skullMask.title=<underline>Skull Mask </underline>
+manual.skullMask.description=
+manual.swampTalisman.title=<underline>Swamp Talisman </underline>
+manual.swampTalisman.description=
+manual.swords.title=<underline>Swords </underline>
+manual.swords.description=
+manual.syrmoriteArmor.title=<underline>Syrmorite </underline>
+manual.syrmoriteArmor.description=
+manual.tarMinion.title=<underline>Tar Minion </underline>
+manual.tarMinion.description=
+manual.valoniteArmor.title=<underline>Valonite Armor </underline>
+manual.valoniteArmor.description=
+manual.volarKite.title=<underline>Volarkite </underline>
+manual.volarKite.description=
+manual.voodooDoll.title=<underline>Voodoo Doll </underline>
+manual.voodooDoll.description=
+manual.weedwoodBow.title=<underline>Weedwood Bow </underline>
+manual.weedwoodBow.description=
+manual.weedwoodJukebox.title=<underline>Weedwood Jukebox </underline>
+manual.weedwoodJukebox.description=
+manual.weedwoodRowboat.title=<underline>Weedwood Rowboat </underline>
+manual.weedwoodRowboat.description=
+
+
+
+
 
 talisman.noplace=The space is not large enough
 
