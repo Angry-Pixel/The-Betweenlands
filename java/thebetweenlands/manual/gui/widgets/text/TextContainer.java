@@ -147,6 +147,13 @@ public class TextContainer {
 			this.color = color;
 			this.scale = scale;
 		}
+
+		private TextSegment(String text, int x, int y, int width, int height, int color, float scale, int additionalLeftWidth, int additionalRightWidth) {
+			super(x, y, width, height, additionalLeftWidth, additionalRightWidth);
+			this.text = text;
+			this.color = color;
+			this.scale = scale;
+		}
 	}
 
 	private final int width, height, xOffset, yOffset;
@@ -334,7 +341,7 @@ public class TextContainer {
 	public void parse() throws Exception {
 		this.componentMap.clear();
 
-		char[] textChars = (this.unparsedText).toCharArray();
+		char[] textChars = ("START " + this.unparsedText + " END").toCharArray();
 		StringBuilder parsedTextBuffer = new StringBuilder(textChars.length);
 		StringBuilder textComponentBuffer = new StringBuilder();
 		boolean componentBody = false;
@@ -381,7 +388,7 @@ public class TextContainer {
 				}
 				componentBody = false;
 				String textComponent = textComponentBuffer.toString();
-				int mapWordIndex = (wasFirstComponent || startWithDelimiter ? wordIndex - 1 : wordIndex);
+				int mapWordIndex = /*(wasFirstComponent || startWithDelimiter ? wordIndex - 1 : */wordIndex/*)*/;
 				List<String> componentList = componentMap.get(mapWordIndex);
 				if(componentList == null) {
 					componentList = new ArrayList<String>();
@@ -406,8 +413,7 @@ public class TextContainer {
 			List<TextArea> tmpTextAreas = new ArrayList<TextArea>();
 			List<TextArea> combinedAreas = new ArrayList<TextArea>();
 			TextSegment offsetSegment = null;
-			//The END appendix is required to pop the last formats off the stack
-			String[] words = this.getSplitWords(this.parsedText + " END");
+			String[] words = this.getSplitWords(this.parsedText);
 			int wordIndex = 0;
 			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 			int defaultSpaceWidth = fontRenderer.getStringWidth(" ");
@@ -547,9 +553,9 @@ public class TextContainer {
 
 					prevPrevOffsetHeight = prevOffsetHeight;
 
-					//Ignore END appendix
-					if(i < words.length - 1) {
-						TextSegment segment = new TextSegment(word, this.xOffset + xCursor, this.yOffset + yCursor, currentTextArea.withSpace().width, currentTextArea.height, this.currentColor, this.currentScale);
+					//Ignore STARD and END appendix
+					if(i != 0 && i < words.length - 1) {
+						TextSegment segment = new TextSegment(word, this.xOffset + xCursor, this.yOffset + yCursor, currentTextArea.width, currentTextArea.height, this.currentColor, this.currentScale, currentTextArea.additionalLeftWidth, currentTextArea.additionalRightWidth);
 						if(!isSeperateWord) {
 							if(offsetSegment == null) {
 								prevOffsetHeight = prevCurrentFontHeight;
@@ -558,12 +564,12 @@ public class TextContainer {
 							combinedAreas.add(segment);
 						}
 						this.textSegments.add(segment);
+
+						xCursor += renderStrWidth;
+						if(isSeperateWord) xCursor += renderSpaceWidth;
+
+						lastWordXCursor = xCursor;
 					}
-
-					xCursor += renderStrWidth;
-					if(isSeperateWord) xCursor += renderSpaceWidth;
-
-					lastWordXCursor = xCursor;
 
 					wordIndex++;
 				} else {
@@ -655,7 +661,7 @@ public class TextContainer {
 		Gui.drawRect(this.xOffset, this.yOffset, this.xOffset + this.width, this.yOffset + this.height, 0x80FF0000);
 		for(TextSegment segment : this.textSegments) {
 			GL11.glPushMatrix();
-			Gui.drawRect(segment.x, segment.y, segment.x + segment.width, segment.y + segment.height, 0x400000FF);
+			Gui.drawRect(segment.withSpace().x, segment.y, segment.withSpace().x + segment.withSpace().width, segment.y + segment.height, 0x400000FF);
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glPopMatrix();
 		}
