@@ -156,7 +156,7 @@ public class GuiManualBase extends GuiScreen {
 
     public void changeTo(ManualEntry entry) {
         if (this.entry != null)
-            this.entry.currentPage = 0;
+            this.entry.clear();
         this.entry = entry;
         if (player.getHeldItem() != null && this.entry != null) {
             NBTTagCompound tag = new NBTTagCompound();

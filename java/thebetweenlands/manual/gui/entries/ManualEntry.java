@@ -48,6 +48,7 @@ public class ManualEntry {
     }
 
     public void clear(){
+        currentPage = 0;
         currentPageLeft = pages.get(0);
         if (pages.size() > 1)
             currentPageRight = pages.get(1);

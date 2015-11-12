@@ -20,9 +20,10 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
-public class ItemWeedwoodBucket extends Item {
+public class ItemWeedwoodBucket extends Item implements IManualEntryItem {
 
 	private final Block fluid;
 
@@ -203,5 +204,25 @@ public class ItemWeedwoodBucket extends Item {
 				return true;
 			}
 		}
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "weedwoodBucket" + fluid.getLocalizedName();
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

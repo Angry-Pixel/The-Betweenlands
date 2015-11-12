@@ -52,7 +52,7 @@ public class BLFluidRegistry {
 
 		FluidContainerRegistry.registerFluidContainer(tarFluid, new ItemStack(BLItemRegistry.weedwoodBucketTar), new ItemStack(BLItemRegistry.weedwoodBucket));
 		FluidContainerRegistry.registerFluidContainer(swampWater, new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.weedwoodBucket));
-		FluidContainerRegistry.registerFluidContainer(stagnantWater, new ItemStack(BLItemRegistry.weedwoodStagnantWater), new ItemStack(BLItemRegistry.weedwoodBucket));
+		FluidContainerRegistry.registerFluidContainer(stagnantWater, new ItemStack(BLItemRegistry.weedwoodBucketStagnantWater), new ItemStack(BLItemRegistry.weedwoodBucket));
 	}
 
 	@SubscribeEvent

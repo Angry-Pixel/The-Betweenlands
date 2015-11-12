@@ -10,8 +10,9 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemTarminion extends Item {
+public class ItemTarminion extends Item implements IManualEntryItem {
 
 	public ItemTarminion() {
 		super();
@@ -37,5 +38,25 @@ public class ItemTarminion extends Item {
 			world.spawnEntityInWorld(tarminion);
 		}
 		return is;
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "tarminion";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{2};
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }

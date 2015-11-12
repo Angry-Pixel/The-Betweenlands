@@ -12,8 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemShimmerStone extends Item {
+public class ItemShimmerStone extends Item implements IManualEntryItem {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon shimmerIcon;
@@ -81,5 +82,25 @@ public class ItemShimmerStone extends Item {
 			return this.shimmerIcon;
 		}
 		return super.getIconFromDamage(damage);
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "shimmerStone";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[0];
+	}
+
+	@Override
+	public int[] metas() {
+		return new int[0];
 	}
 }
