@@ -30,12 +30,15 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
 
     public SmeltingRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs.add(output);
+        if (getSmeltingIngredient(output) != null)
+            this.outputs.add(output);
     }
 
     public SmeltingRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs = outputs;
+        for (ItemStack output : outputs)
+            if (getSmeltingIngredient(output) != null)
+                this.outputs.add(output);
     }
 
 
@@ -110,8 +113,6 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
 
         do {
             if (!iterator.hasNext()) {
-                currentRecipe = 0;
-                outputs.remove(output);
                 return null;
             }
 
@@ -124,7 +125,6 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
     private boolean matches(ItemStack itemStack1, ItemStack itemstack2) {
         return itemstack2.getItem() == itemStack1.getItem() && (itemstack2.getItemDamage() == 32767 || itemstack2.getItemDamage() == itemStack1.getItemDamage());
     }
-
 
 
 }

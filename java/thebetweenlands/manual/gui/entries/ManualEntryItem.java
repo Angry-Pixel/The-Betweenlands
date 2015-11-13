@@ -176,9 +176,11 @@ public class ManualEntryItem extends ManualEntry {
                         break;
                     case 3:
                         if (height + pestleAndMortarRecipeHeight <= 150) {
+                            System.out.println(1);
                             widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
                             height += pestleAndMortarRecipeHeight;
                         } else {
+                            System.out.println(2);
                             ManualPage page = new ManualPage(widgets);
                             page.setPageNumber(pages.size() + 1);
                             pages.add(page);

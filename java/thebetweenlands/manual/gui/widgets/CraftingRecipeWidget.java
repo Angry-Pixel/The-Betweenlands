@@ -3,7 +3,6 @@ package thebetweenlands.manual.gui.widgets;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -32,12 +31,15 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
 
     public CraftingRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs.add(output);
+        if (getRecipe(output) != null)
+            this.outputs.add(output);
     }
 
     public CraftingRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs = outputs;
+        for (ItemStack output : outputs)
+            if (getRecipe(output) != null)
+                this.outputs.add(output);
     }
 
     @Override
@@ -142,15 +144,13 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
             untilUpdate++;
     }
 
-    public IRecipe getRecipe(ItemStack output){
-        for (Object obj: CraftingManager.getInstance().getRecipeList()){
-            if(obj instanceof IRecipe){
-                if(matches(((IRecipe) obj).getRecipeOutput(), output))
-                    return (IRecipe)obj;
+    public IRecipe getRecipe(ItemStack output) {
+        for (Object obj : CraftingManager.getInstance().getRecipeList()) {
+            if (obj instanceof IRecipe) {
+                if (matches(((IRecipe) obj).getRecipeOutput(), output))
+                    return (IRecipe) obj;
             }
         }
-        currentRecipe = 0;
-        outputs.remove(output);
         return null;
     }
 

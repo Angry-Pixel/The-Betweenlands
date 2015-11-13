@@ -34,7 +34,7 @@ public class ManualWidgetsBase {
 
     protected int mouseY;
 
-    private boolean isPageRight = false;
+    public boolean isPageRight = false;
 
     private int untilResize = 20;
 

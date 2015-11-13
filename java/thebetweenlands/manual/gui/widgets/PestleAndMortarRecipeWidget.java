@@ -29,12 +29,15 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
 
     public PestleAndMortarRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        outputs.add(output);
+        if (PestleAndMortarRecipe.getInput(output) != null)
+            outputs.add(output);
     }
 
     public PestleAndMortarRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs = outputs;
+        for (ItemStack output : outputs)
+            if (PestleAndMortarRecipe.getInput(output) != null)
+                this.outputs.add(output);
     }
 
 
@@ -63,12 +66,6 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
                 recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
                 renderTooltip(mouseX, mouseY, recipeToolTips, 0xffffff, 0xf0100010);
             }
-
-            /*
-            if (PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)) == null) {
-                outputs.remove(currentRecipe);
-                currentRecipe = 0;
-            }*/
         }
     }
 

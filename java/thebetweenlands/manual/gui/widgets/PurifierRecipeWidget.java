@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.recipes.PestleAndMortarRecipe;
 import thebetweenlands.recipes.PurifierRecipe;
 
 import java.util.ArrayList;
@@ -30,12 +29,15 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
 
     public PurifierRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs.add(output);
+        if (PurifierRecipe.getRecipeInput(output) != null)
+            this.outputs.add(output);
     }
 
     public PurifierRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(manual, xStart, yStart);
-        this.outputs = outputs;
+        for (ItemStack output : outputs)
+            if (PurifierRecipe.getRecipeInput(output) != null)
+                this.outputs.add(output);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
             }
 
 
-            if (PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)) == null){
+            if (PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)) == null) {
                 outputs.remove(currentRecipe);
                 currentRecipe = 0;
             }
