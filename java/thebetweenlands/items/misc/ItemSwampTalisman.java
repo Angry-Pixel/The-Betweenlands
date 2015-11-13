@@ -104,8 +104,8 @@ public class ItemSwampTalisman
 	}
 
 	@Override
-	public int[] metas() {
-		return new int[]{0, 1, 2, 3, 4};
+	public int metas() {
+		return 4;
 	}
 
 

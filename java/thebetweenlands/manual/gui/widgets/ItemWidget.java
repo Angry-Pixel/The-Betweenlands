@@ -42,11 +42,8 @@ public class ItemWidget extends ManualWidgetsBase {
     public ItemWidget(GuiManualBase manual, int xStart, int yStart, IManualEntryItem entry, float scale) {
         super(manual, xStart, yStart);
 
-        if (entry.metas().length > 0) {
-            for (int i : entry.metas())
-                this.stacks.add(new ItemStack(entry.getItem(), 1, i));
-        } else
-            this.stacks.add(new ItemStack(entry.getItem()));
+        for (int i = 0; i <= entry.metas(); i++)
+            this.stacks.add(new ItemStack(entry.getItem(), 1, i));
         this.scale = scale;
         width = (int) (16 * scale);
         height = (int) (16 * scale);
@@ -63,11 +60,8 @@ public class ItemWidget extends ManualWidgetsBase {
     public ItemWidget(GuiManualBase manual, int xStart, int yStart, float scale, ArrayList<IManualEntryItem> items) {
         super(manual, xStart, yStart);
         for (IManualEntryItem entry : items) {
-            if (entry.metas().length > 0) {
-                for (int i : entry.metas())
-                    this.stacks.add(new ItemStack(entry.getItem(), 1, i));
-            } else
-                this.stacks.add(new ItemStack(entry.getItem()));
+            for (int i = 0; i <= entry.metas(); i++)
+                this.stacks.add(new ItemStack(entry.getItem(), 1, i));
         }
         this.scale = scale;
         width = (int) (16 * scale);

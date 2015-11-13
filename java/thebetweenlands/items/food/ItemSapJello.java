@@ -34,7 +34,7 @@ public class ItemSapJello extends ItemFood implements IDecayFood, IManualEntryIt
     }
 
     @Override
-    public int[] metas( ) {
-        return new int[0];
+    public int metas() {
+        return 0;
     }
 }

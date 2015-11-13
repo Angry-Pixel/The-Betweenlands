@@ -99,7 +99,7 @@ public class BlockBLDoor extends BlockDoor implements IManualEntryItem {
 	}
 
 	@Override
-	public int[] metas( ) {
-		return new int[0];
+	public int metas() {
+		return 0;
 	}
 }

@@ -84,7 +84,7 @@ public class ItemAxeBL extends ItemAxe implements ICorrodible, IManualEntryItem 
 	}
 
 	@Override
-	public int[] metas( ) {
-		return new int[0];
+	public int metas() {
+		return 0;
 	}
 }

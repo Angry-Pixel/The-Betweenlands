@@ -41,26 +41,34 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        manual.mc.renderEngine.bindTexture(pamGrid);
-        manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
-        manual.mc.renderEngine.bindTexture(icons);
-        manual.drawTexturedModalRect(xStart + 11, yStart + 62, 172, 250, progress * 4, 6);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        if (outputs.size() > 0) {
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            manual.mc.renderEngine.bindTexture(pamGrid);
+            manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
+            manual.mc.renderEngine.bindTexture(icons);
+            manual.drawTexturedModalRect(xStart + 11, yStart + 62, 172, 250, progress * 4, 6);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false);
-        renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false);
-        renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true);
-        ArrayList<String> extraToolTips = new ArrayList<>();
-        extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
-        addSpecialItemTooltip(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), extraToolTips);
-        renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false);
-        if (mouseX >= xStart + 11 && mouseX <= xStart + 85 && mouseY >= yStart + 62 && mouseY <= yStart + 68) {
-            ArrayList<String> recipeToolTips = new ArrayList<>();
-            recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
-            renderTooltip(mouseX, mouseY, recipeToolTips, 0xffffff, 0xf0100010);
+            renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false);
+            renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false);
+            renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true);
+            ArrayList<String> extraToolTips = new ArrayList<>();
+            extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
+            addSpecialItemTooltip(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), extraToolTips);
+            renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false);
+            if (mouseX >= xStart + 11 && mouseX <= xStart + 85 && mouseY >= yStart + 62 && mouseY <= yStart + 68) {
+                ArrayList<String> recipeToolTips = new ArrayList<>();
+                recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
+                renderTooltip(mouseX, mouseY, recipeToolTips, 0xffffff, 0xf0100010);
+            }
+
+            /*
+            if (PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)) == null) {
+                outputs.remove(currentRecipe);
+                currentRecipe = 0;
+            }*/
         }
     }
 

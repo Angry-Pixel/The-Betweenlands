@@ -26,5 +26,5 @@ public interface IManualEntryItem {
     int[] recipeType(int meta);
 
 
-    int[] metas();
+    int metas();
 }

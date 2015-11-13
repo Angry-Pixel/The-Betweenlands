@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.manual.gui.GuiManualBase;
+import thebetweenlands.recipes.PestleAndMortarRecipe;
 import thebetweenlands.recipes.PurifierRecipe;
 
 import java.util.ArrayList;
@@ -40,28 +41,36 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        int newX = xStart + 1;
-        int newY = yStart + 1;
+        if (outputs.size() > 0) {
+            int newX = xStart + 1;
+            int newY = yStart + 1;
 
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        manual.mc.renderEngine.bindTexture(purifierGrid);
-        manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
-        manual.mc.renderEngine.bindTexture(icons);
-        manual.drawTexturedModalRect(xStart + 25, yStart + 22, 0, 0, progress, 16);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            manual.mc.renderEngine.bindTexture(purifierGrid);
+            manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
+            manual.mc.renderEngine.bindTexture(icons);
+            manual.drawTexturedModalRect(xStart + 25, yStart + 22, 0, 0, progress, 16);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
-        renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
-        renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
+            renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
+            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
+            renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
 
-        if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
-            ArrayList<String> processTooltip = new ArrayList<>();
-            processTooltip.add(StatCollector.translateToLocal("manual.widget.purifier.recipe"));
-            processTooltip.add(processTimeSecondsString.replace(".seconds.", "21.6"));
-            renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
+            if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
+                ArrayList<String> processTooltip = new ArrayList<>();
+                processTooltip.add(StatCollector.translateToLocal("manual.widget.purifier.recipe"));
+                processTooltip.add(processTimeSecondsString.replace(".seconds.", "21.6"));
+                renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
+            }
+
+
+            if (PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)) == null){
+                outputs.remove(currentRecipe);
+                currentRecipe = 0;
+            }
         }
     }
 

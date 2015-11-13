@@ -25,7 +25,9 @@ public class ManualEntryEntryList extends ManualEntry {
                 times++;
             }
         } else {
-            pages.add(new ManualPageEntryButtons(manual, entries));
+            ManualPageEntryButtons page = new ManualPageEntryButtons(manual, entries);
+            page.setPageNumber(pages.size() + 1);
+            pages.add(page);
         }
 
         if (pages.size() >= 1)

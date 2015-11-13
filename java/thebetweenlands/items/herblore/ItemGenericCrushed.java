@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.gui.entries.IManualEntryItem;
 
-public class ItemGenericCrushed extends Item {
+public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	public static ItemStack createStack(EnumItemGenericCrushed enumCrushed) {
 		return createStack(enumCrushed, 1);
 	}
@@ -86,6 +87,26 @@ public class ItemGenericCrushed extends Item {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public String manualName(int meta) {
+		return "genericItemsCrushed";
+	}
+
+	@Override
+	public Item getItem() {
+		return this;
+	}
+
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[]{3};
+	}
+
+	@Override
+	public int metas() {
+		return 43;
 	}
 
 	public static enum EnumItemGenericCrushed {

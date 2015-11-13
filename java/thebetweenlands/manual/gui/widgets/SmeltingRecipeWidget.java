@@ -42,32 +42,33 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        int newX = xStart + 1;
-        int newY = yStart + 1;
+        if (outputs.size() > 0) {
+            int newX = xStart + 1;
+            int newY = yStart + 1;
 
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        manual.mc.renderEngine.bindTexture(furnaceGrid);
-        manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
-        manual.mc.renderEngine.bindTexture(icons);
-        manual.drawTexturedModalRect(xStart + 25, yStart + 17, 0, 0, progress, 16);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        renderItem(newX, newY, getSmeltingIngredient(outputs.get(currentRecipe)), false);
-        renderItem(newX + 60, newY+ 16, outputs.get(currentRecipe), false);
-        renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), true);
-        ArrayList<String> specialToolTips = new ArrayList<>();
-        specialToolTips.add(burnTimeString.replace(".time.", "800"));
-        addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), specialToolTips);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            manual.mc.renderEngine.bindTexture(furnaceGrid);
+            manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
+            manual.mc.renderEngine.bindTexture(icons);
+            manual.drawTexturedModalRect(xStart + 25, yStart + 17, 0, 0, progress, 16);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            renderItem(newX, newY, getSmeltingIngredient(outputs.get(currentRecipe)), false);
+            renderItem(newX + 60, newY + 16, outputs.get(currentRecipe), false);
+            renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), true);
+            ArrayList<String> specialToolTips = new ArrayList<>();
+            specialToolTips.add(burnTimeString.replace(".time.", "800"));
+            addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), specialToolTips);
 
-        if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 17 && mouseY <= yStart + 33) {
-            ArrayList<String> processTooltip = new ArrayList<>();
-            processTooltip.add(StatCollector.translateToLocal("manual.widget.smelting.recipe"));
-            processTooltip.add(processTimeSecondsString.replace(".seconds.", "10"));
-            renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
+            if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 17 && mouseY <= yStart + 33) {
+                ArrayList<String> processTooltip = new ArrayList<>();
+                processTooltip.add(StatCollector.translateToLocal("manual.widget.smelting.recipe"));
+                processTooltip.add(processTimeSecondsString.replace(".seconds.", "10"));
+                renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
+            }
         }
-
     }
 
 
@@ -109,18 +110,21 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
 
         do {
             if (!iterator.hasNext()) {
+                currentRecipe = 0;
+                outputs.remove(output);
                 return null;
             }
 
             entry = (Map.Entry) iterator.next();
         }
         while (!this.matches((ItemStack) entry.getValue(), output));
-
         return (ItemStack) entry.getKey();
     }
 
     private boolean matches(ItemStack itemStack1, ItemStack itemstack2) {
         return itemstack2.getItem() == itemStack1.getItem() && (itemstack2.getItemDamage() == 32767 || itemstack2.getItemDamage() == itemStack1.getItemDamage());
     }
+
+
 
 }

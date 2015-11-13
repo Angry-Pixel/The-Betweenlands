@@ -34,7 +34,7 @@ public class ItemGertsDonut extends ItemFood implements IManualEntryItem {
     }
 
     @Override
-    public int[] metas() {
-        return new int[0];
+    public int metas() {
+        return 0;
     }
 }
