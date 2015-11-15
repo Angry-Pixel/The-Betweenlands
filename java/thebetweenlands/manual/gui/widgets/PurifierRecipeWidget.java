@@ -73,7 +73,8 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
                 outputs.remove(currentRecipe);
                 currentRecipe = 0;
             }
-        }
+        } else
+            isEmpty = true;
     }
 
 

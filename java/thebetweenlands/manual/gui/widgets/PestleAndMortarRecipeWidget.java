@@ -66,7 +66,8 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
                 recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
                 renderTooltip(mouseX, mouseY, recipeToolTips, 0xffffff, 0xf0100010);
             }
-        }
+        } else
+            isEmpty = true;
     }
 
 

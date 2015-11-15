@@ -36,6 +36,8 @@ public class ManualWidgetsBase {
 
     public boolean isPageRight = false;
 
+    public boolean isEmpty = false;
+
     private int untilResize = 20;
 
     public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");

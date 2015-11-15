@@ -49,7 +49,6 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
             int newX = xStart + 1;
             int newY = yStart + 1;
 
-
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             manual.mc.renderEngine.bindTexture(furnaceGrid);
@@ -71,7 +70,8 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
                 processTooltip.add(processTimeSecondsString.replace(".seconds.", "10"));
                 renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
             }
-        }
+        } else
+            isEmpty = true;
     }
 
 

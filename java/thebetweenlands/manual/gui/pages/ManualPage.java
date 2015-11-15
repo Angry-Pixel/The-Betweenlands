@@ -64,4 +64,14 @@ public class ManualPage {
 		for (ManualWidgetsBase widget : widgets)
 			widget.updateScreen();
 	}
+
+	public boolean isEmpty(){
+		if (widgets.size() == 0)
+			return true;
+		boolean isEmpty = true;
+		for (ManualWidgetsBase widget: widgets)
+			if (!widget.isEmpty)
+				isEmpty = false;
+		return isEmpty;
+	}
 }

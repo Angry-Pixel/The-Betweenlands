@@ -115,7 +115,8 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                 processTooltip.add(recipeType);
                 renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
             }
-        }
+        } else
+            isEmpty = true;
     }
 
     @Override
