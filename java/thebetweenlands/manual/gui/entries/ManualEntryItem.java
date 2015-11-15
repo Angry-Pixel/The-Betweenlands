@@ -35,84 +35,42 @@ public class ManualEntryItem extends ManualEntry {
         for (int i : item.recipeType(0)) {
             switch (i) {
                 case 1:
-                    if (height + smeltingRecipeHeight <= 150) {
-                        widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
-                        height += smeltingRecipeHeight;
-                    } else {
-                        ManualPage page = new ManualPage(widgets);
-                        page.setPageNumber(pages.size() + 1);
-                        pages.add(page);
-                        widgets.clear();
-                        height = 10;
-                        widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
-                        height += smeltingRecipeHeight;
-                    }
+                    widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
+                    height += smeltingRecipeHeight;
                     break;
                 case 2:
-                    if (height + craftingRecipeHeight <= 150) {
-                        widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
-                        height += craftingRecipeHeight;
-                    } else {
-                        ManualPage page = new ManualPage(widgets);
-                        page.setPageNumber(pages.size() + 1);
-                        pages.add(page);
-                        widgets.clear();
-                        height = 10;
-                        widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
-                        height += craftingRecipeHeight;
-                    }
+                    widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
+                    height += craftingRecipeHeight;
                     break;
                 case 3:
-                    if (height + pestleAndMortarRecipeHeight <= 150) {
-                        widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
-                        height += pestleAndMortarRecipeHeight;
-                    } else {
-                        ManualPage page = new ManualPage(widgets);
-                        page.setPageNumber(pages.size() + 1);
-                        pages.add(page);
-                        widgets.clear();
-                        height = 10;
-                        widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
-                        height += pestleAndMortarRecipeHeight;
-                    }
+                    widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
+                    height += pestleAndMortarRecipeHeight;
                     break;
                 case 4:
-                    if (height + compostRecipeHeight <= 150) {
-                        widgets.add(new CompostRecipeWidget(manual, 15, height));
-                        height += compostRecipeHeight;
-                    } else {
-                        ManualPage page = new ManualPage(widgets);
-                        page.setPageNumber(pages.size() + 1);
-                        pages.add(page);
-                        widgets.clear();
-                        height = 10;
-                        widgets.add(new CompostRecipeWidget(manual, 15, height));
-                        height += compostRecipeHeight;
-                    }
+                    widgets.add(new CompostRecipeWidget(manual, 15, height));
+                    height += compostRecipeHeight;
                     break;
                 case 5:
-                    if (height + purifierRecipeHeight <= 150) {
-                        widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
-                        height += purifierRecipeHeight;
-                    } else {
-                        ManualPage page = new ManualPage(widgets);
-                        page.setPageNumber(pages.size() + 1);
-                        pages.add(page);
-                        widgets.clear();
-                        height = 10;
-                        widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
-                        height += purifierRecipeHeight;
-                    }
+                    widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
+                    height += purifierRecipeHeight;
                     break;
                 default:
                     Collections.addAll(widgets, recipes);
                     break;
             }
+            if (widgets.size() >= 2) {
+                ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
+                page.setPageNumber(pages.size() + 1);
+                pages.add(page);
+                widgets.clear();
+                height = 10;
+            }
         }
         if (widgets.size() > 0) {
-            ManualPage page = new ManualPage(widgets);
+            ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
             page.setPageNumber(pages.size() + 1);
             pages.add(page);
+            widgets.clear();
         }
 
 
@@ -147,88 +105,44 @@ public class ManualEntryItem extends ManualEntry {
             if (itemStacks.size() > 0) {
                 switch (type) {
                     case 1:
-                        if (height + smeltingRecipeHeight <= 150) {
-                            widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
-                            height += smeltingRecipeHeight;
-                        } else {
-                            ManualPage page = new ManualPage(widgets);
-                            page.setPageNumber(pages.size() + 1);
-                            pages.add(page);
-                            widgets.clear();
-                            height = 10;
-                            widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
-                            height += smeltingRecipeHeight;
-                        }
+                        widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
+                        height += smeltingRecipeHeight;
                         break;
                     case 2:
-                        if (height + craftingRecipeHeight <= 150) {
-                            widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
-                            height += craftingRecipeHeight;
-                        } else {
-                            ManualPage page = new ManualPage(widgets);
-                            page.setPageNumber(pages.size() + 1);
-                            pages.add(page);
-                            widgets.clear();
-                            height = 10;
-                            widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
-                            height += craftingRecipeHeight;
-                        }
+                        widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
+                        height += craftingRecipeHeight;
                         break;
                     case 3:
-                        if (height + pestleAndMortarRecipeHeight <= 150) {
-                            System.out.println(1);
-                            widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
-                            height += pestleAndMortarRecipeHeight;
-                        } else {
-                            System.out.println(2);
-                            ManualPage page = new ManualPage(widgets);
-                            page.setPageNumber(pages.size() + 1);
-                            pages.add(page);
-                            widgets.clear();
-                            height = 10;
-                            widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
-                            height += pestleAndMortarRecipeHeight;
-                        }
+                        widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
+                        height += pestleAndMortarRecipeHeight;
                         break;
                     case 4:
-                        if (height + compostRecipeHeight <= 150) {
-                            widgets.add(new CompostRecipeWidget(manual, 15, height));
-                            height += compostRecipeHeight;
-                        } else {
-                            ManualPage page = new ManualPage(widgets);
-                            page.setPageNumber(pages.size() + 1);
-                            pages.add(page);
-                            widgets.clear();
-                            height = 10;
-                            widgets.add(new CompostRecipeWidget(manual, 15, height));
-                            height += compostRecipeHeight;
-                        }
+                        widgets.add(new CompostRecipeWidget(manual, 15, height));
+                        height += compostRecipeHeight;
                         break;
                     case 5:
-                        if (height + purifierRecipeHeight <= 150) {
-                            widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
-                            height += purifierRecipeHeight;
-                        } else {
-                            ManualPage page = new ManualPage(widgets);
-                            page.setPageNumber(pages.size() + 1);
-                            pages.add(page);
-                            widgets.clear();
-                            height = 10;
-                            widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
-                            height += purifierRecipeHeight;
-                        }
+                        widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
+                        height += purifierRecipeHeight;
                         break;
                     default:
                         Collections.addAll(widgets, recipes);
                         break;
                 }
+                if (widgets.size() >= 2) {
+                    ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
+                    page.setPageNumber(pages.size() + 1);
+                    pages.add(page);
+                    widgets.clear();
+                    height = 10;
+                }
             }
             type++;
         }
         if (widgets.size() > 0) {
-            ManualPage page = new ManualPage(widgets);
+            ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
             page.setPageNumber(pages.size() + 1);
             pages.add(page);
+            widgets.clear();
         }
     }
 
