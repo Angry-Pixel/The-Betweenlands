@@ -80,7 +80,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             renderItem(xStart, yStart, items.get(currentItem), false);
         else if (resourceLocation != null) {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
-            manual.drawTexturedModalRect(xStart, yStart, indexX, indexY, 16, 16);
+            manual.drawTexturedModalRect(xStart, yStart, indexX * 16 - 15, indexY * 16 - 15, 16, 16);
         }
         textContainer.render();
     }

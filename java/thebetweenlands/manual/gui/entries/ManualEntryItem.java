@@ -72,8 +72,6 @@ public class ManualEntryItem extends ManualEntry {
             pages.add(page);
             widgets.clear();
         }
-
-
     }
 
     public ManualEntryItem(ArrayList<ItemStack> item, String name, GuiManualBase manual, ManualWidgetsBase... recipes) {

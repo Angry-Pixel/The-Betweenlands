@@ -44,10 +44,11 @@ public class ManualEntryRegistry {
 
     public static ArrayList<ManualEntryItem> itemEntries = new ArrayList<>();
     public static ArrayList<ManualEntry> entryLists = new ArrayList<>();
-
+    public static ArrayList<ManualEntryMachines> machines = new ArrayList<>();
 
     public static ManualEntry main;
     public static ManualEntry itemList;
+    public static ManualEntry machineList;
 
     public static void init(GuiManualBase manual) {
         initItemEntries(manual);
@@ -106,7 +107,16 @@ public class ManualEntryRegistry {
         itemList = new ManualEntryEntryList("items", manual, itemEntries);
     }
 
+
+    public static void initMachineEntries(GuiManualBase manual) {
+        machines.clear();
+        machines.add(new ManualEntryMachines("pestleAndMortar", manual, new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGrid.png", 106, 69));
+        machineList = new ManualEntryEntryList(manual, "machines", machines);
+
+    }
+
     public static void initEntryList() {
+        ENTRIES.clear();
         ENTRIES.addAll(itemEntries);
         try {
             for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
@@ -118,7 +128,9 @@ public class ManualEntryRegistry {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        entryLists.clear();
         entryLists.add(itemList);
+        entryLists.add(machineList);
     }
 
 }
