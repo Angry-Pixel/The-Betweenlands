@@ -103,7 +103,7 @@ public class ManualEntryRegistry {
         }
         itemEntries.clear();
         itemEntries.addAll(temp);
-        itemList = new ManualEntryEntryList("title", manual, itemEntries);
+        itemList = new ManualEntryEntryList("items", manual, itemEntries);
     }
 
     public static void initEntryList() {
