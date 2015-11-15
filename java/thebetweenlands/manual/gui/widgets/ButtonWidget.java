@@ -2,16 +2,14 @@ package thebetweenlands.manual.gui.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.Item;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-import thebetweenlands.blocks.BLBlockRegistry;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.text.TextContainer;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents;
-import thebetweenlands.recipes.CompostRecipe;
 
 import java.util.ArrayList;
 
@@ -23,16 +21,22 @@ public class ButtonWidget extends ManualWidgetsBase {
     private ManualEntry entry;
     private TextContainer textContainer;
 
+    private ResourceLocation resourceLocation;
+    private int indexX;
+    private int indexY;
+
     public static int width = 100;
     public static int height = 16;
     int untilUpdate = 0;
     int currentItem;
 
-    public ButtonWidget(GuiManualBase manual, int xStart, int yStart, ItemStack item, ManualEntry entry) {
+    public ButtonWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, ManualEntry entry, int index) {
         super(manual, xStart, yStart);
-        items.add(item);
+        this.resourceLocation = new ResourceLocation(recourseLocation);
         this.entry = entry;
         this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 100, 16, entry.entryName);
+        this.indexX = index % 16;
+        this.indexY = index / 16;
         this.init();
     }
 
@@ -64,7 +68,7 @@ public class ButtonWidget extends ManualWidgetsBase {
 
         try {
             this.textContainer.parse();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -72,8 +76,12 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-
-        renderItem(xStart, yStart, items.get(currentItem), false);
+        if (items.size() > 0)
+            renderItem(xStart, yStart, items.get(currentItem), false);
+        else if (resourceLocation != null) {
+            Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
+            manual.drawTexturedModalRect(xStart, yStart, indexX, indexY, 16, 16);
+        }
         textContainer.render();
     }
 
@@ -85,7 +93,7 @@ public class ButtonWidget extends ManualWidgetsBase {
                 currentItem = 0;
             drawForeGround();
             untilUpdate = 0;
-        } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height){
+        } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             manual.changeTo(entry);
         }
     }

@@ -13,6 +13,8 @@ import thebetweenlands.manual.gui.widgets.text.TextWidget;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 11-8-2015.
@@ -39,46 +41,24 @@ public class ManualEntryRegistry {
     public static IManualEntryItem[] rubberBoots = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.rubberBoots, (IManualEntryItem) BLItemRegistry.rubberBootsImproved};
 
 
+
     public static ArrayList<ManualEntryItem> itemEntries = new ArrayList<>();
+    public static ArrayList<ManualEntry> entryLists = new ArrayList<>();
 
 
-    public static ManualEntry entry;
-    public static ManualEntry entry1;
-    public static ManualEntry entry2;
-    public static ManualEntry entry3;
-    public static ManualEntry entry4;
-    public static ManualEntry entry5;
-    public static ManualEntry entry6;
-    public static ManualEntry entry7;
-    public static ManualEntry entry8;
-    public static ManualEntry entry9;
+    public static ManualEntry main;
+    public static ManualEntry itemList;
 
     public static void init(GuiManualBase manual) {
-        ArrayList<ItemStack> recipes4 = new ArrayList<>();
-        recipes4.add(new ItemStack(BLItemRegistry.anglerToothArrow));
-        recipes4.add((new ItemStack(BLItemRegistry.octineArrow)));
-        ArrayList<ItemStack> gems = new ArrayList<>();
-        gems.add(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.AQUA_MIDDLE_GEM));
-        gems.add(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.CRIMSON_MIDDLE_GEM));
-        gems.add(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.GREEN_MIDDLE_GEM));
-
-
-        entry1 = new ManualEntry("Title", new ManualPage(new TextWidget(manual, 5, 5, "manual.text.test2")));
-        //entry2 = new ManualEntry(new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.title"), new ItemWidget(manual, (127/2)-24, 77, arrows, 3)), new ManualPage(new TextWidget(manual, 5, 5, "manual.arrow.description")), new ManualPage(new CraftingRecipeWidget(manual, recipes4, 5, 10)));
-        entry2 = new ManualEntryItem(gems, "gems", manual, new PurifierRecipeWidget(manual, gems, 5, 10));
-        entry3 = new ManualEntryItem((IManualEntryItem) BLItemRegistry.testItem, manual);
-        entry4 = new ManualEntryEntity(new EntityFirefly(manual.mc.theWorld), manual);
-        entry5 = new ManualEntryItem(recipes4, "arrow", manual);
-
         initItemEntries(manual);
-        entry = new ManualEntryEntryList("title", manual, itemEntries);
-
         initEntryList();
+        main = new ManualEntryEntryList("title", manual, entryLists, "thebetweenlands:textures/gui/manual/HLIcons.png");
     }
 
     public static void initItemEntries(GuiManualBase manual) {
-        itemEntries.clear();
         IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem)BLItemRegistry.itemsGeneric, (IManualEntryItem)BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
+
+        itemEntries.clear();
         for (IManualEntryItem item : itemEntryItem)
             itemEntries.add(new ManualEntryItem(item, manual));
 
@@ -94,7 +74,6 @@ public class ManualEntryRegistry {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //TODO some way of sorting the entries by name
 
         ArrayList<ManualEntryItem> temp = new ArrayList<>();
         while (itemEntries.size() > 0) {
@@ -124,6 +103,7 @@ public class ManualEntryRegistry {
         }
         itemEntries.clear();
         itemEntries.addAll(temp);
+        itemList = new ManualEntryEntryList("title", manual, itemEntries);
     }
 
     public static void initEntryList() {
@@ -138,7 +118,7 @@ public class ManualEntryRegistry {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
+        entryLists.add(itemList);
     }
 
 }

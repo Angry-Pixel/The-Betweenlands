@@ -46,7 +46,7 @@ public class GuiManualBase extends GuiScreen {
         if (player.getHeldItem().getTagCompound() != null && player.getHeldItem().stackTagCompound.hasKey("entry") && player.getHeldItem().stackTagCompound.getString("entry") != null) {
             changeTo(getEntryFromName(player.getHeldItem().stackTagCompound.getString("entry")));
         } else {
-            changeTo(ManualEntryRegistry.entry);
+            changeTo(ManualEntryRegistry.main);
         }
     }
 
@@ -90,43 +90,11 @@ public class GuiManualBase extends GuiScreen {
                 break;
             }
             case Keyboard.KEY_0: {
-                changeTo(ManualEntryRegistry.entry);
+                changeTo(ManualEntryRegistry.main);
                 break;
             }
             case Keyboard.KEY_1: {
-                changeTo(ManualEntryRegistry.entry1);
-                break;
-            }
-            case Keyboard.KEY_2: {
-                changeTo(ManualEntryRegistry.entry2);
-                break;
-            }
-            case Keyboard.KEY_3: {
-                changeTo(ManualEntryRegistry.entry3);
-                break;
-            }
-            case Keyboard.KEY_4: {
-                changeTo(ManualEntryRegistry.entry4);
-                break;
-            }
-            case Keyboard.KEY_5: {
-                changeTo(ManualEntryRegistry.entry5);
-                break;
-            }
-            case Keyboard.KEY_6: {
-                changeTo(ManualEntryRegistry.entry6);
-                break;
-            }
-            case Keyboard.KEY_7: {
-                changeTo(ManualEntryRegistry.entry7);
-                break;
-            }
-            case Keyboard.KEY_8: {
-                changeTo(ManualEntryRegistry.entry8);
-                break;
-            }
-            case Keyboard.KEY_9: {
-                changeTo(ManualEntryRegistry.entry9);
+                changeTo(ManualEntryRegistry.itemList);
                 break;
             }
         }
@@ -192,7 +160,7 @@ public class GuiManualBase extends GuiScreen {
                 return entry;
             }
         }
-        return ManualEntryRegistry.entry;
+        return ManualEntryRegistry.main;
     }
 
     private boolean matches(ItemStack itemStack1, ItemStack itemStack2) {
