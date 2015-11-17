@@ -619,6 +619,7 @@ manual.widget.burn.time=Burn time: .time. seconds
 
 manual.widget.compost.recipe=Compost recipe
 manual.widget.compost.amount=Compost amount: .amount.%
+manual.widget.compost.amount.per=Amount per compost: 25%
 
 manual.widget.crafting.shaped.recipe=Shaped crafting recipe
 manual.widget.crafting.shapeless.recipe=Shapeless crafting recipe

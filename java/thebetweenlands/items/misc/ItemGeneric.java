@@ -162,7 +162,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	@Override
 	public int[] recipeType(int meta) {
-		return new int[]{1, 2, 3, 5};
+		return new int[]{1, 2, 3, 5, 4};
 	}
 
 	@Override
