@@ -58,6 +58,7 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
         }
     }
 
+    @Override
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < CompostRecipe.compostRecipes.size()) {

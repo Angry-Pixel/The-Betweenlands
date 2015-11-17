@@ -20,13 +20,13 @@ public class ItemManual extends Item {
         return itemStack;
     }
 
-    @SuppressWarnings("unchecked")
+    /*@SuppressWarnings("unchecked")
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
         list.add("Current entry: ");
         if (itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("entry")) {
             list.add(itemStack.stackTagCompound.getString("entry"));
         }
-    }
+    }*/
 
 }

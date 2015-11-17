@@ -43,11 +43,12 @@ public class GuiManualBase extends GuiScreen {
         ManualEntryRegistry.init(this);
         if (player.getHeldItem() == null || player.getHeldItem().getItem() != BLItemRegistry.manual)
             mc.displayGuiScreen(null);
-        if (player.getHeldItem().getTagCompound() != null && player.getHeldItem().stackTagCompound.hasKey("entry") && player.getHeldItem().stackTagCompound.getString("entry") != null) {
+        /*if (player.getHeldItem().getTagCompound() != null && player.getHeldItem().stackTagCompound.hasKey("entry") && player.getHeldItem().stackTagCompound.getString("entry") != null) {
             changeTo(getEntryFromName(player.getHeldItem().stackTagCompound.getString("entry")));
         } else {
             changeTo(ManualEntryRegistry.main);
-        }
+        }*/
+        changeTo(ManualEntryRegistry.main);
     }
 
 
@@ -126,11 +127,11 @@ public class GuiManualBase extends GuiScreen {
         if (this.entry != null)
             this.entry.clear();
         this.entry = entry;
-        if (player.getHeldItem() != null && this.entry != null) {
+        /*if (player.getHeldItem() != null && this.entry != null) {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString("entry", this.entry.unlocalizedEntryName);
             player.getHeldItem().stackTagCompound = tag;
-        }
+        }*/
     }
 
     public boolean doesGuiPauseGame() {

@@ -21,6 +21,7 @@ public class ManualEntryItem extends ManualEntry {
     public static int compostRecipeHeight = CompostRecipeWidget.height + 5;
     public static int pestleAndMortarRecipeHeight = PestleAndMortarRecipeWidget.height + 5;
     public static int purifierRecipeHeight = PurifierRecipeWidget.height + 5;
+    public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
 
     public ManualEntryItem(IManualEntryItem item, GuiManualBase manual, ManualWidgetsBase... recipes) {
         super("manual." + item.manualName(0) + ".title", new ManualPage(new TextWidget(manual, 15, 10, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(manual, (GuiManualBase.WIDTH / 2) - 24, 77, item, 3)), new ManualPage(new TextWidget(manual, 16, 10, "manual." + item.manualName(0) + ".description")));
@@ -53,6 +54,10 @@ public class ManualEntryItem extends ManualEntry {
                 case 5:
                     widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
                     height += purifierRecipeHeight;
+                    break;
+                case 6:
+                    widgets.add(new RubberTabWidget(manual, 15, height));
+                    height += rubberTabRecipeHeight;
                     break;
                 default:
                     Collections.addAll(widgets, recipes);
