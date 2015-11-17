@@ -1,5 +1,6 @@
 package thebetweenlands.manual.gui.entries;
 
+import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.pages.ManualPageEntryButtons;
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  */
 public class ManualEntryEntryList extends ManualEntry {
     public ManualEntryEntryList(String unlocalizedEntryName, GuiManualBase manual, ArrayList<ManualEntryItem> entries) {
-        super(unlocalizedEntryName);
+        super("manual." + unlocalizedEntryName + ".title");
 
         if (entries.size() > 8) {
             int entryAmount = entries.size();
@@ -38,7 +39,7 @@ public class ManualEntryEntryList extends ManualEntry {
 
 
     public ManualEntryEntryList(GuiManualBase manual, String unlocalizedEntryName, ArrayList<ManualEntryMachines> entries) {
-        super(unlocalizedEntryName);
+        super("manual." + unlocalizedEntryName + ".title");
 
         if (entries.size() > 8) {
             int entryAmount = entries.size();
@@ -65,7 +66,7 @@ public class ManualEntryEntryList extends ManualEntry {
     }
 
     public ManualEntryEntryList(String unlocalizedEntryName, GuiManualBase manual, ArrayList<ManualEntry> entries, String resourceLocation) {
-        super(unlocalizedEntryName);
+        super("manual." + unlocalizedEntryName + ".title");
 
         int index = 0;
         if (entries.size() > 8) {
@@ -78,7 +79,7 @@ public class ManualEntryEntryList extends ManualEntry {
                 page.setPageNumber(times + 1);
                 pages.add(page);
                 entryAmount -= 8;
-                index += 8;
+                index += 7;
                 times++;
             }
         } else {

@@ -35,7 +35,6 @@ public class ManualPageEntryButtons extends ManualPage {
         int height = 0;
         int times = 0;
         for (ManualEntry entryItem : entries) {
-            indexStart++;
             widgets.add(new ButtonWidget(manual, 15, 10 + height, resourceLocation, entryItem, indexStart + times));
             height += 18;
             times++;

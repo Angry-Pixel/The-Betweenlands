@@ -52,6 +52,7 @@ public class ManualEntryRegistry {
 
     public static void init(GuiManualBase manual) {
         initItemEntries(manual);
+        initMachineEntries(manual);
         initEntryList();
         main = new ManualEntryEntryList("title", manual, entryLists, "thebetweenlands:textures/gui/manual/HLIcons.png");
     }

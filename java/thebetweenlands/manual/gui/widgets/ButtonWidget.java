@@ -34,6 +34,7 @@ public class ButtonWidget extends ManualWidgetsBase {
         super(manual, xStart, yStart);
         this.resourceLocation = new ResourceLocation(recourseLocation);
         this.entry = entry;
+
         this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 100, 16, entry.entryName);
         this.indexX = index % 16;
         this.indexY = index / 16;
@@ -80,7 +81,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             renderItem(xStart, yStart, items.get(currentItem), false);
         else if (resourceLocation != null) {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
-            manual.drawTexturedModalRect(xStart, yStart, indexX * 16 - 15, indexY * 16 - 15, 16, 16);
+            manual.drawTexturedModalRect(xStart, yStart, indexX * 16 + 1, indexY * 16 + 1, 16, 16);
         }
         textContainer.render();
     }
