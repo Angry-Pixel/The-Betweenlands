@@ -19,6 +19,8 @@ public class PictureWidget extends ManualWidgetsBase {
     ResourceLocation recourseLocation;
     public int width;
     public int height;
+    private int xIndex = 0;
+    private int yIndex = 0;
 
     ArrayList<String> toolTips = new ArrayList<>();
 
@@ -27,6 +29,15 @@ public class PictureWidget extends ManualWidgetsBase {
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
+    }
+
+    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, int xIndex, int yIndex) {
+        super(manual, xStart, yStart);
+        this.recourseLocation = new ResourceLocation(recourseLocation);
+        this.width = width;
+        this.height = height;
+        this.xIndex = xIndex;
+        this.yIndex = yIndex;
     }
 
     public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, ArrayList<String> toolTips) {
@@ -56,7 +67,7 @@ public class PictureWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
+        manual.drawTexturedModalRect(xStart, yStart, xIndex, yIndex, width, height);
         GL11.glDisable(GL11.GL_BLEND);
 
         if (toolTips.size() > 0 && mouseX >= xStart && mouseX <= xStart + width && mouseY >= yStart && mouseY <= yStart + height) {

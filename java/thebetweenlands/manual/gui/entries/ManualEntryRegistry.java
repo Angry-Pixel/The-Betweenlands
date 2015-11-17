@@ -111,7 +111,7 @@ public class ManualEntryRegistry {
 
     public static void initMachineEntries(GuiManualBase manual) {
         machines.clear();
-        machines.add(new ManualEntryMachines("pestleAndMortar", manual, new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGrid.png", 106, 69));
+        machines.add(new ManualEntryMachines("pestleAndMortar", manual, new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69));
         machineList = new ManualEntryEntryList(manual, "machines", machines);
 
     }
