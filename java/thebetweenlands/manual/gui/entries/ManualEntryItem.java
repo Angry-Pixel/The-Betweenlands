@@ -34,41 +34,52 @@ public class ManualEntryItem extends ManualEntry {
         for (int i = 0; i <= item.metas(); i++)
             itemStacks.add(new ItemStack(item.getItem(), 1, i));
         for (int i : item.recipeType(0)) {
+            int latestAdded = 0;
             switch (i) {
                 case 1:
                     widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
                     height += smeltingRecipeHeight;
+                    latestAdded += smeltingRecipeHeight;
                     break;
                 case 2:
                     widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
                     height += craftingRecipeHeight;
+                    latestAdded += craftingRecipeHeight;
                     break;
                 case 3:
                     widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
                     height += pestleAndMortarRecipeHeight;
+                    latestAdded += pestleAndMortarRecipeHeight;
                     break;
                 case 4:
                     widgets.add(new CompostRecipeWidget(manual, 15, height));
                     height += compostRecipeHeight;
+                    latestAdded += compostRecipeHeight;
                     break;
                 case 5:
                     widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
                     height += purifierRecipeHeight;
+                    latestAdded += purifierRecipeHeight;
                     break;
                 case 6:
                     widgets.add(new RubberTabWidget(manual, 15, height));
                     height += rubberTabRecipeHeight;
+                    latestAdded += rubberTabRecipeHeight;
                     break;
                 default:
                     Collections.addAll(widgets, recipes);
                     break;
             }
-            if (widgets.size() >= 2) {
+            if (height >= 152){
+                ManualWidgetsBase temp = widgets.get(widgets.size() - 1);
+                widgets.remove(widgets.size() - 1);
                 ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
                 page.setPageNumber(pages.size() + 1);
                 pages.add(page);
                 widgets.clear();
-                height = 10;
+                temp.unchangedYStart = 10;
+                widgets.add(temp);
+                height = 10 + latestAdded;
             }
         }
         if (widgets.size() > 0) {
@@ -106,37 +117,52 @@ public class ManualEntryItem extends ManualEntry {
             }
 
             if (itemStacks.size() > 0) {
+                int latestAdded = 0;
                 switch (type) {
                     case 1:
                         widgets.add(new SmeltingRecipeWidget(manual, itemStacks, 15, height));
                         height += smeltingRecipeHeight;
+                        latestAdded += smeltingRecipeHeight;
                         break;
                     case 2:
                         widgets.add(new CraftingRecipeWidget(manual, itemStacks, 15, height));
                         height += craftingRecipeHeight;
+                        latestAdded += craftingRecipeHeight;
                         break;
                     case 3:
                         widgets.add(new PestleAndMortarRecipeWidget(manual, itemStacks, 15, height));
                         height += pestleAndMortarRecipeHeight;
+                        latestAdded += pestleAndMortarRecipeHeight;
                         break;
                     case 4:
                         widgets.add(new CompostRecipeWidget(manual, 15, height));
                         height += compostRecipeHeight;
+                        latestAdded += compostRecipeHeight;
                         break;
                     case 5:
                         widgets.add(new PurifierRecipeWidget(manual, itemStacks, 15, height));
                         height += purifierRecipeHeight;
+                        latestAdded += purifierRecipeHeight;
+                        break;
+                    case 6:
+                        widgets.add(new RubberTabWidget(manual, 15, height));
+                        height += rubberTabRecipeHeight;
+                        latestAdded += rubberTabRecipeHeight;
                         break;
                     default:
                         Collections.addAll(widgets, recipes);
                         break;
                 }
-                if (widgets.size() >= 2) {
+                if (height >= 152){
+                    ManualWidgetsBase temp = widgets.get(widgets.size() - 1);
+                    widgets.remove(widgets.size() - 1);
                     ManualPage page = new ManualPage((ArrayList<ManualWidgetsBase>) widgets.clone());
                     page.setPageNumber(pages.size() + 1);
                     pages.add(page);
                     widgets.clear();
-                    height = 10;
+                    temp.unchangedYStart = 10;
+                    widgets.add(temp);
+                    height = 10 + latestAdded;
                 }
             }
             type++;
