@@ -15,8 +15,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.manager.DecayManager;
 import thebetweenlands.recipes.BLMaterials;
 
 /**

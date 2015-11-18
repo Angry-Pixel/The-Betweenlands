@@ -26,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandBLEvent;
+import thebetweenlands.command.CommandDecay;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
@@ -65,6 +66,7 @@ import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.BLGamerules;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
@@ -193,9 +195,10 @@ public class TheBetweenlands
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandBLEvent());
+		event.registerServerCommand(new CommandResetAspects());
+		event.registerServerCommand(new CommandDecay());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
-			event.registerServerCommand(new CommandResetAspects());
 		}
 		BLGamerules.INSTANCE.onServerStarting(event);
 	}

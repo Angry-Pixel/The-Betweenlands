@@ -16,8 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import thebetweenlands.BLGamerules;
-import thebetweenlands.manager.DecayManager;
+import thebetweenlands.decay.DecayManager;
+import thebetweenlands.world.BLGamerules;
 
 public final class CorrodibleItemHelper {
 	public static final int MAX_CORROSION = 255;
@@ -74,7 +74,6 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
-		if(!BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) return;
 		int corrosion = getCorrosion(itemStack);
 		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
 		corrosionInfo.append(getCorrosionStage(corrosion));

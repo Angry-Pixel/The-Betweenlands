@@ -1,4 +1,4 @@
-package thebetweenlands;
+package thebetweenlands.world;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.server.MinecraftServer;
@@ -23,14 +23,17 @@ public class BLGamerules {
 	}
 
 	public static GameRules getGameRules() {
-		return MinecraftServer.getServer().worldServerForDimension(0).getGameRules();
+		if(MinecraftServer.getServer() != null && MinecraftServer.getServer().worldServerForDimension(0) != null) {
+			return MinecraftServer.getServer().worldServerForDimension(0).getGameRules();
+		}
+		return null;
 	}
 
 	public static boolean getGameRuleBooleanValue(String name) {
-		return getGameRules().getGameRuleBooleanValue(name);
+		return getGameRules() != null ? getGameRules().getGameRuleBooleanValue(name) : false;
 	}
 
 	public static String getGameRuleStringValue(String name) {
-		return getGameRules().getGameRuleStringValue(name);
+		return getGameRules() != null ? getGameRules().getGameRuleStringValue(name) : "";
 	}
 }

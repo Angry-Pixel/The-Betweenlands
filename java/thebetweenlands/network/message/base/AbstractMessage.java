@@ -10,12 +10,12 @@ public abstract class AbstractMessage<REQ extends AbstractMessage> implements IM
 {
     public IMessage onMessage(REQ message, MessageContext ctx)
     {
-        if (ctx.side.isClient()) onClientMessage(message, TheBetweenlands.proxy.getClientPlayer());
-        else onServerMessage(message, ctx.getServerHandler().playerEntity);
+        if (ctx.side.isClient()) onMessageClientSide(message, TheBetweenlands.proxy.getClientPlayer());
+        else onMessageServerSide(message, ctx.getServerHandler().playerEntity);
         return null;
     }
 
-    public abstract void onClientMessage(REQ message, EntityPlayer player);
+    public abstract void onMessageClientSide(REQ message, EntityPlayer player);
 
-    public abstract void onServerMessage(REQ message, EntityPlayer player);
+    public abstract void onMessageServerSide(REQ message, EntityPlayer player);
 }

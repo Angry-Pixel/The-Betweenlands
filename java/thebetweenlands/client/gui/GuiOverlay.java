@@ -18,8 +18,8 @@ import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
+import thebetweenlands.decay.DecayManager;
 import thebetweenlands.event.debugging.DebugHandlerClient;
-import thebetweenlands.manager.DecayManager;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui
@@ -58,9 +58,9 @@ public class GuiOverlay extends Gui
 							this.tb1 = new Framebuffer(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2, false);
 						}
 					}
-					
+
 					((StarfieldEffect)this.de).setTimeScale(0.000003F);
-					
+
 					this.de.apply(this.tb1.framebufferTexture, shader.getBlitBuffer("starfieldBlitBuffer"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2);
 
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -84,7 +84,7 @@ public class GuiOverlay extends Gui
 					GL11.glTexCoord2d(0, 1);
 					GL11.glVertex2d(0, 0);
 					GL11.glEnd();
-					
+
 					/*GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glEnable(GL11.GL_BLEND);
 					ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
@@ -111,7 +111,7 @@ public class GuiOverlay extends Gui
 			}
 		}
 
-		if (DecayManager.enableDecay(mc.thePlayer) && !mc.thePlayer.capabilities.isCreativeMode)
+		if (DecayManager.isDecayEnabled(mc.thePlayer))
 		{
 			int width = event.resolution.getScaledWidth();
 			int height = event.resolution.getScaledHeight();

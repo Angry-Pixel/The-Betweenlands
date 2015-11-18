@@ -216,10 +216,6 @@ public class CommonProxy implements IGuiHandler {
 		return null;
 	}
 
-	public void corruptPlayerSkin(EntityPlayer entityPlayer, int level) {}
-
-	public void uncorruptPlayerSkin(EntityPlayer entityPlayer) {}
-
 	public void updateWispParticles(TileEntityWisp te) {}
 
 	public void spawnThem() {}

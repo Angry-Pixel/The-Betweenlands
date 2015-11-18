@@ -61,7 +61,7 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 	}
 
 	@Override
-	public void onClientMessage(MessageSyncEnvironmentEvent message, EntityPlayer player) {
+	public void onMessageClientSide(MessageSyncEnvironmentEvent message, EntityPlayer player) {
 		World world = player.worldObj;
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
@@ -75,5 +75,5 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 	}
 
 	@Override
-	public void onServerMessage(MessageSyncEnvironmentEvent message, EntityPlayer player) { }
+	public void onMessageServerSide(MessageSyncEnvironmentEvent message, EntityPlayer player) { }
 }

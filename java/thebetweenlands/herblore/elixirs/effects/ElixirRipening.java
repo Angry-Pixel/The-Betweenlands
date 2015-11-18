@@ -3,7 +3,7 @@ package thebetweenlands.herblore.elixirs.effects;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.manager.DecayManager;
+import thebetweenlands.decay.DecayManager;
 
 public class ElixirRipening extends ElixirEffect {
 	public ElixirRipening(int id, String name, ResourceLocation icon) {
@@ -14,7 +14,7 @@ public class ElixirRipening extends ElixirEffect {
 	protected void performEffect(EntityLivingBase entity, int strength) {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if(DecayManager.enableDecay(player)) {
+			if(DecayManager.isDecayEnabled(player)) {
 				DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) + 1, player);
 			}
 		}

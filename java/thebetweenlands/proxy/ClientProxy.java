@@ -1,15 +1,9 @@
 package thebetweenlands.proxy;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
-
-import javax.imageio.ImageIO;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -18,19 +12,14 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -161,6 +150,7 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.render.BrightnessHandler;
+import thebetweenlands.event.render.DecayRenderHandler;
 import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.FovHandler;
@@ -173,8 +163,6 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.manager.DecayManager;
-import thebetweenlands.manager.TextureManager;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -283,7 +271,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, new RenderWeedwoodRowboat());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, new RenderPeatMummy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, new RenderElixir());
-		
+
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
@@ -378,6 +366,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirClientHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
@@ -393,8 +382,6 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-
-
 	@Override
 	public World getClientWorld() {
 		return Minecraft.getMinecraft().theWorld;
@@ -403,98 +390,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public EntityPlayer getClientPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
-	}
-
-	@Override
-	public void corruptPlayerSkin(EntityPlayer player, int level) {
-		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
-		if (level == 0 || !DecayManager.enableDecay(entityPlayer)) {
-			uncorruptPlayerSkin(entityPlayer);
-			return;
-		}
-		if (!hasBackup(entityPlayer)) {
-			backupPlayerSkin(entityPlayer);
-		}
-		BufferedImage skin = TextureManager.getPlayerSkin(entityPlayer);
-		if (skin == null) {
-			return;
-		}
-		BufferedImage corruption = getPlayerCorruptionTexture();
-		BufferedImage corruptedSkin = new BufferedImage(skin.getWidth(), skin.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = corruptedSkin.createGraphics();
-		g.drawImage(skin, 0, 0, null);
-		AlphaComposite alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8F * level / 10);
-		g.setComposite(alphaComposite);
-		g.drawImage(corruption, 0, 0, null);
-		uploadPlayerSkin(entityPlayer, corruptedSkin);
-	}
-
-	private BufferedImage getPlayerCorruptionTexture() {
-		if (playerCorruptionImg == null) {
-			try {
-				playerCorruptionImg = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(PLAYER_CORRUPTION_TEXTURE).getInputStream());
-			} catch (IOException e) {
-				playerCorruptionImg = new BufferedImage(64, 32, BufferedImage.TYPE_INT_ARGB);
-				e.printStackTrace();
-				// TODO: better logging
-			}
-		}
-		return playerCorruptionImg;
-	}
-
-	@Override
-	public void uncorruptPlayerSkin(EntityPlayer player) {
-		AbstractClientPlayer entityPlayer = (AbstractClientPlayer) player;
-		BufferedImage image = getOriginalPlayerSkin(entityPlayer);
-		if (image != null) {
-			uploadPlayerSkin(entityPlayer, image);
-		}
-	}
-
-	public boolean hasBackup(AbstractClientPlayer player) {
-		return new File("skinbackup" + File.separator + player.getCommandSenderName() + ".png").exists();
-	}
-
-	private void backupPlayerSkin(AbstractClientPlayer entityPlayer) {
-		BufferedImage bufferedImage = TextureManager.getPlayerSkin(entityPlayer);
-
-		File file = new File("skinbackup");
-		file.mkdir();
-		File skinFile = new File(file, entityPlayer.getCommandSenderName() + ".png");
-		try {
-			skinFile.createNewFile();
-			if (bufferedImage != null) {
-				ImageIO.write(bufferedImage, "PNG", skinFile);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void uploadPlayerSkin(AbstractClientPlayer player, BufferedImage bufferedImage) {
-		ITextureObject textureObject = Minecraft.getMinecraft().renderEngine.getTexture(player.getLocationSkin());
-
-		if (textureObject == null) {
-			textureObject = new ThreadDownloadImageData(null, String.format("http://skins.minecraft.net/MinecraftSkins/%s.png", StringUtils.stripControlCodes(player.getCommandSenderName())), AbstractClientPlayer.locationStevePng, new ImageBufferDownload());
-			Minecraft.getMinecraft().renderEngine.loadTexture(player.getLocationSkin(), textureObject);
-		}
-
-		TextureManager.uploadTexture(textureObject, bufferedImage);
-	}
-
-	private BufferedImage getOriginalPlayerSkin(AbstractClientPlayer entityPlayer) {
-		File file = new File("skinbackup" + File.separator + entityPlayer.getCommandSenderName() + ".png");
-		BufferedImage bufferedImage = null;
-
-		try {
-			if (file.exists()) {
-				bufferedImage = ImageIO.read(file);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return bufferedImage;
 	}
 
 	@Override

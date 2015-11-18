@@ -18,11 +18,11 @@ public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
 		this.aspectData = aspectData;
 	}
 
-	public void onClientMessage(MessageLoadAspects message, EntityPlayer player) {
+	public void onMessageClientSide(MessageLoadAspects message, EntityPlayer player) {
 		AspectRecipes.REGISTRY.loadAspects(message.aspectData);
 	}
 
-	public void onServerMessage(MessageLoadAspects message, EntityPlayer player) { }
+	public void onMessageServerSide(MessageLoadAspects message, EntityPlayer player) { }
 
 	public void fromBytes(ByteBuf buf) {
 		PacketBuffer packetBuffer = new PacketBuffer(buf);
