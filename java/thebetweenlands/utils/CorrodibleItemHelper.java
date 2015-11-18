@@ -3,6 +3,9 @@ package thebetweenlands.utils;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -13,10 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.BLGamerules;
 import thebetweenlands.manager.DecayManager;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 public final class CorrodibleItemHelper {
 	public static final int MAX_CORROSION = 255;
@@ -27,7 +28,7 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static int getCorrosion(ItemStack itemStack) {
-		if (itemStack.hasTagCompound()) {
+		if (itemStack.hasTagCompound() && BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
 			if (tagCompound.hasKey("Corrosion", 3)) {
 				return tagCompound.getInteger("Corrosion");
@@ -55,7 +56,7 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isRemote) {
+		if (world.isRemote || !BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) {
 			return;
 		}
 		int corrosion = getCorrosion(itemStack);
@@ -73,6 +74,7 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+		if(!BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) return;
 		int corrosion = getCorrosion(itemStack);
 		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
 		corrosionInfo.append(getCorrosionStage(corrosion));

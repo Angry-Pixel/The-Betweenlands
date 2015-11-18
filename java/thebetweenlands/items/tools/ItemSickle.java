@@ -1,20 +1,28 @@
 package thebetweenlands.items.tools;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.ICorrodible;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
-public class ItemSickle extends Item {
+public class ItemSickle extends Item implements ICorrodible {
+	private IIcon[] corrosionIcons;
+
 	public ItemSickle() {
 		this.setUnlocalizedName("thebetweenlands.sickle");
 		this.setTextureName("thebetweenlands:strictlyHerblore/tools/sickle");
@@ -50,5 +58,35 @@ public class ItemSickle extends Item {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public IIcon getIconIndex(ItemStack stack) {
+		return corrosionIcons[CorrodibleItemHelper.getCorrosionStage(stack)];
+	}
+
+	@Override
+	public IIcon getIcon(ItemStack stack, int pass) {
+		return getIconIndex(stack);
+	}
+
+	@Override
+	public IIcon[] getIcons() {
+		return new IIcon[] { this.itemIcon };
+	}
+
+	@Override
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		this.corrosionIcons = corrosionIcons[0];
+	}
+
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
+		CorrodibleItemHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+	}
+
+	@Override
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+		CorrodibleItemHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }

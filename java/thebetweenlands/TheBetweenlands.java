@@ -25,8 +25,8 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandBLEvent;
+import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
@@ -34,9 +34,9 @@ import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.entity.VolarPadGlideHandler;
+import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
-import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
@@ -197,5 +197,6 @@ public class TheBetweenlands
 			event.registerServerCommand(new CommandTickSpeed());
 			event.registerServerCommand(new CommandResetAspects());
 		}
+		BLGamerules.INSTANCE.onServerStarting(event);
 	}
 }

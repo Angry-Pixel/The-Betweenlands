@@ -2,6 +2,7 @@ package thebetweenlands.manager;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
+import thebetweenlands.BLGamerules;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.lib.ModInfo;
@@ -33,7 +34,7 @@ public class DecayManager {
 	}
 
 	public static boolean enableDecay(EntityPlayer player) {
-		return player.dimension == ModInfo.DIMENSION_ID && !player.capabilities.isCreativeMode;
+		return player.dimension == ModInfo.DIMENSION_ID && !player.capabilities.isCreativeMode && BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY);
 	}
 
 	public static int getCorruptionLevel(EntityPlayer player) {
