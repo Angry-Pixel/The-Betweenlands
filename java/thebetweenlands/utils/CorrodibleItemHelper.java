@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -28,7 +29,7 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static int getCorrosion(ItemStack itemStack) {
-		if (itemStack.hasTagCompound() && BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) {
+		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
 			if (tagCompound.hasKey("Corrosion", 3)) {
 				return tagCompound.getInteger("Corrosion");
