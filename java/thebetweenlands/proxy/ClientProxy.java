@@ -78,7 +78,6 @@ import thebetweenlands.client.render.entity.projectile.RenderElixir;
 import thebetweenlands.client.render.entity.projectile.RenderSnailPoisonJet;
 import thebetweenlands.client.render.item.ItemAlembicRenderer;
 import thebetweenlands.client.render.item.ItemAnimatorRenderer;
-import thebetweenlands.client.render.item.ItemAspectOverlayRenderer;
 import thebetweenlands.client.render.item.ItemCompostBinRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemInfuserRenderer;
@@ -149,6 +148,7 @@ import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
+import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
 import thebetweenlands.event.render.FireflyHandler;
@@ -367,7 +367,8 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(ElixirClientHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
-
+		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
+		
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
@@ -459,11 +460,5 @@ public class ClientProxy extends CommonProxy {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
-	}
-
-	private final ItemAspectOverlayRenderer itemAspectOverlayRenderer = new ItemAspectOverlayRenderer();
-	@Override
-	public void registerItemRenderer(Item item) { 
-		MinecraftForgeClient.registerItemRenderer(item, this.itemAspectOverlayRenderer);
 	}
 }

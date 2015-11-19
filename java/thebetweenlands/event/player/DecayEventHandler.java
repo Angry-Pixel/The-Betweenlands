@@ -1,10 +1,6 @@
 package thebetweenlands.event.player;
 
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.google.common.collect.Maps;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -21,8 +17,8 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
+import thebetweenlands.items.food.IDecayFood;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
-import thebetweenlands.utils.IDecayFood;
 import thebetweenlands.world.BLGamerules;
 
 public class DecayEventHandler {
@@ -75,7 +71,11 @@ public class DecayEventHandler {
 	@SubscribeEvent
 	public void playerTick(TickEvent.PlayerTickEvent event) {
 		if (DecayManager.isDecayEnabled(event.player) && BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY)) {
-			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(DecayManager.getPlayerHearts(event.player));
+			float maxHealth = (int)(DecayManager.getPlayerHearts(event.player) / 2.0F) * 2;
+			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth);
+			if(event.player.getHealth() > maxHealth) {
+				event.player.setHealth(maxHealth);
+			}
 
 			if (DecayManager.getDecayLevel(event.player) <= 4) {
 				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 2, true));

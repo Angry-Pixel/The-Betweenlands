@@ -1,4 +1,4 @@
-package thebetweenlands.utils;
+package thebetweenlands.items.food;
 
 public interface IDecayFood
 {

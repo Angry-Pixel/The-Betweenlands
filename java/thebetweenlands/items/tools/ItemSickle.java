@@ -33,7 +33,8 @@ public class ItemSickle extends Item implements ICorrodible {
 
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, int x, int y, int z, EntityPlayer player) {
-		if (player.worldObj.isRemote || player.capabilities.isCreativeMode) {
+		boolean shouldDrop = player.worldObj.rand.nextFloat() <= 1.0F * CorrodibleItemHelper.getModifier(itemstack);
+		if (player.worldObj.isRemote || player.capabilities.isCreativeMode || !shouldDrop) {
 			return false;
 		}
 		Block block = player.worldObj.getBlock(x, y, z);

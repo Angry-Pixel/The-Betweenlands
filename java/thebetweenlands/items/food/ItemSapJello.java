@@ -3,7 +3,6 @@ package thebetweenlands.items.food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import thebetweenlands.manual.gui.entries.IManualEntryItem;
-import thebetweenlands.utils.IDecayFood;
 
 public class ItemSapJello extends ItemFood implements IDecayFood, IManualEntryItem
 {

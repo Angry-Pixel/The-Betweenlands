@@ -6,18 +6,19 @@ import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.model.block.ModelVolarpad;
 
 /**
  * Created by Bart on 26-9-2015.
  */
-public class ItemVolarKiteRenderer extends ItemAspectOverlayRenderer {
-	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/volarpad2.png");
+public class ItemVolarKiteRenderer implements IItemRenderer {
+	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/volarpad1.png");
 	ModelVolarpad model = new ModelVolarpad();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -27,7 +28,6 @@ public class ItemVolarKiteRenderer extends ItemAspectOverlayRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		super.renderItem(type, item, data);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TEXTURE);
 		switch (type) {
 		case ENTITY:

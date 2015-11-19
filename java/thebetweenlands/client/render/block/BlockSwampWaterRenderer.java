@@ -20,7 +20,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.IWaterRenderer;
-import thebetweenlands.client.render.item.AspectOverlayRenderHelper;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
@@ -39,9 +38,7 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 					RenderItem renderItem1 = (RenderItem) f_renderItem1.get(Minecraft.getMinecraft().ingameGUI);
 					RenderBlocks renderBlocks1 = (RenderBlocks) f_renderBlocks1.get(renderItem1);
 					RenderBlocks renderBlocks2 = (RenderBlocks) f_renderBlocks2.get(renderItem1);
-					RenderItem renderItem2 = AspectOverlayRenderHelper.renderItem;
-					RenderBlocks renderBlocks3 = (RenderBlocks) f_renderBlocks1.get(renderItem2);
-					isInInventory = renderBlocks1 == renderer || renderBlocks2 == renderer || renderBlocks3 == renderer;
+					isInInventory = renderBlocks1 == renderer || renderBlocks2 == renderer;
 				} catch(Exception ex) {
 					ex.printStackTrace();
 				}

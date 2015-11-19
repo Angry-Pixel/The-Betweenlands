@@ -8,16 +8,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.model.block.ModelPurifier;
 
 @SideOnly(Side.CLIENT)
-public class ItemPurifierRenderer extends ItemAspectOverlayRenderer {
+public class ItemPurifierRenderer implements IItemRenderer {
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
 	private final ModelPurifier model = new ModelPurifier();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -27,7 +28,6 @@ public class ItemPurifierRenderer extends ItemAspectOverlayRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		super.renderItem(type, item, data);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TEXTURE);
 		switch (type) {
 		case ENTITY:

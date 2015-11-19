@@ -8,16 +8,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.model.block.ModelTarLootPot1;
 
 @SideOnly(Side.CLIENT)
-public class ItemTarLootPot1Renderer extends ItemAspectOverlayRenderer {
+public class ItemTarLootPot1Renderer implements IItemRenderer {
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/tarLootPot1.png");
 	private final ModelTarLootPot1 model = new ModelTarLootPot1();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -27,7 +28,6 @@ public class ItemTarLootPot1Renderer extends ItemAspectOverlayRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		super.renderItem(type, item, data);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TEXTURE);
 		switch (type) {
 		case ENTITY:

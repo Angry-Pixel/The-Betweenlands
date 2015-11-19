@@ -5,14 +5,15 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 
 @SideOnly(Side.CLIENT)
-public class ItemAnimatorRenderer extends ItemAspectOverlayRenderer
+public class ItemAnimatorRenderer implements IItemRenderer
 {
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -22,7 +23,6 @@ public class ItemAnimatorRenderer extends ItemAspectOverlayRenderer
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-		super.renderItem(type, stack, data);
 		switch( type ) {
 		case ENTITY:
 			GL11.glScaled(1F, 1F, 1F);

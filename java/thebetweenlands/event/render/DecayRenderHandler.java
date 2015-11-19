@@ -13,6 +13,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -23,14 +24,16 @@ import thebetweenlands.lib.ModInfo;
 public class DecayRenderHandler {
 	public static final DecayRenderHandler INSTANCE = new DecayRenderHandler();
 
-	private static final ResourceLocation PLAYER_CORRUPTION_TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/player/playerCorruption.png");
+	public static final ResourceLocation PLAYER_CORRUPTION_TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/player/playerCorruption.png");
 
 	static class ModelBipedOverride extends ModelBiped {
+		public boolean holdingItem = false;
+
 		private ModelBiped parent;
 
 		@Override
 		public void render(Entity entity, float x, float y, float z, float yaw, float pitch, float partialTicks) {
-			this.parent.heldItemRight = DecayRenderHandler.INSTANCE.holdingItem ? 1 : 0;
+			this.parent.heldItemRight = this.holdingItem ? 1 : 0;
 			GL11.glPushMatrix();
 			Minecraft.getMinecraft().renderEngine.bindTexture(PLAYER_CORRUPTION_TEXTURE);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -49,9 +52,30 @@ public class DecayRenderHandler {
 
 	private boolean ignoreEvent = false;
 
-	private boolean holdingItem = false;
-
 	private Field f_mainModel = ReflectionHelper.findField(RendererLivingEntity.class, "mainModel", "field_77045_g", "i");
+
+	private ItemStack[] prevArmor = new ItemStack[4]; 
+	private ItemStack prevHeldItem = null;
+
+	public void removeVisibleEntityItems(EntityLivingBase entity) {
+		if(entity instanceof EntityPlayer) {
+			for(int i = 0; i < 4; i++) {
+				this.prevArmor[i] = ((EntityPlayer)entity).inventory.armorInventory[i];
+				((EntityPlayer)entity).inventory.armorInventory[i] = null;
+			}
+		}
+		this.prevHeldItem = entity.getHeldItem();
+		entity.setCurrentItemOrArmor(0, null);
+	}
+
+	public void restoreVisibleEntityItems(EntityLivingBase entity) {
+		if(entity instanceof EntityPlayer) {
+			for(int i = 0; i < 4; i++) {
+				((EntityPlayer)entity).inventory.armorInventory[i] = this.prevArmor[i];
+			}
+		}
+		entity.setCurrentItemOrArmor(0, this.prevHeldItem);
+	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -62,9 +86,14 @@ public class DecayRenderHandler {
 
 		this.ignoreEvent = true;
 
-		double renderX = event.entity.posX + (event.entity.posX - event.entity.lastTickPosX) * event.partialRenderTick - RenderManager.renderPosX;
-		double renderY = event.entity.posY + (event.entity.posY - event.entity.lastTickPosY) * event.partialRenderTick - RenderManager.renderPosY;
-		double renderZ = event.entity.posZ + (event.entity.posZ - event.entity.lastTickPosZ) * event.partialRenderTick - RenderManager.renderPosZ;
+		double renderX = 0;
+		double renderY = 0;
+		double renderZ = 0;
+		if(event.entityPlayer != Minecraft.getMinecraft().renderViewEntity) {
+			renderX = event.entity.posX + (event.entity.posX - event.entity.lastTickPosX) * event.partialRenderTick - RenderManager.renderPosX;
+			renderY = event.entity.posY + (event.entity.posY - event.entity.lastTickPosY) * event.partialRenderTick - RenderManager.renderPosY;
+			renderZ = event.entity.posZ + (event.entity.posZ - event.entity.lastTickPosZ) * event.partialRenderTick - RenderManager.renderPosZ;
+		}
 		float yaw = event.entity.rotationYaw + (event.entity.rotationYaw - event.entity.prevRotationYaw) * event.partialRenderTick;
 
 		//Render normal model with small depth offset to prevent z-fighting
@@ -87,24 +116,16 @@ public class DecayRenderHandler {
 			ex.printStackTrace();
 		}
 
+		this.modelBipedOverride.holdingItem = event.entityPlayer.getHeldItem() != null;
+
 		//Remove armor and held item
-		ItemStack[] prevArmor = new ItemStack[4];
-		for(int i = 0; i < 4; i++) {
-			prevArmor[i] = event.entityPlayer.inventory.armorInventory[i];
-			event.entityPlayer.inventory.armorInventory[i] = null;
-		}
-		ItemStack prevHeldItem = event.entityPlayer.getHeldItem();
-		this.holdingItem = prevHeldItem != null;
-		event.entityPlayer.setCurrentItemOrArmor(0, null);
+		removeVisibleEntityItems(event.entityPlayer);
 
 		//Render model with overlay
 		event.renderer.doRender(event.entityPlayer, renderX, renderY, renderZ, yaw, event.partialRenderTick);
 
 		//Restore armor and held item
-		for(int i = 0; i < 4; i++) {
-			event.entityPlayer.inventory.armorInventory[i] = prevArmor[i];
-		}
-		event.entityPlayer.setCurrentItemOrArmor(0, prevHeldItem);
+		restoreVisibleEntityItems(event.entityPlayer);
 
 		//Restore previous model
 		try {

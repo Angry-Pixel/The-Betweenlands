@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.gui.entries.IManualEntryItem;
-import thebetweenlands.utils.IDecayFood;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;

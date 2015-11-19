@@ -11,10 +11,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
@@ -24,6 +28,7 @@ import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.recipes.BLMaterials;
 
@@ -36,7 +41,7 @@ public class OverlayHandler {
 	private static final ResourceLocation RES_UNDERWATER_OVERLAY = new ResourceLocation("textures/misc/underwater.png");
 	private static final ResourceLocation RES_TAR_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/tar.png");
 	private static final ResourceLocation RES_MUD_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/mud.png");
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
@@ -50,15 +55,15 @@ public class OverlayHandler {
 			Minecraft mc = Minecraft.getMinecraft();
 			mc.getTextureManager().bindTexture(RES_UNDERWATER_OVERLAY);
 			int colorMultiplier = BLBlockRegistry.swampWater.colorMultiplier(mc.theWorld, MathHelper.floor_double(mc.thePlayer.posX), MathHelper.floor_double(mc.thePlayer.posY), MathHelper.floor_double(mc.thePlayer.posZ));
-			float r = (float)(colorMultiplier >> 16 & 255) / 255.0F;
-			float g = (float)(colorMultiplier >> 8 & 255) / 255.0F;
-			float b = (float)(colorMultiplier & 255) / 255.0F;
-			GL11.glColor4f(r, g, b, 0.5F);
+			float r = (float)(colorMultiplier >> 16 & 255) / 255.0F / 2.0F;
+			float g = (float)(colorMultiplier >> 8 & 255) / 255.0F / 2.0F;
+			float b = (float)(colorMultiplier & 255) / 255.0F / 2.0F;
+			GL11.glColor4f(r, g, b, 1.0F);
 			this.renderWarpedTextureOverlay(event.renderPartialTicks);
 		}
 	}
 
-	public void renderHand(float partialTicks, int renderPass) {
+	public void renderHand(float partialTicks, int renderPass, boolean overlay) {
 		if(this.mERrenderHand == null) {
 			try {
 				this.mERrenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, new Class[]{float.class, int.class});
@@ -67,7 +72,7 @@ public class OverlayHandler {
 				e.printStackTrace();
 			}
 		}
-		this.cancelOverlay = true;
+		this.cancelOverlay = !overlay;
 		try {
 			this.mERrenderHand.invoke(Minecraft.getMinecraft().entityRenderer, partialTicks, renderPass);
 		} catch (Exception e) {
@@ -76,32 +81,79 @@ public class OverlayHandler {
 		this.cancelOverlay = false;
 	}
 
+	private ModelArmOverride modelArmOverride = null;
+
+	static class ModelArmOverride extends ModelRenderer {
+		public ModelArmOverride(ModelBase modelBase) {
+			super(modelBase);
+		}
+
+		public boolean holdingItem = false;
+
+		private ModelRenderer parent;
+
+		private EntityPlayer entity;
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void render(float partialTicks) {
+			GL11.glPushMatrix();
+			Minecraft.getMinecraft().renderEngine.bindTexture(DecayRenderHandler.PLAYER_CORRUPTION_TEXTURE);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			float glow = (float)((Math.cos(entity.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
+			float transparency = 0.85F * DecayManager.getCorruptionLevel((EntityPlayer)entity) / 10.0F - glow;
+			GL11.glColor4f(1, 1, 1, transparency);
+			this.parent.render(partialTicks);
+			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
+			GL11.glPopMatrix();
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
 		EntityLivingBase view = Minecraft.getMinecraft().renderViewEntity;
 		World world = Minecraft.getMinecraft().theWorld;
-		if(view == null || world == null) return;
+
+		event.setCanceled(true);
+		
+		GL11.glPushMatrix();
+		
+		//Render normal hand with overlays
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		this.renderHand(event.partialTicks, event.renderPass, true);
+
+		//Render decay overlay
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
+		if(this.modelArmOverride == null && playerRenderer.modelBipedMain != null) {
+			this.modelArmOverride = new ModelArmOverride(playerRenderer.modelBipedMain);
+		}
+		this.modelArmOverride.parent = playerRenderer.modelBipedMain.bipedRightArm;
+		this.modelArmOverride.entity = Minecraft.getMinecraft().thePlayer;
+		ModelRenderer previousModel = playerRenderer.modelBipedMain.bipedRightArm;
+		playerRenderer.modelBipedMain.bipedRightArm = this.modelArmOverride;
+		this.renderHand(event.partialTicks, event.renderPass, false);
+		playerRenderer.modelBipedMain.bipedRightArm = previousModel;
+
+		//Render other overlays
+		if(view == null || world == null) {
+			GL11.glPopMatrix();
+			return;
+		}
 		Block viewBlock = ActiveRenderInfo.getBlockAtEntityViewpoint(world, view, (float) event.partialTicks);
 		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
 		boolean inTar = (viewBlock.getMaterial() == BLMaterials.tar || (entitiesInside != null && entitiesInside.size() > 0));
 		int bx = MathHelper.floor_double(view.posX);
-        int by = MathHelper.floor_double(view.posY);
-        int bz = MathHelper.floor_double(view.posZ);
+		int by = MathHelper.floor_double(view.posY);
+		int bz = MathHelper.floor_double(view.posZ);
 		Block block = world.getBlock(bx, by, bz);
 		boolean inMud = block.getMaterial() == BLMaterials.mud;
 		boolean inBlock = inTar || inMud;
 		if(inBlock && !this.cancelOverlay) {
-			event.setCanceled(true);
-
-			GL11.glPushMatrix();
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-
-			//Just to set up the necessary GL matrices
-			this.renderHand(event.partialTicks, event.renderPass);
-
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
-
 			Minecraft mc = Minecraft.getMinecraft();
 			if(inTar) {
 				mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
@@ -113,10 +165,9 @@ public class OverlayHandler {
 			}
 
 			this.renderWarpedTextureOverlay(event.partialTicks);
-
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
-			GL11.glPopMatrix();
 		}
+		GL11.glPopMatrix();
 	}
 
 	/**

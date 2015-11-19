@@ -42,7 +42,7 @@ public final class CorrodibleItemHelper {
 	}
 
 	public static float getModifier(ItemStack itemStack) {
-		return (-0.5F * (getCorrosion(itemStack) / (float) MAX_CORROSION) + 1);
+		return (-0.7F * (getCorrosion(itemStack) / (float) MAX_CORROSION) + 1);
 	}
 
 	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, Block block, int meta) {
@@ -61,11 +61,11 @@ public final class CorrodibleItemHelper {
 		}
 		int corrosion = getCorrosion(itemStack);
 		if (corrosion < MAX_CORROSION) {
-			float probability = holder.isInWater() ? 0.0075F : 0.0025F;
+			float probability = holder.isInWater() ? 0.007F : 0.002F;
 			if (holder instanceof EntityPlayer) {
-				probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 1.025F : 1;
-				float playerDecay = DecayManager.getDecayLevel((EntityPlayer) holder) / 20F;
-				probability *= (1 - playerDecay * 0.5F);
+				probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 2.8F : 1.0F;
+				float playerCorruption = DecayManager.getCorruptionLevel((EntityPlayer) holder) / 10F;
+				probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
 			}
 			if (world.rand.nextFloat() < probability) {
 				setCorrosion(itemStack, corrosion + 1);

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.client.IItemRenderer;
 
-public class ItemRender extends ItemAspectOverlayRenderer
+public class ItemRender implements IItemRenderer
 {
 	TileEntitySpecialRenderer render;
 	public TileEntity entity;
@@ -32,7 +32,6 @@ public class ItemRender extends ItemAspectOverlayRenderer
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object ... data)
 	{
-		super.renderItem(type, item, data);
 		if (type == IItemRenderer.ItemRenderType.ENTITY){
 			GL11.glRotatef(180f, 0f, 1f, 0f);
 			GL11.glTranslatef(-0.5f, -0.5f, -0.4f);

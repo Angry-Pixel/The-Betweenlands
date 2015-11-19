@@ -27,7 +27,7 @@ public class ItemTarminionRenderer extends Render implements IItemRenderer {
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP && !AspectOverlayRenderHelper.shouldIgnoreHook();
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -37,7 +37,6 @@ public class ItemTarminionRenderer extends Render implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		AspectOverlayRenderHelper.renderOverlay(type, item);
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(texture);
 		switch (type) {

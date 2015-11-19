@@ -8,16 +8,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 import thebetweenlands.client.model.block.ModelPestleAndMortar;
 
 @SideOnly(Side.CLIENT)
-public class ItemPestleAndMortarRenderer extends ItemAspectOverlayRenderer {
+public class ItemPestleAndMortarRenderer implements IItemRenderer {
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/pestleAndMortar.png");
 	private final ModelPestleAndMortar model = new ModelPestleAndMortar();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -27,7 +28,6 @@ public class ItemPestleAndMortarRenderer extends ItemAspectOverlayRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		super.renderItem(type, item, data);
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(TEXTURE);
 		switch (type) {
 		case ENTITY:

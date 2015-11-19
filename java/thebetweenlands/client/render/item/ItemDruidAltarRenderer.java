@@ -8,11 +8,11 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 
 @SideOnly(Side.CLIENT)
-public class ItemDruidAltarRenderer extends ItemAspectOverlayRenderer
+public class ItemDruidAltarRenderer implements IItemRenderer
 {
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+        return type != ItemRenderType.FIRST_PERSON_MAP;
     }
 
     @Override
@@ -22,7 +22,6 @@ public class ItemDruidAltarRenderer extends ItemAspectOverlayRenderer
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
-    	super.renderItem(type, stack, data);
         switch( type ) {
             case ENTITY:
                 GL11.glScaled(0.75, 0.75, 0.75);

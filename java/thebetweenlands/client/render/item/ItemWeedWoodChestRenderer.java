@@ -8,15 +8,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
 
 @SideOnly(Side.CLIENT)
-public class ItemWeedWoodChestRenderer extends ItemAspectOverlayRenderer {
+public class ItemWeedWoodChestRenderer implements IItemRenderer {
 	private final ModelChest modelChest = new ModelChest();
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/tiles/weedwoodChest.png");
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return type != ItemRenderType.FIRST_PERSON_MAP || super.handleRenderType(item, type);
+		return type != ItemRenderType.FIRST_PERSON_MAP;
 	}
 
 	@Override
@@ -26,7 +27,6 @@ public class ItemWeedWoodChestRenderer extends ItemAspectOverlayRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		super.renderItem(type, item, data);
 		switch (type) {
 		case ENTITY: {
 			renderChest(0.5F, 0.5F, 0.5F);
