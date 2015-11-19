@@ -1,31 +1,39 @@
 package thebetweenlands.entities.property;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 
-public class EntityPropertiesDecay implements IExtendedEntityProperties
-{
-    public int decayLevel = 20;
+public class EntityPropertiesDecay implements IBLExtendedEntityProperties {
+	public int decayTimer = 2000;
+	public int decayLevel = 20;
+	public int syncTimer = 0;
 
-    public void saveNBTData(NBTTagCompound nbt)
-    {
-        nbt.setInteger("decayLevel", decayLevel);
-    }
+	@Override
+	public void saveNBTData(NBTTagCompound nbt) {
+		nbt.setInteger("decayLevel", this.decayLevel);
+		nbt.setInteger("decayTimer", this.decayTimer);
+	}
 
-    public void loadNBTData(NBTTagCompound nbt)
-    {
-        decayLevel = nbt.getInteger("decayLevel");
-    }
+	@Override
+	public void loadNBTData(NBTTagCompound nbt) {
+		this.decayLevel = nbt.getInteger("decayLevel");
+		this.decayTimer = nbt.getInteger("decayTimer");
+	}
 
-    public void init(Entity entity, World world)
-    {
+	@Override
+	public void init(Entity entity, World world) {
 
-    }
+	}
 
-    public static String getId()
-    {
-        return "betweenlands_decay_data";
-    }
+	@Override
+	public String getID() {
+		return "blPropertyDecay";
+	}
+
+	@Override
+	public Class<? extends Entity> getEntityClass() {
+		return EntityPlayer.class;
+	}
 }

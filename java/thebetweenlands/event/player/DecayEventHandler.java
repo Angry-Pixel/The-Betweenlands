@@ -4,6 +4,7 @@ import java.util.List;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,11 +12,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemFood;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.items.food.IDecayFood;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
@@ -23,13 +24,6 @@ import thebetweenlands.world.BLGamerules;
 
 public class DecayEventHandler {
 	public static DecayEventHandler INSTANCE = new DecayEventHandler();
-
-	@SubscribeEvent
-	public void entityConstructing(EntityEvent.EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(EntityPropertiesDecay.getId(), new EntityPropertiesDecay());
-		}
-	}
 
 	@SubscribeEvent
 	public void joinWorld(EntityJoinWorldEvent event) {
@@ -70,7 +64,7 @@ public class DecayEventHandler {
 
 	@SubscribeEvent
 	public void playerTick(TickEvent.PlayerTickEvent event) {
-		if (DecayManager.isDecayEnabled(event.player) && BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY)) {
+		if (DecayManager.isDecayEnabled(event.player) && event.phase == Phase.END) {
 			float maxHealth = (int)(DecayManager.getPlayerHearts(event.player) / 2.0F) * 2;
 			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth);
 			if(event.player.getHealth() > maxHealth) {
@@ -87,18 +81,22 @@ public class DecayEventHandler {
 				event.player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 1, 0, true));
 			}
 
-			// Oli, if you ever want to change decay speed, change the number
-			// that the ticksExisted is divided by.
-			// Right now every multiple of 4000 the decay level is decreased by 1
-			int decayTicks = 4000;
-			if(event.player.isInWater()) decayTicks = decayTicks / 3 * 2;
-			if (event.player.ticksExisted % decayTicks == 0) {
-				DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
-			}
+			if(BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY)) {
+				EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(event.player, BLEntityPropertiesRegistry.DECAY);
+				prop.decayTimer -= event.player.isInWater() ? (event.player.worldObj.rand.nextFloat() < 0.6F ? 2 : 1) : 1;
+				if (prop.decayTimer < 0) {
+					prop.decayTimer = 2000;
+					DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
+				}
 
-			//Send decay to clients
-			if(!event.player.worldObj.isRemote && event.player.ticksExisted % 80 == 0) {
-				TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(event.player), event.player.getUniqueID()), new TargetPoint(event.player.dimension, event.player.posX, event.player.posY, event.player.posZ, 64));
+				//Send decay to clients
+				if(!event.player.worldObj.isRemote) {
+					prop.syncTimer--;
+					if(prop.syncTimer < 0) {
+						prop.syncTimer = 80;
+						TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(event.player), event.player.getUniqueID()), new TargetPoint(event.player.dimension, event.player.posX, event.player.posY, event.player.posZ, 64));
+					}
+				}
 			}
 		} else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20D) {
 			event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20D);

@@ -5,6 +5,7 @@ import java.util.UUID;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.network.message.base.AbstractMessage;
 
@@ -24,7 +25,7 @@ public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDec
 	public void onMessageClientSide(MessageSyncPlayerDecay message, EntityPlayer player) {
 		EntityPlayer target = message.getPlayer(player.worldObj);
 		if(target != null) {
-			EntityPropertiesDecay prop = ((EntityPropertiesDecay) target.getExtendedProperties(EntityPropertiesDecay.getId()));
+			EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY);
 			int prev = prop.decayLevel;
 			prop.decayLevel = message.playerDecay;
 		}

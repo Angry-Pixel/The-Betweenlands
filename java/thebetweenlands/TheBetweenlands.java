@@ -30,6 +30,7 @@ import thebetweenlands.command.CommandDecay;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
@@ -176,6 +177,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BLEntityPropertiesRegistry.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();
