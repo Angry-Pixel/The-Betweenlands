@@ -451,6 +451,11 @@ item.thebetweenlands.candyBlue.name=Blue Candy
 item.thebetweenlands.candyRed.name=Red Candy
 item.thebetweenlands.candyYellow.name=Yellow Candy
 item.thebetweenlands.limestoneFlux.name=Limestone Flux
+item.thebetweenlands.itemRope.name=Tough Climbing Rope
+item.thebetweenlands.syrmoriteShears.name=Syrmorite Shears
+item.thebetweenlands.manual.name=Guide Book
+item.thebetweenlands.tribalPants.name=Tribal Pants
+item.thebetweenlands.sickle.name=Sickle
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -518,6 +523,11 @@ item.thebetweenlands.groundBoneset.name=Ground Boneset
 item.thebetweenlands.groundBottleBrushGrass.name=Ground Bottle Brush Grass
 item.thebetweenlands.groundDriedSwampReed.name=Ground Dried Swamp Reed
 item.thebetweenlands.groundWeedwoodBark.name=Ground Weedwood Bark
+
+# Herblore
+item.thebetweenlands.elixir.dentrothystVial.green.name=Green Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothystVial.orange.name=Orange Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothystVial.dirty.name=Dirty Dentrothyst Vial
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
