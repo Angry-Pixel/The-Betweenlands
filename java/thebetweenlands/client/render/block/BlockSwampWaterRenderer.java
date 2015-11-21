@@ -11,6 +11,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -23,9 +24,10 @@ import thebetweenlands.client.render.block.water.IWaterRenderer;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
-	private Field f_renderItem1 = ReflectionHelper.findField(GuiIngame.class, "itemRenderer", "field_73841_b", "i");
-	private Field f_renderBlocks1 = ReflectionHelper.findField(RenderItem.class, "renderBlocksRi", "field_147913_i", "i");
-	private Field f_renderBlocks2 = ReflectionHelper.findField(Render.class, "field_147909_c", "c");
+	private Field f_GuiIngame_itemRenderer = ReflectionHelper.findField(GuiIngame.class, "itemRenderer", "field_73841_b", "i");
+	private Field f_RenderItem_renderBlocksRi = ReflectionHelper.findField(RenderItem.class, "renderBlocksRi", "field_147913_i", "i");
+	private Field f_Render_renderBlocks = ReflectionHelper.findField(Render.class, "field_147909_c", "c");
+	private Field f_GuiScreen_itemRenderer = ReflectionHelper.findField(GuiScreen.class, "itemRender", "field_146296_j", "j");
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
@@ -35,10 +37,15 @@ public class BlockSwampWaterRenderer implements ISimpleBlockRenderingHandler {
 				boolean isInInventory = false;
 				try {
 					//I'm sorry
-					RenderItem renderItem1 = (RenderItem) f_renderItem1.get(Minecraft.getMinecraft().ingameGUI);
-					RenderBlocks renderBlocks1 = (RenderBlocks) f_renderBlocks1.get(renderItem1);
-					RenderBlocks renderBlocks2 = (RenderBlocks) f_renderBlocks2.get(renderItem1);
-					isInInventory = renderBlocks1 == renderer || renderBlocks2 == renderer;
+					RenderItem renderItem1 = (RenderItem) f_GuiIngame_itemRenderer.get(Minecraft.getMinecraft().ingameGUI);
+					RenderBlocks renderBlocks1 = (RenderBlocks) f_RenderItem_renderBlocksRi.get(renderItem1);
+					RenderBlocks renderBlocks2 = (RenderBlocks) f_Render_renderBlocks.get(renderItem1);
+					RenderBlocks renderBlocks3 = null;
+					if(Minecraft.getMinecraft().getMinecraft().currentScreen != null) {
+						RenderItem renderItem2 = (RenderItem) f_GuiScreen_itemRenderer.get(null);
+						renderBlocks3 = (RenderBlocks) f_RenderItem_renderBlocksRi.get(renderItem2);
+					}
+					isInInventory = renderBlocks1 == renderer || renderBlocks2 == renderer || renderBlocks3 == renderer;
 				} catch(Exception ex) {
 					ex.printStackTrace();
 				}
