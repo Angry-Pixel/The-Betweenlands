@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.block;
 
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
@@ -9,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelWalkway;
 import thebetweenlands.proxy.ClientProxy;
@@ -29,7 +29,6 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 			modelConverterWalkway = new ModelConverter(
 					modelWalkway,
 					0.065D,
-					new ModelConverter.TextureMap(128, 128, BLBlockRegistry.blockWalkWay.icon),
 					true
 					);
 		}
@@ -44,7 +43,7 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		tessellator.startDrawingQuads();
 		Tessellator.instance.addTranslation(0, 1.2F, 0);
-		modelConverterWalkway.renderWithTessellator(Tessellator.instance);
+		modelConverterWalkway.renderWithTessellator(Tessellator.instance, 128, 128, BLBlockRegistry.blockWalkWay.icon);
 		Tessellator.instance.addTranslation(0, -1.2F, 0);
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -58,7 +57,6 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 			modelConverterWalkway = new ModelConverter(
 					modelWalkway,
 					0.065D,
-					new ModelConverter.TextureMap(128, 128, BLBlockRegistry.blockWalkWay.icon),
 					true
 					);
 		}
@@ -76,7 +74,7 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 				for (ModelConverter.Quad quad : box.getQuads()) {
 					for (int i = 0; i < 4; i++) {
 						ModelConverter.Vec3 vec = quad.getVertices()[i];
-						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(BLBlockRegistry.blockWalkWay.icon, 128), vec.getV(BLBlockRegistry.blockWalkWay.icon, 128));
 					}
 				}
 			}
@@ -86,7 +84,7 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 				for (ModelConverter.Quad quad : box.getQuads()) {
 					for (int i = 0; i < 4; i++) {
 						ModelConverter.Vec3 vec = quad.getVertices()[i];
-						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(BLBlockRegistry.blockWalkWay.icon, 128), vec.getV(BLBlockRegistry.blockWalkWay.icon, 128));
 					}
 				}
 			}

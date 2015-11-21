@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
@@ -13,7 +14,6 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelConverter {
 	//Holds the rotation matrix
@@ -23,34 +23,42 @@ public class ModelConverter {
 	private static Field f_mbQuadList = null;
 
 	public static class Vec3 {
-		public double x, y, z, u, v;
+		public double x, y, z, u, v, uw, vw;
 		public Vec3(double x, double y, double z) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 			this.u = 0.0D;
 			this.v = 0.0D;
+			this.uw = 1.0D;
+			this.vw = 1.0D;
 		}
-		public Vec3(double x, double y, double z, double u, double v) {
+		public Vec3(double x, double y, double z, double u, double v, double uw, double vw) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 			this.u = u;
 			this.v = v;
+			this.uw = uw;
+			this.vw = vw;
 		}
-		public Vec3(Vec3 vec, double u, double v) {
+		public Vec3(Vec3 vec, double u, double v, double uw, double vw) {
 			this.x = vec.x;
 			this.y = vec.y;
 			this.z = vec.z;
 			this.u = u;
 			this.v = v;
+			this.uw = uw;
+			this.vw = vw;
 		}
-		public Vec3(double u, double v) {
+		public Vec3(double u, double v, double uw, double vw) {
 			this.x = 0.0D;
 			this.y = 0.0D;
 			this.z = 0.0D;
 			this.u = u;
 			this.v = v;
+			this.uw = uw;
+			this.vw = vw;
 		}
 		public Vec3(Vec3 vec) {
 			this.x = vec.x;
@@ -58,6 +66,8 @@ public class ModelConverter {
 			this.z = vec.z;
 			this.u = vec.u;
 			this.v = vec.v;
+			this.uw = vec.uw;
+			this.vw = vec.vw;
 		}
 		public Vec3 cross(Vec3 vec) {
 			Vec3 crossProduct = new Vec3(0, 0, 0);
@@ -68,6 +78,16 @@ public class ModelConverter {
 		}
 		public Vec3 neg() {
 			return new Vec3(-this.x, -this.y, -this.z);
+		}
+		public double getU(IIcon icon, int width) {
+			double umin = icon.getMinU();
+			double umax = icon.getMaxU();
+			return umin + (umax - umin) * this.uw / (double)width * this.u;
+		}
+		public double getV(IIcon icon, int height) {
+			double vmin = icon.getMinV();
+			double vmax = icon.getMaxV();
+			return vmin + (vmax - vmin) * this.vw / (double)height * this.v;
 		}
 	}
 
@@ -133,58 +153,6 @@ public class ModelConverter {
 		}
 	}
 
-	public static class TextureMap {
-		private final double umin, vmin, umax, vmax;
-		private final int width, height;
-
-		/**
-		 * Creates a new TextureMap. Uses the default UVs of (0.0|0.0) and (1.0|1.0)
-		 * @param width			Width of the texture (pixels)
-		 * @param height		Height of the texture (pixels)
-		 */
-		public TextureMap(int width, int height) {
-			this.width = width;
-			this.height = height;
-			this.umin = 0.0D;
-			this.vmin = 0.0D;
-			this.umax = 1.0D;
-			this.vmax = 1.0D;
-		}
-
-		/**
-		 * Creates a new TextureMap. Uses the UVs of the given minecraft IIcon
-		 * @param width			Width of the texture (pixels)
-		 * @param height		Height of the texture (pixels)
-		 * @param icon			Minecraft IIcon
-		 */
-		public TextureMap(int width, int height, IIcon icon) {
-			this.width = width;
-			this.height = height;
-			this.umin = icon.getMinU();
-			this.vmin = icon.getMinV();
-			this.umax = icon.getMaxU();
-			this.vmax = icon.getMaxV();
-		}
-
-		/**
-		 * Creates a new TextureMap.
-		 * @param width			Width of the texture (pixels)
-		 * @param height		Height of the texture (pixels)
-		 * @param umin			Min. U
-		 * @param vmin			Min. V
-		 * @param umax			Max. U
-		 * @param vmax			Max. V
-		 */
-		public TextureMap(int width, int height, double umin, double vmin, double umax, double vmax) {
-			this.width = width;
-			this.height = height;
-			this.umin = umin;
-			this.vmin = vmin;
-			this.umax = umax;
-			this.vmax = vmax;
-		}
-	}
-
 	public static final class Quad {
 		private Vec3[] vertices = new Vec3[4];
 		private Quad(Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4) {
@@ -246,7 +214,7 @@ public class ModelConverter {
 		public List<Box> getChildBoxes() {
 			return this.childBoxes;
 		}
-		
+
 		/**
 		 * Rotates the box and its child boxes.
 		 * @param rotation		Rotation (degrees)
@@ -402,7 +370,7 @@ public class ModelConverter {
 			}
 			return this;
 		}
-		
+
 		/**
 		 * Returns the list of the reconstructed boxes of this model.
 		 * @return
@@ -416,18 +384,18 @@ public class ModelConverter {
 		 * The tessellator must already be drawing.
 		 * @param tessellator
 		 */
-		public void renderWithTessellator(Tessellator tessellator) {
+		public void renderWithTessellator(Tessellator tessellator, int width, int height, IIcon icon) {
 			for(Box box : this.modelBoxes) {
 				for(Quad quad : box.quads) {
 					for(int i = 0; i < 4; i++) {
 						Vec3 vec = quad.vertices[i];
-						tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+						tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(icon, width), vec.getV(icon, height));
 					}
 				}
 			}
 		}
 	}
-	
+
 	//Holds a list of vertices and UVs of this model
 	private final List<Box> modelBoxList = new ArrayList<Box>();
 
@@ -446,40 +414,37 @@ public class ModelConverter {
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
 	 * @param model					The model
 	 * @param scale					Scale of the model (usually 0.065)
-	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 */
-	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace) {
-		this(model, scale, textureMap, renderDoubleFace, 0, 0, 0);
+	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace) {
+		this(model, scale, renderDoubleFace, 0, 0, 0);
 	}
 
 	/**
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
 	 * @param model					The model
 	 * @param scale					Scale of the model (usually 0.065)
-	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 * @param rotationX				Rotation around X axis (degrees)
 	 * @param rotationY				Rotation around Y axis (degrees)
 	 * @param rotationZ				Rotation around Z axis (degrees)
 	 */
-	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
-		this(model, scale, textureMap, renderDoubleFace, rotationX, rotationY, rotationZ, new Vec3(0, 0, 0));
+	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
+		this(model, scale, renderDoubleFace, rotationX, rotationY, rotationZ, new Vec3(0, 0, 0));
 	}
 
 	/**
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
 	 * @param model					The model
 	 * @param scale					Scale of the model (usually 0.065)
-	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 * @param rotationX				Rotation around X axis (degrees)
 	 * @param rotationY				Rotation around Y axis (degrees)
 	 * @param rotationZ				Rotation around Z axis (degrees)
 	 * @param rotaitonCenter		Center of the rotation
 	 */
-	public ModelConverter(ModelBase model, double scale, TextureMap textureMap, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3 rotationCenter) {
-		this.constructModel(model, scale, textureMap, renderDoubleFace);
+	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3 rotationCenter) {
+		this.constructModel(model, scale, renderDoubleFace);
 		this.rotate(1.0F, rotationX + 180.0F, rotationY, rotationZ, rotationCenter);
 	}
 
@@ -562,10 +527,9 @@ public class ModelConverter {
 	 * Reconstructs a list of vertices and UVs with the given data.
 	 * @param modelBase				The model
 	 * @param modelScale			Scale of the model (usually 0.065)
-	 * @param textureMap			TextureMap that holds the UVs and texture width/height
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
 	 */
-	private void constructModel(ModelBase modelBase, double modelScale, TextureMap textureMap, boolean renderDoubleFace) {
+	private void constructModel(ModelBase modelBase, double modelScale, boolean renderDoubleFace) {
 		//Model texture width/height
 		double modelWidth = modelBase.textureWidth;
 		double modelHeight = modelBase.textureHeight;
@@ -616,109 +580,101 @@ public class ModelConverter {
 				PositionTextureVertex[] mbVertices5 = mbQuadList[4].vertexPositions;
 				PositionTextureVertex[] mbVertices6 = mbQuadList[5].vertexPositions;
 
-				//IIcon UVs
-				double umin = textureMap.umin;
-				double vmin = textureMap.vmin;
-				double umax = textureMap.umax;
-				double vmax = textureMap.vmax;
-				double uvWidth = (umax - umin) * modelWidth / textureMap.width;
-				double uvHeight = (vmax - vmin) * modelHeight / textureMap.height;
-
 				ArrayList<Quad> quadList = new ArrayList<Quad>(12);
 
 				//Face 1
 				Quad face1 = new Quad(
-						new Vec3(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight),
-						new Vec3(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight),
-						new Vec3(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight),
-						new Vec3(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight));
+						new Vec3(o, mbVertices5[0].texturePositionX, mbVertices5[0].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oy, mbVertices5[3].texturePositionX, mbVertices5[3].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxy, mbVertices5[2].texturePositionX, mbVertices5[2].texturePositionY, modelWidth, modelHeight),
+						new Vec3(ox, mbVertices5[1].texturePositionX, mbVertices5[1].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face1);
 				if(renderDoubleFace) {
 					Quad face1d = new Quad(
-							new Vec3(o, umin + mbVertices5[0].texturePositionX * uvWidth, vmin + mbVertices5[0].texturePositionY * uvHeight),
-							new Vec3(ox, umin + mbVertices5[1].texturePositionX * uvWidth, vmin + mbVertices5[1].texturePositionY * uvHeight),
-							new Vec3(oxy, umin + mbVertices5[2].texturePositionX * uvWidth, vmin + mbVertices5[2].texturePositionY * uvHeight),
-							new Vec3(oy, umin + mbVertices5[3].texturePositionX * uvWidth, vmin + mbVertices5[3].texturePositionY * uvHeight));
+							new Vec3(o, mbVertices5[0].texturePositionX, mbVertices5[0].texturePositionY, modelWidth, modelHeight),
+							new Vec3(ox, mbVertices5[1].texturePositionX, mbVertices5[1].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxy, mbVertices5[2].texturePositionX, mbVertices5[2].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oy, mbVertices5[3].texturePositionX, mbVertices5[3].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face1d);
 				}
 
 				//Face 2
 				Quad face2 = new Quad(
-						new Vec3(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight),
-						new Vec3(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight),
-						new Vec3(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight),
-						new Vec3(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight));
+						new Vec3(oz, mbVertices6[1].texturePositionX, mbVertices6[1].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxz, mbVertices6[0].texturePositionX, mbVertices6[0].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxyz, mbVertices6[3].texturePositionX, mbVertices6[3].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oyz, mbVertices6[2].texturePositionX, mbVertices6[2].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face2);
 				if(renderDoubleFace) {
 					Quad face2d = new Quad(
-							new Vec3(oz, umin + mbVertices6[1].texturePositionX * uvWidth, vmin + mbVertices6[1].texturePositionY * uvHeight),
-							new Vec3(oyz, umin + mbVertices6[2].texturePositionX * uvWidth, vmin + mbVertices6[2].texturePositionY * uvHeight),
-							new Vec3(oxyz, umin + mbVertices6[3].texturePositionX * uvWidth, vmin + mbVertices6[3].texturePositionY * uvHeight),
-							new Vec3(oxz, umin + mbVertices6[0].texturePositionX * uvWidth, vmin + mbVertices6[0].texturePositionY * uvHeight));
+							new Vec3(oz, mbVertices6[1].texturePositionX, mbVertices6[1].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oyz, mbVertices6[2].texturePositionX, mbVertices6[2].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxyz, mbVertices6[3].texturePositionX, mbVertices6[3].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxz, mbVertices6[0].texturePositionX, mbVertices6[0].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face2d);
 				}
 
 				//Face 3
 				Quad face3 = new Quad(
-						new Vec3(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight),
-						new Vec3(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight),
-						new Vec3(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight),
-						new Vec3(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight));
+						new Vec3(oy, mbVertices4[1].texturePositionX, mbVertices4[1].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oyz, mbVertices4[2].texturePositionX, mbVertices4[2].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxyz, mbVertices4[3].texturePositionX, mbVertices4[3].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxy, mbVertices4[0].texturePositionX, mbVertices4[0].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face3);
 				if(renderDoubleFace) {
 					Quad face3d = new Quad(
-							new Vec3(oy, umin + mbVertices4[1].texturePositionX * uvWidth, vmin + mbVertices4[1].texturePositionY * uvHeight),
-							new Vec3(oxy, umin + mbVertices4[0].texturePositionX * uvWidth, vmin + mbVertices4[0].texturePositionY * uvHeight),
-							new Vec3(oxyz, umin + mbVertices4[3].texturePositionX * uvWidth, vmin + mbVertices4[3].texturePositionY * uvHeight),
-							new Vec3(oyz, umin + mbVertices4[2].texturePositionX * uvWidth, vmin + mbVertices4[2].texturePositionY * uvHeight));
+							new Vec3(oy, mbVertices4[1].texturePositionX, mbVertices4[1].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxy, mbVertices4[0].texturePositionX, mbVertices4[0].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxyz, mbVertices4[3].texturePositionX, mbVertices4[3].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oyz, mbVertices4[2].texturePositionX, mbVertices4[2].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face3d);
 				}
 
 				//Face 4
 				Quad face4 = new Quad(
-						new Vec3(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight),
-						new Vec3(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight),
-						new Vec3(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight),
-						new Vec3(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight));
+						new Vec3(o, mbVertices3[2].texturePositionX, mbVertices3[2].texturePositionY, modelWidth, modelHeight),
+						new Vec3(ox, mbVertices3[3].texturePositionX, mbVertices3[3].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxz, mbVertices3[0].texturePositionX, mbVertices3[0].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oz, mbVertices3[1].texturePositionX, mbVertices3[1].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face4);
 				if(renderDoubleFace) {
 					Quad face4d = new Quad(
-							new Vec3(o, umin + mbVertices3[2].texturePositionX * uvWidth, vmin + mbVertices3[2].texturePositionY * uvHeight),
-							new Vec3(oz, umin + mbVertices3[1].texturePositionX * uvWidth, vmin + mbVertices3[1].texturePositionY * uvHeight),
-							new Vec3(oxz, umin + mbVertices3[0].texturePositionX * uvWidth, vmin + mbVertices3[0].texturePositionY * uvHeight),
-							new Vec3(ox, umin + mbVertices3[3].texturePositionX * uvWidth, vmin + mbVertices3[3].texturePositionY * uvHeight));
+							new Vec3(o, mbVertices3[2].texturePositionX, mbVertices3[2].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oz, mbVertices3[1].texturePositionX, mbVertices3[1].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxz, mbVertices3[0].texturePositionX, mbVertices3[0].texturePositionY, modelWidth, modelHeight),
+							new Vec3(ox, mbVertices3[3].texturePositionX, mbVertices3[3].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face4d);
 				}
 
 				//Face 5
 				Quad face5 = new Quad(
-						new Vec3(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight),
-						new Vec3(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight),
-						new Vec3(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight),
-						new Vec3(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight));
+						new Vec3(ox, mbVertices1[1].texturePositionX, mbVertices1[1].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxy, mbVertices1[2].texturePositionX, mbVertices1[2].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxyz, mbVertices1[3].texturePositionX, mbVertices1[3].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oxz, mbVertices1[0].texturePositionX, mbVertices1[0].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face5);
 				if(renderDoubleFace) {
 					Quad face5d = new Quad(
-							new Vec3(ox, umin + mbVertices1[1].texturePositionX * uvWidth, vmin + mbVertices1[1].texturePositionY * uvHeight),
-							new Vec3(oxz, umin + mbVertices1[0].texturePositionX * uvWidth, vmin + mbVertices1[0].texturePositionY * uvHeight),
-							new Vec3(oxyz, umin + mbVertices1[3].texturePositionX * uvWidth, vmin + mbVertices1[3].texturePositionY * uvHeight),
-							new Vec3(oxy, umin + mbVertices1[2].texturePositionX * uvWidth, vmin + mbVertices1[2].texturePositionY * uvHeight));
+							new Vec3(ox, mbVertices1[1].texturePositionX, mbVertices1[1].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxz, mbVertices1[0].texturePositionX, mbVertices1[0].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxyz, mbVertices1[3].texturePositionX, mbVertices1[3].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oxy, mbVertices1[2].texturePositionX, mbVertices1[2].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face5d);
 				}
 
 				//Face 6
 				Quad face6 = new Quad(
-						new Vec3(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight),
-						new Vec3(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight),
-						new Vec3(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight),
-						new Vec3(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight));
+						new Vec3(o, mbVertices2[0].texturePositionX, mbVertices2[0].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oz, mbVertices2[1].texturePositionX, mbVertices2[1].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oyz, mbVertices2[2].texturePositionX, mbVertices2[2].texturePositionY, modelWidth, modelHeight),
+						new Vec3(oy, mbVertices2[3].texturePositionX, mbVertices2[3].texturePositionY, modelWidth, modelHeight));
 				quadList.add(face6);
 				if(renderDoubleFace) {
 					Quad face6d = new Quad(
-							new Vec3(o, umin + mbVertices2[0].texturePositionX * uvWidth, vmin + mbVertices2[0].texturePositionY * uvHeight),
-							new Vec3(oy, umin + mbVertices2[3].texturePositionX * uvWidth, vmin + mbVertices2[3].texturePositionY * uvHeight),
-							new Vec3(oyz, umin + mbVertices2[2].texturePositionX * uvWidth, vmin + mbVertices2[2].texturePositionY * uvHeight),
-							new Vec3(oz, umin + mbVertices2[1].texturePositionX * uvWidth, vmin + mbVertices2[1].texturePositionY * uvHeight));
+							new Vec3(o, mbVertices2[0].texturePositionX, mbVertices2[0].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oy, mbVertices2[3].texturePositionX, mbVertices2[3].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oyz, mbVertices2[2].texturePositionX, mbVertices2[2].texturePositionY, modelWidth, modelHeight),
+							new Vec3(oz, mbVertices2[1].texturePositionX, mbVertices2[1].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face6d);
 				}
 
@@ -873,7 +829,7 @@ public class ModelConverter {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Recursively returns a list of all parents and sub-parents of the given ModelRenderer.
 	 * Used to simulate previous rotations and transformations.
@@ -917,12 +873,28 @@ public class ModelConverter {
 	 * The tessellator must already be drawing.
 	 * @param tessellator
 	 */
-	public void renderWithTessellator(Tessellator tessellator) {
+	/*public void renderWithTessellator(Tessellator tessellator) {
 		for(Box box : this.modelBoxList) {
 			for(Quad quad : box.quads) {
 				for(int i = 0; i < 4; i++) {
 					Vec3 vec = quad.vertices[i];
 					tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.u, vec.v);
+				}
+			}
+		}
+	}*/
+
+	/**
+	 * Renders the model with the given tessellator. 
+	 * The tessellator must already be drawing.
+	 * @param tessellator
+	 */
+	public void renderWithTessellator(Tessellator tessellator, int width, int height, IIcon icon) {
+		for(Box box : this.modelBoxList) {
+			for(Quad quad : box.quads) {
+				for(int i = 0; i < 4; i++) {
+					Vec3 vec = quad.vertices[i];
+					tessellator.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(icon, width), vec.getV(icon, height));
 				}
 			}
 		}
