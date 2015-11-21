@@ -162,6 +162,15 @@ public class ManualWidgetsBase {
 
     }
 
+    public void changeXStart(int xStart){
+        this.unchangedXStart = xStart;
+        this.xStart = manual.xStartLeftPage + unchangedXStart;
+    }
+    public void changeYStart(int yStart){
+        this.unchangedYStart = yStart;
+        this.yStart = manual.yStart + unchangedYStart;
+    }
+
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
 
