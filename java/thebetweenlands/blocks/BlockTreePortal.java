@@ -1,20 +1,20 @@
 package thebetweenlands.blocks;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.property.EntityPropertiesPortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
-
-import java.util.Random;
 public class BlockTreePortal extends Block {
 
 	public BlockTreePortal() {
@@ -37,7 +37,7 @@ public class BlockTreePortal extends Block {
 		world.setBlock(x, y - 1, z - 1, BLBlockRegistry.portalBarkFrame, 13, 2);
 		world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 14, 2);
 		world.setBlock(x, y - 1, z + 1, BLBlockRegistry.portalBarkFrame, 15, 2);
-		
+
 		if (isPatternValidX(world, x, y, z)) {
 			world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 0, 2);
 			world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 0, 2);
@@ -45,7 +45,7 @@ public class BlockTreePortal extends Block {
 		}
 		return false;
 	}
-	
+
 	public static boolean makePortalZ(World world, int x, int y, int z) {
 		world.setBlock(x - 1, y + 2, z, BLBlockRegistry.portalBarkFrame, 0, 2);
 		world.setBlock(x, y + 2, z, BLBlockRegistry.portalBarkFrame, 1, 2);
@@ -57,7 +57,7 @@ public class BlockTreePortal extends Block {
 		world.setBlock(x - 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 5, 2);
 		world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 6, 2);
 		world.setBlock(x + 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 7, 2);
-		
+
 		if (isPatternValidZ(world, x, y, z)) {
 			world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 1, 2);
 			world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 1, 2);
@@ -89,7 +89,7 @@ public class BlockTreePortal extends Block {
 
 		return true;
 	}
-	
+
 	public static boolean isPatternValidZ(World world, int x, int y, int z) {
 		// Layer 0
 		if (!check(world, x, y - 1, z, BLBlockRegistry.portalBarkFrame) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
@@ -117,7 +117,7 @@ public class BlockTreePortal extends Block {
 	private static boolean check(World world, int x, int y, int z, Block target) {
 		return world.getBlock(x, y, z) == target;
 	}
-	
+
 	private static boolean checkPortal(World world, int x, int y, int z, Block target, int meta) {
 		return world.getBlock(x, y, z) == target && world.getBlockMetadata(x, y, z) == meta;
 	}
@@ -128,7 +128,7 @@ public class BlockTreePortal extends Block {
 	}
 
 	@Override
-    public boolean canBlockStay(World world, int x, int y, int z) {
+	public boolean canBlockStay(World world, int x, int y, int z) {
 		if(checkPortal(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
 			return true;
 		if(checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
@@ -141,8 +141,8 @@ public class BlockTreePortal extends Block {
 			world.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
 			world.setBlockToAir(x, y, z);
 		}
-        return false;
-    }
+		return false;
+	}
 
 	@Override
 	public int quantityDropped(Random rand) {
@@ -159,11 +159,11 @@ public class BlockTreePortal extends Block {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return null;
 	}
-	
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-        float xSize;
-        float ySize;
+		float xSize;
+		float ySize;
 
 		if( world.getBlock(x - 1, y, z) != BLBlockRegistry.portalBarkFrame && world.getBlock(x + 1, y, z) != BLBlockRegistry.portalBarkFrame ) {
 			xSize = 0.125F;
@@ -173,14 +173,15 @@ public class BlockTreePortal extends Block {
 			ySize = 0.125F;
 		}
 
-        this.setBlockBounds(0.5F - xSize, 0.0F, 0.5F - ySize, 0.5F + xSize, 1.0F, 0.5F + ySize);
+		this.setBlockBounds(0.5F - xSize, 0.0F, 0.5F - ySize, 0.5F + xSize, 1.0F, 0.5F + ySize);
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
 		if (entity.ridingEntity == null && entity.riddenByEntity == null && entity.timeUntilPortal <= 0) {
 			if(entity instanceof EntityPlayer){
-				entity.getEntityData().setBoolean("INPORTAL", true);
+				EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(entity, BLEntityPropertiesRegistry.PORTAL);
+				props.inPortal = true;
 			} else if(!world.isRemote) {
 				if (entity.dimension == 0)
 					TeleporterHandler.transferToBL(entity);

@@ -1,5 +1,9 @@
 package thebetweenlands.world.teleporter;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
@@ -12,10 +16,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public final class TeleporterBetweenlands extends Teleporter {
 	private final WorldServer worldServerInstance;
@@ -42,12 +42,12 @@ public final class TeleporterBetweenlands extends Teleporter {
 		int posX = 0;
 		int posY = 0;
 		int posZ = 0;
-		int roundX = MathHelper.floor_double(entity.posX);
-		int roundZ = MathHelper.floor_double(entity.posZ);
+		int roundX = MathHelper.floor_double(x);
+		int roundZ = MathHelper.floor_double(z);
 		long coordPair = ChunkCoordIntPair.chunkXZ2Int(roundX, roundZ);
 		boolean portalNotSaved = true;
 
-		
+
 		if (destinationCoordinateCache.containsItem(coordPair)) {
 			PortalPosition pos = (PortalPosition) destinationCoordinateCache.getValueByKey(coordPair);
 			distToPortal = 0.0;
@@ -61,10 +61,11 @@ public final class TeleporterBetweenlands extends Teleporter {
 				for (int j = roundZ - checkRadius; j <= roundZ + checkRadius; j++)
 					for (int h = worldServerInstance.getActualHeight() - 1; h >= 0; h--) {
 						Block block = worldServerInstance.getBlock(i, h, j);
-						if (block == BLBlockRegistry.druidStone1) {
-							double X = i + 0.5 - entity.posX;
-							double Z = j + 0.5 - entity.posZ;
-							double Y = h + 2  + 0.5 - entity.posY;
+						if (block == BLBlockRegistry.treePortalBlock) {
+							while(worldServerInstance.getBlock(i, --h, j) == BLBlockRegistry.treePortalBlock);
+							double X = i + 0.5 - x;
+							double Z = j + 0.5 - z;
+							double Y = h + 2 + 0.5 - y;
 							double dist = X * X + Y * Y + Z * Z;
 
 							if (distToPortal < 0.0 || dist < distToPortal) {
@@ -84,31 +85,31 @@ public final class TeleporterBetweenlands extends Teleporter {
 			entity.motionX = entity.motionY = entity.motionZ = 0.0;
 
 			int entityFacing = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-			float entityRotation = 0;
-			double offsetX = 0;
-			double offsetZ = 0;
+			float entityRotation = /*0*/ entity.rotationYaw;
+			double offsetX = 0.5D;
+			double offsetZ = 0.5D;
 
 			switch (entityFacing) {
-				case 0:
-					entityRotation = 180;
-					offsetX = 0.5D;
-					offsetZ = -4.5D;
-					break;
-				case 1:
-					entityRotation = 270;
-					offsetX = 4.5D;
-					offsetZ = 0.5D;
-					break;
-				case 2:
-					entityRotation = 0;
-					offsetX = 0.5D;
-					offsetZ = 4.5D;
-					break;
-				case 3:
-					entityRotation = 90;
-					offsetX = -0.5D;
-					offsetZ = 4.5D;
-					break;
+			case 0:
+				//entityRotation = 180;
+				//offsetX = 0.5D;
+				//offsetZ = -4.5D;
+				break;
+			case 1:
+				//entityRotation = 270;
+				//offsetX = 4.5D;
+				//offsetZ = 0.5D;
+				break;
+			case 2:
+				//entityRotation = 0;
+				//offsetX = 0.5D;
+				//offsetZ = 4.5D;
+				break;
+			case 3:
+				//entityRotation = 90;
+				//offsetX = -0.5D;
+				//offsetZ = 4.5D;
+				break;
 			}
 
 			entity.setLocationAndAngles(posX + offsetX, posY, posZ + offsetZ, entityRotation, entity.rotationPitch);
@@ -124,7 +125,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		int posZ = MathHelper.floor_double(entity.posZ);
 		int maxPortalSpawnHeight;
 		int minSpawnHeight;
-		System.out.println(entity.dimension);
+		//System.out.println(entity.dimension);
 		if (entity.dimension == 0) {
 			maxPortalSpawnHeight = 100;
 			minSpawnHeight = 64;
@@ -132,9 +133,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 			maxPortalSpawnHeight = 85;
 			minSpawnHeight = 80;
 		}
-		System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
-		for (int x = posX - 128; x < posX + 128; x++) {
-			for (int z = posZ - 128; z < posZ + 128; z++) {
+		//System.out.println(maxPortalSpawnHeight + "," + minSpawnHeight);
+		for (int x = posX - 127; x < posX + 127; x++) {
+			for (int z = posZ - 127; z < posZ + 127; z++) {
 				for (int y = maxPortalSpawnHeight; y >= minSpawnHeight; y--) {
 					Block block = worldServerInstance.getBlock(x, y, z);
 					if (block != Blocks.air) {

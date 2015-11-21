@@ -107,7 +107,7 @@ public class BlockMarshMarigold extends BlockSwampWater implements IPlantable, I
 
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
-		return null;
+		return new ArrayList<ItemStack>();
 	}
 
 	@Override

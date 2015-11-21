@@ -1,57 +1,65 @@
 package thebetweenlands.event.player;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.property.EntityPropertiesPortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 public class PlayerPortalHandler {
+	public static final int MAX_PORTAL_TIME = 120;
+
 	@SubscribeEvent
 	public void teleportCheck(LivingEvent.LivingUpdateEvent event) {
 		if(event.entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer)event.entity;
-			NBTTagCompound nbt = player.getEntityData();
-			int timer = nbt.getInteger("PORTALTIMER");
-			if(timer == 0) nbt.setInteger("PORTALTIMER", 120);
-			if(nbt.getBoolean("INPORTAL")){
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(player, BLEntityPropertiesRegistry.PORTAL);
+			if(props.inPortal){
 				if(player.worldObj.getBlock(floor(player.posX), floor(player.posY), floor(player.posZ)) == BLBlockRegistry.treePortalBlock) {
-					if (timer <= 1 || player.capabilities.isCreativeMode) {
-						if (player.dimension == 0) {
-							player.timeUntilPortal = 10;
-							TeleporterHandler.transferToBL(player);
+					if(!props.wasTeleported) {
+						if (props.portalTimer <= 0 || player.capabilities.isCreativeMode) {
+							if (player.dimension == 0) {
+								player.timeUntilPortal = 10;
+								props.wasTeleported = true;
+								TeleporterHandler.transferToBL(player);
+							} else {
+								player.timeUntilPortal = 10;
+								props.wasTeleported = true;
+								TeleporterHandler.transferToOverworld(player);
+							}
+							props.inPortal = false;
+							props.portalTimer = MAX_PORTAL_TIME;
 						} else {
-							player.timeUntilPortal = 10;
-							TeleporterHandler.transferToOverworld(player);
+							props.portalTimer--;
 						}
-						nbt.setBoolean("INPORTAL", false);
-						nbt.setInteger("PORTALTIMER", 120);
-					} else {
-						nbt.setInteger("PORTALTIMER", timer - 1);
 					}
 				} else {
-					nbt.setInteger("PORTALTIMER", 120);
-					nbt.setBoolean("INPORTAL", false);
+					props.portalTimer = MAX_PORTAL_TIME;
+					props.inPortal = false;
+					props.wasTeleported = false;
 				}
 			} else {
-				nbt.setInteger("PORTALTIMER", 120);
+				props.portalTimer = MAX_PORTAL_TIME;
+				if(!props.inPortal) {
+					props.wasTeleported = false;
+				}
 			}
 		}
 		if(event.entity.worldObj.isRemote && event.entity == TheBetweenlands.proxy.getClientPlayer()) {
-			boolean inPortal = event.entity.getEntityData().getBoolean("INPORTAL");
-			if(inPortal) {
-				int timer = event.entity.getEntityData().getInteger("PORTALTIMER");
-				TheBetweenlands.proxy.playPortalSounds(event.entity, timer);
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(event.entity, BLEntityPropertiesRegistry.PORTAL);
+			boolean renderPortalEffect = props.inPortal && !props.wasTeleported;
+			if(renderPortalEffect) {
+				TheBetweenlands.proxy.playPortalSounds(event.entity, props.portalTimer);
 			}
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {
-					if(!inPortal) {
+					if(!renderPortalEffect) {
 						shader.setSwirlAngle(0.0F);
 					} else {
 						if(event.entity.dimension == 0) {

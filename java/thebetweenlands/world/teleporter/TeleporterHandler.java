@@ -57,7 +57,7 @@ public final class TeleporterHandler {
 		else if (world.provider.dimensionId == ConfigHandler.INSTANCE.DIMENSION_ID)
 			world.customTeleporters.add(teleportToBetweenlands = new TeleporterBetweenlands(world));
 
-		System.out.println("added to " + e.world);
+		//System.out.println("added to " + e.world);
 	}
 
 	@SubscribeEvent

@@ -1,15 +1,17 @@
 package thebetweenlands.client.render.shader;
 
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.ContextCapabilities;
-import org.lwjgl.opengl.GLContext;
-
 import thebetweenlands.client.render.shader.base.CShaderGroup;
+import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.property.EntityPropertiesPortal;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -90,7 +92,12 @@ public class ShaderHelper {
 
 	private boolean isRequired() {
 		Minecraft mc = Minecraft.getMinecraft();
-		return (mc.thePlayer != null && mc.thePlayer.getEntityData().getBoolean("INPORTAL")) || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
+		boolean inPortal = false;
+		if(mc.thePlayer != null){
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(mc.thePlayer, BLEntityPropertiesRegistry.PORTAL);
+			inPortal = props.inPortal;
+		}
+		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
 	}
 
 	private boolean needsReload() {

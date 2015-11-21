@@ -3,7 +3,9 @@ package thebetweenlands.entities.property;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,15 +15,15 @@ import net.minecraftforge.event.entity.EntityEvent;
 import thebetweenlands.manual.EntityPropertiesManual;
 
 public class BLEntityPropertiesRegistry {
+	public static final EntityPropertiesPortal PORTAL = new EntityPropertiesPortal();
 	public static final EntityPropertiesDecay DECAY = new EntityPropertiesDecay();
 	public static final EntityPropertiesManual MANUAL = new EntityPropertiesManual();
-	
-	
-	
-	
+
+
+
 	public static final BLEntityPropertiesRegistry INSTANCE = new BLEntityPropertiesRegistry();
 
-	private Map<Class<? extends Entity>, Class<? extends IBLExtendedEntityProperties>> registeredProperties = new HashMap<Class<? extends Entity>, Class<? extends IBLExtendedEntityProperties>>();
+	private Map<Class<? extends Entity>, List<Class<? extends IBLExtendedEntityProperties>>> registeredProperties = new HashMap<Class<? extends Entity>, List<Class<? extends IBLExtendedEntityProperties>>>();
 
 	private BLEntityPropertiesRegistry() {
 		try {
@@ -37,20 +39,25 @@ public class BLEntityPropertiesRegistry {
 	}
 
 	public void registerProperty(Class<? extends Entity> entityClass, Class<? extends IBLExtendedEntityProperties> propClass) {
-		this.registeredProperties.put(entityClass, propClass);
+		List lst = this.registeredProperties.get(entityClass);
+		if(lst == null) {
+			this.registeredProperties.put(entityClass, lst = new ArrayList<Class<? extends IBLExtendedEntityProperties>>());
+		}
+		lst.add(propClass);
 	}
 
 	@SubscribeEvent
 	public void onEntityConstructing(EntityEvent.EntityConstructing event) {
-		for(Entry<Class<? extends Entity>, Class<? extends IBLExtendedEntityProperties>> propEntry : this.registeredProperties.entrySet()) {
+		for(Entry<Class<? extends Entity>, List<Class<? extends IBLExtendedEntityProperties>>> propEntry : this.registeredProperties.entrySet()) {
 			if(propEntry.getKey().isAssignableFrom(event.entity.getClass())) {
-				Class<? extends IBLExtendedEntityProperties> propClass = propEntry.getValue();
-				try {
-					Constructor<? extends IBLExtendedEntityProperties> propCtor = propClass.getConstructor();
-					IBLExtendedEntityProperties prop = propCtor.newInstance();
-					event.entity.registerExtendedProperties(prop.getID(), prop);
-				} catch(Exception ex) {
-					ex.printStackTrace();
+				for(Class<? extends IBLExtendedEntityProperties> propClass : propEntry.getValue()) {
+					try {
+						Constructor<? extends IBLExtendedEntityProperties> propCtor = propClass.getConstructor();
+						IBLExtendedEntityProperties prop = propCtor.newInstance();
+						event.entity.registerExtendedProperties(prop.getID(), prop);
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
 				}
 			}
 		}

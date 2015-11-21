@@ -104,7 +104,6 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, true, rand.nextInt(2) + 3);
 			}
 		}
-		world.setBlock(x, y, z, BLBlockRegistry.druidStone1, 0, 3);
 		System.out.println("made tree," + x + "," + y + "," + z + " World: " + world);
 		return true;
 	}
