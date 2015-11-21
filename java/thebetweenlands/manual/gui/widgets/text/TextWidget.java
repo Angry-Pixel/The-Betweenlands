@@ -79,7 +79,7 @@ public class TextWidget extends ManualWidgetsBase {
 		for(TextPage page : this.textContainer.getPages()) {
 			page.render(this.xStart + pageOffset, this.yStart);
 			page.renderTooltips(this.xStart + pageOffset, this.yStart, mouseX, mouseY);
-			page.renderBounds(this.xStart + pageOffset, this.yStart);
+			//page.renderBounds(this.xStart + pageOffset, this.yStart);
 			pageOffset += 148;
 		}
 	}
