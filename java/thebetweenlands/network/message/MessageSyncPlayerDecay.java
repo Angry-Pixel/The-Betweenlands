@@ -26,8 +26,10 @@ public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDec
 		EntityPlayer target = message.getPlayer(player.worldObj);
 		if(target != null) {
 			EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY);
-			int prev = prop.decayLevel;
-			prop.decayLevel = message.playerDecay;
+			if (prop != null) {
+				int prev = prop.decayLevel;
+				prop.decayLevel = message.playerDecay;
+			}
 		}
 	}
 

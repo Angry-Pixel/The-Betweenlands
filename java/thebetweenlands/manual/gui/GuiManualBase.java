@@ -5,10 +5,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.entries.ManualEntryItem;
 import thebetweenlands.manual.gui.entries.ManualEntryRegistry;
@@ -43,12 +43,7 @@ public class GuiManualBase extends GuiScreen {
         ManualEntryRegistry.init(this);
         if (player.getHeldItem() == null || player.getHeldItem().getItem() != BLItemRegistry.manual)
             mc.displayGuiScreen(null);
-        /*if (player.getHeldItem().getTagCompound() != null && player.getHeldItem().stackTagCompound.hasKey("entry") && player.getHeldItem().stackTagCompound.getString("entry") != null) {
-            changeTo(getEntryFromName(player.getHeldItem().stackTagCompound.getString("entry")));
-        } else {
-            changeTo(ManualEntryRegistry.main);
-        }*/
-        changeTo(ManualEntryRegistry.main);
+        changeTo(getEntryFromName(ManualManager.getCurrentManualPage(player)));
     }
 
 
@@ -127,11 +122,7 @@ public class GuiManualBase extends GuiScreen {
         if (this.entry != null)
             this.entry.clear();
         this.entry = entry;
-        /*if (player.getHeldItem() != null && this.entry != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("entry", this.entry.unlocalizedEntryName);
-            player.getHeldItem().stackTagCompound = tag;
-        }*/
+        ManualManager.setCurrentManualPage(player, this.entry.unlocalizedEntryName);
     }
 
     public boolean doesGuiPauseGame() {
@@ -156,6 +147,7 @@ public class GuiManualBase extends GuiScreen {
     }
 
     private ManualEntry getEntryFromName(String entryName) {
+        if (entryName == null) return ManualEntryRegistry.main;
         for (ManualEntry entry : ManualEntryRegistry.ENTRIES) {
             if (entry.unlocalizedEntryName.equals(entryName)) {
                 return entry;

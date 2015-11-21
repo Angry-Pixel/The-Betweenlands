@@ -10,9 +10,11 @@ import java.util.Map.Entry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.event.entity.EntityEvent;
+import thebetweenlands.manual.EntityPropertiesManual;
 
 public class BLEntityPropertiesRegistry {
 	public static final EntityPropertiesDecay DECAY = new EntityPropertiesDecay();
+	public static final EntityPropertiesManual MANUAL = new EntityPropertiesManual();
 	
 	
 	

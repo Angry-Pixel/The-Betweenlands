@@ -54,7 +54,8 @@ public class ManualEntryRegistry {
         initItemEntries(manual);
         initMachineEntries(manual);
         initEntryList();
-        main = new ManualEntryEntryList("title", manual, entryLists, "thebetweenlands:textures/gui/manual/HLIcons.png");
+        main = new ManualEntryEntryList("main", manual, entryLists, "thebetweenlands:textures/gui/manual/HLIcons.png");
+        ENTRIES.add(main);
     }
 
     public static void initItemEntries(GuiManualBase manual) {
@@ -119,6 +120,7 @@ public class ManualEntryRegistry {
     public static void initEntryList() {
         ENTRIES.clear();
         ENTRIES.addAll(itemEntries);
+        ENTRIES.addAll(machines);
         try {
             for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
@@ -132,6 +134,7 @@ public class ManualEntryRegistry {
         entryLists.clear();
         entryLists.add(itemList);
         entryLists.add(machineList);
+        ENTRIES.addAll(entryLists);
     }
 
 }
