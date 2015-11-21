@@ -1,5 +1,7 @@
 package thebetweenlands.manual.gui.widgets;
 
+import java.util.ArrayList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -9,9 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.text.TextContainer;
+import thebetweenlands.manual.gui.widgets.text.TextContainer.TextPage;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents;
-
-import java.util.ArrayList;
 
 /**
  * Created by Bart on 6-11-2015.
@@ -35,7 +36,7 @@ public class ButtonWidget extends ManualWidgetsBase {
         this.resourceLocation = new ResourceLocation(recourseLocation);
         this.entry = entry;
 
-        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 100, 16, entry.entryName);
+        this.textContainer = new TextContainer(100, 16, entry.entryName);
         this.indexX = index % 16;
         this.indexY = index / 16;
         this.init();
@@ -45,14 +46,14 @@ public class ButtonWidget extends ManualWidgetsBase {
         super(manual, xStart, yStart);
         this.items = items;
         this.entry = entry;
-        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 100, 16, entry.entryName);
+        this.textContainer = new TextContainer(100, 16, entry.entryName);
         this.init();
     }
 
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 100, 16, entry.entryName);
+        this.textContainer = new TextContainer(100, 16, entry.entryName);
         this.init();
     }
 
@@ -83,7 +84,8 @@ public class ButtonWidget extends ManualWidgetsBase {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
             manual.drawTexturedModalRect(xStart, yStart, indexX * 16 + 1, indexY * 16 + 1, 16, 16);
         }
-        textContainer.render();
+        TextPage page = this.textContainer.getPages().get(0);
+        page.render(this.xStart + 18, this.yStart + 4);
     }
 
     public void mouseClicked(int x, int y, int mouseButton) {
@@ -116,7 +118,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(this.xStart + 18, this.yStart + 4, 116, 144, entry.entryName);
+        this.textContainer = new TextContainer(116, 144, entry.entryName);
         this.init();
     }
 }

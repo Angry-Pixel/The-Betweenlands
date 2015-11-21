@@ -6,10 +6,32 @@ import java.util.List;
 import net.minecraft.util.EnumChatFormatting;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextArea;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat;
+import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormatTag;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TooltipArea;
 
 public class TextFormatComponents {
-	public static class TextFormatScale extends TextFormat {
+	public static class TextFormatNewLine extends TextFormat {
+		public TextFormatNewLine() {
+			super("nl");
+		}
+
+		@Override
+		TextFormat create() {
+			return new TextFormatNewLine();
+		}
+
+		@Override
+		EnumPushOrder getPushOrder() {
+			return EnumPushOrder.FIRST;
+		}
+
+		@Override
+		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
+			container.nextLine();
+		}
+	}
+
+	public static class TextFormatScale extends TextFormatTag {
 		private float scale;
 
 		public TextFormatScale(float scale) {
@@ -18,7 +40,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		TextFormat create() {
+		TextFormatTag create() {
 			return new TextFormatScale(1.0F);
 		}
 
@@ -29,7 +51,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		void pop(TextContainer container, TextFormat previous) {
+		void pop(TextContainer container, TextFormatTag previous) {
 			container.setCurrentScale(((TextFormatScale)previous).scale);
 		}
 
@@ -39,7 +61,7 @@ public class TextFormatComponents {
 		}
 	}
 
-	public static class TextFormatColor extends TextFormat {
+	public static class TextFormatColor extends TextFormatTag {
 		private int color;
 
 		public TextFormatColor(int color) {
@@ -48,7 +70,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		TextFormat create() {
+		TextFormatTag create() {
 			return new TextFormatColor(0x808080);
 		}
 
@@ -59,7 +81,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		void pop(TextContainer container, TextFormat previous) {
+		void pop(TextContainer container, TextFormatTag previous) {
 			container.setCurrentColor(((TextFormatColor)previous).color);
 		}
 
@@ -69,7 +91,7 @@ public class TextFormatComponents {
 		}
 	}
 
-	public static class TextFormatTooltip extends TextFormat {
+	public static class TextFormatTooltip extends TextFormatTag {
 		private String text;
 		private TextArea area;
 		private List<TooltipArea> additionalAreas = new ArrayList<TooltipArea>();
@@ -80,7 +102,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		TextFormat create() {
+		TextFormatTag create() {
 			return new TextFormatTooltip("N/A");
 		}
 
@@ -99,7 +121,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		void pop(TextContainer container, TextFormat previous) {
+		void pop(TextContainer container, TextFormatTag previous) {
 			container.removeTextArea(new TooltipArea(this.area, this.text));
 			for(TooltipArea additionalArea : this.additionalAreas) {
 				container.removeTextArea(additionalArea);
@@ -112,7 +134,7 @@ public class TextFormatComponents {
 		}
 	}
 
-	public static class TextFormatSimple extends TextFormat {
+	public static class TextFormatSimple extends TextFormatTag {
 		private final EnumChatFormatting format;
 		private final String name;
 
@@ -123,7 +145,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		TextFormat create() {
+		TextFormatTag create() {
 			return new TextFormatSimple(this.name, this.format);
 		}
 
@@ -133,7 +155,7 @@ public class TextFormatComponents {
 		}
 
 		@Override
-		void pop(TextContainer container, TextFormat previous) {
+		void pop(TextContainer container, TextFormatTag previous) {
 			container.removeFormatting(this.format);
 		}
 

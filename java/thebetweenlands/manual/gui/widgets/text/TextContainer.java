@@ -24,9 +24,11 @@ import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat.EnumPush
 
 public class TextContainer {
 	public static class TextArea {
+		public final TextPage page;
 		public int x, y, width, height;
 		private final int additionalLeftWidth, additionalRightWidth;
-		public TextArea(int x, int y, int width, int height) {
+		public TextArea(TextPage page, int x, int y, int width, int height) {
+			this.page = page;
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -34,7 +36,8 @@ public class TextContainer {
 			this.additionalLeftWidth = 0;
 			this.additionalRightWidth = 0;
 		}
-		private TextArea(int x, int y, int width, int height, int additionalLeftWidth, int additionalRightWidth) {
+		private TextArea(TextPage page, int x, int y, int width, int height, int additionalLeftWidth, int additionalRightWidth) {
+			this.page = page;
 			this.x = x;
 			this.y = y;
 			this.width = width;
@@ -46,14 +49,14 @@ public class TextContainer {
 			return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
 		}
 		public TextArea withSpace() {
-			return new TextArea(this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
+			return new TextArea(this.page, this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
 		}
 
 		@Override
 		public boolean equals(Object object) {
 			if(object instanceof TextArea) {
 				TextArea area = (TextArea) object;
-				return area.x == this.x && area.y == this.y && area.width == this.width && area.height == this.height;
+				return area.page.equals(this.page) && area.x == this.x && area.y == this.y && area.width == this.width && area.height == this.height;
 			}
 			return false;
 		}
@@ -61,12 +64,12 @@ public class TextContainer {
 
 	public static class TooltipArea extends TextArea {
 		public final String text;
-		public TooltipArea(int x, int y, int width, int height, String text) {
-			super(x, y, width, height);
+		public TooltipArea(TextPage page, int x, int y, int width, int height, String text) {
+			super(page, x, y, width, height);
 			this.text = text;
 		}
 		public TooltipArea(TextArea area, String text) {
-			super(area.x, area.y, area.width, area.height);
+			super(area.page, area.x, area.y, area.width, area.height);
 			this.text = text;
 		}
 
@@ -102,13 +105,31 @@ public class TextContainer {
 		}
 
 		/**
-		 * Called when the format is pushed on the stack.
+		 * Called when the format is pushed.
 		 * @param container Text container
 		 * @param previous Previous format
 		 * @param argument Format argument
 		 * @param area Text area
 		 */
 		void push(TextContainer container, TextFormat previous, String argument, TextArea area) { }
+
+		/**
+		 * Creates a new instance of this format
+		 * @return
+		 */
+		abstract TextFormat create();
+
+		/**
+		 * Determines when {@link TextFormatTag#push(TextFormatTag, String)} should be called
+		 * @return
+		 */
+		abstract EnumPushOrder getPushOrder();
+	}
+
+	public static abstract class TextFormatTag extends TextFormat {
+		public TextFormatTag(String type) {
+			super(type);
+		}
 
 		/**
 		 * Called for each word if this format is active
@@ -121,19 +142,7 @@ public class TextContainer {
 		 * Called when the format is popped from the stack
 		 * @param previous Previous format
 		 */
-		void pop(TextContainer container, TextFormat previous) { }
-
-		/**
-		 * Creates a new instance of this format
-		 * @return
-		 */
-		abstract TextFormat create();
-
-		/**
-		 * Determines when {@link TextFormat#push(TextFormat, String)} should be called
-		 * @return
-		 */
-		abstract EnumPushOrder getPushOrder();
+		void pop(TextContainer container, TextFormatTag previous) { }
 	}
 
 	public static class TextSegment extends TextArea {
@@ -141,52 +150,127 @@ public class TextContainer {
 		public final int color;
 		public final float scale;
 
-		public TextSegment(String text, int x, int y, int width, int height, int color, float scale) {
-			super(x, y, width, height);
+		public TextSegment(TextPage page, String text, int x, int y, int width, int height, int color, float scale) {
+			super(page, x, y, width, height);
 			this.text = text;
 			this.color = color;
 			this.scale = scale;
 		}
 
-		private TextSegment(String text, int x, int y, int width, int height, int color, float scale, int additionalLeftWidth, int additionalRightWidth) {
-			super(x, y, width, height, additionalLeftWidth, additionalRightWidth);
+		private TextSegment(TextPage page, String text, int x, int y, int width, int height, int color, float scale, int additionalLeftWidth, int additionalRightWidth) {
+			super(page, x, y, width, height, additionalLeftWidth, additionalRightWidth);
 			this.text = text;
 			this.color = color;
 			this.scale = scale;
 		}
 	}
 
-	private final int width, height, xOffset, yOffset;
+	public static class TextPage {
+		private final List<TextSegment> textSegments = new ArrayList<TextSegment>();
+		private final List<TextArea> textAreas = new ArrayList<TextArea>();
+
+		public final int width, height;
+
+		private TextPage(int width, int height) { 
+			this.width = width;
+			this.height = height;
+		}
+
+		public List<TextSegment> getSegments() {
+			return this.textSegments;
+		}
+
+		public List<TextArea> getTextAreas() {
+			return this.textAreas;
+		}
+
+		/**
+		 * Renders this page
+		 * @param x Page X
+		 * @param y Page Y
+		 */
+		public void render(int x, int y) {
+			for(TextSegment segment : this.textSegments) {
+				GL11.glPushMatrix();
+				GL11.glScalef(segment.scale, segment.scale, 1.0F);
+				Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int((segment.x + x) / segment.scale), MathHelper.ceiling_float_int((segment.y + y) / segment.scale), segment.color);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glPopMatrix();
+			}
+		}
+
+		/**
+		 * Renders the bounds of this page
+		 * @param x Page X
+		 * @param y Page Y
+		 */
+		public void renderBounds(int x, int y) {
+			Gui.drawRect(x, y, this.width + x, this.height + y, 0x80FF0000);
+			for(TextSegment segment : this.textSegments) {
+				GL11.glPushMatrix();
+				Gui.drawRect(segment.withSpace().x + x, segment.y + y, segment.withSpace().x + segment.withSpace().width + x, segment.y + segment.height + y, 0x400000FF);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glPopMatrix();
+			}
+			for(TextArea ta : this.getTextAreas()) {
+				if(ta instanceof TooltipArea) {
+					Gui.drawRect(ta.x + x, ta.y + y, ta.x + ta.width + x, ta.y + ta.height + y, 0x6000FF00);
+				}
+			}
+		}
+
+		/**
+		 * Renders all tooltips
+		 * @param x Page X
+		 * @param y Page Y
+		 * @param mouseX Mouse X
+		 * @param mouseY Mouse Y
+		 */
+		public void renderTooltips(int x, int y, int mouseX, int mouseY) {
+			List<String> tooltipLines = new ArrayList<String>();
+			for(TextArea ta : this.getTextAreas()) {
+				if(ta instanceof TooltipArea) {
+					if(ta.isInside(mouseX - x, mouseY - y)) {
+						tooltipLines.add(((TooltipArea)ta).text);
+					}
+				}
+			}
+			if(tooltipLines.size() > 0) {
+				ManualWidgetsBase.renderTooltip(mouseX, mouseY, tooltipLines, 0xffffff, 0xf0100010);
+			}
+		}
+	}
+
+	private final int width, height;
 	private final String unparsedText;
 	private static final char DELIMITER = Character.MAX_VALUE;
 	private float currentScale = 1.0F;
 	private int currentColor = 1;
 	private String currentFormat = "";
 	private final List<EnumChatFormatting> textFormatList = new ArrayList<EnumChatFormatting>();
-	private final List<TextArea> textAreas = new ArrayList<TextArea>();
-	private final List<TextSegment> textSegments = new ArrayList<TextSegment>();
+	private final List<TextPage> textPages = new ArrayList<TextPage>();
+	private TextPage currentPage;
 	private final Map<String, TextFormat> textFormatComponents = new HashMap<String, TextFormat>();
-	private final Map<String, Stack<TextFormat>> textFormatComponentStacks = new HashMap<String, Stack<TextFormat>>();
+	private final Map<String, Stack<TextFormatTag>> textFormatComponentStacks = new HashMap<String, Stack<TextFormatTag>>();
 	private final Map<Integer, List<String>> componentMap = new HashMap<Integer, List<String>>();
 	private String parsedText = null;
 	private Exception parserError = null;
 	private String[] words;
 	private boolean[] spaceIndices;
+	private int nextLine = 0;
 
-	public TextContainer(int xOffset, int yOffset, int width, int height, String unparsedText) {
-		this.xOffset = xOffset;
-		this.yOffset = yOffset;
+	public TextContainer(int width, int height, String unparsedText) {
 		this.width = width;
 		this.height = height;
 		this.unparsedText = unparsedText;
 	}
 
 	/**
-	 * Returns the text segments that have been built after calling {@link TextContainer#build()}
+	 * Returns the text pages
 	 * @return
 	 */
-	public List<TextSegment> getTextSegments() {
-		return this.textSegments;
+	public List<TextPage> getPages() {
+		return this.textPages;
 	}
 
 	/**
@@ -240,43 +324,37 @@ public class TextContainer {
 	}
 
 	/**
-	 * Adds a text area
+	 * Adds a text area to the current page
 	 * @param area
 	 * @return
 	 */
 	public TextContainer addTextArea(TextArea area) {
-		this.textAreas.add(area);
+		this.currentPage.textAreas.add(area);
 		return this;
 	}
 
 	/**
-	 * Removes a text area
+	 * Removes a text area from all pages
 	 * @param area
 	 * @return
 	 */
 	public TextContainer removeTextArea(TextArea area) {
-		Iterator<TextArea> taIT = this.textAreas.iterator();
-		while(taIT.hasNext()) {
-			TextArea ta = taIT.next();
-			if(ta.equals(area)) {
-				taIT.remove();	
+		for(TextPage page : this.textPages) {
+			Iterator<TextArea> taIT = page.textAreas.iterator();
+			while(taIT.hasNext()) {
+				TextArea ta = taIT.next();
+				if(ta.equals(area)) {
+					taIT.remove();	
+				}
 			}
 		}
 		return this;
 	}
 
-	/**
-	 * Returns a list of all text areas
-	 * @return
-	 */
-	public List<TextArea> getTextAreas() {
-		return this.textAreas;
-	}
-
-	private Stack<TextFormat> getFormatStack(String component, Map<String, Stack<TextFormat>> stackMap) {
-		Stack<TextFormat> stack = stackMap.get(component);
+	private Stack<TextFormatTag> getFormatStack(String component, Map<String, Stack<TextFormatTag>> stackMap) {
+		Stack<TextFormatTag> stack = stackMap.get(component);
 		if(stack == null) {
-			stack = new Stack<TextFormat>();
+			stack = new Stack<TextFormatTag>();
 			stackMap.put(component, stack);
 		}
 		return stack;
@@ -328,7 +406,7 @@ public class TextContainer {
 	 */
 	public void registerFormat(TextFormat format) {
 		this.textFormatComponents.put(format.type, format);
-		this.getFormatStack(format.type, this.textFormatComponentStacks).push(format);
+		if(format instanceof TextFormatTag) this.getFormatStack(format.type, this.textFormatComponentStacks).push((TextFormatTag) format);
 	}
 
 	private boolean isDelimiter(char c) {
@@ -408,8 +486,8 @@ public class TextContainer {
 		String currentStackType = null;
 		int excpWordIndex = 0;
 		try {
-			this.textAreas.clear();
-			this.textSegments.clear();
+			this.textPages.clear();
+			this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
 			List<TextArea> tmpTextAreas = new ArrayList<TextArea>();
 			List<TextArea> combinedAreas = new ArrayList<TextArea>();
 			TextSegment offsetSegment = null;
@@ -435,16 +513,17 @@ public class TextContainer {
 					List<TextFormatType> wordComponentTypes = this.getTextFormatTypesForWord(this.componentMap, wordIndex);
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
+						if(textFormat == null) throw new Exception("Unknown format: " + componentType.type + " Word index: " + excpWordIndex);
 						usedFormats.add(textFormat.type);
 						if(textFormat != null) {
-							Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, this.textFormatComponentStacks);
+							Stack<TextFormatTag> componentStacks = this.getFormatStack(componentType.type, this.textFormatComponentStacks);
 							if(componentType.closing) {
 								componentStacks.pop().pop(this, componentStacks.peek());
 							} else {
 								if(textFormat.getPushOrder() == EnumPushOrder.FIRST) {
 									TextFormat newFormat = textFormat.create();
-									newFormat.push(this, componentStacks.peek(), componentType.argument, null);
-									componentStacks.push(newFormat);
+									newFormat.push(this, newFormat instanceof TextFormatTag ? componentStacks.peek() : null, componentType.argument, null);
+									if(newFormat instanceof TextFormatTag) componentStacks.push((TextFormatTag)newFormat);
 								}
 							}
 						}
@@ -470,7 +549,7 @@ public class TextContainer {
 					int renderSpaceWidth = MathHelper.floor_float(spaceWidth * this.currentScale);
 					int renderStrHeight = MathHelper.floor_float(fontHeight * this.currentScale);
 
-					boolean nextLine = xCursor + renderStrWidth > xOffsetMax;
+					boolean nextLine = (xCursor + renderStrWidth > xOffsetMax) || this.nextLine > 0;
 
 					int prevCurrentFontHeight = currentFontHeight;
 
@@ -486,8 +565,8 @@ public class TextContainer {
 					if(isSeperateWord && nextLine && !wasSeperateWord && combinedAreas.size() > 0) {
 						TextArea firstSegment = offsetSegment;
 						offsetSegment = null;
-						int offsetX = this.xOffset - firstSegment.x;
-						int offsetY = yCursor - (firstSegment.y - this.yOffset) + prevOffsetHeight;
+						int offsetX = firstSegment.x;
+						int offsetY = yCursor - (firstSegment.y) + prevOffsetHeight;
 						int maxHeight = 0;
 						for(TextArea segment : combinedAreas) {
 							segment.x += offsetX;
@@ -495,22 +574,34 @@ public class TextContainer {
 							if(segment.height > maxHeight) maxHeight = segment.height;
 						}
 						TextArea lastSegment = combinedAreas.get(combinedAreas.size() - 1);
-						xCursor = lastSegment.x - this.xOffset + lastSegment.width;
+						xCursor = lastSegment.x + lastSegment.width;
 						lastWordXCursor = xCursor;
-						yCursor += prevPrevOffsetHeight;
+						yCursor += prevPrevOffsetHeight * (this.nextLine > 0 ? this.nextLine : 1);
 						lastFontHeight = currentFontHeight;
 						currentFontHeight = 0;
 						combinedAreas.clear();
 						nextLine = xCursor + renderStrWidth > xOffsetMax;
 						jumped = true;
+						this.nextLine = 0;
+						if(yCursor >= this.height) {
+							xCursor = 0;
+							yCursor = 0;
+							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+						}
 					}
 
 					if(isSeperateWord && nextLine) {
 						xCursor = 0;
 						lastWordXCursor = 0;
-						yCursor += lastFontHeight;
+						yCursor += lastFontHeight * (this.nextLine > 0 ? this.nextLine : 1);
 						lastFontHeight = currentFontHeight;
 						currentFontHeight = 0;
+						this.nextLine = 0;
+						if(yCursor >= this.height) {
+							xCursor = 0;
+							yCursor = 0;
+							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+						}
 					} else if(isSeperateWord && !nextLine) {
 						combinedAreas.clear();
 					}
@@ -518,25 +609,26 @@ public class TextContainer {
 					if(jumped) lastFontHeight = nextLastFontHeight;
 
 					int additionalSpaceWidth = isSeperateWord ? (xCursor - lastWordXCursor) : 0;
-					TextArea currentTextArea = new TextArea(this.xOffset + xCursor, this.yOffset + yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? renderSpaceWidth : 0);
+					TextArea currentTextArea = new TextArea(this.currentPage, xCursor, yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? renderSpaceWidth : 0);
 
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
+						if(textFormat == null) throw new Exception("Unknown format: " + componentType.type + " Word index: " + excpWordIndex);
 						usedFormats.add(textFormat.type);
 						if(textFormat != null && textFormat.getPushOrder() == EnumPushOrder.SECOND) {
-							Stack<TextFormat> componentStacks = this.getFormatStack(componentType.type, this.textFormatComponentStacks);
+							Stack<TextFormatTag> componentStacks = this.getFormatStack(componentType.type, this.textFormatComponentStacks);
 							if(!componentType.closing) {
 								TextFormat newFormat = textFormat.create();
-								newFormat.push(this, componentStacks.peek(), componentType.argument, currentTextArea);
-								componentStacks.push(newFormat);
+								newFormat.push(this, newFormat instanceof TextFormatTag ? componentStacks.peek() : null, componentType.argument, currentTextArea);
+								if(newFormat instanceof TextFormatTag) componentStacks.push((TextFormatTag) newFormat);
 							}
 						}
 					}
 
-					for(Stack<TextFormat> activeFormatStack : this.textFormatComponentStacks.values()) {
+					for(Stack<TextFormatTag> activeFormatStack : this.textFormatComponentStacks.values()) {
 						if(activeFormatStack.size() > 1) {
 							for(int c = 1; c < activeFormatStack.size(); c++) {
-								TextFormat format = activeFormatStack.get(c);
+								TextFormatTag format = activeFormatStack.get(c);
 								if(!usedFormats.contains(format.type)) {
 									format.expand(this, currentTextArea);
 								}
@@ -544,7 +636,7 @@ public class TextContainer {
 						}
 					}
 
-					for(TextArea ta : this.getTextAreas()) {
+					for(TextArea ta : this.currentPage.textAreas) {
 						if(!tmpTextAreas.contains(ta)) {
 							if(!isSeperateWord) combinedAreas.add(ta);
 							tmpTextAreas.add(ta);
@@ -555,7 +647,7 @@ public class TextContainer {
 
 					//Ignore STARD and END appendix
 					if(i != 0 && i < words.length - 1) {
-						TextSegment segment = new TextSegment(word, this.xOffset + xCursor, this.yOffset + yCursor, currentTextArea.width, currentTextArea.height, this.currentColor, this.currentScale, currentTextArea.additionalLeftWidth, currentTextArea.additionalRightWidth);
+						TextSegment segment = new TextSegment(currentTextArea.page, word, xCursor, yCursor, currentTextArea.width, currentTextArea.height, this.currentColor, this.currentScale, currentTextArea.additionalLeftWidth, currentTextArea.additionalRightWidth);
 						if(!isSeperateWord) {
 							if(offsetSegment == null) {
 								prevOffsetHeight = prevCurrentFontHeight;
@@ -563,7 +655,8 @@ public class TextContainer {
 							}
 							combinedAreas.add(segment);
 						}
-						this.textSegments.add(segment);
+						//this.textSegments.add(segment);
+						this.currentPage.textSegments.add(segment);
 
 						xCursor += renderStrWidth;
 						if(isSeperateWord) xCursor += renderSpaceWidth;
@@ -577,17 +670,24 @@ public class TextContainer {
 				}
 				wasSeperateWord = isSeperateWord;
 			}
-			this.textAreas.addAll(tmpTextAreas);
+			for(TextArea area : tmpTextAreas) {
+				area.page.textAreas.add(area);
+			}
+			//this.currentPage.textAreas.addAll(tmpTextAreas);
 		} catch(Exception ex) {
 			this.parserError = new Exception("Stack underflow. Stack type: " + currentStackType + " Word index: " + excpWordIndex, ex);
 			throw this.parserError;
 		}
-		for(Entry<String, Stack<TextFormat>> e : this.textFormatComponentStacks.entrySet()) {
+		for(Entry<String, Stack<TextFormatTag>> e : this.textFormatComponentStacks.entrySet()) {
 			if(e.getValue().size() > 1) {
 				this.parserError = new Exception("Stack overflow. Stack type: " + e.getKey() + " Stack size: " + e.getValue().size() + " Word index: " + excpWordIndex);
 				throw this.parserError;
 			}
 		}
+	}
+
+	public void nextLine() {
+		this.nextLine++;
 	}
 
 	private String[] getSplitWords(String parsedText) {
@@ -634,58 +734,5 @@ public class TextContainer {
 	 */
 	public boolean hasParsingFailed() {
 		return this.parserError != null;
-	}
-
-	/**
-	 * Renders the text
-	 */
-	public void render() {
-		if(this.hasParsingFailed()) {
-			Minecraft.getMinecraft().fontRenderer.drawString("Failed parsing: " + this.parserError.getMessage(), this.xOffset, this.yOffset, 0xFFFF0000);
-			return;
-		}
-
-		for(TextSegment segment : this.textSegments) {
-			GL11.glPushMatrix();
-			GL11.glScalef(segment.scale, segment.scale, 1.0F);
-			Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int(segment.x / segment.scale), MathHelper.ceiling_float_int(segment.y / segment.scale), segment.color);
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glPopMatrix();
-		}
-	}
-
-	/**
-	 * Renders the bounds of this container
-	 */
-	public void renderBounds() {
-		Gui.drawRect(this.xOffset, this.yOffset, this.xOffset + this.width, this.yOffset + this.height, 0x80FF0000);
-		for(TextSegment segment : this.textSegments) {
-			GL11.glPushMatrix();
-			Gui.drawRect(segment.withSpace().x, segment.y, segment.withSpace().x + segment.withSpace().width, segment.y + segment.height, 0x400000FF);
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glPopMatrix();
-		}
-		for(TextArea ta : this.getTextAreas()) {
-			if(ta instanceof TooltipArea) {
-				Gui.drawRect(ta.x, ta.y, ta.x + ta.width, ta.y + ta.height, 0x6000FF00);
-			}
-		}
-	}
-
-	/**
-	 * Renders all tooltips
-	 */
-	public void renderTooltips(int mouseX, int mouseY) {
-		List<String> tooltipLines = new ArrayList<String>();
-		for(TextArea ta : this.getTextAreas()) {
-			if(ta instanceof TooltipArea) {
-				if(ta.isInside(mouseX, mouseY)) {
-					tooltipLines.add(((TooltipArea)ta).text);
-				}
-			}
-		}
-		if(tooltipLines.size() > 0) {
-			ManualWidgetsBase.renderTooltip(mouseX, mouseY, tooltipLines, 0xffffff, 0xf0100010);
-		}
 	}
 }

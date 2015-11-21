@@ -701,7 +701,7 @@ manual.weedwoodRowboat.description=
 
 
 manual.pestleAndMortar.title=Pestle and Mortar
-manual.pestleAndMortar.description=<bold>1 - Input Slot</bold> \n You can place the item you want to process here. \n \n <bold>2 - Life Crystal Slot</bold> \n You can place a Life Crystal here for automation. \n \n <bold>3 - Output Slot</bold> \n This is where the produced item will end up \n \n <bold>4 - Pestle Slot</bold> \n You can place the pestle here for grinding
+manual.pestleAndMortar.description=<bold>1 - Input Slot</bold> <nl> You can place the item you want to process here. <nl> <nl> <bold>2 - Life Crystal Slot</bold> <nl> You can place a Life Crystal here for automation. <nl> <nl> <bold>3 - Output Slot</bold> <nl> This is where the produced item will <tooltip:Test>end up <nl> <nl> <bold>4 - Pestle Slot</bold> <nl> You can </tooltip> place the pestle here for grinding
 
 
 
