@@ -581,6 +581,7 @@ corrosion.4=Extremely corroded
 corrosion.5=Completely corroded
 arrow.caution=Use with caution!
 arrow.stunning=Causes paralysis
+compost.compostable=Compostable
 
 # Commands
 command.tickspeed.success=Set tickspeed to %s ticks per second

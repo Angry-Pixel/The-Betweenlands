@@ -71,7 +71,7 @@ public class BlockCompostBin extends BlockContainer
 			else if (player.getCurrentEquippedItem() != null)
 			{
 				ItemStack stack = player.getCurrentEquippedItem();
-				CompostRecipe compostRecipe = CompostRecipe.hasCompostValue(stack);
+				CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
 				if (compostRecipe != null)
 				{
 					switch (tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true))

@@ -49,7 +49,7 @@ public class CompostRecipe {
         return Item.getItemFromBlock(block);
     }
 
-    public static CompostRecipe hasCompostValue(ItemStack stack) {
+    public static CompostRecipe getCompostRecipe(ItemStack stack) {
         for (CompostRecipe compostRecipe : compostRecipes) {
             if (compostRecipe.compostItem == stack.getItem() && compostRecipe.itemDamage == stack.getItemDamage())
                 return compostRecipe;

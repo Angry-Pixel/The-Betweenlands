@@ -9,16 +9,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import thebetweenlands.items.ICorrodible;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import thebetweenlands.recipes.CompostRecipe;
 
 /**
  * This class allows for the prevention of held item tooltips
@@ -36,6 +39,8 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
  * @author Paul Fulham
  */
 public class HeldItemTooltipHandler {
+	public static final HeldItemTooltipHandler INSTANCE = new HeldItemTooltipHandler();
+
 	private static final Map<Item, ExclusionEntry> ITEM_EXCLUSIONS = new HashMap<Item, ExclusionEntry>();
 	private static final List<ExclusionEntryClass> CLASS_EXCLUSIONS = new ArrayList<ExclusionEntryClass>();
 	private static final List<String> NULL_EXCLUSIONS = new ArrayList<String>(0);
@@ -98,6 +103,17 @@ public class HeldItemTooltipHandler {
 				highlightingItemStack = itemStack;
 				overrideRemainingHighlightTicks();
 			}
+		}
+	}
+
+	/**
+	 * Adds the "Compostable" tooltip to compostable items
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void onItemTooltip(ItemTooltipEvent event) {
+		if(CompostRecipe.getCompostRecipe(event.itemStack) != null) {
+			event.toolTip.add(StatCollector.translateToLocal("compost.compostable"));
 		}
 	}
 
