@@ -127,8 +127,8 @@ public class TextFormatComponents {
 
 		@Override
 		void pop(TextContainer container, TextFormatTag previous) {
-			for(TooltipArea additionalArea : this.tooltipAreas) {
-				container.removeTextArea(additionalArea);
+			for(TooltipArea tooltipArea : this.tooltipAreas) {
+				container.removeTextArea(tooltipArea);
 			}
 		}
 
@@ -222,9 +222,35 @@ public class TextFormatComponents {
 
 		@Override
 		void pop(TextContainer container, TextFormatTag previous) {
-			for(PagelinkArea additionalArea : this.pagelinkAreas) {
-				container.removeTextArea(additionalArea);
+			for(PagelinkArea pagelinkArea : this.pagelinkAreas) {
+				container.removeTextArea(pagelinkArea);
 			}
+		}
+
+		@Override
+		EnumPushOrder getPushOrder() {
+			return EnumPushOrder.SECOND;
+		}
+	}
+
+	public static class TextFormatRainbow extends TextFormatTag {
+		public TextFormatRainbow() {
+			super("rb");
+		}
+
+		@Override
+		TextFormatTag create() {
+			return new TextFormatRainbow();
+		}
+
+		@Override
+		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
+			area.addProperty("rainbow");
+		}
+
+		@Override
+		void expand(TextContainer container, TextArea area) {
+			area.addProperty("rainbow");
 		}
 
 		@Override

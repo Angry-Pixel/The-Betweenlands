@@ -28,16 +28,9 @@ public class TextContainer {
 		public final TextPage page;
 		public int x, y, width, height;
 		private int additionalLeftWidth, additionalRightWidth;
-		public TextArea(TextArea area) {
-			this.page = area.page;
-			this.x = area.x;
-			this.y = area.y;
-			this.width = area.width;
-			this.height = area.height;
-			this.additionalLeftWidth = area.additionalLeftWidth;
-			this.additionalRightWidth = area.additionalRightWidth;
-		}
-		public TextArea(TextPage page, int x, int y, int width, int height) {
+		private List<Object> properties = new ArrayList<Object>();
+
+		protected TextArea(TextPage page, int x, int y, int width, int height) {
 			this.page = page;
 			this.x = x;
 			this.y = y;
@@ -46,18 +39,46 @@ public class TextContainer {
 			this.additionalLeftWidth = 0;
 			this.additionalRightWidth = 0;
 		}
+
+		protected TextArea(TextArea area) {
+			this(area.page, area.x, area.y, area.width, area.height, area.additionalLeftWidth, area.additionalRightWidth, area.properties);
+		}
+
+		private TextArea(TextPage page, int x, int y, int width, int height, List<Object> properties) {
+			this(page, x, y, width, height);
+			this.additionalLeftWidth = 0;
+			this.additionalRightWidth = 0;
+			this.properties = properties;
+		}
+
 		private TextArea(TextPage page, int x, int y, int width, int height, int additionalLeftWidth, int additionalRightWidth) {
-			this.page = page;
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
+			this(page, x, y, width, height);
 			this.additionalLeftWidth = additionalLeftWidth;
 			this.additionalRightWidth = additionalRightWidth;
 		}
+
+		private TextArea(TextPage page, int x, int y, int width, int height, int additionalLeftWidth, int additionalRightWidth, List<Object> properties) {
+			this(page, x, y, width, height, additionalLeftWidth, additionalRightWidth);
+			this.properties = properties;
+		}
+
+		/**
+		 * Checks whether the specified point is inside this text area
+		 * @param offsetX Offset X
+		 * @param offsetY Offset Y
+		 * @param mouseX Mouse X
+		 * @param mouseY Mouse Y
+		 * @return
+		 */
 		public boolean isInside(int offsetX, int offsetY, int mouseX, int mouseY) {
 			return mouseX >= x + offsetX && mouseX < x + offsetX + width && mouseY >= y + offsetY && mouseY < y + offsetY + height;
 		}
+
+		/**
+		 * Sets the bounds of this text area
+		 * @param area
+		 * @return
+		 */
 		public TextArea setBounds(TextArea area) {
 			this.x = area.x;
 			this.y = area.y;
@@ -67,6 +88,11 @@ public class TextContainer {
 			this.additionalRightWidth = area.additionalRightWidth;
 			return this;
 		}
+
+		/**
+		 * Returns this text area with space padding applied
+		 * @return
+		 */
 		public TextArea withSpace() {
 			return new TextArea(this.page, this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
 		}
@@ -78,6 +104,46 @@ public class TextContainer {
 				return area.page.equals(this.page) && area.x == this.x && area.y == this.y && area.width == this.width && area.height == this.height;
 			}
 			return false;
+		}
+
+		/**
+		 * Adds a property to this text area
+		 * @param obj Property
+		 */
+		public void addProperty(Object obj) {
+			this.properties.add(obj);
+		}
+
+		/**
+		 * Removes the specified property from this text area
+		 * @param obj Object to remove
+		 * @return
+		 */
+		public boolean removeProperty(Object obj) {
+			return this.properties.remove(obj);
+		}
+
+		/**
+		 * Returns a list of all properties of this text area
+		 * @return
+		 */
+		public List<Object> getProperties() {
+			return this.properties;
+		}
+
+		/**
+		 * Returns a list of all properties of the specified type of this text area
+		 * @param type Property class
+		 * @return
+		 */
+		public <T> List<T> getProperties(Class<T> type) {
+			List<T> lst = new ArrayList<T>();
+			for(Object obj : this.properties) {
+				if(type.isAssignableFrom(obj.getClass())) {
+					lst.add((T) obj);
+				}
+			}
+			return lst;
 		}
 	}
 
@@ -173,8 +239,8 @@ public class TextContainer {
 			this.scale = scale;
 		}
 
-		private TextSegment(TextPage page, String text, int x, int y, int width, int height, int color, float scale, int additionalLeftWidth, int additionalRightWidth) {
-			super(page, x, y, width, height, additionalLeftWidth, additionalRightWidth);
+		private TextSegment(TextPage page, String text, int x, int y, int width, int height, int color, float scale, int additionalLeftWidth, int additionalRightWidth, List<Object> properties) {
+			super(page, x, y, width, height, additionalLeftWidth, additionalRightWidth, properties);
 			this.text = text;
 			this.color = color;
 			this.scale = scale;
@@ -192,12 +258,35 @@ public class TextContainer {
 			this.height = height;
 		}
 
+		/**
+		 * Returns a list of all text segmetns on this page
+		 * @return
+		 */
 		public List<TextSegment> getSegments() {
 			return this.textSegments;
 		}
 
+		/**
+		 * Returns a list of all text areas on this page
+		 * @return
+		 */
 		public List<TextArea> getTextAreas() {
 			return this.textAreas;
+		}
+
+		/**
+		 * Returns a list of all text areas of the specified type on this page
+		 * @param type Type class
+		 * @return
+		 */
+		public <T extends TextArea> List<T> getTextAreas(Class<T> type) {
+			List<T> lst = new ArrayList<T>();
+			for(TextArea area : this.textAreas) {
+				if(type.isAssignableFrom(area.getClass())) {
+					lst.add((T) area);
+				}
+			}
+			return lst;
 		}
 
 		/**
@@ -422,7 +511,6 @@ public class TextContainer {
 	 */
 	public void registerFormat(TextFormat format) {
 		this.textFormatComponents.put(format.type, format);
-		if(format instanceof TextFormatTag) this.getFormatStack(format.type, this.textFormatComponentStacks).push((TextFormatTag) format);
 	}
 
 	private boolean isDelimiter(char c) {
@@ -502,6 +590,12 @@ public class TextContainer {
 		String currentStackType = null;
 		int excpWordIndex = 0;
 		try {
+			this.textFormatList.clear();
+			this.textFormatComponentStacks.clear();
+			for(Entry<String, TextFormat> e : this.textFormatComponents.entrySet()) {
+				TextFormat format = e.getValue();
+				if(format instanceof TextFormatTag) this.getFormatStack(format.type, this.textFormatComponentStacks).push((TextFormatTag) format);
+			}
 			this.textPages.clear();
 			this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
 			List<TextArea> tmpTextAreas = new ArrayList<TextArea>();
@@ -667,7 +761,7 @@ public class TextContainer {
 
 					//Ignore STARD and END appendix
 					if(i != 0 && i < words.length - 1) {
-						TextSegment segment = new TextSegment(currentTextArea.page, word, xCursor, yCursor, currentTextArea.width, currentTextArea.height, this.currentColor, this.currentScale, currentTextArea.additionalLeftWidth, currentTextArea.additionalRightWidth);
+						TextSegment segment = new TextSegment(currentTextArea.page, word, xCursor, yCursor, currentTextArea.width, currentTextArea.height, this.currentColor, this.currentScale, currentTextArea.additionalLeftWidth, currentTextArea.additionalRightWidth, currentTextArea.properties);
 						if(!isSeperateWord) {
 							if(offsetSegment == null) {
 								prevOffsetHeight = prevCurrentFontHeight;

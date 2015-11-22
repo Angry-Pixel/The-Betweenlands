@@ -1,18 +1,23 @@
 package thebetweenlands.manual.gui.widgets.text;
 
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextArea;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextPage;
+import thebetweenlands.manual.gui.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatColor;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatNewLine;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatPagelink;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatPagelink.PagelinkArea;
+import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatRainbow;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatScale;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatSimple;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatTooltip;
@@ -66,6 +71,7 @@ public class TextWidget extends ManualWidgetsBase {
 		this.textContainer.registerFormat(new TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
 		this.textContainer.registerFormat(new TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
 		this.textContainer.registerFormat(new TextFormatPagelink());
+		this.textContainer.registerFormat(new TextFormatRainbow());
 
 		try {
 			this.textContainer.parse();
@@ -80,7 +86,22 @@ public class TextWidget extends ManualWidgetsBase {
 		//TODO: Implement proper page handling
 		int pageOffset = 0;
 		for(TextPage page : this.textContainer.getPages()) {
-			page.render(this.xStart + pageOffset, this.yStart);
+			for(TextSegment segment : page.getSegments()) {
+				GL11.glPushMatrix();
+				GL11.glScalef(segment.scale, segment.scale, 1.0F);
+				int color = segment.color;
+				//Just a random test
+				if(segment.getProperties(String.class).contains("rainbow")) {
+					double time = (System.nanoTime() / 1000000000.0D);
+					int red = (int)((Math.cos(time)+1.0D)/2.0D * 255);
+					int green = (int)((Math.cos(time + Math.PI * 2.0D / 3.0D)+1.0D)/2.0D * 255);
+					int blue = (int)((Math.cos(time + Math.PI)+1.0D)/2.0D * 255);
+					color = (red << 16) | (green << 8) | (blue);
+				}
+				Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int((segment.x + this.xStart + pageOffset) / segment.scale), MathHelper.ceiling_float_int((segment.y + this.yStart) / segment.scale), (int) (color));
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glPopMatrix();
+			}
 			page.renderTooltips(this.xStart + pageOffset, this.yStart, mouseX, mouseY);
 			//page.renderBounds(this.xStart + pageOffset, this.yStart);
 			pageOffset += 148;
@@ -95,14 +116,12 @@ public class TextWidget extends ManualWidgetsBase {
 		for(TextPage page : this.textContainer.getPages()) {
 			int pageX = this.xStart + pageOffset;
 			int pageY = this.yStart;
-			for(TextArea area : page.getTextAreas()) {
-				if(area instanceof PagelinkArea) {
-					if(area.isInside(pageX, pageY, x, y)) {
-						ManualEntry entry = this.manual.getEntryFromName(((PagelinkArea)area).page);
-						if(entry != null) {
-							this.manual.changeTo(entry);
-							return;
-						}
+			for(PagelinkArea area : page.getTextAreas(PagelinkArea.class)) {
+				if(area.isInside(pageX, pageY, x, y)) {
+					ManualEntry entry = this.manual.getEntryFromName(((PagelinkArea)area).page);
+					if(entry != null) {
+						this.manual.changeTo(entry);
+						return;
 					}
 				}
 			}
