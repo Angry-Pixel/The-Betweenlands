@@ -78,13 +78,6 @@ public class TextWidget extends ManualWidgetsBase {
 	@SideOnly(Side.CLIENT)
 	public void drawForeGround() {
 		//TODO: Implement proper page handling
-
-		try {
-			this.textContainer.parse();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		int pageOffset = 0;
 		for(TextPage page : this.textContainer.getPages()) {
 			page.render(this.xStart + pageOffset, this.yStart);
