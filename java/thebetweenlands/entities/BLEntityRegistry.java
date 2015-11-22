@@ -43,7 +43,7 @@ public class BLEntityRegistry
 		registerEntity(1, EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
 		registerEntity(2, EntitySludge.class, "sludge", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(3, EntitySwampHag.class, "swampHag", 0x0B3B0B, 0xDBA901);
-		registerEntity(4, EntityTarBeast.class, "tarBeast", 0x000000, 0x2E2E2E);
+		registerEntity(4, EntityTarBeast.class, "tarBeast", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(5, EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
 		registerEntity(6, EntityFirefly.class, "firefly", 0x243B0B, 0x808000);
 		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000);
@@ -66,8 +66,8 @@ public class BLEntityRegistry
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0x243B0B, 0x00FFFF);
 		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(26, EntityThrownTarminion.class, "thrownTarminion", 64, 10, true);
-		registerEntity(27, EntityWeedwoodRowboat.class, "weedwoodBoat");
-		registerEntity(28, EntityPeatMummy.class, "peatMummy", 0x000000, 0x2E2E2E);
+		registerEntity(27, EntityWeedwoodRowboat.class, "weedwoodBoat", 64, 1, true);
+		registerEntity(28, EntityPeatMummy.class, "peatMummy", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(29, EntityElixir.class, "thrownElixir", 64, 10, true);
 	}
 
