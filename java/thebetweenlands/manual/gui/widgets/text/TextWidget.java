@@ -86,16 +86,18 @@ public class TextWidget extends ManualWidgetsBase {
 		//TODO: Implement proper page handling
 		int pageOffset = 0;
 		for(TextPage page : this.textContainer.getPages()) {
+			int segmentIndex = 0;
 			for(TextSegment segment : page.getSegments()) {
+				segmentIndex++;
 				GL11.glPushMatrix();
 				GL11.glScalef(segment.scale, segment.scale, 1.0F);
 				int color = segment.color;
 				//Just a random test
 				if(segment.getProperties(String.class).contains("rainbow")) {
-					double time = (System.nanoTime() / 1000000000.0D);
+					double time = (System.nanoTime() / 500000000.0D + segmentIndex / 2.0D);
 					int red = (int)((Math.cos(time)+1.0D)/2.0D * 255);
 					int green = (int)((Math.cos(time + Math.PI * 2.0D / 3.0D)+1.0D)/2.0D * 255);
-					int blue = (int)((Math.cos(time + Math.PI)+1.0D)/2.0D * 255);
+					int blue = (int)((Math.cos(time + Math.PI * 4.0D / 3.0D)+1.0D)/2.0D * 255);
 					color = (red << 16) | (green << 8) | (blue);
 				}
 				Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int((segment.x + this.xStart + pageOffset) / segment.scale), MathHelper.ceiling_float_int((segment.y + this.yStart) / segment.scale), (int) (color));
