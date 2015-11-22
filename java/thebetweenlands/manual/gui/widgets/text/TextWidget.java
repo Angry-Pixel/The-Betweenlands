@@ -5,10 +5,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.gui.GuiManualBase;
+import thebetweenlands.manual.gui.entries.ManualEntry;
 import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
+import thebetweenlands.manual.gui.widgets.text.TextContainer.TextArea;
 import thebetweenlands.manual.gui.widgets.text.TextContainer.TextPage;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatColor;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatNewLine;
+import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatPagelink;
+import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatPagelink.PagelinkArea;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatScale;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatSimple;
 import thebetweenlands.manual.gui.widgets.text.TextFormatComponents.TextFormatTooltip;
@@ -23,14 +27,14 @@ public class TextWidget extends ManualWidgetsBase {
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+		this.textContainer = new TextContainer(116, 150, StatCollector.translateToLocal(/*"manual.text.test2"*/unlocalizedText));
 		this.text = StatCollector.translateToLocal(unlocalizedText);
 		this.init();
 	}
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String unlocalizedText, float scale) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+		this.textContainer = new TextContainer(116, 150, StatCollector.translateToLocal(unlocalizedText));
 		this.text = StatCollector.translateToLocal(unlocalizedText);
 		this.scale = scale;
 		this.init();
@@ -38,7 +42,7 @@ public class TextWidget extends ManualWidgetsBase {
 
 	public TextWidget(GuiManualBase manual, int xStart, int yStart, String text, boolean localized) {
 		super(manual, xStart, yStart);
-		this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, localized ? text : StatCollector.translateToLocal(text));
+		this.textContainer = new TextContainer(116, 150, localized ? text : StatCollector.translateToLocal(text));
 		this.text = localized ? text : StatCollector.translateToLocal(text);
 		this.init();
 	}
@@ -46,7 +50,7 @@ public class TextWidget extends ManualWidgetsBase {
 	@Override
 	public void setPageToRight() {
 		super.setPageToRight();
-		this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
+		this.textContainer = new TextContainer(116, 144, text);
 		this.init();
 	}
 
@@ -61,6 +65,7 @@ public class TextWidget extends ManualWidgetsBase {
 		this.textContainer.registerFormat(new TextFormatSimple("italic", EnumChatFormatting.ITALIC));
 		this.textContainer.registerFormat(new TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
 		this.textContainer.registerFormat(new TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
+		this.textContainer.registerFormat(new TextFormatPagelink());
 
 		try {
 			this.textContainer.parse();
@@ -72,9 +77,14 @@ public class TextWidget extends ManualWidgetsBase {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawForeGround() {
-		//this.textContainer.renderBounds();
-		//this.textContainer.render();
-		//this.textContainer.renderTooltips(mouseX, mouseY);
+		//TODO: Implement proper page handling
+
+		try {
+			this.textContainer.parse();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		int pageOffset = 0;
 		for(TextPage page : this.textContainer.getPages()) {
 			page.render(this.xStart + pageOffset, this.yStart);
@@ -84,11 +94,26 @@ public class TextWidget extends ManualWidgetsBase {
 		}
 	}
 
-
 	@Override
-	public void resize() {
-		super.resize();
-		this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
-		this.init();
+	public void mouseClicked(int x, int y, int mouseButton) {
+		super.mouseClicked(x, y, mouseButton);
+		//TODO: Implement proper page handling
+		int pageOffset = 0;
+		for(TextPage page : this.textContainer.getPages()) {
+			int pageX = this.xStart + pageOffset;
+			int pageY = this.yStart;
+			for(TextArea area : page.getTextAreas()) {
+				if(area instanceof PagelinkArea) {
+					if(area.isInside(pageX, pageY, x, y)) {
+						ManualEntry entry = this.manual.getEntryFromName(((PagelinkArea)area).page);
+						if(entry != null) {
+							this.manual.changeTo(entry);
+							return;
+						}
+					}
+				}
+			}
+			pageOffset += 148;
+		}
 	}
 }

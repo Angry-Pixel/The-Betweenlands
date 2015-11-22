@@ -146,7 +146,7 @@ public class GuiManualBase extends GuiScreen {
         return null;
     }
 
-    private ManualEntry getEntryFromName(String entryName) {
+    public ManualEntry getEntryFromName(String entryName) {
         if (entryName == null) return ManualEntryRegistry.main;
         for (ManualEntry entry : ManualEntryRegistry.ENTRIES) {
             if (entry.unlocalizedEntryName.equals(entryName)) {

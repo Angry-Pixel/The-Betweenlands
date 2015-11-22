@@ -93,8 +93,7 @@ public class TextFormatComponents {
 
 	public static class TextFormatTooltip extends TextFormatTag {
 		private String text;
-		private TextArea area;
-		private List<TooltipArea> additionalAreas = new ArrayList<TooltipArea>();
+		private List<TooltipArea> tooltipAreas = new ArrayList<TooltipArea>();
 
 		public TextFormatTooltip(String text) {
 			super("tooltip");
@@ -109,21 +108,26 @@ public class TextFormatComponents {
 		@Override
 		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
 			this.text = argument;
-			this.area = area.withSpace();
-			container.addTextArea(new TooltipArea(this.area, this.text));
+			TooltipArea newArea = new TooltipArea(area, this.text);
+			this.tooltipAreas.add(newArea);
+			container.addTextArea(newArea);
 		}
 
 		@Override
 		void expand(TextContainer container, TextArea area) {
-			TooltipArea newArea = new TooltipArea(area.withSpace(), this.text);
-			this.additionalAreas.add(newArea);
+			//Add space to previous text area
+			if(this.tooltipAreas.size() > 0) {
+				TextArea prev = this.tooltipAreas.get(this.tooltipAreas.size() - 1);
+				prev.setBounds(prev.withSpace());
+			}
+			TooltipArea newArea = new TooltipArea(area, this.text);
+			this.tooltipAreas.add(newArea);
 			container.addTextArea(newArea);
 		}
 
 		@Override
 		void pop(TextContainer container, TextFormatTag previous) {
-			container.removeTextArea(new TooltipArea(this.area, this.text));
-			for(TooltipArea additionalArea : this.additionalAreas) {
+			for(TooltipArea additionalArea : this.tooltipAreas) {
 				container.removeTextArea(additionalArea);
 			}
 		}
@@ -162,6 +166,70 @@ public class TextFormatComponents {
 		@Override
 		EnumPushOrder getPushOrder() {
 			return EnumPushOrder.FIRST;
+		}
+	}
+
+	public static class TextFormatPagelink extends TextFormatTag {
+		private String page;
+		private List<PagelinkArea> pagelinkAreas = new ArrayList<PagelinkArea>();
+
+		public static class PagelinkArea extends TextArea {
+			public final String page;
+
+			public PagelinkArea(TextArea area, String page) {
+				super(area);
+				this.page = page;
+			}
+
+			@Override
+			public boolean equals(Object object) {
+				if(object instanceof PagelinkArea) {
+					PagelinkArea area = (PagelinkArea) object;
+					return super.equals(area) && area.page.equals(this.page);
+				}
+				return false;
+			}
+		}
+
+		public TextFormatPagelink() {
+			super("pagelink");
+		}
+
+		@Override
+		TextFormatTag create() {
+			return new TextFormatPagelink();
+		}
+
+		@Override
+		void push(TextContainer container, TextFormat previous, String argument, TextArea area) {
+			this.page = argument;
+			PagelinkArea newArea = new PagelinkArea(area, this.page);
+			this.pagelinkAreas.add(newArea);
+			container.addTextArea(newArea);
+		}
+
+		@Override
+		void expand(TextContainer container, TextArea area) {
+			//Add space to previous text area
+			if(this.pagelinkAreas.size() > 0) {
+				TextArea prev = this.pagelinkAreas.get(this.pagelinkAreas.size() - 1);
+				prev.setBounds(prev.withSpace());
+			}
+			PagelinkArea newArea = new PagelinkArea(area, this.page);
+			this.pagelinkAreas.add(newArea);
+			container.addTextArea(newArea);
+		}
+
+		@Override
+		void pop(TextContainer container, TextFormatTag previous) {
+			for(PagelinkArea additionalArea : this.pagelinkAreas) {
+				container.removeTextArea(additionalArea);
+			}
+		}
+
+		@Override
+		EnumPushOrder getPushOrder() {
+			return EnumPushOrder.SECOND;
 		}
 	}
 }

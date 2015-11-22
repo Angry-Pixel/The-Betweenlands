@@ -3,6 +3,7 @@ package thebetweenlands.manual.gui.widgets.text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,16 @@ public class TextContainer {
 	public static class TextArea {
 		public final TextPage page;
 		public int x, y, width, height;
-		private final int additionalLeftWidth, additionalRightWidth;
+		private int additionalLeftWidth, additionalRightWidth;
+		public TextArea(TextArea area) {
+			this.page = area.page;
+			this.x = area.x;
+			this.y = area.y;
+			this.width = area.width;
+			this.height = area.height;
+			this.additionalLeftWidth = area.additionalLeftWidth;
+			this.additionalRightWidth = area.additionalRightWidth;
+		}
 		public TextArea(TextPage page, int x, int y, int width, int height) {
 			this.page = page;
 			this.x = x;
@@ -45,8 +55,17 @@ public class TextContainer {
 			this.additionalLeftWidth = additionalLeftWidth;
 			this.additionalRightWidth = additionalRightWidth;
 		}
-		public boolean isInside(int mouseX, int mouseY) {
-			return mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + height;
+		public boolean isInside(int offsetX, int offsetY, int mouseX, int mouseY) {
+			return mouseX >= x + offsetX && mouseX < x + offsetX + width && mouseY >= y + offsetY && mouseY < y + offsetY + height;
+		}
+		public TextArea setBounds(TextArea area) {
+			this.x = area.x;
+			this.y = area.y;
+			this.width = area.width;
+			this.height = area.height;
+			this.additionalLeftWidth = area.additionalLeftWidth;
+			this.additionalRightWidth = area.additionalRightWidth;
+			return this;
 		}
 		public TextArea withSpace() {
 			return new TextArea(this.page, this.x - this.additionalLeftWidth, this.y, this.width + this.additionalRightWidth + this.additionalLeftWidth, this.height);
@@ -64,12 +83,9 @@ public class TextContainer {
 
 	public static class TooltipArea extends TextArea {
 		public final String text;
-		public TooltipArea(TextPage page, int x, int y, int width, int height, String text) {
-			super(page, x, y, width, height);
-			this.text = text;
-		}
+
 		public TooltipArea(TextArea area, String text) {
-			super(area.page, area.x, area.y, area.width, area.height);
+			super(area);
 			this.text = text;
 		}
 
@@ -77,9 +93,9 @@ public class TextContainer {
 		public boolean equals(Object object) {
 			if(object instanceof TooltipArea) {
 				TooltipArea area = (TooltipArea) object;
-				return super.equals(area) && area.text == this.text;
+				return super.equals(area) && area.text.equals(this.text);
 			}
-			return super.equals(object);
+			return false;
 		}
 	}
 
@@ -230,7 +246,7 @@ public class TextContainer {
 			List<String> tooltipLines = new ArrayList<String>();
 			for(TextArea ta : this.getTextAreas()) {
 				if(ta instanceof TooltipArea) {
-					if(ta.isInside(mouseX - x, mouseY - y)) {
+					if(ta.isInside(x, y, mouseX, mouseY)) {
 						tooltipLines.add(((TooltipArea)ta).text);
 					}
 				}
@@ -508,9 +524,11 @@ public class TextContainer {
 			for(int i = 0; i < words.length; i++) {
 				String word = words[i];
 				boolean isSeperateWord = i < this.spaceIndices.length && this.spaceIndices[i];
+				boolean isNextSeperateWord = i + 1 < this.spaceIndices.length && this.spaceIndices[i + 1];
 				if(word.length() > 0) {
 					List<String> usedFormats = new ArrayList<String>();
 					List<TextFormatType> wordComponentTypes = this.getTextFormatTypesForWord(this.componentMap, wordIndex);
+					excpWordIndex = wordIndex;
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
 						if(textFormat == null) throw new Exception("Unknown format: " + componentType.type + " Word index: " + excpWordIndex);
@@ -559,14 +577,18 @@ public class TextContainer {
 
 					currentFontHeight = renderStrHeight > currentFontHeight ? renderStrHeight : currentFontHeight;
 
+					if(isSeperateWord && !(xCursor > xOffsetMax)) {
+						combinedAreas.clear();
+					}
+
 					//This offsets combined words to a new line if necessary
 					int nextLastFontHeight = lastFontHeight;
 					boolean jumped = false;
 					if(isSeperateWord && nextLine && !wasSeperateWord && combinedAreas.size() > 0) {
 						TextArea firstSegment = offsetSegment;
 						offsetSegment = null;
-						int offsetX = firstSegment.x;
-						int offsetY = yCursor - (firstSegment.y) + prevOffsetHeight;
+						int offsetX = -firstSegment.x;
+						int offsetY = yCursor - firstSegment.y + prevCurrentFontHeight;
 						int maxHeight = 0;
 						for(TextArea segment : combinedAreas) {
 							segment.x += offsetX;
@@ -574,20 +596,20 @@ public class TextContainer {
 							if(segment.height > maxHeight) maxHeight = segment.height;
 						}
 						TextArea lastSegment = combinedAreas.get(combinedAreas.size() - 1);
-						xCursor = lastSegment.x + lastSegment.width;
+						xCursor = lastSegment.x + lastSegment.withSpace().width;
 						lastWordXCursor = xCursor;
-						yCursor += prevPrevOffsetHeight * (this.nextLine > 0 ? this.nextLine : 1);
+						yCursor += prevCurrentFontHeight * (this.nextLine > 0 ? this.nextLine : 1);
 						lastFontHeight = currentFontHeight;
+						if(yCursor + currentFontHeight >= this.height) {
+							xCursor = 0;
+							yCursor = 0;
+							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+						}
 						currentFontHeight = 0;
 						combinedAreas.clear();
 						nextLine = xCursor + renderStrWidth > xOffsetMax;
 						jumped = true;
 						this.nextLine = 0;
-						if(yCursor >= this.height) {
-							xCursor = 0;
-							yCursor = 0;
-							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
-						}
 					}
 
 					if(isSeperateWord && nextLine) {
@@ -595,21 +617,19 @@ public class TextContainer {
 						lastWordXCursor = 0;
 						yCursor += lastFontHeight * (this.nextLine > 0 ? this.nextLine : 1);
 						lastFontHeight = currentFontHeight;
-						currentFontHeight = 0;
-						this.nextLine = 0;
-						if(yCursor >= this.height) {
+						if(yCursor + currentFontHeight >= this.height) {
 							xCursor = 0;
 							yCursor = 0;
 							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
 						}
-					} else if(isSeperateWord && !nextLine) {
-						combinedAreas.clear();
+						currentFontHeight = 0;
+						this.nextLine = 0;
 					}
 
 					if(jumped) lastFontHeight = nextLastFontHeight;
 
 					int additionalSpaceWidth = isSeperateWord ? (xCursor - lastWordXCursor) : 0;
-					TextArea currentTextArea = new TextArea(this.currentPage, xCursor, yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isSeperateWord ? renderSpaceWidth : 0);
+					TextArea currentTextArea = new TextArea(this.currentPage, xCursor, yCursor, renderStrWidth, renderStrHeight, additionalSpaceWidth, isNextSeperateWord || isSeperateWord ? renderSpaceWidth : 0);
 
 					for(TextFormatType componentType : wordComponentTypes) {
 						TextFormat textFormat = this.textFormatComponents.get(componentType.type);
@@ -659,28 +679,30 @@ public class TextContainer {
 						this.currentPage.textSegments.add(segment);
 
 						xCursor += renderStrWidth;
-						if(isSeperateWord) xCursor += renderSpaceWidth;
+						if(isNextSeperateWord || isSeperateWord) xCursor += renderSpaceWidth;
 
 						lastWordXCursor = xCursor;
 					}
 
 					wordIndex++;
 				} else {
-					if(isSeperateWord) xCursor += defaultSpaceWidth;
+					if(isNextSeperateWord || isSeperateWord) xCursor += defaultSpaceWidth;
 				}
 				wasSeperateWord = isSeperateWord;
 			}
 			for(TextArea area : tmpTextAreas) {
 				area.page.textAreas.add(area);
 			}
-			//this.currentPage.textAreas.addAll(tmpTextAreas);
 		} catch(Exception ex) {
-			this.parserError = new Exception("Stack underflow. Stack type: " + currentStackType + " Word index: " + excpWordIndex, ex);
-			throw this.parserError;
+			if(ex instanceof EmptyStackException) {
+				this.parserError = new Exception("Stack underflow. Stack type: " + currentStackType + " Word index: " + excpWordIndex, ex);
+				throw this.parserError;
+			}
+			throw ex;
 		}
 		for(Entry<String, Stack<TextFormatTag>> e : this.textFormatComponentStacks.entrySet()) {
 			if(e.getValue().size() > 1) {
-				this.parserError = new Exception("Stack overflow. Stack type: " + e.getKey() + " Stack size: " + e.getValue().size() + " Word index: " + excpWordIndex);
+				this.parserError = new Exception("Stack overflow. Stack type: " + e.getKey() + " Stack size: " + e.getValue().size());
 				throw this.parserError;
 			}
 		}
