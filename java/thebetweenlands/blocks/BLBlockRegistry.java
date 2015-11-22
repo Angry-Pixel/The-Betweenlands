@@ -394,6 +394,7 @@ public class BLBlockRegistry {
 	public static final Block tarLootPot1 = new BlockTarLootPot1();
 	public static final Block tarLootPot2 = new BlockTarLootPot2();
 	public static final Block tarLootPot3 = new BlockTarLootPot3();
+	public static final BlockMossBed mossBed = new BlockMossBed();
 
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);

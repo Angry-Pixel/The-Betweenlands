@@ -32,21 +32,7 @@ import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.client.render.TessellatorDebug;
-import thebetweenlands.client.render.block.BlockBLLeverRenderer;
-import thebetweenlands.client.render.block.BlockDoorRenderer;
-import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
-import thebetweenlands.client.render.block.BlockHollowLogRenderer;
-import thebetweenlands.client.render.block.BlockModelPlantRenderer;
-import thebetweenlands.client.render.block.BlockMudFlowerPotRenderer;
-import thebetweenlands.client.render.block.BlockRootRenderer;
-import thebetweenlands.client.render.block.BlockRubberLogRenderer;
-import thebetweenlands.client.render.block.BlockRubberTapRenderer;
-import thebetweenlands.client.render.block.BlockSlopeRenderer;
-import thebetweenlands.client.render.block.BlockStalactiteRenderer;
-import thebetweenlands.client.render.block.BlockSwampReedRenderer;
-import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
-import thebetweenlands.client.render.block.BlockWalkwayRenderer;
-import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.block.*;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderBLItemFrame;
 import thebetweenlands.client.render.entity.RenderBerserkerGuardian;
@@ -207,7 +193,8 @@ public class ClientProxy extends CommonProxy {
 		LEVER,
 		MUDFLOWERPOT,
 		SLOPE,
-		HOLLOW_LOG;
+		HOLLOW_LOG,
+		MOSS_BED;
 
 		private final int ID;
 
@@ -339,6 +326,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockRubberTapRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBLLeverRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockMudFlowerPotRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockMossBedRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 
