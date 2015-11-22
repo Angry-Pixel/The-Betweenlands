@@ -11,38 +11,48 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
     }
 }
 
-apply plugin: 'forge'
+apply plugin: "forge"
 
-project.ext.buildnumber = "undefined"
-if (System.getenv().BUILD_NUMBER) project.buildnumber = System.getenv().BUILD_NUMBER
+project.ext.buildnumber = ""
+if (System.getenv().BUILD_NUMBER) project.buildnumber = "-build." + System.getenv().BUILD_NUMBER
 
-version = "1.7.10-1.0.0-alpha.1-build." + project.buildnumber
+version = "1.7.10-1.0.0-alpha.1" + project.buildnumber
 group = "net.angrypixel"
-archivesBaseName = 'TheBetweenlands'
-
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
+archivesBaseName = "TheBetweenlands"
+sourceCompatibility = targetCompatibility = "1.7"
 
 minecraft {
-    version = "1.7.10-10.13.4.1448-1.7.10"
+    version = "1.7.10-10.13.4.1558-1.7.10"
     runDir = "minecraft"
-    replace '${version}', project.version
-    replace '/*!*/true/*!*/', 'false'
+    replace "${version}", project.version
+    replace "/*!*/true/*!*/", "false"
+}
+
+configurations {
+    include
 }
 
 sourceSets {
     main {
         output.resourcesDir = output.classesDir
         java { 
-            srcDir 'java' 
+            srcDir "java" 
         }
         resources { 
-            srcDir 'resources' 
+            srcDir "resources"
         }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "ilexiconn"
+        url = "http://maven.ilexiconn.net/"
     }
 }
 
@@ -50,31 +60,38 @@ processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+    from (sourceSets.main.resources.srcDirs) {
+        include "mcmod.info"
+        expand "version":project.version, "mcversion":project.minecraft.version
     }
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+    from (sourceSets.main.resources.srcDirs) {
+        exclude "mcmod.info"
     }
 }
 
+dependencies {
+    compile "net.ilexiconn:llibrary:0.5.5-1.7.10:dev"
+    include "net.ilexiconn:llibrary-wrapper:1.7.10"
+}
+
 jar {
-    classifier = 'universal'
+    classifier = "universal"
+    from configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
     manifest {
-        attributes('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
-        attributes('FMLCorePluginContainsFMLMod': 'true')
+        attributes ("FMLCorePlugin": "thebetweenlands.core.TheBetweenlandsLoadingPlugin")
+        attributes ("FMLCorePlugin": "net.ilexiconn.llibrary.LLibraryWrapper")
+        attributes ("FMLCorePluginContainsFMLMod": "true")
     }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'src'
+    classifier = "src"
     from sourceSets.main.allSource
 }
 
 task devJar(type: Jar) {
-    classifier = 'dev'
+    classifier = "dev"
     from sourceSets.main.output
 }
 
