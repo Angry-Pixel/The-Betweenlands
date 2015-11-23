@@ -21,11 +21,11 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockPoisonIvy extends BlockVine implements IHarvestable, ISyrmoriteShearable {
+public class BlockPoisonIvy extends BlockVine implements ISickleHarvestable, ISyrmoriteShearable {
 	private final int[] directionToMeta = { -1, -1, 1, 4, 8, 2 };
 
 	@SideOnly(Side.CLIENT)

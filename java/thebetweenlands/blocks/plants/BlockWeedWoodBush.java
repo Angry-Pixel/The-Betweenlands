@@ -1,22 +1,29 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.tools.ISickleHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockWeedWoodBush extends Block {
+public class BlockWeedWoodBush extends Block implements ISyrmoriteShearable, ISickleHarvestable {
 	@SideOnly(Side.CLIENT)
 	public IIcon iconFancy, iconFast, iconStick;
 
@@ -60,5 +67,27 @@ public class BlockWeedWoodBush extends Block {
 		iconFast = iconRegister.registerIcon(ModInfo.ID + ":weedwoodLeavesFast");
 		iconStick = iconRegister.registerIcon(ModInfo.ID + ":weedWoodStick");
 		super.registerBlockIcons(iconRegister);
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
+		return ret;
 	}
 }

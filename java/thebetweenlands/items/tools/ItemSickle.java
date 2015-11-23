@@ -38,8 +38,8 @@ public class ItemSickle extends Item implements ICorrodible {
 			return false;
 		}
 		Block block = player.worldObj.getBlock(x, y, z);
-		if (block instanceof IHarvestable) {
-			IHarvestable target = (IHarvestable)block;
+		if (block instanceof ISickleHarvestable) {
+			ISickleHarvestable target = (ISickleHarvestable)block;
 			if (target.isHarvestable(itemstack, player.worldObj, x, y, z)) {
 				ArrayList<ItemStack> drops = target.getHarvestableDrops(itemstack, player.worldObj, x, y, z, EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, itemstack));
 				Random rand = new Random();

@@ -19,12 +19,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvestable, ISyrmoriteShearable {
+public class BlockDoubleHeightPlant extends BlockDoublePlant implements ISickleHarvestable, ISyrmoriteShearable {
 	@SideOnly(Side.CLIENT)
 	public IIcon topIcon, bottomIcon, spoopyTopIcon, spoopyBottomIcon;
 	protected final String name;

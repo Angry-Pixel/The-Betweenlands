@@ -24,10 +24,10 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockGoldenClub extends BlockSwampWater implements IPlantable, IHarvestable, ISyrmoriteShearable {
+public class BlockGoldenClub extends BlockSwampWater implements IPlantable, ISickleHarvestable, ISyrmoriteShearable {
 	public IIcon iconGoldenClubBottom;
 	public IIcon iconGoldenClubTop;
 

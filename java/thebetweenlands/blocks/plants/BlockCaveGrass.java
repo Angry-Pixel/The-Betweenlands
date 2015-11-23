@@ -10,10 +10,10 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockCaveGrass extends BlockBLSmallPlants implements IHarvestable, ISyrmoriteShearable {
+public class BlockCaveGrass extends BlockBLSmallPlants implements ISickleHarvestable, ISyrmoriteShearable {
 	public BlockCaveGrass(String type) {
 		super(type);
 	}

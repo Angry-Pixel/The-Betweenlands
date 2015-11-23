@@ -20,11 +20,11 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockBLHanger extends BlockBush implements IHarvestable, ISyrmoriteShearable {
+public class BlockBLHanger extends BlockBush implements ISickleHarvestable, ISyrmoriteShearable {
 	private String type;
 
 	@SideOnly(Side.CLIENT)

@@ -321,7 +321,7 @@ public class BLBlockRegistry {
 	public static final BlockBlackHatMushroom blackHatMushroom = new BlockBlackHatMushroom();
 	public static final BlockFlatHeadMushroom flatHeadMushroom = new BlockFlatHeadMushroom();
 	public static final BlockBulbCappedMushroom bulbCappedMushroom = new BlockBulbCappedMushroom();
-	public static final BlockSwampPlant swampPlant = new BlockSwampPlant();
+	public static final BlockSwampPlant swampPlant = (BlockSwampPlant) new BlockSwampPlant().setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GENERIC_LEAF));
 	public static final BlockVenusFlyTrap venusFlyTrap = (BlockVenusFlyTrap) new BlockVenusFlyTrap().setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VENUS_FLY_TRAP));
 	public static final BlockVolarpad volarpad = (BlockVolarpad) new BlockVolarpad().setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 	public static final BlockThorns thorns = new BlockThorns();
@@ -391,7 +391,7 @@ public class BLBlockRegistry {
 	public static final Block boneset = new BlockBLSmallPlants("boneset").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BONESET_FLOWERS));
 	public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BOTTLE_BRUSH_GRASS_BLADES));
 	public static final Block sludgecreep = new BlockBLSmallPlants("sludgecreep").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SLUDGECREEP_LEAVES));
-	public static final Block deadWeedwoodBush = new BlockBLSmallPlants("deadWeedwoodBush");
+	public static final Block deadWeedwoodBush = new BlockBLSmallPlants("deadWeedwoodBush").setHarvestedItem(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockBLHanger("hanger");

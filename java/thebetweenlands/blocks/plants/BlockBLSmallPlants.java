@@ -19,11 +19,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, ISyrmoriteShearable {
+public class BlockBLSmallPlants extends BlockTallGrass implements ISickleHarvestable, ISyrmoriteShearable {
 	protected final String name;
 
 	private boolean harvestable = false;

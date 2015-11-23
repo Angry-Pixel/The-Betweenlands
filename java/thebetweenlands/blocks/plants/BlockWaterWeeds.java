@@ -23,10 +23,10 @@ import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, IHarvestable, ISyrmoriteShearable {
+public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISickleHarvestable, ISyrmoriteShearable {
 	public IIcon iconWaterWeeds;
 
 	public BlockWaterWeeds() {

@@ -18,10 +18,10 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockCaveMoss extends BlockBush implements IHarvestable, ISyrmoriteShearable {
+public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, ISyrmoriteShearable {
 	private IIcon lower;
 
 	public BlockCaveMoss() {

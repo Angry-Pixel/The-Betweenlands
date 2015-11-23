@@ -14,10 +14,10 @@ import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockThorns extends BlockVine implements IHarvestable, ISyrmoriteShearable {
+public class BlockThorns extends BlockVine implements ISickleHarvestable, ISyrmoriteShearable {
 
 	public BlockThorns() {
 		super();
