@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -20,6 +21,8 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 
 public class BlockLifeCrystalOre extends BlockSwampWater {
+	private Random rand = new Random();
+
 	@SideOnly(Side.CLIENT)
 	public IIcon iconBackground, iconGlowing;
 
@@ -93,5 +96,11 @@ public class BlockLifeCrystalOre extends BlockSwampWater {
 
 	protected boolean canPlaceBlockOn(World world, Block block, int x, int y, int z) {
 		return block == this || block.isSideSolid(world, x, y, z, ForgeDirection.UP);
+	}
+
+	@Override
+	public int getExpDrop(IBlockAccess world, int meta, int fortune) {
+		int xpAmount = MathHelper.getRandomIntegerInRange(rand, 12, 25);
+		return xpAmount;
 	}
 }

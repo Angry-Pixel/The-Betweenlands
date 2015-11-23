@@ -16,7 +16,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.world.events.impl.EventSpoopy;
@@ -32,6 +31,8 @@ public class BlockBLLeaves extends BlockLeaves {
 	private IIcon spoopyFastIcon;
 	private boolean placedByPlayer;
 
+	private boolean hasSpoopyTexture = false;
+
 	public BlockBLLeaves(String blockName) {
 		setHardness(0.2F);
 		setLightOpacity(1);
@@ -42,34 +43,20 @@ public class BlockBLLeaves extends BlockLeaves {
 		setBlockTextureName("thebetweenlands:" + type);
 	}
 
+	public BlockBLLeaves setHasSpoopyTexture(boolean spoopyTexture) {
+		this.hasSpoopyTexture = spoopyTexture;
+		return this;
+	}
+
 	@Override
 	public String getLocalizedName() {
 		return String.format(StatCollector.translateToLocal("tile.thebetweenlands." + type));
 	}
 
 	@Override
-	public Item getItemDropped(int meta, Random rand, int fortune) {
-		switch (this.type) {
-		case "weedwoodLeaves":
-			return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
-		case "sapTreeLeaves":
-			return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
-		case "rubberTreeLeaves":
-			return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
-		case "purpleRainLeavesDark":
-			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
-		case "purpleRainLeavesLight":
-			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
-		default:
-			return Item.getItemFromBlock(this);
-		}
-	}
-
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLeaves") || this.type.equals("sapTreeLeaves") || this.type.equals("rubberTreeLeaves"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return Minecraft.getMinecraft().gameSettings.fancyGraphics ? spoopyIcon : spoopyFastIcon;
 		}
 		return Minecraft.getMinecraft().gameSettings.fancyGraphics ? blockIcon : fastIcon;
@@ -91,7 +78,7 @@ public class BlockBLLeaves extends BlockLeaves {
 	public void registerBlockIcons(IIconRegister reg) {
 		blockIcon = reg.registerIcon(getTextureName() + "Fancy");
 		fastIcon = reg.registerIcon(getTextureName() + "Fast");
-		if(this.type.equals("weedwoodLeaves") || this.type.equals("sapTreeLeaves") || this.type.equals("rubberTreeLeaves")) {
+		if(this.hasSpoopyTexture) {
 			spoopyIcon = reg.registerIcon(getTextureName() + "FancySpoopy");
 			spoopyFastIcon = reg.registerIcon(getTextureName() + "FastSpoopy");
 		}
@@ -111,7 +98,6 @@ public class BlockBLLeaves extends BlockLeaves {
 
 	@Override
 	public String[] func_150125_e() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

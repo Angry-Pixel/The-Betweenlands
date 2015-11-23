@@ -18,15 +18,14 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.world.feature.trees.WorldGenRubberTree;
-import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class BlockBLSapling extends BlockSapling {
 
 	private String type;
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
+
+	private WorldGenerator treeGen = null;
 
 	public BlockBLSapling(String blockName) {
 		setCreativeTab(ModCreativeTabs.plants);
@@ -35,6 +34,11 @@ public class BlockBLSapling extends BlockSapling {
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
+	}
+
+	public BlockBLSapling setTreeGenerator(WorldGenerator gen) {
+		this.treeGen = gen;
+		return this;
 	}
 
 	@Override
@@ -89,29 +93,9 @@ public class BlockBLSapling extends BlockSapling {
 	private void growTree(World world, int x, int y, int z, Random rand) {
 		if (!TerrainGen.saplingGrowTree(world, rand, x, y, z))
 			return;
-
-		WorldGenerator worldGen = null;
-
-		if(type.equals("saplingWeedwood")) {
-			worldGen = new WorldGenWeedWoodTree();
-		}
-
-		if(type.equals("saplingSapTree")) {
-			worldGen = new WorldGenSapTree();
-		}
-
-		if(type.equals("saplingRubberTree")) {
-			worldGen = new WorldGenRubberTree();
-		}
-
-		if(type.equals("saplingSpiritTree")) {
-			System.out.println("Generate Spirit Tree");
-			//worldGen = new WorldGenSpiritTree();
-		}
-
+		WorldGenerator worldGen = this.treeGen;
 		if (worldGen == null)
 			return;
-
 		world.setBlockToAir(x, y, z);
 		if (!worldGen.generate(world, rand, x, y, z))
 			world.setBlock(x, y, z, this);

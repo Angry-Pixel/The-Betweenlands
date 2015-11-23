@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -10,9 +12,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockThorns extends BlockVine implements ISyrmoriteShearable {
+public class BlockThorns extends BlockVine implements IHarvestable, ISyrmoriteShearable {
 
 	public BlockThorns() {
 		super();
@@ -42,5 +47,17 @@ public class BlockThorns extends BlockVine implements ISyrmoriteShearable {
 	@Override
 	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.THORNS));
+		return dropList;
 	}
 }

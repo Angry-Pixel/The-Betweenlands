@@ -2,7 +2,6 @@ package thebetweenlands.blocks.plants;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,26 +10,25 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.herblore.ItemGenericPlantDrop;
-import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, ISyrmoriteShearable {
 	protected final String name;
+
+	private boolean harvestable = false;
+	private ItemStack harvestItem = null;
+	private boolean hasSpoopyTexture = false;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon spoopyBlockIcon;
@@ -44,28 +42,22 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, 
 		setBlockName("thebetweenlands." + name);
 	}
 
-	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand) {
-		super.updateTick(world, x, y, z, rand);
-		if (rand.nextInt(25) == 0) {
-			int xx;
-			int yy;
-			int zz;
-			xx = x + rand.nextInt(3) - 1;
-			yy = y + rand.nextInt(2) - rand.nextInt(2);
-			zz = z + rand.nextInt(3) - 1;
-			if (world.isAirBlock(xx, yy, zz) && canBlockStay(world, xx, yy, zz)) {
-				if ("nettle".equals(name) && rand.nextInt(3) == 0)
-					world.setBlock(x, y, z, BLBlockRegistry.nettleFlowered);
-				if ("nettleFlowered".equals(name))
-					world.setBlock(xx, yy, zz, BLBlockRegistry.nettle);
-			}
-			if (rand.nextInt(40) == 0) {
-				if ("nettleFlowered".equals(name))
-					world.setBlock(x, y, z, BLBlockRegistry.nettle);
-			}
-		}
+	public BlockBLSmallPlants setHarvestable(boolean harvestable) {
+		this.harvestable = harvestable;
+		return this;
 	}
+
+	public BlockBLSmallPlants setHarvestedItem(ItemStack harvestedItem) {
+		this.harvestable = true;
+		this.harvestItem = harvestedItem;
+		return this;
+	}
+
+	public BlockBLSmallPlants setHasSpoopyTexture(boolean spoopyTexture) {
+		this.hasSpoopyTexture = spoopyTexture;
+		return this;
+	}
+
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
@@ -76,12 +68,6 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, 
 	@Override	
 	protected boolean canPlaceBlockOn(Block block) {
 		return block == Blocks.grass || block == Blocks.dirt || block == Blocks.farmland || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.swampGrass || block == BLBlockRegistry.deadGrass || block == BLBlockRegistry.swampDirt || block == BLBlockRegistry.sludgyDirt || block == BLBlockRegistry.mud;
-	}
-
-	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if("nettle".equals(name) || "nettleFlowered".equals(name)) 
-			entity.attackEntityFrom(DamageSource.cactus, 1);
 	}
 
 	@Override
@@ -106,7 +92,7 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.name.equals("swampTallGrass") || this.name.equals("softRush") || this.name.equals("cattail") || this.name.equals("blueEyedGrass"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return spoopyBlockIcon;
 		}
 		return blockIcon;
@@ -116,7 +102,7 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, 
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		blockIcon = iconRegister.registerIcon("thebetweenlands:" + name);
-		if(this.name.equals("swampTallGrass") || this.name.equals("blueEyedGrass") || this.name.equals("cattail") || this.name.equals("softRush")) {
+		if(this.hasSpoopyTexture) {
 			spoopyBlockIcon = iconRegister.registerIcon("thebetweenlands:" + name + "Spoopy");
 		}
 	}
@@ -129,59 +115,14 @@ public class BlockBLSmallPlants extends BlockTallGrass implements IHarvestable, 
 
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-		return item.getItem() == BLItemRegistry.sickle;
+		return this.harvestable && this.harvestItem != null;
 	}
 
 	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
-		switch(this.name) {
-		case "arrowArum":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));
-			break;
-		case "blueEyedGrass":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BLUE_EYED_GRASS_FLOWERS));
-			break;
-		case "blueIris":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BLUE_IRIS_PETAL));
-			break;
-		case "boneset":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BONESET_FLOWERS));
-			break;
-		case "bottleBrushGrass":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BOTTLE_BRUSH_GRASS_BLADES));
-			break;
-		case "buttonBush":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BUTTON_BUSH_FLOWERS));
-			break;
-		case "cattail":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CATTAIL_HEAD));
-			break;
-		case "copperIris":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.COPPER_IRIS_PETALS));
-			break;
-		case "marshHibiscus":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER));
-			break;
-		case "marshMallow":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_MALLOW_FLOWER));
-			break;
-		case "nettle":
-		case "nettleFlowered":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
-			break;
-		case "pickerelWeed":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PICKEREL_WEED_FLOWER));
-			break;
-		case "shoots":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SHOOT_LEAVES));
-			break;
-		case "sludgecreep":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SLUDGECREEP_LEAVES));
-			break;
-		case "softRush":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SOFT_RUSH_LEAVES));
-			break;
+		if(this.harvestItem != null) {
+			dropList.add(new ItemStack(this.harvestItem.getItem(), this.harvestItem.stackSize, this.harvestItem.getItemDamage()));
 		}
 		return dropList;
 	}

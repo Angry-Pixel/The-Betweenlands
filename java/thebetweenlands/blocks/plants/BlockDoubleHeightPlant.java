@@ -19,9 +19,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.herblore.ItemGenericPlantDrop;
-import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -30,8 +27,11 @@ import thebetweenlands.world.events.impl.EventSpoopy;
 public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvestable, ISyrmoriteShearable {
 	@SideOnly(Side.CLIENT)
 	public IIcon topIcon, bottomIcon, spoopyTopIcon, spoopyBottomIcon;
-	private final String name;
+	protected final String name;
 	Random rnd = new Random();
+	private boolean harvestable = false;
+	private ItemStack harvestItem = null;
+	private boolean hasSpoopyTexture = false;
 
 	private int renderType = -1;
 
@@ -54,6 +54,22 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvest
 		return this;
 	}
 
+	public BlockDoubleHeightPlant setHarvestable(boolean harvestable) {
+		this.harvestable = harvestable;
+		return this;
+	}
+
+	public BlockDoubleHeightPlant setHarvestedItem(ItemStack stack) {
+		this.harvestable = true;
+		this.harvestItem = stack;
+		return this;
+	}
+
+	public BlockDoubleHeightPlant setHasSpoopyTexture(boolean spoopyTexture) {
+		this.hasSpoopyTexture = spoopyTexture;
+		return this;
+	}
+
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 	}
@@ -71,7 +87,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvest
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.name.equals("DoubleSwampTallgrass")) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return spoopyTopIcon;
 		}
 		return topIcon;
@@ -80,7 +96,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvest
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.name.equals("DoubleSwampTallgrass") || this.name.equals("TallCattail") || this.name.equals("Phragmites"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return func_149887_c(world.getBlockMetadata(x, y, z)) ? spoopyTopIcon : spoopyBottomIcon;
 		}
 		return func_149887_c(world.getBlockMetadata(x, y, z)) ? topIcon : bottomIcon;
@@ -90,9 +106,8 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvest
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
 		topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
-		if(!name.equals("Sundew"))
-			bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
-		if(this.name.equals("DoubleSwampTallgrass") || this.name.equals("Phragmites") || this.name.equals("TallCattail")) {
+		bottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Bottom");
+		if(this.hasSpoopyTexture) {
 			spoopyTopIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "TopSpoopy");
 			spoopyBottomIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "BottomSpoopy");
 		}
@@ -119,28 +134,14 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements IHarvest
 
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
-		return item.getItem() == BLItemRegistry.sickle;
+		return this.harvestable && this.harvestItem != null;
 	}
 
 	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
-		switch(this.name) {
-		case "BroomSedge":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BROOM_SEDGE_LEAVES));
-			break;
-		case "CardinalFlower":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CARDINAL_FLOWER_PETALS));
-			break;
-		case "Phragmites":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PHRAGMITE_STEMS));
-			break;
-		case "Sundew":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SUNDEW_HEAD));
-			break;
-		case "DoubleSwampTallgrass":
-			dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES));
-			break;
+		if(this.harvestItem != null) {
+			dropList.add(new ItemStack(this.harvestItem.getItem(), this.harvestItem.stackSize, this.harvestItem.getItemDamage()));
 		}
 		return dropList;
 	}

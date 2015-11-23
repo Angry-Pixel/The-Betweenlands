@@ -18,10 +18,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockBLHanger extends BlockBush  implements IHarvestable {
+public class BlockBLHanger extends BlockBush implements IHarvestable, ISyrmoriteShearable {
 	private String type;
 
 	@SideOnly(Side.CLIENT)
@@ -69,7 +72,7 @@ public class BlockBLHanger extends BlockBush  implements IHarvestable {
 	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(new ItemStack(this, 1));
+		ret.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.HANGER));
 		return ret;
 	}
 
@@ -113,4 +116,13 @@ public class BlockBLHanger extends BlockBush  implements IHarvestable {
 		return block.getMaterial().blocksMovement() || block == BLBlockRegistry.weedwoodLeaves || block instanceof BlockBLHanger;
 	}
 
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
 }

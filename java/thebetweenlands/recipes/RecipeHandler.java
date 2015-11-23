@@ -1,14 +1,10 @@
 package thebetweenlands.recipes;
 
-import java.util.List;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -16,8 +12,8 @@ import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
-import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
@@ -330,7 +326,6 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_FLATHEAD_MUSHROOM), new ItemStack(BLItemRegistry.flatheadMushroomItem));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GOLDEN_CLUB), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GOLDEN_CLUB_FLOWERS));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GREEN_MIDDLE_GEM), ItemGeneric.createStack(EnumItemGeneric.GREEN_MIDDLE_GEM));
-		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_HANGER), new ItemStack(Item.getItemFromBlock(BLBlockRegistry.hanger)));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_LICHEN), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.LICHEN));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MARSH_HIBISCUS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MARSH_MALLOW), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_MALLOW_FLOWER));
@@ -350,6 +345,12 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_SWAMP_GRASS_TALL), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_TANGLED_ROOTS), ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK), new ItemStack(BLBlockRegistry.weedwoodBark));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_HANGER), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.HANGER));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_WEEDS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_WEEDS));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VENUS_FLY_TRAP), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VENUS_FLY_TRAP));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VOLARPAD), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.THORNS));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
 	}
 
 	private static void registerCompostItems(){

@@ -32,9 +32,10 @@ import thebetweenlands.items.block.ItemBlockPlantSmall;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockWallPlants extends Block implements IHarvestable, ISubBlocksBlock {
+public class BlockWallPlants extends Block implements IHarvestable, ISyrmoriteShearable, ISubBlocksBlock {
 
 	public static final String[] iconPaths = new String[] { "moss", "lichen" };
 
@@ -470,5 +471,20 @@ public class BlockWallPlants extends Block implements IHarvestable, ISubBlocksBl
 			ret.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.LICHEN));
 		}
 		return ret;
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		if (meta == 2 || meta == 3 || meta == 4 || meta == 5 || meta == 6 || meta == 7) {
+			meta = META_MOSS;
+		} else if (meta == 8 || meta == 9 || meta == 10 || meta == 11 || meta == 12 || meta == 13) {
+			meta = META_LICHEN;
+		}
+		return new ItemStack(Item.getItemFromBlock(block), 1, meta);
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

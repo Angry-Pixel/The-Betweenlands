@@ -123,7 +123,9 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 		GROUND_GREEN_MIDDLE_GEM("groundGreenMiddleGem"), GROUND_HANGER("groundHanger"), GROUND_LICHEN("groundLichen"), GROUND_MARSH_MARIGOLD("groundMarshMarigold"),
 		GROUND_MIRE_CORAL("groundMireCoral"), GROUND_MIRE_SNAIL_SHELL("groundMireSnailShell"), GROUND_MOSS("groundMoss"), GROUND_NETTLE("groundNettle"),
 		GROUND_PHRAGMITES("groundPhragmites"), GROUND_SLUDGECREEP("groundSludgecreep"), GROUND_SUNDEW("groundSundew"), GROUND_SWAMP_KELP("groundSwampKelp"),
-		GROUND_TANGLED_ROOTS("groundTangledRoot"), GROUND_AQUA_MIDDLE_GEM("groundAquaMiddleGem");
+		GROUND_TANGLED_ROOTS("groundTangledRoot"), GROUND_AQUA_MIDDLE_GEM("groundAquaMiddleGem"), GROUND_PITCHER_PLANT("groundPitcherPlant"), 
+		GROUND_WATER_WEEDS("groundWaterWeeds"), GROUND_VENUS_FLY_TRAP("groundVenusFlyTrap"), GROUND_VOLARPAD("groundVolarpad"), GROUND_THORNS("groundThorns"),
+		GROUND_POISON_IVY("groundPoisonIvy");
 
 		public final String iconName;
 

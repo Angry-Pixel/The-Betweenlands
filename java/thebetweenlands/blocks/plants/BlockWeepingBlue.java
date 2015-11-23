@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -33,7 +34,7 @@ public class BlockWeepingBlue extends BlockDoubleHeightPlant {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		drops.add(new ItemStack(BLItemRegistry.weepingBluePetal, 1 + world.rand.nextInt(3) + fortune));
+		drops.add(new ItemStack(BLItemRegistry.weepingBluePetal, 1 + world.rand.nextInt(3) + world.rand.nextInt(fortune + 1)));
 		return drops;
 	}
 	
@@ -49,5 +50,10 @@ public class BlockWeepingBlue extends BlockDoubleHeightPlant {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
 		return modelTexture1;
+	}
+	
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return false;
 	}
 }

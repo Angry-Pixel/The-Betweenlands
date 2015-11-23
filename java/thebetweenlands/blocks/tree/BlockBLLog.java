@@ -13,8 +13,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.entities.mobs.EntityTermite;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLLog extends BlockLog {
@@ -23,11 +21,24 @@ public class BlockBLLog extends BlockLog {
 	@SideOnly(Side.CLIENT)
 	private IIcon iconSide, iconTop, spoopyIconSide, spoopyIconTop;
 
+	private boolean hasSpoopyTexture = false;
+	private boolean hasSeperateTopIcon = true;
+
 	public BlockBLLog(String blockName) {
 		setCreativeTab(ModCreativeTabs.plants);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
+	}
+
+	public BlockBLLog setHasSpoopyTexture(boolean spoopyTexture) {
+		this.hasSpoopyTexture = spoopyTexture;
+		return this;
+	}
+
+	public BlockBLLog setHasSperateTopIcon(boolean seperateTopIcon) {
+		this.hasSeperateTopIcon = seperateTopIcon;
+		return this;
 	}
 
 	@Override
@@ -36,25 +47,9 @@ public class BlockBLLog extends BlockLog {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		if (type.equals("sapTreeLog")) {
-			ArrayList<ItemStack> drops = new ArrayList<ItemStack>();;
-			for (int i = 0; i < 1 + world.rand.nextInt(2 + fortune); i++)
-				drops.add(new ItemStack(BLItemRegistry.sapBall));
-			return drops;
-		}
-		return super.getDrops(world, x, y, z, metadata, fortune);
-	}
-
-	@Override
-	public boolean canSilkHarvest(World world, EntityPlayer player, int x, int y, int z, int metadata) {
-		return type.equals("sapTreeLog") ? true : super.canSilkHarvest(world, player, x, y, z, metadata);
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getSideIcon(int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return this.spoopyIconSide;
 		}
 		return iconSide;
@@ -63,7 +58,7 @@ public class BlockBLLog extends BlockLog {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getTopIcon(int meta) {
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && (this.type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark"))) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld) && this.hasSpoopyTexture) {
 			return this.spoopyIconTop;
 		}
 		return iconTop;
@@ -73,30 +68,19 @@ public class BlockBLLog extends BlockLog {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		iconSide = iconRegister.registerIcon(getTextureName());
-		if(type.equals("weedwood") || type.equals("weedwoodBark") || type.equals("rottenWeedwoodBark") || type.equals("portalBark"))
+		if(!this.hasSeperateTopIcon)
 			iconTop = iconSide;
 		else
-			iconTop = iconRegister.registerIcon(getTextureName()+"Top");
-		if(type.equals("weedwoodLog") || type.equals("sapTreeLog") || type.equals("rubberTreeLog") || type.equals("weedwoodBark")) {
-			this.spoopyIconSide = iconRegister.registerIcon(getTextureName()+"Spoopy");
-			if(type.equals("weedwoodBark")) {
+			iconTop = iconRegister.registerIcon(getTextureName() + "Top");
+		if(this.hasSpoopyTexture) {
+			this.spoopyIconSide = iconRegister.registerIcon(getTextureName() + "Spoopy");
+			if(!this.hasSeperateTopIcon) {
 				this.spoopyIconTop = this.spoopyIconSide;
 			} else {
-				this.spoopyIconTop = iconRegister.registerIcon(getTextureName()+"TopSpoopy");
+				this.spoopyIconTop = iconRegister.registerIcon(getTextureName() + "TopSpoopy");
 			}
 		}
 	}
-
-	@Override
-	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-		if (!world.isRemote)
-			if ("rottenWeedwoodBark".equals(type) && world.rand.nextInt(3) == 0) {
-				EntityTermite entity = new EntityTermite(world);
-				entity.setLocationAndAngles(x + 0.5D, y, z + 0.5D, 0.0F, 0.0F);
-				world.spawnEntityInWorld(entity);
-			}
-		super.onBlockDestroyedByPlayer(world, x, y, z, meta);
-	}	  
 
 	public String getType(){
 		return type;

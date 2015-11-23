@@ -10,13 +10,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockBLFallenLeaves extends BlockBush{
+public class BlockBLFallenLeaves extends BlockBush implements ISyrmoriteShearable {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon spoopyIcon;
@@ -99,5 +101,15 @@ public class BlockBLFallenLeaves extends BlockBush{
 			return spoopyIcon;
 		}
 		return super.getIcon(side, meta);
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

@@ -1,5 +1,8 @@
 package thebetweenlands.blocks.ores;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -11,20 +14,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class BlockGenericOre extends Block {
 	private String type;
 	private ItemStack oreDrops;
 	private Random rand = new Random();
-	
+
+	private int minXP = 0, maxXP = 0;
+
 	public BlockGenericOre(String blockName, ItemStack oreDrops) {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
@@ -36,7 +34,13 @@ public class BlockGenericOre extends Block {
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 	}
-	
+
+	public BlockGenericOre setXP(int min, int max) {
+		this.minXP = min;
+		this.maxXP = max;
+		return this;
+	}
+
 	private ItemStack getOreDropped() {
 		return this.oreDrops != null ? new ItemStack(this.oreDrops.getItem(), 1, this.oreDrops.getItemDamage()) : this.oreDrops;
 	}
@@ -44,13 +48,13 @@ public class BlockGenericOre extends Block {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
-		
+
 		if(oreDrops != null)
 			for(int dropFortune = 0; dropFortune < 1 + fortune; dropFortune++)
 				drops.add(getOreDropped());
 		else
 			drops.add(new ItemStack(Item.getItemFromBlock(this)));
-		
+
 		return drops;
 	}
 
@@ -77,19 +81,8 @@ public class BlockGenericOre extends Block {
 
 	@Override
 	public int getExpDrop(IBlockAccess world, int meta, int fortune) {
-		int xpAmount = 0;
-
-		if (type.equals("sulfurOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 2, 5);
-		
-		else if (type.equals("valoniteOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
-		
-		else if (type.equals("lifeCrystalOre"))
-			xpAmount = MathHelper.getRandomIntegerInRange(rand, 3, 7);
-
+		int xpAmount = MathHelper.getRandomIntegerInRange(rand, this.minXP, this.maxXP);
 		return xpAmount;
-
 	}
 
 	@Override
@@ -120,12 +113,11 @@ public class BlockGenericOre extends Block {
 					particleX = x - pixel;
 
 				if (particleX < x || particleX > x + 1 || particleY < y || particleY > y + 1 || particleZ < z || particleZ > z + 1) {
-					if(type.equals("octineOre"))
-						BLParticle.FLAME.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
-					else if(type.equals("sulfurOre"))
-						BLParticle.SULFUR_ORE.spawn(world, particleX, particleY, particleZ, 0, 0, 0, 0);
+					this.spawnParticle(world, particleX, particleY, particleZ);
 				}
 			}
 		}
 	}
+
+	public void spawnParticle(World world, double x, double y, double z) { }
 }

@@ -19,12 +19,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
-import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
-public class BlockPoisonIvy extends BlockVine implements ISyrmoriteShearable {
+public class BlockPoisonIvy extends BlockVine implements IHarvestable, ISyrmoriteShearable {
 	private final int[] directionToMeta = { -1, -1, 1, 4, 8, 2 };
 
 	@SideOnly(Side.CLIENT)
@@ -80,5 +81,17 @@ public class BlockPoisonIvy extends BlockVine implements ISyrmoriteShearable {
 	@Override
 	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
+		return dropList;
 	}
 }

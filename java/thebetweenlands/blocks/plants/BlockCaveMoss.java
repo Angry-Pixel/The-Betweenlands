@@ -19,8 +19,9 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.IHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockCaveMoss extends BlockBush implements IHarvestable {
+public class BlockCaveMoss extends BlockBush implements IHarvestable, ISyrmoriteShearable {
 	private IIcon lower;
 
 	public BlockCaveMoss() {
@@ -119,5 +120,15 @@ public class BlockCaveMoss extends BlockBush implements IHarvestable {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS));
 		return dropList;
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 }

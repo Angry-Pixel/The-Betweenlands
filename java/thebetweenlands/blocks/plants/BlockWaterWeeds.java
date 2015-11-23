@@ -1,5 +1,6 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
@@ -20,9 +21,12 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.IHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyrmoriteShearable {
+public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, IHarvestable, ISyrmoriteShearable {
 	public IIcon iconWaterWeeds;
 
 	public BlockWaterWeeds() {
@@ -33,7 +37,7 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyr
 		setCreativeTab(ModCreativeTabs.plants);
 		setBlockBounds(0.1f, 0.0f, 0.1f, 0.9f, 0.9f, 0.9f);
 		setTickRandomly(true);
-        setLightLevel(0.875F);
+		setLightLevel(0.875F);
 		this.canSpread = false;
 		this.hasBoundingBox = true;
 		this.canReplenish = false;
@@ -83,11 +87,11 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyr
 		this.checkAndDropBlock(world, x, y, z);
 	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
-	
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return false;
+	}
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -99,7 +103,7 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyr
 	public boolean canPlaceBlockOn(Block block) {
 		return block == BLBlockRegistry.mud;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
@@ -116,5 +120,17 @@ public class BlockWaterWeeds extends BlockSwampWater implements IPlantable, ISyr
 	@Override
 	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
+		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_WEEDS));
+		return dropList;
 	}
 }
