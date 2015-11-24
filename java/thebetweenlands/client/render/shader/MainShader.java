@@ -342,8 +342,7 @@ public class MainShader extends CShader {
 		org.lwjgl.util.vector.Matrix4f MVP = new org.lwjgl.util.vector.Matrix4f();
 		org.lwjgl.util.vector.Matrix4f.mul(projectionMatrix, modelviewMatrix, MVP);
 		this.MVP = this.toVecMathMatrix(MVP);
-		MVP.invert();
-		this.INVMVP = this.toVecMathMatrix(MVP);
+		this.INVMVP = this.toVecMathMatrix((org.lwjgl.util.vector.Matrix4f) MVP.invert());
 	}
 
 	private Matrix4f toVecMathMatrix(org.lwjgl.util.vector.Matrix4f mat) {

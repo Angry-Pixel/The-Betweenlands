@@ -33,10 +33,10 @@ public class FireflyHandler {
 
 			if(ShaderHelper.INSTANCE.canUseShaders() && ConfigHandler.FIREFLY_LIGHTING) {
 				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
-						entity.worldObj.rand.nextFloat() * 0.1f + 6.0f, 
-						16.0f / 255.0f + entity.worldObj.rand.nextFloat() * 0.04f, 
-						12.0f / 255.0f + entity.worldObj.rand.nextFloat() * 0.01f, 
-						8.0f / 255.0f));
+						entity.worldObj.rand.nextFloat() * 0.1f + 7.0f, 
+						16.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.4f, 
+						12.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.1f, 
+						8.0f / 255.0f * 60.0F));
 			}
 		}
 		GL11.glPopMatrix();

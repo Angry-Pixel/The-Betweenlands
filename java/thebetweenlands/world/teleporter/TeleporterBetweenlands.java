@@ -56,10 +56,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 			posZ = pos.posZ;
 			pos.lastUpdateTime = worldServerInstance.getTotalWorldTime();
 			portalNotSaved = false;
-		} else
-			for (int i = roundX - checkRadius; i <= roundX + checkRadius; i++)
-				for (int j = roundZ - checkRadius; j <= roundZ + checkRadius; j++)
-					for (int h = worldServerInstance.getActualHeight() - 1; h >= 0; h--) {
+		} else {
+			for (int i = roundX - checkRadius; i <= roundX + checkRadius; i++) {
+				for (int j = roundZ - checkRadius; j <= roundZ + checkRadius; j++) {
+					for (int h = worldServerInstance.getHeightValue(i, j); h >= 0; h--) {
 						Block block = worldServerInstance.getBlock(i, h, j);
 						if (block == BLBlockRegistry.treePortalBlock) {
 							while(worldServerInstance.getBlock(i, --h, j) == BLBlockRegistry.treePortalBlock);
@@ -76,6 +76,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 							}
 						}
 					}
+				}
+			}
+		}
 		if (distToPortal >= 0.0) {
 			if (portalNotSaved) {
 				destinationCoordinateCache.add(coordPair, new PortalPosition(posX, posY, posZ, worldServerInstance.getTotalWorldTime()));

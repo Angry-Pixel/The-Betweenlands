@@ -53,7 +53,8 @@ vec3 getFragPos(sampler2D depthMap) {
     //Using the texture coordinate and the depth, the original vertex in world space coordinates can be calculated
     //The depth value from the depth buffer is not linear
     float zBuffer = texture2D(depthMap, v_texCoord).x;
-    float fragDepth = pow(zBuffer, 2);
+    //float fragDepth = pow(zBuffer, 2);
+	float fragDepth = zBuffer * 2.0F - 1.0F;
     
     //Calculate fragment world position relative to the camera position
     vec4 fragRelPos = vec4(v_texCoord.xy * 2.0 - 1.0, fragDepth, 1.0) * u_INVMVP;
@@ -97,7 +98,7 @@ void main() {
     
     
     
-    //////// Lighting ////////
+    //////// Lighting (Distortion) ////////
     //Calculate distance from fragment to light sources and apply color
     for(int i = 0; i < int(u_lightSources); i++) {
         vec3 lightPos = vec3(u_lightSourcesX[i], u_lightSourcesY[i], u_lightSourcesZ[i]);
@@ -109,8 +110,6 @@ void main() {
 				if(distortionMultiplier < 0.6F) {
 					distortionMultiplier += max(distortionMultiplier, 1.0F - pow(dist / radius, 4));
 				}
-            } else {
-                color += vec4(u_lightColorsR[i], u_lightColorsG[i], u_lightColorsB[i], 0.0F) * (1.0F - dist / radius);
             }
         }
     }
@@ -199,7 +198,18 @@ void main() {
         color += vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_msTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
     }
     
-    
+    //////// Lighting ////////
+    //Calculate distance from fragment to light sources and apply color
+    for(int i = 0; i < int(u_lightSources); i++) {
+        vec3 lightPos = vec3(u_lightSourcesX[i], u_lightSourcesY[i], u_lightSourcesZ[i]);
+        float dist = distance(lightPos, fragPos);
+        float radius = u_lightRadii[i];
+        if(dist < radius) {
+            if(u_lightColorsR[i] != -1 || u_lightColorsG[i] != -1 || u_lightColorsB[i] != -1) {
+                color *= vec4(1.0F, 1.0F, 1.0F, 1.0F) + vec4(vec3(u_lightColorsR[i], u_lightColorsG[i], u_lightColorsB[i]) * (1.0F - dist / radius), 0.0F);
+            }
+        }
+    }
     
     //Return final color
     gl_FragColor = color * colorMultiplier;

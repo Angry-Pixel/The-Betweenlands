@@ -1,18 +1,28 @@
 package thebetweenlands.event.render;
 
+import java.lang.reflect.Method;
+
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
+
+	private static final Method f_setupCameraTransform = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"setupCameraTransform", "func_78479_a", "a"}, float.class, int.class);
+
+	static {
+		f_setupCameraTransform.setAccessible(true);
+	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -25,6 +35,13 @@ public class ShaderHandler {
 		OverlayHandler.INSTANCE.renderHand(event.partialTicks, event.renderPass, false);
 		GL11.glColorMask(true, true, true, true);
 		GL11.glPopMatrix();
+
+		//Restore MVP matrix
+		try {
+			f_setupCameraTransform.invoke(Minecraft.getMinecraft().entityRenderer, event.partialTicks, event.renderPass);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 
 		if(ShaderHelper.INSTANCE.canUseShaders()) {
 			Minecraft mc = Minecraft.getMinecraft();

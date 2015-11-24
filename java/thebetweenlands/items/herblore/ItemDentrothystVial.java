@@ -11,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 public class ItemDentrothystVial extends Item {
-	//TODO: Make throwable
-
 	@SideOnly(Side.CLIENT)
 	private IIcon iconVialOrange, iconVialDirty;
 

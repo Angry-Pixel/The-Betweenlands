@@ -23,8 +23,6 @@ import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
 
 public class ItemElixir extends Item {
-	//TODO: Make throwable
-
 	@SideOnly(Side.CLIENT)
 	private IIcon iconLiquid, iconVialOrange;
 

@@ -24,13 +24,13 @@ public class RenderAngler extends RenderLiving {
 	protected int setAnglerEyeBrightness(EntityAngler entity, int pass, float partialTickTime) {
 		if(pass == 1) {
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
-				double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
-				double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.8f;
+				double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
+				double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
 				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff, 
-						1.0f, 
-						10.0f / 255.0f, 
-						30.0f / 255.0f, 
-						30.0f / 255.0f));
+						1.6f, 
+						10.0f / 255.0f * 13.0F, 
+						30.0f / 255.0f * 13.0F, 
+						20.0f / 255.0f * 13.0F));
 			}
 			
 			bindTexture(eyeTexture);
