@@ -70,17 +70,11 @@ processResources {
     }
 }
 
-dependencies {
-    compile "net.ilexiconn:llibrary:0.5.5-1.7.10:dev"
-    include "net.ilexiconn:llibrary-wrapper:1.7.10"
-}
-
 jar {
     classifier = "universal"
     from configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
     manifest {
         attributes ("FMLCorePlugin": "thebetweenlands.core.TheBetweenlandsLoadingPlugin")
-        attributes ("FMLCorePlugin": "net.ilexiconn.llibrary.LLibraryWrapper")
         attributes ("FMLCorePluginContainsFMLMod": "true")
     }
 }
