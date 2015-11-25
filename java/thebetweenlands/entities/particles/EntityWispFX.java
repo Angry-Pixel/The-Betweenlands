@@ -61,12 +61,12 @@ public class EntityWispFX extends EntityFX {
 		par1Tessellator.addVertexWithUV(ipx + rx * scale - ryz * scale, ipy - rxz * scale, ipz + rz * scale - rxy * scale, 0.0D, 0.0D);
 	}
 
-	private static float getDistanceToViewer(float x, float y, float z, float partialRenderTicks) {
+	public static float getDistanceToViewer(double x, double y, double z, float partialRenderTicks) {
 		EntityLivingBase entity = Minecraft.getMinecraft().renderViewEntity;
-		float dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
-		float dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
-		float dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
-		return MathHelper.sqrt_float(dx * dx + dy * dy + dz * dz);
+		double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
+		double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
+		double dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
+		return MathHelper.sqrt_float((float) (dx * dx + dy * dy + dz * dz));
 	}
 
 	@Override

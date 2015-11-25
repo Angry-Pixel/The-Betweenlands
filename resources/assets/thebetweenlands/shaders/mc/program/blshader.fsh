@@ -200,13 +200,14 @@ void main() {
     
     //////// Lighting ////////
     //Calculate distance from fragment to light sources and apply color
+	float lightingFogMultiplier = 1.0F - getFogMultiplier(fragPos);
     for(int i = 0; i < int(u_lightSources); i++) {
         vec3 lightPos = vec3(u_lightSourcesX[i], u_lightSourcesY[i], u_lightSourcesZ[i]);
         float dist = distance(lightPos, fragPos);
         float radius = u_lightRadii[i];
         if(dist < radius) {
             if(u_lightColorsR[i] != -1 || u_lightColorsG[i] != -1 || u_lightColorsB[i] != -1) {
-                color *= vec4(1.0F, 1.0F, 1.0F, 1.0F) + vec4(vec3(u_lightColorsR[i], u_lightColorsG[i], u_lightColorsB[i]) * (1.0F - dist / radius), 0.0F);
+                color *= vec4(1.0F, 1.0F, 1.0F, 1.0F) + (vec4(vec3(u_lightColorsR[i], u_lightColorsG[i], u_lightColorsB[i]) * (1.0F - dist / radius), 0.0F) * lightingFogMultiplier);
             }
         }
     }
