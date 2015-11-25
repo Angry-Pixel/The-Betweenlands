@@ -11,7 +11,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.recipes.PestleAndMortarRecipe;
 
 public class TileEntityPestleAndMortar extends TileEntityBasicInventory { 
-	
+
 	public int progress;
 	public boolean hasPestle;
 	public boolean hasCrystal;
@@ -26,9 +26,9 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	}
 
 	@Override
-    public boolean canUpdate() {
-        return true;
-    }
+	public boolean canUpdate() {
+		return true;
+	}
 
 	@Override
 	public void updateEntity() {
@@ -126,7 +126,7 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 	public boolean pestleInstalled() {
 		return getStackInSlot(1) != null && getStackInSlot(1).getItem() == BLItemRegistry.pestle;
 	}
-	
+
 	public boolean isCrystalInstalled() {
 		return getStackInSlot(3) != null && getStackInSlot(3).getItem() == BLItemRegistry.lifeCrystal && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
 	}
@@ -172,11 +172,11 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		nbt.setBoolean("hasPestle", hasPestle);
 		nbt.setBoolean("hasCrystal", hasCrystal);
 		nbt.setBoolean("manualGrinding", manualGrinding);
+		NBTTagCompound itemStackCompound = new NBTTagCompound();
 		if(inventory[3] != null) {
-			NBTTagCompound itemStackCompound = inventory[3].writeToNBT(new NBTTagCompound());
-			nbt.setTag("outputItem", itemStackCompound);
-		} else
-			nbt.setTag("outputItem", null);
+			inventory[3].writeToNBT(itemStackCompound);
+		}
+		nbt.setTag("outputItem", itemStackCompound);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -187,9 +187,10 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 		hasCrystal = packet.func_148857_g().getBoolean("hasCrystal");
 		manualGrinding = packet.func_148857_g().getBoolean("manualGrinding");
 		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("outputItem");
-		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+		if(itemStackCompound.getShort("id") != 0) {
 			inventory[3] = ItemStack.loadItemStackFromNBT(itemStackCompound);
-		else
+		} else {
 			inventory[3] = null;
+		}
 	}
 }

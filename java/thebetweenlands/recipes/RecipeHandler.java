@@ -351,6 +351,7 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VOLARPAD), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.THORNS));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PITCHER_PLANT_TRAP));
 	}
 
 	private static void registerCompostItems(){
