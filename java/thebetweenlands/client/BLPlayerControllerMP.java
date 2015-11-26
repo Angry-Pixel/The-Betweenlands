@@ -34,7 +34,7 @@ public class BLPlayerControllerMP extends PlayerControllerMP {
 		try {
 			ItemStack prev = (ItemStack) field_currentItemHittingBlock.get(this);
 			ItemStack current = Minecraft.getMinecraft().thePlayer.getHeldItem();
-			if(!prev.equals(current) && current != null && prev != null && prev.getItem() instanceof ICorrodible) {
+			if(current != null && prev != null && !prev.equals(current) && prev.getItem() instanceof ICorrodible) {
 				if(HeldItemTooltipHandler.areItemStackTagsEqual(prev, current, exclusions)) {
 					field_currentItemHittingBlock.set(this, current);
 				}

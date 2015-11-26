@@ -10,8 +10,9 @@ public class ItemCorrosionHandler {
 
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
-		if(Minecraft.getMinecraft().playerController != null && Minecraft.getMinecraft().playerController instanceof BLPlayerControllerMP == false) {
+		//FIXME: Needs a better way of doing this without breaking stuff
+		/*if(Minecraft.getMinecraft().playerController != null && Minecraft.getMinecraft().playerController instanceof BLPlayerControllerMP == false) {
 			Minecraft.getMinecraft().playerController = new BLPlayerControllerMP(Minecraft.getMinecraft(), Minecraft.getMinecraft().getNetHandler(), Minecraft.getMinecraft().playerController);
-		}
+		}*/
 	}
 }
