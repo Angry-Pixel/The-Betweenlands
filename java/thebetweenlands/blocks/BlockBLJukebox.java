@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 /**
  * Created by Bart on 16-6-2015.

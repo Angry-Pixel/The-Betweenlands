@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place Holder Code
 	public static final String[] iconPaths = new String[] { "lifeCrystal0", "lifeCrystal1", "lifeCrystal2", "lifeCrystal3", "lifeCrystal4" };

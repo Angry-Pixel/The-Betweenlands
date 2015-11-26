@@ -1,6 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
-
-import java.util.ArrayList;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -8,52 +6,45 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.manual.gui.entries.ManualEntry;
-import thebetweenlands.manual.gui.widgets.text.TextContainer;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextPage;
-import thebetweenlands.manual.gui.widgets.text.TextFormatComponents;
+import thebetweenlands.manual.Page;
+import thebetweenlands.manual.widgets.text.TextContainer;
+import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
+import thebetweenlands.manual.widgets.text.TextFormatComponents;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 6-11-2015.
  */
 public class ButtonWidget extends ManualWidgetsBase {
     private ArrayList<ItemStack> items = new ArrayList<>();
-    private ManualEntry entry;
+    public int pageNumber;
     private TextContainer textContainer;
 
     private ResourceLocation resourceLocation;
-    private int indexX;
-    private int indexY;
+    private Page page;
 
     public static int width = 100;
     public static int height = 16;
-    int untilUpdate = 0;
     int currentItem;
 
-    public ButtonWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, ManualEntry entry, int index) {
-        super(manual, xStart, yStart);
-        this.resourceLocation = new ResourceLocation(recourseLocation);
-        this.entry = entry;
-
-        this.textContainer = new TextContainer(100, 16, entry.entryName);
-        this.indexX = index % 16;
-        this.indexY = index / 16;
+    public ButtonWidget(int xStart, int yStart, Page page) {
+        super(xStart, yStart);
+        this.pageNumber = page.pageNumber;
+        this.page = page;
+        if (page.pageItems.size() > 0)
+            this.items.addAll(page.pageItems);
+        else if (page.resourceLocation != null)
+            this.resourceLocation = new ResourceLocation(page.resourceLocation);
+        this.textContainer = new TextContainer(100, 16, page.pageName);
         this.init();
     }
 
-    public ButtonWidget(GuiManualBase manual, int xStart, int yStart, ArrayList<ItemStack> items, ManualEntry entry) {
-        super(manual, xStart, yStart);
-        this.items = items;
-        this.entry = entry;
-        this.textContainer = new TextContainer(100, 16, entry.entryName);
-        this.init();
-    }
 
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(100, 16, entry.entryName);
+        this.textContainer = new TextContainer(100, 16, page.pageName);
         this.init();
     }
 
@@ -82,7 +73,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             renderItem(xStart, yStart, items.get(currentItem), false);
         else if (resourceLocation != null) {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
-            manual.drawTexturedModalRect(xStart, yStart, indexX * 16 + 1, indexY * 16 + 1, 16, 16);
+            manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
         }
         TextPage page = this.textContainer.getPages().get(0);
         page.render(this.xStart + 18, this.yStart + 4);
@@ -95,30 +86,28 @@ public class ButtonWidget extends ManualWidgetsBase {
             } else
                 currentItem = 0;
             drawForeGround();
-            untilUpdate = 0;
+            manual.untilUpdate = 0;
         } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
-            manual.changeTo(entry);
+            manual.changeTo(pageNumber);
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 20) {
+        if (manual.untilUpdate % 20 == 0) {
             if (currentItem + 1 < items.size()) {
                 currentItem++;
             } else
                 currentItem = 0;
             drawForeGround();
-            untilUpdate = 0;
-        } else
-            untilUpdate++;
+        }
     }
 
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(116, 144, entry.entryName);
+        this.textContainer = new TextContainer(116, 144, page.pageName);
         this.init();
     }
 }

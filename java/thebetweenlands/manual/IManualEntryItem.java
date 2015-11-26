@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.entries;
+package thebetweenlands.manual;
 
 import net.minecraft.item.Item;
 

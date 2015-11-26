@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 /**
  * Created by Bart on 23-10-2015.

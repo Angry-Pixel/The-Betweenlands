@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

@@ -2,7 +2,7 @@ package thebetweenlands.items.food;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 /**
  * Created by Bart on 9-11-2015.

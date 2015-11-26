@@ -1,13 +1,14 @@
-package thebetweenlands.manual.gui.widgets.text;
+package thebetweenlands.manual.widgets.text;
+
+
+import net.minecraft.util.EnumChatFormatting;
+import thebetweenlands.manual.widgets.text.TextContainer.TextArea;
+import thebetweenlands.manual.widgets.text.TextContainer.TextFormat;
+import thebetweenlands.manual.widgets.text.TextContainer.TextFormatTag;
+import thebetweenlands.manual.widgets.text.TextContainer.TooltipArea;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.EnumChatFormatting;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextArea;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormatTag;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TooltipArea;
 
 public class TextFormatComponents {
 	public static class TextFormatNewLine extends TextFormat {

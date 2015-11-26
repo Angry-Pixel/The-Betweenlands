@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -7,12 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.recipes.CompostRecipe;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Created by Bart on 17/11/2015.
@@ -21,8 +17,8 @@ public class RubberTabWidget extends ManualWidgetsBase {
     public static int width = 62;
     public static int height = 38;
 
-    public RubberTabWidget(GuiManualBase manual, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public RubberTabWidget(int xStart, int yStart) {
+        super(xStart, yStart);
     }
 
     @Override

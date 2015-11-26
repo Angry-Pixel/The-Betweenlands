@@ -1,27 +1,17 @@
-package thebetweenlands.manual.gui.widgets.text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EmptyStackException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
-
-import org.lwjgl.opengl.GL11;
+package thebetweenlands.manual.widgets.text;
 
 import com.google.common.primitives.Booleans;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
-import thebetweenlands.manual.gui.widgets.ManualWidgetsBase;
-import thebetweenlands.manual.gui.widgets.text.TextContainer.TextFormat.EnumPushOrder;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.manual.widgets.ManualWidgetsBase;
+import thebetweenlands.manual.widgets.text.TextContainer.TextFormat.EnumPushOrder;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class TextContainer {
 	public static class TextArea {
@@ -253,7 +243,7 @@ public class TextContainer {
 
 		public final int width, height;
 
-		private TextPage(int width, int height) { 
+		private TextPage(int width, int height) {
 			this.width = width;
 			this.height = height;
 		}
@@ -449,7 +439,7 @@ public class TextContainer {
 			while(taIT.hasNext()) {
 				TextArea ta = taIT.next();
 				if(ta.equals(area)) {
-					taIT.remove();	
+					taIT.remove();
 				}
 			}
 		}

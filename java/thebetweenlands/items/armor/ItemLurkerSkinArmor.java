@@ -16,7 +16,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 
 public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{

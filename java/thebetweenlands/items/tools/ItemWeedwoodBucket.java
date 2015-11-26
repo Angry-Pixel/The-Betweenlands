@@ -20,7 +20,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
 public class ItemWeedwoodBucket extends Item implements IManualEntryItem {

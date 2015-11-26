@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.items.ICorrodible;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntryItem {

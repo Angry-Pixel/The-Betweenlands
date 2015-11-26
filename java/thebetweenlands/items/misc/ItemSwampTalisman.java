@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
 import java.util.List;

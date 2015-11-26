@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.PestleAndMortarRecipe;
 
 import java.util.ArrayList;
@@ -24,17 +23,16 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     public static int height = 69;
 
     int progress = 0;
-    int untilUpdate = 0;
     int currentRecipe = 0;
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public PestleAndMortarRecipeWidget(ItemStack output, int xStart, int yStart) {
+        super(xStart, yStart);
         if (PestleAndMortarRecipe.getInput(output) != null)
             outputs.add(output);
     }
 
-    public PestleAndMortarRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public PestleAndMortarRecipeWidget(ArrayList<ItemStack> outputs, int xStart, int yStart) {
+        super(xStart, yStart);
         for (ItemStack output : outputs)
             if (PestleAndMortarRecipe.getInput(output) != null)
                 this.outputs.add(output);
@@ -74,7 +72,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 20) {
+        if (manual.untilUpdate % 20 == 0) {
             if (progress <= 21) {
                 progress++;
                 drawForeGround();
@@ -85,8 +83,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
                 else
                     currentRecipe = 0;
             }
-            untilUpdate = 0;
-        } else untilUpdate++;
+        }
     }
 
     @Override
@@ -97,7 +94,6 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
             progress = 0;
         }
     }

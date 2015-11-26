@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemTarminion extends Item implements IManualEntryItem {
 

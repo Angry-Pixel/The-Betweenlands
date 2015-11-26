@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,8 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,21 +25,19 @@ public class ItemWidget extends ManualWidgetsBase {
 
     public ArrayList<ItemStack> stacks = new ArrayList<>();
     public float scale = 1f;
-
-    int currentDisplayItem = 0;
-    int untilUpdate = 0;
+    private int currentDisplayItem = 0;
 
 
-    public ItemWidget(GuiManualBase manual, int xStart, int yStart, ItemStack stack, float scale) {
-        super(manual, xStart, yStart);
+    public ItemWidget(int xStart, int yStart, ItemStack stack, float scale) {
+        super( xStart, yStart);
         this.stacks.add(stack);
         this.scale = scale;
         width = (int) (16 * scale);
         height = (int) (16 * scale);
     }
 
-    public ItemWidget(GuiManualBase manual, int xStart, int yStart, IManualEntryItem entry, float scale) {
-        super(manual, xStart, yStart);
+    public ItemWidget(int xStart, int yStart, IManualEntryItem entry, float scale) {
+        super(xStart, yStart);
 
         for (int i = 0; i <= entry.metas(); i++)
             this.stacks.add(new ItemStack(entry.getItem(), 1, i));
@@ -49,16 +46,16 @@ public class ItemWidget extends ManualWidgetsBase {
         height = (int) (16 * scale);
     }
 
-    public ItemWidget(GuiManualBase manual, int xStart, int yStart, ArrayList<ItemStack> stacks, float scale) {
-        super(manual, xStart, yStart);
+    public ItemWidget( int xStart, int yStart, ArrayList<ItemStack> stacks, float scale) {
+        super(xStart, yStart);
         this.stacks = stacks;
         this.scale = scale;
         width = (int) (16 * scale);
         height = (int) (16 * scale);
     }
 
-    public ItemWidget(GuiManualBase manual, int xStart, int yStart, float scale, ArrayList<IManualEntryItem> items) {
-        super(manual, xStart, yStart);
+    public ItemWidget(int xStart, int yStart, float scale, ArrayList<IManualEntryItem> items) {
+        super(xStart, yStart);
         for (IManualEntryItem entry : items) {
             for (int i = 0; i <= entry.metas(); i++)
                 this.stacks.add(new ItemStack(entry.getItem(), 1, i));
@@ -112,22 +109,21 @@ public class ItemWidget extends ManualWidgetsBase {
             } else
                 currentDisplayItem = 0;
             drawForeGround();
-            untilUpdate = 0;
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 200) {
-            if (currentDisplayItem + 1 < stacks.size()) {
-                currentDisplayItem++;
-            } else
-                currentDisplayItem = 0;
-            drawForeGround();
-            untilUpdate = 0;
-        } else
-            untilUpdate++;
+        if (manual != null) {
+            if (manual.untilUpdate % 200 == 0) {
+                if (currentDisplayItem + 1 < stacks.size()) {
+                    currentDisplayItem++;
+                } else
+                    currentDisplayItem = 0;
+                drawForeGround();
+            }
+        }
     }
 
 }

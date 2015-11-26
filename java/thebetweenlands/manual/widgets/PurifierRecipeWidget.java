@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -8,7 +8,6 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.PurifierRecipe;
 
 import java.util.ArrayList;
@@ -23,18 +22,17 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     ArrayList<ItemStack> outputs = new ArrayList<>();
 
     int progress = 0;
-    int untilUpdate = 0;
     int currentRecipe = 0;
 
 
-    public PurifierRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public PurifierRecipeWidget(ItemStack output, int xStart, int yStart) {
+        super(xStart, yStart);
         if (PurifierRecipe.getRecipeInput(output) != null)
             this.outputs.add(output);
     }
 
-    public PurifierRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public PurifierRecipeWidget(ArrayList<ItemStack> outputs, int xStart, int yStart) {
+        super(xStart, yStart);
         for (ItemStack output : outputs)
             if (PurifierRecipe.getRecipeInput(output) != null)
                 this.outputs.add(output);
@@ -81,7 +79,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 20) {
+        if (manual.untilUpdate % 20 == 0) {
             if (progress <= 22) {
                 progress++;
                 drawForeGround();
@@ -92,8 +90,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
                 else
                     currentRecipe = 0;
             }
-            untilUpdate = 0;
-        } else untilUpdate++;
+        }
     }
 
     @Override
@@ -104,7 +101,6 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
             progress = 0;
         }
     }

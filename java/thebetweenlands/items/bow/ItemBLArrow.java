@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemBLArrow extends Item implements IManualEntryItem {
 	private EnumArrowType type;

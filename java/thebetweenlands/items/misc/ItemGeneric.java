@@ -17,7 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemGeneric extends Item implements IManualEntryItem {
 	public static ItemStack createStack(EnumItemGeneric enumGeneric) {

@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,10 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import thebetweenlands.manual.gui.GuiManualBase;
+import thebetweenlands.manual.GuiManualBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,6 @@ public class ManualWidgetsBase {
 
     public boolean isEmpty = false;
 
-    private int untilResize = 20;
 
     public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
     public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");
@@ -46,23 +44,25 @@ public class ManualWidgetsBase {
     public static String burnTimeString = StatCollector.translateToLocal("manual.widget.burn.time");
 
 
-    public ManualWidgetsBase(GuiManualBase manual, int xStart, int yStart) {
-        this.manual = manual;
+    public ManualWidgetsBase(int xStart, int yStart) {
         this.unchangedXStart = xStart;
         this.unchangedYStart = yStart;
-        this.xStart = manual.xStartLeftPage + xStart;
-        this.yStart = manual.yStart + yStart;
+    }
+
+    public void init(GuiManualBase manual) {
+        this.manual = manual;
+        this.xStart = manual.xStart + (isPageRight ? 146 : 0) + unchangedXStart;
+        this.yStart = manual.yStart + unchangedYStart;
     }
 
     public void setPageToRight() {
-        this.xStart = manual.xStartRightPage + unchangedXStart;
         this.isPageRight = true;
     }
 
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
-            net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+            RenderHelper.disableStandardItemLighting();
 
         if (!tooltipData.isEmpty()) {
             int var5 = 0;
@@ -104,7 +104,7 @@ public class ManualWidgetsBase {
             return var7 + 12;
         }
         if (!lighting)
-            net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+            RenderHelper.disableStandardItemLighting();
         GL11.glColor4f(1F, 1F, 1F, 1F);
 
         return 0;
@@ -143,17 +143,15 @@ public class ManualWidgetsBase {
     public void draw(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
-        if (untilResize <= 0)
+        if (manual.untilUpdate % 100 == 0)
             resize();
-        else
-            untilResize--;
         drawBackGround();
         drawForeGround();
     }
 
     @SideOnly(Side.CLIENT)
     public void resize() {
-        this.xStart = (isPageRight ? manual.xStartRightPage : manual.xStartLeftPage) + unchangedXStart;
+        this.xStart = (isPageRight ? manual.xStartRightPage : manual.xStart) + unchangedXStart;
         this.yStart = manual.yStart + unchangedYStart;
     }
 
@@ -162,18 +160,18 @@ public class ManualWidgetsBase {
 
     }
 
-    public void changeXStart(int xStart){
+    public void changeXStart(int xStart) {
         this.unchangedXStart = xStart;
-        this.xStart = manual.xStartLeftPage + unchangedXStart;
+        //this.xStart = manual.xStart + unchangedXStart;
     }
-    public void changeYStart(int yStart){
+
+    public void changeYStart(int yStart) {
         this.unchangedYStart = yStart;
-        this.yStart = manual.yStart + unchangedYStart;
+        //this.yStart = manual.yStart + unchangedYStart;
     }
 
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-
     }
 
     public void keyTyped(char c, int key) {

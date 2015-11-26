@@ -11,7 +11,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.manual.gui.entries.IManualEntryEntity;
+import thebetweenlands.manual.IManualEntryEntity;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 

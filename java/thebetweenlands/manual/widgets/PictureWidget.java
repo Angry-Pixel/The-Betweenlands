@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -6,7 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.manual.gui.GuiManualBase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,15 +23,15 @@ public class PictureWidget extends ManualWidgetsBase {
 
     ArrayList<String> toolTips = new ArrayList<>();
 
-    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height) {
-        super(manual, xStart, yStart);
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height) {
+        super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
     }
 
-    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, int xIndex, int yIndex) {
-        super(manual, xStart, yStart);
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, int xIndex, int yIndex) {
+        super( xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
@@ -40,16 +39,16 @@ public class PictureWidget extends ManualWidgetsBase {
         this.yIndex = yIndex;
     }
 
-    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, ArrayList<String> toolTips) {
-        super(manual, xStart, yStart);
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, ArrayList<String> toolTips) {
+        super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
         this.toolTips = toolTips;
     }
 
-    public PictureWidget(GuiManualBase manual, int xStart, int yStart, String recourseLocation, int width, int height, String toolTipsSplit) {
-        super(manual, xStart, yStart);
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, String toolTipsSplit) {
+        super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;

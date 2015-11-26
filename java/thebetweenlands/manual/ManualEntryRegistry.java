@@ -1,26 +1,16 @@
-package thebetweenlands.manual.gui.entries;
+package thebetweenlands.manual;
 
-import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.manual.gui.GuiManualBase;
-import thebetweenlands.manual.gui.pages.ManualPage;
-import thebetweenlands.manual.gui.widgets.PurifierRecipeWidget;
-import thebetweenlands.manual.gui.widgets.text.TextWidget;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Created on 11-8-2015.
+ * Created by Bart on 22/11/2015.
  */
 public class ManualEntryRegistry {
-    public static ArrayList<ManualEntry> ENTRIES = new ArrayList<>();
 
     public static IManualEntryItem[] pickaxes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodPickaxe, (IManualEntryItem) BLItemRegistry.betweenstonePickaxe, (IManualEntryItem) BLItemRegistry.octinePickaxe, (IManualEntryItem) BLItemRegistry.valonitePickaxe};
     public static IManualEntryItem[] axes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodAxe, (IManualEntryItem) BLItemRegistry.betweenstoneAxe, (IManualEntryItem) BLItemRegistry.octineAxe, (IManualEntryItem) BLItemRegistry.valoniteAxe};
@@ -42,99 +32,64 @@ public class ManualEntryRegistry {
 
 
 
-    public static ArrayList<ManualEntryItem> itemEntries = new ArrayList<>();
-    public static ArrayList<ManualEntry> entryLists = new ArrayList<>();
-    public static ArrayList<ManualEntryMachines> machines = new ArrayList<>();
+    public static ArrayList<Page> itemPages = new ArrayList<>();
+    //public static ArrayList<ManualEntry> entryLists = new ArrayList<>();
+    //public static ArrayList<ManualEntryMachines> machines = new ArrayList<>();
 
-    public static ManualEntry main;
-    public static ManualEntry itemList;
-    public static ManualEntry machineList;
+    public static ManualCategory itemsCategory;
 
-    public static void init(GuiManualBase manual) {
-        initItemEntries(manual);
-        initMachineEntries(manual);
-        initEntryList();
-        main = new ManualEntryEntryList("main", manual, entryLists, "thebetweenlands:textures/gui/manual/HLIcons.png");
-        ENTRIES.add(main);
+    public static void init(){
+        initItemEntries();
     }
 
-    public static void initItemEntries(GuiManualBase manual) {
-        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem)BLItemRegistry.itemsGeneric, (IManualEntryItem)BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
+    public static void initItemEntries() {
+        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.itemsGeneric, (IManualEntryItem) BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
 
-        itemEntries.clear();
+        itemPages.clear();
         for (IManualEntryItem item : itemEntryItem)
-            itemEntries.add(new ManualEntryItem(item, manual));
-
+            itemPages.addAll(PageCreators.pageCreatorItems(item));
         try {
             for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof IManualEntryItem[]) {
                     ArrayList<IManualEntryItem> list = new ArrayList<>();
                     Collections.addAll(list, (IManualEntryItem[]) obj);
-                    itemEntries.add(new ManualEntryItem(f.getName(), list, manual));
+                    itemPages.addAll(PageCreators.pageCreatorItems(f.getName(), list));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        ArrayList<ManualEntryItem> temp = new ArrayList<>();
-        while (itemEntries.size() > 0) {
-            ManualEntryItem currentFirst = null;
-            for (ManualEntryItem entry : itemEntries) {
+        ArrayList<Page> temp = new ArrayList<>();
+        while (itemPages.size() > 0) {
+            Page currentFirst = null;
+            for (Page page : itemPages) {
                 if (currentFirst == null)
-                    currentFirst = entry;
+                    currentFirst = page;
                 else {
-                    String entryName = entry.entryName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
-                    char[] characters = entryName.toCharArray();
-                    String entryNameFirst = currentFirst.entryName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
-                    char[] charactersFirst = entryNameFirst.toCharArray();
-                    for (int i = 0; 0 < characters.length; i++) {
+                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] characters = pageName.toCharArray();
+                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] charactersFirst = pageNameFirst.toCharArray();
+                    for (int i = 0; i < characters.length; i++) {
                         if(charactersFirst.length > i) {
                             if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
                                 break;
                             } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {
-                                currentFirst = entry;
+                                currentFirst = page;
                                 break;
                             }
                         }
                     }
                 }
             }
-            itemEntries.remove(currentFirst);
+            itemPages.remove(currentFirst);
             temp.add(currentFirst);
         }
-        itemEntries.clear();
-        itemEntries.addAll(temp);
-        itemList = new ManualEntryEntryList("items", manual, itemEntries);
+        itemPages.clear();
+        itemPages.addAll(temp);
+
+        itemsCategory = new ManualCategory(itemPages);
     }
-
-
-    public static void initMachineEntries(GuiManualBase manual) {
-        machines.clear();
-        machines.add(new ManualEntryMachines("pestleAndMortar", manual, new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69));
-        machines.add(new ManualEntryMachines("purifier", manual, new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58));
-        machineList = new ManualEntryEntryList(manual, "machines", machines);
-    }
-
-    public static void initEntryList() {
-        ENTRIES.clear();
-        ENTRIES.addAll(itemEntries);
-        ENTRIES.addAll(machines);
-        try {
-            for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof ManualEntry) {
-                    ENTRIES.add((ManualEntry) obj);
-                }
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        entryLists.clear();
-        entryLists.add(itemList);
-        entryLists.add(machineList);
-        ENTRIES.addAll(entryLists);
-    }
-
 }

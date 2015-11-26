@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -13,7 +13,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.manual.gui.GuiManualBase;
 
 import java.util.ArrayList;
 
@@ -25,18 +24,16 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     public static int width = 116;
     private static ResourceLocation craftingGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/craftingGrid.png");
     ArrayList<ItemStack> outputs = new ArrayList<>();
+    private int currentRecipe = 0;
 
-    int currentRecipe = 0;
-    int untilUpdate = 0;
-
-    public CraftingRecipeWidget(GuiManualBase manual, ItemStack output, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public CraftingRecipeWidget( ItemStack output, int xStart, int yStart) {
+        super( xStart, yStart);
         if (getRecipe(output) != null)
             this.outputs.add(output);
     }
 
-    public CraftingRecipeWidget(GuiManualBase manual, ArrayList<ItemStack> outputs, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public CraftingRecipeWidget(ArrayList<ItemStack> outputs, int xStart, int yStart) {
+        super(xStart, yStart);
         for (ItemStack output : outputs)
             if (getRecipe(output) != null)
                 this.outputs.add(output);
@@ -127,22 +124,19 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 200) {
+        if (manual.untilUpdate % 200 == 0) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
-        } else
-            untilUpdate++;
+        }
     }
 
     public IRecipe getRecipe(ItemStack output) {

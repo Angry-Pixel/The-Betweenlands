@@ -8,7 +8,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 
 public class ItemSyrmoriteArmor extends ItemArmor implements IManualEntryItem {

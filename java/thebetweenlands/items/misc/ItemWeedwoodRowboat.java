@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemWeedwoodRowboat extends Item implements IManualEntryItem{
     public ItemWeedwoodRowboat() {

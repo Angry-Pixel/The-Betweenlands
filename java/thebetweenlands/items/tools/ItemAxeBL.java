@@ -15,7 +15,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.items.ICorrodible;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class ItemAxeBL extends ItemAxe implements ICorrodible, IManualEntryItem {

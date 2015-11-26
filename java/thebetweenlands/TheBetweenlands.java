@@ -47,6 +47,7 @@ import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.manual.ManualEntryRegistry;
 import thebetweenlands.mods.RecurrentComplexModule;
 import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
@@ -181,6 +182,7 @@ public class TheBetweenlands
 
 		RecipeHandler.init();
 		TeleporterHandler.init();
+		ManualEntryRegistry.init();
 
 		// Add the other door recipes back
 		CraftingManager.getInstance().getRecipeList().addAll(doorRecipes);

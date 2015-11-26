@@ -4,12 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IExtendedEntityProperties;
 import thebetweenlands.entities.property.IBLExtendedEntityProperties;
-import thebetweenlands.manual.achievement.AchievementList;
-import thebetweenlands.manual.achievement.BLAchievement;
-
-import java.lang.reflect.Field;
 
 /**
  * Created by Bart on 10-8-2015.

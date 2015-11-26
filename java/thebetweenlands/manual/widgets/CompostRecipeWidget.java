@@ -1,4 +1,4 @@
-package thebetweenlands.manual.gui.widgets;
+package thebetweenlands.manual.widgets;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -6,9 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.manual.gui.GuiManualBase;
 import thebetweenlands.recipes.CompostRecipe;
 
 import java.util.ArrayList;
@@ -18,15 +16,14 @@ import java.util.Random;
  * Created by Bart on 9-8-2015.
  */
 public class CompostRecipeWidget extends ManualWidgetsBase {
-    int currentRecipe;
+    protected int currentRecipe;
 
     public static int width = 62;
     public static int height = 38;
 
-    int untilUpdate = 0;
 
-    public CompostRecipeWidget(GuiManualBase manual, int xStart, int yStart) {
-        super(manual, xStart, yStart);
+    public CompostRecipeWidget(int xStart, int yStart) {
+        super(xStart, yStart);
         Random random = new Random();
         currentRecipe = random.nextInt(CompostRecipe.compostRecipes.size());
     }
@@ -66,21 +63,18 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
         }
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (untilUpdate >= 20) {
+        if (manual.untilUpdate % 20 == 0) {
             if (currentRecipe + 1 < CompostRecipe.compostRecipes.size()) {
                 currentRecipe++;
             } else
                 currentRecipe = 0;
             drawForeGround();
-            untilUpdate = 0;
-        } else
-            untilUpdate++;
+        }
     }
 }

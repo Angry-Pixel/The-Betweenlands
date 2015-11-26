@@ -2,7 +2,7 @@ package thebetweenlands.items.tools;
 
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import net.minecraft.item.Item;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemWeedwoodBucketRubber extends Item implements IManualEntryItem {
 	public ItemWeedwoodBucketRubber() {

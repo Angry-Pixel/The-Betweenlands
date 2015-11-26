@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import thebetweenlands.items.ICorrodible;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.Multimap;

@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeHooks;
 import thebetweenlands.items.ICorrodible;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.CorrodibleItemHelper;
 

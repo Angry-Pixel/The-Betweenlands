@@ -6,7 +6,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
-import thebetweenlands.manual.gui.entries.IManualEntryItem;
+import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemWeepingBluePetal extends ItemFood implements IManualEntryItem
 {
