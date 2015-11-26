@@ -149,6 +149,7 @@ import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
+import thebetweenlands.event.player.ItemCorrosionHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
@@ -372,6 +373,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ItemCorrosionHandler.INSTANCE);
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
