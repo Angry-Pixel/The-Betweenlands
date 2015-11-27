@@ -8,7 +8,9 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -16,6 +18,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntityGecko;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -183,5 +186,17 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		if (isHiding()) {
 			setHidingBush(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ"));
 		}
+	}
+
+	@Override
+	protected boolean interact(EntityPlayer player) {
+		if (player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.net && !worldObj.isRemote) {
+			ItemStack itemStack = new ItemStack(BLItemRegistry.gecko);
+			if (getCustomNameTag() != null)
+				itemStack.setStackDisplayName(getCustomNameTag());
+			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, itemStack));
+			this.setDead();
+		}
+		return true;
 	}
 }

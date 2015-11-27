@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockBed;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
@@ -21,7 +20,7 @@ public class BlockMossBed extends BlockBed {
 
     public IIcon bedIcon;
 
-    public BlockMossBed(){
+    public BlockMossBed() {
         setBlockName("thebetweenlands.mossBed");
     }
 
@@ -31,16 +30,14 @@ public class BlockMossBed extends BlockBed {
         if (world.isRemote) {
             return true;
         } else if (player.dimension == ConfigHandler.DIMENSION_ID) {
-            player.setSpawnChunk(new ChunkCoordinates(x, y, z), false, ConfigHandler.DIMENSION_ID);
-            return true;
-        } else {
+            player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, ConfigHandler.DIMENSION_ID);
             return true;
         }
+        return true;
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister)
-    {
+    public void registerBlockIcons(IIconRegister iconRegister) {
         this.bedIcon = iconRegister.registerIcon("thebetweenlands:mossBed");
     }
 
@@ -56,8 +53,7 @@ public class BlockMossBed extends BlockBed {
     }
 
     @SideOnly(Side.CLIENT)
-    public Item getItem(World p_149694_1_, int p_149694_2_, int p_149694_3_, int p_149694_4_)
-    {
+    public Item getItem(World p_149694_1_, int p_149694_2_, int p_149694_3_, int p_149694_4_) {
         return Item.getItemFromBlock(this);
     }
 }

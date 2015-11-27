@@ -12,7 +12,9 @@ import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.items.armor.ItemArmorOfLegends;
 import thebetweenlands.items.armor.ItemBoneArmor;
 import thebetweenlands.items.armor.ItemImprovedRubberBoots;
@@ -34,31 +36,11 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.ItemBLGenericSeed;
-import thebetweenlands.items.misc.ItemBLRecord;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemLifeCrystal;
-import thebetweenlands.items.misc.ItemManual;
-import thebetweenlands.items.misc.ItemRope;
-import thebetweenlands.items.misc.ItemSpawnEggs;
-import thebetweenlands.items.misc.ItemSwampTalisman;
-import thebetweenlands.items.misc.ItemTestItem;
-import thebetweenlands.items.misc.ItemVolarPad;
-import thebetweenlands.items.misc.ItemWeedwoodRowboat;
+import thebetweenlands.items.misc.*;
 import thebetweenlands.items.throwable.ItemAngryPebble;
 import thebetweenlands.items.throwable.ItemShimmerStone;
 import thebetweenlands.items.throwable.ItemTarminion;
-import thebetweenlands.items.tools.ItemAxeBL;
-import thebetweenlands.items.tools.ItemPestle;
-import thebetweenlands.items.tools.ItemPickaxeBL;
-import thebetweenlands.items.tools.ItemSickle;
-import thebetweenlands.items.tools.ItemSpadeBL;
-import thebetweenlands.items.tools.ItemSwiftPick;
-import thebetweenlands.items.tools.ItemSwordBL;
-import thebetweenlands.items.tools.ItemSyrmoriteShears;
-import thebetweenlands.items.tools.ItemWeedwoodBucket;
-import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
-import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
+import thebetweenlands.items.tools.*;
 import thebetweenlands.recipes.BLMaterials;
 
 public class BLItemRegistry {
@@ -108,6 +90,8 @@ public class BLItemRegistry {
 	public static final Item sickle = new ItemSickle();
 
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
+
+	public static final Item net = new ItemNet();
 
 	// MISC ARMOUR
 	public static final Item lurkerSkinHelmet = new ItemLurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
@@ -197,6 +181,8 @@ public class BLItemRegistry {
 	public static final Item volarPad = new ItemVolarPad().setMaxDamage(200);
 	public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();
 	public static final ItemRope rope = new ItemRope();
+	public static final Item fireFly = new ItemMob("fireFly");
+	public static final Item gecko = new ItemMob("gecko");
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
@@ -234,10 +220,10 @@ public class BLItemRegistry {
 	}
 
 	private static void initCreativeTabs() {
-		ModCreativeTabs.items.setTab(rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
+		ModCreativeTabs.items.setTab(net, rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
-		ModCreativeTabs.specials.setTab(shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion, astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord);
+		ModCreativeTabs.specials.setTab(gecko, fireFly, shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manual, tarminion, astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord);
 		ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
 		ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
 		ModCreativeTabs.plants.setTab(middleFruitSeeds);
