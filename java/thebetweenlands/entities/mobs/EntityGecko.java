@@ -187,16 +187,4 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 			setHidingBush(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ"));
 		}
 	}
-
-	@Override
-	protected boolean interact(EntityPlayer player) {
-		if (player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.net && !worldObj.isRemote) {
-			ItemStack itemStack = new ItemStack(BLItemRegistry.gecko);
-			if (getCustomNameTag() != null)
-				itemStack.setStackDisplayName(getCustomNameTag());
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, itemStack));
-			this.setDead();
-		}
-		return true;
-	}
 }

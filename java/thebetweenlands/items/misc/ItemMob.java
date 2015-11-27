@@ -1,11 +1,10 @@
 package thebetweenlands.items.misc;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.entities.mobs.EntityFirefly;
@@ -17,7 +16,7 @@ import thebetweenlands.entities.mobs.EntityGecko;
 public class ItemMob extends Item {
     String name = "";
 
-    public ItemMob(String name){
+    public ItemMob(String name) {
         this.setTextureName("thebetweenlands:" + name);
         this.setUnlocalizedName("thebetweenlands." + name);
         this.name = name;
@@ -30,7 +29,7 @@ public class ItemMob extends Item {
         if (world.isRemote) return true;
         EntityLiving entity = null;
         ForgeDirection direction = ForgeDirection.getOrientation(side);
-        switch (name){
+        switch (name) {
             case "fireFly":
                 entity = new EntityFirefly(world);
                 break;
@@ -38,9 +37,10 @@ public class ItemMob extends Item {
                 entity = new EntityGecko(world);
                 break;
         }
-        if (entity != null){
+        if (entity != null) {
             entity.setLocationAndAngles(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, 0.0f, 0.0f);
-            entity.setCustomNameTag(itemStack.getDisplayName());
+            if (!(itemStack.getDisplayName().equals(StatCollector.translateToLocal(itemStack.getUnlocalizedName()))) && !(itemStack.getDisplayName().equals(itemStack.getUnlocalizedName())))
+                entity.setCustomNameTag(itemStack.getDisplayName());
             world.spawnEntityInWorld(entity);
         }
         player.destroyCurrentEquippedItem();

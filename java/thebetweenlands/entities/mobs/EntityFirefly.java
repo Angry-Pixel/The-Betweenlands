@@ -181,18 +181,6 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL, IMan
 	}
 
 	@Override
-	protected boolean interact(EntityPlayer player) {
-		if (player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.net && !worldObj.isRemote) {
-			ItemStack itemStack = new ItemStack(BLItemRegistry.fireFly);
-			if (getCustomNameTag() != null)
-				itemStack.setStackDisplayName(getCustomNameTag());
-			worldObj.spawnEntityInWorld(new EntityItem(worldObj, posX, posY, posZ, itemStack));
-			this.setDead();
-		}
-		return true;
-	}
-
-	@Override
 	public String manualPictureLocation() {
 		return "thebetweenlands:textures/gui/manual/test.png";
 	}
