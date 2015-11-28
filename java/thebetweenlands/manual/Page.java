@@ -23,22 +23,39 @@ public class Page {
     public int textureWidth = 0;
     public int textureHeight = 0;
 
+    public boolean isHidden = false;
 
     public String pageName;
+    public String unlocalizedPageName;
 
     public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
     public boolean rightPage = false;
 
     public boolean isParent = false;
 
+    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden) {
+        this.widgets = widgets;
+        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
+        this.unlocalizedPageName = pageName;
+        this.isHidden = isHidden;
+    }
+
     public Page(String pageName, ArrayList<ManualWidgetsBase> widgets) {
         this.widgets = widgets;
-        this.pageName = StatCollector.translateToLocal(pageName);
+        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
+        this.unlocalizedPageName = pageName;
     }
 
     public Page(String pageName, ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
-        this.pageName = StatCollector.translateToLocal(pageName);
+        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
+        this.unlocalizedPageName = pageName;
+    }
+    public Page(String pageName, boolean isHidden, ManualWidgetsBase... widgets) {
+        Collections.addAll(this.widgets, widgets);
+        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
+        this.unlocalizedPageName = pageName;
+        this.isHidden = isHidden;
     }
 
     public void init(GuiManualBase manual) {
@@ -53,6 +70,15 @@ public class Page {
 
     public Page addItems(ArrayList<ItemStack> items) {
         pageItems.addAll(items);
+        return this;
+    }
+    public Page setItem(ItemStack item) {
+        pageItems.add(item);
+        return this;
+    }
+
+    public Page setEntity(IManualEntryEntity entity) {
+        pageEntity = entity;
         return this;
     }
 

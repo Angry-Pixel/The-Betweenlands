@@ -51,8 +51,7 @@ public class ManualWidgetsBase {
 
     public void init(GuiManualBase manual) {
         this.manual = manual;
-        this.xStart = manual.xStart + (isPageRight ? 146 : 0) + unchangedXStart;
-        this.yStart = manual.yStart + unchangedYStart;
+        resize();
     }
 
     public void setPageToRight() {
@@ -143,8 +142,6 @@ public class ManualWidgetsBase {
     public void draw(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
-        if (manual.untilUpdate % 100 == 0)
-            resize();
         drawBackGround();
         drawForeGround();
     }
@@ -179,7 +176,8 @@ public class ManualWidgetsBase {
 
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-
+        if (manual.untilUpdate % 10 == 0)
+            resize();
     }
 
     public void mouseClicked(int x, int y, int mouseButton) {

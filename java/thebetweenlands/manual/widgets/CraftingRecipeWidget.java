@@ -130,6 +130,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
+        super.updateScreen();
         if (manual.untilUpdate % 200 == 0) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;

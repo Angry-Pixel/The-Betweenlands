@@ -1,5 +1,6 @@
 package thebetweenlands.manual;
 
+import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 
@@ -33,13 +34,17 @@ public class ManualEntryRegistry {
 
 
     public static ArrayList<Page> itemPages = new ArrayList<>();
-    //public static ArrayList<ManualEntry> entryLists = new ArrayList<>();
-    //public static ArrayList<ManualEntryMachines> machines = new ArrayList<>();
+    public static ArrayList<Page> entities = new ArrayList<>();
+    public static ArrayList<Page> machines = new ArrayList<>();
+
+
 
     public static ManualCategory itemsCategory;
+    public static ManualCategory machineCategory;
 
     public static void init(){
         initItemEntries();
+        initMachineEntries();
     }
 
     public static void initItemEntries() {
@@ -47,14 +52,14 @@ public class ManualEntryRegistry {
 
         itemPages.clear();
         for (IManualEntryItem item : itemEntryItem)
-            itemPages.addAll(PageCreators.pageCreatorItems(item));
+            itemPages.addAll(PageCreators.pageCreatorItems(item, false));
         try {
             for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof IManualEntryItem[]) {
                     ArrayList<IManualEntryItem> list = new ArrayList<>();
                     Collections.addAll(list, (IManualEntryItem[]) obj);
-                    itemPages.addAll(PageCreators.pageCreatorItems(f.getName(), list));
+                    itemPages.addAll(PageCreators.pageCreatorItems(f.getName(), list, false));
                 }
             }
         } catch (Exception e) {
@@ -90,6 +95,13 @@ public class ManualEntryRegistry {
         itemPages.clear();
         itemPages.addAll(temp);
 
-        itemsCategory = new ManualCategory(itemPages);
+        itemsCategory = new ManualCategory(itemPages, 1);
+    }
+
+    public static void initMachineEntries() {
+        machines.clear();
+        machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
+        machines.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false));
+        machineCategory = new ManualCategory(machines, 2);
     }
 }

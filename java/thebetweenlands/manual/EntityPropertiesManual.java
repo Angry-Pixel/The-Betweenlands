@@ -2,9 +2,13 @@ package thebetweenlands.manual;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import thebetweenlands.entities.property.IBLExtendedEntityProperties;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 10-8-2015.
@@ -12,16 +16,31 @@ import thebetweenlands.entities.property.IBLExtendedEntityProperties;
 public class EntityPropertiesManual implements IBLExtendedEntityProperties {
 
     public String currentPage = "manual.main.title";
+    public ArrayList<String> foundPages = new ArrayList<>();
 
 
     @Override
     public void saveNBTData(NBTTagCompound nbt) {
         nbt.setString("currentPage", this.currentPage);
+
+        NBTTagList pages = new NBTTagList();
+        for (String string:foundPages) {
+            NBTTagCompound data = new NBTTagCompound();
+            data.setString("page", string);
+            pages.appendTag(data);
+        }
+        nbt.setTag("pages", pages);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound nbt) {
         this.currentPage = nbt.getString("currentPage");
+        NBTTagList tag = nbt.getTagList("pages", 10);
+
+        for (int i = 0; i < tag.tagCount(); i++) {
+            NBTTagCompound data = tag.getCompoundTagAt(i);
+            this.foundPages.add(data.getString("page"));
+        }
     }
 
 
@@ -32,7 +51,7 @@ public class EntityPropertiesManual implements IBLExtendedEntityProperties {
 
     @Override
     public String getID() {
-        return "betweenlands_manual_data";
+        return "thebetweenlands_manual_data";
     }
 
     @Override

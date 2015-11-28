@@ -6,6 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.manual.GuiManualBase;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.manual.Page;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
@@ -24,6 +27,8 @@ public class ButtonWidget extends ManualWidgetsBase {
     private ResourceLocation resourceLocation;
     private Page page;
 
+    public boolean isHidden;
+
     public static int width = 100;
     public static int height = 16;
     int currentItem;
@@ -37,7 +42,15 @@ public class ButtonWidget extends ManualWidgetsBase {
         else if (page.resourceLocation != null)
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
         this.textContainer = new TextContainer(100, 16, page.pageName);
+        this.isHidden = page.isHidden;
         this.init();
+    }
+
+    @Override
+    public void init(GuiManualBase manual) {
+        super.init(manual);
+        if (isHidden)
+            this.isHidden = !ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName);
     }
 
 
@@ -75,10 +88,15 @@ public class ButtonWidget extends ManualWidgetsBase {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
             manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
         }
+        if (isHidden){
+            GL11.glColor3f(0.749f, 0.749f, 0.043f);
+        }
+
         TextPage page = this.textContainer.getPages().get(0);
         page.render(this.xStart + 18, this.yStart + 4);
     }
 
+    @Override
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 2 && x >= xStart && x <= xStart + 16 && y >= yStart && y <= yStart + height) {
             if (currentItem + 1 < items.size()) {
@@ -87,7 +105,7 @@ public class ButtonWidget extends ManualWidgetsBase {
                 currentItem = 0;
             drawForeGround();
             manual.untilUpdate = 0;
-        } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
+        } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height && !isHidden) {
             manual.changeTo(pageNumber);
         }
     }
@@ -95,6 +113,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
+        super.updateScreen();
         if (manual.untilUpdate % 20 == 0) {
             if (currentItem + 1 < items.size()) {
                 currentItem++;

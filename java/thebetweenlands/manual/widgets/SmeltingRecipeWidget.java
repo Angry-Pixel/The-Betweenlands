@@ -76,6 +76,7 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
+        super.updateScreen();
         if (manual.untilUpdate % 20 == 0) {
             if (progress <= 22) {
                 progress++;

@@ -69,6 +69,7 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
+        super.updateScreen();
         if (manual.untilUpdate % 20 == 0) {
             if (currentRecipe + 1 < CompostRecipe.compostRecipes.size()) {
                 currentRecipe++;

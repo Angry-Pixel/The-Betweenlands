@@ -16,11 +16,21 @@ public class TextWidget extends ManualWidgetsBase {
     private String text;
     private float scale = 1.0f;
 
+    private int pageNumber = 0;
+
     public TextWidget(int xStart, int yStart, String unlocalizedText) {
         super(xStart, yStart);
         this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
         this.init();
+    }
+
+    public TextWidget(int xStart, int yStart, String unlocalizedText, int pageNumber) {
+        super(xStart, yStart);
+        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.text = StatCollector.translateToLocal(unlocalizedText);
+        this.init();
+        this.pageNumber = pageNumber;
     }
 
     public TextWidget(int xStart, int yStart, String unlocalizedText, float scale) {
@@ -72,13 +82,11 @@ public class TextWidget extends ManualWidgetsBase {
         //this.textContainer.renderBounds();
         //this.textContainer.render();
         //this.textContainer.renderTooltips(mouseX, mouseY);
-        int pageOffset = 0;
-        for (TextPage page : this.textContainer.getPages()) {
-            page.render(this.xStart + pageOffset, this.yStart);
-            page.renderTooltips(this.xStart + pageOffset, this.yStart, mouseX, mouseY);
-            //page.renderBounds(this.xStart + pageOffset, this.yStart);
-            pageOffset += 148;
-        }
+
+        TextPage page = this.textContainer.getPages().get(pageNumber);
+        page.render(this.xStart, this.yStart);
+        page.renderTooltips(this.xStart, this.yStart, mouseX, mouseY);
+        //page.renderBounds(this.xStart + pageOffset, this.yStart);
     }
 
 

@@ -115,6 +115,7 @@ public class ItemWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
+        super.updateScreen();
         if (manual != null) {
             if (manual.untilUpdate % 200 == 0) {
                 if (currentDisplayItem + 1 < stacks.size()) {

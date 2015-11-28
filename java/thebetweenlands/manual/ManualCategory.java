@@ -8,14 +8,16 @@ import java.util.List;
  */
 public class ManualCategory {
     public List<Page> pages = new ArrayList<>();
+    public List<Page> visiblePages = new ArrayList<>();
 
     public Page blankPage = new Page("blank");
-    public Page currentPageLeft;
-    public Page currentPageRight;
+    public Page currentPageLeft = null;
+    public Page currentPageRight = null;
     public int currentPage = 1;
     public int indexPages = 0;
+    public int number;
 
-    public ManualCategory(ArrayList<Page> pages) {
+    public ManualCategory(ArrayList<Page> pages, int number) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
         ArrayList<Page> tempPages = new ArrayList<>();
@@ -31,41 +33,49 @@ public class ManualCategory {
         indexPages = buttonPagesNew.size();
         this.pages.addAll(buttonPagesNew);
         this.pages.addAll(tempPages);
-        currentPageLeft = this.pages.get(0);
-        if (this.pages.size() > 1)
-            currentPageRight = this.pages.get(1);
-        else
-            currentPageRight = blankPage;
-        currentPageRight.setPageToRight();
+        this.number = number;
     }
 
 
-    public void init(GuiManualBase manual) {
+    public void init(GuiManualBase manual, boolean force) {
+        if (currentPageLeft == null || currentPageRight == null || force) {
+            visiblePages.clear();
+            for (Page page : pages)
+                if (!page.isHidden || ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName))
+                    visiblePages.add(page);
+            currentPageLeft = this.visiblePages.get(0);
+            if (this.visiblePages.size() > 1)
+                currentPageRight = this.visiblePages.get(1);
+            else
+                currentPageRight = blankPage;
+            currentPageRight.setPageToRight();
+        }
         if (currentPageLeft != null)
             currentPageLeft.init(manual);
-        if (currentPageRight != null)
+        if (currentPageRight != null) {
             currentPageRight.init(manual);
+        }
     }
 
 
     public void setPage(int pageNumber, GuiManualBase manual) {
         if (pageNumber % 2 == 0)
             pageNumber--;
-        if (pages.size() >= pageNumber) {
-            currentPageLeft = pages.get(pageNumber - 1);
-            if (pages.size() >= pageNumber + 1)
-                currentPageRight = pages.get(pageNumber);
+        if (pageNumber <= visiblePages.size()) {
+            currentPageLeft = visiblePages.get(pageNumber - 1);
+            if (visiblePages.size() >= pageNumber + 1)
+                currentPageRight = visiblePages.get(pageNumber);
             else
                 currentPageRight = blankPage;
             currentPage = pageNumber;
         }
-        currentPageRight.setPageToRight();
         currentPageLeft.init(manual);
         currentPageRight.init(manual);
+        currentPageRight.setPageToRight();
     }
 
     public void nextPage(GuiManualBase manual) {
-        if (currentPage + 2 <= pages.size()) {
+        if (currentPage + 2 <= visiblePages.size()) {
             setPage(currentPage + 2, manual);
         }
     }

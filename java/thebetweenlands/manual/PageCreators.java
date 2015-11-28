@@ -1,7 +1,11 @@
 package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.widgets.*;
+import thebetweenlands.manual.widgets.text.TextContainer;
+import thebetweenlands.manual.widgets.text.TextFormatComponents;
 import thebetweenlands.manual.widgets.text.TextWidget;
 
 import java.util.ArrayList;
@@ -41,35 +45,82 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item) {
+    public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        String title = entity.manualName();
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.manualName() + ".title"), new PictureWidget(73 - (entity.pictureWidth()/2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.addAll(TextPages(15, 10, "manual." + entity.manualName() + ".description", title, isHidden));
+        return newPages;
+    }
+
+    public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        newPages.add(new Page(entryName, isHidden, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
+        newPages.add(new Page(entryName, isHidden, new PictureWidget(15, 10, imageLocation, width, height)));
+        newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden));
+        return newPages;
+    }
+
+
+    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = item.manualName(0);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (int i = 0; i <= item.metas(); i++)
             items.add(new ItemStack(item.getItem(), 1, i));
-        newPages.add(new Page(title, new TextWidget(15, 10, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
-        newPages.add(new Page(title, new TextWidget(16, 10, "manual." + item.manualName(0) + ".description")));
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, item.manualName(0), 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
+        newPages.addAll(TextPages(16, 10, "manual." + item.manualName(0) + ".description", title, isHidden));
         ArrayList<IManualEntryItem> manualItem = new ArrayList<>();
         manualItem.add(item);
-        newPages.addAll(recipePages(manualItem, title));
+        newPages.addAll(RecipePages(manualItem, title, isHidden));
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems) {
+    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (IManualEntryItem item : manualItems) {
             for (int i = 0; i <= item.metas(); i++)
                 items.add(new ItemStack(item.getItem(), 1, i));
         }
-        newPages.add(new Page(name, new TextWidget(15, 10, "manual." + name + ".title", 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
-        newPages.add(new Page(name, new TextWidget(16, 10, "manual." + name + ".description")));
-        newPages.addAll(recipePages(manualItems, name));
+        newPages.add(new Page(name, new TextWidget(15, 10, name, 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
+        newPages.addAll(TextPages(16, 10, "manual." + name + ".description", name, isHidden));
+        newPages.addAll(RecipePages(manualItems, name, isHidden));
         return newPages;
     }
 
 
-    public static ArrayList<Page> recipePages(ArrayList<IManualEntryItem> items, String title) {
+    public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        String text = StatCollector.translateToLocal(unlocalizedName);
+        TextContainer textContainer = new TextContainer(116, 144, text);
+
+        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
+        textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("bold", EnumChatFormatting.BOLD));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("italic", EnumChatFormatting.ITALIC));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatPagelink());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatRainbow());
+
+        try {
+            textContainer.parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < textContainer.getPages().size(); i++) {
+            newPages.add(new Page(pageName, isHidden, new TextWidget(x, y, unlocalizedName, i)));
+        }
+        return newPages;
+    }
+
+    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 10;
         int type = 0;
@@ -121,7 +172,7 @@ public class PageCreators {
                 if (height >= 152) {
                     ManualWidgetsBase temp = widgets.get(widgets.size() - 1);
                     widgets.remove(widgets.size() - 1);
-                    Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone());
+                    Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden);
                     newPages.add(page);
                     widgets.clear();
                     temp.changeYStart(10);
@@ -132,7 +183,7 @@ public class PageCreators {
             type++;
         }
         if (widgets.size() > 0) {
-            Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone());
+            Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden);
             newPages.add(page);
             widgets.clear();
         }
