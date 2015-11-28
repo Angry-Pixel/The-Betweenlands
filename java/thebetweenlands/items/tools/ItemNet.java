@@ -15,27 +15,29 @@ import thebetweenlands.items.BLItemRegistry;
  */
 public class ItemNet extends Item {
 
-    public ItemNet() {
-        this.setUnlocalizedName("thebetweenlands.net");
-        this.setTextureName("thebetweenlands:net");
-        this.maxStackSize = 1;
-    }
+	public ItemNet() {
+		this.setUnlocalizedName("thebetweenlands.net");
+		this.setTextureName("thebetweenlands:net");
+		this.maxStackSize = 1;
+		this.setMaxDamage(32);
+	}
 
-    @Override
-    public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase entity) {
-        if (entity instanceof EntityFirefly || entity instanceof EntityGecko) {
-            ItemStack itemStack1;
-            if (entity instanceof EntityFirefly)
-                itemStack1 = new ItemStack(BLItemRegistry.fireFly);
-            else
-                itemStack1 = new ItemStack(BLItemRegistry.gecko);
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() == this && !player.worldObj.isRemote) {
-                if (((EntityLiving) entity).getCustomNameTag() != null)
-                    itemStack1.setStackDisplayName(((EntityLiving) entity).getCustomNameTag());
-                player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, itemStack1));
-                entity.setDead();
-            }
-        }
-        return true;
-    }
+	@Override
+	public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase entity) {
+		if (entity instanceof EntityFirefly || entity instanceof EntityGecko) {
+			ItemStack itemStack1;
+			if (entity instanceof EntityFirefly)
+				itemStack1 = new ItemStack(BLItemRegistry.fireFly);
+			else
+				itemStack1 = new ItemStack(BLItemRegistry.gecko);
+			if (player.getHeldItem() != null && player.getHeldItem().getItem() == this && !player.worldObj.isRemote) {
+				if (((EntityLiving) entity).getCustomNameTag() != null)
+					itemStack1.setStackDisplayName(((EntityLiving) entity).getCustomNameTag());
+				player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, itemStack1));
+				entity.setDead();
+				itemStack.damageItem(1, player);
+			}
+		}
+		return true;
+	}
 }
