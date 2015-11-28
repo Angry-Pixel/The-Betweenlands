@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Bart on 28/11/2015.
  */
 public class CommandFindPage extends CommandBase {
-    private List<String> childCommands = Arrays.asList("toggle", "on", "off", "list", "enable", "disable");
+    private List<String> childCommands = Arrays.asList("pestleAndMortar", "purifier");
 
     @Override
     public String getCommandName() {
@@ -28,11 +28,12 @@ public class CommandFindPage extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        if(sender.getEntityWorld() == null || !(sender instanceof EntityPlayer)) {
+        if (sender.getEntityWorld() == null || !(sender instanceof EntityPlayer)) {
             sender.addChatMessage(new ChatComponentText("World is null or entity is not a player"));
             return;
         }
-        ManualManager.findPage((EntityPlayer)sender, args[0]);
+        if (childCommands.contains(args[0]))
+            ManualManager.findPage((EntityPlayer) sender, args[0]);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class CommandFindPage extends CommandBase {
             return null;
         }
         List<String> completions = null;
-        if (args.length == 0) {
+        if (args.length == 1) {
             completions = childCommands;
         }
         return completions == null ? null : getListOfStringsMatchingLastWord(args, completions.toArray(new String[0]));

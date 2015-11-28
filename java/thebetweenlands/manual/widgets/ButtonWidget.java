@@ -89,7 +89,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
         }
         if (isHidden){
-            GL11.glColor3f(0.749f, 0.749f, 0.043f);
+            GL11.glColor3f(0.545f, 0.0f, 0.0f);
         }
 
         TextPage page = this.textContainer.getPages().get(0);

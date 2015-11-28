@@ -114,46 +114,60 @@ public class CommonProxy implements IGuiHandler {
 		// unused serverside see ClientProxy for implementation
 	}
 
-	// FIXME TODO use a switch block! PLEASE
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (ID == GUI_DRUID_ALTAR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityDruidAltar) {
-				return new ContainerDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
+		switch (ID) {
+			case GUI_DRUID_ALTAR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityDruidAltar) {
+					return new ContainerDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_WEEDWOOD_CRAFT) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLCraftingTable) {
-				return new ContainerBLCraftingTable(player.inventory, (TileEntityBLCraftingTable) tileentity);
+			case GUI_WEEDWOOD_CRAFT: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLCraftingTable) {
+					return new ContainerBLCraftingTable(player.inventory, (TileEntityBLCraftingTable) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_WEEDWOOD_CHEST) {
-			IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
-			return new ContainerWeedWoodChest(player.inventory, inventory);
-		} else if (ID == GUI_BL_FURNACE) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLFurnace) {
-				return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+			case GUI_WEEDWOOD_CHEST:
+				IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
+				return new ContainerWeedWoodChest(player.inventory, inventory);
+			case GUI_BL_FURNACE: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLFurnace) {
+					return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_BL_DUAL_FURNACE) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLDualFurnace) {
-				return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+			case GUI_BL_DUAL_FURNACE: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLDualFurnace) {
+					return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_ANIMATOR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityAnimator) {
-				return new ContainerAnimator(player.inventory, (TileEntityAnimator) tileentity);
+			case GUI_ANIMATOR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityAnimator) {
+					return new ContainerAnimator(player.inventory, (TileEntityAnimator) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_PURIFIER) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPurifier) {
-				return new ContainerPurifier(player.inventory, (TileEntityPurifier) tileentity);
+			case GUI_PURIFIER: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityPurifier) {
+					return new ContainerPurifier(player.inventory, (TileEntityPurifier) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_PESTLE_AND_MORTAR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPestleAndMortar) {
-				return new ContainerPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+			case GUI_PESTLE_AND_MORTAR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityPestleAndMortar) {
+					return new ContainerPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+				}
+				break;
 			}
 		}
 
@@ -161,48 +175,62 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	@Override
-	// FIXME TODO use a switch block! PLEASE
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (ID == GUI_DRUID_ALTAR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityDruidAltar) {
-				return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
+		switch (ID) {
+			case GUI_DRUID_ALTAR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityDruidAltar) {
+					return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_WEEDWOOD_CRAFT) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLCraftingTable) {
-				return new GuiBLCrafting(player.inventory, (TileEntityBLCraftingTable) tileentity);
+			case GUI_WEEDWOOD_CRAFT: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLCraftingTable) {
+					return new GuiBLCrafting(player.inventory, (TileEntityBLCraftingTable) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_WEEDWOOD_CHEST) {
-			IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
-			return new GuiWeedWoodChest(player.inventory, inventory);
-		} else if (ID == GUI_BL_FURNACE) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLFurnace) {
-				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+			case GUI_WEEDWOOD_CHEST:
+				IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
+				return new GuiWeedWoodChest(player.inventory, inventory);
+			case GUI_BL_FURNACE: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLFurnace) {
+					return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_BL_DUAL_FURNACE) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLDualFurnace) {
-				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+			case GUI_BL_DUAL_FURNACE: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityBLDualFurnace) {
+					return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_ANIMATOR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityAnimator) {
-				return new GuiAnimator(player, (TileEntityAnimator) tileentity);
+			case GUI_ANIMATOR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityAnimator) {
+					return new GuiAnimator(player, (TileEntityAnimator) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_PURIFIER) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPurifier) {
-				return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
+			case GUI_PURIFIER: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityPurifier) {
+					return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_PESTLE_AND_MORTAR) {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPestleAndMortar) {
-				return new GuiPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+			case GUI_PESTLE_AND_MORTAR: {
+				TileEntity tileentity = world.getTileEntity(x, y, z);
+				if (tileentity instanceof TileEntityPestleAndMortar) {
+					return new GuiPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+				}
+				break;
 			}
-		} else if (ID == GUI_MANUAL) {
-			return new GuiManualBase(player);
+			case GUI_MANUAL:
+				return new GuiManualBase(player);
 		}
 
 		return null;

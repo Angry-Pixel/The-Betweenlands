@@ -35,12 +35,17 @@ public class ManualEntryRegistry {
 
     public static ArrayList<Page> itemPages = new ArrayList<>();
     public static ArrayList<Page> entities = new ArrayList<>();
-    public static ArrayList<Page> machines = new ArrayList<>();
+    public static ArrayList<Page> mechanics = new ArrayList<>();
 
 
 
     public static ManualCategory itemsCategory;
     public static ManualCategory machineCategory;
+    public static ManualCategory entitiesCategory;
+    public static ManualCategory category4;
+    public static ManualCategory category5;
+    public static ManualCategory category6;
+    public static ManualCategory category7;
 
     public static void init(){
         initItemEntries();
@@ -99,9 +104,12 @@ public class ManualEntryRegistry {
     }
 
     public static void initMachineEntries() {
-        machines.clear();
-        machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
-        machines.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false));
-        machineCategory = new ManualCategory(machines, 2);
+        mechanics.clear();
+        mechanics.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
+        mechanics.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, true));
+        mechanics.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
+        mechanics.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
+        machineCategory = new ManualCategory(mechanics, 2);
+
     }
 }

@@ -1,6 +1,7 @@
 package thebetweenlands.manual;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 
 import java.util.ArrayList;
@@ -25,21 +26,24 @@ public class ManualManager {
 
     public static void findPage(EntityPlayer player, String pageName) {
         if (pageName != null && player != null) {
-            BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages.add(pageName.toLowerCase());
+            if (!BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages.contains(pageName))
+                BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages.add(pageName.toLowerCase());
         }
     }
 
     public static ArrayList<String> getFoundPages(EntityPlayer player) {
         if (player != null) {
-            return BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages;
+            if (player.worldObj.isRemote)
+                player = player.worldObj.func_152378_a(player.getUniqueID());
+            if (player instanceof EntityPlayerMP)
+                return BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages;
         }
         return null;
     }
 
     public static boolean hasFoundPage(EntityPlayer player, String page) {
         if (player != null) {
-            System.out.println(getFoundPages(player).size());
-            for (String s : getFoundPages(player)) {
+            for (String s : BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesManual>getProperties(player, BLEntityPropertiesRegistry.MANUAL).foundPages) {
                 System.out.println("comparing: " + s.toLowerCase() + ", " + page.toLowerCase());
                 if (s.toLowerCase().equals(page.toLowerCase())) {
                     return true;
