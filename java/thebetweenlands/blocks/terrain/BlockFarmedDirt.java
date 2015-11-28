@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +25,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.tools.ItemSpadeBL;
-import thebetweenlands.world.events.impl.EventSpoopy;
+import thebetweenlands.proxy.ClientProxy;
 
 public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
@@ -34,11 +33,10 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
 	public final int COMPOSTING_MODIFIER = 3, DECAY_CURE = 3, DECAY_CAUSE = 3;
 	public final int MATURE_CROP = 7, DECAYED_CROP = 8;
-	public int DECAY_TIME = 75, DUG_SOIL_REVERT_TIME = 10;
+	public int DECAY_TIME = 150, DUG_SOIL_REVERT_TIME = 10;
+
 	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
-	@SideOnly(Side.CLIENT)
-	private IIcon sideIconDirt, sideIconGrass, iconFertGrassSpoopy, iconFertGrassDecayedSpoopy, iconDugSwampGrassSpoopy;
+	public IIcon iconPureSwampDirt, iconHolePiece, iconConnectionPiece, iconCornerPiece, iconHalfCornerPiece, iconFertHolePiece, iconFertConnectionPiece, iconFertCornerPiece, iconFertHalfCornerPiece, iconDecayedHolePiece, iconDecayedConnectionPiece, iconDecayedCornerPiece, iconDecayedHalfCornerPiece;
 
 	public BlockFarmedDirt() {
 		super(Material.ground);
@@ -141,66 +139,111 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister reg) {
-		sideIconDirt = reg.registerIcon("thebetweenlands:swampDirt");
-		sideIconGrass = reg.registerIcon("thebetweenlands:swampGrassSide");
-		icons = new IIcon[iconPaths.length];
-		int i = 0;
-		for (String path : iconPaths)
-			icons[i++] = reg.registerIcon("thebetweenlands:" + path);
+		this.iconPureSwampDirt = reg.registerIcon("thebetweenlands:dugDirt/purifiedSwampDirt");
 
-		iconFertGrassSpoopy = reg.registerIcon("thebetweenlands:fertGrassSpoopy");
-		iconFertGrassDecayedSpoopy = reg.registerIcon("thebetweenlands:fertGrassDecayedSpoopy");
-		iconDugSwampGrassSpoopy = reg.registerIcon("thebetweenlands:dugSwampGrassSpoopy");
+		this.iconHolePiece = reg.registerIcon("thebetweenlands:dugDirt/hole");
+		this.iconFertHolePiece = reg.registerIcon("thebetweenlands:dugDirt/fertHole");
+		this.iconDecayedHolePiece = reg.registerIcon("thebetweenlands:dugDirt/decayedHole");
+
+		this.iconConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/connection");
+		this.iconFertConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/fertConnection");
+		this.iconDecayedConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedConnection");
+
+		this.iconCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/corner");
+		this.iconFertCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/fertCorner");
+		this.iconDecayedCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedCorner");
+
+		this.iconHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/halfCorner");
+		this.iconFertHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/fertHalfCorner");
+		this.iconDecayedHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedHalfCorner");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta < PURE_SWAMP_DIRT || meta >= icons.length + 2)
-			return null;
-		if(meta == DUG_PURE_SWAMP_DIRT || meta == FERT_PURE_SWAMP_DIRT_MIN)
-			if (side == 1)
-				return icons[meta];
-			else
-				return icons[PURE_SWAMP_DIRT];
-		if(meta == FERT_PURE_SWAMP_DIRT_MID || meta == FERT_PURE_SWAMP_DIRT_MAX)
-			if (side == 1)
-				return icons[FERT_PURE_SWAMP_DIRT_MIN];
-			else
-				return icons[PURE_SWAMP_DIRT];
-		if(meta == DUG_SWAMP_DIRT || meta == FERT_DIRT || meta == FERT_DIRT_DECAYED)
-			if (side == 1)
-				return icons[meta];
-			else
-				return sideIconDirt;
-		if(meta == DUG_SWAMP_GRASS || meta == FERT_GRASS || meta == FERT_GRASS_DECAYED)
-			if (side == 1)
-				if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
-					switch(meta) {
-					case DUG_SWAMP_GRASS:
-						return this.iconDugSwampGrassSpoopy;
-					case FERT_GRASS:
-						return this.iconFertGrassSpoopy;
-					case FERT_GRASS_DECAYED:
-						return this.iconFertGrassDecayedSpoopy;
-					}
-				} else {
-					return icons[meta];
-				}
-			else
-				if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
-					return BLBlockRegistry.swampGrass.getIcon(2, 0);
-				} else {
-					return sideIconGrass;
-				}
-		return icons[meta];
+		switch(meta) {
+		case PURE_SWAMP_DIRT:
+		case DUG_PURE_SWAMP_DIRT:
+		case FERT_PURE_SWAMP_DIRT_MIN:
+			//pure
+			return this.iconPureSwampDirt;
+		case DUG_SWAMP_DIRT:
+		case FERT_DIRT:
+		case FERT_DIRT_DECAYED:
+			//dirt
+			return BLBlockRegistry.swampDirt.getIcon(side, 0);
+		case DUG_SWAMP_GRASS:
+		case FERT_GRASS:
+		case FERT_GRASS_DECAYED:
+			//grass
+			return BLBlockRegistry.swampGrass.getIcon(side, 0);
+		}
+		return BLBlockRegistry.swampDirt.getIcon(side, 0);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public IIcon getOverlayIcon(int piece, int meta) {
+		switch(meta) {
+		case PURE_SWAMP_DIRT:
+		case DUG_PURE_SWAMP_DIRT:
+		case DUG_SWAMP_DIRT:
+		case DUG_SWAMP_GRASS:
+			//normal
+			switch(piece) {
+			case 0:
+				return this.iconHolePiece;
+			case 1:
+				return this.iconConnectionPiece;
+			case 2:
+				return this.iconCornerPiece;
+			case 3:
+				return this.iconHalfCornerPiece;
+			}
+			break;
+		case FERT_PURE_SWAMP_DIRT_MIN:
+		case FERT_PURE_SWAMP_DIRT_MID:
+		case FERT_PURE_SWAMP_DIRT_MAX:
+		case FERT_DIRT:
+		case FERT_GRASS:
+			//fert
+			switch(piece) {
+			case 0:
+				return this.iconFertHolePiece;
+			case 1:
+				return this.iconFertConnectionPiece;
+			case 2:
+				return this.iconFertCornerPiece;
+			case 3:
+				return this.iconFertHalfCornerPiece;
+			}
+			break;
+		case FERT_DIRT_DECAYED:
+		case FERT_GRASS_DECAYED:
+			//decayed
+			switch(piece) {
+			case 0:
+				return this.iconDecayedHolePiece;
+			case 1:
+				return this.iconDecayedConnectionPiece;
+			case 2:
+				return this.iconDecayedCornerPiece;
+			case 3:
+				return this.iconDecayedHalfCornerPiece;
+			}
+			break;
+		}
+		return null;
+	}
+
+	public boolean isDecayed(int meta) {
+		return meta == FERT_GRASS_DECAYED || meta == FERT_DIRT_DECAYED;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(Item id, CreativeTabs tab, List list) {
-		for (int i = 0; i < icons.length; i++)
+		for (int i = 0; i < 9; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
@@ -258,4 +301,20 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		}
 	}
 
+	@Override
+	public int getRenderType() {
+		return ClientProxy.BlockRenderIDs.FARMED_DIRT.id();
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderBlockPass() {
+		return 1;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
 }

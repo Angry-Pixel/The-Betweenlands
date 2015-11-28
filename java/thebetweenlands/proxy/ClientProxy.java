@@ -41,6 +41,11 @@ import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
+import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
+import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
+import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
+import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
+import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
 import thebetweenlands.client.render.block.BlockHollowLogRenderer;
 import thebetweenlands.client.render.block.BlockModelPlantRenderer;
 import thebetweenlands.client.render.block.BlockMossBedRenderer;
@@ -219,7 +224,8 @@ public class ClientProxy extends CommonProxy {
 		SLOPE,
 		HOLLOW_LOG,
 		MOSS_BED,
-		CROP;
+		CROP,
+		FARMED_DIRT;
 
 		private final int ID;
 
@@ -355,6 +361,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBLGenericCropRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockFarmedDirtRenderer());
 
 		// Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());

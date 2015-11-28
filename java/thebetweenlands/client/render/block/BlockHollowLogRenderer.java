@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.tree.BlockHollowLog;
@@ -19,6 +20,7 @@ public class BlockHollowLogRenderer implements ISimpleBlockRenderingHandler {
     public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
         float pixel = 0.0625F;
         renderer.renderAllFaces = true;
+        Tessellator.instance.startDrawingQuads();
         renderer.setRenderBounds(0D, 0D, 0D, 1D, 1D, pixel);
         BlockRenderHelper.renderSimpleBlock(BLBlockRegistry.hollowLog, metadata, renderer);
         renderer.setRenderBounds(0D, 0D, 0D, pixel, 1D, 1D);
@@ -31,6 +33,7 @@ public class BlockHollowLogRenderer implements ISimpleBlockRenderingHandler {
         BlockRenderHelper.renderSimpleBlock(BLBlockRegistry.hollowLog, metadata, renderer);
         renderer.setRenderBounds(0D, 1D - pixel, 0D, 1D, 1D, 1D);
         BlockRenderHelper.renderSimpleBlock(BLBlockRegistry.hollowLog, metadata, renderer);
+        Tessellator.instance.draw();
         renderer.renderAllFaces = false;
     }
 

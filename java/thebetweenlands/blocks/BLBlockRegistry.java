@@ -161,7 +161,7 @@ public class BLBlockRegistry {
 	public static final Block tarFluid = new BlockTarFluid();
 	public static final Block stagnantWaterFluid = new BlockStagnantWater();
 	public static final Block puddle = new BlockPuddle();
-	public static final Block farmedDirt = new BlockFarmedDirt();
+	public static final BlockFarmedDirt farmedDirt = new BlockFarmedDirt();
 	public static final Block dentrothyst = new BlockDentrothyst();
 
 	// ORES @Params (name/texture, drops this item)
