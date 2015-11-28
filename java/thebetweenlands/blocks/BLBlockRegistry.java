@@ -330,7 +330,32 @@ public class BLBlockRegistry {
 
 	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
-	public static final Block middleFruitBush = new BlockBLGenericCrop("middleFruitBush");
+
+	// CROPS
+	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
+		@Override
+		public ItemStack getSeedDrops() {
+			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
+		}
+
+		@Override
+		public ItemStack getCropDrops() {
+			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
+		}
+	};
+	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
+		//TODO: Add seeds and crop drops
+
+		@Override
+		public ItemStack getSeedDrops() {
+			return null;
+		}
+
+		@Override
+		public ItemStack getCropDrops() {
+			return null;
+		}
+	};
 
 	public static final Block caveMoss = new BlockCaveMoss();
 	public static final BlockCaveGrass caveGrass = new BlockCaveGrass("caveGrass");

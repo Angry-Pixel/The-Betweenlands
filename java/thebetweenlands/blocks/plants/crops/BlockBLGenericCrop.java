@@ -3,8 +3,11 @@ package thebetweenlands.blocks.plants.crops;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -12,23 +15,24 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.client.render.block.crops.CropRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockBLGenericCrop extends BlockCrops {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
+
 	@SideOnly(Side.CLIENT)
-	private IIcon decayedTexture;
+	private CropRenderer cropRenderer;
+
 	private String type;
 
 	public BlockBLGenericCrop(String blockName) {
@@ -39,35 +43,53 @@ public class BlockBLGenericCrop extends BlockCrops {
 		setBlockTextureName("thebetweenlands:" + type);
 	}
 
+	@SideOnly(Side.CLIENT)
+	public CropRenderer getCropRenderer() {
+		return this.cropRenderer;
+	}
+
+	/**
+	 * Sets the crop models. Needs 5 stages, last stage is decayed.
+	 * @param models Crop models
+	 * @param textureDimensions Texture dimensions
+	 * @return
+	 */
+	@SideOnly(Side.CLIENT)
+	public BlockBLGenericCrop setCropModels(ModelBase[] models, int[] textureDimensions) {
+		this.cropRenderer = new CropRenderer();
+		this.cropRenderer.setCropModels(models, textureDimensions);
+		return this;
+	}
+
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (metadata == 7) {
 			for (int i = 0; i < 3 + fortune; ++i) {
-				if (world.rand.nextInt(15) <= metadata)
-					ret.add(getSeedDrops());
-				ret.add(getCropDrops());
+				if(getSeedDrops() != null) {
+					if (world.rand.nextInt(15) <= metadata)
+						ret.add(getSeedDrops());
+				}
+				if(getCropDrops() != null) ret.add(getCropDrops());
 			}
 		}
-		if (metadata < 7)
-			ret.add(getSeedDrops());
-		if (metadata > 7)
-			ret.add(getSeedDrops());
+		if(getSeedDrops() != null) {
+			if (metadata < 7)
+				ret.add(getSeedDrops());
+			if (metadata > 7)
+				ret.add(getSeedDrops());
+		}
 		return ret;
 	}
-	
+
 	public ItemStack getSeedDrops() {
-		if(type.equals("middleFruitBush"))
-			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
 		return null;	
 	}
-		
+
 	public ItemStack getCropDrops() {
-		if(type.equals("middleFruitBush"))
-			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
 		return null;	
 	}
-	
+
 	@Override
 	protected Item func_149866_i() { //disabled for custom BL bits
 		return null;
@@ -79,9 +101,9 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
-    public Item getItemDropped(int meta, Random rand, int amount) { //disabled for custom BL bits
-        return null;
-    }
+	public Item getItemDropped(int meta, Random rand, int amount) { //disabled for custom BL bits
+		return null;
+	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
@@ -91,10 +113,10 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
-    protected boolean canPlaceBlockOn(Block block) {
-        return block == BLBlockRegistry.farmedDirt;
-    }
-	
+	protected boolean canPlaceBlockOn(Block block) {
+		return block == BLBlockRegistry.farmedDirt;
+	}
+
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		int meta = world.getBlockMetadata(x, y, z);
@@ -125,7 +147,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
 		int meta = world.getBlockMetadata(x, y, z);
@@ -166,23 +188,19 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta < 7) {
-			if (meta == 6)
-				meta = 5;
+		if (meta <= 7) {
 			return iconArray[meta >> 1];
-		} else if (meta == 8)
-			return decayedTexture;
-		else
-			return iconArray[3];
+		} else
+			return iconArray[4];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		iconArray = new IIcon[4];
-		decayedTexture = iconRegister.registerIcon("thebetweenlands:" + type + "Decay");
-		for (int i = 0; i < iconArray.length; ++i)
-			iconArray[i] = iconRegister.registerIcon("thebetweenlands:" + type + i);
+		iconArray = new IIcon[5];
+		for (int i = 0; i < iconArray.length; ++i) {
+			iconArray[i] = iconRegister.registerIcon("thebetweenlands:crops/" + type + i);
+		}
 	}
 
 	@Override
@@ -196,10 +214,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getRenderType() {
-		return 1;
+		return this.cropRenderer != null ? BlockRenderIDs.CROP.id() : 1;
 	}
-	
+
 	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;

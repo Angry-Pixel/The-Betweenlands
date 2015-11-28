@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,6 +32,11 @@ import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
+import thebetweenlands.client.model.block.crops.ModelCropFungus1;
+import thebetweenlands.client.model.block.crops.ModelCropFungus2;
+import thebetweenlands.client.model.block.crops.ModelCropFungus3;
+import thebetweenlands.client.model.block.crops.ModelCropFungus4;
+import thebetweenlands.client.model.block.crops.ModelCropFungus5;
 import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -48,6 +54,7 @@ import thebetweenlands.client.render.block.BlockSwampReedRenderer;
 import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
 import thebetweenlands.client.render.block.BlockWalkwayRenderer;
 import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.block.crops.BlockBLGenericCropRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderBLItemFrame;
 import thebetweenlands.client.render.entity.RenderBerserkerGuardian;
@@ -165,6 +172,7 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.manual.ManualEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -210,7 +218,8 @@ public class ClientProxy extends CommonProxy {
 		MUDFLOWERPOT,
 		SLOPE,
 		HOLLOW_LOG,
-		MOSS_BED;
+		MOSS_BED,
+		CROP;
 
 		private final int ID;
 
@@ -345,6 +354,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockMossBedRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockSlopeRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockBLGenericCropRenderer());
 
 		// Events
 		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
@@ -375,6 +385,22 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemCorrosionHandler.INSTANCE);
 
+		// Crop renderers
+		BLBlockRegistry.fungusCrop.setCropModels(
+				new ModelBase[]{
+						new ModelCropFungus1(), 
+						new ModelCropFungus2(), 
+						new ModelCropFungus3(), 
+						new ModelCropFungus4(), 
+						new ModelCropFungus5()}, 
+				new int[] {
+						32, 32,
+						32, 32,
+						64, 64,
+						64, 64,
+						64, 64
+				});
+
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
@@ -387,6 +413,12 @@ public class ClientProxy extends CommonProxy {
 			}
 			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20), "timer", "field_71428_T", "Q");
 		}
+	}
+
+	@Override
+	public void postInit() {
+		// Init manual
+		ManualEntryRegistry.init();
 	}
 
 	@Override
