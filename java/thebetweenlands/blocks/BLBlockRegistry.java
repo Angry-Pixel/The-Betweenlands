@@ -358,9 +358,9 @@ public class BLBlockRegistry {
 
 		@Override
 		public void updateTick(World world, int x, int y, int z, Random rand) {
-			if(!world.isRemote && this.isDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z) && rand.nextInt(10) == 0) {
+			if(!world.isRemote && this.isDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z) && rand.nextInt(6) == 0) {
 				EntityLiving entity = new EntitySporeling(world);
-				entity.setLocationAndAngles(x + 0.5D, y + 0.5D, z + 0.5D, 0.0f, 0.0f);
+				entity.setLocationAndAngles(x + 0.5D, y + 1.1D, z + 0.5D, 0.0f, 0.0f);
 				world.spawnEntityInWorld(entity);
 				world.setBlock(x, y, z, Blocks.air);
 			} else {
