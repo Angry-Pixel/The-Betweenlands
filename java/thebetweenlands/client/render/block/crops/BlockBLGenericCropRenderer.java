@@ -36,6 +36,7 @@ public class BlockBLGenericCropRenderer implements ISimpleBlockRenderingHandler 
 		tessellator.startDrawingQuads();
 		this.renderCrop(crop, 0.5F, 1.5F, 0.5F, 6);
 		tessellator.draw();
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override

@@ -303,18 +303,23 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	@Override
 	public int getRenderType() {
-		return ClientProxy.BlockRenderIDs.FARMED_DIRT.id();
+		return ClientProxy.BlockRenderIDs.FARMED_DIRT.id(); 
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getRenderBlockPass() {
-		return 1;
+		return 0;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
 		return false;
 	}
 }

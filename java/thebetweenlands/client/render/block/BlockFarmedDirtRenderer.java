@@ -18,7 +18,6 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		renderer.setRenderBounds(0D, -0.1D, 0D, 1D, 0.9D, 1D);
 
-		GL11.glDisable(GL11.GL_LIGHTING);
 		Tessellator.instance.setColorOpaque(255, 255, 255);
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.theWorld != null && mc.thePlayer != null) {
@@ -27,9 +26,11 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 		}
 		Tessellator.instance.startDrawingQuads();
 		BlockRenderHelper.renderSimpleBlock(block, metadata, renderer);
-		if(metadata != BlockFarmedDirt.PURE_SWAMP_DIRT) renderer.renderFaceYPos(block, 0D, 0D, 0D, BLBlockRegistry.farmedDirt.getOverlayIcon(0, metadata));
+		if(metadata != BlockFarmedDirt.PURE_SWAMP_DIRT) {
+			Tessellator.instance.setNormal(0, 1, 0);
+			renderer.renderFaceYPos(block, 0D, 0D, 0D, BLBlockRegistry.farmedDirt.getOverlayIcon(0, metadata));
+		}
 		Tessellator.instance.draw();
-		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override
