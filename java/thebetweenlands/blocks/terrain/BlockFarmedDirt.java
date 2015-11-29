@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
@@ -36,7 +37,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public int DECAY_TIME = 150, DUG_SOIL_REVERT_TIME = 10;
 
 	@SideOnly(Side.CLIENT)
-	public IIcon iconPureSwampDirt, iconHolePiece, iconConnectionPiece, iconCornerPiece, iconHalfCornerPiece, iconFertHolePiece, iconFertConnectionPiece, iconFertCornerPiece, iconFertHalfCornerPiece, iconDecayedHolePiece, iconDecayedConnectionPiece, iconDecayedCornerPiece, iconDecayedHalfCornerPiece;
+	private IIcon iconPureSwampDirt, iconDugSwampGrassMap, iconDugSwampDirtMap, iconDugPurifiedSwampDirtMap, iconCompostedSwampGrassMap, iconCompostedSwampDirtMap, iconCompostedPurifiedSwampDirtMap, iconDecayedSwampGrassMap, iconDecayedSwampDirtMap, iconDecayedPurifiedSwampDirtMap;
 
 	public BlockFarmedDirt() {
 		super(Material.ground);
@@ -139,21 +140,17 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public void registerBlockIcons(IIconRegister reg) {
 		this.iconPureSwampDirt = reg.registerIcon("thebetweenlands:dugDirt/purifiedSwampDirt");
 
-		this.iconHolePiece = reg.registerIcon("thebetweenlands:dugDirt/hole");
-		this.iconFertHolePiece = reg.registerIcon("thebetweenlands:dugDirt/fertHole");
-		this.iconDecayedHolePiece = reg.registerIcon("thebetweenlands:dugDirt/decayedHole");
+		this.iconDugSwampGrassMap = reg.registerIcon("thebetweenlands:dugDirt/dugSwampGrassMap");
+		this.iconDugSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/dugSwampDirtMap");
+		this.iconDugPurifiedSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/dugPurifiedSwampDirtMap");
 
-		this.iconConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/connection");
-		this.iconFertConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/fertConnection");
-		this.iconDecayedConnectionPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedConnection");
+		this.iconCompostedSwampGrassMap = reg.registerIcon("thebetweenlands:dugDirt/fertSwampGrassMap");
+		this.iconCompostedSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/fertSwampDirtMap");
+		this.iconCompostedPurifiedSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/fertPurifiedSwampDirtMap");
 
-		this.iconCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/corner");
-		this.iconFertCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/fertCorner");
-		this.iconDecayedCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedCorner");
-
-		this.iconHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/halfCorner");
-		this.iconFertHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/fertHalfCorner");
-		this.iconDecayedHalfCornerPiece = reg.registerIcon("thebetweenlands:dugDirt/decayedHalfCorner");
+		this.iconDecayedSwampGrassMap = reg.registerIcon("thebetweenlands:dugDirt/decayedSwampGrassMap");
+		this.iconDecayedSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/decayedSwampDirtMap");
+		this.iconDecayedPurifiedSwampDirtMap = reg.registerIcon("thebetweenlands:dugDirt/decayedPurifiedSwampDirtMap");
 	}
 
 	@Override
@@ -161,78 +158,27 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public IIcon getIcon(int side, int meta) {
 		switch(meta) {
 		case PURE_SWAMP_DIRT:
+			return this.iconPureSwampDirt;
 		case DUG_PURE_SWAMP_DIRT:
+			return side == 1 ? this.iconDugPurifiedSwampDirtMap : this.iconPureSwampDirt;
 		case FERT_PURE_SWAMP_DIRT_MIN:
 		case FERT_PURE_SWAMP_DIRT_MID:
 		case FERT_PURE_SWAMP_DIRT_MAX:
-			//pure
-			return this.iconPureSwampDirt;
+			return side == 1 ? this.iconCompostedPurifiedSwampDirtMap : this.iconPureSwampDirt;
 		case DUG_SWAMP_DIRT:
+			return side == 1 ? this.iconDugSwampDirtMap : BLBlockRegistry.swampDirt.getIcon(side, 0);
 		case FERT_DIRT:
+			return side == 1 ? this.iconCompostedSwampDirtMap : BLBlockRegistry.swampDirt.getIcon(side, 0);
 		case FERT_DIRT_DECAYED:
-			//dirt
-			return BLBlockRegistry.swampDirt.getIcon(side, 0);
+			return side == 1 ? this.iconDecayedSwampDirtMap : BLBlockRegistry.swampDirt.getIcon(side, 0);
 		case DUG_SWAMP_GRASS:
+			return side == 1 ? this.iconDugSwampGrassMap : BLBlockRegistry.swampGrass.getIcon(side, 0);
 		case FERT_GRASS:
+			return side == 1 ? this.iconCompostedSwampGrassMap : BLBlockRegistry.swampGrass.getIcon(side, 0);
 		case FERT_GRASS_DECAYED:
-			//grass
-			return BLBlockRegistry.swampGrass.getIcon(side, 0);
+			return side == 1 ? this.iconDecayedSwampGrassMap : BLBlockRegistry.swampGrass.getIcon(side, 0);
 		}
 		return BLBlockRegistry.swampDirt.getIcon(side, 0);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public IIcon getOverlayIcon(int piece, int meta) {
-		switch(meta) {
-		case PURE_SWAMP_DIRT:
-		case DUG_PURE_SWAMP_DIRT:
-		case DUG_SWAMP_DIRT:
-		case DUG_SWAMP_GRASS:
-			//normal
-			switch(piece) {
-			case 0:
-				return this.iconHolePiece;
-			case 1:
-				return this.iconConnectionPiece;
-			case 2:
-				return this.iconCornerPiece;
-			case 3:
-				return this.iconHalfCornerPiece;
-			}
-			break;
-		case FERT_PURE_SWAMP_DIRT_MIN:
-		case FERT_PURE_SWAMP_DIRT_MID:
-		case FERT_PURE_SWAMP_DIRT_MAX:
-		case FERT_DIRT:
-		case FERT_GRASS:
-			//fert
-			switch(piece) {
-			case 0:
-				return this.iconFertHolePiece;
-			case 1:
-				return this.iconFertConnectionPiece;
-			case 2:
-				return this.iconFertCornerPiece;
-			case 3:
-				return this.iconFertHalfCornerPiece;
-			}
-			break;
-		case FERT_DIRT_DECAYED:
-		case FERT_GRASS_DECAYED:
-			//decayed
-			switch(piece) {
-			case 0:
-				return this.iconDecayedHolePiece;
-			case 1:
-				return this.iconDecayedConnectionPiece;
-			case 2:
-				return this.iconDecayedCornerPiece;
-			case 3:
-				return this.iconDecayedHalfCornerPiece;
-			}
-			break;
-		}
-		return null;
 	}
 
 	public boolean isDecayed(int meta) {
@@ -321,5 +267,11 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
+		return side == 1 ? false : super.shouldSideBeRendered(world, x, y, z, side);
 	}
 }
