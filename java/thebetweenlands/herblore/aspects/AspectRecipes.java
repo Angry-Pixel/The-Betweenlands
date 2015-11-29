@@ -23,7 +23,6 @@ public class AspectRecipes {
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_ARROW_ARUM)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLACKHAT_MUSHROOM)), 		AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLOOD_SNAIL_SHELL)), 		AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLUE_EYED_GRASS)), 		AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLUE_IRIS)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BOG_BEAN)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BONESET)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
@@ -31,7 +30,6 @@ public class AspectRecipes {
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BROOM_SEDGE)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BULB_CAPPED_MUSHROOM)), 	AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BUTTON_BUSH)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CARDINAL_FLOWER)), 		AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CATTAIL)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CAVE_GRASS)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CAVE_MOSS)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
@@ -55,7 +53,13 @@ public class AspectRecipes {
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_SWAMP_GRASS_TALL)), 		AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_TANGLED_ROOTS)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_SUNDEW)), 				AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_WEEDS)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VOLARPAD)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS)), 				AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GENERIC_LEAF)), 			AspectTier.COMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLUE_EYED_GRASS)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CARDINAL_FLOWER)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MIRE_CORAL)), 			AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MARSH_MARIGOLD)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GOLDEN_CLUB)), 			AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
@@ -63,12 +67,9 @@ public class AspectRecipes {
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CRIMSON_MIDDLE_GEM)), 	AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_DEEP_WATER_CORAL)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
 		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_AQUA_MIDDLE_GEM)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT)), 			AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_WEEDS)), 			AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VENUS_FLY_TRAP)), 		AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VOLARPAD)), 				AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS)), 				AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
-		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY)), 			AspectTier.UNCOMMON, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_SUNDEW)), 				AspectTier.RARE, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT)), 			AspectTier.RARE, AspectType.HERB, 1.0F, 1.0F));
+		REGISTRY.addAspectsToItem(new ItemEntryAspects(new ItemEntry(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_VENUS_FLY_TRAP)), 		AspectTier.RARE, AspectType.HERB, 1.0F, 1.0F));
 	}
 
 	private static void registerAspects() {
