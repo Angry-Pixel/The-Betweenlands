@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.proxy.ClientProxy;
 
 public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
@@ -26,7 +27,7 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 		}
 		Tessellator.instance.startDrawingQuads();
 		BlockRenderHelper.renderSimpleBlock(block, metadata, renderer);
-		renderer.renderFaceYPos(block, 0D, 0D, 0D, BLBlockRegistry.farmedDirt.getOverlayIcon(0, metadata));
+		if(metadata != BlockFarmedDirt.PURE_SWAMP_DIRT) renderer.renderFaceYPos(block, 0D, 0D, 0D, BLBlockRegistry.farmedDirt.getOverlayIcon(0, metadata));
 		Tessellator.instance.draw();
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -84,7 +85,7 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 						}
 
 					}
-				} else if(xo == 0 && zo == 0) {
+				} else if(xo == 0 && zo == 0 && world.getBlockMetadata(x, y, z) != BlockFarmedDirt.PURE_SWAMP_DIRT) {
 					//Center hole
 					render = true;
 				}

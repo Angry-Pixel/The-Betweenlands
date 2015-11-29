@@ -30,7 +30,7 @@ import thebetweenlands.proxy.ClientProxy;
 public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 
 	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt", "fertDirtDecayed", "fertGrassDecayed" };
-	public final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
+	public static final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
 	public final int COMPOSTING_MODIFIER = 3, DECAY_CURE = 3, DECAY_CAUSE = 3;
 	public final int MATURE_CROP = 7, DECAYED_CROP = 8;
 	public int DECAY_TIME = 150, DUG_SOIL_REVERT_TIME = 10;
@@ -105,10 +105,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 		if(meta == PURE_SWAMP_DIRT || meta == DUG_PURE_SWAMP_DIRT || meta == FERT_PURE_SWAMP_DIRT_MIN || meta == FERT_PURE_SWAMP_DIRT_MID ||meta == FERT_PURE_SWAMP_DIRT_MAX)
 			drops.add(new ItemStack(Item.getItemFromBlock(this), 1, 0));
-		if(meta == DUG_SWAMP_DIRT || meta == FERT_DIRT || meta == FERT_DIRT_DECAYED)
+		if(meta == DUG_SWAMP_DIRT || meta == FERT_DIRT || meta == FERT_DIRT_DECAYED || meta == DUG_SWAMP_GRASS || meta == FERT_GRASS || meta == FERT_GRASS_DECAYED)
 			drops.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.swampDirt), 1, 0));
-		if(meta == DUG_SWAMP_GRASS || meta == FERT_GRASS || meta == FERT_GRASS_DECAYED)
-			drops.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.swampGrass), 1, 0));
 
 		return drops;
 	}
@@ -165,6 +163,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		case PURE_SWAMP_DIRT:
 		case DUG_PURE_SWAMP_DIRT:
 		case FERT_PURE_SWAMP_DIRT_MIN:
+		case FERT_PURE_SWAMP_DIRT_MID:
+		case FERT_PURE_SWAMP_DIRT_MAX:
 			//pure
 			return this.iconPureSwampDirt;
 		case DUG_SWAMP_DIRT:
