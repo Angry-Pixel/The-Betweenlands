@@ -358,7 +358,6 @@ public class RecipeHandler {
 
 	private static void registerDruidAltarRecipes() {
 		DruidAltarRecipe.addRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN.ordinal()));
-		DruidAltarRecipe.addRecipe(new ItemStack(Items.carrot), new ItemStack(Item.getItemFromBlock(Blocks.pumpkin)), new ItemStack(Items.melon), new ItemStack(Items.blaze_powder), new ItemStack(Items.potato));
 	}
 
 	private static void registerCompostItems(){

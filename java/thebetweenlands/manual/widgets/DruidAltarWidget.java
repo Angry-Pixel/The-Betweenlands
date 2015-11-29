@@ -4,11 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.recipes.PurifierRecipe;
+import thebetweenlands.recipes.DruidAltarRecipe;
 
 import java.util.ArrayList;
 
@@ -16,9 +13,9 @@ import java.util.ArrayList;
  * Created by Bart on 28/11/2015.
  */
 public class DruidAltarWidget extends ManualWidgetsBase {
-    public static int height = 58;
-    public static int width = 82;
-    private static ResourceLocation purifierGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/purifierGrid.png");
+    public static int height = 74;
+    public static int width = 74;
+    private static ResourceLocation druidAltarGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/druidAltarGrid.png");
     ArrayList<ItemStack> outputs = new ArrayList<>();
 
     int progress = 0;
@@ -27,14 +24,14 @@ public class DruidAltarWidget extends ManualWidgetsBase {
 
     public DruidAltarWidget(ItemStack output, int xStart, int yStart) {
         super(xStart, yStart);
-        if (PurifierRecipe.getRecipeInput(output) != null)
+        if (DruidAltarRecipe.getDruidAltarRecipe(output) != null)
             this.outputs.add(output);
     }
 
     public DruidAltarWidget(ArrayList<ItemStack> outputs, int xStart, int yStart) {
         super(xStart, yStart);
         for (ItemStack output : outputs)
-            if (PurifierRecipe.getRecipeInput(output) != null)
+            if (DruidAltarRecipe.getDruidAltarRecipe(output) != null)
                 this.outputs.add(output);
     }
 
@@ -48,26 +45,27 @@ public class DruidAltarWidget extends ManualWidgetsBase {
 
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            manual.mc.renderEngine.bindTexture(purifierGrid);
+            manual.mc.renderEngine.bindTexture(druidAltarGrid);
             manual.drawTexturedModalRect(xStart, yStart, 0, 0, width, height);
-            manual.mc.renderEngine.bindTexture(icons);
-            manual.drawTexturedModalRect(xStart + 25, yStart + 22, 0, 0, progress, 16);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
-            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
-            renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
+            renderItem(newX + 1, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input1, false);
+            renderItem(newX + 57, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input2, false);
+            renderItem(newX + 1, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input3, false);
+            renderItem(newX + 57, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input4, false);
 
-            if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
+            renderItem(newX + 29, newY + 29, outputs.get(currentRecipe), false);
+
+            /*if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
                 ArrayList<String> processTooltip = new ArrayList<>();
                 processTooltip.add(StatCollector.translateToLocal("manual.widget.purifier.recipe"));
                 processTooltip.add(processTimeSecondsString.replace(".seconds.", "21.6"));
                 renderTooltip(mouseX, mouseY, processTooltip, 0xffffff, 0xf0100010);
-            }
+            }*/
 
 
-            if (PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)) == null) {
+            if (DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)) == null) {
                 outputs.remove(currentRecipe);
                 currentRecipe = 0;
             }

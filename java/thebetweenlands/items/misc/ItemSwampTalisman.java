@@ -101,7 +101,7 @@ public class ItemSwampTalisman
 
 	@Override
 	public int[] recipeType(int meta) {
-		return new int[0];
+		return new int[]{7};
 	}
 
 	@Override

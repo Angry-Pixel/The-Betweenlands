@@ -20,6 +20,7 @@ public class PageCreators {
     public static int compostRecipeHeight = CompostRecipeWidget.height + 5;
     public static int pestleAndMortarRecipeHeight = PestleAndMortarRecipeWidget.height + 5;
     public static int purifierRecipeHeight = PurifierRecipeWidget.height + 5;
+    public static int druidAltarRecipeHeight = DruidAltarWidget.height + 5;
     public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
 
     public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages) {
@@ -56,7 +57,7 @@ public class PageCreators {
     public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         newPages.add(new Page(entryName, isHidden, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
-        newPages.add(new Page(entryName, isHidden, new PictureWidget(15, 10, imageLocation, width, height)));
+        newPages.add(new Page(entryName, isHidden, new PictureWidget(73 - width/2, 70 - height/2, imageLocation, width, height)));
         newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden));
         return newPages;
     }
@@ -125,7 +126,7 @@ public class PageCreators {
         int height = 10;
         int type = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
-        while (type <= 6) {
+        while (type <= 7) {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
             for (IManualEntryItem item : items) {
                 for (int i : item.recipeType(0)) {
@@ -167,6 +168,11 @@ public class PageCreators {
                         widgets.add(new RubberTabWidget(15, height));
                         height += rubberTabRecipeHeight;
                         latestAdded += rubberTabRecipeHeight;
+                        break;
+                    case 7:
+                        widgets.add(new DruidAltarWidget(itemStacks, 15, height));
+                        height += druidAltarRecipeHeight;
+                        latestAdded += druidAltarRecipeHeight;
                         break;
                 }
                 if (height >= 152) {
