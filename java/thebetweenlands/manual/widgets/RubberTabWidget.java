@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 
@@ -25,8 +26,13 @@ public class RubberTabWidget extends ManualWidgetsBase {
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
         manual.mc.renderEngine.bindTexture(icons);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         manual.drawTexturedModalRect(xStart + 18, yStart + 4, 0, 17, 16, 16);
         manual.drawTexturedModalRect(xStart + 38, yStart + 22, 0, 0, 22, 16);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         renderItem(xStart, yStart, new ItemStack(BLItemRegistry.weedwoodBucket), false);
         renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.rubberTreeLog)), false);
         renderItem(xStart + 62, yStart + 22, new ItemStack(BLItemRegistry.weedwoodBucketRubber), false);

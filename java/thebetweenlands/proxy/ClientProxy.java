@@ -426,6 +426,7 @@ public class ClientProxy extends CommonProxy {
 	public void postInit() {
 		// Init manual
 		System.out.println("***********************************************");
+		System.out.println("Manual errors:");
 		ManualEntryRegistry.init();
 		System.out.println("***********************************************");
 	}
