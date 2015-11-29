@@ -14,6 +14,7 @@ import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -111,6 +112,7 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockSlab;
@@ -344,16 +346,26 @@ public class BLBlockRegistry {
 		}
 	};
 	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
-		//TODO: Add seeds and crop drops
-
 		@Override
 		public ItemStack getSeedDrops() {
-			return null;
+			return new ItemStack(BLItemRegistry.spores);
 		}
 
 		@Override
 		public ItemStack getCropDrops() {
-			return null;
+			return new ItemStack(BLItemRegistry.yellowDottedFungus);
+		}
+
+		@Override
+		public void updateTick(World world, int x, int y, int z, Random rand) {
+			if(!world.isRemote && this.isDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z) && rand.nextInt(10) == 0) {
+				EntityLiving entity = new EntitySporeling(world);
+				entity.setLocationAndAngles(x + 0.5D, y + 0.5D, z + 0.5D, 0.0f, 0.0f);
+				world.spawnEntityInWorld(entity);
+				world.setBlock(x, y, z, Blocks.air);
+			} else {
+				super.updateTick(world, x, y, z, rand);
+			}
 		}
 	};
 

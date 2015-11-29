@@ -181,7 +181,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		return BLBlockRegistry.swampDirt.getIcon(side, 0);
 	}
 
-	public boolean isDecayed(int meta) {
+	public static boolean isDecayed(int meta) {
 		return meta == FERT_GRASS_DECAYED || meta == FERT_DIRT_DECAYED;
 	}
 

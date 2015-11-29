@@ -185,6 +185,15 @@ public class BlockBLGenericCrop extends BlockCrops {
 		}
 	}
 
+	public boolean isDecayed(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y - 1, z);
+		return BlockFarmedDirt.isDecayed(meta);
+	}
+
+	public boolean isFullyGrown(World world, int x, int y, int z) {
+		return world.getBlockMetadata(x, y, z) >= 7;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
