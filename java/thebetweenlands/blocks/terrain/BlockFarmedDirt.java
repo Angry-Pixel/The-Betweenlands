@@ -34,7 +34,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public static final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
 	public final int COMPOSTING_MODIFIER = 3, DECAY_CURE = 3, DECAY_CAUSE = 3;
 	public final int MATURE_CROP = 7, DECAYED_CROP = 8;
-	public int DECAY_TIME = 150, DUG_SOIL_REVERT_TIME = 10;
+	public int DECAY_TIME = 130, INFECTION_CHANCE = 12, DUG_SOIL_REVERT_TIME = 10;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon iconPureSwampDirt, iconDugSwampGrassMap, iconDugSwampDirtMap, iconDugPurifiedSwampDirtMap, iconCompostedSwampGrassMap, iconCompostedSwampDirtMap, iconCompostedPurifiedSwampDirtMap, iconDecayedSwampGrassMap, iconDecayedSwampDirtMap, iconDecayedPurifiedSwampDirtMap;
@@ -123,6 +123,25 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				//Update decay to plants above
 				if(getCropAboveBlock(world, x, y, z) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x, y, z) == MATURE_CROP)
 					world.setBlockMetadataWithNotify(x, y + 1, z, DECAYED_CROP, 3);
+			}
+		}
+
+		//Spread decay to adjacent blocks
+		if(isDecayed(meta)) {
+			if(rand.nextInt(INFECTION_CHANCE) == 0) {
+				for(int xo = -1; xo <= 1; xo++) {
+					for(int zo = -1; zo <= 1; zo++) {
+						if((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) continue;
+						Block adjacentBlock = world.getBlock(x+xo, y, z+zo);
+						int adjacentMeta = world.getBlockMetadata(x+xo, y, z+zo);
+						if(adjacentBlock == this && (adjacentMeta == FERT_DIRT || adjacentMeta == FERT_GRASS) && !isDecayed(adjacentMeta)) {
+							world.setBlockMetadataWithNotify(x+xo, y, z+zo, adjacentMeta + DECAY_CAUSE, 3);
+							//Update decay to plants above
+							if(getCropAboveBlock(world, x+xo, y, z+zo) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x+xo, y, z+zo) == MATURE_CROP)
+								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, DECAYED_CROP, 3);
+						}
+					}
+				}
 			}
 		}
 
