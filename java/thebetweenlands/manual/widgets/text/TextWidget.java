@@ -22,6 +22,10 @@ public class TextWidget extends ManualWidgetsBase {
         super(xStart, yStart);
         this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
+        if (!StatCollector.canTranslate(unlocalizedText))
+            System.out.println("Needs translation: " + unlocalizedText);
+        if (text.equals(""))
+            System.out.println("The translation for: " + unlocalizedText + " is empty");
         this.init();
     }
 
@@ -29,6 +33,10 @@ public class TextWidget extends ManualWidgetsBase {
         super(xStart, yStart);
         this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
+        if (!StatCollector.canTranslate(unlocalizedText))
+            System.out.println("Needs translation: " + unlocalizedText);
+        if (text.equals(""))
+            System.out.println("The translation for: " + unlocalizedText + " is empty");
         this.init();
         this.pageNumber = pageNumber;
     }
@@ -37,6 +45,10 @@ public class TextWidget extends ManualWidgetsBase {
         super(xStart, yStart);
         this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
+        if (!StatCollector.canTranslate(unlocalizedText))
+            System.out.println("Needs translation: " + unlocalizedText);
+        if (text.equals(""))
+            System.out.println("The translation for: " + unlocalizedText + " is empty");
         this.scale = scale;
         this.init();
     }

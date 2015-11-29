@@ -49,7 +49,7 @@ public class PageCreators {
     public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.manualName();
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.manualName() + ".title"), new PictureWidget(73 - (entity.pictureWidth()/2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.manualName() + ".title"), new PictureWidget(73 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
         newPages.addAll(TextPages(15, 10, "manual." + entity.manualName() + ".description", title, isHidden));
         return newPages;
     }
@@ -57,7 +57,7 @@ public class PageCreators {
     public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         newPages.add(new Page(entryName, isHidden, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
-        newPages.add(new Page(entryName, isHidden, new PictureWidget(73 - width/2, 70 - height/2, imageLocation, width, height)));
+        newPages.add(new Page(entryName, isHidden, new PictureWidget(73 - width / 2, 70 - height / 2, imageLocation, width, height)));
         newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden));
         return newPages;
     }
@@ -69,7 +69,7 @@ public class PageCreators {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (int i = 0; i <= item.metas(); i++)
             items.add(new ItemStack(item.getItem(), 1, i));
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, item.manualName(0), 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + item.manualName(0) + ".title",  1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
         newPages.addAll(TextPages(16, 10, "manual." + item.manualName(0) + ".description", title, isHidden));
         ArrayList<IManualEntryItem> manualItem = new ArrayList<>();
         manualItem.add(item);
@@ -84,7 +84,7 @@ public class PageCreators {
             for (int i = 0; i <= item.metas(); i++)
                 items.add(new ItemStack(item.getItem(), 1, i));
         }
-        newPages.add(new Page(name, new TextWidget(15, 10, name, 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
+        newPages.add(new Page(name, new TextWidget(15, 10, "manual." + name + ".title", 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
         newPages.addAll(TextPages(16, 10, "manual." + name + ".description", name, isHidden));
         newPages.addAll(RecipePages(manualItems, name, isHidden));
         return newPages;

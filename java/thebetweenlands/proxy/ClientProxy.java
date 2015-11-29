@@ -425,7 +425,9 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit() {
 		// Init manual
+		System.out.println("***********************************************");
 		ManualEntryRegistry.init();
+		System.out.println("***********************************************");
 	}
 
 	@Override
