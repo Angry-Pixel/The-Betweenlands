@@ -17,6 +17,7 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class RecipeHandler {
@@ -26,9 +27,10 @@ public class RecipeHandler {
 		registerRecipes();
 		registerSmelting();
 		registerPurifierRecipes();
-		ConfigHandler.userRecipes();
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
+		registerDruidAltarRecipes();
+		ConfigHandler.userRecipes();
 		AspectRecipes.init();
 		ElixirRecipes.init();
 	}
@@ -352,6 +354,11 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.THORNS));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PITCHER_PLANT_TRAP));
+	}
+
+	private static void registerDruidAltarRecipes() {
+		DruidAltarRecipe.addRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN.ordinal()));
+		DruidAltarRecipe.addRecipe(new ItemStack(Items.carrot), new ItemStack(Item.getItemFromBlock(Blocks.pumpkin)), new ItemStack(Items.melon), new ItemStack(Items.blaze_powder), new ItemStack(Items.potato));
 	}
 
 	private static void registerCompostItems(){

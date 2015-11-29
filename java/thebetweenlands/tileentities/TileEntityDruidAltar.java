@@ -21,6 +21,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
+import thebetweenlands.recipes.DruidAltarRecipe;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 
@@ -69,21 +70,22 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 			renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * FINAL_HEIGHT + 1.0D);
 		} else {
 			if (craftingProgress != 0) {
+				DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(inventory[1], inventory[2], inventory[3], inventory[4]);
 				//Sync clients every second
 				if (this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
 					sendCraftingProgressPacket();
 				}
 				++craftingProgress;
 
-				updateDamageValues();
-				if (!containsAllParts() || inventory[0] != null)  {
+				//updateDamageValues();
+				if (recipe == null || inventory[0] != null)  {
 					if (this.craftingProgress != 0) {
 						this.stopCraftingProcess();
 					}
 				}
 
-				if (craftingProgress >= CRAFTING_TIME) {
-					ItemStack stack = new ItemStack(BLItemRegistry.swampTalisman, 1, EnumTalisman.SWAMP_TALISMAN.ordinal());
+				if (craftingProgress >= CRAFTING_TIME && recipe != null) {
+					ItemStack stack = recipe.output;
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);
 					setInventorySlotContents(3, null);
@@ -112,8 +114,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		if (is != null && is.stackSize > getInventoryStackLimit()) {
 			is.stackSize = getInventoryStackLimit();
 		}
-		updateDamageValues();
-		if (containsAllParts() && is != null) {
+		//updateDamageValues();
+		DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(inventory[1], inventory[2], inventory[3], inventory[4]);
+		if (recipe != null && is != null) {
 			if (inventory[0] == null) {
 				if (!worldObj.isRemote) {
 					if (craftingProgress == 0) {
@@ -124,25 +127,26 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 		}
 	}
 
-	private void updateDamageValues() {
-		for (int i = 0; i < 4; i++) {
-			damageValues[i] = inventory[i + 1] == null ? 0 : inventory[i + 1].getItemDamage();
-		}
-	}
+//	private void updateDamageValues() {
+//		for (int i = 0; i < 4; i++) {
+//			damageValues[i] = inventory[i + 1] == null ? 0 : inventory[i + 1].getItemDamage();
+//		}
+//	}
 	
-	private boolean containsAllParts() {
-		return
-			damageValues[0] > 0 &&
-			damageValues[1] > 0 &&
-			damageValues[2] > 0 &&
-			damageValues[3] > 0 &&
-			damageValues[0] != damageValues[1] &&
-			damageValues[0] != damageValues[2] &&
-			damageValues[0] != damageValues[3] &&
-			damageValues[1] != damageValues[2] &&
-			damageValues[1] != damageValues[3] &&
-			damageValues[2] != damageValues[3];
-	}
+//	private boolean containsAllParts() {
+//
+//		return
+//			damageValues[0] > 0 &&
+//			damageValues[1] > 0 &&
+//			damageValues[2] > 0 &&
+//			damageValues[3] > 0 &&
+//			damageValues[0] != damageValues[1] &&
+//			damageValues[0] != damageValues[2] &&
+//			damageValues[0] != damageValues[3] &&
+//			damageValues[1] != damageValues[2] &&
+//			damageValues[1] != damageValues[3] &&
+//			damageValues[2] != damageValues[3];
+//	}
 
 	private void startCraftingProcess() {
 		World world = this.getWorldObj();

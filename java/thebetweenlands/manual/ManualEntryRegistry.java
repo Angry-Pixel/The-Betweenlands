@@ -107,6 +107,8 @@ public class ManualEntryRegistry {
         mechanics.clear();
         mechanics.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
         mechanics.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, true));
+        mechanics.addAll(PageCreators.pageCreatorMachines("sulfurFurnace", new ItemStack(BLBlockRegistry.furnaceBL), "thebetweenlands:textures/gui/manual/furnaceGridExplanation.png", 82, 54, true));
+        mechanics.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, true));
         mechanics.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
         mechanics.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
         machineCategory = new ManualCategory(mechanics, 2);

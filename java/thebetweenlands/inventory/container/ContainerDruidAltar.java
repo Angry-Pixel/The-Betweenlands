@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotDruidAltar;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
+import thebetweenlands.recipes.DruidAltarRecipe;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
@@ -40,7 +41,7 @@ public class ContainerDruidAltar extends Container {
 			stack = stack1.copy();
 			if (slotIndex >= 5) {
 				//Prevents wrong items from being shift-clicked into the slots
-				if(stack1.getItem() == BLItemRegistry.swampTalisman && stack1.getItemDamage() != EnumTalisman.SWAMP_TALISMAN.ordinal()) {
+				if(DruidAltarRecipe.isValidItem(stack1)) {
 					if (!mergeItemStack(stack1, 1, 5, false))
 						return null;
 				} else {

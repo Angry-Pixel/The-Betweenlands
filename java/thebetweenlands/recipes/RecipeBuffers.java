@@ -19,7 +19,6 @@ public class RecipeBuffers {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
                 String name = jsonReader.nextName();
-                System.out.println(name);
                 if (name.contains("recipe")) {
                     jsonReader.beginObject();
                     String inputType = "";
