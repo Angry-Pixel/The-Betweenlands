@@ -3,6 +3,7 @@ package thebetweenlands.client.render.block.crops;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
+import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.utils.ModelConverter;
 
 @SideOnly(Side.CLIENT)
@@ -12,14 +13,16 @@ public class CropRenderer {
 	private int[] textureDimensions = null;
 
 	public ModelConverter getCropModel(int meta) {
+		if(meta == BlockFarmedDirt.MATURE_CROP - 1) meta = BlockFarmedDirt.MATURE_CROP - 2;
 		return this.convertedModels[meta >> 1];
 	}
 
 	public int[] getTextureDimensions(int meta) {
-		if (meta <= 7) {
+		if (meta <= BlockFarmedDirt.MATURE_CROP) {
+			if(meta == BlockFarmedDirt.MATURE_CROP - 1) meta = BlockFarmedDirt.MATURE_CROP - 2;
 			return new int[]{this.textureDimensions[(meta >> 1)*2], this.textureDimensions[(meta >> 1)*2+1]};
 		} else
-			return new int[]{this.textureDimensions[8], this.textureDimensions[9]};
+			return new int[]{this.textureDimensions[this.textureDimensions.length - 2], this.textureDimensions[this.textureDimensions.length - 1]};
 	}
 
 	public void setCropModels(ModelBase[] models, int[] textureDimensions) {

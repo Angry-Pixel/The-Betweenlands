@@ -64,7 +64,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		if (metadata == 7) {
+		if (metadata == BlockFarmedDirt.MATURE_CROP) {
 			for (int i = 0; i < 3 + fortune; ++i) {
 				if(getSeedDrops() != null) {
 					if (world.rand.nextInt(15) <= metadata)
@@ -72,12 +72,8 @@ public class BlockBLGenericCrop extends BlockCrops {
 				}
 				if(getCropDrops() != null) ret.add(getCropDrops());
 			}
-		}
-		if(getSeedDrops() != null) {
-			if (metadata < 7)
-				ret.add(getSeedDrops());
-			if (metadata > 7)
-				ret.add(getSeedDrops());
+		} else if(getSeedDrops() != null) {
+			ret.add(getSeedDrops());
 		}
 		return ret;
 	}
@@ -121,21 +117,29 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack != null && !(meta >= 8)) {
+		if (stack != null) {
 			if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.ordinal()) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player))
-					if (!world.isRemote)
+				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)){
+					if (!world.isRemote) {
 						world.playAuxSFX(2005, x, y, z, 0);
+						if(this.isDecayed(world, x, y, z)) {
+							int newMeta = world.getBlockMetadata(x, y, z);
+							if(newMeta == BlockFarmedDirt.MATURE_CROP) {
+								world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DECAYED_CROP, 2);
+							}
+						}
+					}
+				}
 				return true;
 			}
 		}
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.ordinal()) {
 			int metaDirt = world.getBlockMetadata(x, y - 1 , z);
 			if (!world.isRemote) {
-				if (meta >= 8)
+				if (this.isDecayed(world, x, y, z))
 					world.setBlockMetadataWithNotify(x, y, z, meta - 1 , 3);
 				world.playAuxSFX(2005, x, y, z, 0);
-				if(metaDirt == 7 || metaDirt == 8)
+				if(BlockFarmedDirt.isDecayed(metaDirt))
 					world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - 3, 3);
 			}
 			if(!player.capabilities.isCreativeMode) {
@@ -150,23 +154,31 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
-		int meta = world.getBlockMetadata(x, y, z);
 		int metaDirt = world.getBlockMetadata(x, y - 1, z);
-		if (meta >= 7) {
-			if (metaDirt == 10)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 9, 3);
-			if (metaDirt == 9)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 6, 3);
-			if (metaDirt == 8)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 2, 3);
-			if (metaDirt == 7)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
-			if (metaDirt == 6)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
-			if (metaDirt == 5)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 2, 3);
-			if (metaDirt == 4)
-				world.setBlockMetadataWithNotify(x, y - 1, z, 1, 3);
+		if (this.isFullyGrown(world, x, y, z)) {
+			switch(metaDirt) {
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS_DECAYED:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT_DECAYED:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT:
+				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			}
 		}
 	}
 
@@ -174,33 +186,32 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		super.updateTick(world, x, y, z, rand);
 		int metaDirt = world.getBlockMetadata(x, y - 1, z);
-		if (world.getBlockLightValue(x, y + 1, z) >= 9) {
-			int meta = world.getBlockMetadata(x, y, z);
-			if (meta < 7 && metaDirt <= 6) {
-				if (rand.nextInt(25) == 0) {
-					++meta;
-					world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-				}
+		int meta = world.getBlockMetadata(x, y, z);
+		if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
+			if (rand.nextInt(25) == 0) {
+				++meta;
+				world.setBlockMetadataWithNotify(x, y, z, meta, 3);
 			}
 		}
 	}
 
 	public boolean isDecayed(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y - 1, z);
-		return BlockFarmedDirt.isDecayed(meta);
+		return BlockFarmedDirt.isDecayed(meta) || world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP;
 	}
 
 	public boolean isFullyGrown(World world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) >= 7;
+		return world.getBlockMetadata(x, y, z) == BlockFarmedDirt.MATURE_CROP || this.isDecayed(world, x, y, z);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta <= 7) {
+		if (meta <= BlockFarmedDirt.MATURE_CROP) {
+			if(meta == BlockFarmedDirt.MATURE_CROP - 1) meta = BlockFarmedDirt.MATURE_CROP - 2;
 			return iconArray[meta >> 1];
 		} else
-			return iconArray[4];
+			return iconArray[iconArray.length - 1];
 	}
 
 	@Override
@@ -232,7 +243,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;
 		int meta = world.getBlockMetadata(x, y, z);
-		if (meta >= 8) {
+		if (meta >= BlockFarmedDirt.DECAYED_CROP) {
 			if (rand.nextInt(10) == 0) {
 				for (int l = 0; l <= 5; l++) {
 					double particleX = x + rand.nextFloat();
