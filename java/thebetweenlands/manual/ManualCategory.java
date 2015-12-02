@@ -12,7 +12,7 @@ public class ManualCategory {
     public List<Page> pages = new ArrayList<>();
     public List<Page> visiblePages = new ArrayList<>();
 
-    public Page blankPage = new Page("blank");
+    public Page blankPage = new Page("blank", false);
     public Page currentPageLeft = null;
     public Page currentPageRight = null;
     public int currentPage = 1;

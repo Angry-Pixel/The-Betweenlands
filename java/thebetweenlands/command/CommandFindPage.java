@@ -7,6 +7,7 @@ import net.minecraft.util.ChatComponentText;
 import thebetweenlands.manual.ManualManager;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * Created by Bart on 28/11/2015.
  */
 public class CommandFindPage extends CommandBase {
-    private List<String> childCommands = Arrays.asList("wight", "tarBeast");
+    public static List<String> childCommands = new ArrayList<>();
 
     @Override
     public String getCommandName() {

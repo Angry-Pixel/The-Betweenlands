@@ -2,6 +2,7 @@ package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.command.CommandFindPage;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 
 import java.util.ArrayList;
@@ -38,24 +39,17 @@ public class Page {
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
+        if (isHidden)
+            CommandFindPage.childCommands.add(pageName);
     }
 
-    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets) {
-        this.widgets = widgets;
-        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
-        this.unlocalizedPageName = pageName;
-    }
-
-    public Page(String pageName, ManualWidgetsBase... widgets) {
-        Collections.addAll(this.widgets, widgets);
-        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
-        this.unlocalizedPageName = pageName;
-    }
     public Page(String pageName, boolean isHidden, ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
+        if (isHidden)
+            CommandFindPage.childCommands.add(pageName);
     }
 
     public void init(GuiManualBase manual) {
