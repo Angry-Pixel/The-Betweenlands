@@ -2,6 +2,7 @@ package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.items.BLItemRegistry;
 
 import java.lang.reflect.Field;
@@ -34,7 +35,7 @@ public class ManualEntryRegistry {
 
 
     public static ArrayList<Page> itemPages = new ArrayList<>();
-    public static ArrayList<Page> entities = new ArrayList<>();
+    public static ArrayList<Page> entityPages = new ArrayList<>();
     public static ArrayList<Page> mechanics = new ArrayList<>();
 
 
@@ -50,6 +51,7 @@ public class ManualEntryRegistry {
     public static void init(){
         initItemEntries();
         initMachineEntries();
+        initEnityEntries();
     }
 
     public static void initItemEntries() {
@@ -111,7 +113,75 @@ public class ManualEntryRegistry {
         mechanics.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, false));
         mechanics.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
         mechanics.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
-        machineCategory = new ManualCategory(mechanics, 2);
 
+        ArrayList<Page> temp = new ArrayList<>();
+        while (mechanics.size() > 0) {
+            Page currentFirst = null;
+            for (Page page : mechanics) {
+                if (currentFirst == null)
+                    currentFirst = page;
+                else {
+                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] characters = pageName.toCharArray();
+                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] charactersFirst = pageNameFirst.toCharArray();
+                    for (int i = 0; i < characters.length; i++) {
+                        if(charactersFirst.length > i) {
+                            if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
+                                break;
+                            } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {
+                                currentFirst = page;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            mechanics.remove(currentFirst);
+            temp.add(currentFirst);
+        }
+        mechanics.clear();
+        mechanics.addAll(temp);
+
+        machineCategory = new ManualCategory(mechanics, 2);
+    }
+
+    public static void initEnityEntries() {
+        IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 148, 10, 0), new IManualEntryEntity("angler", 110, 148, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 148, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 148, -1, -1), new IManualEntryEntity("bloodSnail", 110, 148, -1, -1), new IManualEntryEntity("darkDruid", 110, 148, -1, -1), new IManualEntryEntity("dragonFly", 110, 148, -1, -1), new IManualEntryEntity("firefly", 110, 148, -1, -1), new IManualEntryEntity("gecko", 110, 148, -1, -1), new IManualEntryEntity("giantToad", 110, 148, -1, -1), new IManualEntryEntity("leech", 110, 148, -1, -1), new IManualEntryEntity("lurker", 110, 148, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 148, -1, -1), new IManualEntryEntity("mireSnail", 110, 148, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 148, -1, -1), new IManualEntryEntity("peatMummy", 110, 148, -1, -1), new IManualEntryEntity("siltCrab", 110, 148, -1, -1), new IManualEntryEntity("sludge", 110, 148, -1, -1), new IManualEntryEntity("sporeling", 110, 148, -1, -1), new IManualEntryEntity("swampHag", 110, 148, -1, -1), new IManualEntryEntity("tarBeast", 110, 148, -1, -1), new IManualEntryEntity("tarminion", 110, 148, -1, -1), new IManualEntryEntity("termite", 110, 148, -1, -1), new IManualEntryEntity("wight", 110, 148, -1, -1)};
+
+        entityPages.clear();
+        for (IManualEntryEntity entity : manualEntryEntities) {
+            entityPages.addAll(PageCreators.pageCreatorEntities(entity, true));
+        }
+        ArrayList<Page> temp = new ArrayList<>();
+        while (entityPages.size() > 0) {
+            Page currentFirst = null;
+            for (Page page : entityPages) {
+                if (currentFirst == null)
+                    currentFirst = page;
+                else {
+                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] characters = pageName.toCharArray();
+                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    char[] charactersFirst = pageNameFirst.toCharArray();
+                    for (int i = 0; i < characters.length; i++) {
+                        if(charactersFirst.length > i) {
+                            if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
+                                break;
+                            } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {
+                                currentFirst = page;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            entityPages.remove(currentFirst);
+            temp.add(currentFirst);
+        }
+        entityPages.clear();
+        entityPages.addAll(temp);
+
+        entitiesCategory = new ManualCategory(entityPages, 3);
     }
 }

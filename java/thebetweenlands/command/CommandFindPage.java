@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Bart on 28/11/2015.
  */
 public class CommandFindPage extends CommandBase {
-    private List<String> childCommands = Arrays.asList("pestleAndMortar", "purifier");
+    private List<String> childCommands = Arrays.asList("wight", "tarBeast");
 
     @Override
     public String getCommandName() {

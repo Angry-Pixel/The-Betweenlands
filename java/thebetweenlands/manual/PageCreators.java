@@ -48,9 +48,10 @@ public class PageCreators {
 
     public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
-        String title = entity.manualName();
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.manualName() + ".title"), new PictureWidget(73 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
-        newPages.addAll(TextPages(15, 10, "manual." + entity.manualName() + ".description", title, isHidden));
+        String title = entity.pageName();
+        System.out.println(entity.pageName());
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(73 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden));
         return newPages;
     }
 
