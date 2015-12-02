@@ -23,13 +23,13 @@ public class GuiManualBase extends GuiScreen {
     public int yStart;
     public int WIDTH = 292;
     public int HEIGHT = 180;
-    public UUID player;
+    public EntityPlayer player;
 
     public int untilUpdate = 0;
     public ManualCategory currentCategory;
 
     public GuiManualBase(EntityPlayer player) {
-        this.player = player.getUniqueID();
+        this.player = player;
     }
 
     @Override

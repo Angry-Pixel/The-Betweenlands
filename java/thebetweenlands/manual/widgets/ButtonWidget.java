@@ -50,7 +50,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     public void init(GuiManualBase manual) {
         super.init(manual);
         if (isHidden)
-            this.isHidden = !ManualManager.hasFoundPage(manual.mc.theWorld.func_152378_a(manual.player), page.unlocalizedPageName);
+            this.isHidden = !ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName);
     }
 
 

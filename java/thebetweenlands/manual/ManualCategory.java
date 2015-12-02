@@ -43,7 +43,7 @@ public class ManualCategory {
         if (currentPageLeft == null || currentPageRight == null || force) {
             visiblePages.clear();
             for (Page page : pages)
-                if (!page.isHidden || ManualManager.hasFoundPage(Minecraft.getMinecraft().theWorld.func_152378_a(manual.player), page.unlocalizedPageName))
+                if (!page.isHidden || ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName))
                     visiblePages.add(page);
             currentPageLeft = this.visiblePages.get(0);
             if (this.visiblePages.size() > 1)
