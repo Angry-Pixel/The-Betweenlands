@@ -42,7 +42,7 @@ public class BlockGenericOre extends Block {
 	}
 
 	private ItemStack getOreDropped() {
-		return this.oreDrops != null ? new ItemStack(this.oreDrops.getItem(), 1, this.oreDrops.getItemDamage()) : this.oreDrops;
+		return this.oreDrops != null ? this.oreDrops.copy() : this.oreDrops;
 	}
 
 	@Override
