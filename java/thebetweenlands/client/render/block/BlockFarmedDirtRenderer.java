@@ -13,7 +13,7 @@ import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.connectedtexture.ConnectedTexture;
 
 public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
-	private static final ConnectedTexture farmedDirtTextureHelper = new ConnectedTexture(64, 64, 18, 18, 1, 1);
+	private static final ConnectedTexture farmedDirtTextureHelper = new ConnectedTexture(64, 18, 1);
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
@@ -37,7 +37,7 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 					float rxOffset = 0.5F * bsx;
 					float rzOffset = 0.5F * bsz;
 
-					double[][] relIconUVs = farmedDirtTextureHelper.getRelUV(0, quadrant);
+					float[][] relIconUVs = farmedDirtTextureHelper.getUVs(0, quadrant);
 
 					Tessellator.instance.addTranslation(rxOffset, 0.901F, rzOffset);
 					Tessellator.instance.addVertexWithUV(-0.0D, 0.0D, 0.0D, icon.getInterpolatedU(relIconUVs[0][0] * 16.0D), icon.getInterpolatedV(relIconUVs[0][1] * 16.0D));
@@ -73,80 +73,32 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 		tessellator.addTranslation(x, ry, z);
 
 		if(meta != BlockFarmedDirt.PURE_SWAMP_DIRT) {
-			int tls = 0;
-			int trs = 0;
-			int bls = 0;
-			int brs = 0;
+			boolean blockArray[] = new boolean[9];
+
+			boolean isPure = meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN || meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID || meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX;
 
 			for(int xo = -1; xo <= 1; xo++) {
 				for(int zo = -1; zo <= 1; zo++) {
-					boolean render = false;
-					if((xo != 0 && zo == 0) || (xo == 0 && zo != 0)) {
-						//Adjacent neighbour
-						if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && world.getBlockMetadata(x+xo, y, z+zo) == meta) {
-							if(xo == -1) {
-								if(world.getBlock(x, y, z+1) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x, y, z+1) != meta) bls = 1;
-								if(world.getBlock(x, y, z-1) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x, y, z-1) != meta) tls = 1;
-							} else if (xo == 1){
-								if(world.getBlock(x, y, z+1) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x, y, z+1) != meta) brs = 1;
-								if(world.getBlock(x, y, z-1) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x, y, z-1) != meta) trs = 1;
-							} else if(zo == -1) {
-								if(world.getBlock(x-1, y, z) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x-1, y, z) != meta) tls = 2;
-								if(world.getBlock(x+1, y, z) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x+1, y, z) != meta) trs = 2;
-							} else if (zo == 1){
-								if(world.getBlock(x-1, y, z) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x-1, y, z) != meta) bls = 2;
-								if(world.getBlock(x+1, y, z) != BLBlockRegistry.farmedDirt || world.getBlockMetadata(x+1, y, z) != meta) brs = 2;
-							}
-						}
-					} else if(xo != 0 && zo != 0) {
-						//Diagonal neighbour
-						if(world.getBlock(x+xo, y, z) == BLBlockRegistry.farmedDirt && world.getBlock(x, y, z+zo) == BLBlockRegistry.farmedDirt
-								&& world.getBlockMetadata(x+xo, y, z) == meta && world.getBlockMetadata(x, y, z+zo) == meta) {
-							int segment;
-							if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && world.getBlockMetadata(x+xo, y, z+zo) == meta) {
-								//Full sharp corner
-								segment = 3;
-							} else {
-								//Smooth half corner
-								segment = 4;
-							}
-							if(xo == 1 && zo == -1) {
-								trs = segment;
-							} else if(xo == 1 && zo == 1) {
-								brs = segment;
-							} else if(xo == -1 && zo == 1) {
-								bls = segment;
-							} else {
-								tls = segment;
-							}
-						}
-					}
+					int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
+					boolean isCurrentPure = currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN || currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID || currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX;
+					blockArray[ConnectedTexture.getIndex(xo+1, zo+1, 3)] = world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && ((isCurrentPure && isPure) || (currentMeta == meta));
 				}
 			}
 
+			float[][][] blockRelIconUVs = farmedDirtTextureHelper.getFaceUVs(blockArray);
+
 			for(int bsx = 0; bsx <= 1; bsx++) {
 				for(int bsz = 0; bsz <= 1; bsz++) {
-					int quadrant = bsx + bsz * 2;
-
 					float rxOffset = 0.5F * bsx;
 					float rzOffset = 0.5F * bsz;
 
-					int segment = tls;
-					if(bsx == 1 && bsz == 0) {
-						segment = trs;
-					} else if(bsx == 0 && bsz == 1) {
-						segment = bls;
-					} else if(bsx == 1 && bsz == 1) {
-						segment = brs;
-					}
-
-					double[][] relIconUVs = farmedDirtTextureHelper.getRelUV(segment, quadrant);
+					float[][] quadrantRelIconUVs = blockRelIconUVs[ConnectedTexture.getIndex(bsx, bsz, 2)];
 
 					tessellator.addTranslation(rxOffset, 0, rzOffset);
-					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.0D, icon.getInterpolatedU(relIconUVs[0][0] * 16.0D), icon.getInterpolatedV(relIconUVs[0][1] * 16.0D));
-					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.5D, icon.getInterpolatedU(relIconUVs[0][0] * 16.0D), icon.getInterpolatedV(relIconUVs[1][1] * 16.0D));
-					tessellator.addVertexWithUV(0.5D, 0.0D, 0.5D, icon.getInterpolatedU(relIconUVs[1][0] * 16.0D), icon.getInterpolatedV(relIconUVs[1][1] * 16.0D));
-					tessellator.addVertexWithUV(0.5D, 0.0D, 0.0D, icon.getInterpolatedU(relIconUVs[1][0] * 16.0D), icon.getInterpolatedV(relIconUVs[0][1] * 16.0D));
+					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.0D, icon.getInterpolatedU(quadrantRelIconUVs[0][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[0][1] * 16.0D));
+					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.5D, icon.getInterpolatedU(quadrantRelIconUVs[0][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[1][1] * 16.0D));
+					tessellator.addVertexWithUV(0.5D, 0.0D, 0.5D, icon.getInterpolatedU(quadrantRelIconUVs[1][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[1][1] * 16.0D));
+					tessellator.addVertexWithUV(0.5D, 0.0D, 0.0D, icon.getInterpolatedU(quadrantRelIconUVs[1][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[0][1] * 16.0D));
 					tessellator.addTranslation(-rxOffset, -0, -rzOffset);
 				}
 			}

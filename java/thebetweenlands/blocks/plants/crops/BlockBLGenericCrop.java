@@ -10,6 +10,7 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -154,8 +155,12 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
+		if(world.isRemote) return;
+		boolean grown = this.isFullyGrown(world, x, y, z);
+		if(!player.capabilities.isCreativeMode) this.harvestBlock(world, player, x, y, z, id);
+		world.setBlock(x, y, z, Blocks.air);
 		int metaDirt = world.getBlockMetadata(x, y - 1, z);
-		if (this.isFullyGrown(world, x, y, z)) {
+		if (grown) {
 			switch(metaDirt) {
 			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
 				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
