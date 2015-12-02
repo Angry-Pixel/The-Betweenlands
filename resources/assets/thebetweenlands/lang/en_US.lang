@@ -617,7 +617,8 @@ compost.add=Add compostable items to the compost bin
 compost.composting=Wait for the items to turn into compost
 compost.full=The compost bin is full
 compost.not.compostable=This item is not compostable
-compost.open=Open the compost bin to add compostable items
+compost.open.add=Open the compost bin to add compostable items
+compost.open.get=Open the compost bin to take out the compost
 
 # Manual
 manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga

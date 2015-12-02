@@ -75,9 +75,14 @@ public class TileEntityCompostBin extends TileEntity
 	}
 
 	public boolean removeCompost(int amount) {
-		if (compostedAmount >= amount) {
-			compostedAmount -= amount;
-			totalCompostAmount -= amount;
+		if(compostedAmount != 0) {
+			if (compostedAmount >= amount) {
+				compostedAmount -= amount;
+				totalCompostAmount -= amount;
+			} else {
+				compostedAmount = 0;
+				totalCompostAmount = 0;
+			}
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			markDirty();
 			return true;

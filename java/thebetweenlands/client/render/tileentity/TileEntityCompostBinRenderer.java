@@ -10,11 +10,11 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelCompostBin;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.utils.ItemRenderHelper;
@@ -34,7 +34,7 @@ public class TileEntityCompostBinRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float) x + .5f, (float) y, (float) z + .5f);
 		GL11.glRotatef(getRotation(meta), 0.0F, 1F, 0F);
 
-		float compostHeight = Math.min(compostBin.getTotalCompostedAmount() / (float) TileEntityCompostBin.MAX_COMPOST_AMOUNT, 0.5f);
+		float compostHeight = Math.min(compostBin.getTotalCompostedAmount() / (float) TileEntityCompostBin.MAX_COMPOST_AMOUNT, 0.82f);
 
 		if (compostHeight > 0.01f) {
 			Tessellator tessellator = Tessellator.instance;
@@ -49,13 +49,22 @@ public class TileEntityCompostBinRenderer extends TileEntitySpecialRenderer {
 
 			this.bindTexture(TextureMap.locationBlocksTexture);
 			tessellator.startDrawingQuads();
-			blockRenderer.renderBlockAllFaces(Blocks.leaves, tile.xCoord, tile.yCoord, tile.zCoord);
+			blockRenderer.renderBlockAllFaces(BLBlockRegistry.weedwoodLeaves, tile.xCoord, tile.yCoord, tile.zCoord);
 			tessellator.draw();
 
 			GL11.glPopMatrix();
 		}
 
 		GL11.glColor3f(1, 1, 1);
+
+		GL11.glPushMatrix();
+		GL11.glTranslatef(0, 1.5f, 0);
+		GL11.glScalef(1F, -1F, -1F);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		bindTexture(TEXTURE);
+		model.render(compostBin.getLidAngle(partialTickTime));
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glPopMatrix();
 
 		for (int i = 0; i < compostBin.getSizeInventory(); i++) {
 			ItemStack stack = compostBin.getStackInSlot(i);
@@ -73,13 +82,6 @@ public class TileEntityCompostBinRenderer extends TileEntitySpecialRenderer {
 				GL11.glPopMatrix();
 			}
 		}
-
-		GL11.glTranslatef(0, 1.5f, 0);
-		GL11.glScalef(1F, -1F, -1F);
-		GL11.glDisable(GL11.GL_CULL_FACE);
-		bindTexture(TEXTURE);
-		model.render(compostBin.getLidAngle(partialTickTime));
-		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
 	}
 

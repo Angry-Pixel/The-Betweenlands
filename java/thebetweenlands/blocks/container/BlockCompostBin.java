@@ -20,6 +20,8 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.CompostRecipe;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 
@@ -52,42 +54,8 @@ public class BlockCompostBin extends BlockContainer {
 			TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(x, y, z);
 
 			boolean open = tile.open;
-			/*if (!open && !(player.isSneaking() && player.getCurrentEquippedItem() == null)) {
-				player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.open")));
-			} else if (player.isSneaking() && player.getCurrentEquippedItem() == null) {
-				tile.open = !tile.open;
-				world.markBlockForUpdate(x, y, z);
-				tile.markDirty();
-			} else if (player.getCurrentEquippedItem() != null) {
-				ItemStack stack = player.getCurrentEquippedItem();
-				CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
-				if (compostRecipe != null) {
-					switch (tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
-					case 1:
-						tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, false);
-						player.inventory.consumeInventoryItem(stack.getItem());
-						break;
-					case -1:
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
-						break;
-					default:
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.max.items")));
-						break;
-					}
-				} else {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.cannot")));
-				}
-			} else {
-				if (tile.getTotalCompostedAmount() >= TileEntityCompostBin.COMPOST_PER_ITEM) {
-					world.spawnEntityInWorld(new EntityItem(world, x, y + 2, z, ItemGeneric.createStack(EnumItemGeneric.COMPOST)));
-					tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM);
-				} else if (tile.getTotalCompostAmount() > tile.getTotalCompostedAmount()) {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.ready")));
-				} else {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.enough")));
-				}
-			}*/
-			if(!player.isSneaking() && player.getCurrentEquippedItem() == null) {
+
+			if(!player.isSneaking() && player.getCurrentEquippedItem() == null && tile.getTotalCompostedAmount() == 0) {
 				if(open) {
 					if(tile.hasCompostableItems()) {
 						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.close")));
@@ -101,30 +69,38 @@ public class BlockCompostBin extends BlockContainer {
 						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.add")));
 					}
 				}
-			} else if (player.isSneaking() && player.getCurrentEquippedItem() == null) {
+			} else if (player.isSneaking()) {
 				tile.open = !tile.open;
 				world.markBlockForUpdate(x, y, z);
 				tile.markDirty();
 			} else {
-				if(open) {
-					ItemStack stack = player.getCurrentEquippedItem();
-					CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
-					if (compostRecipe != null) {
-						switch (tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
-						case 1:
-							tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, false);
-							player.inventory.consumeInventoryItem(stack.getItem());
-							break;
-						case -1:
-						default:
-							player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
-							break;
+				if(player.getCurrentEquippedItem() != null) {
+					if(open) {
+						ItemStack stack = player.getCurrentEquippedItem();
+						CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
+						if (compostRecipe != null) {
+							switch (tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
+							case 1:
+								tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, false);
+								if(!player.capabilities.isCreativeMode) player.inventory.decrStackSize(player.inventory.currentItem, 1);
+								break;
+							case -1:
+							default:
+								player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
+								break;
+							}
+						} else {
+							player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.compostable")));
 						}
 					} else {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.compostable")));
+						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.open.add")));
 					}
-				} else {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.open")));
+				} else if(!open && tile.getTotalCompostedAmount() != 0) {
+					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.open.get")));
+				} else if(open && tile.getTotalCompostedAmount() != 0) {
+					if(tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
+						world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ItemGeneric.createStack(EnumItemGeneric.COMPOST)));
+					}
 				}
 			}
 		}
