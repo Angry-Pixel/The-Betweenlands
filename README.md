@@ -8,7 +8,6 @@ _____________________________________________________________________
 Unfinished stuff:
 - Volarkite
 - Lanterns
-- Rope
 - Farming models
 - Purple Rain tree (which will be called differently)
 - Temple Guardians
