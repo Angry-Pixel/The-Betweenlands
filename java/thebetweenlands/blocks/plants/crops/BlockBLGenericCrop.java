@@ -38,7 +38,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	public BlockBLGenericCrop(String blockName) {
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(ModCreativeTabs.plants);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);

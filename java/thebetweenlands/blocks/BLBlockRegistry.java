@@ -260,7 +260,6 @@ public class BLBlockRegistry {
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark").setHasSperateTopIcon(false);
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
-	public static final Block rottenLog = new BlockRottenLog();
 	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
 	// WOOD
