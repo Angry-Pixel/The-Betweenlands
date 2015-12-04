@@ -280,4 +280,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 			}
 		}
 	}
+
+	//Fertilizer growth chance
+	@Override
+	public boolean func_149852_a(World world, Random rnd, int x, int y, int z) {
+		int chance = this.isDecayed(world, x, y, z) ? 8 : 3;
+		return rnd.nextInt(chance * ((int)(world.getBlockMetadata(x, y, z) / 1.6D) + 1)) == 0;
+	}
 }

@@ -2,6 +2,7 @@ package thebetweenlands.world.biomes.decorators;
 
 import net.minecraft.block.Block;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 
 public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
@@ -45,23 +46,34 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 					int px = this.x + xo;
 					int pz = this.z + zo;
 					int py = this.world.getHeightValue(px, pz) - 1;
-					if(this.world.getBlock(px, py, pz) == BLBlockRegistry.rubberTreeLeaves
-							|| this.world.getBlock(px, py, pz) == BLBlockRegistry.weedwoodLeaves
-							|| this.world.getBlock(px, py, pz) == BLBlockRegistry.sapTreeLeaves) {
+					Block surfaceBlock = this.world.getBlock(px, py, pz);
+					if(surfaceBlock == BLBlockRegistry.rubberTreeLeaves
+							|| surfaceBlock == BLBlockRegistry.weedwoodLeaves
+							|| surfaceBlock == BLBlockRegistry.sapTreeLeaves) {
 						int yo = 0;
+						boolean hasLeaves = true;
 						for(int i = 0; i < 128; i++) {
 							yo++;
-							if(py-yo <= 0) {
+							if(py-yo <= WorldProviderBetweenlands.CAVE_START) {
 								break;
 							}
 							Block cBlock = this.world.getBlock(px, py-yo, pz);
-							if(cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass ||
+							boolean isBlockLeaves = cBlock == BLBlockRegistry.rubberTreeLeaves
+									|| cBlock == BLBlockRegistry.weedwoodLeaves
+									|| cBlock == BLBlockRegistry.sapTreeLeaves;
+							if(isBlockLeaves) {
+								hasLeaves = true;
+							}
+							if(hasLeaves && (cBlock == BLBlockRegistry.deadGrass || cBlock == BLBlockRegistry.swampGrass ||
 									cBlock == BLBlockRegistry.swampDirt || cBlock == BLBlockRegistry.mud ||
-									cBlock == BLBlockRegistry.weedwoodLog) {
+									cBlock == BLBlockRegistry.weedwoodLog)) {
 								if(this.world.isAirBlock(px, py-yo+1, pz) && this.world.rand.nextInt(3) == 0) {
 									this.world.setBlock(px, py-yo+1, pz, BLBlockRegistry.fallenLeaves);
 									break;
 								}
+							}
+							if(!isBlockLeaves && cBlock.isOpaqueCube()) {
+								hasLeaves = false;
 							}
 						}
 					}
