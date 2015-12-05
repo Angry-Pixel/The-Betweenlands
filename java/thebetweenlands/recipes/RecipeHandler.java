@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
@@ -395,6 +396,7 @@ public class RecipeHandler {
 				return false;
 			}
 		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.spores), 8, 4, EntitySporeling.class));
 	}
 
 	private static void registerCompostItems(){
