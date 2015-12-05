@@ -59,7 +59,6 @@ import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
-import thebetweenlands.blocks.plants.BlockRottenLog;
 import thebetweenlands.blocks.plants.BlockSwampKelp;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
@@ -114,6 +113,7 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntityTermite;
+import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
@@ -397,7 +397,7 @@ public class BLBlockRegistry {
 
 		@Override
 		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-			entity.attackEntityFrom(DamageSource.cactus, 1);
+			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
 		}
 	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block nettle = new BlockBLSmallPlants("nettle"){
@@ -411,7 +411,7 @@ public class BLBlockRegistry {
 
 		@Override
 		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-			entity.attackEntityFrom(DamageSource.cactus, 1);
+			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
 		}
 	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block arrowArum = new BlockBLSmallPlants("arrowArum").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));

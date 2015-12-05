@@ -107,7 +107,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 		super.onUpdate();
 		if(!worldObj.isRemote) {
 			this.despawnTicks++;
-			if(despawnTicks > 1200) setDead();
+			if(despawnTicks > 7200) {
+				setDead();
+			}
 		}
 		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);
@@ -150,6 +152,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 					e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), (int)(20 + (1.0F - dst / 5.25F) * 150), 1, true));
 				}
 			}
+		}
+		if(!this.worldObj.isRemote) {
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 0F);
 		}
 		if(playOnce) {
 			int randomSound = rand.nextInt(3) + 1;
@@ -216,10 +221,5 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public EntityAgeable createChild(EntityAgeable entity) {
 		return null;
-	}
-
-	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 0F);
 	}
 }
