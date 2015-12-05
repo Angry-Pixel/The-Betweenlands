@@ -179,7 +179,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
 		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"),
 		RUBBER_BALL("rubber"), TAR_BEAST_HEART("tarBeastHeart"),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated"), TAR_DRIP("tarDrip"), LIMESTONE_FLUX("limestoneFlux"),
-		SWAMP_KELP("swampKelp");
+		SWAMP_KELP("swampKelp"), INANIMATE_TARMINION("inanimateTarminion");
 
 		public final String iconName;
 

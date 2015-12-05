@@ -1,10 +1,13 @@
 package thebetweenlands.recipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandom;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -18,6 +21,8 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class RecipeHandler {
@@ -30,6 +35,7 @@ public class RecipeHandler {
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
 		registerDruidAltarRecipes();
+		registerAnimatorRecipes();
 		ConfigHandler.userRecipes();
 		AspectRecipes.init();
 		ElixirRecipes.init();
@@ -233,7 +239,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 1), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 2));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 2), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 3));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 3), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
 	}
 
 	private static void registerSmelting() {
@@ -361,6 +367,34 @@ public class RecipeHandler {
 
 	private static void registerDruidAltarRecipes() {
 		DruidAltarRecipe.addRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN.ordinal()));
+	}
+
+	private static void registerAnimatorRecipes() {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.scroll), 16, 16){
+			private final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
+
+			@Override
+			public ItemStack onAnimated(World world, int x, int y, int z) {
+				WeightedRandomItem randItem = (WeightedRandomItem) WeightedRandom.getRandomItem(world.rand, this.items);
+				ItemStack result = randItem.getItem(world.rand);
+				result.stackSize = Math.min(1 + world.rand.nextInt(randItem.itemWeight + 4), result.getMaxStackSize());
+				return result;
+			}
+		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART), 32, 32, ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 8, 8, new ItemStack(BLItemRegistry.tarminion)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.testItem), 2, 1) {
+			@Override
+			public boolean onRetrieved(TileEntityAnimator tile, World world, int x, int y, int z) {
+				EntityItem entityitem = new EntityItem(world, x, y + 1D, z, new ItemStack(BLItemRegistry.testItem));
+				entityitem.motionX = 0;
+				entityitem.motionZ = 0;
+				entityitem.motionY = 0.11000000298023224D;
+				world.spawnEntityInWorld(entityitem);
+				tile.setInventorySlotContents(0, null);
+				return false;
+			}
+		});
 	}
 
 	private static void registerCompostItems(){

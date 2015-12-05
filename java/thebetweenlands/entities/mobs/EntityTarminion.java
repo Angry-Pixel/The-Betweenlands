@@ -28,6 +28,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarminion extends EntityTameable implements IEntityBL {
@@ -214,5 +216,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public EntityAgeable createChild(EntityAgeable entity) {
 		return null;
+	}
+
+	@Override
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 0F);
 	}
 }
