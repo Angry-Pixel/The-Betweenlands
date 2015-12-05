@@ -51,9 +51,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		}
 		if (isSlotInUse(2) && !this.itemAnimated) {
 			if (!isSlotInUse(0) || !isSlotInUse(1)) {
-				ItemStack stack2 = inventory[2].copy();
-				stack2.stackSize += fuelConsumed;
-				setInventorySlotContents(2, stack2);
 				fuelBurnProgress = 0;
 				fuelConsumed = 0;
 			}

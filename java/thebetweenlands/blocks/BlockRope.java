@@ -59,7 +59,7 @@ public class BlockRope extends BlockLadder {
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return world.getBlock(x, y + 1, z).isSideSolid(world, x, y, z, ForgeDirection.DOWN) || world.getBlock(x, y + 1, z) == BLBlockRegistry.rope;
+		return world.getBlock(x, y + 1, z).isBlockSolid(world, x, y + 1, z, 1) || world.getBlock(x, y + 1, z) == BLBlockRegistry.rope;
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class BlockRope extends BlockLadder {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		if(!world.isRemote) {
-			if (!world.getBlock(x, y + 1, z).isSideSolid(world, x, y, z, ForgeDirection.DOWN) && world.getBlock(x, y + 1, z) != BLBlockRegistry.rope) {
+			if (!world.getBlock(x, y + 1, z).isBlockSolid(world, x, y + 1, z, 0) && world.getBlock(x, y + 1, z) != BLBlockRegistry.rope) {
 				this.dropBlockAsItem(world, x, y, z, 1, 0);
 				world.setBlockToAir(x, y, z);
 			} else {

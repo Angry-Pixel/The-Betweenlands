@@ -28,7 +28,7 @@ public class ItemRope extends Item implements IManualEntryItem {
 				}
 				return true;
 			}
-		} else if (world.getBlock(x, y, z).isSideSolid(world, x, y, z, ForgeDirection.DOWN) && world.getBlock(x, y - 1, z) == Blocks.air) {
+		} else if (world.getBlock(x, y, z).isBlockSolid(world, x, y, z, side) && world.getBlock(x, y - 1, z) == Blocks.air) {
 			if(!world.isRemote) {
 				world.setBlock(x, y - 1, z, BLBlockRegistry.rope);
 				stack.stackSize--;
