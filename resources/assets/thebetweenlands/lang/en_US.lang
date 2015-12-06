@@ -83,6 +83,7 @@ tile.thebetweenlands.farmedDirt_7.name=Decayed Composted Swamp Dirt
 tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Grass
 
 tile.thebetweenlands.middleFruitBush.name=Purple Pear Bush
+tile.thebetweenlands.fungusCrop.name=Yellow Dotted Fungus
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -221,6 +222,7 @@ tile.thebetweenlands.tarLootPot2.name=Pot of Chance
 tile.thebetweenlands.tarLootPot3.name=Pot of Chance
 tile.thebetweenlands.tarBeastSpawner.name=Tar Beast Spawner
 tile.thebetweenlands.thatchSlope.name=Thatch Roof
+tile.thebetweenlands.rubberTap.name=Weedwood Bucket
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
@@ -456,6 +458,8 @@ item.thebetweenlands.syrmoriteShears.name=Syrmorite Shears
 item.thebetweenlands.manual.name=Guide Book
 item.thebetweenlands.tribalPants.name=Tribal Pants
 item.thebetweenlands.sickle.name=Sickle
+item.thebetweenlands.gecko.name=Gecko
+item.thebetweenlands.fireFly.name=Fire Fly
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -557,6 +561,43 @@ item.thebetweenlands.groundVenusFlyTrap.name=Ground Venus Flytrap
 item.thebetweenlands.groundVolarpad.name=Ground Volarpad
 item.thebetweenlands.groundThorns.name=Ground Thorns
 item.thebetweenlands.groundPoisonIvy.name=Ground PoisonIvy
+
+#Plant drops
+item.thebetweenlands.genericLeaf.name=Leaf
+item.thebetweenlands.algae.name=Algae Clump
+item.thebetweenlands.arrowArumLeaf.name=Arrow Arum Leaf
+item.thebetweenlands.blueEyedGrassFlowers.name=Blue Eyed Grass Flowers
+item.thebetweenlands.blueIrisPetals.name=Blue Iris Petals
+item.thebetweenlands.bogBeanFlower.name=Bog Bean Flower
+item.thebetweenlands.bonesetFlowers.name=Boneset Flowers
+item.thebetweenlands.bottleBrushGrassBlades.name=Bottle Brush Grass Blades
+item.thebetweenlands.broomSedgeLeaves.name=Broom Sedge Leaves
+item.thebetweenlands.buttonBushFlowers.name=Button Bush Flowers
+item.thebetweenlands.cardinalFlowerPetals.name=Cardinal Flower Petals
+item.thebetweenlands.cattailHead.name=Cattail Head
+item.thebetweenlands.caveGrassBlades.name=Cave Grass Blades
+item.thebetweenlands.copperIrisPetals.name=Copper Iris Petals
+item.thebetweenlands.goldenClubFlowers.name=Golden Club Flowers
+item.thebetweenlands.lichen.name=Lichen Clump
+item.thebetweenlands.marshHibiscusFlower.name=Marsh Hibiscus Flower
+item.thebetweenlands.marshMallowFlower.name=Marsh Mallow Flower
+item.thebetweenlands.marshMarigoldFlower.name=Marsh Marigold Flower
+item.thebetweenlands.nettleLeaf.name=Nettle Leaf
+item.thebetweenlands.phragmiteStems.name=Phragmite Stems
+item.thebetweenlands.pickerelWeedFlower.name=Pickerel Weed Flower
+item.thebetweenlands.shootLeaves.name=Shoots
+item.thebetweenlands.sludgecreepLeaves.name=Sludgecreep Leaves
+item.thebetweenlands.softRushLeaves.name=Soft Rush Leaves
+item.thebetweenlands.sundewHead.name=Sundew Head
+item.thebetweenlands.caveMoss.name=Cave Moss Clump
+item.thebetweenlands.milkweedFlower.name=Milkweed Flower
+item.thebetweenlands.Hanger.name=Hanger
+item.thebetweenlands.pitcherPlantTrap.name=Pitcher Plant Trap
+item.thebetweenlands.waterWeeds.name=Water Weeds
+item.thebetweenlands.venusFlyTrap.name=Venus Fly Trap Head
+item.thebetweenlands.volarpad.name=Volarpad Leaf
+item.thebetweenlands.thorns.name=Thorn Branch
+item.thebetweenlands.poisonIvy.name=Poison Ivy Leaves
 
 # Herblore
 item.thebetweenlands.elixir.dentrothystVial.green.name=Green Dentrothyst Vial
