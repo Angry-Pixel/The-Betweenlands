@@ -1,6 +1,7 @@
 package thebetweenlands.tileentities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.utils.EnumNbtTypes;
 
 public class TileEntityAlembic extends TileEntity {
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
@@ -76,6 +78,13 @@ public class TileEntityAlembic extends TileEntity {
 		nbt.setInteger("progress", this.progress);
 		nbt.setFloat("producedAmount", this.producedAmount);
 		nbt.setBoolean("running", this.running);
+		NBTTagList aspectList = new NBTTagList();
+		for(ItemAspect aspect : this.producableItemAspects) {
+			NBTTagCompound aspectCompound = new NBTTagCompound();
+			aspect.writeToNBT(aspectCompound);
+			aspectList.appendTag(aspectCompound);
+		}
+		nbt.setTag("producableItemAspects", aspectList);
 	}
 
 	@Override
@@ -86,6 +95,15 @@ public class TileEntityAlembic extends TileEntity {
 		this.progress = nbt.getInteger("progress");
 		this.producedAmount = nbt.getFloat("producedAmount");
 		this.running = nbt.getBoolean("running");
+		if(nbt.hasKey("producableItemAspects")) {
+			this.producableItemAspects.clear();
+			NBTTagList aspectList = nbt.getTagList("producableItemAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
+			for(int i = 0; i < aspectList.tagCount(); i++) {
+				NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(i);
+				ItemAspect aspect = ItemAspect.readFromNBT(aspectCompound);
+				this.producableItemAspects.add(aspect);
+			}
+		}
 	}
 
 	@Override
@@ -226,6 +244,16 @@ public class TileEntityAlembic extends TileEntity {
 				if(this.producableItemAspects.size() >= 1) {
 					ItemAspect aspect = this.producableItemAspects.get(0);
 					this.producableItemAspects.remove(0);
+					float totalAmount = aspect.amount;
+					Iterator<ItemAspect> itemAspectIT = this.producableItemAspects.iterator();
+					while(itemAspectIT.hasNext()) {
+						ItemAspect currentAspect = itemAspectIT.next();
+						if(currentAspect.aspect == aspect.aspect) {
+							totalAmount += currentAspect.amount;
+							itemAspectIT.remove();
+						}
+					}
+					aspect = new ItemAspect(aspect.aspect, totalAmount);
 					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
 					AspectRecipes.REGISTRY.addItemAspects(aspectVial, aspect);
 				}
