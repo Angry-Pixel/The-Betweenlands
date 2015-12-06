@@ -563,7 +563,7 @@ item.thebetweenlands.groundVenusFlyTrap.name=Ground Venus Fly Trap
 item.thebetweenlands.groundVolarpad.name=Ground Volarpad
 item.thebetweenlands.groundThorns.name=Ground Thorns
 item.thebetweenlands.groundPoisonIvy.name=Ground Poison Ivy
-item.thebetweenlands.groundGenericLead.name=Ground Leaf
+item.thebetweenlands.groundGenericLeaf.name=Ground Leaf
 
 #Plant drops
 item.thebetweenlands.genericLeaf.name=Leaf
