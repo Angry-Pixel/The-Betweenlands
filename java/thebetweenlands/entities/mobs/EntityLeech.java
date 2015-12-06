@@ -17,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntity;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityLeech extends EntityMob implements IEntityBL {
@@ -133,6 +134,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 					stopFleeing();
 				}
 			}
+			ManualManager.PlayerDiscoverPage(this, "leech");
 		}
 
 		if (!firstTickCheck) {

@@ -42,10 +42,6 @@ import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
 import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
 import thebetweenlands.client.render.block.BlockHollowLogRenderer;
 import thebetweenlands.client.render.block.BlockModelPlantRenderer;
 import thebetweenlands.client.render.block.BlockMossBedRenderer;
@@ -177,7 +173,8 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.manual.ManualEntryRegistry;
+import thebetweenlands.manual.GuideBookEntryRegistry;
+import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -427,7 +424,8 @@ public class ClientProxy extends CommonProxy {
 		// Init manual
 		System.out.println("***********************************************");
 		System.out.println("Manual errors:");
-		ManualEntryRegistry.init();
+		GuideBookEntryRegistry.init();
+		HLEntryRegistry.init();
 		System.out.println("***********************************************");
 	}
 

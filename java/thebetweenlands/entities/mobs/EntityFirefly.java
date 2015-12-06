@@ -5,11 +5,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.*;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -161,6 +162,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 				this.waypointY = this.posY + 0.1D;
 				this.waypointZ = this.posZ;
 			}
+			ManualManager.PlayerDiscoverPage(this, "fireFly");
 		}
 	}
 

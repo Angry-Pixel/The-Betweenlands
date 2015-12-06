@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarminion extends EntityTameable implements IEntityBL {
@@ -110,6 +111,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			if(despawnTicks > 7200) {
 				setDead();
 			}
+			ManualManager.PlayerDiscoverPage(this, "tarminion");
 		}
 		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);

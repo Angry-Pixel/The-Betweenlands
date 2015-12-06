@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
@@ -35,6 +36,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 				setHatchTime(getHatchTime() + 1);
 			if(getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
 				hatch();
+			ManualManager.PlayerDiscoverPage(this, "mireSnailEgg");
 		}
 		pulseFloat = pulse.swing(0.3F, 0.2F, false);
 		renderYawOffset = prevRenderYawOffset;

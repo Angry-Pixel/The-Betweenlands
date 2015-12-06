@@ -12,7 +12,10 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
@@ -22,6 +25,7 @@ import thebetweenlands.entities.entityAI.EntityAIHurtByTargetDruid;
 import thebetweenlands.entities.entityAI.EntityAINearestAttackableTargetDruid;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
 import thebetweenlands.utils.MathUtils;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -121,6 +125,7 @@ public class EntityDarkDruid extends EntityMob {
 			if (teleportCooldown > 0) {
 				teleportCooldown--;
 			}
+			ManualManager.PlayerDiscoverPage(this, "darkDruid");
 		}
 	}
 

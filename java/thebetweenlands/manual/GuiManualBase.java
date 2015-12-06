@@ -2,16 +2,12 @@ package thebetweenlands.manual;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
-
-import java.util.UUID;
 
 /**
  * Created by Bart on 22/11/2015.
@@ -38,7 +34,7 @@ public class GuiManualBase extends GuiScreen {
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
-        changeCategory(ManualEntryRegistry.itemsCategory);
+        changeCategory(GuideBookEntryRegistry.itemsCategory);
     }
 
     @Override
@@ -104,11 +100,11 @@ public class GuiManualBase extends GuiScreen {
             if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0)
                 currentCategory.nextPage(this);
             if (mouseX >= xStart + (currentCategory.number >= 1?0:279) && mouseX <= xStart + (currentCategory.number >= 1?0:279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
-                changeCategory(ManualEntryRegistry.itemsCategory);
+                changeCategory(GuideBookEntryRegistry.itemsCategory);
             if (mouseX >= xStart + (currentCategory.number >= 2?0:279) && mouseX <= xStart + (currentCategory.number >= 2?0:279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)
-                changeCategory(ManualEntryRegistry.machineCategory);
+                changeCategory(GuideBookEntryRegistry.machineCategory);
             if (mouseX >= xStart + (currentCategory.number >= 3?0:279) && mouseX <= xStart + (currentCategory.number >= 3?0:279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
-               changeCategory(ManualEntryRegistry.entitiesCategory);
+               changeCategory(GuideBookEntryRegistry.entitiesCategory);
 //            if (mouseX >= xStart + (currentCategory.number >= 4?0:279) && mouseX <= xStart + (currentCategory.number >= 4?0:279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
 //                changeCategory(ManualEntryRegistry.category4);
 //            if (mouseX >= xStart + (currentCategory.number >= 5?0:279) && mouseX <= xStart + (currentCategory.number >= 5?0:279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)

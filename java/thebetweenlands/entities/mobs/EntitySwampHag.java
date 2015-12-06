@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntitySwampHag extends EntityMob implements IEntityBL {
@@ -114,6 +115,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
 		if (!worldObj.isRemote) {
 			updateLivingSoundTime();
+			ManualManager.PlayerDiscoverPage(this, "swampHag");
 		}
 
 		if (animationTick > 0) {

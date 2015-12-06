@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
@@ -147,5 +148,10 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		setHasMated(nbt.getBoolean("hasMated"));
 	}
-    
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		ManualManager.PlayerDiscoverPage(this, "mireSnail");
+	}
 }

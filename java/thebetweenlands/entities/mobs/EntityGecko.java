@@ -12,7 +12,10 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -20,6 +23,7 @@ import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntityGecko;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
@@ -140,6 +144,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 					stopHiding();
 				}
 			}
+			ManualManager.PlayerDiscoverPage(this, "gecko");
 		}
 	}
 

@@ -2,7 +2,6 @@ package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.entities.mobs.*;
 import thebetweenlands.items.BLItemRegistry;
 
 import java.lang.reflect.Field;
@@ -12,7 +11,7 @@ import java.util.Collections;
 /**
  * Created by Bart on 22/11/2015.
  */
-public class ManualEntryRegistry {
+public class GuideBookEntryRegistry {
 
     public static IManualEntryItem[] pickaxes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodPickaxe, (IManualEntryItem) BLItemRegistry.betweenstonePickaxe, (IManualEntryItem) BLItemRegistry.octinePickaxe, (IManualEntryItem) BLItemRegistry.valonitePickaxe};
     public static IManualEntryItem[] axes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodAxe, (IManualEntryItem) BLItemRegistry.betweenstoneAxe, (IManualEntryItem) BLItemRegistry.octineAxe, (IManualEntryItem) BLItemRegistry.valoniteAxe};
@@ -61,7 +60,7 @@ public class ManualEntryRegistry {
         for (IManualEntryItem item : itemEntryItem)
             itemPages.addAll(PageCreators.pageCreatorItems(item, false));
         try {
-            for (Field f : ManualEntryRegistry.class.getDeclaredFields()) {
+            for (Field f : GuideBookEntryRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof IManualEntryItem[]) {
                     ArrayList<IManualEntryItem> list = new ArrayList<>();
@@ -147,7 +146,7 @@ public class ManualEntryRegistry {
     }
 
     public static void initEnityEntries() {
-        IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 148, 10, 0), new IManualEntryEntity("angler", 110, 148, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 148, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 148, -1, -1), new IManualEntryEntity("bloodSnail", 110, 148, -1, -1), new IManualEntryEntity("darkDruid", 110, 148, -1, -1), new IManualEntryEntity("dragonFly", 110, 148, -1, -1), new IManualEntryEntity("firefly", 110, 148, -1, -1), new IManualEntryEntity("gecko", 110, 148, -1, -1), new IManualEntryEntity("giantToad", 110, 148, -1, -1), new IManualEntryEntity("leech", 110, 148, -1, -1), new IManualEntryEntity("lurker", 110, 148, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 148, -1, -1), new IManualEntryEntity("mireSnail", 110, 148, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 148, -1, -1), new IManualEntryEntity("peatMummy", 110, 148, -1, -1), new IManualEntryEntity("siltCrab", 110, 148, -1, -1), new IManualEntryEntity("sludge", 110, 148, -1, -1), new IManualEntryEntity("sporeling", 110, 148, -1, -1), new IManualEntryEntity("swampHag", 110, 148, -1, -1), new IManualEntryEntity("tarBeast", 110, 148, -1, -1), new IManualEntryEntity("tarminion", 110, 148, -1, -1), new IManualEntryEntity("termite", 110, 148, -1, -1), new IManualEntryEntity("wight", 110, 148, -1, -1)};
+        IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 128, 10, 0), new IManualEntryEntity("angler", 110, 128, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 128, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 128, -1, -1), new IManualEntryEntity("bloodSnail", 110, 128, -1, -1), new IManualEntryEntity("darkDruid", 110, 128, -1, -1), new IManualEntryEntity("dragonFly", 110, 128, -1, -1), new IManualEntryEntity("firefly", 110, 128, -1, -1), new IManualEntryEntity("gecko", 110, 128, -1, -1), new IManualEntryEntity("giantToad", 110, 128, -1, -1), new IManualEntryEntity("leech", 110, 128, -1, -1), new IManualEntryEntity("lurker", 110, 128, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 128, -1, -1), new IManualEntryEntity("mireSnail", 110, 128, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 128, -1, -1), new IManualEntryEntity("peatMummy", 110, 128, -1, -1), new IManualEntryEntity("siltCrab", 110, 128, -1, -1), new IManualEntryEntity("sludge", 110, 128, -1, -1), new IManualEntryEntity("sporeling", 110, 128, -1, -1), new IManualEntryEntity("swampHag", 110, 128, -1, -1), new IManualEntryEntity("tarBeast", 110, 128, -1, -1), new IManualEntryEntity("tarminion", 110, 128, -1, -1), new IManualEntryEntity("termite", 110, 128, -1, -1), new IManualEntryEntity("wight", 110, 128, -1, -1)};
 
         entityPages.clear();
         for (IManualEntryEntity entity : manualEntryEntities) {

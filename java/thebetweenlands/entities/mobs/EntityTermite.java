@@ -7,6 +7,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.world.World;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityTermite extends EntityMob implements IEntityBL {
 
@@ -43,5 +44,12 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	@Override
 	protected String getDeathSound() {
 		return "thebetweenlands:squish";
+	}
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if (!worldObj.isRemote)
+			ManualManager.PlayerDiscoverPage(this, "termite");
 	}
 }

@@ -24,6 +24,8 @@ public class ButtonWidget extends ManualWidgetsBase {
     public int pageNumber;
     private TextContainer textContainer;
 
+    public int color = 0x808080;
+
     private ResourceLocation resourceLocation;
     private Page page;
 
@@ -62,7 +64,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     }
 
     public void init() {
-        this.textContainer.setCurrentScale(1f).setCurrentColor(0x808080).setCurrentFormat("");
+        this.textContainer.setCurrentScale(1f).setCurrentColor(color).setCurrentFormat("");
         this.textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
         this.textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
         this.textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
@@ -89,7 +91,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
         }
         if (isHidden){
-            GL11.glColor3f(0.545f, 0.0f, 0.0f);
+            color = 0x666666;
         }
 
         TextPage page = this.textContainer.getPages().get(0);

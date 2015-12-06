@@ -18,6 +18,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public boolean isFalling;
@@ -64,6 +65,8 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 			if(getIsFalling())
 				setIsFalling(false);
 		super.onUpdate();
+		if (!worldObj.isRemote)
+			ManualManager.PlayerDiscoverPage(this, "sporeling");
 	}
 
 	public boolean getIsFalling() {

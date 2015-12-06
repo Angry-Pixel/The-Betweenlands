@@ -780,7 +780,7 @@ manual.weedwoodRowboat.description=
 manual.pestleAndMortar.title=Pestle and Mortar
 manual.pestleAndMortar.description=<bold>1 - Input Slot</bold> <nl> You can place the item you want to process here. <nl> <nl> <bold>2 - Life Crystal Slot</bold> <nl> You can place a <tooltip:Open guide book entry><pagelink:manual.lifeCrystal.title><rb>Life Crystal</rb></pagelink></tooltip> here for automation. <nl> <nl> <bold>3 - Output Slot</bold> <nl> This is where the produced item will end up <nl> <nl> <bold>4 - Pestle Slot</bold> <nl> You can place the pestle here for grinding
 
-
+manual.discover.page=You discovered a new page
 
 
 

@@ -3,6 +3,8 @@ package thebetweenlands.manual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.list.AspectArmaniis;
 import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextFormatComponents;
@@ -50,7 +52,7 @@ public class PageCreators {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.pageName();
         System.out.println(entity.pageName());
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(73 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(78 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
         newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden));
         return newPages;
     }
@@ -197,6 +199,13 @@ public class PageCreators {
 
         return newPages;
     }
+
+
+
+    /*public static ArrayList<Page> AspectPages(IAspect aspect){
+        ArrayList<Page> newPages = new ArrayList<>();
+        int height = 0;
+    }*/
 
 
 }

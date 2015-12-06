@@ -22,6 +22,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -269,6 +270,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		}
 		tailPitch *= 0.5F;
 		tailYaw *= (1 - movementSpeed);
+		if (!worldObj.isRemote)
+			ManualManager.PlayerDiscoverPage(this, "lurker");
 	}
 
 	@Override

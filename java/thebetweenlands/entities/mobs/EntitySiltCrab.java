@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.manual.ManualManager;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	
@@ -94,6 +95,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 			if (aggroCooldown < 201)
 				aggroCooldown++;
+			ManualManager.PlayerDiscoverPage(this, "siltCrab");
 		}
 	}
 
