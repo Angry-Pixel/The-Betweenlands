@@ -46,7 +46,7 @@ public class CommandResetAspects extends CommandBase {
 
 		if(arg1.equals("confirm")) {
 			World world = sender.getEntityWorld();
-			AspectRecipes.REGISTRY.resetAspects(world);
+			AspectRecipes.REGISTRY.resetStaticAspects(world);
 			sender.addChatMessage(new ChatComponentText("The aspects have been reset"));
 		}
 	}

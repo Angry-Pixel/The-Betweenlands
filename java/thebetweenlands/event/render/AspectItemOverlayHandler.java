@@ -20,6 +20,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
+import thebetweenlands.utils.AspectIconRenderer;
 import thebetweenlands.herblore.aspects.ItemAspect;
 
 public class AspectItemOverlayHandler {
@@ -39,30 +40,27 @@ public class AspectItemOverlayHandler {
 					double mouseY = resolution.getScaledHeight_double() - (Mouse.getY() * resolution.getScaledHeight_double()) / Minecraft.getMinecraft().displayHeight - 1;
 					GL11.glPushMatrix();
 					GL11.glTranslated(mouseX + 8, mouseY, 200);
-					int yOffset = 0;
+					int yOffset = -40;
 					int width = 0;
-					List<ItemAspect> aspects = AspectRecipes.REGISTRY.getItemAspects(new ItemEntry(slot.getStack()));
+					List<ItemAspect> aspects = AspectRecipes.REGISTRY.getItemAspects(slot.getStack());
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 					GL11.glEnable(GL11.GL_BLEND);
 					RenderHelper.disableStandardItemLighting();
 					if(aspects != null && aspects.size() > 0) {
 						for(ItemAspect aspect : aspects) {
 							String aspectText = aspect.aspect.getName() + " (" + aspect.amount + ")";
-							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 1, 1 + yOffset, 0xFFFFFFFF);
-							int strWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectText);
-							if(strWidth > width) {
-								width = strWidth;
+							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + 4 + yOffset, 0xFFFFFFFF);
+							AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.aspect.getIconIndex());
+							int entryWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectText) + 19;
+							if(entryWidth > width) {
+								width = entryWidth;
 							}
-							yOffset += 10;
+							yOffset += 20;
 						}
-					} else {
-						String text = "No aspects";
-						Minecraft.getMinecraft().fontRenderer.drawString(text, 1, 1, 0xFFFFFFFF);
-						width = Minecraft.getMinecraft().fontRenderer.getStringWidth(text);
-						yOffset = 10;
 					}
 					GL11.glTranslated(0, 0, -10);
-					Gui.drawRect(0, 0, 1 + width, yOffset, 0x95000000);
+					Gui.drawRect(0, -40, width + 1, yOffset, 0x90000000);
+					Gui.drawRect(1, -39, width, yOffset - 1, 0xAA000000);
 					RenderHelper.enableGUIStandardItemLighting();
 					GL11.glPopMatrix();
 					GL11.glEnable(GL11.GL_TEXTURE_2D);

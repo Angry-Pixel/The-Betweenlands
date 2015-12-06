@@ -20,7 +20,6 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import thebetweenlands.herblore.aspects.IAspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
@@ -207,7 +206,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
-					setInventorySlotContents(i, null);
+					ItemStack stack = getStackInSlot(i);
+					if(stack != null && stack.getItem() == BLItemRegistry.aspectVial) {
+						//Return empty vials
+						setInventorySlotContents(i, new ItemStack(BLItemRegistry.dentrothystVial, 1, stack.getItemDamage()));
+					} else {
+						setInventorySlotContents(i, null);
+					}
 				}
 				this.infusingRecipe = null;
 				if (evaporation == 600) {
@@ -313,7 +318,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		List<IAspect> infusingAspects = new ArrayList<IAspect>();
 		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if(inventory[i] != null) {
-				infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(new ItemEntry(inventory[i])));
+				infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(inventory[i]));
 			}
 		}
 		return infusingAspects;

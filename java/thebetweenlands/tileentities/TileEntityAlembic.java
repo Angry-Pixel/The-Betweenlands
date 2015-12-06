@@ -14,12 +14,10 @@ import net.minecraft.util.MathHelper;
 import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.aspects.AspectRegistry;
-import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
 import thebetweenlands.herblore.aspects.IAspect;
 import thebetweenlands.herblore.aspects.ItemAspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
 
@@ -27,6 +25,8 @@ public class TileEntityAlembic extends TileEntity {
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
 
 	public static final float AMOUNT_PER_VIAL = Amounts.VIAL;
+
+	public static final float ISOLATION_LOSS_MULTIPLIER = 0.18F;
 
 	private boolean running = false;
 	private int progress = 0;
@@ -36,6 +36,7 @@ public class TileEntityAlembic extends TileEntity {
 	private int producableStrength;
 	private int producableDuration;
 	private ElixirEffect producableElixir = null;
+	private List<ItemAspect> producableItemAspects = new ArrayList<ItemAspect>();
 
 	public void addInfusion(ItemStack bucket) {
 		this.infusionBucket = bucket;
@@ -152,16 +153,28 @@ public class TileEntityAlembic extends TileEntity {
 
 	private void addInvalidInfusion() {
 		//Invalid recipe or infusion too short or too long
-		this.producableElixir = ElixirRegistry.EFFECT_TEST;
-		this.producableAmount = 0.2F;
+		this.producableElixir = null;
+		this.producableAmount = 0;
 		this.producableDuration = 0;
 		this.producableStrength = 0;
+		this.producableItemAspects.clear();
+		if(this.infusionBucket != null && this.infusionBucket.stackTagCompound != null && this.infusionBucket.stackTagCompound.hasKey("ingredients")) {
+			NBTTagList nbtList = (NBTTagList)this.infusionBucket.stackTagCompound.getTag("ingredients");
+			List<ItemStack> infusionIngredients = new ArrayList<ItemStack>();
+			for(int i = 0; i < nbtList.tagCount(); i++) {
+				infusionIngredients.add(ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
+			}
+			List<ItemAspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
+			for(ItemAspect aspect : infusionAspects) {
+				this.producableItemAspects.add(new ItemAspect(aspect.aspect, aspect.amount * ISOLATION_LOSS_MULTIPLIER));
+			}
+		}
 	}
 
 	private List<IAspect> getInfusionAspects(List<ItemStack> ingredients) {
 		List<IAspect> infusingAspects = new ArrayList<IAspect>();
 		for(ItemStack ingredient : ingredients) {
-			infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(new ItemEntry(ingredient)));
+			infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(ingredient));
 		}
 		return infusingAspects;
 	}
@@ -169,7 +182,7 @@ public class TileEntityAlembic extends TileEntity {
 	private List<ItemAspect> getInfusionItemAspects(List<ItemStack> ingredients) {
 		List<ItemAspect> infusingItemAspects = new ArrayList<ItemAspect>();
 		for(ItemStack ingredient : ingredients) {
-			infusingItemAspects.addAll(AspectRecipes.REGISTRY.getItemAspects(new ItemEntry(ingredient)));
+			infusingItemAspects.addAll(AspectRecipes.REGISTRY.getItemAspects(ingredient));
 		}
 		return infusingItemAspects;
 	}
@@ -198,24 +211,42 @@ public class TileEntityAlembic extends TileEntity {
 	 */
 	public ItemStack getElixir(int vialType) {
 		if(this.isFull() && this.hasFinished()) {
-			ItemStack elixir = null;
-			if(this.hasElixir()) {
-				elixir = this.createElixir(this.producableElixir, this.producableStrength, this.producableDuration, vialType);
+			if(this.producableElixir != null) {
+				ItemStack elixir = null;
+				if(this.hasElixir()) {
+					elixir = this.createElixir(this.producableElixir, this.producableStrength, this.producableDuration, vialType);
+				}
+				this.producedAmount -= AMOUNT_PER_VIAL;
+				if(this.producedAmount <= 0.0F || !this.hasElixir()) {
+					this.reset();
+				}
+				return elixir;
+			} else {
+				ItemStack aspectVial = null;
+				if(this.producableItemAspects.size() >= 1) {
+					ItemAspect aspect = this.producableItemAspects.get(0);
+					this.producableItemAspects.remove(0);
+					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
+					AspectRecipes.REGISTRY.addItemAspects(aspectVial, aspect);
+				}
+				if(this.producableItemAspects.size() == 0) {
+					this.reset();
+				}
+				return aspectVial;
 			}
-			System.out.println(this.producedAmount + " " + AMOUNT_PER_VIAL);
-			this.producedAmount -= AMOUNT_PER_VIAL;
-			if(this.producedAmount <= 0.0F || !this.hasElixir()) {
-				this.infusionBucket = null;
-				this.producableAmount = 0.0F;
-				this.producableDuration = 0;
-				this.producableElixir = null;
-				this.producableStrength = 0;
-				this.producedAmount = 0.0F;
-				this.progress = 0;
-			}
-			return elixir;
 		}
 		return null;
+	}
+
+	public void reset() {
+		this.producableItemAspects.clear();
+		this.infusionBucket = null;
+		this.producableAmount = 0.0F;
+		this.producableDuration = 0;
+		this.producableElixir = null;
+		this.producableStrength = 0;
+		this.producedAmount = 0.0F;
+		this.progress = 0;
 	}
 
 	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, int vialType) {

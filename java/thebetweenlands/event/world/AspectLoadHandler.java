@@ -17,7 +17,7 @@ public class AspectLoadHandler {
 		if(!event.world.isRemote) {
 			//long aspectsSeed = getAspectsSeed(event.world.getSeed());
 			//AspectRecipes.REGISTRY.generateAspects(aspectsSeed);
-			AspectRecipes.REGISTRY.loadAspects(event.world);
+			AspectRecipes.REGISTRY.loadStaticAspects(event.world);
 		}
 	}
 

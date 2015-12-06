@@ -40,6 +40,7 @@ import thebetweenlands.items.food.ItemSapBall;
 import thebetweenlands.items.food.ItemSapJello;
 import thebetweenlands.items.food.ItemWeepingBluePetal;
 import thebetweenlands.items.food.ItemWightHeart;
+import thebetweenlands.items.herblore.ItemAspectVial;
 import thebetweenlands.items.herblore.ItemDentrothystVial;
 import thebetweenlands.items.herblore.ItemElixir;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
@@ -247,7 +248,8 @@ public class BLItemRegistry {
 
 	public static final ItemElixir elixir = new ItemElixir();
 	public static final ItemDentrothystVial dentrothystVial = new ItemDentrothystVial();
-
+	public static final ItemAspectVial aspectVial = new ItemAspectVial();
+	
 	public static void init() {
 		initCreativeTabs();
 		registerItems();
@@ -262,7 +264,7 @@ public class BLItemRegistry {
 		ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
 		ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
 		ModCreativeTabs.plants.setTab(middleFruitSeeds, spores);
-		ModCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir, dentrothystVial);
+		ModCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir, dentrothystVial, aspectVial);
 	}
 
 	private static void registerItems() {

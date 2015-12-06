@@ -51,7 +51,7 @@ public class AspectRegistry {
 	}
 
 	public static enum AspectType {
-		HERB
+		HERB, GEM_BYRGINAZ, GEM_FIRNALAZ, GEM_FERGALAZ
 	}
 
 	public static class AspectEntry {
@@ -143,11 +143,11 @@ public class AspectRegistry {
 		this.registeredAspects.add(entry);
 	}
 
-	public void addAspectsToItem(ItemEntryAspects entry) {
-		this.addAspectsToItem(entry, 1);
+	public void addStaticAspectsToItem(ItemEntryAspects entry) {
+		this.addStaticAspectsToItem(entry, 1);
 	}
 
-	public void addAspectsToItem(ItemEntryAspects entry, int aspectCount) {
+	public void addStaticAspectsToItem(ItemEntryAspects entry, int aspectCount) {
 		ItemEntry itemEntry = entry.item;
 		for(Entry<ItemEntry, List<ItemEntryAspects>> e : this.registeredItems.entrySet()) {
 			if(e.getKey().equals(itemEntry)) {
@@ -190,12 +190,12 @@ public class AspectRegistry {
 		return rnd.nextLong();
 	}
 
-	public void loadAspects(World world) {
+	public void loadStaticAspects(World world) {
 		long seed = getAspectsSeed(world.getSeed());
 		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
 		if(worldData != null && worldData.getData() != null && worldData.getData().hasKey("aspects")) {
 			NBTTagCompound aspectsCompound = worldData.getData().getCompoundTag("aspects");
-			this.loadAspects(aspectsCompound);
+			this.loadStaticAspects(aspectsCompound);
 			//System.out.println("Loaded aspects: ");
 			/*for(Entry<ItemEntry, List<ItemAspect>> entry : this.matchedAspects.entrySet()) {
 				System.out.println(entry.getKey().item.getUnlocalizedName() + " ");
@@ -206,15 +206,15 @@ public class AspectRegistry {
 				System.out.println(entry.getKey().item.getUnlocalizedName() + " ");
 			}*/
 		} else {
-			this.generateAspects(seed);
+			this.generateStaticAspects(seed);
 		}
 		NBTTagCompound savedAspects = new NBTTagCompound();
-		this.saveAspects(savedAspects);
+		this.saveStaticAspects(savedAspects);
 		worldData.getData().setTag("aspects", savedAspects);
 		worldData.markDirty();
 	}
 
-	public void loadAspects(NBTTagCompound nbt) {
+	public void loadStaticAspects(NBTTagCompound nbt) {
 		this.matchedAspects.clear();
 		NBTTagList entryList = (NBTTagList) nbt.getTag("entries");
 		entryIT:
@@ -243,7 +243,7 @@ public class AspectRegistry {
 			}
 	}
 
-	private void saveAspects(NBTTagCompound nbt) {
+	private void saveStaticAspects(NBTTagCompound nbt) {
 		NBTTagList entryList = new NBTTagList();
 		for(Entry<ItemEntry, List<ItemAspect>> entry : this.matchedAspects.entrySet()) {
 			ItemEntry itemEntry = entry.getKey();
@@ -261,17 +261,17 @@ public class AspectRegistry {
 		nbt.setTag("entries", entryList);
 	}
 
-	public void resetAspects(World world) {
+	public void resetStaticAspects(World world) {
 		long seed = getAspectsSeed(world.getSeed());
 		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
-		this.generateAspects(seed);
+		this.generateStaticAspects(seed);
 		NBTTagCompound savedAspects = new NBTTagCompound();
-		this.saveAspects(savedAspects);
+		this.saveStaticAspects(savedAspects);
 		worldData.getData().setTag("aspects", savedAspects);
 		worldData.markDirty();
 	}
 
-	private void generateAspects(long seed) {
+	private void generateStaticAspects(long seed) {
 		this.matchedAspects.clear();
 		this.updateAspects(seed);
 	}
@@ -366,7 +366,7 @@ public class AspectRegistry {
 		return possibleAspects.size();
 	}
 
-	public List<ItemAspect> getItemAspects(ItemEntry item) {
+	private List<ItemAspect> getStaticItemAspects(ItemEntry item) {
 		for(Entry<ItemEntry, List<ItemAspect>> e : this.matchedAspects.entrySet()) {
 			if(e.getKey().equals(item)) {
 				return e.getValue();
@@ -375,16 +375,41 @@ public class AspectRegistry {
 		return new ArrayList<ItemAspect>();
 	}
 
-	public List<IAspect> getAspects(ItemEntry item) {
-		List<IAspect> aspects = new ArrayList<IAspect>();
-		for(Entry<ItemEntry, List<ItemAspect>> e : this.matchedAspects.entrySet()) {
-			if(e.getKey().equals(item)) {
-				for(ItemAspect ia : e.getValue()) {
-					aspects.add(ia.aspect);
-				}
-				break;
+	public List<ItemAspect> getItemAspects(ItemStack stack) {
+		List<ItemAspect> aspects = new ArrayList<ItemAspect>();
+		aspects.addAll(this.getStaticItemAspects(new ItemEntry(stack)));
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
+			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", 10);
+			for(int i = 0; i < lst.tagCount(); i++) {
+				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
+				ItemAspect itemAspect = ItemAspect.readFromNBT(aspectCompound);
+				aspects.add(itemAspect);
 			}
 		}
 		return aspects;
+	}
+
+	public List<IAspect> getAspects(ItemStack stack) {
+		List<IAspect> aspects = new ArrayList<IAspect>();
+		for(ItemAspect aspect : this.getItemAspects(stack)) {
+			aspects.add(aspect.aspect);
+		}
+		return aspects;
+	}
+
+	public ItemStack addItemAspects(ItemStack stack, ItemAspect... aspects) {
+		if(stack.stackTagCompound == null) {
+			stack.stackTagCompound = new NBTTagCompound();
+		}
+		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
+			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
+		}
+		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", 10);
+		for(ItemAspect aspect : aspects) {
+			NBTTagCompound aspectCompound = new NBTTagCompound();
+			aspect.writeToNBT(aspectCompound);
+			lst.appendTag(aspectCompound);
+		}
+		return stack;
 	}
 }

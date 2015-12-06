@@ -19,7 +19,7 @@ public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
 	}
 
 	public void onMessageClientSide(MessageLoadAspects message, EntityPlayer player) {
-		AspectRecipes.REGISTRY.loadAspects(message.aspectData);
+		AspectRecipes.REGISTRY.loadStaticAspects(message.aspectData);
 	}
 
 	public void onMessageServerSide(MessageLoadAspects message, EntityPlayer player) { }
