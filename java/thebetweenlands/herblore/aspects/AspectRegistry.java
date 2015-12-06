@@ -28,6 +28,7 @@ import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
 import thebetweenlands.herblore.aspects.list.AspectYeowynn;
 import thebetweenlands.herblore.aspects.list.AspectYihinren;
 import thebetweenlands.herblore.aspects.list.AspectYunugaz;
+import thebetweenlands.utils.EnumNbtTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectRegistry {
@@ -379,7 +380,7 @@ public class AspectRegistry {
 		List<ItemAspect> aspects = new ArrayList<ItemAspect>();
 		aspects.addAll(this.getStaticItemAspects(new ItemEntry(stack)));
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", 10);
+			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < lst.tagCount(); i++) {
 				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
 				ItemAspect itemAspect = ItemAspect.readFromNBT(aspectCompound);
@@ -404,7 +405,7 @@ public class AspectRegistry {
 		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
 			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
 		}
-		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", 10);
+		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
 		for(ItemAspect aspect : aspects) {
 			NBTTagCompound aspectCompound = new NBTTagCompound();
 			aspect.writeToNBT(aspectCompound);

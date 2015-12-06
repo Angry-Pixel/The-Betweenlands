@@ -17,7 +17,7 @@ public class ItemGenericPlantDrop extends Item {
 	}
 
 	public static ItemStack createStack(EnumItemPlantDrop enumPlantDrop, int size) {
-		return new ItemStack(BLItemRegistry.itemsGenericPlantDrop, size, enumPlantDrop.ordinal());
+		return new ItemStack(BLItemRegistry.itemsGenericPlantDrop, size, enumPlantDrop.id);
 	}
 
 	public static ItemStack createStack(Item item, int size, int meta) {
@@ -70,21 +70,23 @@ public class ItemGenericPlantDrop extends Item {
 	}
 
 	public static enum EnumItemPlantDrop {
-		GENERIC_LEAF("genericLeaf"), ALGAE("algae"), ARROW_ARUM_LEAF("arrowArumLeaf"), BLUE_EYED_GRASS_FLOWERS("blueEyedGrassFlowers"), BLUE_IRIS_PETAL("blueIrisPetals"),
-		MIRE_CORAL("mireCoral"), DEEP_WATER_CORAL("deepWaterCoral"), BOG_BEAN_FLOWER("bogBeanFlower"), BONESET_FLOWERS("bonesetFlowers"),
-		BOTTLE_BRUSH_GRASS_BLADES("bottleBrushGrassBlades"), BROOM_SEDGE_LEAVES("broomSedgeLeaves"), BUTTON_BUSH_FLOWERS("buttonBushFlowers"),
-		CARDINAL_FLOWER_PETALS("cardinalFlowerPetals"), CATTAIL_HEAD("cattailHead"), CAVE_GRASS_BLADES("caveGrassBlades"), 
-		COPPER_IRIS_PETALS("copperIrisPetals"), GOLDEN_CLUB_FLOWERS("goldenClubFlowers"), LICHEN("lichen"), MARSH_HIBISCUS_FLOWER("marshHibiscusFlower"),
-		MARSH_MALLOW_FLOWER("marshMallowFlower"), MARSH_MARIGOLD_FLOWER("marshMarigoldFlower"), NETTLE_LEAF("nettleLeaf"), PHRAGMITE_STEMS("phragmiteStems"),
-		PICKEREL_WEED_FLOWER("pickerelWeedFlower"), SHOOT_LEAVES("shootLeaves"), SLUDGECREEP_LEAVES("sludgecreepLeaves"), SOFT_RUSH_LEAVES("softRushLeaves"),
-		SUNDEW_HEAD("sundewHead"), SWAMP_TALL_GRASS_BLADES("swampTallGrassBlades"), CAVE_MOSS("caveMoss"), MOSS("moss"), MILK_WEED("milkWeed"), 
-		HANGER("hanger"), PITCHER_PLANT_TRAP("pitcherPlantTrap"), WATER_WEEDS("waterWeeds"), VENUS_FLY_TRAP("venusFlyTrap"), VOLARPAD("volarpad"), THORNS("thorns"),
-		POISON_IVY("poisonIvy");
+		GENERIC_LEAF("genericLeaf", 0), ALGAE("algae", 1), ARROW_ARUM_LEAF("arrowArumLeaf", 2), BLUE_EYED_GRASS_FLOWERS("blueEyedGrassFlowers", 3), BLUE_IRIS_PETAL("blueIrisPetals", 4),
+		MIRE_CORAL("mireCoral", 5), DEEP_WATER_CORAL("deepWaterCoral", 6), BOG_BEAN_FLOWER("bogBeanFlower", 7), BONESET_FLOWERS("bonesetFlowers", 8),
+		BOTTLE_BRUSH_GRASS_BLADES("bottleBrushGrassBlades", 9), BROOM_SEDGE_LEAVES("broomSedgeLeaves", 10), BUTTON_BUSH_FLOWERS("buttonBushFlowers", 11),
+		CARDINAL_FLOWER_PETALS("cardinalFlowerPetals", 12), CATTAIL_HEAD("cattailHead", 13), CAVE_GRASS_BLADES("caveGrassBlades", 14), 
+		COPPER_IRIS_PETALS("copperIrisPetals", 15), GOLDEN_CLUB_FLOWERS("goldenClubFlowers", 16), LICHEN("lichen", 17), MARSH_HIBISCUS_FLOWER("marshHibiscusFlower", 18),
+		MARSH_MALLOW_FLOWER("marshMallowFlower", 19), MARSH_MARIGOLD_FLOWER("marshMarigoldFlower", 20), NETTLE_LEAF("nettleLeaf", 21), PHRAGMITE_STEMS("phragmiteStems", 22),
+		PICKEREL_WEED_FLOWER("pickerelWeedFlower", 23), SHOOT_LEAVES("shootLeaves", 24), SLUDGECREEP_LEAVES("sludgecreepLeaves", 25), SOFT_RUSH_LEAVES("softRushLeaves", 26),
+		SUNDEW_HEAD("sundewHead", 27), SWAMP_TALL_GRASS_BLADES("swampTallGrassBlades", 28), CAVE_MOSS("caveMoss", 29), MOSS("moss", 30), MILK_WEED("milkWeed", 31), 
+		HANGER("hanger", 32), PITCHER_PLANT_TRAP("pitcherPlantTrap", 33), WATER_WEEDS("waterWeeds", 34), VENUS_FLY_TRAP("venusFlyTrap", 35), VOLARPAD("volarpad", 36), THORNS("thorns", 37),
+		POISON_IVY("poisonIvy", 38);
 
 		public final String iconName;
+		public final int id;
 
-		private EnumItemPlantDrop(String unlocName) {
+		private EnumItemPlantDrop(String unlocName, int id) {
 			iconName = unlocName;
+			this.id = id;
 		}
 
 		public static final EnumItemPlantDrop[] VALUES = values();

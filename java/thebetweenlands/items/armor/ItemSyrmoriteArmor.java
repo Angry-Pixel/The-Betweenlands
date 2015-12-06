@@ -28,7 +28,7 @@ public class ItemSyrmoriteArmor extends ItemArmor implements IManualEntryItem {
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.ordinal();
+		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.id;
 	}
 
 	@Override

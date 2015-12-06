@@ -64,7 +64,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			}
 			return true;
 		}	
-		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.COMPOST.ordinal()) {
+		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.COMPOST.id) {
 			if (!world.isRemote) {
 				if (meta == DUG_SWAMP_DIRT || meta == DUG_SWAMP_GRASS) {
 					world.setBlockMetadataWithNotify(x, y, z, meta + COMPOSTING_MODIFIER, 3);
@@ -81,7 +81,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			}
 			return true;
 		}
-		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.ordinal()) {
+		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			if (!world.isRemote) {
 				if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED)
 					world.setBlockMetadataWithNotify(x, y, z, meta - DECAY_CURE, 3);

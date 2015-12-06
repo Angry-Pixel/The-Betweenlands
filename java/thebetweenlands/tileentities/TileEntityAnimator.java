@@ -90,7 +90,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isSulfurInslot() {
-		return isSlotInUse(2) && inventory[2].getItem() == BLItemRegistry.itemsGeneric && inventory[2].getItemDamage() == EnumItemGeneric.SULFUR.ordinal();
+		return isSlotInUse(2) && inventory[2].getItem() == BLItemRegistry.itemsGeneric && inventory[2].getItemDamage() == EnumItemGeneric.SULFUR.id;
 	}
 
 	public boolean isSlotInUse(int slot) {

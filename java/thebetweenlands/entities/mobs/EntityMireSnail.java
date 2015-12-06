@@ -121,7 +121,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean isBreedingItem(ItemStack is) {
-		return is != null && is.getItem() == BLItemRegistry.itemsGeneric && is.getItemDamage() == EnumItemGeneric.SLUDGE_BALL.ordinal();
+		return is != null && is.getItem() == BLItemRegistry.itemsGeneric && is.getItemDamage() == EnumItemGeneric.SLUDGE_BALL.id;
 	}
 
 	@Override

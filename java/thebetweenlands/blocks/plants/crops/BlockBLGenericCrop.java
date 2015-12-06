@@ -119,7 +119,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null) {
-			if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.ordinal()) {
+			if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id) {
 				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)){
 					if (!world.isRemote) {
 						world.playAuxSFX(2005, x, y, z, 0);
@@ -134,7 +134,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 				return true;
 			}
 		}
-		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.ordinal()) {
+		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			int metaDirt = world.getBlockMetadata(x, y - 1 , z);
 			if (!world.isRemote) {
 				if (this.isDecayed(world, x, y, z))

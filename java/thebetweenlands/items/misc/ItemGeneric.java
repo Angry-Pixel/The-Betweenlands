@@ -25,7 +25,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	}
 
 	public static ItemStack createStack(EnumItemGeneric enumGeneric, int size) {
-		return new ItemStack(BLItemRegistry.itemsGeneric, size, enumGeneric.ordinal());
+		return new ItemStack(BLItemRegistry.itemsGeneric, size, enumGeneric.id);
 	}
 
 	public static ItemStack createStack(Item item, int size, int meta) {
@@ -125,14 +125,14 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
-		if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.ordinal())
+		if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.id)
 			return EnumAction.eat;
 		return null;
 	}
 
 	@Override
 	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player) {
-		if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.ordinal()) {
+		if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.id) {
 			stack.stackSize--;
 			world.playSoundAtEntity(player, "random.burp", 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 			onFoodEaten(stack, world, player);
@@ -171,20 +171,22 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	}
 
 	public static enum EnumItemGeneric {
-		AQUA_MIDDLE_GEM("aquaMiddleGem"), CRIMSON_MIDDLE_GEM("crimsonMiddleGem"), GREEN_MIDDLE_GEM("greenMiddleGem"), 
-		BLOOD_SNAIL_SHELL("bloodSnailShell"), MIRE_SNAIL_SHELL("mireSnailShell"), COMPOST("compost"), DRAGONFLY_WING("dragonflyWing"), 
-		LURKER_SKIN("lurkerSkin"), SWAMP_REED("swampReed"), DRIED_SWAMP_REED("driedSwampReed"), SWAMP_REED_ROPE("swampReedRope"), 
-		TANGLED_ROOT("tangledRoot"), PLANT_TONIC("plantTonic"), 
-		MUD_BRICK("mudBrick"), SYRMORITE_INGOT("syrmoriteIngot"), OCTINE_INGOT("octineIngot"), ROTTEN_BARK("rottenBark"), SLIMY_BONE("slimyBone"), 
-		SLUDGE_BALL("sludgeBall"), SNAPPER_ROOT("snapperRoot"), STALKER_EYE("stalkerEye"), SULFUR("sulfur"), 
-		VALONITE_SHARD("valoniteShard"), WEEDWOOD_STICK("weedWoodStick"), ANGLER_TOOTH("anglerTooth"), WEEDWOOD_BOWL("weedwoodBowl"),
-		RUBBER_BALL("rubber"), TAR_BEAST_HEART("tarBeastHeart"),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated"), TAR_DRIP("tarDrip"), LIMESTONE_FLUX("limestoneFlux"),
-		SWAMP_KELP("swampKelp"), INANIMATE_TARMINION("inanimateTarminion");
+		AQUA_MIDDLE_GEM("aquaMiddleGem", 0), CRIMSON_MIDDLE_GEM("crimsonMiddleGem", 1), GREEN_MIDDLE_GEM("greenMiddleGem", 2), 
+		BLOOD_SNAIL_SHELL("bloodSnailShell", 3), MIRE_SNAIL_SHELL("mireSnailShell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonflyWing", 6), 
+		LURKER_SKIN("lurkerSkin", 7), SWAMP_REED("swampReed", 8), DRIED_SWAMP_REED("driedSwampReed", 9), SWAMP_REED_ROPE("swampReedRope", 10), 
+		TANGLED_ROOT("tangledRoot", 11), PLANT_TONIC("plantTonic", 12), 
+		MUD_BRICK("mudBrick", 13), SYRMORITE_INGOT("syrmoriteIngot", 14), OCTINE_INGOT("octineIngot", 15), ROTTEN_BARK("rottenBark", 16), SLIMY_BONE("slimyBone", 17), 
+		SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21), 
+		VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedWoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
+		RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
+		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32);
 
 		public final String iconName;
+		public final int id;
 
-		private EnumItemGeneric(String unlocName) {
+		private EnumItemGeneric(String unlocName, int id) {
 			iconName = unlocName;
+			this.id = id;
 		}
 
 		public static final EnumItemGeneric[] VALUES = values();
@@ -207,10 +209,10 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	public static boolean isIngot(ItemStack stack) {
 		if(stack == null) return false;
 		return (stack.getItem() instanceof ItemGeneric 
-				&& (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.ordinal()
-				|| stack.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.ordinal()
-				|| stack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()
-				|| stack.getItemDamage() == EnumItemGeneric.VALONITE_SHARD.ordinal()))
+				&& (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id
+				|| stack.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.id
+				|| stack.getItemDamage() == EnumItemGeneric.SULFUR.id
+				|| stack.getItemDamage() == EnumItemGeneric.VALONITE_SHARD.id))
 				|| stack.getItem() == BLItemRegistry.lifeCrystal;
 	}
 
