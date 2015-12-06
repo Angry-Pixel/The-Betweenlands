@@ -625,6 +625,14 @@
     "category": "music",
     "sounds": [
       {
+        "name": "music/EmeraldEmbers",
+        "stream": true
+      },
+      {
+        "name": "music/Darkness",
+        "stream": true
+      },
+      {
         "name": "music/CrocodileTears",
         "stream": true
       },
