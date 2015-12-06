@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
 public class AspectIconRenderer {
-	public static final ResourceLocation ASPECT_MAP = new ResourceLocation("thebetweenlands:textures/gui/aspectMap.png");
+	public static final ResourceLocation ASPECT_MAP = new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/aspectMap.png");
 
 	public static final int TEX_WIDTH = 64, TEX_HEIGHT = 64, ICON_WIDTH = 16, ICON_HEIGHT = 16, ICONS_H = TEX_WIDTH / ICON_WIDTH;
 
@@ -21,12 +21,14 @@ public class AspectIconRenderer {
 		Minecraft.getMinecraft().renderEngine.bindTexture(ASPECT_MAP);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, 0);
+		GL11.glDisable(GL11.GL_BLEND);
 		Tessellator.instance.startDrawingQuads();
 		Tessellator.instance.addVertexWithUV(0, 0, 0, u, v);
 		Tessellator.instance.addVertexWithUV(0, height, 0, u, v+REL_ICON_HEIGHT);
 		Tessellator.instance.addVertexWithUV(width, height, 0, u+REL_ICON_WIDTH, v+REL_ICON_HEIGHT);
 		Tessellator.instance.addVertexWithUV(width, 0, 0, u+REL_ICON_WIDTH, v);
 		Tessellator.instance.draw();
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 	}
 }

@@ -112,7 +112,7 @@ public class BlockInfuser extends BlockContainer {
 			return;
 		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
 		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
-		if (tileInventory != null && !tile.hasInfusion())
+		if (tileInventory != null && !tile.hasInfusion()) {
 			for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
@@ -127,7 +127,7 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 			}
-		if (tileInventory != null) {
+		} else if (tileInventory != null && tile.hasInfusion()) {
 			ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
 			if (stack != null) {
 				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {

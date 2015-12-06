@@ -4,7 +4,7 @@ package thebetweenlands.utils;
  * @author SanAndreas
  * @version 1.0
  */
-public enum EnumNbtTypes
+public enum EnumNBTTypes
 {
     NBT_END,
     NBT_BYTE,

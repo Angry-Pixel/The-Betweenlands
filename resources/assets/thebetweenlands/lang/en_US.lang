@@ -607,6 +607,8 @@ item.thebetweenlands.poisonIvy.name=Poison Ivy Leaves
 item.thebetweenlands.elixir.dentrothystVial.green.name=Green Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothystVial.orange.name=Orange Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothystVial.dirty.name=Dirty Dentrothyst Vial
+item.thebetweenlands.aspectVial.green.name=Green Dentrothyst Aspect Vial
+item.thebetweenlands.aspectVial.orange.name=Orange Dentrothyst Aspect Vial
 
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid

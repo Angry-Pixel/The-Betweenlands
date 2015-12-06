@@ -1,5 +1,6 @@
 package thebetweenlands.herblore.aspects;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
 import thebetweenlands.herblore.aspects.list.AspectYeowynn;
 import thebetweenlands.herblore.aspects.list.AspectYihinren;
 import thebetweenlands.herblore.aspects.list.AspectYunugaz;
-import thebetweenlands.utils.EnumNbtTypes;
+import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectRegistry {
@@ -46,6 +47,23 @@ public class AspectRegistry {
 	public static final IAspect YEOWYNN = new AspectYeowynn();
 	public static final IAspect YUNUGAZ = new AspectYunugaz();
 	public static final IAspect YIHINREN = new AspectYihinren();
+
+	public static final List<IAspect> ASPECT_TYPES = new ArrayList<IAspect>();
+
+	static {
+		try {
+			for(Field f : AspectRegistry.class.getDeclaredFields()) {
+				if(f.getType() == IAspect.class) {
+					Object obj = f.get(null);
+					if(obj instanceof IAspect) {
+						ASPECT_TYPES.add((IAspect)obj);
+					}
+				}
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	public static enum AspectTier {
 		COMMON, UNCOMMON, RARE
@@ -380,11 +398,13 @@ public class AspectRegistry {
 		List<ItemAspect> aspects = new ArrayList<ItemAspect>();
 		aspects.addAll(this.getStaticItemAspects(new ItemEntry(stack)));
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
+			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < lst.tagCount(); i++) {
 				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
 				ItemAspect itemAspect = ItemAspect.readFromNBT(aspectCompound);
-				aspects.add(itemAspect);
+				if(itemAspect != null) {
+					aspects.add(itemAspect);
+				}
 			}
 		}
 		return aspects;
@@ -405,7 +425,7 @@ public class AspectRegistry {
 		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
 			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
 		}
-		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
+		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 		for(ItemAspect aspect : aspects) {
 			NBTTagCompound aspectCompound = new NBTTagCompound();
 			aspect.writeToNBT(aspectCompound);

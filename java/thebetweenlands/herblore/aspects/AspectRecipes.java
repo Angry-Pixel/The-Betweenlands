@@ -80,6 +80,7 @@ public class AspectRecipes {
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.CELAWYNN, 	AspectTier.COMMON, 		AspectType.HERB, Amounts.LOW_MEDIUM));
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.ORDANIIS, 	AspectTier.COMMON, 		AspectType.HERB, Amounts.LOW_MEDIUM));
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.YEOWYNN, 	AspectTier.COMMON, 		AspectType.HERB, Amounts.LOW_MEDIUM));
+		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.ARMANIIS, 	AspectTier.UNCOMMON, 	AspectType.HERB, Amounts.MEDIUM));
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectType.HERB, Amounts.MEDIUM));
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.DAYUNIIS, 	AspectTier.UNCOMMON, 	AspectType.HERB, Amounts.MEDIUM));
 		REGISTRY.registerAspect(new AspectEntry(AspectRegistry.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectType.HERB, Amounts.MEDIUM));

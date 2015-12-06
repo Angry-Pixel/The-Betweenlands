@@ -21,7 +21,7 @@ import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.utils.EnumNbtTypes;
+import thebetweenlands.utils.EnumNBTTypes;
 
 public class TileEntityAlembic extends TileEntity {
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
@@ -97,7 +97,7 @@ public class TileEntityAlembic extends TileEntity {
 		this.running = nbt.getBoolean("running");
 		if(nbt.hasKey("producableItemAspects")) {
 			this.producableItemAspects.clear();
-			NBTTagList aspectList = nbt.getTagList("producableItemAspects", EnumNbtTypes.NBT_COMPOUND.ordinal());
+			NBTTagList aspectList = nbt.getTagList("producableItemAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < aspectList.tagCount(); i++) {
 				NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(i);
 				ItemAspect aspect = ItemAspect.readFromNBT(aspectCompound);

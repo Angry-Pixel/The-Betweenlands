@@ -8,6 +8,7 @@ public class ItemAspect {
 	public final float amount;
 
 	public ItemAspect(IAspect aspect, float amount) {
+		if(aspect == null) throw new RuntimeException("Aspect can't be null");
 		this.aspect = aspect;
 		this.amount = amount;
 	}
