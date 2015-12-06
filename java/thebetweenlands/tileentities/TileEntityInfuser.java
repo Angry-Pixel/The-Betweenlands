@@ -3,6 +3,7 @@ package thebetweenlands.tileentities;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -209,10 +210,20 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					ItemStack stack = getStackInSlot(i);
 					if(stack != null && stack.getItem() == BLItemRegistry.aspectVial) {
 						//Return empty vials
-						setInventorySlotContents(i, new ItemStack(BLItemRegistry.dentrothystVial, 1, stack.getItemDamage()));
-					} else {
-						setInventorySlotContents(i, null);
+						ItemStack ret = null;
+						switch(stack.getItemDamage()) {
+						case 0:
+						default:
+							ret = new ItemStack(BLItemRegistry.dentrothystVial, 1, 0);
+							break;
+						case 1:
+							ret = new ItemStack(BLItemRegistry.dentrothystVial, 1, 2);
+							break;
+						}
+						EntityItem entity = new EntityItem(this.worldObj, this.xCoord + 0.5D, this.yCoord + 1.0D, this.zCoord + 0.5D, ret);
+						this.worldObj.spawnEntityInWorld(entity);
 					}
+					setInventorySlotContents(i, null);
 				}
 				this.infusingRecipe = null;
 				if (evaporation == 600) {
