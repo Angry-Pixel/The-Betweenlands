@@ -460,6 +460,8 @@ item.thebetweenlands.tribalPants.name=Tribal Pants
 item.thebetweenlands.sickle.name=Sickle
 item.thebetweenlands.gecko.name=Gecko
 item.thebetweenlands.fireFly.name=Fire Fly
+item.thebetweenlands.net.name=Net
+item.thebetweenlands.inanimateTarminion.name=Inanimate Tarminion
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -557,10 +559,11 @@ item.thebetweenlands.groundSwampKelp.name=Ground Swamp Kelp
 item.thebetweenlands.groundTangledRoot.name=Ground Tangled Root
 item.thebetweenlands.groundPitcherPlant.name=Ground Pitcher Plant
 item.thebetweenlands.groundWaterWeeds.name=Ground Water Weeds
-item.thebetweenlands.groundVenusFlyTrap.name=Ground Venus Flytrap
+item.thebetweenlands.groundVenusFlyTrap.name=Ground Venus Fly Trap
 item.thebetweenlands.groundVolarpad.name=Ground Volarpad
 item.thebetweenlands.groundThorns.name=Ground Thorns
-item.thebetweenlands.groundPoisonIvy.name=Ground PoisonIvy
+item.thebetweenlands.groundPoisonIvy.name=Ground Poison Ivy
+item.thebetweenlands.groundGenericLead.name=Ground Leaf
 
 #Plant drops
 item.thebetweenlands.genericLeaf.name=Leaf
@@ -589,9 +592,10 @@ item.thebetweenlands.shootLeaves.name=Shoots
 item.thebetweenlands.sludgecreepLeaves.name=Sludgecreep Leaves
 item.thebetweenlands.softRushLeaves.name=Soft Rush Leaves
 item.thebetweenlands.sundewHead.name=Sundew Head
+item.thebetweenlands.swampTallGrassBlades.name=Swamp Tallrass Blades
 item.thebetweenlands.caveMoss.name=Cave Moss Clump
-item.thebetweenlands.milkweedFlower.name=Milkweed Flower
-item.thebetweenlands.Hanger.name=Hanger
+item.thebetweenlands.milkWeed.name=Milkweed Flower
+item.thebetweenlands.hanger.name=Hanger
 item.thebetweenlands.pitcherPlantTrap.name=Pitcher Plant Trap
 item.thebetweenlands.waterWeeds.name=Water Weeds
 item.thebetweenlands.venusFlyTrap.name=Venus Fly Trap Head
