@@ -1,6 +1,7 @@
 package thebetweenlands.tileentities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -226,6 +227,16 @@ public class TileEntityAlembic extends TileEntity {
 				if(this.producableItemAspects.size() >= 1) {
 					ItemAspect aspect = this.producableItemAspects.get(0);
 					this.producableItemAspects.remove(0);
+					float totalAmount = aspect.amount;
+					Iterator<ItemAspect> itemAspectIT = this.producableItemAspects.iterator();
+					while(itemAspectIT.hasNext()) {
+						ItemAspect currentAspect = itemAspectIT.next();
+						if(currentAspect.aspect == aspect.aspect) {
+							totalAmount += currentAspect.amount;
+							itemAspectIT.remove();
+						}
+					}
+					aspect = new ItemAspect(aspect.aspect, totalAmount);
 					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
 					AspectRecipes.REGISTRY.addItemAspects(aspectVial, aspect);
 				}
