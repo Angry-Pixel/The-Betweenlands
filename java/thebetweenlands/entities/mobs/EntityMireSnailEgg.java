@@ -36,7 +36,6 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 				setHatchTime(getHatchTime() + 1);
 			if(getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
 				hatch();
-			ManualManager.PlayerDiscoverPage(this, "mireSnailEgg");
 		}
 		pulseFloat = pulse.swing(0.3F, 0.2F, false);
 		renderYawOffset = prevRenderYawOffset;
@@ -98,4 +97,10 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		setHatchTime(nbt.getInteger("hatchTicks"));
 	}
+
+	@Override
+	public String pageName() {
+		return "mireSnailEgg";
+	}
 }
+

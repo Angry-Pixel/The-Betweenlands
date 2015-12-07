@@ -65,8 +65,6 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 			if(getIsFalling())
 				setIsFalling(false);
 		super.onUpdate();
-		if (!worldObj.isRemote)
-			ManualManager.PlayerDiscoverPage(this, "sporeling");
 	}
 
 	public boolean getIsFalling() {
@@ -141,5 +139,10 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	@Override
 	protected boolean canDespawn() {
 		return true;
+	}
+
+	@Override
+	public String pageName() {
+		return "sporeling";
 	}
 }

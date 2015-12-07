@@ -96,9 +96,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if (!worldObj.isRemote && getAttackTarget() == null)
 			dataWatcher.updateObject(20, Byte.valueOf((byte) 0));
 
-		if (!worldObj.isRemote)
-			ManualManager.PlayerDiscoverPage(this, "wight");
-
 		super.onUpdate();
 	}
 
@@ -161,5 +158,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				}
 		}
 		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	public String pageName() {
+		return "wight";
 	}
 }

@@ -47,9 +47,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		if (!worldObj.isRemote)
-			ManualManager.PlayerDiscoverPage(this, "termite");
+	public String pageName() {
+		return "termite";
 	}
 }

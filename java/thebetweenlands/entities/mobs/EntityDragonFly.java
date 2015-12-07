@@ -119,7 +119,6 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 					flyAbout();
 				}
 			}
-			ManualManager.PlayerDiscoverPage(this, "dragonFly");
 		}
 		super.onUpdate();
 	}
@@ -202,5 +201,9 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 				}
 			}
 		}
+	}
+	@Override
+	public String pageName() {
+		return "dragonFly";
 	}
 }

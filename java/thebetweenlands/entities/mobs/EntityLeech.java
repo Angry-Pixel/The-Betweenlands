@@ -134,7 +134,6 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 					stopFleeing();
 				}
 			}
-			ManualManager.PlayerDiscoverPage(this, "leech");
 		}
 
 		if (!firstTickCheck) {
@@ -234,5 +233,10 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 		setBloodConsumed(nbttagcompound.getInteger("bloodLevel"));
+	}
+
+	@Override
+	public String pageName() {
+		return "leech";
 	}
 }

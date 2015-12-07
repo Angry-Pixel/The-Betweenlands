@@ -125,7 +125,6 @@ public class EntityDarkDruid extends EntityMob {
 			if (teleportCooldown > 0) {
 				teleportCooldown--;
 			}
-			ManualManager.PlayerDiscoverPage(this, "darkDruid");
 		}
 	}
 

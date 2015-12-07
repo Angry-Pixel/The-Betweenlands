@@ -226,7 +226,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				this.setSpawningFinished();
 				this.yOffset = 0;
 			}
-			ManualManager.PlayerDiscoverPage(this, "peatMummy");
 		}
 
 		if(this.getSpawningProgress() != 1.0F) return;
@@ -499,4 +498,12 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 			}
 		}
 	}
+
+	@Override
+	public String pageName() {
+		return "peatMummy";
+	}
+
 }
+
+

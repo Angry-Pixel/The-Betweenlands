@@ -144,7 +144,6 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 					stopHiding();
 				}
 			}
-			ManualManager.PlayerDiscoverPage(this, "gecko");
 		}
 	}
 
@@ -191,5 +190,10 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		if (isHiding()) {
 			setHidingBush(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ"));
 		}
+	}
+
+	@Override
+	public String pageName() {
+		return "gecko";
 	}
 }

@@ -115,7 +115,6 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
 		if (!worldObj.isRemote) {
 			updateLivingSoundTime();
-			ManualManager.PlayerDiscoverPage(this, "swampHag");
 		}
 
 		if (animationTick > 0) {
@@ -160,5 +159,10 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 3), 0F);
+	}
+
+	@Override
+	public String pageName() {
+		return "swampHag";
 	}
 }

@@ -63,7 +63,6 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					}
 				}
 			}
-			ManualManager.PlayerDiscoverPage(this, "giantToad");
 		} else {
 			leapingAnim.updateTimer();
 			// allow 1 tick lag time to prevent single tick onGround == false
@@ -86,5 +85,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 //		if ((t /= d / 2) < 1)
 //			return c / 2 * (t * t * (((s *= (1.525f)) + 1) * t - s)) + b;
 //		return c / 2 * ((t -= 2) * t * (((s *= (1.525f)) + 1) * t + s) + 2) + b;
+	}
+
+	@Override
+	public String pageName() {
+		return "giantToad";
 	}
 }

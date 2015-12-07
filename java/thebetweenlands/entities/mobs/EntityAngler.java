@@ -127,7 +127,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
                     }
                 }
             }
-            ManualManager.PlayerDiscoverPage(this, "angler");
         } else {
             if (isInWater()) {
                 moveProgress = animation.swing(1.2F, 0.4F, false);
@@ -218,4 +217,8 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
         dataWatcher.updateObject(20, (byte) (leaping ? 1 : 0));
     }
 
+    @Override
+    public String pageName() {
+        return "angler";
+    }
 }

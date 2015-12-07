@@ -162,7 +162,6 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 				this.waypointY = this.posY + 0.1D;
 				this.waypointZ = this.posZ;
 			}
-			ManualManager.PlayerDiscoverPage(this, "fireFly");
 		}
 	}
 
@@ -174,5 +173,10 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 				switchOff();
 			}
 		}
+	}
+
+	@Override
+	public String pageName() {
+		return "fireFly";
 	}
 }

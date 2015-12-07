@@ -111,7 +111,6 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			if(despawnTicks > 7200) {
 				setDead();
 			}
-			ManualManager.PlayerDiscoverPage(this, "tarminion");
 		}
 		if (worldObj.isRemote && ticksExisted%10 == 0)
 			renderParticles(worldObj, posX, posY, posZ, rand);
@@ -223,5 +222,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public EntityAgeable createChild(EntityAgeable entity) {
 		return null;
+	}
+
+	@Override
+	public String pageName() {
+		return "tarminion";
 	}
 }

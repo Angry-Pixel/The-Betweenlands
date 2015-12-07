@@ -16,11 +16,8 @@ public class EntityBerserkerGuardian extends EntityTempleGuardian implements IEn
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:templeGuardianBerserkerLiving" + randomSound;
 	}
-
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		if (!worldObj.isRemote)
-			ManualManager.PlayerDiscoverPage(this, "berserkerGuardian");
+	public String pageName() {
+		return "beserkerGuardian";
 	}
 }

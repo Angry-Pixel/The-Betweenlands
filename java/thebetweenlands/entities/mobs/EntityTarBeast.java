@@ -344,7 +344,6 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 				}
 			}
-			ManualManager.PlayerDiscoverPage(this, "tarBeast");
 		}
 	}
 
@@ -422,5 +421,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public void setPreparing() {
 		this.getDataWatcher().updateObject(SUCKING_STATE_DW, (byte)2);
+	}
+
+	@Override
+	public String pageName() {
+		return "tarBeast";
 	}
 }

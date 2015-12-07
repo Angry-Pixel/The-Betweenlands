@@ -270,8 +270,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		}
 		tailPitch *= 0.5F;
 		tailYaw *= (1 - movementSpeed);
-		if (!worldObj.isRemote)
-			ManualManager.PlayerDiscoverPage(this, "lurker");
 	}
 
 	@Override
@@ -467,5 +465,10 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound tagCompound) {
 		super.readEntityFromNBT(tagCompound);
 		anger = tagCompound.getShort("Anger");
+	}
+
+	@Override
+	public String pageName() {
+		return "lurker";
 	}
 }

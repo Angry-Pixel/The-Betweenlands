@@ -102,7 +102,6 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				motionZ = 0;
 				motionY = 0;
 			}
-			ManualManager.PlayerDiscoverPage(this, "sludge");
 		}
 
 		//Update animation
@@ -208,5 +207,10 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String pageName() {
+		return "sludge";
 	}
 }

@@ -17,10 +17,8 @@ public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntity
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
 	}
-
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		ManualManager.PlayerDiscoverPage(this, "meleeGuardian");
+	public String pageName() {
+		return "meleeGuardian";
 	}
 }

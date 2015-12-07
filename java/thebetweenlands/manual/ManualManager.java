@@ -3,6 +3,7 @@ package thebetweenlands.manual;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
@@ -44,7 +45,7 @@ public class ManualManager {
             EntityPlayer newPlayer = Minecraft.getMinecraft().theWorld.func_152378_a(player.getUniqueID());
             EntityPropertiesManual property = BLEntityPropertiesRegistry.INSTANCE.getProperties(newPlayer, BLEntityPropertiesRegistry.MANUAL);
             if (property != null)
-            return property.foundPages;
+                return property.foundPages;
         }
         return null;
     }
@@ -54,15 +55,14 @@ public class ManualManager {
             EntityPlayer newPlayer = Minecraft.getMinecraft().theWorld.func_152378_a(player.getUniqueID());
             EntityPropertiesManual property = BLEntityPropertiesRegistry.INSTANCE.getProperties(newPlayer, BLEntityPropertiesRegistry.MANUAL);
             if (property != null)
-            for (String s : property.foundPages) {
-                if (s.toLowerCase().equals(page.toLowerCase())) {
-                    return true;
+                for (String s : property.foundPages) {
+                    if (s.toLowerCase().equals(page.toLowerCase())) {
+                        return true;
+                    }
                 }
-            }
         }
         return false;
     }
-
 
 
     public static void PlayerDiscoverPage(EntityLiving entity, String name) {

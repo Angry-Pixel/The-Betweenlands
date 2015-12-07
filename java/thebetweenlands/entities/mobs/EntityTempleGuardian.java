@@ -4,11 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import thebetweenlands.manual.ManualManager;
 
 /**
  * Created by jnad325 on 7/14/15.
@@ -48,4 +44,10 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 		int randomSound = rand.nextInt(3) + 1;
 		playSound("thebetweenlands:templeGuardianStep" + randomSound, 1F, 1F);
 	}
+
+
+    @Override
+    public String pageName() {
+        return "templeGuardian";
+    }
 }

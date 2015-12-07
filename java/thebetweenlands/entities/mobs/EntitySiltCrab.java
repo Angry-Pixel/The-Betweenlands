@@ -95,7 +95,6 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 			if (aggroCooldown < 201)
 				aggroCooldown++;
-			ManualManager.PlayerDiscoverPage(this, "siltCrab");
 		}
 	}
 
@@ -111,5 +110,10 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		if (!worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && canAttack) {
 			aggroCooldown = 0;
 		}
+	}
+
+	@Override
+	public String pageName() {
+		return "siltCrab";
 	}
 }

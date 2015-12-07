@@ -150,8 +150,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		ManualManager.PlayerDiscoverPage(this, "mireSnail");
+	public String pageName() {
+		return "mireSnail";
 	}
 }

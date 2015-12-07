@@ -82,7 +82,6 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 				}
 				this.velocityChanged = true;
 			}
-			ManualManager.PlayerDiscoverPage(this, "blindCaveFish");
 		} else {
 			if (isInWater()) {
 				moveProgress = animation.swing(1.2F, 0.4F, false);
@@ -133,5 +132,9 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 		moveForward = 0.5F;
 	}
 
+	@Override
+	public String pageName() {
+		return "blindCaveFish";
+	}
 }
 
