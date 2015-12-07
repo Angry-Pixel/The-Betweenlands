@@ -2,7 +2,7 @@ package thebetweenlands.items.herblore;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -48,7 +48,7 @@ public class ItemAspectVial extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
 		super.registerIcons(reg);
-		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialLiquid");
+		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectLiquid");
 		this.iconVialOrange = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialOrange");
 		IIcon aspectIconAtlas = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectMap");
 		this.aspectIcons = new IIcon[AspectRegistry.ASPECT_TYPES.size()];
@@ -62,7 +62,8 @@ public class ItemAspectVial extends Item {
 	public int getColorFromItemStack(ItemStack stack, int pass) {
 		switch(pass){
 		case 0:
-			return 0xFF80EEFF;
+			//Liquid
+			return 0xFFFFFFFF;
 		case 2:
 			return 0xFFFFFFFF;
 		}
@@ -122,7 +123,7 @@ public class ItemAspectVial extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getRenderPasses(int metadata) {
-		return 3;
+		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 3 : 2;
 	}
 
 	@Override
