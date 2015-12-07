@@ -17,7 +17,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
@@ -57,7 +58,7 @@ public class BlockInfuser extends BlockContainer {
 						return true;
 					}
 				}
-				if (player.getCurrentEquippedItem() != null && AspectRecipes.REGISTRY.getItemAspects(player.getCurrentEquippedItem()).size() > 0 && !tile.hasInfusion()) {
+				if (player.getCurrentEquippedItem() != null && AspectManager.get(world).getAspects(player.getCurrentEquippedItem()).size() > 0 && !tile.hasInfusion()) {
 					ItemStack ingredient = player.getCurrentEquippedItem();
 					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {

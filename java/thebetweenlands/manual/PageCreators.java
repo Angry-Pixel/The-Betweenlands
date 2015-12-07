@@ -3,7 +3,7 @@ package thebetweenlands.manual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.aspects.list.AspectArmaniis;
 import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.TextContainer;

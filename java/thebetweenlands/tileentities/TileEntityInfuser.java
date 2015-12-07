@@ -20,8 +20,8 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
@@ -325,11 +325,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return false;
 	}
 
-	public List<IAspect> getInfusingAspects() {
-		List<IAspect> infusingAspects = new ArrayList<IAspect>();
+	public List<IAspectType> getInfusingAspects() {
+		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if(inventory[i] != null) {
-				infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(inventory[i]));
+				infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(inventory[i]));
 			}
 		}
 		return infusingAspects;

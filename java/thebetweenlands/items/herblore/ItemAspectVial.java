@@ -11,10 +11,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.AspectRegistry;
-import thebetweenlands.herblore.aspects.IAspect;
-import thebetweenlands.herblore.aspects.ItemAspect;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.utils.AtlasIcon;
 
 public class ItemAspectVial extends Item {
@@ -36,9 +36,9 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		List<ItemAspect> itemAspects = AspectRecipes.REGISTRY.getItemAspects(stack);
+		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack);
 		if(itemAspects.size() >= 1) {
-			ItemAspect aspect = itemAspects.get(0);
+			Aspect aspect = itemAspects.get(0);
 			return super.getItemStackDisplayName(stack) + " - " + aspect.aspect.getName() + " (" + aspect.amount + ")";
 		}
 		return super.getItemStackDisplayName(stack);
@@ -51,8 +51,8 @@ public class ItemAspectVial extends Item {
 		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectLiquid");
 		this.iconVialOrange = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialOrange");
 		IIcon aspectIconAtlas = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectMap");
-		this.aspectIcons = new IIcon[AspectRegistry.ASPECT_TYPES.size()];
-		for(IAspect aspect : AspectRegistry.ASPECT_TYPES) {
+		this.aspectIcons = new IIcon[AspectManager.ASPECT_TYPES.size()];
+		for(IAspectType aspect : AspectManager.ASPECT_TYPES) {
 			this.aspectIcons[aspect.getIconIndex()] = new AtlasIcon(aspectIconAtlas, aspect.getIconIndex(), 4);
 		}
 	}
@@ -92,9 +92,9 @@ public class ItemAspectVial extends Item {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
 		if(pass == 2) {
-			List<ItemAspect> itemAspects = AspectRecipes.REGISTRY.getItemAspects(stack);
+			List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack);
 			if(itemAspects.size() >= 1) {
-				ItemAspect aspect = itemAspects.get(0);
+				Aspect aspect = itemAspects.get(0);
 				return this.aspectIcons[aspect.aspect.getIconIndex()];
 			}
 		}
@@ -108,13 +108,13 @@ public class ItemAspectVial extends Item {
 		list.add(new ItemStack(item, 1, 1)); //orange
 
 		//Add all aspects
-		for(IAspect aspect : AspectRegistry.ASPECT_TYPES) {
-			ItemAspect itemAspect = new ItemAspect(aspect, 4.0F);
+		for(IAspectType aspect : AspectManager.ASPECT_TYPES) {
+			Aspect itemAspect = new Aspect(aspect, 4.0F);
 			ItemStack stackGreen = new ItemStack(item, 1, 0);
-			AspectRecipes.REGISTRY.addItemAspects(stackGreen, itemAspect);
+			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addAspects(stackGreen, itemAspect);
 			list.add(stackGreen);
 			ItemStack stackOrange = new ItemStack(item, 1, 1);
-			AspectRecipes.REGISTRY.addItemAspects(stackOrange, itemAspect);
+			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addAspects(stackOrange, itemAspect);
 			list.add(stackOrange);
 		}
 	}

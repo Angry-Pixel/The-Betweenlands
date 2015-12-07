@@ -13,10 +13,10 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import thebetweenlands.herblore.Amounts;
-import thebetweenlands.herblore.aspects.AspectRecipes;
 import thebetweenlands.herblore.aspects.AspectRegistry;
-import thebetweenlands.herblore.aspects.IAspect;
-import thebetweenlands.herblore.aspects.ItemAspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
@@ -38,7 +38,7 @@ public class TileEntityAlembic extends TileEntity {
 	private int producableStrength;
 	private int producableDuration;
 	private ElixirEffect producableElixir = null;
-	private List<ItemAspect> producableItemAspects = new ArrayList<ItemAspect>();
+	private List<Aspect> producableItemAspects = new ArrayList<Aspect>();
 
 	public void addInfusion(ItemStack bucket) {
 		this.infusionBucket = bucket;
@@ -79,7 +79,7 @@ public class TileEntityAlembic extends TileEntity {
 		nbt.setFloat("producedAmount", this.producedAmount);
 		nbt.setBoolean("running", this.running);
 		NBTTagList aspectList = new NBTTagList();
-		for(ItemAspect aspect : this.producableItemAspects) {
+		for(Aspect aspect : this.producableItemAspects) {
 			NBTTagCompound aspectCompound = new NBTTagCompound();
 			aspect.writeToNBT(aspectCompound);
 			aspectList.appendTag(aspectCompound);
@@ -100,7 +100,7 @@ public class TileEntityAlembic extends TileEntity {
 			NBTTagList aspectList = nbt.getTagList("producableItemAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < aspectList.tagCount(); i++) {
 				NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(i);
-				ItemAspect aspect = ItemAspect.readFromNBT(aspectCompound);
+				Aspect aspect = Aspect.readFromNBT(aspectCompound);
 				this.producableItemAspects.add(aspect);
 			}
 		}
@@ -130,31 +130,31 @@ public class TileEntityAlembic extends TileEntity {
 		for(int i = 0; i < nbtList.tagCount(); i++) {
 			infusionIngredients.add(ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
 		}
-		List<IAspect> infusionAspects = this.getInfusionAspects(infusionIngredients);
+		List<IAspectType> infusionAspects = this.getInfusionAspects(infusionIngredients);
 		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infusionAspects);
 		if(recipe == null || infusionTime < recipe.idealInfusionTime - recipe.infusionTimeVariation || infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 			this.addInvalidInfusion();
 			return;
 		}
-		List<ItemAspect> infusionItemAspects = this.getInfusionItemAspects(infusionIngredients);
+		List<Aspect> infusionItemAspects = this.getInfusionItemAspects(infusionIngredients);
 		float totalAmount = Amounts.VERY_LOW; //Base amount
 		float strengthAmount = 0.0F;
 		float durationAmount = 0.0F;
-		for(ItemAspect a : infusionItemAspects) {
+		for(Aspect a : infusionItemAspects) {
 			totalAmount += a.amount;
 			if(recipe.strengthAspect != null && a.aspect == recipe.strengthAspect) strengthAmount += a.amount;
 			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAmount += a.amount;
 		}
 		int recipeByariis = 0;
-		for(IAspect a : recipe.aspects) {
-			if(a == AspectRegistry.BYARIIS) {
+		for(IAspectType a : recipe.aspects) {
+			if(a == AspectManager.BYARIIS) {
 				recipeByariis++;
 			}
 		}
 		this.producableAmount = totalAmount;
 		boolean isPositive = true;
-		for(IAspect a : infusionAspects) {
-			if(a == AspectRegistry.BYARIIS) {
+		for(IAspectType a : infusionAspects) {
+			if(a == AspectManager.BYARIIS) {
 				if(recipeByariis <= 0) {
 					isPositive = !isPositive;
 				} else {
@@ -182,25 +182,25 @@ public class TileEntityAlembic extends TileEntity {
 			for(int i = 0; i < nbtList.tagCount(); i++) {
 				infusionIngredients.add(ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
 			}
-			List<ItemAspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
-			for(ItemAspect aspect : infusionAspects) {
-				this.producableItemAspects.add(new ItemAspect(aspect.aspect, aspect.amount * ISOLATION_LOSS_MULTIPLIER));
+			List<Aspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
+			for(Aspect aspect : infusionAspects) {
+				this.producableItemAspects.add(new Aspect(aspect.aspect, aspect.amount * ISOLATION_LOSS_MULTIPLIER));
 			}
 		}
 	}
 
-	private List<IAspect> getInfusionAspects(List<ItemStack> ingredients) {
-		List<IAspect> infusingAspects = new ArrayList<IAspect>();
+	private List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
+		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(ItemStack ingredient : ingredients) {
-			infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(ingredient));
+			infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(ingredient));
 		}
 		return infusingAspects;
 	}
 
-	private List<ItemAspect> getInfusionItemAspects(List<ItemStack> ingredients) {
-		List<ItemAspect> infusingItemAspects = new ArrayList<ItemAspect>();
+	private List<Aspect> getInfusionItemAspects(List<ItemStack> ingredients) {
+		List<Aspect> infusingItemAspects = new ArrayList<Aspect>();
 		for(ItemStack ingredient : ingredients) {
-			infusingItemAspects.addAll(AspectRecipes.REGISTRY.getItemAspects(ingredient));
+			infusingItemAspects.addAll(AspectManager.get(this.worldObj).getAspects(ingredient));
 		}
 		return infusingItemAspects;
 	}
@@ -242,20 +242,20 @@ public class TileEntityAlembic extends TileEntity {
 			} else {
 				ItemStack aspectVial = null;
 				if(this.producableItemAspects.size() >= 1) {
-					ItemAspect aspect = this.producableItemAspects.get(0);
+					Aspect aspect = this.producableItemAspects.get(0);
 					this.producableItemAspects.remove(0);
 					float totalAmount = aspect.amount;
-					Iterator<ItemAspect> itemAspectIT = this.producableItemAspects.iterator();
+					Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
 					while(itemAspectIT.hasNext()) {
-						ItemAspect currentAspect = itemAspectIT.next();
+						Aspect currentAspect = itemAspectIT.next();
 						if(currentAspect.aspect == aspect.aspect) {
 							totalAmount += currentAspect.amount;
 							itemAspectIT.remove();
 						}
 					}
-					aspect = new ItemAspect(aspect.aspect, totalAmount);
+					aspect = new Aspect(aspect.aspect, totalAmount);
 					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
-					AspectRecipes.REGISTRY.addItemAspects(aspectVial, aspect);
+					AspectManager.get(this.worldObj).addAspects(aspectVial, aspect);
 				}
 				if(this.producableItemAspects.size() == 0) {
 					this.reset();

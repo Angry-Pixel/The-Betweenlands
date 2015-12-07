@@ -1,8 +1,8 @@
 package thebetweenlands.herblore.aspects.list;
 
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 
-public class AspectYunugaz implements IAspect {
+public class AspectYunugaz implements IAspectType {
 	@Override
 	public String getName() {
 		return "Yunugaz";

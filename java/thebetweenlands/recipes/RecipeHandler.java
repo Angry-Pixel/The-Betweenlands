@@ -12,7 +12,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntitySporeling;
-import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
@@ -38,7 +38,7 @@ public class RecipeHandler {
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
 		ConfigHandler.userRecipes();
-		AspectRecipes.init();
+		AspectRegistry.init();
 		ElixirRecipes.init();
 	}
 

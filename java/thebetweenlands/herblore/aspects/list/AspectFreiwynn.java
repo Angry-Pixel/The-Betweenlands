@@ -1,9 +1,9 @@
 package thebetweenlands.herblore.aspects.list;
 
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 
-public class AspectFreiwynn implements IAspect {
+public class AspectFreiwynn implements IAspectType {
 	@Override
 	public String getName() {
 		return "Freiwynn";

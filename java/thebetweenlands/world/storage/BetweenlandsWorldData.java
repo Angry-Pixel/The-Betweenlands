@@ -1,77 +1,76 @@
 package thebetweenlands.world.storage;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
-import net.minecraft.world.storage.MapStorage;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
-public class BetweenlandsWorldData extends WorldSavedData {
-	private NBTTagCompound data = new NBTTagCompound();
+public class BetweenlandsWorldData extends WorldDataBase {
 	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
+	private AspectManager aspectManager = new AspectManager();
 
 	public BetweenlandsWorldData() {
-		super(ModInfo.ID);
-		this.environmentEventRegistry.init();
+		super(ModInfo.ID + ":worldData");
 	}
-	
+
 	public BetweenlandsWorldData(String name) {
 		super(name);
-		this.environmentEventRegistry.init();
 	}
 
 	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		this.data = compound.getCompoundTag(ModInfo.ID + ":worldData");
-		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.readFromNBT(this.data);
-		}
-		environmentEventRegistry.setDisabled(data.getBoolean("eventsDisabled"));
+	
+	public AspectManager getAspectManager() {
+		return this.aspectManager;
 	}
 
+	/**
+	 * Called before loading data and setting defaults
+	 */
 	@Override
-	public void writeToNBT(NBTTagCompound compound) {
-		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.writeToNBT(this.data);
-		}
-		data.setBoolean("eventsDisabled", environmentEventRegistry.isDisabled());
-		compound.setTag(ModInfo.ID + ":worldData", this.data);
+	protected void init() {
+		this.environmentEventRegistry.init();
 	}
 
-	private void setDefaults() {
+	/**
+	 * Called when this data is created for the first time for this world
+	 */
+	@Override
+	protected void setDefaults() {
 		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 			event.setDefaults();
 			event.setLoaded();
 		}
-	}
-	
-	public NBTTagCompound getData() {
-		return this.data;
+		if(!this.getWorld().isRemote) this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 	}
 
-	private static final Map<World, BetweenlandsWorldData> CACHE = new WeakHashMap<World, BetweenlandsWorldData>();
+	/**
+	 * Load data here
+	 */
+	@Override
+	protected void load() {
+		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			event.readFromNBT(this.getData());
+		}
+		this.environmentEventRegistry.setDisabled(this.getData().getBoolean("eventsDisabled"));
+		if(!this.getWorld().isRemote) this.aspectManager.loadAndPopulateStaticAspects(this.getData(), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
+	}
+
+	/**
+	 * Save data here
+	 */
+	@Override
+	protected void save() {
+		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			event.writeToNBT(this.getData());
+		}
+		this.getData().setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
+		if(!this.getWorld().isRemote) this.aspectManager.saveStaticAspects(this.getData());
+	}
+
 	public static BetweenlandsWorldData forWorld(World world) {
-		BetweenlandsWorldData cached = CACHE.get(world);
-		if(cached != null) {
-			return cached;
-		}
-		MapStorage storage = world.perWorldStorage;
-		BetweenlandsWorldData result = (BetweenlandsWorldData)storage.loadData(BetweenlandsWorldData.class, ModInfo.ID);
-		if (result == null) {
-			result = new BetweenlandsWorldData();
-			result.setDefaults();
-			storage.setData(ModInfo.ID, result);
-		}
-		CACHE.put(world, result);
-		return result;
+		return WorldDataBase.forWorld(world, BetweenlandsWorldData.class);
 	}
 }

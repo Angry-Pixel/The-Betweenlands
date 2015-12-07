@@ -20,9 +20,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.IAspect;
-import thebetweenlands.herblore.aspects.ItemAspect;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 
@@ -65,11 +66,11 @@ public class ItemWeedwoodBucketInfusion extends Item {
 				for(Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
 					ItemStack ingredient = stackCount.getKey();
 					int count = stackCount.getValue();
-					if(ingredient != null && AspectRecipes.REGISTRY.getItemAspects(ingredient).size() >= 1) {
+					if(ingredient != null && AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(ingredient).size() >= 1) {
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
 						if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-							List<ItemAspect> ingredientAspects = AspectRecipes.REGISTRY.getItemAspects(ingredient);
-							for(ItemAspect aspect : ingredientAspects) {
+							List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(ingredient);
+							for(Aspect aspect : ingredientAspects) {
 								list.add("  - " + aspect.aspect.getName() + " (" + aspect.amount * count + ")");
 							}
 						}
@@ -117,15 +118,15 @@ public class ItemWeedwoodBucketInfusion extends Item {
 		return ElixirRecipes.getFromAspects(this.getInfusingAspects(stack));
 	}
 
-	public List<IAspect> getInfusingAspects(ItemStack stack) {
-		List<IAspect> infusingAspects = new ArrayList<IAspect>();
+	public List<IAspectType> getInfusingAspects(ItemStack stack) {
+		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		if (hasTag(stack)) {
 			if (stack.stackTagCompound != null && stack.stackTagCompound.hasKey("infused") && stack.stackTagCompound.hasKey("ingredients") && stack.stackTagCompound.hasKey("infusionTime")) {
 				NBTTagList nbtList = (NBTTagList)stack.stackTagCompound.getTag("ingredients");
 				Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
 				for(int i = 0; i < nbtList.tagCount(); i++) {
 					ItemStack ingredient = ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i));
-					infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(ingredient));
+					infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspectTypes(ingredient));
 				}
 			}
 		}

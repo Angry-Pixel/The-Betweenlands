@@ -18,10 +18,9 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.utils.AspectIconRenderer;
-import thebetweenlands.herblore.aspects.ItemAspect;
 
 public class AspectItemOverlayHandler {
 	public static final AspectItemOverlayHandler INSTANCE = new AspectItemOverlayHandler();
@@ -42,12 +41,12 @@ public class AspectItemOverlayHandler {
 					GL11.glTranslated(mouseX + 8, mouseY, 200);
 					int yOffset = -40;
 					int width = 0;
-					List<ItemAspect> aspects = AspectRecipes.REGISTRY.getItemAspects(slot.getStack());
+					List<Aspect> aspects = AspectManager.get(Minecraft.getMinecraft().theWorld).getAspects(slot.getStack());
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 					GL11.glEnable(GL11.GL_BLEND);
 					RenderHelper.disableStandardItemLighting();
 					if(aspects != null && aspects.size() > 0) {
-						for(ItemAspect aspect : aspects) {
+						for(Aspect aspect : aspects) {
 							String aspectText = aspect.aspect.getName() + " (" + aspect.amount + ")";
 							String aspectTypeText = aspect.aspect.getType();
 							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);

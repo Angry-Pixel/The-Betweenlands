@@ -2,7 +2,7 @@ package thebetweenlands.herblore.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IAspect {
+public interface IAspectType {
 	String getName();
 
 	String getType();
