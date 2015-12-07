@@ -120,7 +120,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePressurePlate), "xx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.syrmoritePressurePlate), "xx", 'x', BLBlockRegistry.syrmoriteBlock);
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mudFlowerPot), "x x", " x " , 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));;
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));		
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.itemShelf, 3), "xxx", "   ", "xxx", 'x', BLBlockRegistry.weedwoodPlankSlab);
