@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.proxy.CommonProxy;
 
 import java.util.List;
@@ -20,13 +21,13 @@ public class ItemManual extends Item {
         return itemStack;
     }
 
-    /*@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-        list.add("Current entry: ");
-        if (itemStack.stackTagCompound != null && itemStack.stackTagCompound.hasKey("entry")) {
-            list.add(itemStack.stackTagCompound.getString("entry"));
+        list.add("Found pages: ");
+        if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player) != null) {
+            list.addAll(ManualManager.getFoundPages(player));
         }
-    }*/
+    }
 
 }
