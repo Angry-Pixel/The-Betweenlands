@@ -57,14 +57,14 @@ public class BlockAlembic extends BlockContainer {
 					if(heldStack.getItem() == BLItemRegistry.weedwoodBucketInfusion) {
 						if(!tile.isFull()) {
 							tile.addInfusion(heldStack);
-							player.setCurrentItemOrArmor(0, null);
+							if(!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, new ItemStack(BLItemRegistry.weedwoodBucket, 1));
 						}
 					} else if(heldStack.getItem() == BLItemRegistry.dentrothystVial && (heldStack.getItemDamage() == 0 || heldStack.getItemDamage() == 2)) {
 						if(tile.hasFinished()) {
 							ItemStack result = tile.getElixir(heldStack.getItemDamage() == 0 ? 0 : 1);
 							EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(result, false);
 							if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
-							heldStack.stackSize--;
+							if(!player.capabilities.isCreativeMode) heldStack.stackSize--;
 						}
 					}
 				}

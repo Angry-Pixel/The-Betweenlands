@@ -49,13 +49,15 @@ public class AspectItemOverlayHandler {
 					if(aspects != null && aspects.size() > 0) {
 						for(ItemAspect aspect : aspects) {
 							String aspectText = aspect.aspect.getName() + " (" + aspect.amount + ")";
-							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + 4 + yOffset, 0xFFFFFFFF);
+							String aspectTypeText = aspect.aspect.getType();
+							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
+							Minecraft.getMinecraft().fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
 							AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.aspect.getIconIndex());
-							int entryWidth = Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectText) + 19;
+							int entryWidth = Math.max(Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectText) + 19, Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectTypeText) + 19);
 							if(entryWidth > width) {
 								width = entryWidth;
 							}
-							yOffset += 20;
+							yOffset += 21;
 						}
 					}
 					GL11.glTranslated(0, 0, -10);

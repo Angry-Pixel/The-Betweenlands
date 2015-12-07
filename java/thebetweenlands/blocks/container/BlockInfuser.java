@@ -52,9 +52,7 @@ public class BlockInfuser extends BlockContainer {
 					ItemStack oldItem = player.getCurrentEquippedItem();
 					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
 					world.markBlockForUpdate(x, y, z);
-					if (!player.capabilities.isCreativeMode) {
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-					}
+					if (!player.capabilities.isCreativeMode) player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
 					if (!ItemStack.areItemStacksEqual(oldItem, newItem)) {
 						return true;
 					}
@@ -66,7 +64,7 @@ public class BlockInfuser extends BlockContainer {
 							ItemStack singleIngredient = ingredient.copy();
 							singleIngredient.stackSize = 1;
 							tile.setInventorySlotContents(i, singleIngredient);
-							player.getCurrentEquippedItem().stackSize--;
+							if (!player.capabilities.isCreativeMode) player.getCurrentEquippedItem().stackSize--;
 							world.markBlockForUpdate(x, y, z);
 							return true;
 						}
@@ -75,7 +73,7 @@ public class BlockInfuser extends BlockContainer {
 				if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
 					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, player.getCurrentEquippedItem());
-						player.setCurrentItemOrArmor(0, null);
+						if (!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, null);
 					}
 					return true;
 				}
