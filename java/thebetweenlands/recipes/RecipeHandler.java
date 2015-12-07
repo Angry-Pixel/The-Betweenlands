@@ -267,6 +267,7 @@ public class RecipeHandler {
 	private static void registerOreDictionary() {
 		OreDictionary.registerOre("oreSulfur", new ItemStack(BLBlockRegistry.sulfurOre));
 		OreDictionary.registerOre("oreSyrmorite", new ItemStack(BLBlockRegistry.syrmoriteOre));
+		OreDictionary.registerOre("oreBone", new ItemStack(BLBlockRegistry.boneOre));
 		OreDictionary.registerOre("oreOctine", new ItemStack(BLBlockRegistry.octineOre));
 		OreDictionary.registerOre("oreValonite", new ItemStack(BLBlockRegistry.valoniteOre));
 		OreDictionary.registerOre("oreAquaMiddleGem", new ItemStack(BLBlockRegistry.aquaMiddleGemOre));

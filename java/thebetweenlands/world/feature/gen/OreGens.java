@@ -14,6 +14,9 @@ public class OreGens {
 
 	public static final WorldGenMinableBetweenlands SYRMORITE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.syrmoriteOre, 0, 6, BLBlockRegistry.betweenstone, true);
+	
+	public static final WorldGenMinableBetweenlands BONE_ORE = 
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.boneOre, 0, 6, BLBlockRegistry.betweenstone, true);
 
 	public static final WorldGenMinableBetweenlands OCTINE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.octineOre, 0, 6, BLBlockRegistry.betweenstone, true);

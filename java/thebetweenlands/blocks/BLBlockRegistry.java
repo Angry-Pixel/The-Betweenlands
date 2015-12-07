@@ -178,6 +178,7 @@ public class BLBlockRegistry {
 		}
 	}.setLightLevel(0.875F); //setting null drops item block
 	public static final Block syrmoriteOre = new BlockGenericOre("syrmoriteOre", null);
+	public static final Block boneOre = new BlockGenericOre("boneOre", ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE)).setXP(5, 12);
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemGeneric.createStack(EnumItemGeneric.SULFUR)){
 		@Override
 		public void spawnParticle(World world, double x, double y, double z) { 
@@ -662,6 +663,7 @@ public class BLBlockRegistry {
 		greenMiddleGemOre.setHarvestLevel("shovel", 0);
 		octineOre.setHarvestLevel("pickaxe", 1);
 		sulfurOre.setHarvestLevel("pickaxe", 0);
+		boneOre.setHarvestLevel("pickaxe", 0);
 		valoniteOre.setHarvestLevel("pickaxe", 2);
 		lifeCrystalOre.setHarvestLevel("pickaxe", 0);
 	}
