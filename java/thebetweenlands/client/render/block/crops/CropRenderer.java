@@ -14,7 +14,8 @@ public class CropRenderer {
 
 	public ModelConverter getCropModel(int meta) {
 		if(meta == BlockFarmedDirt.MATURE_CROP - 1) meta = BlockFarmedDirt.MATURE_CROP - 2;
-		return this.convertedModels[meta >> 1];
+		int modelIndex = meta >> 1;
+		return modelIndex < this.convertedModels.length ? this.convertedModels[modelIndex] : this.convertedModels[this.convertedModels.length - 1];
 	}
 
 	public int[] getTextureDimensions(int meta) {

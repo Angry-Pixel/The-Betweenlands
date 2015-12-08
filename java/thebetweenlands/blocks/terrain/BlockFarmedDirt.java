@@ -83,8 +83,12 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		}
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			if (!world.isRemote) {
-				if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED)
+				if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED) {
 					world.setBlockMetadataWithNotify(x, y, z, meta - DECAY_CURE, 3);
+				}
+				if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP) {
+					world.setBlockMetadataWithNotify(x, y + 1, z, BlockFarmedDirt.DECAYED_CROP - 1, 2);
+				}
 			}
 			if (!player.capabilities.isCreativeMode) {
 				stack.stackSize--;

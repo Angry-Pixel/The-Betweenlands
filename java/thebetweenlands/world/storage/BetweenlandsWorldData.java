@@ -21,7 +21,7 @@ public class BetweenlandsWorldData extends WorldDataBase {
 	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
-	
+
 	public AspectManager getAspectManager() {
 		return this.aspectManager;
 	}
@@ -39,11 +39,13 @@ public class BetweenlandsWorldData extends WorldDataBase {
 	 */
 	@Override
 	protected void setDefaults() {
-		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.setDefaults();
-			event.setLoaded();
+		if(!this.getWorld().isRemote) {
+			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+				event.setDefaults();
+				event.setLoaded();
+			}
+			this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 		}
-		if(!this.getWorld().isRemote) this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 	}
 
 	/**
@@ -51,11 +53,13 @@ public class BetweenlandsWorldData extends WorldDataBase {
 	 */
 	@Override
 	protected void load() {
-		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.readFromNBT(this.getData());
+		if(!this.getWorld().isRemote) {
+			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+				event.readFromNBT(this.getData());
+			}
+			this.environmentEventRegistry.setDisabled(this.getData().getBoolean("eventsDisabled"));
+			this.aspectManager.loadAndPopulateStaticAspects(this.getData(), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 		}
-		this.environmentEventRegistry.setDisabled(this.getData().getBoolean("eventsDisabled"));
-		if(!this.getWorld().isRemote) this.aspectManager.loadAndPopulateStaticAspects(this.getData(), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 	}
 
 	/**
@@ -63,11 +67,13 @@ public class BetweenlandsWorldData extends WorldDataBase {
 	 */
 	@Override
 	protected void save() {
-		for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-			event.writeToNBT(this.getData());
+		if(!this.getWorld().isRemote) {
+			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+				event.writeToNBT(this.getData());
+			}
+			this.getData().setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
+			this.aspectManager.saveStaticAspects(this.getData());
 		}
-		this.getData().setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
-		if(!this.getWorld().isRemote) this.aspectManager.saveStaticAspects(this.getData());
 	}
 
 	public static BetweenlandsWorldData forWorld(World world) {

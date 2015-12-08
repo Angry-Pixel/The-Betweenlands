@@ -69,18 +69,18 @@ public class AspectManager {
 		COMMON, UNCOMMON, RARE
 	}
 
-	public static enum AspectType {
+	public static enum AspectGroup {
 		HERB, GEM_BYRGINAZ, GEM_FIRNALAZ, GEM_FERGALAZ
 	}
 
 	public static class AspectEntry {
 		public final IAspectType aspect;
 		public final AspectTier tier;
-		public final AspectType type;
-		public float baseAmount;
-		public String aspectName;
+		public final AspectGroup type;
+		public final float baseAmount;
+		public final String aspectName;
 
-		public AspectEntry(IAspectType aspect, AspectTier tier, AspectType type, float baseAmount) {
+		public AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup type, float baseAmount) {
 			this.aspect = aspect;
 			this.tier = tier;
 			this.type = type;
@@ -88,19 +88,19 @@ public class AspectManager {
 			this.aspectName = this.aspect.getName();
 		}
 
-		public boolean matchEntry(ItemEntryAspects itemEntry) {
+		public boolean matchEntry(AspectItemEntry itemEntry) {
 			return itemEntry.tier == this.tier && itemEntry.type == this.type;
 		}
 	}
 
-	public static final class ItemEntryAspects {
-		public final ItemEntry item;
+	public static final class AspectItemEntry {
+		public final AspectItem item;
 		public final AspectTier tier;
-		public final AspectType type;
+		public final AspectGroup type;
 		public final float amountMultiplier, amountVaration;
 		public final String itemName;
 
-		public ItemEntryAspects(ItemEntry item, AspectTier tier, AspectType type, float amountMultiplier, float amountVariation) {
+		public AspectItemEntry(AspectItem item, AspectTier tier, AspectGroup type, float amountMultiplier, float amountVariation) {
 			this.item = item;
 			this.tier = tier;
 			this.type = type;
@@ -110,21 +110,21 @@ public class AspectManager {
 		}
 	}
 
-	public static final class ItemEntry {
+	public static final class AspectItem {
 		public final Item item;
 		public final int damage;
-		private List<ItemEntryAspects> itemAspects;
+		private List<AspectItemEntry> itemAspects;
 
-		public ItemEntry(Item item, int damage) {
+		public AspectItem(Item item, int damage) {
 			this.item = item;
 			this.damage = damage;
 		}
 
-		public ItemEntry(Item item) {
+		public AspectItem(Item item) {
 			this(item, -1);
 		}
 
-		public ItemEntry(ItemStack itemStack) {
+		public AspectItem(ItemStack itemStack) {
 			this(itemStack.getItem(), itemStack.getItemDamage());
 		}
 
@@ -138,23 +138,23 @@ public class AspectManager {
 
 		@Override
 		public boolean equals(Object obj) {
-			if(obj instanceof ItemEntry) {
-				ItemEntry itemEntry = (ItemEntry)obj;
+			if(obj instanceof AspectItem) {
+				AspectItem itemEntry = (AspectItem)obj;
 				return itemEntry.item.equals(this.item) && itemEntry.damage == this.damage;
 			}
 			return super.equals(obj);
 		}
 
-		public List<ItemEntryAspects> getItemAspectEntries() {
+		public List<AspectItemEntry> getAspectItemEntries() {
 			return this.itemAspects;
 		}
 	}
 
 	private static final List<AspectEntry> registeredAspects = new ArrayList<AspectEntry>();
-	private static final Map<ItemEntry, List<ItemEntryAspects>> registeredItems = new LinkedHashMap<ItemEntry, List<ItemEntryAspects>>();
-	private final Map<ItemEntry, List<Aspect>> matchedAspects = new LinkedHashMap<ItemEntry, List<Aspect>>();
+	private static final Map<AspectItem, List<AspectItemEntry>> registeredItems = new LinkedHashMap<AspectItem, List<AspectItemEntry>>();
+	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<AspectItem, List<Aspect>>();
 
-	public Map<ItemEntry, List<Aspect>> getMatchedAspects() {
+	public Map<AspectItem, List<Aspect>> getMatchedAspects() {
 		return Collections.unmodifiableMap(this.matchedAspects);
 	}
 
@@ -162,21 +162,21 @@ public class AspectManager {
 		registeredAspects.add(entry);
 	}
 
-	public static void addStaticAspectsToItem(ItemEntryAspects entry) {
+	public static void addStaticAspectsToItem(AspectItemEntry entry) {
 		addStaticAspectsToItem(entry, 1);
 	}
 
-	public static void addStaticAspectsToItem(ItemEntryAspects entry, int aspectCount) {
-		ItemEntry itemEntry = entry.item;
-		for(Entry<ItemEntry, List<ItemEntryAspects>> e : registeredItems.entrySet()) {
+	public static void addStaticAspectsToItem(AspectItemEntry entry, int aspectCount) {
+		AspectItem itemEntry = entry.item;
+		for(Entry<AspectItem, List<AspectItemEntry>> e : registeredItems.entrySet()) {
 			if(e.getKey().equals(itemEntry)) {
 				itemEntry = e.getKey();
 				break;
 			}
 		}
-		List<ItemEntryAspects> entryList = registeredItems.get(itemEntry);
+		List<AspectItemEntry> entryList = registeredItems.get(itemEntry);
 		if(entryList == null) {
-			entryList = new ArrayList<ItemEntryAspects>();
+			entryList = new ArrayList<AspectItemEntry>();
 			registeredItems.put(entry.item, entryList);
 		}
 		entry.item.itemAspects = entryList;
@@ -185,17 +185,25 @@ public class AspectManager {
 		}
 	}
 
-	public static AspectEntry getAspectEntryFromName(String name) {
-		for(AspectEntry aspect : registeredAspects) {
-			if(aspect.aspect.getName().equals(name)) {
-				return aspect;
-			}
+	public static IAspectType getAspectTypeFromName(String name) {
+		for(IAspectType type : ASPECT_TYPES) {
+			if(type.getName().equals(name)) return type;
 		}
 		return null;
 	}
 
-	public static ItemEntry getItemEntryFromName(String name, int damage) {
-		for(ItemEntry e : registeredItems.keySet()) {
+	public static List<AspectEntry> getAspectEntriesFromName(String name) {
+		List<AspectEntry> aspectEntries = new ArrayList<AspectEntry>();
+		for(AspectEntry aspect : registeredAspects) {
+			if(aspect.aspect.getName().equals(name)) {
+				aspectEntries.add(aspect);
+			}
+		}
+		return aspectEntries;
+	}
+
+	public static AspectItem getItemEntryFromName(String name, int damage) {
+		for(AspectItem e : registeredItems.keySet()) {
 			if(e.item.getUnlocalizedName().equals(name) && e.damage == damage) {
 				return e;
 			}
@@ -240,7 +248,7 @@ public class AspectManager {
 				String itemName = entryCompound.getString("item");
 				int itemDamage = entryCompound.getInteger("damage");
 				//System.out.println("Getting item entry: " + itemName);
-				ItemEntry itemEntry = this.getItemEntryFromName(itemName, itemDamage);
+				AspectItem itemEntry = this.getItemEntryFromName(itemName, itemDamage);
 				if(itemEntry == null) {
 					//System.out.println("Failed getting item entry");
 					continue;
@@ -263,8 +271,8 @@ public class AspectManager {
 	public void saveStaticAspects(NBTTagCompound nbt) {
 		NBTTagCompound aspectCompound = new NBTTagCompound();
 		NBTTagList entryList = new NBTTagList();
-		for(Entry<ItemEntry, List<Aspect>> entry : this.matchedAspects.entrySet()) {
-			ItemEntry itemEntry = entry.getKey();
+		for(Entry<AspectItem, List<Aspect>> entry : this.matchedAspects.entrySet()) {
+			AspectItem itemEntry = entry.getKey();
 			List<Aspect> itemAspects = entry.getValue();
 			NBTTagCompound entryCompound = new NBTTagCompound();
 			entryCompound.setString("item", itemEntry.item.getUnlocalizedName());
@@ -298,12 +306,12 @@ public class AspectManager {
 
 		List<AspectEntry> possibleAspects = new ArrayList<AspectEntry>();
 
-		for(Entry<ItemEntry, List<ItemEntryAspects>> item : this.registeredItems.entrySet()) {
-			ItemEntry itemStack = item.getKey();
+		for(Entry<AspectItem, List<AspectItemEntry>> item : this.registeredItems.entrySet()) {
+			AspectItem itemStack = item.getKey();
 			if(this.matchedAspects.containsKey(itemStack)) {
 				continue;
 			}
-			List<ItemEntryAspects> itemEntries = item.getValue();
+			List<AspectItemEntry> itemEntries = item.getValue();
 			List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
 			if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
 				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, this.registeredAspects, rnd);
@@ -341,7 +349,7 @@ public class AspectManager {
 		}
 	}
 
-	private boolean fillItemAspects(List<Aspect> itemAspects, int itemAspectsSize, List<ItemEntryAspects> itemEntries, List<AspectEntry> possibleAspects,
+	private boolean fillItemAspects(List<Aspect> itemAspects, int itemAspectsSize, List<AspectItemEntry> itemEntries, List<AspectEntry> possibleAspects,
 			List<AspectEntry> availableAspects, Random rnd) {
 		boolean foundMatches = false;
 		int possibleAspectCount = this.fillPossibleAspects(itemEntries, possibleAspects, availableAspects, null);
@@ -352,9 +360,9 @@ public class AspectManager {
 			}
 			AspectEntry randomAspect = possibleAspects.get(rnd.nextInt(possibleAspects.size()));
 			possibleAspects.remove(randomAspect);
-			ItemEntryAspects matchingItemEntry = null;
+			AspectItemEntry matchingItemEntry = null;
 			Collections.shuffle(itemEntries, rnd);
-			for(ItemEntryAspects itemEntry : itemEntries) {
+			for(AspectItemEntry itemEntry : itemEntries) {
 				if(randomAspect.matchEntry(itemEntry)) {
 					matchingItemEntry = itemEntry;
 					break;
@@ -367,9 +375,9 @@ public class AspectManager {
 		return foundMatches;
 	}
 
-	private int fillPossibleAspects(List<ItemEntryAspects> itemEntries, List<AspectEntry> possibleAspects, List<AspectEntry> availableAspects, List<Aspect> takenAspects) {
+	private int fillPossibleAspects(List<AspectItemEntry> itemEntries, List<AspectEntry> possibleAspects, List<AspectEntry> availableAspects, List<Aspect> takenAspects) {
 		possibleAspects.clear();
-		for(ItemEntryAspects itemEntry : itemEntries) {
+		for(AspectItemEntry itemEntry : itemEntries) {
 			for(AspectEntry availableAspect : availableAspects) {
 				if(availableAspect.matchEntry(itemEntry) && !possibleAspects.contains(availableAspect) && (takenAspects == null || !takenAspects.contains(availableAspect))) {
 					possibleAspects.add(availableAspect);
@@ -379,8 +387,8 @@ public class AspectManager {
 		return possibleAspects.size();
 	}
 
-	private List<Aspect> getStaticAspects(ItemEntry item) {
-		for(Entry<ItemEntry, List<Aspect>> e : this.matchedAspects.entrySet()) {
+	private List<Aspect> getStaticAspects(AspectItem item) {
+		for(Entry<AspectItem, List<Aspect>> e : this.matchedAspects.entrySet()) {
 			if(e.getKey().equals(item)) {
 				return e.getValue();
 			}
@@ -390,7 +398,7 @@ public class AspectManager {
 
 	public List<Aspect> getAspects(ItemStack stack) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		aspects.addAll(this.getStaticAspects(new ItemEntry(stack)));
+		aspects.addAll(this.getStaticAspects(new AspectItem(stack)));
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
 			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < lst.tagCount(); i++) {

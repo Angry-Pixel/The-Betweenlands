@@ -1,7 +1,6 @@
 package thebetweenlands.herblore.aspects;
 
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.herblore.aspects.AspectManager.AspectEntry;
 
 public class Aspect {
 	public final IAspectType aspect;
@@ -22,9 +21,9 @@ public class Aspect {
 	public static Aspect readFromNBT(NBTTagCompound nbt) {
 		String aspectName = nbt.getString("aspect");
 		float amount = nbt.getFloat("amount");
-		AspectEntry aspect = AspectManager.getAspectEntryFromName(aspectName);
-		if(aspect != null) {
-			return new Aspect(aspect.aspect, amount);
+		IAspectType aspectType = AspectManager.getAspectTypeFromName(aspectName);
+		if(aspectType != null) {
+			return new Aspect(aspectType, amount);
 		}
 		return null;
 	}
