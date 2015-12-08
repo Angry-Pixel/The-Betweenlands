@@ -206,7 +206,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	public boolean isFullyGrown(World world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) == BlockFarmedDirt.MATURE_CROP || this.isDecayed(world, x, y, z);
+		return world.getBlockMetadata(x, y, z) == BlockFarmedDirt.MATURE_CROP || world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP;
 	}
 
 	@Override
