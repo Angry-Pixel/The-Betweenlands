@@ -4,7 +4,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.herblore.aspects.IAspectType;
-import thebetweenlands.herblore.aspects.list.AspectArmaniis;
+import thebetweenlands.herblore.elixirs.ElixirRecipe;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextFormatComponents;
@@ -52,7 +54,7 @@ public class PageCreators {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.pageName();
         System.out.println(entity.pageName());
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(78 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(74 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
         newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden));
         return newPages;
     }
@@ -72,7 +74,7 @@ public class PageCreators {
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (int i = 0; i <= item.metas(); i++)
             items.add(new ItemStack(item.getItem(), 1, i));
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
+        newPages.add(new Page(title, isHidden, new TextWidget(18, 12, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
         newPages.addAll(TextPages(16, 10, "manual." + item.manualName(0) + ".description", title, isHidden));
         ArrayList<IManualEntryItem> manualItem = new ArrayList<>();
         manualItem.add(item);
@@ -201,11 +203,113 @@ public class PageCreators {
     }
 
 
-
-    /*public static ArrayList<Page> AspectPages(IAspect aspect){
+    public static ArrayList<Page> AspectPages(IAspectType aspect) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
-    }*/
+        ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+        widgets.add(new AspectWidget(18, 12, aspect, 1f));
+        widgets.add(new TextWidget(38, 12, aspect.getName(), 1.5f));
+        height += 18;
+        widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
+        TextContainer textContainer = new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"));
+
+        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
+        textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("bold", EnumChatFormatting.BOLD));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("italic", EnumChatFormatting.ITALIC));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatPagelink());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatRainbow());
+        try {
+            textContainer.parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        height += 10 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+
+        if (height < 152) {
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 10;
+            widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
+            height += 18;
+        } else {
+            newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 10;
+            widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
+            height += 18;
+        }
+
+        if (height < 152) {
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
+            height += 10;
+            int width = 0;
+            for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
+                if (width <= 72) {
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
+                    width += 18;
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
+                    width += 18;
+                } else {
+                    height += 18;
+                    width = 0;
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
+                    width += 18;
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
+                    width += 18;
+                }
+            }
+        } else {
+            if (newPages.size() > 0)
+                newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+            else
+                newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 10;
+            int width = 0;
+            for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
+                if (width <= 72) {
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
+                    width += 18;
+                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
+                    width += 18;
+                } else {
+                    if (height + 18 < 152) {
+                        height += 18;
+                        width = 0;
+                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
+                        width += 18;
+                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
+                        width += 18;
+                    } else {
+                        if (newPages.size() > 0)
+                            newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+                        else
+                            newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+                        height += 18;
+                        width = 0;
+                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
+                        width += 18;
+                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
+                        width += 18;
+                    }
+                }
+            }
+        }
+
+        if (widgets.size() > 0) {
+            if (newPages.size() > 0)
+                newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+            else
+                newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+        }
+        return newPages;
+    }
 
 
 }

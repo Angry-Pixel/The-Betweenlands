@@ -2,6 +2,7 @@ package thebetweenlands.manual;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentText;
@@ -40,31 +41,34 @@ public class ManualManager {
         }*/
 
         if (pageName != null && player != null) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualGuideBook) {
-                NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-                if (nbt == null)
-                    nbt = new NBTTagCompound();
-                ArrayList<String> foundPages = getFoundPages(player);
-                if (foundPages != null && !foundPages.contains(pageName)) {
-                    NBTTagList pages = new NBTTagList();
-                    for (String string : foundPages) {
+            for (int i = 0; i < 36; i++) {
+                ItemStack stack = player.inventory.getStackInSlot(i);
+                if (stack != null && stack.getItem() == BLItemRegistry.manualGuideBook) {
+                    NBTTagCompound nbt = stack.getTagCompound();
+                    if (nbt == null)
+                        nbt = new NBTTagCompound();
+                    ArrayList<String> foundPages = getFoundPages(player);
+                    if (foundPages != null && !foundPages.contains(pageName)) {
+                        NBTTagList pages = new NBTTagList();
+                        for (String string : foundPages) {
+                            NBTTagCompound data = new NBTTagCompound();
+                            data.setString("page", string);
+                            pages.appendTag(data);
+                        }
                         NBTTagCompound data = new NBTTagCompound();
-                        data.setString("page", string);
+                        data.setString("page", pageName);
                         pages.appendTag(data);
+                        nbt.setTag("pages", pages);
+                    } else {
+                        NBTTagList pages = new NBTTagList();
+                        NBTTagCompound data = new NBTTagCompound();
+                        data.setString("page", pageName);
+                        pages.appendTag(data);
+                        nbt.setTag("pages", pages);
                     }
-                    NBTTagCompound data = new NBTTagCompound();
-                    data.setString("page", pageName);
-                    pages.appendTag(data);
-                    nbt.setTag("pages", pages);
-                } else {
-                    NBTTagList pages = new NBTTagList();
-                    NBTTagCompound data = new NBTTagCompound();
-                    data.setString("page", pageName);
-                    pages.appendTag(data);
-                    nbt.setTag("pages", pages);
+                    player.inventory.getStackInSlot(i).setTagCompound(nbt);
+                    return true;
                 }
-                player.getHeldItem().setTagCompound(nbt);
-                return true;
             }
         }
         return false;
@@ -79,18 +83,23 @@ public class ManualManager {
         }
         return null;*/
 
-        if (player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualGuideBook) {
+        if (player != null) {
             ArrayList<String> foundPages = new ArrayList<>();
-            NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-            if (nbt != null) {
-                NBTTagList tag = nbt.getTagList("pages", 10);
-                if (tag != null) {
-                    for (int i = 0; i < tag.tagCount(); i++) {
-                        NBTTagCompound data = tag.getCompoundTagAt(i);
-                        foundPages.add(data.getString("page"));
+            for (int i = 0; i < 36; i++) {
+                ItemStack stack = player.inventory.getStackInSlot(i);
+                if (stack != null && stack.getItem() == BLItemRegistry.manualGuideBook) {
+                    NBTTagCompound nbt = stack.getTagCompound();
+                    if (nbt != null) {
+                        NBTTagList tag = nbt.getTagList("pages", 10);
+                        if (tag != null) {
+                            for (int j = 0; j < tag.tagCount(); j++) {
+                                NBTTagCompound data = tag.getCompoundTagAt(j);
+                                foundPages.add(data.getString("page"));
+                            }
+                        }
+                        return foundPages;
                     }
                 }
-                return foundPages;
             }
         }
         return null;
@@ -113,7 +122,7 @@ public class ManualManager {
 
     public static void PlayerDiscoverPage(EntityLiving entity, String name) {
         EntityPlayer player = entity.worldObj.getClosestPlayerToEntity(entity, 20);
-        if (!ManualManager.hasFoundPage(player, name) && player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualGuideBook && !player.worldObj.isRemote) {
+        if (!ManualManager.hasFoundPage(player, name) && player != null && player.inventory.hasItem(BLItemRegistry.manualGuideBook) && !player.worldObj.isRemote) {
             Vec3 vec3 = player.getLook(1.0F).normalize();
             Vec3 vec31 = Vec3.createVectorHelper(entity.posX - player.posX, entity.boundingBox.minY + (double) (entity.height / 2.0F) - (player.posY + (double) player.getEyeHeight()), entity.posZ - player.posZ);
             double d0 = vec31.lengthVector();

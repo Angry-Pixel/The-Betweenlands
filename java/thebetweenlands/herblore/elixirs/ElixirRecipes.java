@@ -56,6 +56,19 @@ public class ElixirRecipes {
 		return null;
 	}
 
+
+	public static List<ElixirRecipe> getFromAspect(IAspectType aspectType){
+		List<ElixirRecipe> recipes = new ArrayList<>();
+		for (ElixirRecipe recipe:REGISTERED_RECIPES){
+			for(IAspectType recipeAspect : recipe.aspects) {
+				if (recipeAspect == aspectType)
+					recipes.add(recipe);
+			}
+		}
+		System.out.println("lol " + recipes.size());
+		return recipes;
+	}
+
 	public static void init() {
 		//Just for testing
 		registerRecipe(new ElixirRecipe("Test Elixir", 0xFF0000FF, 0xFFFF0000, 0xFF332902,      //Name & Infusion colors

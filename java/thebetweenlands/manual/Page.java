@@ -3,6 +3,7 @@ package thebetweenlands.manual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.command.CommandFindPage;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Page {
     public int pageNumber;
     public ArrayList<ItemStack> pageItems = new ArrayList<>();
     public IManualEntryEntity pageEntity;
+    public IAspectType pageAspect;
 
     public String resourceLocation;
     public int xStartTexture = 0;
@@ -73,6 +75,11 @@ public class Page {
 
     public Page setEntity(IManualEntryEntity entity) {
         pageEntity = entity;
+        return this;
+    }
+
+    public Page setAspect(IAspectType aspect) {
+        pageAspect = aspect;
         return this;
     }
 

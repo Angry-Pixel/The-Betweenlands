@@ -47,16 +47,6 @@ public class PictureWidget extends ManualWidgetsBase {
         this.toolTips = toolTips;
     }
 
-    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, String toolTipsSplit) {
-        super(xStart, yStart);
-        this.recourseLocation = new ResourceLocation(recourseLocation);
-        this.width = width;
-        this.height = height;
-
-        String[] splits = toolTipsSplit.split("/");
-        Collections.addAll(toolTips, splits);
-    }
-
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {

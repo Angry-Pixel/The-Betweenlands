@@ -22,7 +22,7 @@ public class GuiManualHerblore extends GuiManualBase {
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
-        changeCategory(GuideBookEntryRegistry.itemsCategory);
+        changeCategory(HLEntryRegistry.aspectCategory);
     }
 
 

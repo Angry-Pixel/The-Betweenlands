@@ -6,13 +6,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.ManualManager;
 import thebetweenlands.manual.Page;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 import thebetweenlands.manual.widgets.text.TextFormatComponents;
+import thebetweenlands.utils.AspectIconRenderer;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
  */
 public class ButtonWidget extends ManualWidgetsBase {
     private ArrayList<ItemStack> items = new ArrayList<>();
+    private IAspectType aspect;
     public int pageNumber;
     private TextContainer textContainer;
 
@@ -41,8 +43,11 @@ public class ButtonWidget extends ManualWidgetsBase {
         this.page = page;
         if (page.pageItems.size() > 0)
             this.items.addAll(page.pageItems);
-        else if (page.resourceLocation != null)
+        else if (page.pageAspect != null) {
+            aspect = page.pageAspect;
+        } else if (page.resourceLocation != null) {
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
+        }
         this.textContainer = new TextContainer(100, 16, page.pageName);
         this.isHidden = page.isHidden;
         this.init();
@@ -86,11 +91,13 @@ public class ButtonWidget extends ManualWidgetsBase {
     public void drawForeGround() {
         if (items.size() > 0)
             renderItem(xStart, yStart, items.get(currentItem), false);
-        else if (resourceLocation != null) {
+        else if (aspect != null) {
+            AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
+        } else if (resourceLocation != null) {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
             manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
         }
-        if (isHidden){
+        if (isHidden) {
             color = 0x666666;
         }
 
