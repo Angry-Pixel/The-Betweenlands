@@ -33,8 +33,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt", "fertDirtDecayed", "fertGrassDecayed" };
 	public static final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
 	public static final int COMPOSTING_MODIFIER = 3, DECAY_CURE = 3, DECAY_CAUSE = 3;
-	public static final int MATURE_CROP = 7, DECAYED_CROP = 8;
-	public static int DECAY_TIME = 150, INFECTION_CHANCE = 6, DUG_SOIL_REVERT_TIME = 12;
+	public static int DECAY_CHANCE = 150, INFECTION_CHANCE = 6, DUG_SOIL_REVERT_CHANCE = 12;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon iconPureSwampDirt, iconDugSwampGrassMap, iconDugSwampDirtMap, iconDugPurifiedSwampDirtMap, iconCompostedSwampGrassMap, iconCompostedSwampDirtMap, iconCompostedPurifiedSwampDirtMap, iconDecayedSwampGrassMap, iconDecayedSwampDirtMap, iconDecayedPurifiedSwampDirtMap;
@@ -86,8 +85,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED) {
 					world.setBlockMetadataWithNotify(x, y, z, meta - DECAY_CURE, 3);
 				}
-				if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP) {
-					world.setBlockMetadataWithNotify(x, y + 1, z, BlockFarmedDirt.DECAYED_CROP - 1, 2);
+				if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.DECAYED_CROP) {
+					world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
 				}
 			}
 			if (!player.capabilities.isCreativeMode) {
@@ -121,12 +120,12 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		int meta = getDamageValue(world, x, y, z);
 
 		//Decay rate of composted blocks
-		if(world.rand.nextInt(DECAY_TIME) == 0) {
+		if(world.rand.nextInt(DECAY_CHANCE) == 0) {
 			if(meta == FERT_DIRT || meta == FERT_GRASS) {
 				world.setBlockMetadataWithNotify(x, y, z, meta + DECAY_CAUSE, 3);
 				//Update decay to plants above
-				if(getCropAboveBlock(world, x, y, z) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x, y, z) == MATURE_CROP)
-					world.setBlockMetadataWithNotify(x, y + 1, z, DECAYED_CROP, 3);
+				if(getCropAboveBlock(world, x, y, z) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x, y, z) == BlockBLGenericCrop.MATURE_CROP)
+					world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP, 3);
 			}
 		}
 
@@ -141,8 +140,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 						if(adjacentBlock == this && (adjacentMeta == FERT_DIRT || adjacentMeta == FERT_GRASS) && !isDecayed(adjacentMeta)) {
 							world.setBlockMetadataWithNotify(x+xo, y, z+zo, adjacentMeta + DECAY_CAUSE, 3);
 							//Update decay to plants above
-							if(getCropAboveBlock(world, x+xo, y, z+zo) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x+xo, y, z+zo) == MATURE_CROP)
-								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, DECAYED_CROP, 3);
+							if(getCropAboveBlock(world, x+xo, y, z+zo) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x+xo, y, z+zo) == BlockBLGenericCrop.MATURE_CROP)
+								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, BlockBLGenericCrop.DECAYED_CROP, 3);
 						}
 					}
 				}
@@ -150,7 +149,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		}
 
 		//Dug dirt reverts to un-dug
-		if(world.rand.nextInt(DUG_SOIL_REVERT_TIME) == 0) {
+		if(world.rand.nextInt(DUG_SOIL_REVERT_CHANCE) == 0) {
 			if(meta == DUG_SWAMP_DIRT || meta == DUG_PURE_SWAMP_DIRT)
 				world.setBlock(x, y, z, BLBlockRegistry.swampDirt, 0, 3);
 			if(meta == DUG_SWAMP_GRASS)

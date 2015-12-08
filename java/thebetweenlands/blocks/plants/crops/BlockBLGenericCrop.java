@@ -22,11 +22,11 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.crops.CropRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 public class BlockBLGenericCrop extends BlockCrops {
+	public static final int MATURE_CROP = 7, DECAYED_CROP = 8;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] iconArray;
@@ -65,7 +65,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		if (metadata == BlockFarmedDirt.MATURE_CROP) {
+		if (metadata == MATURE_CROP) {
 			for (int i = 0; i < 3 + fortune; ++i) {
 				if(getSeedDrops() != null) {
 					if (world.rand.nextInt(15) <= metadata)
@@ -119,15 +119,12 @@ public class BlockBLGenericCrop extends BlockCrops {
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null) {
-			if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)){
+			if (meta < MATURE_CROP) {
+				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
 					if (!world.isRemote) {
 						world.playAuxSFX(2005, x, y, z, 0);
-						if(this.isCropOrSoilDecayed(world, x, y, z)) {
-							int newMeta = world.getBlockMetadata(x, y, z);
-							if(newMeta == BlockFarmedDirt.MATURE_CROP) {
-								world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DECAYED_CROP, 2);
-							}
+						if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
+							world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
 						}
 					}
 				}
@@ -137,7 +134,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			int metaDirt = world.getBlockMetadata(x, y - 1 , z);
 			if (!world.isRemote) {
-				if (meta == BlockFarmedDirt.DECAYED_CROP) {
+				if (meta == DECAYED_CROP) {
 					world.setBlockMetadataWithNotify(x, y, z, meta - 1, 3);
 				}
 				world.playAuxSFX(2005, x, y, z, 0);
@@ -205,18 +202,18 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	public boolean isCropOrSoilDecayed(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y - 1, z);
-		return BlockFarmedDirt.isDecayed(meta) || world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP;
+		return BlockFarmedDirt.isDecayed(meta) || world.getBlockMetadata(x, y, z) == DECAYED_CROP;
 	}
 
 	public boolean isFullyGrown(World world, int x, int y, int z) {
-		return world.getBlockMetadata(x, y, z) == BlockFarmedDirt.MATURE_CROP || world.getBlockMetadata(x, y, z) == BlockFarmedDirt.DECAYED_CROP;
+		return world.getBlockMetadata(x, y, z) == MATURE_CROP || world.getBlockMetadata(x, y, z) == DECAYED_CROP;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta <= BlockFarmedDirt.MATURE_CROP) {
-			if(meta == BlockFarmedDirt.MATURE_CROP - 1) meta = BlockFarmedDirt.MATURE_CROP - 2;
+		if (meta <= MATURE_CROP) {
+			if(meta == MATURE_CROP - 1) meta = MATURE_CROP - 2;
 			return iconArray[meta >> 1];
 		} else
 			return iconArray[iconArray.length - 1];
@@ -251,7 +248,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		double pixel = 0.0625D;
 		int meta = world.getBlockMetadata(x, y, z);
-		if (meta >= BlockFarmedDirt.DECAYED_CROP) {
+		if (meta >= DECAYED_CROP) {
 			if (rand.nextInt(10) == 0) {
 				for (int l = 0; l <= 5; l++) {
 					double particleX = x + rand.nextFloat();
@@ -287,7 +284,14 @@ public class BlockBLGenericCrop extends BlockCrops {
 	//Fertilizer growth chance
 	@Override
 	public boolean func_149852_a(World world, Random rnd, int x, int y, int z) {
-		int chance = this.isCropOrSoilDecayed(world, x, y, z) ? 8 : 3;
+		int chance = this.isCropOrSoilDecayed(world, x, y, z) ? 6 : 3;
 		return rnd.nextInt(chance * ((int)(world.getBlockMetadata(x, y, z) / 1.6D) + 1)) == 0;
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		if(this.isFullyGrown(world, x, y, z) && this.isCropOrSoilDecayed(world, x, y, z)) {
+			world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
+		}
 	}
 }
