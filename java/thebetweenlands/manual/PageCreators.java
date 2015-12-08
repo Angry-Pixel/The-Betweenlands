@@ -208,7 +208,7 @@ public class PageCreators {
         int height = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new AspectWidget(18, 12, aspect, 1f));
-        widgets.add(new TextWidget(38, 12, aspect.getName(), 1.5f));
+        widgets.add(new TextWidget(38, 16, "manual." + aspect.getName().toLowerCase() + ".title", 1.5f));
         height += 18;
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
         TextContainer textContainer = new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"));

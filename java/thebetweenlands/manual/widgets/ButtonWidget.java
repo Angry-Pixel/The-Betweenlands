@@ -16,6 +16,7 @@ import thebetweenlands.manual.widgets.text.TextFormatComponents;
 import thebetweenlands.utils.AspectIconRenderer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bart on 6-11-2015.
@@ -93,6 +94,12 @@ public class ButtonWidget extends ManualWidgetsBase {
             renderItem(xStart, yStart, items.get(currentItem), false);
         else if (aspect != null) {
             AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
+            if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {
+                List<String> tooltipData = new ArrayList<>();
+                tooltipData.add(aspect.getName());
+                tooltipData.add(EnumChatFormatting.GRAY + aspect.getType());
+                renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
+            }
         } else if (resourceLocation != null) {
             Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
             manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);

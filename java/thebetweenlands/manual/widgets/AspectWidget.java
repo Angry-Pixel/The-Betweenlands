@@ -1,10 +1,14 @@
 package thebetweenlands.manual.widgets;
 
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.utils.AspectIconRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bart on 08/12/2015.
@@ -23,12 +27,12 @@ public class AspectWidget extends ManualWidgetsBase {
     @Override
     public void drawForeGround() {
         super.drawForeGround();
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
         AspectIconRenderer.renderIcon(xStart, yStart, (int) (16 * scale), (int) (16 * scale), aspect.getIconIndex());
-        GL11.glPopMatrix();
+        if (mouseX >= xStart && mouseX <= xStart + 16 * scale && mouseY >= yStart && mouseY <= yStart + 16 * scale) {
+            List<String> tooltipData = new ArrayList<>();
+            tooltipData.add(aspect.getName());
+            tooltipData.add(EnumChatFormatting.GRAY + aspect.getType());
+            renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
+        }
     }
 }

@@ -79,9 +79,9 @@ public class ItemWidget extends ManualWidgetsBase {
         render.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
         render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
         RenderHelper.disableStandardItemLighting();
-        GL11.glPopMatrix();
         GL11.glScalef(1f, 1f, 1f);
         GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
 
         if (mouseX >= xStart && mouseX <= xStart + 16 * scale && mouseY >= yStart && mouseY <= yStart + 16 * scale) {
             if (stacks.get(currentDisplayItem) != null) {

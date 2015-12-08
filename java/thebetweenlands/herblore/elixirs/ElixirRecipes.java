@@ -65,7 +65,6 @@ public class ElixirRecipes {
 					recipes.add(recipe);
 			}
 		}
-		System.out.println("lol " + recipes.size());
 		return recipes;
 	}
 
