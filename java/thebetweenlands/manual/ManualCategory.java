@@ -45,12 +45,14 @@ public class ManualCategory {
             for (Page page : pages)
                 if (!page.isHidden || ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName))
                     visiblePages.add(page);
-            currentPageLeft = this.visiblePages.get(0);
-            if (this.visiblePages.size() > 1)
-                currentPageRight = this.visiblePages.get(1);
-            else
-                currentPageRight = blankPage;
-            currentPageRight.setPageToRight();
+            if (!visiblePages.isEmpty()) {
+                currentPageLeft = this.visiblePages.get(0);
+                if (this.visiblePages.size() > 1)
+                    currentPageRight = this.visiblePages.get(1);
+                else
+                    currentPageRight = blankPage;
+                currentPageRight.setPageToRight();
+            }
         }
         if (currentPageLeft != null)
             currentPageLeft.init(manual);
@@ -74,6 +76,9 @@ public class ManualCategory {
         currentPageLeft.init(manual);
         currentPageRight.init(manual);
         currentPageRight.setPageToRight();
+
+        currentPageLeft.resize();
+        currentPageRight.resize();
     }
 
     public void nextPage(GuiManualBase manual) {

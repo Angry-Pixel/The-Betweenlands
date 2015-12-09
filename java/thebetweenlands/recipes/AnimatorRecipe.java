@@ -95,4 +95,13 @@ public class AnimatorRecipe {
 		}
 		return null;
 	}
+
+	public static AnimatorRecipe getRecipeFromOutput(ItemStack output) {
+		for(AnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
+			if(recipe.result != null && output.isItemEqual(recipe.result)) {
+				return recipe;
+			}
+		}
+		return null;
+	}
 }

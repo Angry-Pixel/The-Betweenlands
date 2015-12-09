@@ -26,6 +26,7 @@ public class PageCreators {
     public static int purifierRecipeHeight = PurifierRecipeWidget.height + 5;
     public static int druidAltarRecipeHeight = DruidAltarWidget.height + 5;
     public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
+    public static int animatorRecipeHeight = AnimatorRecipeWidget.height + 5;
 
     public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages) {
         ArrayList<Page> newPages = new ArrayList<>();
@@ -53,7 +54,6 @@ public class PageCreators {
     public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.pageName();
-        System.out.println(entity.pageName());
         newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(74 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
         newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden));
         return newPages;
@@ -131,7 +131,7 @@ public class PageCreators {
         int height = 10;
         int type = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
-        while (type <= 7) {
+        while (type <= 8) {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
             for (IManualEntryItem item : items) {
                 for (int i : item.recipeType(0)) {
@@ -178,6 +178,11 @@ public class PageCreators {
                         widgets.add(new DruidAltarWidget(itemStacks, 15, height));
                         height += druidAltarRecipeHeight;
                         latestAdded += druidAltarRecipeHeight;
+                        break;
+                    case 8:
+                        widgets.add(new AnimatorRecipeWidget(itemStacks, 15, height));
+                        height += animatorRecipeHeight;
+                        latestAdded += animatorRecipeHeight;
                         break;
                 }
                 if (height >= 152) {
@@ -230,17 +235,18 @@ public class PageCreators {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        height += 10 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+
+        height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
 
         if (height < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
-            height += 10;
+            height += 16;
             widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
             height += 18;
         } else {
-            newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
-            height += 10;
+            height += 16;
             widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
             height += 18;
         }
@@ -266,9 +272,9 @@ public class PageCreators {
             }
         } else {
             if (newPages.size() > 0)
-                newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setAspect(aspect));
             else
-                newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 10;
             int width = 0;
@@ -288,9 +294,9 @@ public class PageCreators {
                         width += 18;
                     } else {
                         if (newPages.size() > 0)
-                            newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+                            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setAspect(aspect));
                         else
-                            newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+                            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
                         height += 18;
                         width = 0;
                         widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
@@ -304,9 +310,9 @@ public class PageCreators {
 
         if (widgets.size() > 0) {
             if (newPages.size() > 0)
-                newPages.add(new Page(aspect.getType(), widgets, false).setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setAspect(aspect));
             else
-                newPages.add(new Page(aspect.getType(), widgets, false).setParent().setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
         }
         return newPages;
     }

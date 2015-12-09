@@ -50,6 +50,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
         }
         this.textContainer = new TextContainer(100, 16, page.pageName);
+
         this.isHidden = page.isHidden;
         this.init();
     }

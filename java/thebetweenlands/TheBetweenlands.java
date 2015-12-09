@@ -90,6 +90,8 @@ public class TheBetweenlands
 	public static File dir;
 	private static byte nextPacketId = 0;
 
+	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
+
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
@@ -192,6 +194,13 @@ public class TheBetweenlands
 	@SuppressWarnings("unchecked")
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+		if (ConfigHandler.DEBUG){
+			System.out.println("==================================================");
+			for (String name:unlocalizedNames){
+				System.out.println("needs translation: " + name);
+			}
+			System.out.println("==================================================");
+		}
 	}
 
 	@EventHandler

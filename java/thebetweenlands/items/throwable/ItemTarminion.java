@@ -52,7 +52,7 @@ public class ItemTarminion extends Item implements IManualEntryItem {
 
 	@Override
 	public int[] recipeType(int meta) {
-		return new int[]{2};
+		return new int[]{2, 8};
 	}
 
 	@Override

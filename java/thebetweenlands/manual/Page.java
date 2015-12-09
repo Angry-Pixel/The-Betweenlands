@@ -116,4 +116,9 @@ public class Page {
         for (ManualWidgetsBase widget : widgets)
             widget.updateScreen();
     }
+
+    public void resize() {
+        for (ManualWidgetsBase widget : widgets)
+            widget.resize();
+    }
 }

@@ -725,6 +725,10 @@ manual.widget.purifier.process.time=Process time: .seconds. seconds
 
 manual.widget.smelting.recipe=Furnace recipe
 
+manual.widget.animator.output=Output
+manual.widget.animator.input=Input
+manual.widget.animator.recipe=Animator Recipe
+
 manual.arrows.title=Arrows
 manual.arrows.description=These are some magical arrows added by The Betweenlands. They are get able as loot or simply by crafting them.
 manual.axes.title=Axes
@@ -789,6 +793,36 @@ manual.pestleAndMortar.description=<bold>1 - Input Slot</bold> <nl> You can plac
 manual.discover.page=You discovered a new page
 manual.aspect.found.in=This aspect is found in:
 manual.aspect.used.in=This aspect is used in:
+
+
+manual.azuwynn.title=Azuwynn
+manual.azuwynn.description=a
+manual.armaniis.title=Armaniis
+manual.armaniis.description=a
+manual.byariis.title=Byariis
+manual.byariis.description=b
+manual.byrginaz.title=Byrginaz
+manual.byrginaz.description=b
+manual.celawynn.title=Celawynn
+manual.celawynn.description=c
+manual.dayuniis.title=Dayuniis
+manual.dayuniis.description=d
+manual.fergalaz.title=Fergalaz
+manual.fergalaz.description=f
+manual.firnalaz.title=Firnalaz
+manual.firnalaz.description=f
+manual.freiwynn.title=Freiwynn
+manual.freiwynn.description=f
+manual.geoliirgaz.title=Geoliirgaz
+manual.geoliirgaz.description=g
+manual.ordaniis.title=Ordaniis
+manual.ordaniis.description=o
+manual.yeowynn.title=Yeowynn
+manual.yeowynn.description=y
+manual.yunugaz.title=Yunugaz
+manual.yunugaz.description=y
+manual.yihinren.title=Yihinren
+manual.yihinren.description=y
 
 
 talisman.noplace=The space is not large enough

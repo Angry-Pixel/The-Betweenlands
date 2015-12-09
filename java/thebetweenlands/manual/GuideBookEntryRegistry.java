@@ -35,7 +35,7 @@ public class GuideBookEntryRegistry {
 
     public static ArrayList<Page> itemPages = new ArrayList<>();
     public static ArrayList<Page> entityPages = new ArrayList<>();
-    public static ArrayList<Page> mechanics = new ArrayList<>();
+    public static ArrayList<Page> machines = new ArrayList<>();
 
 
 
@@ -105,18 +105,19 @@ public class GuideBookEntryRegistry {
     }
 
     public static void initMachineEntries() {
-        mechanics.clear();
-        mechanics.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
-        mechanics.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false));
-        mechanics.addAll(PageCreators.pageCreatorMachines("sulfurFurnace", new ItemStack(BLBlockRegistry.furnaceBL), "thebetweenlands:textures/gui/manual/furnaceGridExplanation.png", 82, 54, false));
-        mechanics.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, false));
-        mechanics.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
-        mechanics.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
+        machines.clear();
+        machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
+        machines.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false));
+        machines.addAll(PageCreators.pageCreatorMachines("sulfurFurnace", new ItemStack(BLBlockRegistry.furnaceBL), "thebetweenlands:textures/gui/manual/furnaceGridExplanation.png", 82, 54, false));
+        machines.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, false));
+        machines.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
+        machines.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
+        machines.addAll(PageCreators.pageCreatorMachines("animator", new ItemStack(BLBlockRegistry.animator), "thebetweenlands:textures/gui/manual/animatorGridExplanation.png", 108, 67, false));
 
         ArrayList<Page> temp = new ArrayList<>();
-        while (mechanics.size() > 0) {
+        while (machines.size() > 0) {
             Page currentFirst = null;
-            for (Page page : mechanics) {
+            for (Page page : machines) {
                 if (currentFirst == null)
                     currentFirst = page;
                 else {
@@ -136,13 +137,13 @@ public class GuideBookEntryRegistry {
                     }
                 }
             }
-            mechanics.remove(currentFirst);
+            machines.remove(currentFirst);
             temp.add(currentFirst);
         }
-        mechanics.clear();
-        mechanics.addAll(temp);
+        machines.clear();
+        machines.addAll(temp);
 
-        machineCategory = new ManualCategory(mechanics, 2);
+        machineCategory = new ManualCategory(machines, 2);
     }
 
     public static void initEnityEntries() {

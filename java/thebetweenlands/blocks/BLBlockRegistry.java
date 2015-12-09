@@ -21,7 +21,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
@@ -606,6 +608,9 @@ public class BLBlockRegistry {
 					GameRegistry.registerBlock(slab, ItemBlockSlab.class, slab.getLocalizedName(), slab, obj, false);
 			} else
 				GameRegistry.registerBlock(slab, ItemBlockSlab.class, slab.getUnlocalizedName() + "Double", slab.dropsThis, slab, true);
+			if (!StatCollector.canTranslate(slab.getUnlocalizedName() + ".name")) {
+				TheBetweenlands.unlocalizedNames.add(slab.getUnlocalizedName());
+			}
 		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
@@ -646,6 +651,10 @@ public class BLBlockRegistry {
 			GameRegistry.registerBlock(block, ((ISubBlocksBlock) block).getItemBlockClass(), strings[strings.length - 1]);
 		else
 			GameRegistry.registerBlock(block, strings[strings.length - 1]);
+
+		if (!StatCollector.canTranslate(block.getUnlocalizedName()  + ".name")) {
+			TheBetweenlands.unlocalizedNames.add(block.getUnlocalizedName() + ".name");
+		}
 	}
 
 	private static void registerProperties() {

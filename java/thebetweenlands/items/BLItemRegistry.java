@@ -10,6 +10,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
@@ -276,6 +278,9 @@ public class BLItemRegistry {
 		String name = item.getUnlocalizedName();
 		String[] strings = name.split("\\.");
 		GameRegistry.registerItem(item, strings[strings.length - 1]);
+		if (!StatCollector.canTranslate(item.getUnlocalizedName() + ".name")) {
+			TheBetweenlands.unlocalizedNames.add(item.getUnlocalizedName() + ".name");
+		}
 	}
 
 	private static void registerProperties() {
