@@ -116,9 +116,6 @@ public class RecipeBuffers {
                                     case "outputItem":
                                         outputItem = jsonReader.nextString();
                                         break;
-                                    case "inputAmount":
-                                        inputAmount = jsonReader.nextInt();
-                                        break;
                                     case "outputAmount":
                                         outputAmount = jsonReader.nextInt();
                                         break;
@@ -134,13 +131,13 @@ public class RecipeBuffers {
                             case "druidAltar": {
                                 String n = jsonReader.nextName();
                                 switch (n) {
-                                    case "inputType":
+                                    case "inputType1":
                                         inputType = jsonReader.nextString();
                                         break;
-                                    case "inputItem":
+                                    case "inputItem1":
                                         inputItem = jsonReader.nextString();
                                         break;
-                                    case "metaInput":
+                                    case "metaInput1":
                                         metaInput = jsonReader.nextInt();
                                         break;
                                     case "inputType2":
