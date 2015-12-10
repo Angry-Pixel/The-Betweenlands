@@ -1,8 +1,12 @@
 package thebetweenlands.manual;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
@@ -13,6 +17,8 @@ import thebetweenlands.manual.widgets.text.TextFormatComponents;
 import thebetweenlands.manual.widgets.text.TextWidget;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Bart on 23/11/2015.
@@ -241,13 +247,13 @@ public class PageCreators {
         if (height < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
+            widgets.add(new AspectItemWidget(18, 12 + height, aspect));
             height += 18;
         } else {
             newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemWidget(18, 12 + height, new ItemStack(BLItemRegistry.ancient), 1.0f));
+            widgets.add(new AspectItemWidget(18, 12 + height, aspect));
             height += 18;
         }
 

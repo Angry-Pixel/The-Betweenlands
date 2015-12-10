@@ -63,22 +63,24 @@ public class ManualCategory {
 
 
     public void setPage(int pageNumber, GuiManualBase manual) {
-        if (pageNumber % 2 == 0)
-            pageNumber--;
-        if (pageNumber <= visiblePages.size()) {
-            currentPageLeft = visiblePages.get(pageNumber - 1);
-            if (visiblePages.size() >= pageNumber + 1)
-                currentPageRight = visiblePages.get(pageNumber);
-            else
-                currentPageRight = blankPage;
-            currentPage = pageNumber;
-        }
-        currentPageLeft.init(manual);
-        currentPageRight.init(manual);
-        currentPageRight.setPageToRight();
+        if (currentPageLeft != null && currentPageRight != null) {
+            if (pageNumber % 2 == 0)
+                pageNumber--;
+            if (pageNumber <= visiblePages.size()) {
+                currentPageLeft = visiblePages.get(pageNumber - 1);
+                if (visiblePages.size() >= pageNumber + 1)
+                    currentPageRight = visiblePages.get(pageNumber);
+                else
+                    currentPageRight = blankPage;
+                currentPage = pageNumber;
+            }
+            currentPageLeft.init(manual);
+            currentPageRight.init(manual);
+            currentPageRight.setPageToRight();
 
-        currentPageLeft.resize();
-        currentPageRight.resize();
+            currentPageLeft.resize();
+            currentPageRight.resize();
+        }
     }
 
     public void nextPage(GuiManualBase manual) {
