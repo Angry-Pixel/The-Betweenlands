@@ -629,6 +629,10 @@
         "stream": true
       },
       {
+        "name": "music/Barrowmound",
+        "stream": true
+      },
+      {
         "name": "music/Darkness",
         "stream": true
       },
