@@ -291,11 +291,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
 		for (int i = 0; i < getSizeInventory(); i++) {
+			NBTTagCompound itemStackCompound = new NBTTagCompound();
 			if(inventory[i] != null) {
-				NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
-				nbt.setTag("slotItem" + i, itemStackCompound);
-			} else
-				nbt.setTag("slotItem" + i, null);
+				inventory[i].writeToNBT(itemStackCompound);
+			} 
+			nbt.setTag("slotItem" + i, itemStackCompound);
 		}
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
