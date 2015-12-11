@@ -1,11 +1,8 @@
 package thebetweenlands.manual;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
@@ -17,8 +14,6 @@ import thebetweenlands.manual.widgets.text.TextFormatComponents;
 import thebetweenlands.manual.widgets.text.TextWidget;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Bart on 23/11/2015.
@@ -247,13 +242,13 @@ public class PageCreators {
         if (height < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new AspectItemWidget(18, 12 + height, aspect));
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         } else {
             newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new AspectItemWidget(18, 12 + height, aspect));
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         }
 
@@ -261,21 +256,13 @@ public class PageCreators {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
             height += 10;
             int width = 0;
+            ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
-                if (width <= 72) {
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
-                    width += 18;
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
-                    width += 18;
-                } else {
-                    height += 18;
-                    width = 0;
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
-                    width += 18;
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
-                    width += 18;
-                }
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            height += 18;
         } else {
             if (newPages.size() > 0)
                 newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setAspect(aspect));
@@ -283,35 +270,13 @@ public class PageCreators {
                 newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 10;
-            int width = 0;
+            ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
-                if (width <= 72) {
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
-                    width += 18;
-                    widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
-                    width += 18;
-                } else {
-                    if (height + 18 < 152) {
-                        height += 18;
-                        width = 0;
-                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
-                        width += 18;
-                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
-                        width += 18;
-                    } else {
-                        if (newPages.size() > 0)
-                            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setAspect(aspect));
-                        else
-                            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
-                        height += 18;
-                        width = 0;
-                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0), 1.0f));
-                        width += 18;
-                        widgets.add(new ItemWidget(18 + width, 12 + height, BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1), 1.0f));
-                        width += 18;
-                    }
-                }
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            height += 18;
         }
 
         if (widgets.size() > 0) {
@@ -320,6 +285,43 @@ public class PageCreators {
             else
                 newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false).setParent().setAspect(aspect));
         }
+        return newPages;
+    }
+
+    public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        int height = 0;
+        ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
+        ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+        widgets.add(new ItemWidget(18, 12, itemStack, 1f));
+        widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), true));
+        height += 20;
+        widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
+        TextContainer textContainer = new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
+
+        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
+        textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("bold", EnumChatFormatting.BOLD));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("italic", EnumChatFormatting.ITALIC));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatPagelink());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatRainbow());
+        try {
+            textContainer.parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+        widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
+        height += 18;
+        widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
+        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true).setParent().setItem(itemStack));
         return newPages;
     }
 

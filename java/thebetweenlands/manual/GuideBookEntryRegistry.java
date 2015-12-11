@@ -79,9 +79,9 @@ public class GuideBookEntryRegistry {
                 if (currentFirst == null)
                     currentFirst = page;
                 else {
-                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageName = page.pageName.toLowerCase();
                     char[] characters = pageName.toCharArray();
-                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
                         if(charactersFirst.length > i) {
@@ -121,9 +121,9 @@ public class GuideBookEntryRegistry {
                 if (currentFirst == null)
                     currentFirst = page;
                 else {
-                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageName = page.pageName.toLowerCase();
                     char[] characters = pageName.toCharArray();
-                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
                         if(charactersFirst.length > i) {
@@ -160,9 +160,9 @@ public class GuideBookEntryRegistry {
                 if (currentFirst == null)
                     currentFirst = page;
                 else {
-                    String pageName = page.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageName = page.pageName.toLowerCase();
                     char[] characters = pageName.toCharArray();
-                    String pageNameFirst = currentFirst.pageName.toLowerCase().replace("<underline>", "").replace("</underline>", "");
+                    String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
                         if(charactersFirst.length > i) {

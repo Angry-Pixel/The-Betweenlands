@@ -49,7 +49,7 @@ public class ButtonWidget extends ManualWidgetsBase {
         } else if (page.resourceLocation != null) {
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
         }
-        this.textContainer = new TextContainer(100, 16, page.pageName);
+        this.textContainer = new TextContainer(84, 16, page.pageName);
 
         this.isHidden = page.isHidden;
         this.init();
@@ -66,7 +66,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(100, 16, page.pageName);
+        this.textContainer = new TextContainer(84, 16, page.pageName);
         this.init();
     }
 
@@ -143,7 +143,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(116, 144, page.pageName);
+        this.textContainer = new TextContainer(84, 16, page.pageName);
         this.init();
     }
 }

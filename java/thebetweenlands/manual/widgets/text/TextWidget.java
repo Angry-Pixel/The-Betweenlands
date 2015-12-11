@@ -21,7 +21,7 @@ public class TextWidget extends ManualWidgetsBase {
 
     public TextWidget(int xStart, int yStart, String unlocalizedText) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -31,7 +31,7 @@ public class TextWidget extends ManualWidgetsBase {
 
     public TextWidget(int xStart, int yStart, String unlocalizedText, int pageNumber) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -42,7 +42,7 @@ public class TextWidget extends ManualWidgetsBase {
 
     public TextWidget(int xStart, int yStart, String unlocalizedText, float scale) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -53,7 +53,7 @@ public class TextWidget extends ManualWidgetsBase {
 
     public TextWidget(int xStart, int yStart, String text, boolean localized) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(116, 150, localized ? text : StatCollector.translateToLocal(text));
+        this.textContainer = new TextContainer(130 - xStart, 150, localized ? text : StatCollector.translateToLocal(text));
         this.text = localized ? text : StatCollector.translateToLocal(text);
         this.init();
     }
@@ -61,7 +61,7 @@ public class TextWidget extends ManualWidgetsBase {
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
+        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
         this.init();
     }
 
@@ -89,21 +89,16 @@ public class TextWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        //this.textContainer.renderBounds();
-        //this.textContainer.render();
-        //this.textContainer.renderTooltips(mouseX, mouseY);
-
         TextPage page = this.textContainer.getPages().get(pageNumber);
         page.render(this.xStart, this.yStart);
         page.renderTooltips(this.xStart, this.yStart, mouseX, mouseY);
-        //page.renderBounds(this.xStart + pageOffset, this.yStart);
     }
 
 
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
+        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
         this.init();
     }
 }

@@ -158,6 +158,10 @@ public class AspectManager {
 		return Collections.unmodifiableMap(this.matchedAspects);
 	}
 
+	public static Map<AspectItem, List<AspectItemEntry>> getRegisteredItems(){
+		return registeredItems;
+	}
+
 	public static void registerAspect(AspectEntry entry) {
 		registeredAspects.add(entry);
 	}

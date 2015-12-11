@@ -68,6 +68,7 @@ public class Page {
         pageItems.addAll(items);
         return this;
     }
+
     public Page setItem(ItemStack item) {
         pageItems.add(item);
         return this;

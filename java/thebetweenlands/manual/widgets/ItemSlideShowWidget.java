@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.recipes.CompostRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +15,27 @@ import java.util.Map;
 /**
  * Created by Bart on 10/12/2015.
  */
-public class AspectItemWidget extends ManualWidgetsBase {
+public class ItemSlideShowWidget extends ManualWidgetsBase {
     public IAspectType aspectType;
     public ArrayList<ItemStack> items = new ArrayList<>();
 
     public int currentItems = 0;
 
-    public AspectItemWidget(int xStart, int yStart, IAspectType aspectType) {
+    public ItemSlideShowWidget(int xStart, int yStart, IAspectType aspectType) {
         super(xStart, yStart);
         this.aspectType = aspectType;
+    }
+
+    public ItemSlideShowWidget(int xStart, int yStart, ArrayList<ItemStack> items) {
+        super(xStart, yStart);
+        this.items = items;
     }
 
 
     @Override
     public void drawForeGround() {
         super.drawForeGround();
-        List<ItemStack> subItems = items.subList(currentItems, currentItems + (items.size() - currentItems > 5 ? 6 : items.size() - currentItems ));
+        List<ItemStack> subItems = items.subList(currentItems, currentItems + (items.size() - currentItems > 5 ? 6 : items.size() - currentItems));
         int width = 0;
         for (ItemStack itemStack : subItems) {
             renderItem(xStart + width, yStart, itemStack, false);
@@ -43,7 +46,8 @@ public class AspectItemWidget extends ManualWidgetsBase {
     @Override
     public void resize() {
         super.resize();
-        getItems();
+        if (aspectType != null)
+            getItems();
     }
 
     @Override
