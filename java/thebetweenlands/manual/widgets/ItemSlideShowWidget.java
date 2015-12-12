@@ -54,7 +54,7 @@ public class ItemSlideShowWidget extends ManualWidgetsBase {
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
         super.updateScreen();
-        if (manual.untilUpdate % 20 == 0) {
+        if (manual.untilUpdate % 60 == 0) {
             if (currentItems + 1 < items.size() && items.size() - currentItems > 6) {
                 currentItems++;
             } else

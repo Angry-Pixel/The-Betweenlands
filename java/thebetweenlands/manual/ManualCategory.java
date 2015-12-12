@@ -38,6 +38,26 @@ public class ManualCategory {
         this.number = number;
     }
 
+    public ManualCategory(ArrayList<Page> pages, ArrayList<Page> introPages, int number, ManualManager.EnumManual manualType) {
+        int pageNumber = 1;
+        ArrayList<Page> buttonPages = new ArrayList<>();
+        ArrayList<Page> tempPages = new ArrayList<>();
+        for (Page page : pages) {
+            page.setPageNumber(pageNumber);
+            if (page.isParent)
+                buttonPages.add(page);
+            tempPages.add(page);
+            pageNumber++;
+        }
+        ArrayList<Page> buttonPagesNew;
+        buttonPagesNew = PageCreators.pageCreatorButtons(buttonPages, manualType);
+        indexPages = buttonPagesNew.size() + introPages.size();
+        this.pages.addAll(introPages);
+        this.pages.addAll(buttonPagesNew);
+        this.pages.addAll(tempPages);
+        this.number = number;
+    }
+
 
     public void init(GuiManualBase manual, boolean force) {
         if (currentPageLeft == null || currentPageRight == null || force) {
