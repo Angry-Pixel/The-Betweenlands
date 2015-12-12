@@ -195,8 +195,8 @@ public class PageCreators {
         int height = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new AspectWidget(18, 12, aspect, 1f));
-        widgets.add(new TextWidget(38, 16, "manual." + aspect.getName().toLowerCase() + ".title", 1.5f));
-        height += 18;
+        widgets.add(new TextWidget(38, 16, "manual." + aspect.getName().toLowerCase() + ".title"));
+        height += 22;
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
 
@@ -258,7 +258,7 @@ public class PageCreators {
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
         widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), true));
-        height += 20;
+        height += 22;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description")));
 
