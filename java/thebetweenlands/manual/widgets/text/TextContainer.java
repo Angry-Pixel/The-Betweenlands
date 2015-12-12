@@ -242,10 +242,12 @@ public class TextContainer {
 		private final List<TextArea> textAreas = new ArrayList<TextArea>();
 
 		public final int width, height;
+		private final FontRenderer fontRenderer;
 
-		private TextPage(int width, int height) {
+		private TextPage(int width, int height, FontRenderer fontRenderer) {
 			this.width = width;
 			this.height = height;
+			this.fontRenderer = fontRenderer;
 		}
 
 		/**
@@ -288,7 +290,7 @@ public class TextContainer {
 			for(TextSegment segment : this.textSegments) {
 				GL11.glPushMatrix();
 				GL11.glScalef(segment.scale, segment.scale, 1.0F);
-				Minecraft.getMinecraft().fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int((segment.x + x) / segment.scale), MathHelper.ceiling_float_int((segment.y + y) / segment.scale), segment.color);
+				fontRenderer.drawString(segment.text, MathHelper.ceiling_float_int((segment.x + x) / segment.scale), MathHelper.ceiling_float_int((segment.y + y) / segment.scale), segment.color);
 				GL11.glColor4f(1, 1, 1, 1);
 				GL11.glPopMatrix();
 			}
@@ -338,6 +340,7 @@ public class TextContainer {
 
 	private final int width, height;
 	private final String unparsedText;
+	private final FontRenderer fontRenderer;
 	private static final char DELIMITER = Character.MAX_VALUE;
 	private float currentScale = 1.0F;
 	private int currentColor = 1;
@@ -358,6 +361,14 @@ public class TextContainer {
 		this.width = width;
 		this.height = height;
 		this.unparsedText = unparsedText;
+		fontRenderer = Minecraft.getMinecraft().fontRenderer;
+	}
+
+	public TextContainer(int width, int height, String unparsedText, FontRenderer fontRenderer) {
+		this.width = width;
+		this.height = height;
+		this.unparsedText = unparsedText;
+		this.fontRenderer = fontRenderer;
 	}
 
 	/**
@@ -587,13 +598,12 @@ public class TextContainer {
 				if(format instanceof TextFormatTag) this.getFormatStack(format.type, this.textFormatComponentStacks).push((TextFormatTag) format);
 			}
 			this.textPages.clear();
-			this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+			this.textPages.add(this.currentPage = new TextPage(this.width, this.height, fontRenderer));
 			List<TextArea> tmpTextAreas = new ArrayList<TextArea>();
 			List<TextArea> combinedAreas = new ArrayList<TextArea>();
 			TextSegment offsetSegment = null;
 			String[] words = this.getSplitWords(this.parsedText);
 			int wordIndex = 0;
-			FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 			int defaultSpaceWidth = fontRenderer.getStringWidth(" ");
 			int fontHeight = fontRenderer.FONT_HEIGHT;
 			int xOffsetMax = this.width;
@@ -687,7 +697,7 @@ public class TextContainer {
 						if(yCursor + currentFontHeight >= this.height) {
 							xCursor = 0;
 							yCursor = 0;
-							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+							this.textPages.add(this.currentPage = new TextPage(this.width, this.height, fontRenderer));
 						}
 						currentFontHeight = 0;
 						combinedAreas.clear();
@@ -704,7 +714,7 @@ public class TextContainer {
 						if(yCursor + currentFontHeight >= this.height) {
 							xCursor = 0;
 							yCursor = 0;
-							this.textPages.add(this.currentPage = new TextPage(this.width, this.height));
+							this.textPages.add(this.currentPage = new TextPage(this.width, this.height, fontRenderer));
 						}
 						currentFontHeight = 0;
 						this.nextLine = 0;
