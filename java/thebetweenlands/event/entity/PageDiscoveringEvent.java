@@ -15,9 +15,9 @@ public class PageDiscoveringEvent {
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event){
         if (event.entityLiving != null && event.entityLiving instanceof EntityLiving){
             if (event.entityLiving instanceof IEntityBL )
-                ManualManager.PlayerDiscoverPage((EntityLiving) event.entityLiving, ((IEntityBL) event.entityLiving).pageName());
+                ManualManager.PlayerDiscoverPage((EntityLiving) event.entityLiving, ((IEntityBL) event.entityLiving).pageName(), ManualManager.EnumManual.GUIDEBOOK);
             if (event.entityLiving instanceof EntityDarkDruid)
-                ManualManager.PlayerDiscoverPage((EntityLiving) event.entityLiving, "darkDruid");
+                ManualManager.PlayerDiscoverPage((EntityLiving) event.entityLiving, "darkDruid", ManualManager.EnumManual.GUIDEBOOK);
         }
     }
 }

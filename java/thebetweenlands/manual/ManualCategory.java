@@ -12,14 +12,14 @@ public class ManualCategory {
     public List<Page> pages = new ArrayList<>();
     public List<Page> visiblePages = new ArrayList<>();
 
-    public Page blankPage = new Page("blank", false);
+    public Page blankPage = new Page("blank", false, ManualManager.EnumManual.GUIDEBOOK);
     public Page currentPageLeft = null;
     public Page currentPageRight = null;
     public int currentPage = 1;
     public int indexPages = 0;
     public int number;
 
-    public ManualCategory(ArrayList<Page> pages, int number) {
+    public ManualCategory(ArrayList<Page> pages, int number, ManualManager.EnumManual manualType) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
         ArrayList<Page> tempPages = new ArrayList<>();
@@ -31,7 +31,7 @@ public class ManualCategory {
             pageNumber++;
         }
         ArrayList<Page> buttonPagesNew;
-        buttonPagesNew = PageCreators.pageCreatorButtons(buttonPages);
+        buttonPagesNew = PageCreators.pageCreatorButtons(buttonPages, manualType);
         indexPages = buttonPagesNew.size();
         this.pages.addAll(buttonPagesNew);
         this.pages.addAll(tempPages);
@@ -43,7 +43,7 @@ public class ManualCategory {
         if (currentPageLeft == null || currentPageRight == null || force) {
             visiblePages.clear();
             for (Page page : pages)
-                if (!page.isHidden || ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName))
+                if (!page.isHidden || ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName, manual.manualType))
                     visiblePages.add(page);
             if (!visiblePages.isEmpty()) {
                 currentPageLeft = this.visiblePages.get(0);

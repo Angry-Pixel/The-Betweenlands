@@ -24,12 +24,15 @@ public class GuiManualBase extends GuiScreen {
     public int untilUpdate = 0;
     public ManualCategory currentCategory;
 
+    public ManualManager.EnumManual manualType;
+
     public GuiManualBase(EntityPlayer player) {
         this.player = player;
     }
 
     @Override
     public void initGui() {
+        manualType = ManualManager.EnumManual.GUIDEBOOK;
         xStart = width / 2 - 146;
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;

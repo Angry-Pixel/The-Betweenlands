@@ -21,7 +21,7 @@ public class BookCloneRecipe implements IRecipe {
             ItemStack itemstack1 = inventoryCrafting.getStackInSlot(j);
 
             if (itemstack1 != null) {
-                if (itemstack1.getItem() == BLItemRegistry.manualGuideBook) {
+                if (itemstack1.getItem() == BLItemRegistry.manualGuideBook || itemstack1.getItem() == BLItemRegistry.manualHL) {
                     if (itemstack != null) {
                         return false;
                     }
@@ -49,7 +49,7 @@ public class BookCloneRecipe implements IRecipe {
             ItemStack itemstack1 = inventoryCrafting.getStackInSlot(j);
 
             if (itemstack1 != null) {
-                if (itemstack1.getItem() == BLItemRegistry.manualGuideBook) {
+                if (itemstack1.getItem() == BLItemRegistry.manualGuideBook || itemstack1.getItem() == BLItemRegistry.manualGuideBook) {
                     if (itemstack != null) {
                         return null;
                     }
@@ -66,8 +66,13 @@ public class BookCloneRecipe implements IRecipe {
         }
 
         if (itemstack != null && i >= 1) {
-            ItemStack itemstack2 = new ItemStack(BLItemRegistry.manualGuideBook, i + 1);
-            itemstack2.setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+            ItemStack itemstack2;
+            if (itemstack.getItem() == BLItemRegistry.manualGuideBook)
+                itemstack2 = new ItemStack(BLItemRegistry.manualGuideBook, i + 1);
+            else
+                itemstack2 = new ItemStack(BLItemRegistry.manualHL, i + 1);
+            if (itemstack.getTagCompound() != null)
+                itemstack2.setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
 
             if (itemstack.hasDisplayName())
                 itemstack2.setStackDisplayName(itemstack.getDisplayName());

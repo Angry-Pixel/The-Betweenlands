@@ -2,7 +2,6 @@ package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import thebetweenlands.command.CommandFindPage;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 
@@ -36,22 +35,32 @@ public class Page {
 
     public boolean isParent = false;
 
-    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden) {
+    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden, ManualManager.EnumManual manualType) {
         this.widgets = widgets;
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
-        if (isHidden)
-            CommandFindPage.childCommands.add(pageName);
+        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+            ManualManager.findablePagesGuideBook.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+            ManualManager.findablePagesHL.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        }
     }
 
-    public Page(String pageName, boolean isHidden, ManualWidgetsBase... widgets) {
+    public Page(String pageName, boolean isHidden, ManualManager.EnumManual manualType, ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
-        if (isHidden)
-            CommandFindPage.childCommands.add(pageName);
+        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+            ManualManager.findablePagesGuideBook.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+            ManualManager.findablePagesHL.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        }
     }
 
     public void init(GuiManualBase manual) {

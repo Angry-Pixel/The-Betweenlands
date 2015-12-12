@@ -28,7 +28,6 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandDecay;
 import thebetweenlands.command.CommandFindPage;
-import thebetweenlands.command.CommandFoundPages;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
@@ -209,7 +208,6 @@ public class TheBetweenlands
 		event.registerServerCommand(new CommandResetAspects());
 		event.registerServerCommand(new CommandDecay());
 		event.registerServerCommand(new CommandFindPage());
-		event.registerServerCommand(new CommandFoundPages());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
 		}

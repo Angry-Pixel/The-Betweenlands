@@ -18,6 +18,7 @@ public class GuiManualHerblore extends GuiManualBase {
 
     @Override
     public void initGui() {
+        manualType = ManualManager.EnumManual.HL;
         xStart = width / 2 - 146;
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;

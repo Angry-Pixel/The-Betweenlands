@@ -25,8 +25,8 @@ public class ItemManual extends Item {
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
         list.add("Found pages: ");
-        if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player) != null) {
-            list.addAll(ManualManager.getFoundPages(player));
+        if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player, ManualManager.EnumManual.GUIDEBOOK) != null) {
+            list.addAll(ManualManager.getFoundPages(player, ManualManager.EnumManual.GUIDEBOOK));
         }
     }
 

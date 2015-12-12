@@ -16,6 +16,8 @@ public class HLEntryRegistry {
     public static ArrayList<Page> aspectPages = new ArrayList<>();
     public static ArrayList<Page> itemPages = new ArrayList<>();
 
+    public static ManualManager.EnumManual manualType = ManualManager.EnumManual.HL;
+
     public static void init() {
         initAspectEntries();
     }
@@ -25,13 +27,13 @@ public class HLEntryRegistry {
         aspectPages.clear();
         itemPages.clear();
         for (IAspectType aspect : AspectManager.ASPECT_TYPES) {
-            aspectPages.addAll(PageCreators.AspectPages(aspect));
+            aspectPages.addAll(PageCreators.AspectPages(aspect, manualType ));
         }
         
         Map<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
         for (Map.Entry<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
             if (e.getKey() != null)
-                itemPages.addAll(PageCreators.AspectItemPages(e.getKey()));
+                itemPages.addAll(PageCreators.AspectItemPages(e.getKey(), manualType));
         }
 
         ArrayList<Page> temp = new ArrayList<>();
@@ -63,6 +65,6 @@ public class HLEntryRegistry {
         aspectPages.addAll(temp);
         
         
-        aspectCategory = new ManualCategory(aspectPages, 1);
+        aspectCategory = new ManualCategory(aspectPages, 1, manualType);
     }
 }

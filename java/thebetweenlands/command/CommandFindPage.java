@@ -7,15 +7,12 @@ import net.minecraft.util.ChatComponentText;
 import thebetweenlands.manual.ManualManager;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Bart on 28/11/2015.
  */
 public class CommandFindPage extends CommandBase {
-    public static List<String> childCommands = new ArrayList<>();
 
     @Override
     public String getCommandName() {
@@ -33,20 +30,15 @@ public class CommandFindPage extends CommandBase {
             sender.addChatMessage(new ChatComponentText("World is null or entity is not a player"));
             return;
         }
-        if (childCommands.contains(args[0]))
-            ManualManager.findPage((EntityPlayer) sender, args[0]);
+        if (ManualManager.findablePagesGuideBook.contains(args[0]))
+            ManualManager.findPage((EntityPlayer) sender, args[0], ManualManager.EnumManual.GUIDEBOOK);
+        else if (ManualManager.findablePagesHL.contains(args[0]))
+            ManualManager.findPage((EntityPlayer) sender, args[0], ManualManager.EnumManual.HL);
     }
 
     @Override
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-        if (!(sender.getEntityWorld().provider instanceof WorldProviderBetweenlands)) {
-            return null;
-        }
-        List<String> completions = null;
-        if (args.length == 1) {
-            completions = childCommands;
-        }
-        return completions == null ? null : getListOfStringsMatchingLastWord(args, completions.toArray(new String[0]));
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, ManualManager.findablePagesAll.toArray(new String[0])) : null;
     }
 
 }

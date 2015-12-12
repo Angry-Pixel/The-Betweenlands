@@ -37,7 +37,7 @@ public class GuideBookEntryRegistry {
     public static ArrayList<Page> entityPages = new ArrayList<>();
     public static ArrayList<Page> machines = new ArrayList<>();
 
-
+    public static ManualManager.EnumManual manualType = ManualManager.EnumManual.GUIDEBOOK;
 
     public static ManualCategory itemsCategory;
     public static ManualCategory machineCategory;
@@ -58,14 +58,14 @@ public class GuideBookEntryRegistry {
 
         itemPages.clear();
         for (IManualEntryItem item : itemEntryItem)
-            itemPages.addAll(PageCreators.pageCreatorItems(item, false));
+            itemPages.addAll(PageCreators.pageCreatorItems(item, false, manualType));
         try {
             for (Field f : GuideBookEntryRegistry.class.getDeclaredFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof IManualEntryItem[]) {
                     ArrayList<IManualEntryItem> list = new ArrayList<>();
                     Collections.addAll(list, (IManualEntryItem[]) obj);
-                    itemPages.addAll(PageCreators.pageCreatorItems(f.getName(), list, false));
+                    itemPages.addAll(PageCreators.pageCreatorItems(f.getName(), list, false, manualType));
                 }
             }
         } catch (Exception e) {
@@ -101,18 +101,18 @@ public class GuideBookEntryRegistry {
         itemPages.clear();
         itemPages.addAll(temp);
 
-        itemsCategory = new ManualCategory(itemPages, 1);
+        itemsCategory = new ManualCategory(itemPages, 1, manualType);
     }
 
     public static void initMachineEntries() {
         machines.clear();
-        machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false));
-        machines.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false));
-        machines.addAll(PageCreators.pageCreatorMachines("sulfurFurnace", new ItemStack(BLBlockRegistry.furnaceBL), "thebetweenlands:textures/gui/manual/furnaceGridExplanation.png", 82, 54, false));
-        machines.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, false));
-        machines.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false));
-        machines.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false));
-        machines.addAll(PageCreators.pageCreatorMachines("animator", new ItemStack(BLBlockRegistry.animator), "thebetweenlands:textures/gui/manual/animatorGridExplanation.png", 108, 67, false));
+        machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("purifier", new ItemStack(BLBlockRegistry.purifier), "thebetweenlands:textures/gui/manual/purifierGridExplanation.png", 82, 58, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("sulfurFurnace", new ItemStack(BLBlockRegistry.furnaceBL), "thebetweenlands:textures/gui/manual/furnaceGridExplanation.png", 82, 54, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("druidAltar", new ItemStack(BLBlockRegistry.druidAltar), "thebetweenlands:textures/gui/manual/druidAltarGridExplanation.png", 74, 74, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("compostBin", new ItemStack(BLBlockRegistry.compostBin), "thebetweenlands:textures/gui/manual/compostExplanation.png", 89, 58, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("rubberTab", new ItemStack(BLBlockRegistry.rubberTreeLog), "thebetweenlands:textures/gui/manual/rubberTabExplanation.png", 89, 58, false, manualType));
+        machines.addAll(PageCreators.pageCreatorMachines("animator", new ItemStack(BLBlockRegistry.animator), "thebetweenlands:textures/gui/manual/animatorGridExplanation.png", 108, 67, false, manualType));
 
         ArrayList<Page> temp = new ArrayList<>();
         while (machines.size() > 0) {
@@ -143,15 +143,15 @@ public class GuideBookEntryRegistry {
         machines.clear();
         machines.addAll(temp);
 
-        machineCategory = new ManualCategory(machines, 2);
+        machineCategory = new ManualCategory(machines, 2, manualType);
     }
 
     public static void initEnityEntries() {
-        IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 128, 10, 0), new IManualEntryEntity("angler", 110, 128, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 128, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 128, -1, -1), new IManualEntryEntity("bloodSnail", 110, 128, -1, -1), new IManualEntryEntity("darkDruid", 110, 128, -1, -1), new IManualEntryEntity("dragonFly", 110, 128, -1, -1), new IManualEntryEntity("firefly", 110, 128, -1, -1), new IManualEntryEntity("gecko", 110, 128, -1, -1), new IManualEntryEntity("giantToad", 110, 128, -1, -1), new IManualEntryEntity("leech", 110, 128, -1, -1), new IManualEntryEntity("lurker", 110, 128, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 128, -1, -1), new IManualEntryEntity("mireSnail", 110, 128, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 128, -1, -1), new IManualEntryEntity("peatMummy", 110, 128, -1, -1), new IManualEntryEntity("siltCrab", 110, 128, -1, -1), new IManualEntryEntity("sludge", 110, 128, -1, -1), new IManualEntryEntity("sporeling", 110, 128, -1, -1), new IManualEntryEntity("swampHag", 110, 128, -1, -1), new IManualEntryEntity("tarBeast", 110, 128, -1, -1), new IManualEntryEntity("tarminion", 110, 128, -1, -1), new IManualEntryEntity("termite", 110, 128, -1, -1), new IManualEntryEntity("wight", 110, 128, -1, -1)};
+        IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 128, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 128, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 128, -1, -1), new IManualEntryEntity("bloodSnail", 110, 128, -1, -1), new IManualEntryEntity("darkDruid", 110, 128, -1, -1), new IManualEntryEntity("dragonFly", 110, 128, -1, -1), new IManualEntryEntity("firefly", 110, 128, -1, -1), new IManualEntryEntity("gecko", 110, 128, -1, -1), new IManualEntryEntity("giantToad", 110, 128, -1, -1), new IManualEntryEntity("leech", 110, 128, -1, -1), new IManualEntryEntity("lurker", 110, 128, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 128, -1, -1), new IManualEntryEntity("mireSnail", 110, 128, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 128, -1, -1), new IManualEntryEntity("peatMummy", 110, 128, -1, -1), new IManualEntryEntity("siltCrab", 110, 128, -1, -1), new IManualEntryEntity("sludge", 110, 128, -1, -1), new IManualEntryEntity("sporeling", 110, 128, -1, -1), new IManualEntryEntity("swampHag", 110, 128, -1, -1), new IManualEntryEntity("tarBeast", 110, 128, -1, -1), new IManualEntryEntity("tarminion", 110, 128, -1, -1), new IManualEntryEntity("termite", 110, 128, -1, -1), new IManualEntryEntity("wight", 110, 128, -1, -1)};
 
         entityPages.clear();
         for (IManualEntryEntity entity : manualEntryEntities) {
-            entityPages.addAll(PageCreators.pageCreatorEntities(entity, true));
+            entityPages.addAll(PageCreators.pageCreatorEntities(entity, true, manualType));
         }
         ArrayList<Page> temp = new ArrayList<>();
         while (entityPages.size() > 0) {
@@ -182,6 +182,6 @@ public class GuideBookEntryRegistry {
         entityPages.clear();
         entityPages.addAll(temp);
 
-        entitiesCategory = new ManualCategory(entityPages, 3);
+        entitiesCategory = new ManualCategory(entityPages, 3, manualType);
     }
 }
