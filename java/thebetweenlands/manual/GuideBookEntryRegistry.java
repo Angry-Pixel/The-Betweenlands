@@ -13,6 +13,8 @@ import java.util.Collections;
  */
 public class GuideBookEntryRegistry {
 
+    public static ArrayList<ManualCategory> CATEGORIES = new ArrayList<>();
+
     public static IManualEntryItem[] pickaxes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodPickaxe, (IManualEntryItem) BLItemRegistry.betweenstonePickaxe, (IManualEntryItem) BLItemRegistry.octinePickaxe, (IManualEntryItem) BLItemRegistry.valonitePickaxe};
     public static IManualEntryItem[] axes = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodAxe, (IManualEntryItem) BLItemRegistry.betweenstoneAxe, (IManualEntryItem) BLItemRegistry.octineAxe, (IManualEntryItem) BLItemRegistry.valoniteAxe};
     public static IManualEntryItem[] shovels = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.weedwoodShovel, (IManualEntryItem) BLItemRegistry.betweenstoneShovel, (IManualEntryItem) BLItemRegistry.octineShovel, (IManualEntryItem) BLItemRegistry.valoniteShovel};
@@ -101,7 +103,8 @@ public class GuideBookEntryRegistry {
         itemPages.clear();
         itemPages.addAll(temp);
 
-        itemsCategory = new ManualCategory(itemPages, 1, manualType);
+        itemsCategory = new ManualCategory(itemPages, 1, manualType, "itemCategory");
+        CATEGORIES.add(itemsCategory);
     }
 
     public static void initMachineEntries() {
@@ -143,7 +146,8 @@ public class GuideBookEntryRegistry {
         machines.clear();
         machines.addAll(temp);
 
-        machineCategory = new ManualCategory(machines, 2, manualType);
+        machineCategory = new ManualCategory(machines, 2, manualType, "machineCategory");
+        CATEGORIES.add(machineCategory);
     }
 
     public static void initEnityEntries() {
@@ -182,6 +186,7 @@ public class GuideBookEntryRegistry {
         entityPages.clear();
         entityPages.addAll(temp);
 
-        entitiesCategory = new ManualCategory(entityPages, 3, manualType);
+        entitiesCategory = new ManualCategory(entityPages, 3, manualType, "entitiesCategory");
+        CATEGORIES.add(entitiesCategory);
     }
 }

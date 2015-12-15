@@ -23,7 +23,6 @@ public class AspectWidget extends ManualWidgetsBase {
         this.scale = scale;
     }
 
-
     @Override
     public void drawForeGround() {
         super.drawForeGround();
@@ -35,10 +34,6 @@ public class AspectWidget extends ManualWidgetsBase {
             renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
         }
     }
-
-    public static final ResourceLocation ASPECT_MAP = new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/aspectMap.png");
-    public static final int TEX_WIDTH = 64, TEX_HEIGHT = 64, ICON_WIDTH = 16, ICON_HEIGHT = 16, ICONS_H = TEX_WIDTH / ICON_WIDTH;
-    private static final double REL_ICON_WIDTH = (double) ICON_WIDTH / (double) TEX_WIDTH, REL_ICON_HEIGHT = (double) ICON_HEIGHT / (double) TEX_HEIGHT;
 
     public static void renderIcon(int x, int y, int width, int height, int id) {
         final ResourceLocation ASPECT_MAP = new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/aspectMap.png");

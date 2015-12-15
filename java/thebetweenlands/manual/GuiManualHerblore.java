@@ -23,7 +23,7 @@ public class GuiManualHerblore extends GuiManualBase {
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
-        changeCategory(HLEntryRegistry.aspectCategory);
+        changeCategory(ManualManager.getCurrentCategory(manualType, player), ManualManager.getCurrentPageNumber(manualType, player));
     }
 
 
@@ -56,10 +56,14 @@ public class GuiManualHerblore extends GuiManualBase {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (currentCategory != null) {
-            if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0)
+            if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.previousPage(this);
-            if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0)
+                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+            }
+            if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.nextPage(this);
+                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+            }
             if (mouseX >= xStart + (currentCategory.number >= 1?0:279) && mouseX <= xStart + (currentCategory.number >= 1?0:279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
                 changeCategory(HLEntryRegistry.aspectCategory);
             //if (mouseX >= xStart + (currentCategory.number >= 2?0:279) && mouseX <= xStart + (currentCategory.number >= 2?0:279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)

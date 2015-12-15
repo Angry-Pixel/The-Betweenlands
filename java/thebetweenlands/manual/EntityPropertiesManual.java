@@ -15,13 +15,11 @@ import java.util.ArrayList;
  */
 public class EntityPropertiesManual implements IBLExtendedEntityProperties {
 
-    public String currentPage = "manual.main.title";
     public ArrayList<String> foundPages = new ArrayList<>();
 
 
     @Override
     public void saveNBTData(NBTTagCompound nbt) {
-        nbt.setString("currentPage", this.currentPage);
 
         NBTTagList pages = new NBTTagList();
         for (String string:foundPages) {
@@ -34,7 +32,6 @@ public class EntityPropertiesManual implements IBLExtendedEntityProperties {
 
     @Override
     public void loadNBTData(NBTTagCompound nbt) {
-        this.currentPage = nbt.getString("currentPage");
         NBTTagList tag = nbt.getTagList("pages", 10);
 
         for (int i = 0; i < tag.tagCount(); i++) {

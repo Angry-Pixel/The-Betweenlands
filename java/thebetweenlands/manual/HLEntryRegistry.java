@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by Bart on 06/12/2015.
  */
 public class HLEntryRegistry {
-
+    public static ArrayList<ManualCategory> CATEGORIES = new ArrayList<>();
     public static ManualCategory aspectCategory;
     public static ArrayList<Page> aspectPages = new ArrayList<>();
     public static ArrayList<Page> itemPages = new ArrayList<>();
@@ -65,6 +65,7 @@ public class HLEntryRegistry {
         aspectPages.addAll(temp);
         
         
-        aspectCategory = new ManualCategory(aspectPages, 1, manualType);
+        aspectCategory = new ManualCategory(aspectPages, 1, manualType, "aspectCategory");
+        CATEGORIES.add(aspectCategory);
     }
 }

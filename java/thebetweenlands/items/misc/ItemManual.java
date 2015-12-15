@@ -24,9 +24,11 @@ public class ItemManual extends Item {
     @SuppressWarnings("unchecked")
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-        list.add("Found pages: ");
         if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player, ManualManager.EnumManual.GUIDEBOOK) != null) {
-            list.addAll(ManualManager.getFoundPages(player, ManualManager.EnumManual.GUIDEBOOK));
+            list.add("Current page: ");
+            list.add("" + ManualManager.getCurrentPageNumber(ManualManager.EnumManual.GUIDEBOOK, player));
+            list.add("Current category: ");
+            list.add(ManualManager.getCurrentCategory(ManualManager.EnumManual.GUIDEBOOK, player).name);
         }
     }
 

@@ -1,7 +1,5 @@
 package thebetweenlands.manual;
 
-import net.minecraft.client.Minecraft;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +16,9 @@ public class ManualCategory {
     public int currentPage = 1;
     public int indexPages = 0;
     public int number;
+    public String name;
 
-    public ManualCategory(ArrayList<Page> pages, int number, ManualManager.EnumManual manualType) {
+    public ManualCategory(ArrayList<Page> pages, int number, ManualManager.EnumManual manualType, String name) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
         ArrayList<Page> tempPages = new ArrayList<>();
@@ -36,9 +35,10 @@ public class ManualCategory {
         this.pages.addAll(buttonPagesNew);
         this.pages.addAll(tempPages);
         this.number = number;
+        this.name = name;
     }
 
-    public ManualCategory(ArrayList<Page> pages, ArrayList<Page> introPages, int number, ManualManager.EnumManual manualType) {
+    public ManualCategory(ArrayList<Page> pages, ArrayList<Page> introPages, int number, ManualManager.EnumManual manualType, String name) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
         ArrayList<Page> tempPages = new ArrayList<>();
@@ -56,6 +56,7 @@ public class ManualCategory {
         this.pages.addAll(buttonPagesNew);
         this.pages.addAll(tempPages);
         this.number = number;
+        this.name = name;
     }
 
 
