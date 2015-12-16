@@ -27,7 +27,7 @@ public class AspectSlideShowWidget extends ManualWidgetsBase {
         this.itemStack = itemStack;
     }
 
-    public AspectSlideShowWidget(int xStart, int yStart, ArrayList<IAspectType> items) {
+    public AspectSlideShowWidget(int xStart, int yStart, ArrayList<IAspectType> aspects) {
         super(xStart, yStart);
         this.aspects = aspects;
     }
