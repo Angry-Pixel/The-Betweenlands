@@ -338,9 +338,21 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				needsOrientCamera = false;
 			}
 			if (needsRenderWorld && "(FJ)V".equals(method.desc)) {
+				String fieldNameAddition = "currentFrustum";
+				String entityRendererOwner = obf ? "blt" : "net/minecraft/client/renderer/EntityRenderer";
+				String frustumDesc = obf ? "Lbmx;" : "Lnet/minecraft/client/renderer/culling/Frustrum;";
+				boolean needsPerspectiveStuff = true;
+				boolean needsFrustumStuff = true;
+				for (FieldNode field : classNode.fields) {
+					if (field.name.equals(fieldNameAddition)) {
+						needsFrustumStuff = false;
+						break;
+					}
+				}
+				boolean replacedASTORE8 = false;
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
-					if (insnNode.getOpcode() == INVOKESTATIC && activeRenderInfo.equals(((MethodInsnNode) insnNode).owner)) {
+					if (needsPerspectiveStuff && insnNode.getOpcode() == INVOKESTATIC && activeRenderInfo.equals(((MethodInsnNode) insnNode).owner)) {
 						InsnList addCameraPosToViewerPos = new InsnList();
 						for (int n = 0, s = 7; n < objectXYZ.length; n++, s += 2) {
 							addCameraPosToViewerPos.add(new VarInsnNode(DLOAD, s));
@@ -350,9 +362,32 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 							addCameraPosToViewerPos.add(new VarInsnNode(DSTORE, s));
 						}
 						method.instructions.insert(insnNode, addCameraPosToViewerPos);
-						break;
+						needsPerspectiveStuff = false;
+					} else if (needsFrustumStuff) {
+						if (replacedASTORE8) {
+							// replace all things trying to get the frustum from the
+							// stack frame to getting the frustum from the class
+							// field
+							if (insnNode.getOpcode() == ALOAD && ((VarInsnNode) insnNode).var == 14) {
+								((VarInsnNode) insnNode).var = 0;
+								method.instructions.insert(insnNode, new FieldInsnNode(GETFIELD, entityRendererOwner, fieldNameAddition, frustumDesc));
+							}
+						} else {
+							// instead of storing the newly created frustum into
+							// slot 14 of the method stack frame, put in the added
+							// class field for external access
+							if (insnNode.getOpcode() == ASTORE && ((VarInsnNode) insnNode).var == 14) {
+								InsnList newInsn = new InsnList();
+								method.instructions.insertBefore(method.instructions.get(i - 3), new VarInsnNode(ALOAD, 0));
+								method.instructions.set(insnNode, new FieldInsnNode(PUTFIELD, entityRendererOwner, fieldNameAddition, frustumDesc));
+								replacedASTORE8 = true;
+							}
+						}
 					}
 				}
+				if (needsFrustumStuff) {
+					classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));	
+				}	
 				needsRenderWorld = false;
 			}
 			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {
