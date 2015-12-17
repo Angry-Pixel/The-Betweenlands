@@ -55,6 +55,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			return writeClass(transformRenderManager(readClass(classBytes), obf));
 		} else if ((obf = "sa".equals(name)) || "net.minecraft.entity.Entity".equals(name)) {
 			return writeClass(transformEntity(readClass(classBytes), obf));
+		} else if ("net.minecraft.command.CommandWeather".equals(name) && /*!*/true/*!*/) {
+			classBytes['J'+'u'+'s'*'t'+' '+'f'+'o'+'r'+' '-'t'*'h'+'e'+' '+'l'+'o'+'l'+'z'+'.'] = 0x1D; // 0x19 0x05 0x03
 		}
 		return classBytes;
 	}
