@@ -10,7 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.proxy.ClientProxy;
-import thebetweenlands.utils.connectedtexture.ConnectedTexture;
+import thebetweenlands.utils.ConnectedTexture;
 
 public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 	private static final ConnectedTexture farmedDirtTextureHelper = new ConnectedTexture(64, 18, 1);

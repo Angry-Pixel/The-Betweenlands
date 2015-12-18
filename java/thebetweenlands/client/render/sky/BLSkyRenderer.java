@@ -322,7 +322,7 @@ public class BLSkyRenderer extends IRenderHandler {
 				minDist = dist;
 			}
 		}
-		if(minDist > 80 || this.auroras.size() == 0) {
+		if(minDist > 150 || this.auroras.size() == 0) {
 			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(40) + 15));
 		}
 
@@ -335,25 +335,25 @@ public class BLSkyRenderer extends IRenderHandler {
 		if(event != null) {
 			switch(event.getAuroraType()) {
 			case 0:
-				gradients.add(new Vector4f(0, 1, 0, 0.05F));
-				gradients.add(new Vector4f(0, 1, 0, 0.05F));
-				gradients.add(new Vector4f(0, 1, 0.8F, 1.0F));
-				gradients.add(new Vector4f(0, 0.7F, 1, 0.05F));
-				gradients.add(new Vector4f(0, 0.4F, 1, 0.05F));
+				gradients.add(new Vector4f(0, 1, 0, 0.01F));
+				gradients.add(new Vector4f(0, 1, 0, 0.15F));
+				gradients.add(new Vector4f(0, 1, 0.8F, 0.8F));
+				gradients.add(new Vector4f(0, 0.7F, 1, 0.15F));
+				gradients.add(new Vector4f(0, 0.4F, 1, 0.01F));
 				break;
 			case 1:
 				gradients.add(new Vector4f(1, 0, 0, 0.05F));
 				gradients.add(new Vector4f(1, 0, 0, 0.2F));
 				gradients.add(new Vector4f(1, 0, 0.5F, 0.5F));
-				gradients.add(new Vector4f(1, 0.2F, 0.5F, 1.0F));
+				gradients.add(new Vector4f(1, 0.2F, 0.5F, 0.8F));
 				gradients.add(new Vector4f(1, 0, 0.5F, 0.5F));
 				gradients.add(new Vector4f(0.8F, 0, 0.5F, 0.25F));
 				break;
 			case 2:
 				gradients.add(new Vector4f(0, 1, 0, 0.05F));
-				gradients.add(new Vector4f(0.5F, 1, 0, 0.2F));
-				gradients.add(new Vector4f(1, 0.8F, 0, 1.0F));
-				gradients.add(new Vector4f(0.5F, 0.4F, 0, 0.2F));
+				gradients.add(new Vector4f(0.5F, 1, 0, 0.15F));
+				gradients.add(new Vector4f(1, 0.8F, 0, 0.7F));
+				gradients.add(new Vector4f(0.5F, 0.4F, 0, 0.15F));
 				gradients.add(new Vector4f(1, 0.2F, 0, 0.05F));
 			}
 		}

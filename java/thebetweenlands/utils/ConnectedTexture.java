@@ -1,4 +1,4 @@
-package thebetweenlands.utils.connectedtexture;
+package thebetweenlands.utils;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.IBlockAccess;
@@ -36,8 +36,7 @@ import net.minecraftforge.common.util.ForgeDirection;
  *  ------- </pre>
  */
 public class ConnectedTexture {
-	private final int texWidth, texHeight, segmentWidth, segmentHeight;
-	private final float horizontalSegments, verticalSegments, horizontalPadding, verticalPadding;
+	private final TextureAtlasHelper atlas;
 
 	/**
 	 * Creates a new connected texture.
@@ -52,14 +51,7 @@ public class ConnectedTexture {
 	 * @param verticalPadding Vertical padding
 	 */
 	public ConnectedTexture(int texWidth, int texHeight, int segmentWidth, int segmentHeight, int horizontalPadding, int verticalPadding) {
-		this.texWidth = texWidth;
-		this.texHeight = texHeight;
-		this.segmentWidth = segmentWidth;
-		this.segmentHeight = segmentHeight;
-		this.horizontalSegments = (float)texWidth / (float)segmentWidth;
-		this.verticalSegments = (float)texHeight / (float)segmentHeight;
-		this.horizontalPadding = (float)horizontalPadding / (float)texWidth;
-		this.verticalPadding = (float)verticalPadding / (float)texHeight;
+		this.atlas = new TextureAtlasHelper(texWidth, texHeight, segmentWidth, segmentHeight, horizontalPadding, verticalPadding);
 	}
 
 	/**
@@ -76,6 +68,14 @@ public class ConnectedTexture {
 	}
 
 	/**
+	 * Creates a new connected texture from a texture atlas helper.
+	 * @param atlas
+	 */
+	public ConnectedTexture(TextureAtlasHelper atlas) {
+		this.atlas = atlas;
+	}
+
+	/**
 	 * Returns the relative (0.0 - 1.0) min. and max. UVs for the given segment and quadrant of the texture.
 	 * Index 0 is min. UV coordinates and index 1 is max. UV coordinates.
 	 * <p>
@@ -86,16 +86,11 @@ public class ConnectedTexture {
 	 */
 	public float[][] getUVs(int segment, int quadrant) {
 		float[][] ret = new float[2][2];
-		float diffU = 1.0F;
-		float diffV = 1.0F;
-		float segmentX = segment % (int)this.horizontalSegments;
-		float segmentY = segment / (int)this.verticalSegments;
-		float relU = (float)segmentX / (float)this.horizontalSegments;
-		float relV = (float)segmentY / (float)this.verticalSegments;
-		float segmentMinU = diffU * (relU + this.horizontalPadding);
-		float segmentMinV = diffV * (relV + this.verticalPadding);
-		float segmentMaxU = diffU * (relU + 1.0F / (float)this.horizontalSegments - this.horizontalPadding);
-		float segmentMaxV = diffV * (relV + 1.0F / (float)this.verticalSegments - this.verticalPadding);
+		float[][] segmentUVs = this.atlas.getUVs(segment);
+		float segmentMinU = segmentUVs[0][0];
+		float segmentMinV = segmentUVs[0][1];
+		float segmentMaxU = segmentUVs[1][0];
+		float segmentMaxV = segmentUVs[1][1];
 		float segmentDiffU = segmentMaxU - segmentMinU;
 		float segmentDiffV = segmentMaxV - segmentMinV;
 		int quadrantX = quadrant % 2;
