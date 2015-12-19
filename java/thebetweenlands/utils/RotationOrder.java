@@ -1,5 +1,7 @@
 package thebetweenlands.utils;
 
+import net.minecraft.util.Vec3;
+
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -25,22 +27,19 @@ public enum RotationOrder {
 		for (int r = 0; r < order.length; r++) {
 			switch (order[r]) {
 			case X:
-				if (x == 0) {
-					break;
+				if (x != 0) {
+					GL11.glRotatef(x, 1, 0, 0);
 				}
-				GL11.glRotatef(x, 1, 0, 0);
 				break;
 			case Y:
-				if (y == 0) {
-					break;
+				if (y != 0) {
+					GL11.glRotatef(y, 0, 1, 0);
 				}
-				GL11.glRotatef(y, 0, 1, 0);
 				break;
 			case Z:
-				if (z == 0) {
-					break;
+				if (z != 0) {
+					GL11.glRotatef(z, 0, 0, 1);
 				}
-				GL11.glRotatef(z, 0, 0, 1);
 				break;
 			}
 		}

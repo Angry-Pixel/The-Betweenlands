@@ -10,6 +10,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -18,6 +20,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.utils.CubicBezier;
+import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.utils.MathUtils;
 
 /*
@@ -28,9 +32,11 @@ import thebetweenlands.utils.MathUtils;
  * https://en.wikipedia.org/wiki/Anatomy_of_a_rowing_stroke
  */
 public class EntityWeedwoodRowboat extends Entity {
+	private static final CubicBezier DEVIATION_DRAG = new CubicBezier(0.9F, 0, 1, 0.6F); 
+
 	private static final int TIME_SINCE_HIT_ID = 17;
 
-	private static final int FORWARD_DIRECTION_ID = 18;
+	private static final int HIT_ROLL_DIRECTION_ID = 18;
 
 	private static final int DAMAGE_TAKEN_ID = 19;
 
@@ -40,17 +46,21 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	public static final int RIGHT_OAR = 1;
 
+	public static final float OAR_ROTATION_SCALE = -28;
+
+	public static final float OAR_ROTATION_PERIOD = MathUtils.TAU / Math.abs(OAR_ROTATION_SCALE);
+
 	private boolean hadPlayer;
 
 	private final float[] rowForce = new float[2];
 
 	private final int[] rowTime = new int[2];
 
+	private final float[] oarRotationBuffer = new float[2];
+
 	private final float[] prevOarRotation = new float[2];
 
 	private float drag;
-
-	private float bobTime;
 
 	private float submergeTicks;
 
@@ -97,7 +107,7 @@ public class EntityWeedwoodRowboat extends Entity {
 	@Override
 	protected void entityInit() {
 		dataWatcher.addObject(TIME_SINCE_HIT_ID, 0);
-		dataWatcher.addObject(FORWARD_DIRECTION_ID, 1);
+		dataWatcher.addObject(HIT_ROLL_DIRECTION_ID, 1);
 		dataWatcher.addObject(DAMAGE_TAKEN_ID, 0F);
 		for (int i = 0; i < OAR_ROTATION_IDS.length; i++) {
 			dataWatcher.addObject(OAR_ROTATION_IDS[i], 0F);
@@ -126,7 +136,7 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return -0.05;
+		return 0;
 	}
 
 	@Override
@@ -174,7 +184,7 @@ public class EntityWeedwoodRowboat extends Entity {
 		if (isEntityInvulnerable()) {
 			return false;
 		} else if (!worldObj.isRemote && !isDead) {
-			setForwardDirection(-getForwardDirection());
+			setHitRollDirection(-getHitRollDirection());
 			setTimeSinceHit(10);
 			setDamageTaken(getDamageTaken() + amount * 10);
 			setBeenAttacked();
@@ -194,12 +204,12 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	@Override
 	public void performHurtAnimation() {
-		setForwardDirection(-getForwardDirection());
+		setHitRollDirection(-getHitRollDirection());
 		setTimeSinceHit(10);
 		setDamageTaken(getDamageTaken() * 11);
 	}
 
-	public void updateControls(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
+	public void updateControls(boolean oarStrokeLeft, boolean oarStrokeRight) {
 		this.oarStrokeLeft = oarStrokeLeft;
 		this.oarStrokeRight = oarStrokeRight;
 	}
@@ -215,9 +225,9 @@ public class EntityWeedwoodRowboat extends Entity {
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
-		prevOarRotation[LEFT_OAR] = getOarRotation(LEFT_OAR);
-		prevOarRotation[RIGHT_OAR] = getOarRotation(RIGHT_OAR);
 		if (worldObj.isRemote) {
+			updateClientOarRotation(LEFT_OAR);
+			updateClientOarRotation(RIGHT_OAR);
 			boolean hasPlayer = riddenByEntity != null;
 			if (!hadPlayer && hasPlayer) {
 				TheBetweenlands.proxy.onPlayerEnterWeedwoodRowboat();
@@ -229,6 +239,13 @@ public class EntityWeedwoodRowboat extends Entity {
 			stroke(RIGHT_OAR, oarStrokeRight, prevOarStrokeRight);
 			prevOarStrokeLeft = oarStrokeLeft;
 			prevOarStrokeRight = oarStrokeRight;
+			// TODO: weedwood rowboat square control
+			/*if (riddenByEntity instanceof EntityLivingBase) {
+				EntityLivingBase pilot = (EntityLivingBase) riddenByEntity;
+				if (pilot.moveForward < 0) {
+					
+				}
+			}*/
 		}
 		super.onUpdate();
 		if (worldObj.isRemote) {
@@ -236,9 +253,9 @@ public class EntityWeedwoodRowboat extends Entity {
 		} else {
 			boatPosRotationIncrements = 0;
 		}
-		applyForces();
-		applyRowForce();
 		if (!worldObj.isRemote) {
+			applyForces();
+			applyRowForce();
 			moveEntity(motionX, motionY, motionZ);
 		}
 		func_145775_I();
@@ -261,13 +278,27 @@ public class EntityWeedwoodRowboat extends Entity {
 		}
 		rotationYaw = MathHelper.wrapAngleTo180_float(rotationYaw);
 		prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
+		adjustOarRotationForInterpolation(LEFT_OAR);
+		adjustOarRotationForInterpolation(RIGHT_OAR);
+	}
+
+	private void adjustOarRotationForInterpolation(int side) {
+		prevOarRotation[side] = MathUtils.adjustValueForInterpolation(getOarRotation(side), prevOarRotation[side], 0, OAR_ROTATION_PERIOD);
+	}
+
+	private void updateClientOarRotation(int side) {
+		if (oarRotationBuffer[side] == getOarRotation(side)) {
+			prevOarRotation[side] = oarRotationBuffer[side];
+		} else {
+			oarRotationBuffer[side] = getOarRotation(side);
+		}
 	}
 
 	@Override
 	public void updateRiderPosition() {
 		if (riddenByEntity != null) {
-			double dx = Math.cos(rotationYaw * Math.PI / 180) * -0.2;
-			double dz = Math.sin(rotationYaw * Math.PI / 180) * -0.2;
+			double dx = Math.cos(rotationYaw * MathUtils.DEG_TO_RAD) * (-0.2 - 0.0625F);
+			double dz = Math.sin(rotationYaw * MathUtils.DEG_TO_RAD) * (-0.2 - 0.0625F);
 			riddenByEntity.setPosition(posX + dx, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + dz);
 			if (riddenByEntity instanceof EntityLivingBase) {
 				EntityLivingBase rider = (EntityLivingBase) riddenByEntity;
@@ -293,14 +324,7 @@ public class EntityWeedwoodRowboat extends Entity {
 	}
 
 	private void applyForces() {
-		Vec3 currentMotion = Vec3.createVectorHelper(motionX, 0, motionZ);
-		float bobAmount = 1 + (float) currentMotion.lengthVector() * 30;
-		if (worldObj.rand.nextInt(30) == 0) {
-			bobAmount *= 10;
-		}
-		bobTime += 0.05 * bobAmount;
 		float bobBase = 0.1F;
-		float bob = 0;
 		float buoyancy = 0;
 		int blockX = MathHelper.floor_double(posX);
 		int blockY = MathHelper.floor_double(posY);
@@ -309,59 +333,65 @@ public class EntityWeedwoodRowboat extends Entity {
 		Block blockAbove = worldObj.getBlock(blockX, blockY + 1, blockZ);
 		if (blockAt.getMaterial() == Material.water && blockAbove.getMaterial() != Material.water) {
 			buoyancy = (1 - ((float) posY - blockY - 1.1F)) * 0.9F + bobBase;
-			bob = 1 + MathHelper.sin(bobTime) * 0.035F;
-			drag = 0.9F;
+			drag = 0.9875F;
 			submergeTicks = 0;
 		} else if (blockAt.getMaterial() == Material.water && blockAbove.getMaterial() == Material.water) {
 			buoyancy = 1.01F;
-			drag = 0.9F;
+			drag = 0.975F;
 			submergeTicks++;
 		} else if (blockAt.getMaterial() == Material.air) {
 			Block blockBellow = worldObj.getBlock(blockX, blockY - 1, blockZ);
 			if (blockBellow.getMaterial() == Material.water) {
-				drag = 0.9F;
+				drag = 0.95F;
 			} else if (blockBellow.getMaterial().blocksMovement()) {
 				drag = 0.35F;
 			} else {
 				drag = 1;
 			}
 		}
+		float motionRawAngle = (float) Math.atan2(motionZ, motionX);
+		float motionAngle = MathHelper.wrapAngleTo180_float(motionRawAngle * MathUtils.RAD_TO_DEG + 180);
+		float deviation = Math.abs(MathHelper.wrapAngleTo180_float(rotationYaw - motionAngle)) / 180;
+		drag *= MathUtils.linearTransformf(DEVIATION_DRAG.eval(deviation), 0, 1, 1, 0.25F);
 		motionY -= 0.04;
 		motionX *= drag;
 		motionZ *= drag;
-		rotationalVelocity *= drag;
+		rotationalVelocity *= drag * 0.95F;
 		if (buoyancy != 0) {
 			motionY *= 0.7;
-			final float param_39 = (buoyancy - bob - bobBase) * 0.15F;
-			motionY = Math.min(motionY + 0.05F, param_39);
+			final float moveY = (buoyancy - bobBase) * 0.15F;
+			motionY = Math.min(motionY + 0.05F, moveY);
 		}
 	}
 
 	private void applyRowForce() {
 		if (riddenByEntity != null) {
 			if (submergeTicks < 25) {
-				Vec3 rowForce = Vec3.createVectorHelper(3, 0, 0);
+				Vec3 rowForce = Vec3.createVectorHelper(1, 0, 0);
 				Vec3 motion = Vec3.createVectorHelper(0, 0, 0);
 				Vec3 rotation = Vec3.createVectorHelper(0, 0, 0);
 				float leftOarForce = getRowForce(LEFT_OAR);
 				float rightOarForce = getRowForce(RIGHT_OAR);
+				float forceFactor = 0.5F;
 				if (leftOarForce > 0) {
-					if (!isDragHeavy()) {
-						Vec3 param_45 = Vec3.createVectorHelper(0, 0, leftOarForce);
-						motion = motion.addVector(0, 0, leftOarForce);
-						Vec3 cross = rowForce.crossProduct(param_45);
+					updateOarRotation(LEFT_OAR, leftOarForce);
+					if (canOarsApplyForce()) {
+						leftOarForce *= getOarPeriodicForceApplyment(LEFT_OAR);
+						Vec3 leftLever = Vec3.createVectorHelper(0, 0, leftOarForce);
+						motion = motion.addVector(0, 0, leftOarForce * forceFactor);
+						Vec3 cross = rowForce.crossProduct(leftLever);
 						rotation = rotation.addVector(cross.xCoord, cross.yCoord, cross.zCoord);
 					}
-					updateOarRotation(LEFT_OAR, leftOarForce);
 				}
 				if (rightOarForce > 0) {
-					if (!isDragHeavy()) {
-						Vec3 param_46 = Vec3.createVectorHelper(0, 0, rightOarForce);
-						motion = motion.addVector(0, 0, rightOarForce);
-						Vec3 cross = Vec3.createVectorHelper(-rowForce.xCoord, -rowForce.yCoord, -rowForce.zCoord).crossProduct(param_46);
+					updateOarRotation(RIGHT_OAR, rightOarForce);
+					if (canOarsApplyForce()) {
+						rightOarForce *= getOarPeriodicForceApplyment(RIGHT_OAR);
+						Vec3 righerLever = Vec3.createVectorHelper(0, 0, rightOarForce);
+						motion = motion.addVector(0, 0, rightOarForce * forceFactor);
+						Vec3 cross = Vec3.createVectorHelper(-rowForce.xCoord, -rowForce.yCoord, -rowForce.zCoord).crossProduct(righerLever);
 						rotation = rotation.addVector(cross.xCoord, cross.yCoord, cross.zCoord);
 					}
-					updateOarRotation(RIGHT_OAR, rightOarForce);
 				}
 				Vec3 currentMotion = Vec3.createVectorHelper(motionX, 0, motionZ);
 				if (currentMotion.lengthVector() < 0.1 && rotation.xCoord * rotation.xCoord + rotation.yCoord * rotation.yCoord + rotation.zCoord + rotation.zCoord > 0) {
@@ -382,6 +412,10 @@ public class EntityWeedwoodRowboat extends Entity {
 		}
 	}
 
+	private float getOarPeriodicForceApplyment(int side) {
+		return MathUtils.linearTransformf(MathHelper.cos(getOarRotation(side) * OAR_ROTATION_SCALE), -1, 1, 0, 2);
+	}
+
 	private void doSplash() {
 		if (worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY), MathHelper.floor_double(posZ)).getMaterial() != Material.water) {
 			return;
@@ -391,26 +425,26 @@ public class EntityWeedwoodRowboat extends Entity {
 		double motionZ = boatZ - posZ;
 		double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
 		if (velocity > 0.2625) {
-			double vecX = Math.cos(rotationYaw * Math.PI / 180);
-			double vecZ = Math.sin(rotationYaw * Math.PI / 180);
+			double vecX = Math.cos(rotationYaw * MathUtils.DEG_TO_RAD);
+			double vecZ = Math.sin(rotationYaw * MathUtils.DEG_TO_RAD);
 			for (int p = 0; p < 1 + velocity * 60; p++) {
 				double near = rand.nextFloat() * 2 - 1;
 				double far = (rand.nextInt(2) * 2 - 1) * 0.7;
 				if (rand.nextBoolean()) {
 					double splashX = posX - vecX * near * 0.8 + vecZ * far;
 					double splashZ = posZ - vecZ * near * 0.8 - vecX * far;
-					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
+					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY == 0 ? 1e-8 : motionY, motionZ);
 				} else {
 					double splashX = posX + vecX + vecZ * near * 0.7;
 					double splashZ = posZ + vecZ - vecX * near * 0.7;
-					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY, motionZ);
+					worldObj.spawnParticle("splash", splashX, posY - 0.125, splashZ, motionX, motionY == 0 ? 1e-8 : motionY, motionZ);
 				}
 			}
 		}
 	}
 
-	public boolean isDragHeavy() {
-		return drag > 1;
+	public boolean canOarsApplyForce() {
+		return drag <= 1;
 	}
 
 	public float getRowForce(int side) {
@@ -419,23 +453,22 @@ public class EntityWeedwoodRowboat extends Entity {
 
 	public void updateOarRotation(int side, float value) {
 		float rotation = getOarRotation(side) + value;
-		final float max = 1000;
-		if (rotation > max) {
-			rotation -= max;
+		if (rotation > OAR_ROTATION_PERIOD) {
+			rotation -= OAR_ROTATION_PERIOD;
 		}
-		dataWatcher.updateObject(OAR_ROTATION_IDS[side], rotation);
+		setOarRotation(side, rotation);
 	}
 
-	public boolean stroke(int side, boolean prevOarStroke, boolean oarStroke) {
+	public boolean stroke(int side, boolean oarStroke, boolean prevOarStroke) {
 		float force = rowForce[side];
 		int time = rowTime[side];
 		time++;
 		boolean appliedForce = false;
-		if (prevOarStroke || time < 10) {
-			if (!oarStroke && prevOarStroke && time >= 10) {
+		if (oarStroke || time < 10) {
+			if (!prevOarStroke && oarStroke && time >= 10) {
 				force = 1;
 				time = 0;
-				dataWatcher.updateObject(OAR_ROTATION_IDS[side], 0F);
+//				dataWatcher.updateObject(OAR_ROTATION_IDS[side], 0F);
 			} else {
 				force = Math.max(force - 0.05F, 0.55F);
 			}
@@ -448,13 +481,14 @@ public class EntityWeedwoodRowboat extends Entity {
 		return appliedForce;
 	}
 
-	public float getOarRotation(int side, float swing) {
+	public float getOarRotation(int side, float delta) {
 		float prevRotation = prevOarRotation[side];
 		float rotation = getOarRotation(side);
-		if (side == LEFT_OAR) {
-//			System.out.println(prevRotation != rotation);
-		}
-		return (float) MathHelper.denormalizeClamp(prevRotation, rotation, swing);
+		return (float) MathHelper.denormalizeClamp(prevRotation, rotation, delta);
+	}
+
+	public void setOarRotation(int side, float value) {
+		dataWatcher.updateObject(OAR_ROTATION_IDS[side], value);
 	}
 
 	public float getOarRotation(int side) {
@@ -477,17 +511,40 @@ public class EntityWeedwoodRowboat extends Entity {
 		return dataWatcher.getWatchableObjectInt(TIME_SINCE_HIT_ID);
 	}
 
-	public void setForwardDirection(int direction) {
-		dataWatcher.updateObject(FORWARD_DIRECTION_ID, direction);
+	public void setHitRollDirection(int direction) {
+		dataWatcher.updateObject(HIT_ROLL_DIRECTION_ID, direction);
 	}
 
-	public int getForwardDirection() {
-		return dataWatcher.getWatchableObjectInt(FORWARD_DIRECTION_ID);
+	public int getHitRollDirection() {
+		return dataWatcher.getWatchableObjectInt(HIT_ROLL_DIRECTION_ID);
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {}
+	public void func_145781_i(int id) {
+		if (id == OAR_ROTATION_IDS[LEFT_OAR]) {
+			prevOarRotation[LEFT_OAR] = oarRotationBuffer[LEFT_OAR];
+		} else if (id == OAR_ROTATION_IDS[RIGHT_OAR]) {
+			prevOarRotation[RIGHT_OAR] = oarRotationBuffer[RIGHT_OAR];
+		}
+	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {}
+	protected void writeEntityToNBT(NBTTagCompound compound) {
+		compound.setFloat("oarRotationLeft", getOarRotation(LEFT_OAR));
+		compound.setFloat("oarForceLeft", rowForce[LEFT_OAR]);
+		compound.setInteger("oarTimeLeft", rowTime[LEFT_OAR]);
+		compound.setFloat("oarRotationRight", getOarRotation(RIGHT_OAR));
+		compound.setFloat("oarForceRight", rowForce[RIGHT_OAR]);
+		compound.setInteger("oarTimeRight", rowTime[RIGHT_OAR]);
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+		setOarRotation(LEFT_OAR, compound.getFloat("oarRotationLeft"));
+		rowForce[LEFT_OAR] = compound.getFloat("oarForceLeft");
+		rowTime[LEFT_OAR] = compound.getInteger("oarTimeLeft");
+		setOarRotation(RIGHT_OAR, compound.getFloat("oarRotationRight"));
+		rowForce[RIGHT_OAR] = compound.getFloat("oarForceRight");
+		rowTime[RIGHT_OAR] = compound.getInteger("oarTimeRight");
+	}
 }

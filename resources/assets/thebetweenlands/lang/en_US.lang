@@ -993,10 +993,3 @@ talisman.noplace=The space is not large enough
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat
-
-key.weedwoodRowboat.oar.stroke.left=Stroke Left Oar
-key.weedwoodRowboat.oar.stroke.right=Stroke Right Oar
-
-key.weedwoodRowboat.oar.square.left=Square Left Oar
-key.weedwoodRowboat.oar.square.right=Square Right Oar
-e

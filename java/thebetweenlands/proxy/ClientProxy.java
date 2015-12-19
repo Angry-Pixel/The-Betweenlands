@@ -491,15 +491,15 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void onPlayerEnterWeedwoodRowboat() {
 		if (ConfigHandler.rowboatView) {
-			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.switchTo();
+			WeedwoodRowboatHandler.THIRD_PERSON_PERSPECTIVE.switchTo();
 		} else {
-			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE.switchTo();
+			WeedwoodRowboatHandler.FIRST_PERSON_PERSPECTIVE.switchTo();
 		}
 	}
 
 	@Override
 	public void updateRiderYawInWeedwoodRowboat(EntityWeedwoodRowboat rowboat, EntityLivingBase rider) {
-		if (rowboat.worldObj.isRemote && WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
+		if (rowboat.worldObj.isRemote && WeedwoodRowboatHandler.THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
