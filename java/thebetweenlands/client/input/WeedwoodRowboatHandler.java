@@ -99,7 +99,7 @@ public class WeedwoodRowboatHandler {
 
 	@SubscribeEvent
 	public void onRenderLivingEvent(RenderLivingEvent.Pre event) {
-		if (event.entity.ridingEntity instanceof EntityWeedwoodRowboat && RenderWeedwoodRowboat.notRenderingPilot) {
+		if (event.entity.ridingEntity instanceof EntityWeedwoodRowboat && RenderWeedwoodRowboat.shouldPreventRidingRender) {
 			event.setCanceled(true);
 		}
 	}

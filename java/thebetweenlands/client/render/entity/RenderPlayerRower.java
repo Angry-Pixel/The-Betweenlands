@@ -2,7 +2,6 @@ package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -11,16 +10,14 @@ import thebetweenlands.client.render.PlayerLimbPreMirrorer;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat.ArmArticulation;
 
 public class RenderPlayerRower extends RenderPlayer {
-	public static final RenderPlayerRower INSTANCE = new RenderPlayerRower();
-
-	private ModelPlayerRower jointedMain, jointedArmorChest, jointedArmor;
+	private ModelPlayerRower[] models;
 
 	public RenderPlayerRower() {
-		mainModel = jointedMain = new ModelPlayerRower(0);
+		mainModel = new ModelPlayerRower(0);
 		modelBipedMain = (ModelBiped) mainModel;
-		modelArmorChestplate = jointedArmorChest = new ModelPlayerRower(1);
-		modelArmor = jointedArmor = new ModelPlayerRower(0.5F);
-		setRenderManager(RenderManager.instance);
+		modelArmorChestplate = new ModelPlayerRower(1);
+		modelArmor = new ModelPlayerRower(0.5F);
+		models = new ModelPlayerRower[] { (ModelPlayerRower) mainModel, (ModelPlayerRower) modelArmorChestplate, (ModelPlayerRower) modelArmor };
 	}
 
 	@Override
@@ -28,25 +25,19 @@ public class RenderPlayerRower extends RenderPlayer {
 		return PlayerLimbPreMirrorer.getPlayerSkin(player);
 	}
 
-	public void renderPilot(Entity pilot, ArmArticulation leftArm, ArmArticulation rightArm, float delta) {
-		jointedMain.bipedLeftArm.rotateAngleX = leftArm.getShoulderAngleX();
-		jointedMain.bipedLeftArm.rotateAngleY = leftArm.getShoulderAngleY();
-		jointedMain.setLeftArmFlexionAngle(leftArm.getFlexionAngle());
-		jointedArmorChest.bipedLeftArm.rotateAngleX = leftArm.getShoulderAngleX();
-		jointedArmorChest.bipedLeftArm.rotateAngleY = leftArm.getShoulderAngleY();
-		jointedArmorChest.setLeftArmFlexionAngle(leftArm.getFlexionAngle());
-		jointedArmor.bipedLeftArm.rotateAngleX = leftArm.getShoulderAngleX();
-		jointedArmor.bipedLeftArm.rotateAngleY = leftArm.getShoulderAngleY();
-		jointedArmor.setLeftArmFlexionAngle(leftArm.getFlexionAngle());
-		jointedMain.bipedRightArm.rotateAngleX = rightArm.getShoulderAngleX();
-		jointedMain.bipedRightArm.rotateAngleY = rightArm.getShoulderAngleY();
-		jointedMain.setRightArmFlexionAngle(rightArm.getFlexionAngle());
-		jointedArmorChest.bipedRightArm.rotateAngleX = rightArm.getShoulderAngleX();
-		jointedArmorChest.bipedRightArm.rotateAngleY = rightArm.getShoulderAngleY();
-		jointedArmorChest.setRightArmFlexionAngle(rightArm.getFlexionAngle());
-		jointedArmor.bipedRightArm.rotateAngleX = rightArm.getShoulderAngleX();
-		jointedArmor.bipedRightArm.rotateAngleY = rightArm.getShoulderAngleY();
-		jointedArmor.setRightArmFlexionAngle(rightArm.getFlexionAngle());
+	public void renderPilot(Entity pilot, ArmArticulation leftArm, ArmArticulation rightArm, float bodyRotateAngleX, float bodyRotateAngleY, float delta) {
+		for (ModelPlayerRower model : models) {
+			model.bipedLeftArm.rotateAngleX = leftArm.getShoulderAngleX();
+			model.bipedLeftArm.rotateAngleY = leftArm.getShoulderAngleY();
+			model.setLeftArmFlexionAngle(leftArm.getFlexionAngle());
+			model.bipedRightArm.rotateAngleX = rightArm.getShoulderAngleX();
+			model.bipedRightArm.rotateAngleY = rightArm.getShoulderAngleY();
+			model.setRightArmFlexionAngle(rightArm.getFlexionAngle());
+			model.bipedBody.rotateAngleX = bodyRotateAngleX;
+			model.bipedBody.rotateAngleY = bodyRotateAngleY;
+			model.bipedHead.rotateAngleX = -bodyRotateAngleX * 0.75F;
+			model.bipedHead.rotateAngleY = -bodyRotateAngleY * 0.75F;
+		}
 		doRender(pilot, 0, 0, 0, 0, delta);
 	}
 }

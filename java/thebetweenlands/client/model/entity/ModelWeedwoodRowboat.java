@@ -1,5 +1,6 @@
 package thebetweenlands.client.model.entity;
 
+import java.util.EnumMap;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
@@ -8,6 +9,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.MathHelper;
 import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.ShipSide;
 import thebetweenlands.utils.MathUtils;
 import thebetweenlands.utils.RotationOrder;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -61,7 +63,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
 	private ModelRenderer oarBladeLeft;
 
-	private ModelRenderer[] oars;
+	private EnumMap<ShipSide, ModelRenderer> oars;
 
 	private ModelRenderer piece2r;
 
@@ -244,7 +246,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.addChild(oarlockLeft);
 		oarlockRight.addChild(oarLoomRight);
 		hullGunwaleLeft.addChild(oarlockRight);
-		oars = new ModelRenderer[] { oarLoomLeft, oarLoomRight };
+		oars = ShipSide.newEnumMap(ModelRenderer.class, oarLoomLeft, oarLoomRight);
 	}
 
 	private void reconstructModel() {
@@ -287,17 +289,17 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.render(scale);
 	}
 
-	public ModelRenderer getOar(int side) {
-		return oars[side];
+	public ModelRenderer getOar(ShipSide side) {
+		return oars.get(side);
 	}
 
-	public void animateOar(EntityWeedwoodRowboat rowboat, int side, float delta) {
+	public void animateOar(EntityWeedwoodRowboat rowboat, ShipSide side, float delta) {
 		float theta = rowboat.getOarRotation(side, delta) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE;
 		ModelRenderer oar = getOar(side);
 		oar.rotateAngleY = MathUtils.linearTransformf(MathHelper.sin((theta + MathUtils.PI / 2)), -1, 1, MathUtils.PI / 2, 0);
 		oar.rotateAngleX = MathHelper.sin(theta) * 0.6F;
 		oar.rotateAngleZ = MathHelper.cos(theta) * 0.45F - MathUtils.PI / 2.5F;
-		if (side == EntityWeedwoodRowboat.RIGHT_OAR) {
+		if (side == ShipSide.PORT) {
 			oar.rotateAngleY = (MathUtils.PI - oar.rotateAngleY);
 			oar.rotateAngleZ = -oar.rotateAngleZ;
 		}
