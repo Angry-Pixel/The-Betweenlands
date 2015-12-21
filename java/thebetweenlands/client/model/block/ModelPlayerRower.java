@@ -6,6 +6,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.client.model.ModelBipedLimb;
 import thebetweenlands.client.model.ModelBoxCustomizable;
 import thebetweenlands.entities.rowboat.ShipSide;
@@ -18,16 +19,18 @@ public class ModelPlayerRower extends ModelBiped {
 
 	public ModelPlayerRower(float expand) {
 		super(expand, 0, 64, expand == 0 ? 64 : 32);
-		bipedBody.setRotationPoint(0, 12, 0);
 		boxList.remove(bipedBody.cubeList.remove(0));
+		bipedBody = new AdvancedModelRenderer(this, 16, 16);
+		bipedBody.setRotationPoint(0, 12, 0);
 		bipedBody.addBox(-4, -12, -2, 8, 12, 4, expand);
 		bipedHead.setRotationPoint(0, -12, 0);
 		boxList.remove(bipedHead.cubeList.remove(0));
-		bipedHead.addBox(-4, -8, -4, 8, 8, 8, expand);
+		// additional expand to prevent head z-fighting with body
+		bipedHead.addBox(-4, -8, -4, 8, 8, 8, expand + 0.025F);
 		bipedBody.addChild(bipedHead);
 		bipedHeadwear.setRotationPoint(0, 0, 0);
 		boxList.remove(bipedHeadwear.cubeList.remove(0));
-		bipedHeadwear.addBox(-4, -8, -4, 8, 8, 8, expand + 0.5F);
+		bipedHeadwear.addBox(-4, -8, -4, 8, 8, 8, expand + 0.525F);
 		bipedHead.addChild(bipedHeadwear);
 		boxList.remove(bipedEars.cubeList.remove(0));
 		bipedLeftArm.rotationPointY = -10;

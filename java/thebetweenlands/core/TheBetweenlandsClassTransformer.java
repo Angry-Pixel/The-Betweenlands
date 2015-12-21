@@ -19,6 +19,7 @@ import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
@@ -31,6 +32,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	private static final String DEBUG_HANDLER_CLIENT = "thebetweenlands/event/debugging/DebugHandlerClient";
 
 	private static final String PERSPECTIVE = "thebetweenlands/client/perspective/Perspective";
+
+	private static final String SUPERB_ENTITY_TRACKER_ENTRY = "thebetweenlands/entities/SuperbEntityTrackerEntry";
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
@@ -57,6 +60,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 			return writeClass(transformEntity(readClass(classBytes), obf));
 		} else if ("net.minecraft.command.CommandWeather".equals(name) && /*!*/true/*!*/) {
 			classBytes['J'+'u'+'s'*'t'+' '+'f'+'o'+'r'+' '-'t'*'h'+'e'+' '+'l'+'o'+'l'+'z'+'.'] = 0x1D; // 0x19 0x05 0x03
+		} else if ((obf = "mn".equals(name)) || "net.minecraft.entity.EntityTracker".equals(name)) {
+			return writeClass(transformEntityTracker(readClass(classBytes), obf));
 		}
 		return classBytes;
 	}
@@ -440,6 +445,33 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				method.instructions.add(new VarInsnNode(FLOAD, 2));
 				method.instructions.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "setAngles", String.format("(L%s;FF)V", entity), false));
 				method.instructions.add(new InsnNode(RETURN));
+				break;
+			}
+		}
+		return classNode;
+	}
+
+	private ClassNode transformEntityTracker(ClassNode classNode, boolean obf) {
+		String addEntityToTracker = obf ? "a" : "addEntityToTracker";
+		String addEntityToTrackerDesc = obf ? "(Lsa;IIZ)V" : "(Lnet/minecraft/entity/Entity;IIZ)V";
+		String entityTrackerEntry = obf ? "my" : "net/minecraft/entity/EntityTrackerEntry";
+		for (MethodNode method : classNode.methods) {
+			if (addEntityToTracker.equals(method.name) && addEntityToTrackerDesc.equals(method.desc)) {
+				boolean hasEntry = false;
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insn = method.instructions.get(i);
+					if (hasEntry) {
+						if (insn.getOpcode() == INVOKESPECIAL) {
+							((MethodInsnNode) insn).owner = SUPERB_ENTITY_TRACKER_ENTRY;
+							break;
+						}
+					} else {
+						if (insn.getOpcode() == NEW && entityTrackerEntry.equals(((TypeInsnNode) insn).desc)) {
+							((TypeInsnNode) insn).desc = SUPERB_ENTITY_TRACKER_ENTRY;
+							hasEntry = true;
+						}
+					}
+				}
 				break;
 			}
 		}
