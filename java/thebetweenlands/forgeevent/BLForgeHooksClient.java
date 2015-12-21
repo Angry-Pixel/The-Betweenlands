@@ -14,6 +14,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
 import thebetweenlands.forgeevent.client.GetMouseOverEvent;
+import thebetweenlands.forgeevent.client.RenderEntitiesEvent;
 
 public class BLForgeHooksClient {
 	private BLForgeHooksClient() {}
@@ -137,5 +138,13 @@ public class BLForgeHooksClient {
 
 	private static boolean postPlayerAttackEvent() {
 		return MinecraftForge.EVENT_BUS.post(new ClientAttackEvent());
+	}
+
+	public static void postPreRenderEntitiesEvent() {
+		MinecraftForge.EVENT_BUS.post(new RenderEntitiesEvent.Pre());
+	}
+
+	public static void postPostRenderEntitiesEvent() {
+		MinecraftForge.EVENT_BUS.post(new RenderEntitiesEvent.Post());
 	}
 }

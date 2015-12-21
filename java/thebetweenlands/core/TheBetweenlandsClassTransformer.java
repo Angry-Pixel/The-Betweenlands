@@ -350,6 +350,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				String frustumDesc = obf ? "Lbmx;" : "Lnet/minecraft/client/renderer/culling/Frustrum;";
 				boolean needsPerspectiveStuff = true;
 				boolean needsFrustumStuff = true;
+				byte needsBLForgeEventStuff = 0;
 				for (FieldNode field : classNode.fields) {
 					if (field.name.equals(fieldNameAddition)) {
 						needsFrustumStuff = false;
@@ -370,7 +371,12 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						}
 						method.instructions.insert(insnNode, addCameraPosToViewerPos);
 						needsPerspectiveStuff = false;
-					} else if (needsFrustumStuff) {
+					} else if (needsBLForgeEventStuff < 2 && insnNode.getOpcode() == INVOKESTATIC && "setRenderPass".equals(((MethodInsnNode) insnNode).name)) {
+						String name = needsBLForgeEventStuff == 0 ? "postPreRenderEntitiesEvent" : "postPostRenderEntitiesEvent";
+						method.instructions.insert(insnNode, new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, name, "()V", false));	
+						needsBLForgeEventStuff++;
+					}
+					if (needsFrustumStuff) {
 						if (replacedASTORE8) {
 							// replace all things trying to get the frustum from the
 							// stack frame to getting the frustum from the class
@@ -392,9 +398,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						}
 					}
 				}
-				if (needsFrustumStuff) {
-					classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));	
-				}	
+				classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
 				needsRenderWorld = false;
 			}
 			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {

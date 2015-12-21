@@ -19,6 +19,7 @@ import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
 import thebetweenlands.forgeevent.client.GetMouseOverEvent;
+import thebetweenlands.forgeevent.client.RenderEntitiesEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -37,6 +38,8 @@ public class WeedwoodRowboatHandler {
 	private BLKey oarStrokeLeft;
 
 	private BLKey oarStrokeRight;
+
+	private boolean isRenderingEntities;
 
 	private WeedwoodRowboatHandler() {
 		GameSettings settings = Minecraft.getMinecraft().gameSettings;
@@ -98,8 +101,18 @@ public class WeedwoodRowboatHandler {
 	}
 
 	@SubscribeEvent
+	public void onRenderTickEvent(RenderEntitiesEvent.Pre event) {
+		isRenderingEntities = true;
+	}
+
+	@SubscribeEvent
+	public void onRenderTickEvent(RenderEntitiesEvent.Post event) {
+		isRenderingEntities = false;
+	}
+
+	@SubscribeEvent
 	public void onRenderLivingEvent(RenderLivingEvent.Pre event) {
-		if (event.entity.ridingEntity instanceof EntityWeedwoodRowboat && RenderWeedwoodRowboat.shouldPreventRidingRender) {
+		if (isRenderingEntities && event.entity.ridingEntity instanceof EntityWeedwoodRowboat && RenderWeedwoodRowboat.shouldPreventRidingRender) {
 			event.setCanceled(true);
 		}
 	}

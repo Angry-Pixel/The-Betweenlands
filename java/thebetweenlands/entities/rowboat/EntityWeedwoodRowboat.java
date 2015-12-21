@@ -288,7 +288,11 @@ public class EntityWeedwoodRowboat extends Entity {
 				if (dist < 1e-4 && preApplyValue < target) {
 					value = target;
 				} else {
-					value += dist * 0.075F;	
+					float increment = dist * 0.085F;
+					if (increment > 0.005F) {
+						increment = 0.005F;
+					}
+					value += increment;
 				}
 			}
 			setOarRotation(side, value);
