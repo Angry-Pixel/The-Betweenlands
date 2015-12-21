@@ -1,15 +1,17 @@
 package thebetweenlands.client.model.entity;
 
+import java.util.EnumMap;
 import java.util.List;
 
-import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
-import thebetweenlands.utils.MathUtils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+import thebetweenlands.client.model.AdvancedModelRenderer;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.entities.rowboat.ShipSide;
+import thebetweenlands.utils.MathUtils;
+import thebetweenlands.utils.RotationOrder;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ModelWeedwoodRowboat extends ModelBase {
@@ -51,17 +53,17 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
 	private ModelRenderer oarlockRight;
 
-	private ModelRenderer oarLoomRight;
+	private AdvancedModelRenderer oarLoomRight;
 
 	private ModelRenderer oarBladeRight;
 
 	private ModelRenderer oarlockLeft;
 
-	private ModelRenderer oarLoomLeft;
+	private AdvancedModelRenderer oarLoomLeft;
 
 	private ModelRenderer oarBladeLeft;
 
-	private ModelRenderer[] oars;
+	private EnumMap<ShipSide, ModelRenderer> oars;
 
 	private ModelRenderer piece2r;
 
@@ -177,9 +179,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		piece3frontb = new ModelRenderer(this, 140, 51);
 		piece3frontb.setRotationPoint(0.0F, -8.0F, -4.0F);
 		piece3frontb.addBox(-8.0F, -6.0F, -2.0F, 16, 6, 2, 0.0F);
-		oarLoomLeft = new ModelRenderer(this, 200, 8);
+		oarLoomLeft = new AdvancedModelRenderer(this, 200, 8);
+		oarLoomLeft.setRotationOrder(RotationOrder.ZXY);
 		oarLoomLeft.setRotationPoint(1.0F, -1.0F, 2.0F);
-		oarLoomLeft.addBox(-1.0F, -6.0F, -1.0F, 2, 35, 2, 0.0F);
+		oarLoomLeft.addBox(-1.0F, -8.0F, -1.0F, 2, 35, 2, 0.0F);
 		setRotateAngle(oarLoomLeft, 0.31869712141416456F, 0.0F, -1.0016444577195458F);
 		piece2backb = new ModelRenderer(this, 100, 51);
 		piece2backb.setRotationPoint(0.0F, -8.0F, 4.0F);
@@ -199,9 +202,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		oarlockLeft = new ModelRenderer(this, 200, 0);
 		oarlockLeft.setRotationPoint(0.0F, -6.0F, -5.0F);
 		oarlockLeft.addBox(0.0F, -3.0F, 0.0F, 2, 3, 4, 0.0F);
-		oarLoomRight = new ModelRenderer(this, 180, 8);
+		oarLoomRight = new AdvancedModelRenderer(this, 180, 8);
+		oarLoomRight.setRotationOrder(RotationOrder.ZXY);
 		oarLoomRight.setRotationPoint(-1.0F, -1.0F, 2.0F);
-		oarLoomRight.addBox(-1.0F, -6.0F, -1.0F, 2, 35, 2, 0.0F);
+		oarLoomRight.addBox(-1.0F, -8.0F, -1.0F, 2, 35, 2, 0.0F);
 		setRotateAngle(oarLoomRight, 0.31869712141416456F, 0.0F, 1.0016444577195458F);
 		hullBow = new ModelRenderer(this, 100, 0);
 		hullBow.setRotationPoint(0.0F, 22.0F, 11.0F);
@@ -211,7 +215,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		oarlockRight.setRotationPoint(0.0F, -6.0F, -5.0F);
 		oarlockRight.addBox(-2.0F, -3.0F, 0.0F, 2, 3, 4, 0.0F);
 		ModelRenderer seat = new ModelRenderer(this, 100, 60);
-		seat.setRotationPoint(0, -10, 1);
+		seat.setRotationPoint(0, -10, 2);
 		seat.addBox(-6, 0, 0, 12, 2, 5);
 		hullBottom.addChild(seat);
 		backrimdetail.addChild(backrimdetail2);
@@ -242,7 +246,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.addChild(oarlockLeft);
 		oarlockRight.addChild(oarLoomRight);
 		hullGunwaleLeft.addChild(oarlockRight);
-		oars = new ModelRenderer[] { oarLoomLeft, oarLoomRight };
+		oars = ShipSide.newEnumMap(ModelRenderer.class, oarLoomLeft, oarLoomRight);
 	}
 
 	private void reconstructModel() {
@@ -254,6 +258,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		deleteDisplayList(hullStern);
 		deleteDisplayList(hullGunwaleLeft);
 		deleteDisplayList(hullGunwaleRight);
+		boxList.clear();
 		init();
 	}
 
@@ -273,9 +278,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
 	}
 
 	public void render(EntityWeedwoodRowboat rowboat, float scale, float delta) {
-//		if (entity.ticksExisted % 20 == 0) reconstructModel();
-		animateOar(rowboat, EntityWeedwoodRowboat.LEFT_OAR, delta);
-		animateOar(rowboat, EntityWeedwoodRowboat.RIGHT_OAR, delta);
+//		if (rowboat.ticksExisted % 20 == 0) reconstructModel();
 		keel.render(scale);
 		hullBottom.render(scale);
 		hullBottomLeft.render(scale);
@@ -286,15 +289,19 @@ public class ModelWeedwoodRowboat extends ModelBase {
 		hullGunwaleRight.render(scale);
 	}
 
-	private void animateOar(EntityWeedwoodRowboat rowboat, int side, float swing) {
-		final float scale = 40;
-		float theta = rowboat.getOarRotation(side, swing) * scale;
-		ModelRenderer oar = oars[side];
-		oar.rotateAngleX = ((float) MathHelper.denormalizeClamp(-Math.PI / 3, -Math.PI / 12, Math.sin(-theta) + 1) / 2);
-		oar.rotateAngleY = ((float) MathHelper.denormalizeClamp(-Math.PI / 4, Math.PI / 4, Math.sin(-theta + 1) + 1) / 2);
-		if (side == EntityWeedwoodRowboat.RIGHT_OAR) {
-			oar.rotateAngleX = -oar.rotateAngleX;
+	public ModelRenderer getOar(ShipSide side) {
+		return oars.get(side);
+	}
+
+	public void animateOar(EntityWeedwoodRowboat rowboat, ShipSide side, float delta) {
+		float theta = rowboat.getOarRotation(side, delta) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE;
+		ModelRenderer oar = getOar(side);
+		oar.rotateAngleY = MathUtils.linearTransformf(MathHelper.sin((theta + MathUtils.PI / 2)), -1, 1, MathUtils.PI / 2, 0);
+		oar.rotateAngleX = MathHelper.sin(theta) * 0.6F;
+		oar.rotateAngleZ = MathHelper.cos(theta) * 0.45F - MathUtils.PI / 2.5F;
+		if (side == ShipSide.PORT) {
 			oar.rotateAngleY = (MathUtils.PI - oar.rotateAngleY);
+			oar.rotateAngleZ = -oar.rotateAngleZ;
 		}
 	}
 }

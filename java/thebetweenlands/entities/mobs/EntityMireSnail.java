@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
@@ -120,7 +121,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean isBreedingItem(ItemStack is) {
-		return is != null && is.getItem() == BLItemRegistry.itemsGeneric && is.getItemDamage() == EnumItemGeneric.SLUDGE_BALL.ordinal();
+		return is != null && is.getItem() == BLItemRegistry.itemsGeneric && is.getItemDamage() == EnumItemGeneric.SLUDGE_BALL.id;
 	}
 
 	@Override
@@ -147,5 +148,9 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		setHasMated(nbt.getBoolean("hasMated"));
 	}
-    
+
+	@Override
+	public String pageName() {
+		return "mireSnail";
+	}
 }

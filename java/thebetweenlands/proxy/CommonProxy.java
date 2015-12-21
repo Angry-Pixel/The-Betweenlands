@@ -32,6 +32,7 @@ import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.manual.GuiManualBase;
+import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
@@ -74,6 +75,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_PESTLE_AND_MORTAR = 8;
 
 	public static final int GUI_MANUAL = 9;
+
+	public static final int GUI_HL = 10;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -231,6 +234,8 @@ public class CommonProxy implements IGuiHandler {
 			}
 			case GUI_MANUAL:
 				return new GuiManualBase(player);
+			case GUI_HL:
+				return new GuiManualHerblore(player);
 		}
 
 		return null;

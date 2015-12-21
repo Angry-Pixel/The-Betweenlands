@@ -1,26 +1,26 @@
 package thebetweenlands.herblore.aspects.list;
 
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 
-public class AspectYihinren implements IAspect {
+public class AspectYihinren implements IAspectType {
+	@Override
 	public String getName() {
 		return "Yihinren";
 	}
 
+	@Override
 	public String getType() {
 		return "Form";
 	}
 
+	@Override
 	public String getDescription() {
 		return "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.";
 	}
 
-	public void readFromNBT(NBTTagCompound tagCompound) {
-
-	}
-
-	public void writeToNBT(NBTTagCompound tagCompound) {
-
+	@Override
+	public int getIconIndex() {
+		return 12;
 	}
 }

@@ -18,6 +18,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.ControlledAnimation;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
@@ -206,5 +207,10 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String pageName() {
+		return "sludge";
 	}
 }

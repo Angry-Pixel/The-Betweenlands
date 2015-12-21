@@ -64,10 +64,14 @@ public class BLEntityPropertiesRegistry {
 	}
 
 	public <T extends IBLExtendedEntityProperties> T  getProperties(Entity entity, IBLExtendedEntityProperties props) {
-		return (T) entity.getExtendedProperties(props.getID());
+        if (entity != null)
+		    return (T) entity.getExtendedProperties(props.getID());
+        return null;
 	}
 
 	public <T extends IBLExtendedEntityProperties> T  getProperties(Entity entity, IBLExtendedEntityProperties props, Class<T> propClass) {
-		return (T) entity.getExtendedProperties(props.getID());
+        if (entity != null)
+            return (T) entity.getExtendedProperties(props.getID());
+        return null;
 	}
 }

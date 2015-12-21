@@ -1,14 +1,20 @@
 package thebetweenlands.recipes;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipeBookCloning;
+import net.minecraft.util.WeightedRandom;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
@@ -18,7 +24,11 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 public class RecipeHandler {
 
@@ -30,8 +40,9 @@ public class RecipeHandler {
 		registerPestleAndMortarRecipes();
 		registerCompostItems();
 		registerDruidAltarRecipes();
+		registerAnimatorRecipes();
 		ConfigHandler.userRecipes();
-		AspectRecipes.init();
+		AspectRegistry.init();
 		ElixirRecipes.init();
 	}
 
@@ -63,6 +74,8 @@ public class RecipeHandler {
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rope, 1), "#", "#", "#", '#', new ItemStack(BLBlockRegistry.hanger));
 
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
@@ -104,16 +117,16 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE, 4), "p", "p" , "p", 'p', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED));
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL, 4), "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBucket), " X ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks),'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder, 3), "X X", "xxx", "X X", 'x', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK),'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder, 3), "X X", "xxx", "X X", 'x', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK),'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankButton), new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneButton), new ItemStack(BLBlockRegistry.smoothBetweenstone));		
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneButton), new ItemStack(BLBlockRegistry.smoothBetweenstone));
 		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.PLANT_TONIC), new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.sapBall));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePressurePlate), "xx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.syrmoritePressurePlate), "xx", 'x', BLBlockRegistry.syrmoriteBlock);
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudFlowerPot), "x x", " x " , 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mudFlowerPot), "x x", " x " , 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));;
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));		
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.itemShelf, 3), "xxx", "   ", "xxx", 'x', BLBlockRegistry.weedwoodPlankSlab);
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(0, 3), "x x", " x ", 'x', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst), 1, 0));
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), "x x", " x ", 'x', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst), 1, 1));
@@ -137,10 +150,10 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledPitstone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.pitstoneBrickSlab));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.smoothCragrock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrick, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.carvedCrag, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.cragrockBrickSlab));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.carvedCrag, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.cragrockBrickSlab));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBricks, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.limestone));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledLimestone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.limestoneBrickSlab));		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledLimestone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.limestoneBrickSlab));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.sulphurBlock), "xxx", "xxx", "xxx", 'x', ItemGeneric.createStack(EnumItemGeneric.SULFUR));
 		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.SULFUR, 9), new ItemStack(BLBlockRegistry.sulphurBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.octineBlock), "xxx", "xxx", "xxx", 'x', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
@@ -217,7 +230,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.siltGlasPane, 6), "xxx", "xxx", 'x', BLBlockRegistry.siltGlas);
 
 		//Food
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.reedDonut, 3), " # ", "# #", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.reedDonut, 1), " # ", "# #", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.jamDonut, 1), new ItemStack(BLItemRegistry.reedDonut), new ItemStack(BLItemRegistry.middleFruit));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.gertsDonut, 1), new ItemStack(BLItemRegistry.reedDonut), new ItemStack(BLItemRegistry.wightsHeart), new ItemStack(Items.slime_ball));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.crabstick, 3), "  #", " # ", "#  ", '#', new ItemStack(BLItemRegistry.siltCrabClaw));
@@ -231,7 +244,9 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 1), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 2));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 2), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 3));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 3), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
+		RecipeSorter.register("thebetweenlands:bookcloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
+        GameRegistry.addRecipe(new BookCloneRecipe());
 	}
 
 	private static void registerSmelting() {
@@ -257,6 +272,7 @@ public class RecipeHandler {
 	private static void registerOreDictionary() {
 		OreDictionary.registerOre("oreSulfur", new ItemStack(BLBlockRegistry.sulfurOre));
 		OreDictionary.registerOre("oreSyrmorite", new ItemStack(BLBlockRegistry.syrmoriteOre));
+		OreDictionary.registerOre("oreBone", new ItemStack(BLBlockRegistry.boneOre));
 		OreDictionary.registerOre("oreOctine", new ItemStack(BLBlockRegistry.octineOre));
 		OreDictionary.registerOre("oreValonite", new ItemStack(BLBlockRegistry.valoniteOre));
 		OreDictionary.registerOre("oreAquaMiddleGem", new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
@@ -354,51 +370,114 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.THORNS));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PITCHER_PLANT_TRAP));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GENERIC_LEAF), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GENERIC_LEAF));
 	}
 
 	private static void registerDruidAltarRecipes() {
 		DruidAltarRecipe.addRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4.ordinal()), new ItemStack(BLItemRegistry.swampTalisman, 1, ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN.ordinal()));
 	}
 
-	private static void registerCompostItems(){
-		CompostRecipe.addRecipe(5, 12000, OreDictionary.getOres("treeSapling"));
-		CompostRecipe.addRecipe(5, 12000, OreDictionary.getOres("treeLeaves"));
-		CompostRecipe.addRecipe(3, 12000, OreDictionary.getOres("foodMushroom"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("cropWheat"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("cropPotato"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("cropCarrot"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("listAllseed"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("listAllveggie"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("listAllgrain"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("listAllberry"));
-		CompostRecipe.addRecipe(2, 12000, OreDictionary.getOres("listAllfruit"));
-		CompostRecipe.addRecipe(100, 1, BLItemRegistry.testItem);
-		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.wallPlants));
-		CompostRecipe.addRecipe(10, 12000, Item.getItemFromBlock(BLBlockRegistry.wallPlants), 1);
-		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BLBlockRegistry.rottenWeedwoodBark));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.boneset));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.marshMallow));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.nettle));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.nettleFlowered));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.buttonBush));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.milkweed));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.copperIris));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.blueIris));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.waterFlower));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.marshHibiscus));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(BLBlockRegistry.pickerelWeed));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.yellow_flower));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.red_flower));
-		CompostRecipe.addRecipe(6, 12000, Item.getItemFromBlock(Blocks.cactus));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.brown_mushroom));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.red_mushroom));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling));
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 1);
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 2);
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 3);
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 4);
-		CompostRecipe.addRecipe(3, 12000, Item.getItemFromBlock(Blocks.sapling), 5);
+	private static void registerAnimatorRecipes() {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.scroll), 16, 16){
+			private final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
 
+			@Override
+			public ItemStack onAnimated(World world, int x, int y, int z) {
+				WeightedRandomItem randItem = (WeightedRandomItem) WeightedRandom.getRandomItem(world.rand, this.items);
+				ItemStack result = randItem.getItem(world.rand);
+				result.stackSize = Math.min(1 + world.rand.nextInt(randItem.itemWeight + 4), result.getMaxStackSize());
+				return result;
+			}
+		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART), 32, 32, ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 8, 8, new ItemStack(BLItemRegistry.tarminion)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.testItem), 2, 1) {
+			@Override
+			public boolean onRetrieved(TileEntityAnimator tile, World world, int x, int y, int z) {
+				EntityItem entityitem = new EntityItem(world, x, y + 1D, z, new ItemStack(BLItemRegistry.testItem));
+				entityitem.motionX = 0;
+				entityitem.motionZ = 0;
+				entityitem.motionY = 0.11000000298023224D;
+				world.spawnEntityInWorld(entityitem);
+				tile.setInventorySlotContents(0, null);
+				return false;
+			}
+		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.spores), 8, 4, EntitySporeling.class));
 	}
 
+	private static void registerCompostItems(){
+		CompostRecipe.addRecipe(100, 1, BLItemRegistry.testItem);
+		CompostRecipe.addRecipe(30, 12000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK).getItemDamage());
+		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BLBlockRegistry.rottenWeedwoodBark));
+		CompostRecipe.addRecipe(10, 8000, Item.getItemFromBlock(BLBlockRegistry.sundew));
+		CompostRecipe.addRecipe(6, 10000, Item.getItemFromBlock(BLBlockRegistry.doubleSwampTallgrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.phragmites));
+		CompostRecipe.addRecipe(6, 10000, Item.getItemFromBlock(BLBlockRegistry.tallCattail));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.cardinalFlower));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.broomsedge));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.weepingBlue));
+		CompostRecipe.addRecipe(12, 11000, Item.getItemFromBlock(BLBlockRegistry.pitcherPlant));
+		CompostRecipe.addRecipe(6, 8000, Item.getItemFromBlock(BLBlockRegistry.bogBean));
+		CompostRecipe.addRecipe(6, 8000, Item.getItemFromBlock(BLBlockRegistry.goldenClub));
+		CompostRecipe.addRecipe(6, 8000, Item.getItemFromBlock(BLBlockRegistry.marshMarigold));
+		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BLBlockRegistry.swampKelp));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.waterWeeds));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.waterFlower));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.waterFlowerStalk));
+		CompostRecipe.addRecipe(20, 12000, Item.getItemFromBlock(BLBlockRegistry.root));
+		CompostRecipe.addRecipe(20, 12000, Item.getItemFromBlock(BLBlockRegistry.rootUW));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.blackHatMushroom));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.flatHeadMushroom));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.bulbCappedMushroom));
+		CompostRecipe.addRecipe(4, 6000, Item.getItemFromBlock(BLBlockRegistry.swampPlant));
+		CompostRecipe.addRecipe(12, 10000, Item.getItemFromBlock(BLBlockRegistry.venusFlyTrap));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.volarpad));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.thorns));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.poisonIvy));
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.wallPlants));
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.wallPlants), 1);
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.caveMoss));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.caveGrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.catTail));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.swampTallGrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.shoots));
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.nettleFlowered));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.nettle));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.arrowArum));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.buttonBush));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.marshHibiscus));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.pickerelWeed));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.softRush));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.marshMallow));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.blueIris));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.copperIris));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.blueEyedGrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.boneset));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.bottleBrushGrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.sludgecreep));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.deadWeedwoodBush));
+		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BLBlockRegistry.hanger));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.waterFlowerStalk));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingSapTree));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood));
+		CompostRecipe.addRecipe(3, 5000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItemDamage());
+		CompostRecipe.addRecipe(3, 5000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED).getItemDamage());
+		CompostRecipe.addRecipe(5, 8000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE).getItemDamage());
+		CompostRecipe.addRecipe(5, 8000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT).getItemDamage());
+		CompostRecipe.addRecipe(3, 5000, BLItemRegistry.itemsGeneric, ItemGeneric.createStack(EnumItemGeneric.SWAMP_KELP).getItemDamage());
+		CompostRecipe.addRecipe(5, 8000, BLItemRegistry.flatheadMushroomItem);
+		CompostRecipe.addRecipe(5, 8000, BLItemRegistry.blackHatMushroomItem);
+		CompostRecipe.addRecipe(5, 8000, BLItemRegistry.bulbCappedMushroomItem);
+		CompostRecipe.addRecipe(12, 10000, BLItemRegistry.yellowDottedFungus);
+
+		for(EnumItemGenericCrushed type : EnumItemGenericCrushed.values()) {
+			CompostRecipe.addRecipe(3, 4000, BLItemRegistry.itemsGenericCrushed, ItemGenericCrushed.createStack(type).getItemDamage());
+		}
+
+		for(EnumItemPlantDrop type : EnumItemPlantDrop.values()) {
+			CompostRecipe.addRecipe(3, 4000, BLItemRegistry.itemsGenericPlantDrop, ItemGenericPlantDrop.createStack(type).getItemDamage());
+		}
+	}
 }

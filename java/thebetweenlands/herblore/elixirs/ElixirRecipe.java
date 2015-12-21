@@ -1,6 +1,6 @@
 package thebetweenlands.herblore.elixirs;
 
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 
 public class ElixirRecipe {
@@ -13,17 +13,17 @@ public class ElixirRecipe {
 	public final int baseDuration;
 	public final ElixirEffect positiveElixir;
 	public final ElixirEffect negativeElixir;
-	public final IAspect strengthAspect;
-	public final IAspect durationAspect;
-	public final IAspect[] aspects;
+	public final IAspectType strengthAspect;
+	public final IAspectType durationAspect;
+	public final IAspectType[] aspects;
 
 	public ElixirRecipe(String name, int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime, 
-			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspect[] aspects) {
+			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType[] aspects) {
 		this(name, infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime, infusionTimeVariation, baseDuration, positiveElixir, negativeElixir, null, null, aspects);
 	}
 	
 	public ElixirRecipe(String name, int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime, 
-			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspect strengthAspect, IAspect durationAspect, IAspect[] aspects) {
+			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType strengthAspect, IAspectType durationAspect, IAspectType[] aspects) {
 		this.name = name;
 		this.infusionGradient = infusionGradient;
 		this.infusionFinishedColor = infusionFinishedColor;

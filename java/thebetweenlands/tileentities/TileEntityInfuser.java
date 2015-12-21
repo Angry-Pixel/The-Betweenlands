@@ -3,6 +3,7 @@ package thebetweenlands.tileentities;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -19,9 +20,8 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
@@ -207,6 +207,22 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
+					ItemStack stack = getStackInSlot(i);
+					if(stack != null && stack.getItem() == BLItemRegistry.aspectVial) {
+						//Return empty vials
+						ItemStack ret = null;
+						switch(stack.getItemDamage()) {
+						case 0:
+						default:
+							ret = new ItemStack(BLItemRegistry.dentrothystVial, 1, 0);
+							break;
+						case 1:
+							ret = new ItemStack(BLItemRegistry.dentrothystVial, 1, 2);
+							break;
+						}
+						EntityItem entity = new EntityItem(this.worldObj, this.xCoord + 0.5D, this.yCoord + 1.0D, this.zCoord + 0.5D, ret);
+						this.worldObj.spawnEntityInWorld(entity);
+					}
 					setInventorySlotContents(i, null);
 				}
 				this.infusingRecipe = null;
@@ -275,11 +291,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
 		for (int i = 0; i < getSizeInventory(); i++) {
+			NBTTagCompound itemStackCompound = new NBTTagCompound();
 			if(inventory[i] != null) {
-				NBTTagCompound itemStackCompound = inventory[i].writeToNBT(new NBTTagCompound());
-				nbt.setTag("slotItem" + i, itemStackCompound);
-			} else
-				nbt.setTag("slotItem" + i, null);
+				inventory[i].writeToNBT(itemStackCompound);
+			} 
+			nbt.setTag("slotItem" + i, itemStackCompound);
 		}
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
@@ -309,11 +325,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return false;
 	}
 
-	public List<IAspect> getInfusingAspects() {
-		List<IAspect> infusingAspects = new ArrayList<IAspect>();
+	public List<IAspectType> getInfusingAspects() {
+		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if(inventory[i] != null) {
-				infusingAspects.addAll(AspectRecipes.REGISTRY.getAspects(new ItemEntry(inventory[i])));
+				infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(inventory[i]));
 			}
 		}
 		return infusingAspects;

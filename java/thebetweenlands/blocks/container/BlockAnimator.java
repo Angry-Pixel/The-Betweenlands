@@ -2,17 +2,14 @@ package thebetweenlands.blocks.container;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -22,11 +19,9 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.recipes.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAnimator extends BlockContainer {
 
@@ -73,34 +68,17 @@ public class BlockAnimator extends BlockContainer {
 		}
 		if (world.getTileEntity(x, y, z) instanceof TileEntityAnimator) {
 			TileEntityAnimator animator = (TileEntityAnimator) world.getTileEntity(x, y, z);
-			if (animator.itemsConsumed < animator.itemCount)
+			if (animator.fuelConsumed < animator.requiredFuelCount) {
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
-			else {
-				if (animator.getStackInSlot(0) != null) {
-					if (animator.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) {
-						Entity entity = null;
-						if (animator.getStackInSlot(0).getItem() instanceof ItemSpawnEggs)
-							entity = ItemSpawnEggs.getEntity(world, x, y, z, animator.getStackInSlot(0));
-						else
-							entity = EntityList.createEntityByID(animator.getStackInSlot(0).getItemDamage(), world);
-						EntityLiving entityliving = (EntityLiving) entity;
-						entity.setLocationAndAngles(x, y + 0.5D, z, MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F), 0.0F);
-						entityliving.rotationYawHead = entityliving.rotationYaw;
-						entityliving.renderYawOffset = entityliving.rotationYaw;
-						entityliving.onSpawnWithEgg((IEntityLivingData) null);
-						world.spawnEntityInWorld(entityliving);
-					} else {
-						EntityItem entityitem = new EntityItem(world, x, y + 1D, z, animator.getStackInSlot(0));
-						entityitem.motionX = 0;
-						entityitem.motionZ = 0;
-						entityitem.motionY = 0.11000000298023224D;
-						world.spawnEntityInWorld(entityitem);
-					}
+			} else {
+				AnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
+				if(recipe == null || recipe.onRetrieved(animator, world, x, y, z)) {
+					player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ANIMATOR, world, x, y, z);
 				}
-				animator.decrStackSize(0, 1);
-				animator.itemsConsumed = 0;
+				animator.fuelConsumed = 0;
 			}
-			animator.lifeDepleted = false;	
+			animator.itemToAnimate = null;
+			animator.itemAnimated = false;	
 		}
 
 		return true;

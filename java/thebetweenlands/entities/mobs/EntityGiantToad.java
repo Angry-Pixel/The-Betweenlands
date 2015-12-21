@@ -3,11 +3,16 @@ package thebetweenlands.entities.mobs;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.model.ControlledAnimation;
+import thebetweenlands.manual.ManualManager;
 
 /**
  * Created by jnad325 on 7/14/15.
@@ -80,5 +85,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 //		if ((t /= d / 2) < 1)
 //			return c / 2 * (t * t * (((s *= (1.525f)) + 1) * t - s)) + b;
 //		return c / 2 * ((t -= 2) * t * (((s *= (1.525f)) + 1) * t + s) + 2) + b;
+	}
+
+	@Override
+	public String pageName() {
+		return "giantToad";
 	}
 }

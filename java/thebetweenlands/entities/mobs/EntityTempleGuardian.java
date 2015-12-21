@@ -10,6 +10,7 @@ import net.minecraft.world.World;
  * Created by jnad325 on 7/14/15.
  */
 public class EntityTempleGuardian extends EntityMob implements IEntityBL {
+
     public EntityTempleGuardian(World worldObj)
     {
         super(worldObj);
@@ -43,4 +44,10 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 		int randomSound = rand.nextInt(3) + 1;
 		playSound("thebetweenlands:templeGuardianStep" + randomSound, 1F, 1F);
 	}
+
+
+    @Override
+    public String pageName() {
+        return "templeGuardian";
+    }
 }

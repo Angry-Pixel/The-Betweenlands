@@ -11,7 +11,7 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerson {
 	@Override
 	protected boolean canCycleTo(Perspective perspective) {
-		return perspective == WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE;
+		return perspective == WeedwoodRowboatHandler.THIRD_PERSON_PERSPECTIVE;
 	}
 
 	@Override

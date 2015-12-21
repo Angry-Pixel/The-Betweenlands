@@ -1,26 +1,26 @@
 package thebetweenlands.herblore.aspects.list;
 
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 
-public class AspectOrdaniis implements IAspect {
+public class AspectOrdaniis implements IAspectType {
+	@Override
 	public String getName() {
 		return "Ordaniis";
 	}
 
+	@Override
 	public String getType() {
 		return "Enhance";
 	}
 
+	@Override
 	public String getDescription() {
 		return "Needs new decription";
 	}
 
-	public void readFromNBT(NBTTagCompound tagCompound) {
-
-	}
-
-	public void writeToNBT(NBTTagCompound tagCompound) {
-
+	@Override
+	public int getIconIndex() {
+		return 10;
 	}
 }

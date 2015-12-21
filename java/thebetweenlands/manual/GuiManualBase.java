@@ -2,11 +2,9 @@ package thebetweenlands.manual;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
@@ -26,19 +24,20 @@ public class GuiManualBase extends GuiScreen {
     public int untilUpdate = 0;
     public ManualCategory currentCategory;
 
+    public ManualManager.EnumManual manualType;
+
     public GuiManualBase(EntityPlayer player) {
         this.player = player;
     }
 
     @Override
     public void initGui() {
-
-        System.out.println("is instance of EntityPlayerMP: ");
+        manualType = ManualManager.EnumManual.GUIDEBOOK;
         xStart = width / 2 - 146;
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
-        changeCategory(ManualEntryRegistry.itemsCategory);
+        changeCategory(ManualManager.getCurrentCategory(manualType, player), ManualManager.getCurrentPageNumber(manualType, player));
     }
 
     @Override
@@ -99,16 +98,20 @@ public class GuiManualBase extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         if (currentCategory != null) {
-            if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0)
+            if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.previousPage(this);
-            if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0)
+                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+            }
+            if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.nextPage(this);
+                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+            }
             if (mouseX >= xStart + (currentCategory.number >= 1?0:279) && mouseX <= xStart + (currentCategory.number >= 1?0:279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
-                changeCategory(ManualEntryRegistry.itemsCategory);
+                changeCategory(GuideBookEntryRegistry.itemsCategory);
             if (mouseX >= xStart + (currentCategory.number >= 2?0:279) && mouseX <= xStart + (currentCategory.number >= 2?0:279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)
-                changeCategory(ManualEntryRegistry.machineCategory);
-//            if (mouseX >= xStart + (currentCategory.number >= 3?0:279) && mouseX <= xStart + (currentCategory.number >= 3?0:279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
-//                changeCategory(ManualEntryRegistry.entitiesCategory);
+                changeCategory(GuideBookEntryRegistry.machineCategory);
+            if (mouseX >= xStart + (currentCategory.number >= 3?0:279) && mouseX <= xStart + (currentCategory.number >= 3?0:279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
+               changeCategory(GuideBookEntryRegistry.entitiesCategory);
 //            if (mouseX >= xStart + (currentCategory.number >= 4?0:279) && mouseX <= xStart + (currentCategory.number >= 4?0:279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
 //                changeCategory(ManualEntryRegistry.category4);
 //            if (mouseX >= xStart + (currentCategory.number >= 5?0:279) && mouseX <= xStart + (currentCategory.number >= 5?0:279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)
@@ -126,12 +129,14 @@ public class GuiManualBase extends GuiScreen {
         currentCategory = category;
         currentCategory.init(this, true);
         currentCategory.setPage(1, this);
+        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     public void changeCategory(ManualCategory category, int page){
         currentCategory = category;
         currentCategory.init(this, false);
         currentCategory.setPage(page, this);
+        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     @Override
@@ -145,6 +150,7 @@ public class GuiManualBase extends GuiScreen {
 
     public void changeTo(int pageNumber) {
         currentCategory.setPage(pageNumber + currentCategory.indexPages, this);
+        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     public boolean matches(ItemStack itemStack1, ItemStack itemStack2) {

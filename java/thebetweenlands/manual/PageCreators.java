@@ -3,6 +3,11 @@ package thebetweenlands.manual;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.herblore.elixirs.ElixirRecipe;
+import thebetweenlands.herblore.elixirs.ElixirRecipes;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextFormatComponents;
@@ -22,8 +27,9 @@ public class PageCreators {
     public static int purifierRecipeHeight = PurifierRecipeWidget.height + 5;
     public static int druidAltarRecipeHeight = DruidAltarWidget.height + 5;
     public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
+    public static int animatorRecipeHeight = AnimatorRecipeWidget.height + 5;
 
-    public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages) {
+    public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int pageAmount = pages.size();
         int times = 0;
@@ -36,7 +42,7 @@ public class PageCreators {
                 widgets.add(new ButtonWidget(15, 10 + height, page));
                 height += 18;
             }
-            newPages.add(new Page("index" + times, (ArrayList<ManualWidgetsBase>) widgets.clone()));
+            newPages.add(new Page("index" + times, (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType));
             widgets.clear();
             pagesTemp.clear();
             pageAmount -= 8;
@@ -46,87 +52,68 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden) {
+    public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
-        String title = entity.manualName();
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + entity.manualName() + ".title"), new PictureWidget(73 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
-        newPages.addAll(TextPages(15, 10, "manual." + entity.manualName() + ".description", title, isHidden));
+        String title = entity.pageName();
+        newPages.add(new Page(title, isHidden, manualType , new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(74 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden, manualType));
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden) {
+    public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
-        newPages.add(new Page(entryName, isHidden, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
-        newPages.add(new Page(entryName, isHidden, new PictureWidget(73 - width / 2, 70 - height / 2, imageLocation, width, height)));
-        newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden));
+        newPages.add(new Page(entryName, isHidden, manualType, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
+        newPages.add(new Page(entryName, isHidden, manualType, new PictureWidget(73 - width / 2, 70 - height / 2, imageLocation, width, height)));
+        newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden, manualType));
         return newPages;
     }
 
 
-    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden) {
+    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = item.manualName(0);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (int i = 0; i <= item.metas(); i++)
             items.add(new ItemStack(item.getItem(), 1, i));
-        newPages.add(new Page(title, isHidden, new TextWidget(15, 10, "manual." + item.manualName(0) + ".title",  1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
-        newPages.addAll(TextPages(16, 10, "manual." + item.manualName(0) + ".description", title, isHidden));
+        newPages.add(new Page(title, isHidden, manualType, new TextWidget(18, 12, "manual." + item.manualName(0) + ".title", 1.5f), new ItemWidget(49, 77, item, 3)).addItems(items).setParent());
+        newPages.addAll(TextPages(16, 10, "manual." + item.manualName(0) + ".description", title, isHidden, manualType));
         ArrayList<IManualEntryItem> manualItem = new ArrayList<>();
         manualItem.add(item);
-        newPages.addAll(RecipePages(manualItem, title, isHidden));
+        newPages.addAll(RecipePages(manualItem, title, isHidden, manualType));
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden) {
+    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (IManualEntryItem item : manualItems) {
             for (int i = 0; i <= item.metas(); i++)
                 items.add(new ItemStack(item.getItem(), 1, i));
         }
-        newPages.add(new Page(name, new TextWidget(15, 10, "manual." + name + ".title", 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
-        newPages.addAll(TextPages(16, 10, "manual." + name + ".description", name, isHidden));
-        newPages.addAll(RecipePages(manualItems, name, isHidden));
+        newPages.add(new Page(name, false, manualType, new TextWidget(15, 10, "manual." + name + ".title", 1.5f), new ItemWidget(49, 77, items, 3)).addItems(items).setParent());
+        newPages.addAll(TextPages(16, 10, "manual." + name + ".description", name, isHidden, manualType));
+        newPages.addAll(RecipePages(manualItems, name, isHidden, manualType));
         return newPages;
     }
 
 
-    public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden) {
+    public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String text = StatCollector.translateToLocal(unlocalizedName);
-        TextContainer textContainer = new TextContainer(116, 144, text);
-
-        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
-        textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
-        textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("bold", EnumChatFormatting.BOLD));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("italic", EnumChatFormatting.ITALIC));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
-        textContainer.registerFormat(new TextFormatComponents.TextFormatPagelink());
-        textContainer.registerFormat(new TextFormatComponents.TextFormatRainbow());
-
-        try {
-            textContainer.parse();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text));
 
         for (int i = 0; i < textContainer.getPages().size(); i++) {
-            newPages.add(new Page(pageName, isHidden, new TextWidget(x, y, unlocalizedName, i)));
+            newPages.add(new Page(pageName, isHidden, manualType, new TextWidget(x, y, unlocalizedName, i)));
         }
         return newPages;
     }
 
-    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden) {
+    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden, ManualManager.EnumManual manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 10;
         int type = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
-        while (type <= 7) {
+        while (type <= 8) {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
             for (IManualEntryItem item : items) {
                 for (int i : item.recipeType(0)) {
@@ -174,11 +161,16 @@ public class PageCreators {
                         height += druidAltarRecipeHeight;
                         latestAdded += druidAltarRecipeHeight;
                         break;
+                    case 8:
+                        widgets.add(new AnimatorRecipeWidget(itemStacks, 15, height));
+                        height += animatorRecipeHeight;
+                        latestAdded += animatorRecipeHeight;
+                        break;
                 }
                 if (height >= 152) {
                     ManualWidgetsBase temp = widgets.get(widgets.size() - 1);
                     widgets.remove(widgets.size() - 1);
-                    Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden);
+                    Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
                     newPages.add(page);
                     widgets.clear();
                     temp.changeYStart(10);
@@ -189,12 +181,114 @@ public class PageCreators {
             type++;
         }
         if (widgets.size() > 0) {
-            Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden);
+            Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
             newPages.add(page);
             widgets.clear();
         }
 
         return newPages;
+    }
+
+
+    public static ArrayList<Page> AspectPages(IAspectType aspect, ManualManager.EnumManual manualType) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        int height = 0;
+        ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+        widgets.add(new AspectWidget(18, 12, aspect, 1f));
+        widgets.add(new TextWidget(38, 16, "manual." + aspect.getName().toLowerCase() + ".title"));
+        height += 22;
+        widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
+
+        height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+
+        if (height < 152) {
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 16;
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            height += 18;
+        } else {
+            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, ManualManager.EnumManual.HL).setParent().setAspect(aspect));
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 16;
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            height += 18;
+        }
+
+        if (height < 152) {
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
+            height += 10;
+            int width = 0;
+            ArrayList<ItemStack> items = new ArrayList<>();
+            for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
+            }
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            height += 18;
+        } else {
+            if (newPages.size() > 0)
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect));
+            else
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            height += 10;
+            ArrayList<ItemStack> items = new ArrayList<>();
+            for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
+            }
+            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            height += 18;
+        }
+
+        if (widgets.size() > 0) {
+            if (newPages.size() > 0)
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect));
+            else
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
+        }
+        return newPages;
+    }
+
+    public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, ManualManager.EnumManual manualType) {
+        ArrayList<Page> newPages = new ArrayList<>();
+        int height = 0;
+        ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
+        ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+        widgets.add(new ItemWidget(18, 12, itemStack, 1f));
+        widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), true));
+        height += 22;
+        widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description")));
+
+        height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+        widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
+        height += 18;
+        widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
+        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().setItem(itemStack));
+        return newPages;
+    }
+
+    private static TextContainer parseTextContainer(TextContainer textContainer){
+        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
+        textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatColor(0x808080));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatTooltip("N/A"));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("bold", EnumChatFormatting.BOLD));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("italic", EnumChatFormatting.ITALIC));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatSimple("underline", EnumChatFormatting.UNDERLINE));
+        textContainer.registerFormat(new TextFormatComponents.TextFormatPagelink());
+        textContainer.registerFormat(new TextFormatComponents.TextFormatRainbow());
+        try {
+            textContainer.parse();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return textContainer;
     }
 
 

@@ -17,6 +17,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntity;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntityLeech extends EntityMob implements IEntityBL {
@@ -232,5 +233,10 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 		setBloodConsumed(nbttagcompound.getInteger("bloodLevel"));
+	}
+
+	@Override
+	public String pageName() {
+		return "leech";
 	}
 }

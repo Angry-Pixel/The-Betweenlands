@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 import thebetweenlands.manual.widgets.text.TextFormatComponents.*;
@@ -20,42 +21,39 @@ public class TextWidget extends ManualWidgetsBase {
 
     public TextWidget(int xStart, int yStart, String unlocalizedText) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
-        if (!StatCollector.canTranslate(unlocalizedText))
-            System.out.println("Needs translation: " + unlocalizedText);
-        if (text.equals(""))
-            System.out.println("The translation for: " + unlocalizedText + " is empty");
+        if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
+            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        }
         this.init();
     }
 
     public TextWidget(int xStart, int yStart, String unlocalizedText, int pageNumber) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
-        if (!StatCollector.canTranslate(unlocalizedText))
-            System.out.println("Needs translation: " + unlocalizedText);
-        if (text.equals(""))
-            System.out.println("The translation for: " + unlocalizedText + " is empty");
+        if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
+            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        }
         this.init();
         this.pageNumber = pageNumber;
     }
 
     public TextWidget(int xStart, int yStart, String unlocalizedText, float scale) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, StatCollector.translateToLocal(unlocalizedText));
+        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
         this.text = StatCollector.translateToLocal(unlocalizedText);
-        if (!StatCollector.canTranslate(unlocalizedText))
-            System.out.println("Needs translation: " + unlocalizedText);
-        if (text.equals(""))
-            System.out.println("The translation for: " + unlocalizedText + " is empty");
+        if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
+            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        }
         this.scale = scale;
         this.init();
     }
 
     public TextWidget(int xStart, int yStart, String text, boolean localized) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 150, localized ? text : StatCollector.translateToLocal(text));
+        this.textContainer = new TextContainer(130 - xStart, 150, localized ? text : StatCollector.translateToLocal(text));
         this.text = localized ? text : StatCollector.translateToLocal(text);
         this.init();
     }
@@ -63,7 +61,7 @@ public class TextWidget extends ManualWidgetsBase {
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
+        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
         this.init();
     }
 
@@ -91,21 +89,16 @@ public class TextWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        //this.textContainer.renderBounds();
-        //this.textContainer.render();
-        //this.textContainer.renderTooltips(mouseX, mouseY);
-
         TextPage page = this.textContainer.getPages().get(pageNumber);
         page.render(this.xStart, this.yStart);
         page.renderTooltips(this.xStart, this.yStart, mouseX, mouseY);
-        //page.renderBounds(this.xStart + pageOffset, this.yStart);
     }
 
 
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(/*this.xStart, this.yStart, */116, 144, text);
+        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
         this.init();
     }
 }

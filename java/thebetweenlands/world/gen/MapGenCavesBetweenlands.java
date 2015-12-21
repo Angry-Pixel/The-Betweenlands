@@ -34,7 +34,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 
 	private static final double XZ_BREAK_SCALE = 0.05;
 
-	private static final double BREAK_SCALE = 0.5;
+	private static final double BREAK_SCALE = 0.85;
 
 	private static final double BASE_LIMIT = -0.3;
 

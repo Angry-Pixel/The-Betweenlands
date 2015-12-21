@@ -2,6 +2,7 @@ package thebetweenlands.manual;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Page {
     public int pageNumber;
     public ArrayList<ItemStack> pageItems = new ArrayList<>();
     public IManualEntryEntity pageEntity;
+    public IAspectType pageAspect;
 
     public String resourceLocation;
     public int xStartTexture = 0;
@@ -33,29 +35,32 @@ public class Page {
 
     public boolean isParent = false;
 
-    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden) {
+    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden, ManualManager.EnumManual manualType) {
         this.widgets = widgets;
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
+        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+            ManualManager.findablePagesGuideBook.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+            ManualManager.findablePagesHL.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        }
     }
 
-    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets) {
-        this.widgets = widgets;
-        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
-        this.unlocalizedPageName = pageName;
-    }
-
-    public Page(String pageName, ManualWidgetsBase... widgets) {
-        Collections.addAll(this.widgets, widgets);
-        this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
-        this.unlocalizedPageName = pageName;
-    }
-    public Page(String pageName, boolean isHidden, ManualWidgetsBase... widgets) {
+    public Page(String pageName, boolean isHidden, ManualManager.EnumManual manualType, ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
+        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+            ManualManager.findablePagesGuideBook.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+            ManualManager.findablePagesHL.add(pageName);
+            ManualManager.findablePagesAll.add(pageName);
+        }
     }
 
     public void init(GuiManualBase manual) {
@@ -72,6 +77,7 @@ public class Page {
         pageItems.addAll(items);
         return this;
     }
+
     public Page setItem(ItemStack item) {
         pageItems.add(item);
         return this;
@@ -79,6 +85,11 @@ public class Page {
 
     public Page setEntity(IManualEntryEntity entity) {
         pageEntity = entity;
+        return this;
+    }
+
+    public Page setAspect(IAspectType aspect) {
+        pageAspect = aspect;
         return this;
     }
 
@@ -114,5 +125,10 @@ public class Page {
     public void updateScreen() {
         for (ManualWidgetsBase widget : widgets)
             widget.updateScreen();
+    }
+
+    public void resize() {
+        for (ManualWidgetsBase widget : widgets)
+            widget.resize();
     }
 }

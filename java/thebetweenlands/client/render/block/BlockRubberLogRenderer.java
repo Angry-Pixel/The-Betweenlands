@@ -4,6 +4,7 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
@@ -19,11 +20,18 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.setColorOpaque_F(1, 1, 1);
+		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.theWorld != null && mc.thePlayer != null) {
+			tessellator.setBrightness(mc.theWorld.getLightBrightnessForSkyBlocks(
+					(int)(mc.thePlayer.posX), (int)(mc.thePlayer.posY), (int)(mc.thePlayer.posZ), 0));
+		}
 		IIcon topIcon = ((BlockRubberLog)block).getTopIcon(0);
 		IIcon sideIcon = ((BlockRubberLog)block).getSideIcon(0);
+		tessellator.startDrawingQuads();
 		this.renderBoxX(topIcon, sideIcon, 0x1 | 0x2, tessellator, 
 				0.32D, 0.0D, 0.32D, 
 				0.68D, 1.0D, 0.68D);
+		tessellator.draw();
 	}
 
 	@Override
@@ -41,7 +49,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		boolean xm = this.isValidBlock(world.getBlock(x-1, y, z));
 		boolean zp = this.isValidBlock(world.getBlock(x, y, z+1));
 		boolean zm = this.isValidBlock(world.getBlock(x, y, z-1));
-		
+
 		int sideIndex = 0;
 		int sideCount = 0;
 		if(yp) ++sideCount;
@@ -58,7 +66,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 			if(zp) sideIndex |= 0x20;
 			if(zm) sideIndex |= 0x10;
 		}
-		
+
 		//center piece
 		if(!yp && !ym) {
 			if(xp || xm) {
@@ -75,7 +83,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 					x+0.25D, y+0.25D, z+0.25D,
 					x+0.75D, y+0.75D, z+0.75D);
 		}
-		
+
 		//y+1
 		if(yp) {
 			this.renderBoxXS(topIcon, sideIcon, 0x1, tessellator, 
@@ -124,7 +132,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double vmin = (double)icon.getMinV();
 		double umax = (double)icon.getMaxU();
 		double vmax = (double)icon.getMaxV();
-		
+
 		//meh... I'm probably too stupid to figure out the width of the actual texture, but this works too
 		double du = umax - umin;
 		double dv = vmax - vmin;
@@ -132,13 +140,13 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		umax -= du / 16.0D * 4.0D;
 		vmin += dv / 16.0D * 4.0D;
 		vmax -= dv / 16.0D * 4.0D;
-		
+
 		tessellator.addVertexWithUV(x1, y1, z1, umin, vmin);
 		tessellator.addVertexWithUV(x2, y2, z2, umax, vmin);
 		tessellator.addVertexWithUV(x3, y3, z3, umax, vmax);
 		tessellator.addVertexWithUV(x4, y4, z4, umin, vmax);
 	}
-	
+
 	public void renderQuadS(IIcon icon, Tessellator tessellator, 
 			double x1, double y1, double z1,
 			double x2, double y2, double z2,
@@ -148,7 +156,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double vmin = (double)icon.getMinV();
 		double umax = (double)icon.getMaxU();
 		double vmax = (double)icon.getMaxV();
-		
+
 		//meh... I'm probably too stupid to figure out the width of the actual texture, but this works too
 		double du = umax - umin;
 		double dv = vmax - vmin;
@@ -156,7 +164,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		umax -= du / 16.0D * 4.0D;
 		vmin += dv / 16.0D * 4.0D;
 		vmax -= dv / 16.0D * 8.0D;
-		
+
 		tessellator.addVertexWithUV(x1, y1, z1, umin, vmin);
 		tessellator.addVertexWithUV(x2, y2, z2, umax, vmin);
 		tessellator.addVertexWithUV(x3, y3, z3, umax, vmax);
@@ -171,6 +179,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -178,6 +187,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -185,6 +195,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x2, y2, z2,
@@ -192,6 +203,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z1);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y1, z2,
@@ -199,6 +211,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x2, y1, z2,
@@ -206,13 +219,14 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1);
 	}
-	
+
 	public void renderBoxZ(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
@@ -221,6 +235,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -228,6 +243,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -235,6 +251,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x2, y2, z2,
@@ -242,6 +259,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z1);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y1, z2,
@@ -249,6 +267,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x2, y1, z2,
@@ -256,6 +275,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x1, y1, z1,
@@ -271,6 +291,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -278,6 +299,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y1, z2,
@@ -285,6 +307,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y2, z1,
@@ -292,6 +315,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z2);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x1, y2, z2,
@@ -299,6 +323,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z2,
 				x2, y2, z2,
@@ -306,13 +331,14 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1,
 				x2, y1, z1);
 	}
-	
+
 	public void renderBoxSideZ(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
@@ -321,6 +347,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuad((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x1, y2, z1,
@@ -328,6 +355,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z2);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuad((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -335,6 +363,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuad((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y2, z1,
@@ -342,6 +371,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z2);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuad((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x1, y2, z2,
@@ -349,6 +379,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuad((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z2,
 				x2, y2, z2,
@@ -356,13 +387,14 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuad((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1,
 				x2, y1, z1);
 	}
-	
+
 	public void renderBoxXS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
@@ -371,6 +403,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -378,6 +411,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -385,6 +419,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x2, y2, z2,
@@ -392,6 +427,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z1);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y1, z2,
@@ -399,6 +435,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x2, y1, z2,
@@ -406,13 +443,14 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1);
 	}
-	
+
 	public void renderBoxZS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
@@ -421,6 +459,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -428,6 +467,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -435,6 +475,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x2, y2, z2,
@@ -442,6 +483,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z1);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y1, z2,
@@ -449,6 +491,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x2, y1, z2,
@@ -456,6 +499,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y2, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x1, y1, z1,
@@ -471,6 +515,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y2, z1,
 				x1, y2, z2,
@@ -478,6 +523,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z1);
 
 		//-y
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y1, z2,
@@ -485,6 +531,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y2, z1,
@@ -492,6 +539,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z2);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x1, y2, z2,
@@ -499,6 +547,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z2,
 				x2, y2, z2,
@@ -506,13 +555,14 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1,
 				x2, y1, z1);
 	}
-	
+
 	public void renderBoxSideZS(IIcon topIcon, IIcon sideIcon, int topIconIndex, Tessellator tessellator,
 			double x1, double y1, double z1,
 			double x2, double y2, double z2) {
@@ -521,6 +571,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 		double dz = z2 - z1;
 
 		//+y
+		tessellator.setNormal(0, 1, 0);
 		this.renderQuadS((topIconIndex & 0x1) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y2, z1,
 				x1, y2, z1,
@@ -528,6 +579,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y2, z2);
 
 		//-y
+		tessellator.setNormal(0, -1, 0);
 		this.renderQuadS((topIconIndex & 0x2) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x2, y1, z1,
@@ -535,6 +587,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//+x
+		tessellator.setNormal(1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x4) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z1,
 				x2, y2, z1,
@@ -542,6 +595,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z2);
 
 		//-x
+		tessellator.setNormal(-1, 0, 0);
 		this.renderQuadS((topIconIndex & 0x8) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z2,
 				x1, y2, z2,
@@ -549,6 +603,7 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z1);
 
 		//+z
+		tessellator.setNormal(0, 0, 1);
 		this.renderQuadS((topIconIndex & 0x10) == 0 ? sideIcon : topIcon, tessellator, 
 				x2, y1, z2,
 				x2, y2, z2,
@@ -556,20 +611,21 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x1, y1, z2);
 
 		//-z
+		tessellator.setNormal(0, 0, -1);
 		this.renderQuadS((topIconIndex & 0x20) == 0 ? sideIcon : topIcon, tessellator, 
 				x1, y1, z1,
 				x1, y2, z1,
 				x2, y2, z1,
 				x2, y1, z1);
 	}
-	
+
 	public boolean isValidBlock(Block block) {
 		return block == BLBlockRegistry.rubberTreeLog || block == BLBlockRegistry.rubberTreeLeaves;
 	}
-	
+
 	@Override
 	public boolean shouldRender3DInInventory(int modelId) {
-		return false;
+		return true;
 	}
 
 	@Override

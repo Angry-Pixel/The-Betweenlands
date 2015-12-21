@@ -25,14 +25,15 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.command.*;
+import thebetweenlands.command.CommandBLEvent;
+import thebetweenlands.command.CommandDecay;
+import thebetweenlands.command.CommandFindPage;
+import thebetweenlands.command.CommandResetAspects;
+import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
-import thebetweenlands.event.entity.AttackDamageHandler;
-import thebetweenlands.event.entity.MiscEntitySyncHandler;
-import thebetweenlands.event.entity.PowerRingHandler;
-import thebetweenlands.event.entity.VolarPadGlideHandler;
+import thebetweenlands.event.entity.*;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
@@ -44,7 +45,6 @@ import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.manual.ManualEntryRegistry;
 import thebetweenlands.mods.RecurrentComplexModule;
 import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
@@ -88,6 +88,8 @@ public class TheBetweenlands
 	public static CommonPacketProxy packetProxy;
 	public static File dir;
 	private static byte nextPacketId = 0;
+
+	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
@@ -166,6 +168,7 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		MinecraftForge.EVENT_BUS.register(new PowerRingHandler());
 		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());
+		MinecraftForge.EVENT_BUS.register(new PageDiscoveringEvent());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
@@ -190,6 +193,13 @@ public class TheBetweenlands
 	@SuppressWarnings("unchecked")
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+		if (ConfigHandler.DEBUG){
+			System.out.println("==================================================");
+			for (String name:unlocalizedNames){
+				System.out.println("needs translation: " + name);
+			}
+			System.out.println("==================================================");
+		}
 	}
 
 	@EventHandler
@@ -198,7 +208,6 @@ public class TheBetweenlands
 		event.registerServerCommand(new CommandResetAspects());
 		event.registerServerCommand(new CommandDecay());
 		event.registerServerCommand(new CommandFindPage());
-		event.registerServerCommand(new CommandFoundPages());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
 		}

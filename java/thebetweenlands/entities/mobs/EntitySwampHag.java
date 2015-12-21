@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntitySwampHag extends EntityMob implements IEntityBL {
@@ -158,5 +159,10 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 3), 0F);
+	}
+
+	@Override
+	public String pageName() {
+		return "swampHag";
 	}
 }

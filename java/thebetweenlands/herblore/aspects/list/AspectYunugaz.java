@@ -1,26 +1,25 @@
 package thebetweenlands.herblore.aspects.list;
 
-import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.herblore.aspects.IAspect;
+import thebetweenlands.herblore.aspects.IAspectType;
 
-public class AspectYunugaz implements IAspect {
+public class AspectYunugaz implements IAspectType {
+	@Override
 	public String getName() {
 		return "Yunugaz";
 	}
 
+	@Override
 	public String getType() {
 		return "Wind";
 	}
 
+	@Override
 	public String getDescription() {
 		return "Magical property which relates to wind. Any combination with this effect can be related to the element wind.";
 	}
 
-	public void readFromNBT(NBTTagCompound tagCompound) {
-
-	}
-
-	public void writeToNBT(NBTTagCompound tagCompound) {
-
+	@Override
+	public int getIconIndex() {
+		return 13;
 	}
 }

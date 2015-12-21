@@ -7,7 +7,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.herblore.aspects.AspectManager;
 
 public class CommandResetAspects extends CommandBase {
 	private boolean confirm = false;
@@ -46,7 +46,7 @@ public class CommandResetAspects extends CommandBase {
 
 		if(arg1.equals("confirm")) {
 			World world = sender.getEntityWorld();
-			AspectRecipes.REGISTRY.resetAspects(world);
+			AspectManager.get(world).resetStaticAspects(AspectManager.getAspectsSeed(world.getSeed()));
 			sender.addChatMessage(new ChatComponentText("The aspects have been reset"));
 		}
 	}

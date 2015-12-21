@@ -97,12 +97,17 @@ public final class MathUtils {
 	}
 
 	public static float adjustAngleForInterpolation(float angle, float prevAngle) {
-		while (angle - prevAngle < -180) {
-			prevAngle -= 360;
+		return adjustValueForInterpolation(angle, prevAngle, -180, 180);
+	}
+
+	public static float adjustValueForInterpolation(float x, float prevX, float min, float max) {
+		float range = max - min;
+		while (x - prevX < min) {
+			prevX -= range;
 		}
-		while (angle - prevAngle >= 180) {
-			prevAngle += 360;
+		while (x - prevX >= max) {
+			prevX += range;
 		}
-		return prevAngle;
+		return prevX;
 	}
 }

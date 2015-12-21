@@ -36,7 +36,7 @@ public class ContainerPurifier extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 			if (slotIndex > 2) {
-				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
+				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.id) {
 					if (!mergeItemStack(stack1, 0, 1, false))
 						return null;
 				} else if (!mergeItemStack(stack1, 1, 2, true))

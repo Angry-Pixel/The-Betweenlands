@@ -114,7 +114,7 @@ public class BlockHollowLog extends Block {
 
 	@Override
 	public int damageDropped(int meta) {
-        return EnumItemGeneric.ROTTEN_BARK.ordinal();
+        return EnumItemGeneric.ROTTEN_BARK.id;
     }
 	
     @Override

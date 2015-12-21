@@ -176,7 +176,7 @@ public class ManualWidgetsBase {
 
     @SideOnly(Side.CLIENT)
     public void updateScreen() {
-        if (manual.untilUpdate % 10 == 0)
+        if (manual.untilUpdate % 5 == 0)
             resize();
     }
 

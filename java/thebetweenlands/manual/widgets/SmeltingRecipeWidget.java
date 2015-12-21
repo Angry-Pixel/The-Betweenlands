@@ -57,10 +57,10 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             renderItem(newX, newY, getSmeltingIngredient(outputs.get(currentRecipe)), false);
             renderItem(newX + 60, newY + 16, outputs.get(currentRecipe), false);
-            renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), true);
+            renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), true);
             ArrayList<String> specialToolTips = new ArrayList<>();
             specialToolTips.add(burnTimeString.replace(".time.", "800"));
-            addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), specialToolTips);
+            addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), specialToolTips);
 
             if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 17 && mouseY <= yStart + 33) {
                 ArrayList<String> processTooltip = new ArrayList<>();

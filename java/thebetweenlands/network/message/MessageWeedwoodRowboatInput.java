@@ -12,17 +12,11 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 
 	private boolean oarStrokeRight;
 
-	private boolean oarSquareLeft;
-
-	private boolean oarSquareRight;
-
 	public MessageWeedwoodRowboatInput() {}
 
-	public MessageWeedwoodRowboatInput(boolean oarStrokeLeft, boolean oarStrokeRight, boolean oarSquareLeft, boolean oarSquareRight) {
+	public MessageWeedwoodRowboatInput(boolean oarStrokeLeft, boolean oarStrokeRight) {
 		this.oarStrokeLeft = oarStrokeLeft;
 		this.oarStrokeRight = oarStrokeRight;
-		this.oarSquareLeft = oarSquareLeft;
-		this.oarSquareRight = oarSquareRight;
 	}
 
 	@Override
@@ -30,8 +24,6 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 		byte bitset = 0;
 		bitset |= oarStrokeLeft ? 1 : 0;
 		bitset |= oarStrokeRight ? 2 : 0;
-		bitset |= oarSquareLeft ? 4 : 0;
-		bitset |= oarSquareRight ? 8 : 0;
 		buf.writeByte(bitset);
 	}
 
@@ -40,8 +32,6 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 		byte bitset = buf.readByte();
 		oarStrokeLeft = (bitset & 1) == 1;
 		oarStrokeRight = (bitset & 2) == 2;
-		oarSquareLeft = (bitset & 4) == 4;
-		oarSquareRight = (bitset & 8) == 8;
 	}
 
 	@Override
@@ -53,7 +43,7 @@ public class MessageWeedwoodRowboatInput implements IMessage, IMessageHandler<Me
 		EntityPlayer player = ctx.getServerHandler().playerEntity;
 		if (player.ridingEntity instanceof EntityWeedwoodRowboat) {
 			EntityWeedwoodRowboat rowboat = ((EntityWeedwoodRowboat) player.ridingEntity); 
-			rowboat.updateControls(oarStrokeLeft, oarStrokeRight, oarSquareLeft, oarSquareRight);
+			rowboat.updateControls(oarStrokeLeft, oarStrokeRight);
 		}
 		return null;
 	}

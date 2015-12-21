@@ -6,7 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import thebetweenlands.herblore.aspects.AspectRecipes;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.network.message.base.AbstractMessage;
 
 public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
@@ -19,7 +20,7 @@ public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
 	}
 
 	public void onMessageClientSide(MessageLoadAspects message, EntityPlayer player) {
-		AspectRecipes.REGISTRY.loadAspects(message.aspectData);
+		AspectManager.get(TheBetweenlands.proxy.getClientWorld()).loadStaticAspects(message.aspectData);
 	}
 
 	public void onMessageServerSide(MessageLoadAspects message, EntityPlayer player) { }

@@ -1,26 +1,58 @@
 package thebetweenlands.manual;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.util.StatCollector;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 20-8-2015.
  */
 
 //TODO implement this in all Entities
-public interface IManualEntryEntity {
+public class IManualEntryEntity {
+    private String recourseLocation;
+    private int picWidth;
+    private int picHeight;
+    private ArrayList<String> stats;
+    private String name;
 
-    //If any of these don't have to do with the Entity return null
+    public IManualEntryEntity(String name, int picWidth, int picHeight, float health, float attackDamage) {
+        this.name = name;
+        this.picHeight = picHeight;
+        this.picWidth = picWidth;
+        this.recourseLocation = "thebetweenlands:textures/gui/manual/" + name + ".png";
 
-    String manualPictureLocation();
-    int pictureWidth();
-    int pictureHeight();
+        ArrayList<String> stats = new ArrayList<>();
+        stats.add(StatCollector.translateToLocal("manual.entity.health") + health);
+        stats.add(StatCollector.translateToLocal("manual.entity.attack") + attackDamage);
+        this.stats = stats;
+    }
 
-    String manualStats();
+    public IManualEntryEntity(String name, int picHeight, int picWidth, ArrayList<String> stats) {
+        this.name = name;
+        this.picHeight = picHeight;
+        this.picWidth = picWidth;
+        this.recourseLocation = "thebetweenlands:textures/gui/manual/" + name + ".png";
+        this.stats = stats;
+    }
 
+    public String manualPictureLocation() {
+        return recourseLocation;
+    }
 
-    //split at '/'
-    String manualName();
+    public int pictureWidth() {
+        return picWidth;
+    }
 
-    //don't null plz
-    Entity getEntity();
+    public int pictureHeight() {
+        return picHeight;
+    }
+
+    public ArrayList<String> manualStats() {
+        return stats;
+    }
+
+    public String pageName() {
+        return name;
+    }
 }

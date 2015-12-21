@@ -107,7 +107,7 @@ public class ContainerBLFurnace extends Container {
                     if (!mergeItemStack(itemstack1, 0, 1, false))
                         return null;
                 }
-                else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
+                else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.id) {
                     if (!mergeItemStack(itemstack1, 1, 2, false))
                         return null;
                 }

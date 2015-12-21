@@ -14,13 +14,16 @@ import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
@@ -58,7 +61,6 @@ import thebetweenlands.blocks.plants.BlockMarshMarigold;
 import thebetweenlands.blocks.plants.BlockMireCoral;
 import thebetweenlands.blocks.plants.BlockPitcherPlant;
 import thebetweenlands.blocks.plants.BlockPoisonIvy;
-import thebetweenlands.blocks.plants.BlockRottenLog;
 import thebetweenlands.blocks.plants.BlockSwampKelp;
 import thebetweenlands.blocks.plants.BlockSwampPlant;
 import thebetweenlands.blocks.plants.BlockSwampReed;
@@ -111,7 +113,9 @@ import thebetweenlands.blocks.tree.BlockRubberLog;
 import thebetweenlands.blocks.tree.BlockTreeFungus;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntityTermite;
+import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockSlab;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
@@ -176,6 +180,7 @@ public class BLBlockRegistry {
 		}
 	}.setLightLevel(0.875F); //setting null drops item block
 	public static final Block syrmoriteOre = new BlockGenericOre("syrmoriteOre", null);
+	public static final Block boneOre = new BlockGenericOre("boneOre", ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE)).setXP(5, 12);
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemGeneric.createStack(EnumItemGeneric.SULFUR)){
 		@Override
 		public void spawnParticle(World world, double x, double y, double z) { 
@@ -258,7 +263,6 @@ public class BLBlockRegistry {
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark").setHasSperateTopIcon(false);
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
-	public static final Block rottenLog = new BlockRottenLog();
 	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
 	// WOOD
@@ -344,16 +348,26 @@ public class BLBlockRegistry {
 		}
 	};
 	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
-		//TODO: Add seeds and crop drops
-
 		@Override
 		public ItemStack getSeedDrops() {
-			return null;
+			return new ItemStack(BLItemRegistry.spores);
 		}
 
 		@Override
 		public ItemStack getCropDrops() {
-			return null;
+			return new ItemStack(BLItemRegistry.yellowDottedFungus);
+		}
+
+		@Override
+		public void updateTick(World world, int x, int y, int z, Random rand) {
+			if(!world.isRemote && this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z) && rand.nextInt(6) == 0) {
+				EntityLiving entity = new EntitySporeling(world);
+				entity.setLocationAndAngles(x + 0.5D, y + 0.5D, z + 0.5D, 0.0f, 0.0f);
+				world.spawnEntityInWorld(entity);
+				world.setBlock(x, y, z, Blocks.air);
+			} else {
+				super.updateTick(world, x, y, z, rand);
+			}
 		}
 	};
 
@@ -386,7 +400,7 @@ public class BLBlockRegistry {
 
 		@Override
 		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-			entity.attackEntityFrom(DamageSource.cactus, 1);
+			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
 		}
 	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block nettle = new BlockBLSmallPlants("nettle"){
@@ -400,7 +414,7 @@ public class BLBlockRegistry {
 
 		@Override
 		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-			entity.attackEntityFrom(DamageSource.cactus, 1);
+			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
 		}
 	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block arrowArum = new BlockBLSmallPlants("arrowArum").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));
@@ -594,6 +608,9 @@ public class BLBlockRegistry {
 					GameRegistry.registerBlock(slab, ItemBlockSlab.class, slab.getLocalizedName(), slab, obj, false);
 			} else
 				GameRegistry.registerBlock(slab, ItemBlockSlab.class, slab.getUnlocalizedName() + "Double", slab.dropsThis, slab, true);
+			if (!StatCollector.canTranslate(slab.getUnlocalizedName() + ".name")) {
+				TheBetweenlands.unlocalizedNames.add(slab.getUnlocalizedName());
+			}
 		} catch (IllegalAccessException | NoSuchFieldException e) {
 			e.printStackTrace();
 		}
@@ -634,6 +651,10 @@ public class BLBlockRegistry {
 			GameRegistry.registerBlock(block, ((ISubBlocksBlock) block).getItemBlockClass(), strings[strings.length - 1]);
 		else
 			GameRegistry.registerBlock(block, strings[strings.length - 1]);
+
+		if (!StatCollector.canTranslate(block.getUnlocalizedName()  + ".name")) {
+			TheBetweenlands.unlocalizedNames.add(block.getUnlocalizedName() + ".name");
+		}
 	}
 
 	private static void registerProperties() {
@@ -651,6 +672,7 @@ public class BLBlockRegistry {
 		greenMiddleGemOre.setHarvestLevel("shovel", 0);
 		octineOre.setHarvestLevel("pickaxe", 1);
 		sulfurOre.setHarvestLevel("pickaxe", 0);
+		boneOre.setHarvestLevel("pickaxe", 0);
 		valoniteOre.setHarvestLevel("pickaxe", 2);
 		lifeCrystalOre.setHarvestLevel("pickaxe", 0);
 	}

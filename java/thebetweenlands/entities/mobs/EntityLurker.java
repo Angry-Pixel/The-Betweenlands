@@ -22,6 +22,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -464,5 +465,10 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound tagCompound) {
 		super.readEntityFromNBT(tagCompound);
 		anger = tagCompound.getShort("Anger");
+	}
+
+	@Override
+	public String pageName() {
+		return "lurker";
 	}
 }

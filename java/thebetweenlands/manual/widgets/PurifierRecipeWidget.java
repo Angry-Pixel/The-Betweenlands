@@ -56,7 +56,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
             renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
-            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.ordinal()), false);
+            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), false);
             renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
 
             if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {

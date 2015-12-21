@@ -3,7 +3,9 @@ package thebetweenlands.event.world;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
@@ -69,6 +71,17 @@ public class EnvironmentEventHandler {
 			for(EnvironmentEvent eevent : reg.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;
 				eevent.update(world);
+			}
+		}
+	}
+
+	//Send packet to sync events on joining
+	@SubscribeEvent
+	public void joinWorld(EntityJoinWorldEvent event) {
+		if (!event.world.isRemote && event.entity instanceof EntityPlayerMP && event.world.provider instanceof WorldProviderBetweenlands) {
+			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
+			for(EnvironmentEvent eevent : provider.getWorldData().getEnvironmentEventRegistry().getEvents().values()) {
+				TheBetweenlands.networkWrapper.sendToAll(new MessageSyncEnvironmentEvent(eevent));
 			}
 		}
 	}

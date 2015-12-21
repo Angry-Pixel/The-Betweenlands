@@ -141,7 +141,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements ISickleH
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		if(this.harvestItem != null) {
-			dropList.add(new ItemStack(this.harvestItem.getItem(), this.harvestItem.stackSize, this.harvestItem.getItemDamage()));
+			dropList.add(this.harvestItem.copy());
 		}
 		return dropList;
 	}

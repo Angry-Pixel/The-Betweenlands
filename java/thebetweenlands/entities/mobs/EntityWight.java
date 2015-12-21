@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityWight extends EntityMob implements IEntityBL {
 	private EntityAIAttackOnCollide meleeAttack = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false);
@@ -157,5 +158,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				}
 		}
 		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	public String pageName() {
+		return "wight";
 	}
 }

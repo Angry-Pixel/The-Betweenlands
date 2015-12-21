@@ -1,18 +1,19 @@
 package thebetweenlands.client.render.block;
 
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.proxy.ClientProxy;
+import thebetweenlands.utils.ConnectedTexture;
 
 public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
+	private static final ConnectedTexture farmedDirtTextureHelper = new ConnectedTexture(64, 18, 1);
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
@@ -27,8 +28,25 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator.instance.startDrawingQuads();
 		BlockRenderHelper.renderSimpleBlock(block, metadata, renderer);
 		if(metadata != BlockFarmedDirt.PURE_SWAMP_DIRT) {
+			IIcon icon = BLBlockRegistry.farmedDirt.getIcon(1, metadata);
 			Tessellator.instance.setNormal(0, 1, 0);
-			renderer.renderFaceYPos(block, 0D, 0D, 0D, BLBlockRegistry.farmedDirt.getOverlayIcon(0, metadata));
+			for(int bsx = 0; bsx <= 1; bsx++) {
+				for(int bsz = 0; bsz <= 1; bsz++) {
+					int quadrant = bsx + bsz * 2;
+
+					float rxOffset = 0.5F * bsx;
+					float rzOffset = 0.5F * bsz;
+
+					float[][] relIconUVs = farmedDirtTextureHelper.getUVs(0, quadrant);
+
+					Tessellator.instance.addTranslation(rxOffset, 0.901F, rzOffset);
+					Tessellator.instance.addVertexWithUV(-0.0D, 0.0D, 0.0D, icon.getInterpolatedU(relIconUVs[0][0] * 16.0D), icon.getInterpolatedV(relIconUVs[0][1] * 16.0D));
+					Tessellator.instance.addVertexWithUV(-0.0D, 0.0D, 0.5D, icon.getInterpolatedU(relIconUVs[0][0] * 16.0D), icon.getInterpolatedV(relIconUVs[1][1] * 16.0D));
+					Tessellator.instance.addVertexWithUV(0.5D, 0.0D, 0.5D, icon.getInterpolatedU(relIconUVs[1][0] * 16.0D), icon.getInterpolatedV(relIconUVs[1][1] * 16.0D));
+					Tessellator.instance.addVertexWithUV(0.5D, 0.0D, 0.0D, icon.getInterpolatedU(relIconUVs[1][0] * 16.0D), icon.getInterpolatedV(relIconUVs[0][1] * 16.0D));
+					Tessellator.instance.addTranslation(-rxOffset, -0.901F, -rzOffset);
+				}
+			}
 		}
 		Tessellator.instance.draw();
 	}
@@ -39,65 +57,55 @@ public class BlockFarmedDirtRenderer implements ISimpleBlockRenderingHandler {
 
 		Tessellator tessellator = Tessellator.instance;
 
+		if(meta == BlockFarmedDirt.PURE_SWAMP_DIRT) {
+			renderer.renderAllFaces = true;
+		}
 		renderer.renderStandardBlock(block, x, y, z);
+		renderer.renderAllFaces = false;
 
-		renderer.renderMinY = 0.9999D;
+		IIcon icon = BLBlockRegistry.farmedDirt.getIcon(1, meta);;
 
-		for(int xo = -1; xo <= 1; xo++) {
-			for(int zo = -1; zo <= 1; zo++) {
-				renderer.renderMaxY = 1.002D;
-				renderer.uvRotateTop = 0;
-				int piece = 0;
-				boolean render = false;
-				if((xo != 0 && zo == 0) || (xo == 0 && zo != 0)) {
-					//Adjacent neighbour
-					piece = 1;
-					if(xo == -1) {
-						renderer.uvRotateTop = 0;
-					} else if (xo == 1){
-						renderer.uvRotateTop = 3;
-					} else if(zo == -1) {
-						renderer.uvRotateTop = 1;
-					} else if (zo == 1){
-						renderer.uvRotateTop = 2;
-					}
-					renderer.renderMaxY = 1.004D;
-					if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && world.getBlockMetadata(x+xo, y, z+zo) == meta) render = true;
-				} else if(xo != 0 && zo != 0) {
-					//Diagonal neighbour
-					if(world.getBlock(x+xo, y, z) == BLBlockRegistry.farmedDirt && world.getBlock(x, y, z+zo) == BLBlockRegistry.farmedDirt
-							&& world.getBlockMetadata(x+xo, y, z) == meta && world.getBlockMetadata(x, y, z+zo) == meta) {
-						if(xo == 1 && zo == -1) {
-							renderer.uvRotateTop = 1;
-						} else if(xo == 1 && zo == 1) {
-							renderer.uvRotateTop = 3;
-						} else if(xo == -1 && zo == 1) {
-							renderer.uvRotateTop = 2;
-						}
-						renderer.renderMaxY = 1.006D;
-						if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && world.getBlockMetadata(x+xo, y, z+zo) == meta) {
-							//Full sharp corner
-							piece = 2;
-							render = true;
-						} else {
-							//Smooth half corner
-							piece = 3;
-							render = true;
-						}
+		tessellator.setNormal(0, 1, 0);
+		tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y + 1, z));
+		tessellator.setColorOpaque_F(1, 1, 1);
 
-					}
-				} else if(xo == 0 && zo == 0 && world.getBlockMetadata(x, y, z) != BlockFarmedDirt.PURE_SWAMP_DIRT) {
-					//Center hole
-					render = true;
-				}
-				if(render) {
-					renderer.overrideBlockTexture = BLBlockRegistry.farmedDirt.getOverlayIcon(piece, meta);
-					renderer.renderStandardBlock(block, x, y, z);
-					renderer.overrideBlockTexture = null;
+		float ry = (float) y + 1.0F;
+		tessellator.addTranslation(x, ry, z);
+
+		if(meta != BlockFarmedDirt.PURE_SWAMP_DIRT) {
+			boolean blockArray[] = new boolean[9];
+
+			boolean isPure = meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN || meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID || meta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX;
+
+			for(int xo = -1; xo <= 1; xo++) {
+				for(int zo = -1; zo <= 1; zo++) {
+					int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
+					boolean isCurrentPure = currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN || currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID || currentMeta == BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX;
+					blockArray[ConnectedTexture.getIndex(xo+1, zo+1, 3)] = world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.farmedDirt && ((isCurrentPure && isPure) || (currentMeta == meta));
 				}
 			}
-			renderer.uvRotateTop = 0;
+
+			float[][][] blockRelIconUVs = farmedDirtTextureHelper.getFaceUVs(blockArray);
+
+			for(int bsx = 0; bsx <= 1; bsx++) {
+				for(int bsz = 0; bsz <= 1; bsz++) {
+					float rxOffset = 0.5F * bsx;
+					float rzOffset = 0.5F * bsz;
+
+					float[][] quadrantRelIconUVs = blockRelIconUVs[ConnectedTexture.getIndex(bsx, bsz, 2)];
+
+					tessellator.addTranslation(rxOffset, 0, rzOffset);
+					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.0D, icon.getInterpolatedU(quadrantRelIconUVs[0][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[0][1] * 16.0D));
+					tessellator.addVertexWithUV(-0.0D, 0.0D, 0.5D, icon.getInterpolatedU(quadrantRelIconUVs[0][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[1][1] * 16.0D));
+					tessellator.addVertexWithUV(0.5D, 0.0D, 0.5D, icon.getInterpolatedU(quadrantRelIconUVs[1][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[1][1] * 16.0D));
+					tessellator.addVertexWithUV(0.5D, 0.0D, 0.0D, icon.getInterpolatedU(quadrantRelIconUVs[1][0] * 16.0D), icon.getInterpolatedV(quadrantRelIconUVs[0][1] * 16.0D));
+					tessellator.addTranslation(-rxOffset, -0, -rzOffset);
+				}
+			}
 		}
+
+		tessellator.addTranslation(-x, -ry, -z);
+
 		return true;
 	}
 

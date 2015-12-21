@@ -16,7 +16,7 @@ public class SlotDruidAltar extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		// && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() == TALISMAN.swampTalisman.ordinal()
+		// && stack.getItem() instanceof SwampTalisman && stack.getItemDamage() == TALISMAN.swampTalisman.id
 		//Player should not be able to put the talisman back in
 		return slotNumber != 0 && (slotNumber > 0 && slotNumber <= 4 && stack.getItem() instanceof ItemSwampTalisman && stack.getItemDamage() != EnumTalisman.SWAMP_TALISMAN.ordinal() || DruidAltarRecipe.isValidItem(stack));
 	}

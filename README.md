@@ -6,23 +6,20 @@ To do for First Release:
 _____________________________________________________________________
 
 Unfinished stuff:
-- Volarkite
-- Lanterns
-- Rope
-- Farming models
-- Purple Rain tree (which will be called differently)
+- Volarkite (half done)
+- Lanterns (Paul)
 - Temple Guardians
+- Weedwood Boat
 - Proper mob spawning
 
 New Stuff (High priority):
-- Temple generation
+- Temple generation (Lukas but er...)
 - Middle Gem Circle
-- Herblore
-- Net
-- Guidebook
+- Herblore (half done/mostly)
+- Guidebook (half done)
 - Pitstone Structures
 - Some surface structures
-- Moss Beds for spawn points
+- Moss Beds for spawn points (half done)
 
 New Stuff (Low priority)
 - Pieces of Lore for Loot

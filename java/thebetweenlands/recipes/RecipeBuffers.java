@@ -40,6 +40,8 @@ public class RecipeBuffers {
                     int metaInput4 = 0;
                     int inputAmount = 1;
                     int outputAmount = 1;
+                    int fuelAmount = 1;
+                    int lifeAmount = 1;
                     while (jsonReader.hasNext()) {
                         switch (recipeName) {
                             case "compost": {
@@ -64,6 +66,39 @@ public class RecipeBuffers {
                                 }
                                 break;
                             }
+                            case "animator":{
+                                String n = jsonReader.nextName();
+                                switch (n) {
+                                    case "inputType":
+                                        inputType = jsonReader.nextString();
+                                        break;
+                                    case "inputItem":
+                                        inputItem = jsonReader.nextString();
+                                        break;
+                                    case "outputType":
+                                        outputType = jsonReader.nextString();
+                                        break;
+                                    case "outputItem":
+                                        outputItem = jsonReader.nextString();
+                                        break;
+                                    case "metaInput":
+                                        metaInput = jsonReader.nextInt();
+                                        break;
+                                    case "metaOutput":
+                                        metaOutput = jsonReader.nextInt();
+                                        break;
+                                    case "outputAmount":
+                                        outputAmount = jsonReader.nextInt();
+                                        break;
+                                    case "lifeAmount":
+                                        lifeAmount = jsonReader.nextInt();
+                                        break;
+                                    case "fuelAmount":
+                                        fuelAmount = jsonReader.nextInt();
+                                        break;
+                                }
+                                break;
+                            }
                             case "pam":
                             case "pestleAndMortar":
                             case "purifier": {
@@ -81,9 +116,6 @@ public class RecipeBuffers {
                                     case "outputItem":
                                         outputItem = jsonReader.nextString();
                                         break;
-                                    case "inputAmount":
-                                        inputAmount = jsonReader.nextInt();
-                                        break;
                                     case "outputAmount":
                                         outputAmount = jsonReader.nextInt();
                                         break;
@@ -99,13 +131,13 @@ public class RecipeBuffers {
                             case "druidAltar": {
                                 String n = jsonReader.nextName();
                                 switch (n) {
-                                    case "inputType":
+                                    case "inputType1":
                                         inputType = jsonReader.nextString();
                                         break;
-                                    case "inputItem":
+                                    case "inputItem1":
                                         inputItem = jsonReader.nextString();
                                         break;
-                                    case "metaInput":
+                                    case "metaInput1":
                                         metaInput = jsonReader.nextInt();
                                         break;
                                     case "inputType2":
@@ -162,6 +194,9 @@ public class RecipeBuffers {
                             break;
                         case "druidAltar":
                             druidAltarRecipeBuffer(inputType, inputItem, inputType2, inputItem2, inputType3, inputItem3, inputType4, inputItem4, outputType, outputItem, metaInput, metaInput2, metaInput3, metaInput4, metaOutput);
+                            break;
+                        case "animator":
+                            animatorRecipeBuffer(inputType, inputItem, outputType, outputItem, outputAmount, fuelAmount, lifeAmount, metaInput, metaOutput);
                             break;
                     }
                     jsonReader.endObject();
@@ -352,5 +387,45 @@ public class RecipeBuffers {
                     for (ItemStack stackInput4 : input4)
                         for (ItemStack stackOutput : output)
                             DruidAltarRecipe.addRecipe(stackInput, stackInput2, stackInput3, stackInput4, stackOutput);
+    }
+
+
+    private static void animatorRecipeBuffer(String inputType, String inputItem, String outputType, String outputItem, int outputAmount, int fuelAmount, int lifeAmount, int metaInput, int metaOutput){
+        ArrayList<ItemStack> input = new ArrayList<>();
+        ArrayList<ItemStack> output = new ArrayList<>();
+
+        if (inputType.toLowerCase().equals("oredictionary")) {
+            if (OreDictionary.getOres(inputItem).size() > 0) {
+                for (ItemStack stack : OreDictionary.getOres(inputItem))
+                    input.add(new ItemStack(stack.getItem(), 1, stack.getItemDamage()));
+            }
+        } else if (inputType.toLowerCase().equals("id")) {
+            if (Item.getItemById(Integer.getInteger(inputItem)) != null) {
+                input.add(new ItemStack(Item.getItemById(Integer.getInteger(inputItem)), 1, metaInput));
+            }
+        } else if (GameRegistry.findBlock(inputType, inputItem) != null) {
+            input.add(new ItemStack(GameRegistry.findBlock(inputType, inputItem), 1, metaInput));
+        } else if (GameRegistry.findItem(inputType, inputItem) != null) {
+            input.add(new ItemStack(GameRegistry.findItem(inputType, inputItem), 1, metaInput));
+        }
+
+        if (outputType.toLowerCase().equals("oredictionary")) {
+            if (OreDictionary.getOres(outputItem).size() > 0) {
+                for (ItemStack stack : OreDictionary.getOres(outputItem))
+                    output.add(new ItemStack(stack.getItem(), outputAmount, stack.getItemDamage()));
+            }
+        } else if (outputType.toLowerCase().equals("id")) {
+            if (Item.getItemById(Integer.getInteger(outputItem)) != null) {
+                output.add(new ItemStack(Item.getItemById(Integer.getInteger(outputItem)), outputAmount, metaOutput));
+            }
+        } else if (GameRegistry.findBlock(outputType, outputItem) != null) {
+            output.add(new ItemStack(GameRegistry.findBlock(outputType, outputItem), outputAmount, metaOutput));
+        } else if (GameRegistry.findItem(outputType, outputItem) != null) {
+            output.add(new ItemStack(GameRegistry.findItem(outputType, outputItem), outputAmount, metaOutput));
+        }
+
+        for (ItemStack stackInput : input)
+            for (ItemStack stackOutput : output)
+                AnimatorRecipe.addRecipe(new AnimatorRecipe(stackInput, fuelAmount, lifeAmount, stackOutput));
     }
 }

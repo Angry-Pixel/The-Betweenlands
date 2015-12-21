@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.manual.ManualManager;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	
@@ -109,5 +110,10 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		if (!worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && canAttack) {
 			aggroCooldown = 0;
 		}
+	}
+
+	@Override
+	public String pageName() {
+		return "siltCrab";
 	}
 }

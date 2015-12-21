@@ -28,7 +28,7 @@ public class ItemBoneArmor extends ItemArmor implements IManualEntryItem {
 
     @Override
     public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-        return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.SLIMY_BONE.ordinal();
+        return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.SLIMY_BONE.id;
     }
 
     @Override

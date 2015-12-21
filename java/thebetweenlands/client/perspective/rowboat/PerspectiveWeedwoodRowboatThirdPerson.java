@@ -30,7 +30,7 @@ public class PerspectiveWeedwoodRowboatThirdPerson extends Perspective {
 
 	@Override
 	protected boolean canCycleTo(Perspective perspective) {
-		return perspective == WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE;
+		return perspective == WeedwoodRowboatHandler.FIRST_PERSON_PERSPECTIVE;
 	}
 
 	@Override

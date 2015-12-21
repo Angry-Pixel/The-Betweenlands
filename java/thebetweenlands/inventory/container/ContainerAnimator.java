@@ -27,7 +27,7 @@ public class ContainerAnimator extends Container {
 
 		addSlotToContainer(new SlotSizeRestriction(tile, 0, 79, 23, 1));
 		addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 34, 57, new ItemStack(BLItemRegistry.lifeCrystal), 1));
-		addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.ordinal()), 64));
+		addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.id), 64));
 
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 9; k++)
@@ -44,13 +44,13 @@ public class ContainerAnimator extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 			if (slotIndex > 2) {
-				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.ordinal())
+				if (stack1.getItem() == BLItemRegistry.itemsGeneric && stack1.getItemDamage() == EnumItemGeneric.SULFUR.id)
 					if (!mergeItemStack(stack1, 2, 3, true))
 						return null;
 				if (stack1.getItem() == BLItemRegistry.lifeCrystal)
 					if (!mergeItemStack(stack1, 1, 2, true))
 						return null;
-				if (stack1.stackSize == 1 && stack1 != new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.ordinal()) && stack1.getItem() != BLItemRegistry.lifeCrystal)
+				if (stack1.stackSize == 1 && stack1 != new ItemStack(BLItemRegistry.itemsGeneric, 1, EnumItemGeneric.SULFUR.id) && stack1.getItem() != BLItemRegistry.lifeCrystal)
 					if (!mergeItemStack(stack1, 0, 1, true))
 						return null;
 			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))

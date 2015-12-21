@@ -222,7 +222,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	}
 
 	public boolean hasFuel() {
-		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.itemsGeneric && getStackInSlot(0).getItemDamage() == EnumItemGeneric.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
+		return getStackInSlot(0) != null && getStackInSlot(0).getItem() == BLItemRegistry.itemsGeneric && getStackInSlot(0).getItemDamage() == EnumItemGeneric.SULFUR.id && getStackInSlot(0).stackSize >= 1;
 	}
 
 	private boolean outputIsFull() {

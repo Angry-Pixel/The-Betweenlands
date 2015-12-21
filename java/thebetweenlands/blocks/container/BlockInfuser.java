@@ -17,8 +17,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.herblore.aspects.AspectRecipes;
-import thebetweenlands.herblore.aspects.AspectRegistry.ItemEntry;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
@@ -53,19 +53,19 @@ public class BlockInfuser extends BlockContainer {
 					ItemStack oldItem = player.getCurrentEquippedItem();
 					ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
 					world.markBlockForUpdate(x, y, z);
-					if (!player.capabilities.isCreativeMode) {
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-					}
+					if (!player.capabilities.isCreativeMode) player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
 					if (!ItemStack.areItemStacksEqual(oldItem, newItem)) {
 						return true;
 					}
 				}
-				if (player.getCurrentEquippedItem() != null && AspectRecipes.REGISTRY.getItemAspects(new ItemEntry(player.getCurrentEquippedItem())).size() > 0 && !tile.hasInfusion()) {
-					ItemStack crushedItem = player.getCurrentEquippedItem();
+				if (player.getCurrentEquippedItem() != null && AspectManager.get(world).getAspects(player.getCurrentEquippedItem()).size() > 0 && !tile.hasInfusion()) {
+					ItemStack ingredient = player.getCurrentEquippedItem();
 					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {
-							tile.setInventorySlotContents(i, new ItemStack(crushedItem.getItem(), 1, crushedItem.getItemDamage()));
-							player.getCurrentEquippedItem().stackSize--;
+							ItemStack singleIngredient = ingredient.copy();
+							singleIngredient.stackSize = 1;
+							tile.setInventorySlotContents(i, singleIngredient);
+							if (!player.capabilities.isCreativeMode) player.getCurrentEquippedItem().stackSize--;
 							world.markBlockForUpdate(x, y, z);
 							return true;
 						}
@@ -74,7 +74,7 @@ public class BlockInfuser extends BlockContainer {
 				if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
 					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, player.getCurrentEquippedItem());
-						player.setCurrentItemOrArmor(0, null);
+						if (!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, null);
 					}
 					return true;
 				}
@@ -83,7 +83,7 @@ public class BlockInfuser extends BlockContainer {
 			if(player.isSneaking() && !tile.hasInfusion()) {
 				for (int i = TileEntityInfuser.MAX_INGREDIENTS; i >= 0; i--) {
 					if(tile.getStackInSlot(i) != null) {
-						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(i).getItem(), 1, tile.getStackInSlot(i).getItemDamage()), false);
+						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(tile.getStackInSlot(i).copy(), false);
 						if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
 						tile.setInventorySlotContents(i, null);
 						world.markBlockForUpdate(x, y, z);
@@ -94,7 +94,7 @@ public class BlockInfuser extends BlockContainer {
 
 			if(player.isSneaking()) {
 				if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) != null) {
-					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(new ItemStack(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItem(), 1, tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).getItemDamage()), false);
+					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).copy(), false);
 					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
 					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
 					world.markBlockForUpdate(x, y, z);
@@ -111,7 +111,7 @@ public class BlockInfuser extends BlockContainer {
 			return;
 		IInventory tileInventory = (IInventory) world.getTileEntity(x, y, z);
 		TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(x, y, z);
-		if (tileInventory != null && !tile.hasInfusion())
+		if (tileInventory != null && !tile.hasInfusion()) {
 			for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 				ItemStack stack = tileInventory.getStackInSlot(i);
 				if (stack != null) {
@@ -126,7 +126,7 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 			}
-		if (tileInventory != null) {
+		} else if (tileInventory != null && tile.hasInfusion()) {
 			ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
 			if (stack != null) {
 				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {

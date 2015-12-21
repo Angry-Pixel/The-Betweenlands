@@ -46,7 +46,7 @@ public class BLEntityRegistry
 		registerEntity(4, EntityTarBeast.class, "tarBeast", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(5, EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
 		registerEntity(6, EntityFirefly.class, "firefly", 0x243B0B, 0x808000);
-		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000);
+		registerEntity(7, EntitySporeling.class, "sporeling", 0xFFFFFF, 0xFF0000, 64, 1, true);
 		registerEntity(8, EntityLeech.class, "leech", 0x804E3D, 0x3D6F80);
 		registerEntity(9, EntityDragonFly.class, "dragonfly", 0x804E3D, 0x3D6F80);
 		registerEntity(10, EntityBloodSnail.class, "bloodSnail", 0x804E3D, 0x3D6F80);

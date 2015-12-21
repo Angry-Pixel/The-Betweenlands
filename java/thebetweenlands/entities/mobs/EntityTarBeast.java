@@ -35,6 +35,7 @@ import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
 import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.items.tools.ItemSwordBL;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
@@ -420,5 +421,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public void setPreparing() {
 		this.getDataWatcher().updateObject(SUCKING_STATE_DW, (byte)2);
+	}
+
+	@Override
+	public String pageName() {
+		return "tarBeast";
 	}
 }

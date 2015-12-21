@@ -11,13 +11,13 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
 	public ChunkCoordinates currentFlightTarget;
@@ -201,5 +201,9 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 				}
 			}
 		}
+	}
+	@Override
+	public String pageName() {
+		return "dragonFly";
 	}
 }

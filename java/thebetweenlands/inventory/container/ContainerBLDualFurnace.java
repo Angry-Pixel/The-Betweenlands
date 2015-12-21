@@ -143,7 +143,7 @@ public class ContainerBLDualFurnace extends Container {
 					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 3, 4, false))
 						return null;
 				}
-				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.ordinal()) {
+				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.id) {
 					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 4, 5, false))
 						return null;
 				}

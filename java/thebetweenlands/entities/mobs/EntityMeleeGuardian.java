@@ -1,6 +1,7 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.world.World;
+import thebetweenlands.manual.ManualManager;
 
 /**
  * Created by jnad325 on 7/14/15.
@@ -15,5 +16,9 @@ public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntity
 	protected String getLivingSound() {
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
+	}
+	@Override
+	public String pageName() {
+		return "meleeGuardian";
 	}
 }

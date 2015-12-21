@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.entityAI.EntityAIApproachItem;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -497,4 +498,12 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 			}
 		}
 	}
+
+	@Override
+	public String pageName() {
+		return "peatMummy";
+	}
+
 }
+
+

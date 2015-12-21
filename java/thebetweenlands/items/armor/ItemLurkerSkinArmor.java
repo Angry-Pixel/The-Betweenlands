@@ -36,7 +36,7 @@ public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.LURKER_SKIN.ordinal();
+		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.LURKER_SKIN.id;
 	}
 
 	@Override

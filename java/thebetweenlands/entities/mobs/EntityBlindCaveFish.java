@@ -4,12 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -132,5 +132,9 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 		moveForward = 0.5F;
 	}
 
+	@Override
+	public String pageName() {
+		return "blindCaveFish";
+	}
 }
 

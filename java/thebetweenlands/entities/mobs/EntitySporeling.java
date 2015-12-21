@@ -13,11 +13,12 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.ManualManager;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public boolean isFalling;
@@ -132,11 +133,16 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		int chance = rand.nextInt(4) + rand.nextInt(1 + looting);
 		int amount;
 		for (amount = 0; amount < chance; ++amount)
-			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SPORES), 0.0F);
+			entityDropItem(new ItemStack(BLItemRegistry.spores), 0.0F);
 	}
 
 	@Override
 	protected boolean canDespawn() {
 		return true;
+	}
+
+	@Override
+	public String pageName() {
+		return "sporeling";
 	}
 }

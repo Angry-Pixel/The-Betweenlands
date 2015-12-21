@@ -42,10 +42,6 @@ import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
 import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
 import thebetweenlands.client.render.block.BlockHollowLogRenderer;
 import thebetweenlands.client.render.block.BlockModelPlantRenderer;
 import thebetweenlands.client.render.block.BlockMossBedRenderer;
@@ -177,7 +173,8 @@ import thebetweenlands.event.render.WispHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.manual.ManualEntryRegistry;
+import thebetweenlands.manual.GuideBookEntryRegistry;
+import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -425,10 +422,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void postInit() {
 		// Init manual
-		System.out.println("***********************************************");
-		System.out.println("Manual errors:");
-		ManualEntryRegistry.init();
-		System.out.println("***********************************************");
+		GuideBookEntryRegistry.init();
+		HLEntryRegistry.init();
 	}
 
 	@Override
@@ -496,15 +491,15 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void onPlayerEnterWeedwoodRowboat() {
 		if (ConfigHandler.rowboatView) {
-			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.switchTo();
+			WeedwoodRowboatHandler.THIRD_PERSON_PERSPECTIVE.switchTo();
 		} else {
-			WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_FIRST_PERSON_PERSPECTIVE.switchTo();
+			WeedwoodRowboatHandler.FIRST_PERSON_PERSPECTIVE.switchTo();
 		}
 	}
 
 	@Override
 	public void updateRiderYawInWeedwoodRowboat(EntityWeedwoodRowboat rowboat, EntityLivingBase rider) {
-		if (rowboat.worldObj.isRemote && WeedwoodRowboatHandler.WEEDWOOD_ROWBOAT_THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
+		if (rowboat.worldObj.isRemote && WeedwoodRowboatHandler.THIRD_PERSON_PERSPECTIVE.isCurrentPerspective()) {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}

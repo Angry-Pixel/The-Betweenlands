@@ -2,24 +2,19 @@ package thebetweenlands.entities.mobs;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.*;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.IManualEntryEntity;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-public class EntityFirefly extends EntityFlying implements IMob, IEntityBL, IManualEntryEntity {
+public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	public int courseChangeCooldown;
 	public double waypointX;
@@ -181,32 +176,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL, IMan
 	}
 
 	@Override
-	public String manualPictureLocation() {
-		return "thebetweenlands:textures/gui/manual/test.png";
-	}
-
-	@Override
-	public int pictureWidth() {
-		return 100;
-	}
-
-	@Override
-	public int pictureHeight() {
-		return 180;
-	}
-
-	@Override
-	public String manualStats() {
-		return "Attack:0/health:2/stat:num/stat:num/stat:num";
-	}
-
-	@Override
-	public String manualName() {
-		return "firefly";
-	}
-
-	@Override
-	public Entity getEntity() {
-		return this;
+	public String pageName() {
+		return "fireFly";
 	}
 }

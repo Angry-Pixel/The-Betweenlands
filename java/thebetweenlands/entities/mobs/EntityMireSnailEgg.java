@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.manual.ManualManager;
 import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
@@ -96,4 +97,10 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		setHatchTime(nbt.getInteger("hatchTicks"));
 	}
+
+	@Override
+	public String pageName() {
+		return "mireSnailEgg";
+	}
 }
+

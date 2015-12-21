@@ -1,20 +1,19 @@
 package thebetweenlands.inventory.gui;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAnimator;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiAnimator extends GuiContainer {
@@ -49,19 +48,20 @@ public class GuiAnimator extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 		if (tile.getStackInSlot(1) != null) {
-			int i1 = 40 - tile.life /3;
+			int i1 = 40 - tile.lifeCrystalLife /3;
 			this.drawTexturedModalRect(k + 39, l + 8 + i1, 175, 2 + i1, 6, 42);
 		}
-		if (tile.progress > 0) {
-			int i1 = tile.progress;
+		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.isValidFocalItem()) {
+			int i1 = tile.fuelBurnProgress;
 			drawTexturedModalRect(k + 129, l + 8 + i1, 175, 2 + i1, 6, 42);
-			if (tile.itemsConsumed <= 16) {
-				int i2 = tile.itemsConsumed;
+			double relTotalProgress = (tile.fuelConsumed + (tile.fuelBurnProgress / 42.0D)) / (double)tile.requiredFuelCount;
+			if(relTotalProgress <= 0.5D) {
+				int i2 = (int)(relTotalProgress * 32);
 				drawTexturedModalRect(k + 51, l + 65, 182, 18, i2 * 2, 2);
 				drawTexturedModalRect(k + 123 - i2 * 2, l + 65, 254 - i2 * 2, 18, i2 * 2, 2);
-			}
-			if (tile.itemsConsumed > 16 && tile.itemsConsumed <= 32) {
-				int i2 = tile.itemsConsumed;
+			} 
+			if(relTotalProgress > 0.5D && relTotalProgress <= 1.0D) {
+				int i2 = (int)(relTotalProgress * 32);
 				drawTexturedModalRect(k + 51, l + 65 - i2 + 16, 182, 18 - i2 + 16, 72, 2 + i2 - 16);
 			}
 		}
@@ -84,7 +84,7 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if (tile.lifeDepleted)
+		if (tile.itemAnimated)
 			playerSent.closeScreen();
 	}
 }

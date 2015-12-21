@@ -28,10 +28,12 @@ public class ItemRenderHelper
      * @param renderPass int
      */
     public static void renderItem(ItemStack item, int renderPass) {
+    	GL11.glPushMatrix();
         GL11.glTranslated(0.5, 0, 1.0D / 16.0D);
         GL11.glRotatef(-335.0F, 0.0F, 0.0F, 1.0F);
         GL11.glRotatef(-50.0F, 0.0F, 1.0F, 0.0F);
         RenderManager.instance.itemRenderer.renderItem(Minecraft.getMinecraft().thePlayer, item, renderPass, ItemRenderType.ENTITY);
+        GL11.glPopMatrix();
     }
 
     ///--------------------------------------
