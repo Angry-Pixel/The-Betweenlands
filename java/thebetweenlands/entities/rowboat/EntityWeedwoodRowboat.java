@@ -635,7 +635,6 @@ public class EntityWeedwoodRowboat extends Entity {
 			if (!prevOarStroke && oarStroke && time >= 10) {
 				force = 1;
 				time = 0;
-				worldObj.playSound(posX, posY, posZ, ModInfo.ID + ":rowboat.row", 1, 0.8F + rand.nextFloat() * 0.3F, true);	
 			} else {
 				force = Math.max(force - 0.05F, 0.55F);
 			}
