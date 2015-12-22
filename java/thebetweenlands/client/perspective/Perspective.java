@@ -40,12 +40,9 @@ public abstract class Perspective {
 
 	private int id;
 
-	private List<PerspectiveExtension> extensions;
-
 	private boolean doesRenderPlayer;
 
 	public Perspective() {
-		extensions = new ArrayList<PerspectiveExtension>();
 		doesRenderPlayer = shouldRenderPlayer();
 	}
 
@@ -83,10 +80,6 @@ public abstract class Perspective {
 
 	public final void switchTo() {
 		switchTo(this);
-	}
-
-	public final void addExtension(PerspectiveExtension extension) {
-		extensions.add(extension);
 	}
 
 	public final boolean doesRenderPlayer() {
@@ -154,11 +147,16 @@ public abstract class Perspective {
 
 	public static int getInsideOpaqueBlockView() {
 		Perspective perspective = getCurrentPerspective();
-		Perspective newPerspective = Perspective.FIRST_PERSON;
-		for (PerspectiveExtension extension : perspective.extensions) {
-			newPerspective = extension.getPerspectiveIfPlayerInOpaqueBlock(perspective);
+		Perspective newPerspective = perspective.getPerspectiveForOpaqueBlockView();
+		if (newPerspective == null) {
+			newPerspective = perspective;
 		}
-		return (newPerspective == null ? perspective : newPerspective).getId();
+		changeTo(newPerspective);
+		return newPerspective.doesRenderPlayer() ? currentPerspective : 0;
+	}
+
+	protected Perspective getPerspectiveForOpaqueBlockView() {
+		return Perspective.FIRST_PERSON;
 	}
 
 	public static int cyclePerspective() {
@@ -167,22 +165,10 @@ public abstract class Perspective {
 		for (int i = 1; i < PERSPECTIVES.size(); i++) {
 			Perspective candidate = getPerspective((currentView + i) % PERSPECTIVES.size());
 			if (perspective.canCycleTo(candidate) && candidate.canCycleFrom(perspective)) {
-				boolean canCycleTo = true;
-				for (PerspectiveExtension extension : perspective.extensions) {
-					if (extension.disallowCycle(candidate)) {
-						canCycleTo = false;
-						break;
-					}
-				}
-				if (canCycleTo) {
-					for (PerspectiveExtension extension : perspective.extensions) {
-						extension.onCycleTo(candidate);
-					}
-					candidate.onCycleTo();
-					perspective.onCycleOff();
-					perspective = candidate;
-					break;
-				}
+				candidate.onCycleTo();
+				perspective.onCycleOff();
+				perspective = candidate;
+				break;
 			}
 		}
 		return cycleTo(perspective);

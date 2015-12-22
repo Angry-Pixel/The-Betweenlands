@@ -5,13 +5,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
+import com.google.common.base.Throwables;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundEventAccessorComposite;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
@@ -27,6 +27,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.audio.SuperbSoundRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
@@ -198,6 +199,11 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -405,17 +411,33 @@ public class ClientProxy extends CommonProxy {
 						64, 64
 				});
 
+		replaceSoundRegistry();
+
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
 			Field tessellatorInstanceField = ReflectionHelper.findField(Tessellator.class, "instance", "field_78398_a", "a");
-			try {
-				ReflectionHelper.findField(Field.class, "modifiers").setInt(tessellatorInstanceField, tessellatorInstanceField.getModifiers() & ~Modifier.FINAL);
-				tessellatorInstanceField.set(null, new TessellatorDebug());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			unfinalize(tessellatorInstanceField);
 			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), debugTimer = new TimerDebug(20), "timer", "field_71428_T", "Q");
+		}
+	}
+
+	private void replaceSoundRegistry() {
+		SoundHandler mcSoundHandler = Minecraft.getMinecraft().getSoundHandler();
+		Field sndRegistry = ReflectionHelper.findField(SoundHandler.class, "sndRegistry", "field_147697_e", "e");
+		unfinalize(sndRegistry);
+		try {
+			sndRegistry.set(mcSoundHandler, new SuperbSoundRegistry());
+		} catch (Exception e) {
+			Throwables.propagate(e);
+		}
+	}
+
+	private void unfinalize(Field field) {
+		try {
+			ReflectionHelper.findField(Field.class, "modifiers").setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		} catch (Exception e) {
+			Throwables.propagate(e);
 		}
 	}
 

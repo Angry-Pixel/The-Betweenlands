@@ -115,10 +115,20 @@ public class RenderWeedwoodRowboat extends Render {
 			articulateBody();
 			articulateArm(ShipSide.STARBOARD, x, y, z, yaw);
 			articulateArm(ShipSide.PORT, x, y, z, yaw);
-			shouldPreventRidingRender = false;
 			AbstractClientPlayer player = (AbstractClientPlayer) pilot;
+			/*
+			 * A bit of weird transformation here since I had everything setup to not translate from the viewer,
+			 * which makes other players not translated to their rowboat
+			 */
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y - 0.5 + pilot.yOffset, z);
+			GL11.glRotatef(yaw, 0, 1, 0);
+			GL11.glTranslated(0, 0, 0.26);
+			GL11.glRotatef(-yaw, 0, 1, 0);
+			shouldPreventRidingRender = false;
 			rowerRenderer.renderPilot(pilot, arms.get(ShipSide.STARBOARD), arms.get(ShipSide.PORT), bodyRotateAngleX, bodyRotateAngleY, delta);
 			shouldPreventRidingRender = true;
+			GL11.glPopMatrix();
 		}
 	}
 
@@ -206,19 +216,21 @@ public class RenderWeedwoodRowboat extends Render {
 				GL11.glColor3f(0, 1, 0);
 			}
 		}
-		GL11.glPointSize(8);
-		GL11.glRotatef(yaw, 0, 1, 0);
-		GL11.glBegin(GL11.GL_POINTS);
-		GL11.glVertex3d(arm.x, arm.y, arm.z);
-		GL11.glVertex3d(grip.x, grip.y, grip.z);
-		GL11.glEnd();
-		GL11.glLineWidth(3);
-		GL11.glBegin(GL11.GL_LINES);
-		GL11.glVertex3d(arm.x, arm.y, arm.z);
-		GL11.glVertex3d(grip.x, grip.y, grip.z);
-		GL11.glEnd();
-		GL11.glLineWidth(1);
-		GL11.glRotatef(-yaw, 0, 1, 0);
+		if (false) {
+			GL11.glPointSize(8);
+			GL11.glRotatef(yaw, 0, 1, 0);
+			GL11.glBegin(GL11.GL_POINTS);
+			GL11.glVertex3d(arm.x, arm.y, arm.z);
+			GL11.glVertex3d(grip.x, grip.y, grip.z);
+			GL11.glEnd();
+			GL11.glLineWidth(3);
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3d(arm.x, arm.y, arm.z);
+			GL11.glVertex3d(grip.x, grip.y, grip.z);
+			GL11.glEnd();
+			GL11.glLineWidth(1);
+			GL11.glRotatef(-yaw, 0, 1, 0);
+		}
 	}
 
 	private void createBodyTransformationMatrix() {

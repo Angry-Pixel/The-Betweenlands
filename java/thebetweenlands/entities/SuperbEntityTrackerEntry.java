@@ -89,7 +89,7 @@ public class SuperbEntityTrackerEntry extends EntityTrackerEntry {
 		} else if (ticks % updateFrequency == 0 || myEntity.isAirBorne || myEntity.getDataWatcher().hasChanges()) {
 			// TODO: more extensible system of custom thresholds, possibly user configuration as well
 			boolean silk = myEntity instanceof EntityWeedwoodRowboat;
-			int rotationThreshold = 4;
+			int moveThreshold = silk ? 1 : 4;
 			if (myEntity.ridingEntity == null) {
 				ticksSinceLastForcedTeleport++;
 				int x = myEntity.myEntitySize.multiplyBy32AndRound(myEntity.posX);
@@ -101,8 +101,8 @@ public class SuperbEntityTrackerEntry extends EntityTrackerEntry {
 				int deltaY = y - lastScaledYPosition;
 				int deltaZ = z - lastScaledZPosition;
 				Packet packet = null;
-				boolean movePastThreshold = Math.abs(deltaX) >= 4 || Math.abs(deltaY) >= 4 || Math.abs(deltaZ) >= 4 || ticks % 60 == 0;
-				boolean rotationPastThreshold = (silk && (Math.abs(myEntity.rotationYaw - prevRotationYaw) > 1 || Math.abs(myEntity.rotationPitch - prevRotationPitch) > 1)) || Math.abs(yaw - lastYaw) >= rotationThreshold || Math.abs(pitch - lastPitch) >= rotationThreshold;
+				boolean movePastThreshold = Math.abs(deltaX) >= moveThreshold || Math.abs(deltaY) >= moveThreshold || Math.abs(deltaZ) >= moveThreshold || ticks % 60 == 0;
+				boolean rotationPastThreshold = (silk && (Math.abs(myEntity.rotationYaw - prevRotationYaw) > 0.5F || Math.abs(myEntity.rotationPitch - prevRotationPitch) > 1)) || Math.abs(yaw - lastYaw) >= 4 || Math.abs(pitch - lastPitch) >= 4;
 				if (ticks > 0 || myEntity instanceof EntityArrow) {
 					if (deltaX >= -128 && deltaX < 128 && deltaY >= -128 && deltaY < 128 && deltaZ >= -128 && deltaZ < 128 && ticksSinceLastForcedTeleport <= 400 && !isRidingEntity) {
 						if (movePastThreshold && rotationPastThreshold) {
@@ -151,7 +151,7 @@ public class SuperbEntityTrackerEntry extends EntityTrackerEntry {
 			} else {
 				int yaw = MathUtils.degToByte(myEntity.rotationYaw);
 				int pitch = MathUtils.degToByte(myEntity.rotationPitch);
-				boolean rotationPastThreshold = Math.abs(yaw - lastYaw) >= rotationThreshold || Math.abs(pitch - lastPitch) >= rotationThreshold;
+				boolean rotationPastThreshold = Math.abs(yaw - lastYaw) >= 4 || Math.abs(pitch - lastPitch) >= 4;
 				if (rotationPastThreshold) {
 					func_151259_a(new S14PacketEntity.S16PacketEntityLook(myEntity.getEntityId(), (byte) yaw, (byte) pitch));
 					lastYaw = yaw;

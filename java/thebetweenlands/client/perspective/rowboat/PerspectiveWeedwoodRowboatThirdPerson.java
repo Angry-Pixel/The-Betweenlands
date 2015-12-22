@@ -120,4 +120,9 @@ public class PerspectiveWeedwoodRowboatThirdPerson extends Perspective {
 		prevYaw = yaw;
 		prevPitch = pitch;
 	}
+
+	@Override
+	protected Perspective getPerspectiveForOpaqueBlockView() {
+		return WeedwoodRowboatHandler.FIRST_PERSON_PERSPECTIVE;
+	}
 }
