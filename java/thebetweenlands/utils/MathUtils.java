@@ -110,4 +110,8 @@ public final class MathUtils {
 		}
 		return prevX;
 	}
+
+	public static int degToByte(float angle) {
+		return MathHelper.floor_float(angle * (256F / 360));
+	}
 }

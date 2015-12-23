@@ -65,4 +65,9 @@ public class PerspectiveWeedwoodRowboatFirstPerson extends PerspectiveFirstPerso
 		entity.rotationYaw += rowboatYawOffset;
 		entity.prevRotationYaw = MathUtils.adjustAngleForInterpolation(entity.rotationYaw, entity.prevRotationYaw);
 	}
+
+	@Override
+	protected Perspective getPerspectiveForOpaqueBlockView() {
+		return this;
+	}
 }

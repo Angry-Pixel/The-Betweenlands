@@ -21,6 +21,9 @@ public class RenderPlayerRower extends RenderPlayer {
 	}
 
 	@Override
+	protected void renderEquippedItems(AbstractClientPlayer player, float delta) {}
+
+	@Override
 	protected ResourceLocation getEntityTexture(AbstractClientPlayer player) {
 		return PlayerLimbPreMirrorer.getPlayerSkin(player);
 	}

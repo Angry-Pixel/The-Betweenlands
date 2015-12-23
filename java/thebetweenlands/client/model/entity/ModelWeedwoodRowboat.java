@@ -294,14 +294,10 @@ public class ModelWeedwoodRowboat extends ModelBase {
 	}
 
 	public void animateOar(EntityWeedwoodRowboat rowboat, ShipSide side, float delta) {
-		float theta = rowboat.getOarRotation(side, delta) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE;
+		float theta = rowboat.getRowProgress(side, delta);
 		ModelRenderer oar = getOar(side);
-		oar.rotateAngleY = MathUtils.linearTransformf(MathHelper.sin((theta + MathUtils.PI / 2)), -1, 1, MathUtils.PI / 2, 0);
-		oar.rotateAngleX = MathHelper.sin(theta) * 0.6F;
-		oar.rotateAngleZ = MathHelper.cos(theta) * 0.45F - MathUtils.PI / 2.5F;
-		if (side == ShipSide.PORT) {
-			oar.rotateAngleY = (MathUtils.PI - oar.rotateAngleY);
-			oar.rotateAngleZ = -oar.rotateAngleZ;
-		}
+		oar.rotateAngleX = EntityWeedwoodRowboat.getOarRotationX(theta);
+		oar.rotateAngleY = EntityWeedwoodRowboat.getOarRotationY(side, theta);
+		oar.rotateAngleZ = EntityWeedwoodRowboat.getOarRotationZ(side, theta);
 	}
 }
