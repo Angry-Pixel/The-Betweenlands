@@ -53,6 +53,12 @@ public class GuideBookEntryRegistry {
         initItemEntries();
         initMachineEntries();
         initEnityEntries();
+        ArrayList<Page> page = new ArrayList<>();
+        page.addAll(PageCreators.TextPages(16, 10, "manual.wip.page", "WIP", false, manualType));
+        category4 = new ManualCategory(page, 4, manualType, "4");
+        category5 = new ManualCategory(page, 5, manualType, "5");
+        category6 = new ManualCategory(page, 6, manualType, "6");
+        category7 = new ManualCategory(page, 7, manualType, "7");
     }
 
     public static void initItemEntries() {

@@ -730,6 +730,8 @@ manual.widget.animator.input=Input
 manual.widget.animator.recipe=Animator Recipe
 
 #manual items
+manual.angryPebble.title=Angry Pebble
+manual.angryPebble.description=Needs localization
 manual.arrows.title=Arrows
 manual.arrows.description=These are some magical arrows added by The Betweenlands. They are get able as loot or simply by crafting them.
 manual.axes.title=Axes
@@ -744,6 +746,10 @@ manual.explorerHat.title=Explorer Hat
 manual.explorerHat.description=Needs localization
 manual.food.title=Food
 manual.food.description=Needs localization
+manual.genericItems.title=Generic Items
+manual.genericItems.description=Needs localization
+manual.genericItemsCrushed.title=Crushed Items
+manual.genericItemsCrushed.description=Needs localization
 manual.legendaryArmor.title=Armor of Legends
 manual.legendaryArmor.description=Needs localization
 manual.lifeCrystal.title=Life Crystal
@@ -988,6 +994,8 @@ manual.groundvenusflytrap.title=Ground Venus Fly Trap
 manual.groundgreenmiddlegem.title=Ground Green Middle Gem
 manual.groundcrimsonmiddlegem.title=Ground Crimson Middle Gem
 manual.groundaquamiddlegem.title=Ground Aqua Middle Gem
+
+manual.wip.page=These pages seem to be glued together with magic glue, it is said that this glue will slowly go away every time the Betweenlands gets bigger.
 
 talisman.noplace=The space is not large enough
 

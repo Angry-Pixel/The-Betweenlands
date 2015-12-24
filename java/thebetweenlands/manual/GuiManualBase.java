@@ -41,6 +41,18 @@ public class GuiManualBase extends GuiScreen {
     }
 
     @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
+    }
+
+    @Override
     @SideOnly(Side.CLIENT)
     public void drawScreen(int mouseX, int mouseY, float renderPartials) {
         super.drawScreen(mouseX, mouseY, renderPartials);
@@ -100,11 +112,9 @@ public class GuiManualBase extends GuiScreen {
         if (currentCategory != null) {
             if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.previousPage(this);
-                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
             }
             if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.nextPage(this);
-                ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
             }
             if (mouseX >= xStart + (currentCategory.number >= 1?0:279) && mouseX <= xStart + (currentCategory.number >= 1?0:279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.itemsCategory);
@@ -112,14 +122,14 @@ public class GuiManualBase extends GuiScreen {
                 changeCategory(GuideBookEntryRegistry.machineCategory);
             if (mouseX >= xStart + (currentCategory.number >= 3?0:279) && mouseX <= xStart + (currentCategory.number >= 3?0:279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
                changeCategory(GuideBookEntryRegistry.entitiesCategory);
-//            if (mouseX >= xStart + (currentCategory.number >= 4?0:279) && mouseX <= xStart + (currentCategory.number >= 4?0:279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
-//                changeCategory(ManualEntryRegistry.category4);
-//            if (mouseX >= xStart + (currentCategory.number >= 5?0:279) && mouseX <= xStart + (currentCategory.number >= 5?0:279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)
-//                changeCategory(ManualEntryRegistry.category5);
-//            if (mouseX >= xStart + (currentCategory.number >= 6?0:279) && mouseX <= xStart + (currentCategory.number >= 6?0:279) + 14 && mouseY >= yStart + 131 && mouseY <= yStart + 130 + 20 && button == 0)
-//                changeCategory(ManualEntryRegistry.category6);
-//            if (mouseX >= xStart + (currentCategory.number >= 7?0:279) && mouseX <= xStart + (currentCategory.number >= 7?0:279) + 14 && mouseY >= yStart + 153 && mouseY <= yStart + 152 + 20 && button == 0)
-//                changeCategory(ManualEntryRegistry.category7);
+            if (mouseX >= xStart + (currentCategory.number >= 4?0:279) && mouseX <= xStart + (currentCategory.number >= 4?0:279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
+                changeCategory(GuideBookEntryRegistry.category4);
+            if (mouseX >= xStart + (currentCategory.number >= 5?0:279) && mouseX <= xStart + (currentCategory.number >= 5?0:279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)
+                changeCategory(GuideBookEntryRegistry.category5);
+            if (mouseX >= xStart + (currentCategory.number >= 6?0:279) && mouseX <= xStart + (currentCategory.number >= 6?0:279) + 14 && mouseY >= yStart + 121 && mouseY <= yStart + 120 + 20 && button == 0)
+                changeCategory(GuideBookEntryRegistry.category6);
+            if (mouseX >= xStart + (currentCategory.number >= 7?0:279) && mouseX <= xStart + (currentCategory.number >= 7?0:279) + 14 && mouseY >= yStart + 143 && mouseY <= yStart + 142 + 20 && button == 0)
+                changeCategory(GuideBookEntryRegistry.category7);
 
             currentCategory.mouseClicked(mouseX, mouseY, button);
         }
@@ -129,14 +139,12 @@ public class GuiManualBase extends GuiScreen {
         currentCategory = category;
         currentCategory.init(this, true);
         currentCategory.setPage(1, this);
-        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     public void changeCategory(ManualCategory category, int page){
         currentCategory = category;
         currentCategory.init(this, false);
         currentCategory.setPage(page, this);
-        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     @Override
@@ -150,7 +158,6 @@ public class GuiManualBase extends GuiScreen {
 
     public void changeTo(int pageNumber) {
         currentCategory.setPage(pageNumber + currentCategory.indexPages, this);
-        ManualManager.setCurrentPage(currentCategory.name, currentCategory.currentPage, manualType, player);
     }
 
     public boolean matches(ItemStack itemStack1, ItemStack itemStack2) {
