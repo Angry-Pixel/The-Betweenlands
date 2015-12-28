@@ -21,7 +21,7 @@ public class ElixirRecipe {
 			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType[] aspects) {
 		this(name, infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime, infusionTimeVariation, baseDuration, positiveElixir, negativeElixir, null, null, aspects);
 	}
-	
+
 	public ElixirRecipe(String name, int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime, 
 			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType strengthAspect, IAspectType durationAspect, IAspectType[] aspects) {
 		this.name = name;
@@ -44,5 +44,31 @@ public class ElixirRecipe {
 		float g = (float)(color >> 8 & 255) / 255.0F;
 		float b = (float)(color & 255) / 255.0F;
 		return new float[] {r, g, b, a};
+	}
+
+	public static float[] getInfusionColor(ElixirRecipe recipe, int infusionTime) {
+		if(recipe != null) {
+			if(infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
+				return recipe.getRGBA(recipe.infusionFailedColor);
+			} else if(infusionTime > recipe.idealInfusionTime - recipe.infusionTimeVariation
+					&& infusionTime < recipe.idealInfusionTime + recipe.infusionTimeVariation) {
+				return recipe.getRGBA(recipe.infusionFinishedColor);
+			} else {
+				float startR = 0.2F;
+				float startG = 0.6F;
+				float startB = 0.4F;
+				float startA = 0.9F;
+				float[] targetColor = recipe.getRGBA(recipe.infusionGradient);
+				int targetTime = recipe.idealInfusionTime - recipe.infusionTimeVariation;
+				float infusingPercentage = (float)infusionTime / (float)targetTime;
+				float interpR = startR + (targetColor[0] - startR) * infusingPercentage;
+				float interpG = startG + (targetColor[1] - startG) * infusingPercentage;
+				float interpB = startB + (targetColor[2] - startB) * infusingPercentage;
+				float interpA = startA + (targetColor[3] - startA) * infusingPercentage;
+				return new float[]{interpR, interpG, interpB, interpA};
+			}
+		} else {
+			return new float[]{0.8F, 0.0F, 0.8F, 1.0F};
+		}
 	}
 }
