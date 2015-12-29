@@ -11,10 +11,10 @@ public class ElixirStarvation extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(entity instanceof EntityPlayer) {
+		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(player.getFoodStats().getFoodLevel() > 0) {
-				player.getFoodStats().addStats(-1, 0.0F);
+				player.getFoodStats().addStats(-1, 5.0F);
 			} else {
 				player.getFoodStats().setFoodLevel(0);
 			}
