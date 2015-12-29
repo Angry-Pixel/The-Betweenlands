@@ -63,7 +63,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 		this.entityPathEntity = this.entityPathNavigate.getPathToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);
 		Vec3 pos = Vec3.createVectorHelper(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);
 		this.targetPos = pos;
-		boolean execute = this.entityPathEntity == null ? false : !this.entityPathEntity.isDestinationSame(pos);
+		boolean execute = this.entityPathEntity == null ? false : true;
 		return execute;
 	}
 
