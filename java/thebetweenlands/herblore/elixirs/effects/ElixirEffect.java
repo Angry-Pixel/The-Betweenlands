@@ -16,6 +16,9 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
+import thebetweenlands.manual.widgets.text.TextContainer;
+import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 import thebetweenlands.utils.PotionHelper;
 
 public class ElixirEffect {
@@ -35,10 +38,14 @@ public class ElixirEffect {
 	private static class ElixirPotionEffect extends Potion {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
+		private final String elixirName;
+
+		private TextContainer nameContainer;
 
 		protected ElixirPotionEffect(ElixirEffect effect, String name, int color, ResourceLocation icon) {
 			super(effect.potionID, false, color);
 			this.setPotionName(name);
+			this.elixirName = StatCollector.translateToLocal(name);
 			this.effect = effect;
 			this.icon = icon;
 		}
@@ -59,6 +66,7 @@ public class ElixirEffect {
 		public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 			if(this.icon != null) {
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				GL11.glEnable(GL11.GL_BLEND);
 				Minecraft.getMinecraft().renderEngine.bindTexture(this.icon);
 				Tessellator tessellator = Tessellator.instance;
 				tessellator.startDrawingQuads();
@@ -67,6 +75,30 @@ public class ElixirEffect {
 				tessellator.addVertexWithUV(x+6+20, y+6+20, 0, 1, 1);
 				tessellator.addVertexWithUV(x+6+20, y+6, 0, 1, 0);
 				tessellator.draw();
+			}
+			if(this.nameContainer == null) {
+				this.nameContainer = new TextContainer(88, 100, this.elixirName);
+				int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.elixirName);
+				float scale = 1.0F;
+				if(width > 88) {
+					scale = 88.0F / (float)width;
+					scale -= scale % 0.25F;
+				}
+				if(scale < 0.5F) {
+					scale = 0.5F;
+				}
+				this.nameContainer.setCurrentScale(scale);
+				this.nameContainer.setCurrentColor(0xFFFFFFFF);
+				try {
+					this.nameContainer.parse();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if(this.nameContainer != null && this.nameContainer.getPages().size() > 0) {
+				this.setPotionName("");
+				TextPage page0 = this.nameContainer.getPages().get(0);
+				page0.render(x + 28, y + 6);
 			}
 		}
 
@@ -234,11 +266,11 @@ public class ElixirEffect {
 		}
 		return null;
 	}
-	
+
 	public void removeElixir(EntityLivingBase entity) {
 		entity.removePotionEffect(this.potionID);
 	}
-	
+
 	public ElixirPotionEffect getPotionEffect() {
 		return this.potionEffect;
 	}

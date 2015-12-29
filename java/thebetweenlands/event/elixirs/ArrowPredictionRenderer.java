@@ -72,6 +72,9 @@ public class ArrowPredictionRenderer {
 		}
 	}
 
+	public static void setRandomYawPitch() {
+		randomYawPitchSet = false;
+	}
 
 	private static float randYaw = 0.0F;
 	private static float randPitch = 0.0F;

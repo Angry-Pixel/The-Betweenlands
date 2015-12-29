@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.entities.projectiles.EntityElixir;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
@@ -111,6 +112,11 @@ public class ItemElixir extends Item {
 	}
 
 	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return StatCollector.translateToLocal(this.getElixirFromItem(stack).getEffectName());
+	}
+
+	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("throwing") && stack.stackTagCompound.getBoolean("throwing")) {
 			return EnumAction.bow;
@@ -135,7 +141,7 @@ public class ItemElixir extends Item {
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates an item stack with the specified effect, duration, strength and vial type.
 	 * Vial types: 0 = green, 1 = orange
@@ -162,7 +168,7 @@ public class ItemElixir extends Item {
 		}
 		return 32;
 	}
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if(stack.stackTagCompound == null) {

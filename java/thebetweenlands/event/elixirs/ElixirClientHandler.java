@@ -25,6 +25,7 @@ import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
 
@@ -180,9 +181,37 @@ public class ElixirClientHandler {
 						}
 					}
 				}
+
+				if(ElixirRegistry.EFFECT_SLUGARM.isActive(player)) {
+					if(player.isSwingInProgress) {
+						int strength = ElixirRegistry.EFFECT_SLUGARM.getStrength(player);
+						if(player.swingProgressInt != 0) {
+							player.swingProgressInt--;
+							if(player.ticksExisted % (2 << strength) == 0) {
+								player.swingProgressInt++;
+							}
+							if(player.prevSwingProgress < player.swingProgress) {
+								player.swingProgress -= (player.swingProgress - player.prevSwingProgress);
+								player.prevSwingProgress = player.swingProgress;
+								player.swingProgress += (1.0F / 6.0F) / (2 << strength);
+							}
+							if(player.swingProgressInt < 0 || player.swingProgress < 0) {
+								player.swingProgressInt = 0;
+								player.swingProgress = 0;
+							}
+						}
+					}
+				}
 			} else {
 				this.entityTrails.clear();
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onShootArrow(ArrowLooseEvent event) {
+		if(event.entityPlayer == Minecraft.getMinecraft().thePlayer) {
+			ArrowPredictionRenderer.setRandomYawPitch();
 		}
 	}
 

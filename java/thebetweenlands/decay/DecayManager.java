@@ -19,7 +19,7 @@ public class DecayManager {
 
 	public static int setDecayLevel(int decayLevel, EntityPlayer player) {
 		if (decayLevel < 0) return 0;
-		BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY).decayLevel = decayLevel > 20 ? 20 : decayLevel;
+		BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY).decayLevel = decayLevel > 20 ? 20 : (decayLevel < 0 ? 0 : decayLevel);
 		if(!player.worldObj.isRemote) {
 			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(player), player.getUniqueID()), new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
 		}

@@ -610,6 +610,43 @@ item.thebetweenlands.elixir.dentrothystVial.dirty.name=Dirty Dentrothyst Vial
 item.thebetweenlands.aspectVial.green.name=Green Dentrothyst Aspect Vial
 item.thebetweenlands.aspectVial.orange.name=Orange Dentrothyst Aspect Vial
 
+# Elixirs
+bl.elixir.petrify=Petrify
+bl.elixir.strength=Elixir of Strength
+bl.elixir.nimblefeet=Nimblefeet Elixir
+bl.elixir.healing=Elixir of Healing
+bl.elixir.ripening=Elixir of Ripening
+bl.elixir.toughskin=Toughskin Elixir
+bl.elixir.feasting=Elixir of Feasting
+bl.elixir.huntersSense=Hunter's Sense Brew
+bl.elixir.masking=Masking Brew
+bl.elixir.swiftarm=Swiftarm Brew
+bl.elixir.catsEyes=Brew of the Cat's Eye
+bl.elixir.sagittarius=Draught of Sagittarius
+bl.elixir.spiderbreed=Spiderbreed Draught
+bl.elixir.lightweight=Lightweight Draught
+bl.elixir.unclouded=Draught of the Unclouded
+bl.elixir.gillsgrowth=Shapeshifter's draught of Gillsgrowth
+bl.elixir.wings=Shapeshifter's draught of Wings
+bl.elixir.huntersSenseMaster=Hunter's Sense Masterbrew
+bl.elixir.weakness=Elixir of Weakness
+bl.elixir.lumbering=Lumbering Elixir
+bl.elixir.draining=Elixir of Draining
+bl.elixir.decay=Elixir of Decay
+bl.elixir.poisonsting=Poisonsting Elixir
+bl.elixir.starvation=Elixir of Starvation
+bl.elixir.drunkard=Drunkard's Brew
+bl.elixir.stenching=Stenching Brew
+bl.elixir.slugarm=Slugarm Brew
+bl.elixir.blindman=Blindman's Brew
+bl.elixir.weakbow=Weakbow Draught
+bl.elixir.basilisk=Basilisk Draught
+bl.elixir.heavyweight=Heavyweight Draught
+bl.elixir.foggedMind=Draught of the Fogged Mind
+bl.elixir.deformed=Shapeshifter's draught of the Deformed
+bl.elixir.limbless=Shapeshifter's draught of the Limbless
+bl.elixir.isolatedSenses=Masterbrew of Isolated Senses
+
 # Entities
 entity.thebetweenlands.darkDruid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler

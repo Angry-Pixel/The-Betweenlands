@@ -4,8 +4,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class ElixirFeasting extends ElixirEffect {
-	public ElixirFeasting(int id, String name, ResourceLocation icon) {
+public class ElixirStarvation extends ElixirEffect {
+	public ElixirStarvation(int id, String name, ResourceLocation icon) {
 		super(id, name, icon);
 	}
 
@@ -13,13 +13,17 @@ public class ElixirFeasting extends ElixirEffect {
 	protected void performEffect(EntityLivingBase entity, int strength) {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			player.getFoodStats().addStats(1, 0.0F);
+			if(player.getFoodStats().getFoodLevel() > 0) {
+				player.getFoodStats().addStats(-1, 0.0F);
+			} else {
+				player.getFoodStats().setFoodLevel(0);
+			}
 		}
 	}
 
 	@Override
 	protected boolean isReady(int ticks, int strength) {
-		int ticksPerFood = 100 >> strength;
-		return ticksPerFood > 0 ? ticks % ticksPerFood == 0 : true;
+		int ticksPerStarve = 80 >> strength;
+		return ticksPerStarve > 0 ? ticks % ticksPerStarve == 0 : true;
 	}
 }

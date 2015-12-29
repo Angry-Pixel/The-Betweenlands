@@ -1,21 +1,19 @@
 package thebetweenlands.items.armor;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.herblore.elixirs.ElixirRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemImprovedRubberBoots extends ItemRubberBoots implements IManualEntryItem {
 	private static final int MAX_WALK_TICKS = 20;
@@ -70,6 +68,7 @@ public class ItemImprovedRubberBoots extends ItemRubberBoots implements IManualE
 	}
 
 	public static boolean checkPlayerEffect(EntityPlayer player) {
+		if(ElixirRegistry.EFFECT_HEAVYWEIGHT.isActive(player)) return false;
 		ItemStack boots = player.inventory.armorInventory[0];
 		if(boots != null && boots.getItem() instanceof ItemImprovedRubberBoots) {
 			if(boots.stackTagCompound != null && boots.stackTagCompound.getInteger("walkTicksLeft") > 1) {
