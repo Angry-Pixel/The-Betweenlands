@@ -22,6 +22,7 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.crops.CropRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
@@ -120,7 +121,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null) {
 			if (meta < MATURE_CROP) {
-				if (ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
+				if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id && ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
 					if (!world.isRemote) {
 						world.playAuxSFX(2005, x, y, z, 0);
 						if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
