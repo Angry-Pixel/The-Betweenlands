@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
@@ -30,8 +31,13 @@ public class BlockAlgae extends BlockBush implements ISickleHarvestable, ISyrmor
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		entity.motionX *= 0.8D;
-		entity.motionZ *= 0.8D;
+		if(entity instanceof EntityWeedwoodRowboat == false) {
+			entity.motionX *= 0.8D;
+			entity.motionZ *= 0.8D;
+		} else {
+			entity.motionX *= 0.995D;
+			entity.motionZ *= 0.995D;
+		}
 	}
 
 	@Override
