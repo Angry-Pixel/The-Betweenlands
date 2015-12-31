@@ -390,7 +390,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(ItemCorrosionHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ItemCorrosionHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(
