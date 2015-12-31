@@ -110,7 +110,13 @@ public class FogHandler {
 
 		float uncloudedStrength = 0.0F;
 		if(ElixirRegistry.EFFECT_UNCLOUDED.isActive(player)) {
-			uncloudedStrength = Math.min((ElixirRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
+			uncloudedStrength += Math.min((ElixirRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
+		}
+
+		if(ElixirRegistry.EFFECT_FOGGEDMIND.isActive(player)) {
+			float additionalFogStrength = (ElixirRegistry.EFFECT_FOGGEDMIND.getStrength(player) + 1) * 0.85F;
+			fogStart /= additionalFogStrength * 2.0F;
+			fogEnd /= additionalFogStrength;
 		}
 
 		//Dense fog
@@ -135,6 +141,9 @@ public class FogHandler {
 			fogStart *= Math.min(multiplier * (1.0F + uncloudedStrength * (1.0F / multiplier - 1.0F)), 1.0F);
 			fogEnd *= Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
 		}
+
+		fogStart = Math.max(fogStart, 1);
+		fogEnd = Math.max(fogEnd, 3);
 
 		if(this.currentFogStart < 0.0F || this.currentFogEnd < 0.0F) {
 			this.currentFogStart = fogStart;

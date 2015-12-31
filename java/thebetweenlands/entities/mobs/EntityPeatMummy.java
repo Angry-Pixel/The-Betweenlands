@@ -76,7 +76,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		this.getNavigator().setCanSwim(true);
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIApproachItem(this, BLItemRegistry.shimmerStone, 15, 64, 1.9F, 1.5F) {
+		this.tasks.addTask(1, new EntityAIApproachItem(this, BLItemRegistry.shimmerStone, 80, 64, 1.9F, 1.5F) {
 			@Override
 			protected double getNearSpeed() {
 				if(EntityPeatMummy.this.isCharging()) {

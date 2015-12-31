@@ -160,32 +160,26 @@ public class ManualManager {
     public static void setCurrentPage(String category, int pageNumber, EnumManual manualType, EntityPlayer player) {
         player = player.worldObj.getClosestPlayerToEntity(player, 20);
         if (manualType.equals(EnumManual.GUIDEBOOK) && player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualGuideBook && category != null) {
-            NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-            if (nbt == null)
-                nbt = new NBTTagCompound();
-            nbt.setInteger("pageNumber", pageNumber);
-            nbt.setString("category", category);
-            player.getHeldItem().setTagCompound(nbt);
+            if (player.getHeldItem().stackTagCompound == null)
+                player.getHeldItem().stackTagCompound  = new NBTTagCompound();
+            player.getHeldItem().stackTagCompound.setInteger("pageNumber", pageNumber);
+            player.getHeldItem().stackTagCompound.setString("category", category);
         } else if (manualType.equals(EnumManual.HL) && player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualHL && category != null) {
-            NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-            if (nbt == null)
-                nbt = new NBTTagCompound();
-            nbt.setInteger("pageNumber", pageNumber);
-            nbt.setString("category", category);
-            player.getHeldItem().setTagCompound(nbt);
+            if (player.getHeldItem().stackTagCompound == null)
+                player.getHeldItem().stackTagCompound = new NBTTagCompound();
+            player.getHeldItem().stackTagCompound.setInteger("pageNumber", pageNumber);
+            player.getHeldItem().stackTagCompound.setString("category", category);
         }
     }
 
     public static int getCurrentPageNumber(EnumManual manualType, EntityPlayer player) {
         player = player.worldObj.getClosestPlayerToEntity(player, 20);
         if (manualType.equals(EnumManual.GUIDEBOOK) && player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualGuideBook) {
-            NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-            if (nbt != null && nbt.hasKey("pageNumber"))
-                return nbt.getInteger("pageNumber");
+            if (player.getHeldItem().stackTagCompound != null && player.getHeldItem().stackTagCompound.hasKey("pageNumber"))
+                return player.getHeldItem().stackTagCompound.getInteger("pageNumber");
         } else if (manualType.equals(EnumManual.HL) && player != null && player.getHeldItem() != null && player.getHeldItem().getItem() == BLItemRegistry.manualHL) {
-            NBTTagCompound nbt = player.getHeldItem().getTagCompound();
-            if (nbt != null && nbt.hasKey("pageNumber"))
-                return nbt.getInteger("pageNumber");
+            if (player.getHeldItem().stackTagCompound != null && player.getHeldItem().stackTagCompound.hasKey("pageNumber"))
+                return player.getHeldItem().stackTagCompound.getInteger("pageNumber");
         }
         return 1;
     }

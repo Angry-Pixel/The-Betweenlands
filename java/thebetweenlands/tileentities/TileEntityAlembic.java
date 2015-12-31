@@ -13,10 +13,9 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import thebetweenlands.herblore.Amounts;
-import thebetweenlands.herblore.aspects.AspectRegistry;
+import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
-import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
@@ -39,10 +38,15 @@ public class TileEntityAlembic extends TileEntity {
 	private int producableDuration;
 	private ElixirEffect producableElixir = null;
 	private List<Aspect> producableItemAspects = new ArrayList<Aspect>();
+	private ElixirRecipe recipe = null;
+	private int bucketInfusionTime;
+
+	private boolean loadInfusionData = false;
 
 	public void addInfusion(ItemStack bucket) {
 		this.infusionBucket = bucket;
 		this.loadFromInfusion();
+		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	@Override
@@ -52,17 +56,24 @@ public class TileEntityAlembic extends TileEntity {
 
 	@Override
 	public void updateEntity() {
-		if(!this.worldObj.isRemote) {
-			if(this.isFull() && !this.hasFinished()) {
-				this.progress++;
-				if(!this.running) {
+		if(this.loadInfusionData) {
+			this.loadFromInfusion();
+			this.loadInfusionData = false;
+		}
+
+		if(this.isFull() && !this.hasFinished()) {
+			this.progress++;
+			if(!this.worldObj.isRemote) {
+				if(!this.running || this.progress % 20 == 0) {
 					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 				}
 				this.running = true;
 				if(this.hasFinished()) {
 					this.producedAmount = this.producableAmount;
 				}
-			} else {
+			}
+		} else {
+			if(!this.worldObj.isRemote) {
 				if(this.running) {
 					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 				}
@@ -91,7 +102,7 @@ public class TileEntityAlembic extends TileEntity {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		if(nbt.hasKey("infusionBucket")) this.infusionBucket = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("infusionBucket"));
-		this.loadFromInfusion();
+		this.loadInfusionData = true;
 		this.progress = nbt.getInteger("progress");
 		this.producedAmount = nbt.getFloat("producedAmount");
 		this.running = nbt.getBoolean("running");
@@ -110,17 +121,47 @@ public class TileEntityAlembic extends TileEntity {
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setBoolean("running", this.running);
+		NBTTagCompound itemStackCompound = new NBTTagCompound();
+		if(this.infusionBucket != null) {
+			this.infusionBucket.writeToNBT(itemStackCompound);
+		} 
+		nbt.setTag("infusionBucket", itemStackCompound);
+		nbt.setInteger("progress", this.progress);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		this.running = packet.func_148857_g().getBoolean("running");
+		NBTTagCompound itemStackCompound = packet.func_148857_g().getCompoundTag("infusionBucket");
+		ItemStack oldStack = this.infusionBucket;
+		if(itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+			this.infusionBucket = ItemStack.loadItemStackFromNBT(itemStackCompound);
+		else
+			this.infusionBucket = null;
+		if(this.infusionBucket != null && !ItemStack.areItemStacksEqual(this.infusionBucket, oldStack)) {
+			this.loadFromInfusion();
+		}
+		this.progress = packet.func_148857_g().getInteger("progress");
+	}
+
+	public ElixirRecipe getElixirRecipe() {
+		return this.recipe;
+	}
+
+	public int getInfusionTime() {
+		return this.bucketInfusionTime;
+	}
+
+	public float getProgress() {
+		return (float)this.progress / (float)DISTILLING_TIME;
 	}
 
 	private void loadFromInfusion() {
+		this.recipe = null;
 		if(this.infusionBucket == null) return;
 		int infusionTime = this.infusionBucket.stackTagCompound.getInteger("infusionTime");
+		this.bucketInfusionTime = infusionTime;
 		if(!this.infusionBucket.stackTagCompound.hasKey("ingredients")) {
 			this.addInvalidInfusion();
 			return;
@@ -132,6 +173,7 @@ public class TileEntityAlembic extends TileEntity {
 		}
 		List<IAspectType> infusionAspects = this.getInfusionAspects(infusionIngredients);
 		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infusionAspects);
+		this.recipe = recipe;
 		if(recipe == null || infusionTime < recipe.idealInfusionTime - recipe.infusionTimeVariation || infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 			this.addInvalidInfusion();
 			return;
@@ -189,7 +231,7 @@ public class TileEntityAlembic extends TileEntity {
 		}
 	}
 
-	private List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
+	public List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
 		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(ItemStack ingredient : ingredients) {
 			infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(ingredient));
@@ -275,6 +317,7 @@ public class TileEntityAlembic extends TileEntity {
 		this.producableStrength = 0;
 		this.producedAmount = 0.0F;
 		this.progress = 0;
+		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, int vialType) {

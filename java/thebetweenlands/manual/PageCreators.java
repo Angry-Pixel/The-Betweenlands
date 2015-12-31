@@ -200,9 +200,9 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
 
-        height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+        height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 16;
 
-        if (height < 152) {
+        if (height + 18 + 16< 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
             widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
@@ -215,10 +215,9 @@ public class PageCreators {
             height += 18;
         }
 
-        if (height < 152) {
+        if (height + 10 + 18 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
             height += 10;
-            int width = 0;
             ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));

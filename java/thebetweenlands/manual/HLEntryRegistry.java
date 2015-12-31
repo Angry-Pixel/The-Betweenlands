@@ -18,8 +18,13 @@ public class HLEntryRegistry {
 
     public static ManualManager.EnumManual manualType = ManualManager.EnumManual.HL;
 
+    public static ManualCategory category2;
+
     public static void init() {
         initAspectEntries();
+        ArrayList<Page> page = new ArrayList<>();
+        page.addAll(PageCreators.TextPages(16, 10, "manual.wip.page", "WIP", false, manualType));
+        category2 = new ManualCategory(page, 2, manualType, "2");
     }
 
 

@@ -10,8 +10,10 @@ import net.minecraft.client.model.ModelRenderer;
 @SideOnly(Side.CLIENT)
 public class ModelAlembic extends ModelBase {
 	ModelRenderer alembic_base;
+	ModelRenderer alembic_liquid;
 	ModelRenderer stand;
 	ModelRenderer davids_jar;
+	ModelRenderer jar_liquid;
 	ModelRenderer alembic_midpiece;
 	ModelRenderer alembic_top1;
 	ModelRenderer alembic_top2;
@@ -63,6 +65,10 @@ public class ModelAlembic extends ModelBase {
 		davids_jar.setRotationPoint(4.8F, 24.0F, -3.8F);
 		davids_jar.addBox(-2.0F, -4.0F, -2.0F, 4, 4, 4, 0.0F);
 		setRotateAngle(davids_jar, 0.0F, -0.6373942428283291F, 0.0F);
+		jar_liquid = new ModelRenderer(this, 43, 6);
+		jar_liquid.setRotationPoint(4.8F, 25.0F, -3.8F);
+		jar_liquid.addBox(-1.5F, -4.5F, -1.5F, 3, 3, 3, 0.0F);
+		setRotateAngle(jar_liquid, 0.0F, -0.6373942428283291F, 0.0F);
 		stand = new ModelRenderer(this, 18, 9);
 		stand.setRotationPoint(-2.0F, 17.0F, 2.0F);
 		stand.addBox(-4.0F, 0.0F, -4.0F, 8, 2, 8, 0.0F);
@@ -75,6 +81,10 @@ public class ModelAlembic extends ModelBase {
 		alembic_base.setRotationPoint(-2.0F, 20.0F, 2.2F);
 		alembic_base.addBox(-3.0F, -6.0F, -3.0F, 6, 7, 6, 0.0F);
 		setRotateAngle(alembic_base, 0.091106186954104F, 0.6829473363053812F, 0.091106186954104F);
+		alembic_liquid = new ModelRenderer(this, 0, 0);
+		alembic_liquid.setRotationPoint(-2.0F, 20.0F, 2.2F);
+		alembic_liquid.addBox(-2.5F, -4.5F, -2.5F, 5, 5, 5, 0.0F);
+		setRotateAngle(alembic_liquid, 0.0F, 0.6829473363053812F, 0.0F);
 		firebowl = new ModelRenderer(this, 36, 0);
 		firebowl.setRotationPoint(0.0F, 7.0F, 0.0F);
 		firebowl.addBox(-2.0F, -1.01F, -2.0F, 4, 1, 4, 0.0F);
@@ -104,14 +114,42 @@ public class ModelAlembic extends ModelBase {
 		davids_jar.addChild(davids_jartop2);
 	}
 
+	public void renderWithLiquid(float r, float g, float b, float progress) { 
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(r, g, b, 0.8F);
+
+		if(1.0F - progress > 0.0F) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, -(20.5F * 0.0625F) * (1.0F - progress) + (20.5F * 0.0625F), 0);
+			GL11.glScalef(1, 1.0F - progress, 1);
+			alembic_liquid.render(0.0625F);
+			GL11.glPopMatrix();
+		}
+
+		if(progress != 0.0F) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, -(23.5F * 0.0625F) * progress + (23.5F * 0.0625F), 0);
+			GL11.glScalef(1, progress, 1);
+			jar_liquid.render(0.0625F);
+			GL11.glPopMatrix();
+		}
+
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(1, 1, 1, 1.0F);
+
+		this.render();
+	}
+
 	public void render() { 
 		GL11.glColorMask(false, false, false, false);
 		davids_jar.render(0.0625F);
 		stand.render(0.0625F);
 		alembic_base.render(0.0625F);
 		GL11.glColorMask(true, true, true, true);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		davids_jar.render(0.0625F);
 		stand.render(0.0625F);
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		alembic_base.render(0.0625F);
 	}
 

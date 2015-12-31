@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBow;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -13,6 +14,7 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import thebetweenlands.herblore.elixirs.ElixirRegistry;
@@ -66,18 +68,40 @@ public class ElixirCommonHandler {
 	@SubscribeEvent
 	public void onBreakSpeed(BreakSpeed event) {
 		EntityPlayer player = event.entityPlayer;
-		if(player != null && ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
-			event.newSpeed *= 1.0F + (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1) * 0.3F;
+		if(player != null) {
+			if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+				event.newSpeed *= 1.0F + (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1) * 0.3F;
+			}
+			if(ElixirRegistry.EFFECT_SLUGARM.isActive(player) && ElixirRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
+				event.newSpeed /= 1.0F + (ElixirRegistry.EFFECT_SLUGARM.getStrength(player) + 1) * 0.3F;
+			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onStartUseItem(PlayerUseItemEvent.Start event) {
 		EntityPlayer player = event.entityPlayer;
-		if(player != null && ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
-			float newDuration = event.duration;
-			newDuration *= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
-			event.duration = MathHelper.ceiling_float_int(newDuration);
+		if(player != null) {
+			if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+				float newDuration = event.duration;
+				newDuration *= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
+				event.duration = MathHelper.ceiling_float_int(newDuration);
+			}
+			if(ElixirRegistry.EFFECT_SLUGARM.isActive(player) && ElixirRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
+				if(event.item != null && event.item.getItem() instanceof ItemBow == false) {
+					float newDuration = event.duration;
+					newDuration /= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SLUGARM.getStrength(player) + 1);
+					event.duration = MathHelper.ceiling_float_int(newDuration);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onShootArrow(ArrowLooseEvent event) {
+		if(ElixirRegistry.EFFECT_WEAKBOW.isActive(event.entityLiving)) {
+			event.charge = Math.min(event.charge, 10);
+			event.charge *= 1.0F - (ElixirRegistry.EFFECT_WEAKBOW.getStrength(event.entityLiving) + 1) / 4.0F * 0.75F;
 		}
 	}
 
@@ -122,9 +146,28 @@ public class ElixirCommonHandler {
 			}
 		}
 
+		if(living.isInWater() && ElixirRegistry.EFFECT_HEAVYWEIGHT.isActive(living)) {
+			if(living.motionY > -0.1F) living.motionY -= 0.04F;
+		}
+
 		if(ElixirRegistry.EFFECT_CATSEYES.isActive(living)) {
 			living.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), ElixirRegistry.EFFECT_CATSEYES.getDuration(living), ElixirRegistry.EFFECT_CATSEYES.getStrength(living)));
 			ElixirRegistry.EFFECT_CATSEYES.removeElixir(living);
+		}
+
+		if(ElixirRegistry.EFFECT_POISONSTING.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.poison.getId(), ElixirRegistry.EFFECT_POISONSTING.getDuration(living), ElixirRegistry.EFFECT_POISONSTING.getStrength(living)));
+			ElixirRegistry.EFFECT_POISONSTING.removeElixir(living);
+		}
+
+		if(ElixirRegistry.EFFECT_DRUNKARD.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.confusion.getId(), ElixirRegistry.EFFECT_DRUNKARD.getDuration(living), ElixirRegistry.EFFECT_DRUNKARD.getStrength(living)));
+			ElixirRegistry.EFFECT_DRUNKARD.removeElixir(living);
+		}
+
+		if(ElixirRegistry.EFFECT_BLINDMAN.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.blindness.getId(), ElixirRegistry.EFFECT_BLINDMAN.getDuration(living), ElixirRegistry.EFFECT_BLINDMAN.getStrength(living)));
+			ElixirRegistry.EFFECT_BLINDMAN.removeElixir(living);
 		}
 	}
 	private boolean isEntityOnWall(EntityLivingBase entity) {

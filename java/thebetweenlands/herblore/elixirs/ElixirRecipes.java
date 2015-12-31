@@ -124,7 +124,7 @@ public class ElixirRecipes {
 		registerRecipe(new ElixirRecipe("Hunter's Sense Brew", 0xFF0000FF, 0xFF6f175d, 0xFF332902, 
 				2000, 200, 
 				1200,
-				ElixirRegistry.EFFECT_HUNTERSSENSE, ElixirRegistry.EFFECT_DRUNKYARD,
+				ElixirRegistry.EFFECT_HUNTERSSENSE, ElixirRegistry.EFFECT_DRUNKARD,
 				AspectManager.FREIWYNN, AspectManager.DAYUNIIS,
 				new IAspectType[]{AspectManager.FREIWYNN, AspectManager.DAYUNIIS, AspectManager.ORDANIIS, AspectManager.FIRNALAZ}));
 

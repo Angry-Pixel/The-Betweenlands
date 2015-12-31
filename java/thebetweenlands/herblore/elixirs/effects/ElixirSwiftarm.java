@@ -12,7 +12,6 @@ public class ElixirSwiftarm extends ElixirEffect {
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
 		if(entity instanceof EntityPlayer) {
-			//System.out.println("tes");
 			EntityPlayer player = (EntityPlayer) entity;
 			if(player.getSwingProgress(0) == 20) player.swingItem();
 		}

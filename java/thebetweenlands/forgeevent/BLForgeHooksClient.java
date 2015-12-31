@@ -13,6 +13,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
+import thebetweenlands.forgeevent.client.ClientBlockDamageEvent;
 import thebetweenlands.forgeevent.client.GetMouseOverEvent;
 import thebetweenlands.forgeevent.client.RenderEntitiesEvent;
 
@@ -114,26 +115,65 @@ public class BLForgeHooksClient {
 				}
 			} else {
 				switch (mc.objectMouseOver.typeOfHit) {
-					case ENTITY:
-						mc.playerController.attackEntity(mc.thePlayer, mc.objectMouseOver.entityHit);
-						break;
-					case BLOCK:
-						int x = mc.objectMouseOver.blockX;
-						int y = mc.objectMouseOver.blockY;
-						int z = mc.objectMouseOver.blockZ;
-						if (mc.theWorld.getBlock(x, y, z).getMaterial() == Material.air) {
-							if (mc.playerController.isNotCreative()) {
-								leftClickCounter = 10;
-							}
-						} else {
-							mc.playerController.clickBlock(x, y, z, mc.objectMouseOver.sideHit);
+				case ENTITY:
+					mc.playerController.attackEntity(mc.thePlayer, mc.objectMouseOver.entityHit);
+					break;
+				case BLOCK:
+					int x = mc.objectMouseOver.blockX;
+					int y = mc.objectMouseOver.blockY;
+					int z = mc.objectMouseOver.blockZ;
+					if (mc.theWorld.getBlock(x, y, z).getMaterial() == Material.air) {
+						if (mc.playerController.isNotCreative()) {
+							leftClickCounter = 10;
 						}
-					default:
-						break;
+					} else {
+						mc.playerController.clickBlock(x, y, z, mc.objectMouseOver.sideHit);
+					}
+				default:
+					break;
 				}
 			}
 		}
 		return leftClickCounter;
+	}
+
+	public static int handleBlockBreakingInput(boolean breaking, int leftClickCounter) {
+		if (!breaking) {
+			leftClickCounter = 0;
+		}
+
+		Minecraft mc = Minecraft.getMinecraft();
+
+		if (leftClickCounter <= 0) {
+			if (breaking && mc.objectMouseOver != null && mc.objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+				if(postPreBlockDamageEvent()) return leftClickCounter;
+				int i = mc.objectMouseOver.blockX;
+				int j = mc.objectMouseOver.blockY;
+				int k = mc.objectMouseOver.blockZ;
+
+				if (mc.theWorld.getBlock(i, j, k).getMaterial() != Material.air) {
+					mc.playerController.onPlayerDamageBlock(i, j, k, mc.objectMouseOver.sideHit);
+
+					if (mc.thePlayer.isCurrentToolAdventureModeExempt(i, j, k)) {
+						mc.effectRenderer.addBlockHitEffects(i, j, k, mc.objectMouseOver);
+						mc.thePlayer.swingItem();
+					}
+				}
+				postPostBlockDamageEvent();
+			} else {
+				mc.playerController.resetBlockRemoving();
+			}
+		}
+
+		return leftClickCounter;
+	}
+
+	private static boolean postPreBlockDamageEvent() {
+		return MinecraftForge.EVENT_BUS.post(new ClientBlockDamageEvent.Pre());
+	}
+
+	private static void postPostBlockDamageEvent() {
+		MinecraftForge.EVENT_BUS.post(new ClientBlockDamageEvent.Post());
 	}
 
 	private static boolean postPlayerAttackEvent() {

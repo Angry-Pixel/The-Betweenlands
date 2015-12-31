@@ -7,11 +7,14 @@ import java.util.Iterator;
 
 import com.google.common.base.Throwables;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundEventAccessorComposite;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.SoundRegistry;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
@@ -38,7 +41,6 @@ import thebetweenlands.client.model.block.crops.ModelCropFungus2;
 import thebetweenlands.client.model.block.crops.ModelCropFungus3;
 import thebetweenlands.client.model.block.crops.ModelCropFungus4;
 import thebetweenlands.client.model.block.crops.ModelCropFungus5;
-import thebetweenlands.client.render.TessellatorDebug;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
@@ -199,11 +201,6 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -393,7 +390,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(ItemCorrosionHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ItemCorrosionHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(
@@ -477,7 +474,7 @@ public class ClientProxy extends CommonProxy {
 			return;
 		}
 		if (FogHandler.INSTANCE.hasDenseFog() && FogHandler.INSTANCE.getCurrentFogEnd() < 80.0f) {
-			int probability = (int) FogHandler.INSTANCE.getCurrentFogEnd() / 2 + 16;
+			int probability = Math.max((int) FogHandler.INSTANCE.getCurrentFogEnd() / 2 + 16, 10);
 			if (Minecraft.getMinecraft().theWorld.rand.nextInt(probability) == 0) {
 				double xOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;
 				double zOff = Minecraft.getMinecraft().theWorld.rand.nextInt(50) - 25;

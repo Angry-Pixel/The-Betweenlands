@@ -1,12 +1,32 @@
 package thebetweenlands.core;
 
-import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.tree.AbstractInsnNode.*;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.DADD;
+import static org.objectweb.asm.Opcodes.DLOAD;
+import static org.objectweb.asm.Opcodes.DSTORE;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.F2D;
+import static org.objectweb.asm.Opcodes.FLOAD;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.SWAP;
+import static org.objectweb.asm.tree.AbstractInsnNode.LDC_INSN;
+import static org.objectweb.asm.tree.AbstractInsnNode.METHOD_INSN;
 
 import java.util.Iterator;
 import java.util.ListIterator;
-
-import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -21,6 +41,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+
+import net.minecraft.launchwrapper.IClassTransformer;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static final String SLEEP_PER_TICK = "sleepPerTick";
@@ -37,7 +59,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
-		boolean obf = false;
+		boolean obf = !(/*!*/true/*!*/);
 		if ("net.minecraft.server.MinecraftServer".equals(name)) {
 			return writeClass(transformMinecraftServer(readClass(classBytes)));
 		} else if ((obf = "yz".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
@@ -164,12 +186,14 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		String runTick = obf ? "p" : "runTick";
 		String isPressed = obf ? "f" : "isPressed";
 		String handlePlayerAttackInput = obf ? "al" : "func_147116_af";
+		String handleBlockBreakingInput = obf ? "a" : "func_147115_a";
 		String minecraft = obf ? "bao" : "net/minecraft/client/Minecraft";
 		String leftClickCounter = obf ? "U" : "leftClickCounter";
 		boolean needsStartGame = true;
 		boolean needsRunGameLoop = true;
 		boolean needsRunTick = true;
 		boolean needsHandlePlayerAttackInput = true;
+		boolean needsHandleBlockBreakingInput = true;
 		for (MethodNode method : classNode.methods) {
 			if (needsStartGame && startGame.equals(method.name) && "()V".equals(method.desc)) {
 				for (int i = method.instructions.size() - 1; i >= 0; i--) {
@@ -219,6 +243,19 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				method.instructions.add(new FieldInsnNode(PUTFIELD, minecraft, leftClickCounter, "I"));
 				method.instructions.add(new InsnNode(RETURN));
 				needsHandlePlayerAttackInput = false;
+			}
+			if(needsHandleBlockBreakingInput && handleBlockBreakingInput.equals(method.name) && "(Z)V".equals(method.desc)) {
+				method.localVariables.clear();
+				method.instructions.clear();
+				method.instructions.add(new VarInsnNode(ILOAD, 1));
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new FieldInsnNode(GETFIELD, minecraft, leftClickCounter, "I"));
+				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "handleBlockBreakingInput", "(ZI)I", false));
+				method.instructions.add(new VarInsnNode(ALOAD, 0));
+				method.instructions.add(new InsnNode(SWAP));
+				method.instructions.add(new FieldInsnNode(PUTFIELD, minecraft, leftClickCounter, "I"));
+				method.instructions.add(new InsnNode(RETURN));
+				needsHandleBlockBreakingInput = false;
 			}
 			if (!needsRunGameLoop && !needsStartGame && !needsRunTick && !needsHandlePlayerAttackInput) {
 				break;

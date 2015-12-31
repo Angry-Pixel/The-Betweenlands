@@ -12,7 +12,7 @@ public class ElixirRipening extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(entity instanceof EntityPlayer) {
+		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(DecayManager.isDecayEnabled(player)) {
 				DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) + 1, player);

@@ -134,6 +134,8 @@ public class DecayRenderHandler {
 			ex.printStackTrace();
 		}
 
+		GL11.glColor4f(1, 1, 1, 1);
+		
 		this.ignoreEvent = false;
 	}
 }

@@ -51,7 +51,9 @@ public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{
 		if (itemStack.getItem() == BLItemRegistry.lurkerSkinBoots && player.isInWater()) {
 			boolean fullyInWater = player.worldObj.getBlock((int)player.posX, (int)(player.boundingBox.maxY + 0.1D), (int)player.posZ).getMaterial().isLiquid();
 			if(fullyInWater) {
-				if(!player.isSneaking() && player.moveForward == 0) player.motionY = 0.0D;
+				if(!player.isSneaking() && player.moveForward == 0) {
+					player.motionY = Math.sin(player.ticksExisted / 5.0F) * 0.016D;
+				}
 				if(player.moveForward != 0) {
 					if(player.moveForward > 0) {
 						Vec3 lookVec = player.getLookVec().normalize();

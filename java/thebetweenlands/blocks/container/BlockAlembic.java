@@ -89,6 +89,21 @@ public class BlockAlembic extends BlockContainer {
 				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 				BLParticle.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+				int meta = world.getBlockMetadata(x, y, z);
+				switch(meta) {
+				case 2:
+					BLParticle.FLAME.spawn(world, x + 0.65F + (rand.nextFloat() - 0.5F) * 0.1F, y, z + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, (rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F, (rand.nextFloat() - 0.5F) * 0.01F);
+					break;
+				case 3:
+					BLParticle.FLAME.spawn(world, x + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, y, z + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, (rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F, (rand.nextFloat() - 0.5F) * 0.01F);
+					break;
+				case 4:
+					BLParticle.FLAME.spawn(world, x + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, y, z + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, (rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F, (rand.nextFloat() - 0.5F) * 0.01F);
+					break;
+				case 5:
+					BLParticle.FLAME.spawn(world, x + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, y, z + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, (rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F, (rand.nextFloat() - 0.5F) * 0.01F);
+					break;
+				}
 			}
 		}
 	}
