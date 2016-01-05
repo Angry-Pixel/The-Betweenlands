@@ -15,6 +15,7 @@ import net.minecraft.util.MathHelper;
 import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
@@ -180,23 +181,23 @@ public class TileEntityAlembic extends TileEntity {
 		}
 		List<Aspect> infusionItemAspects = this.getInfusionItemAspects(infusionIngredients);
 		float totalAmount = Amounts.VERY_LOW; //Base amount
-		float strengthAmount = 0.0F;
-		float durationAmount = 0.0F;
+		float strengthAspectAmount = 0.0F;
+		float durationAspectAmount = 0.0F;
 		for(Aspect a : infusionItemAspects) {
 			totalAmount += a.amount;
-			if(recipe.strengthAspect != null && a.aspect == recipe.strengthAspect) strengthAmount += a.amount;
-			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAmount += a.amount;
+			if(recipe.strengthAspect != null && a.aspect == recipe.strengthAspect) strengthAspectAmount += a.amount;
+			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAspectAmount += a.amount;
 		}
 		int recipeByariis = 0;
 		for(IAspectType a : recipe.aspects) {
-			if(a == AspectManager.BYARIIS) {
+			if(a == AspectRegistry.BYARIIS) {
 				recipeByariis++;
 			}
 		}
 		this.producableAmount = totalAmount;
 		boolean isPositive = true;
 		for(IAspectType a : infusionAspects) {
-			if(a == AspectManager.BYARIIS) {
+			if(a == AspectRegistry.BYARIIS) {
 				if(recipeByariis <= 0) {
 					isPositive = !isPositive;
 				} else {
@@ -205,10 +206,14 @@ public class TileEntityAlembic extends TileEntity {
 			}
 		}
 		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
-		float relStrengthAmount = strengthAmount / Amounts.MAX_ASPECT_AMOUNT;
-		float relDurationAmount = durationAmount / Amounts.MAX_ASPECT_AMOUNT;
+		float relStrengthAmount = strengthAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
+		float relDurationAmount = durationAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
 		this.producableStrength = MathHelper.floor_float(relStrengthAmount * 4.0F);
-		this.producableDuration = recipe.baseDuration + MathHelper.floor_float(recipe.baseDuration * relDurationAmount * 2.0F);
+		if(isPositive) {
+			this.producableDuration = recipe.baseDuration + MathHelper.floor_float(recipe.durationModifier * relDurationAmount * 2.0F);
+		} else {
+			this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor_float(recipe.negativeDurationModifier * relDurationAmount * 2.0F);
+		}
 	}
 
 	private void addInvalidInfusion() {

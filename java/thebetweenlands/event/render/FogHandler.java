@@ -23,7 +23,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandlerClient;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -109,12 +109,12 @@ public class FogHandler {
 
 
 		float uncloudedStrength = 0.0F;
-		if(ElixirRegistry.EFFECT_UNCLOUDED.isActive(player)) {
-			uncloudedStrength += Math.min((ElixirRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
+		if(ElixirEffectRegistry.EFFECT_UNCLOUDED.isActive(player)) {
+			uncloudedStrength += Math.min((ElixirEffectRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
 		}
 
-		if(ElixirRegistry.EFFECT_FOGGEDMIND.isActive(player)) {
-			float additionalFogStrength = (ElixirRegistry.EFFECT_FOGGEDMIND.getStrength(player) + 1) * 0.85F;
+		if(ElixirEffectRegistry.EFFECT_FOGGEDMIND.isActive(player)) {
+			float additionalFogStrength = (ElixirEffectRegistry.EFFECT_FOGGEDMIND.getStrength(player) + 1) * 0.85F;
 			fogStart /= additionalFogStrength * 2.0F;
 			fogEnd /= additionalFogStrength;
 		}

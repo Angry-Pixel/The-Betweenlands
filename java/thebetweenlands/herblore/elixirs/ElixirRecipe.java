@@ -11,6 +11,9 @@ public class ElixirRecipe {
 	public final int idealInfusionTime;
 	public final int infusionTimeVariation;
 	public final int baseDuration;
+	public final int durationModifier;
+	public final int negativeBaseDuration;
+	public final int negativeDurationModifier;
 	public final ElixirEffect positiveElixir;
 	public final ElixirEffect negativeElixir;
 	public final IAspectType strengthAspect;
@@ -18,12 +21,16 @@ public class ElixirRecipe {
 	public final IAspectType[] aspects;
 
 	public ElixirRecipe(String name, int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime, 
-			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType[] aspects) {
-		this(name, infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime, infusionTimeVariation, baseDuration, positiveElixir, negativeElixir, null, null, aspects);
+			int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier, 
+			ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType[] aspects) {
+		this(name, infusionGradient, infusionFinishedColor, infusionFailedColor, idealInfusionTime, 
+				infusionTimeVariation, baseDuration, durationModifier, negativeBaseDuration, negativeDurationModifier,
+				positiveElixir, negativeElixir, null, null, aspects);
 	}
 
 	public ElixirRecipe(String name, int infusionGradient, int infusionFinishedColor, int infusionFailedColor, int idealInfusionTime, 
-			int infusionTimeVariation, int baseDuration, ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType strengthAspect, IAspectType durationAspect, IAspectType[] aspects) {
+			int infusionTimeVariation, int baseDuration, int durationModifier, int negativeBaseDuration, int negativeDurationModifier, 
+			ElixirEffect positiveElixir, ElixirEffect negativeElixir, IAspectType strengthAspect, IAspectType durationAspect, IAspectType[] aspects) {
 		this.name = name;
 		this.infusionGradient = infusionGradient;
 		this.infusionFinishedColor = infusionFinishedColor;
@@ -35,6 +42,9 @@ public class ElixirRecipe {
 		this.strengthAspect = strengthAspect;
 		this.durationAspect = durationAspect;
 		this.baseDuration = baseDuration;
+		this.durationModifier = durationModifier;
+		this.negativeBaseDuration = negativeBaseDuration;
+		this.negativeDurationModifier = negativeDurationModifier;
 		this.aspects = aspects;
 	}
 

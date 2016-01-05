@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.projectiles.EntityElixir;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
 
@@ -32,7 +32,7 @@ public class ItemElixir extends Item {
 	public ItemElixir() {
 		this.setUnlocalizedName("item.thebetweenlands.elixir");
 
-		this.effects.addAll(ElixirRegistry.getEffects());
+		this.effects.addAll(ElixirEffectRegistry.getEffects());
 
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);

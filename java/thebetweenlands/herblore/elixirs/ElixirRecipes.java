@@ -3,7 +3,7 @@ package thebetweenlands.herblore.elixirs;
 import java.util.ArrayList;
 import java.util.List;
 
-import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 
@@ -29,7 +29,7 @@ public class ElixirRecipes {
 			checkAvailability:
 				for(IAspectType recipeAspect : recipe.aspects) {
 					for(IAspectType aspect : aspects) {
-						if(aspect == AspectManager.BYARIIS 
+						if(aspect == AspectRegistry.BYARIIS 
 								|| aspect == recipe.durationAspect 
 								|| aspect == recipe.strengthAspect) continue;
 						boolean contains = false;
@@ -72,110 +72,128 @@ public class ElixirRecipes {
 		//Just for testing
 		registerRecipe(new ElixirRecipe("Test Elixir", 0xFF0000FF, 0xFFFF0000, 0xFF332902,      //Name & Infusion colors
 				2000, 200,                                                                      //Infusion times
-				1200,                                                                           //Base duration
-				ElixirRegistry.EFFECT_TEST, ElixirRegistry.EFFECT_TEST,                         //Result elixirs
-				AspectManager.ARMANIIS, AspectManager.FERGALAZ,								//Strength aspect & duration aspect
-				new IAspectType[]{AspectManager.BYARIIS}));                                        //Required aspects
+				1200, 8000,                                                                     //Base duration & Duration modifier
+				1200, 8000,																		//Negative base duration & negative duration modifier
+				ElixirEffectRegistry.EFFECT_TEST, ElixirEffectRegistry.EFFECT_TEST,                         //Result elixirs
+				AspectRegistry.ARMANIIS, AspectRegistry.FERGALAZ,								    //Strength aspect & duration aspect
+				new IAspectType[]{AspectRegistry.BYARIIS}));                                     //Required aspects
 
 
-		//Result items are placeholders
+		//Tier 1
 		registerRecipe(new ElixirRecipe("Elixir of Strength", 0xFF0000FF, 0xFFFF0000, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_STRENGTH, ElixirRegistry.EFFECT_WEAKNESS,
-				AspectManager.AZUWYNN, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.ORDANIIS}));
+				3600, 6000,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_STRENGTH, ElixirEffectRegistry.EFFECT_WEAKNESS,
+				AspectRegistry.AZUWYNN, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.ORDANIIS}));
 
 		registerRecipe(new ElixirRecipe("Nimblefeet Elixir", 0xFF0000FF, 0xFFacaef0, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_NIMBLEFEET, ElixirRegistry.EFFECT_LUMBERING,
-				AspectManager.YUNUGAZ, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.ORDANIIS, AspectManager.YUNUGAZ}));
+				3600, 6000,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_NIMBLEFEET, ElixirEffectRegistry.EFFECT_LUMBERING,
+				AspectRegistry.YUNUGAZ, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.ORDANIIS, AspectRegistry.YUNUGAZ}));
 
 		registerRecipe(new ElixirRecipe("Elixir of Healing", 0xFF0000FF, 0xFF1cd67d, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_HEALING, ElixirRegistry.EFFECT_DRAINING,
-				AspectManager.YEOWYNN, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.YEOWYNN, AspectManager.ORDANIIS}));
+				3600, 6000,
+				160, 240,
+				ElixirEffectRegistry.EFFECT_HEALING, ElixirEffectRegistry.EFFECT_DRAINING,
+				AspectRegistry.YEOWYNN, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.YEOWYNN, AspectRegistry.ORDANIIS}));
 
 		registerRecipe(new ElixirRecipe("Elixir of Ripening", 0xFF0000FF, 0xFF8dbdee, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_RIPENING, ElixirRegistry.EFFECT_DECAY,
-				AspectManager.DAYUNIIS, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.YEOWYNN, AspectManager.ORDANIIS, AspectManager.DAYUNIIS}));
+				3600, 8000,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_RIPENING, ElixirEffectRegistry.EFFECT_DECAY,
+				AspectRegistry.DAYUNIIS, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.YEOWYNN, AspectRegistry.ORDANIIS, AspectRegistry.DAYUNIIS}));
 
 		registerRecipe(new ElixirRecipe("Toughskin Elixir", 0xFF0000FF, 0xFF4311b1, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_TOUGHSKIN, ElixirRegistry.EFFECT_POISONSTING,
-				AspectManager.YEOWYNN, AspectManager.CELAWYNN,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.YEOWYNN, AspectManager.CELAWYNN}));
+				3600, 8000,
+				160, 240,
+				ElixirEffectRegistry.EFFECT_TOUGHSKIN, ElixirEffectRegistry.EFFECT_POISONSTING,
+				AspectRegistry.YEOWYNN, AspectRegistry.CELAWYNN,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.YEOWYNN, AspectRegistry.CELAWYNN}));
 
 		registerRecipe(new ElixirRecipe("Elixir of Feasting", 0xFF0000FF, 0xFFc57118, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_FEASTING, ElixirRegistry.EFFECT_STARVATION,
-				AspectManager.CELAWYNN, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.CELAWYNN, AspectManager.YEOWYNN, AspectManager.ORDANIIS}));
+				3600, 8000,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_FEASTING, ElixirEffectRegistry.EFFECT_STARVATION,
+				AspectRegistry.CELAWYNN, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.CELAWYNN, AspectRegistry.YEOWYNN, AspectRegistry.ORDANIIS}));
 
+
+		//Tier 2
 		registerRecipe(new ElixirRecipe("Hunter's Sense Brew", 0xFF0000FF, 0xFF6f175d, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_HUNTERSSENSE, ElixirRegistry.EFFECT_DRUNKARD,
-				AspectManager.FREIWYNN, AspectManager.DAYUNIIS,
-				new IAspectType[]{AspectManager.FREIWYNN, AspectManager.DAYUNIIS, AspectManager.ORDANIIS, AspectManager.FIRNALAZ}));
+				2400, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_HUNTERSSENSE, ElixirEffectRegistry.EFFECT_DRUNKARD,
+				AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS,
+				new IAspectType[]{AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS, AspectRegistry.ORDANIIS, AspectRegistry.FIRNALAZ}));
 
 		registerRecipe(new ElixirRecipe("Masking Brew", 0xFF0000FF, 0xFF28ccd5, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_MASKING, ElixirRegistry.EFFECT_STENCHING,
-				AspectManager.ARMANIIS, AspectManager.DAYUNIIS,
-				new IAspectType[]{AspectManager.DAYUNIIS, AspectManager.ARMANIIS, AspectManager.BYARIIS}));
+				2400, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_MASKING, ElixirEffectRegistry.EFFECT_STENCHING,
+				AspectRegistry.ARMANIIS, AspectRegistry.DAYUNIIS,
+				new IAspectType[]{AspectRegistry.DAYUNIIS, AspectRegistry.ARMANIIS, AspectRegistry.BYARIIS}));
 
 		registerRecipe(new ElixirRecipe("Swiftarm Brew", 0xFF0000FF, 0xFFe8fc5b, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_SWIFTARM, ElixirRegistry.EFFECT_SLUGARM,
-				AspectManager.AZUWYNN, AspectManager.ORDANIIS,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.DAYUNIIS, AspectManager.YUNUGAZ, AspectManager.ORDANIIS}));
+				2400, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_SWIFTARM, ElixirEffectRegistry.EFFECT_SLUGARM,
+				AspectRegistry.AZUWYNN, AspectRegistry.ORDANIIS,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.DAYUNIIS, AspectRegistry.YUNUGAZ, AspectRegistry.ORDANIIS}));
 
 		registerRecipe(new ElixirRecipe("Brew of the Cat's Eye", 0xFF0000FF, 0xFF7aaa19, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_CATSEYES, ElixirRegistry.EFFECT_BLINDMAN,
-				AspectManager.FREIWYNN, AspectManager.DAYUNIIS,
-				new IAspectType[]{AspectManager.FREIWYNN, AspectManager.DAYUNIIS, AspectManager.ORDANIIS, AspectManager.GEOLIIRGAZ}));
+				2400, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_CATSEYES, ElixirEffectRegistry.EFFECT_BLINDMAN,
+				AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS,
+				new IAspectType[]{AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS, AspectRegistry.ORDANIIS, AspectRegistry.GEOLIIRGAZ}));
 
+		//Tier 3
 		registerRecipe(new ElixirRecipe("Draught of Sagittarius", 0xFF0000FF, 0xFFea6731, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_SAGITTARIUS, ElixirRegistry.EFFECT_WEAKBOW,
-				AspectManager.FREIWYNN, AspectManager.DAYUNIIS,
-				new IAspectType[]{AspectManager.FREIWYNN, AspectManager.DAYUNIIS, AspectManager.BYARIIS, AspectManager.ORDANIIS, AspectManager.ARMANIIS}));
+				1200, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_SAGITTARIUS, ElixirEffectRegistry.EFFECT_WEAKBOW,
+				AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS,
+				new IAspectType[]{AspectRegistry.FREIWYNN, AspectRegistry.DAYUNIIS, AspectRegistry.BYARIIS, AspectRegistry.ORDANIIS, AspectRegistry.ARMANIIS}));
 
 		registerRecipe(new ElixirRecipe("Spiderbreed Draught", 0xFF0000FF, 0xFF71c230, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_SPIDERBREED, ElixirRegistry.EFFECT_BASILISK,
-				AspectManager.AZUWYNN, AspectManager.YIHINREN,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.FERGALAZ, AspectManager.DAYUNIIS, AspectManager.YIHINREN, AspectManager.YUNUGAZ}));
+				1200, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_SPIDERBREED, ElixirEffectRegistry.EFFECT_BASILISK,
+				AspectRegistry.AZUWYNN, AspectRegistry.YIHINREN,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.FERGALAZ, AspectRegistry.DAYUNIIS, AspectRegistry.YIHINREN, AspectRegistry.YUNUGAZ}));
 
 		registerRecipe(new ElixirRecipe("Lightweight Draught", 0xFF0000FF, 0xFF6528da, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_LIGHTWEIGHT, ElixirRegistry.EFFECT_HEAVYWEIGHT,
-				AspectManager.YUNUGAZ, AspectManager.YIHINREN,
-				new IAspectType[]{AspectManager.AZUWYNN, AspectManager.BYRGINAZ, AspectManager.YUNUGAZ, AspectManager.GEOLIIRGAZ}));
+				1200, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, ElixirEffectRegistry.EFFECT_HEAVYWEIGHT,
+				AspectRegistry.YUNUGAZ, AspectRegistry.YIHINREN,
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.BYRGINAZ, AspectRegistry.YUNUGAZ, AspectRegistry.GEOLIIRGAZ}));
 
 		registerRecipe(new ElixirRecipe("Draught of the Unclouded", 0xFF0000FF, 0xFF0d9ddf, 0xFF332902, 
 				2000, 200, 
-				1200,
-				ElixirRegistry.EFFECT_UNCLOUDED, ElixirRegistry.EFFECT_FOGGEDMIND,
-				AspectManager.GEOLIIRGAZ, AspectManager.DAYUNIIS,
-				new IAspectType[]{AspectManager.DAYUNIIS, AspectManager.FREIWYNN, AspectManager.GEOLIIRGAZ, AspectManager.ORDANIIS, AspectManager.YUNUGAZ}));
+				1200, 4800,
+				400, 2000,
+				ElixirEffectRegistry.EFFECT_UNCLOUDED, ElixirEffectRegistry.EFFECT_FOGGEDMIND,
+				AspectRegistry.GEOLIIRGAZ, AspectRegistry.DAYUNIIS,
+				new IAspectType[]{AspectRegistry.DAYUNIIS, AspectRegistry.FREIWYNN, AspectRegistry.GEOLIIRGAZ, AspectRegistry.ORDANIIS, AspectRegistry.YUNUGAZ}));
 
 		//Special potions
 		/*registerRecipe(new ElixirRecipe("Shapeshifter's draught of Gillsgrowth", 0xFF0000FF, 0xFFFF0000, 0xFF332902, 

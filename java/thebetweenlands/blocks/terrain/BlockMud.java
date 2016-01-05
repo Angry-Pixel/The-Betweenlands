@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.armor.ItemRubberBoots;
 import thebetweenlands.recipes.BLMaterials;
@@ -33,7 +33,7 @@ public class BlockMud extends Block {
 	}
 
 	public boolean canEntityWalkOnMud(Entity entity) {
-		if(entity instanceof EntityLivingBase && ElixirRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
+		if(entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
 		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
 		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() == BLItemRegistry.lurkerSkinBoots;
 		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor;

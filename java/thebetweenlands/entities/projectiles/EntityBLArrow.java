@@ -17,7 +17,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.bow.EnumArrowType;
 
@@ -92,7 +92,7 @@ public class EntityBLArrow extends EntityArrow implements IProjectile {
 					}
 					break;
 				case BASILISK:
-					hitEntity.addPotionEffect(ElixirRegistry.EFFECT_PETRIFY.createEffect(100, 1));
+					hitEntity.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(100, 1));
 					break;
 				default:
 				}

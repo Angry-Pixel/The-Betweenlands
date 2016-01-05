@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
@@ -68,7 +68,7 @@ public class ItemImprovedRubberBoots extends ItemRubberBoots implements IManualE
 	}
 
 	public static boolean checkPlayerEffect(EntityPlayer player) {
-		if(ElixirRegistry.EFFECT_HEAVYWEIGHT.isActive(player)) return false;
+		if(ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(player)) return false;
 		ItemStack boots = player.inventory.armorInventory[0];
 		if(boots != null && boots.getItem() instanceof ItemImprovedRubberBoots) {
 			if(boots.stackTagCompound != null && boots.stackTagCompound.getInteger("walkTicksLeft") > 1) {

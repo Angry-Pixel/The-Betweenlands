@@ -33,21 +33,6 @@ import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectManager {
-	public static final IAspectType AZUWYNN = new AspectAzuwynn();
-	public static final IAspectType ARMANIIS = new AspectArmaniis();
-	public static final IAspectType BYARIIS = new AspectByariis();
-	public static final IAspectType BYRGINAZ = new AspectByrginaz();
-	public static final IAspectType CELAWYNN = new AspectCelawynn();
-	public static final IAspectType DAYUNIIS = new AspectDayuniis();
-	public static final IAspectType FERGALAZ = new AspectFergalaz();
-	public static final IAspectType FIRNALAZ = new AspectFirnalaz();
-	public static final IAspectType FREIWYNN = new AspectFreiwynn();
-	public static final IAspectType GEOLIIRGAZ = new AspectGeoliirgaz();
-	public static final IAspectType ORDANIIS = new AspectOrdaniis();
-	public static final IAspectType YEOWYNN = new AspectYeowynn();
-	public static final IAspectType YUNUGAZ = new AspectYunugaz();
-	public static final IAspectType YIHINREN = new AspectYihinren();
-
 	public static final List<IAspectType> ASPECT_TYPES = new ArrayList<IAspectType>();
 
 	static {

@@ -17,7 +17,7 @@ import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 
 public class ElixirCommonHandler {
 	public static final ElixirCommonHandler INSTANCE = new ElixirCommonHandler();
@@ -56,7 +56,7 @@ public class ElixirCommonHandler {
 	@SubscribeEvent
 	public void onSetAttackTarget(LivingSetAttackTargetEvent event) {
 		if(!this.ignoreSetAttackTarget) {
-			if(event.entityLiving instanceof EntityLiving && ((EntityLiving)event.entityLiving).getAttackTarget() != null && !ElixirRegistry.EFFECT_MASKING.canEntityBeSeenBy(((EntityLiving)event.entityLiving).getAttackTarget(), event.entityLiving)) {
+			if(event.entityLiving instanceof EntityLiving && ((EntityLiving)event.entityLiving).getAttackTarget() != null && !ElixirEffectRegistry.EFFECT_MASKING.canEntityBeSeenBy(((EntityLiving)event.entityLiving).getAttackTarget(), event.entityLiving)) {
 				this.ignoreSetAttackTarget = true;
 				((EntityLiving)event.entityLiving).setAttackTarget(null);
 			}
@@ -69,11 +69,11 @@ public class ElixirCommonHandler {
 	public void onBreakSpeed(BreakSpeed event) {
 		EntityPlayer player = event.entityPlayer;
 		if(player != null) {
-			if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
-				event.newSpeed *= 1.0F + (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1) * 0.3F;
+			if(ElixirEffectRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirEffectRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+				event.newSpeed *= 1.0F + (ElixirEffectRegistry.EFFECT_SWIFTARM.getStrength(player) + 1) * 0.3F;
 			}
-			if(ElixirRegistry.EFFECT_SLUGARM.isActive(player) && ElixirRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
-				event.newSpeed /= 1.0F + (ElixirRegistry.EFFECT_SLUGARM.getStrength(player) + 1) * 0.3F;
+			if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(player) && ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
+				event.newSpeed /= 1.0F + (ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player) + 1) * 0.3F;
 			}
 		}
 	}
@@ -82,15 +82,15 @@ public class ElixirCommonHandler {
 	public void onStartUseItem(PlayerUseItemEvent.Start event) {
 		EntityPlayer player = event.entityPlayer;
 		if(player != null) {
-			if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
+			if(ElixirEffectRegistry.EFFECT_SWIFTARM.isActive(player) && ElixirEffectRegistry.EFFECT_SWIFTARM.getStrength(player) >= 0) {
 				float newDuration = event.duration;
-				newDuration *= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
+				newDuration *= 1.0F - 0.5F / 4.0F * (ElixirEffectRegistry.EFFECT_SWIFTARM.getStrength(player) + 1);
 				event.duration = MathHelper.ceiling_float_int(newDuration);
 			}
-			if(ElixirRegistry.EFFECT_SLUGARM.isActive(player) && ElixirRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
+			if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(player) && ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player) >= 0) {
 				if(event.item != null && event.item.getItem() instanceof ItemBow == false) {
 					float newDuration = event.duration;
-					newDuration /= 1.0F - 0.5F / 4.0F * (ElixirRegistry.EFFECT_SLUGARM.getStrength(player) + 1);
+					newDuration /= 1.0F - 0.5F / 4.0F * (ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player) + 1);
 					event.duration = MathHelper.ceiling_float_int(newDuration);
 				}
 			}
@@ -99,17 +99,17 @@ public class ElixirCommonHandler {
 
 	@SubscribeEvent
 	public void onShootArrow(ArrowLooseEvent event) {
-		if(ElixirRegistry.EFFECT_WEAKBOW.isActive(event.entityLiving)) {
+		if(ElixirEffectRegistry.EFFECT_WEAKBOW.isActive(event.entityLiving)) {
 			event.charge = Math.min(event.charge, 10);
-			event.charge *= 1.0F - (ElixirRegistry.EFFECT_WEAKBOW.getStrength(event.entityLiving) + 1) / 4.0F * 0.75F;
+			event.charge *= 1.0F - (ElixirEffectRegistry.EFFECT_WEAKBOW.getStrength(event.entityLiving) + 1) / 4.0F * 0.75F;
 		}
 	}
 
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
 		EntityLivingBase living = event.entityLiving;
-		if(ElixirRegistry.EFFECT_SPIDERBREED.isActive(living)) {
-			int strength = ElixirRegistry.EFFECT_SPIDERBREED.getStrength(living);
+		if(ElixirEffectRegistry.EFFECT_SPIDERBREED.isActive(living)) {
+			int strength = ElixirEffectRegistry.EFFECT_SPIDERBREED.getStrength(living);
 			float relStrength = Math.min((strength + 1) / 4.0F, 1.0F);
 			Vec3 lookVec = living.getLookVec().normalize();
 			if(living.moveForward < 0.0F) {
@@ -135,10 +135,10 @@ public class ElixirCommonHandler {
 			}
 		}
 
-		if(ElixirRegistry.EFFECT_LIGHTWEIGHT.isActive(living) && !living.isInWater()) {
+		if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(living) && !living.isInWater()) {
 			Block blockBelow = living.worldObj.getBlock(MathHelper.floor_double(living.posX), MathHelper.floor_double(living.boundingBox.minY - 0.1D), MathHelper.floor_double(living.posZ));
 			if(blockBelow.getMaterial().isLiquid()) {
-				float relStrength = Math.min((ElixirRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 4.0F, 1.0F);
+				float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 4.0F, 1.0F);
 				living.motionX *= 0.1F + relStrength * 0.9F;
 				living.motionZ *= 0.1F + relStrength * 0.9F;
 				if(living.motionY < 0.0D) living.motionY = 0.0D;
@@ -146,28 +146,28 @@ public class ElixirCommonHandler {
 			}
 		}
 
-		if(living.isInWater() && ElixirRegistry.EFFECT_HEAVYWEIGHT.isActive(living)) {
+		if(living.isInWater() && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(living)) {
 			if(living.motionY > -0.1F) living.motionY -= 0.04F;
 		}
 
-		if(ElixirRegistry.EFFECT_CATSEYES.isActive(living)) {
-			living.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), ElixirRegistry.EFFECT_CATSEYES.getDuration(living), ElixirRegistry.EFFECT_CATSEYES.getStrength(living)));
-			ElixirRegistry.EFFECT_CATSEYES.removeElixir(living);
+		if(ElixirEffectRegistry.EFFECT_CATSEYES.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.nightVision.getId(), ElixirEffectRegistry.EFFECT_CATSEYES.getDuration(living), ElixirEffectRegistry.EFFECT_CATSEYES.getStrength(living)));
+			ElixirEffectRegistry.EFFECT_CATSEYES.removeElixir(living);
 		}
 
-		if(ElixirRegistry.EFFECT_POISONSTING.isActive(living)) {
-			living.addPotionEffect(new PotionEffect(Potion.poison.getId(), ElixirRegistry.EFFECT_POISONSTING.getDuration(living), ElixirRegistry.EFFECT_POISONSTING.getStrength(living)));
-			ElixirRegistry.EFFECT_POISONSTING.removeElixir(living);
+		if(ElixirEffectRegistry.EFFECT_POISONSTING.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.poison.getId(), ElixirEffectRegistry.EFFECT_POISONSTING.getDuration(living), ElixirEffectRegistry.EFFECT_POISONSTING.getStrength(living)));
+			ElixirEffectRegistry.EFFECT_POISONSTING.removeElixir(living);
 		}
 
-		if(ElixirRegistry.EFFECT_DRUNKARD.isActive(living)) {
-			living.addPotionEffect(new PotionEffect(Potion.confusion.getId(), ElixirRegistry.EFFECT_DRUNKARD.getDuration(living), ElixirRegistry.EFFECT_DRUNKARD.getStrength(living)));
-			ElixirRegistry.EFFECT_DRUNKARD.removeElixir(living);
+		if(ElixirEffectRegistry.EFFECT_DRUNKARD.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.confusion.getId(), ElixirEffectRegistry.EFFECT_DRUNKARD.getDuration(living), ElixirEffectRegistry.EFFECT_DRUNKARD.getStrength(living)));
+			ElixirEffectRegistry.EFFECT_DRUNKARD.removeElixir(living);
 		}
 
-		if(ElixirRegistry.EFFECT_BLINDMAN.isActive(living)) {
-			living.addPotionEffect(new PotionEffect(Potion.blindness.getId(), ElixirRegistry.EFFECT_BLINDMAN.getDuration(living), ElixirRegistry.EFFECT_BLINDMAN.getStrength(living)));
-			ElixirRegistry.EFFECT_BLINDMAN.removeElixir(living);
+		if(ElixirEffectRegistry.EFFECT_BLINDMAN.isActive(living)) {
+			living.addPotionEffect(new PotionEffect(Potion.blindness.getId(), ElixirEffectRegistry.EFFECT_BLINDMAN.getDuration(living), ElixirEffectRegistry.EFFECT_BLINDMAN.getStrength(living)));
+			ElixirEffectRegistry.EFFECT_BLINDMAN.removeElixir(living);
 		}
 	}
 	private boolean isEntityOnWall(EntityLivingBase entity) {
@@ -192,8 +192,8 @@ public class ElixirCommonHandler {
 	@SubscribeEvent
 	public void onLivingJump(LivingJumpEvent event) {
 		EntityLivingBase living = event.entityLiving;
-		if(ElixirRegistry.EFFECT_LIGHTWEIGHT.isActive(living)) {
-			float relStrength = Math.min((ElixirRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 9.0F, 0.4F);
+		if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(living)) {
+			float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 9.0F, 0.4F);
 			living.motionY *= 1.0F + relStrength;
 		}
 	}

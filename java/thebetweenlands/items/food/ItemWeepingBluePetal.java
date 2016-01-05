@@ -5,7 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemWeepingBluePetal extends ItemFood implements IManualEntryItem
@@ -18,7 +18,7 @@ public class ItemWeepingBluePetal extends ItemFood implements IManualEntryItem
 	@Override
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
-		player.addPotionEffect(ElixirRegistry.EFFECT_RIPENING.createEffect(600, 2));
+		player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(600, 2));
 	}
 
 	@Override

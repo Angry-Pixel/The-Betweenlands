@@ -19,7 +19,7 @@ import thebetweenlands.herblore.elixirs.effects.ElixirRipening;
 import thebetweenlands.herblore.elixirs.effects.ElixirStarvation;
 import thebetweenlands.herblore.elixirs.effects.ElixirSwiftarm;
 
-public class ElixirRegistry {
+public class ElixirEffectRegistry {
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
 	//Test
@@ -72,7 +72,7 @@ public class ElixirRegistry {
 
 	private static void registerElixirs() {
 		try {
-			for (Field f : ElixirRegistry.class.getDeclaredFields()) {
+			for (Field f : ElixirEffectRegistry.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof ElixirEffect) register((ElixirEffect) obj);
 			}

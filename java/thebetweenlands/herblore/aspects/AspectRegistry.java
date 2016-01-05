@@ -6,10 +6,39 @@ import thebetweenlands.herblore.aspects.AspectManager.AspectGroup;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItemEntry;
 import thebetweenlands.herblore.aspects.AspectManager.AspectTier;
+import thebetweenlands.herblore.aspects.list.AspectArmaniis;
+import thebetweenlands.herblore.aspects.list.AspectAzuwynn;
+import thebetweenlands.herblore.aspects.list.AspectByariis;
+import thebetweenlands.herblore.aspects.list.AspectByrginaz;
+import thebetweenlands.herblore.aspects.list.AspectCelawynn;
+import thebetweenlands.herblore.aspects.list.AspectDayuniis;
+import thebetweenlands.herblore.aspects.list.AspectFergalaz;
+import thebetweenlands.herblore.aspects.list.AspectFirnalaz;
+import thebetweenlands.herblore.aspects.list.AspectFreiwynn;
+import thebetweenlands.herblore.aspects.list.AspectGeoliirgaz;
+import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
+import thebetweenlands.herblore.aspects.list.AspectYeowynn;
+import thebetweenlands.herblore.aspects.list.AspectYihinren;
+import thebetweenlands.herblore.aspects.list.AspectYunugaz;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 
 public class AspectRegistry {
+	public static final IAspectType AZUWYNN = new AspectAzuwynn();
+	public static final IAspectType ARMANIIS = new AspectArmaniis();
+	public static final IAspectType BYARIIS = new AspectByariis();
+	public static final IAspectType BYRGINAZ = new AspectByrginaz();
+	public static final IAspectType CELAWYNN = new AspectCelawynn();
+	public static final IAspectType DAYUNIIS = new AspectDayuniis();
+	public static final IAspectType FERGALAZ = new AspectFergalaz();
+	public static final IAspectType FIRNALAZ = new AspectFirnalaz();
+	public static final IAspectType FREIWYNN = new AspectFreiwynn();
+	public static final IAspectType GEOLIIRGAZ = new AspectGeoliirgaz();
+	public static final IAspectType ORDANIIS = new AspectOrdaniis();
+	public static final IAspectType YEOWYNN = new AspectYeowynn();
+	public static final IAspectType YUNUGAZ = new AspectYunugaz();
+	public static final IAspectType YIHINREN = new AspectYihinren();
+
 	public static void init() {
 		registerItems();
 		registerAspects();
@@ -73,24 +102,24 @@ public class AspectRegistry {
 	}
 
 	private static void registerAspects() {
-		AspectManager.registerAspect(new AspectEntry(AspectManager.BYARIIS, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.HIGH));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.AZUWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.CELAWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.ORDANIIS, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.YEOWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.ARMANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.DAYUNIIS, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.FREIWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.YUNUGAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.GEOLIIRGAZ,	AspectTier.RARE, 		AspectGroup.HERB, Amounts.MEDIUM_HIGH));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.YIHINREN, 	AspectTier.RARE, 		AspectGroup.HERB, Amounts.MEDIUM_HIGH));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.BYARIIS, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.HIGH));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.AZUWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.CELAWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.ORDANIIS, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.YEOWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.ARMANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.DAYUNIIS, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.FREIWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.YUNUGAZ, 	AspectTier.UNCOMMON, 	AspectGroup.HERB, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.GEOLIIRGAZ,	AspectTier.RARE, 		AspectGroup.HERB, Amounts.MEDIUM_HIGH));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.YIHINREN, 	AspectTier.RARE, 		AspectGroup.HERB, Amounts.MEDIUM_HIGH));
 
 		//For middle gems
-		AspectManager.registerAspect(new AspectEntry(AspectManager.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_BYRGINAZ, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FERGALAZ, Amounts.MEDIUM));
-		AspectManager.registerAspect(new AspectEntry(AspectManager.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FIRNALAZ, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_BYRGINAZ, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FERGALAZ, Amounts.MEDIUM));
+		AspectManager.registerAspect(new AspectEntry(AspectRegistry.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FIRNALAZ, Amounts.MEDIUM));
 	}
 }

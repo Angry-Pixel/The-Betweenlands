@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.herblore.elixirs.ElixirRegistry;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 
 public class ElixirClientHandler {
 	public static final ElixirClientHandler INSTANCE = new ElixirClientHandler();
@@ -101,8 +101,8 @@ public class ElixirClientHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(event.phase == Phase.END) {
 			if(player != null && player.worldObj != null && player.worldObj.isRemote && player == Minecraft.getMinecraft().thePlayer) {
-				if(ElixirRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
-					int strength = ElixirRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
+				if(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
+					int strength = ElixirEffectRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
 					World world = player.worldObj;
 					List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.boundingBox.expand(50, 50, 50));
 					List<TrailPos> availablePositions = new ArrayList<TrailPos>();
@@ -165,7 +165,7 @@ public class ElixirClientHandler {
 					this.entityTrails.clear();
 				}
 
-				if(ElixirRegistry.EFFECT_SWIFTARM.isActive(player)) {
+				if(ElixirEffectRegistry.EFFECT_SWIFTARM.isActive(player)) {
 					if(Minecraft.getMinecraft().gameSettings.keyBindAttack.getIsKeyPressed() && !player.isBlocking()) {
 						try {
 							MovingObjectPosition target = Minecraft.getMinecraft().objectMouseOver;
@@ -182,9 +182,9 @@ public class ElixirClientHandler {
 					}
 				}
 
-				if(ElixirRegistry.EFFECT_SLUGARM.isActive(player)) {
+				if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(player)) {
 					if(player.isSwingInProgress) {
-						int strength = ElixirRegistry.EFFECT_SLUGARM.getStrength(player);
+						int strength = ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player);
 						if(player.swingProgressInt != 0) {
 							player.swingProgressInt--;
 							if(player.ticksExisted % (2 << strength) == 0) {
@@ -220,8 +220,8 @@ public class ElixirClientHandler {
 	public void onRenderWorld(RenderWorldLastEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(player != null && player.worldObj != null) {
-			if(ElixirRegistry.EFFECT_SAGITTARIUS.isActive(player)) {
-				ArrowPredictionRenderer.render(Math.min((ElixirRegistry.EFFECT_SAGITTARIUS.getStrength(player) + 1) / 3.0F, 1.0F));
+			if(ElixirEffectRegistry.EFFECT_SAGITTARIUS.isActive(player)) {
+				ArrowPredictionRenderer.render(Math.min((ElixirEffectRegistry.EFFECT_SAGITTARIUS.getStrength(player) + 1) / 3.0F, 1.0F));
 			}
 		}
 	}
