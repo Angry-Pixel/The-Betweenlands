@@ -14,7 +14,6 @@ Unfinished stuff:
 
 New Stuff (High priority):
 - Temple generation (Lukas but er...)
-- Middle Gem Circle
 - Herblore (half done/mostly)
 - Guidebook (half done)
 - Pitstone Structures
