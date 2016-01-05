@@ -700,6 +700,9 @@ corrosion.5=Completely corroded
 arrow.caution=Use with caution!
 arrow.stunning=Causes paralysis
 compost.compostable=Compostable
+circlegem.green=Green Gem
+circlegem.crimson=Crimson Gem
+circlegem.aqua=Aqua Gem
 
 # Commands
 command.tickspeed.success=Set tickspeed to %s ticks per second

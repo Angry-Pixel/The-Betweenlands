@@ -1,4 +1,4 @@
-package thebetweenlands.client.tooltips;
+package thebetweenlands.event.item;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,6 +20,8 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.recipes.CompostRecipe;
 
@@ -38,8 +40,8 @@ import thebetweenlands.recipes.CompostRecipe;
  * 
  * @author Paul Fulham
  */
-public class HeldItemTooltipHandler {
-	public static final HeldItemTooltipHandler INSTANCE = new HeldItemTooltipHandler();
+public class ItemTooltipHandler {
+	public static final ItemTooltipHandler INSTANCE = new ItemTooltipHandler();
 
 	private static final Map<Item, ExclusionEntry> ITEM_EXCLUSIONS = new HashMap<Item, ExclusionEntry>();
 	private static final List<ExclusionEntryClass> CLASS_EXCLUSIONS = new ArrayList<ExclusionEntryClass>();
@@ -71,7 +73,7 @@ public class HeldItemTooltipHandler {
 	 */
 	private int remainingHighlightTicks = 0;
 
-	public HeldItemTooltipHandler() {
+	public ItemTooltipHandler() {
 		mc = Minecraft.getMinecraft();
 		remainingHighlightTicksField = ReflectionHelper.findField(GuiIngame.class, new String[] { "remainingHighlightTicks", "field_92017_k", "r" });
 	}
@@ -103,17 +105,6 @@ public class HeldItemTooltipHandler {
 				highlightingItemStack = itemStack;
 				overrideRemainingHighlightTicks();
 			}
-		}
-	}
-
-	/**
-	 * Adds the "Compostable" tooltip to compostable items
-	 * @param event
-	 */
-	@SubscribeEvent
-	public void onItemTooltip(ItemTooltipEvent event) {
-		if(CompostRecipe.getCompostRecipe(event.itemStack) != null) {
-			event.toolTip.add(StatCollector.translateToLocal("compost.compostable"));
 		}
 	}
 
@@ -268,5 +259,33 @@ public class HeldItemTooltipHandler {
 			}
 		}
 		return NULL_EXCLUSIONS;
+	}
+
+	/**
+	 * Adds the "Compostable" and Gem tooltips to items
+	 * @param event
+	 */
+	@SubscribeEvent
+	public void onItemTooltip(ItemTooltipEvent event) {
+		if(CompostRecipe.getCompostRecipe(event.itemStack) != null) {
+			event.toolTip.add(StatCollector.translateToLocal("compost.compostable"));
+		}
+		CircleGem circleGem = GemCircleHelper.getGem(event.itemStack);
+		if(circleGem != CircleGem.NONE) {
+			String colorPrefix = "";
+			switch(circleGem){
+			case AQUA:
+				colorPrefix = "\u00A79";
+				break;
+			case CRIMSON:
+				colorPrefix = "\u00A7c";
+				break;
+			case GREEN:
+				colorPrefix = "\u00A7a";
+				break;
+			default:
+			}
+			event.toolTip.add(colorPrefix + StatCollector.translateToLocal("circlegem." + circleGem.name));
+		}
 	}
 }

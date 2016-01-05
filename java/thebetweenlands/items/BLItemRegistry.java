@@ -15,6 +15,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.armor.ItemArmorOfLegends;
 import thebetweenlands.items.armor.ItemBoneArmor;
 import thebetweenlands.items.armor.ItemImprovedRubberBoots;
@@ -50,7 +51,20 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.*;
+import thebetweenlands.items.misc.ItemBLGenericSeed;
+import thebetweenlands.items.misc.ItemBLRecord;
+import thebetweenlands.items.misc.ItemGem;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemHLBook;
+import thebetweenlands.items.misc.ItemLifeCrystal;
+import thebetweenlands.items.misc.ItemManual;
+import thebetweenlands.items.misc.ItemMob;
+import thebetweenlands.items.misc.ItemRope;
+import thebetweenlands.items.misc.ItemSpawnEggs;
+import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.items.misc.ItemTestItem;
+import thebetweenlands.items.misc.ItemVolarPad;
+import thebetweenlands.items.misc.ItemWeedwoodRowboat;
 import thebetweenlands.items.throwable.ItemAngryPebble;
 import thebetweenlands.items.throwable.ItemShimmerStone;
 import thebetweenlands.items.throwable.ItemTarminion;
@@ -117,6 +131,11 @@ public class BLItemRegistry {
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
 
 	public static final Item net = new ItemNet();
+
+	// GEMS
+	public static final ItemGem aquaMiddleGem = new ItemGem("aquaMiddleGem", CircleGem.AQUA);
+	public static final ItemGem crimsonMiddleGem = new ItemGem("crimsonMiddleGem", CircleGem.CRIMSON);
+	public static final ItemGem greenMiddleGem = new ItemGem("greenMiddleGem", CircleGem.GREEN);
 
 	// MISC ARMOUR
 	public static final Item lurkerSkinHelmet = new ItemLurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
@@ -240,7 +259,7 @@ public class BLItemRegistry {
 	public static final ItemElixir elixir = new ItemElixir();
 	public static final ItemDentrothystVial dentrothystVial = new ItemDentrothystVial();
 	public static final ItemAspectVial aspectVial = new ItemAspectVial();
-	
+
 	public static void init() {
 		initCreativeTabs();
 		registerItems();
@@ -251,7 +270,7 @@ public class BLItemRegistry {
 		ModCreativeTabs.items.setTab(net, rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem, blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, forbiddenFig, candyBlue, candyRed, candyYellow);
-		ModCreativeTabs.specials.setTab(gecko, fireFly, shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord);
+		ModCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, tribalPants, skullMask, testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord);
 		ModCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, valoniteAxe, valoniteShovel);
 		ModCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, rubberBootsImproved);
 		ModCreativeTabs.plants.setTab(middleFruitSeeds, spores);

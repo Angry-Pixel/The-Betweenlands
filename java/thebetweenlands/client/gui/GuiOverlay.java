@@ -22,20 +22,18 @@ import thebetweenlands.decay.DecayManager;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 
 @SideOnly(Side.CLIENT)
-public class GuiOverlay extends Gui
-{
-	public ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
-	public Minecraft mc = Minecraft.getMinecraft();
-	public Random random = new Random();
+public class GuiOverlay extends Gui {
+	private ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
+	private Minecraft mc = Minecraft.getMinecraft();
+	private Random random = new Random();
 
-	public int updateCounter;
+	private int updateCounter;
 
 	private DeferredEffect de = null;
 	private Framebuffer tb1 = null;
 
 	@SubscribeEvent
-	public void renderGui(RenderGameOverlayEvent.Post event)
-	{
+	public void renderGui(RenderGameOverlayEvent.Post event) {
 		updateCounter++;
 
 		//GLUProjection test
@@ -111,23 +109,28 @@ public class GuiOverlay extends Gui
 			}
 		}
 
-		if (DecayManager.isDecayEnabled(mc.thePlayer))
-		{
+		if (DecayManager.isDecayEnabled(mc.thePlayer)) {
 			int width = event.resolution.getScaledWidth();
 			int height = event.resolution.getScaledHeight();
 
 			int startX = (width / 2) - (27 / 2) + 23;
 			int startY = height - 49;
 
+			//Erebus compatibility
+			if (mc.thePlayer.getEntityData().hasKey("antivenomDuration")) {
+				int duration = mc.thePlayer.getEntityData().getInteger("antivenomDuration");
+				if (duration > 0) {
+					startY -= 12;
+				}
+			}
+
 			int decayLevel = DecayManager.getDecayLevel(mc.thePlayer);
 
-			if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR)
-			{
+			if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
 				mc.getTextureManager().bindTexture(decayBarTexture);
 
 				GL11.glEnable(GL11.GL_BLEND);
-				for (int i = 0; i < 10; i++)
-				{
+				for (int i = 0; i < 10; i++) {
 					int offsetY = mc.thePlayer.isInsideOfMaterial(Material.water) ? -10 : 0;
 
 					if (updateCounter % (decayLevel * 3 + 1) == 0) offsetY += random.nextInt(3) - 1;

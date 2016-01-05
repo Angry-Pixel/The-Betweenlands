@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.client.tooltips.HeldItemTooltipHandler;
+import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.forgeevent.client.ClientBlockDamageEvent;
 import thebetweenlands.items.ICorrodible;
 
@@ -30,7 +30,7 @@ public class ItemCorrosionHandler {
 			ItemStack prev = (ItemStack) field_currentItemHittingBlock.get(controller);
 			ItemStack current = Minecraft.getMinecraft().thePlayer.getHeldItem();
 			if(current != null && prev != null && !prev.equals(current) && prev.getItem() instanceof ICorrodible) {
-				if(HeldItemTooltipHandler.areItemStackTagsEqual(prev, current, exclusions)) {
+				if(ItemTooltipHandler.areItemStackTagsEqual(prev, current, exclusions)) {
 					field_currentItemHittingBlock.set(controller, current);
 				}
 			}

@@ -171,7 +171,6 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	}
 
 	public static enum EnumItemGeneric {
-		AQUA_MIDDLE_GEM("aquaMiddleGem", 0), CRIMSON_MIDDLE_GEM("crimsonMiddleGem", 1), GREEN_MIDDLE_GEM("greenMiddleGem", 2), 
 		BLOOD_SNAIL_SHELL("bloodSnailShell", 3), MIRE_SNAIL_SHELL("mireSnailShell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonflyWing", 6), 
 		LURKER_SKIN("lurkerSkin", 7), SWAMP_REED("swampReed", 8), DRIED_SWAMP_REED("driedSwampReed", 9), SWAMP_REED_ROPE("swampReedRope", 10), 
 		TANGLED_ROOT("tangledRoot", 11), PLANT_TONIC("plantTonic", 12), 

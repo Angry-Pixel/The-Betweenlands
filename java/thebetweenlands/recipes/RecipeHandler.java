@@ -1,12 +1,13 @@
 package thebetweenlands.recipes;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.RecipeBookCloning;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -27,8 +28,6 @@ import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 public class RecipeHandler {
 
@@ -80,6 +79,9 @@ public class RecipeHandler {
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
 
+		//Circle gem recipes
+		GameRegistry.addRecipe(new RecipesCircleGems());
+
 		// Armour
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinHelmet, 1), "###", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinChestplate, 1), "# #", "###", "###", '#', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
@@ -102,7 +104,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteBoots, 1), "# #", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rubberBoots, 1), "# #", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.rubberBootsImproved, 1), new ItemStack(BLItemRegistry.rubberBoots, 1), ItemGeneric.createStack(EnumItemGeneric.AQUA_MIDDLE_GEM));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.rubberBootsImproved, 1), new ItemStack(BLItemRegistry.rubberBoots, 1), new ItemStack(BLItemRegistry.aquaMiddleGem, 1));
 
 		// Miscellaneous
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), ItemGeneric.createStack(EnumItemGeneric.SULFUR));
@@ -246,7 +248,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
 		RecipeSorter.register("thebetweenlands:bookcloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-        GameRegistry.addRecipe(new BookCloneRecipe());
+		GameRegistry.addRecipe(new BookCloneRecipe());
 	}
 
 	private static void registerSmelting() {
@@ -305,9 +307,9 @@ public class RecipeHandler {
 	}
 
 	private static void registerPurifierRecipes() {
-		PurifierRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.AQUA_MIDDLE_GEM), new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
-		PurifierRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.CRIMSON_MIDDLE_GEM), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
-		PurifierRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.GREEN_MIDDLE_GEM), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
+		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.aquaMiddleGem, 1), new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
+		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.crimsonMiddleGem, 1), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
+		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.greenMiddleGem, 1), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
 		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.farmedDirt, 1, 0), new ItemStack(BLBlockRegistry.swampDirt));
 		PurifierRecipe.addRecipe(BLItemRegistry.dentrothystVial.createStack(0), BLItemRegistry.dentrothystVial.createStack(1));
 	}
@@ -318,7 +320,7 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), new ItemStack(BLBlockRegistry.polishedLimestone));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_ALGAE), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ALGAE));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_ANGLER_TOOTH), ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH));
-		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_AQUA_MIDDLE_GEM), ItemGeneric.createStack(EnumItemGeneric.AQUA_MIDDLE_GEM));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_AQUA_MIDDLE_GEM), new ItemStack(BLItemRegistry.aquaMiddleGem, 1));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_ARROW_ARUM), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLACKHAT_MUSHROOM), new ItemStack(BLItemRegistry.blackHatMushroomItem));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLOOD_SNAIL_SHELL), ItemGeneric.createStack(EnumItemGeneric.BLOOD_SNAIL_SHELL));
@@ -335,12 +337,12 @@ public class RecipeHandler {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CAVE_GRASS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_GRASS_BLADES));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CAVE_MOSS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_COPPER_IRIS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.COPPER_IRIS_PETALS));
-		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CRIMSON_MIDDLE_GEM), ItemGeneric.createStack(EnumItemGeneric.CRIMSON_MIDDLE_GEM));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_CRIMSON_MIDDLE_GEM), new ItemStack(BLItemRegistry.crimsonMiddleGem, 1));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_DEEP_WATER_CORAL), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.DEEP_WATER_CORAL));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED), ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_FLATHEAD_MUSHROOM), new ItemStack(BLItemRegistry.flatheadMushroomItem));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GOLDEN_CLUB), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GOLDEN_CLUB_FLOWERS));
-		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GREEN_MIDDLE_GEM), ItemGeneric.createStack(EnumItemGeneric.GREEN_MIDDLE_GEM));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GREEN_MIDDLE_GEM), new ItemStack(BLItemRegistry.greenMiddleGem, 1));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_LICHEN), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.LICHEN));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MARSH_HIBISCUS), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_MARSH_MALLOW), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_MALLOW_FLOWER));

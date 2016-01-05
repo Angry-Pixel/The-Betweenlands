@@ -1,4 +1,4 @@
-package thebetweenlands.client.tooltips;
+package thebetweenlands.event.item;
 
 import java.util.List;
 
