@@ -5,10 +5,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
+import thebetweenlands.entities.mobs.EntityTempleGuardian;
 
 /**
- * BLTempleGuardian1 - TripleHeadedSheep
- * Created using Tabula 4.1.1
+ * BLTempleGuardian1 - TripleHeadedSheep * Created using Tabula 4.1.1
  */
 public class ModelMeleeGuardian extends MowzieModelBase {
     public MowzieModelRenderer waist_invisible;
@@ -297,8 +297,7 @@ public class ModelMeleeGuardian extends MowzieModelBase {
         this.edge1a.addChild(this.edge1b);
         this.chestpiece_left.addChild(this.shoulder_left);
         this.waist_invisible.addChild(this.armouredskirt_left);
-        
-        parts = new MowzieModelRenderer[] {waist_invisible, body_base, chestpiece_right, chestpiece_left, legright_1, legleft_1, armouredskirt_back, armouredskirt_right, armouredskirt_left, neck, shoulder_right, armright_1, armright_2, sword_handle, pommel1, pommel2, guard1, blade1, guard2, guard3, blade2, shoulder_left, armleft_1, armleft_2, shield_baseplate, shieldstrap, edge1a, edge2a, edge3a, edge4a, button_huehue_butt, edge1b, edge2b, edge3b, edge4b, legright_2, footpiece_right, legleft_2, footpiece_left, armouredskirt_backedge, headconnection, headbase, facepiece, nose, helmettop, helmetside_right, helmetside_left, helmet_back, chest_invisible, headJoint};
+        parts = new MowzieModelRenderer[]{waist_invisible, body_base, chestpiece_right, chestpiece_left, legright_1, legleft_1, armouredskirt_back, armouredskirt_right, armouredskirt_left, neck, shoulder_right, armright_1, armright_2, sword_handle, pommel1, pommel2, guard1, blade1, guard2, guard3, blade2, shoulder_left, armleft_1, armleft_2, shield_baseplate, shieldstrap, edge1a, edge2a, edge3a, edge4a, button_huehue_butt, edge1b, edge2b, edge3b, edge4b, legright_2, footpiece_right, legleft_2, footpiece_left, armouredskirt_backedge, headconnection, headbase, facepiece, nose, helmettop, helmetside_right, helmetside_left, helmet_back, chest_invisible, headJoint};
         setInitPose();
     }
 
@@ -319,41 +318,59 @@ public class ModelMeleeGuardian extends MowzieModelBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        faceTarget(headconnection, 1, f3, f4);
+        EntityTempleGuardian guardian = (EntityTempleGuardian) entity;
+        float active = guardian.active.getAnimationProgressSinSqrt(1);
+        faceTarget(headconnection, 1, f3 * active, f4 * active);
     }
 
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float f, float f1, float partialTicks) {
         setToInitPose();
-
-//        f = entity.ticksExisted + partialTicks;
-//        f1 = 0.7f;
-
+        EntityTempleGuardian guardian = (EntityTempleGuardian) entity;
+        float active = guardian.active.getAnimationProgressSinSqrt(1);
+        float inactive = (1-active);
+        //Inactive Pose
+        armright_2.rotateAngleZ -= 0.7 * inactive;
+        armright_1.rotateAngleZ -= 0.3 * inactive;
+        shoulder_right.rotateAngleX -= 1 * inactive;
+        shoulder_right.rotateAngleY -= 0.4 * inactive;
+        armleft_2.rotateAngleZ += 1.3 * inactive;
+        armleft_1.rotateAngleZ += 0.3 * inactive;
+        shoulder_left.rotateAngleX -= 1.3 * inactive;
+        sword_handle.rotateAngleX += (2 * Math.PI - 3.4) * inactive;
+        sword_handle.rotateAngleY -= 0.4 * inactive;
+        sword_handle.rotateAngleZ -= 0.3 * inactive;
+        sword_handle.rotationPointX -= 2 * inactive;
+        sword_handle.rotationPointY -= 2 * inactive;
+        shield_baseplate.rotationPointX += 0 * inactive;
+        shield_baseplate.rotationPointY += 4 * inactive;
+        shield_baseplate.rotationPointZ += 4 * inactive;
+        shield_baseplate.rotateAngleX += 0.3 * inactive;
+        shield_baseplate.rotateAngleZ -= 0.2 * inactive;
+        shield_baseplate.rotateAngleY += 0 * inactive;
+        //        f = entity.ticksExisted + partialTicks;
+        //        f1 = 0.7f;
         float globalSpeed = 1f;
         float globalDegree = 1.2f;
         float globalHeight = 1.7f;
-
-        waist_invisible.rotationPointY += 1 * f1;
-        bob(waist_invisible, 1 * globalSpeed, 1f * globalHeight, false, f, f1);
-        swing(chest_invisible, 0.5f * globalSpeed, 0.4f * globalDegree, true, 0, 0, f, f1);
-        swing(neck, 0.5f * globalSpeed, 0.4f * globalDegree, false, 0, 0, f, f1);
-        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight, false, 0, 0.2f, f, f1);
-        walk(headJoint, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
-        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
-        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
-
-        walk(armouredskirt_back, 1 * globalSpeed, 0.3f * globalHeight, false, -1, 0.5f, f, f1);
-        flap(armouredskirt_left, 1 * globalSpeed, 0.2f * globalHeight, true, -1, -0.4f, f, f1);
-        flap(armouredskirt_right, 1 * globalSpeed, 0.2f * globalHeight, false, -1, 0.4f, f, f1);
-
-        walk(legright_1, 0.5F * globalSpeed, 1F * globalDegree, false, 0, 0.2f, f, f1);
-        walk(legleft_1, 0.5F * globalSpeed, 1F * globalDegree, true, 0, 0.2f, f, f1);
-        walk(legright_2, 0.5F * globalSpeed, 0.8F * globalDegree, false, -2.2F, 0.6F, f, f1);
-        walk(legleft_2, 0.5F * globalSpeed, 0.8F * globalDegree, true, -2.2F, 0.6F, f, f1);
-
-        walk(shoulder_right, 0.5F * globalSpeed, 0.6F * globalDegree, true, 0F, -0.3F * f1, f, f1);
-        walk(shoulder_left, 0.5F * globalSpeed, 0.6F * globalDegree, false, 0F, -0.3F * f1, f, f1);
-        walk(armright_2, 0.5F * globalSpeed, 0.4F * globalDegree, true, -1F, -0.5F * f1, f, f1);
-        walk(armleft_2, 0.5F * globalSpeed, 0.4F * globalDegree, false, -1F, -0.5F * f1, f, f1);
+        waist_invisible.rotationPointY += 1 * f1 * active;
+        bob(waist_invisible, 1 * globalSpeed, 1f * globalHeight * active, false, f, f1);
+        swing(chest_invisible, 0.5f * globalSpeed, 0.4f * globalDegree * active, true, 0, 0, f, f1);
+        swing(neck, 0.5f * globalSpeed, 0.4f * globalDegree * active, false, 0, 0, f, f1);
+        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight * active, false, 0, 0.2f * active, f, f1);
+        walk(headJoint, 1 * globalSpeed, 0.1f * globalHeight * active, true, 0, -0.2f * active, f, f1);
+        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight * active, true, 0, -0.2f * active, f, f1);
+        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight * active, true, 0, -0.2f * active, f, f1);
+        walk(armouredskirt_back, 1 * globalSpeed, 0.3f * globalHeight * active, false, -1, 0.5f * active, f, f1);
+        flap(armouredskirt_left, 1 * globalSpeed, 0.2f * globalHeight * active, true, -1, -0.4f * active, f, f1);
+        flap(armouredskirt_right, 1 * globalSpeed, 0.2f * globalHeight * active, false, -1, 0.4f * active, f, f1);
+        walk(legright_1, 0.5F * globalSpeed, 1F * globalDegree * active, false, 0, 0.2f * active, f, f1);
+        walk(legleft_1, 0.5F * globalSpeed, 1F * globalDegree * active, true, 0, 0.2f * active, f, f1);
+        walk(legright_2, 0.5F * globalSpeed, 0.8F * globalDegree * active, false, -2.2F, 0.6F * active, f, f1);
+        walk(legleft_2, 0.5F * globalSpeed, 0.8F * globalDegree * active, true, -2.2F, 0.6F * active, f, f1);
+        walk(shoulder_right, 0.5F * globalSpeed, 0.6F * globalDegree * active, true, 0F, -0.3F * f1 * active, f, f1);
+        walk(shoulder_left, 0.5F * globalSpeed, 0.6F * globalDegree * active, false, 0F, -0.3F * f1 * active, f, f1);
+        walk(armright_2, 0.5F * globalSpeed, 0.4F * globalDegree * active, true, -1F, -0.5F * f1 * active, f, f1);
+        walk(armleft_2, 0.5F * globalSpeed, 0.4F * globalDegree * active, false, -1F, -0.5F * f1 * active, f, f1);
     }
 }
