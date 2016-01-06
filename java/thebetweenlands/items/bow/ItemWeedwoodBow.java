@@ -18,6 +18,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
+import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
@@ -137,6 +138,7 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntr
 			}
 
 			if (!world.isRemote) {
+				GemCircleHelper.setGem(entityarrow, GemCircleHelper.getGem(stack));
 				world.spawnEntityInWorld(entityarrow);
 			}
 		}

@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ public class GemCircleHelper {
 		if(obj instanceof ItemStack) {
 			ItemStack stack = (ItemStack)obj;
 			Item item = stack.getItem();
-			return item instanceof ItemArmor || item instanceof ItemSword;
+			return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow;
 		} else if(obj instanceof EntityLivingBase) {
 			return true;
 		}

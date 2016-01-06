@@ -1,5 +1,11 @@
 package thebetweenlands.gemcircle;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MathHelper;
+
 public enum CircleGem {
 	CRIMSON("crimson"), GREEN("green"), AQUA("aqua"), NONE("none");
 
@@ -50,6 +56,45 @@ public enum CircleGem {
 		default:
 			return 0;
 		}
+	}
+
+	/**
+	 * Applies the gem proc to the attacker or defender
+	 * @param owner
+	 * @param attacker
+	 * @param defender
+	 * @param attackerProc
+	 * @param defenderProc
+	 * @param strength
+	 */
+	public boolean applyProc(Entity owner, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
+		switch(this) {
+		case CRIMSON:
+			if(attackerProc && owner == attacker) {
+				defender.setFire(MathHelper.floor_float(Math.min(strength * 0.2F, 6.0F)) + 2);
+				return true;
+			}
+			break;
+		case GREEN:
+			if(attackerProc && owner == attacker) {
+				if(attacker instanceof EntityLivingBase) {
+					((EntityLivingBase)attacker).heal(Math.min(Math.max(strength * 0.45F, 1.0F), 10.0F));
+					return true;
+				}
+			}
+			break;
+		case AQUA:
+			if(defenderProc && owner == defender) {
+				if(defender instanceof EntityLivingBase) {
+					EntityLivingBase entityLiving = (EntityLivingBase)defender;
+					entityLiving.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.4F), 3)));
+					return true;
+				}
+			}
+			break;
+		default:
+		}
+		return false;
 	}
 
 	public static CircleGem fromName(String name) {
