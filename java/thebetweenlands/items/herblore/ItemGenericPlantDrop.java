@@ -69,7 +69,7 @@ public class ItemGenericPlantDrop extends Item {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, EnumItemPlantDrop.VALUES[i].id));
+			if(EnumItemPlantDrop.VALUES[i] != EnumItemPlantDrop.INVALID) list.add(new ItemStack(item, 1, EnumItemPlantDrop.VALUES[i].id));
 		}
 	}
 

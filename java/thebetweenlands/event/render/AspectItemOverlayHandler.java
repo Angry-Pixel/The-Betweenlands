@@ -58,10 +58,10 @@ public class AspectItemOverlayHandler {
 							}
 							yOffset += 21;
 						}
+						GL11.glTranslated(0, 0, -10);
+						Gui.drawRect(0, -40, width + 1, yOffset, 0x90000000);
+						Gui.drawRect(1, -39, width, yOffset - 1, 0xAA000000);
 					}
-					GL11.glTranslated(0, 0, -10);
-					Gui.drawRect(0, -40, width + 1, yOffset, 0x90000000);
-					Gui.drawRect(1, -39, width, yOffset - 1, 0xAA000000);
 					RenderHelper.enableGUIStandardItemLighting();
 					GL11.glPopMatrix();
 					GL11.glEnable(GL11.GL_TEXTURE_2D);

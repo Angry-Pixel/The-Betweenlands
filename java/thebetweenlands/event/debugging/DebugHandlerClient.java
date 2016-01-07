@@ -77,7 +77,7 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 	public boolean ignoreStart = true;
 
 	public boolean debugDeferredEffect = false;
-	
+
 	private float lightTable[];
 
 	public GuiScreen previousGuiScreen;
@@ -209,18 +209,21 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 	public void onRenderOverlay(RenderGameOverlayEvent.Text event) {
 		Minecraft mc = Minecraft.getMinecraft();
 		if (ConfigHandler.DEBUG && !mc.gameSettings.showDebugInfo) {
-			mc.fontRenderer.drawString("Debug", 2, 2, 0xFFFFFFFF);
-			mc.fontRenderer.drawString("Decay: " + DecayManager.getDecayLevel(mc.thePlayer), 2, 10, 0xFFFFFFFF);
-			mc.fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(mc.thePlayer), 2, 18, 0xFFFFFFFF);
+			int yOffset = 2;
+			mc.fontRenderer.drawString("Debug", 2, yOffset, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Decay level: " + DecayManager.getDecayLevel(mc.thePlayer), 2, yOffset += 8, 0xFFFFFFFF);
+			//mc.fontRenderer.drawString("Decay saturation: " + DECIMAL_FORMAT.format(DecayManager.getDecayStats(mc.thePlayer).getSaturationLevel()), 2, yOffset += 8, 0xFFFFFFFF);
+			//mc.fontRenderer.drawString("Decay exhaustion: " + DECIMAL_FORMAT.format(DecayManager.getDecayStats(mc.thePlayer).getExhaustionLevel()), 2, yOffset += 8, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Corruption: " + DecayManager.getCorruptionLevel(mc.thePlayer), 2, yOffset += 8, 0xFFFFFFFF);
 			float fog = FogHandler.INSTANCE.getCurrentFogStart() + (FogHandler.INSTANCE.getCurrentFogEnd() - FogHandler.INSTANCE.getCurrentFogStart()) / 2;
-			mc.fontRenderer.drawString("Fog: " + DECIMAL_FORMAT.format(fog) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, 26, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Fog: " + DECIMAL_FORMAT.format(fog) + (FogHandler.INSTANCE.hasDenseFog() ? " (D)" : "") + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, yOffset += 8, 0xFFFFFFFF);
 			float lightLevel = 0.0F;
 			World world = mc.theWorld;
 			if (world != null) {
 				WorldProvider provider = world.provider;
 				lightLevel += provider.lightBrightnessTable[0];
 			}
-			mc.fontRenderer.drawString("Base Light: " + lightLevel + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, 34, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Base Light: " + lightLevel + (mc.thePlayer.posY < WorldProviderBetweenlands.CAVE_START ? " (C)" : ""), 2, yOffset += 8, 0xFFFFFFFF);
 			String activeEvents = "";
 			if (world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
@@ -236,8 +239,8 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			} else {
 				activeEvents = "None";
 			}
-			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, 42, 0xFFFFFFFF);
-			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, 50, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, yOffset += 8, 0xFFFFFFFF);
+			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, yOffset += 8, 0xFFFFFFFF);
 		}
 	}
 

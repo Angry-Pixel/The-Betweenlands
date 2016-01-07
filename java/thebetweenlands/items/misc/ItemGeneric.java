@@ -77,7 +77,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, EnumItemGeneric.VALUES[i].id));
+			if(EnumItemGeneric.VALUES[i] != EnumItemGeneric.INVALID) list.add(new ItemStack(item, 1, EnumItemGeneric.VALUES[i].id));
 		}
 	}
 

@@ -1,5 +1,9 @@
 package thebetweenlands.herblore.aspects;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.AspectManager.AspectEntry;
 import thebetweenlands.herblore.aspects.AspectManager.AspectGroup;
@@ -24,6 +28,8 @@ import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 
 public class AspectRegistry {
+	public static final List<IAspectType> ASPECT_TYPES = new ArrayList<IAspectType>();
+
 	public static final IAspectType AZUWYNN = new AspectAzuwynn();
 	public static final IAspectType ARMANIIS = new AspectArmaniis();
 	public static final IAspectType BYARIIS = new AspectByariis();
@@ -38,6 +44,21 @@ public class AspectRegistry {
 	public static final IAspectType YEOWYNN = new AspectYeowynn();
 	public static final IAspectType YUNUGAZ = new AspectYunugaz();
 	public static final IAspectType YIHINREN = new AspectYihinren();
+
+	static {
+		try {
+			for(Field f : AspectRegistry.class.getDeclaredFields()) {
+				if(f.getType() == IAspectType.class) {
+					Object obj = f.get(null);
+					if(obj instanceof IAspectType) {
+						ASPECT_TYPES.add((IAspectType)obj);
+					}
+				}
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	public static void init() {
 		registerItems();

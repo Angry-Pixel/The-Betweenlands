@@ -74,7 +74,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, EnumItemGenericCrushed.VALUES[i].id));
+			if(EnumItemGenericCrushed.VALUES[i] != EnumItemGenericCrushed.INVALID) list.add(new ItemStack(item, 1, EnumItemGenericCrushed.VALUES[i].id));
 		}
 	}
 

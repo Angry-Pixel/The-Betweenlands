@@ -27,7 +27,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	private EntityLivingBase target;
 
-	public int attackCountDown = 60;
+	public int attackCountDown = 20;
 
 	public int hungerCoolDown;
 
@@ -72,8 +72,8 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(0.5);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0);
 	}
 
@@ -159,8 +159,8 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 		if (ridingEntity != null && ridingEntity instanceof EntityLivingBase && getBloodConsumed() < MAX_BLOOD_LEVEL) {
 			drainage++;
-			if (drainage >= attackCountDown) {
-				ridingEntity.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
+			if (drainage >= attackCountDown && this.deathTime == 0) {
+				ridingEntity.attackEntityFrom(DamageSource.causeMobDamage(this), (int)getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
 				drainage = 0;
 				setBloodConsumed(getBloodConsumed() + 1);
 			}

@@ -1,6 +1,5 @@
 package thebetweenlands.herblore.aspects;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,41 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import thebetweenlands.herblore.aspects.list.AspectArmaniis;
-import thebetweenlands.herblore.aspects.list.AspectAzuwynn;
-import thebetweenlands.herblore.aspects.list.AspectByariis;
-import thebetweenlands.herblore.aspects.list.AspectByrginaz;
-import thebetweenlands.herblore.aspects.list.AspectCelawynn;
-import thebetweenlands.herblore.aspects.list.AspectDayuniis;
-import thebetweenlands.herblore.aspects.list.AspectFergalaz;
-import thebetweenlands.herblore.aspects.list.AspectFirnalaz;
-import thebetweenlands.herblore.aspects.list.AspectFreiwynn;
-import thebetweenlands.herblore.aspects.list.AspectGeoliirgaz;
-import thebetweenlands.herblore.aspects.list.AspectOrdaniis;
-import thebetweenlands.herblore.aspects.list.AspectYeowynn;
-import thebetweenlands.herblore.aspects.list.AspectYihinren;
-import thebetweenlands.herblore.aspects.list.AspectYunugaz;
 import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectManager {
-	public static final List<IAspectType> ASPECT_TYPES = new ArrayList<IAspectType>();
-
-	static {
-		try {
-			for(Field f : AspectManager.class.getDeclaredFields()) {
-				if(f.getType() == IAspectType.class) {
-					Object obj = f.get(null);
-					if(obj instanceof IAspectType) {
-						ASPECT_TYPES.add((IAspectType)obj);
-					}
-				}
-			}
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 	public static enum AspectTier {
 		COMMON, UNCOMMON, RARE
 	}
@@ -175,7 +143,7 @@ public class AspectManager {
 	}
 
 	public static IAspectType getAspectTypeFromName(String name) {
-		for(IAspectType type : ASPECT_TYPES) {
+		for(IAspectType type : AspectRegistry.ASPECT_TYPES) {
 			if(type.getName().equals(name)) return type;
 		}
 		return null;

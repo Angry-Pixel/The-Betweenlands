@@ -76,7 +76,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1);
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(25);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(55);
 	}
 
 	@Override

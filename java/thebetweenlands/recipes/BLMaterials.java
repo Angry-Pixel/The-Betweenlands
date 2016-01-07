@@ -15,19 +15,19 @@ public class BLMaterials {
 	public static ToolMaterial toolValonite = EnumHelper.addToolMaterial("VALONITE", 3, 2500, 8.0F, 3.0F, 10);
 	public static ToolMaterial toolLoot = EnumHelper.addToolMaterial("LOOT", 2, 250, 40.0F, 0.5F, 5);
 	public static ToolMaterial toolOfLegends = EnumHelper.addToolMaterial("LEGEND", 6, 10000, 16.0F, 6.0F, 20);
-	
-	public static ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("LURKERSKIN", 5, new int[]{1, 3, 2, 1}, 0);
-	public static ArmorMaterial armorBone = EnumHelper.addArmorMaterial("SLIMYBONE", 5, new int[] {2, 5, 3, 1}, 0);
-	public static ArmorMaterial armorOctine = EnumHelper.addArmorMaterial("OCTINE", 15, new int[] {2, 6, 5, 2}, 0);
-	public static ArmorMaterial armorValonite = EnumHelper.addArmorMaterial("VALONITE", 33, new int[] {3, 8, 6, 3}, 0);
-	public static ArmorMaterial armorRubber = EnumHelper.addArmorMaterial("RUBBER", 8, new int[] {0, 0, 0, 1}, 0);
+
+	public static ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("LURKERSKIN", 12, new int[]{1, 3, 2, 1}, 0);
+	public static ArmorMaterial armorBone = EnumHelper.addArmorMaterial("SLIMYBONE", 6, new int[] {2, 5, 3, 1}, 0);
+	public static ArmorMaterial armorOctine = EnumHelper.addArmorMaterial("OCTINE", 16, new int[] {2, 6, 5, 2}, 0);
+	public static ArmorMaterial armorValonite = EnumHelper.addArmorMaterial("VALONITE", 35, new int[] {3, 8, 6, 3}, 0);
+	public static ArmorMaterial armorRubber = EnumHelper.addArmorMaterial("RUBBER", 10, new int[] {0, 0, 0, 1}, 0);
 	public static ArmorMaterial armorOfLegends = EnumHelper.addArmorMaterial("LEGEND", 66, new int[] {6, 16, 12, 6}, 0);
 
 	public static Material tar = new MaterialLiquid(MapColor.mapColorArray[0]);
 	public static final Material mud = new Material(MapColor.dirtColor) {
 		@Override
 		public boolean isOpaque() {
-	        return false;
-	    }
+			return false;
+		}
 	};
 }

@@ -38,9 +38,9 @@ public class DecayStats {
 		}
 
 		if(player.isInWater()) {
-			this.addExhaustion(0.002F);
+			this.addExhaustion(0.0033F);
 		} else {
-			this.addExhaustion(0.001F);
+			this.addExhaustion(0.0018F);
 		}
 	}
 
@@ -72,6 +72,10 @@ public class DecayStats {
 
 	public float getSaturationLevel() {
 		return this.decaySaturationLevel;
+	}
+
+	public float getExhaustionLevel() {
+		return this.decayExhaustionLevel;
 	}
 
 	public void setDecayLevel(int decay) {

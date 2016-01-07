@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.utils.AtlasIcon;
 
@@ -51,8 +52,8 @@ public class ItemAspectVial extends Item {
 		this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectLiquid");
 		this.iconVialOrange = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/vialOrange");
 		IIcon aspectIconAtlas = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/aspectMap");
-		this.aspectIcons = new IIcon[AspectManager.ASPECT_TYPES.size()];
-		for(IAspectType aspect : AspectManager.ASPECT_TYPES) {
+		this.aspectIcons = new IIcon[AspectRegistry.ASPECT_TYPES.size()];
+		for(IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
 			this.aspectIcons[aspect.getIconIndex()] = new AtlasIcon(aspectIconAtlas, aspect.getIconIndex(), 4);
 		}
 	}
@@ -108,7 +109,7 @@ public class ItemAspectVial extends Item {
 		list.add(new ItemStack(item, 1, 1)); //orange
 
 		//Add all aspects
-		for(IAspectType aspect : AspectManager.ASPECT_TYPES) {
+		for(IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
 			Aspect itemAspect = new Aspect(aspect, 4.0F);
 			ItemStack stackGreen = new ItemStack(item, 1, 0);
 			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addAspects(stackGreen, itemAspect);
