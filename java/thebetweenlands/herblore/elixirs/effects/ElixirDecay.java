@@ -15,7 +15,7 @@ public class ElixirDecay extends ElixirEffect {
 		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(DecayManager.isDecayEnabled(player)) {
-				DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) - 1, player);
+				DecayManager.getDecayStats(player).addExhaustion(4.0F);
 			}
 		}
 	}

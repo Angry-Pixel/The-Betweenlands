@@ -5,6 +5,8 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
@@ -23,6 +25,8 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
+	public static final GuiOverlay INSTANCE = new GuiOverlay();
+	
 	private ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
 	private Minecraft mc = Minecraft.getMinecraft();
 	private Random random = new Random();
@@ -33,9 +37,14 @@ public class GuiOverlay extends Gui {
 	private Framebuffer tb1 = null;
 
 	@SubscribeEvent
-	public void renderGui(RenderGameOverlayEvent.Post event) {
-		updateCounter++;
+	public void onTick(ClientTickEvent event) {
+		if(event.phase == Phase.START) {
+			this.updateCounter++;
+		}
+	}
 
+	@SubscribeEvent
+	public void renderGui(RenderGameOverlayEvent.Post event) {
 		//GLUProjection test
 		/*for(Entity e : (List<Entity>)Minecraft.getMinecraft().theWorld.loadedEntityList) {
 			Projection p = GLUProjection.getInstance().project(e.posX - Minecraft.getMinecraft().thePlayer.posX, e.posY - Minecraft.getMinecraft().thePlayer.posY, e.posZ - Minecraft.getMinecraft().thePlayer.posZ, ClampMode.NONE, false);
@@ -139,9 +148,9 @@ public class GuiOverlay extends Gui {
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glColor4f(1, 1, 1, 1);
 
-					drawTexturedModalRect(startX + i * 8, startY + offsetY, 18, 0, 9, 9);
-					if (i * 2 + 1 < decayLevel) drawTexturedModalRect(startX + i * 8, startY + offsetY, 0, 0, 9, 9);
-					if (i * 2 + 1 == decayLevel) drawTexturedModalRect(startX + i * 8, startY + offsetY, 9, 0, 9, 9);
+					drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
+					if (i * 2 + 1 < decayLevel) drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
+					if (i * 2 + 1 == decayLevel) drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 				}
 			}
 		}

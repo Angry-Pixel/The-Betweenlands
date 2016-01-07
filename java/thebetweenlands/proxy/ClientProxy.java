@@ -160,7 +160,6 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
-import thebetweenlands.event.item.ItemCorrosionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
@@ -366,7 +365,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockFarmedDirtRenderer());
 
 		// Events
-		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
+		MinecraftForge.EVENT_BUS.register(GuiOverlay.INSTANCE);
+		FMLCommonHandler.instance().bus().register(GuiOverlay.INSTANCE);
 		AmbienceSoundPlayHandler ambientHandler = new AmbienceSoundPlayHandler();
 		FMLCommonHandler.instance().bus().register(ambientHandler);
 		MinecraftForge.EVENT_BUS.register(ambientHandler);

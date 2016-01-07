@@ -14,17 +14,20 @@ import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.forgeevent.client.ClientBlockDamageEvent;
-import thebetweenlands.items.ICorrodible;
 
-public class ItemCorrosionHandler {
-	public static final ItemCorrosionHandler INSTANCE = new ItemCorrosionHandler();
+public class ItemNBTExclusionHandler {
+	public static final ItemNBTExclusionHandler INSTANCE = new ItemNBTExclusionHandler();
 
 	private static Field field_currentItemHittingBlock;
 	private static final Field field_itemInUse = ReflectionHelper.findField(EntityPlayer.class, "itemInUse", "field_71074_e", "f");
 	private static final List<String> exclusions = new ArrayList<String>();
 
+	/**
+	 * Add any NBT tag exclusions here
+	 */
 	static {
 		exclusions.add("Corrosion");
+		exclusions.add("throwing");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -37,7 +40,7 @@ public class ItemCorrosionHandler {
 			PlayerControllerMP controller = Minecraft.getMinecraft().playerController;
 			ItemStack prev = (ItemStack) field_currentItemHittingBlock.get(controller);
 			ItemStack current = Minecraft.getMinecraft().thePlayer.getHeldItem();
-			if(current != null && prev != null && !prev.equals(current) && prev.getItem() instanceof ICorrodible) {
+			if(current != null && prev != null && !prev.equals(current)) {
 				if(ItemTooltipHandler.areItemStackTagsEqual(prev, current, exclusions)) {
 					field_currentItemHittingBlock.set(controller, current);
 				}
@@ -53,7 +56,7 @@ public class ItemCorrosionHandler {
 			EntityPlayer player = event.player;
 			ItemStack prev = (ItemStack) field_itemInUse.get(player);
 			ItemStack current = event.player.getHeldItem();
-			if(current != null && prev != null && !prev.equals(current) && prev.getItem() instanceof ICorrodible) {
+			if(current != null && prev != null && !prev.equals(current)) {
 				if(ItemTooltipHandler.areItemStackTagsEqual(prev, current, exclusions)) {
 					field_itemInUse.set(player, current);
 				}

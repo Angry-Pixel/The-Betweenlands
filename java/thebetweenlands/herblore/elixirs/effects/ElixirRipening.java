@@ -15,7 +15,7 @@ public class ElixirRipening extends ElixirEffect {
 		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(DecayManager.isDecayEnabled(player)) {
-				DecayManager.setDecayLevel(DecayManager.getDecayLevel(player) + 1, player);
+				DecayManager.getDecayStats(player).addStats(1, 0.6F);;
 			}
 		}
 	}

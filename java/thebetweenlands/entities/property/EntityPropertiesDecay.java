@@ -4,22 +4,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.decay.DecayStats;
 
 public class EntityPropertiesDecay implements IBLExtendedEntityProperties {
-	public int decayTimer = 2000;
-	public int decayLevel = 20;
-	public int syncTimer = 0;
-
+	public int decaySyncTimer = 0;
+	public DecayStats decayStats = new DecayStats();
+	
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
-		nbt.setInteger("decayLevel", this.decayLevel);
-		nbt.setInteger("decayTimer", this.decayTimer);
+		this.decayStats.writeNBT(nbt);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
-		this.decayLevel = nbt.getInteger("decayLevel");
-		this.decayTimer = nbt.getInteger("decayTimer");
+		this.decayStats.readNBT(nbt);
 	}
 
 	@Override

@@ -9,25 +9,35 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.message.MessageSyncPlayerDecay;
 
 public class DecayManager {
-	public static int getDecayLevel(EntityPlayer player) {
+	public static DecayStats getDecayStats(EntityPlayer player) {
 		EntityPropertiesDecay property = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY);
 		if (property != null) {
-			return property.decayLevel;
+			return property.decayStats;
+		}
+		return null;
+	}
+
+	public static int getDecayLevel(EntityPlayer player) {
+		DecayStats stats = getDecayStats(player);
+		if (stats != null) {
+			return stats.getDecayLevel();
 		}
 		return 0;
 	}
 
-	public static int setDecayLevel(int decayLevel, EntityPlayer player) {
-		if (decayLevel < 0) return 0;
-		BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY).decayLevel = decayLevel > 20 ? 20 : (decayLevel < 0 ? 0 : decayLevel);
+	public static void setDecayLevel(int decayLevel, EntityPlayer player) {
+		if (decayLevel < 0) return;
 		if(!player.worldObj.isRemote) {
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(player), player.getUniqueID()), new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
+			DecayStats stats = getDecayStats(player);
+			if(stats != null) {
+				stats.setDecayLevel(decayLevel > 20 ? 20 : (decayLevel < 0 ? 0 : decayLevel));
+				TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(player), player.getUniqueID()), new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
+			}
 		}
-		return BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY).decayLevel;
 	}
 
-	public static int resetDecay(EntityPlayer player) {
-		return setDecayLevel(0, player);
+	public static void resetDecay(EntityPlayer player) {
+		setDecayLevel(0, player);
 	}
 
 	public static float getPlayerHearts(EntityPlayer player) {

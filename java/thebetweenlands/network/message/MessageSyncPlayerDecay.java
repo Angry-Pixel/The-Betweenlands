@@ -9,8 +9,7 @@ import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.property.EntityPropertiesDecay;
 import thebetweenlands.network.message.base.AbstractMessage;
 
-public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDecay>
-{
+public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDecay> {
 	private int playerDecay;
 	private UUID playerUUID;
 
@@ -27,16 +26,13 @@ public class MessageSyncPlayerDecay extends AbstractMessage<MessageSyncPlayerDec
 		if(target != null) {
 			EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY);
 			if (prop != null) {
-				int prev = prop.decayLevel;
-				prop.decayLevel = message.playerDecay;
+				prop.decayStats.setDecayLevel(message.playerDecay);
 			}
 		}
 	}
 
 	@Override
-	public void onMessageServerSide(MessageSyncPlayerDecay message, EntityPlayer player) {
-		//((EntityPropertiesDecay) player.getExtendedProperties(EntityPropertiesDecay.getId())).decayLevel = message.playerDecay;
-	}
+	public void onMessageServerSide(MessageSyncPlayerDecay message, EntityPlayer player) { }
 
 	@Override
 	public void fromBytes(ByteBuf buf) {

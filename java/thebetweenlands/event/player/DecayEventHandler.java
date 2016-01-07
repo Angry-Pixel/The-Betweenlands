@@ -25,6 +25,8 @@ import thebetweenlands.world.BLGamerules;
 public class DecayEventHandler {
 	public static DecayEventHandler INSTANCE = new DecayEventHandler();
 
+	private int syncTimer = 0;
+
 	@SubscribeEvent
 	public void joinWorld(EntityJoinWorldEvent event) {
 		if (!event.world.isRemote && event.entity instanceof EntityPlayer) {
@@ -50,7 +52,7 @@ public class DecayEventHandler {
 	public void useItem(PlayerUseItemEvent.Finish event) {
 		if (DecayManager.isDecayEnabled(event.entityPlayer) && event.item.getItem() instanceof IDecayFood) {
 			IDecayFood food = (IDecayFood) event.item.getItem();
-			DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.entityPlayer) + food.getDecayHealAmount(), event.entityPlayer);
+			DecayManager.getDecayStats(event.entityPlayer).addStats(food.getDecayHealAmount(), 0.6F);
 		}
 	}
 
@@ -83,17 +85,19 @@ public class DecayEventHandler {
 
 			if(BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY)) {
 				EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(event.player, BLEntityPropertiesRegistry.DECAY);
-				prop.decayTimer -= event.player.isInWater() ? (event.player.worldObj.rand.nextFloat() < 0.6F ? 2 : 1) : 1;
+				/*prop.decayTimer -= event.player.isInWater() ? (event.player.worldObj.rand.nextFloat() < 0.6F ? 2 : 1) : 1;
 				if (prop.decayTimer < 0) {
 					prop.decayTimer = 2000;
 					DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
-				}
+				}*/
 
-				//Send decay to clients
 				if(!event.player.worldObj.isRemote) {
-					prop.syncTimer--;
-					if(prop.syncTimer < 0) {
-						prop.syncTimer = 80;
+					prop.decayStats.onUpdate(event.player);
+					
+					//Send decay to clients
+					prop.decaySyncTimer--;
+					if(prop.decaySyncTimer < 0) {
+						prop.decaySyncTimer = 80;
 						TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(event.player), event.player.getUniqueID()), new TargetPoint(event.player.dimension, event.player.posX, event.player.posY, event.player.posZ, 64));
 					}
 				}
