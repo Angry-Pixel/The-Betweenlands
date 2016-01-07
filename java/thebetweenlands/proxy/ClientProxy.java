@@ -159,8 +159,9 @@ import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
+import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.item.ItemCorrosionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
-import thebetweenlands.event.player.ItemCorrosionHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
@@ -254,6 +255,7 @@ public class ClientProxy extends CommonProxy {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ClientPacketHandler.class, Side.CLIENT);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityDruidAltar.class, Side.CLIENT);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(AttackDamageHandler.class, Side.CLIENT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -390,7 +392,6 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(ItemCorrosionHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(

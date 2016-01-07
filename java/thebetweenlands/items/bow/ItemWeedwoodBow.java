@@ -18,7 +18,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
-import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
@@ -77,7 +76,7 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntr
 		MinecraftForge.EVENT_BUS.post(event);
 		if (event.isCanceled())
 			return;
-		maxUseDuration = event.charge;
+		maxUseDuration = Math.min(event.charge, 10);
 
 		boolean canShoot = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
 
@@ -96,8 +95,8 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntr
 			float power = maxUseDuration / 10.0F;
 			power = (power * power + power * 2.0F) / 2.0F;
 
-			power *= (CorrodibleItemHelper.getModifier(stack) - 0.5F) * 2 + 0.15F;
-
+			power *= CorrodibleItemHelper.getModifier(stack) * 1.15F;
+			
 			if (power < 0.1F)
 				return;
 
@@ -138,7 +137,6 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntr
 			}
 
 			if (!world.isRemote) {
-				GemCircleHelper.setGem(entityarrow, GemCircleHelper.getGem(stack));
 				world.spawnEntityInWorld(entityarrow);
 			}
 		}

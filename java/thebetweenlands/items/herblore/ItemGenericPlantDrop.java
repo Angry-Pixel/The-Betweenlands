@@ -35,9 +35,22 @@ public class ItemGenericPlantDrop extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
-		icons = new IIcon[EnumItemPlantDrop.VALUES.length];
+		int maxID = 0;
 		for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
-			icons[i] = reg.registerIcon("thebetweenlands:strictlyHerblore/plantDrops/" + EnumItemPlantDrop.VALUES[i].iconName);
+			EnumItemPlantDrop enumGeneric = EnumItemPlantDrop.VALUES[i];
+			if(enumGeneric != EnumItemPlantDrop.INVALID) {
+				int enumID = enumGeneric.id;
+				if(enumID > maxID) {
+					maxID = enumID;
+				}
+			}
+		}
+		icons = new IIcon[maxID + 1];
+		for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
+			EnumItemPlantDrop enumGeneric = EnumItemPlantDrop.VALUES[i];
+			if(enumGeneric != EnumItemPlantDrop.INVALID) {
+				icons[enumGeneric.id] = reg.registerIcon("thebetweenlands:strictlyHerblore/plantDrops/" + enumGeneric.iconName);
+			}
 		}
 	}
 
@@ -56,20 +69,29 @@ public class ItemGenericPlantDrop extends Item {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, i));
+			list.add(new ItemStack(item, 1, EnumItemPlantDrop.VALUES[i].id));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + EnumItemPlantDrop.VALUES[stack.getItemDamage()].iconName;
+			return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknownPlantDrop";
 		}
 	}
 
+	public static EnumItemPlantDrop getEnumFromID(int id) {
+		for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
+			EnumItemPlantDrop enumGeneric = EnumItemPlantDrop.VALUES[i];
+			if(enumGeneric.id == id) return enumGeneric;
+		}
+		return EnumItemPlantDrop.INVALID;
+	}
+
 	public static enum EnumItemPlantDrop {
+		INVALID("invalid", 1024),
 		GENERIC_LEAF("genericLeaf", 0), ALGAE("algae", 1), ARROW_ARUM_LEAF("arrowArumLeaf", 2), BLUE_EYED_GRASS_FLOWERS("blueEyedGrassFlowers", 3), BLUE_IRIS_PETAL("blueIrisPetals", 4),
 		MIRE_CORAL("mireCoral", 5), DEEP_WATER_CORAL("deepWaterCoral", 6), BOG_BEAN_FLOWER("bogBeanFlower", 7), BONESET_FLOWERS("bonesetFlowers", 8),
 		BOTTLE_BRUSH_GRASS_BLADES("bottleBrushGrassBlades", 9), BROOM_SEDGE_LEAVES("broomSedgeLeaves", 10), BUTTON_BUSH_FLOWERS("buttonBushFlowers", 11),

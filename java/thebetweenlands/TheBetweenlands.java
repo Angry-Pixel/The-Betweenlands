@@ -33,7 +33,12 @@ import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
-import thebetweenlands.event.entity.*;
+import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.entity.MiscEntitySyncHandler;
+import thebetweenlands.event.entity.PageDiscoveringEvent;
+import thebetweenlands.event.entity.PowerRingHandler;
+import thebetweenlands.event.entity.VolarPadGlideHandler;
+import thebetweenlands.event.item.ItemCorrosionHandler;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
@@ -57,6 +62,7 @@ import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
+import thebetweenlands.network.packet.server.PacketGemProc;
 import thebetweenlands.network.packet.server.PacketRevengeTarget;
 import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.network.packet.server.PacketTickspeed;
@@ -129,7 +135,7 @@ public class TheBetweenlands
 		registerPacket(PacketRevengeTarget.class);
 		registerPacket(PacketAttackTarget.class);
 		registerPacket(PacketWeedWoodBushRustle.class);
-
+		registerPacket(PacketGemProc.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
@@ -179,6 +185,8 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLEntityPropertiesRegistry.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ItemCorrosionHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ItemCorrosionHandler.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

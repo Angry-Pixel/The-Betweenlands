@@ -43,9 +43,22 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
-		icons = new IIcon[EnumItemGeneric.VALUES.length];
+		int maxID = 0;
 		for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
-			icons[i] = reg.registerIcon("thebetweenlands:" + EnumItemGeneric.VALUES[i].iconName);
+			EnumItemGeneric enumGeneric = EnumItemGeneric.VALUES[i];
+			if(enumGeneric != EnumItemGeneric.INVALID) {
+				int enumID = enumGeneric.id;
+				if(enumID > maxID) {
+					maxID = enumID;
+				}
+			}
+		}
+		icons = new IIcon[maxID + 1];
+		for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
+			EnumItemGeneric enumGeneric = EnumItemGeneric.VALUES[i];
+			if(enumGeneric != EnumItemGeneric.INVALID) {
+				icons[enumGeneric.id] = reg.registerIcon("thebetweenlands:" + enumGeneric.iconName);
+			}
 		}
 	}
 
@@ -64,17 +77,25 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, i));
+			list.add(new ItemStack(item, 1, EnumItemGeneric.VALUES[i].id));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + EnumItemGeneric.VALUES[stack.getItemDamage()].iconName;
+			return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknownGeneric";
 		}
+	}
+
+	public static EnumItemGeneric getEnumFromID(int id) {
+		for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
+			EnumItemGeneric enumGeneric = EnumItemGeneric.VALUES[i];
+			if(enumGeneric.id == id) return enumGeneric;
+		}
+		return EnumItemGeneric.INVALID;
 	}
 
 	@Override
@@ -171,6 +192,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	}
 
 	public static enum EnumItemGeneric {
+		INVALID("invalid", 1024),
 		BLOOD_SNAIL_SHELL("bloodSnailShell", 3), MIRE_SNAIL_SHELL("mireSnailShell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonflyWing", 6), 
 		LURKER_SKIN("lurkerSkin", 7), SWAMP_REED("swampReed", 8), DRIED_SWAMP_REED("driedSwampReed", 9), SWAMP_REED_ROPE("swampReedRope", 10), 
 		TANGLED_ROOT("tangledRoot", 11), PLANT_TONIC("plantTonic", 12), 

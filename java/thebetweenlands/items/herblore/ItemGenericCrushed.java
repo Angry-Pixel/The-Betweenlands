@@ -40,9 +40,22 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
-		icons = new IIcon[EnumItemGenericCrushed.VALUES.length];
+		int maxID = 0;
 		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
-			icons[i] = reg.registerIcon("thebetweenlands:strictlyHerblore/ground/" + EnumItemGenericCrushed.VALUES[i].iconName);
+			EnumItemGenericCrushed enumGeneric = EnumItemGenericCrushed.VALUES[i];
+			if(enumGeneric != EnumItemGenericCrushed.INVALID) {
+				int enumID = enumGeneric.id;
+				if(enumID > maxID) {
+					maxID = enumID;
+				}
+			}
+		}
+		icons = new IIcon[maxID + 1];
+		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
+			EnumItemGenericCrushed enumGeneric = EnumItemGenericCrushed.VALUES[i];
+			if(enumGeneric != EnumItemGenericCrushed.INVALID) {
+				icons[enumGeneric.id] = reg.registerIcon("thebetweenlands:strictlyHerblore/ground/" + enumGeneric.iconName);
+			}
 		}
 	}
 
@@ -61,17 +74,25 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
-			list.add(new ItemStack(item, 1, i));
+			list.add(new ItemStack(item, 1, EnumItemGenericCrushed.VALUES[i].id));
 		}
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + EnumItemGenericCrushed.VALUES[stack.getItemDamage()].iconName;
+			return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknownCrushed";
 		}
+	}
+
+	public static EnumItemGenericCrushed getEnumFromID(int id) {
+		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
+			EnumItemGenericCrushed enumGeneric = EnumItemGenericCrushed.VALUES[i];
+			if(enumGeneric.id == id) return enumGeneric;
+		}
+		return EnumItemGenericCrushed.INVALID;
 	}
 
 	@Override
@@ -110,6 +131,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	}
 
 	public static enum EnumItemGenericCrushed {
+		INVALID("invalid", 1024),
 		GROUND_GENERIC_LEAF("groundGenericLeaf", 0), GROUND_CATTAIL("groundCatTail", 1), GROUND_SWAMP_GRASS_TALL("groundSwampTallgrass", 2), GROUND_SHOOTS("groundShoots", 3), 
 		GROUND_ARROW_ARUM("groundArrowArum", 4), GROUND_BUTTON_BUSH("groundButtonBush", 5), GROUND_MARSH_HIBISCUS("groundMarshHibiscus", 6), 
 		GROUND_PICKEREL_WEED("groundPickerelWeed", 7), GROUND_SOFT_RUSH("groundSoftRush", 8), GROUND_MARSH_MALLOW("groundMarshMallow", 9), 

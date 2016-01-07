@@ -1,10 +1,14 @@
 package thebetweenlands.gemcircle;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import thebetweenlands.items.BLItemRegistry;
 
 public enum CircleGem {
 	CRIMSON("crimson"), GREEN("green"), AQUA("aqua"), NONE("none");
@@ -72,6 +76,17 @@ public enum CircleGem {
 		case CRIMSON:
 			if(attackerProc && owner == attacker) {
 				defender.setFire(MathHelper.floor_float(Math.min(strength * 0.2F, 6.0F)) + 2);
+				if(attacker instanceof EntityLivingBase) {
+					EntityLivingBase entityLiving = (EntityLivingBase)attacker;
+					if(entityLiving.getHeldItem() != null && entityLiving.getHeldItem().getItem() == BLItemRegistry.octineSword) {
+						List<Entity> affectedList = (List<Entity>)defender.worldObj.getEntitiesWithinAABBExcludingEntity(attacker, AxisAlignedBB.getBoundingBox(defender.posX, defender.posY, defender.posZ, defender.posX, defender.posY, defender.posZ).expand(4.5F, 4.5F, 4.5F));
+						for(Entity affected : affectedList) {
+							if(affected.getDistanceToEntity(defender) <= 4.5F) {
+								affected.setFire(MathHelper.floor_float(Math.min(strength * 0.2F, 6.0F)) + 2);
+							}
+						}
+					}
+				}
 				return true;
 			}
 			break;
@@ -87,7 +102,7 @@ public enum CircleGem {
 			if(defenderProc && owner == defender) {
 				if(defender instanceof EntityLivingBase) {
 					EntityLivingBase entityLiving = (EntityLivingBase)defender;
-					entityLiving.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.4F), 3)));
+					entityLiving.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));
 					return true;
 				}
 			}

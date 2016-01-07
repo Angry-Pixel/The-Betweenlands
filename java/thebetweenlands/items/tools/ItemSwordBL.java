@@ -2,6 +2,9 @@ package thebetweenlands.items.tools;
 
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -12,13 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryItem {
 	private IIcon[] corrosionIcons;
@@ -34,7 +36,7 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	public boolean hitEntity(ItemStack is, EntityLivingBase entity, EntityLivingBase player) {
 		is.damageItem(1, player);
 		if (is.getItem() == BLItemRegistry.octineSword)
-			if (player.worldObj.rand.nextInt(4) == 0)
+			if (player.worldObj.rand.nextInt(GemCircleHelper.getGem(is) == CircleGem.CRIMSON ? 3 : 4) == 0)
 				entity.setFire(10);
 		return true;
 	}
