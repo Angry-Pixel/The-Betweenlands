@@ -124,7 +124,7 @@ public class AttackDamageHandler {
 				}
 
 				boolean attackerProc = attacker.worldObj.rand.nextFloat() <= (user == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
-				boolean defenderProc = attacker.worldObj.rand.nextFloat() <= (user == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
+				boolean defenderProc = attacker.worldObj.rand.nextFloat() <= GEM_PROC_CHANCE;
 
 				boolean attackerProcd = false;
 				boolean defenderProcd = false;
