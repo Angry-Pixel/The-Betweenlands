@@ -31,7 +31,8 @@ import thebetweenlands.command.CommandFindPage;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.MessageSyncEntityProperties;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
@@ -57,7 +58,6 @@ import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
-import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
@@ -119,11 +119,10 @@ public class TheBetweenlands
 
 		//Message Registry
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-		networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 2, Side.CLIENT);
-		networkWrapper.registerMessage(MessageSyncPlayerDecay.class, MessageSyncPlayerDecay.class, 3, Side.SERVER);
 		networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
 		networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
 		networkWrapper.registerMessage(MessageLoadAspects.class, MessageLoadAspects.class, 6, Side.CLIENT);
+		networkWrapper.registerMessage(MessageSyncEntityProperties.class, MessageSyncEntityProperties.class, 7, Side.CLIENT);
 
 		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 
@@ -184,9 +183,9 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(BLEntityPropertiesRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemNBTExclusionHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
+		BLEntityPropertiesRegistry.HANDLER.register();
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

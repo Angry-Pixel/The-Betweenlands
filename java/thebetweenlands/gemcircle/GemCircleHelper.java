@@ -8,6 +8,8 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 
 public class GemCircleHelper {
 	/**
@@ -26,21 +28,17 @@ public class GemCircleHelper {
 		return false;
 	}
 
-	public static void setGem(NBTTagCompound root, CircleGem gem) {
+	private static void setGem(NBTTagCompound root, CircleGem gem) {
 		if(root != null) {
 			root.setString("blCircleGem", gem == null ? "none" : gem.name);
 		}
 	}
 
-	public static CircleGem getGem(NBTTagCompound root) {
+	private static CircleGem getGem(NBTTagCompound root) {
 		if(root != null) {
 			return CircleGem.fromName(root.getString("blCircleGem"));
 		}
 		return CircleGem.NONE;
-	}
-
-	public static int getRelation(NBTTagCompound root1, NBTTagCompound root2) {
-		return getGem(root1).getRelation(getGem(root2));
 	}
 
 	public static int getRelation(CircleGem gem1, CircleGem gem2) {
@@ -56,10 +54,17 @@ public class GemCircleHelper {
 	}
 
 	public static void setGem(Entity entity, CircleGem gem) {
-		setGem(entity.getEntityData(), gem);
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			property.setGem(gem);
+		}
 	}
 
 	public static CircleGem getGem(Entity entity) {
-		return getGem(entity.getEntityData());
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			return property.getGem();
+		}
+		return CircleGem.NONE;
 	}
 }

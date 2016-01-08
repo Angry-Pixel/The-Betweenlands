@@ -1,12 +1,13 @@
-package thebetweenlands.entities.property;
+package thebetweenlands.entities.properties.list;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.event.player.PlayerPortalHandler;
 
-public class EntityPropertiesPortal implements IBLExtendedEntityProperties {
+public class EntityPropertiesPortal extends EntityProperties {
 	public boolean inPortal = false;
 	public boolean wasTeleported = false;
 	public int portalTimer = PlayerPortalHandler.MAX_PORTAL_TIME;
@@ -38,5 +39,10 @@ public class EntityPropertiesPortal implements IBLExtendedEntityProperties {
 	@Override
 	public Class<? extends Entity> getEntityClass() {
 		return EntityPlayer.class;
+	}
+
+	@Override
+	public int getTrackingTime() {
+		return -1;
 	}
 }

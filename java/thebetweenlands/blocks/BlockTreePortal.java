@@ -12,8 +12,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.property.EntityPropertiesPortal;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 public class BlockTreePortal extends Block {
 
@@ -180,7 +180,7 @@ public class BlockTreePortal extends Block {
 	public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
 		if (entity.ridingEntity == null && entity.riddenByEntity == null && entity.timeUntilPortal <= 0) {
 			if(entity instanceof EntityPlayer){
-				EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(entity, BLEntityPropertiesRegistry.PORTAL);
+				EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesPortal.class);
 				props.inPortal = true;
 			} else if(!world.isRemote) {
 				if (entity.dimension == 0)

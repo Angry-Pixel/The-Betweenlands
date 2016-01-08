@@ -1,15 +1,15 @@
-package thebetweenlands.entities.property;
+package thebetweenlands.entities.properties.list;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.decay.DecayStats;
+import thebetweenlands.entities.properties.EntityProperties;
 
-public class EntityPropertiesDecay implements IBLExtendedEntityProperties {
-	public int decaySyncTimer = 0;
+public class EntityPropertiesDecay extends EntityProperties {
 	public DecayStats decayStats = new DecayStats();
-	
+
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
 		this.decayStats.writeNBT(nbt);
@@ -33,5 +33,21 @@ public class EntityPropertiesDecay implements IBLExtendedEntityProperties {
 	@Override
 	public Class<? extends Entity> getEntityClass() {
 		return EntityPlayer.class;
+	}
+
+	@Override
+	public int getTrackingTime() {
+		return 0;
+	}
+
+	@Override
+	public boolean saveTrackingSensitiveData(NBTTagCompound nbt) {
+		nbt.setInteger("decayLevel", this.decayStats.getDecayLevel());
+		return false;
+	}
+
+	@Override
+	public void loadTrackingSensitiveData(NBTTagCompound nbt) {
+		this.decayStats.setDecayLevel(nbt.getInteger("decayLevel"));
 	}
 }

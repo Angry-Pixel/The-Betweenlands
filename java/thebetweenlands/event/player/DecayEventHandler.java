@@ -1,46 +1,24 @@
 package thebetweenlands.event.player;
 
-import java.util.List;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemFood;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.decay.DecayManager;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.property.EntityPropertiesDecay;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.items.food.IDecayFood;
-import thebetweenlands.network.message.MessageSyncPlayerDecay;
 import thebetweenlands.world.BLGamerules;
 
 public class DecayEventHandler {
 	public static DecayEventHandler INSTANCE = new DecayEventHandler();
 
 	private int syncTimer = 0;
-
-	@SubscribeEvent
-	public void joinWorld(EntityJoinWorldEvent event) {
-		if (!event.world.isRemote && event.entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.entity;
-
-			int decayLevel = DecayManager.getDecayLevel(player);
-
-			for(EntityPlayer p : (List<EntityPlayer>)event.world.playerEntities) {
-				if(this.isInRenderRange(p, player.getDistanceToEntity(p))) {
-					TheBetweenlands.networkWrapper.sendTo(new MessageSyncPlayerDecay(decayLevel, p.getUniqueID()), (EntityPlayerMP) player);
-				}
-			}
-		}
-	}
 
 	private boolean isInRenderRange(EntityPlayer player, double dst) {
 		double d1 = player.boundingBox.getAverageEdgeLength();
@@ -84,22 +62,9 @@ public class DecayEventHandler {
 			}
 
 			if(BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_DECAY)) {
-				EntityPropertiesDecay prop = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(event.player, BLEntityPropertiesRegistry.DECAY);
-				/*prop.decayTimer -= event.player.isInWater() ? (event.player.worldObj.rand.nextFloat() < 0.6F ? 2 : 1) : 1;
-				if (prop.decayTimer < 0) {
-					prop.decayTimer = 2000;
-					DecayManager.setDecayLevel(DecayManager.getDecayLevel(event.player) - 1, event.player);
-				}*/
-
+				EntityPropertiesDecay prop = BLEntityPropertiesRegistry.HANDLER.getProperties(event.player, EntityPropertiesDecay.class);
 				if(!event.player.worldObj.isRemote) {
 					prop.decayStats.onUpdate(event.player);
-					
-					//Send decay to clients
-					prop.decaySyncTimer--;
-					if(prop.decaySyncTimer < 0) {
-						prop.decaySyncTimer = 80;
-						TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(event.player), event.player.getUniqueID()), new TargetPoint(event.player.dimension, event.player.posX, event.player.posY, event.player.posZ, 64));
-					}
 				}
 			}
 		} else if (event.player.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue() != 20D) {

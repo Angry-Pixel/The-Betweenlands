@@ -58,11 +58,11 @@ public class BLEntityRegistry
 		registerEntity(16, EntitySnailPoisonJet.class, "snailPoisonJet");
 		registerEntity(17, EntityLurker.class, "lurker", 0x283320, 0x827856);
 		registerEntity(18, EntityBLItemFrame.class, "itemFrameBL");
-		registerEntity(19, EntityGecko.class, "gecko", 0x283320, 0x827856);
+		registerEntity(19, EntityGecko.class, "gecko", 0x283320, 0x827856, 64, 1, true);
 		registerEntity(20, EntityTermite.class, "termite", 0x283320, 0x827856);
 		registerEntity(21, EntityGiantToad.class, "toad", 0x283320, 0x827856);
-		registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", 0x283320, 0x827856);
-		registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", 0x283320, 0x827856);
+		registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", 0x283320, 0x827856, 64, 1, true);
+		registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", 0x283320, 0x827856, 64, 1, true);
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0x243B0B, 0x00FFFF);
 		registerEntity(25, EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(26, EntityThrownTarminion.class, "thrownTarminion", 64, 10, true);

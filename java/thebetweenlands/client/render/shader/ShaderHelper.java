@@ -10,8 +10,8 @@ import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.shader.base.CShaderGroup;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.property.EntityPropertiesPortal;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -94,7 +94,7 @@ public class ShaderHelper {
 		Minecraft mc = Minecraft.getMinecraft();
 		boolean inPortal = false;
 		if(mc.thePlayer != null){
-			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(mc.thePlayer, BLEntityPropertiesRegistry.PORTAL);
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesPortal.class);
 			inPortal = props.inPortal;
 		}
 		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);

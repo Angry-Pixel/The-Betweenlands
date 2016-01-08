@@ -6,14 +6,14 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import thebetweenlands.entities.property.IBLExtendedEntityProperties;
+import thebetweenlands.entities.properties.EntityProperties;
 
 import java.util.ArrayList;
 
 /**
  * Created by Bart on 10-8-2015.
  */
-public class EntityPropertiesManual implements IBLExtendedEntityProperties {
+public class EntityPropertiesManual extends EntityProperties {
 
     public ArrayList<String> foundPages = new ArrayList<>();
 

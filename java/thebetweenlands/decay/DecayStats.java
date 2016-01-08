@@ -1,11 +1,8 @@
 package thebetweenlands.decay;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumDifficulty;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.network.message.MessageSyncPlayerDecay;
 
 public class DecayStats {
 	private int decayLevel = 20;
@@ -20,10 +17,6 @@ public class DecayStats {
 
 	public void onUpdate(EntityPlayer player) {
 		EnumDifficulty difficulty = player.worldObj.difficultySetting;
-
-		if(!player.worldObj.isRemote && this.prevDecayLevel != this.decayLevel) {
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(player), player.getUniqueID()), new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
-		}
 
 		this.prevDecayLevel = this.decayLevel;
 

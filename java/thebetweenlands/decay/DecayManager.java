@@ -1,16 +1,13 @@
 package thebetweenlands.decay;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.player.EntityPlayer;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.property.EntityPropertiesDecay;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.network.message.MessageSyncPlayerDecay;
 
 public class DecayManager {
 	public static DecayStats getDecayStats(EntityPlayer player) {
-		EntityPropertiesDecay property = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesDecay>getProperties(player, BLEntityPropertiesRegistry.DECAY);
+		EntityPropertiesDecay property = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesDecay.class);
 		if (property != null) {
 			return property.decayStats;
 		}
@@ -31,7 +28,6 @@ public class DecayManager {
 			DecayStats stats = getDecayStats(player);
 			if(stats != null) {
 				stats.setDecayLevel(decayLevel > 20 ? 20 : (decayLevel < 0 ? 0 : decayLevel));
-				TheBetweenlands.networkWrapper.sendToAllAround(new MessageSyncPlayerDecay(DecayManager.getDecayLevel(player), player.getUniqueID()), new TargetPoint(player.dimension, player.posX, player.posY, player.posZ, 64));
 			}
 		}
 	}

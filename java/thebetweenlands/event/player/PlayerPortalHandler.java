@@ -7,8 +7,8 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.entities.property.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.property.EntityPropertiesPortal;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 public class PlayerPortalHandler {
@@ -18,7 +18,7 @@ public class PlayerPortalHandler {
 	public void teleportCheck(LivingEvent.LivingUpdateEvent event) {
 		if(event.entity instanceof EntityPlayer){
 			EntityPlayer player = (EntityPlayer)event.entity;
-			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(player, BLEntityPropertiesRegistry.PORTAL);
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesPortal.class);
 			if(props.inPortal){
 				if(player.worldObj.getBlock(floor(player.posX), floor(player.posY), floor(player.posZ)) == BLBlockRegistry.treePortalBlock) {
 					if(!props.wasTeleported) {
@@ -51,7 +51,7 @@ public class PlayerPortalHandler {
 			}
 		}
 		if(event.entity.worldObj.isRemote && event.entity == TheBetweenlands.proxy.getClientPlayer()) {
-			EntityPropertiesPortal props = BLEntityPropertiesRegistry.INSTANCE.<EntityPropertiesPortal>getProperties(event.entity, BLEntityPropertiesRegistry.PORTAL);
+			EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entity, EntityPropertiesPortal.class);
 			boolean renderPortalEffect = props.inPortal && !props.wasTeleported;
 			if(renderPortalEffect) {
 				TheBetweenlands.proxy.playPortalSounds(event.entity, props.portalTimer);
