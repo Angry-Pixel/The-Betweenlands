@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelMeleeGuardian;
-import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
+import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.gemcircle.GemCircleHelper;
 
@@ -24,7 +24,7 @@ public class RenderMeleeGuardian extends RenderLiving {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		if(((EntityBerserkerGuardian)entity).getActive()) {
+		if(((EntityMeleeGuardian)entity).getActive()) {
 			CircleGem gem = GemCircleHelper.getGem(entity);
 			switch(gem) {
 			case CRIMSON:

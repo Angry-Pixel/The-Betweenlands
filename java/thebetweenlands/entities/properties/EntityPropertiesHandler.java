@@ -12,6 +12,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
@@ -34,9 +36,18 @@ public class EntityPropertiesHandler {
 	/**
 	 * Registers the handler to the Forge event bus
 	 */
-	public void register() {
+	public void registerHandler() {
 		MinecraftForge.EVENT_BUS.register(BLEntityPropertiesRegistry.HANDLER);
 		FMLCommonHandler.instance().bus().register(BLEntityPropertiesRegistry.HANDLER);
+	}
+
+	/**
+	 * Registers the packet that keeps the properties in sync
+	 * @param networkWrapper
+	 * @param packetID
+	 */
+	public void registerPacket(SimpleNetworkWrapper networkWrapper, int packetID) {
+		networkWrapper.registerMessage(MessageSyncEntityProperties.class, MessageSyncEntityProperties.class, packetID, Side.CLIENT);
 	}
 
 	/**
