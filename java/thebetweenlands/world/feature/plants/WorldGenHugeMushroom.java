@@ -12,8 +12,8 @@ import java.util.Random;
  * Created by Bart on 31-5-2015.
  */
 public class WorldGenHugeMushroom extends WorldGenerator {
-    private BlockBlubCappedMushroomHead head = (BlockBlubCappedMushroomHead)BLBlockRegistry.hugeMushroomTop;
-    private BlockBlubCappedMushroomStalk stalk = (BlockBlubCappedMushroomStalk)BLBlockRegistry.hugeMushroomStalk;
+    private BlockBlubCappedMushroomHead head = (BlockBlubCappedMushroomHead)BLBlockRegistry.bulbCappedMushroomTop;
+    private BlockBlubCappedMushroomStalk stalk = (BlockBlubCappedMushroomStalk)BLBlockRegistry.bulbCappedMushroomStalk;
 
     @Override
     public boolean generate(World world, Random rand, int x, int y, int z) {

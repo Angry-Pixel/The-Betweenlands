@@ -332,8 +332,8 @@ public class BLBlockRegistry {
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
 
-	public static final Block hugeMushroomStalk = new BlockBlubCappedMushroomStalk();
-	public static final Block hugeMushroomTop = new BlockBlubCappedMushroomHead();
+	public static final Block bulbCappedMushroomStalk = new BlockBlubCappedMushroomStalk();
+	public static final Block bulbCappedMushroomTop = new BlockBlubCappedMushroomHead();
 
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
