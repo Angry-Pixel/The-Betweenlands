@@ -16,6 +16,8 @@ import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
+//TODO: Not needed anymore with the new spawning system, replace when the new spawning system is finished
+@Deprecated
 public class EntitySpawnHandler {
 	public abstract class EntitySpawnEntry {
 		public final SpawnListEntry spawnEntry;

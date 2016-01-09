@@ -8,7 +8,6 @@ import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
-import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
@@ -19,6 +18,8 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
 import thebetweenlands.world.biomes.feature.FlatLandNoiseFeature;
 import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
+import thebetweenlands.world.biomes.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.SurfaceSpawnEntry;
 
 public class BiomeSwampLands
 extends BiomeGenBaseBetweenlands {
@@ -42,7 +43,7 @@ extends BiomeGenBaseBetweenlands {
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x184220;
 
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 15, 2, 6));
+		/*spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 15, 2, 6));
 		spawnableCreatureList.add(new SpawnListEntry(EntityGecko.class, 30, 1, 3));
 		spawnableCreatureList.add(new SpawnListEntry(EntityMireSnail.class, 30, 1, 2));
 
@@ -56,7 +57,22 @@ extends BiomeGenBaseBetweenlands {
 		spawnableMonsterList.add(new SpawnListEntry(EntityLeech.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityTarBeast.class, 15, 1, 1));
 		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));
+		spawnableMonsterList.add(new SpawnListEntry(EntityBloodSnail.class, 15, 1, 1));*/
+
+		//TODO: Tweak weights
+		
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 80).setGroupSize(1, 5));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityMireSnail.class, (short) 60).setGroupSize(1, 5));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 60).setGroupSize(3, 5));
+
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityTarBeast.class, (short) 20).setHostile(true));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
+
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 40).setHostile(true));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 30).setHostile(true));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 3).setHostile(true));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBloodSnail.class, (short) 25).setHostile(true));
 	}
 
 	/*@Override

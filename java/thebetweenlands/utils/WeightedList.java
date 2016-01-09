@@ -30,7 +30,7 @@ public class WeightedList<T extends IWeightProvider> extends ArrayList<T> {
 		return b;
 	}
 
-	private void recalculateWeight() {
+	public void recalculateWeight() {
 		totalWeight = 0;
 		for (T obj : this)
 			totalWeight += obj.getWeight();

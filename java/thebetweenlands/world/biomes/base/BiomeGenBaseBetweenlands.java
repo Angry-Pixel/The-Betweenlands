@@ -13,12 +13,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.tree.BlockBLSapling;
 import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
+import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
 
 /**
  *
@@ -39,7 +39,9 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 	protected byte underLayerBlockHeight = 2;
 	protected boolean isNoiseGenInitialized = false;
 	protected List<BiomeNoiseFeature> featureList = new ArrayList<BiomeNoiseFeature>();
+	protected List<BLSpawnEntry> blSpawnEntries = new ArrayList<BLSpawnEntry>();
 	private short biomeWeight;
+
 	/**
 	 * Creates a new Betweenlands biome.
 	 *
@@ -59,6 +61,14 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.spawnableWaterCreatureList.clear();
 		//this.setDisableRain();
 		this.setTemperatureRainfall(2.0f, 0.0f);
+	}
+
+	/**
+	 * Returns the BL spawn entries
+	 * @return
+	 */
+	public List<BLSpawnEntry> getSpawnEntries() {
+		return this.blSpawnEntries;
 	}
 
 	/**
