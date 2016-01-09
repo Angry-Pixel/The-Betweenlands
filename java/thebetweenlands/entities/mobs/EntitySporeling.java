@@ -1,9 +1,7 @@
 package thebetweenlands.entities.mobs;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -18,7 +16,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.ManualManager;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public boolean isFalling;
@@ -77,31 +74,12 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		int by = MathHelper.floor_double(this.posY);
-		int bx = MathHelper.floor_double(this.posX);
-		int bz = MathHelper.floor_double(this.posZ);
-		for(int yo = 0; yo < 16; yo++) {
-			Block cb = this.worldObj.getBlock(bx, by - yo, bz);
-			if(cb == BLBlockRegistry.treeFungus) {
-				by = by - yo + 1;
-				break;
-			}
-		}
-		this.posY = by;
-		this.setPosition(this.posX, this.posY, this.posZ);
 		boolean canSpawn = super.getCanSpawnHere() && isOnShelfFungus();
 		return canSpawn;
 	}
 
 	private boolean isOnShelfFungus() {
 		return worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(boundingBox.minY) - 1, MathHelper.floor_double(posZ)) == BLBlockRegistry.treeFungus;
-	}
-
-	//To prevent wrong spawns on chunk generate because the spawning system is broken and doesn't check getCanSpawnHere() on chunk generate...
-	@Override
-	public IEntityLivingData onSpawnWithEgg(IEntityLivingData entityData) {
-		if(!this.isOnShelfFungus()) this.setDead();
-		return super.onSpawnWithEgg(entityData);
 	}
 
 	@Override

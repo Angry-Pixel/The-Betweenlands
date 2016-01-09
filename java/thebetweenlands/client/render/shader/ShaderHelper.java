@@ -50,7 +50,7 @@ public class ShaderHelper {
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
 			if(this.isRequired()) {
-				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup) {
+				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.needsReload()) {
 					MainShader shaderWrapper = this.currentShader;
 					if(shaderWrapper != null && this.needsReload()) {
 						try {

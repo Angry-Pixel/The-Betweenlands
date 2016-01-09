@@ -35,7 +35,6 @@ import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
 import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.items.tools.ItemSwordBL;
-import thebetweenlands.manual.ManualManager;
 import thebetweenlands.recipes.BLMaterials;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
@@ -60,7 +59,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public EntityTarBeast(World world) {
 		super(world);
 		setSize(1.25F, 2F);
-		
+
 		this.tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 		this.tasks.addTask(2, new EntityAIWander(this, 1D));
 		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -95,8 +94,6 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	public boolean getCanSpawnHere() {
 		boolean isDifficultyValid = this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL;
-		//Couldn't find any better way to make them spawn on liquid tar
-		this.setLocationAndAngles(this.posX + 8 - this.rand.nextInt(16), this.posY + 8 - this.rand.nextInt(16), this.posZ + 8 - this.rand.nextInt(16), this.rotationYaw, this.rotationPitch);
 		if(isDifficultyValid) {
 			int bx = MathHelper.floor_double(posX);
 			int by = MathHelper.floor_double(posY);
@@ -241,7 +238,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			} else {
 				this.stepHeight = 0.75F;
 			}
-			
+
 			if(this.shedCooldown > 0 && this.getEntityToAttack() != null) {
 				this.shedCooldown--;
 			}

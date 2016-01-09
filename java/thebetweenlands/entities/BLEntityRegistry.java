@@ -76,7 +76,7 @@ public class BLEntityRegistry
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name) {
-		EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.instance, 64, 5, true);
+		EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.instance, 64, 3, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

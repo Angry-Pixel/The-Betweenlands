@@ -75,6 +75,7 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.spawning.MobSpawnHandler;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.world.storage.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -187,6 +188,7 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
 		BLEntityPropertiesRegistry.HANDLER.registerHandler();
 		FMLCommonHandler.instance().bus().register(MobSpawnHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

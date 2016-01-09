@@ -31,16 +31,19 @@ import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.utils.WeightedList;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 
 public class MobSpawnHandler {
 	public static MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	private static final int HARD_ENTITY_LIMIT = 400;
-	private static final byte SPAWN_CHUNK_DISTANCE = 6;
+	private static final byte SPAWN_CHUNK_DISTANCE = 8;
+	private static final byte SPAWN_CHUNK_RIM = 4;
 	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 40;
 	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 20;
 	private static final int MAX_SPAWNS_PER_ATTEMPT = 4;
+	private static final float MAX_ENTITIES_PER_CHUNK = 2.8F;
 
 	/**
 	 * Default spawning weight is 100
@@ -76,9 +79,10 @@ public class MobSpawnHandler {
 		 * @param x
 		 * @param y
 		 * @param z
+		 * @param block
 		 * @param surfaceBlock
 		 */
-		protected boolean canSpawn(World world, int x, int y, int z, Block surfaceBlock) {
+		protected boolean canSpawn(World world, Chunk chunk, int x, int y, int z, Block block, Block surfaceBlock) {
 			return surfaceBlock.isNormalCube();
 		}
 
@@ -102,6 +106,13 @@ public class MobSpawnHandler {
 			return this;
 		}
 
+		/**
+		 * Sets the desired minimum and maximum group size. The minimum desired group size
+		 * may not always be achieved depending on the area around the initial spawn point.
+		 * @param min
+		 * @param max
+		 * @return
+		 */
 		public final BLSpawnEntry setGroupSize(int min, int max) {
 			if(max < min) {
 				throw new RuntimeException("Maximum group size cannot be smaller than minimum group size!");
@@ -194,9 +205,8 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			//TODO:
-			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning") && world.getTotalWorldTime() % 20 == 0) {
-				long start = System.nanoTime();
+			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning")) {
+				//long start = System.nanoTime();
 				this.spawnMobs(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
 			}
@@ -204,28 +214,29 @@ public class MobSpawnHandler {
 	}
 
 	private void spawnMobs(WorldServer world) {
+		if(world.provider instanceof WorldProviderBetweenlands == false) 
+			return;
+
 		this.updateEntityCounts(world);
 		int totalEntityCount = 0;
 		for(int count : this.entityCounts.values()) {
 			totalEntityCount += count;
 		}
-		if(totalEntityCount >= HARD_ENTITY_LIMIT) {
+		if(totalEntityCount >= HARD_ENTITY_LIMIT)
 			//Hard limit reached, don't spawn any more entities
 			return;
-		}
 
 		this.updateSpawnerChunks(world);
 
-		if(this.eligibleChunksForSpawning.size() == 0) {
+		if(this.eligibleChunksForSpawning.size() == 0)
 			//No spawning chunks
 			return;
-		}
 
 		List<ChunkCoordIntPair> spawnerChunks = new ArrayList<ChunkCoordIntPair>(this.eligibleChunksForSpawning.keySet().size() / (SPAWN_CHUNK_DISTANCE*SPAWN_CHUNK_DISTANCE) * (SPAWN_CHUNK_DISTANCE-1) * 4);
 
-		if(totalEntityCount >= this.eligibleChunksForSpawning.size()) {
+		if(totalEntityCount >= this.eligibleChunksForSpawning.size() * MAX_ENTITIES_PER_CHUNK)
+			//Too many entities, don't spawn any more entities
 			return;
-		}
 
 		//Add valid chunks
 		for(Entry<ChunkCoordIntPair, Boolean> chunkEntry : this.eligibleChunksForSpawning.entrySet()) {
@@ -236,12 +247,14 @@ public class MobSpawnHandler {
 
 		int attempts = 0, chunkSpawnedEntities = 0;
 
+		boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
+		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
+
 		for(ChunkCoordIntPair chunkPos : spawnerChunks) {
 			while(attempts++ < SPAWNING_ATTEMPTS_PER_CHUNK && chunkSpawnedEntities < MAX_SPAWNS_PER_ATTEMPT) {
 				ChunkPosition spawnPos = this.getRandomSpawnPosition(world, chunkPos);
 				BiomeGenBase biome = world.getBiomeGenForCoords(spawnPos.chunkPosX, spawnPos.chunkPosZ);
 
-				//TODO:
 				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof BiomeGenBaseBetweenlands == false) 
 					continue;
 
@@ -249,9 +262,6 @@ public class MobSpawnHandler {
 
 				if(centerSpawnBlock.isNormalCube()) 
 					continue;
-
-				boolean spawnHostiles = true;
-				boolean spawnAnimals = true;
 
 				//Get possible spawn entries and update weights
 				List<BLSpawnEntry> biomeSpawns = ((BiomeGenBaseBetweenlands)biome).getSpawnEntries();
@@ -291,8 +301,6 @@ public class MobSpawnHandler {
 					desiredGroupSize -= foundGroupEntities.size();
 				}
 
-				//System.out.println(spawnPos.chunkPosY);
-
 				if(desiredGroupSize > 0) {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = SPAWNING_ATTEMPTS_PER_GROUP + desiredGroupSize * 2;
@@ -308,8 +316,6 @@ public class MobSpawnHandler {
 
 							if(spawnBlock.isNormalCube())
 								continue;
-
-							//System.out.println("Pr: " + spawnPos.chunkPosY);
 
 							int spawnSegmentY = entitySpawnPos.chunkPosY / 16;
 							Chunk spawnChunk = world.getChunkFromBlockCoords(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosZ);
@@ -335,13 +341,9 @@ public class MobSpawnHandler {
 								//Entity reached chunk limit
 								continue;
 
-							//System.out.println("Po: " + spawnPos.chunkPosY);
+							Block surfaceBlock = spawnChunk.getBlock(entitySpawnPos.chunkPosX - spawnChunk.xPosition * 16, entitySpawnPos.chunkPosY - 1, entitySpawnPos.chunkPosZ - spawnChunk.zPosition * 16);
 
-							Block surfaceBlock = world.getBlock(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY - 1, entitySpawnPos.chunkPosZ);
-
-							if(spawnEntry.canSpawn(world, entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, surfaceBlock)) {
-								//System.out.println("Cs: " + spawnPos.chunkPosY);
-
+							if(spawnEntry.canSpawn(world, spawnChunk, entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, spawnBlock, surfaceBlock)) {
 								double sx = entitySpawnPos.chunkPosX + 0.5D;
 								double sy = entitySpawnPos.chunkPosY;
 								double sz = entitySpawnPos.chunkPosZ + 0.5D;
@@ -355,8 +357,6 @@ public class MobSpawnHandler {
 									if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere())) {
 										groupSpawnedEntities++;
 										chunkSpawnedEntities++;
-
-										//System.out.println(newEntity);
 
 										world.spawnEntityInWorld(newEntity);
 
@@ -387,12 +387,16 @@ public class MobSpawnHandler {
 	private ChunkPosition getRandomSpawnPosition(World world, ChunkPosition centerPos, int radius) {
 		return new ChunkPosition(
 				centerPos.chunkPosX + world.rand.nextInt(radius*2) - radius,
-				centerPos.chunkPosY + world.rand.nextInt(4) - 2,
+				MathHelper.clamp_int(centerPos.chunkPosY + world.rand.nextInt(4) - 2, 1, world.getHeight()),
 				centerPos.chunkPosZ + world.rand.nextInt(radius*2) - radius);
 	}
 
 	private Map<ChunkCoordIntPair, Boolean> eligibleChunksForSpawning = new HashMap<ChunkCoordIntPair, Boolean>();
 
+	/**
+	 * Clears eligibleChunksForSpawning, finds chunks entities can spawn in and adds them to eligibleChunksForSpawning
+	 * @param world
+	 */
 	private void updateSpawnerChunks(World world) {
 		this.eligibleChunksForSpawning.clear();
 		for(EntityPlayer player : (List<EntityPlayer>) world.playerEntities) {
@@ -403,11 +407,12 @@ public class MobSpawnHandler {
 					int cx = pcx + cox;
 					int cz = pcz + coz;
 					ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(cx, cz);
-					boolean isOuterChunk = cox == -SPAWN_CHUNK_DISTANCE || cox == SPAWN_CHUNK_DISTANCE || coz == -SPAWN_CHUNK_DISTANCE || coz == SPAWN_CHUNK_DISTANCE;
-					if(!isOuterChunk) {
+					boolean isOuterChunk = (Math.abs(cox - SPAWN_CHUNK_DISTANCE) <= SPAWN_CHUNK_RIM) || (Math.abs(coz - SPAWN_CHUNK_DISTANCE) <= SPAWN_CHUNK_RIM);
+					if(isOuterChunk) {
+						if(!this.eligibleChunksForSpawning.containsKey(chunkPos))
+							this.eligibleChunksForSpawning.put(chunkPos, true);
+					} else {
 						this.eligibleChunksForSpawning.put(chunkPos, false);
-					} else if(!this.eligibleChunksForSpawning.containsKey(chunkPos)) {
-						this.eligibleChunksForSpawning.put(chunkPos, true);
 					}
 				}
 			}

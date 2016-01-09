@@ -1,13 +1,16 @@
 package thebetweenlands.world.storage;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraftforge.event.world.WorldEvent;
 
 public abstract class WorldDataBase extends WorldSavedData {
 	private World world;
@@ -66,7 +69,7 @@ public abstract class WorldDataBase extends WorldSavedData {
 		}
 	}
 
-	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new WeakHashMap<WorldDataTypePair, WorldDataBase>();
+	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new HashMap<WorldDataTypePair, WorldDataBase>();
 
 	private static WorldDataBase getMatchingData(World world, Class<? extends WorldDataBase> clazz) {
 		for(Entry<WorldDataTypePair, WorldDataBase> cacheEntry : CACHE.entrySet()) {
@@ -106,5 +109,22 @@ public abstract class WorldDataBase extends WorldSavedData {
 		}
 		CACHE.put(new WorldDataTypePair(world, clazz), result);
 		return (T) result;
+	}
+
+	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
+
+	public static class WorldUnloadHandler {
+		private WorldUnloadHandler(){}
+
+		@SubscribeEvent
+		public void onWorldUnload(WorldEvent.Unload event) {
+			Iterator<Entry<WorldDataTypePair, WorldDataBase>> cacheIT = CACHE.entrySet().iterator();
+			while(cacheIT.hasNext()) {
+				World world = cacheIT.next().getKey().world;
+				if(world.equals(event.world)) {
+					cacheIT.remove();
+				}
+			}
+		}
 	}
 }

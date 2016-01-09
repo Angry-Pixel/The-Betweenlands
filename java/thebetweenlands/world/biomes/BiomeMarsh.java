@@ -17,6 +17,9 @@ import thebetweenlands.world.biomes.decorators.BiomeDecoratorMarsh;
 import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlands;
 import thebetweenlands.world.biomes.feature.PatchNoiseFeature;
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
+import thebetweenlands.world.biomes.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.TreeSpawnEntry;
 
 public class BiomeMarsh
 extends BiomeGenBaseBetweenlands
@@ -41,13 +44,12 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new PatchNoiseFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BLBlockRegistry.mud));
 		this.waterColorMultiplier = 0x485E18;
 
-		spawnableCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5));
 
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 100, 2, 5));
-
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityPeatMummy.class, 14, 1, 1));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setGroupRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityPeatMummy.class, (short) 20).setHostile(true).setGroupRadius(20.0D));
 	}
 
 	private int[] recalculatedFogColor = new int[]{(int) 255, (int) 255, (int) 255};

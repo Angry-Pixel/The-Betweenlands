@@ -6,7 +6,6 @@ import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntitySporeling;
-import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
@@ -16,6 +15,9 @@ import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
 import thebetweenlands.world.biomes.feature.CragSpiresNoiseFeature;
 import thebetweenlands.world.biomes.feature.DeepWaterNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
+import thebetweenlands.world.biomes.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.TreeSpawnEntry;
 
 public class BiomeDeepWaters
 extends BiomeGenBaseBetweenlands
@@ -39,15 +41,12 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature())
 		.addFeature(new CragSpiresNoiseFeature());
 
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 10));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5));
 
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 5, 1, 1));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 100, 2, 5));
-
-		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
-
-		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 20, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 35).setHostile(true).setGroupRadius(12.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setGroupRadius(30.0D));
 	}
 }

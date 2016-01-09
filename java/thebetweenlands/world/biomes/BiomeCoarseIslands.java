@@ -1,6 +1,5 @@
 package thebetweenlands.world.biomes;
 
-import net.minecraft.block.Block;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -18,6 +17,9 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 import thebetweenlands.world.biomes.feature.AlgaeNoiseFeature;
 import thebetweenlands.world.biomes.feature.CoarseIslandNoiseFeature;
 import thebetweenlands.world.biomes.feature.SiltNoiseFeature;
+import thebetweenlands.world.biomes.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.TreeSpawnEntry;
 
 public class BiomeCoarseIslands
 extends BiomeGenBaseBetweenlands
@@ -40,18 +42,16 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x1b3944;
 
-		spawnableCreatureList.add(new SpawnListEntry(EntityDragonFly.class, 35, 2, 4));
-		spawnableCreatureList.add(new SpawnListEntry(EntityFirefly.class, 25, 1, 3));
-		spawnableCreatureList.add(new SpawnListEntry(EntityGecko.class, 35, 1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 35));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 40).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5));
 
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityLurker.class, 10, 1, 1));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityAngler.class, 25, 1, 2));
-		spawnableWaterCreatureList.add(new SpawnListEntry(EntityBlindCaveFish.class, 100, 2, 5));
-
-		spawnableCaveCreatureList.add(new SpawnListEntry(EntitySporeling.class, 200, 5, 8));
-
-		spawnableMonsterList.add(new SpawnListEntry(EntitySwampHag.class, 15, 1, 1));
-		spawnableMonsterList.add(new SpawnListEntry(EntityWight.class, 5, -1, -1));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 35).setHostile(true).setGroupRadius(12.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 130).setHostile(true));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setGroupRadius(30.0D));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;

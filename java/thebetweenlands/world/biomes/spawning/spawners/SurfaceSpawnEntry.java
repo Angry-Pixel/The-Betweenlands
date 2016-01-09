@@ -3,6 +3,7 @@ package thebetweenlands.world.biomes.spawning.spawners;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
@@ -34,7 +35,7 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected boolean canSpawn(World world, int x, int y, int z, Block surfaceBlock) {
-		return surfaceBlock.isNormalCube() && SurfaceType.MIXED.matchBlock(surfaceBlock);
+	protected boolean canSpawn(World world, Chunk chunk, int x, int y, int z, Block spawnBlock, Block surfaceBlock) {
+		return surfaceBlock.isNormalCube() || SurfaceType.MIXED.matchBlock(surfaceBlock);
 	}
 }

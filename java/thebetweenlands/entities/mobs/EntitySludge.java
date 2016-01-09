@@ -18,7 +18,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.ControlledAnimation;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.ManualManager;
 
 public class EntitySludge extends EntityMob implements IEntityBL {
 	private int sludgeJumpDelay;
@@ -143,7 +142,11 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 			}
 			isJumping = true;
 			moveStrafing = getAttackTarget() == null ? (1.0F - rand.nextFloat() * 2.0F) : ((1.0F - rand.nextFloat() * 2.0F) / 10.0F);
-			moveForward = 1;
+			if(this.getAttackTarget() != null) {
+				this.moveFlying(0, 0.65F, 1);
+			} else {
+				moveForward = 1;
+			}
 			playSound("mob.slime.big", 1F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 		} else {
 			isJumping = false;
