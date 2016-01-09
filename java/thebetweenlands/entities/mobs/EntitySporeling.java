@@ -23,6 +23,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		super(world);
 		setSize(0.3F, 0.6F);
 		stepHeight = 1.0F;
+		getNavigator().setCanSwim(true);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAvoidEntity(this, EntityLivingBase.class, 10.0F, 0.7D, 0.5D));
@@ -53,14 +54,16 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (!onGround && motionY < 0D && worldObj.getBlock((int)posX, (int)posY - 1, (int)posZ) == Blocks.air) {
-			motionY *= 0.7D;
-			renderYawOffset += 10;
-			setIsFalling(true);
+		if(!this.isInWater()) {
+			if (!onGround && motionY < 0D && worldObj.getBlock((int)posX, (int)posY - 1, (int)posZ) == Blocks.air) {
+				motionY *= 0.7D;
+				renderYawOffset += 10;
+				setIsFalling(true);
+			}
+			else
+				if(getIsFalling())
+					setIsFalling(false);
 		}
-		else
-			if(getIsFalling())
-				setIsFalling(false);
 		super.onUpdate();
 	}
 
@@ -74,7 +77,8 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		boolean canSpawn = super.getCanSpawnHere() && isOnShelfFungus();
+		boolean canSpawn = this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && isOnShelfFungus();
+		System.out.println("tried: " + canSpawn);
 		return canSpawn;
 	}
 
@@ -115,12 +119,12 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected boolean canDespawn() {
-		return true;
+	public String pageName() {
+		return "sporeling";
 	}
 
 	@Override
-	public String pageName() {
-		return "sporeling";
+	protected boolean canDespawn() {
+		return false;
 	}
 }

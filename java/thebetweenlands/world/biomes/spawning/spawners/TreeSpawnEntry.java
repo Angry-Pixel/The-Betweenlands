@@ -27,7 +27,7 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	protected void update(World world, int x, int y, int z) {
-		int treeHeight = WorldProviderBetweenlands.LAYER_HEIGHT + 10;
+		int treeHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 		short spawnWeight = this.baseWeight;
 		if(y < treeHeight) {
 			spawnWeight = 0;

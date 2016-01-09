@@ -164,4 +164,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public String pageName() {
 		return "wight";
 	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 }

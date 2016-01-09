@@ -20,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import thebetweenlands.blocks.container.BlockBLFurnace;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
@@ -245,7 +246,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 			else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
 				furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(ItemGeneric.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
+			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[3] != null) {
 					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
 					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {

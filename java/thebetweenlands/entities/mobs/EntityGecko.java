@@ -196,4 +196,9 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	public String pageName() {
 		return "gecko";
 	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 }

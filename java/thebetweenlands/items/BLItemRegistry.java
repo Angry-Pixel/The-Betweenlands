@@ -55,6 +55,7 @@ import thebetweenlands.items.misc.ItemBLGenericSeed;
 import thebetweenlands.items.misc.ItemBLRecord;
 import thebetweenlands.items.misc.ItemGem;
 import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemHLBook;
 import thebetweenlands.items.misc.ItemLifeCrystal;
 import thebetweenlands.items.misc.ItemManual;
@@ -82,7 +83,11 @@ import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterials;
 
+
 public class BLItemRegistry {
+	private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
+	private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
+
 	public static final List<Item> ITEMS = new ArrayList<Item>();
 
 	// BASIC MATERIALS
@@ -310,5 +315,40 @@ public class BLItemRegistry {
 				//add fuels here
 			}
 		});
+
+		ORES.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.octineOre)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.syrmoriteOre)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.sulfurOre)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.valoniteOre)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BLBlockRegistry.lifeCrystalOre)));
+
+		INGOTS.add(new ItemStack(itemsGeneric, 1, EnumItemGeneric.OCTINE_INGOT.id));
+		INGOTS.add(new ItemStack(itemsGeneric, 1, EnumItemGeneric.SYRMORITE_INGOT.id));
+		INGOTS.add(new ItemStack(itemsGeneric, 1, EnumItemGeneric.SULFUR.id));
+		INGOTS.add(new ItemStack(itemsGeneric, 1, EnumItemGeneric.VALONITE_SHARD.id));
+		INGOTS.add(new ItemStack(lifeCrystal));
+	}
+
+	private static boolean containsItem(List<ItemStack> lst, ItemStack stack) {
+		for(ItemStack s : lst) {
+			if(s.getItem() == stack.getItem() && s.getItemDamage() == stack.getItemDamage())
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isIngotFromOre(ItemStack input, ItemStack output) {
+		if(input == null || output == null) return false;
+		return isOre(input) && isIngot(output);
+	}
+
+	public static boolean isOre(ItemStack stack) {
+		if(stack == null) return false;
+		return containsItem(ORES, stack);
+	}
+
+	public static boolean isIngot(ItemStack stack) {
+		if(stack == null) return false;
+		return containsItem(INGOTS, stack);
 	}
 }

@@ -7,16 +7,25 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemGeneric extends Item implements IManualEntryItem {
@@ -138,17 +147,135 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		return false;
 	}
 
-	/*@Override
+	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		player.setItemInUse(stack, getMaxItemUseDuration(stack));
+		if(stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.id)
+			player.setItemInUse(stack, getMaxItemUseDuration(stack));
+		if(stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id) {
+			Vec3 playerPos = Vec3.createVectorHelper(player.posX, player.posY + (player.worldObj.isRemote ? 0 : player.getEyeHeight()), player.posZ);
+			Vec3 rayDir = player.getLookVec();
+			Vec3 rayTraceEnd = playerPos.addVector(rayDir.xCoord*5, rayDir.yCoord*5, rayDir.zCoord*5);
+			MovingObjectPosition pos = player.worldObj.rayTraceBlocks(playerPos, rayTraceEnd);
+			if(pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
+				ForgeDirection dir = ForgeDirection.getOrientation(pos.sideHit);
+				int bx = pos.blockX + dir.offsetX;
+				int by = pos.blockY + dir.offsetY;
+				int bz = pos.blockZ + dir.offsetZ;
+				boolean hasTinder = false;
+				boolean isBlockTinder = false;
+				Block block = player.worldObj.getBlock(pos.blockX, pos.blockY, pos.blockZ);
+				if(this.isTinder(block, null)) {
+					hasTinder = true;
+					isBlockTinder = true;
+				} else {
+					List<EntityItem> items = player.worldObj.getEntitiesWithinAABB(EntityItem.class, 
+							AxisAlignedBB.getBoundingBox(bx, by, bz, bx+1, by+1, bz+1));
+					for(EntityItem entityItem : items) {
+						ItemStack entityItemStack = entityItem.getEntityItem();
+						if(this.isTinder(null, entityItemStack)) {
+							hasTinder = true;
+							break;
+						}
+					}
+				}
+				if((hasTinder || isBlockTinder) && block != Blocks.fire) {
+					player.setItemInUse(stack, getMaxItemUseDuration(stack));
+				}
+			}
+		}
 		return stack;
-	}*/
+	}
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 		if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.id)
 			return EnumAction.eat;
+		if(stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id)
+			return EnumAction.bow;
 		return null;
+	}
+
+	@Override
+	public void onUsingTick(ItemStack stack, EntityPlayer player, int count) {
+		if(stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id) {
+			Vec3 playerPos = Vec3.createVectorHelper(player.posX, player.posY + (player.worldObj.isRemote ? 0 : player.getEyeHeight()), player.posZ);
+			Vec3 rayDir = player.getLookVec();
+			Vec3 rayTraceEnd = playerPos.addVector(rayDir.xCoord*5, rayDir.yCoord*5, rayDir.zCoord*5);
+			MovingObjectPosition pos = player.worldObj.rayTraceBlocks(playerPos, rayTraceEnd);
+			if(pos != null && pos.typeOfHit == MovingObjectType.BLOCK) {
+				ForgeDirection dir = ForgeDirection.getOrientation(pos.sideHit);
+				int bx = pos.blockX + dir.offsetX;
+				int by = pos.blockY + dir.offsetY;
+				int bz = pos.blockZ + dir.offsetZ;
+				boolean hasTinder = false;
+				boolean isBlockTinder = false;
+				Block block = player.worldObj.getBlock(pos.blockX, pos.blockY, pos.blockZ);
+				if(this.isTinder(block, null)) {
+					hasTinder = true;
+					isBlockTinder = true;
+				} else {
+					List<EntityItem> items = player.worldObj.getEntitiesWithinAABB(EntityItem.class, 
+							AxisAlignedBB.getBoundingBox(bx, by, bz, bx+1, by+1, bz+1));
+					for(EntityItem entityItem : items) {
+						ItemStack entityItemStack = entityItem.getEntityItem();
+						if(this.isTinder(null, entityItemStack)) {
+							hasTinder = true;
+							break;
+						}
+					}
+				}
+				if(hasTinder) {
+					if(player.worldObj.rand.nextInt(count / 10 + 1) == 0) {
+						player.worldObj.spawnParticle("flame", 
+								pos.hitVec.xCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 
+								pos.hitVec.yCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 
+								pos.hitVec.zCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
+						player.worldObj.spawnParticle("smoke", 
+								pos.hitVec.xCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 
+								pos.hitVec.yCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 
+								pos.hitVec.zCoord+player.worldObj.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
+					}
+					if(!player.worldObj.isRemote) {
+						if(count == 1) {
+							if(isBlockTinder) {
+								player.worldObj.setBlock(pos.blockX, pos.blockY, pos.blockZ, Blocks.fire);
+							} else {
+								if(player.worldObj.getBlock(bx, by, bz).getMaterial().isReplaceable()) {
+									player.worldObj.setBlock(bx, by, bz, Blocks.fire);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		super.onUsingTick(stack, player, count);
+	}
+
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean debug) {
+		if(stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id)
+			info.add(StatCollector.translateToLocal("octine.fire"));
+		super.addInformation(stack, player, info, debug);
+	}
+
+	private boolean isTinder(Block block, ItemStack stack) {
+		if(block != null) {
+			return block == BLBlockRegistry.caveMoss || block == BLBlockRegistry.wallPlants;
+		}
+		if(stack != null) {
+			if(stack.getItem() instanceof ItemBlock) {
+				ItemBlock itemBlock = (ItemBlock) stack.getItem();
+				return this.isTinder(itemBlock.field_150939_a, null);
+			}
+			return stack.getItem() == BLItemRegistry.itemsGenericPlantDrop &&
+					(stack.getItemDamage() == EnumItemPlantDrop.CAVE_MOSS.id ||
+					stack.getItemDamage() == EnumItemPlantDrop.MOSS.id ||
+					stack.getItemDamage() == EnumItemPlantDrop.LICHEN.id);
+		}
+		return false;
 	}
 
 	@Override
@@ -212,31 +339,4 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 		public static final EnumItemGeneric[] VALUES = values();
 	}
-
-	public static boolean isIngotFromOre(ItemStack input, ItemStack output) {
-		if(input == null || output == null) return false;
-		return isOre(input) && isIngot(output);
-	}
-
-	public static boolean isOre(ItemStack stack) {
-		if(stack == null) return false;
-		return stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.octineOre)
-				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.syrmoriteOre)
-				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.sulfurOre)
-				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.valoniteOre)
-				|| stack.getItem() == Item.getItemFromBlock(BLBlockRegistry.lifeCrystalOre);
-	}
-
-	public static boolean isIngot(ItemStack stack) {
-		if(stack == null) return false;
-		return (stack.getItem() instanceof ItemGeneric 
-				&& (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id
-				|| stack.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.id
-				|| stack.getItemDamage() == EnumItemGeneric.SULFUR.id
-				|| stack.getItemDamage() == EnumItemGeneric.VALONITE_SHARD.id))
-				|| stack.getItem() == BLItemRegistry.lifeCrystal;
-	}
-
-	// Slimy Bonemeal
-
 }

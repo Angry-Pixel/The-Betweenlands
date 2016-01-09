@@ -57,7 +57,7 @@ extends BiomeGenBaseBetweenlands
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setHostile(true).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 130).setHostile(true));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setGroupRadius(30.0D));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySiltCrab.class, (short) 30).setHostile(true).setGroupSize(2, 8));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySiltCrab.class, (short) 60).setHostile(true).setGroupSize(2, 8));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 30).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
 	}

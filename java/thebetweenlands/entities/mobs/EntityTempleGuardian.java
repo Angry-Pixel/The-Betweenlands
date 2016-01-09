@@ -32,10 +32,8 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 
 	@Override
 	public IEntityLivingData onSpawnWithEgg(IEntityLivingData livingData) {
-		if(this.worldObj.rand.nextFloat() < 0.25F) {
-			int gemType = this.worldObj.rand.nextInt(3);
-			GemCircleHelper.setGem(this, CircleGem.TYPES[gemType]);
-		}
+		int gemType = this.worldObj.rand.nextInt(3);
+		GemCircleHelper.setGem(this, CircleGem.TYPES[gemType]);
 		return super.onSpawnWithEgg(livingData);
 	}
 

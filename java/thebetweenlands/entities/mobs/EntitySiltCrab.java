@@ -116,4 +116,9 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public String pageName() {
 		return "siltCrab";
 	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 }

@@ -37,12 +37,12 @@ import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 public class MobSpawnHandler {
 	public static MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
-	private static final int HARD_ENTITY_LIMIT = 400;
-	private static final byte SPAWN_CHUNK_DISTANCE = 8;
-	private static final byte SPAWN_CHUNK_RIM = 4;
-	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 40;
+	private static final int HARD_ENTITY_LIMIT = 500;
+	private static final byte SPAWN_CHUNK_DISTANCE = 6;
+	private static final byte SPAWN_CHUNK_RIM = 2;
+	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 50;
 	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 20;
-	private static final int MAX_SPAWNS_PER_ATTEMPT = 4;
+	private static final int MAX_SPAWNS_PER_ATTEMPT = 6;
 	private static final float MAX_ENTITIES_PER_CHUNK = 2.8F;
 
 	/**
@@ -51,26 +51,28 @@ public class MobSpawnHandler {
 	public static class BLSpawnEntry implements IWeightProvider {
 		private final Class<? extends EntityLiving> entityType;
 		private final Constructor<? extends EntityLiving> entityCtor;
+		private final short baseWeight;
+		private short weight;
 		private boolean hostile = false;
 		private int subChunkLimit = -1;
 		private int chunkLimit = -1;
 		private int worldLimit = -1;
 		private int minGroupSize = 1, maxGroupSize = 1;
-		private short weight = 100;
 		private double groupRadius = 6.0D;
 
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType) {
+			this(entityType, (short) 100);
+		}
+
+		public BLSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
 			this.entityType = entityType;
 			try {
 				this.entityCtor = this.entityType.getConstructor(World.class);
 			} catch (NoSuchMethodException | SecurityException e) {
 				throw new RuntimeException("Can't find or access entity constructor (World) of entity: " + entityType.getName());
 			}
-		}
-
-		public BLSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-			this(entityType);
 			this.weight = weight;
+			this.baseWeight = weight;
 		}
 
 		/**
@@ -104,6 +106,14 @@ public class MobSpawnHandler {
 		protected final BLSpawnEntry setWeight(short weight) {
 			this.weight = weight;
 			return this;
+		}
+
+		/**
+		 * Returns the initial base weight
+		 * @return
+		 */
+		public final short getBaseWeight() {
+			return this.baseWeight;
 		}
 
 		/**
@@ -263,11 +273,14 @@ public class MobSpawnHandler {
 				if(centerSpawnBlock.isNormalCube()) 
 					continue;
 
+				short totalBaseWeight = 0;
+
 				//Get possible spawn entries and update weights
 				List<BLSpawnEntry> biomeSpawns = ((BiomeGenBaseBetweenlands)biome).getSpawnEntries();
 				List<BLSpawnEntry> possibleSpawns = new ArrayList<BLSpawnEntry>();
 				for(BLSpawnEntry spawnEntry : biomeSpawns) {
 					if(!((spawnEntry.isHostile() && !spawnHostiles) || (!spawnEntry.isHostile() && !spawnAnimals))) {
+						totalBaseWeight += spawnEntry.getBaseWeight();
 						possibleSpawns.add(spawnEntry);
 						spawnEntry.update(world, spawnPos.chunkPosX, spawnPos.chunkPosY, spawnPos.chunkPosZ);
 					}
@@ -278,7 +291,11 @@ public class MobSpawnHandler {
 
 				BLSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(world.rand);
 
-				if(spawnEntry == null || spawnEntry.getWorldLimit() >= 0 && this.entityCounts.get(spawnEntry.entityType) >= spawnEntry.getWorldLimit())
+				int dynamicLimit = (int)((double)HARD_ENTITY_LIMIT / (double)totalBaseWeight * (double)spawnEntry.getBaseWeight());
+
+				int spawnEntityCount = this.entityCounts.get(spawnEntry.entityType);
+
+				if(spawnEntry == null || spawnEntityCount >= dynamicLimit || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
 					//Entity reached world spawning limit
 					continue;
 
@@ -289,12 +306,12 @@ public class MobSpawnHandler {
 
 				if(checkExistingGroups) {
 					List<Entity> foundGroupEntities = world.getEntitiesWithinAABB(entityType, AxisAlignedBB.getBoundingBox(
-							spawnPos.chunkPosX - groupRadius, spawnPos.chunkPosY - 3, spawnPos.chunkPosZ - groupRadius, 
-							spawnPos.chunkPosX + groupRadius, spawnPos.chunkPosY + 3, spawnPos.chunkPosZ + groupRadius));
+							spawnPos.chunkPosX - groupRadius, spawnPos.chunkPosY - 6, spawnPos.chunkPosZ - groupRadius, 
+							spawnPos.chunkPosX + groupRadius, spawnPos.chunkPosY + 6, spawnPos.chunkPosZ + groupRadius));
 					Iterator<Entity> foundGroupEntitiesIT = foundGroupEntities.iterator();
 					while(foundGroupEntitiesIT.hasNext()) {
 						Entity foundEntity = foundGroupEntitiesIT.next();
-						if(foundEntity.getDistance(spawnPos.chunkPosX, foundEntity.posX, spawnPos.chunkPosZ) > groupRadius) {
+						if(foundEntity.getDistance(spawnPos.chunkPosX, foundEntity.posY, spawnPos.chunkPosZ) > groupRadius) {
 							foundGroupEntitiesIT.remove();
 						}
 					}

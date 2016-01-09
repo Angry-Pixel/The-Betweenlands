@@ -703,6 +703,7 @@ compost.compostable=Compostable
 circlegem.green=Green Gem
 circlegem.crimson=Crimson Gem
 circlegem.aqua=Aqua Gem
+octine.fire=Hot enough to set moss on fire
 
 # Commands
 command.tickspeed.success=Set tickspeed to %s ticks per second
