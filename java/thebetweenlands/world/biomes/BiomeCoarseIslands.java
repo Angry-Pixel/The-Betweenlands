@@ -42,16 +42,16 @@ extends BiomeGenBaseBetweenlands
 		.addFeature(new AlgaeNoiseFeature());
 		this.waterColorMultiplier = 0x1b3944;
 
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 36));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 25));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 52).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5));
-		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 36).setGroupSize(1, 2).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 25).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 52).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 32).setHostile(true).setGroupRadius(12.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 32).setHostile(true).setSpawnCheckRadius(16.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 42).setHostile(true).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 110).setHostile(true));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setGroupRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 110).setHostile(true).setSpawnCheckRadius(6.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;

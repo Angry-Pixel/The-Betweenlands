@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.manual.IManualEntryItem;
 
@@ -263,17 +264,26 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	private boolean isTinder(Block block, ItemStack stack) {
 		if(block != null) {
-			return block == BLBlockRegistry.caveMoss || block == BLBlockRegistry.wallPlants;
+			return block == BLBlockRegistry.caveMoss || 
+					block == BLBlockRegistry.wallPlants ||
+					block == BLBlockRegistry.thorns;
 		}
 		if(stack != null) {
 			if(stack.getItem() instanceof ItemBlock) {
 				ItemBlock itemBlock = (ItemBlock) stack.getItem();
 				return this.isTinder(itemBlock.field_150939_a, null);
 			}
-			return stack.getItem() == BLItemRegistry.itemsGenericPlantDrop &&
+			return (stack.getItem() == BLItemRegistry.itemsGenericPlantDrop &&
 					(stack.getItemDamage() == EnumItemPlantDrop.CAVE_MOSS.id ||
 					stack.getItemDamage() == EnumItemPlantDrop.MOSS.id ||
-					stack.getItemDamage() == EnumItemPlantDrop.LICHEN.id);
+					stack.getItemDamage() == EnumItemPlantDrop.LICHEN.id ||
+					stack.getItemDamage() == EnumItemPlantDrop.THORNS.id)) ||
+
+					(stack.getItem() == BLItemRegistry.itemsGenericCrushed &&
+					(stack.getItemDamage() == EnumItemGenericCrushed.GROUND_CAVE_MOSS.id ||
+					stack.getItemDamage() == EnumItemGenericCrushed.GROUND_MOSS.id ||
+					stack.getItemDamage() == EnumItemGenericCrushed.GROUND_LICHEN.id ||
+					stack.getItemDamage() == EnumItemGenericCrushed.GROUND_THORNS.id));
 		}
 		return false;
 	}

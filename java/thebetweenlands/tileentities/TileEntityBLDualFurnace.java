@@ -313,7 +313,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[6] != null) {
-					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
 					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
 						furnaceItemStacks[2].stackSize++;
 					}
@@ -342,7 +342,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[3], furnaceItemStacks[5])) {
 				if(furnaceItemStacks[7] != null) {
-					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
 					if(useFlux && furnaceItemStacks[5].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[5].stackSize + 1 <= furnaceItemStacks[5].getMaxStackSize()) {
 						furnaceItemStacks[5].stackSize++;
 					}

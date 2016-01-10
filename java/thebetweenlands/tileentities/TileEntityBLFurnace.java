@@ -248,7 +248,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 
 			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[3] != null) {
-					boolean useFlux = this.worldObj.rand.nextInt(4) == 0;
+					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
 					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
 						furnaceItemStacks[2].stackSize++;
 					}

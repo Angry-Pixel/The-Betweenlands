@@ -1041,5 +1041,8 @@ manual.wip.page=These pages seem to be glued together with magic glue, it is sai
 
 talisman.noplace=The space is not large enough
 
+# Chat Messages
+chat.flintandsteel=It's too damp to set something on fire with %s
+
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

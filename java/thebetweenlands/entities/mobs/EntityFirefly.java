@@ -5,12 +5,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -45,7 +44,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		if (this.worldObj.isRemote) {
 			return;
 		}
-		
+
 		double dx = this.waypointX - this.posX;
 		double dy = this.waypointY - this.posY;
 		double dz = this.waypointZ - this.posZ;
@@ -179,5 +178,10 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public String pageName() {
 		return "fireFly";
+	}
+
+	@Override
+	protected boolean canDespawn() {
+		return false;
 	}
 }

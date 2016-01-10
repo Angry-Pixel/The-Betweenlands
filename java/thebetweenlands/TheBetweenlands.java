@@ -42,10 +42,10 @@ import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
+import thebetweenlands.event.player.OverworldItemEventHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
-import thebetweenlands.event.player.TorchPlaceEventHandler;
 import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -168,7 +168,7 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new ArmorHandler());
-		MinecraftForge.EVENT_BUS.register(new TorchPlaceEventHandler());
+		MinecraftForge.EVENT_BUS.register(new OverworldItemEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
@@ -188,6 +188,7 @@ public class TheBetweenlands
 		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
 		BLEntityPropertiesRegistry.HANDLER.registerHandler();
 		FMLCommonHandler.instance().bus().register(MobSpawnHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 
 		RecipeHandler.init();
