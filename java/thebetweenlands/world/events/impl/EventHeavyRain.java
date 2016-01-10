@@ -28,11 +28,11 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(102000) + 72000;
+		return rnd.nextInt(110000) + 85000;
 	}
 	@Override
 	public int getOnTime(Random rnd) {
-		return rnd.nextInt(9000) + 5000;
+		return rnd.nextInt(10000) + 8000;
 	}
 
 	@Override

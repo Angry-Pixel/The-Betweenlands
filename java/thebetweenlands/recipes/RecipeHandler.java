@@ -175,7 +175,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 3), "##", "##", "##", '#', "plankWeedwood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', "plankWeedwood"));
 
 		// Stairs, slabs, walls, fences
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricks);

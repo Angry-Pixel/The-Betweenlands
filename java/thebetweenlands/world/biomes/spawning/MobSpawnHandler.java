@@ -39,7 +39,7 @@ public class MobSpawnHandler {
 	public static MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 32;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
 
 	//Maximum distance from the player where mobs can still spawn
 	private static final byte SPAWN_CHUNK_DISTANCE = 6;
