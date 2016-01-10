@@ -76,6 +76,8 @@ public class MobSpawnHandler {
 		private int minGroupSize = 1, maxGroupSize = 1;
 		private double spawnCheckRadius = 16.0D;
 		private double groupSpawnRadius = 6.0D;
+		private int spawningInterval = 0;
+		private long lastSpawn = -1;
 
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType) {
 			this(entityType, (short) 100);
@@ -123,6 +125,24 @@ public class MobSpawnHandler {
 		protected final BLSpawnEntry setWeight(short weight) {
 			this.weight = weight;
 			return this;
+		}
+
+		/**
+		 * Sets the spawning interval
+		 * @param interval
+		 * @return
+		 */
+		public final BLSpawnEntry setSpawningInterval(int interval) {
+			this.spawningInterval = interval;
+			return this;
+		}
+
+		/**
+		 * Returns the spawning interval
+		 * @return
+		 */
+		public final int getSpawningInterval() {
+			return this.spawningInterval;
 		}
 
 		/**
@@ -262,7 +282,7 @@ public class MobSpawnHandler {
 			//long start = System.nanoTime();
 			int spawnedEntities = 0;
 			for(int i = 0; i < CHUNK_GEN_SPAWN_RUNS; i++) {
-				spawnedEntities += this.populateChunk(world, new ChunkCoordIntPair(event.chunkX, event.chunkZ), spawnHostiles, spawnAnimals, false, 
+				spawnedEntities += this.populateChunk(world, new ChunkCoordIntPair(event.chunkX, event.chunkZ), spawnHostiles, spawnAnimals, false, true,
 						SPAWNING_ATTEMPTS_PER_CHUNK, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT);
 			}
 			//System.out.println("Spawned: " + spawnedEntities + " Time: " + (System.nanoTime() - start) / 1000000.0F);
@@ -305,12 +325,12 @@ public class MobSpawnHandler {
 		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
 		for(ChunkCoordIntPair chunkPos : spawnerChunks) {
-			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, 
+			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
 					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT);
 		}
 	}
 
-	private int populateChunk(World world, ChunkCoordIntPair chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks,
+	private int populateChunk(World world, ChunkCoordIntPair chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreTimers,
 			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit) {
 		int attempts = 0, chunkSpawnedEntities = 0;
 		while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
@@ -375,77 +395,89 @@ public class MobSpawnHandler {
 				int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 				int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
-				groupIteration:
-					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
-						ChunkPosition entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor_double(groupSpawnRadius));
+				if(!ignoreTimers) {
+					if(spawnEntry.lastSpawn == -1) {
+						spawnEntry.lastSpawn = world.getTotalWorldTime();
+						continue;
+					}
+					if(world.getTotalWorldTime() - spawnEntry.lastSpawn < spawnEntry.spawningInterval)
+						//Too early, don't spawn yet
+						continue;
+				}
 
-						boolean inChunk = (entitySpawnPos.chunkPosX >> 4) == chunkPos.chunkXPos && (entitySpawnPos.chunkPosZ >> 4) == chunkPos.chunkZPos;
+				while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
+					ChunkPosition entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor_double(groupSpawnRadius));
 
-						if(!loadChunks && !inChunk)
-							continue;
+					boolean inChunk = (entitySpawnPos.chunkPosX >> 4) == chunkPos.chunkXPos && (entitySpawnPos.chunkPosZ >> 4) == chunkPos.chunkZPos;
 
-						if(world.getClosestPlayer(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, 24D) != null)
-							continue;
+					if(!loadChunks && !inChunk)
+						continue;
 
-						Block spawnBlock = world.getBlock(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ);
+					if(world.getClosestPlayer(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, 24D) != null)
+						continue;
 
-						if(spawnBlock.isNormalCube())
-							continue;
+					Block spawnBlock = world.getBlock(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ);
 
-						int spawnSegmentY = entitySpawnPos.chunkPosY / 16;
-						Chunk spawnChunk = world.getChunkFromBlockCoords(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosZ);
-						List<Entity>[] entityLists = spawnChunk.entityLists;
-						int chunkEntityCount = 0;
-						boolean nextGroupAttempt = false;
-						for(int l = 0; l < entityLists.length; l++) {
-							int subChunkEntityCount = 0;
-							for(Entity entity : entityLists[l]) {
-								if(entity.getClass() == spawnEntry.entityType) {
-									subChunkEntityCount++;
-									chunkEntityCount++;
-								}
-							}
-							if(l == spawnSegmentY) {
-								if(spawnEntry.getSubChunkLimit() >= 0 && subChunkEntityCount >= spawnEntry.getSubChunkLimit())
-									//Entity reached sub chunk limit
-									continue groupIteration;
+					if(spawnBlock.isNormalCube())
+						continue;
+
+					int spawnSegmentY = entitySpawnPos.chunkPosY / 16;
+					Chunk spawnChunk = world.getChunkFromBlockCoords(entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosZ);
+					List<Entity>[] entityLists = spawnChunk.entityLists;
+					int chunkEntityCount = 0;
+					boolean nextGroupAttempt = false;
+					for(int l = 0; l < entityLists.length; l++) {
+						int subChunkEntityCount = 0;
+						for(Entity entity : entityLists[l]) {
+							if(entity.getClass() == spawnEntry.entityType) {
+								subChunkEntityCount++;
+								chunkEntityCount++;
 							}
 						}
+						if(l == spawnSegmentY) {
+							if(spawnEntry.getSubChunkLimit() >= 0 && subChunkEntityCount >= spawnEntry.getSubChunkLimit())
+								//Entity reached sub chunk limit
+								continue;
+						}
+					}
 
-						if(spawnEntry.getChunkLimit() >= 0 && chunkEntityCount >= spawnEntry.getChunkLimit())
-							//Entity reached chunk limit
-							continue;
+					if(spawnEntry.getChunkLimit() >= 0 && chunkEntityCount >= spawnEntry.getChunkLimit())
+						//Entity reached chunk limit
+						continue;
 
-						Block surfaceBlock = spawnChunk.getBlock(entitySpawnPos.chunkPosX - spawnChunk.xPosition * 16, entitySpawnPos.chunkPosY - 1, entitySpawnPos.chunkPosZ - spawnChunk.zPosition * 16);
+					Block surfaceBlock = spawnChunk.getBlock(entitySpawnPos.chunkPosX - spawnChunk.xPosition * 16, entitySpawnPos.chunkPosY - 1, entitySpawnPos.chunkPosZ - spawnChunk.zPosition * 16);
 
-						if(spawnEntry.canSpawn(world, spawnChunk, entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, spawnBlock, surfaceBlock)) {
-							double sx = entitySpawnPos.chunkPosX + 0.5D;
-							double sy = entitySpawnPos.chunkPosY;
-							double sz = entitySpawnPos.chunkPosZ + 0.5D;
-							float yaw = world.rand.nextFloat() * 360.0F;
+					if(spawnEntry.canSpawn(world, spawnChunk, entitySpawnPos.chunkPosX, entitySpawnPos.chunkPosY, entitySpawnPos.chunkPosZ, spawnBlock, surfaceBlock)) {
+						double sx = entitySpawnPos.chunkPosX + 0.5D;
+						double sy = entitySpawnPos.chunkPosY;
+						double sz = entitySpawnPos.chunkPosZ + 0.5D;
+						float yaw = world.rand.nextFloat() * 360.0F;
 
-							EntityLiving newEntity = spawnEntry.createEntity(world);
-							if(newEntity != null) {
-								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
+						EntityLiving newEntity = spawnEntry.createEntity(world);
+						if(newEntity != null) {
+							newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
 
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz);
-								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere())) {
-									groupSpawnedEntities++;
-									chunkSpawnedEntities++;
+							Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz);
+							if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere())) {
+								groupSpawnedEntities++;
+								chunkSpawnedEntities++;
 
-									world.spawnEntityInWorld(newEntity);
+								world.spawnEntityInWorld(newEntity);
 
-									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
-										newEntity.onSpawnWithEgg(null);
-									}
+								if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
+									newEntity.onSpawnWithEgg(null);
+								}
 
-									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
-										continue groupIteration;
-									}
+								if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
+									break;
 								}
 							}
 						}
 					}
+				}
+
+				if(!ignoreTimers && groupSpawnedEntities > 0)
+					spawnEntry.lastSpawn = world.getTotalWorldTime();
 			}
 		}
 		return chunkSpawnedEntities;

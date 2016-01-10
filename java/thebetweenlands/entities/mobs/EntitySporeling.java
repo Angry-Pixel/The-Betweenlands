@@ -78,7 +78,6 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	@Override
 	public boolean getCanSpawnHere() {
 		boolean canSpawn = this.worldObj.checkNoEntityCollision(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).isEmpty() && isOnShelfFungus();
-		System.out.println("tried: " + canSpawn);
 		return canSpawn;
 	}
 
