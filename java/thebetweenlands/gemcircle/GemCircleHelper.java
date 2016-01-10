@@ -1,10 +1,9 @@
 package thebetweenlands.gemcircle;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -100,11 +99,16 @@ public class GemCircleHelper {
 				boolean attackerProcd = false;
 				boolean defenderProcd = false;
 
-				attackerProcd |= applyProc(attackerGem, user, user, attackedEntity, attackerProc, defenderProc, damage);
-				attackerProcd |= applyProc(attackerItemGem, user, user, attackedEntity, attackerProc, defenderProc, damage);
-				defenderProcd |= applyProc(attackedGem, attackedEntity, user, attackedEntity, attackerProc, defenderProc, damage);
-				defenderProcd |= applyProc(attackedBlockingItemGem, attackedEntity, user, attackedEntity, attackerProc, defenderProc, damage);
-				HashMap<CircleGem, Integer> gemCountMap = new HashMap<CircleGem, Integer>();
+				//Attacker gems
+				TObjectIntHashMap<CircleGem> attackerGemCounts = new TObjectIntHashMap<CircleGem>();
+				attackerGemCounts.adjustOrPutValue(attackerGem, 1, 1);
+				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
+				for(CircleGem gem : attackerGemCounts.keySet()) {
+					attackerProcd |= applyProc(gem, user, user, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage));
+				}
+
+				//Defender gems
+				TObjectIntHashMap<CircleGem> defenderGemCounts = new TObjectIntHashMap<CircleGem>();
 				if(attackedEntity instanceof EntityPlayer) {
 					InventoryPlayer inventory = ((EntityPlayer)attackedEntity).inventory;
 					ItemStack[] armorInventory = inventory.armorInventory;
@@ -113,21 +117,15 @@ public class GemCircleHelper {
 						if(armorStack != null) {
 							CircleGem armorGem = GemCircleHelper.getGem(armorStack);
 							if(armorGem != CircleGem.NONE) {
-								if(!gemCountMap.containsKey(armorGem)) {
-									gemCountMap.put(armorGem, 1);
-								} else {
-									gemCountMap.put(armorGem, gemCountMap.get(armorGem) + 1);
-								}
+								defenderGemCounts.adjustOrPutValue(armorGem, 1, 1);
 							}
 						}
 					}
 				}
-				for(Entry<CircleGem, Integer> gemCount : gemCountMap.entrySet()) {
-					float strength = 0;
-					for(int i = 0; i < gemCount.getValue(); i++) {
-						strength += damage / Math.pow(1.4F, i);
-					}
-					defenderProcd |= applyProc(gemCount.getKey(), attackedEntity, user, attackedEntity, attackerProc, defenderProc, strength);
+				defenderGemCounts.adjustOrPutValue(attackedGem, 1, 1);
+				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
+				for(CircleGem gem : defenderGemCounts.keySet()) {
+					defenderProcd |= applyProc(gem, attackedEntity, user, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage));
 				}
 
 				if(attackerProcd || defenderProcd) {
@@ -149,6 +147,14 @@ public class GemCircleHelper {
 			}
 		}
 		return damage;
+	}
+
+	private static float getMultipleProcStrength(int procs, float strength) {
+		float ret = 0;
+		for(int i = 0; i < procs; i++) {
+			ret += strength / Math.pow(1.4F, i);
+		}
+		return ret;
 	}
 
 	private static boolean applyProc(CircleGem gem, Entity owner, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
