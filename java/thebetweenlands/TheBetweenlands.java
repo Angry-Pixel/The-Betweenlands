@@ -46,7 +46,6 @@ import thebetweenlands.event.player.OverworldItemEventHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
-import thebetweenlands.event.world.EntitySpawnHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -180,7 +179,6 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(new BonemealEventHandler());
 		MinecraftForge.EVENT_BUS.register(new SiltCrabClipHandler());
 		MinecraftForge.EVENT_BUS.register(new MiscEntitySyncHandler());
-		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);

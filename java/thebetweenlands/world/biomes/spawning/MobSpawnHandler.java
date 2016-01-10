@@ -53,8 +53,8 @@ public class MobSpawnHandler {
 
 	//Maximum spawns per spawning run
 	private static final int MAX_SPAWNS_PER_CHUNK = 6;
-	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * spawnerChunks)
-	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = 2F;
+	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
+	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = 2.4F;
 
 	//World entity limit
 	private static final int HARD_ENTITY_LIMIT = 500;
@@ -241,7 +241,7 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning") && world.getTotalWorldTime() % 5 == 0) {
+			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning") && world.getTotalWorldTime() % 3 == 0) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
@@ -288,16 +288,16 @@ public class MobSpawnHandler {
 			//No spawning chunks
 			return;
 
+		if(totalEntityCount >= this.eligibleChunksForSpawning.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER)
+			//Too many entities, don't spawn any more entities
+			return;
+
 		List<ChunkCoordIntPair> spawnerChunks = new ArrayList<ChunkCoordIntPair>(this.eligibleChunksForSpawning.keySet().size() / (SPAWN_CHUNK_DISTANCE*SPAWN_CHUNK_DISTANCE) * (SPAWN_CHUNK_DISTANCE-1) * 4);
 
 		//Add valid chunks
 		for(Entry<ChunkCoordIntPair, Boolean> chunkEntry : this.eligibleChunksForSpawning.entrySet()) {
 			if(chunkEntry.getValue()) spawnerChunks.add(chunkEntry.getKey());
 		}
-
-		if(totalEntityCount >= spawnerChunks.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER)
-			//Too many entities, don't spawn any more entities
-			return;
 
 		Collections.shuffle(spawnerChunks);
 

@@ -12,16 +12,12 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
  * Prevents entities from spawning in caves.
  */
 public class SurfaceSpawnEntry extends BLSpawnEntry {
-	private final short baseWeight;
-
 	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType) {
 		super(entityType);
-		this.baseWeight = this.getWeight();
 	}
 
 	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
 		super(entityType, weight);
-		this.baseWeight = this.getWeight();
 	}
 
 	@Override
@@ -30,7 +26,7 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 		if(y <= caveHeight) {
 			this.setWeight((short) 0);
 		} else {
-			this.setWeight(this.baseWeight);
+			this.setWeight(this.getBaseWeight());
 		}
 	}
 

@@ -13,22 +13,18 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
  * Used for sporeling.
  */
 public class TreeSpawnEntry extends BLSpawnEntry {
-	private final short baseWeight;
-
 	public TreeSpawnEntry(Class<? extends EntityLiving> entityType) {
 		super(entityType);
-		this.baseWeight = this.getWeight();
 	}
 
 	public TreeSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
 		super(entityType, weight);
-		this.baseWeight = this.getWeight();
 	}
 
 	@Override
 	protected void update(World world, int x, int y, int z) {
 		int treeHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
-		short spawnWeight = this.baseWeight;
+		short spawnWeight = this.getBaseWeight();
 		if(y < treeHeight) {
 			spawnWeight = 0;
 		} else {

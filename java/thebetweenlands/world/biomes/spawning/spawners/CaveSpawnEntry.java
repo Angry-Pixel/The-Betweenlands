@@ -13,25 +13,21 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
  * Mostly used for hostile entities.
  */
 public class CaveSpawnEntry extends BLSpawnEntry {
-	private final short baseWeight;
-
 	public CaveSpawnEntry(Class<? extends EntityLiving> entityType) {
 		super(entityType);
-		this.baseWeight = this.getWeight();
 	}
 
 	public CaveSpawnEntry(Class<? extends EntityLiving> entityType, short baseWeight) {
 		super(entityType, baseWeight);
-		this.baseWeight = this.getWeight();
 	}
 
 	@Override
 	protected void update(World world, int x, int y, int z) {
 		int surfaceHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
-		short spawnWeight = (short) (this.baseWeight / 4);
+		short spawnWeight = (short) (this.getBaseWeight() / 4);
 		if(y < surfaceHeight) {
 			double percentage = 1.0D - ((double)(surfaceHeight - y) / (double)surfaceHeight);
-			spawnWeight = (short) MathHelper.ceiling_double_int(this.baseWeight / (3.0D * percentage + 1.0D));
+			spawnWeight = (short) MathHelper.ceiling_double_int(this.getBaseWeight() / (3.0D * percentage + 1.0D));
 		}
 		this.setWeight(spawnWeight);
 	}
