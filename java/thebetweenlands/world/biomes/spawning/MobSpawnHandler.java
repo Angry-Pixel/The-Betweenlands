@@ -39,7 +39,7 @@ public class MobSpawnHandler {
 	public static MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 18;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 32;
 
 	//Maximum distance from the player where mobs can still spawn
 	private static final byte SPAWN_CHUNK_DISTANCE = 6;
@@ -47,14 +47,14 @@ public class MobSpawnHandler {
 	private static final byte SPAWN_CHUNK_RIM = 2;
 
 	//How many attempts per spawning run
-	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 6;
+	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 4;
 	//How many attempts to reach the desired mob group size
-	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 20;
+	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 30;
 
 	//Maximum spawns per spawning run
 	private static final int MAX_SPAWNS_PER_CHUNK = 6;
-	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
-	private static final float MAX_ENTITIES_PER_CHUNK = 2.6F;
+	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * spawnerChunks)
+	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = 2F;
 
 	//World entity limit
 	private static final int HARD_ENTITY_LIMIT = 500;
@@ -290,14 +290,14 @@ public class MobSpawnHandler {
 
 		List<ChunkCoordIntPair> spawnerChunks = new ArrayList<ChunkCoordIntPair>(this.eligibleChunksForSpawning.keySet().size() / (SPAWN_CHUNK_DISTANCE*SPAWN_CHUNK_DISTANCE) * (SPAWN_CHUNK_DISTANCE-1) * 4);
 
-		if(totalEntityCount >= this.eligibleChunksForSpawning.size() * MAX_ENTITIES_PER_CHUNK)
-			//Too many entities, don't spawn any more entities
-			return;
-
 		//Add valid chunks
 		for(Entry<ChunkCoordIntPair, Boolean> chunkEntry : this.eligibleChunksForSpawning.entrySet()) {
 			if(chunkEntry.getValue()) spawnerChunks.add(chunkEntry.getKey());
 		}
+
+		if(totalEntityCount >= spawnerChunks.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER)
+			//Too many entities, don't spawn any more entities
+			return;
 
 		Collections.shuffle(spawnerChunks);
 
