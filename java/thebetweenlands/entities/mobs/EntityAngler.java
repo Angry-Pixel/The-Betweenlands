@@ -27,7 +27,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	public EntityAngler(World world) {
 		super(world);
-		setSize(0.9F, 0.5F);
+		setSize(1F, 0.7F);
 		setAir(80);
 	}
 

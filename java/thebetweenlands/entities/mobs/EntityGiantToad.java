@@ -28,6 +28,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(5, new EntityAIWander(this, 0));
 		leapOffset = rand.nextInt(29);
+		this.setSize(2F, 1.5F);
 	}
 
 	@Override

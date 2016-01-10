@@ -1,14 +1,10 @@
 package thebetweenlands.gemcircle;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
-import thebetweenlands.items.BLItemRegistry;
 
 public enum CircleGem {
 	CRIMSON("crimson"), GREEN("green"), AQUA("aqua"), NONE("none");
@@ -71,27 +67,37 @@ public enum CircleGem {
 	 * @param defenderProc
 	 * @param strength
 	 */
-	public boolean applyProc(Entity owner, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
+	public boolean applyProc(boolean isAttacker, Entity owner, Entity attacker, Entity defender, float strength) {
 		switch(this) {
 		case CRIMSON:
-			if(attackerProc && owner == attacker) {
-				defender.setFire(MathHelper.floor_float(Math.min(strength * 0.2F, 6.0F)) + 2);
-				if(attacker instanceof EntityLivingBase) {
-					EntityLivingBase entityLiving = (EntityLivingBase)attacker;
-					if(entityLiving.getHeldItem() != null && entityLiving.getHeldItem().getItem() == BLItemRegistry.octineSword) {
-						List<Entity> affectedList = (List<Entity>)defender.worldObj.getEntitiesWithinAABBExcludingEntity(attacker, AxisAlignedBB.getBoundingBox(defender.posX, defender.posY, defender.posZ, defender.posX, defender.posY, defender.posZ).expand(4.5F, 4.5F, 4.5F));
-						for(Entity affected : affectedList) {
-							if(affected.getDistanceToEntity(defender) <= 4.5F) {
-								affected.setFire(MathHelper.floor_float(Math.min(strength * 0.2F, 6.0F)) + 2);
-							}
-						}
+			if(isAttacker) {
+				if(defender instanceof EntityLivingBase) {
+					double knockbackStrength = Math.min(2.2D / 10.0D * strength, 2.2D);
+					double mx = attacker.posX - defender.posX;
+					double mz;
+					for(mz = attacker.posZ - defender.posZ; mx * mx + mz * mz < 1.0E-4D; mz = (Math.random() - Math.random()) * 0.01D) {
+						mx = (Math.random() - Math.random()) * 0.01D;
 					}
+					double len = Math.sqrt(mx*mx+mz*mz);
+					((EntityLivingBase)defender).knockBack(attacker, strength, mx * 6.0F, mz * 6.0F);
+					defender.motionX /= 2.0D;
+					defender.motionY /= 2.0D;
+					defender.motionZ /= 2.0D;
+					defender.motionX -= mx / len * knockbackStrength;
+					defender.motionY += 0.4D;
+					defender.motionZ -= mz / len * knockbackStrength;
+					if (defender.motionY > 0.4D) {
+						defender.motionY = 0.4D;
+					}
+					if(attacker instanceof EntityLivingBase) {
+						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
+					}
+					return true;
 				}
-				return true;
 			}
 			break;
 		case GREEN:
-			if(attackerProc && owner == attacker) {
+			if(isAttacker) {
 				if(attacker instanceof EntityLivingBase) {
 					((EntityLivingBase)attacker).heal(Math.min(Math.max(strength * 0.45F, 1.0F), 10.0F));
 					return true;
@@ -99,7 +105,7 @@ public enum CircleGem {
 			}
 			break;
 		case AQUA:
-			if(defenderProc && owner == defender) {
+			if(!isAttacker) {
 				if(defender instanceof EntityLivingBase) {
 					EntityLivingBase entityLiving = (EntityLivingBase)defender;
 					entityLiving.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));

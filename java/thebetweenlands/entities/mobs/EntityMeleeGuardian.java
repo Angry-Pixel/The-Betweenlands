@@ -4,14 +4,20 @@ import net.minecraft.world.World;
 
 public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntityBL {
 
-    public EntityMeleeGuardian(World worldObj) {super(worldObj);}
+	public EntityMeleeGuardian(World worldObj) {
+		super(worldObj);
+		this.setSize(1.0F, 2.5F);
+	}
 
-    @Override
+	@Override
+	protected String getLivingSound() {
+		if (!getActive()) return null;
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
+	}
 
-    protected String getLivingSound() {if (!getActive()) return null;
-        int randomSound = rand.nextInt(3) + 1;
-        return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;}
-
-    @Override
-    public String pageName() {return "meleeGuardian";}
+	@Override
+	public String pageName() {
+		return "meleeGuardian";
+	}
 }

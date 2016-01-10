@@ -46,7 +46,7 @@ public class RenderFirefly extends Render {
 		float rxy = ActiveRenderInfo.rotationXY;
 
 		double ipx = x;
-		double ipy = y;
+		double ipy = y + 0.25D;
 		double ipz = z;
 		double scale = 1.0D;
 

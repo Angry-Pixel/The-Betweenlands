@@ -34,7 +34,7 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 
 		isImmuneToFire = true;
-		setSize(1.0F, 1.5F);
+		setSize(1.1F, 1.2F);
 		sludgeJumpDelay = rand.nextInt(20) + 10;
 	}
 

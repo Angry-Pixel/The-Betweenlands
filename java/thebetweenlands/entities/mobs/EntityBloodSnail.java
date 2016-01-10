@@ -32,7 +32,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 
 	public EntityBloodSnail(World world) {
 		super(world);
-		setSize(0.3F, 0.3F);
+		setSize(0.7F, 0.5F);
 		stepHeight = 0.0F;
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 0.5D, false));
@@ -41,7 +41,6 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		tasks.addTask(4, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
-		
 	}
 
 	@Override

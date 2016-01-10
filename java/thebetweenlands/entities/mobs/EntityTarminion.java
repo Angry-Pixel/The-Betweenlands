@@ -25,12 +25,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarminion extends EntityTameable implements IEntityBL {
@@ -42,12 +42,14 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	public EntityTarminion(World world) {
 		super(world);
 		isImmuneToFire = true;
-		setSize(0.16F, 0.25F);
+		setSize(0.3F, 0.5F);
 		renderDistanceWeight = 2.5D;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityMob.class, 0.5D, false));
-		tasks.addTask(2, new EntityAIFollowOwner(this, 0.7D, 3.0F, 40.0F));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D));
+		this.getNavigator().setAvoidsWater(true);
+		this.getNavigator().setCanSwim(true);
+		tasks.addTask(0, new EntityAIAttackOnCollide(this, EntityMob.class, 0.5D, false));
+		tasks.addTask(1, new EntityAIFollowOwner(this, 0.7D, 3.0F, 40.0F));
+		tasks.addTask(2, new EntityAIWander(this, 0.5D));
+		tasks.addTask(3, new EntityAISwimming(this));
 		targetTasks.addTask(0, new EntityAIOwnerHurtByTarget(this));
 		targetTasks.addTask(1, new EntityAIOwnerHurtTarget(this));
 		targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
@@ -200,7 +202,14 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				motionZ = dz / dist * 0.2D + motionZ * 0.2D;
 				motionY = 0.3D;
 			}
-			entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
+			DamageSource damageSource;
+			EntityLivingBase owner = this.getOwner();
+			if(owner != null) {
+				damageSource = new EntityDamageSourceIndirect("mob", this, owner);
+			} else {
+				damageSource = DamageSource.causeMobDamage(this);
+			}
+			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
 			int randomSound = rand.nextInt(3) + 1;
 			worldObj.playSoundAtEntity(entity, "thebetweenlands:tarBeastStep" + randomSound, 1.0F, 2.0F);
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, worldObj.difficultySetting.ordinal() * 50, 0));

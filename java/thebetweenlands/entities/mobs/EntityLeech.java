@@ -49,7 +49,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	public EntityLeech(World world) {
 		super(world);
-		setSize(0.5F, 0.25F);
+		setSize(0.7F, 0.3F);
 		stepHeight = 0;
 		moveProgress = 0;
 		firstTickCheck = false;

@@ -13,7 +13,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 
 	public EntityTermite(World world) {
 		super(world);
-		setSize(0.7F, 0.6F);
+		setSize(0.9F, 0.6F);
 		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 	}
 

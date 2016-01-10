@@ -36,9 +36,14 @@ public class DecayEventHandler {
 
 	@SubscribeEvent
 	public void useItemStart(PlayerUseItemEvent.Start event) {
-		if (DecayManager.isDecayEnabled(event.entityPlayer) && event.item.getItem() instanceof IDecayFood && DecayManager.getDecayLevel(event.entityPlayer) >= 20 && (!event.entityPlayer.getFoodStats().needFood() || event.item.getItem() instanceof ItemFood == true)) {
-			event.duration = -1;
-			event.setCanceled(true);
+		boolean isDecayFood = event.item.getItem() instanceof IDecayFood;
+		if(isDecayFood) {
+			boolean eatFood = event.entityPlayer.getFoodStats().needFood() && event.item.getItem() instanceof ItemFood;
+			boolean eatDecay = DecayManager.getDecayLevel(event.entityPlayer) < 20;
+			if (!eatFood && !eatDecay) {
+				event.duration = -1;
+				event.setCanceled(true);
+			}
 		}
 	}
 

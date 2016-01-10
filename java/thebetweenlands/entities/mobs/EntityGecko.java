@@ -53,7 +53,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		tasks.addTask(2, new EntityAIBLAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.3, 0.5));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		setSize(0.5F, 0.5F);
+		setSize(0.75F, 0.35F);
 	}
 
 	@Override

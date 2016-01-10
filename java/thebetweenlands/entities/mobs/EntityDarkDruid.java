@@ -58,7 +58,7 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(6, new EntityAIDruidTeleport(this));
 		targetTasks.addTask(1, new EntityAIHurtByTargetDruid(this));
 		targetTasks.addTask(2, new EntityAINearestAttackableTargetDruid(this));
-		setSize(1.1F, 1.7F);
+		setSize(1.1F, 2.1F);
 	}
 
 	@Override

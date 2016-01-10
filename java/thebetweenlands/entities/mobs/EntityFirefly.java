@@ -28,6 +28,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	public EntityFirefly(World world) {
 		super(world);
+		this.setSize(0.6F, 0.6F);
 		this.ignoreFrustumCheck = true;
 	}
 

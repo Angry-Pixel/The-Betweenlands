@@ -71,7 +71,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	public EntityPeatMummy(World world) {
 		super(world);
-		setSize(0.6F, 1.55F);
+		setSize(1.2F, 1.2F);
 
 		this.getNavigator().setCanSwim(true);
 

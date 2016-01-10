@@ -57,7 +57,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	public EntityLurker(World world) {
 		super(world);
-		setSize(1.5F, 0.9F);
+		setSize(1.7F, 0.9F);
 		tasks.addTask(1, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 0.5D, false));
 	}
 
