@@ -9,8 +9,6 @@ Unfinished stuff:
 - Volarkite (half done)
 - Lanterns (Lex)
 - Temple Guardians
-- Weedwood Boat (Paul)
-- Proper mob spawning
 
 New Stuff (High priority):
 - Temple generation (Lukas but er...)
