@@ -13,8 +13,8 @@ public class WorldGenRottenLogs extends WorldGenerator {
 	private int length = -1;
 	private int baseRadius = -1;
 	private byte direction;
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
-	
+	private BlockBLLog log;
+
 	public WorldGenRottenLogs(int length, int baseRadius, byte direction) {
 		this.length = length;
 		this.baseRadius = baseRadius;
@@ -23,6 +23,8 @@ public class WorldGenRottenLogs extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+
+		this.log = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
 
 		// Trunk N/S
 		if (direction == 1) {

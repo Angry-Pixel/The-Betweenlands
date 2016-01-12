@@ -32,14 +32,14 @@ import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree;
 import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenSmalWeedWoodTree;
+import thebetweenlands.world.feature.trees.WorldGenSmallWeedWoodTree;
 import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
 	private final static WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedWoodTree();
-	private final static WorldGenerator GEN_SMAL_WEEDWOOD_TREE = new WorldGenSmalWeedWoodTree();
+	private final static WorldGenerator GEN_SMAL_WEEDWOOD_TREE = new WorldGenSmallWeedWoodTree();
 	private final static WorldGenPurpleRainTree GEN_PURPLE_RAIN_TREE = new WorldGenPurpleRainTree();
 	private final static WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	private final static WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();

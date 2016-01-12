@@ -204,7 +204,7 @@ public class BLBlockRegistry {
 			return Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood);
 		}
 	}.setHasSpoopyTexture(true);
-	public static final Block sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves"){
+	public static final BlockBLLeaves sapTreeLeaves = new BlockBLLeaves("sapTreeLeaves"){
 		@Override
 		public Item getItemDropped(int meta, Random rand, int fortune) {
 			return Item.getItemFromBlock(BLBlockRegistry.saplingSapTree);
@@ -246,7 +246,7 @@ public class BLBlockRegistry {
 			super.onBlockDestroyedByPlayer(world, x, y, z, meta);
 		}	 
 	}.setHasSperateTopIcon(false);
-	public static final Block sapTreeLog = new BlockBLLog("sapTreeLog"){
+	public static final BlockBLLog sapTreeLog = new BlockBLLog("sapTreeLog"){
 		@Override
 		public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 			ArrayList<ItemStack> drops = new ArrayList<ItemStack>();

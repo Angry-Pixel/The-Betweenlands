@@ -1,5 +1,7 @@
 package thebetweenlands.world.feature.trees;
 
+import java.util.Random;
+
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -11,19 +13,23 @@ import thebetweenlands.blocks.plants.BlockPoisonIvy;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 
-import java.util.Random;
-
 public class WorldGenWeedWoodPortalTree extends WorldGenerator {
-	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.portalBark;
-	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
-	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
-	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
-	private BlockTreePortal portal = (BlockTreePortal) BLBlockRegistry.treePortalBlock;
+	private BlockBLLog bark;
+	private BlockBLLog wood;
+	private BlockBLLeaves leaves;
+	private BlockPoisonIvy ivy;
+	private BlockTreePortal portal;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		int radius = 4;
 		int height = 16;
 		int maxRadius = 9;
+
+		this.bark = (BlockBLLog) BLBlockRegistry.portalBark;
+		this.wood = (BlockBLLog) BLBlockRegistry.weedwood;
+		this.leaves = (BlockBLLeaves) BLBlockRegistry.weedwoodLeaves;
+		this.ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
+		this.portal = (BlockTreePortal) BLBlockRegistry.treePortalBlock;
 
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
@@ -35,7 +41,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 					}
 
 		createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
-		
+
 		for (int yy = y; yy < y + height; ++yy) {
 			if ((yy - y) % 5 == 0 && radius > 1 && yy > 7)
 				--radius;
@@ -67,7 +73,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, false, rand.nextInt(2) + 3);
 				createBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, false, rand.nextInt(2) + 3);
 			}
-			
+
 			if (yy == y + height/2 + 4) {
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 4);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 4);
@@ -79,7 +85,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z + radius + 1, 7, 3);
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z - radius - 1, 8, 3);
 			}
-			
+
 			if (yy == y + height/2 + 7) {
 				createSmallBranch(world, rand, x + radius + 1, yy - rand.nextInt(2), z, 1, 2);
 				createSmallBranch(world, rand, x - radius - 1, yy - rand.nextInt(2), z, 2, 2);
@@ -255,7 +261,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 	}
 
 	public void addVines(World world, Random rand, int x, int y, int z, int meta) {
-	/*	if (rand.nextInt(4) != 0) {
+		/*	if (rand.nextInt(4) != 0) {
 			int length = rand.nextInt(4) + 4;
 			for (int yy = y; yy > y - length; --yy)
 				if (world.getBlock(x, yy, z) == Blocks.air)

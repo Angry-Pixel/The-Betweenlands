@@ -1,22 +1,24 @@
 package thebetweenlands.world.feature.trees;
 
+import java.util.Random;
+
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 
-import java.util.Random;
-
 public class WorldGenRubberTree extends WorldGenerator {
-
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.rubberTreeLog;
-	private BlockBLLeaves leaves = (BlockBLLeaves) BLBlockRegistry.rubberTreeLeaves;
+	private BlockBLLog log;
+	private BlockBLLeaves leaves;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 
 		int height = rand.nextInt(8) + 8;
 		int maxRadius = 4;
+
+		this.log = (BlockBLLog) BLBlockRegistry.rubberTreeLog;
+		this.leaves = (BlockBLLeaves) BLBlockRegistry.rubberTreeLeaves;
 
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
@@ -73,6 +75,6 @@ public class WorldGenRubberTree extends WorldGenerator {
 						if (world.getBlock(x1, y1, z1) != log && rand.nextInt(5) != 0)
 							world.setBlock(x1, y1, z1, leaves);
 				}
-		}
+	}
 
 }

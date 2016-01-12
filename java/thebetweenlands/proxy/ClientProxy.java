@@ -75,6 +75,7 @@ import thebetweenlands.client.render.entity.RenderMeleeGuardian;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
+import thebetweenlands.client.render.entity.RenderRopeNode;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSporeling;
@@ -125,6 +126,7 @@ import thebetweenlands.client.render.tileentity.TileEntityTarLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.EntityBLItemFrame;
+import thebetweenlands.entities.EntityRopeNode;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -290,6 +292,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, new RenderWeedwoodRowboat());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, new RenderPeatMummy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, new RenderElixir());
+		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, new RenderRopeNode());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());

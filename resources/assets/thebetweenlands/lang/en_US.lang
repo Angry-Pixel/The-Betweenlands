@@ -462,6 +462,7 @@ item.thebetweenlands.gecko.name=Gecko
 item.thebetweenlands.fireFly.name=Fire Fly
 item.thebetweenlands.net.name=Net
 item.thebetweenlands.inanimateTarminion.name=Inanimate Tarminion
+item.thebetweenlands.cavingRope.name=Caving Rope
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -1043,6 +1044,9 @@ talisman.noplace=The space is not large enough
 
 # Chat Messages
 chat.flintandsteel=It's too damp to set something on fire with %s
+chat.rope.already_connected=Already connected to another climbing rope
+chat.rope.disconnected=You were disconnected from the climbing rope
+chat.rope.too_far=You're too far away from the last anchor point
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

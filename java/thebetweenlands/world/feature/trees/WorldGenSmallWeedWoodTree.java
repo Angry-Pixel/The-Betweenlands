@@ -10,17 +10,22 @@ import thebetweenlands.blocks.tree.BlockBLLog;
 
 import java.util.Random;
 
-public class WorldGenSmalWeedWoodTree extends WorldGenerator {
-	private BlockBLLog log = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
-	private BlockBLLog bark = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
-	private BlockBLLog wood = (BlockBLLog) BLBlockRegistry.weedwood;
-	private BlockPoisonIvy ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
+public class WorldGenSmallWeedWoodTree extends WorldGenerator {
+	private BlockBLLog log;
+	private BlockBLLog bark;
+	private BlockBLLog wood;
+	private BlockPoisonIvy ivy;
 
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 		int radius = rand.nextInt(2) + 3;
 		int height = rand.nextInt(2) + 15;
 		int maxRadius = 9;
 
+		this.log = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
+		this.bark = (BlockBLLog) BLBlockRegistry.rottenWeedwoodBark;
+		this.wood = (BlockBLLog) BLBlockRegistry.weedwood;
+		this.ivy = (BlockPoisonIvy) BLBlockRegistry.poisonIvy;
+		
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
@@ -222,7 +227,7 @@ public class WorldGenSmalWeedWoodTree extends WorldGenerator {
 		}
 	}
 
-	public void addVines(World world, Random rand, int x, int y, int z, int meta) {
+	private void addVines(World world, Random rand, int x, int y, int z, int meta) {
 		if (rand.nextInt(4) != 0) {
 			int length = rand.nextInt(4) + 4;
 			for (int yy = y; yy > y - length; --yy)

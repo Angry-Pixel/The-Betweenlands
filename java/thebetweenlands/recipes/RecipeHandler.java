@@ -135,6 +135,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BLBlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.cavingRope, 8), "rrr", "ror", "rrr", 'r', new ItemStack(BLItemRegistry.rope), 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
 
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));

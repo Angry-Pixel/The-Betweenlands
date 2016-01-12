@@ -12,22 +12,28 @@ import thebetweenlands.blocks.tree.BlockBLLeaves;
 import thebetweenlands.blocks.tree.BlockBLLog;
 
 public class WorldGenPurpleRainTree extends WorldGenerator {
-    private BlockBLLog log = (BlockBLLog) BLBlockRegistry.purpleRainLog;
-    private BlockBLHanger hanger = (BlockBLHanger) BLBlockRegistry.purpleHanger;
-    private BlockBLHanger hangerFlowered = (BlockBLHanger) BLBlockRegistry.purpleHangerFlowered;
-    private BlockBLLeaves leavesLight = (BlockBLLeaves) BLBlockRegistry.purpleRainLeavesLight;
-    private BlockBLLeaves leavesDark = (BlockBLLeaves) BLBlockRegistry.purpleRainLeavesDark;
-    private BlockBLFallenLeaves fallenLeaves = (BlockBLFallenLeaves) BLBlockRegistry.purpleFallenLeaves;
+	private BlockBLLog log;
+	private BlockBLHanger hanger;
+	private BlockBLHanger hangerFlowered;
+	private BlockBLLeaves leavesLight;
+	private BlockBLLeaves leavesDark;
+	private BlockBLFallenLeaves fallenLeaves;
 
 	public WorldGenPurpleRainTree() {
 	}
 
 	public boolean generate (World world, Random rand, int x, int y, int z) {
-		
 		int radius = 4 + rand.nextInt(2);
 		int height = 30 + rand.nextInt(5);
 		int maxRadius = 9;
-	
+
+		this.log = (BlockBLLog) BLBlockRegistry.purpleRainLog;
+		this.hanger = (BlockBLHanger) BLBlockRegistry.purpleHanger;
+		this.hangerFlowered = (BlockBLHanger) BLBlockRegistry.purpleHangerFlowered;
+		this.leavesLight = (BlockBLLeaves) BLBlockRegistry.purpleRainLeavesLight;
+		this.leavesDark = (BlockBLLeaves) BLBlockRegistry.purpleRainLeavesDark;
+		this.fallenLeaves = (BlockBLFallenLeaves) BLBlockRegistry.purpleFallenLeaves;
+
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
@@ -46,7 +52,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius || Math.round(Math.sqrt(dSq)) <= radius && yy == y + height - 1)
 						world.setBlock(x + i, yy, z + j, log, 15, 2);
 				}
-				
+
 			}
 			if (yy == y + height/2) {
 				createBranch(world, rand, x + radius + 1, yy, z, 1, false, height/3 + rand.nextInt(4));
@@ -163,7 +169,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
 									world.setBlock(x1, y1 - i, z1, leavesDark, 0, 15);
 								if(i == 2)
 									addHangers(world, rand, x1, y1 - i - 1, z1);
-								}
+							}
 				}
 	}
 
@@ -177,7 +183,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
 			}
 			else if (root && i >= 4)
 				y--;
-			
+
 			if(root)
 				meta = 15;
 
@@ -194,7 +200,7 @@ public class WorldGenPurpleRainTree extends WorldGenerator {
 						createSmallBranch(world, rand, x + i, y - 1, z + 1, 3, 4);
 						createSmallBranch(world, rand, x + i, y - 1, z - 1, 4, 4);
 					}
-						addHangers(world, rand, x + i, y - 3, z);
+					addHangers(world, rand, x + i, y - 3, z);
 					if (i == branchLength)
 						createMainCanopy(world, rand, x + i, y + 1, z, branchLength / 2 + rand.nextInt(branchLength / 2));
 				}
