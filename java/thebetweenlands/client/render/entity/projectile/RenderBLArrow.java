@@ -25,7 +25,7 @@ public class RenderBLArrow extends RenderArrow {
 		EntityBLArrow entityArrow = (EntityBLArrow) entity;
 		if(entityArrow.getArrowType() == EnumArrowType.OCTINE)
 			if (ShaderHelper.INSTANCE.canUseShaders())
-				ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 0x100500));
+				ShaderHelper.INSTANCE.addDynLight(new LightSource(entityArrow.posX, entityArrow.posY, entityArrow.posZ, 2, 2, 0, 0));
 	}
 
 	/*public void renderArrow(EntityBLArrow entityArrow, double x, double y, double z, float yaw, float tick) {
