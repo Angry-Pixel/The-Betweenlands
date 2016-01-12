@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
@@ -135,7 +136,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BLBlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.cavingRope, 8), "rrr", "ror", "rrr", 'r', new ItemStack(BLItemRegistry.rope), 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.cavingRope, 4), "rrr", "ror", "rrr", 'r', new ItemStack(BLItemRegistry.rope), 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
 
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
@@ -310,6 +311,8 @@ public class RecipeHandler {
 	}
 
 	private static void registerPurifierRecipes() {
+		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.genericStone, 1, BlockGenericStone.META_CRAGROCK), new ItemStack(BLBlockRegistry.genericStone, 1, BlockGenericStone.META_MOSSYCRAGROCK1));
+		PurifierRecipe.addRecipe(new ItemStack(BLBlockRegistry.genericStone, 1, BlockGenericStone.META_CRAGROCK), new ItemStack(BLBlockRegistry.genericStone, 1, BlockGenericStone.META_MOSSYCRAGROCK2));
 		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.aquaMiddleGem, 1), new ItemStack(BLBlockRegistry.aquaMiddleGemOre));
 		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.crimsonMiddleGem, 1), new ItemStack(BLBlockRegistry.crimsonMiddleGemOre));
 		PurifierRecipe.addRecipe(new ItemStack(BLItemRegistry.greenMiddleGem, 1), new ItemStack(BLBlockRegistry.greenMiddleGemOre));
@@ -435,6 +438,7 @@ public class RecipeHandler {
 		CompostRecipe.addRecipe(4, 6000, Item.getItemFromBlock(BLBlockRegistry.swampPlant));
 		CompostRecipe.addRecipe(12, 10000, Item.getItemFromBlock(BLBlockRegistry.venusFlyTrap));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.volarpad));
+		CompostRecipe.addRecipe(20, 12000, Item.getItemFromBlock(BLBlockRegistry.weedwoodBush));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.thorns));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.poisonIvy));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.wallPlants));
@@ -455,12 +459,15 @@ public class RecipeHandler {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.blueIris));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.copperIris));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.blueEyedGrass));
+		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.milkweed));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.boneset));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.bottleBrushGrass));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.sludgecreep));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.deadWeedwoodBush));
 		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BLBlockRegistry.hanger));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BLBlockRegistry.waterFlowerStalk));
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.mireCoral));
+		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BLBlockRegistry.deepWaterCoral));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingSapTree));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BLBlockRegistry.saplingWeedwood));
