@@ -35,7 +35,7 @@ public class ArmorHandler {
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		if(event.entityPlayer.isInWater()) {
-			boolean fullyInWater = event.entityPlayer.worldObj.getBlock((int)event.entityPlayer.posX, (int)(event.entityPlayer.boundingBox.maxY + 0.1D), (int)event.entityPlayer.posZ).getMaterial().isLiquid();
+			boolean fullyInWater = event.entityPlayer.worldObj.getBlock((int)event.entityPlayer.posX, (int)(event.entityPlayer.boundingBox.maxY + 0.01D), (int)event.entityPlayer.posZ).getMaterial().isLiquid();
 			if(fullyInWater) {
 				ItemStack[] armor = event.entityPlayer.inventory.armorInventory;
 				int pieces = 0;
@@ -44,7 +44,9 @@ public class ArmorHandler {
 						pieces++;
 					}
 				}
-				if(pieces != 0) event.newSpeed *= (5.0F * (event.entityPlayer.onGround ? 1.0F : 5.0F) / 4.0F * pieces);
+				if(pieces != 0) {
+					event.newSpeed *= (5.0F * (event.entityPlayer.onGround ? 1.0F : 5.0F) / 4.0F * pieces);
+				}
 			}
 		}
 	}

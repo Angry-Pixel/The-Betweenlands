@@ -12,9 +12,9 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
@@ -22,7 +22,6 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.crops.CropRenderer;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
@@ -120,19 +119,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		int meta = world.getBlockMetadata(x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack != null) {
-			if (meta < MATURE_CROP) {
-				if (stack.getItem() == BLItemRegistry.itemsGenericCrushed && stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id && ItemDye.applyBonemeal(stack, world, x, y, z, player)) {
-					if (!world.isRemote) {
-						world.playAuxSFX(2005, x, y, z, 0);
-						if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
-							world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
-						}
-					}
-					return true;
-				}
-			}
-		}
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			if (!world.isRemote) {
 				if (meta == DECAYED_CROP) {
@@ -153,6 +139,40 @@ public class BlockBLGenericCrop extends BlockCrops {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Whether this crop can be grown with a fertilizer
+	 */
+	@Override
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
+		int meta = world.getBlockMetadata(x, y, z);
+		return meta < MATURE_CROP;
+	}
+
+	/**
+	 * After using a fertilizer this determines whether the grow successfully grows or not
+	 */
+	@Override
+	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+		int chance = this.isCropOrSoilDecayed(world, x, y, z) ? 6 : 3;
+		return rand.nextInt(chance * ((int)(world.getBlockMetadata(x, y, z) / 1.6D) + 1)) == 0;
+	}
+
+	/**
+	 * Determines how much the crop grows after successfully using a fertilizer
+	 */
+	@Override
+	public void func_149863_m(World world, int x, int y, int z) {
+		int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 4);
+		if (l > 7) {
+			l = 7;
+		}
+		world.setBlockMetadataWithNotify(x, y, z, l, 2);
+		world.playAuxSFX(2005, x, y, z, 0);
+		if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
+			world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
+		}
 	}
 
 	@Override
@@ -281,13 +301,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 				}
 			}
 		}
-	}
-
-	//Fertilizer growth chance
-	@Override
-	public boolean func_149852_a(World world, Random rnd, int x, int y, int z) {
-		int chance = this.isCropOrSoilDecayed(world, x, y, z) ? 6 : 3;
-		return rnd.nextInt(chance * ((int)(world.getBlockMetadata(x, y, z) / 1.6D) + 1)) == 0;
 	}
 
 	@Override

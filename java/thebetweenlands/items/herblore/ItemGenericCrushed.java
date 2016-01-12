@@ -100,11 +100,16 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 		if (stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id) {
 			Block block = world.getBlock(x, y, z);
 			if (block instanceof IGrowable) {
-				if(!world.isRemote) {
-					((IGrowable)block).func_149853_b(world, world.rand, x, y, z);
-					--stack.stackSize;
+				IGrowable growable = (IGrowable) block;
+				if (growable.func_149851_a(world, x, y, z, world.isRemote)) {
+					if (!world.isRemote) {
+						if (growable.func_149852_a(world, world.rand, x, y, z)) {
+							growable.func_149853_b(world, world.rand, x, y, z);
+						}
+						--stack.stackSize;
+					}
+					return true;
 				}
-				return true;
 			}
 		}
 		return false;
