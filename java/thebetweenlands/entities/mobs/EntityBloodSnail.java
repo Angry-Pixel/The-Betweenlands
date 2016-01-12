@@ -120,7 +120,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getAttackTarget() != null) {
+		if (getAttackTarget() != null && this.isEntityAlive()) {
 			float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().boundingBox.minY, getAttackTarget().posZ);
 			if (getRangeAttackTimer() < 100 && distance > 3)
 				setRangeAttackTimer(getRangeAttackTimer() + 2);

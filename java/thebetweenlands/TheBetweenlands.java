@@ -38,7 +38,6 @@ import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PageDiscoveringEvent;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.entity.VolarPadGlideHandler;
-import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
@@ -182,8 +181,6 @@ public class TheBetweenlands
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirCommonHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(ItemNBTExclusionHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
 		BLEntityPropertiesRegistry.HANDLER.registerHandler();
 		FMLCommonHandler.instance().bus().register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);

@@ -162,6 +162,7 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
@@ -395,6 +396,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FovHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ItemNBTExclusionHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(

@@ -50,6 +50,7 @@ public class ItemNBTExclusionHandler {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
 		try {

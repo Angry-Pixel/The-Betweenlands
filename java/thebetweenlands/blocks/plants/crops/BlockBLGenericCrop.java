@@ -128,30 +128,30 @@ public class BlockBLGenericCrop extends BlockCrops {
 							world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
 						}
 					}
+					return true;
 				}
-				return true;
 			}
 		}
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
-			int metaDirt = world.getBlockMetadata(x, y - 1 , z);
 			if (!world.isRemote) {
 				if (meta == DECAYED_CROP) {
 					world.setBlockMetadataWithNotify(x, y, z, meta - 1, 3);
 				}
 				world.playAuxSFX(2005, x, y, z, 0);
+				int metaDirt = world.getBlockMetadata(x, y - 1, z);
 				if(BlockFarmedDirt.isDecayed(metaDirt)) {
 					world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - BlockFarmedDirt.DECAY_CURE, 3);
 				}
-			}
-			if(!player.capabilities.isCreativeMode) {
-				stack.stackSize--;
-				if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket))) {
-					player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
+				if(!player.capabilities.isCreativeMode) {
+					stack.stackSize--;
+					if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket))) {
+						player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
+					}
 				}
 			}
 			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
