@@ -211,9 +211,9 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.rubberTreePlanks));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.purpleRainPlanks));
 
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFenceGate, 3), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFenceGate, 3), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.rubberTreePlanks));
-		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankFenceGate, 3), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.purpleRainPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFenceGate, 1), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFenceGate, 1), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.rubberTreePlanks));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purpleRainPlankFenceGate, 1), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.purpleRainPlanks));
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlab, 6), "###", '#', BLBlockRegistry.betweenstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickSlab, 6), "###", '#', BLBlockRegistry.mudBrick);

@@ -67,14 +67,15 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (metadata == MATURE_CROP) {
-			for (int i = 0; i < 3 + fortune; ++i) {
+			for (int i = 0; i < world.rand.nextInt(4) + 1 + fortune; ++i) {
 				if(getSeedDrops() != null) {
 					if (world.rand.nextInt(15) <= metadata)
 						ret.add(getSeedDrops());
 				}
 				if(getCropDrops() != null) ret.add(getCropDrops());
 			}
-		} else if(getSeedDrops() != null) {
+		}
+		if(getSeedDrops() != null) {
 			ret.add(getSeedDrops());
 		}
 		return ret;
@@ -142,11 +143,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 				if(BlockFarmedDirt.isDecayed(metaDirt)) {
 					world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - BlockFarmedDirt.DECAY_CURE, 3);
 				}
-				if(!player.capabilities.isCreativeMode) {
-					stack.stackSize--;
-					if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket))) {
-						player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
-					}
+			}
+			if(!player.capabilities.isCreativeMode) {
+				stack.stackSize--;
+				if (!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.weedwoodBucket))) {
+					player.dropPlayerItemWithRandomChoice(new ItemStack(BLItemRegistry.weedwoodBucket), false);
 				}
 			}
 			return true;

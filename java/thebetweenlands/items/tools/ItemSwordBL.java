@@ -1,10 +1,14 @@
 package thebetweenlands.items.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,9 +25,12 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
+import thebetweenlands.utils.IGemTextureProvider;
 
-public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryItem {
+public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryItem, IGemTextureProvider {
 	private IIcon[] corrosionIcons;
+	private String[] gemTextures = new String[CircleGem.TYPES.length];
+	private IIcon[][] gemTextureIcons = new IIcon[CircleGem.TYPES.length][1];
 
 	private float attackDamageWeaponModifier;
 
@@ -43,6 +50,13 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 
 	@Override
 	public IIcon getIconIndex(ItemStack stack) {
+		CircleGem gem = GemCircleHelper.getGem(stack);
+		if(gem != CircleGem.NONE) {
+			int gemID = gem.ordinal();
+			if(this.gemTextureIcons[gemID][0] != null) {
+				return this.gemTextureIcons[gemID][CorrodibleItemHelper.getCorrosionStage(stack)];
+			}
+		}
 		return corrosionIcons[CorrodibleItemHelper.getCorrosionStage(stack)];
 	}
 
@@ -53,12 +67,38 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 
 	@Override
 	public IIcon[] getIcons() {
-		return new IIcon[] { itemIcon };
+		List<IIcon> iconList = new ArrayList<IIcon>();
+		iconList.add(this.itemIcon);
+		for(int i = 0; i < this.gemTextureIcons.length; i++) {
+			IIcon gemTextureIcon = this.gemTextureIcons[i][0];
+			if(gemTextureIcon != null) {
+				iconList.add(gemTextureIcon);
+			}
+		}
+		return iconList.toArray(new IIcon[0]);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister register) {
+		super.registerIcons(register);
+		for(int i = 0; i < this.gemTextures.length; i++) {
+			String gemTexture = this.gemTextures[i];
+			if(gemTexture != null) {
+				this.gemTextureIcons[i][0] = register.registerIcon(gemTexture);
+			}
+		}
 	}
 
 	@Override
 	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
 		this.corrosionIcons = corrosionIcons[0];
+		for(int i = 0; i < this.gemTextureIcons.length; i++) {
+			IIcon gemTextureIcon = this.gemTextureIcons[i][0];
+			if(gemTextureIcon != null) {
+				this.gemTextureIcons[i] = corrosionIcons[i + 1];
+			}
+		}
 	}
 
 	@Override
@@ -97,5 +137,16 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	@Override
 	public int metas() {
 		return 0;
+	}
+
+	@Override
+	public ItemSwordBL setGemTexture(CircleGem gem, String texture) {
+		this.gemTextures[gem.ordinal()] = texture;
+		return this;
+	}
+
+	@Override
+	public String getGemTexture(CircleGem gem) {
+		return this.gemTextures[gem.ordinal()];
 	}
 }
