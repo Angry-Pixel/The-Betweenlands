@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -23,7 +23,7 @@ public class BlockTarFluid extends BlockFluidClassic {
 	protected IIcon stillIcon, flowingIcon;
 
 	public BlockTarFluid() {
-		super(BLFluidRegistry.tarFluid, BLMaterials.tar);
+		super(BLFluidRegistry.tarFluid, BLMaterial.tar);
 		setBlockName("thebetweenlands.tarFluid");
 	}
 
@@ -61,7 +61,7 @@ public class BlockTarFluid extends BlockFluidClassic {
 			if(entity.motionY < 0)
 				entity.motionY *= 0.005D;
 			Block blockAbove = world.getBlock(x, y + 1, z);
-			if(blockAbove.getMaterial() == BLMaterials.tar && entity.isInsideOfMaterial(BLMaterials.tar)) {
+			if(blockAbove.getMaterial() == BLMaterial.tar && entity.isInsideOfMaterial(BLMaterial.tar)) {
 				((EntityLivingBase) entity).attackEntityFrom(DamageSource.drown, 2.0F);
 			}
 		}
@@ -81,7 +81,7 @@ public class BlockTarFluid extends BlockFluidClassic {
 
 	private void solidifyTar(World world, int x, int y, int z) {
 		if (world.getBlock(x, y, z) == this) {
-			if (this.blockMaterial == BLMaterials.tar) {
+			if (this.blockMaterial == BLMaterial.tar) {
 				boolean placeTar = false;
 
 				if (placeTar || world.getBlock(x, y, z - 1).getMaterial() == Material.water)

@@ -8,14 +8,14 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 /**
  * Created by Bart on 11-9-2015.
  */
 public class ItemArmorOfLegends extends ItemArmor implements IManualEntryItem {
     public ItemArmorOfLegends(int armorType) {
-        super(BLMaterials.armorOfLegends, 2, armorType);
+        super(BLMaterial.armorOfLegends, 2, armorType);
     }
 
     @Override

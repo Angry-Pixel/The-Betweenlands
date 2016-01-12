@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 import java.util.ArrayList;
 

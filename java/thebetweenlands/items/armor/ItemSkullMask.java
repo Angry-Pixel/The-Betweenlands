@@ -17,7 +17,7 @@ import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -28,7 +28,7 @@ public class ItemSkullMask extends ItemArmor implements IManualEntryItem {
 	private static final ResourceLocation SKULL_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/skullMask.png");
 
 	public ItemSkullMask() {
-		super(BLMaterials.armorBone, 2, 0);
+		super(BLMaterial.armorBone, 2, 0);
 	}
 
 	@Override

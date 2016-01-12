@@ -19,11 +19,11 @@ import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.armor.ItemRubberBoots;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 public class BlockMud extends Block {
 	public BlockMud() {
-		super(BLMaterials.mud);
+		super(BLMaterial.mud);
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
@@ -63,7 +63,7 @@ public class BlockMud extends Block {
 				entity.motionY *= 0.02D;
 			}
 			entity.onGround = true;
-			if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterials.mud)) {
+			if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterial.mud)) {
 				((EntityLivingBase) entity).attackEntityFrom(DamageSource.inWall, 2.0F);
 			}
 		}

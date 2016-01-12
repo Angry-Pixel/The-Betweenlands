@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeHooks;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.HashMultimap;

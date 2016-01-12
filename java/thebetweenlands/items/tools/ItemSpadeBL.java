@@ -2,22 +2,22 @@ package thebetweenlands.items.tools;
 
 import java.util.List;
 
-import net.minecraft.item.Item;
-import thebetweenlands.items.ICorrodible;
-import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.utils.CorrodibleItemHelper;
-
 import com.google.common.collect.Multimap;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.ReflectionHelper;
+import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.items.ICorrodible;
+import thebetweenlands.manual.IManualEntryItem;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class ItemSpadeBL extends ItemSpade implements ICorrodible, IManualEntryItem {
 	private float damageVsEntity;
@@ -87,5 +87,10 @@ public class ItemSpadeBL extends ItemSpade implements ICorrodible, IManualEntryI
 	@Override
 	public int metas() {
 		return 0;
+	}
+
+	@Override
+	public boolean func_150897_b(Block block) {
+		return block == BLBlockRegistry.sludge || super.func_150897_b(block);
 	}
 }

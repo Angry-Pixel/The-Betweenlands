@@ -13,7 +13,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -21,7 +21,7 @@ public class ItemRubberBoots extends ItemArmor implements IManualEntryItem {
 	private static final int MAX_WALK_TICKS = 40;
 
 	public ItemRubberBoots() {
-		super(BLMaterials.armorRubber, 2, 3);
+		super(BLMaterial.armorRubber, 2, 3);
 	}
 
 	@Override

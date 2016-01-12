@@ -35,7 +35,7 @@ import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
 import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.items.tools.ItemSwordBL;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {
@@ -233,7 +233,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		}
 
 		if(!worldObj.isRemote) {
-			if(this.isInsideOfMaterial(BLMaterials.tar)) {
+			if(this.isInsideOfMaterial(BLMaterial.tar)) {
 				this.stepHeight = 2.0F;
 			} else {
 				this.stepHeight = 0.75F;

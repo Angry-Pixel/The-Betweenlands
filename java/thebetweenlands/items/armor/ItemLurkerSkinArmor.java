@@ -17,12 +17,12 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{
 
 	public ItemLurkerSkinArmor(int armorType) {
-		super(BLMaterials.armorLurkerSkin, 2, armorType);
+		super(BLMaterial.armorLurkerSkin, 2, armorType);
 	}
 
 	@Override

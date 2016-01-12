@@ -9,12 +9,12 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 public class ItemValoniteArmor extends ItemArmor implements IManualEntryItem {
 
 	public ItemValoniteArmor(int armorType) {
-		super(BLMaterials.armorValonite, 2, armorType);
+		super(BLMaterial.armorValonite, 2, armorType);
 	}
 
 	@Override

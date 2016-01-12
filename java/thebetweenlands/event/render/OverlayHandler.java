@@ -30,7 +30,7 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.recipes.BLMaterials;
+import thebetweenlands.recipes.BLMaterial;
 
 public class OverlayHandler {
 	public static final OverlayHandler INSTANCE = new OverlayHandler();
@@ -145,12 +145,12 @@ public class OverlayHandler {
 		}
 		Block viewBlock = ActiveRenderInfo.getBlockAtEntityViewpoint(world, view, (float) event.partialTicks);
 		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
-		boolean inTar = (viewBlock.getMaterial() == BLMaterials.tar || (entitiesInside != null && entitiesInside.size() > 0));
+		boolean inTar = (viewBlock.getMaterial() == BLMaterial.tar || (entitiesInside != null && entitiesInside.size() > 0));
 		int bx = MathHelper.floor_double(view.posX);
 		int by = MathHelper.floor_double(view.posY);
 		int bz = MathHelper.floor_double(view.posZ);
 		Block block = world.getBlock(bx, by, bz);
-		boolean inMud = block.getMaterial() == BLMaterials.mud;
+		boolean inMud = block.getMaterial() == BLMaterial.mud;
 		boolean inBlock = inTar || inMud;
 		if(inBlock && !this.cancelOverlay) {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
