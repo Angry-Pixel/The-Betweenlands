@@ -44,7 +44,7 @@ public class ArmorHandler {
 						pieces++;
 					}
 				}
-				event.newSpeed *= (5.0F * (event.entityPlayer.onGround ? 1.0F : 5.0F) / 4.0F * pieces);
+				if(pieces != 0) event.newSpeed *= (5.0F * (event.entityPlayer.onGround ? 1.0F : 5.0F) / 4.0F * pieces);
 			}
 		}
 	}
