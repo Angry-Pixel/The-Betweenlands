@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -37,7 +38,7 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack);
+		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack, null);
 		if(itemAspects.size() >= 1) {
 			Aspect aspect = itemAspects.get(0);
 			return super.getItemStackDisplayName(stack) + " - " + aspect.aspect.getName() + " (" + aspect.amount + ")";
@@ -93,7 +94,7 @@ public class ItemAspectVial extends Item {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
 		if(pass == 2) {
-			List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack);
+			List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack, null);
 			if(itemAspects.size() >= 1) {
 				Aspect aspect = itemAspects.get(0);
 				return this.aspectIcons[aspect.aspect.getIconIndex()];

@@ -82,7 +82,7 @@ public class AspectSlideShowWidget extends ManualWidgetsBase {
 
     public void getAspects() {
         aspects.clear();
-        for (Aspect aspect:AspectManager.get(Minecraft.getMinecraft().theWorld).getAspects(itemStack)){
+        for (Aspect aspect:AspectManager.get(Minecraft.getMinecraft().theWorld).getAspects(itemStack, Minecraft.getMinecraft().thePlayer)){
             aspects.add(aspect.aspect);
         }
     }

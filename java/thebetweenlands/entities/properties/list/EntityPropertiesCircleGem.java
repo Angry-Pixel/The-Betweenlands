@@ -8,7 +8,6 @@ import thebetweenlands.gemcircle.CircleGem;
 
 public class EntityPropertiesCircleGem extends EntityProperties {
 	private CircleGem circleGem = CircleGem.NONE;
-	private Entity entity;
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
@@ -18,11 +17,6 @@ public class EntityPropertiesCircleGem extends EntityProperties {
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
 		this.circleGem = CircleGem.fromName(nbt.getString("blCircleGem"));
-	}
-
-	@Override
-	public void init(Entity entity, World world) {
-		this.entity = entity;
 	}
 
 	@Override

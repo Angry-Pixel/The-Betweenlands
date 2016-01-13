@@ -9,11 +9,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
 import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
@@ -66,7 +69,6 @@ public class AspectManager {
 	public static final class AspectItem {
 		public final Item item;
 		public final int damage;
-		private List<AspectItemEntry> itemAspects;
 
 		public AspectItem(Item item, int damage) {
 			this.item = item;
@@ -89,17 +91,45 @@ public class AspectManager {
 			return this.item.equals(item);
 		}
 
-		@Override
-		public boolean equals(Object obj) {
-			if(obj instanceof AspectItem) {
-				AspectItem itemEntry = (AspectItem)obj;
-				return itemEntry.item.equals(this.item) && itemEntry.damage == this.damage;
-			}
-			return super.equals(obj);
+		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+			nbt.setString("item", this.item.getUnlocalizedName());
+			nbt.setInteger("damage", this.damage);
+			return nbt;
 		}
 
-		public List<AspectItemEntry> getAspectItemEntries() {
-			return this.itemAspects;
+		public static AspectItem readFromNBT(NBTTagCompound nbt) {
+			String itemName = nbt.getString("item");
+			int itemDamage = nbt.getInteger("damage");
+			AspectItem aspectItem = getItemEntryFromName(itemName, itemDamage);
+			return aspectItem;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + this.damage;
+			result = prime * result + ((this.item == null) ? 0 : this.item.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			AspectItem other = (AspectItem) obj;
+			if (this.damage != other.damage)
+				return false;
+			if (this.item == null) {
+				if (other.item != null)
+					return false;
+			} else if (!this.item.equals(other.item))
+				return false;
+			return true;
 		}
 	}
 
@@ -136,7 +166,6 @@ public class AspectManager {
 			entryList = new ArrayList<AspectItemEntry>();
 			registeredItems.put(entry.item, entryList);
 		}
-		entry.item.itemAspects = entryList;
 		for(int i = 0; i < aspectCount; i++) {
 			entryList.add(entry);
 		}
@@ -196,16 +225,19 @@ public class AspectManager {
 		}
 	}
 
+	private void updateMatchedAspects(AspectItem item, List<Aspect> aspects) {
+		Collections.sort(aspects);
+		this.matchedAspects.put(item, aspects);
+	}
+
 	public void loadStaticAspects(NBTTagCompound nbt) {
 		this.matchedAspects.clear();
 		NBTTagList entryList = (NBTTagList) nbt.getTag("entries");
 		entryIT:
 			for(int i = 0; i < entryList.tagCount(); i++) {
 				NBTTagCompound entryCompound = entryList.getCompoundTagAt(i);
-				String itemName = entryCompound.getString("item");
-				int itemDamage = entryCompound.getInteger("damage");
 				//System.out.println("Getting item entry: " + itemName);
-				AspectItem itemEntry = this.getItemEntryFromName(itemName, itemDamage);
+				AspectItem itemEntry = AspectItem.readFromNBT(entryCompound);
 				if(itemEntry == null) {
 					//System.out.println("Failed getting item entry");
 					continue;
@@ -221,7 +253,7 @@ public class AspectManager {
 					}
 					itemAspects.add(aspect);
 				}
-				this.matchedAspects.put(itemEntry, itemAspects);
+				this.updateMatchedAspects(itemEntry, itemAspects);
 			}
 	}
 
@@ -232,8 +264,7 @@ public class AspectManager {
 			AspectItem itemEntry = entry.getKey();
 			List<Aspect> itemAspects = entry.getValue();
 			NBTTagCompound entryCompound = new NBTTagCompound();
-			entryCompound.setString("item", itemEntry.item.getUnlocalizedName());
-			entryCompound.setInteger("damage", itemEntry.damage);
+			itemEntry.writeToNBT(entryCompound);
 			NBTTagList aspectList = new NBTTagList();
 			for(Aspect aspect : itemAspects) {
 				aspectList.appendTag(aspect.writeToNBT(new NBTTagCompound()));
@@ -292,7 +323,7 @@ public class AspectManager {
 					mergedAspects.add(new Aspect(mergedAspect.aspect, mergedAspect.amount + aspect.amount));
 				}
 			}
-			this.matchedAspects.put(itemStack, mergedAspects);
+			this.updateMatchedAspects(itemStack, mergedAspects);
 		}
 	}
 
@@ -344,7 +375,7 @@ public class AspectManager {
 		return possibleAspects.size();
 	}
 
-	private List<Aspect> getStaticAspects(AspectItem item) {
+	public List<Aspect> getStaticAspects(AspectItem item) {
 		for(Entry<AspectItem, List<Aspect>> e : this.matchedAspects.entrySet()) {
 			if(e.getKey().equals(item)) {
 				return e.getValue();
@@ -353,9 +384,16 @@ public class AspectManager {
 		return new ArrayList<Aspect>();
 	}
 
-	public List<Aspect> getAspects(ItemStack stack) {
+	public List<Aspect> getAspects(ItemStack stack, EntityPlayer player) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		aspects.addAll(this.getStaticAspects(new AspectItem(stack)));
+		if(player == null) {
+			aspects.addAll(this.getStaticAspects(new AspectItem(stack)));
+		} else {
+			EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
+			if(aspectProperties != null) {
+				aspects.addAll(aspectProperties.getDiscoveredStaticAspects(stack));
+			}
+		}
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
 			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < lst.tagCount(); i++) {
@@ -369,9 +407,9 @@ public class AspectManager {
 		return aspects;
 	}
 
-	public List<IAspectType> getAspectTypes(ItemStack stack) {
+	public List<IAspectType> getAspectTypes(ItemStack stack, EntityPlayer player) {
 		List<IAspectType> aspects = new ArrayList<IAspectType>();
-		for(Aspect aspect : this.getAspects(stack)) {
+		for(Aspect aspect : this.getAspects(stack, player)) {
 			aspects.add(aspect.aspect);
 		}
 		return aspects;

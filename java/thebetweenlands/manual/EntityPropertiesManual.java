@@ -40,12 +40,6 @@ public class EntityPropertiesManual extends EntityProperties {
         }
     }
 
-
-    @Override
-    public void init(Entity entity, World world) {
-
-    }
-
     @Override
     public String getID() {
         return "thebetweenlands_manual_data";

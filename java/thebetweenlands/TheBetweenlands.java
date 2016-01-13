@@ -27,6 +27,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandDecay;
+import thebetweenlands.command.CommandDiscoverAspects;
 import thebetweenlands.command.CommandFindPage;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
@@ -53,7 +54,6 @@ import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
-import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
@@ -120,8 +120,7 @@ public class TheBetweenlands
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 		networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
 		networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
-		networkWrapper.registerMessage(MessageLoadAspects.class, MessageLoadAspects.class, 6, Side.CLIENT);
-		BLEntityPropertiesRegistry.HANDLER.registerPacket(networkWrapper, 7);
+		BLEntityPropertiesRegistry.HANDLER.registerPacket(networkWrapper, 6);
 
 		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 
@@ -214,6 +213,7 @@ public class TheBetweenlands
 		event.registerServerCommand(new CommandResetAspects());
 		event.registerServerCommand(new CommandDecay());
 		event.registerServerCommand(new CommandFindPage());
+		event.registerServerCommand(new CommandDiscoverAspects());
 		if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
 		}

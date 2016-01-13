@@ -21,11 +21,6 @@ public class EntityPropertiesDecay extends EntityProperties {
 	}
 
 	@Override
-	public void init(Entity entity, World world) {
-
-	}
-
-	@Override
 	public String getID() {
 		return "blPropertyDecay";
 	}

@@ -114,6 +114,7 @@ public class EntityPropertiesHandler {
 				WorldServer entityWorld = DimensionManager.getWorld(entity.dimension);
 				if(entity == null || entity.isDead || entityWorld == null || !entityWorld.loadedEntityList.contains(entity)) {
 					it.remove();
+					tracker.removeTracker();
 					continue;
 				}
 				tracker.updateTracker();
@@ -154,12 +155,19 @@ public class EntityPropertiesHandler {
 				PropertiesTracker tracker = it.next();
 				if(tracker.getEntity().equals(entity)) {
 					it.remove();
+					tracker.removeTracker();
 				}
 			}
 		}
 	}
 
 	private void removePlayer(EntityPlayerMP player) {
+		List<PropertiesTracker> trackers = this.trackerMap.get(player);
+		if(trackers != null && trackers.size() > 0) {
+			for(PropertiesTracker tracker : trackers) {
+				tracker.removeTracker();
+			}
+		}
 		this.trackerMap.remove(player);
 	}
 
@@ -200,6 +208,9 @@ public class EntityPropertiesHandler {
 					WorldServer playerWorld = DimensionManager.getWorld(player.dimension);
 					if(player == null || player.isDead || playerWorld == null || !playerWorld.loadedEntityList.contains(player)) {
 						trackerMapIT.remove();
+						for(PropertiesTracker tracker : trackerEntry.getValue()) {
+							tracker.removeTracker();
+						}
 					}
 				}
 			}

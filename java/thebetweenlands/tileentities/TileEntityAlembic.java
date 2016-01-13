@@ -239,7 +239,7 @@ public class TileEntityAlembic extends TileEntity {
 	public List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
 		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(ItemStack ingredient : ingredients) {
-			infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(ingredient));
+			infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(ingredient, null));
 		}
 		return infusingAspects;
 	}
@@ -247,7 +247,7 @@ public class TileEntityAlembic extends TileEntity {
 	private List<Aspect> getInfusionItemAspects(List<ItemStack> ingredients) {
 		List<Aspect> infusingItemAspects = new ArrayList<Aspect>();
 		for(ItemStack ingredient : ingredients) {
-			infusingItemAspects.addAll(AspectManager.get(this.worldObj).getAspects(ingredient));
+			infusingItemAspects.addAll(AspectManager.get(this.worldObj).getAspects(ingredient, null));
 		}
 		return infusingItemAspects;
 	}

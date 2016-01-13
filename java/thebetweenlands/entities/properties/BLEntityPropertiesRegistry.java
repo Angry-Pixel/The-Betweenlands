@@ -1,5 +1,6 @@
 package thebetweenlands.entities.properties;
 
+import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
@@ -13,5 +14,6 @@ public class BLEntityPropertiesRegistry {
 		HANDLER.registerProperties(EntityPropertiesDecay.class);
 		HANDLER.registerProperties(EntityPropertiesManual.class);
 		HANDLER.registerProperties(EntityPropertiesCircleGem.class);
+		HANDLER.registerProperties(EntityPropertiesAspects.class);
 	}
 }

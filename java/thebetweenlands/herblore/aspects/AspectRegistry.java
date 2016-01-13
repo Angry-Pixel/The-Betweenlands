@@ -30,6 +30,28 @@ import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 public class AspectRegistry {
 	public static final List<IAspectType> ASPECT_TYPES = new ArrayList<IAspectType>();
 
+	public static final IAspectType UNKNOWN = new IAspectType() {
+		@Override
+		public String getName() {
+			return "Unknown";
+		}
+
+		@Override
+		public String getType() {
+			return "Unknown";
+		}
+
+		@Override
+		public String getDescription() {
+			return "Unknown";
+		}
+
+		@Override
+		public int getIconIndex() {
+			return 0;
+		}
+	};
+
 	public static final IAspectType AZUWYNN = new AspectAzuwynn();
 	public static final IAspectType ARMANIIS = new AspectArmaniis();
 	public static final IAspectType BYARIIS = new AspectByariis();
