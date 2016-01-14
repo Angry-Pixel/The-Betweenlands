@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.item.Item;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.items.BLItemRegistry;
 
 /**
  * Created by Bart on 06/12/2015.
@@ -17,7 +19,7 @@ public class HLEntryRegistry {
 	public static ArrayList<Page> aspectPages = new ArrayList<>();
 	public static ArrayList<Page> itemPages = new ArrayList<>();
 
-	public static ManualManager.EnumManual manualType = ManualManager.EnumManual.HL;
+	public static Item manualType = BLItemRegistry.manualHL;
 
 	public static ManualCategory category2;
 

@@ -1,5 +1,6 @@
 package thebetweenlands.manual;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
@@ -39,7 +40,7 @@ public class GuideBookEntryRegistry {
     public static ArrayList<Page> entityPages = new ArrayList<>();
     public static ArrayList<Page> machines = new ArrayList<>();
 
-    public static ManualManager.EnumManual manualType = ManualManager.EnumManual.GUIDEBOOK;
+    public static Item manualType = BLItemRegistry.manualGuideBook;
 
     public static ManualCategory itemsCategory;
     public static ManualCategory machineCategory;

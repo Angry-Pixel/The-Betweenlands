@@ -5,9 +5,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
+import thebetweenlands.items.BLItemRegistry;
 
 /**
  * Created by Bart on 22/11/2015.
@@ -24,7 +26,7 @@ public class GuiManualBase extends GuiScreen {
     public int untilUpdate = 0;
     public ManualCategory currentCategory;
 
-    public ManualManager.EnumManual manualType;
+    public Item manualType;
 
     public GuiManualBase(EntityPlayer player) {
         this.player = player;
@@ -32,7 +34,7 @@ public class GuiManualBase extends GuiScreen {
 
     @Override
     public void initGui() {
-        manualType = ManualManager.EnumManual.GUIDEBOOK;
+        manualType = BLItemRegistry.manualGuideBook;
         xStart = width / 2 - 146;
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;

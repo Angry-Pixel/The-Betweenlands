@@ -1,5 +1,6 @@
 package thebetweenlands.manual;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -29,7 +30,7 @@ public class PageCreators {
     public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
     public static int animatorRecipeHeight = AnimatorRecipeWidget.height + 5;
 
-    public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int pageAmount = pages.size();
         int times = 0;
@@ -52,15 +53,15 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.pageName();
-        newPages.add(new Page(title, isHidden, manualType , new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(74 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
+        newPages.add(new Page(title, isHidden, manualType, new TextWidget(15, 10, "manual." + entity.pageName() + ".title"), new PictureWidget(74 - (entity.pictureWidth() / 2), 15, entity.manualPictureLocation(), entity.pictureWidth(), entity.pictureHeight(), entity.manualStats())).setParent().setEntity(entity));
         newPages.addAll(TextPages(15, 10, "manual." + entity.pageName() + ".description", title, isHidden, manualType));
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         newPages.add(new Page(entryName, isHidden, manualType, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
         newPages.add(new Page(entryName, isHidden, manualType, new PictureWidget(73 - width / 2, 70 - height / 2, imageLocation, width, height)));
@@ -69,7 +70,7 @@ public class PageCreators {
     }
 
 
-    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = item.manualName(0);
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
@@ -83,7 +84,7 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (IManualEntryItem item : manualItems) {
@@ -97,7 +98,7 @@ public class PageCreators {
     }
 
 
-    public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String text = StatCollector.translateToLocal(unlocalizedName);
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text));
@@ -108,7 +109,7 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 10;
         int type = 0;
@@ -190,7 +191,7 @@ public class PageCreators {
     }
 
 
-    public static ArrayList<Page> AspectPages(IAspectType aspect, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> AspectPages(IAspectType aspect, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
@@ -202,13 +203,13 @@ public class PageCreators {
 
         height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 16;
 
-        if (height + 18 + 16< 152) {
+        if (height + 18 + 16 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
             widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         } else {
-            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, ManualManager.EnumManual.HL).setParent().setAspect(aspect));
+            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
             widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
@@ -250,7 +251,7 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, ManualManager.EnumManual manualType) {
+    public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
         ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
@@ -269,7 +270,7 @@ public class PageCreators {
         return newPages;
     }
 
-    private static TextContainer parseTextContainer(TextContainer textContainer){
+    private static TextContainer parseTextContainer(TextContainer textContainer) {
         textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
         textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
         textContainer.registerFormat(new TextFormatComponents.TextFormatScale(1.0F));

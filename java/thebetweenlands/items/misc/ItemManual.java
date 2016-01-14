@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.ManualManager;
 import thebetweenlands.proxy.CommonProxy;
 
@@ -24,11 +25,11 @@ public class ItemManual extends Item {
     @SuppressWarnings("unchecked")
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-        if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player, ManualManager.EnumManual.GUIDEBOOK) != null) {
+        if (itemStack.stackTagCompound != null && ManualManager.getFoundPages(player, BLItemRegistry.manualGuideBook) != null) {
             list.add("Current page: ");
-            list.add("" + ManualManager.getCurrentPageNumber(ManualManager.EnumManual.GUIDEBOOK, player));
+            list.add("" + ManualManager.getCurrentPageNumber(BLItemRegistry.manualHL, player));
             list.add("Current category: ");
-            list.add(ManualManager.getCurrentCategory(ManualManager.EnumManual.GUIDEBOOK, player).name);
+            list.add(ManualManager.getCurrentCategory(BLItemRegistry.manualGuideBook, player).name);
         }
     }
 

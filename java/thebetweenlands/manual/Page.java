@@ -1,8 +1,10 @@
 package thebetweenlands.manual;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 
 import java.util.ArrayList;
@@ -35,29 +37,29 @@ public class Page {
 
     public boolean isParent = false;
 
-    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden, ManualManager.EnumManual manualType) {
+    public Page(String pageName, ArrayList<ManualWidgetsBase> widgets, boolean isHidden, Item manualType) {
         this.widgets = widgets;
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
-        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+        if (isHidden && manualType == BLItemRegistry.manualGuideBook) {
             ManualManager.findablePagesGuideBook.add(pageName);
             ManualManager.findablePagesAll.add(pageName);
-        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+        } else if (isHidden && manualType == BLItemRegistry.manualHL) {
             ManualManager.findablePagesHL.add(pageName);
             ManualManager.findablePagesAll.add(pageName);
         }
     }
 
-    public Page(String pageName, boolean isHidden, ManualManager.EnumManual manualType, ManualWidgetsBase... widgets) {
+    public Page(String pageName, boolean isHidden, Item manualType, ManualWidgetsBase... widgets) {
         Collections.addAll(this.widgets, widgets);
         this.pageName = StatCollector.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
         this.isHidden = isHidden;
-        if (isHidden && manualType.equals(ManualManager.EnumManual.GUIDEBOOK)) {
+        if (isHidden && manualType == BLItemRegistry.manualGuideBook) {
             ManualManager.findablePagesGuideBook.add(pageName);
             ManualManager.findablePagesAll.add(pageName);
-        } else if (isHidden && manualType.equals(ManualManager.EnumManual.HL)) {
+        } else if (isHidden && manualType == BLItemRegistry.manualHL) {
             ManualManager.findablePagesHL.add(pageName);
             ManualManager.findablePagesAll.add(pageName);
         }

@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.items.BLItemRegistry;
 
 /**
  * Created by Bart on 06/12/2015.
@@ -18,7 +19,7 @@ public class GuiManualHerblore extends GuiManualBase {
 
     @Override
     public void initGui() {
-        manualType = ManualManager.EnumManual.HL;
+        manualType = BLItemRegistry.manualHL;
         xStart = width / 2 - 146;
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
