@@ -109,12 +109,12 @@ extends Block implements IGrowable {
 
 	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean p_149851_5_) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
-		return false;
+		return true;
 	}
 
 	@Override

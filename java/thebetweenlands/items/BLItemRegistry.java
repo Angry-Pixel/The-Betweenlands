@@ -247,7 +247,7 @@ public class BLItemRegistry {
 	public static final ItemRope rope = new ItemRope();
 	public static final Item fireFly = new ItemMob("fireFly");
 	public static final Item gecko = new ItemMob("gecko");
-	public static final Item cavingRope = new ItemCavingRope().setUnlocalizedName("thebetweenlands.cavingRope");
+	public static final Item cavingRope = new ItemCavingRope().setUnlocalizedName("thebetweenlands.cavingRope").setTextureName("thebetweenlands:cavingRope");
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
