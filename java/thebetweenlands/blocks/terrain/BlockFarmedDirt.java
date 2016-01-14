@@ -82,11 +82,18 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		}
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			if (!world.isRemote) {
-				if (meta == FERT_DIRT_DECAYED || meta == FERT_GRASS_DECAYED) {
-					world.setBlockMetadataWithNotify(x, y, z, meta - DECAY_CURE, 3);
-				}
-				if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.DECAYED_CROP) {
-					world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
+				for(int xo = -1; xo <= 1; xo++) {
+					for(int zo = -1; zo <= 1; zo++) {
+						if(world.getBlock(x+xo, y, z+zo) instanceof BlockFarmedDirt) {
+							int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
+							if (currentMeta == FERT_DIRT_DECAYED || currentMeta == FERT_GRASS_DECAYED) {
+								world.setBlockMetadataWithNotify(x+xo, y, z+zo, currentMeta - DECAY_CURE, 3);
+							}
+							if(world.getBlock(x+xo, y + 1, z+zo) instanceof BlockBLGenericCrop && world.getBlockMetadata(x+xo, y + 1, z+zo) == BlockBLGenericCrop.DECAYED_CROP) {
+								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
+							}
+						}
+					}
 				}
 			}
 			if (!player.capabilities.isCreativeMode) {

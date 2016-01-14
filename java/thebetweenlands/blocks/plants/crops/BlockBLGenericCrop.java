@@ -121,14 +121,19 @@ public class BlockBLGenericCrop extends BlockCrops {
 		ItemStack stack = player.getCurrentEquippedItem();
 		if (stack != null && stack.getItem() == BLItemRegistry.itemsGeneric && stack.getItemDamage() == EnumItemGeneric.PLANT_TONIC.id) {
 			if (!world.isRemote) {
-				if (meta == DECAYED_CROP) {
-					world.setBlockMetadataWithNotify(x, y, z, meta - 1, 3);
+				for(int xo = -1; xo <= 1; xo++) {
+					for(int zo = -1; zo <= 1; zo++) {
+						int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
+						if (currentMeta == DECAYED_CROP) {
+							world.setBlockMetadataWithNotify(x+xo, y, z+zo, currentMeta - 1, 3);
+						}
+						int metaDirt = world.getBlockMetadata(x+xo, y - 1, z+zo);
+						if(BlockFarmedDirt.isDecayed(metaDirt)) {
+							world.setBlockMetadataWithNotify(x+xo, y - 1, z+zo, metaDirt - BlockFarmedDirt.DECAY_CURE, 3);
+						}
+					}
 				}
 				world.playAuxSFX(2005, x, y, z, 0);
-				int metaDirt = world.getBlockMetadata(x, y - 1, z);
-				if(BlockFarmedDirt.isDecayed(metaDirt)) {
-					world.setBlockMetadataWithNotify(x, y - 1, z, metaDirt - BlockFarmedDirt.DECAY_CURE, 3);
-				}
 			}
 			if(!player.capabilities.isCreativeMode) {
 				stack.stackSize--;
