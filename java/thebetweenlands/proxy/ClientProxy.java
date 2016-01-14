@@ -111,6 +111,7 @@ import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityCompostBinRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityGeckoCageRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityInfuserRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityItemShelfRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityLifeCrystalRenderer;
@@ -188,6 +189,7 @@ import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
@@ -316,6 +318,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot2.class, new TileEntityTarLootPot2Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new TileEntityTarLootPot3Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new TileEntityItemShelfRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new TileEntityGeckoCageRenderer());
 
 		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());

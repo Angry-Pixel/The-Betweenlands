@@ -228,9 +228,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				this.infusingRecipe = null;
 				if (evaporation == 600) {
 					// TODO Make this a toxic cloud entity - a job for Sam's expert render skills :P
-					EntityPig piggy = new EntityPig(worldObj);
-					piggy.setLocationAndAngles(xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, MathHelper.wrapAngleTo180_float(worldObj.rand.nextFloat() * 360.0F), 0.0F);
-					worldObj.spawnEntityInWorld(piggy);
+					//EntityPig piggy = new EntityPig(worldObj);
+					//piggy.setLocationAndAngles(xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, MathHelper.wrapAngleTo180_float(worldObj.rand.nextFloat() * 360.0F), 0.0F);
+					//worldObj.spawnEntityInWorld(piggy);
 				}
 			}
 			hasInfusion = false;

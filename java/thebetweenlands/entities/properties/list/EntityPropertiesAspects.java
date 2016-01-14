@@ -28,11 +28,13 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		}
 
 		public final EnumDiscoveryResult result;
+		public final boolean successful;
 		public final Aspect discovered;
 
-		private AspectDiscovery(EnumDiscoveryResult result, Aspect discovered) {
+		private AspectDiscovery(EnumDiscoveryResult result, Aspect discovered, boolean successful) {
 			this.result = result;
 			this.discovered = discovered;
+			this.successful = successful;
 		}
 	}
 
@@ -60,18 +62,18 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	public AspectDiscovery discover(AspectManager manager, AspectItem item) {
 		List<Aspect> staticAspects = manager.getStaticAspects(item);
 		if(staticAspects.size() == 0) {
-			return new AspectDiscovery(EnumDiscoveryResult.NONE, null);
+			return new AspectDiscovery(EnumDiscoveryResult.NONE, null, false);
 		}
 		int discoveryCount = this.getDiscoveryCount(item) + 1;
 		if(discoveryCount > staticAspects.size()) {
-			return new AspectDiscovery(EnumDiscoveryResult.END, null);
+			return new AspectDiscovery(EnumDiscoveryResult.END, null, false);
 		}
 		this.discoveredStaticAspectCounts.put(item, discoveryCount);
 		this.sync();
-		if(discoveryCount - 1 == staticAspects.size()) {
-			return new AspectDiscovery(EnumDiscoveryResult.LAST, staticAspects.get(discoveryCount - 1));
+		if(discoveryCount == staticAspects.size()) {
+			return new AspectDiscovery(EnumDiscoveryResult.LAST, staticAspects.get(discoveryCount - 1), true);
 		} else {
-			return new AspectDiscovery(EnumDiscoveryResult.NEW, staticAspects.get(discoveryCount - 1));
+			return new AspectDiscovery(EnumDiscoveryResult.NEW, staticAspects.get(discoveryCount - 1), true);
 		}
 	}
 

@@ -30,6 +30,7 @@ import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
 import thebetweenlands.blocks.container.BlockCompostBin;
+import thebetweenlands.blocks.container.BlockGeckoCage;
 import thebetweenlands.blocks.container.BlockInfuser;
 import thebetweenlands.blocks.container.BlockItemShelf;
 import thebetweenlands.blocks.container.BlockLootPot1;
@@ -494,7 +495,7 @@ public class BLBlockRegistry {
 	public static final Block pitstoneTiles = new BlockBLGenericDeco("pitstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block chiseledPitstone = new BlockBLGenericDeco("chiseledPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone); 
 	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");
-
+	public static final Block geckoCage = new BlockGeckoCage();
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
 	public static final Block blockTotem = new BlockTotem();

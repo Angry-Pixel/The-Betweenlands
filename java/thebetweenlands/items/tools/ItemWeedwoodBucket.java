@@ -80,21 +80,23 @@ public class ItemWeedwoodBucket extends Item implements IManualEntryItem {
 					if (block == BLBlockRegistry.rubberTreeLog && meta == 1 && pos.sideHit >= 2 && !world.isRemote) {
 						int tx = x + (pos.sideHit == 4 ? -1 : (pos.sideHit == 5 ? 1 : 0));
 						int tz = z + (pos.sideHit == 2 ? -1 : (pos.sideHit == 3 ? 1 : 0));
-						ItemStack swampReedRopeItem =ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE);
-						boolean hasRope = player.capabilities.isCreativeMode;
-						if(!hasRope && player.inventory.hasItemStack(swampReedRopeItem)) {
-							for(int i = 0; i < player.inventory.mainInventory.length; ++i) {
-								if(player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].isItemEqual(swampReedRopeItem)) {
-									player.inventory.decrStackSize(i, 1);
-									hasRope = true;
-									break;
+						if(world.isAirBlock(tx, y, tz)) {
+							ItemStack swampReedRopeItem =ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE);
+							boolean hasRope = player.capabilities.isCreativeMode;
+							if(!hasRope && player.inventory.hasItemStack(swampReedRopeItem)) {
+								for(int i = 0; i < player.inventory.mainInventory.length; ++i) {
+									if(player.inventory.mainInventory[i] != null && player.inventory.mainInventory[i].isItemEqual(swampReedRopeItem)) {
+										player.inventory.decrStackSize(i, 1);
+										hasRope = true;
+										break;
+									}
 								}
 							}
-						}
-						if(hasRope) {
-							world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
-							stack.stackSize--;
-							return stack;
+							if(hasRope) {
+								world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
+								stack.stackSize--;
+								return stack;
+							}
 						}
 					}
 
