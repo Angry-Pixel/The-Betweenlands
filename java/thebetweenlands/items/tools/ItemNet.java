@@ -37,6 +37,7 @@ public class ItemNet extends Item {
 				entity.setDead();
 				itemStack.damageItem(1, player);
 			}
+			player.swingItem();
 		}
 		return true;
 	}

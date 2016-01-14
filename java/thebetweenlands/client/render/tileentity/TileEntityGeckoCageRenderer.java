@@ -53,7 +53,9 @@ public class TileEntityGeckoCageRenderer extends TileEntitySpecialRenderer {
 		}
 
 		bindTexture(TEXTURE);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		MODEL.render();
+		GL11.glEnable(GL11.GL_CULL_FACE);
 
 		/*GL11.glPushMatrix();
 		GL11.glTranslatef(-1.0F, 0.5F, -0.5F);

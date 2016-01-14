@@ -78,6 +78,8 @@ public class RecipeHandler {
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rope, 1), "#", "#", "#", '#', new ItemStack(BLBlockRegistry.hanger));
 
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.net, 1), "SRR", "SRR", "S  ", 'S', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
 
@@ -145,6 +147,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pestleAndMortar), "x x", "xxx", "s s", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.alembic), " o ", " dv", "coc", 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.infuser), "o o", "opo", "sos", 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'p', new ItemStack(BLItemRegistry.pestle), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.geckoCage), "sps", "rrr", "sps", 's', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT), 'p', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.weedwoodPlankSlab)), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 
 		//Deco Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
@@ -178,6 +181,9 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.doorSyrmorite, 1), "##", "##", "##", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorSyrmorite, 2), "###", "###", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 
 		// Stairs, slabs, walls, fences
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricks);

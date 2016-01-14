@@ -54,6 +54,7 @@ import thebetweenlands.network.base.IPacket;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
@@ -120,7 +121,8 @@ public class TheBetweenlands
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 		networkWrapper.registerMessage(MessageSyncEnvironmentEvent.class, MessageSyncEnvironmentEvent.class, 4, Side.CLIENT);
 		networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
-		BLEntityPropertiesRegistry.HANDLER.registerPacket(networkWrapper, 6);
+		networkWrapper.registerMessage(MessageLoadAspects.class, MessageLoadAspects.class, 6, Side.CLIENT);
+		BLEntityPropertiesRegistry.HANDLER.registerPacket(networkWrapper, 7);
 
 		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 

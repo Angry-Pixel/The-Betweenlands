@@ -71,6 +71,7 @@ tile.thebetweenlands.alembic.name=Alembic
 tile.thebetweenlands.infuser.name=Infuser
 tile.thebetweenlands.hollowLog.name=Hollow Log
 tile.thebetweenlands.itemShelf.name=Item Shelf
+tile.thebetweenlands.geckoCage.name=Gecko Cage
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -1063,6 +1064,7 @@ chat.compost.open.get=Open the compost bin to take out the compost
 chat.aspect.discovery.gecko.none=You can't conduct this experiment without a gecko
 chat.aspect.discovery.gecko.recovering=The gecko is still recovering from the last experiment
 chat.aspect.discovery.none=This item doesn't seem to have any aspects
+chat.aspect.discovery.more=This item still seems to have some more undiscovered aspects
 chat.aspect.discovery.end=You've already discovered all aspects on this item
 chat.aspect.discovery.last=This seems to be the last undiscovered aspect on this item
 chat.aspect.discovery.Ordaniis=The gecko's scales seem to be glowing slightly

@@ -52,11 +52,11 @@ public class CommandDiscoverAspects extends CommandBase {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				AspectDiscovery discovery = properties.discover(manager, new AspectItem(player.getHeldItem()));
-				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discovered.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.aspect.getName())));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.aspect.getName())));
 				break;
 			case "all":
 				properties.discoverAll();
-				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discovered.all"));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.all"));
 				break;
 			default:
 				throw new CommandException("commands.generic.syntax");

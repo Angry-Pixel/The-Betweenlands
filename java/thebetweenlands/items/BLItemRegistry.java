@@ -228,7 +228,7 @@ public class BLItemRegistry {
 
 	//DOORS
 	public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
-	public static final Item doorOctine = new ItemBLDoor(BLBlockRegistry.doorSyrmorite);
+	public static final Item doorSyrmorite = new ItemBLDoor(BLBlockRegistry.doorSyrmorite);
 
 	//MISC
 	public static final ItemShimmerStone shimmerStone = new ItemShimmerStone();

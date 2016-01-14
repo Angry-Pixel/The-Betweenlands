@@ -196,10 +196,20 @@ public class AspectManager {
 		return rnd.nextLong();
 	}
 
+	/**
+	 * Returns the aspect manager for the specified world
+	 * @param world
+	 * @return
+	 */
 	public static AspectManager get(World world) {
 		return BetweenlandsWorldData.forWorld(world).getAspectManager();
 	}
 
+	/**
+	 * Loads all static aspects from an NBT and complements any missing data
+	 * @param nbt
+	 * @param aspectSeed
+	 */
 	public void loadAndPopulateStaticAspects(NBTTagCompound nbt, long aspectSeed) {
 		if(nbt != null && nbt.hasKey("aspects")) {
 			NBTTagCompound aspectCompound = nbt.getCompoundTag("aspects");
@@ -223,6 +233,10 @@ public class AspectManager {
 		this.matchedAspects.put(item, aspects);
 	}
 
+	/**
+	 * Loads all static aspects from an NBT
+	 * @param nbt
+	 */
 	public void loadStaticAspects(NBTTagCompound nbt) {
 		this.matchedAspects.clear();
 		NBTTagList entryList = (NBTTagList) nbt.getTag("entries");
@@ -250,6 +264,10 @@ public class AspectManager {
 			}
 	}
 
+	/**
+	 * Saves all static aspects to an NBT
+	 * @param nbt
+	 */
 	public void saveStaticAspects(NBTTagCompound nbt) {
 		NBTTagCompound aspectCompound = new NBTTagCompound();
 		NBTTagList entryList = new NBTTagList();
@@ -269,6 +287,10 @@ public class AspectManager {
 		nbt.setTag("aspects", aspectCompound);
 	}
 
+	/**
+	 * Resets all static aspects
+	 * @param aspectSeed
+	 */
 	public void resetStaticAspects(long aspectSeed) {
 		this.generateStaticAspects(aspectSeed);
 	}
@@ -368,6 +390,11 @@ public class AspectManager {
 		return possibleAspects.size();
 	}
 
+	/**
+	 * Returns a list of all static aspects on an item
+	 * @param item
+	 * @return
+	 */
 	public List<Aspect> getStaticAspects(AspectItem item) {
 		for(Entry<AspectItem, List<Aspect>> e : this.matchedAspects.entrySet()) {
 			if(e.getKey().equals(item)) {
@@ -377,6 +404,14 @@ public class AspectManager {
 		return new ArrayList<Aspect>();
 	}
 
+	/**
+	 * Returns a list of all aspects on an item. If you specify a player
+	 * this will only return the aspects that the player has discovered.
+	 * If the player is null this will return all aspects on an item.
+	 * @param stack
+	 * @param player
+	 * @return
+	 */
 	public List<Aspect> getAspects(ItemStack stack, EntityPlayer player) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
 		if(player == null) {
@@ -384,7 +419,7 @@ public class AspectManager {
 		} else {
 			EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
 			if(aspectProperties != null) {
-				aspects.addAll(aspectProperties.getDiscoveredStaticAspects(stack));
+				aspects.addAll(aspectProperties.getDiscoveredStaticAspects(this, new AspectItem(stack)));
 			}
 		}
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
@@ -400,6 +435,14 @@ public class AspectManager {
 		return aspects;
 	}
 
+	/**
+	 * Returns a list of all aspect types on an item. If you specify a player
+	 * this will only return the aspect types that the player has discovered.
+	 * If the player is null this will return all aspect types on an item.
+	 * @param stack
+	 * @param player
+	 * @return
+	 */
 	public List<IAspectType> getAspectTypes(ItemStack stack, EntityPlayer player) {
 		List<IAspectType> aspects = new ArrayList<IAspectType>();
 		for(Aspect aspect : this.getAspects(stack, player)) {
@@ -408,6 +451,12 @@ public class AspectManager {
 		return aspects;
 	}
 
+	/**
+	 * Adds dynamic aspects to an item stack
+	 * @param stack
+	 * @param aspects
+	 * @return
+	 */
 	public ItemStack addAspects(ItemStack stack, Aspect... aspects) {
 		if(stack.stackTagCompound == null) {
 			stack.stackTagCompound = new NBTTagCompound();

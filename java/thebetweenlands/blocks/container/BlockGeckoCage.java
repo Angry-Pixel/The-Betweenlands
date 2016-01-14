@@ -73,36 +73,40 @@ public class BlockGeckoCage extends BlockContainer {
 						AspectManager manager = AspectManager.get(world);
 						List<Aspect> aspects = manager.getAspects(stack, null);
 						if(aspects.size() > 0) {
-							if(!world.isRemote) {
-								EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
-								if(aspectProperties != null) {
-									AspectDiscovery discovery = aspectProperties.discover(manager, new AspectItem(stack));
-									switch(discovery.result) {
-									case NEW:
-									case LAST:
-										tile.setAspectType(discovery.discovered.aspect, 1200);
+							EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
+							if(aspectProperties != null) {
+								AspectDiscovery discovery = aspectProperties.discover(manager, new AspectItem(stack));
+								switch(discovery.result) {
+								case NEW:
+								case LAST:
+									if(!world.isRemote) {
+										tile.setAspectType(discovery.discovered.aspect, 2400);
 										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.aspect.getName()));
 										if(discovery.result == EnumDiscoveryResult.LAST) {
 											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.last"));
+										} else {
+											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.more"));
 										}
 										if(!player.capabilities.isCreativeMode) --stack.stackSize;
-										return true;
-									case END:
-										//already all discovered
-										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.end"));
-										return false;
-									default:
-										//no aspects
-										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
-										return false;
 									}
+									return true;
+								case END:
+									//already all discovered
+									if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.end"));
+									return false;
+								default:
+									//no aspects
+									if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
+									return false;
 								}
 							}
-							return true;
 						} else {
 							//no aspects
-							if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
-							return false;
+							if(!world.isRemote) {
+								player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
+								return false;
+							}
+							return true;
 						}
 					} else {
 						//no gecko
