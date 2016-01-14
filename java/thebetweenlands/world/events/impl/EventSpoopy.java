@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
@@ -61,7 +61,7 @@ public class EventSpoopy extends EnvironmentEvent {
 		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.addChatMessage(new ChatComponentText("You feel a chill in the air... the haunting season has begun!"));
+			player.addChatMessage(new ChatComponentTranslation("chat.event.spook"));
 		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {

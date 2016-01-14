@@ -2,9 +2,10 @@ package thebetweenlands.blocks.terrain;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.AxisAlignedBB;
@@ -13,11 +14,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockPuddle extends Block {
 	public BlockPuddle() {
@@ -49,7 +49,7 @@ public class BlockPuddle extends Block {
 				for(int xo = -1; xo <= 1; xo++) {
 					for(int zo = -1; zo <= 1; zo++) {
 						if((xo == 0 && zo == 0) || xo*xo == zo*zo) continue;
-						if(world.isAirBlock(x+xo, y, z+zo) && BLBlockRegistry.puddle.canPlaceBlockAt(world, x+xo, y, z+zo)) {
+						if((world.isAirBlock(x+xo, y, z+zo) || world.getBlock(x+xo, y, z+zo) instanceof BlockBLGenericCrop) && BLBlockRegistry.puddle.canPlaceBlockAt(world, x+xo, y, z+zo)) {
 							world.setBlock(x+xo, y, z+zo, BLBlockRegistry.puddle);
 						} else if(world.getBlock(x+xo, y, z+zo) == BLBlockRegistry.puddle) {
 							world.setBlockMetadataWithNotify(x+xo, y, z+zo, world.getBlockMetadata(x+xo, y, z+zo) + rnd.nextInt(6), 2);
@@ -142,7 +142,7 @@ public class BlockPuddle extends Block {
 				int colorMultiplier = blockAccess.getBiomeGenForCoords(x + yOff, z + xOff).getWaterColorMultiplier();
 				avgRed += (colorMultiplier & 16711680) >> 16;
 			avgGreen += (colorMultiplier & 65280) >> 8;
-			avgBlue += colorMultiplier & 255;
+					avgBlue += colorMultiplier & 255;
 			}
 		}
 

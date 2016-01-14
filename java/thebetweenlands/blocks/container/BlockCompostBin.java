@@ -12,10 +12,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
@@ -58,15 +57,15 @@ public class BlockCompostBin extends BlockContainer {
 			if(!player.isSneaking() && player.getCurrentEquippedItem() == null && tile.getTotalCompostedAmount() == 0) {
 				if(open) {
 					if(tile.hasCompostableItems()) {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.close")));
+						player.addChatMessage(new ChatComponentTranslation("chat.compost.close"));
 					} else {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.add")));
+						player.addChatMessage(new ChatComponentTranslation("chat.compost.add"));
 					}
 				} else {
 					if(tile.hasCompostableItems()) {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.composting")));
+						player.addChatMessage(new ChatComponentTranslation("chat.compost.composting"));
 					} else {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.add")));
+						player.addChatMessage(new ChatComponentTranslation("chat.compost.add"));
 					}
 				}
 			} else if (player.isSneaking()) {
@@ -86,17 +85,17 @@ public class BlockCompostBin extends BlockContainer {
 								break;
 							case -1:
 							default:
-								player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.full")));
+								player.addChatMessage(new ChatComponentTranslation("chat.compost.full"));
 								break;
 							}
 						} else {
-							player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.not.compostable")));
+							player.addChatMessage(new ChatComponentTranslation("chat.compost.not.compostable"));
 						}
 					} else {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.open.add")));
+						player.addChatMessage(new ChatComponentTranslation("chat.compost.open.add"));
 					}
 				} else if(!open && tile.getTotalCompostedAmount() != 0) {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("compost.open.get")));
+					player.addChatMessage(new ChatComponentTranslation("chat.compost.open.get"));
 				} else if(open && tile.getTotalCompostedAmount() != 0) {
 					if(tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
 						world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ItemGeneric.createStack(EnumItemGeneric.COMPOST)));

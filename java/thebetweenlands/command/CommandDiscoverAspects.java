@@ -8,6 +8,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
@@ -34,58 +35,52 @@ public class CommandDiscoverAspects extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
 		if(sender instanceof EntityPlayer == false) {
-			throw new CommandException("Must be player");
+			throw new CommandException("command.generic.noplayer");
 		}
 		EntityPlayer player = (EntityPlayer) sender;
 		EntityPropertiesAspects properties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
-		if(properties == null) {
-			throw new CommandException("Aspect properties not available");
-		}
 		if(args.length < 2) {
-			throw new CommandException("Not enough arguments");
+			throw new CommandException("commands.generic.syntax");
 		}
 		WorldServer blWorld = DimensionManager.getWorld(ConfigHandler.DIMENSION_ID);
-		if(blWorld == null) {
-			throw new CommandException("Betweenlands world is null");
-		}
 		AspectManager manager = AspectManager.get(blWorld);
 		switch(args[0]) {
 		case "discover":
 			switch(args[1]) {
 			case "held":
 				if(player.getHeldItem() == null) {
-					throw new CommandException("Held item must not be null");
+					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				AspectDiscovery discovery = properties.discover(manager, new AspectItem(player.getHeldItem()));
-				sender.addChatMessage(new ChatComponentText("Result: " + discovery.result.toString() + " Aspect: " + (discovery.discovered == null ? "null" : discovery.discovered.aspect.getName())));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discovered.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.aspect.getName())));
 				break;
 			case "all":
 				properties.discoverAll();
-				sender.addChatMessage(new ChatComponentText("Discovered all aspects of all items"));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discovered.all"));
 				break;
 			default:
-				throw new CommandException("Incorrect usage");
+				throw new CommandException("commands.generic.syntax");
 			}
 			break;
 		case "reset":
 			switch(args[1]) {
 			case "held":
 				if(player.getHeldItem() == null) {
-					throw new CommandException("Held item must not be null");
+					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				properties.resetDiscovery(new AspectItem(player.getHeldItem()));
-				sender.addChatMessage(new ChatComponentText("Removed discovered aspects"));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.reset.held"));
 				break;
 			case "all":
 				properties.resetAllDiscovery();
-				sender.addChatMessage(new ChatComponentText("Removed discovered aspects from all items"));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.reset.all"));
 				break;
 			default:
-				throw new CommandException("Incorrect usage");
+				throw new CommandException("commands.generic.syntax");
 			}
 			break;
 		default:
-			throw new CommandException("Incorrect usage");
+			throw new CommandException("commands.generic.syntax");
 		}
 	}
 

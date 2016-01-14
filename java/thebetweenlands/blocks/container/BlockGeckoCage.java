@@ -1,5 +1,8 @@
 package thebetweenlands.blocks.container;
 
+import java.util.List;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -8,14 +11,22 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
+import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery;
+import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery.EnumDiscoveryResult;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
-import thebetweenlands.tileentities.TileEntityPurifier;
 
 public class BlockGeckoCage extends BlockContainer {
 	public BlockGeckoCage() {
@@ -41,28 +52,98 @@ public class BlockGeckoCage extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
-		if (world.getTileEntity(x, y, z) instanceof TileEntityGeckoCage ) {
-			TileEntityGeckoCage tile = (TileEntityGeckoCage ) world.getTileEntity(x, y, z);
+		if (world.getTileEntity(x, y, z) instanceof TileEntityGeckoCage) {
+			TileEntityGeckoCage tile = (TileEntityGeckoCage) world.getTileEntity(x, y, z);
 
-			if (player.isSneaking())
+			if(player.isSneaking())
 				return false;
 
-			//TODO: Gecko Cage - Implement interaction
+			if(player.getHeldItem() != null) {
+				ItemStack stack = player.getHeldItem();
+				if(stack.getItem() == BLItemRegistry.gecko) {
+					if(!tile.hasGecko()) {
+						tile.addGecko(12);
+						if(!player.capabilities.isCreativeMode) --stack.stackSize;
+						return true;
+					}
+					return false;
+				}
+				if(tile.getAspectType() == null) {
+					if(tile.hasGecko()) {
+						AspectManager manager = AspectManager.get(world);
+						List<Aspect> aspects = manager.getAspects(stack, null);
+						if(aspects.size() > 0) {
+							if(!world.isRemote) {
+								EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
+								if(aspectProperties != null) {
+									AspectDiscovery discovery = aspectProperties.discover(manager, new AspectItem(stack));
+									switch(discovery.result) {
+									case NEW:
+									case LAST:
+										tile.setAspectType(discovery.discovered.aspect, 1200);
+										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.aspect.getName()));
+										if(discovery.result == EnumDiscoveryResult.LAST) {
+											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.last"));
+										}
+										if(!player.capabilities.isCreativeMode) --stack.stackSize;
+										return true;
+									case END:
+										//already all discovered
+										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.end"));
+										return false;
+									default:
+										//no aspects
+										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
+										return false;
+									}
+								}
+							}
+							return true;
+						} else {
+							//no aspects
+							if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
+							return false;
+						}
+					} else {
+						//no gecko
+						if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.gecko.none"));
+						return false;
+					}
+				} else {
+					//recovering
+					if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.gecko.recovering"));
+					return false;
+				}
+			}
 		}
-		return true;
+
+		return false;
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		if (world.getTileEntity(x, y, z) instanceof TileEntityPurifier) {
-			TileEntityPurifier tile = (TileEntityPurifier) world.getTileEntity(x, y, z);
-			if (tile == null)
-				return 0;
-			return tile.lightOn ? 13 : 0;
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		if (rand.nextInt(10) == 0 && world.getTileEntity(x, y, z) instanceof TileEntityGeckoCage) {
+			TileEntityGeckoCage cage = (TileEntityGeckoCage) world.getTileEntity(x, y, z);
+			if (cage.hasGecko()) {
+				float xx = (float) x + 0.5F;
+				float yy = (float) (y + 0.1F + rand.nextFloat() * 0.5F);
+				float zz = (float) z + 0.5F;
+				float fixedOffset = 0.25F;
+				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
+				if(cage.getAspectType() != null) {
+					BLParticle.BUBBLE_INFUSION.spawn(world, (double) (xx - fixedOffset), (double) yy, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.BUBBLE_INFUSION.spawn(world, (double) (xx + fixedOffset), (double) yy, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.BUBBLE_INFUSION.spawn(world, (double) (xx + randomOffset), (double) yy, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.BUBBLE_INFUSION.spawn(world, (double) (xx + randomOffset), (double) yy, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+				} else {
+					BLParticle.RUSTLE_LEAF.spawn(world, (double) (xx - fixedOffset / 2.0F), (double) yy, (double) (zz + randomOffset / 2.0F), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.RUSTLE_LEAF.spawn(world, (double) (xx + fixedOffset / 2.0F), (double) yy, (double) (zz + randomOffset / 2.0F), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.RUSTLE_LEAF.spawn(world, (double) (xx + randomOffset / 2.0F), (double) yy, (double) (zz - fixedOffset / 2.0F), 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.RUSTLE_LEAF.spawn(world, (double) (xx + randomOffset / 2.0F), (double) yy, (double) (zz + fixedOffset / 2.0F), 0.0D, 0.0D, 0.0D, 0);
+				}
+			}
 		}
-		return 0;
 	}
 
 	@Override

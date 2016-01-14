@@ -171,13 +171,6 @@ public class AspectManager {
 		}
 	}
 
-	public static IAspectType getAspectTypeFromName(String name) {
-		for(IAspectType type : AspectRegistry.ASPECT_TYPES) {
-			if(type.getName().equals(name)) return type;
-		}
-		return null;
-	}
-
 	public static List<AspectEntry> getAspectEntriesFromName(String name) {
 		List<AspectEntry> aspectEntries = new ArrayList<AspectEntry>();
 		for(AspectEntry aspect : registeredAspects) {

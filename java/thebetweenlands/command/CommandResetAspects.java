@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import thebetweenlands.herblore.aspects.AspectManager;
 
@@ -27,13 +29,12 @@ public class CommandResetAspects extends CommandBase {
 
 	@Override
 	public void processCommand(ICommandSender sender, String[] args) {
-		if(sender.getEntityWorld() == null) {
-			sender.addChatMessage(new ChatComponentText("World is null"));
-			return;
+		if(sender.getEntityWorld() == null || !(sender instanceof EntityPlayer)) {
+			throw new CommandException("command.generic.noplayer");
 		}
 		if (args.length < 1) {
 			this.confirm = true;
-			sender.addChatMessage(new ChatComponentText("Confirm with '/resetAspects confirm'"));
+			sender.addChatMessage(new ChatComponentTranslation("command.aspect.reset.confirm"));
 			return;
 		}
 		if(!this.confirm) {
@@ -47,7 +48,7 @@ public class CommandResetAspects extends CommandBase {
 		if(arg1.equals("confirm")) {
 			World world = sender.getEntityWorld();
 			AspectManager.get(world).resetStaticAspects(AspectManager.getAspectsSeed(world.getSeed()));
-			sender.addChatMessage(new ChatComponentText("The aspects have been reset"));
+			sender.addChatMessage(new ChatComponentTranslation("command.aspect.reset.success"));
 		}
 	}
 

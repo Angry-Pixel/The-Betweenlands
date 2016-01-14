@@ -6,8 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntityRopeNode;
 
@@ -33,7 +32,7 @@ public class ItemCavingRope extends Item {
 				--stack.stackSize;
 			} else {
 				if(connectedRopeNode.getDistance(x + hitX, y + hitY, z + hitZ) > EntityRopeNode.ROPE_LENGTH) {
-					player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.rope.too_far")));
+					player.addChatMessage(new ChatComponentTranslation("chat.rope.too_far"));
 					return false;
 				} else {
 					connectedRopeNode.extendRope(player, x + hitX, y + hitY, z + hitZ);

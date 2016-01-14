@@ -82,6 +82,13 @@ public class AspectRegistry {
 		}
 	}
 
+	public static IAspectType getAspectTypeFromName(String name) {
+		for(IAspectType type : ASPECT_TYPES) {
+			if(type.getName().equals(name)) return type;
+		}
+		return null;
+	}
+
 	public static void init() {
 		registerItems();
 		registerAspects();

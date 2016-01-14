@@ -707,6 +707,8 @@ circlegem.aqua=Aqua Gem
 octine.fire=Hot enough to set moss on fire
 
 # Commands
+command.generic.noplayer=You must be a player
+
 command.tickspeed.success=Set tickspeed to %s ticks per second
 command.tickspeed.usage=/tickspeed <ticks per second>
 
@@ -728,20 +730,23 @@ command.blevent.failure.alreadyoff=The event '%s' is already off
 command.blevent.failure.alreadyenabled=Events are already enabled
 command.blevent.failure.alreadydisabled=Events are already disabled
 
+command.decay.noplayer=You must be a player
+command.decay.noint=Argument is not an integer
+
+command.aspectdiscovery.held.null=Held item must not be null
+command.aspectdiscovery.discover.held=Result: %s Aspect: %d
+command.aspectdiscovery.discover.all=Discovered all aspects of all items
+command.aspectdiscovery.reset.held=Removed discovered aspects
+command.aspectdiscovery.reset.all=Removed discovered aspects from all items
+
+command.aspect.reset.confirm=Confirm with '/resetAspects confirm'
+command.aspect.reset.success=The aspects have been reset
+
 # Events
 event.denseFog.name=Dense Fog
 event.heavyRain.name=Heavy Rain
 event.auroras.name=Auroras
 event.bloodSky.name=Blood Sky
-
-# Compost Bin
-compost.close=Close the compost bin to let the items turn into compost
-compost.add=Add compostable items to the compost bin
-compost.composting=Wait for the items to turn into compost
-compost.full=The compost bin is full
-compost.not.compostable=This item is not compostable
-compost.open.add=Open the compost bin to add compostable items
-compost.open.get=Open the compost bin to take out the compost
 
 # Manual
 manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
@@ -897,8 +902,6 @@ manual.termite.description=Needs localization
 manual.wight.title=Wight
 manual.wight.description=Needs localization
 
-
-manual.discover.page=You discovered a new page
 manual.aspect.found.in=This aspect is found in:
 manual.aspect.used.in=This aspect is used in:
 manual.has.aspects=This item has the following aspects:
@@ -1044,9 +1047,44 @@ talisman.noplace=The space is not large enough
 
 # Chat Messages
 chat.flintandsteel=It's too damp to set something on fire with %s
+
 chat.rope.already_connected=Already connected to another climbing rope
 chat.rope.disconnected=You were disconnected from the climbing rope
 chat.rope.too_far=You're too far away from the last anchor point
+
+chat.compost.close=Close the compost bin to let the items turn into compost
+chat.compost.add=Add compostable items to the compost bin
+chat.compost.composting=Wait for the items to turn into compost
+chat.compost.full=The compost bin is full
+chat.compost.not.compostable=This item is not compostable
+chat.compost.open.add=Open the compost bin to add compostable items
+chat.compost.open.get=Open the compost bin to take out the compost
+
+chat.aspect.discovery.gecko.none=You can't conduct this experiment without a gecko
+chat.aspect.discovery.gecko.recovering=The gecko is still recovering from the last experiment
+chat.aspect.discovery.none=This item doesn't seem to have any aspects
+chat.aspect.discovery.end=You've already discovered all aspects on this item
+chat.aspect.discovery.last=This seems to be the last undiscovered aspect on this item
+chat.aspect.discovery.Ordaniis=The gecko's scales seem to be glowing slightly
+chat.aspect.discovery.Celawynn=You can hear its belly rumbling and it seems to burp a lot
+chat.aspect.discovery.Yeowynn=You've never seen a healthier gecko, it's bursting with energy
+chat.aspect.discovery.Azuwynn=You can see its muscles twitching uncontrollably
+chat.aspect.discovery.Freiwynn=Its eyes are pulsating
+chat.aspect.discovery.Dayuniis=The gecko is walking around like a drunkard and looks around in a schizophrenic manner
+chat.aspect.discovery.Fergalaz=The gecko's scales seem to become rock hard, it can barely move
+chat.aspect.discovery.Yunugaz=The gecko seems light, and its breath sounds like a hollow wind
+chat.aspect.discovery.Firnalaz=Its scales have a red glow and it breathes a hot breath
+chat.aspect.discovery.Byrginaz=It's drooling, sweating and peeing around its cage
+chat.aspect.discovery.Armaniis=It seems very calm and looks at you with loving eyes
+chat.aspect.discovery.Geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
+chat.aspect.discovery.Yihinren=Its scales became puffy and its head looks... different
+chat.aspect.discovery.Byariis=The gecko is chewing furiously on its tail and looks around as if possessed
+
+chat.event.spook=You feel a chill in the air... the haunting season has begun!
+
+chat.item.forbiddenfig=Cursed are those who eat the Forbidden Fig!
+
+chat.manual.discover.page=You discovered a new page: %s
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

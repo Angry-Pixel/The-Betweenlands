@@ -21,7 +21,7 @@ public class Aspect implements Comparable<Aspect> {
 	public static Aspect readFromNBT(NBTTagCompound nbt) {
 		String aspectName = nbt.getString("aspect");
 		float amount = nbt.getFloat("amount");
-		IAspectType aspectType = AspectManager.getAspectTypeFromName(aspectName);
+		IAspectType aspectType = AspectRegistry.getAspectTypeFromName(aspectName);
 		if(aspectType != null) {
 			return new Aspect(aspectType, amount);
 		}

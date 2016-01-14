@@ -93,6 +93,7 @@ import thebetweenlands.client.render.item.ItemAlembicRenderer;
 import thebetweenlands.client.render.item.ItemAnimatorRenderer;
 import thebetweenlands.client.render.item.ItemCompostBinRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
+import thebetweenlands.client.render.item.ItemGeckoCageRenderer;
 import thebetweenlands.client.render.item.ItemInfuserRenderer;
 import thebetweenlands.client.render.item.ItemLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemLootPot2Renderer;
@@ -337,6 +338,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot2), new ItemTarLootPot2Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.geckoCage), new ItemGeckoCageRenderer());
 
 		//Register custom item renderer for aspect overlays
 		for(Item item : BLItemRegistry.ITEMS) {

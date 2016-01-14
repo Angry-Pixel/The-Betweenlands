@@ -10,9 +10,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
@@ -113,7 +112,7 @@ public class EntityRopeNode extends Entity {
 				}
 				if(nextNode.getDistanceToEntity(this) > ROPE_LENGTH_MAX) {
 					if(nextNode instanceof ICommandSender) {
-						((ICommandSender) nextNode).addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.rope.disconnected")));
+						((ICommandSender) nextNode).addChatMessage(new ChatComponentTranslation("chat.rope.disconnected"));
 					}
 					this.setNextNode(null);
 				}
@@ -221,7 +220,7 @@ public class EntityRopeNode extends Entity {
 				}
 				if(connectedRopeNode != null) {
 					if(player.worldObj.isRemote) {
-						player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.rope.already_connected")));
+						player.addChatMessage(new ChatComponentTranslation("chat.rope.already_connected"));
 					}
 					return false;
 				}

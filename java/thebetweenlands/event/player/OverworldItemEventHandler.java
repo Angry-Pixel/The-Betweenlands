@@ -7,8 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -45,7 +44,7 @@ public class OverworldItemEventHandler {
 					event.useItem = Result.DENY;
 					event.setCanceled(true);
 					if(event.world.isRemote) {
-						event.entityPlayer.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("chat.flintandsteel").replaceAll("%s", item.getDisplayName())));
+						event.entityPlayer.addChatMessage(new ChatComponentTranslation("chat.flintandsteel", new ChatComponentTranslation(item.getUnlocalizedName() + ".name")));
 					}
 				}
 			}

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 import thebetweenlands.world.events.TimedEnvironmentEvent;
@@ -20,12 +21,12 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	public EventHeavyRain(EnvironmentEventRegistry registry) {
 		super(registry);
 	}
-	
+
 	@Override
 	public String getEventName() {
 		return "heavyRain";
 	}
-	
+
 	@Override
 	public int getOffTime(Random rnd) {
 		return rnd.nextInt(110000) + 85000;
@@ -65,7 +66,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 						int by = chunk.getPrecipitationHeight(cbx, cbz);
 						int bx = chunkPos.chunkXPos * 16 + cbx;
 						int bz = chunkPos.chunkZPos * 16 + cbz;
-						if(world.getBlock(bx, by-1, bz) != BLBlockRegistry.puddle && BLBlockRegistry.puddle.canPlaceBlockAt(world, bx, by, bz)) {
+						if(world.getBlock(bx, by-1, bz) != BLBlockRegistry.puddle && (world.isAirBlock(bx, by, bz) || world.getBlock(bx, by, bz) instanceof BlockBLGenericCrop) && BLBlockRegistry.puddle.canPlaceBlockAt(world, bx, by, bz)) {
 							world.setBlock(bx, by, bz, BLBlockRegistry.puddle);
 						}
 					}
