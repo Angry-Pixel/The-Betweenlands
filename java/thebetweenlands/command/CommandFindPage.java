@@ -32,7 +32,6 @@ public class CommandFindPage extends CommandBase {
             return;
         }
         if (ManualManager.findablePagesGuideBook.contains(args[0]))
-            ManualManager.findPage((EntityPlayer) sender, args[0], ManualManager.EnumManual.GUIDEBOOK);
             ManualManager.findPage((EntityPlayer) sender, args[0], BLItemRegistry.manualGuideBook);
         else if (ManualManager.findablePagesHL.contains(args[0]))
             ManualManager.findPage((EntityPlayer) sender, args[0], BLItemRegistry.manualHL);
