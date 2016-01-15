@@ -269,7 +269,7 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
 
-        height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 16;
+        height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 18;
 
         if (height + 18 + 16 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));

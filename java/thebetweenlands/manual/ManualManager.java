@@ -172,8 +172,11 @@ public class ManualManager {
             NBTTagCompound nbt = player.getHeldItem().getTagCompound();
             if (nbt != null && nbt.hasKey("category") && getCategoryFromString(nbt.getString("category"), itemManual) != null)
                 return getCategoryFromString(nbt.getString("category"), itemManual);
-            else
+            else {
+                if (itemManual == BLItemRegistry.manualHL)
+                    return HLEntryRegistry.aspectCategory;
                 return GuideBookEntryRegistry.itemsCategory;
+            }
         }
         return null;
     }
