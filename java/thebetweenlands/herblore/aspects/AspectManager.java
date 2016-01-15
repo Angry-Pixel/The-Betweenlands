@@ -326,7 +326,7 @@ public class AspectManager {
 			for(Aspect aspect : itemAspects) {
 				Aspect mergedAspect = null;
 				for(Aspect ma : mergedAspects) {
-					if(ma.aspect == aspect.aspect) {
+					if(ma.type == aspect.type) {
 						mergedAspect = ma;
 						break;
 					}
@@ -335,7 +335,7 @@ public class AspectManager {
 					mergedAspects.add(aspect);
 				} else {
 					mergedAspects.remove(mergedAspect);
-					mergedAspects.add(new Aspect(mergedAspect.aspect, mergedAspect.amount + aspect.amount));
+					mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.getAmount() + aspect.getAmount()));
 				}
 			}
 			this.updateMatchedAspects(itemStack, mergedAspects);
@@ -346,7 +346,7 @@ public class AspectManager {
 		Iterator<AspectEntry> it = availableAspects.iterator();
 		AspectEntry availableAspect = null;
 		while(it.hasNext() && (availableAspect = it.next()) != null) {
-			if(availableAspect.aspect.equals(itemAspect.aspect)) {
+			if(availableAspect.aspect.equals(itemAspect.type)) {
 				it.remove();
 			}
 		}
@@ -446,7 +446,7 @@ public class AspectManager {
 	public List<IAspectType> getAspectTypes(ItemStack stack, EntityPlayer player) {
 		List<IAspectType> aspects = new ArrayList<IAspectType>();
 		for(Aspect aspect : this.getAspects(stack, player)) {
-			aspects.add(aspect.aspect);
+			aspects.add(aspect.type);
 		}
 		return aspects;
 	}
@@ -471,5 +471,25 @@ public class AspectManager {
 			lst.appendTag(aspectCompound);
 		}
 		return stack;
+	}
+
+	/**
+	 * Writes an aspect type to the specified nbt compound
+	 * @param type
+	 * @param nbt
+	 * @return
+	 */
+	public static NBTTagCompound writeAspectTypeNBT(IAspectType type, NBTTagCompound nbt) {
+		nbt.setString("type", type.getName());
+		return nbt;
+	}
+
+	/**
+	 * Reads an aspect type from the specified compound
+	 * @param nbt
+	 * @return
+	 */
+	public static IAspectType readAspectTypeFromNBT(NBTTagCompound nbt) {
+		return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
 	}
 }

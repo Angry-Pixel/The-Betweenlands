@@ -2,6 +2,7 @@ package thebetweenlands.entities.properties.list;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +15,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDi
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
-import thebetweenlands.herblore.aspects.AspectManager.AspectItemEntry;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.utils.EnumNBTTypes;
 
 public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
@@ -34,8 +35,7 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		}
 	}
 
-	//Server side only!
-	private final Map<AspectItem, Integer> discoveredStaticAspectCounts = new HashMap<AspectItem, Integer>();
+	private final Map<AspectItem, List<IAspectType>> discoveredStaticAspects = new HashMap<AspectItem, List<IAspectType>>();
 
 	/**
 	 * Returns how many aspects of the specified item are already discovered
@@ -43,7 +43,7 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 * @return
 	 */
 	private int getDiscoveryCount(AspectItem item) {
-		return !this.discoveredStaticAspectCounts.containsKey(item) ? 0 : this.discoveredStaticAspectCounts.get(item).intValue();
+		return !this.discoveredStaticAspects.containsKey(item) ? 0 : this.discoveredStaticAspects.get(item).size();
 	}
 
 	/**
@@ -61,12 +61,13 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		if(discoveryCount > staticAspects.size()) {
 			return new AspectDiscovery(EnumDiscoveryResult.END, null, false);
 		}
-		this.discoveredStaticAspectCounts.put(item, discoveryCount);
+		Aspect undiscovered = this.getUndiscoveredAspect(staticAspects, this.discoveredStaticAspects.get(item));
+		this.addDiscovery(item, undiscovered.type);
 		this.sync();
 		if(discoveryCount == staticAspects.size()) {
-			return new AspectDiscovery(EnumDiscoveryResult.LAST, staticAspects.get(discoveryCount - 1), true);
+			return new AspectDiscovery(EnumDiscoveryResult.LAST, undiscovered, true);
 		} else {
-			return new AspectDiscovery(EnumDiscoveryResult.NEW, staticAspects.get(discoveryCount - 1), true);
+			return new AspectDiscovery(EnumDiscoveryResult.NEW, undiscovered, true);
 		}
 	}
 
@@ -74,9 +75,10 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 * Discovers all aspects of all aspect items
 	 * @param manager
 	 */
-	public void discoverAll() {
-		for(Entry<AspectItem, List<AspectItemEntry>> e : AspectManager.getRegisteredItems().entrySet()) {
-			this.discoveredStaticAspectCounts.put(e.getKey(), e.getValue().size());
+	public void discoverAll(AspectManager manager) {
+		for(Entry<AspectItem, List<Aspect>> e : manager.getMatchedAspects().entrySet()) {
+			for(Aspect a : e.getValue())
+				this.addDiscovery(e.getKey(), a.type);
 		}
 		this.sync();
 	}
@@ -86,29 +88,56 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 * @param item
 	 */
 	public void resetDiscovery(AspectItem item) {
-		if(this.discoveredStaticAspectCounts.containsKey(item) && this.discoveredStaticAspectCounts.get(item) != 0) {
+		if(this.discoveredStaticAspects.containsKey(item) && this.discoveredStaticAspects.get(item).size() != 0) {
 			this.sync();
 		}
-		this.discoveredStaticAspectCounts.put(item, 0);
+		this.discoveredStaticAspects.remove(item);
 	}
 
 	/**
 	 * Resets all aspect discoveries of all aspect items
 	 */
 	public void resetAllDiscovery() {
-		this.discoveredStaticAspectCounts.clear();
+		this.discoveredStaticAspects.clear();
 		this.sync();
+	}
+
+	private void addDiscovery(AspectItem item, IAspectType discovered) {
+		List<IAspectType> discoveredAspects = this.discoveredStaticAspects.get(item);
+		if(discoveredAspects == null) {
+			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<IAspectType>());
+		}
+		discoveredAspects.add(discovered);
+	}
+
+	private Aspect getUndiscoveredAspect(List<Aspect> all, List<IAspectType> discovered) {
+		if(discovered == null) {
+			return all.size() == 0 ? null : all.get(0);
+		}
+		for(Aspect a : all) {
+			if(!discovered.contains(a.type))
+				return a;
+		}
+		return null;
 	}
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
 		NBTTagList discoveryList = new NBTTagList();
-		for(Entry<AspectItem, Integer> discovery : this.discoveredStaticAspectCounts.entrySet()) {
-			AspectItem item = discovery.getKey();
-			int discoveryCount = discovery.getValue();
+		Iterator<Entry<AspectItem, List<IAspectType>>> discoveryIT = this.discoveredStaticAspects.entrySet().iterator();
+		while(discoveryIT.hasNext()) {
+			Entry<AspectItem, List<IAspectType>> e = discoveryIT.next();
+			if(e.getValue() == null || e.getValue().size() == 0) {
+				discoveryIT.remove();
+				continue;
+			}
 			NBTTagCompound discoveryEntry = new NBTTagCompound();
-			item.writeToNBT(discoveryEntry);
-			discoveryEntry.setInteger("discoveryCount", discoveryCount);
+			e.getKey().writeToNBT(discoveryEntry);
+			NBTTagList aspectListCompound = new NBTTagList();
+			for(IAspectType type : e.getValue()) {
+				aspectListCompound.appendTag(AspectManager.writeAspectTypeNBT(type, new NBTTagCompound()));
+			}
+			discoveryEntry.setTag("aspects", aspectListCompound);
 			discoveryList.appendTag(discoveryEntry);
 		}
 		nbt.setTag("discoveries", discoveryList);
@@ -116,15 +145,19 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
-		this.discoveredStaticAspectCounts.clear();
+		this.discoveredStaticAspects.clear();
 		NBTTagList discoveryList = nbt.getTagList("discoveries", EnumNBTTypes.NBT_COMPOUND.ordinal());
 		int discoveryEntries = discoveryList.tagCount();
 		for(int i = 0; i < discoveryEntries; i++) {
 			NBTTagCompound discoveryEntry = discoveryList.getCompoundTagAt(i);
 			AspectItem item = AspectItem.readFromNBT(discoveryEntry);
-			if(item == null) continue;
-			int discoveryCount = discoveryEntry.getInteger("discoveryCount");
-			this.discoveredStaticAspectCounts.put(item, discoveryCount);
+			List<IAspectType> aspectTypeList = new ArrayList<IAspectType>();
+			NBTTagList aspectListCompound = discoveryEntry.getTagList("aspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+			for(int c = 0; c < aspectListCompound.tagCount(); c++) {
+				NBTTagCompound aspectTypeCompound = aspectListCompound.getCompoundTagAt(c);
+				aspectTypeList.add(AspectManager.readAspectTypeFromNBT(aspectTypeCompound));
+			}
+			this.discoveredStaticAspects.put(item, aspectTypeList);
 		}
 	}
 
@@ -156,11 +189,12 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 */
 	public List<Aspect> getDiscoveredStaticAspects(AspectManager manager, AspectItem item) {
 		List<Aspect> discoveredStaticAspects = new ArrayList<Aspect>();
-		if(this.discoveredStaticAspectCounts.containsKey(item)) {
-			int discoveredAspectCount = this.discoveredStaticAspectCounts.get(item);
+		if(this.discoveredStaticAspects.containsKey(item)) {
+			List<IAspectType> discoveredAspects = this.discoveredStaticAspects.get(item);
 			List<Aspect> staticAspects = manager.getStaticAspects(item);
-			for(int i = 0; i < staticAspects.size() && i < discoveredAspectCount; i++) {
-				discoveredStaticAspects.add(staticAspects.get(i));
+			for(Aspect a : staticAspects) {
+				if(discoveredAspects.contains(a.type))
+					discoveredStaticAspects.add(a);
 			}
 		}
 		return discoveredStaticAspects;

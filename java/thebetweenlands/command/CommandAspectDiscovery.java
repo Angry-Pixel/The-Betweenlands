@@ -18,7 +18,7 @@ import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
-public class CommandDiscoverAspects extends CommandBase {
+public class CommandAspectDiscovery extends CommandBase {
 	public String getCommandName() {
 		return "aspectDiscovery";
 	}
@@ -52,10 +52,10 @@ public class CommandDiscoverAspects extends CommandBase {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				AspectDiscovery discovery = properties.discover(manager, new AspectItem(player.getHeldItem()));
-				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.aspect.getName())));
+				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.type.getName())));
 				break;
 			case "all":
-				properties.discoverAll();
+				properties.discoverAll(manager);
 				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.all"));
 				break;
 			default:

@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -27,6 +28,7 @@ import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class BlockGeckoCage extends BlockContainer {
 	public BlockGeckoCage() {
@@ -80,8 +82,13 @@ public class BlockGeckoCage extends BlockContainer {
 								case NEW:
 								case LAST:
 									if(!world.isRemote) {
-										tile.setAspectType(discovery.discovered.aspect, 2400);
-										player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.aspect.getName()));
+										tile.setAspectType(discovery.discovered.type, 2400);
+										if(ConfigHandler.DEBUG) {
+											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
+											player.addChatMessage(new ChatComponentText("Aspect: " + discovery.discovered.type.getName()));
+										} else {
+											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
+										}
 										if(discovery.result == EnumDiscoveryResult.LAST) {
 											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.last"));
 										} else {

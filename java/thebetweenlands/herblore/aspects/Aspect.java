@@ -3,17 +3,17 @@ package thebetweenlands.herblore.aspects;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class Aspect implements Comparable<Aspect> {
-	public final IAspectType aspect;
+	public final IAspectType type;
 	public final float amount;
 
 	public Aspect(IAspectType aspect, float amount) {
 		if(aspect == null) throw new RuntimeException("Aspect can't be null");
-		this.aspect = aspect;
+		this.type = aspect;
 		this.amount = amount;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setString("aspect", this.aspect.getName());
+		nbt.setString("aspect", this.type.getName());
 		nbt.setFloat("amount", this.amount);
 		return nbt;
 	}
@@ -28,12 +28,20 @@ public class Aspect implements Comparable<Aspect> {
 		return null;
 	}
 
+	public float getAmount() {
+		return this.amount;
+	}
+
+	public IAspectType getType() {
+		return this.type;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Float.floatToIntBits(this.amount);
-		result = prime * result + ((this.aspect == null) ? 0 : this.aspect.hashCode());
+		result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
 		return result;
 	}
 
@@ -48,16 +56,16 @@ public class Aspect implements Comparable<Aspect> {
 		Aspect other = (Aspect) obj;
 		if (Float.floatToIntBits(this.amount) != Float.floatToIntBits(other.amount))
 			return false;
-		if (this.aspect == null) {
-			if (other.aspect != null)
+		if (this.type == null) {
+			if (other.type != null)
 				return false;
-		} else if (!this.aspect.equals(other.aspect))
+		} else if (!this.type.equals(other.type))
 			return false;
 		return true;
 	}
 
 	@Override
 	public int compareTo(Aspect other) {
-		return this.hashCode() - other.hashCode();
+		return this.type.getName().compareTo(other.type.getName());
 	}
 }

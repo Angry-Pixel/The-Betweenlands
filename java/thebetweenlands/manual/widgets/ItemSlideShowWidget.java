@@ -78,7 +78,7 @@ public class ItemSlideShowWidget extends ManualWidgetsBase {
         Map<AspectManager.AspectItem, List<Aspect>> matchedAspects = AspectManager.get(Minecraft.getMinecraft().theWorld).getMatchedAspects();
         for (Map.Entry<AspectManager.AspectItem, List<Aspect>> e : matchedAspects.entrySet()) {
             for (Aspect aspect1 : e.getValue()) {
-                if (aspect1.aspect == aspectType) {
+                if (aspect1.type == aspectType) {
                     items.add(new ItemStack(e.getKey().item, 1, e.getKey().damage));
                 }
             }

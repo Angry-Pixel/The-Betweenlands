@@ -72,7 +72,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
 						if(ingredientAspects.size() >= 1) {
 							if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 								for(Aspect aspect : ingredientAspects) {
-									list.add("  - " + aspect.aspect.getName() + " (" + aspect.amount * count + ")");
+									list.add("  - " + aspect.type.getName() + " (" + aspect.getAmount() * count + ")");
 								}
 							}
 						}

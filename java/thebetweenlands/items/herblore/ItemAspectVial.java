@@ -41,7 +41,7 @@ public class ItemAspectVial extends Item {
 		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack, null);
 		if(itemAspects.size() >= 1) {
 			Aspect aspect = itemAspects.get(0);
-			return super.getItemStackDisplayName(stack) + " - " + aspect.aspect.getName() + " (" + aspect.amount + ")";
+			return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + aspect.getAmount() + ")";
 		}
 		return super.getItemStackDisplayName(stack);
 	}
@@ -97,7 +97,7 @@ public class ItemAspectVial extends Item {
 			List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(stack, null);
 			if(itemAspects.size() >= 1) {
 				Aspect aspect = itemAspects.get(0);
-				return this.aspectIcons[aspect.aspect.getIconIndex()];
+				return this.aspectIcons[aspect.type.getIconIndex()];
 			}
 		}
 		return super.getIcon(stack, pass);

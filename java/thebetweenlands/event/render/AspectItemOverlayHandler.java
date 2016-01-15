@@ -47,11 +47,11 @@ public class AspectItemOverlayHandler {
 					RenderHelper.disableStandardItemLighting();
 					if(aspects != null && aspects.size() > 0) {
 						for(Aspect aspect : aspects) {
-							String aspectText = aspect.aspect.getName() + " (" + aspect.amount + ")";
-							String aspectTypeText = aspect.aspect.getType();
+							String aspectText = aspect.type.getName() + " (" + aspect.getAmount() + ")";
+							String aspectTypeText = aspect.type.getType();
 							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
 							Minecraft.getMinecraft().fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
-							AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.aspect.getIconIndex());
+							AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIconIndex());
 							int entryWidth = Math.max(Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectText) + 19, Minecraft.getMinecraft().fontRenderer.getStringWidth(aspectTypeText) + 19);
 							if(entryWidth > width) {
 								width = entryWidth;

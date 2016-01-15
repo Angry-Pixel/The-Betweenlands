@@ -184,9 +184,9 @@ public class TileEntityAlembic extends TileEntity {
 		float strengthAspectAmount = 0.0F;
 		float durationAspectAmount = 0.0F;
 		for(Aspect a : infusionItemAspects) {
-			totalAmount += a.amount;
-			if(recipe.strengthAspect != null && a.aspect == recipe.strengthAspect) strengthAspectAmount += a.amount;
-			if(recipe.durationAspect != null && a.aspect == recipe.durationAspect) durationAspectAmount += a.amount;
+			totalAmount += a.getAmount();
+			if(recipe.strengthAspect != null && a.type == recipe.strengthAspect) strengthAspectAmount += a.getAmount();
+			if(recipe.durationAspect != null && a.type == recipe.durationAspect) durationAspectAmount += a.getAmount();
 		}
 		int recipeByariis = 0;
 		for(IAspectType a : recipe.aspects) {
@@ -231,7 +231,7 @@ public class TileEntityAlembic extends TileEntity {
 			}
 			List<Aspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
 			for(Aspect aspect : infusionAspects) {
-				this.producableItemAspects.add(new Aspect(aspect.aspect, aspect.amount * ISOLATION_LOSS_MULTIPLIER));
+				this.producableItemAspects.add(new Aspect(aspect.type, aspect.getAmount() * ISOLATION_LOSS_MULTIPLIER));
 			}
 		}
 	}
@@ -291,16 +291,16 @@ public class TileEntityAlembic extends TileEntity {
 				if(this.producableItemAspects.size() >= 1) {
 					Aspect aspect = this.producableItemAspects.get(0);
 					this.producableItemAspects.remove(0);
-					float totalAmount = aspect.amount;
+					float totalAmount = aspect.getAmount();
 					Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
 					while(itemAspectIT.hasNext()) {
 						Aspect currentAspect = itemAspectIT.next();
-						if(currentAspect.aspect == aspect.aspect) {
-							totalAmount += currentAspect.amount;
+						if(currentAspect.type == aspect.type) {
+							totalAmount += currentAspect.getAmount();
 							itemAspectIT.remove();
 						}
 					}
-					aspect = new Aspect(aspect.aspect, totalAmount);
+					aspect = new Aspect(aspect.type, totalAmount);
 					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
 					AspectManager.get(this.worldObj).addAspects(aspectVial, aspect);
 				}
