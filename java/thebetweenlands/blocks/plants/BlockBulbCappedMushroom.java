@@ -89,7 +89,17 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants implements IGrow
 			}
 		}
 	}
-	
+
+	@Override
+	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
+		return true;
+	}
+
+	@Override
+	public boolean func_149852_a(World world, Random rand, int x, int y, int z) {
+		return (double)world.rand.nextFloat() < 0.45D;
+	}
+
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return false;
