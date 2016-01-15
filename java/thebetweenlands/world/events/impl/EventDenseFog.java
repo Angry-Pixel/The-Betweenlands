@@ -21,12 +21,12 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(40000) + 10000;
+		return rnd.nextInt(40000) + 21000;
 	}
 
 	@Override
 	public int getOnTime(Random rnd) {
-		return rnd.nextInt(20000) + 6000;
+		return rnd.nextInt(22000) + 9000;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 			}
 		}
 	}
-	
+
 	public float getFade(float partialTicks) {
 		return this.fade + (this.fade - this.lastFade) * partialTicks;
 	}

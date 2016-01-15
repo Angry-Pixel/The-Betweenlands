@@ -33,7 +33,7 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(200000) + 400000;
+		return rnd.nextInt(400000) + 500000;
 	}
 
 	@Override

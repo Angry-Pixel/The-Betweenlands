@@ -193,7 +193,7 @@ public class BlockItemShelf extends BlockContainer {
 			if (player.getCurrentEquippedItem() != null && slotClicked != -1) {
 				ItemStack item = player.getCurrentEquippedItem();
 				if (tile.getStackInSlot(slotClicked) == null) {
-					tile.setInventorySlotContents(slotClicked, new ItemStack(item.getItem(), 1, item.getItemDamage()));
+					tile.setInventorySlotContents(slotClicked, item.copy());
 					if (!player.capabilities.isCreativeMode)
 						player.getCurrentEquippedItem().stackSize--;
 					world.markBlockForUpdate(x, y, z);
