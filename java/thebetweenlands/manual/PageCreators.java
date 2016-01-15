@@ -319,6 +319,13 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Creates the pages for the ground times
+     *
+     * @param item       the item
+     * @param manualType the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
@@ -338,6 +345,12 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Parses the text container. Used to get the right width and height of the container
+     *
+     * @param textContainer a unparsed text container
+     * @return a parsed text container
+     */
     private static TextContainer parseTextContainer(TextContainer textContainer) {
         textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
         textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());
