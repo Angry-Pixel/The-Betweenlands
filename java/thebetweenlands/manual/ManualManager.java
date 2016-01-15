@@ -72,7 +72,7 @@ public class ManualManager {
      *
      * @param player     a player with a manual
      * @param itemManual either manualGuideBook or manualHL
-     * @return
+     * @return a list of found pages
      */
     public static ArrayList<String> getFoundPages(EntityPlayer player, Item itemManual) {
         if (player != null) {
@@ -107,10 +107,10 @@ public class ManualManager {
      * @param player     a player with a manual
      * @param page       a valid page name (one found in the arrays above)
      * @param itemManual either manualGuideBook or manualHL
-     * @return
+     * @return whether or not the player has found the specific page or not
      */
     public static boolean hasFoundPage(EntityPlayer player, String page, Item itemManual) {
-        return player != null && page != null && getFoundPages(player, itemManual) != null && getFoundPages(player, itemManual).contains(page.toLowerCase());
+        return player != null && page != null && getFoundPages(player, itemManual) != null && getFoundPages(player, itemManual).contains(page);
     }
 
     /**

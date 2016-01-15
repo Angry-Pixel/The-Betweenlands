@@ -29,7 +29,9 @@ public class ItemManual extends Item {
             list.add("Current page: ");
             list.add("" + ManualManager.getCurrentPageNumber(BLItemRegistry.manualHL, player));
             list.add("Current category: ");
-            list.add(ManualManager.getCurrentCategory(BLItemRegistry.manualGuideBook, player).name);
+            if (ManualManager.getCurrentCategory(BLItemRegistry.manualGuideBook, player) != null)
+                list.add(ManualManager.getCurrentCategory(BLItemRegistry.manualGuideBook, player).name);
+            list.addAll(ManualManager.getFoundPages(player, this));
         }
     }
 
