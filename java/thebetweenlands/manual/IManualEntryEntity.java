@@ -16,6 +16,15 @@ public class IManualEntryEntity {
     private ArrayList<String> stats;
     private String name;
 
+    /**
+     * Constructor for manual entity entries
+     *
+     * @param name         name of the entity
+     * @param picWidth     width of the entity picture
+     * @param picHeight    height of the entity picture
+     * @param health       the entiy health
+     * @param attackDamage the entity's attack damage
+     */
     public IManualEntryEntity(String name, int picWidth, int picHeight, float health, float attackDamage) {
         this.name = name;
         this.picHeight = picHeight;

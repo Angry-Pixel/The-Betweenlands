@@ -21,6 +21,14 @@ public class ManualCategory {
     public int number;
     public String name;
 
+    /**
+     * The constructor for the manual categories
+     *
+     * @param pages      all pages in this category
+     * @param number     a number that shows which where the category is located
+     * @param manualType the type of manual it is. manualHL or manualGuideBook
+     * @param name       the name of the category
+     */
     public ManualCategory(ArrayList<Page> pages, int number, Item manualType, String name) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
@@ -41,6 +49,13 @@ public class ManualCategory {
         this.name = name;
     }
 
+    /**
+     * @param pages      all pages in this category
+     * @param introPages introduction pages in case a category has them
+     * @param number     a number that shows which where the category is located
+     * @param manualType the type of manual it is. manualHL or manualGuideBook
+     * @param name       the name of the category
+     */
     public ManualCategory(ArrayList<Page> pages, ArrayList<Page> introPages, int number, Item manualType, String name) {
         int pageNumber = 1;
         ArrayList<Page> buttonPages = new ArrayList<>();
@@ -62,7 +77,12 @@ public class ManualCategory {
         this.name = name;
     }
 
-
+    /**
+     * Initializing a category
+     *
+     * @param manual the current manual gui
+     * @param force  whether to force it to reconstruct all pages
+     */
     public void init(GuiManualBase manual, boolean force) {
         if (currentPageLeft == null || currentPageRight == null || force) {
             visiblePages.clear();
@@ -85,7 +105,12 @@ public class ManualCategory {
         }
     }
 
-
+    /**
+     * Set the current display page
+     *
+     * @param pageNumber the page number
+     * @param manual     the manual gui
+     */
     public void setPage(int pageNumber, GuiManualBase manual) {
         if (currentPageLeft != null && currentPageRight != null) {
             if (pageNumber % 2 == 0)
@@ -107,19 +132,34 @@ public class ManualCategory {
         }
     }
 
+    /**
+     * Flip to the next page
+     *
+     * @param manual the manual gui
+     */
     public void nextPage(GuiManualBase manual) {
         if (currentPage + 2 <= visiblePages.size()) {
             setPage(currentPage + 2, manual);
         }
     }
 
+    /**
+     * Flip to the previous page
+     *
+     * @param manual the manual gui
+     */
     public void previousPage(GuiManualBase manual) {
         if (currentPage - 2 >= 1) {
             setPage(currentPage - 2, manual);
         }
     }
 
-
+    /**
+     * Draw the current pages
+     *
+     * @param mouseX the x coordinate of the mouse
+     * @param mouseY the y coordinate of the mouse
+     */
     public void draw(int mouseX, int mouseY) {
         if (currentPageLeft != null)
             currentPageLeft.draw(mouseX, mouseY);
@@ -127,6 +167,12 @@ public class ManualCategory {
             currentPageRight.draw(mouseX, mouseY);
     }
 
+    /**
+     * Passes on the typed key
+     *
+     * @param c   key in character
+     * @param key key in number
+     */
     public void keyTyped(char c, int key) {
         if (currentPageLeft != null)
             currentPageLeft.keyTyped(c, key);
@@ -134,6 +180,13 @@ public class ManualCategory {
             currentPageRight.keyTyped(c, key);
     }
 
+    /**
+     * Passes on the mouse clicks
+     *
+     * @param x      the x coordinate of the click
+     * @param y      the y coordinate of the click
+     * @param button the button that was pressed
+     */
     public void mouseClicked(int x, int y, int button) {
         if (currentPageLeft != null)
             currentPageLeft.mouseClicked(x, y, button);
@@ -141,6 +194,9 @@ public class ManualCategory {
             currentPageRight.mouseClicked(x, y, button);
     }
 
+    /**
+     * Passes on the screen updates
+     */
     public void updateScreen() {
         if (currentPageLeft != null)
             currentPageLeft.updateScreen();

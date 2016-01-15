@@ -58,6 +58,16 @@ public class ManualWidgetsBase {
         this.isPageRight = true;
     }
 
+    /**
+     * Renders a tooltip at the cursor
+     *
+     * @param x           the x coordinate to render the tooltip
+     * @param y           the y coordinate to render the tooltip
+     * @param tooltipData a list of the tooltip lines that need to be displayed
+     * @param color       the color of the inside
+     * @param color2      the color of the outlining
+     * @return some kind of number?
+     */
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
@@ -109,6 +119,17 @@ public class ManualWidgetsBase {
         return 0;
     }
 
+    /**
+     * To be honest I have no idea how this works
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param par3
+     * @param par4
+     * @param par5
+     * @param par6
+     */
     public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {
         float var7 = (par5 >> 24 & 255) / 255F;
         float var8 = (par5 >> 16 & 255) / 255F;
@@ -157,11 +178,21 @@ public class ManualWidgetsBase {
 
     }
 
+    /**
+     * Changes the starting coordinate
+     *
+     * @param xStart the new x start
+     */
     public void changeXStart(int xStart) {
         this.unchangedXStart = xStart;
         //this.xStart = manual.xStart + unchangedXStart;
     }
 
+    /**
+     * Changes the starting coordinate
+     *
+     * @param yStart the new y start
+     */
     public void changeYStart(int yStart) {
         this.unchangedYStart = yStart;
         //this.yStart = manual.yStart + unchangedYStart;
@@ -183,6 +214,14 @@ public class ManualWidgetsBase {
     public void mouseClicked(int x, int y, int mouseButton) {
     }
 
+    /**
+     * Renders an item
+     *
+     * @param xPos              the x coordinate to start drawing the item
+     * @param yPos              the y coordinate to start drawing the item
+     * @param stack             the item stack to draw
+     * @param hasSpecialTooltip whether or not the item has a special tooltip
+     */
     @SideOnly(Side.CLIENT)
     public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip) {
         RenderItem render = new RenderItem();
@@ -216,6 +255,14 @@ public class ManualWidgetsBase {
         GL11.glDisable(GL11.GL_LIGHTING);
     }
 
+    /**
+     * Adds a special tooltip in case you want to
+     *
+     * @param xPos     the x coordinate to start drawing the tooltip
+     * @param yPos     the y coordinate to start drawing the tooltip
+     * @param stack    the item stack the tooltip is for
+     * @param toolTips the tooltip lines
+     */
     public void addSpecialItemTooltip(int xPos, int yPos, ItemStack stack, ArrayList<String> toolTips) {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {

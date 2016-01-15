@@ -76,13 +76,26 @@ public class GuiManualBase extends GuiScreen {
                     drawTexture(xStart + 256, yStart + 160, 19, 8, 512.0D, 512.0D, 311.0D, 330.0D, 0.0D, 9.0D);
             }
             drawTexture(xStart, yStart + 10, 14, 22 * currentCategory.number, 512.0D, 512.0D, 293.0D, 306.0D, 18.0D, 18.0D + 22.0D * currentCategory.number);
-            drawTexture(xStart + 279 , yStart + 10 + 22 * currentCategory.number, 14, 154 - 22 * currentCategory.number, 512.0D, 512.0D, 306.0D, 293.0D, 18.0D + 22.0D * currentCategory.number, 174.0D);
+            drawTexture(xStart + 279, yStart + 10 + 22 * currentCategory.number, 14, 154 - 22 * currentCategory.number, 512.0D, 512.0D, 306.0D, 293.0D, 18.0D + 22.0D * currentCategory.number, 174.0D);
 
             currentCategory.draw(mouseX, mouseY);
         }
     }
 
-
+    /**
+     * Drawing a scalable texture
+     *
+     * @param xStart        the x coordinate to start drawing
+     * @param yStart        the y coordinate to start drawing
+     * @param width         the width for drawing
+     * @param height        the height for drawing
+     * @param textureWidth  the width of the texture
+     * @param textureHeight the height of the texture
+     * @param textureXStart the x start in the texture
+     * @param textureXEnd   the x end in the texture
+     * @param textureYStart the y start in the texture
+     * @param textureYEnd   the y end in the texture
+     */
     public void drawTexture(int xStart, int yStart, int width, int height, double textureWidth, double textureHeight, double textureXStart, double textureXEnd, double textureYStart, double textureYEnd) {
         double umin = 1.0D / textureWidth * textureXStart;
         double umax = 1.0D / textureWidth * textureXEnd;
@@ -118,32 +131,52 @@ public class GuiManualBase extends GuiScreen {
             if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8 && button == 0) {
                 currentCategory.nextPage(this);
             }
-            if (mouseX >= xStart + (currentCategory.number >= 1?0:279) && mouseX <= xStart + (currentCategory.number >= 1?0:279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 1 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 1 ? 0 : 279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.itemsCategory);
-            if (mouseX >= xStart + (currentCategory.number >= 2?0:279) && mouseX <= xStart + (currentCategory.number >= 2?0:279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 2 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 2 ? 0 : 279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.machineCategory);
-            if (mouseX >= xStart + (currentCategory.number >= 3?0:279) && mouseX <= xStart + (currentCategory.number >= 3?0:279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
-               changeCategory(GuideBookEntryRegistry.entitiesCategory);
-            if (mouseX >= xStart + (currentCategory.number >= 4?0:279) && mouseX <= xStart + (currentCategory.number >= 4?0:279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 3 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 3 ? 0 : 279) + 14 && mouseY >= yStart + 55 && mouseY <= yStart + 54 + 20 && button == 0)
+                changeCategory(GuideBookEntryRegistry.entitiesCategory);
+            if (mouseX >= xStart + (currentCategory.number >= 4 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 4 ? 0 : 279) + 14 && mouseY >= yStart + 77 && mouseY <= yStart + 76 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.category4);
-            if (mouseX >= xStart + (currentCategory.number >= 5?0:279) && mouseX <= xStart + (currentCategory.number >= 5?0:279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 5 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 5 ? 0 : 279) + 14 && mouseY >= yStart + 99 && mouseY <= yStart + 98 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.category5);
-            if (mouseX >= xStart + (currentCategory.number >= 6?0:279) && mouseX <= xStart + (currentCategory.number >= 6?0:279) + 14 && mouseY >= yStart + 121 && mouseY <= yStart + 120 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 6 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 6 ? 0 : 279) + 14 && mouseY >= yStart + 121 && mouseY <= yStart + 120 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.category6);
-            if (mouseX >= xStart + (currentCategory.number >= 7?0:279) && mouseX <= xStart + (currentCategory.number >= 7?0:279) + 14 && mouseY >= yStart + 143 && mouseY <= yStart + 142 + 20 && button == 0)
+            if (mouseX >= xStart + (currentCategory.number >= 7 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 7 ? 0 : 279) + 14 && mouseY >= yStart + 143 && mouseY <= yStart + 142 + 20 && button == 0)
                 changeCategory(GuideBookEntryRegistry.category7);
 
             currentCategory.mouseClicked(mouseX, mouseY, button);
         }
     }
 
-    public void changeCategory(ManualCategory category){
+    /**
+     * Change to a page
+     *
+     * @param pageNumber the number of a page
+     */
+    public void changeTo(int pageNumber) {
+        currentCategory.setPage(pageNumber + currentCategory.indexPages, this);
+    }
+
+    /**
+     * Change the current category
+     *
+     * @param category a guidebook category
+     */
+    public void changeCategory(ManualCategory category) {
         currentCategory = category;
         currentCategory.init(this, true);
         currentCategory.setPage(1, this);
     }
 
-    public void changeCategory(ManualCategory category, int page){
+    /**
+     * Change the current category and page
+     *
+     * @param category a guidebook category
+     * @param page     the number of a page
+     */
+    public void changeCategory(ManualCategory category, int page) {
         currentCategory = category;
         currentCategory.init(this, false);
         currentCategory.setPage(page, this);
@@ -155,11 +188,6 @@ public class GuiManualBase extends GuiScreen {
         untilUpdate++;
         if (currentCategory != null)
             currentCategory.updateScreen();
-    }
-
-
-    public void changeTo(int pageNumber) {
-        currentCategory.setPage(pageNumber + currentCategory.indexPages, this);
     }
 
     public boolean matches(ItemStack itemStack1, ItemStack itemStack2) {
