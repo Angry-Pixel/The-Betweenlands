@@ -75,6 +75,7 @@ import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
+import thebetweenlands.blocks.plants.crops.BlockAspectCrop;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -371,6 +372,7 @@ public class BLBlockRegistry {
 			}
 		}
 	};
+	public static final BlockAspectCrop aspectCrop = new BlockAspectCrop("aspectCrop");
 
 	public static final Block caveMoss = new BlockCaveMoss();
 	public static final BlockCaveGrass caveGrass = new BlockCaveGrass("caveGrass");
@@ -532,7 +534,7 @@ public class BLBlockRegistry {
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
 	public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");  
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
-	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
+	public static final BlockBLFence rubberTreePlankFence = (BlockBLFence) new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
 	public static final Block weedwoodPlankFenceGate = new BlockBLFenceGate("weedwoodPlanks");
 	public static final Block rubberTreePlankFenceGate = new BlockBLFenceGate("rubberTreePlanks");

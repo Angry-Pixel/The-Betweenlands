@@ -169,6 +169,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 */
 	@Override
 	public void func_149863_m(World world, int x, int y, int z) {
+		this.onGrow(world, x, y, z, world.getBlockMetadata(x, y, z));
 		int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 4);
 		if (l > 7) {
 			l = 7;
@@ -186,30 +187,32 @@ public class BlockBLGenericCrop extends BlockCrops {
 		boolean grown = this.isFullyGrown(world, x, y, z);
 		if(!player.capabilities.isCreativeMode) this.harvestBlock(world, player, x, y, z, id);
 		world.setBlock(x, y, z, Blocks.air);
-		int metaDirt = world.getBlockMetadata(x, y - 1, z);
-		if (grown) {
-			switch(metaDirt) {
-			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
-				break;
-			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
-				break;
-			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-				break;
-			case BlockFarmedDirt.FERT_GRASS_DECAYED:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
-				break;
-			case BlockFarmedDirt.FERT_DIRT_DECAYED:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-				break;
-			case BlockFarmedDirt.FERT_GRASS:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
-				break;
-			case BlockFarmedDirt.FERT_DIRT:
-				world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-				break;
+		if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt) {
+			int metaDirt = world.getBlockMetadata(x, y - 1, z);
+			if (grown) {
+				switch(metaDirt) {
+				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
+					break;
+				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
+					break;
+				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+					break;
+				case BlockFarmedDirt.FERT_GRASS_DECAYED:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+					break;
+				case BlockFarmedDirt.FERT_DIRT_DECAYED:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+					break;
+				case BlockFarmedDirt.FERT_GRASS:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+					break;
+				case BlockFarmedDirt.FERT_DIRT:
+					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+					break;
+				}
 			}
 		}
 	}
@@ -219,6 +222,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		super.updateTick(world, x, y, z, rand);
 		int metaDirt = world.getBlockMetadata(x, y - 1, z);
 		int meta = world.getBlockMetadata(x, y, z);
+		this.onGrow(world, x, y, z, meta);
 		if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
 			if (rand.nextInt(25) == 0) {
 				++meta;
@@ -227,13 +231,64 @@ public class BlockBLGenericCrop extends BlockCrops {
 		}
 	}
 
+	/**
+	 * Returns whether the soil of the crop is decayed
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public boolean isCropOrSoilDecayed(World world, int x, int y, int z) {
-		int meta = world.getBlockMetadata(x, y - 1, z);
+		int meta = this.getSoilMetadata(world, x, y, z);
+		if(meta == -1) return false;
 		return BlockFarmedDirt.isDecayed(meta) || world.getBlockMetadata(x, y, z) == DECAYED_CROP;
 	}
 
+	/**
+	 * Returns the metadata of the soil. Return -1 if there's no soil
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public int getSoilMetadata(World world, int x, int y, int z) {
+		return world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt == false ? -1 : world.getBlockMetadata(x, y - 1, z);
+	}
+
+	/**
+	 * Returns whether the crop is fully grown (decay stage included)
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public boolean isFullyGrown(World world, int x, int y, int z) {
 		return world.getBlockMetadata(x, y, z) == MATURE_CROP || world.getBlockMetadata(x, y, z) == DECAYED_CROP;
+	}
+
+	/**
+	 * Decays or purifies the crop
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param decayed
+	 */
+	public void setDecayed(World world, int x, int y, int z, boolean decayed) {
+		if(!decayed) {
+			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.DECAYED_CROP) {
+				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
+				((BlockBLGenericCrop)world.getBlock(x, y, z)).onCure(world, x, y, z);
+			}
+		} else {
+			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.MATURE_CROP) {
+				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 3);
+				((BlockBLGenericCrop)world.getBlock(x, y, z)).onDecayed(world, x, y, z);
+			}
+		}
 	}
 
 	@Override
@@ -310,8 +365,50 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
+		super.onNeighborBlockChange(world, x, y, z, block);
 		if(this.isFullyGrown(world, x, y, z) && this.isCropOrSoilDecayed(world, x, y, z)) {
 			world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
 		}
+	}
+
+	/**
+	 * Called when the crop decays
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void onDecayed(World world, int x, int y, int z) { }
+
+	/**
+	 * Called when the crop is cured
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void onCure(World world, int x, int y, int z) { }
+
+	/**
+	 * Called before the crop grows
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param prevMeta
+	 * @param meta
+	 */
+	public void onGrow(World world, int x, int y, int z, int meta) { }
+
+	/**
+	 * Returns whether the soil (and crop) should decay this tick
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean shouldDecay(World world, int x, int y, int z) {
+		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
 	}
 }
