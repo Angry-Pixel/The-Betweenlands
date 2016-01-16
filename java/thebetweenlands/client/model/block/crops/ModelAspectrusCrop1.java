@@ -7,7 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
  * BLAspectCropGrowth1 - TripleHeadedSheep
  * Created using Tabula 4.1.1
  */
-public class ModelAspectCrop extends ModelBase {
+public class ModelAspectrusCrop1 extends ModelBase {
 	public ModelRenderer crop1;
 	public ModelRenderer leaf1;
 	public ModelRenderer leaf2;
@@ -18,7 +18,7 @@ public class ModelAspectCrop extends ModelBase {
 	public ModelRenderer leafb;
 	public ModelRenderer leaf3b;
 
-	public ModelAspectCrop() {
+	public ModelAspectrusCrop1() {
 		this.textureWidth = 64;
 		this.textureHeight = 32;
 		this.leaf3 = new ModelRenderer(this, 17, 11);

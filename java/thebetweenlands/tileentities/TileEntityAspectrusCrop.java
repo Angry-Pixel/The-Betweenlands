@@ -1,13 +1,16 @@
 package thebetweenlands.tileentities;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import thebetweenlands.herblore.aspects.Aspect;
 
-public class TileEntityAspectCrop extends TileEntity {
+public class TileEntityAspectrusCrop extends TileEntity {
 	private Aspect seedAspect = null;
 
 	public void setAspect(Aspect aspect) {
@@ -17,6 +20,12 @@ public class TileEntityAspectCrop extends TileEntity {
 
 	public Aspect getAspect() {
 		return this.seedAspect;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+		return AxisAlignedBB.getBoundingBox(this.xCoord - 0.5D, this.yCoord - 0.5D, this.zCoord - 0.5D, this.xCoord + 1.5D, this.yCoord + 1.5D, this.zCoord + 1.5D);
 	}
 
 	@Override

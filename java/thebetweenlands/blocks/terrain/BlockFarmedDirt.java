@@ -115,17 +115,15 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				world.setBlockMetadataWithNotify(x, y, z, currentMeta - DECAY_CURE, 3);
 			}
 			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == BlockBLGenericCrop.DECAYED_CROP) {
-				world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
-				((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).onCure(world, x, y + 1, z);
+				((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).setDecayed(world, x, y + 1, z, false);
 			}
 		} else {
 			int currentMeta = world.getBlockMetadata(x, y, z);
 			if(currentMeta == FERT_DIRT || currentMeta == FERT_GRASS) {
 				world.setBlockMetadataWithNotify(x, y, z, currentMeta + DECAY_CAUSE, 3);
 			}
-			if(getCropAboveBlock(world, x, y, z) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x, y, z) == BlockBLGenericCrop.MATURE_CROP) {
-				world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP, 3);
-				((BlockBLGenericCrop)getCropAboveBlock(world, x, y, z)).onDecayed(world, x, y + 1, z);
+			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == BlockBLGenericCrop.MATURE_CROP) {
+				((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).setDecayed(world, x, y + 1, z, true);
 			}
 		}
 	}

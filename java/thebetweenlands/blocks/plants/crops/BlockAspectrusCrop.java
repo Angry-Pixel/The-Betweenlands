@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,13 +18,15 @@ import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.tileentities.TileEntityAspectCrop;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 
-public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityProvider {
-	private static final float ASPECT_MULTIPLIER = 0.66F;
+public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntityProvider {
+	private static final float ASPECT_MULTIPLIER = 0.5F;
 	private static final int MAX_HEIGHT = 3;
 
-	public BlockAspectCrop(String blockName) {
+	public BlockAspectrusCrop(String blockName) {
 		super(blockName);
 		this.setBlockTextureName("thebetweenlands:weedwoodLeavesFast");
 		float min = 0.375F - 0.03F;
@@ -35,14 +36,14 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 
 	public void setAspect(World world, int x, int y, int z, Aspect aspect){
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if(tile instanceof TileEntityAspectCrop)
-			((TileEntityAspectCrop)tile).setAspect(aspect);
+		if(tile instanceof TileEntityAspectrusCrop)
+			((TileEntityAspectrusCrop)tile).setAspect(aspect);
 	}
 
 	public Aspect getAspect(World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(x, y, z);
-		if(tile instanceof TileEntityAspectCrop)
-			return ((TileEntityAspectCrop)tile).getAspect();
+		if(tile instanceof TileEntityAspectrusCrop)
+			return ((TileEntityAspectrusCrop)tile).getAspect();
 		return null;
 	}
 
@@ -91,17 +92,17 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 
 	@Override
 	protected boolean canPlaceBlockOn(Block block) {
-		return block == BLBlockRegistry.aspectCrop || super.canPlaceBlockOn(block);
+		return block == BLBlockRegistry.aspectrusCrop || super.canPlaceBlockOn(block);
 	}
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		Block soil = world.getBlock(x, y - 1, z);
-		return (soil == BLBlockRegistry.aspectCrop && ((BlockBLGenericCrop)soil).isFullyGrown(world, x, y - 1, z)) || super.canBlockStay(world, x, y, z);
+		return (soil == BLBlockRegistry.aspectrusCrop && ((BlockBLGenericCrop)soil).isFullyGrown(world, x, y - 1, z)) || super.canBlockStay(world, x, y, z);
 	}
 
 	@Override
-	public void onGrow(World world, int x, int y, int z, int meta) { 
+	public void preGrow(World world, int x, int y, int z, int meta) { 
 		if(meta == BlockBLGenericCrop.MATURE_CROP) {
 			//Max height: 3
 			if(world.getBlock(x, y - (MAX_HEIGHT - 1), z) == this)
@@ -112,11 +113,33 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 						!BLBlockRegistry.rubberTreePlankFence.canConnectFenceTo(world, x, y+1, z+1) &&
 						!BLBlockRegistry.rubberTreePlankFence.canConnectFenceTo(world, x, y+1, z-1)) {
 					world.setBlock(x, y + 1, z, this);
-					if(world.getBlock(x, y + 1, z) instanceof BlockAspectCrop)
-						((BlockAspectCrop)world.getBlock(x, y + 1, z)).setAspect(world, x, y + 1, z, this.getAspect(world, x, y, z));
+					if(world.getBlock(x, y + 1, z) instanceof BlockAspectrusCrop)
+						((BlockAspectrusCrop)world.getBlock(x, y + 1, z)).setAspect(world, x, y + 1, z, this.getAspect(world, x, y, z));
 				}
 			}
 		}
+	}
+
+	@Override
+	public void postGrow(World world, int x, int y, int z, int prevMeta, int meta) { 
+		if(meta == BlockBLGenericCrop.MATURE_CROP && prevMeta < meta) {
+			if(world.getBlock(x, y - 1, z) instanceof BlockAspectrusCrop) {
+				BlockAspectrusCrop crop = (BlockAspectrusCrop) world.getBlock(x, y - 1, z);
+				if(crop.isCropOrSoilDecayed(world, x, y - 1, z)) {
+					world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 2);
+				}
+			}
+		}
+	}
+
+	@Override
+	public int getSoilMetadata(World world, int x, int y, int z) {
+		for(int yo = 1; yo <= MAX_HEIGHT; yo++) {
+			Block block = world.getBlock(x, y - yo, z);
+			if(block instanceof BlockFarmedDirt)
+				return world.getBlockMetadata(x, y - yo, z);
+		}
+		return world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt == false ? -1 : world.getBlockMetadata(x, y - 1, z);
 	}
 
 	@Override
@@ -137,8 +160,7 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 		super.removedByPlayer(world, player, x, y, z, willHarvest);
 		for(int yo = 1; yo <= MAX_HEIGHT; yo++) {
 			Block block = world.getBlock(x, y-yo, z);
-			if(block instanceof BlockAspectCrop) {
-				block.dropBlockAsItem(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z), 0);
+			if(block instanceof BlockAspectrusCrop) {
 				block.onBlockHarvested(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z), player);
 				world.setBlock(x, y-yo, z, BLBlockRegistry.rubberTreePlankFence);
 			}
@@ -174,31 +196,34 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 	@Override
 	public void onDecayed(World world, int x, int y, int z) {
 		Block blockAbove = world.getBlock(x, y+1, z);
-		if(blockAbove instanceof BlockAspectCrop)
-			((BlockAspectCrop)blockAbove).setDecayed(world, x, y+1, z, true);
+		if(blockAbove instanceof BlockAspectrusCrop) {
+			((BlockAspectrusCrop)blockAbove).setDecayed(world, x, y+1, z, true);
+		}
 		Block blockBelow = world.getBlock(x, y-1, z);
-		if(blockBelow instanceof BlockAspectCrop)
-			((BlockAspectCrop)blockBelow).setDecayed(world, x, y-1, z, true);
+		if(blockBelow instanceof BlockAspectrusCrop)
+			((BlockAspectrusCrop)blockBelow).setDecayed(world, x, y-1, z, true);
 	}
 
 	@Override
 	public void onCure(World world, int x, int y, int z) {
 		Block blockAbove = world.getBlock(x, y+1, z);
-		if(blockAbove instanceof BlockAspectCrop)
-			((BlockAspectCrop)blockAbove).setDecayed(world, x, y+1, z, false);
+		if(blockAbove instanceof BlockAspectrusCrop)
+			((BlockAspectrusCrop)blockAbove).setDecayed(world, x, y+1, z, false);
 		Block blockBelow = world.getBlock(x, y-1, z);
-		if(blockBelow instanceof BlockAspectCrop)
-			((BlockAspectCrop)blockBelow).setDecayed(world, x, y-1, z, false);
+		if(blockBelow instanceof BlockAspectrusCrop)
+			((BlockAspectrusCrop)blockBelow).setDecayed(world, x, y-1, z, false);
+		if(blockBelow instanceof BlockFarmedDirt)
+			((BlockFarmedDirt)blockBelow).setDecayed(world, x, y-1, z, false);
 	}
 
 	@Override
-	public ItemStack getSeedDrops(World world, int x, int y, int z) {
-		return new ItemStack(Blocks.dirt, 1);	
+	public ItemStack getSeedDrop(World world, int x, int y, int z) {
+		return new ItemStack(BLItemRegistry.aspectrusCropSeed, 1);	
 	}
 
 	@Override
-	public ItemStack getCropDrops(World world, int x, int y, int z) {
-		ItemStack stack = new ItemStack(Blocks.stone, 1);
+	public ItemStack getCropDrop(World world, int x, int y, int z) {
+		ItemStack stack = ItemGeneric.createStack(EnumItemGeneric.ASPECTRUS_FRUIT);
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
 			AspectManager.addAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_MULTIPLIER));
@@ -250,6 +275,6 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityAspectCrop();
+		return new TileEntityAspectrusCrop();
 	}
 }

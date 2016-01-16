@@ -1,4 +1,4 @@
-package thebetweenlands.items.misc;
+package thebetweenlands.items.crops;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,14 +8,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 public class ItemBLGenericSeed extends ItemSeedFood implements IPlantable {
-
-	private Block soilId;
-	private Block cropId;
+	protected Block soilId;
+	protected Block cropId;
 
 	public ItemBLGenericSeed(int healAmount, float saturation, Block cropBlock, Block soilBlock) {
 		super(healAmount, saturation, cropBlock, soilBlock);
-        cropId = cropBlock;
-        soilId = soilBlock;
+		this.cropId = cropBlock;
+		this.soilId = soilBlock;
 	}
 
 	@Override

@@ -9,13 +9,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.client.particle.BLParticle;
@@ -67,24 +70,24 @@ public class BlockBLGenericCrop extends BlockCrops {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (metadata == MATURE_CROP) {
 			for (int i = 0; i < world.rand.nextInt(4) + 1 + fortune; ++i) {
-				if(getSeedDrops(world, x, y, z) != null) {
+				if(getSeedDrop(world, x, y, z) != null) {
 					if (world.rand.nextInt(15) <= metadata)
-						ret.add(getSeedDrops(world, x, y, z));
+						ret.add(getSeedDrop(world, x, y, z));
 				}
-				if(getCropDrops(world, x, y, z) != null) ret.add(getCropDrops(world, x, y, z));
+				if(getCropDrop(world, x, y, z) != null) ret.add(getCropDrop(world, x, y, z));
 			}
 		}
-		if(getSeedDrops(world, x, y, z) != null) {
-			ret.add(getSeedDrops(world, x, y, z));
+		if(getSeedDrop(world, x, y, z) != null) {
+			ret.add(getSeedDrop(world, x, y, z));
 		}
 		return ret;
 	}
 
-	public ItemStack getSeedDrops(World world, int x, int y, int z) {
+	public ItemStack getSeedDrop(World world, int x, int y, int z) {
 		return null;	
 	}
 
-	public ItemStack getCropDrops(World world, int x, int y, int z) {
+	public ItemStack getCropDrop(World world, int x, int y, int z) {
 		return null;	
 	}
 
@@ -123,14 +126,12 @@ public class BlockBLGenericCrop extends BlockCrops {
 			if (!world.isRemote) {
 				for(int xo = -1; xo <= 1; xo++) {
 					for(int zo = -1; zo <= 1; zo++) {
-						int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
-						if (currentMeta == DECAYED_CROP) {
-							world.setBlockMetadataWithNotify(x+xo, y, z+zo, currentMeta - 1, 3);
-						}
-						int metaDirt = world.getBlockMetadata(x+xo, y - 1, z+zo);
-						if(BlockFarmedDirt.isDecayed(metaDirt)) {
-							world.setBlockMetadataWithNotify(x+xo, y - 1, z+zo, metaDirt - BlockFarmedDirt.DECAY_CURE, 3);
-						}
+						Block block = world.getBlock(x+xo, y, z+zo);
+						if(block instanceof BlockBLGenericCrop)
+							((BlockBLGenericCrop)block).setDecayed(world, x+xo, y, z+zo, false);
+						Block blockBelow = world.getBlock(x+xo, y-1, z+zo);
+						if(blockBelow instanceof BlockFarmedDirt)
+							((BlockFarmedDirt)blockBelow).setDecayed(world, x+xo, y-1, z+zo, false);
 					}
 				}
 				world.playAuxSFX(2005, x, y, z, 0);
@@ -169,7 +170,8 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 */
 	@Override
 	public void func_149863_m(World world, int x, int y, int z) {
-		this.onGrow(world, x, y, z, world.getBlockMetadata(x, y, z));
+		int prevMeta = world.getBlockMetadata(x, y, z);
+		this.preGrow(world, x, y, z, prevMeta);
 		int l = world.getBlockMetadata(x, y, z) + MathHelper.getRandomIntegerInRange(world.rand, 2, 4);
 		if (l > 7) {
 			l = 7;
@@ -177,15 +179,18 @@ public class BlockBLGenericCrop extends BlockCrops {
 		world.setBlockMetadataWithNotify(x, y, z, l, 2);
 		world.playAuxSFX(2005, x, y, z, 0);
 		if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
-			world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
+			this.setDecayed(world, x, y, z, true);
 		}
+		this.postGrow(world, x, y, z, prevMeta, world.getBlockMetadata(x, y, z));
 	}
 
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
 		if(world.isRemote) return;
 		boolean grown = this.isFullyGrown(world, x, y, z);
-		if(!player.capabilities.isCreativeMode) this.harvestBlock(world, player, x, y, z, id);
+		if(!player.capabilities.isCreativeMode) {
+			this.harvestCrop(world, x, y, z, player);
+		}
 		world.setBlock(x, y, z, Blocks.air);
 		if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt) {
 			int metaDirt = world.getBlockMetadata(x, y - 1, z);
@@ -217,17 +222,52 @@ public class BlockBLGenericCrop extends BlockCrops {
 		}
 	}
 
+	/**
+	 * Adds block mining stats, exhaustion and drops items
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param player
+	 */
+	public void harvestCrop(World world, int x, int y, int z, EntityPlayer player) {
+		player.addStat(StatList.mineBlockStatArray[getIdFromBlock(this)], 1);
+		player.addExhaustion(0.025F);
+		if (!world.isRemote && !world.restoringBlockSnapshots && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+			ArrayList<ItemStack> drops = this.getDrops(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			float chance = ForgeEventFactory.fireBlockHarvesting(drops, world, this, x, y, z, world.getBlockMetadata(x, y, z), 0, 1, false, harvesters.get());
+			for (ItemStack item : drops) {
+				if (world.rand.nextFloat() <= chance) {
+					float f = 0.7F;
+					double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+					double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+					double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+					EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y + d1, (double)z + d2, item);
+					entityitem.delayBeforeCanPickup = 10;
+					world.spawnEntityInWorld(entityitem);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
+		return;
+	}
+
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		super.updateTick(world, x, y, z, rand);
 		int metaDirt = world.getBlockMetadata(x, y - 1, z);
 		int meta = world.getBlockMetadata(x, y, z);
-		this.onGrow(world, x, y, z, meta);
-		if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
-			if (this.shouldGrow(world, x, y, z)) {
+		if (this.shouldGrow(world, x, y, z)) {
+			int prevMeta = meta;
+			this.preGrow(world, x, y, z, meta);
+			if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
 				++meta;
 				world.setBlockMetadataWithNotify(x, y, z, meta, 3);
 			}
+			this.postGrow(world, x, y, z, prevMeta, meta);
 		}
 	}
 
@@ -254,7 +294,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public boolean shouldDecay(World world, int x, int y, int z) {
 		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
 	}
-	
+
 	/**
 	 * Returns whether the soil of the crop is decayed
 	 * @param world
@@ -391,12 +431,12 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		super.onNeighborBlockChange(world, x, y, z, block);
 		if(this.isFullyGrown(world, x, y, z) && this.isCropOrSoilDecayed(world, x, y, z)) {
-			world.setBlockMetadataWithNotify(x, y, z, DECAYED_CROP, 2);
+			this.setDecayed(world, x, y, z, true);
 		}
 	}
 
 	/**
-	 * Called when the crop decays
+	 * Called after the crop decays
 	 * @param world
 	 * @param x
 	 * @param y
@@ -405,7 +445,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public void onDecayed(World world, int x, int y, int z) { }
 
 	/**
-	 * Called when the crop is cured
+	 * Called after the crop is cured
 	 * @param world
 	 * @param x
 	 * @param y
@@ -422,5 +462,16 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @param prevMeta
 	 * @param meta
 	 */
-	public void onGrow(World world, int x, int y, int z, int meta) { }
+	public void preGrow(World world, int x, int y, int z, int meta) { }
+
+	/**
+	 * Called after the crop has grown
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param prevMeta
+	 * @param meta
+	 */
+	public void postGrow(World world, int x, int y, int z, int prevMeta, int meta) { }
 }

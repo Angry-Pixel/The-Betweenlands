@@ -75,7 +75,7 @@ import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
-import thebetweenlands.blocks.plants.crops.BlockAspectCrop;
+import thebetweenlands.blocks.plants.crops.BlockAspectrusCrop;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -340,23 +340,23 @@ public class BLBlockRegistry {
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
 		@Override
-		public ItemStack getSeedDrops(World world, int x, int y, int z) {
+		public ItemStack getSeedDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
 		}
 
 		@Override
-		public ItemStack getCropDrops(World world, int x, int y, int z) {
+		public ItemStack getCropDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
 		}
 	};
 	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
 		@Override
-		public ItemStack getSeedDrops(World world, int x, int y, int z) {
+		public ItemStack getSeedDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.spores);
 		}
 
 		@Override
-		public ItemStack getCropDrops(World world, int x, int y, int z) {
+		public ItemStack getCropDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.yellowDottedFungus);
 		}
 
@@ -372,7 +372,7 @@ public class BLBlockRegistry {
 			}
 		}
 	};
-	public static final BlockAspectCrop aspectCrop = new BlockAspectCrop("aspectCrop");
+	public static final BlockAspectrusCrop aspectrusCrop = new BlockAspectrusCrop("aspectrusCrop");
 
 	public static final Block caveMoss = new BlockCaveMoss();
 	public static final BlockCaveGrass caveGrass = new BlockCaveGrass("caveGrass");
