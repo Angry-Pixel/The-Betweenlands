@@ -72,7 +72,7 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
         this.setRotateAngle(shoulder_left, -0.18203784098300857F, -0.045553093477052F, -0.18203784098300857F);
         this.headbase = new MowzieModelRenderer(this, 150, 9);
         this.headbase.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.headbase.addBox(-4.0F, -7.0F, -6.0F, 8, 6, 8, 0.0F);
+        this.headbase.addBox(-4.0F, -7.0F, -6.0F, 8, 6, 8, 0.001F);
         this.legright_1 = new MowzieModelRenderer(this, 100, 0);
         this.legright_1.setRotationPoint(-2.5F, -0.004985738891883029F, -0.0030482055673419772F);
         this.legright_1.addBox(-2.0F, -1.0F, -2.0F, 4, 8, 4, 0.0F);
@@ -259,36 +259,50 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
         super.setLivingAnimations(entity, f, f1, partialTicks);
         setToInitPose();
         EntityBerserkerGuardian guardian = (EntityBerserkerGuardian) entity;
+        float active = guardian.active.getAnimationProgressSinSqrt(1);
+        float inactive = (1-active);
         float frame = guardian.ticksExisted + partialTicks;
+        waist_invisible.rotationPointY += 6.2 * inactive;
+        waist_invisible.rotationPointZ += 3 * inactive;
+        legright_1.rotateAngleX -= 1.4f * inactive;
+        legright_2.rotateAngleX += 1.4f * inactive;
+        legleft_1.rotateAngleX += 0.3 * inactive;
+        legleft_2.rotateAngleX += 1.5f * inactive;
+        shoulder_left.rotateAngleX -= 0.4f * inactive;
+        armleft_2.rotateAngleX -= 1f * inactive;
+        shoulder_left.rotateAngleZ += 0.1f * inactive;
+        shoulder_right.rotateAngleX -= 0.4f * inactive;
+        armright_2.rotateAngleX -= 1f * inactive;
+        shoulder_right.rotateAngleZ -= 0.1f * inactive;
 
 //        f = entity.ticksExisted + partialTicks;
 //        f1 = 0.7f;
 
         float globalSpeed = 1f;
-        float globalDegree = 1.2f;
-        float globalHeight = 1.7f;
+        float globalDegree = 1.2f * active;
+        float globalHeight = 1.7f * active;
 
-        waist_invisible.rotationPointY += 1 * f1;
+        waist_invisible.rotationPointY += 1 * f1 * active;
         bob(waist_invisible, 1 * globalSpeed, 1f * globalHeight, false, f, f1);
         swing(chest_invisible, 0.5f * globalSpeed, 0.4f * globalDegree, true, 0, 0, f, f1);
         swing(headJoint, 0.5f * globalSpeed, 0.4f * globalDegree, false, 0, 0, f, f1);
-        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight, false, 0, 0.2f, f, f1);
-        walk(headJoint, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
-        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
-        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f, f, f1);
+        walk(waist_invisible, 1 * globalSpeed, 0.1f * globalHeight, false, 0, 0.2f * active, f, f1);
+        walk(headJoint, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f * active, f, f1);
+        walk(legleft_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f * active, f, f1);
+        walk(legright_1, 1 * globalSpeed, 0.1f * globalHeight, true, 0, -0.2f * active, f, f1);
 
-        walk(armouredskirt_back, 1 * globalSpeed, 0.3f * globalHeight, false, -1, 0.5f, f, f1);
-        flap(armouredskirt_left, 1 * globalSpeed, 0.2f * globalHeight, true, -1, -0.4f, f, f1);
-        flap(armouredskirt_right, 1 * globalSpeed, 0.2f * globalHeight, false, -1, 0.4f, f, f1);
+        walk(armouredskirt_back, 1 * globalSpeed, 0.3f * globalHeight, false, -1, 0.5f * active, f, f1);
+        flap(armouredskirt_left, 1 * globalSpeed, 0.2f * globalHeight, true, -1, -0.4f * active, f, f1);
+        flap(armouredskirt_right, 1 * globalSpeed, 0.2f * globalHeight, false, -1, 0.4f * active, f, f1);
 
-        walk(legright_1, 0.5F * globalSpeed, 1F * globalDegree, false, 0, 0.2f, f, f1);
-        walk(legleft_1, 0.5F * globalSpeed, 1F * globalDegree, true, 0, 0.2f, f, f1);
-        walk(legright_2, 0.5F * globalSpeed, 0.8F * globalDegree, false, -2.2F, 0.6F, f, f1);
-        walk(legleft_2, 0.5F * globalSpeed, 0.8F * globalDegree, true, -2.2F, 0.6F, f, f1);
+        walk(legright_1, 0.5F * globalSpeed, 1F * globalDegree, false, 0, 0.2f * active, f, f1);
+        walk(legleft_1, 0.5F * globalSpeed, 1F * globalDegree, true, 0, 0.2f * active, f, f1);
+        walk(legright_2, 0.5F * globalSpeed, 0.8F * globalDegree, false, -2.2F, 0.6F * active, f, f1);
+        walk(legleft_2, 0.5F * globalSpeed, 0.8F * globalDegree, true, -2.2F, 0.6F * active, f, f1);
 
-        walk(shoulder_right, 0.5F * globalSpeed, 0.6F * globalDegree, true, 0F, -0.3F * f1, f, f1);
-        walk(shoulder_left, 0.5F * globalSpeed, 0.6F * globalDegree, false, 0F, -0.3F * f1, f, f1);
-        walk(armright_2, 0.5F * globalSpeed, 0.4F * globalDegree, true, -1F, -0.5F * f1, f, f1);
-        walk(armleft_2, 0.5F * globalSpeed, 0.4F * globalDegree, false, -1F, -0.5F * f1, f, f1);
+        walk(shoulder_right, 0.5F * globalSpeed, 0.6F * globalDegree, true, 0F, -0.3F * f1 * active, f, f1);
+        walk(shoulder_left, 0.5F * globalSpeed, 0.6F * globalDegree, false, 0F, -0.3F * f1 * active, f, f1);
+        walk(armright_2, 0.5F * globalSpeed, 0.4F * globalDegree, true, -1F, -0.5F * f1 * active, f, f1);
+        walk(armleft_2, 0.5F * globalSpeed, 0.4F * globalDegree, false, -1F, -0.5F * f1 * active, f, f1);
     }
 }
