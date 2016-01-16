@@ -72,7 +72,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBow, 1), " #X", "# X", " #X", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
-
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.poisonedAnglerToothArrow, 1), ItemGeneric.createStack(EnumItemGeneric.POISON_GLAND), new ItemStack(BLItemRegistry.anglerToothArrow));
+		
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 
