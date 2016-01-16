@@ -30,6 +30,13 @@ public class PageCreators {
     public static int rubberTabRecipeHeight = RubberTabWidget.height + 5;
     public static int animatorRecipeHeight = AnimatorRecipeWidget.height + 5;
 
+    /**
+     * Creates the button pages for a category
+     *
+     * @param pages      the pages that need a button
+     * @param manualType the type of manual the pages are in
+     * @return a array of button pages
+     */
     public static ArrayList<Page> pageCreatorButtons(ArrayList<Page> pages, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int pageAmount = pages.size();
@@ -53,6 +60,14 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Creates the pages for a entity entry
+     *
+     * @param entity     the entity to make the entry for
+     * @param isHidden   whether or not the pages should be hidden until discovery
+     * @param manualType the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> pageCreatorEntities(IManualEntryEntity entity, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = entity.pageName();
@@ -61,6 +76,18 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Creates the pages for a machine entry
+     *
+     * @param entryName     the entry name
+     * @param machine       the machine it is for
+     * @param imageLocation the location for the explanation texture
+     * @param width         the width of the texture
+     * @param height        the height of the texture
+     * @param isHidden      whether or not the pages should be hidden until discovery
+     * @param manualType    the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         newPages.add(new Page(entryName, isHidden, manualType, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
@@ -69,7 +96,14 @@ public class PageCreators {
         return newPages;
     }
 
-
+    /**
+     * Creates the pages for a item entry
+     *
+     * @param item       the item for the entry
+     * @param isHidden   whether or not the pages should be hidden until discovery
+     * @param manualType the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> pageCreatorItems(IManualEntryItem item, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String title = item.manualName(0);
@@ -84,6 +118,15 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Creates the pages for a item entry
+     *
+     * @param name        the name of the entry
+     * @param manualItems an array for the items in the entry
+     * @param isHidden    whether or not the pages should be hidden until discovery
+     * @param manualType  the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> pageCreatorItems(String name, ArrayList<IManualEntryItem> manualItems, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
@@ -97,7 +140,17 @@ public class PageCreators {
         return newPages;
     }
 
-
+    /**
+     * Creates pages containing text
+     *
+     * @param x               the x coordinate for starting the text
+     * @param y               the y coordinate for starting the text
+     * @param unlocalizedName the unlocalized text
+     * @param pageName        the page name
+     * @param isHidden        whether or not the pages should be hidden until discovery
+     * @param manualType      the type of manual they are in
+     * @return an array of text pages
+     */
     public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String text = StatCollector.translateToLocal(unlocalizedName);
@@ -109,7 +162,16 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String title, boolean isHidden, Item manualType) {
+    /**
+     * Creates pages containing recipes
+     *
+     * @param items      an array of items to display the recipies for
+     * @param pageName   the page name
+     * @param isHidden   whether or not the pages should be hidden until discovery
+     * @param manualType the type of manual they are in
+     * @return an array of recipe pages
+     */
+    public static ArrayList<Page> RecipePages(ArrayList<IManualEntryItem> items, String pageName, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 10;
         int type = 0;
@@ -171,7 +233,7 @@ public class PageCreators {
                 if (height >= 152) {
                     ManualWidgetsBase temp = widgets.get(widgets.size() - 1);
                     widgets.remove(widgets.size() - 1);
-                    Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
+                    Page page = new Page(pageName, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
                     newPages.add(page);
                     widgets.clear();
                     temp.changeYStart(10);
@@ -182,7 +244,7 @@ public class PageCreators {
             type++;
         }
         if (widgets.size() > 0) {
-            Page page = new Page(title, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
+            Page page = new Page(pageName, (ArrayList<ManualWidgetsBase>) widgets.clone(), isHidden, manualType);
             newPages.add(page);
             widgets.clear();
         }
@@ -190,7 +252,13 @@ public class PageCreators {
         return newPages;
     }
 
-
+    /**
+     * Creates the pages for a aspect entry
+     *
+     * @param aspect     the aspect to create the pages for
+     * @param manualType the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> AspectPages(IAspectType aspect, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
@@ -201,18 +269,18 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
         TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
 
-        height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 16;
+        height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 18;
 
         if (height + 18 + 16 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         } else {
             newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         }
 
@@ -224,7 +292,7 @@ public class PageCreators {
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
         } else {
             if (newPages.size() > 0)
@@ -238,7 +306,7 @@ public class PageCreators {
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
         }
 
@@ -251,6 +319,13 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Creates the pages for the ground times
+     *
+     * @param item       the item
+     * @param manualType the type of manual they are in
+     * @return an array for the entry
+     */
     public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
@@ -270,6 +345,12 @@ public class PageCreators {
         return newPages;
     }
 
+    /**
+     * Parses the text container. Used to get the right width and height of the container
+     *
+     * @param textContainer a unparsed text container
+     * @return a parsed text container
+     */
     private static TextContainer parseTextContainer(TextContainer textContainer) {
         textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");
         textContainer.registerFormat(new TextFormatComponents.TextFormatNewLine());

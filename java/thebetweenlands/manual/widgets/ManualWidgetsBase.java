@@ -14,6 +14,9 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.manual.GuiManualBase;
+import thebetweenlands.manual.GuideBookEntryRegistry;
+import thebetweenlands.manual.ManualCategory;
+import thebetweenlands.manual.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +25,35 @@ import java.util.List;
  * Created by Bart on 8-8-2015.
  */
 public class ManualWidgetsBase {
+    public static class PageLink {
+        public int x;
+        public int y;
+        public int width;
+        public int height;
+        public int pageNumber;
+        public ManualCategory category;
+
+        public PageLink(int x, int y, int width, int height, ItemStack item) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
+                if (page.pageItems != null) {
+                    for (ItemStack stack : page.pageItems) {
+                        if (stack != null && item != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
+                            pageNumber = page.pageNumber;
+                            category = page.parentCategory;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
 
+    public ArrayList<PageLink> pageLinks = new ArrayList<>();
     public GuiManualBase manual;
     public int unchangedXStart;
     public int unchangedYStart;
@@ -58,6 +88,16 @@ public class ManualWidgetsBase {
         this.isPageRight = true;
     }
 
+    /**
+     * Renders a tooltip at the cursor
+     *
+     * @param x           the x coordinate to render the tooltip
+     * @param y           the y coordinate to render the tooltip
+     * @param tooltipData a list of the tooltip lines that need to be displayed
+     * @param color       the color of the inside
+     * @param color2      the color of the outlining
+     * @return some kind of number?
+     */
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
@@ -109,6 +149,17 @@ public class ManualWidgetsBase {
         return 0;
     }
 
+    /**
+     * To be honest I have no idea how this works
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param par3
+     * @param par4
+     * @param par5
+     * @param par6
+     */
     public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {
         float var7 = (par5 >> 24 & 255) / 255F;
         float var8 = (par5 >> 16 & 255) / 255F;
@@ -157,11 +208,21 @@ public class ManualWidgetsBase {
 
     }
 
+    /**
+     * Changes the starting coordinate
+     *
+     * @param xStart the new x start
+     */
     public void changeXStart(int xStart) {
         this.unchangedXStart = xStart;
         //this.xStart = manual.xStart + unchangedXStart;
     }
 
+    /**
+     * Changes the starting coordinate
+     *
+     * @param yStart the new y start
+     */
     public void changeYStart(int yStart) {
         this.unchangedYStart = yStart;
         //this.yStart = manual.yStart + unchangedYStart;
@@ -181,10 +242,23 @@ public class ManualWidgetsBase {
     }
 
     public void mouseClicked(int x, int y, int mouseButton) {
+        if (mouseButton == 0)
+            for (PageLink link : pageLinks) {
+                if (x >= link.x && y >= link.y && x <= link.x + link.width && y <= link.y + link.height)
+                    manual.changeCategory(link.category, link.pageNumber + link.category.indexPages);
+            }
     }
 
+    /**
+     * Renders an item
+     *
+     * @param xPos              the x coordinate to start drawing the item
+     * @param yPos              the y coordinate to start drawing the item
+     * @param stack             the item stack to draw
+     * @param hasSpecialTooltip whether or not the item has a special tooltip
+     */
     @SideOnly(Side.CLIENT)
-    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip) {
+    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink) {
         RenderItem render = new RenderItem();
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -196,12 +270,21 @@ public class ManualWidgetsBase {
         render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stack, xPos, yPos);
         RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
+        boolean shouldShowTooltip = false;
+        if (addPageLink) {
+            int lengthBefore = pageLinks.size();
+            PageLink link = new PageLink(xPos, yPos, 16, 16, stack);
+            if (link.category != null)
+                pageLinks.add(link);
+            shouldShowTooltip = pageLinks.size() > lengthBefore;
+        }
         if (!hasSpecialTooltip && mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
                 List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().thePlayer, false);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
-
+                if (addPageLink && shouldShowTooltip)
+                    tooltipData.add("Open guide book entry");
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)
@@ -216,6 +299,14 @@ public class ManualWidgetsBase {
         GL11.glDisable(GL11.GL_LIGHTING);
     }
 
+    /**
+     * Adds a special tooltip in case you want to
+     *
+     * @param xPos     the x coordinate to start drawing the tooltip
+     * @param yPos     the y coordinate to start drawing the tooltip
+     * @param stack    the item stack the tooltip is for
+     * @param toolTips the tooltip lines
+     */
     public void addSpecialItemTooltip(int xPos, int yPos, ItemStack stack, ArrayList<String> toolTips) {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {

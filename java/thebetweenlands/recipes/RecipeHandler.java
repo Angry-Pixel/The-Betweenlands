@@ -12,7 +12,6 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.RecipeSorter.Category;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
@@ -72,6 +71,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBow, 1), " #X", "# X", " #X", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'Y', ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.poisonedAnglerToothArrow, 1), ItemGeneric.createStack(EnumItemGeneric.POISON_GLAND), new ItemStack(BLItemRegistry.anglerToothArrow));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
@@ -82,10 +82,6 @@ public class RecipeHandler {
 
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
-
-		//Circle gem recipes
-		RecipeSorter.register("recipesCircleGems", RecipesCircleGems.class, Category.SHAPELESS, "");
-		GameRegistry.addRecipe(new RecipesCircleGems());
 
 		// Armour
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinHelmet, 1), "###", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
@@ -257,8 +253,12 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 2), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 3));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
-		RecipeSorter.register("thebetweenlands:bookcloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
+		RecipeSorter.register("thebetweenlands:bookCloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new BookCloneRecipe());
+		RecipeSorter.register("thebetweenlands:bookMerging", BookMergeRecipe.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new BookMergeRecipe());
+		RecipeSorter.register("thebetweenlands:recipesCircleGems", RecipesCircleGems.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesCircleGems());
 	}
 
 	private static void registerSmelting() {

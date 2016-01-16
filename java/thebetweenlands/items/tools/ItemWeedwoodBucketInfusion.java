@@ -68,7 +68,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
 					int count = stackCount.getValue();
 					if(ingredient != null) {
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspects(ingredient, player);
+						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(ingredient, AspectManager.getMergedDiscoveryContainer(player));
 						if(ingredientAspects.size() >= 1) {
 							if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 								for(Aspect aspect : ingredientAspects) {
@@ -128,7 +128,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
 				Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
 				for(int i = 0; i < nbtList.tagCount(); i++) {
 					ItemStack ingredient = ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i));
-					infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getAspectTypes(ingredient, null));
+					infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspectTypes(ingredient, null));
 				}
 			}
 		}

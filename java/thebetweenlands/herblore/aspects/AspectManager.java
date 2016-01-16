@@ -10,13 +10,13 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
@@ -405,47 +405,77 @@ public class AspectManager {
 	}
 
 	/**
-	 * Returns a list of all aspects on an item. If you specify a player
+	 * Returns a list of all discovered and dynamic aspects on an item. If you specify a player
 	 * this will only return the aspects that the player has discovered.
 	 * If the player is null this will return all aspects on an item.
 	 * @param stack
 	 * @param player
 	 * @return
 	 */
-	public List<Aspect> getAspects(ItemStack stack, EntityPlayer player) {
+	public List<Aspect> getDiscoveredAspects(ItemStack stack, DiscoveryContainer discoveryContainer) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		if(player == null) {
+		if(discoveryContainer == null) {
 			aspects.addAll(this.getStaticAspects(new AspectItem(stack)));
 		} else {
-			EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
-			if(aspectProperties != null) {
-				aspects.addAll(aspectProperties.getDiscoveredStaticAspects(this, new AspectItem(stack)));
-			}
+			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, new AspectItem(stack)));
 		}
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
 			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
 			for(int i = 0; i < lst.tagCount(); i++) {
 				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
 				Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
-				if(itemAspect != null) {
+				if(itemAspect != null)
 					aspects.add(itemAspect);
-				}
 			}
 		}
 		return aspects;
 	}
 
 	/**
-	 * Returns a list of all aspect types on an item. If you specify a player
+	 * Returns a list of all discovered and dynamic aspect types on an item. If you specify a player
 	 * this will only return the aspect types that the player has discovered.
 	 * If the player is null this will return all aspect types on an item.
 	 * @param stack
 	 * @param player
 	 * @return
 	 */
-	public List<IAspectType> getAspectTypes(ItemStack stack, EntityPlayer player) {
+	public List<IAspectType> getDiscoveredAspectTypes(ItemStack stack, DiscoveryContainer discoveryContainer) {
 		List<IAspectType> aspects = new ArrayList<IAspectType>();
-		for(Aspect aspect : this.getAspects(stack, player)) {
+		for(Aspect aspect : this.getDiscoveredAspects(stack, discoveryContainer)) {
+			aspects.add(aspect.type);
+		}
+		return aspects;
+	}
+
+	/**
+	 * Returns a list of all discovered aspects on an item. If you specify a player
+	 * this will only return the aspects that the player has discovered.
+	 * If the player is null this will return all aspects on an item.
+	 * @param item
+	 * @param player
+	 * @return
+	 */
+	public List<Aspect> getDiscoveredAspects(AspectItem item, DiscoveryContainer discoveryContainer) {
+		List<Aspect> aspects = new ArrayList<Aspect>();
+		if(discoveryContainer == null) {
+			aspects.addAll(this.getStaticAspects(item));
+		} else {
+			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, item));
+		}
+		return aspects;
+	}
+
+	/**
+	 * Returns a list of all discovered aspect types on an item. If you specify a player
+	 * this will only return the aspect types that the player has discovered.
+	 * If the player is null this will return all aspect types on an item.
+	 * @param item
+	 * @param player
+	 * @return
+	 */
+	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer discoveryContainer) {
+		List<IAspectType> aspects = new ArrayList<IAspectType>();
+		for(Aspect aspect : this.getDiscoveredAspects(item, discoveryContainer)) {
 			aspects.add(aspect.type);
 		}
 		return aspects;
@@ -491,5 +521,69 @@ public class AspectManager {
 	 */
 	public static IAspectType readAspectTypeFromNBT(NBTTagCompound nbt) {
 		return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
+	}
+
+	/**
+	 * Returns whether a player has a HL book to write to
+	 * @param player
+	 * @return
+	 */
+	public static boolean hasDiscoveryProvider(EntityPlayer player) {
+		InventoryPlayer inventory = player.inventory;
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack != null && stack.getItem() == BLItemRegistry.manualHL)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Returns a list of all writable discovery containers in the inventory of a player
+	 * @param player
+	 * @return
+	 */
+	public static List<DiscoveryContainer> getWritableDiscoveryContainers(EntityPlayer player) {
+		List<DiscoveryContainer> containerList = new ArrayList<DiscoveryContainer>();
+		InventoryPlayer inventory = player.inventory;
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack != null && stack.getItem() == BLItemRegistry.manualHL) {
+				IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
+				ItemStack providerObj = stack;
+				DiscoveryContainer container = provider.getContainer(stack);
+				if(container != null)
+					containerList.add(container);
+			}
+		}
+		return containerList;
+	}
+
+	/**
+	 * Merges all discovery containers in the inventory of a player into one discovery container.
+	 * Mostly used to get the combined knowledge of the player.
+	 * @param player
+	 * @return
+	 */
+	public static DiscoveryContainer getMergedDiscoveryContainer(EntityPlayer player) {
+		List<DiscoveryContainer> containerList = getWritableDiscoveryContainers(player);
+		DiscoveryContainer merged = new DiscoveryContainer();
+		for(DiscoveryContainer container : containerList) {
+			if(container != null)
+				merged.mergeDiscoveries(container);
+		}
+		return merged;
+	}
+
+	/**
+	 * Adds a discovered aspect to all discovery containers of the player
+	 * @param player
+	 * @param item
+	 * @param type
+	 */
+	public static void addDiscoveryToContainers(EntityPlayer player, AspectItem item, IAspectType type) {
+		List<DiscoveryContainer> discoveryContainers = AspectManager.getWritableDiscoveryContainers(player);
+		for(DiscoveryContainer container : discoveryContainers)
+			container.addDiscovery(item, type);
 	}
 }

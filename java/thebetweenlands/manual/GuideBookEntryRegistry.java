@@ -35,7 +35,6 @@ public class GuideBookEntryRegistry {
     public static IManualEntryItem[] rubberBoots = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.rubberBoots, (IManualEntryItem) BLItemRegistry.rubberBootsImproved};
 
 
-
     public static ArrayList<Page> itemPages = new ArrayList<>();
     public static ArrayList<Page> entityPages = new ArrayList<>();
     public static ArrayList<Page> machines = new ArrayList<>();
@@ -50,7 +49,10 @@ public class GuideBookEntryRegistry {
     public static ManualCategory category6;
     public static ManualCategory category7;
 
-    public static void init(){
+    /**
+     * initializes the Guide Book
+     */
+    public static void init() {
         initItemEntries();
         initMachineEntries();
         initEnityEntries();
@@ -62,6 +64,9 @@ public class GuideBookEntryRegistry {
         category7 = new ManualCategory(page, 7, manualType, "7");
     }
 
+    /**
+     * initializes the item pages
+     */
     public static void initItemEntries() {
         IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.itemsGeneric, (IManualEntryItem) BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
 
@@ -93,7 +98,7 @@ public class GuideBookEntryRegistry {
                     String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
-                        if(charactersFirst.length > i) {
+                        if (charactersFirst.length > i) {
                             if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
                                 break;
                             } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {
@@ -114,6 +119,9 @@ public class GuideBookEntryRegistry {
         CATEGORIES.add(itemsCategory);
     }
 
+    /**
+     * initializes the mechanic pages
+     */
     public static void initMachineEntries() {
         machines.clear();
         machines.addAll(PageCreators.pageCreatorMachines("pestleAndMortar", new ItemStack(BLBlockRegistry.pestleAndMortar), "thebetweenlands:textures/gui/manual/pamGridExplanation.png", 106, 69, false, manualType));
@@ -136,7 +144,7 @@ public class GuideBookEntryRegistry {
                     String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
-                        if(charactersFirst.length > i) {
+                        if (charactersFirst.length > i) {
                             if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
                                 break;
                             } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {
@@ -157,6 +165,9 @@ public class GuideBookEntryRegistry {
         CATEGORIES.add(machineCategory);
     }
 
+    /**
+     * initializes the entity pages
+     */
     public static void initEnityEntries() {
         IManualEntryEntity[] manualEntryEntities = new IManualEntryEntity[]{new IManualEntryEntity("angler", 110, 128, 10, -1), new IManualEntryEntity("berserkerGuardian", 110, 128, -1, -1), new IManualEntryEntity("blindCaveFish", 110, 128, -1, -1), new IManualEntryEntity("bloodSnail", 110, 128, -1, -1), new IManualEntryEntity("darkDruid", 110, 128, -1, -1), new IManualEntryEntity("dragonFly", 110, 128, -1, -1), new IManualEntryEntity("firefly", 110, 128, -1, -1), new IManualEntryEntity("gecko", 110, 128, -1, -1), new IManualEntryEntity("giantToad", 110, 128, -1, -1), new IManualEntryEntity("leech", 110, 128, -1, -1), new IManualEntryEntity("lurker", 110, 128, -1, -1), new IManualEntryEntity("meleeGuardian", 110, 128, -1, -1), new IManualEntryEntity("mireSnail", 110, 128, -1, -1), new IManualEntryEntity("mireSnailEgg", 110, 128, -1, -1), new IManualEntryEntity("peatMummy", 110, 128, -1, -1), new IManualEntryEntity("siltCrab", 110, 128, -1, -1), new IManualEntryEntity("sludge", 110, 128, -1, -1), new IManualEntryEntity("sporeling", 110, 128, -1, -1), new IManualEntryEntity("swampHag", 110, 128, -1, -1), new IManualEntryEntity("tarBeast", 110, 128, -1, -1), new IManualEntryEntity("tarminion", 110, 128, -1, -1), new IManualEntryEntity("termite", 110, 128, -1, -1), new IManualEntryEntity("wight", 110, 128, -1, -1)};
 
@@ -176,7 +187,7 @@ public class GuideBookEntryRegistry {
                     String pageNameFirst = currentFirst.pageName.toLowerCase();
                     char[] charactersFirst = pageNameFirst.toCharArray();
                     for (int i = 0; i < characters.length; i++) {
-                        if(charactersFirst.length > i) {
+                        if (charactersFirst.length > i) {
                             if (((Character) characters[i]).compareTo(charactersFirst[i]) > 0) {
                                 break;
                             } else if (((Character) characters[i]).compareTo(charactersFirst[i]) < 0) {

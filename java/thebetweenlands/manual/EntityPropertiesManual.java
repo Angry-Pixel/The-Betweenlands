@@ -2,10 +2,8 @@ package thebetweenlands.manual;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.world.World;
 import thebetweenlands.entities.properties.EntityProperties;
 
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class EntityPropertiesManual extends EntityProperties {
     public void saveNBTData(NBTTagCompound nbt) {
 
         NBTTagList pages = new NBTTagList();
-        for (String string:foundPages) {
+        for (String string : foundPages) {
             NBTTagCompound data = new NBTTagCompound();
             data.setString("page", string);
             pages.appendTag(data);

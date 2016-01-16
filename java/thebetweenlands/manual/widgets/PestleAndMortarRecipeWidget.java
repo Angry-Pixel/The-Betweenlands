@@ -42,6 +42,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+        pageLinks.clear();
         if (outputs.size() > 0) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -52,13 +53,13 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false);
-            renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false);
-            renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true);
+            renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false, true);
+            renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false, false);
+            renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true, true);
             ArrayList<String> extraToolTips = new ArrayList<>();
             extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
             addSpecialItemTooltip(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), extraToolTips);
-            renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false);
+            renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false, true);
             if (mouseX >= xStart + 11 && mouseX <= xStart + 85 && mouseY >= yStart + 62 && mouseY <= yStart + 68) {
                 ArrayList<String> recipeToolTips = new ArrayList<>();
                 recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
@@ -89,6 +90,7 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;

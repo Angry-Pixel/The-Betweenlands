@@ -67,7 +67,9 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
 
 		if (rand.nextBoolean())
-			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.BLOOD_SNAIL_SHELL, 1), 0.0F);
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.BLOOD_SNAIL_SHELL, 1), 0.0F);		
+		else
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.POISON_GLAND, 2), 0.0F);
 	}
 
 	@Override

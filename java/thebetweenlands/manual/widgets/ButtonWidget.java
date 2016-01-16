@@ -92,7 +92,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
         if (items.size() > 0)
-            renderItem(xStart, yStart, items.get(currentItem), false);
+            renderItem(xStart, yStart, items.get(currentItem), false, false);
         else if (aspect != null) {
             AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
             if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {

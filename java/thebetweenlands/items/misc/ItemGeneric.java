@@ -325,7 +325,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	@Override
 	public int metas() {
-		return 32;
+		return 33;
 	}
 
 	public static enum EnumItemGeneric {
@@ -337,7 +337,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21), 
 		VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedWoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
 		RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
-		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32);
+		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33);
 
 		public final String iconName;
 		public final int id;

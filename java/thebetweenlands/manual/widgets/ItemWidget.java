@@ -103,6 +103,7 @@ public class ItemWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentDisplayItem + 1 < stacks.size()) {
                 currentDisplayItem++;

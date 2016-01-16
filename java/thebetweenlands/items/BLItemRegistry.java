@@ -239,8 +239,8 @@ public class BLItemRegistry {
 	public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(ModCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
 	public static final Item pestle = new ItemPestle().setUnlocalizedName("thebetweenlands.pestle");
 	public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
-	public static final Item manualGuideBook = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("manual");
-	public static final Item manualHL = new ItemHLBook().setUnlocalizedName("thebetweenlands.manualHL").setTextureName("manualHL");
+	public static final Item manualGuideBook = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("thebetweenlands:manual");
+	public static final Item manualHL = new ItemHLBook().setUnlocalizedName("thebetweenlands.manualHL").setTextureName("thebetweenlands:manualHL");
 	public static final Item tarminion = new ItemTarminion().setUnlocalizedName("thebetweenlands.tarminion");
 	public static final Item volarPad = new ItemVolarPad().setMaxDamage(200);
 	public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();

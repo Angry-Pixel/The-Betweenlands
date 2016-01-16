@@ -44,6 +44,7 @@ public class AnimatorRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+        pageLinks.clear();
         if (outputs.size() > 0) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -53,10 +54,10 @@ public class AnimatorRecipeWidget extends ManualWidgetsBase {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             AnimatorRecipe recipe = AnimatorRecipe.getRecipeFromOutput(outputs.get(currentRecipe));
             if (recipe != null) {
-                renderItem(xStart + 46, yStart + 16, outputs.get(currentRecipe), false);
-                renderItem(xStart + 1, yStart + 16, recipe.input, false);
-                renderItem(xStart + 1, yStart + 50, new ItemStack(BLItemRegistry.lifeCrystal), false);
-                renderItem(xStart + 91, yStart + 50, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.SULFUR), false);
+                renderItem(xStart + 46, yStart + 16, outputs.get(currentRecipe), false, false);
+                renderItem(xStart + 1, yStart + 16, recipe.input, false, true);
+                renderItem(xStart + 1, yStart + 50, new ItemStack(BLItemRegistry.lifeCrystal), false, true);
+                renderItem(xStart + 91, yStart + 50, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.SULFUR), false, true);
             }
             if (mouseX >= xStart + 18 && mouseX <= xStart + 89 && mouseY >= yStart + 42 && mouseY <= yStart + 66) {
                 ArrayList<String> recipeToolTips = new ArrayList<>();
@@ -88,6 +89,7 @@ public class AnimatorRecipeWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;

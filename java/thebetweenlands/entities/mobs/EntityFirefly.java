@@ -177,7 +177,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	public String pageName() {
-		return "fireFly";
+		return "firefly";
 	}
 
 	@Override
