@@ -41,6 +41,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+        pageLinks.clear();
         if (outputs.size() > 0) {
             int newX = xStart + 1;
             int newY = yStart + 1;
@@ -55,9 +56,9 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false);
-            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), false);
-            renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false);
+            renderItem(newX, newY, PurifierRecipe.getRecipeInput(outputs.get(currentRecipe)), false, true);
+            renderItem(newX, newY + 40, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), false, true);
+            renderItem(newX + 60, newY + 20, outputs.get(currentRecipe), false, false);
 
             if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
                 ArrayList<String> processTooltip = new ArrayList<>();
@@ -96,6 +97,7 @@ public class PurifierRecipeWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;

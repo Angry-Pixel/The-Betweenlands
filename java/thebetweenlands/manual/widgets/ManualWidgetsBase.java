@@ -14,6 +14,9 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import thebetweenlands.manual.GuiManualBase;
+import thebetweenlands.manual.GuideBookEntryRegistry;
+import thebetweenlands.manual.ManualCategory;
+import thebetweenlands.manual.Page;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +25,35 @@ import java.util.List;
  * Created by Bart on 8-8-2015.
  */
 public class ManualWidgetsBase {
+    public static class PageLink {
+        public int x;
+        public int y;
+        public int width;
+        public int height;
+        public int pageNumber;
+        public ManualCategory category;
+
+        public PageLink(int x, int y, int width, int height, ItemStack item) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
+                if (page.pageItems != null) {
+                    for (ItemStack stack : page.pageItems) {
+                        if (stack != null && item != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
+                            pageNumber = page.pageNumber;
+                            category = page.parentCategory;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
 
+    public ArrayList<PageLink> pageLinks = new ArrayList<>();
     public GuiManualBase manual;
     public int unchangedXStart;
     public int unchangedYStart;
@@ -212,6 +242,11 @@ public class ManualWidgetsBase {
     }
 
     public void mouseClicked(int x, int y, int mouseButton) {
+        if (mouseButton == 0)
+            for (PageLink link : pageLinks) {
+                if (x >= link.x && y >= link.y && x <= link.x + link.width && y <= link.y + link.height)
+                    manual.changeCategory(link.category, link.pageNumber + link.category.indexPages);
+            }
     }
 
     /**
@@ -223,7 +258,7 @@ public class ManualWidgetsBase {
      * @param hasSpecialTooltip whether or not the item has a special tooltip
      */
     @SideOnly(Side.CLIENT)
-    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip) {
+    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink) {
         RenderItem render = new RenderItem();
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -235,12 +270,21 @@ public class ManualWidgetsBase {
         render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(), stack, xPos, yPos);
         RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
+        boolean shouldShowTooltip = false;
+        if (addPageLink) {
+            int lengthBefore = pageLinks.size();
+            PageLink link = new PageLink(xPos, yPos, 16, 16, stack);
+            if (link.category != null)
+                pageLinks.add(link);
+            shouldShowTooltip = pageLinks.size() > lengthBefore;
+        }
         if (!hasSpecialTooltip && mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
                 List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().thePlayer, false);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
-
+                if (addPageLink && shouldShowTooltip)
+                    tooltipData.add("Open guide book entry");
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)

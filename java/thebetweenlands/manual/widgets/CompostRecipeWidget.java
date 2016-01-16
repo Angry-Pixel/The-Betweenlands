@@ -32,6 +32,7 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+        pageLinks.clear();
         CompostRecipe recipe = CompostRecipe.compostRecipes.get(currentRecipe);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -41,9 +42,9 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(xStart, yStart, new ItemStack(recipe.compostItem, 1, recipe.itemDamage), false);
-        renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.compostBin)), false);
-        renderItem(xStart + 62, yStart + 22, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.COMPOST), false);
+        renderItem(xStart, yStart, new ItemStack(recipe.compostItem, 1, recipe.itemDamage), false, true);
+        renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.compostBin)), false, false);
+        renderItem(xStart + 62, yStart + 22, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.COMPOST), false, false);
         if (mouseX >= xStart + 18 && mouseX <= xStart + 34 && mouseY >= yStart + 4 && mouseY <= yStart + 20) {
             ArrayList<String> processTooltip = new ArrayList<>();
             processTooltip.add(StatCollector.translateToLocal("manual.widget.compost.recipe"));
@@ -62,6 +63,7 @@ public class CompostRecipeWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < CompostRecipe.compostRecipes.size()) {
                 currentRecipe++;

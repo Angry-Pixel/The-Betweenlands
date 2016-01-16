@@ -38,6 +38,7 @@ public class DruidAltarWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
+        pageLinks.clear();
         if (outputs.size() > 0) {
             int newX = xStart + 1;
             int newY = yStart + 1;
@@ -50,12 +51,12 @@ public class DruidAltarWidget extends ManualWidgetsBase {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            renderItem(newX + 1, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input1, false);
-            renderItem(newX + 57, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input2, false);
-            renderItem(newX + 1, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input3, false);
-            renderItem(newX + 57, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input4, false);
+            renderItem(newX + 1, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input1, false, true);
+            renderItem(newX + 57, newY + 1, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input2, false, true);
+            renderItem(newX + 1, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input3, false, true);
+            renderItem(newX + 57, newY + 57, DruidAltarRecipe.getDruidAltarRecipe(outputs.get(currentRecipe)).input4, false, true);
 
-            renderItem(newX + 29, newY + 29, outputs.get(currentRecipe), false);
+            renderItem(newX + 29, newY + 29, outputs.get(currentRecipe), false, false);
 
             /*if (mouseX >= xStart + 25 && mouseX <= xStart + 47 && mouseY >= yStart + 22 && mouseY <= yStart + 38) {
                 ArrayList<String> processTooltip = new ArrayList<>();
@@ -94,6 +95,7 @@ public class DruidAltarWidget extends ManualWidgetsBase {
 
     @Override
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height) {
             if (currentRecipe + 1 < outputs.size()) {
                 currentRecipe++;

@@ -34,11 +34,12 @@ public class ItemSlideShowWidget extends ManualWidgetsBase {
 
     @Override
     public void drawForeGround() {
+        pageLinks.clear();
         super.drawForeGround();
         List<ItemStack> subItems = items.subList(currentItems, currentItems + (items.size() - currentItems > 5 ? 6 : items.size() - currentItems));
         int width = 0;
         for (ItemStack itemStack : subItems) {
-            renderItem(xStart + width, yStart, itemStack, false);
+            renderItem(xStart + width, yStart, itemStack, false, true);
             width += 18;
         }
     }
@@ -64,6 +65,7 @@ public class ItemSlideShowWidget extends ManualWidgetsBase {
     }
 
     public void mouseClicked(int x, int y, int mouseButton) {
+        super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + 96 && y >= yStart && y <= yStart + 16) {
             if (currentItems + 1 < items.size() && items.size() - currentItems > 6) {
                 currentItems++;
