@@ -38,6 +38,7 @@ public class ManualCategory {
             if (page.isParent)
                 buttonPages.add(page);
             tempPages.add(page);
+            page.setParentCategory(this);
             pageNumber++;
         }
         ArrayList<Page> buttonPagesNew;

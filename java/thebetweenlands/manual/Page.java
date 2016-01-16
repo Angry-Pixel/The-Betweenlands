@@ -34,7 +34,7 @@ public class Page {
 
     public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
     public boolean rightPage = false;
-
+    public ManualCategory parentCategory;
     public boolean isParent = false;
 
     /**
@@ -214,5 +214,16 @@ public class Page {
     public void resize() {
         for (ManualWidgetsBase widget : widgets)
             widget.resize();
+    }
+
+
+    /**
+     * Sets the category this page is in. Might be usefull for pagelinking
+     * @param category the category this page is in
+     * @return this page
+     */
+    public Page setParentCategory(ManualCategory category){
+        parentCategory = category;
+        return this;
     }
 }
