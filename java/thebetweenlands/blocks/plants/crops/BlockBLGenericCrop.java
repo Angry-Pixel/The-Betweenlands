@@ -67,24 +67,24 @@ public class BlockBLGenericCrop extends BlockCrops {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		if (metadata == MATURE_CROP) {
 			for (int i = 0; i < world.rand.nextInt(4) + 1 + fortune; ++i) {
-				if(getSeedDrops() != null) {
+				if(getSeedDrops(world, x, y, z) != null) {
 					if (world.rand.nextInt(15) <= metadata)
-						ret.add(getSeedDrops());
+						ret.add(getSeedDrops(world, x, y, z));
 				}
-				if(getCropDrops() != null) ret.add(getCropDrops());
+				if(getCropDrops(world, x, y, z) != null) ret.add(getCropDrops(world, x, y, z));
 			}
 		}
-		if(getSeedDrops() != null) {
-			ret.add(getSeedDrops());
+		if(getSeedDrops(world, x, y, z) != null) {
+			ret.add(getSeedDrops(world, x, y, z));
 		}
 		return ret;
 	}
 
-	public ItemStack getSeedDrops() {
+	public ItemStack getSeedDrops(World world, int x, int y, int z) {
 		return null;	
 	}
 
-	public ItemStack getCropDrops() {
+	public ItemStack getCropDrops(World world, int x, int y, int z) {
 		return null;	
 	}
 
@@ -224,13 +224,37 @@ public class BlockBLGenericCrop extends BlockCrops {
 		int meta = world.getBlockMetadata(x, y, z);
 		this.onGrow(world, x, y, z, meta);
 		if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
-			if (rand.nextInt(25) == 0) {
+			if (this.shouldGrow(world, x, y, z)) {
 				++meta;
 				world.setBlockMetadataWithNotify(x, y, z, meta, 3);
 			}
 		}
 	}
 
+	/**
+	 * Returns whether the crop should grow this tick
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean shouldGrow(World world, int x, int y, int z) {
+		return world.rand.nextInt(25) == 0;
+	}
+
+	/**
+	 * Returns whether the soil (and crop) should decay this tick
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean shouldDecay(World world, int x, int y, int z) {
+		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
+	}
+	
 	/**
 	 * Returns whether the soil of the crop is decayed
 	 * @param world
@@ -399,16 +423,4 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @param meta
 	 */
 	public void onGrow(World world, int x, int y, int z, int meta) { }
-
-	/**
-	 * Returns whether the soil (and crop) should decay this tick
-	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @return
-	 */
-	public boolean shouldDecay(World world, int x, int y, int z) {
-		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
-	}
 }

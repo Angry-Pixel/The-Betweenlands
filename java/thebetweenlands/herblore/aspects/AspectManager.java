@@ -487,7 +487,7 @@ public class AspectManager {
 	 * @param aspects
 	 * @return
 	 */
-	public ItemStack addAspects(ItemStack stack, Aspect... aspects) {
+	public static ItemStack addAspects(ItemStack stack, Aspect... aspects) {
 		if(stack.stackTagCompound == null) {
 			stack.stackTagCompound = new NBTTagCompound();
 		}

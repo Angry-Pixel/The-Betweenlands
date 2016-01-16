@@ -11,12 +11,14 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.crops.ModelAspectCrop;
+import thebetweenlands.client.model.block.crops.ModelAspectCrop2;
 import thebetweenlands.tileentities.TileEntityAspectCrop;
 
 public class TileEntityAspectCropRenderer extends TileEntitySpecialRenderer {
 	private static final RenderBlocks renderBlocks = new RenderBlocks();
 
 	private static final ModelAspectCrop MODEL = new ModelAspectCrop();
+	private static final ModelAspectCrop2 MODEL2 = new ModelAspectCrop2();
 
 	private static final ResourceLocation TEXTURE_0 = new ResourceLocation("thebetweenlands:textures/blocks/crops/aspectCrop0.png");
 	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/blocks/crops/aspectCrop1.png");

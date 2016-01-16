@@ -340,23 +340,23 @@ public class BLBlockRegistry {
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
 		@Override
-		public ItemStack getSeedDrops() {
+		public ItemStack getSeedDrops(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
 		}
 
 		@Override
-		public ItemStack getCropDrops() {
+		public ItemStack getCropDrops(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
 		}
 	};
 	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
 		@Override
-		public ItemStack getSeedDrops() {
+		public ItemStack getSeedDrops(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.spores);
 		}
 
 		@Override
-		public ItemStack getCropDrops() {
+		public ItemStack getCropDrops(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.yellowDottedFungus);
 		}
 

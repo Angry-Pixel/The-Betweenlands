@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.plants.crops;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -13,9 +15,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockFarmedDirt;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityAspectCrop;
 
 public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityProvider {
+	private static final float ASPECT_MULTIPLIER = 0.66F;
 	private static final int MAX_HEIGHT = 3;
 
 	public BlockAspectCrop(String blockName) {
@@ -24,6 +31,50 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 		float min = 0.375F - 0.03F;
 		float max = 0.625F + 0.03F;
 		this.setBlockBounds(min, 0, min, max, 1, max);
+	}
+
+	public void setAspect(World world, int x, int y, int z, Aspect aspect){
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if(tile instanceof TileEntityAspectCrop)
+			((TileEntityAspectCrop)tile).setAspect(aspect);
+	}
+
+	public Aspect getAspect(World world, int x, int y, int z) {
+		TileEntity tile = world.getTileEntity(x, y, z);
+		if(tile instanceof TileEntityAspectCrop)
+			return ((TileEntityAspectCrop)tile).getAspect();
+		return null;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(this.getAspect(world, x, y, z) == null) {
+			ItemStack heldItem = player.getHeldItem();
+			if(heldItem != null && heldItem.getItem() == BLItemRegistry.aspectVial) {
+				List<Aspect> aspects = AspectManager.get(world).getDiscoveredAspects(heldItem, null);
+				if(aspects.size() > 0) {
+					if(!world.isRemote) {
+						Aspect aspect = aspects.get(0);
+						this.setAspect(world, x, y, z, aspect);
+						if (!player.capabilities.isCreativeMode) {
+							--heldItem.stackSize;
+							if(heldItem.stackSize == 0)
+								player.setCurrentItemOrArmor(0, null);
+							ItemStack newStack;
+							if(heldItem.getItemDamage() % 2 == 0) {
+								newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 0);
+							} else {
+								newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 2);
+							}
+							if(!player.inventory.addItemStackToInventory(newStack))
+								player.dropPlayerItemWithRandomChoice(newStack, false);
+						}
+					}
+					return true;
+				}
+			}
+		}
+		return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -61,6 +112,8 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 						!BLBlockRegistry.rubberTreePlankFence.canConnectFenceTo(world, x, y+1, z+1) &&
 						!BLBlockRegistry.rubberTreePlankFence.canConnectFenceTo(world, x, y+1, z-1)) {
 					world.setBlock(x, y + 1, z, this);
+					if(world.getBlock(x, y + 1, z) instanceof BlockAspectCrop)
+						((BlockAspectCrop)world.getBlock(x, y + 1, z)).setAspect(world, x, y + 1, z, this.getAspect(world, x, y, z));
 				}
 			}
 		}
@@ -111,6 +164,9 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 	 */
 	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
+		Aspect aspect = this.getAspect(world, x, y, z);
+		if(aspect == null)
+			return false;
 		int meta = world.getBlockMetadata(x, y, z);
 		return (world.getBlock(x, y + 1, z) != BLBlockRegistry.rubberTreePlankFence || world.getBlock(x, y - (MAX_HEIGHT - 1), z) == this) ? meta < MATURE_CROP : meta <= MATURE_CROP;
 	}
@@ -136,14 +192,35 @@ public class BlockAspectCrop extends BlockBLGenericCrop implements ITileEntityPr
 	}
 
 	@Override
-	public ItemStack getSeedDrops() {
+	public ItemStack getSeedDrops(World world, int x, int y, int z) {
 		return new ItemStack(Blocks.dirt, 1);	
 	}
 
 	@Override
-	public ItemStack getCropDrops() {
-		return new ItemStack(Blocks.stone, 1);	
+	public ItemStack getCropDrops(World world, int x, int y, int z) {
+		ItemStack stack = new ItemStack(Blocks.stone, 1);
+		Aspect aspect = this.getAspect(world, x, y, z);
+		if(aspect != null)
+			AspectManager.addAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_MULTIPLIER));
+		return stack;	
 	}
+
+	@Override
+	public boolean shouldGrow(World world, int x, int y, int z) {
+		Aspect aspect = this.getAspect(world, x, y, z);
+		if(aspect != null)
+			return world.rand.nextInt((int)(10 + aspect.amount * 20)) == 0;
+		return false;
+	}
+
+	@Override
+	public boolean shouldDecay(World world, int x, int y, int z) {
+		Aspect aspect = this.getAspect(world, x, y, z);
+		if(aspect != null)
+			return world.rand.nextInt(Math.max((int)(BlockFarmedDirt.DECAY_CHANCE - aspect.amount * 35), 2)) == 0;
+		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
+	}
+
 
 
 
