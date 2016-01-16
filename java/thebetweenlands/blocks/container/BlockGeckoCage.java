@@ -19,13 +19,12 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
+import thebetweenlands.herblore.aspects.DiscoveryContainer;
+import thebetweenlands.herblore.aspects.DiscoveryContainer.AspectDiscovery;
+import thebetweenlands.herblore.aspects.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -72,15 +71,17 @@ public class BlockGeckoCage extends BlockContainer {
 				}
 				if(tile.getAspectType() == null) {
 					if(tile.hasGecko()) {
-						AspectManager manager = AspectManager.get(world);
-						List<Aspect> aspects = manager.getAspects(stack, null);
-						if(aspects.size() > 0) {
-							EntityPropertiesAspects aspectProperties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
-							if(aspectProperties != null) {
-								AspectDiscovery discovery = aspectProperties.discover(manager, new AspectItem(stack));
+						if(AspectManager.hasDiscoveryProvider(player)) {
+							AspectManager manager = AspectManager.get(world);
+							List<Aspect> aspects = manager.getDiscoveredAspects(stack, null);
+							if(aspects.size() > 0) {
+								DiscoveryContainer mergedKnowledge = AspectManager.getMergedDiscoveryContainer(player);
+								AspectItem aspectItem = new AspectItem(stack);
+								AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem);
 								switch(discovery.result) {
 								case NEW:
 								case LAST:
+									AspectManager.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 									if(!world.isRemote) {
 										tile.setAspectType(discovery.discovered.type, 2400);
 										if(ConfigHandler.DEBUG) {
@@ -106,14 +107,15 @@ public class BlockGeckoCage extends BlockContainer {
 									if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
 									return false;
 								}
-							}
-						} else {
-							//no aspects
-							if(!world.isRemote) {
-								player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
+							} else {
+								//no aspects
+								if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.none"));
 								return false;
 							}
-							return true;
+						} else {
+							//no herblore book
+							if(!world.isRemote) player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery.book.none"));
+							return false;
 						}
 					} else {
 						//no gecko

@@ -58,7 +58,7 @@ public class BlockInfuser extends BlockContainer {
 						return true;
 					}
 				}
-				if (player.getCurrentEquippedItem() != null && AspectManager.get(world).getAspects(player.getCurrentEquippedItem(), null).size() > 0 && !tile.hasInfusion()) {
+				if (player.getCurrentEquippedItem() != null && AspectManager.get(world).getDiscoveredAspects(player.getCurrentEquippedItem(), null).size() > 0 && !tile.hasInfusion()) {
 					ItemStack ingredient = player.getCurrentEquippedItem();
 					for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 						if(tile.getStackInSlot(i) == null) {

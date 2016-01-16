@@ -329,7 +329,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if(inventory[i] != null) {
-				infusingAspects.addAll(AspectManager.get(this.worldObj).getAspectTypes(inventory[i], null));
+				infusingAspects.addAll(AspectManager.get(this.worldObj).getDiscoveredAspectTypes(inventory[i], null));
 			}
 		}
 		return infusingAspects;

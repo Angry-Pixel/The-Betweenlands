@@ -457,6 +457,7 @@ item.thebetweenlands.limestoneFlux.name=Limestone Flux
 item.thebetweenlands.itemRope.name=Tough Climbing Rope
 item.thebetweenlands.syrmoriteShears.name=Syrmorite Shears
 item.thebetweenlands.manual.name=Guide Book
+item.thebetweenlands.manualHL.name=Herblore Book
 item.thebetweenlands.tribalPants.name=Tribal Pants
 item.thebetweenlands.sickle.name=Sickle
 item.thebetweenlands.gecko.name=Gecko
@@ -735,6 +736,7 @@ command.blevent.failure.alreadydisabled=Events are already disabled
 command.decay.noplayer=You must be a player
 command.decay.noint=Argument is not an integer
 
+command.aspectdiscovery.book.none=There's no Herblore Book to write to
 command.aspectdiscovery.held.null=Held item must not be null
 command.aspectdiscovery.discover.held=Result: %s Aspect: %d
 command.aspectdiscovery.discover.all=Discovered all aspects of all items
@@ -1062,6 +1064,7 @@ chat.compost.not.compostable=This item is not compostable
 chat.compost.open.add=Open the compost bin to add compostable items
 chat.compost.open.get=Open the compost bin to take out the compost
 
+chat.aspect.discovery.book.none=You don't have a book to write down your discoveries
 chat.aspect.discovery.gecko.none=You can't conduct this experiment without a gecko
 chat.aspect.discovery.gecko.recovering=The gecko is still recovering from the last experiment
 chat.aspect.discovery.none=This item doesn't seem to have any aspects

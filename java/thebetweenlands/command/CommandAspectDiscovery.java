@@ -11,11 +11,10 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
+import thebetweenlands.herblore.aspects.DiscoveryContainer;
+import thebetweenlands.herblore.aspects.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
 public class CommandAspectDiscovery extends CommandBase {
@@ -37,10 +36,12 @@ public class CommandAspectDiscovery extends CommandBase {
 		if(sender instanceof EntityPlayer == false) {
 			throw new CommandException("command.generic.noplayer");
 		}
-		EntityPlayer player = (EntityPlayer) sender;
-		EntityPropertiesAspects properties = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesAspects.class);
 		if(args.length < 2) {
 			throw new CommandException("commands.generic.syntax");
+		}
+		EntityPlayer player = (EntityPlayer) sender;
+		if(!AspectManager.hasDiscoveryProvider(player)) {
+			throw new CommandException("command.aspectdiscovery.book.none");
 		}
 		WorldServer blWorld = DimensionManager.getWorld(ConfigHandler.DIMENSION_ID);
 		AspectManager manager = AspectManager.get(blWorld);
@@ -51,11 +52,15 @@ public class CommandAspectDiscovery extends CommandBase {
 				if(player.getHeldItem() == null) {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
-				AspectDiscovery discovery = properties.discover(manager, new AspectItem(player.getHeldItem()));
+				DiscoveryContainer mergedKnowledge = AspectManager.getMergedDiscoveryContainer(player);
+				AspectDiscovery discovery = mergedKnowledge.discover(manager, new AspectItem(player.getHeldItem()));
+				AspectManager.addDiscoveryToContainers(player, new AspectItem(player.getHeldItem()), discovery.discovered.type);
 				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.held", new ChatComponentText(discovery.result.toString()), new ChatComponentText(discovery.discovered == null ? "null" : discovery.discovered.type.getName())));
 				break;
 			case "all":
-				properties.discoverAll(manager);
+				List<DiscoveryContainer> discoveryContainers = AspectManager.getWritableDiscoveryContainers(player);
+				for(DiscoveryContainer container : discoveryContainers)
+					container.discoverAll(manager);
 				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.discover.all"));
 				break;
 			default:
@@ -63,16 +68,19 @@ public class CommandAspectDiscovery extends CommandBase {
 			}
 			break;
 		case "reset":
+			List<DiscoveryContainer> discoveryContainers = AspectManager.getWritableDiscoveryContainers(player);
 			switch(args[1]) {
 			case "held":
 				if(player.getHeldItem() == null) {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
-				properties.resetDiscovery(new AspectItem(player.getHeldItem()));
+				for(DiscoveryContainer container : discoveryContainers)
+					container.resetDiscovery(new AspectItem(player.getHeldItem()));
 				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.reset.held"));
 				break;
 			case "all":
-				properties.resetAllDiscovery();
+				for(DiscoveryContainer container : discoveryContainers)
+					container.resetAllDiscovery();
 				sender.addChatMessage(new ChatComponentTranslation("command.aspectdiscovery.reset.all"));
 				break;
 			default:

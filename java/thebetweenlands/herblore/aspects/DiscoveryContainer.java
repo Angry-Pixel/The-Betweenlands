@@ -1,4 +1,4 @@
-package thebetweenlands.entities.properties.list;
+package thebetweenlands.herblore.aspects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,18 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import thebetweenlands.entities.properties.EntityProperties;
-import thebetweenlands.entities.properties.list.EntityPropertiesAspects.AspectDiscovery.EnumDiscoveryResult;
-import thebetweenlands.herblore.aspects.Aspect;
-import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
-import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.herblore.aspects.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.utils.EnumNBTTypes;
 
-public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
+public class DiscoveryContainer {
 	public static class AspectDiscovery {
 		public static enum EnumDiscoveryResult {
 			NONE, NEW, LAST, END;
@@ -36,6 +31,18 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	}
 
 	private final Map<AspectItem, List<IAspectType>> discoveredStaticAspects = new HashMap<AspectItem, List<IAspectType>>();
+	private final IDiscoveryProvider provider;
+	private final Object providerObj;
+
+	public DiscoveryContainer(IDiscoveryProvider provider, Object providerObj) {
+		this.provider = provider;
+		this.providerObj = providerObj;
+	}
+
+	public DiscoveryContainer() {
+		this.provider = null;
+		this.providerObj = null;
+	}
 
 	/**
 	 * Returns how many aspects of the specified item are already discovered
@@ -44,6 +51,12 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 */
 	private int getDiscoveryCount(AspectItem item) {
 		return !this.discoveredStaticAspects.containsKey(item) ? 0 : this.discoveredStaticAspects.get(item).size();
+	}
+
+	private DiscoveryContainer saveContainer() {
+		if(this.provider != null && this.providerObj != null)
+			this.provider.saveContainer(this.providerObj, this);
+		return this;
 	}
 
 	/**
@@ -63,10 +76,11 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		}
 		Aspect undiscovered = this.getUndiscoveredAspect(staticAspects, this.discoveredStaticAspects.get(item));
 		this.addDiscovery(item, undiscovered.type);
-		this.sync();
 		if(discoveryCount == staticAspects.size()) {
+			this.saveContainer();
 			return new AspectDiscovery(EnumDiscoveryResult.LAST, undiscovered, true);
 		} else {
+			this.saveContainer();
 			return new AspectDiscovery(EnumDiscoveryResult.NEW, undiscovered, true);
 		}
 	}
@@ -80,7 +94,7 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 			for(Aspect a : e.getValue())
 				this.addDiscovery(e.getKey(), a.type);
 		}
-		this.sync();
+		this.saveContainer();
 	}
 
 	/**
@@ -88,10 +102,8 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 * @param item
 	 */
 	public void resetDiscovery(AspectItem item) {
-		if(this.discoveredStaticAspects.containsKey(item) && this.discoveredStaticAspects.get(item).size() != 0) {
-			this.sync();
-		}
 		this.discoveredStaticAspects.remove(item);
+		this.saveContainer();
 	}
 
 	/**
@@ -99,15 +111,22 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 	 */
 	public void resetAllDiscovery() {
 		this.discoveredStaticAspects.clear();
-		this.sync();
+		this.saveContainer();
 	}
 
-	private void addDiscovery(AspectItem item, IAspectType discovered) {
+	/**
+	 * Adds a single aspect discovery
+	 * @param item
+	 * @param discovered
+	 */
+	public void addDiscovery(AspectItem item, IAspectType discovered) {
 		List<IAspectType> discoveredAspects = this.discoveredStaticAspects.get(item);
 		if(discoveredAspects == null) {
 			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<IAspectType>());
 		}
-		discoveredAspects.add(discovered);
+		if(!discoveredAspects.contains(discovered))
+			discoveredAspects.add(discovered);
+		this.saveContainer();
 	}
 
 	private Aspect getUndiscoveredAspect(List<Aspect> all, List<IAspectType> discovered) {
@@ -121,8 +140,11 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		return null;
 	}
 
-	@Override
-	public void saveNBTData(NBTTagCompound nbt) {
+	/**
+	 * Writes this discovery container to an NBT
+	 * @param nbt
+	 */
+	public void writeToNBT(NBTTagCompound nbt) {
 		NBTTagList discoveryList = new NBTTagList();
 		Iterator<Entry<AspectItem, List<IAspectType>>> discoveryIT = this.discoveredStaticAspects.entrySet().iterator();
 		while(discoveryIT.hasNext()) {
@@ -143,8 +165,23 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 		nbt.setTag("discoveries", discoveryList);
 	}
 
-	@Override
-	public void loadNBTData(NBTTagCompound nbt) {
+	/**
+	 * Reads a discovery container from an NBT
+	 * @param nbt
+	 * @return
+	 */
+	public static DiscoveryContainer readFromNBT(NBTTagCompound nbt) {
+		DiscoveryContainer container = new DiscoveryContainer();
+		container.updateFromNBT(nbt, false);
+		return container;
+	}
+
+	/**
+	 * Updates this discovery container from an NBT
+	 * @param nbt
+	 * @return
+	 */
+	public DiscoveryContainer updateFromNBT(NBTTagCompound nbt, boolean save) {
 		this.discoveredStaticAspects.clear();
 		NBTTagList discoveryList = nbt.getTagList("discoveries", EnumNBTTypes.NBT_COMPOUND.ordinal());
 		int discoveryEntries = discoveryList.tagCount();
@@ -159,30 +196,41 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 			}
 			this.discoveredStaticAspects.put(item, aspectTypeList);
 		}
-	}
-
-	@Override
-	public String getID() {
-		return "blPropertyAspects";
-	}
-
-	@Override
-	public Class<EntityPlayer> getEntityClass() {
-		return EntityPlayer.class;
-	}
-
-	@Override
-	public int getTrackingTime() {
-		return 0;
-	}
-
-	@Override
-	public int getTrackingUpdateTime() {
-		return 40;
+		if(save)
+			this.saveContainer();
+		return this;
 	}
 
 	/**
-	 * Returns the list of all the discovered aspects of the specified item. Server side only!
+	 * Merges the discoveries of another container into this container
+	 * @param other
+	 * @return
+	 */
+	public DiscoveryContainer mergeDiscoveries(DiscoveryContainer other) {
+		boolean changed = false;
+		for(Entry<AspectItem, List<IAspectType>> entry : other.discoveredStaticAspects.entrySet()) {
+			AspectItem otherItem = entry.getKey();
+			List<IAspectType> otherTypes = entry.getValue();
+			if(!this.discoveredStaticAspects.containsKey(otherItem)) {
+				this.discoveredStaticAspects.put(otherItem, otherTypes);
+				changed = true;
+			} else {
+				List<IAspectType> aspectTypes = this.discoveredStaticAspects.get(otherItem);
+				for(IAspectType otherType : otherTypes) {
+					if(!aspectTypes.contains(otherType)) {
+						aspectTypes.add(otherType);
+						changed = true;
+					}
+				}
+			}
+		}
+		if(changed)
+			this.saveContainer();
+		return this;
+	}
+
+	/**
+	 * Returns the list of all the discovered aspects of the specified item.
 	 * @param manager
 	 * @param item
 	 * @return
@@ -198,16 +246,5 @@ public class EntityPropertiesAspects extends EntityProperties<EntityPlayer> {
 			}
 		}
 		return discoveredStaticAspects;
-	}
-
-	@Override
-	public boolean saveTrackingSensitiveData(NBTTagCompound nbt) {
-		this.saveNBTData(nbt);
-		return false;
-	}
-
-	@Override
-	public void loadTrackingSensitiveData(NBTTagCompound nbt) {
-		this.loadNBTData(nbt);
 	}
 }

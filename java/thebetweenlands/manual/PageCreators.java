@@ -274,13 +274,13 @@ public class PageCreators {
         if (height + 18 + 16 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         } else {
             newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, aspect));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         }
 
@@ -292,7 +292,7 @@ public class PageCreators {
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
         } else {
             if (newPages.size() > 0)
@@ -306,7 +306,7 @@ public class PageCreators {
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
                 items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
-            widgets.add(new ItemSlideShowWidget(18, 12 + height, items));
+            widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
         }
 

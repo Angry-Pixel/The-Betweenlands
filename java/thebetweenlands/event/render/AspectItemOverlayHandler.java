@@ -41,7 +41,7 @@ public class AspectItemOverlayHandler {
 					GL11.glTranslated(mouseX + 8, mouseY, 200);
 					int yOffset = -40;
 					int width = 0;
-					List<Aspect> aspects = AspectManager.get(Minecraft.getMinecraft().theWorld).getAspects(slot.getStack(), Minecraft.getMinecraft().thePlayer);
+					List<Aspect> aspects = AspectManager.get(Minecraft.getMinecraft().theWorld).getDiscoveredAspects(slot.getStack(), AspectManager.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer));
 					GL11.glEnable(GL11.GL_TEXTURE_2D);
 					GL11.glEnable(GL11.GL_BLEND);
 					RenderHelper.disableStandardItemLighting();
