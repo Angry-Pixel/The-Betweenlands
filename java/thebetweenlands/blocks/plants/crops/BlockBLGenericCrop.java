@@ -90,17 +90,19 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ItemStack seedDrop = this.getSeedDrop(world, x, y, z);
+		ItemStack cropDrop = this.getCropDrop(world, x, y, z);
 		if (metadata == MATURE_CROP) {
 			for (int i = 0; i < world.rand.nextInt(4) + 1 + fortune; ++i) {
-				if(getSeedDrop(world, x, y, z) != null) {
+				if(seedDrop != null) {
 					if (world.rand.nextInt(15) <= metadata)
-						ret.add(getSeedDrop(world, x, y, z));
+						ret.add(seedDrop);
 				}
-				if(getCropDrop(world, x, y, z) != null) ret.add(getCropDrop(world, x, y, z));
+				if(cropDrop != null) ret.add(cropDrop);
 			}
 		}
-		if(getSeedDrop(world, x, y, z) != null) {
-			ret.add(getSeedDrop(world, x, y, z));
+		if(seedDrop != null) {
+			ret.add(seedDrop);
 		}
 		return ret;
 	}
@@ -126,6 +128,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	public Item getItemDropped(int meta, Random rand, int amount) { //disabled for custom BL bits
 		return null;
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) { //disabled for custom BL bits
+		return;
 	}
 
 	@Override
@@ -221,33 +228,9 @@ public class BlockBLGenericCrop extends BlockCrops {
 			this.harvestCrop(world, x, y, z, player);
 		}
 		this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
-		if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt) {
-			int metaDirt = world.getBlockMetadata(x, y - 1, z);
-			if (grown) {
-				switch(metaDirt) {
-				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
-					break;
-				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
-					break;
-				case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-					break;
-				case BlockFarmedDirt.FERT_GRASS_DECAYED:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
-					break;
-				case BlockFarmedDirt.FERT_DIRT_DECAYED:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-					break;
-				case BlockFarmedDirt.FERT_GRASS:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
-					break;
-				case BlockFarmedDirt.FERT_DIRT:
-					world.setBlockMetadataWithNotify(x, y - 1, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
-					break;
-				}
-			}
+		if(grown) {
+			if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt)
+				((BlockFarmedDirt)world.getBlock(x, y - 1, z)).useCompost(world, x, y - 1, z);
 		}
 	}
 
@@ -277,11 +260,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
-		return;
 	}
 
 	@Override

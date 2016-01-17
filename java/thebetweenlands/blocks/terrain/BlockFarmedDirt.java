@@ -225,6 +225,42 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	}
 
 	/**
+	 * Uses up the compost
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void useCompost(World world, int x, int y, int z) {
+		if(world.getBlock(x, y, z) == this) {
+			int metaDirt = world.getBlockMetadata(x, y, z);
+			switch(metaDirt) {
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS_DECAYED:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT_DECAYED:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			}
+		}
+	}
+
+	/**
 	 * Returns whether the soild (and crop) should decay this tick
 	 * @param world
 	 * @param x
