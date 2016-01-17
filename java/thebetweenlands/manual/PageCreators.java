@@ -43,17 +43,17 @@ public class PageCreators {
         int times = 0;
         while (pageAmount > 0) {
             ArrayList<Page> pagesTemp = new ArrayList<>();
-            pagesTemp.addAll(pages.subList(8 * times, (pageAmount > 8 ? 8 + 8 * times : 8 * times + pageAmount)));
+            pagesTemp.addAll(pages.subList(7 * times, (pageAmount > 7 ? 7 + 7 * times : 7 * times + pageAmount)));
             int height = 0;
             ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
             for (Page page : pagesTemp) {
                 widgets.add(new ButtonWidget(15, 10 + height, page));
-                height += 18;
+                height += 22;
             }
             newPages.add(new Page("index" + times, (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType));
             widgets.clear();
             pagesTemp.clear();
-            pageAmount -= 8;
+            pageAmount -= 7;
             times++;
         }
 

@@ -111,7 +111,7 @@ public enum BLParticle {
 		}
 	},
 	WATER_BUG(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
-		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/waterBug.png");
+		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/waterbug.png");
 
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {

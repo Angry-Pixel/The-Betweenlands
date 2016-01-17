@@ -10,7 +10,7 @@ import thebetweenlands.items.BLItemRegistry;
  * Created by Bart on 06/12/2015.
  */
 public class GuiManualHerblore extends GuiManualBase {
-    private static ResourceLocation book = new ResourceLocation("thebetweenlands:textures/gui/manual/manual.png");
+    private static ResourceLocation book = new ResourceLocation("thebetweenlands:textures/gui/manual/manualHL.png");
 
     public GuiManualHerblore(EntityPlayer player) {
         super(player);
