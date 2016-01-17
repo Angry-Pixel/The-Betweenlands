@@ -245,4 +245,13 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			return false;
 		}
 	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		if (side == 0)
+			return new int[]{2};
+		if (side == 1)
+			return new int[]{1};
+		return new int[]{0};
+	}
 }

@@ -193,4 +193,13 @@ public class TileEntityPestleAndMortar extends TileEntityBasicInventory {
 			inventory[3] = null;
 		}
 	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		if (side == 0)
+			return new int[]{0};
+		if (side == 1)
+			return new int[]{2};
+		return new int[]{};
+	}
 }
