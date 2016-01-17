@@ -325,7 +325,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	@Override
 	public int metas() {
-		return 33;
+		return 32;
 	}
 
 	public static enum EnumItemGeneric {

@@ -8,6 +8,7 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BlockBLSign;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
 /**
  * Created by Bart on 16/01/2016.
@@ -21,6 +22,7 @@ public class ItemBLSign extends ItemSign {
         this.wall = wall;
         this.standing = standing;
         this.material = material;
+        setCreativeTab(ModCreativeTabs.items);
         setUnlocalizedName("thebetweenlands." + material + "Sign");
         setTextureName("thebetweenlands:" + material + "Sign");
     }

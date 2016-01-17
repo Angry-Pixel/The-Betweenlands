@@ -26,6 +26,7 @@ tile.thebetweenlands.syrmoriteOre.name=Syrmorite Ore
 tile.thebetweenlands.octineOre.name=Octine Ore
 tile.thebetweenlands.sulfurOre.name=Sulfur Ore
 tile.thebetweenlands.valoniteOre.name=Valonite Ore
+tile.thebetweenlands.boneOre.name=Slimy Bone Ore
 tile.thebetweenlands.lifeCrystalOre.name=Life Crystal Ore
 tile.thebetweenlands.peat.name=Peat
 tile.thebetweenlands.wisp.name=Will o' the wisp
@@ -72,6 +73,8 @@ tile.thebetweenlands.infuser.name=Infuser
 tile.thebetweenlands.hollowLog.name=Hollow Log
 tile.thebetweenlands.itemShelf.name=Item Shelf
 tile.thebetweenlands.geckoCage.name=Gecko Cage
+tile.thebetweenlands.blSpawner.name=Monster Spawner
+tile.thebetweenlands.lifeCrystalBlock.name=Life Crystal Block
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -85,6 +88,7 @@ tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Grass
 
 tile.thebetweenlands.middleFruitBush.name=Purple Pear Bush
 tile.thebetweenlands.fungusCrop.name=Yellow Dotted Fungus
+tile.thebetweenlands.aspectrusCrop.name=Aspectrus Plant
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -466,6 +470,8 @@ item.thebetweenlands.net.name=Net
 item.thebetweenlands.inanimateTarminion.name=Inanimate Tarminion
 item.thebetweenlands.cavingRope.name=Caving Rope
 item.thebetweenlands.poisonGland.name=Poison Gland
+item.thebetweenlands.aspectrusFruit.name=Aspectrus Fruit
+item.thebetweenlands.weedwoodSign.name=Weedwood Sign
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -473,6 +479,7 @@ item.thebetweenlands.ringOfPower.name=Ring Of Power
 item.thebetweenlands.swiftPickaxe.name=Swift Pickaxe
 item.thebetweenlands.wightsBane.name=Wight's Bane
 item.thebetweenlands.skullMask.name=Skull Mask
+item.thebetweenlands.legendarySword.name=Legendary Sword
 
 item.thebetweenlands.recordHagDance.name=Music Disc
 item.thebetweenlands.recordLonelyFire.name=Music Disc
@@ -708,6 +715,7 @@ circlegem.green=Green Gem
 circlegem.crimson=Crimson Gem
 circlegem.aqua=Aqua Gem
 octine.fire=Hot enough to set moss on fire
+power.ring.bonus=Grants a bonus to all stats
 
 # Commands
 command.generic.noplayer=You must be a player
