@@ -28,6 +28,7 @@ import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
+import thebetweenlands.blocks.container.BlockBLSign;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
 import thebetweenlands.blocks.container.BlockCompostBin;
 import thebetweenlands.blocks.container.BlockGeckoCage;
@@ -541,8 +542,8 @@ public class BLBlockRegistry {
 	public static final Block purpleRainPlankFenceGate = new BlockBLFenceGate("purpleRainPlanks");
 	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
-	public static final BlockBLSign weedwoodSignStanding = new BlockBLSign(true, "weedwood");
-	public static final BlockBLSign weedwoodWallSign = new BlockBLSign(false, "weedwood");
+	public static final BlockBLSign weedwoodSignStanding = (BlockBLSign) new BlockBLSign(true, "weedwood").setHardness(0.6F);
+	public static final BlockBLSign weedwoodWallSign = (BlockBLSign) new BlockBLSign(false, "weedwood").setHardness(0.6F);
 	public static final Block weedwoodPlankButton = new BlockBLButton("weedwoodPlanks", true);
 	public static final Block betweenstoneButton = new BlockBLButton("smoothBetweenstone", false);
 	public static final Block weedwoodPlankPressurePlate = new BlockBLPressurePlate("weedwoodPlanks", Material.wood, BlockPressurePlate.Sensitivity.everything);

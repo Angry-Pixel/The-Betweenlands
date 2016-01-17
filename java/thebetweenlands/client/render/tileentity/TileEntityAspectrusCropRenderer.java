@@ -40,11 +40,6 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
 		///// Fence /////
 
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glPopMatrix();
-
-		this.bindTexture(TextureMap.locationBlocksTexture);
-
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 
@@ -58,26 +53,31 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 
 		tessellator.startDrawingQuads();
 		//South
+		tessellator.setNormal(0, 0, 1);
 		tessellator.addVertexWithUV(max, 0, max, icon.getInterpolatedU(max*16.0F), icon.getMaxV());
 		tessellator.addVertexWithUV(max, 1, max, icon.getInterpolatedU(max*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(min, 1, max, icon.getInterpolatedU(min*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(min, 0, max, icon.getInterpolatedU(min*16.0F), icon.getMaxV());
 		//North
+		tessellator.setNormal(0, 0, -1);
 		tessellator.addVertexWithUV(min, 0, min, icon.getInterpolatedU(max*16.0F), icon.getMaxV());
 		tessellator.addVertexWithUV(min, 1, min, icon.getInterpolatedU(max*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(max, 1, min, icon.getInterpolatedU(min*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(max, 0, min, icon.getInterpolatedU(min*16.0F), icon.getMaxV());
 		//Eeast
+		tessellator.setNormal(1, 0, 0);
 		tessellator.addVertexWithUV(max, 0, min, icon.getInterpolatedU(max*16.0F), icon.getMaxV());
 		tessellator.addVertexWithUV(max, 1, min, icon.getInterpolatedU(max*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(max, 1, max, icon.getInterpolatedU(min*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(max, 0, max, icon.getInterpolatedU(min*16.0F), icon.getMaxV());
 		//West
+		tessellator.setNormal(-1, 0, 0);
 		tessellator.addVertexWithUV(min, 0, max, icon.getInterpolatedU(max*16.0F), icon.getMaxV());
 		tessellator.addVertexWithUV(min, 1, max, icon.getInterpolatedU(max*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(min, 1, min, icon.getInterpolatedU(min*16.0F), icon.getMinV());
 		tessellator.addVertexWithUV(min, 0, min, icon.getInterpolatedU(min*16.0F), icon.getMaxV());
 		//Top
+		tessellator.setNormal(0, 1, 0);
 		tessellator.addVertexWithUV(min, 1, min, icon.getInterpolatedU(max*16.0F), icon.getInterpolatedV(min*16.0F));
 		tessellator.addVertexWithUV(min, 1, max, icon.getInterpolatedU(max*16.0F), icon.getInterpolatedV(max*16.0F));
 		tessellator.addVertexWithUV(max, 1, max, icon.getInterpolatedU(min*16.0F), icon.getInterpolatedV(max*16.0F));
@@ -180,5 +180,8 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 			MODEL4.renderPlant();
 			break;
 		}
+
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glPopMatrix();
 	}
 }

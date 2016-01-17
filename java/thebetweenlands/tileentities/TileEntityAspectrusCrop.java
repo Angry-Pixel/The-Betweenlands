@@ -24,6 +24,12 @@ public class TileEntityAspectrusCrop extends TileEntity {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	public double getMaxRenderDistanceSquared() {
+		return 4096.0D * 6.0D;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return AxisAlignedBB.getBoundingBox(this.xCoord - 0.5D, this.yCoord - 0.5D, this.zCoord - 0.5D, this.xCoord + 1.5D, this.yCoord + 1.5D, this.zCoord + 1.5D);
 	}

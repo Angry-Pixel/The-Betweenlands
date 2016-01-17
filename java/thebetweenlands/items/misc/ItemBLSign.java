@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BlockBLSign;
+import thebetweenlands.blocks.container.BlockBLSign;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 
 /**
