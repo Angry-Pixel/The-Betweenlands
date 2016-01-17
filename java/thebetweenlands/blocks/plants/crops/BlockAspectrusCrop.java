@@ -56,7 +56,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 		ItemStack stack = ItemGeneric.createStack(EnumItemGeneric.ASPECTRUS_FRUIT);
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			AspectManager.addAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_MULTIPLIER));
+			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_MULTIPLIER));
 		return stack;	
 	}
 

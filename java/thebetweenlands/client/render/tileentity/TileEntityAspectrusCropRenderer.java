@@ -100,7 +100,7 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 		Aspect aspect = cropTile.getAspect();
 		Random colorRnd = new Random();
 		if(aspect != null)
-			colorRnd.setSeed(aspect.type.toString().hashCode());
+			colorRnd.setSeed(aspect.type.getName().hashCode());
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);

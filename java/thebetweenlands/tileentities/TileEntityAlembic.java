@@ -302,7 +302,7 @@ public class TileEntityAlembic extends TileEntity {
 					}
 					aspect = new Aspect(aspect.type, totalAmount);
 					aspectVial = new ItemStack(BLItemRegistry.aspectVial, 1, vialType);
-					AspectManager.get(this.worldObj).addAspects(aspectVial, aspect);
+					AspectManager.get(this.worldObj).addDynamicAspects(aspectVial, aspect);
 				}
 				if(this.producableItemAspects.size() == 0) {
 					this.reset();

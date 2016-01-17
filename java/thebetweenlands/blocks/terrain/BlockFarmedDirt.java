@@ -148,9 +148,13 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = getDamageValue(world, x, y, z);
 
-		//Decay rate of composted blocks
-		if(this.shouldDecay(world, x, y, z)) {
-			this.setDecayed(world, x, y, z, true);
+		//Decay
+		if(meta != FERT_PURE_SWAMP_DIRT_MIN &&
+				meta != FERT_PURE_SWAMP_DIRT_MID &&
+				meta != FERT_PURE_SWAMP_DIRT_MAX) {
+			if(this.shouldDecay(world, x, y, z)) {
+				this.setDecayed(world, x, y, z, true);
+			}
 		}
 
 		//Spread decay to adjacent blocks

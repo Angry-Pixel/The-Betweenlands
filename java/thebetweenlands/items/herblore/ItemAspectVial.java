@@ -1,12 +1,12 @@
 package thebetweenlands.items.herblore;
 
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -17,7 +17,9 @@ import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AtlasIcon;
+import thebetweenlands.utils.ColorUtils;
 
 public class ItemAspectVial extends Item {
 	@SideOnly(Side.CLIENT)
@@ -34,6 +36,8 @@ public class ItemAspectVial extends Item {
 		this.setMaxDamage(0);
 
 		this.setTextureName("thebetweenlands:strictlyHerblore/misc/vialGreen");
+
+		this.setContainerItem(BLItemRegistry.dentrothystVial);
 	}
 
 	@Override
@@ -65,6 +69,13 @@ public class ItemAspectVial extends Item {
 		switch(pass){
 		case 0:
 			//Liquid
+			List<Aspect> aspects = AspectManager.getDynamicAspects(stack);
+			if(aspects.size() > 0) {
+				Aspect aspect = aspects.get(0);
+				Random rnd = new Random();
+				rnd.setSeed(aspect.type.getName().hashCode());
+				return ColorUtils.toHex(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), 1.0F);
+			}
 			return 0xFFFFFFFF;
 		case 2:
 			return 0xFFFFFFFF;
@@ -113,10 +124,10 @@ public class ItemAspectVial extends Item {
 		for(IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
 			Aspect itemAspect = new Aspect(aspect, 4.0F);
 			ItemStack stackGreen = new ItemStack(item, 1, 0);
-			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addAspects(stackGreen, itemAspect);
+			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addDynamicAspects(stackGreen, itemAspect);
 			list.add(stackGreen);
 			ItemStack stackOrange = new ItemStack(item, 1, 1);
-			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addAspects(stackOrange, itemAspect);
+			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addDynamicAspects(stackOrange, itemAspect);
 			list.add(stackOrange);
 		}
 	}
@@ -139,5 +150,15 @@ public class ItemAspectVial extends Item {
 			}
 		} catch (Exception e) { }
 		return "item.thebetweenlands.unknown";
+	}
+
+	@Override
+	public ItemStack getContainerItem(ItemStack itemStack) {
+		return new ItemStack(BLItemRegistry.dentrothystVial, itemStack.stackSize, itemStack.getItemDamage() % 2 == 0 ? 0 : 2);
+	}
+
+	@Override
+	public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemStack) {
+		return false;
 	}
 }
