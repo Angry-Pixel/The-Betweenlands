@@ -11,7 +11,6 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
@@ -19,7 +18,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.crops.CropRenderer;
@@ -31,8 +29,10 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 public class BlockBLGenericCrop extends BlockCrops {
 	public static final int MATURE_CROP = 7, DECAYED_CROP = 8;
 
+	private int maxHeight = 1;
+
 	@SideOnly(Side.CLIENT)
-	private IIcon[] iconArray;
+	private IIcon[] cropIconArray;
 
 	@SideOnly(Side.CLIENT)
 	private CropRenderer cropRenderer;
@@ -42,11 +42,33 @@ public class BlockBLGenericCrop extends BlockCrops {
 	public BlockBLGenericCrop(String blockName) {
 		setStepSound(soundTypeGrass);
 		setCreativeTab(ModCreativeTabs.plants);
-		type = blockName;
+		this.type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 	}
 
+	/**
+	 * Sets the maximum height of this crop
+	 * @param maxHeight
+	 * @return
+	 */
+	public BlockBLGenericCrop setMaxHeight(int maxHeight) {
+		this.maxHeight = maxHeight;
+		return this;
+	}
+
+	/**
+	 * Returns the maximum height of this crop
+	 * @return
+	 */
+	public int getMaxHeight() {
+		return this.maxHeight;
+	}
+
+	/**
+	 * Returns the crop renderer
+	 * @return
+	 */
 	@SideOnly(Side.CLIENT)
 	public CropRenderer getCropRenderer() {
 		return this.cropRenderer;
@@ -107,15 +129,23 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
-	public boolean canBlockStay(World world, int x, int y, int z) {
-		Block soil = world.getBlock(x, y - 1, z);
-		int meta = world.getBlockMetadata(x, y -1, z);
-		return soil != null && soil instanceof BlockFarmedDirt && meta >= 4 && meta <= 10;
+	protected boolean canPlaceBlockOn(Block block) {
+		if(this.maxHeight > 1 && block == this) {
+			return true;
+		} else {
+			return block instanceof BlockFarmedDirt;
+		}
 	}
 
 	@Override
-	protected boolean canPlaceBlockOn(Block block) {
-		return block == BLBlockRegistry.farmedDirt;
+	public boolean canBlockStay(World world, int x, int y, int z) {
+		if(this.maxHeight > 1 && world.getBlock(x, y - 1, z) == this) {
+			return ((BlockBLGenericCrop)world.getBlock(x, y - 1, z)).isFullyGrown(world, x, y - 1, z);
+		} else {
+			Block soil = world.getBlock(x, y - 1, z);
+			int meta = world.getBlockMetadata(x, y -1, z);
+			return soil != null && soil instanceof BlockFarmedDirt && meta >= 4 && meta <= 10;
+		}
 	}
 
 	@Override
@@ -150,10 +180,9 @@ public class BlockBLGenericCrop extends BlockCrops {
 	/**
 	 * Whether this crop can be grown with a fertilizer
 	 */
-	@Override
 	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
 		int meta = world.getBlockMetadata(x, y, z);
-		return meta < MATURE_CROP;
+		return (this.maxHeight <= 1 || !this.canGrowTo(world, x, y + 1, z) || world.getBlock(x, y - (this.maxHeight - 1), z) == this) ? meta < MATURE_CROP : meta <= MATURE_CROP;
 	}
 
 	/**
@@ -191,7 +220,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		if(!player.capabilities.isCreativeMode) {
 			this.harvestCrop(world, x, y, z, player);
 		}
-		world.setBlock(x, y, z, Blocks.air);
+		this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
 		if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt) {
 			int metaDirt = world.getBlockMetadata(x, y - 1, z);
 			if (grown) {
@@ -318,6 +347,13 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @return
 	 */
 	public int getSoilMetadata(World world, int x, int y, int z) {
+		if(this.maxHeight > 1) {
+			for(int yo = 1; yo <= this.maxHeight; yo++) {
+				Block block = world.getBlock(x, y - yo, z);
+				if(block instanceof BlockFarmedDirt)
+					return world.getBlockMetadata(x, y - yo, z);
+			}
+		}
 		return world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt == false ? -1 : world.getBlockMetadata(x, y - 1, z);
 	}
 
@@ -345,7 +381,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		if(!decayed) {
 			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.DECAYED_CROP) {
 				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
-				((BlockBLGenericCrop)world.getBlock(x, y, z)).onCure(world, x, y, z);
+				((BlockBLGenericCrop)world.getBlock(x, y, z)).onCured(world, x, y, z);
 			}
 		} else {
 			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.MATURE_CROP) {
@@ -356,21 +392,50 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+		if(this.maxHeight > 1) {
+			for(int yo = 1; yo <= this.maxHeight; yo++) {
+				Block block = world.getBlock(x, y-yo, z);
+				if(block instanceof BlockBLGenericCrop) {
+					block.onBlockHarvested(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z), player);
+					((BlockBLGenericCrop) block).destroyCrop(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z));
+				}
+			}
+		}
+		return this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
+	}
+
+	@Override
+	protected void checkAndDropBlock(World world, int x, int y, int z) {
+		if (!this.canBlockStay(world, x, y, z)) {
+			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
+		}
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if (meta <= MATURE_CROP) {
-			if(meta == MATURE_CROP - 1) meta = MATURE_CROP - 2;
-			return iconArray[meta >> 1];
-		} else
-			return iconArray[iconArray.length - 1];
+		if(this.cropRenderer != null) {
+			if (meta <= MATURE_CROP) {
+				if(meta == MATURE_CROP - 1) meta = MATURE_CROP - 2;
+				return this.cropIconArray[meta >> 1];
+			} else
+				return this.cropIconArray[this.cropIconArray.length - 1];
+		}
+		return this.blockIcon;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		iconArray = new IIcon[5];
-		for (int i = 0; i < iconArray.length; ++i) {
-			iconArray[i] = iconRegister.registerIcon("thebetweenlands:crops/" + type + i);
+		if(this.cropRenderer != null) {
+			cropIconArray = new IIcon[5];
+			for (int i = 0; i < cropIconArray.length; ++i) {
+				cropIconArray[i] = iconRegister.registerIcon("thebetweenlands:crops/" + type + i);
+			}
+		} else {
+			this.blockIcon = iconRegister.registerIcon(this.textureName);
 		}
 	}
 
@@ -436,13 +501,21 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	/**
-	 * Called after the crop decays
+	 * Called after the crop decayed
 	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
 	 */
-	public void onDecayed(World world, int x, int y, int z) { }
+	protected void onDecayed(World world, int x, int y, int z) {
+		Block blockAbove = world.getBlock(x, y+1, z);
+		if(blockAbove instanceof BlockBLGenericCrop) {
+			((BlockBLGenericCrop)blockAbove).setDecayed(world, x, y+1, z, true);
+		}
+		Block blockBelow = world.getBlock(x, y-1, z);
+		if(blockBelow instanceof BlockBLGenericCrop)
+			((BlockBLGenericCrop)blockBelow).setDecayed(world, x, y-1, z, true);
+	}
 
 	/**
 	 * Called after the crop is cured
@@ -451,7 +524,16 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @param y
 	 * @param z
 	 */
-	public void onCure(World world, int x, int y, int z) { }
+	protected void onCured(World world, int x, int y, int z) {
+		Block blockAbove = world.getBlock(x, y+1, z);
+		if(blockAbove instanceof BlockBLGenericCrop)
+			((BlockBLGenericCrop)blockAbove).setDecayed(world, x, y+1, z, false);
+		Block blockBelow = world.getBlock(x, y-1, z);
+		if(blockBelow instanceof BlockBLGenericCrop)
+			((BlockBLGenericCrop)blockBelow).setDecayed(world, x, y-1, z, false);
+		if(blockBelow instanceof BlockFarmedDirt)
+			((BlockFarmedDirt)blockBelow).setDecayed(world, x, y-1, z, false);
+	}
 
 	/**
 	 * Called before the crop grows
@@ -462,7 +544,18 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @param prevMeta
 	 * @param meta
 	 */
-	public void preGrow(World world, int x, int y, int z, int meta) { }
+	private void preGrow(World world, int x, int y, int z, int meta) {
+		if(this.maxHeight > 1) {
+			if(meta == BlockBLGenericCrop.MATURE_CROP) {
+				if(world.getBlock(x, y - (this.maxHeight - 1), z) == this)
+					return;
+				if(this.canGrowTo(world, x, y + 1, z)) {
+					world.setBlock(x, y + 1, z, this);
+					this.onGrow(world, x, y + 1, z);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Called after the crop has grown
@@ -473,5 +566,52 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @param prevMeta
 	 * @param meta
 	 */
-	public void postGrow(World world, int x, int y, int z, int prevMeta, int meta) { }
+	private void postGrow(World world, int x, int y, int z, int prevMeta, int meta) { 
+		if(this.maxHeight > 1) {
+			if(meta == BlockBLGenericCrop.MATURE_CROP && prevMeta < meta) {
+				if(world.getBlock(x, y - 1, z) instanceof BlockBLGenericCrop) {
+					BlockBLGenericCrop crop = (BlockBLGenericCrop) world.getBlock(x, y - 1, z);
+					if(crop.isCropOrSoilDecayed(world, x, y - 1, z)) {
+						world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 2);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Called when a crop has grown higher.
+	 * Coordinates are of the new block.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	protected void onGrow(World world, int x, int y, int z) { }
+
+	/**
+	 * Returns whether this crop can grow into the block above.
+	 * Coordinates are of the block above.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	protected boolean canGrowTo(World world, int x, int y, int z) {
+		return world.isAirBlock(x, y, z);
+	}
+
+	/**
+	 * Called when the crop is being destroyed. Usually sets the block to air.
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param meta
+	 * @return
+	 */
+	protected boolean destroyCrop(World world, int x, int y, int z, int meta) {
+		return world.setBlockToAir(x, y, z);
+	}
 }
