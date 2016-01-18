@@ -7,7 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.tileentities.TileEntityTarLootPot1;
+import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.world.loot.LootItemStack;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
@@ -38,7 +38,7 @@ public class WorldGenCavePots extends WorldGenCave {
         if (world.getBlock(x, y, z) == Blocks.air && world.getBlock(x, y - 1, z).isBlockSolid(world, x, y-1, z, ForgeDirection.UP.ordinal())) {
             int randDirection = random.nextInt(4) + 2;
             world.setBlock(x, y, z , getRandomBlock(random), randDirection, 3);
-            TileEntityTarLootPot1 lootPot = (TileEntityTarLootPot1) world.getTileEntity(x , y, z);
+            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x , y, z);
             if (lootPot != null)
                 LootUtil.generateLoot(lootPot, random, loot, 1, 2);
             System.out.println(x + " " + y + " " + z);
@@ -49,10 +49,10 @@ public class WorldGenCavePots extends WorldGenCave {
 
     private Block getRandomBlock(Random rand) {
         switch(rand.nextInt(3)) {
-            case 0: return BLBlockRegistry.tarLootPot1;
-            case 1: return BLBlockRegistry.tarLootPot2;
-            case 2: return BLBlockRegistry.tarLootPot3;
-            default: return BLBlockRegistry.tarLootPot1;
+            case 0: return BLBlockRegistry.lootPot1;
+            case 1: return BLBlockRegistry.lootPot2;
+            case 2: return BLBlockRegistry.lootPot3;
+            default: return BLBlockRegistry.lootPot1;
         }
     }
 }
