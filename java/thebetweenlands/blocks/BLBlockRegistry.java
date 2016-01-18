@@ -43,6 +43,7 @@ import thebetweenlands.blocks.container.BlockTarLootPot1;
 import thebetweenlands.blocks.container.BlockTarLootPot2;
 import thebetweenlands.blocks.container.BlockTarLootPot3;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
+import thebetweenlands.blocks.container.repeller.BlockRepeller;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
@@ -504,7 +505,8 @@ public class BLBlockRegistry {
 	public static final Block blockTotem = new BlockTotem();
 	public static final Block siltGlas = new BlockBLGlass();
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
-
+	public static final Block repeller = new BlockRepeller().setBlockName("repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
+	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 

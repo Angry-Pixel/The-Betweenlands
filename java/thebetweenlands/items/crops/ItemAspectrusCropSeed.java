@@ -4,10 +4,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.creativetabs.ModCreativeTabs;
 
 public class ItemAspectrusCropSeed extends ItemBLGenericSeed {
 	public ItemAspectrusCropSeed(int healAmount, float saturation) {
 		super(healAmount, saturation, BLBlockRegistry.aspectrusCrop, BLBlockRegistry.farmedDirt);
+		this.setCreativeTab(ModCreativeTabs.plants);
 	}
 
 	@Override

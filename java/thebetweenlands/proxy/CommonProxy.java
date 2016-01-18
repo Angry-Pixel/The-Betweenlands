@@ -53,6 +53,7 @@ import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityRepeller;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
@@ -108,6 +109,7 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityGeckoCage.class, "geckoCage");
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectCrop");
 		registerTileEntity(TileEntityBLSign.class, "signBL");
+		registerTileEntity(TileEntityRepeller.class, "repeller");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
