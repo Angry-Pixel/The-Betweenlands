@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -51,7 +50,7 @@ public class EntityWeedwoodRowboat extends Entity {
 	private static final float ROW_PROGRESS_PERIOD = MathUtils.TAU / Math.abs(OAR_ROTATION_SCALE);
 
 	private static final float OAR_LENGTH = 40F / 16;
-	
+
 	private static final float BLADE_LENGTH = 12F / 16;
 
 	private static final float LOOM_LENGTH = OAR_LENGTH - BLADE_LENGTH;
@@ -268,14 +267,8 @@ public class EntityWeedwoodRowboat extends Entity {
 		if (!worldObj.isRemote) {
 			List<Entity> entities = worldObj.getEntitiesWithinAABBExcludingEntity(this, getBoundingBox().expand(0.2, 0.05, 0.2));
 			if (entities != null && !entities.isEmpty()) {
-				double motionCutoff = motionX * motionX + motionZ * motionZ + 5;
-				boolean shouldMount = !worldObj.isRemote && motionCutoff > 0.01;
 				for (Entity entity : entities) {
-					if (shouldMount && entity instanceof EntityLiving && entity.ridingEntity == null && riddenByEntity == null) {
-						entity.mountEntity(this);
-					} else {
-						applyEntityCollision(entity);
-					}
+					applyEntityCollision(entity);
 				}
 			}
 			if (riddenByEntity != null && riddenByEntity.isDead) {
@@ -481,7 +474,7 @@ public class EntityWeedwoodRowboat extends Entity {
 	}
 
 	private float getOarElevation(ShipSide side) {
-		return MathHelper.cos(getRowProgress(side) * OAR_ROTATION_SCALE); 
+		return MathHelper.cos(getRowProgress(side) * OAR_ROTATION_SCALE);
 	}
 
 	private void animateHullWaterInteraction() {
@@ -607,7 +600,7 @@ public class EntityWeedwoodRowboat extends Entity {
 				if (oarInAir.get(side) || start) {
 					float volume = force * 0.8F + 0.2F;
 					String sound = start ? ModInfo.ID + ":rowboat.row.start" : ModInfo.ID + ":rowboat.row";
-					worldObj.playSoundEffect(raytrace.hitVec.xCoord, raytrace.hitVec.yCoord, raytrace.hitVec.zCoord, sound, volume, 0.8F + rand.nextFloat() * 0.3F);	
+					worldObj.playSoundEffect(raytrace.hitVec.xCoord, raytrace.hitVec.yCoord, raytrace.hitVec.zCoord, sound, volume, 0.8F + rand.nextFloat() * 0.3F);
 				}
 			}
 		}
