@@ -26,6 +26,7 @@ public class TileEntityRepeller extends TileEntity {
 	private float radius = 0.0F;
 	private int deployTicks = 0;
 
+	public int renderTicks = 0;
 
 	public void addShimmerstone() {
 		this.hasShimmerstone = true;
@@ -107,6 +108,8 @@ public class TileEntityRepeller extends TileEntity {
 					this.fuel -= 0.0035F;
 				}
 			}
+		} else {
+			this.renderTicks++;
 		}
 
 		if(this.prevRunning != this.running) {

@@ -48,6 +48,11 @@ public class BlockRepeller extends BlockContainer {
 	}
 
 	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		return super.canPlaceBlockAt(world, x, y, z) && world.isSideSolid(x, y - 1, z, ForgeDirection.UP) && world.isAirBlock(x, y + 1, z);
+	}
+
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		if(world.getBlockMetadata(x, y, z) >= 4 && world.getBlock(x, y - 1, z) == this) {
 			return this.onBlockActivated(world, x, y - 1, z, player, metadata, hitX, hitY, hitZ);
@@ -128,7 +133,7 @@ public class BlockRepeller extends BlockContainer {
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
 		return (world.getBlock(x, y - 1, z) != this && world.isSideSolid(x, y - 1, z, ForgeDirection.UP) && world.getBlock(x, y + 1, z) == this) || 
-				world.getBlock(x, y - 1, z) == this;
+				(world.getBlock(x, y - 1, z) == this && world.getBlockMetadata(x, y, z) >= 4);
 	}
 
 	@Override
