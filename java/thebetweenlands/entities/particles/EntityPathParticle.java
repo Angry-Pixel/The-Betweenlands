@@ -1,16 +1,17 @@
 package thebetweenlands.entities.particles;
 
+import java.util.List;
+
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 
-import javax.vecmath.Vector3d;
-import java.util.ArrayList;
-
 public class EntityPathParticle extends EntityFX {
 	private int positionIndex = 0;
-	private final ArrayList<Vector3d> targetPoints;
+	private final List<Vector3d> targetPoints;
 
-	public EntityPathParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, ArrayList<Vector3d> targetPoints) {
+	public EntityPathParticle(World world, double x, double y, double z, double motionX, double motionY, double motionZ, List<Vector3d> targetPoints) {
 		super(world, x, y, z, motionX, motionY, motionZ);
 		this.targetPoints = targetPoints;
 	}

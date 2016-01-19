@@ -1,5 +1,12 @@
 package thebetweenlands.client.render.entity;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
+
+import javax.vecmath.Vector3d;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -8,14 +15,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.particles.EntityWispFX;
-import thebetweenlands.event.render.FireflyHandler;
-
-import javax.vecmath.Vector3d;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Random;
+import thebetweenlands.event.render.WorldRenderHandler;
 
 @SideOnly(Side.CLIENT)
 public class RenderFirefly extends Render {
@@ -24,7 +26,7 @@ public class RenderFirefly extends Render {
 	
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
-		FireflyHandler.INSTANCE.fireflyList.add(new SimpleEntry(new SimpleEntry(this, (EntityFirefly)entity), new Vector3d(x, y, z)));
+		WorldRenderHandler.INSTANCE.fireflyList.add(new SimpleEntry(new SimpleEntry(this, (EntityFirefly)entity), new Vector3d(x, y, z)));
 	}
 
 	public void doRenderCallback(Entity entity, double x, double y, double z, float partialTicks) {

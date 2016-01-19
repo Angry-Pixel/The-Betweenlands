@@ -70,19 +70,19 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 					if(!world.isRemote) {
 						Aspect aspect = aspects.get(0);
 						this.setAspect(world, x, y, z, aspect);
-						if (!player.capabilities.isCreativeMode) {
-							--heldItem.stackSize;
-							if(heldItem.stackSize == 0)
-								player.setCurrentItemOrArmor(0, null);
-							ItemStack newStack;
-							if(heldItem.getItemDamage() % 2 == 0) {
-								newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 0);
-							} else {
-								newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 2);
-							}
-							if(!player.inventory.addItemStackToInventory(newStack))
-								player.dropPlayerItemWithRandomChoice(newStack, false);
+					}
+					if (!player.capabilities.isCreativeMode) {
+						--heldItem.stackSize;
+						if(heldItem.stackSize == 0)
+							player.setCurrentItemOrArmor(0, null);
+						ItemStack newStack;
+						if(heldItem.getItemDamage() % 2 == 0) {
+							newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 0);
+						} else {
+							newStack = new ItemStack(BLItemRegistry.dentrothystVial, 1, 2);
 						}
+						if(!player.inventory.addItemStackToInventory(newStack))
+							player.dropPlayerItemWithRandomChoice(newStack, false);
 					}
 					return true;
 				}

@@ -100,6 +100,7 @@ import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemRepellerRenderer;
 import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
@@ -172,7 +173,6 @@ import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
-import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.FovHandler;
 import thebetweenlands.event.render.GLUProjectionHandler;
@@ -180,7 +180,7 @@ import thebetweenlands.event.render.ItemTextureTicker;
 import thebetweenlands.event.render.OverlayHandler;
 import thebetweenlands.event.render.ScreenShakeHandler;
 import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -329,7 +329,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new TileEntityAspectrusCropRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSign.class, new TileEntityBLSignRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new TileEntityRepellerRenderer());
-		
+
 		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.animator), new ItemAnimatorRenderer());
@@ -348,6 +348,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.geckoCage), new ItemGeckoCageRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.repeller), new ItemRepellerRenderer());
 
 		//Register custom item renderer for aspect overlays
 		for(Item item : BLItemRegistry.ITEMS) {
@@ -394,8 +395,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WorldRenderHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new CorrosionTextureStitchHandler());
 		FMLCommonHandler.instance().bus().register(ItemTooltipHandler.INSTANCE);

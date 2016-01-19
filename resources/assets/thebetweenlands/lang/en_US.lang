@@ -75,6 +75,7 @@ tile.thebetweenlands.itemShelf.name=Item Shelf
 tile.thebetweenlands.geckoCage.name=Gecko Cage
 tile.thebetweenlands.blSpawner.name=Monster Spawner
 tile.thebetweenlands.lifeCrystalBlock.name=Life Crystal Block
+tile.thebetweenlands.repeller.name=Repeller
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -716,6 +717,7 @@ circlegem.crimson=Crimson Gem
 circlegem.aqua=Aqua Gem
 octine.fire=Hot enough to set moss on fire
 power.ring.bonus=Grants a bonus to all stats
+aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 
 # Commands
 command.generic.noplayer=You must be a player
@@ -1099,6 +1101,8 @@ chat.event.spook=You feel a chill in the air... the haunting season has begun!
 chat.item.forbiddenfig=Cursed are those who eat the Forbidden Fig!
 
 chat.manual.discover.page=You discovered a new page: %s
+
+chat.repeller.shimmerstone.missing=The repeller needs a Shimmerstone to run
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

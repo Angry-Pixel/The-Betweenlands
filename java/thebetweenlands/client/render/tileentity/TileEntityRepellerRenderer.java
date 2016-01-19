@@ -1,11 +1,17 @@
 package thebetweenlands.client.render.tileentity;
 
+import java.util.AbstractMap.SimpleEntry;
+
+import javax.vecmath.Vector3d;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.block.ModelRepeller;
+import thebetweenlands.event.render.WorldRenderHandler;
+import thebetweenlands.tileentities.TileEntityRepeller;
 
 public class TileEntityRepellerRenderer extends TileEntitySpecialRenderer {
 
@@ -15,6 +21,7 @@ public class TileEntityRepellerRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks) {
+		TileEntityRepeller tileRepeller = (TileEntityRepeller) tile;
 		int meta = tile.getBlockMetadata();
 
 		GL11.glPushMatrix();
@@ -30,5 +37,11 @@ public class TileEntityRepellerRenderer extends TileEntitySpecialRenderer {
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
+
+		if(tileRepeller.isRunning()) {
+			double xOff = Math.sin(meta / 2.0F * Math.PI) * 0.12F;
+			double zOff = Math.cos(meta / 2.0F * Math.PI) * 0.12F;
+			WorldRenderHandler.INSTANCE.repellerShields.add(new SimpleEntry(new Vector3d(x + 0.5F + xOff, y + 1.15F, z + 0.5F - zOff), tileRepeller.getRadius(partialTicks)));
+		}
 	}
 }

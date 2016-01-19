@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.particles.EntityWispFX;
-import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
-		WispHandler.INSTANCE.tileList.add(new SimpleEntry(new SimpleEntry(this, tileEntity), new Vector3d(x, y, z)));
+		WorldRenderHandler.INSTANCE.wispTileList.add(new SimpleEntry(new SimpleEntry(this, tileEntity), new Vector3d(x, y, z)));
 
 		ArrayList<Object> particleList = ((TileEntityWisp)tileEntity).particleList;
 
