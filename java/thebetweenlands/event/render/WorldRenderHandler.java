@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockWisp;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
@@ -51,7 +52,10 @@ public class WorldRenderHandler {
 			double ry = pos.y + RenderManager.renderPosY + 0.5D;
 			double rz = pos.z + RenderManager.renderPosZ + 0.5D;
 
-			float size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp_float(EntityWispFX.getDistanceToViewer(rx, ry, rz, event.partialTicks), 10, 20))) * 1.2F;
+			float size = 3.0F;
+			if(!BlockWisp.canSee(e.getKey().getValue().getWorldObj())) {
+				size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp_float(EntityWispFX.getDistanceToViewer(rx, ry, rz, event.partialTicks), 10, 20))) * 1.2F;
+			}
 
 			int wispMeta = e.getKey().getValue().getBlockMetadata();
 			for(int i = 0; i < 2; i++) {

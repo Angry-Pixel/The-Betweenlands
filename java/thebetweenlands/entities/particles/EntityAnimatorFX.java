@@ -1,12 +1,12 @@
 package thebetweenlands.entities.particles;
 
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import java.util.List;
 
 import javax.vecmath.Vector3d;
-import java.util.ArrayList;
+
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 
 public class EntityAnimatorFX extends EntityPathParticle {
 	private int ticks = 0;
@@ -14,7 +14,7 @@ public class EntityAnimatorFX extends EntityPathParticle {
 
 	public EntityAnimatorFX(World world, double x, double y, double z,
 			double motionX, double motionY, double motionZ,
-			ArrayList<Vector3d> targetPoints, IIcon icon, float sizeDecrease) {
+			List<Vector3d> targetPoints, IIcon icon, float sizeDecrease) {
 		super(world, x, y, z, motionX, motionY, motionZ, targetPoints);
 
 		this.particleScale = world.rand.nextFloat() / 2.0F;

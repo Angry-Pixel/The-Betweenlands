@@ -41,7 +41,6 @@ public class WorldGenCavePots extends WorldGenCave {
             TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x , y, z);
             if (lootPot != null)
                 LootUtil.generateLoot(lootPot, random, loot, 1, 2);
-            System.out.println(x + " " + y + " " + z);
             return true;
         }
         return false;
