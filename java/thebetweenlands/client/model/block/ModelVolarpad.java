@@ -2,12 +2,10 @@ package thebetweenlands.client.model.block;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-/**
- * BLVolarpad - TripleHeadedSheep
- * Created using Tabula 4.1.1
- */
+@SideOnly(Side.CLIENT)
 public class ModelVolarpad extends ModelBase {
 	public ModelRenderer stalk1;
 	public ModelRenderer roots;
@@ -45,7 +43,7 @@ public class ModelVolarpad extends ModelBase {
 
 	public ModelVolarpad() {
 		this.textureWidth = 256;
-		this.textureHeight = 128;
+		this.textureHeight = 256;
 		this.moss2 = new ModelRenderer(this, 110, 25);
 		this.moss2.setRotationPoint(6.0F, 0.0F, 0.0F);
 		this.moss2.addBox(0.0F, 0.0F, -6.0F, 0, 22, 12, 0.0F);
@@ -213,5 +211,12 @@ public class ModelVolarpad extends ModelBase {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
+	}
+
+	public void renderKite() {
+		moss1.showModel = false;
+		moss2.showModel = false;
+		moss3.showModel = false;
+		stalk1.render(0.0625F);
 	}
 }
