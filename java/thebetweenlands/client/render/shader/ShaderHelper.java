@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GLContext;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.ShaderGroup;
 import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.client.util.JsonException;
@@ -15,7 +17,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-public class ShaderHelper {
+public class ShaderHelper implements IResourceManagerReloadListener {
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
 
 	private MainShader currentShader;
@@ -23,6 +25,7 @@ public class ShaderHelper {
 	private ShaderGroup currentShaderGroup;
 	private boolean checked = false;
 	private boolean shadersSupported = false;
+	private boolean needsReload = false;
 
 	public boolean canUseShaders() {
 		return this.isShaderSupported() && ConfigHandler.USE_SHADER;
@@ -50,9 +53,9 @@ public class ShaderHelper {
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
 			if(this.isRequired()) {
-				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.needsReload()) {
+				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.scheduleShaderReload()) {
 					MainShader shaderWrapper = this.currentShader;
-					if(shaderWrapper != null && this.needsReload()) {
+					if(shaderWrapper != null && this.scheduleShaderReload()) {
 						try {
 							shaderWrapper.getShaderGroup().deleteShaderGroup();
 							shaderWrapper.deleteBuffers();
@@ -61,7 +64,7 @@ public class ShaderHelper {
 							ex.printStackTrace();
 						}
 					}
-					if(shaderWrapper == null || this.needsReload()) {
+					if(shaderWrapper == null || this.scheduleShaderReload()) {
 						shaderWrapper = new MainShader(
 								mc.getTextureManager(),
 								mc.getResourceManager(), mc.getFramebuffer(),
@@ -78,6 +81,9 @@ public class ShaderHelper {
 						this.currentShaderGroup = mc.entityRenderer.theShaderGroup;
 						this.currentShader = shaderWrapper;
 						mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+						if(this.scheduleShaderReload()) {
+							this.needsReload = false;
+						}
 					} catch (JsonException e) {
 						this.failedLoading = true;
 						System.err.println("Failed loading shader files!");
@@ -100,8 +106,12 @@ public class ShaderHelper {
 		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
 	}
 
-	private boolean needsReload() {
-		return false;
+	private boolean scheduleShaderReload() {
+		return this.needsReload;
+	}
+
+	public void reloadShaders() {
+		this.needsReload = true;
 	}
 
 	public void updateShader() {
@@ -132,5 +142,10 @@ public class ShaderHelper {
 
 	public MainShader getCurrentShader() {
 		return this.currentShader;
+	}
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		this.reloadShaders();
 	}
 }

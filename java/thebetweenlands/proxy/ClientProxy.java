@@ -20,6 +20,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -109,6 +110,7 @@ import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemTarminionRenderer;
 import thebetweenlands.client.render.item.ItemVolarKiteRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAspectrusCropRenderer;
@@ -432,6 +434,12 @@ public class ClientProxy extends CommonProxy {
 				});
 
 		replaceSoundRegistry();
+
+		//Add listener to reload shader resources
+		IResourceManager resourceMgr = Minecraft.getMinecraft().getResourceManager();
+		if(resourceMgr instanceof IReloadableResourceManager) {
+			((IReloadableResourceManager)resourceMgr).registerReloadListener(ShaderHelper.INSTANCE);
+		}
 
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
