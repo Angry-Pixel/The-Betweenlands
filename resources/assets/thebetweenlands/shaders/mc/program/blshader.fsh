@@ -145,7 +145,7 @@ void main() {
             //Calculate color distortion
             float fragDistortion = (fragPos2.y + u_camPos.y + (cos(fragPos2.x + u_camPos.x) * sin(fragPos2.z + u_camPos.z)) * 2.0F) * 8.0F;
             float colorDistortion = ((sin(fragDistortion + u_msTime / 300.0F) + 1.0F) / 800.0F);
-            shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 1.0F);
+            shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
         }
         
         //Apply intersection glow
@@ -157,7 +157,7 @@ void main() {
                 dstMultiplier = 3000.0F;
             }
             float dsCol = pow((0.1F - dist / 2.0F), dstFalloff) * dstMultiplier;
-            shieldFragColor += vec4(repellerShieldBuffCol.rgb * dsCol, 1.0F);
+            shieldFragColor += vec4(repellerShieldBuffCol.rgb * dsCol, 0.0F);
         }
 		
 		//Applies fogged shield color to the fragment color
