@@ -28,7 +28,7 @@ public class BlockMossBedRenderer implements ISimpleBlockRenderingHandler {
             modelConverterMossBed = new ModelConverter(modelMossBed, 0.065D, true );
 
         int meta = world.getBlockMetadata(x, y, z);
-        if(meta == 1 || meta == 3 || meta == 0 || meta == 2) {
+        if (meta <= 3) {
 			Tessellator.instance.setColorRGBA_F(1, 1, 1, 1);
 			Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 			Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z + 0.5F);
