@@ -1,59 +1,92 @@
 package thebetweenlands.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
+
 import net.minecraft.block.BlockBed;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-/**
- * Created by Bart on 22/11/2015.
- */
 public class BlockMossBed extends BlockBed {
-
 
     public IIcon bedIcon;
 
     public BlockMossBed() {
+        super();
         setBlockName("thebetweenlands.mossBed");
     }
 
-
-    @Override
+   @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+	   super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
         if (world.isRemote) {
             return true;
         } else if (player.dimension == ConfigHandler.DIMENSION_ID) {
-            player.setSpawnChunk(new ChunkCoordinates(x, y, z), true, ConfigHandler.DIMENSION_ID);
+            player.setSpawnChunk(new ChunkCoordinates(x, y, z), false, ConfigHandler.DIMENSION_ID);
             return true;
         }
         return true;
     }
-
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        this.bedIcon = iconRegister.registerIcon("thebetweenlands:mossBed");
+    
+	@Override
+    public boolean isBed(IBlockAccess world, int x, int y, int z, EntityLivingBase player) {
+        return true;
     }
 
-    @Override
-    public int getRenderBlockPass() {
-        return ClientProxy.BlockRenderIDs.MOSS_BED.id();
-    }
+	@Override
+	public Item getItemDropped(int meta, Random random, int count) {
+		return BLItemRegistry.mossBed;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
-        return this.blockIcon;
-    }
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		this.bedIcon = iconRegister.registerIcon("thebetweenlands:mossBed");
+	}
 
-    @SideOnly(Side.CLIENT)
-    public Item getItem(World p_149694_1_, int p_149694_2_, int p_149694_3_, int p_149694_4_) {
-        return Item.getItemFromBlock(this);
-    }
+	@Override
+	public int getRenderType() {
+		return ClientProxy.BlockRenderIDs.MOSS_BED.id();
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean isBlockNormalCube() {
+		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return this.bedIcon;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Item getItem(World world, int x, int y, int z) {
+		return Item.getItemFromBlock(this);
+	}
 }

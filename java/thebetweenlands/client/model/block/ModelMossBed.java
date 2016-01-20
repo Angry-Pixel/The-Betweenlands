@@ -2,12 +2,10 @@ package thebetweenlands.client.model.block;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
-/**
- * ModelMossBed - TripleHeadedSheep
- * Created using Tabula 4.1.1
- */
+@SideOnly(Side.CLIENT)
 public class ModelMossBed extends ModelBase {
     public ModelRenderer bedbase;
     public ModelRenderer stand_frontr;
@@ -75,14 +73,10 @@ public class ModelMossBed extends ModelBase {
         this.bedbase.addChild(this.stand_frontl);
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.bedbase.render(f5);
+    public void render() { 
+        this.bedbase.render(0.0625F);
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
