@@ -7,8 +7,6 @@ import javax.vecmath.Vector3d;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.block.ModelAnimator;
-import thebetweenlands.entities.particles.EntityAnimatorFX;
-import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
@@ -72,20 +68,7 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5F, y + 1.5F, z + 0.5F);
 		GL11.glScalef(1F, -1F, -1F);
-		switch (meta) {
-		case 2:
-			GL11.glRotatef(180F, 0.0F, 1F, 0F);
-			break;
-		case 3:
-			GL11.glRotatef(0F, 0.0F, 1F, 0F);
-			break;
-		case 4:
-			GL11.glRotatef(90F, 0.0F, 1F, 0F);
-			break;
-		case 5:
-			GL11.glRotatef(-90F, 0.0F, 1F, 0F);
-			break;
-		}
+		GL11.glRotatef(meta * 90.0F - 180.0F, 0.0F, 1F, 0F);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		model.render(null, 0, 0, 0, 0, 0, 0.0625F);
 		GL11.glEnable(GL11.GL_CULL_FACE);
@@ -149,49 +132,6 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 				}
 			}
 			GL11.glPopMatrix();
-		}
-
-		//TODO: Move this to update logic
-		if(te.isSlotInUse(0) && te.isCrystalInslot() && te.isSulfurInslot() && te.fuelConsumed < te.requiredFuelCount && te.isValidFocalItem()) {
-			// Sulfur Particles
-			if (te.getStackInSlot(2) != null) {
-				rand = te.getWorldObj().rand;
-				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D, te.yCoord + 0.1D, te.zCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
-				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
-				if (te.getWorldObj().rand.nextInt(15) == 0) {
-					Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, ItemGeneric.createStack(EnumItemGeneric.SULFUR).getIconIndex(), 0.01F));
-				}
-			}
-
-			// Life Crystal Particles
-			if (te.getStackInSlot(1) != null) {
-				points = new ArrayList<Vector3d>();
-				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.5D, te.zCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
-				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
-				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
-				if (te.getWorldObj().rand.nextInt(50) == 0) {
-					Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 0.0003F));
-				}
-			}
-
-			// Runes
-			points = new ArrayList<Vector3d>();
-			points.add(new Vector3d(te.xCoord + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.9, te.zCoord + 0.65 + rand.nextFloat() * 0.3D - 0.15D));
-			points.add(new Vector3d(te.xCoord + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 1.36, te.zCoord + 0.65 + rand.nextFloat() * 0.3D - 0.15D));
-			points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
-			if (te.getWorldObj().rand.nextInt(150) == 0) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX2(te.getWorldObj(), te.xCoord, te.yCoord + 0.9, te.zCoord + 0.65, 0, 0, 0, points));
-			}
-
-			// Smoke
-			if (te.getWorldObj().rand.nextInt(150) == 0) {
-				Minecraft.getMinecraft().effectRenderer.addEffect(new EntitySmokeFX(te.getWorldObj(), te.xCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.3, te.zCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, 0, 0, 0, (rand.nextFloat() / 2.0F) + 1F));
-			}
 		}
 	}
 }

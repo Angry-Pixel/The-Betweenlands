@@ -23,7 +23,7 @@ public class BlockRope extends BlockLadder {
 	private IIcon iconBottom;
 
 	public BlockRope() {
-		this.setBlockName("thebeteenlands.rope");
+		this.setBlockName("thebetweenlands.rope");
 		this.setStepSound(soundTypeGrass);
 		this.setBlockBounds(0.4375f, 0f, 0.4375f, 0.5625f, 1f, 0.5625f);
 		this.setHardness(0.5F);

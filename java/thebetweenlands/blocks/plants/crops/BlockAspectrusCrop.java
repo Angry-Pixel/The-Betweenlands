@@ -21,7 +21,8 @@ import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 
 public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntityProvider {
-	private static final float ASPECT_MULTIPLIER = 0.5F;
+	private static final float ASPECT_FRUIT_MULTIPLIER = 0.5F;
+	private static final float ASPECT_SEEDS_DEGRADATION = 0.18F;
 	private static final int MAX_HEIGHT = 3;
 
 	public BlockAspectrusCrop(String blockName) {
@@ -48,7 +49,11 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 
 	@Override
 	public ItemStack getSeedDrop(World world, int x, int y, int z) {
-		return new ItemStack(BLItemRegistry.aspectrusCropSeed, 1);	
+		ItemStack stack = new ItemStack(BLItemRegistry.aspectrusCropSeed, 1);
+		Aspect aspect = this.getAspect(world, x, y, z);
+		if(aspect != null && aspect.amount - ASPECT_SEEDS_DEGRADATION > 0.0F)
+			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount - ASPECT_SEEDS_DEGRADATION));
+		return stack;
 	}
 
 	@Override
@@ -56,7 +61,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 		ItemStack stack = ItemGeneric.createStack(EnumItemGeneric.ASPECTRUS_FRUIT);
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_MULTIPLIER));
+			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_FRUIT_MULTIPLIER));
 		return stack;	
 	}
 

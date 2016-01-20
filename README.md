@@ -6,7 +6,6 @@ To do for First Release:
 _____________________________________________________________________
 
 Unfinished stuff:
-- Volarkite (ssshhh no one knows who's fixing this)
 - Lanterns (Lex)
 - Temple Guardians
 
@@ -16,7 +15,6 @@ New Stuff (High priority):
 - Guidebook (half done)
 - Pitstone Structures
 - Some surface structures
-- Moss Beds for spawn points (half done, and will be finished sometime soon... maybe)
 
 New Stuff (Low priority)
 - Pieces of Lore for Loot

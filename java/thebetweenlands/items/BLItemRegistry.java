@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
@@ -61,6 +59,7 @@ import thebetweenlands.items.misc.ItemHLBook;
 import thebetweenlands.items.misc.ItemLifeCrystal;
 import thebetweenlands.items.misc.ItemManual;
 import thebetweenlands.items.misc.ItemMob;
+import thebetweenlands.items.misc.ItemMossBed;
 import thebetweenlands.items.misc.ItemRope;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
@@ -83,6 +82,8 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterial;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -250,6 +251,7 @@ public class BLItemRegistry {
 	public static final Item gecko = new ItemMob("gecko");
 	public static final Item cavingRope = new ItemCavingRope().setUnlocalizedName("thebetweenlands.cavingRope").setTextureName("thebetweenlands:cavingRope");
 	public static final Item weedwoodSign = new ItemBLSign(BLBlockRegistry.weedwoodWallSign, BLBlockRegistry.weedwoodSignStanding, "weedwood");
+	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBedItem");
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();

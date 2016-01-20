@@ -1,6 +1,5 @@
 package thebetweenlands.entities.particles;
 
-import thebetweenlands.utils.MathUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,6 +7,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.terrain.BlockWisp;
+import thebetweenlands.utils.MathUtils;
 
 public class EntityWispFX extends EntityFX {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");
@@ -48,7 +49,10 @@ public class EntityWispFX extends EntityFX {
 
 		par1Tessellator.setBrightness(brightness);
 
-		float distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialRenderTicks), 10, 20);
+		float distance = 0.0F;
+		if(!BlockWisp.canSee(this.worldObj)) {
+			distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialRenderTicks), 10, 20);
+		}
 		float a = (color >>> 24 & 0xFF) / 255F - MathHelper.sin(MathUtils.PI / 20 * distance);
 		float r = (color >> 16 & 0xFF) / 255F;
 		float g = (color >> 8 & 0xFF) / 255F;

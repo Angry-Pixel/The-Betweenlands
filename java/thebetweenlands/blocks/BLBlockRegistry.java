@@ -506,7 +506,8 @@ public class BLBlockRegistry {
 	public static final Block siltGlas = new BlockBLGlass();
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
 	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
-	
+	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
+
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
