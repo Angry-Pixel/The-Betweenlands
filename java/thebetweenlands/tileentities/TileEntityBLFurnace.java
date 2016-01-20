@@ -28,7 +28,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 {
 	private static final int[] slotsTop = new int[] {0};
 	private static final int[] slotsBottom = new int[] {2, 1};
-	private static final int[] slotsSides = new int[] {1};
+	private static final int[] slotsSides = new int[] {1, 3};
 	private ItemStack[] furnaceItemStacks = new ItemStack[4];
 	public int furnaceBurnTime;
 	public int currentItemBurnTime;

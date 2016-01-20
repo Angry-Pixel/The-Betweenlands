@@ -192,11 +192,22 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		if (slot == 1 && stack != null && stack.getItem().equals(BLItemRegistry.lifeCrystal))
+			return true;
+		else if (slot == 2 && stack != null && stack.getItem().equals(BLItemRegistry.itemsGeneric) && stack.getItemDamage() == EnumItemGeneric.SULFUR.id)
+			return true;
+		else if (slot == 0)
+			return true;
+		return false;
+	}
+
+	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
 		if (side == 0)
-			return new int[]{1};
+			return new int[]{0};
 		if (side == 1)
-			return new int[]{1};
-		return new int[]{0, 2};
+			return new int[]{0};
+		return new int[]{1, 2};
 	}
 }
