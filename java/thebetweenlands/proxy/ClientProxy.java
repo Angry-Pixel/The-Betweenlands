@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,6 +42,7 @@ import thebetweenlands.client.model.block.crops.ModelCropFungus2;
 import thebetweenlands.client.model.block.crops.ModelCropFungus3;
 import thebetweenlands.client.model.block.crops.ModelCropFungus4;
 import thebetweenlands.client.model.block.crops.ModelCropFungus5;
+import thebetweenlands.client.model.item.ModelExplorersHat;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
@@ -251,6 +253,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private static final ResourceLocation PLAYER_CORRUPTION_TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/player/playerCorruption.png");
+
+	private static final ModelExplorersHat EXPLORERS_HAT_MODEL = new ModelExplorersHat();
 
 	private BufferedImage playerCorruptionImg = null;
 
@@ -543,5 +547,10 @@ public class ClientProxy extends CommonProxy {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
+	}
+
+	@Override
+	public ModelBiped getExplorersHatModel() {
+		return EXPLORERS_HAT_MODEL;
 	}
 }
