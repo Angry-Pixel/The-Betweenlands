@@ -263,6 +263,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new RecipesCircleGems());
 		RecipeSorter.register("thebetweenlands:recipesAspectVials", RecipesAspectVials.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAspectVials());
+		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
 	}
 
 	private static void registerSmelting() {

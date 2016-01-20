@@ -24,6 +24,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
@@ -106,6 +108,18 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 			if(enumGeneric.id == id) return enumGeneric;
 		}
 		return EnumItemGeneric.INVALID;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		if(stack.getItemDamage() == EnumItemGeneric.ASPECTRUS_FRUIT.id) {
+			List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
+			if(!itemAspects.isEmpty()) {
+				Aspect aspect = itemAspects.get(0);
+				return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + aspect.getAmount() + ")";
+			}
+		}
+		return super.getItemStackDisplayName(stack);
 	}
 
 	@Override

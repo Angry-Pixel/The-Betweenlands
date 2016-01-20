@@ -92,25 +92,64 @@ public class BlockBLGenericCrop extends BlockCrops {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 		ItemStack seedDrop = this.getSeedDrop(world, x, y, z);
 		ItemStack cropDrop = this.getCropDrop(world, x, y, z);
-		if (metadata == MATURE_CROP) {
-			for (int i = 0; i < world.rand.nextInt(4) + 1 + fortune; ++i) {
-				if(seedDrop != null) {
-					if (world.rand.nextInt(15) <= metadata)
-						ret.add(seedDrop);
-				}
-				if(cropDrop != null) ret.add(cropDrop);
-			}
-		}
-		if(seedDrop != null) {
+		for(int i = 0; i < this.getSeedDrops(world, x, y, z, fortune); i++) {
 			ret.add(seedDrop);
+		}
+		for(int i = 0; i < this.getCropDrops(world, x, y, z, fortune); i++) {
+			ret.add(cropDrop);
 		}
 		return ret;
 	}
 
+	/**
+	 * Returns the amount of seeds to drop
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param fortune
+	 * @return
+	 */
+	public int getSeedDrops(World world, int x, int y, int z, int fortune) {
+		return 1 + (this.isMature(world, x, y, z) ? (world.rand.nextInt(3) == 0 ? 1 : 0) + fortune : 0);
+	}
+
+	/**
+	 * Returns the amount of fruits to drop
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param fortune
+	 * @return
+	 */
+	public int getCropDrops(World world, int x, int y, int z, int fortune) {
+		if(this.isMature(world, x, y, z)) {
+			return 2 + world.rand.nextInt(3) + fortune;
+		}
+		return 0;
+	}
+
+	/**
+	 * Returns the seed item
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public ItemStack getSeedDrop(World world, int x, int y, int z) {
 		return null;	
 	}
 
+	/**
+	 * Returns the fruit item
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public ItemStack getCropDrop(World world, int x, int y, int z) {
 		return null;	
 	}
@@ -137,7 +176,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	protected boolean canPlaceBlockOn(Block block) {
-		if(this.maxHeight > 1 && block == this) {
+		if(this.maxHeight > 1 && block instanceof BlockBLGenericCrop && this.isSameCrop(block)) {
 			return true;
 		} else {
 			return block instanceof BlockFarmedDirt;
@@ -146,11 +185,11 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	public boolean canBlockStay(World world, int x, int y, int z) {
-		if(this.maxHeight > 1 && world.getBlock(x, y - 1, z) == this) {
-			return ((BlockBLGenericCrop)world.getBlock(x, y - 1, z)).isFullyGrown(world, x, y - 1, z);
+		Block soil = world.getBlock(x, y - 1, z);
+		if(this.maxHeight > 1 && soil instanceof BlockBLGenericCrop && this.isSameCrop(soil)) {
+			return ((BlockBLGenericCrop) soil).isFullyGrown(world, x, y - 1, z);
 		} else {
-			Block soil = world.getBlock(x, y - 1, z);
-			int meta = world.getBlockMetadata(x, y -1, z);
+			int meta = world.getBlockMetadata(x, y - 1, z);
 			return soil != null && soil instanceof BlockFarmedDirt && meta >= 4 && meta <= 10;
 		}
 	}
@@ -189,7 +228,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 */
 	public boolean func_149851_a(World world, int x, int y, int z, boolean isRemote) {
 		int meta = world.getBlockMetadata(x, y, z);
-		return (this.maxHeight <= 1 || !this.canGrowTo(world, x, y + 1, z) || world.getBlock(x, y - (this.maxHeight - 1), z) == this) ? meta < MATURE_CROP : meta <= MATURE_CROP;
+		return (this.maxHeight <= 1 || !this.canGrowTo(world, x, y + 1, z) || this.hasReachedMaxHeight(world, x, y, z)) ? meta < MATURE_CROP : meta <= MATURE_CROP;
 	}
 
 	/**
@@ -212,7 +251,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		if (l > 7) {
 			l = 7;
 		}
-		world.setBlockMetadataWithNotify(x, y, z, l, 2);
+		world.setBlockMetadataWithNotify(x, y, z, l, 3);
 		world.playAuxSFX(2005, x, y, z, 0);
 		if(this.isCropOrSoilDecayed(world, x, y, z) && this.isFullyGrown(world, x, y, z)) {
 			this.setDecayed(world, x, y, z, true);
@@ -220,17 +259,78 @@ public class BlockBLGenericCrop extends BlockCrops {
 		this.postGrow(world, x, y, z, prevMeta, world.getBlockMetadata(x, y, z));
 	}
 
+	/**
+	 * Returns true if the crop at the specified position is mature and not decayed
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean isMature(World world, int x, int y, int z) {
+		return world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.MATURE_CROP;
+	}
+
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int id, EntityPlayer player) {
 		if(world.isRemote) return;
+		if(this.maxHeight > 1) {
+			//Harvest crops above
+			if(!player.capabilities.isCreativeMode) {
+				for(int yo = 1; yo <= this.maxHeight; yo++) {
+					Block block = world.getBlock(x, y+yo, z);
+					if(block instanceof BlockBLGenericCrop && this.isSameCrop(block)) {
+						((BlockBLGenericCrop) block).harvestCrop(world, x, y+yo, z, player);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+
+		//Harvest and destroy current crop
 		boolean grown = this.isFullyGrown(world, x, y, z);
 		if(!player.capabilities.isCreativeMode) {
 			this.harvestCrop(world, x, y, z, player);
 		}
 		this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
 		if(grown) {
-			if(world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt)
+			if(!player.capabilities.isCreativeMode && world.getBlock(x, y - 1, z) instanceof BlockFarmedDirt)
 				((BlockFarmedDirt)world.getBlock(x, y - 1, z)).useCompost(world, x, y - 1, z);
+		}
+
+		if(this.maxHeight > 1) {
+			//Harvest crops below
+			if(!player.capabilities.isCreativeMode) {
+				for(int yo = 1; yo <= this.maxHeight; yo++) {
+					Block block = world.getBlock(x, y-yo, z);
+					if(block instanceof BlockBLGenericCrop && this.isSameCrop(block)) {
+						((BlockBLGenericCrop) block).harvestCrop(world, x, y-yo, z, player);
+					} else {
+						break;
+					}
+				}
+			}
+
+			//Destroy crops above and below
+			for(int yo = 1; yo <= this.maxHeight; yo++) {
+				Block block = world.getBlock(x, y+yo, z);
+				if(block instanceof BlockBLGenericCrop && this.isSameCrop(block)) {
+					((BlockBLGenericCrop) block).destroyCrop(world, x, y+yo, z, world.getBlockMetadata(x, y+yo, z));
+				} else {
+					break;
+				}
+			}
+			for(int yo = 1; yo <= this.maxHeight; yo++) {
+				Block block = world.getBlock(x, y-yo, z);
+				if(block instanceof BlockBLGenericCrop && this.isSameCrop(block)) {
+					((BlockBLGenericCrop) block).destroyCrop(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z));
+					if(!player.capabilities.isCreativeMode && world.getBlock(x, y-yo-1, z) instanceof BlockFarmedDirt)
+						((BlockFarmedDirt)world.getBlock(x, y-yo-1, z)).useCompost(world, x, y-yo-1, z);
+				} else {
+					break;
+				}
+			}
 		}
 	}
 
@@ -360,26 +460,19 @@ public class BlockBLGenericCrop extends BlockCrops {
 			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.DECAYED_CROP) {
 				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
 				((BlockBLGenericCrop)world.getBlock(x, y, z)).onCured(world, x, y, z);
+				world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
 			}
 		} else {
 			if(world.getBlock(x, y, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y, z) == BlockBLGenericCrop.MATURE_CROP) {
-				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 3);
+				world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 2);
 				((BlockBLGenericCrop)world.getBlock(x, y, z)).onDecayed(world, x, y, z);
+				world.notifyBlockChange(x, y, z, world.getBlock(x, y, z));
 			}
 		}
 	}
 
 	@Override
 	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-		if(this.maxHeight > 1) {
-			for(int yo = 1; yo <= this.maxHeight; yo++) {
-				Block block = world.getBlock(x, y-yo, z);
-				if(block instanceof BlockBLGenericCrop) {
-					block.onBlockHarvested(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z), player);
-					((BlockBLGenericCrop) block).destroyCrop(world, x, y-yo, z, world.getBlockMetadata(x, y-yo, z));
-				}
-			}
-		}
 		return this.destroyCrop(world, x, y, z, world.getBlockMetadata(x, y, z));
 	}
 
@@ -525,14 +618,60 @@ public class BlockBLGenericCrop extends BlockCrops {
 	private void preGrow(World world, int x, int y, int z, int meta) {
 		if(this.maxHeight > 1) {
 			if(meta == BlockBLGenericCrop.MATURE_CROP) {
-				if(world.getBlock(x, y - (this.maxHeight - 1), z) == this)
-					return;
-				if(this.canGrowTo(world, x, y + 1, z)) {
-					world.setBlock(x, y + 1, z, this);
-					this.onGrow(world, x, y + 1, z);
+				if(!this.hasReachedMaxHeight(world, x, y, z)) {
+					if(this.canGrowTo(world, x, y + 1, z)) {
+						world.setBlock(x, y + 1, z, this);
+						this.onGrow(world, x, y + 1, z);
+					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns whether this crop has reached its maximum height
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean hasReachedMaxHeight(World world, int x, int y, int z) {
+		return this.getCropHeight(world, x, y, z) >= this.maxHeight;
+	}
+
+	/**
+	 * Returns the height of this crop
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public int getCropHeight(World world, int x, int y, int z) {
+		int height = 1;
+		for(int yo = 1; yo <= this.maxHeight; yo++) {
+			Block below = world.getBlock(x, y - yo, z);
+			if(below instanceof BlockBLGenericCrop && this.isSameCrop(below)) {
+				height++;
+			} else {
+				break;
+			}
+		}
+		return height;
+	}
+
+	/**
+	 * Returns true if the specified crop should be treated as the same
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param crop
+	 * @return
+	 */
+	public boolean isSameCrop(Block crop) {
+		return crop == this;
 	}
 
 	/**
@@ -550,7 +689,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 				if(world.getBlock(x, y - 1, z) instanceof BlockBLGenericCrop) {
 					BlockBLGenericCrop crop = (BlockBLGenericCrop) world.getBlock(x, y - 1, z);
 					if(crop.isCropOrSoilDecayed(world, x, y - 1, z)) {
-						world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 2);
+						world.setBlockMetadataWithNotify(x, y, z, BlockBLGenericCrop.DECAYED_CROP, 3);
 					}
 				}
 			}
