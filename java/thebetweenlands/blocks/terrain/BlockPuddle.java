@@ -73,7 +73,6 @@ public class BlockPuddle extends Block {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean renderAsNormalBlock() {
 		return false;
 	}

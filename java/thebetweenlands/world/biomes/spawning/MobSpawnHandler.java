@@ -47,7 +47,7 @@ public class MobSpawnHandler {
 	private static final byte SPAWN_CHUNK_RIM = 2;
 
 	//How many attempts per spawning run
-	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 4;
+	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 6;
 	//How many attempts to reach the desired mob group size
 	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 30;
 
@@ -261,7 +261,7 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning") && world.getTotalWorldTime() % 3 == 0) {
+			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning")) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);

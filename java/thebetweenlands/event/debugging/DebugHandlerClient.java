@@ -241,6 +241,7 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			}
 			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, yOffset += 8, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, yOffset += 8, 0xFFFFFFFF);
+			TheBetweenlands.proxy.getCustomFontRenderer().drawString("Custom Font Test", 2, yOffset += 8, 0xFFFFFFFF);
 		}
 	}
 
