@@ -61,7 +61,13 @@ extends WorldProvider
 
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTickTime) {
-		return 0.5F;
+		return 0.35F;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public float getSunBrightness(float partialTicks) {
+		return 0.2F;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -78,10 +84,10 @@ extends WorldProvider
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float minBrightness = (float) (1.0F / 100000000.0F * Math.pow(ConfigHandler.DIMENSION_BRIGHTNESS, 4) + 0.005F);
+		float minBrightness = (float) (1.0F / 10000000.0F * Math.pow(ConfigHandler.DIMENSION_BRIGHTNESS, 3.2F) + 0.002F);
 		for(int i = 0; i <= 15; i++) {
-			float f1 = 1F - (i*i*i) / (15F*15F*15F);
-			this.lightBrightnessTable[i] = (1F - f1) / (f1 * 3F + 1F) * (1F - minBrightness) + minBrightness;
+			float f1 = 1F - (i*i) / (15F*15F);
+			this.lightBrightnessTable[i] = ((1F - f1) / (f1 * 6F + 1F) * (1F - minBrightness) + minBrightness);
 		}
 		System.arraycopy(this.lightBrightnessTable, 0, this.originalLightBrightnessTable, 0, 16);
 	}
@@ -89,7 +95,6 @@ extends WorldProvider
 	@Override
 	public void registerWorldChunkManager() {
 		this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
-		this.hasNoSky = true;
 		this.dimensionId = ModInfo.DIMENSION_ID;
 	}
 

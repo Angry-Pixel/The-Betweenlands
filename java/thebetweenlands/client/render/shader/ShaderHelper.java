@@ -53,9 +53,9 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
 			if(this.isRequired()) {
-				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.scheduleShaderReload()) {
+				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.needsShaderReload()) {
 					MainShader shaderWrapper = this.currentShader;
-					if(shaderWrapper != null && this.scheduleShaderReload()) {
+					if(shaderWrapper != null && this.needsShaderReload()) {
 						try {
 							shaderWrapper.getShaderGroup().deleteShaderGroup();
 							shaderWrapper.deleteBuffers();
@@ -64,7 +64,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 							ex.printStackTrace();
 						}
 					}
-					if(shaderWrapper == null || this.scheduleShaderReload()) {
+					if(shaderWrapper == null || this.needsShaderReload()) {
 						shaderWrapper = new MainShader(
 								mc.getTextureManager(),
 								mc.getResourceManager(), mc.getFramebuffer(),
@@ -81,7 +81,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 						this.currentShaderGroup = mc.entityRenderer.theShaderGroup;
 						this.currentShader = shaderWrapper;
 						mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-						if(this.scheduleShaderReload()) {
+						if(this.needsShaderReload()) {
 							this.needsReload = false;
 						}
 					} catch (JsonException e) {
@@ -106,11 +106,11 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
 	}
 
-	private boolean scheduleShaderReload() {
+	private boolean needsShaderReload() {
 		return this.needsReload;
 	}
 
-	public void reloadShaders() {
+	public void scheduleShaderReload() {
 		this.needsReload = true;
 	}
 
@@ -146,6 +146,6 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
-		this.reloadShaders();
+		this.scheduleShaderReload();
 	}
 }
