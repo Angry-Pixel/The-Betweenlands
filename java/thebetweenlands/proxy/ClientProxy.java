@@ -44,23 +44,7 @@ import thebetweenlands.client.model.block.crops.ModelCropFungus2;
 import thebetweenlands.client.model.block.crops.ModelCropFungus3;
 import thebetweenlands.client.model.block.crops.ModelCropFungus4;
 import thebetweenlands.client.model.block.crops.ModelCropFungus5;
-import thebetweenlands.client.render.block.BlockBLLeverRenderer;
-import thebetweenlands.client.render.block.BlockDoorRenderer;
-import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockHollowLogRenderer;
-import thebetweenlands.client.render.block.BlockModelPlantRenderer;
-import thebetweenlands.client.render.block.BlockMossBedRenderer;
-import thebetweenlands.client.render.block.BlockMudFlowerPotRenderer;
-import thebetweenlands.client.render.block.BlockRootRenderer;
-import thebetweenlands.client.render.block.BlockRubberLogRenderer;
-import thebetweenlands.client.render.block.BlockRubberTapRenderer;
-import thebetweenlands.client.render.block.BlockSlopeRenderer;
-import thebetweenlands.client.render.block.BlockStalactiteRenderer;
-import thebetweenlands.client.render.block.BlockSwampReedRenderer;
-import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
-import thebetweenlands.client.render.block.BlockWalkwayRenderer;
-import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.block.*;
 import thebetweenlands.client.render.block.crops.BlockBLGenericCropRenderer;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderBLItemFrame;
@@ -241,7 +225,8 @@ public class ClientProxy extends CommonProxy {
 		HOLLOW_LOG,
 		MOSS_BED,
 		CROP,
-		FARMED_DIRT;
+		FARMED_DIRT,
+		HOPPER;
 
 		private final int ID;
 
@@ -386,6 +371,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBLGenericCropRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockFarmedDirtRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockBLHopperRenderer());
 
 		// Events
 		MinecraftForge.EVENT_BUS.register(GuiOverlay.INSTANCE);

@@ -281,7 +281,7 @@ tile.thebetweenlands.waterWeeds.name=Swamp Kelp
 tile.thebetweenlands.waterWeedsSmall.name=Water Weeds
 tile.thebetweenlands.sludgecreep.name=Sludgecreep
 tile.thebetweenlands.deadWeedwoodBush.name=Dead Weedwood Bush
-
+tile.thebetweelands.syrmoriteHopper.name=Syrmorite Hopper
 tile.thebetweenlands.hugeMushroomTop.name=Bulb-Capped Mushroom Top
 tile.thebetweenlands.hugeMushroomStalk.name=Bulb-Capped Mushroom Stalk
 
@@ -649,6 +649,7 @@ item.thebetweenlands.mossBedItem.name=Moss Bed
 item.item.thebetweenlands.elixir.name=Elixir
 item.item.thebetweenlands.dentrothystVial.name=Dentrothyst Vial
 item.item.thebetweenlands.aspectVial.name=Aspect Vial
+
 # Elixirs
 bl.elixir.petrify=Petrify
 bl.elixir.strength=Elixir of Strength
