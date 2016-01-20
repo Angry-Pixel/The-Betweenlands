@@ -6,12 +6,15 @@ import net.minecraft.block.BlockBed;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.network.packet.server.PlayerMessage;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -33,6 +36,7 @@ public class BlockMossBed extends BlockBed {
             return true;
         } else if (player.dimension == ConfigHandler.DIMENSION_ID) {
             player.setSpawnChunk(new ChunkCoordinates(x, y, z), false, ConfigHandler.DIMENSION_ID);
+            TheBetweenlands.networkWrapper.sendTo(new PlayerMessage(player, 0), (EntityPlayerMP) player);
             return true;
         }
         return true;

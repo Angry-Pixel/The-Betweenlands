@@ -1132,5 +1132,7 @@ chat.manual.discover.page=You discovered a new page: %s
 
 chat.repeller.shimmerstone.missing=The repeller needs a Shimmerstone to run
 
+chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
+
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat
