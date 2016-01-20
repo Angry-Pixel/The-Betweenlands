@@ -42,7 +42,7 @@ public class ItemVolarKiteRenderer implements IItemRenderer {
 			renderHeld(0.5F, 0F, 0.5F, 1.5D);
 			break;
 		case INVENTORY:
-			renderBlock(0.0F, 0F, 0.0F, 0.4D);
+			renderBlock(0.0F, 1.75F, 0.0F, 0.4D);
 			break;
 		default:
 			break;
