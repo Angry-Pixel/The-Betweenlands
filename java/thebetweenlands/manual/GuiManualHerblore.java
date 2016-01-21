@@ -49,7 +49,11 @@ public class GuiManualHerblore extends GuiManualBase {
             }
             drawTexture(xStart, yStart + 10, 14, 22 * currentCategory.number, 512.0D, 512.0D, 293.0D, 306.0D, 18.0D, 18.0D + 22.0D * currentCategory.number);
             drawTexture(xStart + 279, yStart + 10 + 22 * currentCategory.number, 14, 44 - 22 * currentCategory.number, 512.0D, 512.0D, 306.0D, 293.0D, 18.0D + 22.0D * currentCategory.number, 62.0D);
-
+            if (currentCategory.number == 2)
+                drawTexture(xStart, yStart + 33, 14, 20, 512.0D, 512.0D, 312.0D, 325.0D, 42.0D, 62.0D);
+            else
+                drawTexture(xStart + 278, yStart + 33, 14, 20, 512.0D, 512.0D, 315.0D, 329.0D, 42.0D, 62.0D);
+            drawTexture(xStart, yStart + 11, 14, 20, 512.0D, 512.0D, 312.0D, 325.0D, 20.0D, 39.0D);
             currentCategory.draw(mouseX, mouseY);
         }
     }
