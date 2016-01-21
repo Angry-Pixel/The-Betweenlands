@@ -57,7 +57,7 @@ vec3 getFragPos(sampler2D depthMap) {
 	float fragDepth = zBuffer * 2.0F - 1.0F;
     
     //Calculate fragment world position relative to the camera position
-    vec4 fragRelPos = vec4(v_texCoord.xy * 2.0 - 1.0, fragDepth, 1.0) * u_INVMVP;
+    vec4 fragRelPos = vec4(v_texCoord.xy * 2.0F - 1.0F, fragDepth, 1.0F) * u_INVMVP;
     fragRelPos.xyz /= fragRelPos.w;
     
     return fragRelPos.xyz;
@@ -77,7 +77,7 @@ float getFogMultiplier(vec3 fragPos) {
 
 //Applies fog to the color of a fragment
 vec4 applyFog(vec3 fragPos, vec4 color) {
-    return mix(color, vec4(0, 0, 0, 0), getFogMultiplier(fragPos));
+    return mix(color, vec4(0.0F, 0.0F, 0.0F, 0.0F), getFogMultiplier(fragPos));
 }
 
 void main() {
@@ -122,30 +122,30 @@ void main() {
     bool inShield = repellerShieldBuffCol.a != 0.0F;
     if(inShield) {
         //Get shield frag pos
-        vec3 fragPos2 = getFragPos(s_repellerShield_depth);
+        vec3 shieldFragPos = getFragPos(s_repellerShield_depth);
         
 		//Holds calculated shield color
 		vec4 shieldFragColor = vec4(0.0F, 0.0F, 0.0F, 0.0F);
 		
         //Get depth (distance to camera) and distance between fragments
-        float dist = distance(fragPos2, fragPos);
+        float dist = distance(shieldFragPos, fragPos);
         float fragCamDist = length(fragPos);
-        float fragCamDist2 = length(fragPos2);
+        float shieldFragCamDist = length(shieldFragPos);
         
         //Check if repeller shield is behind or in front of the diffuse fragment
-        bool inBack = fragCamDist <= fragCamDist2;
+        bool inBack = fragCamDist <= shieldFragCamDist;
         if(!inBack) {
             //Calculate distortion and color multiplier
             distortion = true;
-            distortionMultiplier += 1.5F / (pow(fragCamDist2 - fragCamDist, 2) / 100.0F + 1.0F);
+            //distortionMultiplier += 1.5F / (pow(shieldFragCamDist - fragCamDist, 2) / 100.0F + 1.0F);
             
             //Calculate color multiplier (affected by fog)
-            colorMultiplier *= 1.0F - mix(0.1F, 0.0F, getFogMultiplier(fragPos2));
+            //colorMultiplier *= 1.0F - mix(0.1F, 0.0F, getFogMultiplier(shieldFragPos));
             
             //Calculate color distortion
-            float fragDistortion = (fragPos2.y + u_camPos.y + (cos(fragPos2.x + u_camPos.x) * sin(fragPos2.z + u_camPos.z)) * 2.0F) * 8.0F;
+            float fragDistortion = (shieldFragPos.y + u_camPos.y + (cos(shieldFragPos.x + u_camPos.x) * sin(shieldFragPos.z + u_camPos.z)) * 2.0F) * 8.0F;
             float colorDistortion = ((sin(fragDistortion + u_msTime / 300.0F) + 1.0F) / 800.0F);
-            shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
+            //shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
         }
         
         //Apply intersection glow
@@ -161,7 +161,7 @@ void main() {
         }
 		
 		//Applies fogged shield color to the fragment color
-		color += applyFog(fragPos2, shieldFragColor);
+		color += applyFog(shieldFragPos, shieldFragColor);
     }
     
     
@@ -172,16 +172,16 @@ void main() {
 	bool inGas = gasParticlesBuffCol.a != 0.0F;
     if(inGas) {
 		//Get gas frag pos
-        vec3 fragPos2 = getFragPos(s_gasParticles_depth);
+        vec3 gasFragPos = getFragPos(s_gasParticles_depth);
 		
 		//Get depth (distance to camera)
         float fragCamDist = length(fragPos);
-        float fragCamDist2 = length(fragPos2);
+        float gasFragCamDist = length(gasFragPos);
         
         //Check if repeller shield is behind or in front of the diffuse fragment
-        bool inBack = fragCamDist <= fragCamDist2;
+        bool inBack = fragCamDist <= gasFragCamDist;
         if(!inBack) {
-			color += applyFog(fragPos2, gasParticlesBuffCol);
+			color += applyFog(gasFragPos, gasParticlesBuffCol);
 			distortion = true;
 			distortionMultiplier += 1.5F;
 			/////WIP stuff/////

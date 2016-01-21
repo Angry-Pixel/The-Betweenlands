@@ -143,7 +143,9 @@ public class WorldRenderHandler {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 
-			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+			GL11.glColor4f(1, 1, 1, 1);
+			
+			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		} else if(this.sphereDispList >= 0) {
 			GL11.glDepthMask(false);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
