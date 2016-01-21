@@ -364,10 +364,13 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		super.updateTick(world, x, y, z, rand);
-		int metaDirt = world.getBlockMetadata(x, y - 1, z);
-		int meta = world.getBlockMetadata(x, y, z);
+		//Don't call super#updateTick, the growing has to be handled in this class only
+
+		this.checkAndDropBlock(world, x, y, z);
+
 		if (this.shouldGrow(world, x, y, z)) {
+			int metaDirt = world.getBlockMetadata(x, y - 1, z);
+			int meta = world.getBlockMetadata(x, y, z);
 			int prevMeta = meta;
 			this.preGrow(world, x, y, z, meta);
 			if (!this.isFullyGrown(world, x, y, z) && BlockFarmedDirt.isFertilized(metaDirt)) {
@@ -620,7 +623,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 			if(meta == BlockBLGenericCrop.MATURE_CROP) {
 				if(!this.hasReachedMaxHeight(world, x, y, z)) {
 					if(this.canGrowTo(world, x, y + 1, z)) {
-						world.setBlock(x, y + 1, z, this);
 						this.onGrow(world, x, y + 1, z);
 					}
 				}
@@ -697,14 +699,16 @@ public class BlockBLGenericCrop extends BlockCrops {
 	}
 
 	/**
-	 * Called when a crop has grown higher.
-	 * Coordinates are of the new block.
+	 * Called when {@link BlockBLGenericCrop#canGrowTo(World, int, int, int)} returned true and the crop is growing one block higher.
+	 * Sets a new crop block at the specified coordinates.
 	 * @param world
 	 * @param x
 	 * @param y
 	 * @param z
 	 */
-	protected void onGrow(World world, int x, int y, int z) { }
+	protected void onGrow(World world, int x, int y, int z) { 
+		world.setBlock(x, y, z, this);
+	}
 
 	/**
 	 * Returns whether this crop can grow into the block above.
