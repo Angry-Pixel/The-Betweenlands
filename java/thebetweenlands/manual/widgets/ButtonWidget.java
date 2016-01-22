@@ -34,9 +34,11 @@ public class ButtonWidget extends ManualWidgetsBase {
 
     public boolean isHidden;
 
-    public static int width = 100;
-    public static int height = 16;
+    public int width = 100;
+    public int height = 16;
     int currentItem;
+    boolean renderSomething = true;
+    boolean doMathWithIndexPages = true;
 
     public ButtonWidget(int xStart, int yStart, Page page) {
         super(xStart, yStart);
@@ -55,6 +57,15 @@ public class ButtonWidget extends ManualWidgetsBase {
         this.init();
     }
 
+    public ButtonWidget(int xStart, int yStart, int width, int height, int pageNumber, boolean doMathWithIndexPages) {
+        super(xStart, yStart);
+        this.width = width;
+        this.height = height;
+        this.pageNumber = pageNumber;
+        renderSomething = false;
+        this.doMathWithIndexPages = doMathWithIndexPages;
+    }
+
     @Override
     public void init(GuiManualBase manual) {
         super.init(manual);
@@ -66,8 +77,10 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(84, 22, page.pageName);
-        this.init();
+        if (renderSomething) {
+            this.textContainer = new TextContainer(84, 22, page.pageName);
+            this.init();
+        }
     }
 
     public void init() {
@@ -91,26 +104,28 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        if (items.size() > 0)
-            renderItem(xStart, yStart, items.get(currentItem), false, false);
-        else if (aspect != null) {
-            AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
-            if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {
-                List<String> tooltipData = new ArrayList<>();
-                tooltipData.add(aspect.getName());
-                tooltipData.add(EnumChatFormatting.GRAY + aspect.getType());
-                renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
+        if (renderSomething) {
+            if (items.size() > 0)
+                renderItem(xStart, yStart, items.get(currentItem), false, false);
+            else if (aspect != null) {
+                AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
+                if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {
+                    List<String> tooltipData = new ArrayList<>();
+                    tooltipData.add(aspect.getName());
+                    tooltipData.add(EnumChatFormatting.GRAY + aspect.getType());
+                    renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
+                }
+            } else if (resourceLocation != null) {
+                Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
+                manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
             }
-        } else if (resourceLocation != null) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
-            manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
-        }
-        if (isHidden) {
-            color = 0x666666;
-        }
+            if (isHidden) {
+                color = 0x666666;
+            }
 
-        TextPage page = this.textContainer.getPages().get(0);
-        page.render(this.xStart + 18, this.yStart + 4);
+            TextPage page = this.textContainer.getPages().get(0);
+            page.render(this.xStart + 18, this.yStart + 4);
+        }
     }
 
     @Override
@@ -123,7 +138,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             drawForeGround();
             manual.untilUpdate = 0;
         } else if (mouseButton == 0 && x >= xStart && x <= xStart + width && y >= yStart && y <= yStart + height && !isHidden) {
-            manual.changeTo(pageNumber);
+            manual.changeTo(pageNumber, doMathWithIndexPages);
         }
     }
 
@@ -143,7 +158,9 @@ public class ButtonWidget extends ManualWidgetsBase {
     @Override
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(84, 22, page.pageName);
-        this.init();
+        if (renderSomething) {
+            this.textContainer = new TextContainer(84, 22, page.pageName);
+            this.init();
+        }
     }
 }

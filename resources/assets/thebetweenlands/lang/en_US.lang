@@ -947,6 +947,9 @@ manual.wight.description=vil spirits who look sad on the outside, but then lash 
 manual.aspect.found.in=This aspect is found in:
 manual.aspect.used.in=This aspect is used in:
 manual.has.aspects=This item has the following aspects:
+manual.aspectInfo.title=Aspect Info
+manual.ingredientInfo.title=Ingredient Info
+
 
 manual.azuwynn.title=Azuwynn - Muscle
 manual.azuwynn.description=The aspect that has effect on the muscles.<nl> Tier I aspect.

@@ -33,27 +33,27 @@ public class GuiManualHerblore extends GuiManualBase {
     public void drawScreen(int mouseX, int mouseY, float renderPartials) {
         mc.renderEngine.bindTexture(book);
 
-        drawTexture(xStart, yStart, WIDTH, HEIGHT, 512.0D, 512.0D, 0.0D, 292.0D, 0.0D, 180.0D);
+        drawTexture(xStart, yStart, WIDTH, HEIGHT, 1024.0D, 1024.0D, 0.0D, 292.0D, 0.0D, 180.0D);
         if (currentCategory != null) {
             if (currentCategory.currentPage - 2 >= 1) {
                 if (mouseX >= xStart + 15 && mouseX <= xStart + 15 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8)
-                    drawTexture(xStart + 15, yStart + 160, 19, 8, 512.0D, 512.0D, 292.0D, 311.0D, 9.0D, 18.0D);
+                    drawTexture(xStart + 15, yStart + 160, 19, 8, 1024.0D, 1024.0D, 292.0D, 311.0D, 9.0D, 18.0D);
                 else
-                    drawTexture(xStart + 15, yStart + 160, 19, 8, 512.0D, 512.0D, 292.0D, 311.0D, 0.0D, 9.0D);
+                    drawTexture(xStart + 15, yStart + 160, 19, 8, 1024.0D, 1024.0D, 292.0D, 311.0D, 0.0D, 9.0D);
             }
             if (currentCategory.currentPage + 2 <= currentCategory.visiblePages.size()) {
                 if (mouseX >= xStart + 256 && mouseX <= xStart + 256 + 19 && mouseY >= yStart + 160 && mouseY <= yStart + 160 + 8)
-                    drawTexture(xStart + 256, yStart + 160, 19, 8, 512.0D, 512.0D, 311.0D, 330.0D, 9.0D, 18.0D);
+                    drawTexture(xStart + 256, yStart + 160, 19, 8, 1024.0D, 1024.0D, 311.0D, 330.0D, 9.0D, 18.0D);
                 else
-                    drawTexture(xStart + 256, yStart + 160, 19, 8, 512.0D, 512.0D, 311.0D, 330.0D, 0.0D, 9.0D);
+                    drawTexture(xStart + 256, yStart + 160, 19, 8, 1024.0D, 1024.0D, 311.0D, 330.0D, 0.0D, 9.0D);
             }
-            drawTexture(xStart, yStart + 10, 14, 22 * currentCategory.number, 512.0D, 512.0D, 293.0D, 306.0D, 18.0D, 18.0D + 22.0D * currentCategory.number);
-            drawTexture(xStart + 279, yStart + 10 + 22 * currentCategory.number, 14, 44 - 22 * currentCategory.number, 512.0D, 512.0D, 306.0D, 293.0D, 18.0D + 22.0D * currentCategory.number, 62.0D);
+            drawTexture(xStart, yStart + 10, 14, 22 * currentCategory.number, 1024.0D, 1024.0D, 293.0D, 306.0D, 18.0D, 18.0D + 22.0D * currentCategory.number);
+            drawTexture(xStart + 279, yStart + 10 + 22 * currentCategory.number, 14, 44 - 22 * currentCategory.number, 1024.0D, 1024.0D, 306.0D, 293.0D, 18.0D + 22.0D * currentCategory.number, 62.0D);
             if (currentCategory.number == 2)
-                drawTexture(xStart, yStart + 33, 14, 20, 512.0D, 512.0D, 312.0D, 325.0D, 42.0D, 62.0D);
+                drawTexture(xStart, yStart + 33, 14, 20, 1024.0D, 1024.0D, 312.0D, 325.0D, 42.0D, 62.0D);
             else
-                drawTexture(xStart + 278, yStart + 33, 14, 20, 512.0D, 512.0D, 315.0D, 329.0D, 42.0D, 62.0D);
-            drawTexture(xStart, yStart + 11, 14, 20, 512.0D, 512.0D, 312.0D, 325.0D, 20.0D, 39.0D);
+                drawTexture(xStart + 278, yStart + 33, 14, 20, 1024.0D, 1024.0D, 315.0D, 329.0D, 42.0D, 62.0D);
+            drawTexture(xStart, yStart + 11, 14, 20, 1024.0D, 1024.0D, 312.0D, 325.0D, 20.0D, 39.0D);
             currentCategory.draw(mouseX, mouseY);
         }
     }
