@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * Created by Bart on 8-8-2015.
  */
+@SideOnly(Side.CLIENT)
 public class ManualWidgetsBase {
     public static class PageLink {
         public int x;
@@ -73,17 +74,17 @@ public class ManualWidgetsBase {
     public static String processTimeSecondsString = StatCollector.translateToLocal("manual.widget.process.time.seconds");
     public static String burnTimeString = StatCollector.translateToLocal("manual.widget.burn.time");
 
-
+    @SideOnly(Side.CLIENT)
     public ManualWidgetsBase(int xStart, int yStart) {
         this.unchangedXStart = xStart;
         this.unchangedYStart = yStart;
     }
-
+    @SideOnly(Side.CLIENT)
     public void init(GuiManualBase manual) {
         this.manual = manual;
         resize();
     }
-
+    @SideOnly(Side.CLIENT)
     public void setPageToRight() {
         this.isPageRight = true;
     }
@@ -98,6 +99,7 @@ public class ManualWidgetsBase {
      * @param color2      the color of the outlining
      * @return some kind of number?
      */
+    @SideOnly(Side.CLIENT)
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
@@ -160,6 +162,7 @@ public class ManualWidgetsBase {
      * @param par5
      * @param par6
      */
+    @SideOnly(Side.CLIENT)
     public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {
         float var7 = (par5 >> 24 & 255) / 255F;
         float var8 = (par5 >> 16 & 255) / 255F;
@@ -213,6 +216,7 @@ public class ManualWidgetsBase {
      *
      * @param xStart the new x start
      */
+    @SideOnly(Side.CLIENT)
     public void changeXStart(int xStart) {
         this.unchangedXStart = xStart;
         //this.xStart = manual.xStart + unchangedXStart;
@@ -223,6 +227,7 @@ public class ManualWidgetsBase {
      *
      * @param yStart the new y start
      */
+    @SideOnly(Side.CLIENT)
     public void changeYStart(int yStart) {
         this.unchangedYStart = yStart;
         //this.yStart = manual.yStart + unchangedYStart;
@@ -232,6 +237,7 @@ public class ManualWidgetsBase {
     public void drawForeGround() {
     }
 
+    @SideOnly(Side.CLIENT)
     public void keyTyped(char c, int key) {
     }
 
@@ -241,6 +247,7 @@ public class ManualWidgetsBase {
             resize();
     }
 
+    @SideOnly(Side.CLIENT)
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 0)
             for (PageLink link : pageLinks) {
@@ -307,6 +314,7 @@ public class ManualWidgetsBase {
      * @param stack    the item stack the tooltip is for
      * @param toolTips the tooltip lines
      */
+    @SideOnly(Side.CLIENT)
     public void addSpecialItemTooltip(int xPos, int yPos, ItemStack stack, ArrayList<String> toolTips) {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {

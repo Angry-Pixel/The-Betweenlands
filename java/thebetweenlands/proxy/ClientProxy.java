@@ -479,16 +479,16 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void postInit() {
-		// Init manual
-		GuideBookEntryRegistry.init();
-		HLEntryRegistry.init();
-
 		//Font
 		pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/fontAtlas.png"), Minecraft.getMinecraft().renderEngine, false);
 		if (Minecraft.getMinecraft().gameSettings.language != null) {
 			pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
 		}
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
+
+		// Init manual
+		GuideBookEntryRegistry.init();
+		HLEntryRegistry.init();
 	}
 
 	@Override

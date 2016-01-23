@@ -7,6 +7,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
 import thebetweenlands.manual.widgets.text.TextContainer.TextFormat.EnumPushOrder;
 
@@ -357,18 +358,11 @@ public class TextContainer {
 	private boolean[] spaceIndices;
 	private int nextLine = 0;
 
-	public TextContainer(int width, int height, String unparsedText) {
+	public TextContainer(int width, int height, String unparsedText, boolean useCustomFont) {
 		this.width = width;
 		this.height = height;
 		this.unparsedText = unparsedText;
-		fontRenderer = Minecraft.getMinecraft().fontRenderer;
-	}
-
-	public TextContainer(int width, int height, String unparsedText, FontRenderer fontRenderer) {
-		this.width = width;
-		this.height = height;
-		this.unparsedText = unparsedText;
-		this.fontRenderer = fontRenderer;
+		this.fontRenderer = useCustomFont?TheBetweenlands.proxy.getCustomFontRenderer():Minecraft.getMinecraft().fontRenderer;
 	}
 
 	/**

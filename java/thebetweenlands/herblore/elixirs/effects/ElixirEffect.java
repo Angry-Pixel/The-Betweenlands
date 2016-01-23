@@ -77,7 +77,7 @@ public class ElixirEffect {
 				tessellator.draw();
 			}
 			if(this.nameContainer == null) {
-				this.nameContainer = new TextContainer(88, 100, this.elixirName);
+				this.nameContainer = new TextContainer(88, 100, this.elixirName, false);
 				int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.elixirName);
 				float scale = 1.0F;
 				if(width > 88) {

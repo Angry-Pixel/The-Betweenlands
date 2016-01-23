@@ -48,7 +48,7 @@ public class PageCreators {
             ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
             for (Page page : pagesTemp) {
                 widgets.add(new ButtonWidget(15, 10 + height, page));
-                height += 22;
+                height += 20;
             }
             newPages.add(new Page("index" + times, (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType));
             widgets.clear();
@@ -154,7 +154,7 @@ public class PageCreators {
     public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String text = StatCollector.translateToLocal(unlocalizedName);
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text, false));
 
         for (int i = 0; i < textContainer.getPages().size(); i++) {
             newPages.add(new Page(pageName, isHidden, manualType, new TextWidget(x, y, unlocalizedName, i)));
@@ -259,15 +259,15 @@ public class PageCreators {
      * @param manualType the type of manual they are in
      * @return an array for the entry
      */
-    public static ArrayList<Page> AspectPages(IAspectType aspect, Item manualType) {
+    public static ArrayList<Page> AspectPages(IAspectType aspect, Item manualType, boolean useCustomFont) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new AspectWidget(18, 12, aspect, 1f));
-        widgets.add(new TextWidget(38, 16, "manual." + aspect.getName().toLowerCase() + ".title"));
-        height += 22;
+        widgets.add(new TextWidget(38, 14, "manual." + aspect.getName().toLowerCase() + ".title", useCustomFont, false));
+        height += 24;
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description")));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"), false));
 
         height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 18;
 
@@ -277,7 +277,7 @@ public class PageCreators {
             widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
             height += 18;
         } else {
-            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
+            newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect).setLocalizedPageName(aspect.getName()));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 16;
             widgets.add(new AspectItemSlideShowWidget(18, 12 + height, aspect));
@@ -296,9 +296,9 @@ public class PageCreators {
             height += 18;
         } else {
             if (newPages.size() > 0)
-                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect).setLocalizedPageName(aspect.getName()));
             else
-                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect).setLocalizedPageName(aspect.getName()));
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
             height += 10;
             ArrayList<ItemStack> items = new ArrayList<>();
@@ -312,9 +312,9 @@ public class PageCreators {
 
         if (widgets.size() > 0) {
             if (newPages.size() > 0)
-                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect).setLocalizedPageName(aspect.getName()));
             else
-                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect));
+                newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect).setLocalizedPageName(aspect.getName()));
         }
         return newPages;
     }
@@ -332,16 +332,39 @@ public class PageCreators {
         ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
-        widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), true));
+        widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), false, true));
         height += 22;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description")));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"), false));
 
         height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
         height += 18;
         widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
-        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().setItem(itemStack));
+        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().setItem(itemStack).setLocalizedPageName(itemStack.getDisplayName()));
+        return newPages;
+    }
+
+    public static ArrayList<Page> elixirPages(ItemStack item, Item manualType){
+        ArrayList<Page> newPages = new ArrayList<>();
+        int height = 0;
+        ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
+        widgets.add(new ItemWidget(18, 12, item, 1f));
+        widgets.add(new TextWidget(38, 14, item.getDisplayName(), true, true));
+        height += 32;
+        TextContainer textContainer = new TextContainer(116, 40, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", false);
+        textContainer = parseTextContainer(textContainer);
+        if (textContainer.getPages().size() > 1) {
+            widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 0, 116, 40));
+            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
+            widgets.clear();
+            widgets.add(new TextWidget(15, 10, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 116, 40));
+            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setLocalizedPageName(item.getDisplayName()).setItem(item));
+        } else {
+            widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description"));
+            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
+        }
+
         return newPages;
     }
 
@@ -349,7 +372,8 @@ public class PageCreators {
      * Parses the text container. Used to get the right width and height of the container
      *
      * @param textContainer a unparsed text container
-     * @return a parsed text container
+     * @return a pars
+     * ed text container
      */
     private static TextContainer parseTextContainer(TextContainer textContainer) {
         textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080).setCurrentFormat("");

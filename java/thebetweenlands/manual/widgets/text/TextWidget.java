@@ -2,6 +2,8 @@ package thebetweenlands.manual.widgets.text;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
@@ -12,16 +14,22 @@ import thebetweenlands.manual.widgets.text.TextFormatComponents.*;
 /**
  * Created by Bart on 12-8-2015.
  */
+@SideOnly(Side.CLIENT)
 public class TextWidget extends ManualWidgetsBase {
     private TextContainer textContainer;
     private String text;
     private float scale = 1.0f;
-
+    private int width;
+    private int height;
     private int pageNumber = 0;
+    private boolean useCustomFont = false;
 
+    @SideOnly(Side.CLIENT)
     public TextWidget(int xStart, int yStart, String unlocalizedText) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
+        width = 130 - xStart;
+        height = 144;
+        this.textContainer = new TextContainer(width, height, StatCollector.translateToLocal(unlocalizedText), false);
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -29,9 +37,12 @@ public class TextWidget extends ManualWidgetsBase {
         this.init();
     }
 
+    @SideOnly(Side.CLIENT)
     public TextWidget(int xStart, int yStart, String unlocalizedText, int pageNumber) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
+        width = 130 - xStart;
+        height = 144;
+        this.textContainer = new TextContainer(width, height, StatCollector.translateToLocal(unlocalizedText), false);
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -40,9 +51,25 @@ public class TextWidget extends ManualWidgetsBase {
         this.pageNumber = pageNumber;
     }
 
+    public TextWidget(int xStart, int yStart, String unlocalizedText, int pageNumber, int width, int height) {
+        super(xStart, yStart);
+        this.width = width;
+        this.height = height;
+        this.textContainer = new TextContainer(width, height, StatCollector.translateToLocal(unlocalizedText), false);
+        this.text = StatCollector.translateToLocal(unlocalizedText);
+        if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
+            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        }
+        this.init();
+        this.pageNumber = pageNumber;
+    }
+
+    @SideOnly(Side.CLIENT)
     public TextWidget(int xStart, int yStart, String unlocalizedText, float scale) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(130 - xStart, 150, StatCollector.translateToLocal(unlocalizedText));
+        width = 130 - xStart;
+        height = 144;
+        this.textContainer = new TextContainer(width, height, StatCollector.translateToLocal(unlocalizedText), false);
         this.text = StatCollector.translateToLocal(unlocalizedText);
         if (!StatCollector.canTranslate(unlocalizedText) || text.equals("")) {
             TheBetweenlands.unlocalizedNames.add(unlocalizedText);
@@ -51,20 +78,29 @@ public class TextWidget extends ManualWidgetsBase {
         this.init();
     }
 
-    public TextWidget(int xStart, int yStart, String text, boolean localized) {
+    @SideOnly(Side.CLIENT)
+    public TextWidget(int xStart, int yStart, String text, boolean useCustomFont, boolean isLocalized) {
         super(xStart, yStart);
-        this.textContainer = new TextContainer(130 - xStart, 150, localized ? text : StatCollector.translateToLocal(text));
-        this.text = localized ? text : StatCollector.translateToLocal(text);
+        this.text = isLocalized ? text : StatCollector.translateToLocal(text);
+        width = 130 - xStart;
+        height = 144;
+        this.textContainer = new TextContainer(width, height, text, useCustomFont);
+        if (!isLocalized && (!StatCollector.canTranslate(text) || text.equals(""))) {
+            TheBetweenlands.unlocalizedNames.add(text);
+        }
+        this.useCustomFont = useCustomFont;
         this.init();
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
+        this.textContainer = new TextContainer(width, height, text, useCustomFont);
         this.init();
     }
 
+    @SideOnly(Side.CLIENT)
     public void init() {
         this.textContainer.setCurrentScale(scale).setCurrentColor(0x808080).setCurrentFormat("");
         this.textContainer.registerFormat(new TextFormatNewLine());
@@ -96,9 +132,10 @@ public class TextWidget extends ManualWidgetsBase {
 
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(130 - unchangedXStart, 144, text);
+        this.textContainer = new TextContainer(width, height, text, useCustomFont);
         this.init();
     }
 }

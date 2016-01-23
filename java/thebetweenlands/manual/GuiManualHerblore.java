@@ -70,7 +70,7 @@ public class GuiManualHerblore extends GuiManualBase {
             if (mouseX >= xStart + (currentCategory.number >= 1 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 1 ? 0 : 279) + 14 && mouseY >= yStart + 11 && mouseY <= yStart + 10 + 20 && button == 0)
                 changeCategory(HLEntryRegistry.aspectCategory);
             if (mouseX >= xStart + (currentCategory.number >= 2 ? 0 : 279) && mouseX <= xStart + (currentCategory.number >= 2 ? 0 : 279) + 14 && mouseY >= yStart + 33 && mouseY <= yStart + 32 + 20 && button == 0)
-                changeCategory(HLEntryRegistry.category2);
+                changeCategory(HLEntryRegistry.elixirCategory);
             currentCategory.mouseClicked(mouseX, mouseY, button);
         }
     }

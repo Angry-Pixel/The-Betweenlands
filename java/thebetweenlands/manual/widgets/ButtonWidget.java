@@ -51,7 +51,7 @@ public class ButtonWidget extends ManualWidgetsBase {
         } else if (page.resourceLocation != null) {
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
         }
-        this.textContainer = new TextContainer(84, 22, page.pageName);
+        this.textContainer = new TextContainer(84, 22, page.pageName, false);
 
         this.isHidden = page.isHidden;
         this.init();
@@ -78,7 +78,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     public void setPageToRight() {
         super.setPageToRight();
         if (renderSomething) {
-            this.textContainer = new TextContainer(84, 22, page.pageName);
+            this.textContainer = new TextContainer(84, 22, page.pageName, false);
             this.init();
         }
     }
@@ -124,7 +124,7 @@ public class ButtonWidget extends ManualWidgetsBase {
             }
 
             TextPage page = this.textContainer.getPages().get(0);
-            page.render(this.xStart + 18, this.yStart + 4);
+            page.render(this.xStart + 18, this.yStart + 2);
         }
     }
 
@@ -159,7 +159,7 @@ public class ButtonWidget extends ManualWidgetsBase {
     public void resize() {
         super.resize();
         if (renderSomething) {
-            this.textContainer = new TextContainer(84, 22, page.pageName);
+            this.textContainer = new TextContainer(84, 22, page.pageName, false);
             this.init();
         }
     }
