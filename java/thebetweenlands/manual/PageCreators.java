@@ -345,20 +345,20 @@ public class PageCreators {
         return newPages;
     }
 
-    public static ArrayList<Page> elixirPages(ItemStack item, Item manualType){
+    public static ArrayList<Page> elixirPages(ItemStack item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
         ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, item, 1f));
         widgets.add(new TextWidget(38, 14, item.getDisplayName(), true, true));
         height += 32;
-        TextContainer textContainer = new TextContainer(116, 40, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", false);
+        TextContainer textContainer = new TextContainer(114, 130, StatCollector.translateToLocal("manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description"), false);
         textContainer = parseTextContainer(textContainer);
         if (textContainer.getPages().size() > 1) {
-            widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 0, 116, 40));
-            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
+            widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 0, 114, 130));
+            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
             widgets.clear();
-            widgets.add(new TextWidget(15, 10, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 116, 40));
+            widgets.add(new TextWidget(15, 10, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 114, 130));
             newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setLocalizedPageName(item.getDisplayName()).setItem(item));
         } else {
             widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description"));
