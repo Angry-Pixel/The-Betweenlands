@@ -13,10 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import thebetweenlands.manual.GuiManualBase;
-import thebetweenlands.manual.GuideBookEntryRegistry;
-import thebetweenlands.manual.ManualCategory;
-import thebetweenlands.manual.Page;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.manual.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +37,28 @@ public class ManualWidgetsBase {
             this.y = y;
             this.width = width;
             this.height = height;
-            for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
-                if (page.pageItems != null) {
-                    for (ItemStack stack : page.pageItems) {
-                        if (stack != null && item != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
-                            pageNumber = page.pageNumber;
-                            category = page.parentCategory;
+            if (item != null) {
+                if (!(item.getItem() == BLItemRegistry.elixir)) {
+                    for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
+                        if (page.pageItems != null) {
+                            for (ItemStack stack : page.pageItems) {
+                                if (stack != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
+                                    pageNumber = page.pageNumber;
+                                    category = page.parentCategory;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (Page page : HLEntryRegistry.elixirCategory.visiblePages) {
+                        if (page.pageItems != null) {
+                            for (ItemStack stack : page.pageItems) {
+
+                                if (stack != null && stack.getItem() == item.getItem() && (stack.getItemDamage() == item.getItemDamage() || stack.getItemDamage() == item.getItemDamage() - 1)) {
+                                    pageNumber = page.pageNumber;
+                                    category = page.parentCategory;
+                                }
+                            }
                         }
                     }
                 }
@@ -79,11 +93,13 @@ public class ManualWidgetsBase {
         this.unchangedXStart = xStart;
         this.unchangedYStart = yStart;
     }
+
     @SideOnly(Side.CLIENT)
     public void init(GuiManualBase manual) {
         this.manual = manual;
         resize();
     }
+
     @SideOnly(Side.CLIENT)
     public void setPageToRight() {
         this.isPageRight = true;

@@ -50,7 +50,7 @@ public class HLEntryRegistry {
         itemPages.clear();
         ArrayList<Page> temp = new ArrayList<>();
         ArrayList<Page> entryPages = new ArrayList<>();
-        aspectPages.add(new Page("aspectInfo", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
+        aspectPages.add(new Page("aspctInfo", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
         for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
             aspectPages.addAll(PageCreators.AspectPages(aspect, manualType, true));
         }
@@ -117,7 +117,7 @@ public class HLEntryRegistry {
     public static void initElixirEntries() {
         elixirPages.clear();
         for (ElixirEffect effect: ElixirEffectRegistry.getEffects()){
-            elixirPages.addAll(PageCreators.elixirPages(BLItemRegistry.elixir.getElixirItem(effect, 1, 1, 1), manualType));
+            elixirPages.addAll(PageCreators.elixirPages(BLItemRegistry.elixir.getElixirItem(effect, 1, 1, 0), manualType));
         }
 
         ArrayList<Page> temp = new ArrayList<>();
