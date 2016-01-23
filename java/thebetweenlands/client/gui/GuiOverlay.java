@@ -26,7 +26,7 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
 	public static final GuiOverlay INSTANCE = new GuiOverlay();
-	
+
 	private ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
 	private Minecraft mc = Minecraft.getMinecraft();
 	private Random random = new Random();
@@ -49,6 +49,39 @@ public class GuiOverlay extends Gui {
 		/*for(Entity e : (List<Entity>)Minecraft.getMinecraft().theWorld.loadedEntityList) {
 			Projection p = GLUProjection.getInstance().project(e.posX - Minecraft.getMinecraft().thePlayer.posX, e.posY - Minecraft.getMinecraft().thePlayer.posY, e.posZ - Minecraft.getMinecraft().thePlayer.posZ, ClampMode.NONE, false);
 			if(p.isType(Type.INSIDE)) Gui.drawRect((int)p.getX(), (int)p.getY(), (int)p.getX() + 5, (int)p.getY() + 5, 0xFFFF0000);
+		}*/
+
+		/*try {
+			String str1 = "This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not  ";
+			String str2 = "This might be a <tooltip:hehe haha hoho><color:0x800000> long </color> </tooltip> text but it also might not  ";
+			String str3 = "<a>no<b>word<c>wrap</a>this</b>time</c>";
+			String str4 = "This might be a <tooltip:hehe haha hoho><color:0x800000> long </color> </tooltip> text <a>but<b>it</b>also</a>might not  ";
+			String str5 = "This is <scale:0.5>scaled</scale> but not anymore now. Now it's <color:0xFF0000>colored!</color> and this is <underline>underlined</underline>. <nl> Now it's <underline>underlined and <color:0x00FF00>colored and <bold>bold at the same time and even <scale:2>scaled! </scale>and it still </bold>works properly </color> like</underline> expected. This is a new page by the way. And this is a <tooltip:Hi!>tooltip. <scale:0.75>Yay!</scale></tooltip> <font:custom>Custom fonts also work btw</font>.";
+			TextContainer container = new TextContainer(100, 100, str5, Minecraft.getMinecraft().fontRenderer);
+
+			container.setCurrentScale(1.0F).setCurrentColor(0x808080);
+			container.registerTag(new TagNewLine());
+			container.registerTag(new TagScale(1.0F));
+			container.registerTag(new TagColor(0x808080));
+			container.registerTag(new TagTooltip("N/A"));
+			container.registerTag(new TagSimple("bold", EnumChatFormatting.BOLD));
+			container.registerTag(new TagSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+			container.registerTag(new TagSimple("italic", EnumChatFormatting.ITALIC));
+			container.registerTag(new TagSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+			container.registerTag(new TagSimple("underline", EnumChatFormatting.UNDERLINE));
+			container.registerTag(new TagPagelink());
+			container.registerTag(new TagRainbow());
+			container.registerTag(new TagFont());
+
+			container.parse();
+
+			int xOff = 0;
+			for(thebetweenlands.manual.widgets.text.TextContainer.TextPage page : container.getPages()) {
+				page.render(50 + (xOff += 100), 2);
+				page.renderBounds(50D + xOff, 2);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}*/
 
 		//Just some shader debugging stuff. Applies gaussian blur to the top half of the screen
