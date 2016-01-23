@@ -42,6 +42,8 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.event.render.FogHandler;
+import thebetweenlands.manual.widgets.text.rewrite.MCTextContainerFont;
+import thebetweenlands.manual.widgets.text.rewrite.TextContainerR;
 import thebetweenlands.network.packet.server.PacketTickspeed;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -133,6 +135,19 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			}
 			if(Keyboard.isKeyDown(Keyboard.KEY_H)) {
 				ShaderHelper.INSTANCE.scheduleShaderReload();
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_P)) {
+				try {
+					String str1 = "This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not  ";
+					String str2 = "This might be a <tooltip:hehe haha hoho><color:0x800000> long </color> </tooltip> text but it also might not  ";
+					String str3 = "<a>no<b>word<c>wrap</a>this</b>time</c>";
+					String str4 = "This might be a <tooltip:hehe haha hoho><color:0x800000> long </color> </tooltip> text <a>but<b>it</b>also</a>might not  ";
+					TextContainerR container = new TextContainerR(100, 100, str4, new MCTextContainerFont());
+
+					container.parse();
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_M)) {
