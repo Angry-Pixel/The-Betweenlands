@@ -948,7 +948,7 @@ public class DecorationHelper {
 		generateThorns(200);
 		generateCaveMoss(100);
 		generateCaveGrass(120);
-		generateCavePots(30);
+		generateCavePots(20);
 	}
 
 	public void generateCaveGrass(int attempts) {

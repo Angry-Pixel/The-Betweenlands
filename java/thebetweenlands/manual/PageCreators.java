@@ -358,7 +358,7 @@ public class PageCreators {
             widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 0, 114, 130));
             newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
             widgets.clear();
-            widgets.add(new TextWidget(15, 10, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 114, 130));
+            widgets.add(new TextWidget(15, 14, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 114, 130));
             newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setLocalizedPageName(item.getDisplayName()).setItem(item));
         } else {
             widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description"));
