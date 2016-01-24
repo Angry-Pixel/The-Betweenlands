@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
+import thebetweenlands.entities.mobs.EntityTempleGuardian;
 
 /**
  * BLTempleGuardian3 - TripleHeadedSheep
@@ -241,7 +242,8 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.waist_invisible.render(f5);
     }
 
@@ -255,12 +257,21 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
     }
 
     @Override
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+        EntityTempleGuardian guardian = (EntityTempleGuardian) entity;
+        float active = guardian.active.getAnimationProgressSinSqrt(1);
+        faceTarget(headconnection, 1, f3 * active, f4 * active);
+    }
+
+    @Override
     public void setLivingAnimations(EntityLivingBase entity, float f, float f1, float partialTicks) {
         super.setLivingAnimations(entity, f, f1, partialTicks);
         setToInitPose();
         EntityBerserkerGuardian guardian = (EntityBerserkerGuardian) entity;
         float active = guardian.active.getAnimationProgressSinSqrt(1);
         float inactive = (1-active);
+        float charging = guardian.chargeAnim.getAnimationProgressSinSqrt(1);
+        float notCharging = (1 - charging);
         float frame = guardian.ticksExisted + partialTicks;
         waist_invisible.rotationPointY += 6.2 * inactive;
         waist_invisible.rotationPointZ += 3 * inactive;
@@ -279,8 +290,8 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
 //        f1 = 0.7f;
 
         float globalSpeed = 1f;
-        float globalDegree = 1.2f * active;
-        float globalHeight = 1.7f * active;
+        float globalDegree = 1.2f * active * notCharging;
+        float globalHeight = 1.7f * active * notCharging;
 
         waist_invisible.rotationPointY += 1 * f1 * active;
         bob(waist_invisible, 1 * globalSpeed, 1f * globalHeight, false, f, f1);
@@ -304,5 +315,38 @@ public class ModelBerserkerGuardian extends MowzieModelBase {
         walk(shoulder_left, 0.5F * globalSpeed, 0.6F * globalDegree, false, 0F, -0.3F * f1 * active, f, f1);
         walk(armright_2, 0.5F * globalSpeed, 0.4F * globalDegree, true, -1F, -0.5F * f1 * active, f, f1);
         walk(armleft_2, 0.5F * globalSpeed, 0.4F * globalDegree, false, -1F, -0.5F * f1 * active, f, f1);
+
+        float chargingSpeed = 1f;
+        float chargingDegree = 1.2f * charging;
+        float chargingHeight = 1.7f * charging;
+
+        hammerhandle_left.rotationPointZ -= 6 * charging;
+        hammerhandle_right.rotationPointZ -= 6 * charging;
+        waist_invisible.rotationPointY += 1 * charging;
+        bob(waist_invisible, 1 * chargingSpeed, 1f * chargingHeight, false, frame,1);
+        swing(chest_invisible, 0.5f * chargingSpeed, 0.8f * chargingDegree, true, 0, 0, frame,1);
+        swing(headJoint, 0.5f * chargingSpeed, 0.7f * chargingDegree, false, 0, 0, frame,1);
+        walk(waist_invisible, 1 * chargingSpeed, 0.1f * chargingHeight, false, 0, 0.1f * charging, frame,1);
+        walk(headJoint, 1 * chargingSpeed, 0.1f * chargingHeight, true, 0, -0.2f * charging, frame,1);
+        walk(legleft_1, 1 * chargingSpeed, 0.1f * chargingHeight, true, 0, -0.2f * charging, frame,1);
+        walk(legright_1, 1 * chargingSpeed, 0.1f * chargingHeight, true, 0, -0.2f * charging, frame,1);
+
+        walk(armouredskirt_back, 1 * chargingSpeed, 0.3f * chargingHeight, false, -1, 0.5f * charging, frame,1);
+        flap(armouredskirt_left, 1 * chargingSpeed, 0.2f * chargingHeight, true, -1, -0.4f * charging, frame,1);
+        flap(armouredskirt_right, 1 * chargingSpeed, 0.2f * chargingHeight, false, -1, 0.4f * charging, frame,1);
+
+        walk(legright_1, 0.5F * chargingSpeed, 1F * chargingDegree, false, 0, 0.2f * charging, frame,1);
+        walk(legleft_1, 0.5F * chargingSpeed, 1F * chargingDegree, true, 0, 0.2f * charging, frame,1);
+        walk(legright_2, 0.5F * chargingSpeed, 0.8F * chargingDegree, false, -2.2F, 0.6F * charging, frame,1);
+        walk(legleft_2, 0.5F * chargingSpeed, 0.8F * chargingDegree, true, -2.2F, 0.6F * charging, frame,1);
+
+        walk(shoulder_right, 0.5F * chargingSpeed, 0.6F * chargingDegree, false, 0F, -0.5F * charging, frame,1);
+        walk(shoulder_left, 0.5F * chargingSpeed, 0.6F * chargingDegree, true, 0F, -0.5F * charging, frame,1);
+        walk(armright_2, 0.5F * chargingSpeed, 0.4F * chargingDegree, false, 0, -0.5F *1 * charging, frame,1);
+        walk(armleft_2, 0.5F * chargingSpeed, 0.4F * chargingDegree, true, 0, -0.5F *1 * charging, frame,1);
+        swing(shoulder_right, 0.5f * chargingSpeed, 0.3f * chargingDegree, true, 0, 0.6f * charging, frame, 1);
+        swing(shoulder_left, 0.5f * chargingSpeed, 0.3f * chargingDegree, true, 0, -0.6f * charging, frame, 1);
+        walk(hammerhandle_left, 0.5f * chargingSpeed, 0.2f * chargingDegree, true, 0, 0.2f * charging, frame, 1);
+        walk(hammerhandle_right, 0.5f * chargingSpeed, 0.2f * chargingDegree, false, 0, 0.2f * charging, frame, 1);
     }
 }

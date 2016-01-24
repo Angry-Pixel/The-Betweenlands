@@ -69,6 +69,7 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 			setActive(false);
 		}
 		if (getActive()) active.increaseTimer();
+		else if (this instanceof EntityBerserkerGuardian && ((EntityBerserkerGuardian)this).getCharging()) active.increaseTimer();
 		else active.decreaseTimer();
 		if (active.getTimer() == 0) {
 			getNavigator().clearPathEntity();
