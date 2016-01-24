@@ -1,16 +1,17 @@
 package thebetweenlands.entities.particles;
 
-import net.minecraft.world.World;
+import java.util.List;
 
 import javax.vecmath.Vector3d;
-import java.util.ArrayList;
+
+import net.minecraft.world.World;
 
 public class EntityAnimatorFX2 extends EntityPathParticle {
 	private int ticks = 0;
 
 	public EntityAnimatorFX2(World world, double x, double y, double z,
 			double motionX, double motionY, double motionZ,
-			ArrayList<Vector3d> targetPoints) {
+			List<Vector3d> targetPoints) {
 		super(world, x, y, z, motionX, motionY, motionZ, targetPoints);
 
 		this.particleScale = world.rand.nextFloat() / 2.0F;

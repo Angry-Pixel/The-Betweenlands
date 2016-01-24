@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
@@ -14,7 +12,6 @@ import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
-import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.armor.ItemArmorOfLegends;
 import thebetweenlands.items.armor.ItemBoneArmor;
@@ -25,10 +22,11 @@ import thebetweenlands.items.armor.ItemSkullMask;
 import thebetweenlands.items.armor.ItemSyrmoriteArmor;
 import thebetweenlands.items.armor.ItemValoniteArmor;
 import thebetweenlands.items.block.ItemBLDoor;
-import thebetweenlands.items.block.ItemBLHangingEntity;
 import thebetweenlands.items.bow.EnumArrowType;
 import thebetweenlands.items.bow.ItemBLArrow;
 import thebetweenlands.items.bow.ItemWeedwoodBow;
+import thebetweenlands.items.crops.ItemAspectrusCropSeed;
+import thebetweenlands.items.crops.ItemBLGenericSeed;
 import thebetweenlands.items.food.ItemBLFood;
 import thebetweenlands.items.food.ItemBlackHatMushroom;
 import thebetweenlands.items.food.ItemBulbCappedMushroom;
@@ -51,8 +49,8 @@ import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.ItemBLGenericSeed;
 import thebetweenlands.items.misc.ItemBLRecord;
+import thebetweenlands.items.misc.ItemBLSign;
 import thebetweenlands.items.misc.ItemCavingRope;
 import thebetweenlands.items.misc.ItemGem;
 import thebetweenlands.items.misc.ItemGeneric;
@@ -61,6 +59,7 @@ import thebetweenlands.items.misc.ItemHLBook;
 import thebetweenlands.items.misc.ItemLifeCrystal;
 import thebetweenlands.items.misc.ItemManual;
 import thebetweenlands.items.misc.ItemMob;
+import thebetweenlands.items.misc.ItemMossBed;
 import thebetweenlands.items.misc.ItemRope;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
@@ -83,6 +82,8 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterial;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -192,6 +193,7 @@ public class BLItemRegistry {
 	public static final Item rottenFood = new ItemRottenFood().setAlwaysEdible().setUnlocalizedName("thebetweenlands.rottenFood").setTextureName("thebetweenlands:rottenFood");
 	public static final Item middleFruitSeeds = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.middleFruitBush, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.middleFruitSeeds").setTextureName("thebetweenlands:middleFruitSeeds");
 	public static final Item spores = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.fungusCrop, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.spores").setTextureName("thebetweenlands:spores");
+	public static final Item aspectrusCropSeed = new ItemAspectrusCropSeed(0, 0F).setUnlocalizedName("thebetweenlands.aspectrusSeeds").setTextureName("thebetweenlands:aspectrusSeeds");
 
 	public static final Item anglerMeatRaw = new ItemBLFood(4, 0.4F, false).setUnlocalizedName("thebetweenlands.anglerMeatRaw").setTextureName("thebetweenlands:anglerFlesh");
 	public static final Item anglerMeatCooked = new ItemBLFood(8, 0.8F, false).setUnlocalizedName("thebetweenlands.anglerMeatCooked").setTextureName("thebetweenlands:cookedAnglerFlesh");
@@ -235,7 +237,7 @@ public class BLItemRegistry {
 	public static final Item angryPebble = new ItemAngryPebble();
 	public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(1);
 	public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
-	public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);
+	//public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(ModCreativeTabs.blocks);
 	public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(ModCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
 	public static final Item pestle = new ItemPestle().setUnlocalizedName("thebetweenlands.pestle");
 	public static final Item weedwoodBucketInfusion = new ItemWeedwoodBucketInfusion();
@@ -248,6 +250,8 @@ public class BLItemRegistry {
 	public static final Item fireFly = new ItemMob("fireFly");
 	public static final Item gecko = new ItemMob("gecko");
 	public static final Item cavingRope = new ItemCavingRope().setUnlocalizedName("thebetweenlands.cavingRope").setTextureName("thebetweenlands:cavingRope");
+	public static final Item weedwoodSign = new ItemBLSign(BLBlockRegistry.weedwoodWallSign, BLBlockRegistry.weedwoodSignStanding, "weedwood");
+	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBedItem");
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();

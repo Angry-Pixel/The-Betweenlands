@@ -18,6 +18,7 @@ tile.thebetweenlands.druidAltar.name=Dark Druid Altar
 tile.thebetweenlands.silt.name=Silt
 tile.thebetweenlands.mud.name=Mud
 tile.thebetweenlands.swampWater.name=Swamp Water
+tile.thebetweenlands.stagnantWater.name=Stagnant Water
 tile.thebetweenlands.sulfurTorch.name=Sulfur Torch
 tile.thebetweenlands.aquaMiddleGemOre.name=Aqua Middle Gem Ore
 tile.thebetweenlands.crimsonMiddleGemOre.name=Crimson Middle Gem Ore
@@ -26,6 +27,7 @@ tile.thebetweenlands.syrmoriteOre.name=Syrmorite Ore
 tile.thebetweenlands.octineOre.name=Octine Ore
 tile.thebetweenlands.sulfurOre.name=Sulfur Ore
 tile.thebetweenlands.valoniteOre.name=Valonite Ore
+tile.thebetweenlands.boneOre.name=Slimy Bone Ore
 tile.thebetweenlands.lifeCrystalOre.name=Life Crystal Ore
 tile.thebetweenlands.peat.name=Peat
 tile.thebetweenlands.wisp.name=Will o' the wisp
@@ -72,6 +74,9 @@ tile.thebetweenlands.infuser.name=Infuser
 tile.thebetweenlands.hollowLog.name=Hollow Log
 tile.thebetweenlands.itemShelf.name=Item Shelf
 tile.thebetweenlands.geckoCage.name=Gecko Cage
+tile.thebetweenlands.blSpawner.name=Monster Spawner
+tile.thebetweenlands.lifeCrystalBlock.name=Life Crystal Block
+tile.thebetweenlands.repeller.name=Repeller
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
@@ -85,6 +90,7 @@ tile.thebetweenlands.farmedDirt_8.name=Decayed Composted Swamp Grass
 
 tile.thebetweenlands.middleFruitBush.name=Purple Pear Bush
 tile.thebetweenlands.fungusCrop.name=Yellow Dotted Fungus
+tile.thebetweenlands.aspectrusCrop.name=Aspectrus Plant
 
 tile.thebetweenlands.slimyGrass.name=Slimy Grass
 tile.thebetweenlands.slimyDirt.name=Slimy Dirt
@@ -275,7 +281,7 @@ tile.thebetweenlands.waterWeeds.name=Swamp Kelp
 tile.thebetweenlands.waterWeedsSmall.name=Water Weeds
 tile.thebetweenlands.sludgecreep.name=Sludgecreep
 tile.thebetweenlands.deadWeedwoodBush.name=Dead Weedwood Bush
-
+tile.thebetweelands.syrmoriteHopper.name=Syrmorite Hopper
 tile.thebetweenlands.hugeMushroomTop.name=Bulb-Capped Mushroom Top
 tile.thebetweenlands.hugeMushroomStalk.name=Bulb-Capped Mushroom Stalk
 
@@ -301,6 +307,21 @@ tile.thebetweenlands.dualFurnaceBL.name=Dual Sulfur Furnace
 
 tile.thebetweenlands.caveMoss.name=Cave Moss
 tile.thebetweenlands.caveGrass.name=Cave Grass
+
+#Mostly unused I think
+tile.thebetweenlands.treePortalBlock.name=Tree Portal
+tile.thebetweenlands.genericStone.name=Generic Stone
+tile.thebetweenlands.farmedDirt.name=Farmed Dirt
+tile.thebetweenlands.dentrothyst.name=Dentrothyst
+tile.thebetweenlands.portalBarkFrame.name=Portal Bart
+tile.thebetweenlands.wallPlants.name=Wall plant
+tile.thebetweenlands.furnaceBLLit.name=Betweenstone Furnace
+tile.thebetweenlands.dualFurnaceBLLit.name=Betweenstone dual Furnace
+tile.thebetweenlands.weedwoodSignStanding.name=Weedwood Sign
+tile.thebetweenlands.weedwoodSignWall.name=Weedwood Sign
+tile.thebetweenlands.mossBed.name=Moss Bed
+tile.thebetweenlands.rope.name=Rope
+item.thebetweenlands.swampTalisman.name=Swamp Talisman
 
 # Items
 item.thebetweenlands.testItem.name=Test Item
@@ -411,6 +432,7 @@ item.thebetweenlands.driedSwampReed.name=Dried Swamp Reed
 item.thebetweenlands.swampReedRope.name=Reed Rope
 item.thebetweenlands.lifeCrystal.name=Life Crystal
 item.thebetweenlands.middleFruitSeeds.name=Middle Fruit Seeds
+item.thebetweenlands.aspectrusSeeds.name=Aspectrus Seeds
 item.thebetweenlands.mireCoral.name=Mire Coral
 item.thebetweenlands.deepWaterCoral.name=Deep Water Coral
 item.thebetweenlands.moss.name=Moss
@@ -466,6 +488,8 @@ item.thebetweenlands.net.name=Net
 item.thebetweenlands.inanimateTarminion.name=Inanimate Tarminion
 item.thebetweenlands.cavingRope.name=Caving Rope
 item.thebetweenlands.poisonGland.name=Poison Gland
+item.thebetweenlands.aspectrusFruit.name=Aspectrus Fruit
+item.thebetweenlands.weedwoodSign.name=Weedwood Sign
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -473,6 +497,7 @@ item.thebetweenlands.ringOfPower.name=Ring Of Power
 item.thebetweenlands.swiftPickaxe.name=Swift Pickaxe
 item.thebetweenlands.wightsBane.name=Wight's Bane
 item.thebetweenlands.skullMask.name=Skull Mask
+item.thebetweenlands.legendarySword.name=Legendary Sword
 
 item.thebetweenlands.recordHagDance.name=Music Disc
 item.thebetweenlands.recordLonelyFire.name=Music Disc
@@ -614,6 +639,17 @@ item.thebetweenlands.elixir.dentrothystVial.dirty.name=Dirty Dentrothyst Vial
 item.thebetweenlands.aspectVial.green.name=Green Dentrothyst Aspect Vial
 item.thebetweenlands.aspectVial.orange.name=Orange Dentrothyst Aspect Vial
 
+#Mostly unused I think
+item.null.name=Null
+item.thebetweenlands.groundStuff.name=Ground Items
+item.thebetweenlands.plantDrop.name=Plant Drop
+item.thebetweenlands.door_weedwood.name=Weedwood Door
+item.thebetweenlands.door_syrmorite.name=Symorite Door
+item.thebetweenlands.mossBedItem.name=Moss Bed
+item.item.thebetweenlands.elixir.name=Elixir
+item.item.thebetweenlands.dentrothystVial.name=Dentrothyst Vial
+item.item.thebetweenlands.aspectVial.name=Aspect Vial
+
 # Elixirs
 bl.elixir.petrify=Petrify
 bl.elixir.strength=Elixir of Strength
@@ -708,6 +744,8 @@ circlegem.green=Green Gem
 circlegem.crimson=Crimson Gem
 circlegem.aqua=Aqua Gem
 octine.fire=Hot enough to set moss on fire
+power.ring.bonus=Grants a bonus to all stats
+aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 
 # Commands
 command.generic.noplayer=You must be a player
@@ -860,83 +898,72 @@ manual.animator.title=Animator
 manual.animator.description=<bold>1 - Life Crystal Slot</bold> <nl> You can the Life Crystals here for fuel.<nl> <nl> <bold>2 - Input/Output Slot</bold> <nl> This is where you place the item you want to animate. This is also where the result will appear.<nl> <nl> <bold>3 - Sulfer Slot</bold> <nl> This is where you place Sulfer for fuel.
 #manual entities
 manual.angler.title=Angler
-manual.angler.description=Needs localization
+manual.angler.description=Vicious flesh-eating fish that swim around in the waters
 manual.berserkerGuardian.title=Berserker Guardian
-manual.berserkerGuardian.description=Needs localization
+manual.berserkerGuardian.description=One of the three types of guardian
 manual.blindCaveFish.title=Blind Cave Fish
-manual.blindCaveFish.description=Needs localization
+manual.blindCaveFish.description=Small fish that swim in the waters of the caverns
 manual.bloodSnail.title=Blood Snail
-manual.bloodSnail.description=Needs localization
+manual.bloodSnail.description=Aggressive snails that could squirt poisonous blood at their enemies
 manual.darkDruid.title=Dark Druid
-manual.darkDruid.description=Needs localization
+manual.darkDruid.description=Insane Druids who chant around altars in Overworld swamps
 manual.dragonFly.title=Dragon Fly
-manual.dragonFly.description=Needs localization
+manual.dragonFly.description=Graceful insects that fly across the dark skies
 manual.firefly.title=Firefly
-manual.firefly.description=Needs localization
+manual.firefly.description=Glowing insects that fly around and give off light
 manual.gecko.title=Gecko
-manual.gecko.description=Needs localization
+manual.gecko.description=Small lizards that hide in bushes
 manual.giantToad.title=Giant Toad
-manual.giantToad.description=Needs localization
+manual.giantToad.description=Big slimy amphibians that can be tamed and ridden
 manual.leech.title=Leech
-manual.leech.description=Needs localization
+manual.leech.description=Second-rating worms that suck the blood of any living mob
 manual.lurker.title=Lurker
-manual.lurker.description=Needs localization
+manual.lurker.description=Large, strong reptilian creatures that attack when provoked
 manual.meleeGuardian.title=Melee Guardian
-manual.meleeGuardian.description=Needs localization
+manual.meleeGuardian.description=One of the three types of guardian
 manual.mireSnail.title=Mire Snail
-manual.mireSnail.description=Needs localization
+manual.mireSnail.description=Peaceful snails that could be farmed much easier than their ornery cousins
 manual.mireSnailEgg.title=Mire Snail Egg
-manual.mireSnailEgg.description=Needs localization
+manual.mireSnailEgg.description=The egg of Mire Snails
 manual.peatMummy.title=Peat Mummy
-manual.peatMummy.description=Needs localization
+manual.peatMummy.description=Undead skeletons that rise up from the muddy marshes to attack the player
 manual.siltCrab.title=Silt Crab
-manual.siltCrab.description=Needs localization
+manual.siltCrab.description=Watch your toes!
 manual.sludge.title=Sludge
-manual.sludge.description=Needs localization
+manual.sludge.description=Slime-like mobs that lie in wait for their prey in the marshes
 manual.sporeling.title=Sporeling
-manual.sporeling.description=Needs localization
+manual.sporeling.description=Skittish mushroom creatures that prefer to walk on shelf fungus
 manual.swampHag.title=Swamp Hag
-manual.swampHag.description=Needs localization
+manual.swampHag.description=Undead monsters that stalk the swamps
 manual.tarBeast.title=Tar Beast
-manual.tarBeast.description=Needs localization
+manual.tarBeast.description=Monsters made out of tar that live in tar pools
 manual.tarminion.title=Tarminion
-manual.tarminion.description=Needs localization
+manual.tarminion.description=Craftable little tar-based creatures that will attack hostile mobs
 manual.termite.title=Termite
-manual.termite.description=Needs localization
+manual.termite.description=Pesky insects that occasionally come out of Rotten Weedwood Logs
 manual.wight.title=Wight
-manual.wight.description=Needs localization
+manual.wight.description=vil spirits who look sad on the outside, but then lash out if taken too lightly
 
 manual.aspect.found.in=This aspect is found in:
 manual.aspect.used.in=This aspect is used in:
 manual.has.aspects=This item has the following aspects:
+manual.aspectInfo.title=Aspect Info
+manual.ingredientInfo.title=Ingredient Info
 
-manual.azuwynn.title=Azuwynn - Muscle
+
 manual.azuwynn.description=The aspect that has effect on the muscles.<nl> Tier I aspect.
-manual.armaniis.title=Armaniis - Desire
 manual.armaniis.description=The aspect that influences the desire of a being or a thought.<nl> Tier II aspect.
-manual.byariis.title=Byariis - Corruption
 manual.byariis.description=The aspect that changes the nature of anything to its opposite.<nl> Tier I special aspect.
-manual.byrginaz.title=Byrginaz - Water
 manual.byrginaz.description=The aspect that correlates to the element of water.<nl> Tier II aspect.
-manual.celawynn.title=Celawynn - Stomach
 manual.celawynn.description=The aspect that influences the digestive organs and immune system.<nl> Tier I aspect.
-manual.dayuniis.title=Dayuniis - Mind
 manual.dayuniis.description=The aspect that has effect on the mind and the border between reality and imagination.<nl> Tier II aspect.
-manual.fergalaz.title=Fergalaz - Earth
 manual.fergalaz.description=The aspect that correlates to the element of earth.<nl> Tier II aspect.
-manual.firnalaz.title=Firnalaz - Fire
 manual.firnalaz.description=The aspect that correlates to the element of fire.<nl> Tier II aspect.
-manual.freiwynn.title=Freiwynn - Vision:
 manual.freiwynn.description=The aspect that has effect on the perception of light.<nl> Tier II aspect.
-manual.geoliirgaz.title=Geoliirgaz - Void
 manual.geoliirgaz.description=he aspect that correlates to the formless element of void or ether.<nl> Tier III aspect.
-manual.ordaniis.title=Ordaniis - Enhance
 manual.ordaniis.description=The aspect that activates other aspects or enhances power in any form.<nl> Tier I aspect.
-manual.yeowynn.title=Yeowynn - Health
 manual.yeowynn.description=The aspect that influences physical health and recovery.<nl> Tier I aspect.
-manual.yunugaz.title=Yunugaz - Wind
 manual.yunugaz.description=The aspect that correlates to the element of wind.<nl> Tier II aspect.
-manual.yihinren.title=Yihinren - Form
 manual.yihinren.description=The aspect that affects both physical and psychological form.<nl> Tier III aspect.
 
 #ground items (not implemented yet)
@@ -992,58 +1019,45 @@ manual.groundvenusflytrap.description=Needs localization
 manual.groundgreenmiddlegem.description=Needs localization
 manual.groundcrimsonmiddlegem.description=Needs localization
 manual.groundaquamiddlegem.description=Needs localization
-manual.groundalgae.title=Ground Algea
-manual.groundarrowarum.title=Ground Arrow Arum
-manual.groundblackhatmushroom.title=Ground Black Hat Mushroom
-manual.groundbogbean.title=Ground Bog Bean
-manual.groundboneset.title=Ground Boneset
-manual.groundbottlebrushgrass.title=Ground Bottle Brush Grass
-manual.groundbroomsedge.title=Ground Broom Sedge
-manual.groundbuttonbush.title=Ground Button Bush
-manual.groundcattail.title=Ground Cattail
-manual.groundcavegrass.title=Ground Cave Grass
-manual.groundcavemoss.title=Ground Cave Moss
-manual.groundcopperiris.title=Ground Copper Iris
-manual.grounddriedswampreed.title=Ground Dried Swamp Reed
-manual.groundflatheadmushroom.title=Ground Flathead Mushroom
-manual.groundhanger.title=Ground Hanger
-manual.groundlichen.title=Ground Lichen
-manual.groundmarshhibiscus.title=Ground Marsh Hibiscus
-manual.groundmarshmallow.title=Ground Marshmallow
-manual.groundmilkweed.title=Ground Milk Weed
-manual.groundmoss.title=Ground Moss
-manual.groundnettle.title=Ground Nettle
-manual.groundphragmites.title=Ground Phragmite
-manual.groundpickerelweed.title=Ground Pickerel Weed
-manual.groundshoots.title=Ground Shoot
-manual.groundsludgecreep.title=Ground Sludge Creep
-manual.groundsoftrush.title=Ground Soft Trush
-manual.groundswampkelp.title=Ground Swamp Kelp
-manual.groundswamptallgrass.title=Ground Swamp Tall Grass
-manual.groundtangledroot.title=Ground Tangle Droot
-manual.groundweedwoodbark.title=Ground Weedwood Bark
-manual.groundwaterweeds.title=Ground Water Weeds
-manual.groundvolarpad.title=Ground Volarpad
-manual.groundthorns.title=Ground Thorns
-manual.groundpoisonivy.title=Ground Poison Ivy
-manual.groundleaf.title=Ground Leaf
-manual.groundbloodsnailshell.title=Ground Blood Snail Shell
-manual.groundblueiris.title=Ground Blue Iris
-manual.groundblueeyedgrass.title=Ground Blue Eyed Grass
-manual.groundcardinalflower.title=Ground Cardinal Flower
-manual.groundmirecoral.title=Ground Mire Coral
-manual.groundmarshmarigold.title=Ground Marsh Marigold
-manual.groundgoldenclub.title=Ground Golden Club
-manual.grounddeepwatercoral.title=Ground Deep Water Coral
-manual.groundmiresnailshell.title=Ground Mire Snail Shell
-manual.groundbulbcappedmushroom.title=Ground Bulb Capped Mushroom
-manual.groundanglertooth.title=Ground Angler Thoot
-manual.groundsundew.title=Ground Sundew
-manual.groundpitcherplant.title=Ground Pitcher Plant
-manual.groundvenusflytrap.title=Ground Venus Fly Trap
-manual.groundgreenmiddlegem.title=Ground Green Middle Gem
-manual.groundcrimsonmiddlegem.title=Ground Crimson Middle Gem
-manual.groundaquamiddlegem.title=Ground Aqua Middle Gem
+
+
+manual.bl.elixir.test.description
+
+manual.Petrify.description=
+manual.MasterbrewofIsolatedSenses.description=
+manual.ShapeshiftersdraughtoftheLimbless.description=
+manual.ShapeshiftersdraughtoftheDeformed.description=
+manual.DraughtoftheFoggedMind.description=
+manual.HeavyweightDraught.description=
+manual.BasiliskDraught.description=
+manual.WeakbowDraught.description=
+manual.BlindmansBrew.description=
+manual.SlugarmBrew.description=
+manual.StenchingBrew.description=
+manual.DrunkardsBrew.description=
+manual.ElixirofStarvation.description=
+manual.PoisonstingElixir.description=
+manual.ElixirofDecay.description=
+manual.ElixirofDraining.description=
+manual.LumberingElixir.description=
+manual.ElixirofWeakness.description=
+manual.HuntersSenseMasterbrew.description=
+manual.ShapeshiftersdraughtofWings.description=
+manual.ShapeshiftersdraughtofGillsgrowth.description=
+manual.DraughtoftheUnclouded.description=<scale:0.75>This strange draught seems to clear up a foggy mind. You will be able to see through a dense fog, as if it evaporates right in front of you. To achive such an effect, one will need to work with the aspects Dayuniis, Freiwynn, Geoliirgaz, Ordaniis and Yunugaz. To get a clearer view one will need to improve the strength of the effect by adding more Geoliirgaz. To achieve a longer duration it requires more Dayuniis.<nl> By adding Byariis to its recipe, this draught ends up being the Draught of the Fogged Mind, which causes one ot hallucinate an extremely dense fog.</scale>
+manual.LightweightDraught.description=<scale:0.75>This draught is the improved, and tastier version of your improved rubber boots. Being as light as a feather, you will be able to walk on water and jump higher than ever before. To make this draught one would need to use the aspects Azuwynn, Byrginaz, Yunugaz, Yhinren for a lighter form and Geoliirgaz to reach the state of an empty and pure mind. To improve the strength of the effect, more Yunugaz needs to be added. To increase the duration, one will need to keep an empty and pure mind for longer, therefore Geoliirgaz is required.<nl> When corrupting this draught with the aspect Byariis, this draught becomes the Heavyweight Draught, which makes the affected so heavy, he or she will be unable to swim and sink into mud, even when wearing rubber boots.</scale>
+manual.SpiderbreedDraught.description=<scale:0.75>This draught changes the workings of the skin and muscle. It allows you to climb on any obstacle like it is a simple ladder. To get this to work one will need to brew with the aspects Azuwynn, Fergalaz, Dayuniis, Yunugaz, and the very rare Yihinren, which will adjust ones form. To improve the strentgh of the effect one will need to work with more Azuwynn for the muscles. To keep the form for a longer time, one needs to add more of the rare Yihinren.<nl> When Byariis is added to the draught, it will become corrupted and turn into the Basilisk Draught, which will paralize anyone or anything who comes in contact with the substance.</scale>
+manual.DraughtofSagittarius.description=<scale:0.75>This draught blesses you with the power of Sagittarius. Therefore you will be able to see exactly what path your arrow will take and where it will land. to achieve this wonderful effect one needs to work with the aspects Freiwynn, Dayuniis, Armaniis, and strangely enough Byariis and Ordaniis. Apparently ones mind needs to be corrupted for this to work. To enhance the accuracy of this potion, one needs to add more Freiwynn, for it improves the vision. To increase the duration of the effect, it requires Dayuniis.<nl> When corrupting this draught by adding more Byariis, or by leaving it out completely, one ends up with the Weakbow Draught, which heavily reduces one's shooting range.</scale>
+manual.BrewoftheCatsEye.description=<scale:0.75>Similar to a potion of the overworld, this brew will make your eyes extremely sensitive to light. It allows you to see in the dark. To achieve this, one will need to work with the aspects Freiwynn, Dayuniis, Ordaniis and Geoliirgaz.<nl> The more Freiwynn one uses, the stronger the effect of the potion. Dayuniis increases the duration of the effect.<nl> When corrupted by adding the aspect Byariis, this brew turns into the Blindman's Brew, which blinds anyone or anything it is used on.</scale>
+manual.SwiftarmBrew.description=
+manual.MaskingBrew.description=<scale:0.75>This brew will mask your natural odour like a perfume. Therefore you will be harder to detect by predators of any kind. To make this brew one will need to play with the desire and mind of the beasts and corrupt them. Therefore the aspects Dayuniis, Armaniis and Byariis are required. Armaniis will increase the masking strength, while Dayuniis increases the duration.<nl> One can corrupt this brew by using the aspect Byariis, this will result in the Stenching Brew, which leaves a strong smell on the person which it is used on. This will make that person easier to detect for predators.</scale>
+manual.HuntersSenseBrew.description=<scale:0.75>This wonderful brew strongly enhances your senses. You will be able to see and smell the trails of any creature. To achieve this effect, one would need to work with the aspects of vision and the mind, Freiwynn and Dayuniis, and the aspects Ordaniis and Firnalaz. Since the influence on the mind and vision are most important, Freiwynn increases the strength of the brew and Dayuniis increases its duration.<nl> When corrupted by using the aspect Byariis, this brew turns into the Drunkard's Brew, which causes some heavy nausea to anyone who gets it into their system.</scale>
+manual.ElixirofFeasting.description=<scale:0.75>This elixir gives the stomach something tough to feed on. It will satisfy your hunger quickly.<nl> To make this elixir possible, one needs to brew with the aspects of Yeowynn, Ordaniis and Celawynn, as they will enhance the stomach strongly.<nl> To increase the power of this nourishing elixir, one will need to add more Celawynn to it. To extend the duration of its effect, it requires more Ordaniis.<nl> Corrupting this elixir by using the aspect Byariis will result in the Elixir of Starvation, which causes the stomach fluids to digest food faster and less efficient, causing some severe hunger.</scale>
+manual.ToughskinElixir.description=<scale:0.75>In a realm full of harmfull plants, this elixir makes your skin tough and protects it against the flora. To make this elixir, one needs the aspects of Azuwynn, Yeowynn, and, very important, the aspect of the stomach, Celawynn. To improve the strength of this potion one will need to add more Yeowynn. To improve the duration one would need more Celawynn.</scale>
+manual.ElixirofRipening.description=<scale:0.75>This elixir restores your physical and psychological health from the decay of the Betweenlands. To achieve this effect, one needs to brew with the aspects Yeowynn, Ordaniis and Dayuniis. As sanity is most affected by the realm's decay, Dayuniis increases the strength of this elixir. Ordaniis increases the duration.<nl> When this elixir is corrupted by using the aspect Byariis one will end up with an Elixir of Decay, which speeds up the process of decay in someone.</scale>
+manual.ElixirofHealing.description=<scale:0.75>This elixir is based on a potion we find in the Overworld. It heals one's wounds with incredible speed, unmatched by normal medicine or bandages. The Elixir of Healing is made by simply using the two aspects Yeowynn and Ordaniis. The combination of these two enhances the health of a being. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis.<nl> By using the aspect Byariis, one corrupts the elixir. It will then turn into the Elixir of Draining, which drains ones health.</scale>
+manual.NimblefeetElixir.description=<scale:0.75>This potion resembles a potion we find in the Overworld. It makes nimble on your feet and thus increases your speed. The Nimblefeet Elixir is brewed by using the aspects Azuwynn, Ordaniis and, for the nimble and swift effect, Yunugaz. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration.<nl> When one corrupts the effect of this elixir with the aspect Byariis, it will turn into the Lumbering Elixir, which will slow down your target.</scale>
+manual.ElixirofStrength.description=<scale:0.75>This potion is based on one of the brews we find in the Overworld. It lets you deal more damage to any entity you hit.<nl> The Elixir of Strength is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect.<nl> When one corrupts this elixir by using the aspect Byariis, it will turn into the Elixir of Weakness, which reduces the damage dealth to any entity the affected creature hits.</scale>
 
 manual.wip.page=These pages seem to be glued together with magic glue, it is said that this glue will slowly go away every time the Betweenlands gets bigger.
 
@@ -1091,6 +1105,10 @@ chat.event.spook=You feel a chill in the air... the haunting season has begun!
 chat.item.forbiddenfig=Cursed are those who eat the Forbidden Fig!
 
 chat.manual.discover.page=You discovered a new page: %s
+
+chat.repeller.shimmerstone.missing=The repeller needs a Shimmerstone to run
+
+chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

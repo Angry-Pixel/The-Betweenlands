@@ -61,7 +61,7 @@ public final class CorrodibleItemHelper {
 		}
 		int corrosion = getCorrosion(itemStack);
 		if (corrosion < MAX_CORROSION) {
-			float probability = holder.isInWater() ? 0.006F : 0.0014F;
+			float probability = holder.isInWater() ? 0.0014F : 0.0007F;
 			if (holder instanceof EntityPlayer) {
 				probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 2.8F : 1.0F;
 				float playerCorruption = DecayManager.getCorruptionLevel((EntityPlayer) holder) / 10F;

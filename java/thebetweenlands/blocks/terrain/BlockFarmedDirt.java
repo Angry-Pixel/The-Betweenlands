@@ -33,7 +33,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public static final String[] iconPaths = new String[] { "purifiedSwampDirt", "dugSwampDirt", "dugSwampGrass", "dugPurifiedSwampDirt", "fertDirt", "fertGrass", "fertPurifiedSwampDirt", "fertDirtDecayed", "fertGrassDecayed" };
 	public static final int PURE_SWAMP_DIRT = 0, DUG_SWAMP_DIRT = 1, DUG_SWAMP_GRASS = 2, DUG_PURE_SWAMP_DIRT = 3, FERT_DIRT = 4, FERT_GRASS = 5, FERT_PURE_SWAMP_DIRT_MIN = 6, FERT_DIRT_DECAYED = 7, FERT_GRASS_DECAYED = 8, FERT_PURE_SWAMP_DIRT_MID = 9, FERT_PURE_SWAMP_DIRT_MAX = 10;
 	public static final int COMPOSTING_MODIFIER = 3, DECAY_CURE = 3, DECAY_CAUSE = 3;
-	public static int DECAY_CHANCE = 150, INFECTION_CHANCE = 6, DUG_SOIL_REVERT_CHANCE = 12;
+	public static final int DECAY_CHANCE = 180, INFECTION_CHANCE = 6, DUG_SOIL_REVERT_CHANCE = 12;
 
 	@SideOnly(Side.CLIENT)
 	private IIcon iconPureSwampDirt, iconDugSwampGrassMap, iconDugSwampDirtMap, iconDugPurifiedSwampDirtMap, iconCompostedSwampGrassMap, iconCompostedSwampDirtMap, iconCompostedPurifiedSwampDirtMap, iconDecayedSwampGrassMap, iconDecayedSwampDirtMap, iconDecayedPurifiedSwampDirtMap;
@@ -52,7 +52,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float hitX, float hitY, float hitZ) {
 		int meta = getDamageValue(world, x, y, z);
 		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack !=null && stack.getItem() instanceof ItemSpadeBL) {
+		if (stack != null && stack.getItem() instanceof ItemSpadeBL) {
 			if (!world.isRemote) {
 				if(meta == PURE_SWAMP_DIRT) {
 					world.setBlockMetadataWithNotify(x, y, z, DUG_PURE_SWAMP_DIRT, 3);
@@ -85,13 +85,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 				for(int xo = -1; xo <= 1; xo++) {
 					for(int zo = -1; zo <= 1; zo++) {
 						if(world.getBlock(x+xo, y, z+zo) instanceof BlockFarmedDirt) {
-							int currentMeta = world.getBlockMetadata(x+xo, y, z+zo);
-							if (currentMeta == FERT_DIRT_DECAYED || currentMeta == FERT_GRASS_DECAYED) {
-								world.setBlockMetadataWithNotify(x+xo, y, z+zo, currentMeta - DECAY_CURE, 3);
-							}
-							if(world.getBlock(x+xo, y + 1, z+zo) instanceof BlockBLGenericCrop && world.getBlockMetadata(x+xo, y + 1, z+zo) == BlockBLGenericCrop.DECAYED_CROP) {
-								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, BlockBLGenericCrop.DECAYED_CROP - 1, 2);
-							}
+							((BlockFarmedDirt) world.getBlock(x+xo, y, z+zo)).setDecayed(world, x+xo, y, z+zo, false);
 						}
 					}
 				}
@@ -104,6 +98,34 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Decays or purifies the farmed dirt
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param decayed
+	 */
+	public void setDecayed(World world, int x, int y, int z, boolean decayed) {
+		if(!decayed) {
+			int currentMeta = world.getBlockMetadata(x, y, z);
+			if (currentMeta == FERT_DIRT_DECAYED || currentMeta == FERT_GRASS_DECAYED) {
+				world.setBlockMetadataWithNotify(x, y, z, currentMeta - DECAY_CURE, 3);
+			}
+			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == BlockBLGenericCrop.DECAYED_CROP) {
+				((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).setDecayed(world, x, y + 1, z, false);
+			}
+		} else {
+			int currentMeta = world.getBlockMetadata(x, y, z);
+			if(currentMeta == FERT_DIRT || currentMeta == FERT_GRASS) {
+				world.setBlockMetadataWithNotify(x, y, z, currentMeta + DECAY_CAUSE, 3);
+			}
+			if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop && world.getBlockMetadata(x, y + 1, z) == BlockBLGenericCrop.MATURE_CROP) {
+				((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).setDecayed(world, x, y + 1, z, true);
+			}
+		}
 	}
 
 	public void playCompostEffects(World world, int x, int y, int z) {
@@ -126,13 +148,12 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		int meta = getDamageValue(world, x, y, z);
 
-		//Decay rate of composted blocks
-		if(world.rand.nextInt(DECAY_CHANCE) == 0) {
-			if(meta == FERT_DIRT || meta == FERT_GRASS) {
-				world.setBlockMetadataWithNotify(x, y, z, meta + DECAY_CAUSE, 3);
-				//Update decay to plants above
-				if(getCropAboveBlock(world, x, y, z) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x, y, z) == BlockBLGenericCrop.MATURE_CROP)
-					world.setBlockMetadataWithNotify(x, y + 1, z, BlockBLGenericCrop.DECAYED_CROP, 3);
+		//Decay
+		if(meta != FERT_PURE_SWAMP_DIRT_MIN &&
+				meta != FERT_PURE_SWAMP_DIRT_MID &&
+				meta != FERT_PURE_SWAMP_DIRT_MAX) {
+			if(this.shouldDecay(world, x, y, z)) {
+				this.setDecayed(world, x, y, z, true);
 			}
 		}
 
@@ -144,11 +165,8 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 						if((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) continue;
 						Block adjacentBlock = world.getBlock(x+xo, y, z+zo);
 						int adjacentMeta = world.getBlockMetadata(x+xo, y, z+zo);
-						if(adjacentBlock == this && (adjacentMeta == FERT_DIRT || adjacentMeta == FERT_GRASS) && !isDecayed(adjacentMeta)) {
-							world.setBlockMetadataWithNotify(x+xo, y, z+zo, adjacentMeta + DECAY_CAUSE, 3);
-							//Update decay to plants above
-							if(getCropAboveBlock(world, x+xo, y, z+zo) instanceof BlockBLGenericCrop && getCropAboveBlockDamageValue(world, x+xo, y, z+zo) == BlockBLGenericCrop.MATURE_CROP)
-								world.setBlockMetadataWithNotify(x+xo, y + 1, z+zo, BlockBLGenericCrop.DECAYED_CROP, 3);
+						if(adjacentBlock instanceof BlockFarmedDirt) {
+							((BlockFarmedDirt) adjacentBlock).setDecayed(world, x+xo, y, z+zo, true);
 						}
 					}
 				}
@@ -210,10 +228,71 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		return BLBlockRegistry.swampDirt.getIcon(side, 0);
 	}
 
+	/**
+	 * Uses up the compost
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
+	public void useCompost(World world, int x, int y, int z) {
+		if(world.getBlock(x, y, z) == this) {
+			int metaDirt = world.getBlockMetadata(x, y, z);
+			switch(metaDirt) {
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MAX:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MID:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN, 3);
+				break;
+			case BlockFarmedDirt.FERT_PURE_SWAMP_DIRT_MIN:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS_DECAYED:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT_DECAYED:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			case BlockFarmedDirt.FERT_GRASS:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_GRASS, 3);
+				break;
+			case BlockFarmedDirt.FERT_DIRT:
+				world.setBlockMetadataWithNotify(x, y, z, BlockFarmedDirt.DUG_SWAMP_DIRT, 3);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Returns whether the soild (and crop) should decay this tick
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean shouldDecay(World world, int x, int y, int z) {
+		if(world.getBlock(x, y + 1, z) instanceof BlockBLGenericCrop) {
+			return ((BlockBLGenericCrop)world.getBlock(x, y + 1, z)).shouldDecay(world, x, y + 1, z);
+		}
+		return world.rand.nextInt(DECAY_CHANCE) == 0;
+	}
+
+	/**
+	 * Returns whether the soil with the specified metadata is decayed
+	 * @param meta
+	 * @return
+	 */
 	public static boolean isDecayed(int meta) {
 		return meta == FERT_GRASS_DECAYED || meta == FERT_DIRT_DECAYED;
 	}
 
+	/**
+	 * Returns whether the soil with the specified metadata is fertilized
+	 * @param meta
+	 * @return
+	 */
 	public static boolean isFertilized(int meta) {
 		return meta == FERT_PURE_SWAMP_DIRT_MIN || meta == FERT_PURE_SWAMP_DIRT_MID || meta == FERT_PURE_SWAMP_DIRT_MAX ||
 				meta == FERT_DIRT || meta == FERT_GRASS;
@@ -237,11 +316,11 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		return world.getBlockMetadata(x, y, z);
 	}
 
-	public Block getCropAboveBlock(World world, int x, int y, int z) {
+	private Block getCropAboveBlock(World world, int x, int y, int z) {
 		return world.getBlock(x, y + 1, z);
 	}
 
-	public int getCropAboveBlockDamageValue(World world, int x, int y, int z) {
+	private int getCropAboveBlockDamageValue(World world, int x, int y, int z) {
 		return world.getBlockMetadata(x, y + 1, z);
 	}
 

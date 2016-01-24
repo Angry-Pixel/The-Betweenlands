@@ -77,7 +77,6 @@ public class WorldGenDruidCircle
         world.setBlock(x, y, z, BLBlockRegistry.druidAltar);
         world.setBlock(x, y - 1, z, BLBlockRegistry.druidSpawner);
 
-        System.out.println("Added DruidCircle at: " + x + " " + z);
         return true;
     }
 

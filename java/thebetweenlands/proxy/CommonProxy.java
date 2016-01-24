@@ -1,7 +1,7 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,9 +35,11 @@ import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
+import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.tileentities.TileEntityBush;
 import thebetweenlands.tileentities.TileEntityCompostBin;
@@ -51,12 +53,17 @@ import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityRepeller;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
 import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -104,6 +111,9 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityTarLootPot3.class, "tarLootPot3");
 		registerTileEntity(TileEntityItemShelf.class, "itemShelf");
 		registerTileEntity(TileEntityGeckoCage.class, "geckoCage");
+		registerTileEntity(TileEntityAspectrusCrop.class, "aspectCrop");
+		registerTileEntity(TileEntityBLSign.class, "signBL");
+		registerTileEntity(TileEntityRepeller.class, "repeller");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
@@ -266,4 +276,13 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void registerItemRenderer(Item item) { }
+
+	@SideOnly(Side.CLIENT)
+	public FontRenderer getCustomFontRenderer() {
+		return null; 
+	}
+
+	public ModelBiped getExplorersHatModel() {
+		return null;
+	}
 }

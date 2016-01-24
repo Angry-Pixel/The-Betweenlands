@@ -405,6 +405,107 @@ public class AspectManager {
 	}
 
 	/**
+	 * Returns a list of all dynamic aspects on an item stack
+	 * @param stack
+	 * @return
+	 */
+	public static List<Aspect> getDynamicAspects(ItemStack stack) {
+		List<Aspect> aspects = new ArrayList<Aspect>();
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
+			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+			for(int i = 0; i < lst.tagCount(); i++) {
+				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
+				Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
+				if(itemAspect != null)
+					aspects.add(itemAspect);
+			}
+		}
+		return aspects;
+	}
+
+	/**
+	 * Adds dynamic aspects to an item stack
+	 * @param stack
+	 * @param aspects
+	 * @return
+	 */
+	public static ItemStack addDynamicAspects(ItemStack stack, Aspect... aspects) {
+		if(stack.stackTagCompound == null) {
+			stack.stackTagCompound = new NBTTagCompound();
+		}
+		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
+			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
+		}
+		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+		for(Aspect aspect : aspects) {
+			NBTTagCompound aspectCompound = new NBTTagCompound();
+			aspect.writeToNBT(aspectCompound);
+			lst.appendTag(aspectCompound);
+		}
+		return stack;
+	}
+
+	/**
+	 * Removes all dynamic aspects from an item stack
+	 * @param stack
+	 * @return
+	 */
+	public static ItemStack removeDynamicAspects(ItemStack stack) {
+		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
+			stack.stackTagCompound.removeTag("herbloreAspects");
+		}
+		return stack;
+	}
+
+	/**
+	 * Removes all dynamic aspects from an item stack that match with one of the specified aspect types
+	 * @param stack
+	 * @param type
+	 * @return
+	 */
+	public static ItemStack removeDynamicAspects(ItemStack stack, IAspectType... types) {
+		for(IAspectType type : types) {
+			if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
+				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+				int count = lst.tagCount();
+				for(int i = 0; i < count; i++) {
+					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
+					Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
+					if(itemAspect != null && itemAspect.type.equals(type)) {
+						lst.removeTag(i);
+						break;
+					}
+				}
+			}
+		}
+		return stack;
+	}
+
+	/**
+	 * Removes all dynamic aspects from an item stack that match with one of the specified aspects
+	 * @param stack
+	 * @param aspects
+	 * @return
+	 */
+	public static ItemStack removeDynamicAspects(ItemStack stack, Aspect... aspects) {
+		for(Aspect aspect : aspects) {
+			if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
+				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+				int count = lst.tagCount();
+				for(int i = 0; i < count; i++) {
+					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
+					Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
+					if(itemAspect != null && itemAspect.equals(aspect)) {
+						lst.removeTag(i);
+						break;
+					}
+				}
+			}
+		}
+		return stack;
+	}
+
+	/**
 	 * Returns a list of all discovered and dynamic aspects on an item. If you specify a player
 	 * this will only return the aspects that the player has discovered.
 	 * If the player is null this will return all aspects on an item.
@@ -419,15 +520,7 @@ public class AspectManager {
 		} else {
 			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, new AspectItem(stack)));
 		}
-		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
-			for(int i = 0; i < lst.tagCount(); i++) {
-				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
-				Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
-				if(itemAspect != null)
-					aspects.add(itemAspect);
-			}
-		}
+		aspects.addAll(getDynamicAspects(stack));
 		return aspects;
 	}
 
@@ -479,28 +572,6 @@ public class AspectManager {
 			aspects.add(aspect.type);
 		}
 		return aspects;
-	}
-
-	/**
-	 * Adds dynamic aspects to an item stack
-	 * @param stack
-	 * @param aspects
-	 * @return
-	 */
-	public ItemStack addAspects(ItemStack stack, Aspect... aspects) {
-		if(stack.stackTagCompound == null) {
-			stack.stackTagCompound = new NBTTagCompound();
-		}
-		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
-			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
-		}
-		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
-		for(Aspect aspect : aspects) {
-			NBTTagCompound aspectCompound = new NBTTagCompound();
-			aspect.writeToNBT(aspectCompound);
-			lst.appendTag(aspectCompound);
-		}
-		return stack;
 	}
 
 	/**

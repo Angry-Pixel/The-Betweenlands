@@ -1,12 +1,18 @@
 package thebetweenlands.blocks.container;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+
+import javax.vecmath.Vector3d;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntitySmokeFX;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +25,11 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.entities.particles.EntityAnimatorFX;
+import thebetweenlands.entities.particles.EntityAnimatorFX2;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -58,7 +69,7 @@ public class BlockAnimator extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
 		int rot = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		world.setBlockMetadataWithNotify(x, y, z, rot == 0 ? 2 : rot == 1 ? 5 : rot == 2 ? 3 : 4, 3);
+		world.setBlockMetadataWithNotify(x, y, z, rot, 3);
 	}
 
 	@Override
@@ -128,5 +139,70 @@ public class BlockAnimator extends BlockContainer {
 		}
 
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
+		TileEntityAnimator te = (TileEntityAnimator) world.getTileEntity(x, y, z);
+		if(te != null && te.isSlotInUse(0) && te.isCrystalInslot() && te.isSulfurInslot() && te.fuelConsumed < te.requiredFuelCount && te.isValidFocalItem()) {
+			List<Vector3d> points = new ArrayList<Vector3d>();
+
+			// Sulfur Particles
+			if (te.getStackInSlot(2) != null) {
+				rand = te.getWorldObj().rand;
+				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D, te.yCoord + 0.1D, te.zCoord + 0.5D + rand.nextFloat() * 0.6D - 0.3D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
+				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, ItemGeneric.createStack(EnumItemGeneric.SULFUR).getIconIndex(), 0.01F));
+			}
+
+			// Life Crystal Particles
+			if (te.getStackInSlot(1) != null) {
+				points = new ArrayList<Vector3d>();
+				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.5D, te.zCoord + 0.5D + rand.nextFloat() * 0.3D - 0.15D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1, te.zCoord + 0.5D));
+				points.add(new Vector3d(te.xCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D, te.yCoord + 1.2, te.zCoord + 0.5D + rand.nextFloat() * 0.5D - 0.25D));
+				points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
+				Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX(te.getWorldObj(), te.xCoord + 0.5D, te.yCoord, te.zCoord + 0.5D, 0, 0, 0, points, new ItemStack(BLItemRegistry.lifeCrystal).getIconIndex(), 0.0003F));
+			}
+
+			int meta = te.getBlockMetadata();
+
+			double xOff = 0;
+			double zOff = 0;
+
+			switch(meta) {
+			case 0:
+				xOff = -0.5F;
+				zOff = 0.14F;
+				break;
+			case 1:
+				xOff = -0.14F;
+				zOff = -0.5F;
+				break;
+			case 2:
+				xOff = 0.5F;
+				zOff = -0.14F;
+				break;
+			case 3:
+				xOff = 0.14F;
+				zOff = 0.5F;
+				break;
+			}
+
+			// Runes
+			points = new ArrayList<Vector3d>();
+			points.add(new Vector3d(te.xCoord + 0.5D + (rand.nextFloat()-0.5F) * 0.3D + xOff, te.yCoord + 0.9, te.zCoord + 0.5 + (rand.nextFloat()-0.5F) * 0.3D + zOff));
+			points.add(new Vector3d(te.xCoord + 0.5D + (rand.nextFloat()-0.5F) * 0.3D + xOff, te.yCoord + 1.36, te.zCoord + 0.5 + (rand.nextFloat()-0.5F) * 0.3D + zOff));
+			points.add(new Vector3d(te.xCoord + 0.5D, te.yCoord + 1.5D, te.zCoord + 0.5D));
+			Minecraft.getMinecraft().effectRenderer.addEffect(new EntityAnimatorFX2(te.getWorldObj(), te.xCoord, te.yCoord + 0.9, te.zCoord + 0.65, 0, 0, 0, points));
+
+			// Smoke
+			Minecraft.getMinecraft().effectRenderer.addEffect(new EntitySmokeFX(te.getWorldObj(), te.xCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, te.yCoord + 0.3, te.zCoord + 0.5 + rand.nextFloat() * 0.3D - 0.15D, 0, 0, 0, (rand.nextFloat() / 2.0F) + 1F));
+		}
 	}
 }

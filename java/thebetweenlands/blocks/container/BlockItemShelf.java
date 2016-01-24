@@ -7,6 +7,8 @@ import static net.minecraftforge.common.util.ForgeDirection.WEST;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -25,8 +27,6 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.ModCreativeTabs;
 import thebetweenlands.tileentities.TileEntityItemShelf;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockItemShelf extends BlockContainer {
 
@@ -125,22 +125,22 @@ public class BlockItemShelf extends BlockContainer {
 		float widthMin = 0, depthMin = 0;
 		float widthMax = 0, depthMax = 0;
 		switch (meta) {
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				depthMin = 0.5F;
-				break;
-			case 3:
-				depthMax = 0.5F;
-				break;
-			case 4:
-				widthMin = 0.5F;
-				break;
-			case 5:
-				widthMax = 0.5F;
-				break;
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			depthMin = 0.5F;
+			break;
+		case 3:
+			depthMax = 0.5F;
+			break;
+		case 4:
+			widthMin = 0.5F;
+			break;
+		case 5:
+			widthMax = 0.5F;
+			break;
 		}
 		setBlockBounds(0F + widthMin, 0F, 0F + depthMin, 1F - widthMax, 1F, 1F - depthMax);
 	}
@@ -193,7 +193,9 @@ public class BlockItemShelf extends BlockContainer {
 			if (player.getCurrentEquippedItem() != null && slotClicked != -1) {
 				ItemStack item = player.getCurrentEquippedItem();
 				if (tile.getStackInSlot(slotClicked) == null) {
-					tile.setInventorySlotContents(slotClicked, item.copy());
+					ItemStack stackCopy = item.copy();
+					stackCopy.stackSize = 1;
+					tile.setInventorySlotContents(slotClicked, stackCopy);
 					if (!player.capabilities.isCreativeMode)
 						player.getCurrentEquippedItem().stackSize--;
 					world.markBlockForUpdate(x, y, z);
@@ -220,7 +222,7 @@ public class BlockItemShelf extends BlockContainer {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override

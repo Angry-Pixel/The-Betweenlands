@@ -38,6 +38,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.gui.GuiDebugMenu;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.event.render.FogHandler;
@@ -129,6 +130,9 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_U) && mc.isIntegratedServerRunning() && isInDebugWorld && !shouldRecreateBetweenlands) {
 				shouldRecreateBetweenlands = true;
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_H)) {
+				ShaderHelper.INSTANCE.scheduleShaderReload();
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_M)) {
@@ -241,6 +245,7 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			}
 			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, yOffset += 8, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, yOffset += 8, 0xFFFFFFFF);
+			TheBetweenlands.proxy.getCustomFontRenderer().drawString("Custom Font Test", 2, yOffset += 8, 0xFFFFFFFF);
 		}
 	}
 

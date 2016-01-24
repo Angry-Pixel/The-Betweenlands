@@ -51,29 +51,34 @@ public class ManualCategory {
     }
 
     /**
-     * @param pages      all pages in this category
-     * @param introPages introduction pages in case a category has them
-     * @param number     a number that shows which where the category is located
-     * @param manualType the type of manual it is. manualHL or manualGuideBook
-     * @param name       the name of the category
+     * @param pages                  all pages in this category
+     * @param number                 a number that shows which where the category is located
+     * @param manualType             the type of manual it is. manualHL or manualGuideBook
+     * @param name                   the name of the category
+     * @param customPageInitializing whether or not it has a custom way of doing pages
+     * @param indexPages             if not needed use -1
      */
-    public ManualCategory(ArrayList<Page> pages, ArrayList<Page> introPages, int number, Item manualType, String name) {
-        int pageNumber = 1;
-        ArrayList<Page> buttonPages = new ArrayList<>();
-        ArrayList<Page> tempPages = new ArrayList<>();
-        for (Page page : pages) {
-            page.setPageNumber(pageNumber);
-            if (page.isParent)
-                buttonPages.add(page);
-            tempPages.add(page);
-            pageNumber++;
-        }
+    public ManualCategory(ArrayList<Page> pages, int number, Item manualType, String name, boolean customPageInitializing, int indexPages) {
         ArrayList<Page> buttonPagesNew;
-        buttonPagesNew = PageCreators.pageCreatorButtons(buttonPages, manualType);
-        indexPages = buttonPagesNew.size() + introPages.size();
-        this.pages.addAll(introPages);
-        this.pages.addAll(buttonPagesNew);
-        this.pages.addAll(tempPages);
+        if (!customPageInitializing) {
+            int pageNumber = 1;
+            ArrayList<Page> buttonPages = new ArrayList<>();
+            ArrayList<Page> tempPages = new ArrayList<>();
+            for (Page page : pages) {
+                page.setPageNumber(pageNumber);
+                if (page.isParent)
+                    buttonPages.add(page);
+                tempPages.add(page);
+                pageNumber++;
+            }
+            buttonPagesNew = PageCreators.pageCreatorButtons(buttonPages, manualType);
+            this.pages.addAll(buttonPagesNew);
+            this.pages.addAll(tempPages);
+            this.indexPages = buttonPagesNew.size();
+        } else {
+            this.pages.addAll(pages);
+            this.indexPages = indexPages;
+        }
         this.number = number;
         this.name = name;
     }

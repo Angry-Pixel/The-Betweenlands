@@ -5,19 +5,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,6 +38,8 @@ import thebetweenlands.client.model.block.crops.ModelCropFungus2;
 import thebetweenlands.client.model.block.crops.ModelCropFungus3;
 import thebetweenlands.client.model.block.crops.ModelCropFungus4;
 import thebetweenlands.client.model.block.crops.ModelCropFungus5;
+import thebetweenlands.client.model.item.ModelExplorersHat;
+import thebetweenlands.client.render.block.BlockBLHopperRenderer;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
 import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
@@ -100,14 +99,18 @@ import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
+import thebetweenlands.client.render.item.ItemRepellerRenderer;
 import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemTarminionRenderer;
 import thebetweenlands.client.render.item.ItemVolarKiteRenderer;
 import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityAspectrusCropRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityBLSignRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityCompostBinRenderer;
@@ -121,6 +124,7 @@ import thebetweenlands.client.render.tileentity.TileEntityLootPot2Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityPestleAndMortarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityPurifierRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityRepellerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarBeastSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarLootPot1Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarLootPot2Renderer;
@@ -169,7 +173,6 @@ import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
-import thebetweenlands.event.render.FireflyHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.FovHandler;
 import thebetweenlands.event.render.GLUProjectionHandler;
@@ -177,7 +180,7 @@ import thebetweenlands.event.render.ItemTextureTicker;
 import thebetweenlands.event.render.OverlayHandler;
 import thebetweenlands.event.render.ScreenShakeHandler;
 import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -186,7 +189,9 @@ import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityBLSpawner;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
@@ -199,6 +204,7 @@ import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityRepeller;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
@@ -207,6 +213,14 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -231,7 +245,8 @@ public class ClientProxy extends CommonProxy {
 		HOLLOW_LOG,
 		MOSS_BED,
 		CROP,
-		FARMED_DIRT;
+		FARMED_DIRT,
+		HOPPER;
 
 		private final int ID;
 
@@ -245,6 +260,8 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	private static final ResourceLocation PLAYER_CORRUPTION_TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/player/playerCorruption.png");
+
+	private static final ModelExplorersHat EXPLORERS_HAT_MODEL = new ModelExplorersHat();
 
 	private BufferedImage playerCorruptionImg = null;
 
@@ -320,6 +337,9 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new TileEntityTarLootPot3Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new TileEntityItemShelfRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new TileEntityGeckoCageRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new TileEntityAspectrusCropRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSign.class, new TileEntityBLSignRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new TileEntityRepellerRenderer());
 
 		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
@@ -339,6 +359,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.geckoCage), new ItemGeckoCageRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.repeller), new ItemRepellerRenderer());
 
 		//Register custom item renderer for aspect overlays
 		for(Item item : BLItemRegistry.ITEMS) {
@@ -372,6 +393,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(new BlockHollowLogRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockBLGenericCropRenderer());
 		RenderingRegistry.registerBlockHandler(new BlockFarmedDirtRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockBLHopperRenderer());
 
 		// Events
 		MinecraftForge.EVENT_BUS.register(GuiOverlay.INSTANCE);
@@ -385,8 +407,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(FogHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ShaderHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(WispHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(FireflyHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WorldRenderHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ThemHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new CorrosionTextureStitchHandler());
 		FMLCommonHandler.instance().bus().register(ItemTooltipHandler.INSTANCE);
@@ -422,6 +443,12 @@ public class ClientProxy extends CommonProxy {
 
 		replaceSoundRegistry();
 
+		//Add listener to reload shader resources
+		IResourceManager resourceMgr = Minecraft.getMinecraft().getResourceManager();
+		if(resourceMgr instanceof IReloadableResourceManager) {
+			((IReloadableResourceManager)resourceMgr).registerReloadListener(ShaderHelper.INSTANCE);
+		}
+
 		if (ConfigHandler.DEBUG) {
 			FMLCommonHandler.instance().bus().register(DebugHandlerClient.INSTANCE);
 			MinecraftForge.EVENT_BUS.register(DebugHandlerClient.INSTANCE);
@@ -452,6 +479,13 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void postInit() {
+		//Font
+		pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/fontAtlas.png"), Minecraft.getMinecraft().renderEngine, false);
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
+
 		// Init manual
 		GuideBookEntryRegistry.init();
 		HLEntryRegistry.init();
@@ -534,5 +568,17 @@ public class ClientProxy extends CommonProxy {
 			rider.rotationYaw += ((rowboat.rotationYaw - rider.rotationYaw) % 180 - 90) * 0.2F;
 			rider.rotationPitch *= 0.8F;
 		}
+	}
+
+	private static FontRenderer pixelLove;
+
+	@Override
+	public FontRenderer getCustomFontRenderer() {
+		return pixelLove; 
+	}
+
+	@Override
+	public ModelBiped getExplorersHatModel() {
+		return EXPLORERS_HAT_MODEL;
 	}
 }

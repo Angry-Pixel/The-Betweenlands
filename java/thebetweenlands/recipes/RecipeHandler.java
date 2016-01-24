@@ -135,6 +135,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BLBlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.cavingRope, 4), "rrr", "ror", "rrr", 'r', new ItemStack(BLItemRegistry.rope), 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.syrmoriteHopper), "s s", "scs", " s ", 's', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT), 'c', new ItemStack(BLBlockRegistry.weedwoodChest));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
@@ -259,6 +261,10 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new BookMergeRecipe());
 		RecipeSorter.register("thebetweenlands:recipesCircleGems", RecipesCircleGems.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCircleGems());
+		RecipeSorter.register("thebetweenlands:recipesAspectVials", RecipesAspectVials.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesAspectVials());
+		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
 	}
 
 	private static void registerSmelting() {

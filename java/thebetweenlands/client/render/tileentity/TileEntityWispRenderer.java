@@ -1,32 +1,37 @@
 package thebetweenlands.client.render.tileentity;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+
+import javax.vecmath.Vector3d;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.terrain.BlockWisp;
 import thebetweenlands.entities.particles.EntityWispFX;
-import thebetweenlands.event.render.WispHandler;
+import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import javax.vecmath.Vector3d;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 
 public class TileEntityWispRenderer extends TileEntitySpecialRenderer {
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
-		WispHandler.INSTANCE.tileList.add(new SimpleEntry(new SimpleEntry(this, tileEntity), new Vector3d(x, y, z)));
+		WorldRenderHandler.INSTANCE.wispTileList.add(new SimpleEntry(new SimpleEntry(this, tileEntity), new Vector3d(x, y, z)));
 
 		ArrayList<Object> particleList = ((TileEntityWisp)tileEntity).particleList;
 
-		double dist = Minecraft.getMinecraft().renderViewEntity.getDistance(x + RenderManager.renderPosX, y + RenderManager.renderPosY, z + RenderManager.renderPosZ);
-		if(dist > 50 || dist < 10) {
-			return;
+		if(!BlockWisp.canSee(tileEntity.getWorldObj())) {
+			double dist = Minecraft.getMinecraft().renderViewEntity.getDistance(x + RenderManager.renderPosX, y + RenderManager.renderPosY, z + RenderManager.renderPosZ);
+			if(dist > 50 || dist < 10) {
+				return;
+			}
 		}
 
 		if(particleList.size() < 1000 && !Minecraft.getMinecraft().isGamePaused()) {

@@ -31,6 +31,7 @@ public class Page {
 
     public String pageName;
     public String unlocalizedPageName;
+    public String localizedPageName;
 
     public ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
     public boolean rightPage = false;
@@ -224,6 +225,11 @@ public class Page {
      */
     public Page setParentCategory(ManualCategory category){
         parentCategory = category;
+        return this;
+    }
+
+    public Page setLocalizedPageName(String text){
+        pageName = text;
         return this;
     }
 }

@@ -24,6 +24,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.herblore.aspects.Aspect;
+import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
@@ -106,6 +108,18 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 			if(enumGeneric.id == id) return enumGeneric;
 		}
 		return EnumItemGeneric.INVALID;
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		if(stack.getItemDamage() == EnumItemGeneric.ASPECTRUS_FRUIT.id) {
+			List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
+			if(!itemAspects.isEmpty()) {
+				Aspect aspect = itemAspects.get(0);
+				return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + aspect.getAmount() + ")";
+			}
+		}
+		return super.getItemStackDisplayName(stack);
 	}
 
 	@Override
@@ -325,7 +339,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 
 	@Override
 	public int metas() {
-		return 33;
+		return 32;
 	}
 
 	public static enum EnumItemGeneric {
@@ -337,7 +351,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21), 
 		VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedWoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
 		RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
-		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33);
+		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34);
 
 		public final String iconName;
 		public final int id;

@@ -8,7 +8,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Bart on 9-8-2015.
@@ -20,31 +19,39 @@ public class PictureWidget extends ManualWidgetsBase {
     public int height;
     private int xIndex = 0;
     private int yIndex = 0;
+    double textureWidth;
+    double textureHeight;
 
     ArrayList<String> toolTips = new ArrayList<>();
 
-    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height) {
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, double textureWidth, double textureHeight) {
         super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
-    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, int xIndex, int yIndex) {
-        super( xStart, yStart);
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, int xIndex, int yIndex, double textureWidth, double textureHeight) {
+        super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
         this.xIndex = xIndex;
         this.yIndex = yIndex;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
-    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, ArrayList<String> toolTips) {
+    public PictureWidget(int xStart, int yStart, String recourseLocation, int width, int height, ArrayList<String> toolTips, double textureWidth, double textureHeight) {
         super(xStart, yStart);
         this.recourseLocation = new ResourceLocation(recourseLocation);
         this.width = width;
         this.height = height;
         this.toolTips = toolTips;
+        this.textureWidth = textureWidth;
+        this.textureHeight = textureHeight;
     }
 
     @Override
@@ -56,7 +63,7 @@ public class PictureWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1F, 1F, 1F, 1F);
-        manual.drawTexturedModalRect(xStart, yStart, xIndex, yIndex, width, height);
+        manual.drawTexture(xStart, yStart, width, height, textureWidth, textureHeight, xIndex, xIndex + width, yIndex, yIndex + height);
         GL11.glDisable(GL11.GL_BLEND);
 
         if (toolTips.size() > 0 && mouseX >= xStart && mouseX <= xStart + width && mouseY >= yStart && mouseY <= yStart + height) {

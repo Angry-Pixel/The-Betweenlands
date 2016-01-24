@@ -25,9 +25,9 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.command.CommandAspectDiscovery;
 import thebetweenlands.command.CommandBLEvent;
 import thebetweenlands.command.CommandDecay;
-import thebetweenlands.command.CommandAspectDiscovery;
 import thebetweenlands.command.CommandFindPage;
 import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
@@ -78,8 +78,7 @@ import thebetweenlands.world.storage.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
-public class TheBetweenlands
-{
+public class TheBetweenlands {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
 
@@ -200,9 +199,9 @@ public class TheBetweenlands
 	@SuppressWarnings("unchecked")
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
-		if (ConfigHandler.DEBUG){
+		if (ConfigHandler.DEBUG) {
 			System.out.println("==================================================");
-			for (String name:unlocalizedNames){
+			for (String name : unlocalizedNames) {
 				System.out.println("needs translation: " + name);
 			}
 			System.out.println("==================================================");

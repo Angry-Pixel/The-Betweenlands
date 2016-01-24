@@ -28,6 +28,7 @@ import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
+import thebetweenlands.blocks.container.BlockBLSign;
 import thebetweenlands.blocks.container.BlockBLWorkbench;
 import thebetweenlands.blocks.container.BlockCompostBin;
 import thebetweenlands.blocks.container.BlockGeckoCage;
@@ -42,6 +43,7 @@ import thebetweenlands.blocks.container.BlockTarLootPot1;
 import thebetweenlands.blocks.container.BlockTarLootPot2;
 import thebetweenlands.blocks.container.BlockTarLootPot3;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
+import thebetweenlands.blocks.container.repeller.BlockRepeller;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
@@ -75,6 +77,7 @@ import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
 import thebetweenlands.blocks.plants.BlockWaterWeeds;
 import thebetweenlands.blocks.plants.BlockWeedWoodBush;
 import thebetweenlands.blocks.plants.BlockWeepingBlue;
+import thebetweenlands.blocks.plants.crops.BlockAspectrusCrop;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
 import thebetweenlands.blocks.plants.roots.BlockRootUW;
@@ -339,23 +342,23 @@ public class BLBlockRegistry {
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
 		@Override
-		public ItemStack getSeedDrops() {
+		public ItemStack getSeedDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruitSeeds, 1, 0);
 		}
 
 		@Override
-		public ItemStack getCropDrops() {
+		public ItemStack getCropDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.middleFruit, 1, 0);
 		}
 	};
 	public static final BlockBLGenericCrop fungusCrop = new BlockBLGenericCrop("fungusCrop") {
 		@Override
-		public ItemStack getSeedDrops() {
+		public ItemStack getSeedDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.spores);
 		}
 
 		@Override
-		public ItemStack getCropDrops() {
+		public ItemStack getCropDrop(World world, int x, int y, int z) {
 			return new ItemStack(BLItemRegistry.yellowDottedFungus);
 		}
 
@@ -371,6 +374,7 @@ public class BLBlockRegistry {
 			}
 		}
 	};
+	public static final BlockAspectrusCrop aspectrusCrop = new BlockAspectrusCrop("aspectrusCrop");
 
 	public static final Block caveMoss = new BlockCaveMoss();
 	public static final BlockCaveGrass caveGrass = new BlockCaveGrass("caveGrass");
@@ -501,6 +505,8 @@ public class BLBlockRegistry {
 	public static final Block blockTotem = new BlockTotem();
 	public static final Block siltGlas = new BlockBLGlass();
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
+	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
+	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
 
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
@@ -532,13 +538,15 @@ public class BLBlockRegistry {
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
 	public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");  
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
-	public static final Block rubberTreePlankFence = new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
+	public static final BlockBLFence rubberTreePlankFence = (BlockBLFence) new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
 	public static final Block weedwoodPlankFenceGate = new BlockBLFenceGate("weedwoodPlanks");
 	public static final Block rubberTreePlankFenceGate = new BlockBLFenceGate("rubberTreePlanks");
 	public static final Block purpleRainPlankFenceGate = new BlockBLFenceGate("purpleRainPlanks");
 	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
+	public static final BlockBLSign weedwoodSignStanding = (BlockBLSign) new BlockBLSign(true, "weedwood").setHardness(0.6F);
+	public static final BlockBLSign weedwoodWallSign = (BlockBLSign) new BlockBLSign(false, "weedwood").setHardness(0.6F);
 	public static final Block weedwoodPlankButton = new BlockBLButton("weedwoodPlanks", true);
 	public static final Block betweenstoneButton = new BlockBLButton("smoothBetweenstone", false);
 	public static final Block weedwoodPlankPressurePlate = new BlockBLPressurePlate("weedwoodPlanks", Material.wood, BlockPressurePlate.Sensitivity.everything);

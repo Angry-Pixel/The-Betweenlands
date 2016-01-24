@@ -155,8 +155,8 @@ public class GuiManualBase extends GuiScreen {
      *
      * @param pageNumber the number of a page
      */
-    public void changeTo(int pageNumber) {
-        currentCategory.setPage(pageNumber + currentCategory.indexPages, this);
+    public void changeTo(int pageNumber, boolean doMathWithIndexPages) {
+        currentCategory.setPage(pageNumber + (doMathWithIndexPages? currentCategory.indexPages:0), this);
     }
 
     /**

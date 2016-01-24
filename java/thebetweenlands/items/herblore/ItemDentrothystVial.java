@@ -77,7 +77,7 @@ public class ItemDentrothystVial extends Item {
 	public ItemStack createStack(int vialType) {
 		return new ItemStack(this, 1, vialType);
 	}
-	
+
 	/**
 	 * Creates an item stack of the specified vial type.
 	 * Vial types: 0 = green, 1 = dirty, 2 = orange

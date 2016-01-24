@@ -83,7 +83,7 @@ public class BlockGeckoCage extends BlockContainer {
 								case LAST:
 									AspectManager.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 									if(!world.isRemote) {
-										tile.setAspectType(discovery.discovered.type, 2400);
+										tile.setAspectType(discovery.discovered.type, 600);
 										if(ConfigHandler.DEBUG) {
 											player.addChatMessage(new ChatComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
 											player.addChatMessage(new ChatComponentText("Aspect: " + discovery.discovered.type.getName()));

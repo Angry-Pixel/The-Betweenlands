@@ -8,13 +8,20 @@ import net.minecraft.item.ItemStack;
 
 public abstract class PurifierRecipe {
 	private static final List<PurifierRecipe> RECIPES = new ArrayList<PurifierRecipe>();
+
 	private static final PurifierRecipeCorrodible CORRODIBLE_ITEMS_RECIPE = new PurifierRecipeCorrodible();
+	private static final PurifierRecipeAspectVial ASPECT_VIAL_ITEMS_RECIPE = new PurifierRecipeAspectVial();
 
 	public abstract ItemStack getOutput(ItemStack input);
 	public abstract ItemStack getInput(ItemStack output);
 
 	public abstract boolean matches(ItemStack stack);
 	public abstract boolean matchesOutput(ItemStack stack);
+
+	static {
+		RECIPES.add(CORRODIBLE_ITEMS_RECIPE);
+		RECIPES.add(ASPECT_VIAL_ITEMS_RECIPE);
+	}
 
 	/**
 	 * @param output what will be produced by the recipe
@@ -29,9 +36,6 @@ public abstract class PurifierRecipe {
 			if (recipe.matches(input)) {
 				return recipe.getOutput(input);
 			}
-		}
-		if (CORRODIBLE_ITEMS_RECIPE.matches(input)) {
-			return CORRODIBLE_ITEMS_RECIPE.getOutput(input);
 		}
 		return null;
 	}

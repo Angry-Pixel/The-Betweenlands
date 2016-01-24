@@ -4,60 +4,48 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFlowerPot;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelMossBed;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.ModelConverter;
 
-/**
- * Created by Bart on 22/11/2015.
- */
 public class BlockMossBedRenderer implements ISimpleBlockRenderingHandler {
-    public static ModelMossBed modelMossBed = new ModelMossBed();
+	public static ModelMossBed modelMossBed = new ModelMossBed();
 
-    public static ModelConverter modelConverterMossBed = null;
+	public static ModelConverter modelConverterMossBed = null;
 
-    @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 
-    }
+	}
 
-    @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        if (world == null)
-            return false;
-        if (modelConverterMossBed == null) {
-            modelConverterMossBed = new ModelConverter(
-                    modelMossBed,
-                    0.065D,
-                    true
-            );
-        }
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		if (world == null)
+			return false;
+		if (modelConverterMossBed == null)
+			modelConverterMossBed = new ModelConverter(modelMossBed, 0.065D, true );
 
-        Tessellator.instance.setColorRGBA_F(1, 1, 1, 1);
+		int meta = world.getBlockMetadata(x, y, z);
+		if (meta <= 3) {
+			Tessellator.instance.setColorRGBA_F(1, 1, 1, 1);
+			Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
+			Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z + 0.5F);
+			ModelConverter.Model model = modelConverterMossBed.getModel().rotate(meta == 1 || meta == 3 ? 90F * meta : meta == 2 ? 180F * meta : - 180F, 0f, 1f, 0f, new ModelConverter.Vec3(0, 0, 0));
+			model.renderWithTessellator(Tessellator.instance, 128, 128, BLBlockRegistry.mossBed.bedIcon);
+			Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.5F, -z - 0.5F);
+		}
+		return true;
+	}
 
-        Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		return false;
+	}
 
-        GL11.glRotatef(90f * world.getBlockMetadata(x, y, z), 0f, 1f, 0f);
-        Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z + 0.5F);
-        modelConverterMossBed.renderWithTessellator(Tessellator.instance, 64, 64, BLBlockRegistry.mossBed.bedIcon);
-        Tessellator.instance.addTranslation(-x - 0.5F, -y - 1.5F, -z - 0.5F);
-        return true;
-    }
-
-    @Override
-    public boolean shouldRender3DInInventory(int modelId) {
-        return false;
-    }
-
-    @Override
-    public int getRenderId() {
-        return ClientProxy.BlockRenderIDs.MOSS_BED.id();
-    }
+	@Override
+	public int getRenderId() {
+		return ClientProxy.BlockRenderIDs.MOSS_BED.id();
+	}
 }
