@@ -276,6 +276,8 @@ public class FormatTags {
 	}
 
 	public static class TagFont extends RangedTag {
+		private FontRenderer font;
+
 		public TagFont() {
 			super("font");
 		}
@@ -299,10 +301,20 @@ public class FormatTags {
 					font = TheBetweenlands.proxy.getCustomFontRenderer();
 					break;
 				}
+				this.font = font;
 				container.setCurrentFont(font);
 				return true;
 			}
 			return false;
+		}
+
+		@Override
+		void pop(TextContainer container, RangedTag previous) {
+			if(previous != null) {
+				container.setCurrentFont(((TagFont)previous).font);
+			} else {
+				container.setCurrentFont(container.getDefaultFont());
+			}
 		}
 	}
 }

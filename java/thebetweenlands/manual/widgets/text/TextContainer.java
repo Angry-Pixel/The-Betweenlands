@@ -23,7 +23,7 @@ public class TextContainer {
 	private final String unparsedText;
 	private final Map<String, Tag> textTagComponents = new HashMap<String, Tag>();
 	private final List<TextPage> pages = new ArrayList<TextPage>();
-	private FontRenderer defaultFont;
+	private final FontRenderer defaultFont;
 
 	public TextContainer(final double pageWidth, final double pageHeight, final String text, final FontRenderer defaultFont) {
 		this.pageWidth = pageWidth;
@@ -438,35 +438,50 @@ public class TextContainer {
 		final StringBuilder strippedTextBuilder = new StringBuilder();
 		StringBuilder tagTextBuilder = null;
 		final List<ParsedTag> tagList = new ArrayList<ParsedTag>();
-		final char[] textCharArray = ("P " + this.unparsedText + " P").toCharArray();
+		final char[] textCharArray = (this.unparsedText + " P").toCharArray();
 		char prevChar = 0;
+		char prevChar2 = 0;
 		boolean inTag = false;
 		int strippedTextIndex = 0;
+		final char escapeChar = '\\';
 		for(int i = 0; i < textCharArray.length; i++) {
 			final char currentChar = textCharArray[i];
-			prevChar = currentChar;
+			final char nextChar = i < textCharArray.length - 1 ? textCharArray[i+1] : 0;
+			final char nextChar2 = i < textCharArray.length - 2 ? textCharArray[i+2] : 0;
 			boolean addChar = true;
+			final boolean escapable = this.isEscapable(currentChar);
+			final boolean escaped = prevChar == escapeChar && prevChar2 != prevChar;
+			prevChar2 = prevChar;
+			prevChar = currentChar;
+			if(currentChar == escapeChar && nextChar == escapeChar && this.isEscapable(nextChar2)) {
+				addChar = false;
+			}
 
-			if(currentChar == '<') {
-				if(inTag) {
-					throw new RuntimeException("Already in tag");
+			if(escapable && !escaped) {
+				if(currentChar == '<') {
+					if(inTag) {
+						throw new RuntimeException("Already in tag");
+					}
+					inTag = true;
+					addChar = false;
+					tagTextBuilder = new StringBuilder();
+				} else if(currentChar == '>'){
+					if(!inTag) {
+						throw new RuntimeException("Not in tag");
+					}
+					inTag = false;
+					addChar = false;
+					String tagText = tagTextBuilder.toString();
+					boolean close = false;
+					if(tagText.startsWith("/")) {
+						close = true;
+						tagText = tagText.substring(1, tagText.length());
+					}
+					tagList.add(new ParsedTag(tagText, close, strippedTextIndex));
 				}
-				inTag = true;
-				addChar = false;
-				tagTextBuilder = new StringBuilder();
-			} else if(currentChar == '>'){
-				if(!inTag) {
-					throw new RuntimeException("Not in tag");
-				}
-				inTag = false;
-				addChar = false;
-				String tagText = tagTextBuilder.toString();
-				boolean close = false;
-				if(tagText.startsWith("/")) {
-					close = true;
-					tagText = tagText.substring(1, tagText.length());
-				}
-				tagList.add(new ParsedTag(tagText, close, strippedTextIndex));
+			} else if(escapable && escaped && strippedTextIndex > 0) {
+				strippedTextBuilder.delete(strippedTextIndex-1, strippedTextIndex);
+				strippedTextIndex--;
 			}
 
 			if(addChar) {
@@ -477,6 +492,9 @@ public class TextContainer {
 					tagTextBuilder.append(currentChar);
 				}
 			}
+		}
+		if(inTag) {
+			throw new RuntimeException("Unclosed tag");
 		}
 		final String strippedText = strippedTextBuilder.toString();
 		final List<ParsedTag>[] tagsArray = new ArrayList[strippedText.length() + 1];
@@ -493,7 +511,7 @@ public class TextContainer {
 		StringBuilder segmentTextBuilder = new StringBuilder();
 		boolean wasSpacing = false;
 		final List<ParsedTag> prevTags = new ArrayList<ParsedTag>();
-		for(int i = 2; i < strippedTextCharArray.length - 1; i++) {
+		for(int i = 0; i < strippedTextCharArray.length; i++) {
 			final char currentChar = strippedTextCharArray[i];
 			final List<ParsedTag> tags = tagsArray[i];
 			final boolean hasTags = tags != null && !tags.isEmpty();
@@ -530,8 +548,8 @@ public class TextContainer {
 			}
 			wasSpacing = isSpacing;
 
-			if(i != strippedTextCharArray.length - 1) segmentTextBuilder.append(currentChar);
-			if(i == strippedTextCharArray.length - 1) {
+			if(i != strippedTextCharArray.length - 2) segmentTextBuilder.append(currentChar);
+			if(i == strippedTextCharArray.length - 2) {
 				parsedSegments.add(new ParsedSegment(segmentTextBuilder.toString(), !isSpacing));
 			}
 		}
@@ -590,9 +608,13 @@ public class TextContainer {
 			double cursorX = 0.0D;
 			double cursorY = 0.0D;
 			double lineHeight = 0.0D;
+			WrapSegment prevWrapSegment = null;
+			final List<TextSegment> prevWrapTextSegments = new ArrayList<TextSegment>();
+			boolean newLine = false;
 			for(WrapSegment wrapSegment : wrapSegments) {
 				double wrapSegmentWidth = 0.0D;
 				double wrapSegmentHeight = 0.0D;
+				final List<TextSegment> wrapTextSegments = new ArrayList<TextSegment>();
 
 				for(ParsedSegment segment : wrapSegment.segments) {
 					currentSegment = segment;
@@ -647,15 +669,22 @@ public class TextContainer {
 					double strWidth = this.currentFont.getStringWidth(word) * this.currentScale;
 					double strHeight = this.currentFont.FONT_HEIGHT * this.currentScale;
 					boolean nextLine = cursorX + strWidth > this.pageWidth;
-					boolean newLine = false;
+					if(segment.significant) {
+						newLine = false;
+					}
 					if(nextLine || this.newLine > 0) {
 						cursorX = 0.0D;
 						cursorY += lineHeight * (this.newLine + (nextLine ? 1 : 0));
 						lineHeight = 0.0D;
-						this.newLine = 0;
 						newLine = true;
+						if(prevWrapSegment != null && nextLine && this.newLine == 0) {
+							//Remove previous insignificant segments
+							for(TextSegment wrapTextSegment : prevWrapTextSegments) {
+								wrapTextSegment.page.textSegments.remove(wrapTextSegment);
+							}
+						}
 					}
-					if(strHeight > lineHeight) {
+					if(segment.text.length() > 0 && strHeight > lineHeight) {
 						lineHeight = strHeight;
 					}
 					boolean nextPage = cursorY + strHeight > this.pageHeight;
@@ -667,6 +696,8 @@ public class TextContainer {
 							pages.add(currentPage);
 						}
 						this.newPage = 0;
+						lineHeight = 0.0D;
+						newLine = false;
 						cursorX = 0.0D;
 						cursorY = 0.0D;
 					}
@@ -714,16 +745,32 @@ public class TextContainer {
 					}
 
 					//Only add X offset and segment at start of new line if the segment's width is significant when word wrapping
-					if(!(newLine && !segment.significant)) {
+					if(!newLine || segment.significant || this.newLine > 0) {
 						//// Create text segment ////
 						TextSegment textSegment = new TextSegment(area.page, word, cursorX, cursorY, strWidth, strHeight, this.currentColor, this.currentScale, this.currentFont);
 						currentPage.textSegments.add(textSegment);
 						currentPage.textAreas.addAll(this.textAreas);
+						if(!segment.significant) {
+							wrapTextSegments.add(textSegment);
+						}
 						this.textAreas.clear();
 
 						cursorX += strWidth;
+					} else if(newLine && !segment.significant || this.newLine == 0) {
+						//Remove insignificant segments
+						for(TextSegment wrapTextSegment : wrapTextSegments) {
+							wrapTextSegment.page.textSegments.remove(wrapTextSegment);
+						}
 					}
+
+					if(segment.significant) {
+						newLine = false;
+					}
+					this.newLine = 0;
 				}
+				prevWrapSegment = wrapSegment;
+				prevWrapTextSegments.clear();
+				prevWrapTextSegments.addAll(wrapTextSegments);
 			}
 
 			return pages;
@@ -741,7 +788,11 @@ public class TextContainer {
 	 * @return
 	 */
 	public TextContainer setCurrentFont(FontRenderer font) {
-		this.currentFont = font;
+		if(font == null) {
+			this.currentFont = this.defaultFont;
+		} else {
+			this.currentFont = font;
+		}
 		return this;
 	}
 
@@ -840,5 +891,9 @@ public class TextContainer {
 
 	private boolean isSpacing(char c) {
 		return c == ' ';
+	}
+
+	private boolean isEscapable(char c) {
+		return c == '<' || c == '>';
 	}
 }

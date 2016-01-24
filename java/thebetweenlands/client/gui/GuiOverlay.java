@@ -57,7 +57,8 @@ public class GuiOverlay extends Gui {
 			String str3 = "<a>no<b>word<c>wrap</a>this</b>time</c>";
 			String str4 = "This might be a <tooltip:hehe haha hoho><color:0x800000> long </color> </tooltip> text <a>but<b>it</b>also</a>might not  ";
 			String str5 = "This is <scale:0.5>scaled</scale> but not anymore now. Now it's <color:0xFF0000>colored!</color> and this is <underline>underlined</underline>. <nl> Now it's <underline>underlined and <color:0x00FF00>colored and <bold>bold at the same time and even <scale:2>scaled! </scale>and it still </bold>works properly </color> like</underline> expected. This is a new page by the way. And this is a <tooltip:Hi!>tooltip. <scale:0.75>Yay!</scale></tooltip> <font:custom>Custom fonts also work btw</font>.";
-			TextContainer container = new TextContainer(100, 100, str5, Minecraft.getMinecraft().fontRenderer);
+			String str6 = "Escaping now also works: \\<font:custom\\><nl>But you can also escape the escape character: \\ <np>Additionally you can now also <font:custom>change the font inline and<font:default> add a new page wherever you want.<np><scale:0.5> Unnecessary spacing is automatically discarded when wrapping words, but can be forced by manually adding a new line with \\<nl\\> if you don't want them to be discarded. E.g. like this: \\<nl\\><nl>   - 1 \\<nl\\><nl>   - 2 \\<nl\\><nl>   - 3 \\<nl\\><nl> The space discarding comes in handy when underlining words: <underline>This is an underlined text.</underline><nl>Without space discarding it would look like this in a bad case: <underline>This is an     <nl>    underlined text.</underline><nl>And that doesn't look nice</scale>";
+			TextContainer container = new TextContainer(100, 200, str6, Minecraft.getMinecraft().fontRenderer);
 
 			container.setCurrentScale(1.0F).setCurrentColor(0x808080);
 			container.registerTag(new TagNewLine());
@@ -72,13 +73,14 @@ public class GuiOverlay extends Gui {
 			container.registerTag(new TagPagelink());
 			container.registerTag(new TagRainbow());
 			container.registerTag(new TagFont());
+			container.registerTag(new TagNewPage());
 
 			container.parse();
 
 			int xOff = 0;
 			for(thebetweenlands.manual.widgets.text.TextContainer.TextPage page : container.getPages()) {
-				page.render(50 + (xOff += 100), 2);
-				page.renderBounds(50D + xOff, 2);
+				page.render(50 + (xOff += 104), 2);
+				//page.renderBounds(50D + xOff, 2);
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
