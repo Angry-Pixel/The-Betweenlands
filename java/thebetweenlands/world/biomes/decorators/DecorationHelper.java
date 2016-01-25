@@ -945,10 +945,10 @@ public class DecorationHelper {
 
 	public void populateCave() {
 		generateSpeleothems(60);
+		generateCavePots(20);
 		generateThorns(200);
 		generateCaveMoss(100);
 		generateCaveGrass(120);
-		generateCavePots(20);
 	}
 
 	public void generateCaveGrass(int attempts) {
@@ -968,6 +968,7 @@ public class DecorationHelper {
 			float v = SPELEOTHEM_Y_CDF.eval(rand.nextFloat());
 			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
+			y = y - y%70;
 			GEN_SPELEOTHEM.generate(world, rand, x, y, z);
 		}
 	}

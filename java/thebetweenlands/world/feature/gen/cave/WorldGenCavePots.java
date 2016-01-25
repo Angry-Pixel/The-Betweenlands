@@ -34,10 +34,12 @@ public class WorldGenCavePots extends WorldGenCave {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
+        if (y > 70)
+            return false;
         int randDirection = random.nextInt(4) + 2;
         for (int xx = x; xx <= x + 3; xx++) {
             for (int zz = z; zz <= z + 3; zz++) {
-                if (random.nextInt(10) == 0) {
+                if (random.nextInt(7) == 0) {
                     if (world.getBlock(xx, y, zz) == Blocks.air && world.getBlock(xx, y - 1, zz).isBlockSolid(world, xx, y - 1, zz, ForgeDirection.UP.ordinal())) {
                         world.setBlock(xx, y, zz, getRandomBlock(random), randDirection, 3);
                         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, zz);
