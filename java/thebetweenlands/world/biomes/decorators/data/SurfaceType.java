@@ -37,7 +37,7 @@ public enum SurfaceType {
 			block == BLBlockRegistry.peat || block == BLBlockRegistry.sludgyDirt || 
 			block == BLBlockRegistry.silt;
 		case UNDERGROUND:
-			return block == BLBlockRegistry.betweenstone;
+			return block == BLBlockRegistry.betweenstone || block == BLBlockRegistry.pitstone || block == BLBlockRegistry.limestone;
 		default:
 			return false;
 		}

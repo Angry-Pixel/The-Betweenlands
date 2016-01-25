@@ -7,6 +7,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityLootPot1;
+import thebetweenlands.world.biomes.decorators.DecorationHelper;
+import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.loot.LootItemStack;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
@@ -40,7 +42,7 @@ public class WorldGenCavePots extends WorldGenCave {
         for (int xx = x; xx <= x + 3; xx++) {
             for (int zz = z; zz <= z + 3; zz++) {
                 if (random.nextInt(7) == 0) {
-                    if (world.getBlock(xx, y, zz) == Blocks.air && world.getBlock(xx, y - 1, zz).isBlockSolid(world, xx, y - 1, zz, ForgeDirection.UP.ordinal())) {
+                    if (world.getBlock(xx, y, zz) == Blocks.air && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, zz))) {
                         world.setBlock(xx, y, zz, getRandomBlock(random), randDirection, 3);
                         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, zz);
                         if (lootPot != null)
