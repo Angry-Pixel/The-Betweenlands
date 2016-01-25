@@ -102,9 +102,9 @@ public class BLItemRegistry {
 
 	// WEAPONS TOOLS
 	public static final Item weedwoodSword = new ItemSwordBL(BLMaterial.toolWeedWood)
-			.setGemTexture(CircleGem.CRIMSON, "thebetweenlands:weedWoodSwordCrimson")
-			.setGemTexture(CircleGem.AQUA, "thebetweenlands:weedWoodSwordAqua")
-			.setGemTexture(CircleGem.GREEN, "thebetweenlands:weedWoodSwordGreen").setUnlocalizedName("thebetweenlands.weedwoodSword").setTextureName("thebetweenlands:weedWoodSword");
+			.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:weedWoodSwordCrimson")
+			.setGemTextures(CircleGem.AQUA, "thebetweenlands:weedWoodSwordAqua")
+			.setGemTextures(CircleGem.GREEN, "thebetweenlands:weedWoodSwordGreen").setUnlocalizedName("thebetweenlands.weedwoodSword").setTextureName("thebetweenlands:weedWoodSword");
 	public static final Item weedwoodPickaxe = new ItemPickaxeBL(BLMaterial.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodPickaxe").setTextureName("thebetweenlands:weedWoodPickaxe");
 	public static final Item weedwoodAxe = new ItemAxeBL(BLMaterial.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodAxe").setTextureName("thebetweenlands:weedWoodAxe");
 	public static final Item weedwoodShovel = new ItemSpadeBL(BLMaterial.toolWeedWood).setUnlocalizedName("thebetweenlands.weedwoodShovel").setTextureName("thebetweenlands:weedWoodShovel");
@@ -115,25 +115,25 @@ public class BLItemRegistry {
 	public static final Item basiliskArrow = new ItemBLArrow("basiliskArrow", EnumArrowType.BASILISK).setUnlocalizedName("thebetweenlands.basiliskArrow");
 
 	public static final Item betweenstoneSword = new ItemSwordBL(BLMaterial.toolBetweenstone)
-			.setGemTexture(CircleGem.CRIMSON, "thebetweenlands:betweenstoneSwordCrimson")
-			.setGemTexture(CircleGem.AQUA, "thebetweenlands:betweenstoneSwordAqua")
-			.setGemTexture(CircleGem.GREEN, "thebetweenlands:betweenstoneSwordGreen").setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
+			.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:betweenstoneSwordCrimson")
+			.setGemTextures(CircleGem.AQUA, "thebetweenlands:betweenstoneSwordAqua")
+			.setGemTextures(CircleGem.GREEN, "thebetweenlands:betweenstoneSwordGreen").setUnlocalizedName("thebetweenlands.betweenstoneSword").setTextureName("thebetweenlands:betweenstoneSword");
 	public static final Item betweenstonePickaxe = new ItemPickaxeBL(BLMaterial.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstonePickaxe").setTextureName("thebetweenlands:betweenstonePickaxe");
 	public static final Item betweenstoneAxe = new ItemAxeBL(BLMaterial.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneAxe").setTextureName("thebetweenlands:betweenstoneAxe");
 	public static final Item betweenstoneShovel = new ItemSpadeBL(BLMaterial.toolBetweenstone).setUnlocalizedName("thebetweenlands.betweenstoneShovel").setTextureName("thebetweenlands:betweenstoneShovel");
 
 	public static final Item octineSword = new ItemSwordBL(BLMaterial.toolOctine)
-			.setGemTexture(CircleGem.CRIMSON, "thebetweenlands:octineSwordCrimson")
-			.setGemTexture(CircleGem.AQUA, "thebetweenlands:octineSwordAqua")
-			.setGemTexture(CircleGem.GREEN, "thebetweenlands:octineSwordGreen").setUnlocalizedName("thebetweenlands.octineSword").setTextureName("thebetweenlands:octineSword");
+			.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:octineSwordCrimson")
+			.setGemTextures(CircleGem.AQUA, "thebetweenlands:octineSwordAqua")
+			.setGemTextures(CircleGem.GREEN, "thebetweenlands:octineSwordGreen").setUnlocalizedName("thebetweenlands.octineSword").setTextureName("thebetweenlands:octineSword");
 	public static final Item octinePickaxe = new ItemPickaxeBL(BLMaterial.toolOctine).setUnlocalizedName("thebetweenlands.octinePickaxe").setTextureName("thebetweenlands:octinePickaxe");
 	public static final Item octineAxe = new ItemAxeBL(BLMaterial.toolOctine).setUnlocalizedName("thebetweenlands.octineAxe").setTextureName("thebetweenlands:octineAxe");
 	public static final Item octineShovel = new ItemSpadeBL(BLMaterial.toolOctine).setUnlocalizedName("thebetweenlands.octineShovel").setTextureName("thebetweenlands:octineShovel");
 
 	public static final Item valoniteSword = new ItemSwordBL(BLMaterial.toolValonite)
-			.setGemTexture(CircleGem.CRIMSON, "thebetweenlands:valoniteSwordCrimson")
-			.setGemTexture(CircleGem.AQUA, "thebetweenlands:valoniteSwordAqua")
-			.setGemTexture(CircleGem.GREEN, "thebetweenlands:valoniteSwordGreen").setUnlocalizedName("thebetweenlands.valoniteSword").setTextureName("thebetweenlands:valoniteSword");
+			.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:valoniteSwordCrimson")
+			.setGemTextures(CircleGem.AQUA, "thebetweenlands:valoniteSwordAqua")
+			.setGemTextures(CircleGem.GREEN, "thebetweenlands:valoniteSwordGreen").setUnlocalizedName("thebetweenlands.valoniteSword").setTextureName("thebetweenlands:valoniteSword");
 	public static final Item valonitePickaxe = new ItemPickaxeBL(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.valonitePickaxe").setTextureName("thebetweenlands:valonitePickaxe");
 	public static final Item valoniteAxe = new ItemAxeBL(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.valoniteAxe").setTextureName("thebetweenlands:valoniteAxe");
 	public static final Item valoniteShovel = new ItemSpadeBL(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.valoniteShovel").setTextureName("thebetweenlands:valoniteShovel");

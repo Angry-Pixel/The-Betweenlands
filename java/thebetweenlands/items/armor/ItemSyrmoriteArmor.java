@@ -6,29 +6,29 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.recipes.BLMaterial;
 
-public class ItemSyrmoriteArmor extends ItemArmor implements IManualEntryItem {
+public class ItemSyrmoriteArmor extends ItemArmorBL implements IManualEntryItem {
 
 	public ItemSyrmoriteArmor(int armorType) {
-		super(BLMaterial.armorOctine, 2, armorType);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity event, int slot, String type) {
-		if (stack.getItem() == BLItemRegistry.syrmoriteLeggings)
-			return "thebetweenlands:textures/armour/syrmorite2.png";
-		else
-			return "thebetweenlands:textures/armour/syrmorite1.png";
+		super(BLMaterial.armorOctine, 2, armorType, "thebetweenlands:textures/armour/syrmorite1.png", "thebetweenlands:textures/armour/syrmorite2.png");
+		this.setGemTextures(CircleGem.AQUA, "thebetweenlands:textures/armour/syrmorite1AquaGem.png", "thebetweenlands:textures/armour/syrmorite2AquaGem.png");
+		this.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:textures/armour/syrmorite1CrimsonGem.png", "thebetweenlands:textures/armour/syrmorite2CrimsonGem.png");
+		this.setGemTextures(CircleGem.GREEN, "thebetweenlands:textures/armour/syrmorite1GreenGem.png", "thebetweenlands:textures/armour/syrmorite2GreenGem.png");
 	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
 		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.SYRMORITE_INGOT.id;
+	}
+	
+	@Override
+	protected boolean isLeggings(ItemStack stack) {
+		return stack.getItem() == BLItemRegistry.syrmoriteLeggings;
 	}
 
 	@Override

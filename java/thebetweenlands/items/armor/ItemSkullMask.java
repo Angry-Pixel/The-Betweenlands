@@ -24,17 +24,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Created by Bart on 11-9-2015.
  */
-public class ItemSkullMask extends ItemArmor implements IManualEntryItem {
+public class ItemSkullMask extends ItemArmorBL implements IManualEntryItem {
 	private static final ResourceLocation SKULL_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/skullMask.png");
 
 	public ItemSkullMask() {
-		super(BLMaterial.armorBone, 2, 0);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return "thebetweenlands:textures/armour/skullMask.png";
+		super(BLMaterial.armorBone, 2, 0, "thebetweenlands:textures/armour/skullMask.png", null);
 	}
 
 	@Override

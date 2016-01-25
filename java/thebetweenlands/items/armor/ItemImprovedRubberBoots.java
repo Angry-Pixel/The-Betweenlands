@@ -23,12 +23,6 @@ public class ItemImprovedRubberBoots extends ItemRubberBoots implements IManualE
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return "thebetweenlands:textures/armour/rubberBoots.png";
-	}
-
-	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
 		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.RUBBER_BALL.id;
 	}

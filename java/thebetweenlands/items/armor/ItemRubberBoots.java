@@ -17,24 +17,18 @@ import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemRubberBoots extends ItemArmor implements IManualEntryItem {
+public class ItemRubberBoots extends ItemArmorBL implements IManualEntryItem {
 	private static final int MAX_WALK_TICKS = 40;
 
 	public ItemRubberBoots() {
-		super(BLMaterial.armorRubber, 2, 3);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		return "thebetweenlands:textures/armour/rubberBoots.png";
+		super(BLMaterial.armorRubber, 2, 3, "thebetweenlands:textures/armour/rubberBoots.png", null);
 	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
 		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.RUBBER_BALL.id;
 	}
-
+	
 	@Override
 	public String manualName(int meta) {
 		return "rubberBoots";

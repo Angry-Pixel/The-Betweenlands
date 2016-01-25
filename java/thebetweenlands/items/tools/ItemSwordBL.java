@@ -140,13 +140,13 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	}
 
 	@Override
-	public ItemSwordBL setGemTexture(CircleGem gem, String texture) {
-		this.gemTextures[gem.ordinal()] = texture;
+	public ItemSwordBL setGemTextures(CircleGem gem, String... texture) {
+		this.gemTextures[gem.ordinal()] = texture[0];
 		return this;
 	}
 
 	@Override
-	public String getGemTexture(CircleGem gem) {
-		return this.gemTextures[gem.ordinal()];
+	public String[] getGemTextures(CircleGem gem) {
+		return new String[]{this.gemTextures[gem.ordinal()]};
 	}
 }
