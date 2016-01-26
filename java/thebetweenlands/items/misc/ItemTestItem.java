@@ -10,6 +10,7 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
+import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
 
 public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public ItemTestItem() {
@@ -26,9 +27,8 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if( !world.isRemote && player.isSneaking() ) {
-            WorldGenFluidPool genTarPool = new WorldGenFluidPool();
-            genTarPool.prepare(1.5);
-        	genTarPool.generate(world, rand, x, y, z);
+            WorldGenSmallRuins ruin = new WorldGenSmallRuins();
+            ruin.generate(world, rand, x, y + 1, z);
             return true;
         }
         return false;
