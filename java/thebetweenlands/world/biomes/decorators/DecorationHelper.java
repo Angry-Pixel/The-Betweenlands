@@ -968,7 +968,6 @@ public class DecorationHelper {
 			float v = SPELEOTHEM_Y_CDF.eval(rand.nextFloat());
 			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
-			y = y - y%70;
 			GEN_SPELEOTHEM.generate(world, rand, x, y, z);
 		}
 	}
@@ -997,7 +996,7 @@ public class DecorationHelper {
 		while (attempts --> 0){
 			int x = this.x + offsetXZ();
 			float v = CAVE_POTS_Y_CDF.eval(rand.nextFloat());
-			int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+			int y = (int) (v * (70 - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 			int z = this.z + offsetXZ();
 			GEN_CAVE_POTS.generate(world, rand, x, y, z);
 		}

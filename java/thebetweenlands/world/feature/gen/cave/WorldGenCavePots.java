@@ -42,7 +42,7 @@ public class WorldGenCavePots extends WorldGenCave {
         for (int xx = x; xx <= x + 3; xx++) {
             for (int zz = z; zz <= z + 3; zz++) {
                 if (random.nextInt(7) == 0) {
-                    if (world.getBlock(xx, y, zz) == Blocks.air && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, zz))) {
+                    if (world.getBlock(xx, y, zz) == Blocks.air && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(xx, y - 1, zz))) {
                         world.setBlock(xx, y, zz, getRandomBlock(random), randDirection, 3);
                         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, zz);
                         if (lootPot != null)
