@@ -49,7 +49,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
     public boolean ark1(World world, Random random, int x, int y, int z) {
         int height = 9 + random.nextInt(2);
-        int width = 7 + random.nextInt(2);
+        int width = 7;
         if (random.nextBoolean()) {
             for (int xx = x; xx < x + width; xx++)
                 for (int yy = y; yy < y + height; yy++)
@@ -161,7 +161,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
     public boolean ark2(World world, Random random, int x, int y, int z) {
         int height = 13 + random.nextInt(2);
-        int width = 7 + random.nextInt(2);
+        int width = 7;
         if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width - 2, y - 1, z)))
             return false;
         if (random.nextBoolean()) {
@@ -218,7 +218,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                 for (int yy = y; yy < y + height; yy++)
                     if (!(world.getBlock(x, yy, zz) == Blocks.air))
                         return false;
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z  + width - 2)))
+            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width - 2)))
                 return false;
             for (int yy = y; yy < y + height - 4; yy++) {
                 if (yy <= y + height - 9)
@@ -269,7 +269,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
     public boolean ark3(World world, Random random, int x, int y, int z) {
         int height = 6 + random.nextInt(2);
-        int width = 5 + random.nextInt(2);
+        int width = 5;
         for (int zz = z; zz < z + width; zz++)
             for (int yy = y; yy < y + height; yy++)
                 for (int xx = x; xx > x - width; xx--)
@@ -345,60 +345,52 @@ public class WorldGenSmallRuins extends WorldGenerator {
             }
         }
 
-        if (random.nextInt(5) == 0 && width - 5 == 1) {
-            if (SurfaceType.MIXED.matchBlock(world.getBlock(x - 3, y - 1, z + 3))) {
+
+        if (SurfaceType.MIXED.matchBlock(world.getBlock(x - 3, y - 1, z + 3))) {
+            if (random.nextInt(8) == 0) {
+                int randDirection = random.nextInt(4) + 2;
+                world.setBlock(x - 2, y, z + 2, getRandomBlock(random), randDirection, 3);
+                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 2);
+                if (lootPot != null)
+                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+            }
+            if (random.nextInt(8) == 0) {
+                int randDirection = random.nextInt(4) + 2;
+                world.setBlock(x - 2, y, z + 3, getRandomBlock(random), randDirection, 3);
+                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 3);
+                if (lootPot != null)
+                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+            }
+            if (random.nextInt(8) == 0) {
+                int randDirection = random.nextInt(4) + 2;
+                world.setBlock(x - 3, y, z + 2, getRandomBlock(random), randDirection, 3);
+                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 2);
+                if (lootPot != null)
+                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+            }
+            if (random.nextInt(8) == 0) {
                 int randDirection = random.nextInt(4) + 2;
                 world.setBlock(x - 3, y, z + 3, getRandomBlock(random), randDirection, 3);
                 TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 3);
                 if (lootPot != null)
                     LootUtil.generateLoot(lootPot, random, loot, 1, 2);
             }
-        } else {
-            if (SurfaceType.MIXED.matchBlock(world.getBlock(x - 3, y - 1, z + 3))) {
-                if (random.nextInt(8) == 0) {
-                    int randDirection = random.nextInt(4) + 2;
-                    world.setBlock(x - 2, y, z + 2, getRandomBlock(random), randDirection, 3);
-                    TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 2);
-                    if (lootPot != null)
-                        LootUtil.generateLoot(lootPot, random, loot, 1, 2);
-                }
-                if (random.nextInt(8) == 0) {
-                    int randDirection = random.nextInt(4) + 2;
-                    world.setBlock(x - 2, y, z + 3, getRandomBlock(random), randDirection, 3);
-                    TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 3);
-                    if (lootPot != null)
-                        LootUtil.generateLoot(lootPot, random, loot, 1, 2);
-                }
-                if (random.nextInt(8) == 0) {
-                    int randDirection = random.nextInt(4) + 2;
-                    world.setBlock(x - 3, y, z + 2, getRandomBlock(random), randDirection, 3);
-                    TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 2);
-                    if (lootPot != null)
-                        LootUtil.generateLoot(lootPot, random, loot, 1, 2);
-                }
-                if (random.nextInt(8) == 0) {
-                    int randDirection = random.nextInt(4) + 2;
-                    world.setBlock(x - 3, y, z + 3, getRandomBlock(random), randDirection, 3);
-                    TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 3);
-                    if (lootPot != null)
-                        LootUtil.generateLoot(lootPot, random, loot, 1, 2);
-                }
-            }
         }
+        
         return true;
     }
 
 
     public boolean ark4(World world, Random random, int x, int y, int z) {
         int height = 9 + random.nextInt(2);
-        int width = 6 + random.nextInt(2);
+        int width = 6;
         for (int zz = z; zz < z + width; zz++)
             for (int yy = y; yy < y + height; yy++)
                 for (int xx = x; xx > x - width; xx--)
                     if (!(world.getBlock(xx, yy, zz) == Blocks.air))
                         return false;
 
-        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width - 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y- 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)))
+        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width - 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)))
             return false;
         for (int yy = y; yy < y + height; yy++) {
             if (yy <= y + height - 5) {
@@ -435,7 +427,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                 }
                 world.setBlock(x - width + 1, yy, z + width - 1, BLBlockRegistry.betweenstoneTiles);
             } else if (yy <= y + height - 2) {
-                if (yy == y + height - 4){
+                if (yy == y + height - 4) {
                     world.setBlock(x - width, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickWall);
                     world.setBlock(x - width + 1, yy, z + width, BLBlockRegistry.betweenstoneBrickWall);
                 }
@@ -447,7 +439,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                 int xx;
                 for (xx = x - width + 3; xx <= x - 3; xx++) {
                     world.setBlock(xx, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
-                    if (random.nextInt(8) == 0){
+                    if (random.nextInt(8) == 0) {
                         int randDirection = random.nextInt(4) + 2;
                         world.setBlock(xx, yy + 1, z + width - 1, getRandomBlock(random), randDirection, 3);
                         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, yy + 1, z + width - 1);
@@ -477,7 +469,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                     world.setBlock(x, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
                 }
                 world.setBlock(x - 1, yy, z + width - 1, BLBlockRegistry.betweenstoneBricks);
-            } else if (yy == y + height - 1){
+            } else if (yy == y + height - 1) {
                 world.setBlock(x - 1, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);
             }
         }
