@@ -7,6 +7,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityLootPot1;
+import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.loot.LootItemStack;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
@@ -61,7 +62,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                     for (xx = x + 3; xx <= x + 3 + width - 7; xx++) {
                         world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0){
+                        if (random.nextInt(5) == 0 && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(xx, y - 1, z))){
                             int randDirection = random.nextInt(4) + 2;
                             world.setBlock(xx, y, z, getRandomBlock(random), randDirection, 3);
                             TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, z);
@@ -111,7 +112,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                     for (zz = z + 3; zz <= z + 3 + width - 7; zz++) {
                         world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0){
+                        if (random.nextInt(5) == 0 && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(x, y - 1, zz))){
                             int randDirection = random.nextInt(4) + 2;
                             world.setBlock(x, y, zz, getRandomBlock(random), randDirection, 3);
                             TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, zz);
@@ -168,7 +169,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                     for (xx = x + 2; xx <= x + 2 + width - 6; xx++) {
                         world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0){
+                        if (random.nextInt(5) == 0 && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(xx, y - 1, z))){
                             int randDirection = random.nextInt(4) + 2;
                             world.setBlock(xx, y, z, getRandomBlock(random), randDirection, 3);
                             TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, z);
@@ -216,7 +217,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                     for (zz = z + 2; zz <= z + 2 + width - 6; zz++) {
                         world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0){
+                        if (random.nextInt(5) == 0 && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(x, y - 1, zz))){
                             int randDirection = random.nextInt(4) + 2;
                             world.setBlock(x, y, zz, getRandomBlock(random), randDirection, 3);
                             TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, zz);
