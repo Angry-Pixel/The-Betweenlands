@@ -21,7 +21,7 @@ public class ItemArtefact extends Item {
     }
 
     public static ItemStack createStack(EnumItemArtefact enumGeneric, int size) {
-        return new ItemStack(BLItemRegistry.itemsGeneric, size, enumGeneric.id);
+        return new ItemStack(BLItemRegistry.itemArtefact, size, enumGeneric.id);
     }
 
     public static ItemStack createStack(Item item, int size, int meta) {
