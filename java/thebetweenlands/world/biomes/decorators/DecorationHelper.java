@@ -23,6 +23,7 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
+import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
 import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
 import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree;
@@ -77,6 +78,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_SLUDGECREEP = new WorldGenTallGrass(BLBlockRegistry.sludgecreep, 1);
 	private final static WorldGenTallGrass GEN_DEAD_WEEDWOOD_BUSH = new WorldGenTallGrass(BLBlockRegistry.deadWeedwoodBush, 1);
 	private final static WorldGenCavePots GEN_CAVE_POTS = new WorldGenCavePots();
+	private final static WorldGenSmallRuins GEN_SMALL_RUINS = new WorldGenSmallRuins();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -922,6 +924,16 @@ public class DecorationHelper {
 			}
 		}
 	}
+
+	public void generateSmallRuins(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_SMALL_RUINS.generate(world, rand, x, y, z);
+		}
+	}
+
 	public void generateSmallHollowLog(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();

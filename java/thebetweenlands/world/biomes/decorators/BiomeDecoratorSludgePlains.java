@@ -11,8 +11,8 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBaseBetweenlands {
     public void postChunkGen(int pass) {
         DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
         helper.populateCave();
-
         helper.generateTarPool(100);
+        helper.generateSmallRuins(5);
         helper.generateSmallHollowLog(5);
         helper.generateSmalWeedwoodTree(4);
 		helper.generateSludgecreep(50);
