@@ -14,9 +14,6 @@ import thebetweenlands.world.loot.WeightedLootList;
 
 import java.util.Random;
 
-/**
- * Created by Bart on 26/01/2016.
- */
 public class WorldGenSmallRuins extends WorldGenerator {
 
     public static final WeightedLootList loot = new WeightedLootList(new LootItemStack[]{
@@ -53,7 +50,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         if (random.nextBoolean()) {
             for (int xx = x; xx < x + width; xx++)
                 for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(xx, yy, z) == Blocks.air))
+                    if (!(world.getBlock(xx, yy, z) == Blocks.air || (world.getBlock(xx, yy, z) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
             if (!SurfaceType.MIXED.matchBlock(world.getBlock(x + 1, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width - 2, y - 1, z)))
                 return false;
@@ -105,7 +102,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         } else {
             for (int zz = z; zz < z + width; zz++)
                 for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(x, yy, zz) == Blocks.air))
+                    if (!(world.getBlock(x, yy, zz) == Blocks.air || (world.getBlock(x, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
             if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width - 2)))
                 return false;
@@ -167,7 +164,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         if (random.nextBoolean()) {
             for (int xx = x; xx < x + width; xx++)
                 for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(xx, yy, z) == Blocks.air))
+                    if (!(world.getBlock(xx, yy, z) == Blocks.air || (world.getBlock(xx, yy, z) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
             for (int yy = y; yy < y + height - 4; yy++) {
                 if (yy <= y + height - 9)
@@ -216,7 +213,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         } else {
             for (int zz = z; zz < z + width; zz++)
                 for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(x, yy, zz) == Blocks.air))
+                    if (!(world.getBlock(x, yy, zz) == Blocks.air || (world.getBlock(x, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
             if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width - 2)))
                 return false;
@@ -273,7 +270,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         for (int zz = z; zz < z + width; zz++)
             for (int yy = y; yy < y + height; yy++)
                 for (int xx = x; xx > x - width; xx--)
-                    if (!(world.getBlock(xx, yy, zz) == Blocks.air))
+                    if (!(world.getBlock(xx, yy, zz) == Blocks.air || (world.getBlock(xx, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
         if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width)))
             return false;
@@ -387,7 +384,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         for (int zz = z; zz < z + width; zz++)
             for (int yy = y; yy < y + height; yy++)
                 for (int xx = x; xx > x - width; xx--)
-                    if (!(world.getBlock(xx, yy, zz) == Blocks.air))
+                    if (!(world.getBlock(xx, yy, zz) == Blocks.air || (world.getBlock(xx, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
                         return false;
 
         if (!SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width - 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)))
