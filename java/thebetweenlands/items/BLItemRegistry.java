@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
@@ -83,8 +85,6 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterial;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -168,20 +168,20 @@ public class BLItemRegistry {
 	public static final Item boneLeggings = new ItemBoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings").setTextureName("thebetweenlands:boneLeggings");
 	public static final Item boneBoots = new ItemBoneArmor(3).setUnlocalizedName("thebetweenlands.boneBoots").setTextureName("thebetweenlands:boneBoots");
 
-	public static final Item syrmoriteHelmet = new ItemSyrmoriteArmor(0).setUnlocalizedName("thebetweenlands.syrmoriteHelmet").setTextureName("thebetweenlands:syrmoriteHelmet");
-	public static final Item syrmoriteChestplate = new ItemSyrmoriteArmor(1).setUnlocalizedName("thebetweenlands.syrmoriteChestplate").setTextureName("thebetweenlands:syrmoriteChestplate");
-	public static final Item syrmoriteLeggings = new ItemSyrmoriteArmor(2).setUnlocalizedName("thebetweenlands.syrmoriteLeggings").setTextureName("thebetweenlands:syrmoriteLeggings");
-	public static final Item syrmoriteBoots = new ItemSyrmoriteArmor(3).setUnlocalizedName("thebetweenlands.syrmoriteBoots").setTextureName("thebetweenlands:syrmoriteBoots");
+	public static final Item syrmoriteHelmet = new ItemSyrmoriteArmor(0).setUnlocalizedName("thebetweenlands.syrmoriteHelmet");
+	public static final Item syrmoriteChestplate = new ItemSyrmoriteArmor(1).setUnlocalizedName("thebetweenlands.syrmoriteChestplate");
+	public static final Item syrmoriteLeggings = new ItemSyrmoriteArmor(2).setUnlocalizedName("thebetweenlands.syrmoriteLeggings");
+	public static final Item syrmoriteBoots = new ItemSyrmoriteArmor(3).setUnlocalizedName("thebetweenlands.syrmoriteBoots");
 
 	public static final Item legendaryHelmet = new ItemArmorOfLegends(0).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryHelmet").setTextureName("thebetweenlands:legendaryHelmet");
 	public static final Item legendaryChestplate = new ItemArmorOfLegends(1).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryChestplate").setTextureName("thebetweenlands:legendaryChestplate");
 	public static final Item legendaryLeggings = new ItemArmorOfLegends(2).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryLeggings").setTextureName("thebetweenlands:legendaryLeggings");
 	public static final Item legendaryBoots = new ItemArmorOfLegends(3).setMaxDamage(-1).setUnlocalizedName("thebetweenlands.legendaryBoots").setTextureName("thebetweenlands:legendaryBoots");
 
-	public static final Item valoniteHelmet = new ItemValoniteArmor(0).setUnlocalizedName("thebetweenlands.valoniteHelmet").setTextureName("thebetweenlands:valoniteHelmet");
-	public static final Item valoniteChestplate = new ItemValoniteArmor(1).setUnlocalizedName("thebetweenlands.valoniteChestplate").setTextureName("thebetweenlands:valoniteChestplate");
-	public static final Item valoniteLeggings = new ItemValoniteArmor(2).setUnlocalizedName("thebetweenlands.valoniteLeggings").setTextureName("thebetweenlands:valoniteLeggings");
-	public static final Item valoniteBoots = new ItemValoniteArmor(3).setUnlocalizedName("thebetweenlands.valoniteBoots").setTextureName("thebetweenlands:valoniteBoots");
+	public static final Item valoniteHelmet = new ItemValoniteArmor(0).setUnlocalizedName("thebetweenlands.valoniteHelmet");
+	public static final Item valoniteChestplate = new ItemValoniteArmor(1).setUnlocalizedName("thebetweenlands.valoniteChestplate");
+	public static final Item valoniteLeggings = new ItemValoniteArmor(2).setUnlocalizedName("thebetweenlands.valoniteLeggings");
+	public static final Item valoniteBoots = new ItemValoniteArmor(3).setUnlocalizedName("thebetweenlands.valoniteBoots");
 
 	public static final Item rubberBoots = new ItemRubberBoots().setUnlocalizedName("thebetweenlands.rubberBoots").setTextureName("thebetweenlands:rubberBoots");
 	public static final Item rubberBootsImproved = new ItemImprovedRubberBoots().setUnlocalizedName("thebetweenlands.rubberBootsImproved").setTextureName("thebetweenlands:rubberBoots");
