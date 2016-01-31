@@ -22,6 +22,8 @@ New Stuff (Low priority)
 - Dreadful Peatmummy mini-boss
 - Some collectibles
 - Achievements
-- More mobs e.g Stalker
+- More mobs:
+- Stalker
+- Mud Golem
 
 Furthermore we should keep polishing things and playtest often to find bugs and polish balancing.
