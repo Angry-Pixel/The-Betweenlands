@@ -628,7 +628,23 @@
 				"stream": true
 			},
 			{
-				"name": "music/Barrowmound",
+				"name": "music/BarrowMounds",
+				"stream": true
+			},
+			{
+				"name": "music/Don'tFollowTheWhisps",
+				"stream": true
+			},
+			{
+				"name": "music/Ghostfaces",
+				"stream": true
+			},
+			{
+				"name": "music/Incantation",
+				"stream": true
+			},
+			{
+				"name": "music/MurkBeneathATwinklingVoid",
 				"stream": true
 			},
 			{
