@@ -178,7 +178,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', "plankWeedwood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorRubber, 1), "##", "##", "##", '#', BLBlockRegistry.rubberTreePlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.doorSyrmorite, 1), "##", "##", "##", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', "plankWeedwood"));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorSyrmorite, 2), "###", "###", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));

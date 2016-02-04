@@ -231,6 +231,7 @@ public class BLItemRegistry {
 
 	//DOORS
 	public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
+	public static final Item doorRubber = new ItemBLDoor(BLBlockRegistry.doorRubber);
 	public static final Item doorSyrmorite = new ItemBLDoor(BLBlockRegistry.doorSyrmorite);
 
 	//MISC
@@ -252,7 +253,7 @@ public class BLItemRegistry {
 	public static final Item gecko = new ItemMob("gecko");
 	public static final Item cavingRope = new ItemCavingRope().setUnlocalizedName("thebetweenlands.cavingRope").setTextureName("thebetweenlands:cavingRope");
 	public static final Item weedwoodSign = new ItemBLSign(BLBlockRegistry.weedwoodWallSign, BLBlockRegistry.weedwoodSignStanding, "weedwood");
-	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBedItem");
+	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBed");
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();

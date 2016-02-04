@@ -33,16 +33,21 @@ public class BlockBLDoor extends BlockDoor implements IManualEntryItem {
 		this.item = item;
 	}
 
-	public BlockBLDoor setRenderPass(int pass) {
-		renderPass = pass;
-		return this;
-	}
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderBlockPass() {
-		return renderPass;
-	}
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
+    @Override
+    public int getRenderBlockPass ()
+    {
+        return 1;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
