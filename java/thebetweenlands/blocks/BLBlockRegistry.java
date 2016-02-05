@@ -507,7 +507,11 @@ public class BLBlockRegistry {
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
 	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
 	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
-
+	public static final Block slimyBoneBlock = new BlockBLGenericDeco("slimyBoneBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block aquaMiddleGemBlock = new BlockBLGenericDeco("aquaMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block crimsonMiddleGemBlock = new BlockBLGenericDeco("crimsonMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
 
