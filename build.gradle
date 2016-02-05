@@ -18,9 +18,9 @@ buildscript {
 apply plugin: 'forge'
 
 project.ext.buildnumber = ''
-if (System.getenv().BUILD_NUMBER) project.buildnumber = '-build.' + System.getenv().BUILD_NUMBER
+if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BUILD_NUMBER
 
-version = '1.7.10-1.0.0-alpha.1' + project.buildnumber
+version = getVersionFromJava() + project.buildnumber
 group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.7'
@@ -30,10 +30,6 @@ minecraft {
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '/*!*/true/*!*/', 'false'
-}
-
-configurations {
-    include
 }
 
 sourceSets {
@@ -72,7 +68,6 @@ processResources {
 
 jar {
     classifier = 'universal'
-    from configurations.include.collect { it.isDirectory() ? it : zipTree(it) }
     manifest {
         attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
         attributes ('FMLCorePluginContainsFMLMod': 'true')
@@ -91,4 +86,25 @@ task devJar(type: Jar) {
 
 artifacts {
     archives sourcesJar, devJar
+}
+
+String getVersionFromJava() {
+    String major = "0";
+    String revision = "0";
+    String patch = "0";
+    String prefix = "public static final String VERSION = \"";
+    File file = file("java/thebetweenlands/lib/ModInfo.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length(), s.length() - 2);
+            String[] pts = s.split("\\.");
+
+            major = pts[0];
+            revision = pts[1];
+            patch = pts[2];
+        }
+    }
+
+    return "$major.$revision.$patch";
 }
