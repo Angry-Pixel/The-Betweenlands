@@ -187,6 +187,8 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.crimsonMiddleGem, 9), new ItemStack(BLBlockRegistry.crimsonMiddleGemBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.greenMiddleGemBlock), "xxx", "xxx", "xxx", 'x', new ItemStack(BLItemRegistry.greenMiddleGem));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.greenMiddleGem, 9), new ItemStack(BLBlockRegistry.greenMiddleGemBlock));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockOfCompost), "xxx", "xxx", "xxx", 'x', ItemGeneric.createStack(EnumItemGeneric.COMPOST));
+		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.COMPOST, 9), new ItemStack(BLBlockRegistry.blockOfCompost));
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
