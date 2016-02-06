@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class RecipeFairyLights implements IRecipe {
 	}
 
 	public RecipeFairyLights() {
-		Object[] recipe = {"I-I", 'I', "ingotIron", '-', new Object[]{Items.string, "stickWood"}};
+		Object[] recipe = {"I-I", 'I', EnumItemGeneric.SYRMORITE_INGOT, '-', new Object[]{EnumItemGeneric.SWAMP_REED_ROPE, EnumItemGeneric.WEEDWOOD_STICK}};
 		outputItem = BLItemRegistry.fairyLights;
 
 		String recipeString = "";
