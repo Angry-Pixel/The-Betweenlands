@@ -72,12 +72,13 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_DEAD_WEEDWOOD_BUSH = new WorldGenTallGrass(BLBlockRegistry.deadWeedwoodBush, 1);
 	private final static WorldGenCavePots GEN_CAVE_POTS = new WorldGenCavePots();
 	private final static WorldGenSmallRuins GEN_SMALL_RUINS = new WorldGenSmallRuins();
-	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
 	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
+	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
+
 	private final Random rand;
 	private final int x, y, z;
 	private final World world;
@@ -347,6 +348,7 @@ public class DecorationHelper {
 		}
 	}
 
+
 	public void generateSwampPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -413,6 +415,7 @@ public class DecorationHelper {
 			}
 		}
 	}
+
 
 	public void generatePitcherPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
