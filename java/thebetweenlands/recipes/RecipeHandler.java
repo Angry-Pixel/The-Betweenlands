@@ -22,8 +22,6 @@ import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.lanterns.LightVariant;
-import thebetweenlands.items.lanterns.crafting.RecipeDyeColorNBT;
-import thebetweenlands.items.lanterns.crafting.RecipeFairyLights;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;

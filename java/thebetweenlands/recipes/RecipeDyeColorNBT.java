@@ -1,4 +1,4 @@
-package thebetweenlands.items.lanterns.crafting;
+package thebetweenlands.recipes;
 
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
