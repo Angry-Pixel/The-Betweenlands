@@ -1,10 +1,8 @@
 package thebetweenlands.network.message;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
@@ -12,6 +10,9 @@ import thebetweenlands.network.message.base.AbstractMessage;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvironmentEvent> {
 	private EnvironmentEvent event;
@@ -61,6 +62,7 @@ public class MessageSyncEnvironmentEvent extends AbstractMessage<MessageSyncEnvi
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onMessageClientSide(MessageSyncEnvironmentEvent message, EntityPlayer player) {
 		World world = player.worldObj;
 		if(world.provider instanceof WorldProviderBetweenlands) {

@@ -1,13 +1,11 @@
 package thebetweenlands.entities.properties.list;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import thebetweenlands.decay.DecayStats;
 import thebetweenlands.entities.properties.EntityProperties;
 
-public class EntityPropertiesDecay extends EntityProperties {
+public class EntityPropertiesDecay extends EntityProperties<EntityPlayer> {
 	public DecayStats decayStats = new DecayStats();
 
 	@Override
@@ -26,7 +24,7 @@ public class EntityPropertiesDecay extends EntityProperties {
 	}
 
 	@Override
-	public Class<? extends Entity> getEntityClass() {
+	public Class<EntityPlayer> getEntityClass() {
 		return EntityPlayer.class;
 	}
 

@@ -1,7 +1,7 @@
 package thebetweenlands.network.message;
 
-import java.io.IOException;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,6 +9,8 @@ import net.minecraft.network.PacketBuffer;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.network.message.base.AbstractMessage;
+
+import java.io.IOException;
 
 public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
 	public NBTTagCompound aspectData;
@@ -19,6 +21,7 @@ public class MessageLoadAspects extends AbstractMessage<MessageLoadAspects> {
 		this.aspectData = aspectData;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void onMessageClientSide(MessageLoadAspects message, EntityPlayer player) {
 		AspectManager.get(TheBetweenlands.proxy.getClientWorld()).loadStaticAspects(message.aspectData);
 	}

@@ -2,11 +2,10 @@ package thebetweenlands.entities.properties.list;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.gemcircle.CircleGem;
 
-public class EntityPropertiesCircleGem extends EntityProperties {
+public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	private CircleGem circleGem = CircleGem.NONE;
 
 	@Override
@@ -25,7 +24,7 @@ public class EntityPropertiesCircleGem extends EntityProperties {
 	}
 
 	@Override
-	public Class<? extends Entity> getEntityClass() {
+	public Class<Entity> getEntityClass() {
 		return Entity.class;
 	}
 
