@@ -8,7 +8,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 
 /**
@@ -21,7 +21,7 @@ public class BlockBLPane extends BlockPane {
         super(name, name, material, dropItem);
         setBlockName("thebetweenlands." + name + "Pane");
         textureName = "thebetweenlands:" + name;
-        this.setCreativeTab(ModCreativeTabs.blocks);
+        this.setCreativeTab(BLCreativeTabs.blocks);
     }
 
     @Override

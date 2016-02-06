@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
@@ -28,7 +28,7 @@ public class ItemSickle extends Item implements ICorrodible {
 		this.setTextureName("thebetweenlands:strictlyHerblore/tools/sickle");
 		this.setMaxStackSize(1);
 		this.setMaxDamage(2500);
-		ModCreativeTabs.herbLore.setTab(this);
+		BLCreativeTabs.herbLore.setTab(this);
 	}
 
 	@Override

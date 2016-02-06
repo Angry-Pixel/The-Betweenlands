@@ -14,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
@@ -28,7 +28,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, ISyr
 		super(Material.plants);
 		setTickRandomly(false);
 		setHardness(0);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockName("thebetweenlands.caveMoss");
 		setBlockTextureName("thebetweenlands:caveMoss");
 		setStepSound(Block.soundTypeGrass);

@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 16-6-2015.
@@ -23,7 +23,7 @@ public class BlockBLTrapDoor extends BlockTrapDoor {
         textureName = "thebetweenlands:" + name + "Trapdoor";
         setHardness(3.0F);
         setStepSound(soundTypeWood);
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
     }
 
 

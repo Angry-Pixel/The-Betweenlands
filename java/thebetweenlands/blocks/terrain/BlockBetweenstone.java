@@ -2,7 +2,7 @@ package thebetweenlands.blocks.terrain;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockBetweenstone
         extends Block
@@ -13,7 +13,7 @@ public class BlockBetweenstone
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.betweenstone");
 		setBlockTextureName("thebetweenlands:betweenstone");
 	}

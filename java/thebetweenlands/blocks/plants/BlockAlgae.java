@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
@@ -23,7 +23,7 @@ public class BlockAlgae extends BlockBush implements ISickleHarvestable, ISyrmor
 	public BlockAlgae() {
 		setHardness(0.1F);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockName("thebetweenlands.algae");
 		setBlockTextureName("thebetweenlands:algae");
 		setBlockBounds(0, 0.0F, 0, 1.0F, 0.125F, 1.0F);

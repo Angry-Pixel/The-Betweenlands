@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.ISickleHarvestable;
@@ -23,7 +23,7 @@ public class BlockThorns extends BlockVine implements ISickleHarvestable, ISyrmo
 		super();
 		setHardness(0.2F);
 		setBlockName("thebetweenlands.thorns");
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		setBlockTextureName("thebetweenlands:thorns");
 	}

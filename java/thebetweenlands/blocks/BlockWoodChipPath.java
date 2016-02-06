@@ -12,7 +12,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 12-6-2015.
@@ -23,7 +23,7 @@ public class BlockWoodChipPath extends Block {
 		this.setBlockBounds(0, 0.0F, 0, 1.0F, 0.125F, 1.0F);
 		this.setBlockName("thebetweenlands.weedwoodChipPath");
 		this.setBlockTextureName("thebetweenlands:weedwoodBarkGround");
-		this.setCreativeTab(ModCreativeTabs.blocks);
+		this.setCreativeTab(BLCreativeTabs.blocks);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		this.setStepSound(soundTypeWood);

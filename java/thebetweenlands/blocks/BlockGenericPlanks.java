@@ -3,7 +3,7 @@ package thebetweenlands.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.StatCollector;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockGenericPlanks extends Block {
 
@@ -11,7 +11,7 @@ public class BlockGenericPlanks extends Block {
 
 	public BlockGenericPlanks(String blockName, Material material) {
 		super(material);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setHardness(2F);
 		setResistance(5.0F);
 		setStepSound(Block.soundTypeWood);

@@ -1,7 +1,7 @@
 package thebetweenlands.blocks.structure;
 
 import thebetweenlands.blocks.BlockSpawner;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockDruidSpawner extends BlockSpawner {
 
@@ -10,7 +10,7 @@ public class BlockDruidSpawner extends BlockSpawner {
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.druidSpawner");
 		setBlockTextureName("thebetweenlands:druidSpawner");
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 	}
 
 }

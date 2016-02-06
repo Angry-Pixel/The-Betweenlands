@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 
@@ -42,7 +42,7 @@ public class BlockBLFurnace extends BlockContainer {
         setHardness(3.5F);
         setStepSound(soundTypePiston);
         if(!isActive)
-        	setCreativeTab(ModCreativeTabs.blocks);
+        	setCreativeTab(BLCreativeTabs.blocks);
     }
 
 	@Override

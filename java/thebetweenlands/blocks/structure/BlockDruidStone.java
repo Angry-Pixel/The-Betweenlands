@@ -11,9 +11,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -31,7 +30,7 @@ public class BlockDruidStone
 		setStepSound(soundTypeStone);
 		setHarvestLevel("pickaxe", 0);
 		setLightLevel(0.8F);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
         this.type = blockName;
 		setBlockName("thebetweenlands." + this.type);
 		setBlockTextureName("thebetweenlands:" + this.type);

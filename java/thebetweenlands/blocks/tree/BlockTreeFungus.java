@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 import java.util.Random;
@@ -23,7 +23,7 @@ public class BlockTreeFungus extends Block {
         super(Material.wood);
 		setStepSound(Block.soundTypeCloth);
 		setHardness(0.2F);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockName("thebetweenlands.treeFungus");
 	}
 

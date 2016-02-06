@@ -24,7 +24,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.particles.EntityAnimatorFX;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.items.BLItemRegistry;
@@ -41,7 +41,7 @@ public class BlockAnimator extends BlockContainer {
 	public BlockAnimator() {
 		super(Material.rock);
 		setStepSound(soundTypeStone);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.animator");
 		setBlockTextureName("thebetweenlands:betweenstone");
 	}

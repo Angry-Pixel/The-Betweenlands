@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class BlockBLWall extends BlockWall {
 	public BlockBLWall(Block block, int meta) {
 		super(block);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		blockType = block;
 		blockMeta = meta;
 	}

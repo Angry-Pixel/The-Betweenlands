@@ -15,7 +15,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -28,7 +28,7 @@ public class BlockRoot extends Block {
 	public BlockRoot() {
 		super(Material.wood);
 		this.setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setHardness(1.0F);
 		setStepSound(Block.soundTypeWood);
 		//setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);

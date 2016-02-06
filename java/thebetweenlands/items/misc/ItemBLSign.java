@@ -1,14 +1,13 @@
 package thebetweenlands.items.misc;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemSign;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.container.BlockBLSign;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 16/01/2016.
@@ -22,7 +21,7 @@ public class ItemBLSign extends ItemSign {
         this.wall = wall;
         this.standing = standing;
         this.material = material;
-        setCreativeTab(ModCreativeTabs.items);
+        setCreativeTab(BLCreativeTabs.items);
         setUnlocalizedName("thebetweenlands." + material + "Sign");
         setTextureName("thebetweenlands:" + material + "Sign");
     }

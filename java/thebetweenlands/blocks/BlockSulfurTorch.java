@@ -4,9 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -18,7 +17,7 @@ public class BlockSulfurTorch extends BlockTorch {
         setStepSound(soundTypeWood);
         setBlockName("thebetweenlands.sulfurTorch");
         setBlockTextureName("thebetweenlands:sulfurTorch");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         setTickRandomly(true);
     }
 

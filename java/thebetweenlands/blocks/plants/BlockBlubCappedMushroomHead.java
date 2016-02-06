@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 
 public class BlockBlubCappedMushroomHead extends Block {
@@ -22,7 +22,7 @@ public class BlockBlubCappedMushroomHead extends Block {
 		setHardness(0.2F);
 		setBlockName("thebetweenlands.hugeMushroomTop");
 		setBlockTextureName("thebetweenlands:bulbCappedShroomCap");
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setLightLevel(1.0F);
 	}
 

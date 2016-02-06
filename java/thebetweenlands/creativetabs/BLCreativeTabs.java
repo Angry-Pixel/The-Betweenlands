@@ -1,7 +1,7 @@
 package thebetweenlands.creativetabs;
 
 
-public class ModCreativeTabs
+public class BLCreativeTabs
 {
 	public static CreativeTabBetweenlands blocks = new TabBlocks();
 	public static CreativeTabBetweenlands items = new TabItems();

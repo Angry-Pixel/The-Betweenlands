@@ -3,7 +3,7 @@ package thebetweenlands.blocks.structure;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 
 public class BlockTarBeastSpawner extends BlockMobSpawner {
@@ -16,7 +16,7 @@ public class BlockTarBeastSpawner extends BlockMobSpawner {
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.tarBeastSpawner");
 		setBlockTextureName("thebetweenlands:solidTar");
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 	}
 
 	@Override

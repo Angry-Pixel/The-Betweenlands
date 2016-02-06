@@ -1,10 +1,11 @@
 package thebetweenlands.proxy;
 
-import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Iterator;
-
+import com.google.common.base.Throwables;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -20,6 +21,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -27,142 +31,32 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.client.audio.SuperbSoundRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
-import thebetweenlands.client.model.block.crops.ModelCropFungus1;
-import thebetweenlands.client.model.block.crops.ModelCropFungus2;
-import thebetweenlands.client.model.block.crops.ModelCropFungus3;
-import thebetweenlands.client.model.block.crops.ModelCropFungus4;
-import thebetweenlands.client.model.block.crops.ModelCropFungus5;
+import thebetweenlands.client.model.block.crops.*;
 import thebetweenlands.client.model.item.ModelExplorersHat;
-import thebetweenlands.client.render.block.BlockBLHopperRenderer;
-import thebetweenlands.client.render.block.BlockBLLeverRenderer;
-import thebetweenlands.client.render.block.BlockDoorRenderer;
-import thebetweenlands.client.render.block.BlockDoublePlantRenderer;
-import thebetweenlands.client.render.block.BlockFarmedDirtRenderer;
-import thebetweenlands.client.render.block.BlockHollowLogRenderer;
-import thebetweenlands.client.render.block.BlockModelPlantRenderer;
-import thebetweenlands.client.render.block.BlockMossBedRenderer;
-import thebetweenlands.client.render.block.BlockMudFlowerPotRenderer;
-import thebetweenlands.client.render.block.BlockRootRenderer;
-import thebetweenlands.client.render.block.BlockRubberLogRenderer;
-import thebetweenlands.client.render.block.BlockRubberTapRenderer;
-import thebetweenlands.client.render.block.BlockSlopeRenderer;
-import thebetweenlands.client.render.block.BlockStalactiteRenderer;
-import thebetweenlands.client.render.block.BlockSwampReedRenderer;
-import thebetweenlands.client.render.block.BlockSwampWaterRenderer;
-import thebetweenlands.client.render.block.BlockWalkwayRenderer;
-import thebetweenlands.client.render.block.BlockWeedWoodBushRenderer;
+import thebetweenlands.client.render.ConnectionRenderer;
+import thebetweenlands.client.render.block.*;
 import thebetweenlands.client.render.block.crops.BlockBLGenericCropRenderer;
-import thebetweenlands.client.render.entity.RenderAngler;
-import thebetweenlands.client.render.entity.RenderBLItemFrame;
-import thebetweenlands.client.render.entity.RenderBerserkerGuardian;
-import thebetweenlands.client.render.entity.RenderBlindCaveFish;
-import thebetweenlands.client.render.entity.RenderBloodSnail;
-import thebetweenlands.client.render.entity.RenderDarkDruid;
-import thebetweenlands.client.render.entity.RenderDragonFly;
-import thebetweenlands.client.render.entity.RenderFirefly;
-import thebetweenlands.client.render.entity.RenderGecko;
-import thebetweenlands.client.render.entity.RenderGiantToad;
-import thebetweenlands.client.render.entity.RenderLeech;
-import thebetweenlands.client.render.entity.RenderLurker;
-import thebetweenlands.client.render.entity.RenderMeleeGuardian;
-import thebetweenlands.client.render.entity.RenderMireSnail;
-import thebetweenlands.client.render.entity.RenderMireSnailEgg;
-import thebetweenlands.client.render.entity.RenderPeatMummy;
-import thebetweenlands.client.render.entity.RenderRopeNode;
-import thebetweenlands.client.render.entity.RenderSiltCrab;
-import thebetweenlands.client.render.entity.RenderSludge;
-import thebetweenlands.client.render.entity.RenderSporeling;
-import thebetweenlands.client.render.entity.RenderSwampHag;
-import thebetweenlands.client.render.entity.RenderTarBeast;
-import thebetweenlands.client.render.entity.RenderTarminion;
-import thebetweenlands.client.render.entity.RenderTermite;
-import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
-import thebetweenlands.client.render.entity.RenderWight;
+import thebetweenlands.client.render.entity.*;
 import thebetweenlands.client.render.entity.projectile.RenderAngryPebble;
 import thebetweenlands.client.render.entity.projectile.RenderBLArrow;
 import thebetweenlands.client.render.entity.projectile.RenderElixir;
 import thebetweenlands.client.render.entity.projectile.RenderSnailPoisonJet;
-import thebetweenlands.client.render.item.ItemAlembicRenderer;
-import thebetweenlands.client.render.item.ItemAnimatorRenderer;
-import thebetweenlands.client.render.item.ItemCompostBinRenderer;
-import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
-import thebetweenlands.client.render.item.ItemGeckoCageRenderer;
-import thebetweenlands.client.render.item.ItemInfuserRenderer;
-import thebetweenlands.client.render.item.ItemLootPot1Renderer;
-import thebetweenlands.client.render.item.ItemLootPot2Renderer;
-import thebetweenlands.client.render.item.ItemLootPot3Renderer;
-import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
-import thebetweenlands.client.render.item.ItemPurifierRenderer;
-import thebetweenlands.client.render.item.ItemRepellerRenderer;
-import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
-import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
-import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
-import thebetweenlands.client.render.item.ItemTarminionRenderer;
-import thebetweenlands.client.render.item.ItemVolarKiteRenderer;
-import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
+import thebetweenlands.client.render.item.*;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityAspectrusCropRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityBLSignRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityBLWorkbenchRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityCompostBinRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityGeckoCageRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityInfuserRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityItemShelfRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityLifeCrystalRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityLootPot1Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityLootPot2Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityLootPot3Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityPestleAndMortarRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityPurifierRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityRepellerRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityTarBeastSpawnerRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityTarLootPot1Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityTarLootPot2Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityTarLootPot3Renderer;
-import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
+import thebetweenlands.client.render.tileentity.*;
 import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntityRopeNode;
-import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
-import thebetweenlands.entities.mobs.EntityBlindCaveFish;
-import thebetweenlands.entities.mobs.EntityBloodSnail;
-import thebetweenlands.entities.mobs.EntityDarkDruid;
-import thebetweenlands.entities.mobs.EntityDragonFly;
-import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityGecko;
-import thebetweenlands.entities.mobs.EntityGiantToad;
-import thebetweenlands.entities.mobs.EntityLeech;
-import thebetweenlands.entities.mobs.EntityLurker;
-import thebetweenlands.entities.mobs.EntityMeleeGuardian;
-import thebetweenlands.entities.mobs.EntityMireSnail;
-import thebetweenlands.entities.mobs.EntityMireSnailEgg;
-import thebetweenlands.entities.mobs.EntityPeatMummy;
-import thebetweenlands.entities.mobs.EntitySiltCrab;
-import thebetweenlands.entities.mobs.EntitySludge;
-import thebetweenlands.entities.mobs.EntitySporeling;
-import thebetweenlands.entities.mobs.EntitySwampHag;
-import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.entities.mobs.EntityTarminion;
-import thebetweenlands.entities.mobs.EntityTermite;
-import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.*;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
-import thebetweenlands.entities.projectiles.EntityAngryPebble;
-import thebetweenlands.entities.projectiles.EntityBLArrow;
-import thebetweenlands.entities.projectiles.EntityElixir;
-import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
-import thebetweenlands.entities.projectiles.EntityThrownTarminion;
+import thebetweenlands.entities.projectiles.*;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
@@ -170,57 +64,23 @@ import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
-import thebetweenlands.event.render.AspectItemOverlayHandler;
-import thebetweenlands.event.render.BrightnessHandler;
-import thebetweenlands.event.render.DecayRenderHandler;
-import thebetweenlands.event.render.FogHandler;
-import thebetweenlands.event.render.FovHandler;
-import thebetweenlands.event.render.GLUProjectionHandler;
-import thebetweenlands.event.render.ItemTextureTicker;
-import thebetweenlands.event.render.OverlayHandler;
-import thebetweenlands.event.render.ScreenShakeHandler;
-import thebetweenlands.event.render.ShaderHandler;
-import thebetweenlands.event.render.WorldRenderHandler;
+import thebetweenlands.event.render.*;
 import thebetweenlands.event.world.ThemHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.manual.GuideBookEntryRegistry;
 import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
-import thebetweenlands.tileentities.TileEntityAlembic;
-import thebetweenlands.tileentities.TileEntityAnimator;
-import thebetweenlands.tileentities.TileEntityAspectrusCrop;
-import thebetweenlands.tileentities.TileEntityBLCraftingTable;
-import thebetweenlands.tileentities.TileEntityBLSign;
-import thebetweenlands.tileentities.TileEntityBLSpawner;
-import thebetweenlands.tileentities.TileEntityCompostBin;
-import thebetweenlands.tileentities.TileEntityDruidAltar;
-import thebetweenlands.tileentities.TileEntityGeckoCage;
-import thebetweenlands.tileentities.TileEntityInfuser;
-import thebetweenlands.tileentities.TileEntityItemShelf;
-import thebetweenlands.tileentities.TileEntityLifeCrystal;
-import thebetweenlands.tileentities.TileEntityLootPot1;
-import thebetweenlands.tileentities.TileEntityLootPot2;
-import thebetweenlands.tileentities.TileEntityLootPot3;
-import thebetweenlands.tileentities.TileEntityPestleAndMortar;
-import thebetweenlands.tileentities.TileEntityPurifier;
-import thebetweenlands.tileentities.TileEntityRepeller;
-import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
-import thebetweenlands.tileentities.TileEntityTarLootPot1;
-import thebetweenlands.tileentities.TileEntityTarLootPot2;
-import thebetweenlands.tileentities.TileEntityTarLootPot3;
-import thebetweenlands.tileentities.TileEntityWeedWoodChest;
-import thebetweenlands.tileentities.TileEntityWisp;
+import thebetweenlands.tileentities.*;
+import thebetweenlands.tileentities.connection.Connection;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.utils.vectormath.Point3f;
 
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Iterator;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -424,6 +284,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemNBTExclusionHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(new ConnectionRenderer());
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(
@@ -580,5 +441,48 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public ModelBiped getExplorersHatModel() {
 		return EXPLORERS_HAT_MODEL;
+	}
+
+	@Override
+	public float getCatenaryOffset(EntityPlayer player) {
+		if (player == Minecraft.getMinecraft().thePlayer) {
+			return -player.height * 0.4F;
+		} else {
+			return player.height - player.height * 0.4F;
+		}
+	}
+
+	@Override
+	public ItemStack getFairyLightsFastenerPickBlock(MovingObjectPosition target, World world, int x, int y, int z, BlockConnectionFastener block) {
+		ItemStack itemStack = new ItemStack(block.getItem(world, x, y, z));
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		TileEntity tileEntity = world.getTileEntity(x, y, z);
+		double playerX = Minecraft.getMinecraft().thePlayer.posX, playerY = Minecraft.getMinecraft().thePlayer.posY, playerZ = Minecraft.getMinecraft().thePlayer.posZ;
+		if (tileEntity instanceof TileEntityConnectionFastener) {
+			TileEntityConnectionFastener lightsFastener = (TileEntityConnectionFastener) tileEntity;
+			Connection closetConnection = null;
+			float smallestDistance = Float.MAX_VALUE;
+			for (Connection connection : lightsFastener.getConnections()) {
+				Point3f to = connection.getTo();
+				if (to == null) {
+					continue;
+				}
+				float tx = to.x, ty = to.y, tz = to.z;
+				Point3f offset = ((BlockConnectionFastener) lightsFastener.getBlockType()).getOffsetForData(lightsFastener.getBlockMetadata(), 0.125F);
+				float dist = (float) Math.abs((offset.x + tx) * (offset.x + tx) - playerX * playerX + (offset.y + ty) * (offset.y + ty) - playerY * playerY + (offset.z + tz) * (offset.z + tz) - playerZ * playerZ);
+				if (dist < smallestDistance) {
+					smallestDistance = dist;
+					closetConnection = connection;
+				}
+			}
+			if (closetConnection != null) {
+				closetConnection.writeDetailsToNBT(tagCompound);
+				itemStack.func_150996_a(closetConnection.getType().getItem());
+			}
+		}
+		if (!tagCompound.hasNoTags()) {
+			itemStack.setTagCompound(tagCompound);
+		}
+		return itemStack;
 	}
 }

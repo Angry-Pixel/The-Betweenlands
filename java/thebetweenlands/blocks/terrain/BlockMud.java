@@ -14,7 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
@@ -27,7 +27,7 @@ public class BlockMud extends Block {
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.mud");
 		setBlockTextureName("thebetweenlands:mud");
 	}

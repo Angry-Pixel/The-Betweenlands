@@ -27,7 +27,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.block.ItemBlockPlantSmall;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
@@ -50,7 +50,7 @@ public class BlockWallPlants extends Block implements ISickleHarvestable, ISyrmo
 		super(Material.plants);
 		setHardness(0.2F);
 		setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		setBlockName("thebetweenlands.wallPlants");
 	}

@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.tools.ISickleHarvestable;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -41,7 +41,7 @@ public class BlockDoubleHeightPlant extends BlockDoublePlant implements ISickleH
 
 	public BlockDoubleHeightPlant(String name, float width) {
 		this.name = name;
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		this.setTickRandomly(true);
 		float w = (1F - width) / 2F;

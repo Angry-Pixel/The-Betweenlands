@@ -18,7 +18,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.recipes.CompostRecipe;
@@ -30,7 +30,7 @@ public class BlockCompostBin extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.compostBin");
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockTextureName("thebetweenlands:weedwood");
 	}
 

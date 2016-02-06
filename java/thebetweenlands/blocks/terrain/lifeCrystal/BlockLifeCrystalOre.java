@@ -17,7 +17,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.LifeCrystalRenderer;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 
 public class BlockLifeCrystalOre extends BlockSwampWater {
@@ -31,7 +31,7 @@ public class BlockLifeCrystalOre extends BlockSwampWater {
 		setStepSound(Block.soundTypeStone);
 		setBlockName("thebetweenlands.lifeCrystalOre");
 		setHardness(1.0F);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		setTickRandomly(true);
 		setBlockTextureName("thebetweenlands:pitstone");

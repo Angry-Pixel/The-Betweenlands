@@ -15,7 +15,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.block.ItemBlockGeneric;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class BlockBLPortalFrame extends Block implements ISubBlocksBlock {
 		super(Material.wood);
 		setHardness(2.0F);
         setStepSound(soundTypeWood);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockName("thebetweenlands.portalBarkFrame");
 		setBlockTextureName("thebetweenlands:portalBark");
 	}

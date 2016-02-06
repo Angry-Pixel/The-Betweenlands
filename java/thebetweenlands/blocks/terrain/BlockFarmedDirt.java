@@ -21,7 +21,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.block.ItemBlockGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
@@ -43,7 +43,7 @@ public class BlockFarmedDirt extends Block implements ISubBlocksBlock {
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.farmedDirt");
 		setTickRandomly(true);
 	}

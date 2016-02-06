@@ -14,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 
@@ -27,7 +27,7 @@ public class BlockBLWorkbench extends Block {
 
     public BlockBLWorkbench() {
     	super(Material.wood);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedwoodCraftingTable");
 		setHardness(2.5F);
 		setBlockTextureName("thebetweenlands:weedwoodCraftingTable");

@@ -21,7 +21,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.blocks.terrain.BlockFarmedDirt;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.crops.CropRenderer;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -41,7 +41,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 
 	public BlockBLGenericCrop(String blockName) {
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		this.type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);

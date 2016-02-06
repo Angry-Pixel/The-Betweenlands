@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityLifeCrystal;
 
@@ -18,7 +18,7 @@ public class BlockLifeCrystalBlock extends BlockContainer {
 
 	public BlockLifeCrystalBlock() {
 		super(Material.glass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.lifeCrystalBlock");
 		setHardness(1.0F);
 		setBlockTextureName("thebetweenlands:betweenstone");

@@ -9,7 +9,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BlockBLDoor;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class ItemBLDoor extends Item {
 
@@ -18,7 +18,7 @@ public class ItemBLDoor extends Item {
 	public ItemBLDoor(Block door) {
 		this.door = (BlockBLDoor) door;
 		setMaxStackSize(64);
-		setCreativeTab(ModCreativeTabs.items);
+		setCreativeTab(BLCreativeTabs.items);
 
 		String name = ((BlockBLDoor) door).name;
 		setTextureName("thebetweenlands:door_" + name);

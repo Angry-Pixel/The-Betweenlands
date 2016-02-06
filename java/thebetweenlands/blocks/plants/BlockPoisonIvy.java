@@ -17,7 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
@@ -36,7 +36,7 @@ public class BlockPoisonIvy extends BlockVine implements ISickleHarvestable, ISy
 		super();
 		setHardness(0.2F);
 		setBlockName("thebetweenlands.poisonIvy");
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		setBlockTextureName("thebetweenlands:poisonIvy");
 	}

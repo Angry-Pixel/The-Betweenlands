@@ -17,7 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import cpw.mods.fml.relauncher.Side;
@@ -29,7 +29,7 @@ public class BlockLootPot1 extends BlockContainer {
 		super(Material.glass);
 		setHardness(1.0F);
 		setStepSound(soundTypeGlass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.lootPot1");
 	}
 

@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.block.ItemBlockGeneric;
 
 /**
@@ -34,7 +34,7 @@ public class BlockDentrothyst extends Block implements ISubBlocksBlock {
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.dentrothyst");
 	}
 

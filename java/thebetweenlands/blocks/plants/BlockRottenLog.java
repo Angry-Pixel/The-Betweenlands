@@ -9,13 +9,10 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 
 import java.util.Random;
 
@@ -32,7 +29,7 @@ public class BlockRottenLog extends Block {
 		setResistance(5.0F);
 		setStepSound(soundTypeWood);
 		setBlockName("thebetweenlands.rottenLog");
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 	}
 
 	@Override

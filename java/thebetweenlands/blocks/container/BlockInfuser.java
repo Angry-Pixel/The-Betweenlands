@@ -16,9 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.herblore.aspects.AspectManager;
-import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityInfuser;
 
@@ -29,7 +28,7 @@ public class BlockInfuser extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.infuser");
-		setCreativeTab(ModCreativeTabs.herbLore);
+		setCreativeTab(BLCreativeTabs.herbLore);
 		setBlockTextureName("thebetweenlands:octineBlock");
 	}
 

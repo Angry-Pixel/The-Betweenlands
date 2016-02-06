@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
@@ -30,7 +30,7 @@ public class BlockPestleAndMortar extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.pestleAndMortar");
-		setCreativeTab(ModCreativeTabs.herbLore);
+		setCreativeTab(BLCreativeTabs.herbLore);
 		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 

@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
@@ -25,7 +25,7 @@ public class ItemSyrmoriteShears extends Item implements ICorrodible {
 		this.setTextureName("thebetweenlands:syrmoriteShears");
 		this.setMaxStackSize(1);
 		this.setMaxDamage(500);
-		ModCreativeTabs.gears.setTab(this);
+		BLCreativeTabs.gears.setTab(this);
 	}
 
 	@Override

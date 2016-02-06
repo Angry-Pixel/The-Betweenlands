@@ -187,6 +187,10 @@ tile.thebetweenlands.smoothPitstone.name=Smooth Pitstone
 tile.thebetweenlands.chiseledPitstone.name=Chiseled Pitstone
 tile.thebetweenlands.pitstoneBricks.name=Pitstone Bricks
 tile.thebetweenlands.pitstoneTiles.name=Pitstone Tiles
+tile.thebetweenlands.aquaMiddleGemBlock.name=Aqua Middle Gem Block
+tile.thebetweenlands.crimsonMiddleGemBlock.name=Crimson Middle Gem Block
+tile.thebetweenlands.greenMiddleGemBlock.name=Green Middle Gem Block
+tile.thebetweenlands.slimyBoneBlock.name=Slimy Bone Block
 
 tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
 tile.thebetweenlands.walkway.name=Weedwood Walkway
@@ -491,6 +495,7 @@ item.thebetweenlands.cavingRope.name=Caving Rope
 item.thebetweenlands.poisonGland.name=Poison Gland
 item.thebetweenlands.aspectrusFruit.name=Aspectrus Fruit
 item.thebetweenlands.weedwoodSign.name=Weedwood Sign
+item.thebetweenlands.parchment.name=Swamp Reed Parchment
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -1114,3 +1119,9 @@ chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat
+
+tile.fairy_lights.name=Connection Fastener
+item.fairy_lights.pattern=Pattern:
+item.fairy_lights.colored_light=%1$s %2$s
+item.thebetweenlands.light.weedwood_lantern.name=Weedwood Lantern
+item.thebetweenlands.light_connection.name=Weedwood Lanterns

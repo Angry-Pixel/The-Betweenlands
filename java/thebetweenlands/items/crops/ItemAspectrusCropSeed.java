@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
@@ -15,7 +15,7 @@ import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 public class ItemAspectrusCropSeed extends ItemBLGenericSeed {
 	public ItemAspectrusCropSeed(int healAmount, float saturation) {
 		super(healAmount, saturation, BLBlockRegistry.aspectrusCrop, BLBlockRegistry.farmedDirt);
-		this.setCreativeTab(ModCreativeTabs.plants);
+		this.setCreativeTab(BLCreativeTabs.plants);
 	}
 
 	@Override

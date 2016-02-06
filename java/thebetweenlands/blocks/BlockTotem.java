@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 16-6-2015.
@@ -21,7 +21,7 @@ public class BlockTotem extends Block {
     public BlockTotem() {
         super(Material.wood);
         this.setBlockName("thebetweenlands.totem");
-        this.setCreativeTab(ModCreativeTabs.blocks);
+        this.setCreativeTab(BLCreativeTabs.blocks);
         textureName = "thebetweenlands:" + "totem";
         setHardness(2.0F);
         setResistance(5.0F);
