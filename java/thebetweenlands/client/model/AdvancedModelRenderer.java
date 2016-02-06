@@ -143,8 +143,8 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 					compileDisplayList(scale);
 				}
 				GL11.glTranslatef(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
-				rotationOrder.rotate(rotateAngleX * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG, rotateAngleY * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG, rotateAngleZ * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG);
-				secondaryRotationOrder.rotate(secondaryRotateAngleX * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG, secondaryRotateAngleY * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG, secondaryRotateAngleZ * com.pau101.fairylights.util.MathUtils.RAD_TO_DEG);
+				rotationOrder.rotate(rotateAngleX * thebetweenlands.utils.MathUtils.RAD_TO_DEG, rotateAngleY * thebetweenlands.utils.MathUtils.RAD_TO_DEG, rotateAngleZ * thebetweenlands.utils.MathUtils.RAD_TO_DEG);
+				secondaryRotationOrder.rotate(secondaryRotateAngleX * thebetweenlands.utils.MathUtils.RAD_TO_DEG, secondaryRotateAngleY * thebetweenlands.utils.MathUtils.RAD_TO_DEG, secondaryRotateAngleZ * thebetweenlands.utils.MathUtils.RAD_TO_DEG);
 				GL11.glTranslatef(aftMoveX, aftMoveY, aftMoveZ);
 				GL11.glScalef(scaleX, scaleY, scaleZ);
 			}
