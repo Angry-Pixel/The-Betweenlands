@@ -1,8 +1,8 @@
 package thebetweenlands.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;

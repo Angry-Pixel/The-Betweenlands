@@ -28,6 +28,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generateNettles(2);
 		helper.generateWeepingBlue(3);
 		helper.generateWisp(4);
+		helper.generateDungeon(1);
 		helper.generateArrowArum(2);
 		helper.generatePickerelWeed(2);
 		helper.generateMarshHibiscus(2);

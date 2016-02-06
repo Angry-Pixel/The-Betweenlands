@@ -1,7 +1,5 @@
 package thebetweenlands.world.biomes.decorators;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -24,15 +22,10 @@ import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
-import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
-import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
-import thebetweenlands.world.feature.trees.WorldGenPurpleRainTree;
-import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
-import thebetweenlands.world.feature.trees.WorldGenRubberTree;
-import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenSmallWeedWoodTree;
-import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.world.feature.trees.*;
+
+import java.util.Random;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
@@ -79,7 +72,12 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_DEAD_WEEDWOOD_BUSH = new WorldGenTallGrass(BLBlockRegistry.deadWeedwoodBush, 1);
 	private final static WorldGenCavePots GEN_CAVE_POTS = new WorldGenCavePots();
 	private final static WorldGenSmallRuins GEN_SMALL_RUINS = new WorldGenSmallRuins();
-
+	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
+	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
+	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
+	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
+	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
+	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private final Random rand;
 	private final int x, y, z;
 	private final World world;
@@ -349,7 +347,6 @@ public class DecorationHelper {
 		}
 	}
 
-
 	public void generateSwampPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
 			int x = this.x + this.offsetXZ();
@@ -416,7 +413,6 @@ public class DecorationHelper {
 			}
 		}
 	}
-
 
 	public void generatePitcherPlant(int attempts) {
 		for (int i = 0; i < attempts; i++) {
@@ -934,6 +930,15 @@ public class DecorationHelper {
 		}
 	}
 
+	public void generateDungeon(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_DUNGEON.generate(world, rand, x, y, z);
+		}
+	}
+
 	public void generateSmallHollowLog(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();
@@ -944,16 +949,6 @@ public class DecorationHelper {
 				GEN_SMALL_HOLLOW_LOG.generate(world, rand, x, y, z);
 		}
 	}
-
-	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
-
-	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
-
-	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
-
-	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
-
-	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 
 	public void populateCave() {
 		generateSpeleothems(60);
