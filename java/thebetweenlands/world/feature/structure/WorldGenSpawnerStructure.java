@@ -8,6 +8,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.loot.LootItemStack;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
@@ -39,7 +40,7 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
         for (int xx = x; xx < x + 5; xx++)
             for (int yy = y; yy < y + 5; yy++)
                 for (int zz = z; zz < z + 5; zz++)
-                    if (world.getBlock(xx, yy, zz) != Blocks.air)
+                    if (world.getBlock(xx, yy, zz) != Blocks.air || !SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, zz)))
                         return false;
         for (int yy = y; yy < y + 5; yy++) {
             if (yy == y) {
@@ -50,18 +51,6 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                 for (int xx = x + 1; xx < x + 4; xx++) {
                     world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 2, 3);
                     world.setBlock(xx, yy, z + 4, BLBlockRegistry.betweenstoneBrickStairs, 3, 3);
-
-                    if (random.nextBoolean()) {
-                        world.setBlock(xx, yy + 1, z, BLBlockRegistry.weedwoodChest);
-                        TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(xx, yy + 1, z);
-                        if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 1, 2);
-                    } else {
-                        world.setBlock(xx, yy + 1, z + 4, BLBlockRegistry.weedwoodChest);
-                        TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(xx, yy + 1, z);
-                        if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 1, 2);
-                    }
                 }
                 for (int zz = z + 1; zz < z + 4; zz++) {
                     world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs);
@@ -69,12 +58,24 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                     if (zz != z + 2)
                         world.setBlock(x + 2, yy, zz, BLBlockRegistry.betweenstoneTiles);
                     else {
-                        world.setBlock(x + 2, yy, zz, BLBlockRegistry.angryBetweenstone);
-                        world.setBlock(x + 2, yy + 1, zz, BLBlockRegistry.blSpawner);
-                        BlockBLSpawner.setRandomMob(world, x, y, z, random);
+                        world.setBlock(x + 2, yy, zz, BLBlockRegistry.chiseledBetweenstone);
+                        world.setBlock(x + 2, yy + 2, zz, BLBlockRegistry.blSpawner);
+                        BlockBLSpawner.setRandomMob(world, x, y + 2, z, random);
                     }
                     world.setBlock(x + 3, yy, zz, BLBlockRegistry.betweenstoneTiles);
                     world.setBlock(x + 4, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);
+                }
+
+                if (random.nextBoolean()) {
+                    world.setBlock(x + 2, yy + 1, z, BLBlockRegistry.weedwoodChest);
+                    TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 1);
+                    if (lootChest != null)
+                        LootUtil.generateLoot(lootChest, random, loot, 1, 2);
+                } else {
+                    world.setBlock(x + 2, yy + 1, z + 4, BLBlockRegistry.weedwoodChest);
+                    TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 4);
+                    if (lootChest != null)
+                        LootUtil.generateLoot(lootChest, random, loot, 1, 2);
                 }
             } else if (yy < y + 4) {
                 world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneTiles);
