@@ -2,26 +2,18 @@ package thebetweenlands.event.player;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemFood;
 import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
-import thebetweenlands.network.message.MessageSyncFoodHatred;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerItemEventHandler {
 	public static final PlayerItemEventHandler INSTANCE = new PlayerItemEventHandler();
-
-	@SubscribeEvent
-	public void onPlayerJoin(EntityEvent.EntityConstructing event) {
-		if (!event.entity.worldObj.isRemote && event.entity instanceof EntityPlayerMP) {
-			EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entity, EntityPropertiesFood.class);
-			TheBetweenlands.networkWrapper.sendTo(new MessageSyncFoodHatred(property.getHatredMap()), (EntityPlayerMP) event.entity);
-		}
-	}
 
 	@SubscribeEvent
 	public void onStartItemUse(PlayerUseItemEvent.Start event) {
@@ -42,5 +34,40 @@ public class PlayerItemEventHandler {
 			ItemFood food = (ItemFood) event.item.getItem();
 			property.increaseFoodHatred(food);
 		}
+	}
+
+	public enum Sickness {
+		FINE(0),
+		HALF(5),
+		SICK(10);
+
+		private String[] lines;
+		private int minHatred;
+
+		Sickness(int minHatred) {
+			this.minHatred = minHatred;
+			int index = 0;
+			List<String> lineList = new ArrayList<>();
+			while (StatCollector.canTranslate("chat.food_sickness." + name().toLowerCase() + "." + index)) {
+				lineList.add(StatCollector.translateToLocal("chat.food_sickness." + name().toLowerCase() + "." + index));
+				index++;
+			}
+			lines = lineList.toArray(new String[index]);
+		}
+
+		public String[] getLines() {
+			return lines;
+		}
+
+		public static Sickness getSicknessForHatred(int hatred) {
+			for (Sickness sickness : VALUES) {
+				if (sickness.minHatred < hatred) {
+					return sickness;
+				}
+			}
+			return VALUES[VALUES.length - 1];
+		}
+
+		public static Sickness[] VALUES = values();
 	}
 }

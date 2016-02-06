@@ -49,6 +49,38 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		}
 	}
 
+	@Override
+	public boolean saveTrackingSensitiveData(NBTTagCompound compound) {
+		compound.setInteger("Size", hatredMap.size());
+		NBTTagList list = new NBTTagList();
+		for (Map.Entry<String, Integer> entry : hatredMap.entrySet()) {
+			NBTTagCompound listCompound = new NBTTagCompound();
+			listCompound.setString("Food", entry.getKey());
+			listCompound.setInteger("Level", entry.getValue());
+			list.appendTag(listCompound);
+		}
+		compound.setTag("HatredMap", list);
+		return true;
+	}
+
+	@Override
+	public void loadTrackingSensitiveData(NBTTagCompound compound) {
+		hatredMap = Maps.newHashMap();
+		int size = compound.getInteger("Size");
+		NBTTagList list = compound.getTagList("HatredMap", Constants.NBT.TAG_COMPOUND);
+		for (int i = 0; i < size; i++) {
+			NBTTagCompound listCompound = list.getCompoundTagAt(i);
+			String food = listCompound.getString("Food");
+			int level = listCompound.getInteger("Level");
+			hatredMap.put(food, level);
+		}
+	}
+
+	@Override
+	public int getTrackingTime() {
+		return 0;
+	}
+
 	public int getFoodHatred(ItemFood food) {
 		if (hatredMap.containsKey(food.getUnlocalizedName())) {
 			return hatredMap.get(food.getUnlocalizedName());
@@ -68,9 +100,5 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		} else {
 			hatredMap.put(food.getUnlocalizedName(), amount);
 		}
-	}
-
-	public Map<String, Integer> getHatredMap() {
-		return hatredMap;
 	}
 }
