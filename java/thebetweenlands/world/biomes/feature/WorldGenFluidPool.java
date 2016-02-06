@@ -97,17 +97,18 @@ public class WorldGenFluidPool extends WorldGenerator {
                         //		world.setBlock(x + xx, y + yy, z + zz, BLBlockRegistry.solidTar, 0, 2);
                     }
                 }
+        for (xx = 0; xx < 16; ++xx)
+            for (zz = 0; zz < 16; ++zz)
+                for (yy = 0; yy < 8; ++yy)
+                    if (isBlacklistedBlock(world.getBlock(x, y, z)))
+                        return false;
 
         for (xx = 0; xx < 16; ++xx)
             for (zz = 0; zz < 16; ++zz)
-                for (yy = 0; yy < 8; ++yy) {
-                    if (!isBlacklistedBlock(world.getBlock(x, y, z))) {
-                        if (placeFluid[(xx * 16 + zz) * 8 + yy])
-                            world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
-                    }
-                    else
-                        return false;
-                }
+                for (yy = 0; yy < 8; ++yy)
+                    if (placeFluid[(xx * 16 + zz) * 8 + yy])
+                        world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
+
         return true;
     }
 
