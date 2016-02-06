@@ -90,7 +90,6 @@ public class BLBlockRegistry {
 	public static final BlockWisp wisp = new BlockWisp();
 	public static final BlockSludge sludge = new BlockSludge();
 	public static final Block fallenLeaves = new BlockBLFallenLeaves("fallenLeaves");
-	public static final Block purpleFallenLeaves = new BlockBLFallenLeaves("purpleFallenLeaves");
 	public static final Block slimyGrass = new BlockSlimyGrass();
 	public static final Block slimyDirt = new BlockSlimyDirt();
 	public static final Block sludgyDirt = new BlockSludgyDirt();
@@ -128,7 +127,6 @@ public class BLBlockRegistry {
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree").setTreeGenerator(new WorldGenSapTree());
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
 	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree").setTreeGenerator(new WorldGenRubberTree());
-	public static final Block saplingPurpleRain = new BlockBLSapling("saplingPurpleRain");
 
 	public static final Block weedwoodLeaves = new BlockBLLeaves("weedwoodLeaves"){
 		@Override
@@ -146,19 +144,6 @@ public class BLBlockRegistry {
 		@Override
 		public Item getItemDropped(int meta, Random rand, int fortune) {
 			return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
-		}
-	}.setHasSpoopyTexture(true);
-	//public static final Block spiritTreeLeaves = new BlockBLLeaves("spiritTreeLeaves"); - not sure about these
-	public static final Block purpleRainLeavesLight = new BlockBLLeaves("purpleRainLeavesLight"){
-		@Override
-		public Item getItemDropped(int meta, Random rand, int fortune) {
-			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
-		}
-	};
-	public static final Block purpleRainLeavesDark = new BlockBLLeaves("purpleRainLeavesDark"){
-		@Override
-		public Item getItemDropped(int meta, Random rand, int fortune) {
-			return Item.getItemFromBlock(BLBlockRegistry.saplingPurpleRain);
 		}
 	};
 
@@ -195,12 +180,10 @@ public class BLBlockRegistry {
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(BLCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark").setHasSperateTopIcon(false);
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
-	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
 
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockGenericPlanks("weedwoodPlanks", Material.wood);
 	public static final Block rubberTreePlanks = new BlockGenericPlanks("rubberTreePlanks", Material.wood);
-	public static final Block purpleRainPlanks = new BlockGenericPlanks("purpleRainPlanks", Material.wood);
 	public static final Block hollowLog = new BlockHollowLog();
 
 	// DOUBLE PLANTS
@@ -371,8 +354,6 @@ public class BLBlockRegistry {
 
 	// UNDERGROWTH
 	public static final Block hanger = new BlockBLHanger("hanger");
-	public static final Block purpleHanger = new BlockBLHanger("purpleHanger");
-	public static final Block purpleHangerFlowered = new BlockBLHanger("purpleHangerFlowered");
 	public static final Block treeFungus = new BlockTreeFungus();
 
 	// DECORATIONS AND UTILITIES
@@ -460,7 +441,6 @@ public class BLBlockRegistry {
 	public static final Block templeBrickStairs = new BlockBLStairs(templeBrick, 0).setBlockName("thebetweenlands.templeBrickStairs");
 	public static final Block weedwoodPlankStairs = new BlockBLStairs(weedwoodPlanks, 0).setBlockName("thebetweenlands.weedwoodPlankStairs");
 	public static final Block rubberTreePlankStairs = new BlockBLStairs(rubberTreePlanks, 0).setBlockName("thebetweenlands.rubberTreePlankStairs");
-	public static final Block purpleRainPlankStairs = new BlockBLStairs(purpleRainPlanks, 0).setBlockName("thebetweenlands.purpleRainPlankStairs");
 	public static final Block pitstoneBrickStairs = new BlockBLStairs(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickStairs");
 	public static final Block betweenstoneBrickWall = new BlockBLWall(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickWall");
 	public static final Block mudBrickWall = new BlockBLWall(mudBrick, 0).setBlockName("thebetweenlands.mudBrickWall");
@@ -475,10 +455,8 @@ public class BLBlockRegistry {
 	public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");  
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final BlockBLFence rubberTreePlankFence = (BlockBLFence) new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
-	public static final Block purpleRainPlankFence = new BlockBLFence("purpleRainPlanks", Material.wood).setBlockName("thebetweenlands.purpleRainPlankFence");
 	public static final Block weedwoodPlankFenceGate = new BlockBLFenceGate("weedwoodPlanks");
 	public static final Block rubberTreePlankFenceGate = new BlockBLFenceGate("rubberTreePlanks");
-	public static final Block purpleRainPlankFenceGate = new BlockBLFenceGate("purpleRainPlanks");
 	public static final Block weedwoodJukebox = new BlockBLJukebox("weedwood");
 	public static final Block weedwoodLadder = new BlockBLLadder("weedwood");
 	public static final BlockBLSign weedwoodSignStanding = (BlockBLSign) new BlockBLSign(true, "weedwood").setHardness(0.6F);
@@ -517,8 +495,6 @@ public class BLBlockRegistry {
 	public static final BlockBLSlab weedwoodPlankSlabDouble = new BlockBLSlab(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab, "axe");
 	public static final BlockBLSlab rubberTreePlankSlab = new BlockBLSlab(false, Material.wood, "rubberTreePlanks", null, "axe");
 	public static final BlockBLSlab rubberTreePlankSlabDouble = new BlockBLSlab(true, Material.wood, "rubberTreePlanks", rubberTreePlankSlab, "axe");
-	public static final BlockBLSlab purpleRainPlankSlab = new BlockBLSlab(false, Material.wood, "purpleRainPlanks", null, "axe");
-	public static final BlockBLSlab purpleRainPlankSlabDouble = new BlockBLSlab(true, Material.wood, "purpleRainPlanks", purpleRainPlankSlab, "axe");
 	public static final BlockBLSlab betweenstoneBrickSlab = new BlockBLSlab(false, Material.rock, "betweenstoneBricks", null, "pickaxe");
 	public static final BlockBLSlab betweenstoneBrickSlabDouble = new BlockBLSlab(true, Material.rock, "betweenstoneBricks", betweenstoneBrickSlab, "pickaxe");
 	public static final BlockBLSlab mudBrickSlab = new BlockBLSlab(false, Material.rock, "mudBrick", null, "pickaxe");
@@ -607,11 +583,9 @@ public class BLBlockRegistry {
 		//for fire etc
 		Blocks.fire.setFireInfo(weedwoodPlanks, 5, 20);
 		Blocks.fire.setFireInfo(rubberTreePlanks, 5, 20);
-		Blocks.fire.setFireInfo(purpleRainPlanks, 5, 20);
 
 		weedwoodPlanks.setHarvestLevel("axe", 0);
 		rubberTreePlanks.setHarvestLevel("axe", 0);
-		purpleRainPlanks.setHarvestLevel("axe", 0);
 
 		aquaMiddleGemOre.setHarvestLevel("shovel", 0);
 		crimsonMiddleGemOre.setHarvestLevel("shovel", 0);

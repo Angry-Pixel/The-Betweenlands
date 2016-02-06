@@ -31,7 +31,6 @@ public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
 	private final static WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedWoodTree();
 	private final static WorldGenerator GEN_SMAL_WEEDWOOD_TREE = new WorldGenSmallWeedWoodTree();
-	private final static WorldGenPurpleRainTree GEN_PURPLE_RAIN_TREE = new WorldGenPurpleRainTree();
 	private final static WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	private final static WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
 	private final static WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedWoodBush();
@@ -538,18 +537,6 @@ public class DecorationHelper {
 				int z = this.z + this.offsetXZ();
 				if (this.checkSurface(SurfaceType.DIRT, x, y, z) || this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)|| this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 					GEN_SMAL_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
-			}
-		}
-	}
-
-	public void generatePurpleRainTree(int attempts) {
-		if (canShortThingsGenerateHere()) {
-			for (int i = 0; i < attempts; i++) {
-				int x = this.x + this.offsetXZ();
-				int y = this.y - 8 + this.rand.nextInt(16);
-				int z = this.z + this.offsetXZ();
-				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z) || this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
-					GEN_PURPLE_RAIN_TREE.generate(this.world, this.rand, x, y, z);
 			}
 		}
 	}
