@@ -1,7 +1,5 @@
 package thebetweenlands.recipes;
 
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -23,12 +21,18 @@ import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.lanterns.LightVariant;
+import thebetweenlands.items.lanterns.crafting.RecipeDyeColorNBT;
+import thebetweenlands.items.lanterns.crafting.RecipeFairyLights;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.lib.ModInfo;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 public class RecipeHandler {
 
@@ -279,6 +283,13 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new RecipesAspectVials());
 		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
+
+		GameRegistry.addRecipe(new RecipeFairyLights());
+		for (LightVariant variant : LightVariant.values()) {
+			GameRegistry.addRecipe(new RecipeDyeColorNBT(variant.getCraftingResult(), variant.getCraftingRecipe()));
+		}
+		RecipeSorter.register(ModInfo.ID + ":fairy_lights", RecipeFairyLights.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
+		RecipeSorter.register(ModInfo.ID + ":dye_color_nbt", RecipeDyeColorNBT.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 	}
 
 	private static void registerSmelting() {

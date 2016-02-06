@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry.ISubBlocksBlock;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.block.ItemBlockGeneric;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -42,7 +42,7 @@ implements ISubBlocksBlock
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.genericStone");
 		setTickRandomly(true);
 	}

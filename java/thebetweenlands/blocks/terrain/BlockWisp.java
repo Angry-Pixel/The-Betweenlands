@@ -12,7 +12,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.recipes.BLMaterial;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.world.WorldProviderBetweenlands;
@@ -22,7 +22,7 @@ public class BlockWisp extends BlockContainer {
 	public BlockWisp() {
 		super(BLMaterial.wisp);
 		setStepSound(soundTypeStone);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.wisp");
 		setHardness(0);
 		setBlockBounds(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);

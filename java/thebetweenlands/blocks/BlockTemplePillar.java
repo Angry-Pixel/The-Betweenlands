@@ -6,7 +6,7 @@ import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockTemplePillar extends BlockRotatedPillar {
 
@@ -15,7 +15,7 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.templePillar");
 		setBlockTextureName("thebetweenlands:templePillar");
 	}

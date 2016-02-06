@@ -23,7 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
@@ -35,7 +35,7 @@ public class BlockRepeller extends BlockContainer {
 	public BlockRepeller() {
 		super(Material.wood);
 		this.setHardness(1.5F);
-		this.setCreativeTab(ModCreativeTabs.blocks);
+		this.setCreativeTab(BLCreativeTabs.blocks);
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -35,7 +35,7 @@ public class BlockBLSlab extends BlockSlab {
 
         setHarvestLevel(harvestTool, 0);
         if(dropsThis == null)
-            setCreativeTab(ModCreativeTabs.blocks);
+            setCreativeTab(BLCreativeTabs.blocks);
         if(material == Material.rock)
             setStepSound(Block.soundTypeStone);
         else if(material == Material.wood)

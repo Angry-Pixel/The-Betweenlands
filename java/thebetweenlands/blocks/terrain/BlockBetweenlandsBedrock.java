@@ -2,7 +2,7 @@ package thebetweenlands.blocks.terrain;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockBetweenlandsBedrock
         extends Block
@@ -12,7 +12,7 @@ public class BlockBetweenlandsBedrock
 		setResistance(6000000.0F);
 		setStepSound(soundTypePiston);
 		disableStats();
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.bedrock");
 		setBlockTextureName("thebetweenlands:bedrock");
 		setBlockUnbreakable();

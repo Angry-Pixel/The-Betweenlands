@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.IManualEntryItem;
 
@@ -24,7 +24,7 @@ public class BlockBLJukebox extends BlockJukebox implements IManualEntryItem {
 
     public BlockBLJukebox(String name) {
         this.setBlockName("thebetweenlands." + name + "Jukebox");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         textureName = "thebetweenlands:" + name + "Jukebox";
         setHardness(2.0F);
         setResistance(10.0F);

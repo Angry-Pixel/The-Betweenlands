@@ -12,9 +12,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.armor.ItemRubberBoots;
 
 public class BlockPeat
@@ -25,7 +24,7 @@ extends Block
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.peat");
 		setBlockTextureName("thebetweenlands:peat");
 	}

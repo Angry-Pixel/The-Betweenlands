@@ -14,7 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.WeedWoodBushUncollidableEntity;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
@@ -31,7 +31,7 @@ public class BlockWeedWoodBush extends Block implements ISyrmoriteShearable, ISi
 		super(Material.leaves);
 		setHardness(0.35F);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName(ModInfo.ID + ".weedwoodbush");
 		setBlockTextureName(ModInfo.ID + ":weedwoodLeavesFancy");
 		setBlockBounds(0.1F, 0, 0.1F, 0.9F, 0.9F, 0.9F);

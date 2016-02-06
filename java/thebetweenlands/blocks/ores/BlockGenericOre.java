@@ -14,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockGenericOre extends Block {
 	private String type;
@@ -28,7 +28,7 @@ public class BlockGenericOre extends Block {
 		setStepSound(soundTypeStone);
 		setHardness(3.0F);
 		setResistance(5.0F);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		type = blockName;
 		this.oreDrops = oreDrops;
 		setBlockName("thebetweenlands." + type);

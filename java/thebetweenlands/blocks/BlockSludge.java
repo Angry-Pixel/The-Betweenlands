@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
@@ -22,7 +22,7 @@ public class BlockSludge extends Block {
 		super(BLMaterial.sludge);
 		setHardness(0.1F);
 		setStepSound(soundTypeGravel);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.sludge");
 		setBlockTextureName("thebetweenlands:sludge");
 		setBlockBounds(0, 0.0F, 0, 1.0F, 0.125F, 1.0F);

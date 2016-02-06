@@ -20,7 +20,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
@@ -34,7 +34,7 @@ public class BlockSwampKelp extends BlockSwampWater implements IPlantable {
 		setBlockName("thebetweenlands.waterWeeds");
 		setHardness(0.5F);
 		setLightLevel(0.875F);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockBounds(0.1f, 0.0f, 0.1f, 1.0f, 0.9f, 0.9f);
 		setTickRandomly(true);
 		this.canSpread = false;

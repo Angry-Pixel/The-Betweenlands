@@ -11,7 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
@@ -23,7 +23,7 @@ public class BlockDruidAltar
 		setBlockUnbreakable();
 		setResistance(100.0F);
 		setStepSound(soundTypeStone);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.druidAltar");
 	}
 

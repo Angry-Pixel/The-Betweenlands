@@ -1,6 +1,7 @@
 package thebetweenlands.utils;
 
 import net.minecraft.util.MathHelper;
+import thebetweenlands.utils.vectormath.Point3f;
 
 /**
  * 
@@ -113,5 +114,35 @@ public final class MathUtils {
 
 	public static int degToByte(float angle) {
 		return MathHelper.floor_float(angle * (256F / 360));
+	}
+
+	public static int hash(int x) {
+		x = (x >> 16 ^ x) * 0x45D9F3B;
+		x = (x >> 16 ^ x) * 0x45D9F3B;
+		x = x >> 16 ^ x;
+		return x;
+	}
+
+	public static float modf(float a, float b) {
+		return (a % b + b) % b;
+	}
+
+	public static void minmax(Point3f min, Point3f max, float x, float y, float z) {
+		if (min.x != min.x) {
+			min.x = x;
+			min.y = y;
+			min.z = z;
+		}
+		if (max.x != max.x) {
+			max.x = x;
+			max.y = y;
+			max.z = z;
+		}
+		min.x = x < min.x ? x : min.x;
+		min.y = y < min.y ? y : min.y;
+		min.z = z < min.z ? z : min.z;
+		max.x = x > max.x ? x : max.x;
+		max.y = y > max.y ? y : max.y;
+		max.z = z > max.z ? z : max.z;
 	}
 }

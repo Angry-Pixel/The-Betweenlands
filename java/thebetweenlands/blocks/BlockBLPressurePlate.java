@@ -10,9 +10,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,7 +26,7 @@ public class BlockBLPressurePlate extends BlockBasePressurePlate {
         sensitivity = sensitivity1;
         this.setBlockName("thebetweenlands." + name + "PressurePlate");
         textureName = "thebetweenlands:" + name;
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
     }
 
     @Override

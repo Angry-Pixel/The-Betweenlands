@@ -1,9 +1,5 @@
 package thebetweenlands;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -25,27 +21,12 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.command.CommandAspectDiscovery;
-import thebetweenlands.command.CommandBLEvent;
-import thebetweenlands.command.CommandDecay;
-import thebetweenlands.command.CommandFindPage;
-import thebetweenlands.command.CommandResetAspects;
-import thebetweenlands.command.CommandTickSpeed;
+import thebetweenlands.command.*;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
-import thebetweenlands.event.entity.AttackDamageHandler;
-import thebetweenlands.event.entity.MiscEntitySyncHandler;
-import thebetweenlands.event.entity.PageDiscoveringEvent;
-import thebetweenlands.event.entity.PowerRingHandler;
-import thebetweenlands.event.entity.VolarPadGlideHandler;
-import thebetweenlands.event.player.ArmorHandler;
-import thebetweenlands.event.player.BonemealEventHandler;
-import thebetweenlands.event.player.DecayEventHandler;
-import thebetweenlands.event.player.OverworldItemEventHandler;
-import thebetweenlands.event.player.PlayerPortalHandler;
-import thebetweenlands.event.player.RottenFoodHandler;
-import thebetweenlands.event.player.SiltCrabClipHandler;
+import thebetweenlands.event.entity.*;
+import thebetweenlands.event.player.*;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -57,14 +38,7 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
-import thebetweenlands.network.packet.server.PacketAttackTarget;
-import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
-import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
-import thebetweenlands.network.packet.server.PacketGemProc;
-import thebetweenlands.network.packet.server.PacketRevengeTarget;
-import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
-import thebetweenlands.network.packet.server.PacketTickspeed;
-import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
+import thebetweenlands.network.packet.server.*;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.PotionHelper;
@@ -76,6 +50,10 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.world.storage.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
@@ -95,6 +73,7 @@ public class TheBetweenlands {
 	private static byte nextPacketId = 0;
 
 	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
+	public static boolean isShadersModInstalled = false;
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
@@ -167,6 +146,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new ArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new OverworldItemEventHandler());
+		MinecraftForge.EVENT_BUS.register(new PlayerLanternEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
@@ -206,6 +186,10 @@ public class TheBetweenlands {
 			}
 			System.out.println("==================================================");
 		}
+		try {
+			Class.forName("shadersmod.client.Shaders");
+			isShadersModInstalled = true;
+		} catch (ClassNotFoundException e) {}
 	}
 
 	@EventHandler

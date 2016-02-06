@@ -15,7 +15,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -30,7 +30,7 @@ public class BlockSludgyDirt
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.sludgyDirt");
 		setTickRandomly(true);
 	}

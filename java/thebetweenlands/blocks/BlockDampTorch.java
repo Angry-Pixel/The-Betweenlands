@@ -4,9 +4,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -19,7 +18,7 @@ public class BlockDampTorch extends BlockTorch {
         setStepSound(soundTypeWood);
         setBlockName("thebetweenlands.dampTorch");
         setBlockTextureName("thebetweenlands:dampTorch");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         setTickRandomly(true);
     }
 

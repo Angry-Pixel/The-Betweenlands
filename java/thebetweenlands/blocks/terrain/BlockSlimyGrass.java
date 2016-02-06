@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -27,7 +27,7 @@ public class BlockSlimyGrass
 		setHardness(0.5F);
 		setStepSound(soundTypeGrass);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.slimyGrass");
 		setTickRandomly(true);
 	}

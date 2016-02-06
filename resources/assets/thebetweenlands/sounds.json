@@ -830,5 +830,17 @@
 			"boatRowStart1",
 			"boatRowStart2"
 		]
+	},
+	"cord.creak": {
+		"category": "block",
+		"sounds": [
+			"random/cord_creak"
+		]
+	},
+	"cord.break": {
+		"category": "block",
+		"sounds": [
+			"random/cord_break"
+		]
 	}
 }

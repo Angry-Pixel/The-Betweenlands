@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -29,7 +29,7 @@ extends Block implements IGrowable {
 		setHardness(0.5F);
 		setStepSound(soundTypeGrass);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.swampGrass");
 		setTickRandomly(true);
 	}

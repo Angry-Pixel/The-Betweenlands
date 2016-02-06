@@ -1,11 +1,5 @@
 package thebetweenlands.blocks;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,59 +18,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.blocks.container.BlockAlembic;
-import thebetweenlands.blocks.container.BlockAnimator;
-import thebetweenlands.blocks.container.BlockBLDualFurnace;
-import thebetweenlands.blocks.container.BlockBLFurnace;
-import thebetweenlands.blocks.container.BlockBLSign;
-import thebetweenlands.blocks.container.BlockBLWorkbench;
-import thebetweenlands.blocks.container.BlockCompostBin;
-import thebetweenlands.blocks.container.BlockGeckoCage;
-import thebetweenlands.blocks.container.BlockInfuser;
-import thebetweenlands.blocks.container.BlockItemShelf;
-import thebetweenlands.blocks.container.BlockLootPot1;
-import thebetweenlands.blocks.container.BlockLootPot2;
-import thebetweenlands.blocks.container.BlockLootPot3;
-import thebetweenlands.blocks.container.BlockPestleAndMortar;
-import thebetweenlands.blocks.container.BlockPurifier;
-import thebetweenlands.blocks.container.BlockTarLootPot1;
-import thebetweenlands.blocks.container.BlockTarLootPot2;
-import thebetweenlands.blocks.container.BlockTarLootPot3;
-import thebetweenlands.blocks.container.BlockWeedWoodChest;
+import thebetweenlands.blocks.container.*;
 import thebetweenlands.blocks.container.repeller.BlockRepeller;
+import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
+import thebetweenlands.blocks.lanterns.BlockConnectionFastenerFence;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
-import thebetweenlands.blocks.plants.BlockAlgae;
-import thebetweenlands.blocks.plants.BlockBLHanger;
-import thebetweenlands.blocks.plants.BlockBLSmallPlants;
-import thebetweenlands.blocks.plants.BlockBlackHatMushroom;
-import thebetweenlands.blocks.plants.BlockBlubCappedMushroomHead;
-import thebetweenlands.blocks.plants.BlockBlubCappedMushroomStalk;
-import thebetweenlands.blocks.plants.BlockBogBean;
-import thebetweenlands.blocks.plants.BlockBulbCappedMushroom;
-import thebetweenlands.blocks.plants.BlockCaveGrass;
-import thebetweenlands.blocks.plants.BlockCaveMoss;
-import thebetweenlands.blocks.plants.BlockDeepWaterCoral;
-import thebetweenlands.blocks.plants.BlockDoubleHeightPlant;
-import thebetweenlands.blocks.plants.BlockFlatHeadMushroom;
-import thebetweenlands.blocks.plants.BlockGoldenClub;
-import thebetweenlands.blocks.plants.BlockMarshMarigold;
-import thebetweenlands.blocks.plants.BlockMireCoral;
-import thebetweenlands.blocks.plants.BlockPitcherPlant;
-import thebetweenlands.blocks.plants.BlockPoisonIvy;
-import thebetweenlands.blocks.plants.BlockSwampKelp;
-import thebetweenlands.blocks.plants.BlockSwampPlant;
-import thebetweenlands.blocks.plants.BlockSwampReed;
-import thebetweenlands.blocks.plants.BlockSwampReedUW;
-import thebetweenlands.blocks.plants.BlockThorns;
-import thebetweenlands.blocks.plants.BlockVenusFlyTrap;
-import thebetweenlands.blocks.plants.BlockVolarpad;
-import thebetweenlands.blocks.plants.BlockWallPlants;
-import thebetweenlands.blocks.plants.BlockWaterFlower;
-import thebetweenlands.blocks.plants.BlockWaterFlowerStalk;
-import thebetweenlands.blocks.plants.BlockWaterWeeds;
-import thebetweenlands.blocks.plants.BlockWeedWoodBush;
-import thebetweenlands.blocks.plants.BlockWeepingBlue;
+import thebetweenlands.blocks.plants.*;
 import thebetweenlands.blocks.plants.crops.BlockAspectrusCrop;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.blocks.plants.roots.BlockRoot;
@@ -86,37 +34,11 @@ import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
-import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
-import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.blocks.terrain.BlockBetweenstone;
-import thebetweenlands.blocks.terrain.BlockDeadGrass;
-import thebetweenlands.blocks.terrain.BlockDentrothyst;
-import thebetweenlands.blocks.terrain.BlockFarmedDirt;
-import thebetweenlands.blocks.terrain.BlockGenericStone;
-import thebetweenlands.blocks.terrain.BlockMud;
-import thebetweenlands.blocks.terrain.BlockPeat;
-import thebetweenlands.blocks.terrain.BlockPitstone;
-import thebetweenlands.blocks.terrain.BlockPuddle;
-import thebetweenlands.blocks.terrain.BlockSilt;
-import thebetweenlands.blocks.terrain.BlockSlimyDirt;
-import thebetweenlands.blocks.terrain.BlockSlimyGrass;
-import thebetweenlands.blocks.terrain.BlockSludgyDirt;
-import thebetweenlands.blocks.terrain.BlockStagnantWater;
-import thebetweenlands.blocks.terrain.BlockSwampDirt;
-import thebetweenlands.blocks.terrain.BlockSwampGrass;
-import thebetweenlands.blocks.terrain.BlockSwampWater;
-import thebetweenlands.blocks.terrain.BlockTarFluid;
-import thebetweenlands.blocks.terrain.BlockWisp;
+import thebetweenlands.blocks.terrain.*;
 import thebetweenlands.blocks.terrain.lifeCrystal.BlockLifeCrystalOre;
-import thebetweenlands.blocks.tree.BlockBLLeaves;
-import thebetweenlands.blocks.tree.BlockBLLog;
-import thebetweenlands.blocks.tree.BlockBLPortalFrame;
-import thebetweenlands.blocks.tree.BlockBLSapling;
-import thebetweenlands.blocks.tree.BlockHollowLog;
-import thebetweenlands.blocks.tree.BlockRubberLog;
-import thebetweenlands.blocks.tree.BlockTreeFungus;
+import thebetweenlands.blocks.tree.*;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.IEntityBL;
@@ -130,6 +52,12 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
@@ -264,7 +192,7 @@ public class BLBlockRegistry {
 		}
 	}.setHasSpoopyTexture(true);
 	public static final Block rubberTreeLog = new BlockRubberLog("rubberTreeLog").setHasSpoopyTexture(true);
-	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(ModCreativeTabs.plants);
+	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(BLCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark").setHasSperateTopIcon(false);
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
 	public static final Block purpleRainLog = new BlockBLLog("purpleRainLog");
@@ -338,6 +266,10 @@ public class BLBlockRegistry {
 
 	public static final Block bulbCappedMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block bulbCappedMushroomTop = new BlockBlubCappedMushroomHead();
+
+	//LANTERN
+	public static final Block connectionFastener = new BlockConnectionFastener();
+	public static final Block connectionFastenerFence = new BlockConnectionFastenerFence();
 
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
@@ -450,7 +382,7 @@ public class BLBlockRegistry {
 	public static final Block furnaceBLLit = new BlockBLFurnace(true).setBlockName("thebetweenlands.furnaceBLLit").setLightLevel(0.875F);
 	public static final Block dualFurnaceBL = new BlockBLDualFurnace(false).setBlockName("thebetweenlands.dualFurnaceBL");
 	public static final Block dualFurnaceBLLit = new BlockBLDualFurnace(true).setBlockName("thebetweenlands.dualFurnaceBLLit").setLightLevel(0.875F);
-	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0.75F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(ModCreativeTabs.blocks);
+	public static final Block stalactite = new BlockStalactite(Material.rock).setHardness(0.75F).setStepSound(Block.soundTypeStone).setBlockName("thebetweenlands.stalactite").setCreativeTab(BLCreativeTabs.blocks);
 	public static final Block animator = new BlockAnimator();
 	public static final Block purifier = new BlockPurifier();
 	public static final Block compostBin = new BlockCompostBin();
@@ -612,7 +544,7 @@ public class BLBlockRegistry {
 	public static final BlockBLSlab thatchSlab = new BlockBLSlab(false, Material.cloth, "thatch", null, "axe");
 	public static final BlockBLSlab thatchSlabDouble = new BlockBLSlab(true, Material.cloth, "thatch", thatchSlab, "axe");
 
-	public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope").setCreativeTab(ModCreativeTabs.blocks);
+	public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope").setCreativeTab(BLCreativeTabs.blocks);
 
 	public static void registerSlabs(BlockBLSlab slab, String fieldName) {
 		try {

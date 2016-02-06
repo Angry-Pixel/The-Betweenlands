@@ -7,7 +7,7 @@ import net.minecraft.block.BlockGlass;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.world.IBlockAccess;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 16-6-2015.
@@ -16,7 +16,7 @@ public class BlockBLGlass extends BlockGlass {
     public BlockBLGlass() {
         super(Material.glass, false);
         this.setBlockName("thebetweenlands.siltGlass");
-        this.setCreativeTab(ModCreativeTabs.blocks);
+        this.setCreativeTab(BLCreativeTabs.blocks);
         textureName = "thebetweenlands:siltGlass1";
         setHardness(0.3F);
         setStepSound(soundTypeGlass);

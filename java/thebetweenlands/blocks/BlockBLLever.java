@@ -1,7 +1,7 @@
 package thebetweenlands.blocks;
 
 import net.minecraft.block.BlockLever;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.ClientProxy;
 
 /**
@@ -9,7 +9,7 @@ import thebetweenlands.proxy.ClientProxy;
  */
 public class BlockBLLever extends BlockLever {
     public BlockBLLever(){
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         this.setBlockName("thebetweenlands.weedwoodLever");
         setBlockTextureName("thebetweenlands:weedwoodLever");
     }

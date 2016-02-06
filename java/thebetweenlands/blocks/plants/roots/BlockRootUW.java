@@ -7,14 +7,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterRootRenderer;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
@@ -26,7 +25,7 @@ public class BlockRootUW extends BlockSwampWater {
 		setStepSound(Block.soundTypeWood);
 		setBlockName("thebetweenlands.rootUW");
 		setHardness(1.0F);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		setTickRandomly(true);
 		setBlockTextureName("thebetweenlands:weedwoodBark");

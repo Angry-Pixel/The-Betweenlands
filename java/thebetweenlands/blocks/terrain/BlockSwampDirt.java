@@ -5,7 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.tools.ItemSpadeBL;
 
 public class BlockSwampDirt
@@ -16,7 +16,7 @@ extends Block
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.swampDirt");
 		setBlockTextureName("thebetweenlands:swampDirt");
 	}

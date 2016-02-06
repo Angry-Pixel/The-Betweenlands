@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -17,7 +17,7 @@ public class BlockPitstone extends Block implements IGrowable {
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
 		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.pitstone");
 		setBlockTextureName("thebetweenlands:pitstone");
 	}

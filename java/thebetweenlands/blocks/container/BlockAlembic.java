@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.tileentities.TileEntityAlembic;
 
@@ -27,7 +27,7 @@ public class BlockAlembic extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setBlockName("thebetweenlands.alembic");
-		setCreativeTab(ModCreativeTabs.herbLore);
+		setCreativeTab(BLCreativeTabs.herbLore);
 		setBlockTextureName("thebetweenlands:betweenstone");
 	}
 

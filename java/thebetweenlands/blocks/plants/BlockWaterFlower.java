@@ -10,10 +10,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 import java.util.Random;
 
@@ -21,7 +20,7 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 	public BlockWaterFlower() {
 		super(Material.plants);
 		this.setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setHardness(0.5F);
 		setStepSound(Block.soundTypeGrass);
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);

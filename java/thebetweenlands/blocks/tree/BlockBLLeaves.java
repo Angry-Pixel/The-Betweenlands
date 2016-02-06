@@ -10,14 +10,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLLeaves extends BlockLeaves {
@@ -36,7 +35,7 @@ public class BlockBLLeaves extends BlockLeaves {
 	public BlockBLLeaves(String blockName) {
 		setHardness(0.2F);
 		setLightOpacity(1);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);

@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockButton;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 /**
  * Created by Bart on 16-6-2015.
@@ -13,7 +13,7 @@ import thebetweenlands.creativetabs.ModCreativeTabs;
 public class BlockBLButton extends BlockButton {
     public BlockBLButton( String name, boolean shootByArrow) {
         super(shootByArrow);
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         this.setBlockName("thebetweenlands." + name + "Button");
         textureName = "thebetweenlands:" + name;
     }

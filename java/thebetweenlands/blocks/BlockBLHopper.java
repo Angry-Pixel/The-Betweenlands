@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.ClientProxy;
 
 /**
@@ -23,7 +23,7 @@ public class BlockBLHopper extends BlockHopper {
 
     public BlockBLHopper(String material) {
         setBlockName("thebetweelands." + material + "Hopper");
-        setCreativeTab(ModCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.blocks);
         this.material = material;
         setHardness(3.0F);
         setResistance(8.0F);

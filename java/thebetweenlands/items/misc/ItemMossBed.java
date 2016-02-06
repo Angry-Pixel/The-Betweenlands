@@ -7,12 +7,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockMossBed;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class ItemMossBed extends Item {
 
 	public ItemMossBed() {
-		setCreativeTab(ModCreativeTabs.items);
+		setCreativeTab(BLCreativeTabs.items);
 	}
 
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {

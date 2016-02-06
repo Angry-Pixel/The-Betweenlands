@@ -6,16 +6,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.proxy.ClientProxy;
 
 /**
@@ -27,7 +25,7 @@ public class BlockWalkway extends Block {
     public BlockWalkway() {
         super(Material.wood);
         this.setBlockName("thebetweenlands.walkway");
-        this.setCreativeTab(ModCreativeTabs.blocks);
+        this.setCreativeTab(BLCreativeTabs.blocks);
         this.setBlockBounds(0, 0.0F, 0, 1.0F, 0.6F, 1.0F);
     }
 

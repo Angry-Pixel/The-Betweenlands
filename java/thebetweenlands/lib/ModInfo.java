@@ -14,4 +14,5 @@ public class ModInfo
 	public static final String COMMONPACKETPROXY_LOCATION = "thebetweenlands.network.base.impl.CommonPacketProxy";
 	public static final String CONFIG_GUI = "thebetweenlands.utils.confighandler.ConfigGuiFactory";
 	public static final int DIMENSION_ID = ConfigHandler.DIMENSION_ID;
+	public static final int MAX_LANTERN_LENGTH = 20;
 }

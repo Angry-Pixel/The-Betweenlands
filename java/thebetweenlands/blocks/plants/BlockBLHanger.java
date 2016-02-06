@@ -17,7 +17,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.ISickleHarvestable;
@@ -34,7 +34,7 @@ public class BlockBLHanger extends BlockBush implements ISickleHarvestable, ISyr
 		super(Material.plants);
 		setHardness(0.0F);
 		type = blockName;
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
 		setStepSound(Block.soundTypeGrass);

@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class BlockBLSapling extends BlockSapling {
 
@@ -28,7 +28,7 @@ public class BlockBLSapling extends BlockSapling {
 	private WorldGenerator treeGen = null;
 
 	public BlockBLSapling(String blockName) {
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setStepSound(Block.soundTypeGrass);
 		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F);
 		type = blockName;

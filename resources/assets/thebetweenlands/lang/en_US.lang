@@ -1119,3 +1119,9 @@ chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat
+
+tile.fairy_lights.name=Connection Fastener
+item.fairy_lights.pattern=Pattern:
+item.fairy_lights.colored_light=%1$s %2$s
+item.thebetweenlands.light.weedwood_lantern.name=Weedwood Lantern
+item.thebetweenlands.light_connection.name=Weedwood Lanterns

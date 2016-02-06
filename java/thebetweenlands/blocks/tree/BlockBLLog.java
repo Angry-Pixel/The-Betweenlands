@@ -1,18 +1,13 @@
 package thebetweenlands.blocks.tree;
 
-import java.util.ArrayList;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLLog extends BlockLog {
@@ -25,7 +20,7 @@ public class BlockBLLog extends BlockLog {
 	private boolean hasSeperateTopIcon = true;
 
 	public BlockBLLog(String blockName) {
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);

@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
 
@@ -23,7 +23,7 @@ public class BlockPuddle extends Block {
 	public BlockPuddle() {
 		super(Material.ground);
 		setHardness(0.1F);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.puddle");
 		setBlockBounds(0, 0.0F, 0, 1.0F, 0.07F, 1.0F);
 		setTickRandomly(true);

@@ -1,6 +1,6 @@
 package thebetweenlands.items.tools;
 
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import net.minecraft.item.Item;
 import thebetweenlands.manual.IManualEntryItem;
 
@@ -9,7 +9,7 @@ public class ItemWeedwoodBucketRubber extends Item implements IManualEntryItem {
 		this.setMaxStackSize(1);
 		this.setUnlocalizedName("thebetweenlands.bucketOfRubber");
 		this.setTextureName("thebetweenlands:weedwoodBucketRubber");
-		this.setCreativeTab(ModCreativeTabs.items);
+		this.setCreativeTab(BLCreativeTabs.items);
 	}
 
 	@Override

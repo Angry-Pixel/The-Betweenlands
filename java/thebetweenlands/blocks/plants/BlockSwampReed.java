@@ -19,7 +19,7 @@ import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
@@ -32,7 +32,7 @@ public class BlockSwampReed extends BlockBush implements IPlantable {
 	public BlockSwampReed() {
 		super(Material.coral);
 		this.setTickRandomly(true);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setHardness(0.5F);
 		setStepSound(Block.soundTypeGrass);
 		setBlockBounds(0.1f, 0, 0.1f, 0.9f, 1, 0.9f);

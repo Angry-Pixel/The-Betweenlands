@@ -6,7 +6,6 @@ To do for First Release:
 _____________________________________________________________________
 
 Unfinished stuff:
-- Lanterns (Lex)
 - Temple Guardians
 
 New Stuff (High priority):

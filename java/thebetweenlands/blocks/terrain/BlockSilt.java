@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.items.armor.ItemRubberBoots;
 
@@ -18,7 +18,7 @@ public class BlockSilt
 		setHardness(0.5F);
 		setStepSound(soundTypeGravel);
 		setHarvestLevel("shovel", 0);
-		setCreativeTab(ModCreativeTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.silt");
 		setBlockTextureName("thebetweenlands:silt");
 	}

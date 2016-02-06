@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.tools.ISyrmoriteShearable;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
@@ -27,7 +27,7 @@ public class BlockBLFallenLeaves extends BlockBush implements ISyrmoriteShearabl
 	public BlockBLFallenLeaves(String blockName) {
 		setHardness(0.1F);
 		setStepSound(soundTypeGrass);
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);

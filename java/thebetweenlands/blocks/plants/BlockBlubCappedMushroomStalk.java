@@ -13,7 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.ModCreativeTabs;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 
 
@@ -27,7 +27,7 @@ public class BlockBlubCappedMushroomStalk extends Block {
 		setStepSound(Block.soundTypeCloth);
 		setHardness(0.2F);
 		setBlockName("thebetweenlands.hugeMushroomStalk");
-		setCreativeTab(ModCreativeTabs.plants);
+		setCreativeTab(BLCreativeTabs.plants);
 		setLightLevel(1.0F);
 	}
 
