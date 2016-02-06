@@ -1073,6 +1073,56 @@ talisman.noplace=The space is not large enough
 # Chat Messages
 chat.flintandsteel=It's too damp to set something on fire with %s
 
+chat.food_sickness.fine.0=Ah, that was refreshing
+chat.food_sickness.fine.1=Finally, something different to eat
+chat.food_sickness.fine.2=Finally, something new
+chat.food_sickness.fine.3=Finally, something that isn't just brown slime
+chat.food_sickness.fine.4=That actually tasted alright
+chat.food_sickness.fine.5=Well at least it doesn't taste like mud
+chat.food_sickness.fine.6=Slimy, yet satisfying
+chat.food_sickness.fine.7=Mmm... not bad
+chat.food_sickness.fine.8=I could get used to eating this
+chat.food_sickness.fine.9=I suppose it beats eating moss
+chat.food_sickness.fine.10=It's great to have something different for a change
+chat.food_sickness.fine.11=At last, I was getting sick of that other stuff
+chat.food_sickness.fine.12=This is kinda tasty
+chat.food_sickness.fine.13=It's not quite golden apples, but it'll do
+chat.food_sickness.fine.14=That tasted good
+chat.food_sickness.fine.15=Tastes alright, hopefully it's not poisonous
+
+chat.food_sickness.half.0=I'm getting a bit sick of eating this
+chat.food_sickness.half.1=Isn't there anything else to eat around here?
+chat.food_sickness.half.2=It's edible I suppose
+chat.food_sickness.half.3=I don't think I can eat much more of this
+chat.food_sickness.half.4=This stuff tastes pretty terrible
+chat.food_sickness.half.5=Hopefully there is more food around here
+chat.food_sickness.half.6=I should probably try finding something different to eat
+chat.food_sickness.half.7=I think I need a more varied diet
+chat.food_sickness.half.8=I'm feeling a bit off, maybe I should find another food source
+chat.food_sickness.half.9=This food is getting pretty repetitive
+chat.food_sickness.half.10=I wish I had more food options
+chat.food_sickness.half.11=I should find something else to eat soon
+chat.food_sickness.half.12=This food is starting to make me ill
+chat.food_sickness.half.13=I don't feel too good, is there anything else to eat?
+chat.food_sickness.half.14=This food is bland, I need some more variety
+chat.food_sickness.half.15=Eating the same thing all the time can't be good for me
+
+chat.food_sickness.sick.0=I can't eat any more of this
+chat.food_sickness.sick.1=I feel terrible, I can't eat this
+chat.food_sickness.sick.2=Ugh, I'm not eating that
+chat.food_sickness.sick.3=I'm not eating any more of that
+chat.food_sickness.sick.4=I'm sick of eating this, I need to find something else
+chat.food_sickness.sick.5=I'm not putting that anywhere near my mouth
+chat.food_sickness.sick.6=I think I'll be ill if I eat any more of that, I need something different
+chat.food_sickness.sick.7=I don't think I can face any more of that, I'll have to find something else
+chat.food_sickness.sick.8=No way am I eating any more of that
+chat.food_sickness.sick.9=That stuff can't be good for me, I need something different
+chat.food_sickness.sick.10=I need a more varied diet, I can't eat more of that
+chat.food_sickness.sick.11=I think I'll need a rest before I eat more of that
+chat.food_sickness.sick.12=No thanks, I'll have something else for a change
+chat.food_sickness.sick.13=It smells even worse than it looks, I'll find something else to eat
+chat.food_sickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
+
 chat.rope.already_connected=Already connected to another climbing rope
 chat.rope.disconnected=You were disconnected from the climbing rope
 chat.rope.too_far=You're too far away from the last anchor point
