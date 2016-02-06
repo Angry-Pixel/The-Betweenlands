@@ -60,7 +60,7 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                     else {
                         world.setBlock(x + 2, yy, zz, BLBlockRegistry.chiseledBetweenstone);
                         world.setBlock(x + 2, yy + 2, zz, BLBlockRegistry.blSpawner);
-                        BlockBLSpawner.setRandomMob(world, x, y + 2, z, random);
+                        BlockBLSpawner.setRandomMob(world, x + 2, yy + 2, zz, random);
                     }
                     world.setBlock(x + 3, yy, zz, BLBlockRegistry.betweenstoneTiles);
                     world.setBlock(x + 4, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);

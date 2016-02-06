@@ -12,6 +12,8 @@ import java.util.Random;
 
 public class WorldGenFluidPool extends WorldGenerator {
 
+    private Block[] blackListBlocks = new Block[]{BLBlockRegistry.betweenstoneTiles, BLBlockRegistry.betweenstoneBrickStairs, BLBlockRegistry.betweenstoneBricks, BLBlockRegistry.betweenstoneBrickSlab};
+
     private Block fillerFluid = BLBlockRegistry.tarFluid;
 
     private double size;
@@ -98,13 +100,25 @@ public class WorldGenFluidPool extends WorldGenerator {
 
         for (xx = 0; xx < 16; ++xx)
             for (zz = 0; zz < 16; ++zz)
-                for (yy = 0; yy < 8; ++yy)
-                    if (placeFluid[(xx * 16 + zz) * 8 + yy])
-                        world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
+                for (yy = 0; yy < 8; ++yy) {
+                    if (!isBlacklistedBlock(world.getBlock(x, y, z))) {
+                        if (placeFluid[(xx * 16 + zz) * 8 + yy])
+                            world.setBlock(x + xx, y + yy, z + zz, yy >= 4 ? Blocks.air : fillerFluid, 0, 2);
+                    }
+                    else
+                        return false;
+                }
         return true;
     }
 
     private final boolean checkSurface(World world, SurfaceType surfaceType, int x, int y, int z) {
         return surfaceType.matchBlock(world.getBlock(x, y, z));
+    }
+
+    private boolean isBlacklistedBlock(Block block) {
+        for (Block blacklistBlock : blackListBlocks)
+            if (block.equals(blacklistBlock))
+                return true;
+        return false;
     }
 }
