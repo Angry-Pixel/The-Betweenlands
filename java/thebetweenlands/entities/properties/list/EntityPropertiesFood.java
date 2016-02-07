@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
+import thebetweenlands.event.player.PlayerItemEventHandler;
 
 import java.util.Map;
 
@@ -100,5 +101,9 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		} else {
 			hatredMap.put(food.getUnlocalizedName(), amount);
 		}
+	}
+
+	public PlayerItemEventHandler.Sickness getSickness(ItemFood food) {
+		return PlayerItemEventHandler.Sickness.getSicknessForHatred(getFoodHatred(food));
 	}
 }

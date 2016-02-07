@@ -1,6 +1,5 @@
 package thebetweenlands.event.player;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.item.ItemFood;
 import net.minecraft.util.ChatComponentText;
@@ -11,6 +10,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PlayerItemEventHandler {
 	public static final PlayerItemEventHandler INSTANCE = new PlayerItemEventHandler();
@@ -20,9 +20,15 @@ public class PlayerItemEventHandler {
 		if (event.item != null && event.item.getItem() instanceof ItemFood) {
 			EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
 			ItemFood food = (ItemFood) event.item.getItem();
-			if (property.getFoodHatred(food) > 5) {
-				event.setCanceled(true);
-				event.entityPlayer.addChatComponentMessage(new ChatComponentText("Ew " + FMLCommonHandler.instance().getEffectiveSide()));
+			Sickness sickness = property.getSickness(food);
+			switch (sickness) {
+				case SICK:
+					if (event.entityPlayer.worldObj.isRemote) event.entityPlayer.addChatComponentMessage(new ChatComponentText(sickness.getRandomLine()));
+					event.setCanceled(true);
+					break;
+				default:
+					if (event.entityPlayer.worldObj.isRemote) event.entityPlayer.addChatComponentMessage(new ChatComponentText(sickness.getRandomLine()));
+					break;
 			}
 		}
 	}
@@ -37,10 +43,11 @@ public class PlayerItemEventHandler {
 	}
 
 	public enum Sickness {
-		FINE(0),
-		HALF(5),
-		SICK(10);
+		FINE(5),
+		HALF(10),
+		SICK(11);
 
+		private Random random;
 		private String[] lines;
 		private int minHatred;
 
@@ -52,16 +59,21 @@ public class PlayerItemEventHandler {
 				lineList.add(StatCollector.translateToLocal("chat.food_sickness." + name().toLowerCase() + "." + index));
 				index++;
 			}
-			lines = lineList.toArray(new String[index]);
+			this.lines = lineList.toArray(new String[index]);
+			this.random = new Random();
 		}
 
 		public String[] getLines() {
 			return lines;
 		}
 
+		public String getRandomLine() {
+			return getLines()[random.nextInt(getLines().length)];
+		}
+
 		public static Sickness getSicknessForHatred(int hatred) {
 			for (Sickness sickness : VALUES) {
-				if (sickness.minHatred < hatred) {
+				if (sickness.minHatred > hatred) {
 					return sickness;
 				}
 			}
