@@ -42,7 +42,7 @@ public class WorldGenIdolHeads extends WorldGenerator {
                 }
             }
         }
-
+if(rand.nextBoolean()) {
     	// Gold Head
         rotatedCubeVolume(world, rand, x, y, z, 1, 0, 2, solid, 0, 6, 4, 5, direction);
         rotatedCubeVolume(world, rand, x, y, z, 0, 3, 4, solid, 0, 1, 2, 2, direction);
@@ -57,17 +57,38 @@ public class WorldGenIdolHeads extends WorldGenerator {
         rotatedCubeVolume(world, rand, x, y, z, 3, 7, 6, solid, 0, 2, 1, 1, direction);
         rotatedCubeVolume(world, rand, x, y, z, 3, 6, 7, solid, 0, 2, 1, 1, direction);
         rotatedCubeVolume(world, rand, x, y, z, 3, 4, 7, solid, 0, 2, 1, 1, direction);
-
         rotatedCubeVolume(world, rand, x, y, z, 2, 4, 3, octine, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, rand, x, y, z, 5, 4, 3, octine, 0, 1, 1, 1, direction);
-
         rotatedCubeVolume(world, rand, x, y, z, 2, 1, 1, slab, 0, 4, 1, 1, direction);
         rotatedCubeVolume(world, rand, x, y, z, 2, 2, 1, slab, 8, 4, 1, 1, direction);
         rotatedCubeVolume(world, rand, x, y, z, 1, 1, 1, stairs, direction == 0 ? 1 : direction == 2 ? 0 : direction == 1 ? 3 : 2, 1, 1, 1, direction); //bottom right
         rotatedCubeVolume(world, rand, x, y, z, 6, 1, 1, stairs, direction == 0 ? 0 : direction == 2 ? 1 : direction == 1 ? 2 : 3, 1, 1, 1, direction); //bottom left
         rotatedCubeVolume(world, rand, x, y, z, 1, 2, 1, stairs, direction == 0 ? 5 : direction == 2 ? 4 : direction == 1 ? 7 : 6, 1, 1, 1, direction); //top right
         rotatedCubeVolume(world, rand, x, y, z, 6, 2, 1, stairs, direction == 0 ? 4 : direction == 2 ? 5 : direction == 1 ? 6 : 7, 1, 1, 1, direction); //top left
-
+} else {
+        // Silver Head
+        rotatedCubeVolume(world, rand, x, y, z, 1, 0, 2, solid, 0, 6, 4, 5, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 0, 1, 4, solid, 0, 1, 5, 2, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 7, 1, 4, solid, 0, 1, 5, 2, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 3, 1, 7, solid, 0, 2, 5, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 1, 4, 3, solid, 0, 6, 3, 4, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 1, 7, 1, solid, 0, 2, 1, 6, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 1, 6, 1, slab, 8, 2, 1, 2, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 3, 7, 1, slab, 0, 2, 1, 6, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 5, 7, 1, solid, 0, 2, 1, 6, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 5, 6, 1, slab, 8, 2, 1, 2, direction); 
+        rotatedCubeVolume(world, rand, x, y, z, 3, 3, 0, solid, 0, 2, 3, 3, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 3, 6, 1, solid, 0, 2, 1, 2, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 1, 4, 2, slab, 0, 2, 1, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 5, 4, 2, slab, 0, 2, 1, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 2, 3, 1, solid, 0, 4, 1, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 2, 5, 3, octine, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 5, 5, 3, octine, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, rand, x, y, z, 3, 1, 1, stairs, direction == 0 ? 1 : direction == 2 ? 0 : direction == 1 ? 3 : 2, 1, 1, 1, direction); //bottom right
+        rotatedCubeVolume(world, rand, x, y, z, 4, 1, 1, stairs, direction == 0 ? 0 : direction == 2 ? 1 : direction == 1 ? 2 : 3, 1, 1, 1, direction); //bottom left
+        rotatedCubeVolume(world, rand, x, y, z, 3, 2, 1, stairs, direction == 0 ? 5 : direction == 2 ? 4 : direction == 1 ? 7 : 6, 1, 1, 1, direction); //top right
+        rotatedCubeVolume(world, rand, x, y, z, 4, 2, 1, stairs, direction == 0 ? 4 : direction == 2 ? 5 : direction == 1 ? 6 : 7, 1, 1, 1, direction); //top left
+} 
         System.out.println("Added Head at: " + x + " " + z);
         return true;
     }
