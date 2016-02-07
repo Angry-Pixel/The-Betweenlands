@@ -936,7 +936,8 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			GEN_HEADS.generate(world, rand, x, y, z);
+			if (checkSurface(SurfaceType.MIXED, x, y, z))
+				GEN_HEADS.generate(world, rand, x, y, z);
 		}
 	}
 
