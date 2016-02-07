@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 	private Map<String, Integer> hatredMap = Maps.newHashMap();
+	private int lastHatred = 0;
 
 	@Override
 	public String getID() {
@@ -35,6 +36,7 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 			list.appendTag(listCompound);
 		}
 		compound.setTag("HatredMap", list);
+		compound.setInteger("LastHatred", lastHatred);
 	}
 
 	@Override
@@ -48,6 +50,7 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 			int level = listCompound.getInteger("Level");
 			hatredMap.put(food, level);
 		}
+		lastHatred = compound.getInteger("LastHatred");
 	}
 
 	@Override
@@ -61,6 +64,7 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 			list.appendTag(listCompound);
 		}
 		compound.setTag("HatredMap", list);
+		compound.setInteger("LastHatred", lastHatred);
 		return true;
 	}
 
@@ -75,6 +79,7 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 			int level = listCompound.getInteger("Level");
 			hatredMap.put(food, level);
 		}
+		lastHatred = compound.getInteger("LastHatred");
 	}
 
 	@Override
@@ -101,9 +106,14 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		} else {
 			hatredMap.put(food.getUnlocalizedName(), amount);
 		}
+		lastHatred = hatredMap.get(food.getUnlocalizedName());
 	}
 
 	public PlayerItemEventHandler.Sickness getSickness(ItemFood food) {
 		return PlayerItemEventHandler.Sickness.getSicknessForHatred(getFoodHatred(food));
+	}
+
+	public PlayerItemEventHandler.Sickness getLastSickness() {
+		return PlayerItemEventHandler.Sickness.getSicknessForHatred(this.lastHatred);
 	}
 }

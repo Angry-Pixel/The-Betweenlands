@@ -26,9 +26,6 @@ public class PlayerItemEventHandler {
 					if (event.entityPlayer.worldObj.isRemote) event.entityPlayer.addChatComponentMessage(new ChatComponentText(sickness.getRandomLine()));
 					event.setCanceled(true);
 					break;
-				default:
-					if (event.entityPlayer.worldObj.isRemote) event.entityPlayer.addChatComponentMessage(new ChatComponentText(sickness.getRandomLine()));
-					break;
 			}
 		}
 	}
@@ -38,6 +35,11 @@ public class PlayerItemEventHandler {
 		if (event.item != null && event.item.getItem() instanceof ItemFood) {
 			EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
 			ItemFood food = (ItemFood) event.item.getItem();
+			switch (property.getLastSickness()) {
+				case SICK:
+					if (event.entityPlayer.worldObj.isRemote) event.entityPlayer.addChatComponentMessage(new ChatComponentText(property.getSickness(food).getRandomLine()));
+					break;
+			}
 			property.increaseFoodHatred(food);
 		}
 	}
@@ -49,10 +51,10 @@ public class PlayerItemEventHandler {
 
 		private Random random;
 		private String[] lines;
-		private int minHatred;
+		private int maxHatred;
 
-		Sickness(int minHatred) {
-			this.minHatred = minHatred;
+		Sickness(int maxHatred) {
+			this.maxHatred = maxHatred;
 			int index = 0;
 			List<String> lineList = new ArrayList<>();
 			while (StatCollector.canTranslate("chat.food_sickness." + name().toLowerCase() + "." + index)) {
@@ -73,7 +75,7 @@ public class PlayerItemEventHandler {
 
 		public static Sickness getSicknessForHatred(int hatred) {
 			for (Sickness sickness : VALUES) {
-				if (sickness.minHatred > hatred) {
+				if (sickness.maxHatred > hatred) {
 					return sickness;
 				}
 			}
