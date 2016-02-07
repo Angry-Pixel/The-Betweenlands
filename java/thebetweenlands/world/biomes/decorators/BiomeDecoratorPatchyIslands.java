@@ -8,7 +8,6 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 	public void postChunkGen(int pass) {
 		DecorationHelper helper = new DecorationHelper(this.rand, this.world, this.x, this.world.getHeightValue(this.x, this.z), this.z, false);
 
-		//helper.generatePurpleRainTree(40);
 		helper.populateCave();
 		helper.generateWeedwoodTree(40);
 		helper.generateSapTree(30);
@@ -17,7 +16,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateHugeMushroom(10);
 		helper.generateSwampGrass(50);
 		helper.generateSwampTallGrass(100);
-		helper.generateHeads(1);
+		helper.generateHeads(2);
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateMossPatch(10);
