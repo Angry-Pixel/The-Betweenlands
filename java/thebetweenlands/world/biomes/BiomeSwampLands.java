@@ -34,7 +34,7 @@ extends BiomeGenBaseBetweenlands {
 		super(biomeID, decorator);
 		this.setFogColor((byte) 10, (byte) 30, (byte) 12);
 		setColors(0x314D31, 0x314D31);
-		setWeight(20);
+		setWeight(25);
 		this.setHeightAndVariation(WorldProviderBetweenlands.CAVE_START, 0);
 		this.setBiomeName("Swamplands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.deadGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
