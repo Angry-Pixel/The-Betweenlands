@@ -17,6 +17,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateHugeMushroom(10);
 		helper.generateSwampGrass(50);
 		helper.generateSwampTallGrass(100);
+		helper.generateHeads(1);
 		helper.generateReeds(20);
 		helper.generateMireCoral(3.0D);
 		helper.generateMossPatch(10);

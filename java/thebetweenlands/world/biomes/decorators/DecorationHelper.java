@@ -21,6 +21,7 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
+import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
 import thebetweenlands.world.feature.trees.*;
@@ -77,6 +78,7 @@ public class DecorationHelper {
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
 	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
+	private final static WorldGenIdolHeads GEN_HEADS = new WorldGenIdolHeads();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -926,6 +928,15 @@ public class DecorationHelper {
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
 			GEN_DUNGEON.generate(world, rand, x, y, z);
+		}
+	}
+	
+	public void generateHeads(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_HEADS.generate(world, rand, x, y, z);
 		}
 	}
 
