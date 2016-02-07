@@ -13,7 +13,6 @@ public class WorldGenIdolHeads extends WorldGenerator {
     private int width = -1;
     private int height = -1;
     private int direction = -1;
-    Random rand = new Random();
     private Block solid = BLBlockRegistry.smoothCragrock;
     private Block slab = BLBlockRegistry.smoothCragrockSlab;
     private Block stairs = BLBlockRegistry.smoothCragrockStairs;
@@ -23,7 +22,6 @@ public class WorldGenIdolHeads extends WorldGenerator {
         length = 8;
         width = 8;
         height = 8;
-        direction = rand.nextInt(4);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class WorldGenIdolHeads extends WorldGenerator {
                 }
             }
         }
-
+		direction = rand.nextInt(4);
         int headType = rand.nextInt(3);
         int xx = x - length / 2;
         int zz = z - width / 2;
