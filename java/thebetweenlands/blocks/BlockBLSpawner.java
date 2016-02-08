@@ -43,7 +43,7 @@ public class BlockBLSpawner extends BlockMobSpawner {
     }
 
     public static void setRandomMob(World world, int x, int y, int z, Random random) {
-        setMob(world, x, y, z, entityList[random.nextInt(entityList.length - 1)]);
+        setMob(world, x, y, z, entityList[random.nextInt(entityList.length)]);
     }
 
     @Override

@@ -65,17 +65,33 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                     world.setBlock(x + 3, yy, zz, BLBlockRegistry.betweenstoneTiles);
                     world.setBlock(x + 4, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);
                 }
-
-                if (random.nextBoolean()) {
-                    world.setBlock(x + 2, yy + 1, z, BLBlockRegistry.weedwoodChest);
-                    TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 1);
-                    if (lootChest != null)
-                        LootUtil.generateLoot(lootChest, random, loot, 1, 2);
-                } else {
-                    world.setBlock(x + 2, yy + 1, z + 4, BLBlockRegistry.weedwoodChest);
-                    TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 4);
-                    if (lootChest != null)
-                        LootUtil.generateLoot(lootChest, random, loot, 1, 2);
+                int randomInt = random.nextInt(4);
+                TileEntityWeedWoodChest lootChest;
+                switch (randomInt) {
+                    case 0:
+                        world.setBlock(x + 1, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
+                        lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 1);
+                        if (lootChest != null)
+                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        break;
+                    case 1:
+                        world.setBlock(x + 1, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
+                        lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 3);
+                        if (lootChest != null)
+                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        break;
+                    case 2:
+                        world.setBlock(x + 3, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
+                        lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 1);
+                        if (lootChest != null)
+                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        break;
+                    case 3:
+                        world.setBlock(x + 3, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
+                        lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 3);
+                        if (lootChest != null)
+                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        break;
                 }
             } else if (yy < y + 4) {
                 world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneTiles);

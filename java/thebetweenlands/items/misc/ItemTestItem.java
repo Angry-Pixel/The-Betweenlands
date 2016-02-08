@@ -8,8 +8,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenDungeons;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
+import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
 
 public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public ItemTestItem() {
@@ -26,7 +28,7 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if( !world.isRemote && player.isSneaking() ) {
-            WorldGenIdolHeads heads = new WorldGenIdolHeads();
+            WorldGenSpawnerStructure heads = new WorldGenSpawnerStructure();
             heads.generate(world, rand, x, y + 1, z);
             return true;
         }
