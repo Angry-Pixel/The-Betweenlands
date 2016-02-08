@@ -116,17 +116,4 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 
         return true;
     }
-
-    private Block getRandomBlock(Random rand) {
-        switch (rand.nextInt(3)) {
-            case 0:
-                return BLBlockRegistry.lootPot1;
-            case 1:
-                return BLBlockRegistry.lootPot2;
-            case 2:
-                return BLBlockRegistry.lootPot3;
-            default:
-                return BLBlockRegistry.lootPot1;
-        }
-    }
 }
