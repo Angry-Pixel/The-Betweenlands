@@ -1,17 +1,16 @@
 package thebetweenlands.items.misc;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenDungeons;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
-import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
+
+import java.util.Random;
 
 public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public ItemTestItem() {
@@ -28,8 +27,9 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if( !world.isRemote && player.isSneaking() ) {
-            WorldGenSpawnerStructure heads = new WorldGenSpawnerStructure();
-            heads.generate(world, rand, x, y + 1, z);
+            WorldGenFluidPool pool = new WorldGenFluidPool();
+            pool.prepare((rand.nextDouble() + 0.7D) * 1.5D);
+            pool.generatePool(world, rand, x, y, z, BLBlockRegistry.tarFluid, false);
             return true;
         }
         return false;

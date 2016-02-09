@@ -50,6 +50,12 @@ public class WorldGenFluidPool extends WorldGenerator {
             return false;
         y -= 4;
 
+        for (int xx = x; xx < x + 16; ++xx)
+            for (int zz = z; zz < z + 16; ++zz)
+                for (int yy = y; yy < y + 8; ++yy)
+                    if (isBlacklistedBlock(world.getBlock(xx, yy, zz)))
+                        return false;
+
         boolean[] placeFluid = new boolean[2048];
 
         int xx;
@@ -97,11 +103,6 @@ public class WorldGenFluidPool extends WorldGenerator {
                         //		world.setBlock(x + xx, y + yy, z + zz, BLBlockRegistry.solidTar, 0, 2);
                     }
                 }
-        for (xx = 0; xx < 16; ++xx)
-            for (zz = 0; zz < 16; ++zz)
-                for (yy = 0; yy < 8; ++yy)
-                    if (isBlacklistedBlock(world.getBlock(x, y, z)))
-                        return false;
 
         for (xx = 0; xx < 16; ++xx)
             for (zz = 0; zz < 16; ++zz)

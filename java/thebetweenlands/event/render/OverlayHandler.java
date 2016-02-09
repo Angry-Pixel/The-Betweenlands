@@ -1,10 +1,5 @@
 package thebetweenlands.event.render;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -27,20 +22,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderHandEvent;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.recipes.BLMaterial;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
 public class OverlayHandler {
 	public static final OverlayHandler INSTANCE = new OverlayHandler();
-
-	private Method mERrenderHand;
-	private boolean cancelOverlay = false;
-
 	private static final ResourceLocation RES_UNDERWATER_OVERLAY = new ResourceLocation("textures/misc/underwater.png");
 	private static final ResourceLocation RES_TAR_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/tar.png");
 	private static final ResourceLocation RES_MUD_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/mud.png");
+	private static final ResourceLocation RES_STAGNANT_OVERLAY = new ResourceLocation("thebetweenlands:textures/blocks/stagnantWater.png");
+	private Method mERrenderHand;
+	private boolean cancelOverlay = false;
+	private ModelArmOverride modelArmOverride = null;
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -66,7 +65,7 @@ public class OverlayHandler {
 	public void renderHand(float partialTicks, int renderPass, boolean overlay) {
 		if(this.mERrenderHand == null) {
 			try {
-				this.mERrenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, new Class[]{float.class, int.class});
+				this.mERrenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, float.class, int.class);
 				this.mERrenderHand.setAccessible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -81,36 +80,6 @@ public class OverlayHandler {
 		this.cancelOverlay = false;
 	}
 
-	private ModelArmOverride modelArmOverride = null;
-
-	static class ModelArmOverride extends ModelRenderer {
-		public ModelArmOverride(ModelBase modelBase) {
-			super(modelBase);
-		}
-
-		public boolean holdingItem = false;
-
-		private ModelRenderer parent;
-
-		private EntityPlayer entity;
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void render(float partialTicks) {
-			GL11.glPushMatrix();
-			Minecraft.getMinecraft().renderEngine.bindTexture(DecayRenderHandler.PLAYER_CORRUPTION_TEXTURE);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			float glow = (float)((Math.cos(entity.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
-			float transparency = 0.85F * DecayManager.getCorruptionLevel((EntityPlayer)entity) / 10.0F - glow;
-			GL11.glColor4f(1, 1, 1, transparency);
-			this.parent.render(partialTicks);
-			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
-			GL11.glPopMatrix();
-		}
-	}
-
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderHand(RenderHandEvent event) {
@@ -118,9 +87,9 @@ public class OverlayHandler {
 		World world = Minecraft.getMinecraft().theWorld;
 
 		event.setCanceled(true);
-		
+
 		GL11.glPushMatrix();
-		
+
 		//Render normal hand with overlays
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		this.renderHand(event.partialTicks, event.renderPass, true);
@@ -128,7 +97,7 @@ public class OverlayHandler {
 		//Render decay overlay
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
-		if(this.modelArmOverride == null && playerRenderer.modelBipedMain != null) {
+		if (this.modelArmOverride == null && playerRenderer.modelBipedMain != null) {
 			this.modelArmOverride = new ModelArmOverride(playerRenderer.modelBipedMain);
 		}
 		this.modelArmOverride.parent = playerRenderer.modelBipedMain.bipedRightArm;
@@ -139,29 +108,34 @@ public class OverlayHandler {
 		playerRenderer.modelBipedMain.bipedRightArm = previousModel;
 
 		//Render other overlays
-		if(view == null || world == null) {
+		if (view == null || world == null) {
 			GL11.glPopMatrix();
 			return;
 		}
-		Block viewBlock = ActiveRenderInfo.getBlockAtEntityViewpoint(world, view, (float) event.partialTicks);
+		Block viewBlock = ActiveRenderInfo.getBlockAtEntityViewpoint(world, view, event.partialTicks);
 		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
 		boolean inTar = (viewBlock.getMaterial() == BLMaterial.tar || (entitiesInside != null && entitiesInside.size() > 0));
+		boolean inStagnantWater = viewBlock.getMaterial() == BLMaterial.stagnantWater;
 		int bx = MathHelper.floor_double(view.posX);
 		int by = MathHelper.floor_double(view.posY);
 		int bz = MathHelper.floor_double(view.posZ);
 		Block block = world.getBlock(bx, by, bz);
 		boolean inMud = block.getMaterial() == BLMaterial.mud;
-		boolean inBlock = inTar || inMud;
-		if(inBlock && !this.cancelOverlay) {
+		boolean inBlock = inTar || inMud || inStagnantWater;
+		if (inBlock && !this.cancelOverlay) {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			Minecraft mc = Minecraft.getMinecraft();
-			if(inTar) {
+			if (inTar) {
 				mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
 				GL11.glColor4f(1, 1, 1, 0.985F);
 				GL11.glScaled(1, 20, 1);
-			} else if(inMud) {
+			} else if (inMud) {
 				GL11.glColor4f(0.25F, 0.25F, 0.25F, 1);
 				mc.getTextureManager().bindTexture(RES_MUD_OVERLAY);
+			} else if (inStagnantWater) {
+				mc.getTextureManager().bindTexture(RES_STAGNANT_OVERLAY);
+				GL11.glColor4f(1, 1, 1, 0.985F);
+				GL11.glScaled(1, 20, 1);
 			}
 
 			this.renderWarpedTextureOverlay(event.partialTicks);
@@ -199,5 +173,31 @@ public class OverlayHandler {
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	static class ModelArmOverride extends ModelRenderer {
+		public boolean holdingItem = false;
+		private ModelRenderer parent;
+		private EntityPlayer entity;
+
+		public ModelArmOverride(ModelBase modelBase) {
+			super(modelBase);
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public void render(float partialTicks) {
+			GL11.glPushMatrix();
+			Minecraft.getMinecraft().renderEngine.bindTexture(DecayRenderHandler.PLAYER_CORRUPTION_TEXTURE);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			float glow = (float) ((Math.cos(entity.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
+			float transparency = 0.85F * DecayManager.getCorruptionLevel(entity) / 10.0F - glow;
+			GL11.glColor4f(1, 1, 1, transparency);
+			this.parent.render(partialTicks);
+			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
+			GL11.glPopMatrix();
+		}
 	}
 }

@@ -23,6 +23,7 @@ public class BLMaterial extends Material {
 	public static final ArmorMaterial armorOfLegends = EnumHelper.addArmorMaterial("LEGEND", 66, new int[] {6, 16, 12, 6}, 0);
 
 	public static final Material tar = new MaterialLiquid(MapColor.mapColorArray[0]);
+	public static final Material stagnantWater = new MaterialLiquid(MapColor.mapColorArray[0]);
 	public static final Material mud = new Material(MapColor.dirtColor) {
 		@Override
 		public boolean isOpaque() {
