@@ -44,9 +44,9 @@ public class WorldGenIdolHeads extends WorldGenerator {
             }
         }
 		direction = rand.nextInt(4);
-        int headType = rand.nextInt(3);
-        int xx = x - length / 2;
-        int zz = z - width / 2;
+		int headType = rand.nextInt(3);
+		int xx = x - length / 2;
+		int zz = z - width / 2;
 
         switch (headType) {
 	        case 0:// Gold Head
@@ -124,7 +124,7 @@ public class WorldGenIdolHeads extends WorldGenerator {
         world.setBlock(x, y - 1, z, BLBlockRegistry.weedwoodChest);
         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y - 1, z);
         if (lootChest != null)
-            LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
+        	LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
         return true;
     }
 
