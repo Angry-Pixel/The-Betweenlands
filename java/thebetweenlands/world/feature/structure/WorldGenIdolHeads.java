@@ -6,6 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootUtil;
 
 public class WorldGenIdolHeads extends WorldGenerator {
 
@@ -117,6 +120,11 @@ public class WorldGenIdolHeads extends WorldGenerator {
 		        rotatedCubeVolume(world, rand, xx, y, zz, 5, 2, 1, stairs, direction == 0 ? 4 : direction == 2 ? 5 : direction == 1 ? 6 : 7, 1, 1, 1, direction); //top left
 		        break;
         }
+        TileEntityWeedWoodChest lootChest;
+        world.setBlock(x, y - 1, z, BLBlockRegistry.weedwoodChest);
+        lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y - 1, z);
+        if (lootChest != null)
+            LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
         return true;
     }
 

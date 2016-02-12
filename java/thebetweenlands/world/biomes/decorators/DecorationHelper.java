@@ -1,5 +1,7 @@
 package thebetweenlands.world.biomes.decorators;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -16,7 +18,11 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
-import thebetweenlands.world.feature.gen.cave.*;
+import thebetweenlands.world.feature.gen.cave.WorldGenCaveGrass;
+import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
+import thebetweenlands.world.feature.gen.cave.WorldGenCavePots;
+import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
+import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
@@ -24,9 +30,14 @@ import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
-import thebetweenlands.world.feature.trees.*;
-
-import java.util.Random;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
+import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
+import thebetweenlands.world.feature.trees.WorldGenRubberTree;
+import thebetweenlands.world.feature.trees.WorldGenSapTree;
+import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
+import thebetweenlands.world.feature.trees.WorldGenSmallWeedWoodTree;
+import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
@@ -936,7 +947,7 @@ public class DecorationHelper {
 			int x = this.x + this.offsetXZ();
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.MIXED, x, y, z))
+			if (checkSurface(SurfaceType.MIXED, x, y, z) && checkSurface(SurfaceType.MIXED, x - 2, y, z - 2) && checkSurface(SurfaceType.MIXED, x + 2, y, z - 2) && checkSurface(SurfaceType.MIXED, x - 2, y, z + 2) && checkSurface(SurfaceType.MIXED, x + 2, y, z + 2))
 				GEN_HEADS.generate(world, rand, x, y, z);
 		}
 	}

@@ -1,71 +1,21 @@
 package thebetweenlands.world.feature.structure;
 
+import java.util.Random;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
-import thebetweenlands.world.loot.LootItemStack;
+import thebetweenlands.world.loot.LootBasicList;
 import thebetweenlands.world.loot.LootUtil;
-import thebetweenlands.world.loot.WeightedLootList;
-
-import java.util.Random;
 
 /**
  * Created by Bart on 05/02/2016.
  */
 public class WorldGenSpawnerStructure extends WorldGenerator {
-
-    public static final WeightedLootList loot = new WeightedLootList(new LootItemStack[]{
-            //common
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH.id).setAmount(4, 8).setWeight(20),
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(20),
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(20),
-            new LootItemStack(BLItemRegistry.sapBall).setAmount(8, 32).setWeight(20),
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(20),
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.PARCHMENT.id).setAmount(8, 16).setWeight(20),
-            //in between
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(12),
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(12),
-            new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(22),
-            new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(12),
-            new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(12),
-            new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(12),
-            //rare
-            new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.VALONITE_SHARD.id).setAmount(1, 4).setWeight(6),
-            new LootItemStack(BLItemRegistry.angryPebble).setAmount(8, 16).setWeight(6),
-            new LootItemStack(BLItemRegistry.scroll).setAmount(1, 3).setWeight(6),
-            new LootItemStack(BLItemRegistry.middleFruitSeeds).setAmount(1, 8).setWeight(6),
-            new LootItemStack(BLItemRegistry.aspectrusCropSeed).setAmount(1, 8).setWeight(6),
-            new LootItemStack(BLItemRegistry.astatos).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.betweenYouAndMe).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.christmasOnTheMarsh).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.theExplorer).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.hagDance).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.lonelyFire).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.mysteriousRecord).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.ancient).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.beneathAGreenSky).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.dJWightsMixtape).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.onwards).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.stuckInTheMud).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.wanderingWisps).setAmount(1).setWeight(6),
-            new LootItemStack(BLItemRegistry.waterlogged).setAmount(1).setWeight(6),
-            //very rare
-            new LootItemStack(BLItemRegistry.forbiddenFig).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.explorerHat).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.voodooDoll).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.ringOfPower).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.swiftPick).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.wightsBane).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.skullMask).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.tribalPants).setAmount(1).setWeight(1)
-
-    });
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
@@ -108,25 +58,25 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                         world.setBlock(x + 1, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 1);
                         if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
                         break;
                     case 1:
                         world.setBlock(x + 1, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 3);
                         if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
                         break;
                     case 2:
                         world.setBlock(x + 3, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 1);
                         if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
                         break;
                     case 3:
                         world.setBlock(x + 3, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 3);
                         if (lootChest != null)
-                            LootUtil.generateLoot(lootChest, random, loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
                         break;
                 }
             } else if (yy < y + 4) {
