@@ -423,7 +423,9 @@ public class BLBlockRegistry {
 	public static final Block slimyBoneBlock = new BlockBLGenericDeco("slimyBoneBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block aquaMiddleGemBlock = new BlockBLGenericDeco("aquaMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block crimsonMiddleGemBlock = new BlockBLGenericDeco("crimsonMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
-	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);	
+	public static final Block mossyLimestoneBricks = new BlockBLGenericDeco("mossyLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block crackedLimestoneBricks = new BlockBLGenericDeco("crackedLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
