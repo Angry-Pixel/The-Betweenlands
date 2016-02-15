@@ -45,6 +45,7 @@ public class BLEntityRegistry
 		registerEntity(29, EntityElixir.class, "thrownElixir", 64, 10, true);
 		registerEntity(30, EntityRopeNode.class, "ropeNode", 64, 1, true);
 		registerEntity(31, EntityDreadfulMummy.class, "dreadfulMummy", 0x000000, 0x2E2E2E, 64, 1, true);
+		registerEntity(32, EntityShallowBreath.class, "shallowBreath", 0x005C3D, 0x2D4231, 10, 1, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

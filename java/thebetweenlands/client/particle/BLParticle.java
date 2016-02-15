@@ -1,14 +1,9 @@
 package thebetweenlands.client.particle;
 
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityBreakingFX;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.particle.EntityFlameFX;
-import net.minecraft.client.particle.EntitySmokeFX;
-import net.minecraft.client.particle.EntitySpellParticleFX;
+import net.minecraft.client.particle.*;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.init.Items;
@@ -16,19 +11,13 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.entities.particles.EntityAltarCraftingFX;
-import thebetweenlands.entities.particles.EntityBLBubbleFX;
-import thebetweenlands.entities.particles.EntityBugFX;
-import thebetweenlands.entities.particles.EntityCaveWaterDripFX;
-import thebetweenlands.entities.particles.EntityDruidCastingFX;
-import thebetweenlands.entities.particles.EntityLeafFX;
+import thebetweenlands.entities.particles.*;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntitySplashFX;
-import thebetweenlands.entities.particles.EntityTarBeastDrip;
-import thebetweenlands.entities.particles.EntityWeedWoodRustleFX;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public enum BLParticle {
@@ -41,8 +30,9 @@ public enum BLParticle {
 		}
 	},
 	SMOKE(EntitySmokeFX.class),
+	SWAMP_SMOKE(EntitySmokeFX.class, 45, 66, 49),
 	FLAME(EntityFlameFX.class),
-	GREEN_FLAME(EntityFlameFX.class, 0.1f, 1, 0.1f),
+	GREEN_FLAME(EntityFlameFX.class, 0.176f, 0.259f, 0.192f),
 	SULFUR_TORCH(EntitySmokeFX.class, 1, 0.9294F, 0, ParticleArgs.V0_V0_V0),
 	SULFUR_ORE(EntitySpellParticleFX.class, 1, 0.9294F, 0),
 	SNAIL_POSION(EntitySpellParticleFX.class, 1, 0, 0),
@@ -151,19 +141,19 @@ public enum BLParticle {
 
 	private float b;
 
-	private BLParticle(Class<? extends EntityFX> fxClass) {
+	BLParticle(Class<? extends EntityFX> fxClass) {
 		this(fxClass, -1, 0xDEAD, 0xC0DE);
 	}
 
-	private BLParticle(Class<? extends EntityFX> fxClass, float r, float g, float b) {
+	BLParticle(Class<? extends EntityFX> fxClass, float r, float g, float b) {
 		this(fxClass, r, g, b, ParticleArgs.VX_VY_VZ);
 	}
 
-	private BLParticle(Class<? extends EntityFX> fxClass, ParticleArgs args, Class<?>... additionalArgTypes) {
+	BLParticle(Class<? extends EntityFX> fxClass, ParticleArgs args, Class<?>... additionalArgTypes) {
 		this(fxClass, -1, 0xDEAD, 0xC0DE, args, additionalArgTypes);
 	}
 
-	private BLParticle(Class<? extends EntityFX> fxClass, float r, float g, float b, ParticleArgs args, Class<?>... additionalArgTypes) {
+	BLParticle(Class<? extends EntityFX> fxClass, float r, float g, float b, ParticleArgs args, Class<?>... additionalArgTypes) {
 		if (r != -1) {
 			shouldAssignColor = true;
 			this.r = r;
@@ -184,12 +174,6 @@ public enum BLParticle {
 		this.additionalArgTypes = additionalArgTypes;
 	}
 
-	protected Object[] getAdditionalArgs(World world, Object... data) {
-		return new Object[0];
-	}
-
-	protected void onSpawn(EntityFX entityFX) {}
-
 	private static Class<?>[] getArgumentTypes(ParticleArgs args, Class<?>[] additionalArgTypes) {
 		Class<?>[] argumentTypes = new Class<?>[REGULAR_ARG_NUM + args.getArgumentCount() + additionalArgTypes.length];
 		argumentTypes[0] = World.class;
@@ -200,6 +184,12 @@ public enum BLParticle {
 		System.arraycopy(additionalArgTypes, 0, argumentTypes, REGULAR_ARG_NUM + args.getArgumentCount(), additionalArgTypes.length);
 		return argumentTypes;
 	}
+
+	protected Object[] getAdditionalArgs(World world, Object... data) {
+		return new Object[0];
+	}
+
+	protected void onSpawn(EntityFX entityFX) {}
 
 	public final void spawn(World world, double x, double y, double z) {
 		spawn(world, x, y, z, 0, 0, 0, 1);
@@ -248,4 +238,7 @@ public enum BLParticle {
 		System.arraycopy(additionalArgs, 0, arguments, REGULAR_ARG_NUM + args.getArgumentCount(), additionalArgs.length);
 		return arguments;
 	}
+
+
+
 }
