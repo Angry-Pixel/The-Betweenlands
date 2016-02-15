@@ -13,11 +13,11 @@ import thebetweenlands.creativetabs.BLCreativeTabs;
  * Created by Bart on 16-6-2015.
  */
 public class BlockBLGlass extends BlockGlass {
-    public BlockBLGlass() {
+    public BlockBLGlass(String blockName, String textureName) {
         super(Material.glass, false);
-        this.setBlockName("thebetweenlands.siltGlass");
+        this.setBlockName("thebetweenlands." + blockName);
         this.setCreativeTab(BLCreativeTabs.blocks);
-        textureName = "thebetweenlands:siltGlass1";
+        this.textureName = "thebetweenlands:" + textureName;
         setHardness(0.3F);
         setStepSound(soundTypeGlass);
     }
@@ -31,7 +31,7 @@ public class BlockBLGlass extends BlockGlass {
     @Override
     public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
         Block block = iblockaccess.getBlock(x, y, z);
-        return block != BLBlockRegistry.siltGlas;
+        return block != this;
     }
 
     @Override

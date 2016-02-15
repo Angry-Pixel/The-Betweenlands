@@ -62,10 +62,6 @@ import java.util.Random;
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
 	public static final List<Block> BLOCKS = new LinkedList<Block>();
-
-	// PORTAL
-	public static BlockTreePortal treePortalBlock = new BlockTreePortal();
-
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
 	public static final Block pitstone = new BlockPitstone();
@@ -98,7 +94,6 @@ public class BLBlockRegistry {
 	public static final Block puddle = new BlockPuddle();
 	public static final BlockFarmedDirt farmedDirt = new BlockFarmedDirt();
 	public static final Block dentrothyst = new BlockDentrothyst();
-
 	// ORES @Params (name/texture, drops this item)
 	// hardness & resistance could be set on an individual basis but aren't atm.
 	public static final Block aquaMiddleGemOre = new BlockMiddleGemOre("aquaMiddleGemOre", null);
@@ -106,7 +101,7 @@ public class BLBlockRegistry {
 	public static final Block greenMiddleGemOre = new BlockMiddleGemOre("greenMiddleGemOre", null);
 	public static final Block octineOre = new BlockGenericOre("octineOre", null){
 		@Override
-		public void spawnParticle(World world, double x, double y, double z) { 
+		public void spawnParticle(World world, double x, double y, double z) {
 			BLParticle.FLAME.spawn(world, x, y, z, 0, 0, 0, 0);
 		}
 	}.setLightLevel(0.875F); //setting null drops item block
@@ -114,20 +109,17 @@ public class BLBlockRegistry {
 	public static final Block boneOre = new BlockGenericOre("boneOre", ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE)).setXP(5, 12);
 	public static final Block sulfurOre = new BlockGenericOre("sulfurOre", ItemGeneric.createStack(EnumItemGeneric.SULFUR)){
 		@Override
-		public void spawnParticle(World world, double x, double y, double z) { 
+		public void spawnParticle(World world, double x, double y, double z) {
 			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
 		}
 	}.setXP(2, 5);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD)).setXP(5, 12);
 	public static final BlockLifeCrystalOre lifeCrystalOre = (BlockLifeCrystalOre) new BlockLifeCrystalOre().setLightLevel(0.4F);
-
-
 	// TREES
 	public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood").setTreeGenerator(new WorldGenWeedWoodTree());
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree").setTreeGenerator(new WorldGenSapTree());
 	public static final Block saplingSpiritTree = new BlockBLSapling("saplingSpiritTree");
 	public static final Block saplingRubberTree = new BlockBLSapling("saplingRubberTree").setTreeGenerator(new WorldGenRubberTree());
-
 	public static final Block weedwoodLeaves = new BlockBLLeaves("weedwoodLeaves"){
 		@Override
 		public Item getItemDropped(int meta, Random rand, int fortune) {
@@ -146,7 +138,6 @@ public class BLBlockRegistry {
 			return Item.getItemFromBlock(BLBlockRegistry.saplingRubberTree);
 		}
 	};
-
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog").setHasSpoopyTexture(true);
 	public static final Block weedwood = new BlockBLLog("weedwood").setHasSperateTopIcon(false);
 	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark").setHasSperateTopIcon(false);
@@ -161,7 +152,7 @@ public class BLBlockRegistry {
 				}
 			}
 			super.onBlockDestroyedByPlayer(world, x, y, z, meta);
-		}	 
+		}
 	}.setHasSperateTopIcon(false);
 	public static final BlockBLLog sapTreeLog = new BlockBLLog("sapTreeLog"){
 		@Override
@@ -180,12 +171,10 @@ public class BLBlockRegistry {
 	public static final Block weedwoodBush = new BlockWeedWoodBush().setBlockName("thebetweenlands.weedwoodBush").setCreativeTab(BLCreativeTabs.plants);
 	public static final Block portalBark = new BlockBLLog("portalBark").setHasSperateTopIcon(false);
 	public static final Block portalBarkFrame = new BlockBLPortalFrame();
-
 	// WOOD
 	public static final Block weedwoodPlanks = new BlockGenericPlanks("weedwoodPlanks", Material.wood);
 	public static final Block rubberTreePlanks = new BlockGenericPlanks("rubberTreePlanks", Material.wood);
 	public static final Block hollowLog = new BlockHollowLog();
-
 	// DOUBLE PLANTS
 	public static final BlockDoubleHeightPlant sundew = new BlockDoubleHeightPlant("Sundew", 0.8F) {
 		@Override
@@ -202,7 +191,6 @@ public class BLBlockRegistry {
 			this.topIcon = reg.registerIcon("thebetweenlands:doublePlant" + name + "Top");
 		}
 	}.setRenderType(BlockRenderIDs.MODEL_PLANT.id()).setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SUNDEW_HEAD));
-
 	public static final Block doubleSwampTallgrass = new BlockDoubleHeightPlant("DoubleSwampTallgrass", 0.8F).setHasSpoopyTexture(true).setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES));
 	public static final Block phragmites = new BlockDoubleHeightPlant("Phragmites", 0.8F) {
 		@Override
@@ -222,7 +210,6 @@ public class BLBlockRegistry {
 	public static final Block broomsedge = new BlockDoubleHeightPlant("BroomSedge", 0.8F).setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BROOM_SEDGE_LEAVES));
 	public static final BlockWeepingBlue weepingBlue = new BlockWeepingBlue();
 	public static final BlockPitcherPlant pitcherPlant = (BlockPitcherPlant) new BlockPitcherPlant().setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PITCHER_PLANT_TRAP));
-
 	//PLANTS
 	public static final BlockSwampReed swampReed = new BlockSwampReed();
 	public static final BlockSwampReedUW swampReedUW = new BlockSwampReedUW();
@@ -246,14 +233,11 @@ public class BLBlockRegistry {
 	public static final BlockThorns thorns = new BlockThorns();
 	public static final BlockPoisonIvy poisonIvy = new BlockPoisonIvy();
 	public static final Block wallPlants = new BlockWallPlants();
-
 	public static final Block bulbCappedMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block bulbCappedMushroomTop = new BlockBlubCappedMushroomHead();
-
 	//LANTERN
 	public static final Block connectionFastener = new BlockConnectionFastener();
 	public static final Block connectionFastenerFence = new BlockConnectionFastenerFence();
-
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
 		@Override
@@ -290,14 +274,26 @@ public class BLBlockRegistry {
 		}
 	};
 	public static final BlockAspectrusCrop aspectrusCrop = new BlockAspectrusCrop("aspectrusCrop");
-
 	public static final Block caveMoss = new BlockCaveMoss();
 	public static final BlockCaveGrass caveGrass = new BlockCaveGrass("caveGrass");
-
 	// SMALL PLANTS
 	public static final Block catTail = new BlockBLSmallPlants("cattail").setHasSpoopyTexture(true).setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CATTAIL_HEAD));
 	public static final Block swampTallGrass = new BlockBLSmallPlants("swampTallgrass").setHasSpoopyTexture(true).setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES));
 	public static final Block shoots = new BlockBLSmallPlants("shoots").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SHOOT_LEAVES));
+	public static final Block nettle = new BlockBLSmallPlants("nettle") {
+		@Override
+		public void updateTick(World world, int x, int y, int z, Random rand) {
+			super.updateTick(world, x, y, z, rand);
+			if (rand.nextInt(80) == 0) {
+				world.setBlock(x, y, z, BLBlockRegistry.nettle);
+			}
+		}
+
+		@Override
+		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
+			if (entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
+		}
+	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block nettleFlowered = new BlockBLSmallPlants("nettleFlowered"){
 		@Override
 		public void updateTick(World world, int x, int y, int z, Random rand) {
@@ -323,20 +319,6 @@ public class BLBlockRegistry {
 			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
 		}
 	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
-	public static final Block nettle = new BlockBLSmallPlants("nettle"){
-		@Override
-		public void updateTick(World world, int x, int y, int z, Random rand) {
-			super.updateTick(world, x, y, z, rand);
-			if (rand.nextInt(80) == 0) {
-				world.setBlock(x, y, z, BLBlockRegistry.nettle);
-			}
-		}
-
-		@Override
-		public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-			if(entity instanceof IEntityBL == false) entity.attackEntityFrom(DamageSource.cactus, 1);
-		}
-	}.setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.NETTLE_LEAF));
 	public static final Block arrowArum = new BlockBLSmallPlants("arrowArum").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.ARROW_ARUM_LEAF));
 	public static final Block buttonBush = new BlockBLSmallPlants("buttonBush").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BUTTON_BUSH_FLOWERS));
 	public static final Block marshHibiscus = new BlockBLSmallPlants("marshHibiscus").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER));
@@ -351,11 +333,9 @@ public class BLBlockRegistry {
 	public static final Block bottleBrushGrass = new BlockBLSmallPlants("bottleBrushGrass").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.BOTTLE_BRUSH_GRASS_BLADES));
 	public static final Block sludgecreep = new BlockBLSmallPlants("sludgecreep").setHarvestedItem(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.SLUDGECREEP_LEAVES));
 	public static final Block deadWeedwoodBush = new BlockBLSmallPlants("deadWeedwoodBush").setHarvestedItem(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
-
 	// UNDERGROWTH
 	public static final Block hanger = new BlockBLHanger("hanger");
 	public static final Block treeFungus = new BlockTreeFungus();
-
 	// DECORATIONS AND UTILITIES
 	public static final Block weedwoodCraftingTable = new BlockBLWorkbench();
 	public static final Block weedwoodChest = new BlockWeedWoodChest();
@@ -410,33 +390,31 @@ public class BLBlockRegistry {
 	public static final Block smoothPitstone = new BlockBLGenericDeco("smoothPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block pitstoneBricks = new BlockBLGenericDeco("pitstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block pitstoneTiles = new BlockBLGenericDeco("pitstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block chiseledPitstone = new BlockBLGenericDeco("chiseledPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone); 
+	public static final Block chiseledPitstone = new BlockBLGenericDeco("chiseledPitstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block choca = new BlockBLGenericDeco("choca", Material.rock).setHardness(15F).setResistance(20.0F).setStepSound(Block.soundTypeStone).setBlockTextureName("thebetweenlands:dave");
 	public static final Block geckoCage = new BlockGeckoCage();
 	public static final Block blockWoodChipPath = new BlockWoodChipPath();
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
 	public static final Block blockTotem = new BlockTotem();
-	public static final Block siltGlas = new BlockBLGlass();
+	public static final Block siltGlas = new BlockBLGlass("siltGlass", "siltGlass1");
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
 	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
 	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
 	public static final Block slimyBoneBlock = new BlockBLGenericDeco("slimyBoneBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block aquaMiddleGemBlock = new BlockBLGenericDeco("aquaMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block crimsonMiddleGemBlock = new BlockBLGenericDeco("crimsonMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
-	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);	
+	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block mossyLimestoneBricks = new BlockBLGenericDeco("mossyLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block crackedLimestoneBricks = new BlockBLGenericDeco("crackedLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
-
 	// STAIRS, SLABS, WALLS, FENCES, SIGNS, ETC.
 	public static final Block betweenstoneBrickStairs = new BlockBLStairs(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickStairs");
 	public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
 	public static final Block cragrockBrickStairs = new BlockBLStairs(cragrockBrick, 0).setBlockName("thebetweenlands.cragrockBrickStairs");
 	public static final Block limestoneBrickStairs = new BlockBLStairs(limestoneBricks, 0).setBlockName("thebetweenlands.limestoneBrickStairs");
 	public static final Block limestoneStairs = new BlockBLStairs(limestone, 0).setBlockName("thebetweenlands.limestoneStairs");
-	public static final Block smoothBetweenstoneStairs = new BlockBLStairs(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneStairs"); 
+	public static final Block smoothBetweenstoneStairs = new BlockBLStairs(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneStairs");
 	public static final Block smoothCragrockStairs = new BlockBLStairs(smoothCragrock, 0).setBlockName("thebetweenlands.smoothCragrockStairs");
 	public static final Block smoothPitstoneStairs = new BlockBLStairs(smoothPitstone, 0).setBlockName("thebetweenlands.smoothPitstoneStairs");
 	public static final Block solidTarStairs = new BlockBLStairs(solidTar, 0).setBlockName("thebetweenlands.solidTarStairs");
@@ -454,7 +432,7 @@ public class BLBlockRegistry {
 	public static final Block smoothPitstoneWall = new BlockBLWall(smoothPitstone, 0).setBlockName("thebetweenlands.smoothPitstoneWall");
 	public static final Block solidTarWall = new BlockBLWall(solidTar, 0).setBlockName("thebetweenlands.solidTarWall");
 	public static final Block templeBrickWall = new BlockBLWall(templeBrick, 0).setBlockName("thebetweenlands.templeBrickWall");
-	public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");  
+	public static final Block pitstoneBrickWall = new BlockBLWall(pitstoneBricks, 0).setBlockName("thebetweenlands.pitstoneBrickWall");
 	public static final Block weedwoodPlankFence = new BlockBLFence("weedwoodPlanks", Material.wood).setBlockName("thebetweenlands.weedwoodPlankFence");
 	public static final BlockBLFence rubberTreePlankFence = (BlockBLFence) new BlockBLFence("rubberTreePlanks", Material.wood).setBlockName("thebetweenlands.rubberTreePlankFence");
 	public static final Block weedwoodPlankFenceGate = new BlockBLFenceGate("weedwoodPlanks");
@@ -477,21 +455,18 @@ public class BLBlockRegistry {
 	public static final Block tarLootPot2 = new BlockTarLootPot2();
 	public static final Block tarLootPot3 = new BlockTarLootPot3();
 	public static final BlockMossBed mossBed = new BlockMossBed();
-
 	//DOORS
 	public static final Block doorWeedwood = new BlockBLDoor("weedwood", Material.wood);
 	public static final Block doorRubber = new BlockBLDoor("rubber", Material.wood);
 	public static final Block doorSyrmorite = new BlockBLDoor("syrmorite", Material.rock);
 	public static final Block trapDoorWeedwood = new BlockBLTrapDoor("weedwood", Material.wood);
 	public static final Block trapDoorSyrmorite = new BlockBLTrapDoor("syrmorite", Material.rock);
-
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
 	public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
 	public static final BlockLifeCrystalBlock lifeCrystalBlock = new BlockLifeCrystalBlock();
 	public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 	public static final BlockRope rope = new BlockRope();
-
 	// SLABS
 	public static final BlockBLSlab weedwoodPlankSlab = new BlockBLSlab(false, Material.wood, "weedwoodPlanks", null, "axe");
 	public static final BlockBLSlab weedwoodPlankSlabDouble = new BlockBLSlab(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab, "axe");
@@ -521,8 +496,9 @@ public class BLBlockRegistry {
 	public static final BlockBLSlab pitstoneBrickSlabDouble = new BlockBLSlab(true, Material.rock, "pitstoneBricks", pitstoneBrickSlab, "pickaxe");
 	public static final BlockBLSlab thatchSlab = new BlockBLSlab(false, Material.cloth, "thatch", null, "axe");
 	public static final BlockBLSlab thatchSlabDouble = new BlockBLSlab(true, Material.cloth, "thatch", thatchSlab, "axe");
-
 	public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope").setCreativeTab(BLCreativeTabs.blocks);
+	// PORTAL
+	public static BlockTreePortal treePortalBlock = new BlockTreePortal();
 
 	public static void registerSlabs(BlockBLSlab slab, String fieldName) {
 		try {
@@ -599,7 +575,7 @@ public class BLBlockRegistry {
 		lifeCrystalOre.setHarvestLevel("pickaxe", 0);
 	}
 
-	public static interface ISubBlocksBlock {
+	public interface ISubBlocksBlock {
 		Class<? extends ItemBlock> getItemBlockClass();
 	}
 }
