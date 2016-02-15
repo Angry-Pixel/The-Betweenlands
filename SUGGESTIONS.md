@@ -14,3 +14,9 @@ TRIBE STUFF -
 * Guy who cuts down trees
 * Elder's Hut
 
+MORE MOBS - 
+* Shade
+* Shallowbreath
+* Floating Flamme
+* Dirt Crawler
+* Giant Fruit Bat
