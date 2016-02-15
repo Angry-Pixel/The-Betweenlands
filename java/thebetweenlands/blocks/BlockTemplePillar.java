@@ -75,4 +75,9 @@ public class BlockTemplePillar extends BlockRotatedPillar {
         super.registerBlockIcons(reg);
         field_150164_N = reg.registerIcon("thebetweenlands:" + textureNameBottom);
     }
+
+    @Override
+    public void setBlockBoundsForItemRender() {
+        this.setBlockBounds(0.0625f, 0f, 0.0625f, .9375f, 1f, .9375f);
+    }
 }
