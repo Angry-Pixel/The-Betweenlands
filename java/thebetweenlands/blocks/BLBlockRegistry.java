@@ -380,7 +380,12 @@ public class BLBlockRegistry {
 	public static final Block carvedTempleBrick = new BlockBLGenericDeco("carvedTempleBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block dungeonTile = new BlockBLGenericDeco("dungeonTile", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block dungeonWall = new BlockBLGenericDeco("dungeonWall", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final BlockTemplePillar templePillar = new BlockTemplePillar("templePillar", "dungeonTile");
+	public static final BlockTemplePillar templePillar = new BlockTemplePillar("templePillar", "templePillarTop");
+	public static final BlockTemplePillar betweenstonePillar = new BlockTemplePillar("betweenstonePillar", "betweenstonePillarTop");
+	public static final BlockTemplePillar pitstonePillar = new BlockTemplePillar("pitstonePillar", "pitstonePillarTop");
+	public static final BlockTemplePillar limestonePillar = new BlockTemplePillar("limestonePillar", "limestonePillarTop");
+	public static final BlockTemplePillar cragrockPillar = new BlockTemplePillar("cragrockPillar", "cragrockPillarTop");
+	
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);

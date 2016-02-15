@@ -22,7 +22,7 @@ public class BlockTemplePillar extends BlockRotatedPillar {
         setBlockTextureName("thebetweenlands:" + name);
         this.textureNameBottom = textureNameBottom;
     }
-    /*
+
     @Override
     public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
         int meta = world.getBlockMetadata(x, y, z);
@@ -62,7 +62,6 @@ public class BlockTemplePillar extends BlockRotatedPillar {
     public boolean isOpaqueCube() {
         return false;
     }
-    */
 
     @Override
     @SideOnly(Side.CLIENT)

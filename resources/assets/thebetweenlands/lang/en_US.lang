@@ -193,6 +193,10 @@ tile.thebetweenlands.greenMiddleGemBlock.name=Green Middle Gem Block
 tile.thebetweenlands.slimyBoneBlock.name=Slimy Bone Block
 tile.thebetweenlands.mossyLimestoneBricks.name=Mossy Limestone Bricks
 tile.thebetweenlands.crackedLimestoneBricks.name=Cracked Limestone Bricks
+tile.thebetweenlands.betweenstonePillar.name=Betweenstone Pillar
+tile.thebetweenlands.pitstonePillar.name=Pitstone Pillar
+tile.thebetweenlands.limestonePillar.name=Limestone Pillar
+tile.thebetweenlands.cragrockPillar.name=Cragrock Pillar
 
 tile.thebetweenlands.weedwoodChipPath.name=Woodchip Path
 tile.thebetweenlands.walkway.name=Weedwood Walkway

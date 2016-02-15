@@ -200,7 +200,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', "plankWeedwood"));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorSyrmorite, 2), "###", "###", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 
-		// Stairs, slabs, walls, fences
+		// Stairs, slabs, walls, fences, pillars
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.pitstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.mudBrick);
@@ -247,7 +247,12 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankSlab, 6), "###", '#', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankSlab, 6), "###", '#', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlab, 6), "###", '#', BLBlockRegistry.thatch);
-
+		
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothBetweenstone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothPitstone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockPillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothCragrock));
+		
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlope, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.thatch);
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.siltGlasPane, 6), "xxx", "xxx", 'x', BLBlockRegistry.siltGlas);
