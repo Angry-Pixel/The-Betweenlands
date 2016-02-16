@@ -725,7 +725,7 @@ entity.thebetweenlands.berserkerGuardian.name=Temple Guardian
 entity.thebetweenlands.blindCaveFish.name=Blind Cave Fish
 entity.thebetweenlands.tarminion.name=Tar Minion
 entity.thebetweenlands.peatMummy.name=Peat Mummy
-entity.thebetweenlands.snailPoisonJet.name=Snail Poison Jet
+entity.thebetweenlands.dreadfulMummy.name=Dreadful Peat Mummy
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
