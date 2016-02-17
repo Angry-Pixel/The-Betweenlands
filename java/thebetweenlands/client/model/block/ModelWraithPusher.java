@@ -129,21 +129,8 @@ public class ModelWraithPusher extends ModelBase {
 			hoodR.render(0.0625F);
 			head.render(0.0625F);
 			body.render(0.0625F);
-		/*	leftArm.render(0.0625F);
-			leftCuff.render(0.0625F);
-			leftPalm.render(0.0625F);
-			leftOutFinger.render(0.0625F);
-			leftInFinger.render(0.0625F);
-			leftThumb.render(0.0625F);
-			rightArm.render(0.0625F);
-			rightCuff.render(0.0625F);
-			rightPalm.render(0.0625F);
-			rightOutFinger.render(0.0625F);
-			rightInFinger.render(0.0625F);
-			rightThumb.render(0.0625F);*/
-			
+
 			 GL11.glPushMatrix();
-		//	 GL11.glTranslatef(-0.0625F, 0F, 0.0625F);
 			 if(tile.animationTicks > 8)
 				 GL11.glRotatef(0F - tile.animationTicks * 0.75F, 0, 1, 0);
 			 else
@@ -155,9 +142,8 @@ public class ModelWraithPusher extends ModelBase {
 				rightInFinger.render(0.0625F);
 				rightThumb.render(0.0625F);
 			 GL11.glPopMatrix();
-			 
+
 			 GL11.glPushMatrix();
-			// GL11.glTranslatef(0.0625F, 0F, 0.0625F);
 			 if(tile.animationTicks > 8)
 				 GL11.glRotatef(0F + tile.animationTicks * 0.75F, 0, 1, 0);
 			 else
@@ -169,7 +155,7 @@ public class ModelWraithPusher extends ModelBase {
 				leftInFinger.render(0.0625F);
 				leftThumb.render(0.0625F);
 			 GL11.glPopMatrix();
-			
+
 		}
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
