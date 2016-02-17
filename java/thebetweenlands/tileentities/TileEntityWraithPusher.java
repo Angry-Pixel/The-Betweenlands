@@ -44,7 +44,7 @@ public class TileEntityWraithPusher extends TileEntity {
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		if (worldObj.isRemote)
-			if(!active && animationTicks == 8)
+			if(!active && animationTicks %8 > 0)
 				spawnParticles();
 	}
 
