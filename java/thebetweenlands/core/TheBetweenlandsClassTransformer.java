@@ -45,6 +45,8 @@ import org.objectweb.asm.tree.VarInsnNode;
 import net.minecraft.launchwrapper.IClassTransformer;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
+	public static boolean constructed;
+
 	public static final String SLEEP_PER_TICK = "sleepPerTick";
 
 	private static final String BL_FORGE_HOOKS = "thebetweenlands/forgeevent/BLForgeHooks";
@@ -57,9 +59,13 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	private static final String SUPERB_ENTITY_TRACKER_ENTRY = "thebetweenlands/entities/SuperbEntityTrackerEntry";
 
+	public TheBetweenlandsClassTransformer() {
+		constructed = true;
+	}
+
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
-		boolean obf = !(/*!*/true/*!*/);
+		boolean obf;
 		if ("net.minecraft.server.MinecraftServer".equals(name)) {
 			return writeClass(transformMinecraftServer(readClass(classBytes)));
 		} else if ((obf = "yz".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {

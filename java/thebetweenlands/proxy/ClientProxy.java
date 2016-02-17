@@ -174,6 +174,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, new RenderPeatMummy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, new RenderElixir());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, new RenderRopeNode());
+		RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, new RenderDreadfulMummy());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
