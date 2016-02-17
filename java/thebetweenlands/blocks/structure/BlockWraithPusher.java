@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.tileentities.TileEntityWraithPusher;
 
 public class BlockWraithPusher extends BlockContainer {
@@ -17,7 +18,7 @@ public class BlockWraithPusher extends BlockContainer {
 		setStepSound(Block.soundTypeStone);
 		setBlockUnbreakable();
 		setResistance(6000000.0F);
-		//setCreativeTab(ModTabs.blocks);
+		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockTextureName("thebetweenlands:limestoneBricks");
 		setBlockName("thebetweenlands.wraithPusher");
 	}
