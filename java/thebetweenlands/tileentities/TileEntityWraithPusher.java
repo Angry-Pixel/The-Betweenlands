@@ -12,6 +12,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import thebetweenlands.client.particle.BLParticle;
 
 public class TileEntityWraithPusher extends TileEntity {
 
@@ -42,6 +43,31 @@ public class TileEntityWraithPusher extends TileEntity {
 
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+		if (worldObj.isRemote)
+			if(!active && animationTicks == 8)
+				spawnParticles();
+	}
+
+	private void spawnParticles() {
+		int meta = getBlockMetadata();
+		float x = 0, z = 0;
+		if(meta == 4)
+			x = -1F;
+		if(meta == 5)
+			x = 1F;
+		if(meta == 2)
+			z = -1F;
+		if(meta == 3)
+			z = 1F;
+
+		float xx = (float) xCoord  + 0.5F + x;
+		float yy = (float) yCoord + 0.5F;
+		float zz = (float) zCoord + 0.5F + z;
+		float randomOffset = worldObj.rand.nextFloat() * 0.6F - 0.3F;
+		BLParticle.SMOKE.spawn(worldObj, (double) (xx - randomOffset), (double) (yy + randomOffset), (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+		BLParticle.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
+		BLParticle.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy + randomOffset), (double) (zz - randomOffset), 0.0D, 0.0D, 0.0D, 0);
+		BLParticle.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 	}
 
 	public void setActive(boolean isActive) {

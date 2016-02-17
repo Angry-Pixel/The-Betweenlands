@@ -115,50 +115,52 @@ public class ModelWraithPusher extends ModelBase {
 
 	public void render(TileEntityWraithPusher tile) {
 		block.render(0.0625F);
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		if (tile.animationTicks <= 8)
-			GL11.glTranslatef(0F, 0F, 0F - 1F / 8 * tile.animationTicks);
-		if (tile.animationTicks > 8)
-			GL11.glTranslatef(0F, 0F, 0F - 1F);
-		if (tile.animationTicks > 1) {
-			hoodLT.render(0.0625F);
-			hoodRT.render(0.0625F);
-			hoodL.render(0.0625F);
-			hoodR.render(0.0625F);
-			head.render(0.0625F);
-			body.render(0.0625F);
+		if (tile.active || !tile.active && tile.animationTicks > 8) {
+			GL11.glPushMatrix();
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			if (tile.animationTicks <= 8)
+				GL11.glTranslatef(0F, 0F, 0F - 1F / 8 * tile.animationTicks);
+			if (tile.animationTicks > 8)
+				GL11.glTranslatef(0F, 0F, 0F - 1F);
+			if (tile.animationTicks > 1) {
+				hoodLT.render(0.0625F);
+				hoodRT.render(0.0625F);
+				hoodL.render(0.0625F);
+				hoodR.render(0.0625F);
+				head.render(0.0625F);
+				body.render(0.0625F);
 
-			 GL11.glPushMatrix();
-			 if(tile.animationTicks > 8)
-				 GL11.glRotatef(0F - tile.animationTicks * 0.75F, 0, 1, 0);
-			 else
-				 GL11.glRotatef(-0, 0, 1, 0);
-			 rightArm.render(0.0625F);
+				GL11.glPushMatrix();
+				if (tile.animationTicks > 8)
+					GL11.glRotatef(0F - tile.animationTicks * 0.75F, 0, 1, 0);
+				else
+					GL11.glRotatef(-0, 0, 1, 0);
+				rightArm.render(0.0625F);
 				rightCuff.render(0.0625F);
 				rightPalm.render(0.0625F);
 				rightOutFinger.render(0.0625F);
 				rightInFinger.render(0.0625F);
 				rightThumb.render(0.0625F);
-			 GL11.glPopMatrix();
+				GL11.glPopMatrix();
 
-			 GL11.glPushMatrix();
-			 if(tile.animationTicks > 8)
-				 GL11.glRotatef(0F + tile.animationTicks * 0.75F, 0, 1, 0);
-			 else
-				 GL11.glRotatef(0, 0, 1, 0);
-			 leftArm.render(0.0625F);
+				GL11.glPushMatrix();
+				if (tile.animationTicks > 8)
+					GL11.glRotatef(0F + tile.animationTicks * 0.75F, 0, 1, 0);
+				else
+					GL11.glRotatef(0, 0, 1, 0);
+				leftArm.render(0.0625F);
 				leftCuff.render(0.0625F);
 				leftPalm.render(0.0625F);
 				leftOutFinger.render(0.0625F);
 				leftInFinger.render(0.0625F);
 				leftThumb.render(0.0625F);
-			 GL11.glPopMatrix();
+				GL11.glPopMatrix();
 
+			}
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
 		}
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
