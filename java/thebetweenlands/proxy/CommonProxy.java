@@ -36,7 +36,35 @@ import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
-import thebetweenlands.tileentities.*;
+import thebetweenlands.tileentities.TileEntityAlembic;
+import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityAspectrusCrop;
+import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import thebetweenlands.tileentities.TileEntityBLFurnace;
+import thebetweenlands.tileentities.TileEntityBLSign;
+import thebetweenlands.tileentities.TileEntityBLSpawner;
+import thebetweenlands.tileentities.TileEntityBush;
+import thebetweenlands.tileentities.TileEntityCompostBin;
+import thebetweenlands.tileentities.TileEntityConnectionFastener;
+import thebetweenlands.tileentities.TileEntityDruidAltar;
+import thebetweenlands.tileentities.TileEntityGeckoCage;
+import thebetweenlands.tileentities.TileEntityInfuser;
+import thebetweenlands.tileentities.TileEntityItemShelf;
+import thebetweenlands.tileentities.TileEntityLifeCrystal;
+import thebetweenlands.tileentities.TileEntityLootPot1;
+import thebetweenlands.tileentities.TileEntityLootPot2;
+import thebetweenlands.tileentities.TileEntityLootPot3;
+import thebetweenlands.tileentities.TileEntityPestleAndMortar;
+import thebetweenlands.tileentities.TileEntityPurifier;
+import thebetweenlands.tileentities.TileEntityRepeller;
+import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
+import thebetweenlands.tileentities.TileEntityTarLootPot1;
+import thebetweenlands.tileentities.TileEntityTarLootPot2;
+import thebetweenlands.tileentities.TileEntityTarLootPot3;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.tileentities.TileEntityWisp;
+import thebetweenlands.tileentities.TileEntityWraithPusher;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -92,6 +120,7 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityBLSign.class, "signBL");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityConnectionFastener.class, "fairyLightsFastener");
+		registerTileEntity(TileEntityWraithPusher.class, "wraithPusher");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
