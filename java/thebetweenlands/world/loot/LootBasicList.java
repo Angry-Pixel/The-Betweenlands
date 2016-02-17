@@ -41,11 +41,14 @@ public class LootBasicList {
             new LootItemStack(BLItemRegistry.waterlogged).setAmount(1).setWeight(6),
             //very rare
             new LootItemStack(BLItemRegistry.forbiddenFig).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.explorerHat).setAmount(1).setWeight(1),
+            new LootItemStack(BLItemRegistry.explorerHat).setAmount(3).setWeight(1),
             new LootItemStack(BLItemRegistry.voodooDoll).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.ringOfPower).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.swiftPick).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.wightsBane).setAmount(1).setWeight(1),
+            new LootItemStack(BLItemRegistry.critterCruncher).setAmount(1).setWeight(1),
+            new LootItemStack(BLItemRegistry.hagHacker).setAmount(1).setWeight(1),
+            new LootItemStack(BLItemRegistry.sludgeSlicer).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.skullMask).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.tribalPants).setAmount(1).setWeight(1)
 
