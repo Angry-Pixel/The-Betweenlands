@@ -216,6 +216,10 @@ public class BLItemRegistry {
 	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item swiftPick = new ItemSwiftPick(BLMaterial.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
 	public static final Item wightsBane = new ItemSwordBL(BLMaterial.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.wightsBane").setTextureName("thebetweenlands:wightsBane");
+	public static final Item sludgeSlicer = new ItemSwordBL(BLMaterial.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.sludgeSlicer").setTextureName("thebetweenlands:purgerOfTheMire");
+	public static final Item critterCruncher = new ItemSwordBL(BLMaterial.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.critterCruncher").setTextureName("thebetweenlands:critterCruncher");
+	public static final Item hagHacker = new ItemSwordBL(BLMaterial.toolWeedWood).setMaxDamage(32).setUnlocalizedName("thebetweenlands.hagHacker").setTextureName("thebetweenlands:hagHacker");
+	
 	public static final Item skullMask = new ItemSkullMask().setUnlocalizedName("thebetweenlands.skullMask").setTextureName("thebetweenlands:skullMask");
 	public static final Item tribalPants = new ItemArmor(ItemArmor.ArmorMaterial.CLOTH, 0, 2).setUnlocalizedName("thebetweenlands.tribalPants").setTextureName("thebetweenlands:tribalPants");
 	public static final Item itemArtefact = new ItemArtefact();

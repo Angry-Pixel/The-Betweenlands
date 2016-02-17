@@ -13,6 +13,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
@@ -152,5 +153,18 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "mireSnail";
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.getSourceOfDamage() instanceof EntityPlayer) {
+			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
+			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
+			if (heldItem != null)
+				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
+					return super.attackEntityFrom(source, this.getHealth());
+				}
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 }

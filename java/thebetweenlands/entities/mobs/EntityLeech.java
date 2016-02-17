@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -191,14 +192,6 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.equals(DamageSource.inWall) || source.equals(DamageSource.drown)) {
-			return false;
-		}
-		return super.attackEntityFrom(source, damage);
-	}
-
-	@Override
 	@SuppressWarnings("rawtypes")
 	public boolean canAttackClass(Class entity) {
 		return entity != EntityLeech.class && (entity == EntityPlayer.class || entity == EntityPlayerMP.class || entity == EntitySwampHag.class);
@@ -238,5 +231,18 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "leech";
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.getSourceOfDamage() instanceof EntityPlayer) {
+			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
+			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
+			if (heldItem != null)
+				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
+					return super.attackEntityFrom(source, this.getHealth());
+				}
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 }

@@ -14,8 +14,11 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.ManualManager;
@@ -164,5 +167,18 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "swampHag";
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.getSourceOfDamage() instanceof EntityPlayer) {
+			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
+			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
+			if (heldItem != null)
+				if (heldItem.getItem() == BLItemRegistry.hagHacker) {
+					return super.attackEntityFrom(source, this.getHealth());
+				}
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 }

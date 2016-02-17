@@ -98,7 +98,7 @@ public class ItemArtefact extends Item {
 
     public static enum EnumItemArtefact {
         INVALID("invalid", 1024),
-        GOLD_BONE_BOW("GoldBoneBow", 1), BEJEWELED_AXE("BejeweledAxe", 2), RITUAL_DAGGER("RitualDagger", 3), SPIKED_BRONZE_CLUB("SpikedBronzeClub", 4);
+        GOLD_BONE_BOW("GoldBoneBow", 1);
 
         public final String iconName;
         public final int id;

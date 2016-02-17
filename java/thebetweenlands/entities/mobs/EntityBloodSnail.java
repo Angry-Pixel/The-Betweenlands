@@ -14,8 +14,10 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -152,5 +154,18 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "bloodSnail";
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.getSourceOfDamage() instanceof EntityPlayer) {
+			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
+			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
+			if (heldItem != null)
+				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
+					return super.attackEntityFrom(source, this.getHealth());
+				}
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 }
