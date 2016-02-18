@@ -614,6 +614,12 @@
 			"grind"
 		]
 	},
+	"wallCreep": {
+		"category": "block",
+		"sounds": [
+			"wallCreep"
+		]
+	},
 	"fig": {
 		"category": "player",
 		"sounds": [
