@@ -29,7 +29,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-        int randomInt = random.nextInt(4);
+        int randomInt = random.nextInt(6);
         switch (randomInt) {
             case 0:
                 return ark1(world, random, x, y, z);
@@ -39,6 +39,10 @@ public class WorldGenSmallRuins extends WorldGenerator {
                 return ark3(world, random, x, y, z);
             case 3:
                 return ark4(world, random, x, y, z);
+            case 4:
+                return pillar1(world, random, x, y, z);
+            case 5:
+                return pillar2(world, random, x, y, z);
             default:
                 return false;
         }
@@ -71,11 +75,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                         world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
                         if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, z))) {
-                            int randDirection = random.nextInt(4) + 2;
-                            world.setBlock(xx, y, z, getRandomBlock(random), randDirection, 3);
-                            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, z);
-                            if (lootPot != null)
-                                LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                            generateLoot(world, random, xx, y, z);
                         }
                     }
                     world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
@@ -123,11 +123,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                         world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
                         if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, zz))) {
-                            int randDirection = random.nextInt(4) + 2;
-                            world.setBlock(x, y, zz, getRandomBlock(random), randDirection, 3);
-                            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, zz);
-                            if (lootPot != null)
-                                LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                            generateLoot(world, random, x, y, zz);
                         }
                     }
                     world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
@@ -182,11 +178,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                         world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
                         if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, z))) {
-                            int randDirection = random.nextInt(4) + 2;
-                            world.setBlock(xx, y, z, getRandomBlock(random), randDirection, 3);
-                            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, y, z);
-                            if (lootPot != null)
-                                LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                            generateLoot(world, random, xx, y, z);
                         }
                     }
                     world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
@@ -233,11 +225,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                         world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                         world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
                         if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, zz))) {
-                            int randDirection = random.nextInt(4) + 2;
-                            world.setBlock(x, y, zz, getRandomBlock(random), randDirection, 3);
-                            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, zz);
-                            if (lootPot != null)
-                                LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                            generateLoot(world, random, x, y, zz);
                         }
                     }
                     world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
@@ -345,35 +333,19 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
         if (SurfaceType.MIXED.matchBlock(world.getBlock(x - 3, y - 1, z + 3))) {
             if (random.nextInt(8) == 0) {
-                int randDirection = random.nextInt(4) + 2;
-                world.setBlock(x - 2, y, z + 2, getRandomBlock(random), randDirection, 3);
-                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 2);
-                if (lootPot != null)
-                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                generateLoot(world, random, x - 2, y, z + 2);
             }
             if (random.nextInt(8) == 0) {
-                int randDirection = random.nextInt(4) + 2;
-                world.setBlock(x - 2, y, z + 3, getRandomBlock(random), randDirection, 3);
-                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 2, y, z + 3);
-                if (lootPot != null)
-                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                generateLoot(world, random, x - 2, y, z + 3);
             }
             if (random.nextInt(8) == 0) {
-                int randDirection = random.nextInt(4) + 2;
-                world.setBlock(x - 3, y, z + 2, getRandomBlock(random), randDirection, 3);
-                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 2);
-                if (lootPot != null)
-                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                generateLoot(world, random, x - 3, y, z + 2);
             }
             if (random.nextInt(8) == 0) {
-                int randDirection = random.nextInt(4) + 2;
-                world.setBlock(x - 3, y, z + 3, getRandomBlock(random), randDirection, 3);
-                TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x - 3, y, z + 3);
-                if (lootPot != null)
-                    LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                generateLoot(world, random, x - 3, y, z + 3);
             }
         }
-        
+
         return true;
     }
 
@@ -437,11 +409,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
                 for (xx = x - width + 3; xx <= x - 3; xx++) {
                     world.setBlock(xx, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
                     if (random.nextInt(8) == 0) {
-                        int randDirection = random.nextInt(4) + 2;
-                        world.setBlock(xx, yy + 1, z + width - 1, getRandomBlock(random), randDirection, 3);
-                        TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, yy + 1, z + width - 1);
-                        if (lootPot != null)
-                            LootUtil.generateLoot(lootPot, random, loot, 1, 2);
+                        generateLoot(world, random, xx, yy + 1, z + width - 1);
                     } else
                         world.setBlock(xx, yy + 1, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab);
                 }
@@ -472,6 +440,82 @@ public class WorldGenSmallRuins extends WorldGenerator {
         }
 
         return true;
+    }
+
+    public boolean pillar1(World world, Random random, int x, int y, int z) {
+        int height = 4 + random.nextInt(2);
+        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)))
+            return false;
+        for (int yy = y; yy <= y + height; yy++)
+            if (!(world.getBlock(x, yy, z) == Blocks.air))
+                return false;
+        for (int yy = y; yy <= y + height; yy++) {
+            if (yy == y)
+                world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
+            else if (yy == y + height) {
+                world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
+                if (random.nextInt(5) == 0) {
+                    generateLoot(world, random, x, yy + 1, z);
+                }
+            } else
+                world.setBlock(x, yy, z, BLBlockRegistry.betweenstonePillar);
+        }
+        return true;
+    }
+
+    public boolean pillar2(World world, Random random, int x, int y, int z) {
+        int width = 4 + random.nextInt(2);
+        if (random.nextBoolean()) {
+            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width, y - 1, z)))
+                return false;
+            for (int xx = x; xx <= x + width; xx++)
+                if (!(world.getBlock(xx, y, z) == Blocks.air))
+                    return false;
+            for (int xx = x; xx <= x + width; xx++) {
+                if (xx == x) {
+                    world.setBlock(xx, y, z, BLBlockRegistry.chiseledBetweenstone);
+                    if (random.nextInt(5) == 0) {
+                        generateLoot(world, random, xx, y + 1, z);
+                    }
+                } else if (xx == x + width) {
+                    world.setBlock(xx, y, z, BLBlockRegistry.chiseledBetweenstone);
+                    if (random.nextInt(5) == 0) {
+                        generateLoot(world, random, xx, y + 1, z);
+                    }
+                } else
+                    world.setBlock(xx, y, z, BLBlockRegistry.betweenstonePillar, 5, 3);
+            }
+            return true;
+        } else {
+            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width)))
+                return false;
+            for (int zz = z; zz <= z + width; zz++)
+                if (!(world.getBlock(x, y, zz) == Blocks.air))
+                    return false;
+            for (int zz = z; zz <= z + width; zz++) {
+                if (zz == z) {
+                    world.setBlock(x, y, zz, BLBlockRegistry.chiseledBetweenstone);
+                    if (random.nextInt(5) == 0) {
+                        generateLoot(world, random, x, y + 1, zz);
+                    }
+                } else if (zz == z + width) {
+                    world.setBlock(x, y, zz, BLBlockRegistry.chiseledBetweenstone);
+                    if (random.nextInt(5) == 0) {
+                        generateLoot(world, random, x, y + 1, zz);
+                    }
+                } else
+                    world.setBlock(x, y, zz, BLBlockRegistry.betweenstonePillar, 8, 3);
+            }
+            return true;
+        }
+    }
+
+    private void generateLoot(World world, Random random, int x, int y, int z) {
+        int randDirection = random.nextInt(4) + 2;
+        world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
+        TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
+        if (lootPot != null)
+            LootUtil.generateLoot(lootPot, random, loot, 1, 2);
     }
 
     private Block getRandomBlock(Random rand) {
