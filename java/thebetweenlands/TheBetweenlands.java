@@ -4,6 +4,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.InstanceFactory;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -39,6 +40,7 @@ import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.server.*;
+import thebetweenlands.precondition.TheBetweenlandsPreconditions;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
 import thebetweenlands.utils.PotionHelper;
@@ -204,5 +206,11 @@ public class TheBetweenlands {
 			event.registerServerCommand(new CommandTickSpeed());
 		}
 		BLGamerules.INSTANCE.onServerStarting(event);
+	}
+
+	@InstanceFactory
+	public static TheBetweenlands createInstance() {
+		TheBetweenlandsPreconditions.check();
+		return new TheBetweenlands();
 	}
 }
