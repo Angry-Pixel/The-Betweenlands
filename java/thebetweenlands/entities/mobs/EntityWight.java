@@ -1,5 +1,7 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -15,16 +17,19 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.items.BLItemRegistry;
 
 public class EntityWight extends EntityMob implements IEntityBL {
-	public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute("bl.volatileCooldown", 300.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
+	public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute("bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
 	public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute("bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
-	public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute("bl.volatileLength", 200.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
+	public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute("bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
 	public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute("bl.volatileMaxDamage", 30.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
 
 	public static final int ATTACK_STATE_DW = 20;
@@ -38,10 +43,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	//Volatile stuff
 	private int volatileCooldown = (int) VOLATILE_COOLDOWN_ATTRIB.getDefaultValue() + 20;
 	private int volatileProgress = 0;
+	private float volatileReceivedDamage = 0.0F;
 	private double waypointX;
 	private double waypointY;
 	private double waypointZ;
-	private float volatileReceivedDamage = 0.0F;
+	private boolean prevVolatile = false;
 
 	public EntityWight(World world) {
 		super(world);
@@ -84,6 +90,24 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setByte("volatileState", this.getDataWatcher().getWatchableObjectByte(VOLATILE_STATE_DW));
+		nbt.setInteger("volatileCooldown", this.volatileCooldown);
+		nbt.setInteger("volatileProgress", this.volatileProgress);
+		nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.getDataWatcher().updateObject(VOLATILE_STATE_DW, nbt.getByte("volatileState"));
+		this.volatileCooldown = nbt.getInteger("volatileCooldown");
+		this.volatileProgress = nbt.getInteger("volatileProgress");
+		this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
+	}
+
+	@Override
 	public boolean getCanSpawnHere() {
 		return worldObj.checkNoEntityCollision(boundingBox) && worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox);
 	}
@@ -109,7 +133,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		EntityPlayer target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+		EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
+		if(target == null) {
+			target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+		}
 
 		if(target != null && !target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
 			setTargetSpotted(target, true);
@@ -156,11 +183,29 @@ public class EntityWight extends EntityMob implements IEntityBL {
 					this.waypointY = this.posY + 3.0D;
 					this.waypointZ = this.posZ;
 				}
-				if (getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 2) {
+				if (getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 1) {
 					onCollideWithEntity(getAttackTarget());
 				}
+				if(this.ridingEntity != null) {
+					if(this.ticksExisted % 30 == 0) {
+						List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.boundingBox.expand(16.0D, 16.0D, 16.0D));
+						if(existingSouls.size() < 16) {
+							EntityVolatileSoul soul = new EntityVolatileSoul(this.worldObj);
+							float mx = this.worldObj.rand.nextFloat() - 0.5F;
+							float my = this.worldObj.rand.nextFloat() / 2.0F;
+							float mz = this.worldObj.rand.nextFloat() - 0.5F;
+							Vec3 dir = Vec3.createVectorHelper(mx, my, mz).normalize();
+							soul.setOwner(this.getUniqueID().toString());
+							soul.setLocationAndAngles(this.posX + dir.xCoord * 0.5D, this.posY + dir.yCoord * 1.5D, this.posZ + dir.zCoord * 0.5D, 0, 0);
+							soul.setThrowableHeading(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
+							this.worldObj.spawnEntityInWorld(soul);
+						}
+					}
+				}
 			} else {
-				this.spawnVolatileParticles();
+				if(this.ridingEntity == null || this.ticksExisted % 4 == 0) {
+					this.spawnVolatileParticles();
+				}
 			}
 			this.setSize(0.7F, 0.7F);
 		} else {
@@ -171,6 +216,20 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 0));
 		}
 
+		if(this.prevVolatile != this.isVolatile()) {
+			if(worldObj.isRemote) {
+				for(int i = 0; i < 80; i++) {
+					double px = this.posX + this.worldObj.rand.nextFloat() * 0.7F;
+					double py = this.posY + this.worldObj.rand.nextFloat() * 2.2F;
+					double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.7F;
+					Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.35F, this.posY + 1.1F, this.posZ + 0.35F)).normalize();
+					BLParticle.SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.15F, vec.yCoord * 0.15F, vec.zCoord * 0.15F, 1.0F);
+				}
+			}
+			worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
+		}
+		this.prevVolatile = this.isVolatile();
+
 		super.onUpdate();
 	}
 
@@ -178,6 +237,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if (!worldObj.isRemote && this.isVolatile()) {
 			if (entity.riddenByEntity == null) {
 				mountEntity(entity);
+				this.volatileProgress = 20;
 			}
 		}
 	}
@@ -193,6 +253,12 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + fixedOffset), (double) yy - fixedOffset, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
 		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + randomOffset), (double) yy + randomOffset, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + randomOffset), (double) yy - randomOffset, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public float getShadowSize() {
+		return !this.isVolatile() ? super.getShadowSize() : 0.0F;
 	}
 
 	@Override
@@ -350,14 +416,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.getSourceOfDamage() instanceof EntityPlayer) {
 			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-
-			if(this.isVolatile() && this.ridingEntity != null) {
-				this.volatileReceivedDamage += damage;
-				if(this.volatileReceivedDamage >= this.getEntityAttribute(VOLATILE_MAX_DAMAGE_ATTRIB).getAttributeValue()) {
-					this.setVolatile(false);
-				}
-			}
-
 			//TODO: Move this to item
 			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
 			if (heldItem != null)
@@ -365,7 +423,19 @@ public class EntityWight extends EntityMob implements IEntityBL {
 					return super.attackEntityFrom(source, this.getHealth());
 				}
 		}
-		return super.attackEntityFrom(source, damage);
+		if(this.isVolatile() && source == DamageSource.inWall) {
+			return false;
+		}
+		float prevHealth = this.getHealth();
+		boolean ret = super.attackEntityFrom(source, damage);
+		float dealtDamage = prevHealth - this.getHealth();
+		if(this.isVolatile() && this.ridingEntity != null) {
+			this.volatileReceivedDamage += dealtDamage;
+			if(this.volatileReceivedDamage >= this.getEntityAttribute(VOLATILE_MAX_DAMAGE_ATTRIB).getAttributeValue()) {
+				this.setVolatile(false);
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -389,7 +459,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	public double getYOffset() {
 		if(this.ridingEntity != null && this.ridingEntity instanceof EntityPlayer && this.worldObj.isRemote) {
-			return -2;
+			return -2.5D;
 		}
 		return this.yOffset;
 	}
