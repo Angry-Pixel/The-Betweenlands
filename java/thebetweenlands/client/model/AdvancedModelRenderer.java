@@ -1,19 +1,24 @@
 package thebetweenlands.client.model;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.TextureOffset;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
+
 import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.utils.MathUtils;
 import thebetweenlands.utils.RotationOrder;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.common.collect.Lists;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 
@@ -59,7 +64,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 
 	public boolean isMeteorLightGlow;
 
-	public List<AdvancedModelRenderer> childModels;
+	public List<ModelRenderer> childModels;
 
 	protected List<IModelRenderCallback> callbacks = new ArrayList<IModelRenderCallback>();
 
@@ -81,7 +86,8 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 		secondaryRotationOrder = RotationOrder.ZYX;
 	}
 
-	public void addChild(AdvancedModelRenderer modelRenderer) {
+	@Override
+	public void addChild(ModelRenderer modelRenderer) {
 		if (childModels == null) {
 			childModels = Lists.newArrayList();
 		}
@@ -182,8 +188,10 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 			GL11.glCallList(displayList);
 		}
 		if (childModels != null) {
-			for (AdvancedModelRenderer modelRenderer : childModels) {
-				modelRenderer.isGlowing = isGlowing;
+			for (ModelRenderer modelRenderer : childModels) {
+				if (modelRenderer instanceof AdvancedModelRenderer) {
+					((AdvancedModelRenderer) modelRenderer).isGlowing = isGlowing;	
+				}
 				modelRenderer.render(scale);
 			}
 		}
@@ -208,7 +216,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 						callback(scale);
 
 						if (childModels != null) {
-							for (AdvancedModelRenderer childModel : childModels) {
+							for (ModelRenderer childModel : childModels) {
 								childModel.render(scale);
 							}
 						}
@@ -222,7 +230,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 						callback(scale);
 
 						if (childModels != null) {
-							for (AdvancedModelRenderer childModel : childModels) {
+							for (ModelRenderer childModel : childModels) {
 								childModel.render(scale);
 							}
 						}
@@ -240,7 +248,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 					callback(scale);
 
 					if (childModels != null) {
-						for (AdvancedModelRenderer childModel : childModels) {
+						for (ModelRenderer childModel : childModels) {
 							childModel.render(scale);
 						}
 					}
@@ -261,7 +269,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 				callback(scale);
 
 				if (childModels != null) {
-					for (AdvancedModelRenderer childModel : childModels) {
+					for (ModelRenderer childModel : childModels) {
 						childModel.render(scale);
 					}
 				}
