@@ -1,7 +1,5 @@
 package thebetweenlands.world.biomes.decorators;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -18,11 +16,7 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
-import thebetweenlands.world.feature.gen.cave.WorldGenCaveGrass;
-import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
-import thebetweenlands.world.feature.gen.cave.WorldGenCavePots;
-import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
-import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
+import thebetweenlands.world.feature.gen.cave.*;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
@@ -30,14 +24,10 @@ import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
 import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
-import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
-import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
-import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
-import thebetweenlands.world.feature.trees.WorldGenRubberTree;
-import thebetweenlands.world.feature.trees.WorldGenSapTree;
-import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
-import thebetweenlands.world.feature.trees.WorldGenSmallWeedWoodTree;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+import thebetweenlands.world.feature.structure.WorldGenUnderGroundStructures;
+import thebetweenlands.world.feature.trees.*;
+
+import java.util.Random;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
@@ -83,6 +73,7 @@ public class DecorationHelper {
 	private final static WorldGenTallGrass GEN_DEAD_WEEDWOOD_BUSH = new WorldGenTallGrass(BLBlockRegistry.deadWeedwoodBush, 1);
 	private final static WorldGenCavePots GEN_CAVE_POTS = new WorldGenCavePots();
 	private final static WorldGenSmallRuins GEN_SMALL_RUINS = new WorldGenSmallRuins();
+	private final static WorldGenUnderGroundStructures GEN_UNDER_GROUND_STRUCTURES = new WorldGenUnderGroundStructures();
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -930,6 +921,15 @@ public class DecorationHelper {
 			int y = this.y - 8 + this.rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
 			GEN_SMALL_RUINS.generate(world, rand, x, y, z);
+		}
+	}
+
+	public void generateUnderGroundStructures(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = this.y - 8 + this.rand.nextInt(16);
+			int z = this.z + this.offsetXZ();
+			GEN_UNDER_GROUND_STRUCTURES.generate(world, rand, x, y, z);
 		}
 	}
 
