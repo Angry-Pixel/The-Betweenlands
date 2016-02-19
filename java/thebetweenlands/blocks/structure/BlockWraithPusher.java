@@ -36,16 +36,16 @@ public class BlockWraithPusher extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return 1;
+		return 0;
 	}
 
 	@Override
 	public boolean isOpaqueCube() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean renderAsNormalBlock() {
-		return false;
+		return true;
 	}
 }

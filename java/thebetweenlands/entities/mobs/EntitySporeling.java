@@ -130,6 +130,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
+		//TODO: Move this to item
 		if (source.getSourceOfDamage() instanceof EntityPlayer) {
 			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
 			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();

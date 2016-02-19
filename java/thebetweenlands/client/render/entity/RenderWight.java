@@ -16,9 +16,9 @@ import thebetweenlands.entities.mobs.EntityWight;
 @SideOnly(Side.CLIENT)
 public class RenderWight extends RenderLiving {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
-	
+
 	private static final ModelWight model = new ModelWight();
-	
+
 	public RenderWight() {
 		super(model, 0.5F);
 		this.renderPassModel = model;
@@ -40,7 +40,11 @@ public class RenderWight extends RenderLiving {
 	@Override
 	protected int shouldRenderPass(EntityLivingBase entityliving, int pass, float partialTickTime) {
 		EntityWight wight = (EntityWight) entityliving;
-		
+
+		if(wight.isVolatile()) {
+			return -1;
+		}
+
 		if(pass == 0) {
 			GL11.glScalef(0.9F, 0.9F, 0.9F);
 			GL11.glDisable(GL11.GL_BLEND);
@@ -54,7 +58,7 @@ public class RenderWight extends RenderLiving {
 			GL11.glColor4f(1F, 1F, 1F, 1F - wight.getAnimation() * 0.5F);
 			return 1;
 		}
-		
+
 		return -1;
 	}
 
