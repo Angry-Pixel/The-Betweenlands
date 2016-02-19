@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelWraithPusher extends ModelBase {
-	ModelRenderer block;
 	ModelRenderer hoodLT;
 	ModelRenderer hoodRT;
 	ModelRenderer hoodL;
@@ -35,10 +34,6 @@ public class ModelWraithPusher extends ModelBase {
 		textureWidth = 64;
 		textureHeight = 128;
 
-		block = new ModelRenderer(this, 0, 0);
-		block.addBox(-8F, -8F, -8F, 16, 16, 16);
-		block.setRotationPoint(0F, 16F, 0F);
-		setRotation(block, 0F, 0F, 0F);
 		hoodLT = new ModelRenderer(this, 39, 33);
 		hoodLT.addBox(-1.8F, -5.8F, -3.5F, 3, 1, 5);
 		hoodLT.setRotationPoint(0F, 16F, 0F);
@@ -114,7 +109,6 @@ public class ModelWraithPusher extends ModelBase {
 	}
 
 	public void render(TileEntityWraithPusher tile) {
-		block.render(0.0625F);
 		if (tile.active || !tile.active && tile.animationTicks > 8) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
