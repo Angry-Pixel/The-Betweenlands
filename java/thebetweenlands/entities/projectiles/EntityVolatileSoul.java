@@ -33,7 +33,6 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 	public EntityVolatileSoul(World world, EntityWight source) {
 		this(world);
 		this.setOwner(source.getUniqueID().toString());
-		this.noClip = true;
 	}
 
 	@Override
@@ -70,22 +69,27 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 
 	protected void onImpact(MovingObjectPosition target) {
 		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false) {
-			if(!worldObj.isRemote) {
+			if(!this.worldObj.isRemote) {
 				if(target.entityHit instanceof EntityPlayer && ((EntityPlayer)target.entityHit).isBlocking() && ((EntityPlayer)target.entityHit).getItemInUseDuration() <= 10) {
 					this.motionX *= -6;
 					this.motionY *= -6;
 					this.motionZ *= -6;
+					this.strikes++;
 					return;
 				}
-				target.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getOwner()), 6);
-				if(target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
+				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 6);
+				if(!this.isDead && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
+					target.entityHit.setDead();
 					EntityWight wight = new EntityWight(this.worldObj);
-					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
-					if(wight.getCanSpawnHere()) {
+					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY + 0.05D, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
+					if(this.worldObj.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
 						this.worldObj.spawnEntityInWorld(wight);
 					}
 				}
 				this.setDead();
+				this.motionX = 0;
+				this.motionY = 0;
+				this.motionZ = 0;
 			}
 		}
 	}
@@ -124,93 +128,95 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-
 		if(!this.worldObj.isRemote && (this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL || this.getOwner() == null || this.getOwner().isDead)) {
 			this.setDead();
 			return;
 		}
 
-		this.ticksInAir++;
-
-		Vec3 currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-		Vec3 nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-		MovingObjectPosition hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
-		currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
-		nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-		if (hitObject != null) {
-			nextPos = Vec3.createVectorHelper(hitObject.hitVec.xCoord, hitObject.hitVec.yCoord, hitObject.hitVec.zCoord);
-		}
-		Entity hitEntity = null;
-		List hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
-		double minDist = 0.0D;
-		for (int i = 0; i < hitEntities.size(); ++i) {
-			Entity entity1 = (Entity)hitEntities.get(i);
-			if (entity1.canBeCollidedWith() && (this.ticksInAir >= 25)) {
-				float f = 0.3F;
-				AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double)f, (double)f, (double)f);
-				MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
-				if (movingobjectposition1 != null) {
-					double d1 = currentPos.distanceTo(movingobjectposition1.hitVec);
-					if (d1 < minDist || minDist == 0.0D) {
-						hitEntity = entity1;
-						minDist = d1;
+		if(!this.isDead) {
+			this.ticksInAir++;
+			if(this.worldObj.isRemote) {
+				double px = this.posX + this.worldObj.rand.nextFloat() * 0.25F;
+				double py = this.posY + this.worldObj.rand.nextFloat() * 0.25F;
+				double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.25F;
+				Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.125F, this.posY + 0.125F, this.posZ + 0.125F)).normalize();
+				BLParticle.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.05F, vec.yCoord * 0.05F, vec.zCoord * 0.05F, 1.0F);
+			}
+			if(this.target == null || this.target.isDead) {
+				List<Entity> targetList = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(16.0D, 16.0D, 16.0D));
+				List<Entity> eligibleTargets = new ArrayList<Entity>();
+				if(this.worldObj.rand.nextInt(4) > 0) {
+					for(Entity e : targetList) {
+						if(e instanceof EntityPlayer) {
+							eligibleTargets.add((EntityPlayer)e);
+						}
+					}
+				}
+				if(eligibleTargets.isEmpty()) {
+					for(Entity e : targetList) {
+						if(e instanceof EntityWight == false) {
+							eligibleTargets.add(e);
+						}
+					}
+				}
+				if(!eligibleTargets.isEmpty()) {
+					this.target = eligibleTargets.get(this.worldObj.rand.nextInt(eligibleTargets.size()));
+				}
+			} 
+			if(this.target != null && this.ticksInAir >= 10) {
+				double dx = this.target.boundingBox.minX + (this.target.boundingBox.maxX - this.target.boundingBox.minX) / 2.0D - this.posX;
+				double dy = this.target.boundingBox.minY + (this.target.boundingBox.maxY - this.target.boundingBox.minY) / 2.0D - this.posY;
+				double dz = this.target.boundingBox.minZ + (this.target.boundingBox.maxZ - this.target.boundingBox.minZ) / 2.0D - this.posZ;
+				double dist = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
+				double speed = 0.075D;
+				double maxSpeed = 0.8D;
+				this.motionX += dx / dist * speed;
+				this.motionY += dy / dist * speed;
+				this.motionZ += dz / dist * speed;
+				Vec3 motion = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
+				if(motion.lengthVector() > maxSpeed) {
+					motion = motion.normalize();
+					this.motionX = motion.xCoord * maxSpeed;
+					this.motionY = motion.yCoord * maxSpeed;
+					this.motionZ = motion.zCoord * maxSpeed;
+				}
+			}
+			Vec3 currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			Vec3 nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			MovingObjectPosition hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
+			currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			if (hitObject != null) {
+				nextPos = Vec3.createVectorHelper(hitObject.hitVec.xCoord, hitObject.hitVec.yCoord, hitObject.hitVec.zCoord);
+			}
+			Entity hitEntity = null;
+			List hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
+			double minDist = 0.0D;
+			for (int i = 0; i < hitEntities.size(); ++i) {
+				Entity entity1 = (Entity)hitEntities.get(i);
+				if (entity1.canBeCollidedWith() && (this.ticksInAir >= 10)) {
+					float f = 0.3F;
+					AxisAlignedBB axisalignedbb = entity1.boundingBox.expand((double)f, (double)f, (double)f);
+					MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
+					if (movingobjectposition1 != null) {
+						double d1 = currentPos.distanceTo(movingobjectposition1.hitVec);
+						if (d1 < minDist || minDist == 0.0D) {
+							hitEntity = entity1;
+							minDist = d1;
+						}
 					}
 				}
 			}
-		}
-		if (hitEntity != null) {
-			hitObject = new MovingObjectPosition(hitEntity);
-		}
-		if (hitObject != null) {
-			this.onImpact(hitObject);
+			if (hitEntity != null) {
+				hitObject = new MovingObjectPosition(hitEntity);
+			}
+			if (hitObject != null) {
+				this.onImpact(hitObject);
+			}
+			this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		}
 
-		if(this.worldObj.isRemote) {
-			double px = this.posX + this.worldObj.rand.nextFloat() * 0.25F;
-			double py = this.posY + this.worldObj.rand.nextFloat() * 0.25F;
-			double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.25F;
-			Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.125F, this.posY + 0.125F, this.posZ + 0.125F)).normalize();
-			BLParticle.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.05F, vec.yCoord * 0.05F, vec.zCoord * 0.05F, 1.0F);
-		}
-
-		if(this.target == null) {
-			List<Entity> targetList = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(16.0D, 16.0D, 16.0D));
-			List<Entity> eligibleTargets = new ArrayList<Entity>();
-			if(this.worldObj.rand.nextInt(4) > 0) {
-				for(Entity e : targetList) {
-					if(e instanceof EntityPlayer) {
-						eligibleTargets.add((EntityPlayer)e);
-					}
-				}
-			}
-			if(eligibleTargets.isEmpty()) {
-				eligibleTargets.addAll(targetList);
-			}
-			if(!eligibleTargets.isEmpty()) {
-				this.target = eligibleTargets.get(this.worldObj.rand.nextInt(eligibleTargets.size()));
-			}
-		} 
-		if(this.target != null) {
-			double dx = this.target.boundingBox.minX + (this.target.boundingBox.maxX - this.target.boundingBox.minX) / 2.0D - this.posX;
-			double dy = this.target.boundingBox.minY + (this.target.boundingBox.maxY - this.target.boundingBox.minY) / 2.0D - this.posY;
-			double dz = this.target.boundingBox.minZ + (this.target.boundingBox.maxZ - this.target.boundingBox.minZ) / 2.0D - this.posZ;
-			double dist = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
-			double speed = 0.05D;
-			double maxSpeed = 0.5D;
-			this.motionX += dx / dist * speed;
-			this.motionY += dy / dist * speed;
-			this.motionZ += dz / dist * speed;
-			Vec3 motion = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
-			if(motion.lengthVector() > maxSpeed) {
-				motion = motion.normalize();
-				this.motionX = motion.xCoord * maxSpeed;
-				this.motionY = motion.yCoord * maxSpeed;
-				this.motionZ = motion.zCoord * maxSpeed;
-			}
-		}
+		super.onUpdate();
 	}
 
 	@Override

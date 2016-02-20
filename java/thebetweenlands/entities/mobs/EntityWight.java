@@ -9,9 +9,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILeapAtTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -27,6 +29,7 @@ import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.items.BLItemRegistry;
 
 public class EntityWight extends EntityMob implements IEntityBL {
+	public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute("bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
 	public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute("bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
 	public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute("bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
 	public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute("bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
@@ -41,7 +44,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private boolean updateHasBeenSeen = false;
 
 	//Volatile stuff
-	private int volatileCooldown = (int) VOLATILE_COOLDOWN_ATTRIB.getDefaultValue() + 20;
+	private int volatileCooldown = (int) VOLATILE_COOLDOWN_ATTRIB.getDefaultValue() / 2 + 20;
 	private int volatileProgress = 0;
 	private float volatileReceivedDamage = 0.0F;
 	private double waypointX;
@@ -52,22 +55,22 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public EntityWight(World world) {
 		super(world);
 		setSize(0.7F, 2.2F);
-		getNavigator().setCanSwim(true);
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, meleeAttack);
-		tasks.addTask(2, new EntityAIWander(this, 0.3D));
-		tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
-		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(1, new EntityAILeapAtTarget(this, 0.5F));
-		//this.volatileCooldown = 10;
+		this.getNavigator().setCanSwim(true);
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, this.meleeAttack);
+		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(3, new EntityAIWander(this, 1D));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
+		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataWatcher.addObject(ATTACK_STATE_DW, (byte) 0);
-		dataWatcher.addObject(ANIMATION_STATE_DW, (float) 1);
-		dataWatcher.addObject(VOLATILE_STATE_DW, (byte) 0);
+		this.dataWatcher.addObject(ATTACK_STATE_DW, (byte) 0);
+		this.dataWatcher.addObject(ANIMATION_STATE_DW, (float) 1);
+		this.dataWatcher.addObject(VOLATILE_STATE_DW, (byte) 0);
 	}
 
 	@Override
@@ -78,11 +81,12 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0D);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(76.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
 
+		this.getAttributeMap().registerAttribute(VOLATILE_HEALTH_START_ATTRIB);
 		this.getAttributeMap().registerAttribute(VOLATILE_COOLDOWN_ATTRIB);
 		this.getAttributeMap().registerAttribute(VOLATILE_FLIGHT_SPEED_ATTRIB);
 		this.getAttributeMap().registerAttribute(VOLATILE_LENGTH_ATTRIB);
@@ -120,10 +124,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getHurtSound() {
-		if (rand.nextBoolean())
+		if (this.rand.nextBoolean()) {
 			return "thebetweenlands:wightHurt1";
-		else
+		} else {
 			return "thebetweenlands:wightHurt2";
+		}
 	}
 
 	@Override
@@ -134,28 +139,40 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
-		if(target == null) {
-			target = worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+		if(target == null || target.isDead || target.getDistanceToEntity(this) > this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue()) {
+			target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 25.0D);
 		}
 
 		if(target != null && !target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
-			setTargetSpotted(target, true);
+			this.setTargetSpotted(target, true);
 		}
 
-		if(target != null && target != previousTarget && target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
-			setTargetSpotted(target, false);
+		if(target != null && target != this.previousTarget && target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
+			this.setTargetSpotted(target, false);
 		}
 
-		if((target == null && previousTarget != null) || (target != null && target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
-			setTargetSpotted(target, false);
+		if((target == null && this.previousTarget != null) || (target != null && target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
+			this.setTargetSpotted(target, false);
 		}
 
-		if (!worldObj.isRemote && getAttackTarget() != null) {
-			dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
+		if(this.getAttackTarget() != null) {
+			if (getAnimation() > 0)
+				setAnimation(getAnimation() - 0.1F);
+		} else {
+			if (getAnimation() < 1)
+				setAnimation(getAnimation() + 0.1F);
+			if (getAnimation() == 0 && previousTarget != null) {
+				previousTarget = null;
+			}
+		}
+
+		if (!this.worldObj.isRemote && getAttackTarget() != null) {
+			this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
 
 			if(!this.isVolatile()) {
-				this.volatileCooldown--;
-				if(this.volatileCooldown <= 0) {
+				if(this.volatileCooldown > 0)
+					this.volatileCooldown--;
+				if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
 					this.setVolatile(true);
 					this.volatileCooldown = this.getVolatileCooldown() + this.worldObj.rand.nextInt(this.getVolatileCooldown()) + 20;
 					this.volatileProgress = 0;
@@ -164,7 +181,35 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		}
 
 		if(this.isVolatile()) {
+			if(this.getAttackTarget() != null) {
+				if(this.ridingEntity == null) {
+					double dx = this.getAttackTarget().posX - this.posX;
+					double dz = this.getAttackTarget().posZ - this.posZ;
+					double dy;
+					if (this.getAttackTarget() instanceof EntityLivingBase) {
+						EntityLivingBase entitylivingbase = (EntityLivingBase)this.getAttackTarget();
+						dy = entitylivingbase.posY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
+					} else {
+						dy = (this.getAttackTarget().boundingBox.minY + this.getAttackTarget().boundingBox.maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
+					}
+					double dist = (double)MathHelper.sqrt_double(dx * dx + dz * dz);
+					float yaw = (float)(Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
+					float pitch = (float)(-(Math.atan2(dy, dist) * 180.0D / Math.PI));
+					this.setRotation(yaw, pitch);
+					if(this.worldObj.isRemote) {
+						this.setRotationYawHead(yaw);
+					}
+				} else {
+					this.setRotation(this.ridingEntity.rotationYaw, 0);
+					if(this.worldObj.isRemote) {
+						this.setRotationYawHead(this.ridingEntity.rotationYaw);
+					}
+				}
+			}
 			if(!this.worldObj.isRemote) {
+				if(this.ridingEntity != null && this.ridingEntity.isDead) {
+					this.dismountEntity(this.ridingEntity);
+				}
 				if(this.volatileProgress < this.getEntityAttribute(VOLATILE_LENGTH_ATTRIB).getAttributeValue()) {
 					this.volatileProgress++;
 				}
@@ -212,21 +257,21 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			this.setSize(0.7F, 2.2F);
 		}
 
-		if (!worldObj.isRemote && getAttackTarget() == null) {
-			dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 0));
+		if (!this.worldObj.isRemote && getAttackTarget() == null) {
+			this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 0));
 		}
 
 		if(this.prevVolatile != this.isVolatile()) {
-			if(worldObj.isRemote) {
+			if(this.worldObj.isRemote) {
 				for(int i = 0; i < 80; i++) {
 					double px = this.posX + this.worldObj.rand.nextFloat() * 0.7F;
 					double py = this.posY + this.worldObj.rand.nextFloat() * 2.2F;
 					double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.7F;
 					Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.35F, this.posY + 1.1F, this.posZ + 0.35F)).normalize();
-					BLParticle.SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.15F, vec.yCoord * 0.15F, vec.zCoord * 0.15F, 1.0F);
+					BLParticle.SWAMP_SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F, 1.0F);
 				}
 			}
-			worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
+			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
 		}
 		this.prevVolatile = this.isVolatile();
 
@@ -234,7 +279,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public void onCollideWithEntity(EntityLivingBase entity) {
-		if (!worldObj.isRemote && this.isVolatile()) {
+		if (!this.worldObj.isRemote && this.isVolatile() && entity == this.getAttackTarget()) {
 			if (entity.riddenByEntity == null) {
 				mountEntity(entity);
 				this.volatileProgress = 20;
@@ -244,15 +289,20 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@SideOnly(Side.CLIENT)
 	private void spawnVolatileParticles() {
-		float xx = (float) (this.posX + this.motionX);
-		float yy = (float) (this.posY + rand.nextFloat() * 0.7F + this.motionY);
-		float zz = (float) (this.posZ + this.motionZ);
-		float fixedOffset = 0.35F;
-		float randomOffset = rand.nextFloat() * 0.7F - 0.35F;
-		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx - fixedOffset), (double) yy - fixedOffset, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
-		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + fixedOffset), (double) yy - fixedOffset, (double) (zz + randomOffset), 0.0D, 0.0D, 0.0D, 0);
-		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + randomOffset), (double) yy + randomOffset, (double) (zz - fixedOffset), 0.0D, 0.0D, 0.0D, 0);
-		BLParticle.STEAM_PURIFIER.spawn(this.worldObj, (double) (xx + randomOffset), (double) yy - randomOffset, (double) (zz + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
+		final double radius = 0.3F;
+		final double cx = this.posX;
+		final double cy = this.posY + 0.35D;
+		final double cz = this.posZ;
+		for(int i = 0; i < 8; i++) {
+			double px = this.worldObj.rand.nextFloat() * 0.7F;
+			double py = this.worldObj.rand.nextFloat() * 0.7F;
+			double pz = this.worldObj.rand.nextFloat() * 0.7F;
+			Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(0.35F, 0.35F, 0.35F)).normalize();
+			px = cx + vec.xCoord * radius;
+			py = cy + vec.yCoord * radius;
+			pz = cz + vec.zCoord * radius;
+			BLParticle.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz, 0.0D, 0.0D, 0.0D, 0);
+		}
 	}
 
 	@Override
@@ -372,19 +422,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				setAttackTarget(target);
 				previousTarget = target;
 			}
-			if (getAnimation() > 0)
-				setAnimation(getAnimation() - 0.1F);
-
 		} else {
 			if (updateHasBeenSeen) {
 				updateHasBeenSeen = false;
 				setAttackTarget(null);
 				tasks.removeTask(meleeAttack);
-			}
-			if (getAnimation() < 1)
-				setAnimation(getAnimation() + 0.1F);
-			if (getAnimation() == 0 && previousTarget != null) {
-				previousTarget = null;
 			}
 		}
 	}
@@ -459,7 +501,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	public double getYOffset() {
 		if(this.ridingEntity != null && this.ridingEntity instanceof EntityPlayer && this.worldObj.isRemote) {
-			return -2.5D;
+			return -1.7D;
 		}
 		return this.yOffset;
 	}
