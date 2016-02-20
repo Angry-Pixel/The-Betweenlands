@@ -1,9 +1,5 @@
 package thebetweenlands.manual;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
@@ -15,6 +11,10 @@ import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.widgets.ButtonWidget;
 import thebetweenlands.manual.widgets.PictureWidget;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Bart on 06/12/2015.
@@ -49,7 +49,7 @@ public class HLEntryRegistry {
 		itemPages.clear();
 		ArrayList<Page> temp = new ArrayList<>();
 		ArrayList<Page> entryPages = new ArrayList<>();
-		aspectPages.add(new Page("aspctInfo", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
+		aspectPages.add(new Page("aspectInfo", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
 		for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
 			aspectPages.addAll(PageCreators.AspectPages(aspect, manualType));
 		}

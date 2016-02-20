@@ -40,6 +40,7 @@ public class BiomeDecoratorSwampLands extends BiomeDecoratorBaseBetweenlands {
 			helper.generateNettles(8);
 			helper.generateMossPatch(20);
 			helper.generateStagnantWaterPool(5);
+			helper.generateUnderGroundStructures(100);
 		} else {
 			for(int xo = -16; xo < 32; xo++) {
 				for(int zo = -16; zo < 32; zo++) {

@@ -927,7 +927,7 @@ public class DecorationHelper {
 	public void generateUnderGroundStructures(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();
-			int y = this.y - 8 + this.rand.nextInt(16);
+			int y = WorldProviderBetweenlands.CAVE_WATER_HEIGHT + rand.nextInt(16);
 			int z = this.z + this.offsetXZ();
 			GEN_UNDER_GROUND_STRUCTURES.generate(world, rand, x, y, z);
 		}
