@@ -5,15 +5,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
@@ -187,19 +183,5 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	protected boolean canDespawn() {
 		return false;
-	}
-	
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		//TODO: Move this to item
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
-		return super.attackEntityFrom(source, damage);
 	}
 }

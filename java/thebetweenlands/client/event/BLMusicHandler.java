@@ -22,9 +22,8 @@ public class BLMusicHandler
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent event) {
-        //TODO: check SRG field name when updating MC!
         if( this.mcMusicTickerField == null ) {
-            this.mcMusicTickerField = ReflectionHelper.findField(Minecraft.class, "mcMusicTicker", "field_147126_aw");
+            this.mcMusicTickerField = ReflectionHelper.findField(Minecraft.class, "mcMusicTicker", "field_147126_aw", "ax");
         }
 
         if( event.phase == Phase.START ) {

@@ -132,7 +132,6 @@ import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityGeckoCageRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityInfuserRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityItemShelfRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityLifeCrystalRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot1Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot2Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot3Renderer;
@@ -216,7 +215,6 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.tileentities.TileEntityItemShelf;
-import thebetweenlands.tileentities.TileEntityLifeCrystal;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
@@ -329,7 +327,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, new RenderRopeNode());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, new RenderDreadfulMummy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, new RenderVolatileSoul());
-		
+
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());
@@ -341,7 +339,6 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new TileEntityAlembicRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new TileEntityInfuserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPestleAndMortar.class, new TileEntityPestleAndMortarRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLifeCrystal.class, new TileEntityLifeCrystalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot1.class, new TileEntityLootPot1Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot2.class, new TileEntityLootPot2Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot3.class, new TileEntityLootPot3Renderer());

@@ -13,12 +13,10 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.ManualManager;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
@@ -58,15 +56,15 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-    public boolean getCanSpawnHere() {
-        return worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox);
-    }
+	public boolean getCanSpawnHere() {
+		return worldObj.getCollidingBoundingBoxes(this, boundingBox).isEmpty() && !worldObj.isAnyLiquid(boundingBox);
+	}
 
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
-	
+
 	@Override
 	protected boolean canDespawn() {
 		if (hasMated())
@@ -98,7 +96,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshCooked, 1, 0), 0.0F);
 		else
 			entityDropItem(ItemGeneric.createStack(BLItemRegistry.snailFleshRaw, 1, 0), 0.0F);
-		
+
 		if (rand.nextBoolean())
 			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.MIRE_SNAIL_SHELL, 1), 0.0F);
 	}
@@ -112,7 +110,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 			setHasMated(true);
 			return super.interact(player);
 		}
-		
+
 		return super.interact(player);
 	}
 
@@ -153,19 +151,5 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "mireSnail";
-	}
-	
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		//TODO: Move this to item
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
-		return super.attackEntityFrom(source, damage);
 	}
 }

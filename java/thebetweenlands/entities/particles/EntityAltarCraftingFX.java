@@ -29,7 +29,6 @@ public class EntityAltarCraftingFX extends EntityFX {
 
     @Override
     public void onUpdate() {
-    	//TODO I have no fucking idea why it only works like this, for some reason this.target != te
     	TileEntity tileEntity = this.worldObj.getTileEntity(this.target.xCoord, this.target.yCoord, this.target.zCoord);
     	double craftingProgress = 0;
     	if(tileEntity instanceof TileEntityDruidAltar) {

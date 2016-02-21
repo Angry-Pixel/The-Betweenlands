@@ -54,7 +54,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 		for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
 			EnumItemGenericCrushed enumGeneric = EnumItemGenericCrushed.VALUES[i];
 			if(enumGeneric != EnumItemGenericCrushed.INVALID) {
-				icons[enumGeneric.id] = reg.registerIcon("thebetweenlands:strictlyHerblore/ground/" + enumGeneric.iconName);
+				icons[enumGeneric.id] = reg.registerIcon("thebetweenlands:strictlyHerblore/ground/" + enumGeneric.name);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
+			return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).name;
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknownCrushed";
 		}
@@ -154,11 +154,11 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 		GROUND_WATER_WEEDS("groundWaterWeeds", 47), GROUND_VENUS_FLY_TRAP("groundVenusFlyTrap", 48), GROUND_VOLARPAD("groundVolarpad", 49), GROUND_THORNS("groundThorns", 50),
 		GROUND_POISON_IVY("groundPoisonIvy", 51);
 
-		public final String iconName;
+		public final String name;
 		public final int id;
 
 		private EnumItemGenericCrushed(String unlocName, int id) {
-			iconName = unlocName;
+			name = unlocName;
 			this.id = id;
 		}
 

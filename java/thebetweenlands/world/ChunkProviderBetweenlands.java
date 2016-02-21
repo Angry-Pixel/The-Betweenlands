@@ -324,7 +324,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 				float currentBiomeRootHeight = currentBiome.rootHeight;
 				float currentBiomeHeightVariation = currentBiome.heightVariation;
 				if(currentBiome instanceof BiomeGenBaseBetweenlands) {
-					//TODO
 					if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)currentBiome))) {
 						this.biomeGenList.add(((BiomeGenBaseBetweenlands)currentBiome));
 						if(!((BiomeGenBaseBetweenlands)currentBiome).isNoiseGenInitialized()) {
@@ -350,7 +349,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
                         float surroundingBiomeRootHeight = surroundingBiome.rootHeight;
                         float surroundingBiomeHeightVariation = surroundingBiome.heightVariation;
                         if(surroundingBiome instanceof BiomeGenBaseBetweenlands) {
-                        	//TODO
                         	if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)surroundingBiome))) {
                         		this.biomeGenList.add(((BiomeGenBaseBetweenlands)surroundingBiome));
                             	if(!((BiomeGenBaseBetweenlands)surroundingBiome).isNoiseGenInitialized()) {
@@ -449,7 +447,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 
 				this.clampNoise = this.noiseOctave3.generateNoiseOctaves(this.clampNoise, x, 0, z, 5, 33, 5, 8.555150000000001D, 4.277575000000001D, 8.555150000000001D);*/
 
-				//TODO Find good noise scale
 				double noiseScale = 1200.0D;
 		        double yNoiseScale = 684.412D / noiseScale;
 
@@ -470,7 +467,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                BiomeGenBase currentBiome = this.biomesForGeneration[bxo + 2 + (bzo + 2) * 10];
 		                float currentBiomeRootHeight = currentBiome.rootHeight;
 		                /*if(currentBiome instanceof BiomeGenBaseBetweenlands) {
-		                	//TODO
 		                	if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)currentBiome))) {
 		                		this.biomeGenList.add(((BiomeGenBaseBetweenlands)currentBiome));
 		                    	if(!((BiomeGenBaseBetweenlands)currentBiome).isNoiseGenInitialized()) {
@@ -490,7 +486,6 @@ public class ChunkProviderBetweenlands implements IChunkProvider
 		                        float surroundingBiomeRootHeight = surroundingBiome.rootHeight;
 		                        float surroundingBiomeHeightVariation = surroundingBiome.heightVariation;
 		                        /*if(surroundingBiome instanceof BiomeGenBaseBetweenlands) {
-		                        	//TODO
 		                        	if(!this.biomeGenList.contains(((BiomeGenBaseBetweenlands)surroundingBiome))) {
 		                        		this.biomeGenList.add(((BiomeGenBaseBetweenlands)surroundingBiome));
 		                            	if(!((BiomeGenBaseBetweenlands)surroundingBiome).isNoiseGenInitialized()) {

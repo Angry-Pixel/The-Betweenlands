@@ -155,18 +155,4 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	public String pageName() {
 		return "bloodSnail";
 	}
-	
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		//TODO: Move this to item
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
-		return super.attackEntityFrom(source, damage);
-	}
 }

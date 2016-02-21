@@ -81,7 +81,6 @@ public class AspectItemSlideShowWidget extends ManualWidgetsBase {
 		items.clear();
 		AspectManager manager = AspectManager.get(Minecraft.getMinecraft().theWorld);
 		for(Entry<AspectItem, List<AspectItemEntry>> entry : AspectManager.getRegisteredItems().entrySet()) {
-			//TODO: HL - Move NBT to book instead of player
 			List<Aspect> discoveredAspects = manager.getDiscoveredAspects(entry.getKey(), AspectManager.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer));
 			for(Aspect aspect : discoveredAspects) {
 				if(aspect.type.equals(this.aspectType))

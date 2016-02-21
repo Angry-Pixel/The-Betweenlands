@@ -68,7 +68,6 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 
 		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infuser.getInfusingAspects());
 
-		// TODO this here for debug please leave
 		if(ConfigHandler.DEBUG) {
 			String elixirName = recipe != null ? recipe.name : " N/A";
 			renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);

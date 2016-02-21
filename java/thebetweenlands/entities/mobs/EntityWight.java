@@ -456,15 +456,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			//TODO: Move this to item
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.wightsBane) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
 		if(this.isVolatile() && source == DamageSource.inWall) {
 			return false;
 		}
