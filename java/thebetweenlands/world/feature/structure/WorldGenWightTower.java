@@ -21,6 +21,7 @@ public class WorldGenWightTower extends WorldGenerator {
     private Block wall = BLBlockRegistry.limestoneBrickWall;
     
     public WorldGenWightTower() {
+    	//these sizes are subject to change
         length = 13;
         width = 13;
         height = 19;
@@ -33,14 +34,33 @@ public class WorldGenWightTower extends WorldGenerator {
 
     public boolean generateStructure(World world, Random rand, int xx, int yy, int zz) {
       // air 
-		for (int xa = xx - length; xa <= xx + length; ++xa) {
-            for(int za = zz - width; za <= zz + width; ++za) {
-                for(int ya = yy + 1; ya < yy + height; ++ya ) {
+		for (int xa = xx; xa <= xx + 32; ++xa) {
+            for(int za = zz; za <= zz + 32; ++za) {
+                for(int ya = yy; ya < yy + 32; ++ya ) {
                 	world.setBlockToAir(xa, ya, za);
                 }
             }
         }
 
+		//TODO seperate this and prepare for decoration and block placing
+		//ground floors
+		length = 32;
+        width = 32;
+		for (direction = 0; direction < 4; direction++) {
+			rotatedCubeVolume(world, rand, xx, yy, zz, 1, -1, 1, polished, 0, 11, 1, 11, direction);
+
+		//1st floors
+			rotatedCubeVolume(world, rand, xx, yy, zz, 3, 5, 3, polished, 0, 7, 1, 7, direction);
+
+		//2nd floors
+			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 11, 4, polished, 0, 5, 1, 5, direction);
+
+		//3rd floors
+			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 16, 4, polished, 0, 5, 1, 5, direction);
+		}
+
+		length = 13;
+		width = 13;
 		for (int tower = 0; tower  < 5; tower ++) {
 			int x = xx, y = yy, z = zz;
 
@@ -56,7 +76,7 @@ public class WorldGenWightTower extends WorldGenerator {
     		    z = zz + 19;
     		
     		for (direction = 0; direction < 4; direction++) {
-    			if( tower < 4) {
+    			if(tower < 4) {
     			rotatedCubeVolume(world, rand, x, y, z, 0, 0, 1, bricks, 0, 1, 3, 1, direction);
     			rotatedCubeVolume(world, rand, x, y, z, 0, 0, 3, bricks, 0, 1, 3, 1, direction);
     			rotatedCubeVolume(world, rand, x, y, z, 1, 0, 1, bricks, 0, 1, 4, 1, direction);
@@ -109,8 +129,9 @@ public class WorldGenWightTower extends WorldGenerator {
 	        	rotatedCubeVolume(world, rand, x, y, z, 3, 8, 2, stairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 4, 8, 1, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 8, 8, 1, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
+	        	rotatedCubeVolume(world, rand, x, y, z, 6, 11, 4, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 
-				//walkways
+	        	//walkways
 	        	if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
 	        		rotatedCubeVolume(world, rand, x, y, z, 5, 4, 11, bricks, 0, 3, 1, 5, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 4, 5, 12, bricks, 0, 1, 1, 4, direction);
@@ -176,10 +197,10 @@ public class WorldGenWightTower extends WorldGenerator {
 		direction = rand.nextInt(4);
 		length = 32;
         width = 32;
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 0, 4, bricks, 0, 8, 4, 3, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 3, bricks, 0, 6, 3, 3, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 2, bricks, 0, 6, 2, 3, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 1, bricks, 0, 6, 1, 3, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 0, 4, bricks, 0, 8, 4, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 3, bricks, 0, 6, 3, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 2, bricks, 0, 6, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 1, bricks, 0, 6, 1, 1, direction);
 		
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 3, 3, bricks, 0, 1, 2, 2, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 2, 2, bricks, 0, 1, 2, 2, direction);
@@ -207,6 +228,8 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 3, 3, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 4, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 4, 4, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 4, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 5, 4, Blocks.air, 0, 4, 4, 1, direction);
+		
+
         return true;
     }
 
