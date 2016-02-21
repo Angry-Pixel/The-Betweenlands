@@ -100,7 +100,6 @@ public class WorldGenWightTower extends WorldGenerator {
 	        	rotatedCubeVolume(world, rand, x, y, z, 7, 3, 0, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 5, 9, 2, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 7, 9, 2, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
-	        	//rotatedCubeVolume(world, rand, x, y, z, 6, 10, 3, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 6, 5, 2, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 0, 3, 1, stairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 0, 3, 3, stairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
@@ -108,15 +107,15 @@ public class WorldGenWightTower extends WorldGenerator {
 	        	rotatedCubeVolume(world, rand, x, y, z, 3, 8, 2, stairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 4, 8, 1, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 	        	rotatedCubeVolume(world, rand, x, y, z, 8, 8, 1, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
-    	
+
 				//walkways
-	        	if(tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
+	        	if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
 	        		rotatedCubeVolume(world, rand, x, y, z, 5, 4, 11, bricks, 0, 3, 1, 5, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 4, 5, 12, bricks, 0, 1, 1, 4, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 8, 5, 12, bricks, 0, 1, 1, 4, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 5, 4, 1, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 3, 1, 1, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 6, 10, 3, stairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
-		        	
+
 	        		rotatedCubeVolume(world, rand, x, y, z, 4, 6, 12, wall, 0, 1, 1, 4, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 8, 6, 12, wall, 0, 1, 1, 4, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 4, 7, 14, wall, 0, 1, 2, 1, direction);
@@ -135,7 +134,35 @@ public class WorldGenWightTower extends WorldGenerator {
 	        		rotatedCubeVolume(world, rand, x, y, z, 4, 15, 11, bricks, 0, 1, 1, 5, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 8, 15, 11, bricks, 0, 1, 1, 5, direction);
 	        		rotatedCubeVolume(world, rand, x, y, z, 5, 16, 11, bricks, 0, 3, 1, 5, direction);
-				}	
+				}
+
+	        	//top Floor
+	        	if (tower == 0 && direction == 0 || tower == 1 && direction == 3 || tower == 2 && direction == 2 || tower == 3 && direction == 1) {
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 16, 11, bricks, 0, 1, 3, 4, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 7, 17, 15, stairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 17, 15, bricks, 0, 3, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 9, 17, 14, bricks, 0, 3, 2, 1, direction);
+
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 19, 10, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 19, 12, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 19, 14, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 9, 19, 14, wall, 0, 2, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 8, 21, 10, slab, 0, 1, 1, 5, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 9, 21, 14, slab, 0, 2, 1, 1, direction);
+	        	}
+	        	if (tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 2 && direction == 3 || tower == 3 && direction == 2) {
+	        		rotatedCubeVolume(world, rand, x, y, z, 4, 16, 11, bricks, 0, 1, 3, 4, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 5, 17, 15, stairs, direction == 0 ? 1 : direction== 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 2, 17, 15, bricks, 0, 3, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 1, 17, 14, bricks, 0, 3, 2, 1, direction);
+
+	        		rotatedCubeVolume(world, rand, x, y, z, 4, 19, 10, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 4, 19, 12, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 4, 19, 14, wall, 0, 1, 2, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 2, 19, 14, wall, 0, 2, 1, 1, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 4, 21, 10, slab, 0, 1, 1, 5, direction);
+	        		rotatedCubeVolume(world, rand, x, y, z, 2, 21, 14, slab, 0, 2, 1, 1, direction);
+	        	}
     		}
     	}
         return true;
