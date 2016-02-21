@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.client.render.shader.MainShader;
@@ -21,7 +22,12 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.items.misc.ItemAmulet;
+import thebetweenlands.utils.ItemRenderHelper;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
@@ -153,24 +159,44 @@ public class GuiOverlay extends Gui {
 			}
 		}
 
-		if (DecayManager.isDecayEnabled(mc.thePlayer)) {
+		if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			int width = event.resolution.getScaledWidth();
 			int height = event.resolution.getScaledHeight();
 
-			int startX = (width / 2) - (27 / 2) + 23;
-			int startY = height - 49;
-
-			//Erebus compatibility
-			if (mc.thePlayer.getEntityData().hasKey("antivenomDuration")) {
-				int duration = mc.thePlayer.getEntityData().getInteger("antivenomDuration");
-				if (duration > 0) {
-					startY -= 12;
+			EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesCircleGem.class);
+			if(property != null && property.hasAmulet()) {
+				CircleGem entityGem = property.getGem();
+				ItemStack gemItem = ItemAmulet.createStack(entityGem);
+				GL11.glPushMatrix();
+				int posX = (width / 2) - (27 / 2) + 115;
+				int posY = height - 8;
+				GL11.glTranslated(posX, posY, 0);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glScaled(10, -10, 10);
+				float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+				GL11.glScaled(scale, scale, scale);
+				for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {
+					ItemRenderHelper.renderItem(gemItem, i);
 				}
+				GL11.glPopMatrix();
 			}
 
-			int decayLevel = DecayManager.getDecayLevel(mc.thePlayer);
+			if (DecayManager.isDecayEnabled(mc.thePlayer)) {
+				int startX = (width / 2) - (27 / 2) + 23;
+				int startY = height - 49;
 
-			if (event.type == RenderGameOverlayEvent.ElementType.HOTBAR) {
+				//Erebus compatibility
+				if (mc.thePlayer.getEntityData().hasKey("antivenomDuration")) {
+					int duration = mc.thePlayer.getEntityData().getInteger("antivenomDuration");
+					if (duration > 0) {
+						startY -= 12;
+					}
+				}
+
+				int decayLevel = DecayManager.getDecayLevel(mc.thePlayer);
+
 				mc.getTextureManager().bindTexture(decayBarTexture);
 
 				GL11.glEnable(GL11.GL_BLEND);

@@ -3,8 +3,9 @@ package thebetweenlands.network.packet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public abstract class PacketEntityIdTuple implements IPacket {
+public abstract class PacketEntityIdTuple extends Packet  {
 	private int aId;
 	private int bId;
 

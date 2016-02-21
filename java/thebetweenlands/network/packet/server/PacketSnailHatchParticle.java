@@ -1,9 +1,9 @@
 package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public class PacketSnailHatchParticle implements IPacket {
+public class PacketSnailHatchParticle extends Packet {
 	public PacketSnailHatchParticle() { }
 	
 	public double x, y, z;

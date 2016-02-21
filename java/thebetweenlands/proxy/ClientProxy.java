@@ -43,6 +43,7 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.client.input.KeyBindingsBL;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.client.model.block.crops.ModelCropFungus1;
 import thebetweenlands.client.model.block.crops.ModelCropFungus2;
@@ -292,6 +293,9 @@ public class ClientProxy extends CommonProxy {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		//Key bindings
+		KeyBindingsBL.init();
 
 		// Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());

@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
@@ -38,6 +39,7 @@ import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
+import thebetweenlands.items.misc.ItemAmulet;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
@@ -126,6 +128,13 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void init() {
+		// Register packet handlers
+		try {
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemAmulet.class, Side.SERVER);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		MinecraftForge.EVENT_BUS.register(AspectLoadHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
 	}

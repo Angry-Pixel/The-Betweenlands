@@ -1,5 +1,6 @@
 package thebetweenlands.network.base;
 
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -8,4 +9,5 @@ import io.netty.buffer.ByteBuf;
 public interface IPacket {
 	public void deserialize(ByteBuf buffer);
 	public void serialize(ByteBuf buffer);
+	public void setContext(MessageContext ctx);
 }

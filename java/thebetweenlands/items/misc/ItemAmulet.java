@@ -6,6 +6,7 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,12 +22,16 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.input.KeyBindingsBL;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packet.client.PacketDropAmulet;
 import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.LightingUtil;
 
@@ -70,8 +75,9 @@ public class ItemAmulet extends Item {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int face, float bx, float by, float bz) {
-		return addAmulet(player, stack, player);
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		addAmulet(player, stack, player);
+		return stack;
 	}
 
 	@Override
@@ -167,8 +173,7 @@ public class ItemAmulet extends Item {
 		if(property != null) {
 			if(property.hasAmulet()) {
 				CircleGem entityGem = property.getGem();
-				ItemStack gemItem = new ItemStack(BLItemRegistry.amulet, 1, 0);
-				GemCircleHelper.setGem(gemItem, entityGem);
+				ItemStack gemItem = createStack(entityGem);
 				if(gemItem != null) {
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
@@ -193,6 +198,38 @@ public class ItemAmulet extends Item {
 					GL11.glColor4f(1, 1, 1, 1);
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glPopMatrix();
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
+		if(KeyBindingsBL.dropAmulet.isPressed()) {
+			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+			if(player != null) {
+				EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesCircleGem.class);
+				if(property != null && property.hasAmulet()) {
+					TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDropAmulet()));
+				}
+			}
+		}
+	}
+
+	@SubscribePacket
+	public static void onPacketDropAmulet(PacketDropAmulet packet) {
+		if(packet.getContext().getServerHandler() != null) {
+			EntityPlayer sender = packet.getContext().getServerHandler().playerEntity;
+			if(sender != null) {
+				EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(sender, EntityPropertiesCircleGem.class);
+				if(property != null && property.hasAmulet()) {
+					CircleGem gem = property.getGem();
+					ItemStack stack = createStack(gem);
+					if(!sender.inventory.addItemStackToInventory(stack))
+						sender.entityDropItem(stack, sender.getEyeHeight());
+					property.removeAmulet();
+					property.setGem(CircleGem.NONE);
 				}
 			}
 		}

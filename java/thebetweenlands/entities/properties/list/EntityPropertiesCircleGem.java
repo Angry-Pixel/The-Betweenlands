@@ -1,6 +1,5 @@
 package thebetweenlands.entities.properties.list;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.entities.properties.EntityProperties;
@@ -15,12 +14,14 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 	public void saveNBTData(NBTTagCompound nbt) {
 		nbt.setString("blCircleGem", this.circleGem.name);
 		nbt.setBoolean("blAmulet", this.hasAmulet);
+		nbt.setBoolean("blAmuletRemovable", this.isRemovable);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
 		this.circleGem = CircleGem.fromName(nbt.getString("blCircleGem"));
 		this.hasAmulet = nbt.getBoolean("blAmulet");
+		this.isRemovable = nbt.getBoolean("blAmuletRemovable");
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 	public boolean isRemovable() {
 		return this.isRemovable;
 	}
-	
+
 	public void removeAmulet() {
 		this.hasAmulet = false;
 	}

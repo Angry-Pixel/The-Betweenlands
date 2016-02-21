@@ -60,6 +60,7 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
+import thebetweenlands.network.packet.client.PacketDropAmulet;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
@@ -139,6 +140,7 @@ public class TheBetweenlands {
 		registerPacket(PacketAttackTarget.class);
 		registerPacket(PacketWeedWoodBushRustle.class);
 		registerPacket(PacketGemProc.class);
+		registerPacket(PacketDropAmulet.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
@@ -193,6 +195,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
+		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

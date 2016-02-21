@@ -1,9 +1,9 @@
 package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public class PacketWeedWoodBushRustle implements IPacket {
+public class PacketWeedWoodBushRustle extends Packet {
 	private int x, y, z;
 	private float strength;
 

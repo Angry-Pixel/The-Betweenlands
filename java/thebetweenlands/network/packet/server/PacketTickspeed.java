@@ -1,9 +1,9 @@
 package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public class PacketTickspeed implements IPacket {
+public class PacketTickspeed extends Packet {
 	private float ticksPerSecond;
 
 	public PacketTickspeed() {
