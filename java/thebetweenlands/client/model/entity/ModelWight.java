@@ -10,6 +10,7 @@ import thebetweenlands.entities.mobs.EntityWight;
 
 @SideOnly(Side.CLIENT)
 public class ModelWight extends ModelBase {
+	private boolean renderHeadOnly = false;
 
 	ModelRenderer body_base;
 	ModelRenderer neck;
@@ -144,12 +145,19 @@ public class ModelWight extends ModelBase {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 		neck.render(unitPixel);
-		body_base.render(unitPixel);
+		if(!this.renderHeadOnly) {
+			body_base.render(unitPixel);
+		}
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
 		model.rotateAngleX = x;
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
+	}
+
+	public ModelWight setRenderHeadOnly(boolean headOnly) {
+		this.renderHeadOnly = headOnly;
+		return this;
 	}
 }

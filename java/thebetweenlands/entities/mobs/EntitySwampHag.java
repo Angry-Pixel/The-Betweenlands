@@ -14,14 +14,10 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class EntitySwampHag extends EntityMob implements IEntityBL {
@@ -35,21 +31,21 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	public EntitySwampHag(World world) {
 		super(world);
 		this.getNavigator().setBreakDoors(true);
-        this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIBLBreakDoor(this, Blocks.wooden_door, 10));
-       // this.tasks.addTask(2, new EntityAIBLBreakDoor(this, Blocks.iron_door, 20));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1D, false));
-        this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
-        this.tasks.addTask(6, new EntityAIWander(this, 1D));
-        this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-        this.tasks.addTask(8, new EntityAILookIdle(this));
-        this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, false));
-        this.setSize(0.6F, 1.8F);
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIBLBreakDoor(this, Blocks.wooden_door, 10));
+		// this.tasks.addTask(2, new EntityAIBLBreakDoor(this, Blocks.iron_door, 20));
+		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
+		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1D, false));
+		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(6, new EntityAIWander(this, 1D));
+		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(8, new EntityAILookIdle(this));
+		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityVillager.class, 0, false));
+		this.setSize(0.6F, 1.8F);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -59,9 +55,9 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-    protected boolean isAIEnabled() {
-    	return true;
-    }
+	protected boolean isAIEnabled() {
+		return true;
+	}
 
 	@Override
 	protected void applyEntityAttributes() {
@@ -92,7 +88,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	private void setTalkSound(int soundIndex) {
 		dataWatcher.updateObject(19, (byte) soundIndex);
 	}
-	
+
 	private byte getTalkSound() {
 		return dataWatcher.getWatchableObjectByte(19);
 	}
@@ -158,7 +154,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	private int getLivingSoundTime() {
 		return dataWatcher.getWatchableObjectInt(21);
 	}
-	
+
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 3), 0F);
@@ -167,19 +163,5 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "swampHag";
-	}
-	
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		//TODO: Move this to item
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.hagHacker) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
-		return super.attackEntityFrom(source, damage);
 	}
 }

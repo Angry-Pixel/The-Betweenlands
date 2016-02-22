@@ -82,7 +82,6 @@ public class AspectSlideShowWidget extends ManualWidgetsBase {
 
 	public void getAspects() {
 		aspects.clear();
-		//TODO: HL - Move NBT to book instead of player
 		for (Aspect aspect:AspectManager.get(Minecraft.getMinecraft().theWorld).getDiscoveredAspects(itemStack, AspectManager.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer))){
 			aspects.add(aspect.type);
 		}

@@ -8,7 +8,6 @@ public class TileEntityBLSpawner extends TileEntityMobSpawner {
 	
 	@Override
 	public void updateEntity() {
-		//TODO: Get rid of particles
 		super.updateEntity();
 		this.lastCounter = this.counter;
 		this.counter += 0.0085F;

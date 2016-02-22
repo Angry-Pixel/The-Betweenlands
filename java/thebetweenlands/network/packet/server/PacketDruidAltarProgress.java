@@ -1,10 +1,10 @@
 package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
-public class PacketDruidAltarProgress implements IPacket {
+public class PacketDruidAltarProgress extends Packet {
 	public PacketDruidAltarProgress() { }
 	
 	public int x, y, z, progress;

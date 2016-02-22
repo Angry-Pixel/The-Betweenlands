@@ -198,7 +198,6 @@ public class ConnectedTexture {
 		boolean yr = false;
 		boolean zr = false;
 		boolean[] connectionArray = new boolean[9];
-		//TODO: May need to switch this stuff out a bit
 		switch(dir) {
 		case DOWN:
 			xp = false;

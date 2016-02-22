@@ -6,12 +6,7 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.ManualManager;
 
 public class EntityTermite extends EntityMob implements IEntityBL {
 
@@ -24,9 +19,9 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(8.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}
 
@@ -53,19 +48,5 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	@Override
 	public String pageName() {
 		return "termite";
-	}
-	
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		//TODO: Move this to item
-		if (source.getSourceOfDamage() instanceof EntityPlayer) {
-			EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-			ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
-			if (heldItem != null)
-				if (heldItem.getItem() == BLItemRegistry.critterCruncher) {
-					return super.attackEntityFrom(source, this.getHealth());
-				}
-		}
-		return super.attackEntityFrom(source, damage);
 	}
 }

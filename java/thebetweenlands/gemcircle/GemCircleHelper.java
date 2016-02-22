@@ -7,7 +7,6 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBow;
@@ -75,13 +74,12 @@ public class GemCircleHelper {
 				gemRelation += attackerItemGem.getRelation(attackedBlockingItemGem);
 				gemRelation += userGem.getRelation(attackedGem);
 				gemRelation += userGem.getRelation(attackedBlockingItemGem);
-				if(attackedEntity instanceof EntityPlayer) {
-					InventoryPlayer inventory = ((EntityPlayer)attackedEntity).inventory;
-					ItemStack[] armorInventory = inventory.armorInventory;
-					for(int i = 0; i < armorInventory.length; i++) {
-						ItemStack armorStack = armorInventory[i];
-						if(armorStack != null) {
-							CircleGem armorGem = GemCircleHelper.getGem(armorStack);
+				if(attackedEntity instanceof EntityLivingBase) {
+					ItemStack[] equipment = ((EntityLivingBase)attackedEntity).getLastActiveItems();
+					for(int i = 0; i < equipment.length; i++) {
+						ItemStack equipmentStack = equipment[i];
+						if(equipmentStack != null && !equipmentStack.equals(((EntityLivingBase)attackedEntity).getHeldItem()) && equipmentStack.getItem() instanceof ItemArmor) {
+							CircleGem armorGem = GemCircleHelper.getGem(equipmentStack);
 							gemRelation += attackerGem.getRelation(armorGem);
 							gemRelation += attackerItemGem.getRelation(armorGem);
 							gemRelation += userGem.getRelation(armorGem);
@@ -109,13 +107,12 @@ public class GemCircleHelper {
 
 				//Defender gems
 				TObjectIntHashMap<CircleGem> defenderGemCounts = new TObjectIntHashMap<CircleGem>();
-				if(attackedEntity instanceof EntityPlayer) {
-					InventoryPlayer inventory = ((EntityPlayer)attackedEntity).inventory;
-					ItemStack[] armorInventory = inventory.armorInventory;
-					for(int i = 0; i < armorInventory.length; i++) {
-						ItemStack armorStack = armorInventory[i];
-						if(armorStack != null) {
-							CircleGem armorGem = GemCircleHelper.getGem(armorStack);
+				if(attackedEntity instanceof EntityLivingBase) {
+					ItemStack[] equipment = ((EntityLivingBase)attackedEntity).getLastActiveItems();
+					for(int i = 0; i < equipment.length; i++) {
+						ItemStack equipmentStack = equipment[i];
+						if(equipmentStack != null && !equipmentStack.equals(((EntityLivingBase)attackedEntity).getHeldItem()) && equipmentStack.getItem() instanceof ItemArmor) {
+							CircleGem armorGem = GemCircleHelper.getGem(equipmentStack);
 							if(armorGem != CircleGem.NONE) {
 								defenderGemCounts.adjustOrPutValue(armorGem, 1, 1);
 							}

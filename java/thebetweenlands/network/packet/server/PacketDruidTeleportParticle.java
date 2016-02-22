@@ -2,9 +2,9 @@ package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public class PacketDruidTeleportParticle implements IPacket {
+public class PacketDruidTeleportParticle extends Packet {
 	public PacketDruidTeleportParticle() { }
 	
 	public double x, y, z;

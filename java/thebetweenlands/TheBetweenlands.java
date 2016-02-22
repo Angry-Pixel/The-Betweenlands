@@ -1,5 +1,9 @@
 package thebetweenlands;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -22,12 +26,29 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
-import thebetweenlands.command.*;
+import thebetweenlands.command.CommandAspectDiscovery;
+import thebetweenlands.command.CommandBLEvent;
+import thebetweenlands.command.CommandDecay;
+import thebetweenlands.command.CommandFindPage;
+import thebetweenlands.command.CommandResetAspects;
+import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
-import thebetweenlands.event.entity.*;
-import thebetweenlands.event.player.*;
+import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.entity.MiscEntitySyncHandler;
+import thebetweenlands.event.entity.PageDiscoveringEvent;
+import thebetweenlands.event.entity.PowerRingHandler;
+import thebetweenlands.event.entity.VolarPadGlideHandler;
+import thebetweenlands.event.player.ArmorHandler;
+import thebetweenlands.event.player.BonemealEventHandler;
+import thebetweenlands.event.player.DecayEventHandler;
+import thebetweenlands.event.player.OverworldItemEventHandler;
+import thebetweenlands.event.player.PlayerItemEventHandler;
+import thebetweenlands.event.player.PlayerLanternEventHandler;
+import thebetweenlands.event.player.PlayerPortalHandler;
+import thebetweenlands.event.player.RottenFoodHandler;
+import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
@@ -39,7 +60,15 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
-import thebetweenlands.network.packet.server.*;
+import thebetweenlands.network.packet.client.PacketDropAmulet;
+import thebetweenlands.network.packet.server.PacketAttackTarget;
+import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
+import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
+import thebetweenlands.network.packet.server.PacketGemProc;
+import thebetweenlands.network.packet.server.PacketRevengeTarget;
+import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
+import thebetweenlands.network.packet.server.PacketTickspeed;
+import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import thebetweenlands.precondition.TheBetweenlandsPreconditions;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.RecipeHandler;
@@ -52,10 +81,6 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.world.storage.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
@@ -115,6 +140,7 @@ public class TheBetweenlands {
 		registerPacket(PacketAttackTarget.class);
 		registerPacket(PacketWeedWoodBushRustle.class);
 		registerPacket(PacketGemProc.class);
+		registerPacket(PacketDropAmulet.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
@@ -168,6 +194,8 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
+		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

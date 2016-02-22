@@ -539,8 +539,12 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 			GL11.glCallList(this.skyDispListStart);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			GL11.glDepthMask(true);
 			GL11.glDisable(GL11.GL_BLEND);
@@ -548,7 +552,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		} else {
 			this.renderSkyTexture(mc, false);
 		}
-		
+
 		this.renderSkyTexture(mc, true);
 
 		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {

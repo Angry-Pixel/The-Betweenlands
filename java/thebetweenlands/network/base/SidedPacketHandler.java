@@ -1,5 +1,7 @@
 package thebetweenlands.network.base;
 
+import java.util.List;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
@@ -7,14 +9,12 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import thebetweenlands.network.base.impl.SimplePacketObjectSerializer;
 
-import java.util.List;
-
 public final class SidedPacketHandler implements IMessageHandler<MessageWrapper, IMessage> {
 	private static SidedPacketHandler instance;
 	private IPacketProxy proxy;
 	private SimpleNetworkWrapper networkWrapper;
 	private IPacketObjectSerializer packetSerializer = new SimplePacketObjectSerializer();
-	
+
 	public MessageWrapper wrapPacket(IPacket pkt) {
 		return new MessageWrapper(pkt, this);
 	}
@@ -26,7 +26,7 @@ public final class SidedPacketHandler implements IMessageHandler<MessageWrapper,
 		this.packetSerializer = packetSerializer;
 		return this;
 	}
-	
+
 	public SidedPacketHandler setProxy(IPacketProxy proxy) {
 		if(proxy == null) {
 			throw new NullPointerException("Packet Proxy must not be null!");
@@ -56,7 +56,7 @@ public final class SidedPacketHandler implements IMessageHandler<MessageWrapper,
 	protected IPacketObjectSerializer getPacketSerializer() {
 		return this.packetSerializer;
 	}
-	
+
 	@Override
 	public IMessage onMessage(MessageWrapper message, MessageContext ctx) {
 		message.setPacketHandler(this);
@@ -67,6 +67,7 @@ public final class SidedPacketHandler implements IMessageHandler<MessageWrapper,
 			return null;
 		}
 		IPacket pkt = message.getPacket();
+		pkt.setContext(ctx);
 		List<ListenerEntry> listeners = this.proxy.getListeners().get(pkt.getClass());
 		if(listeners != null && listeners.size() > 0) {
 			for(ListenerEntry l : listeners) {

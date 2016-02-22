@@ -3,9 +3,9 @@ package thebetweenlands.network.packet.server;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import thebetweenlands.network.base.IPacket;
+import thebetweenlands.network.base.Packet;
 
-public class PacketGemProc implements IPacket {
+public class PacketGemProc extends Packet {
 	public PacketGemProc() { }
 
 	public byte type;

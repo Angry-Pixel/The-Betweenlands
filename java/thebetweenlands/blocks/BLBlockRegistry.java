@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
@@ -130,9 +133,6 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
@@ -460,7 +460,7 @@ public class BLBlockRegistry {
 	public static final BlockTemplePillar pitstonePillar = new BlockTemplePillar("pitstonePillar", "pitstonePillarTop");
 	public static final BlockTemplePillar limestonePillar = new BlockTemplePillar("limestonePillar", "limestonePillarTop");
 	public static final BlockTemplePillar cragrockPillar = new BlockTemplePillar("cragrockPillar", "cragrockPillarTop");
-	
+
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
@@ -544,7 +544,6 @@ public class BLBlockRegistry {
 	// OTHER THINGS
 	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
 	public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
-	public static final BlockLifeCrystalBlock lifeCrystalBlock = new BlockLifeCrystalBlock();
 	public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 	public static final BlockRope rope = new BlockRope();
 	public static final BlockWraithPusher wraith = new BlockWraithPusher();

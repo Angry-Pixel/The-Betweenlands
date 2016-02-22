@@ -194,4 +194,9 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	protected boolean canDespawn() {
 		return false;
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+        return !this.isHiding();
+    }
 }

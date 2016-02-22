@@ -5,6 +5,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -36,6 +43,7 @@ import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.GuiOverlay;
+import thebetweenlands.client.input.KeyBindingsBL;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.client.model.block.crops.ModelCropFungus1;
 import thebetweenlands.client.model.block.crops.ModelCropFungus2;
@@ -88,6 +96,7 @@ import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderTarminion;
 import thebetweenlands.client.render.entity.RenderTermite;
+import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.entity.projectile.RenderAngryPebble;
@@ -124,7 +133,6 @@ import thebetweenlands.client.render.tileentity.TileEntityDruidAltarRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityGeckoCageRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityInfuserRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityItemShelfRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityLifeCrystalRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot1Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot2Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityLootPot3Renderer;
@@ -171,6 +179,7 @@ import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.entities.projectiles.EntityElixir;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
+import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
@@ -207,7 +216,6 @@ import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.tileentities.TileEntityItemShelf;
-import thebetweenlands.tileentities.TileEntityLifeCrystal;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
@@ -225,14 +233,6 @@ import thebetweenlands.tileentities.connection.Connection;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.utils.vectormath.Point3f;
-
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -294,6 +294,9 @@ public class ClientProxy extends CommonProxy {
 			e.printStackTrace();
 		}
 
+		//Key bindings
+		KeyBindingsBL.init();
+
 		// Mob Entity Renderer
 		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, new RenderDarkDruid());
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderAngler());
@@ -327,6 +330,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, new RenderElixir());
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, new RenderRopeNode());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, new RenderDreadfulMummy());
+		RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, new RenderVolatileSoul());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -339,7 +343,6 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new TileEntityAlembicRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new TileEntityInfuserRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPestleAndMortar.class, new TileEntityPestleAndMortarRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLifeCrystal.class, new TileEntityLifeCrystalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot1.class, new TileEntityLootPot1Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot2.class, new TileEntityLootPot2Renderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot3.class, new TileEntityLootPot3Renderer());
