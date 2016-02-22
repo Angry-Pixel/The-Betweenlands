@@ -55,10 +55,12 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         width = 7;
         depth = 6;
         int direction = random.nextInt(4);
-        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, depth, direction))
+        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, 1, 4, depth, direction)
+                || !rotatedCubeCanReplace(world, x, y, z, 6, 0, 0, 1, 4, depth, direction)
+                || !rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, 1, direction)
+                || !rotatedCubeCanReplace(world, x, y, z, 0, 0, 5, width, 4, 1, direction))
             return false;
-        if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction))
-            return false;
+        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
 
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 1, 6, direction);
         rotatedCubeVolume(world, random, x, y, z, 6, 0, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 1, 6, direction);
@@ -99,7 +101,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 11;
         int direction = random.nextInt(4);
         int height = 6 + random.nextInt(2);
-        if (!rotatedCubeCanReplace(world, x, y, z, 4, 0, 0, 5, height, depth, direction) || !rotatedCubeCanReplace(world, x, y, z, 0, 0, 6, 4, height, 5, direction))
+        if (!rotatedCubeCanReplace(world, x, y, z, 4, height - 3, 0, 5, height - 4, depth, direction) || !rotatedCubeCanReplace(world, x, y, z, 0, height - 3, 6, 4, height - 4, 5, direction))
             return false;
         if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 6, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
                 || !rotatedCubeBlockCheck(world, x, y, z, 0, -1, 10, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
@@ -223,8 +225,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         int direction = random.nextInt(4);
         if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, depth, direction))
             return false;
-        if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction))
-            return false;
+        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
 
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 11, direction);
         rotatedCubeVolume(world, random, x, y, z, 1, 0, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 4, 1, direction);
@@ -265,10 +266,11 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 13;
         width = 8;
         int direction = 0;//random.nextInt(4);
-        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 8, depth, direction))
+        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 1, depth, direction)
+                || !rotatedCubeCanReplace(world, x, y, z, 0, 5, 0, width, 1, depth, direction)
+                || !rotatedCubeCanReplace(world, x, y, z, 2, 6, 0, 6, 3, depth, direction))
             return false;
-        if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction))
-            return false;
+        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
 
 
         rotatedCubeVolume(world, random, x, y, z, 1, 0, 1, BLBlockRegistry.pitstoneBrickStairs, 0, 1, 1, 12, direction);
