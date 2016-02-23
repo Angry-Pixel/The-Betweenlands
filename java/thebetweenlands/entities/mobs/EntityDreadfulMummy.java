@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.world.World;
 
@@ -14,5 +15,15 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     @Override
     public String pageName() {
         return null;
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(2);
+        getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
+        getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1);
+        getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
+        getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
     }
 }
