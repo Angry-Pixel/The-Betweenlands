@@ -2,6 +2,7 @@ package thebetweenlands.client.model.entity;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
@@ -271,9 +272,9 @@ public class ModelDreadfulMummy extends MowzieModelBase {
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        setToInitPose();
         EntityDreadfulMummy mummy = (EntityDreadfulMummy)entity;
 
+        faceTarget(neck, 1, f3, f4);
 //        f = mummy.ticksExisted;
 //        f1 = 1f;
 
@@ -310,5 +311,20 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 
         chainWave(tentacle1, 2 * speed, height * 0.2f, -3, f, f1);
         chainWave(tentacle2, 2 * speed, height * 0.2f, -2, f, f1);
+    }
+
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float f3, float f4, float delta) {
+        super.setLivingAnimations(entity, f3, f4, delta);
+        setToInitPose();
+        float frame = entity.ticksExisted + delta;
+        chainWave(tentacle1, 0.2f, 0.3f, -2, frame, 1);
+        chainWave(tentacle2, 0.3f, 0.3f, -2, frame, 1);
+        walk(neck, 0.2f, 0.05f, true, 2, 0, frame, 1);
+        walk(head1, 0.2f, 0.05f, true, 1, 0, frame, 1);
+        walk(jaw, 0.2f, 0.2f, true, 0, 0.2f, frame, 1);
+        chainWave(tongue, 0.2f, -0.3f, -3, frame, 1);
+        walk(armleft1, 0.15f, 0.2f, true, 2, 0, frame, 1);
+        walk(armleft2, 0.15f, 0.2f, true, 1, 0, frame, 1);
     }
 }
