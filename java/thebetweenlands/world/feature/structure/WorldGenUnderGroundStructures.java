@@ -60,7 +60,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
                 || !rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, 1, direction)
                 || !rotatedCubeCanReplace(world, x, y, z, 0, 0, 5, width, 4, 1, direction))
             return false;
-        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
+            return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 1, 6, direction);
         rotatedCubeVolume(world, random, x, y, z, 6, 0, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 1, 6, direction);
@@ -83,13 +85,13 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
 
         rotatedCubeVolume(world, random, x, y, z, 0, 3, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 2, direction);
 
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 1, 0, 1, direction);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 5, 0, 1, direction);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 1, 0, 4, direction);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 5, 0, 4, direction);
         System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
@@ -101,17 +103,25 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 11;
         int direction = random.nextInt(4);
         int height = 6 + random.nextInt(2);
-        if (!rotatedCubeCanReplace(world, x, y, z, 4, height - 3, 0, 5, height - 4, depth, direction) || !rotatedCubeCanReplace(world, x, y, z, 0, height - 3, 6, 4, height - 4, 5, direction))
+        if (!rotatedCubeCanReplace(world, x, y, z, 4, height - 3, 0, 5, height - 3, depth, direction) || !rotatedCubeCanReplace(world, x, y, z, 0, height - 3, 6, 4, height - 3, 5, direction))
             return false;
-        if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 6, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 0, -1, 10, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 4, -1, 6, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 4, -1, 10, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 4, -1, 2, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 8, -1, 6, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 8, -1, 10, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction)
-                || !rotatedCubeBlockCheck(world, x, y, z, 8, -1, 2, BLBlockRegistry.pitstone, 0, 1, 1, 1, direction))
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 6, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 0, -1, 10, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 4, -1, 6, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 4, -1, 10, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 4, -1, 2, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 8, -1, 6, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 8, -1, 10, 1, 1, direction, true)
+                || !makePitstoneSupport(world, x, y, z, 8, -1, 2, 1, 1, direction, true))
             return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 6, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 0, -1, 10, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 4, -1, 6, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 4, -1, 10, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 4, -1, 2, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 8, -1, 6, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 8, -1, 10, 1, 1, direction, false);
+        makePitstoneSupport(world, x, y, z, 8, -1, 2, 1, 1, direction, false);
 
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 6, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 10, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
@@ -159,11 +169,11 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
 
         if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 7, height - 1, 9, direction);
-        if (random.nextInt(5) == 0)
+        if (random.nextInt(4) == 0)
             rotatedLoot(world, random, x, y, z, 5, height - 1, 4, direction);
-        if (random.nextInt(5) == 0)
+        if (random.nextInt(4) == 0)
             rotatedLoot(world, random, x, y, z, 1, 0, 7, direction);
-        if (random.nextInt(5) == 0)
+        if (random.nextInt(4) == 0)
             rotatedLoot(world, random, x, y, z, 7, 0, 9, direction);
         System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
@@ -175,8 +185,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         int direction = 0;
         if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 7, depth, direction))
             return false;
-        if (!rotatedCubeBlockCheck(world, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction))
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
         rotatedCubeVolume(world, random, x, y, z, 1, 0, 1, BLBlockRegistry.pitstoneTiles, 0, 4, 1, 4, direction);
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 1, 2, 1, direction);
@@ -207,13 +218,13 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         rotatedCubeVolume(world, random, x, y, z, 1, 6, 5, BLBlockRegistry.pitstoneBrickSlab, 0, 4, 1, 1, direction);
         rotatedCubeVolume(world, random, x, y, z, 5, 6, 1, BLBlockRegistry.pitstoneBrickSlab, 0, 1, 1, 4, direction);
 
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 1, 1, 1, 0);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 4, 1, 1, 0);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 1, 1, 4, 0);
-        if (random.nextInt(4) == 0)
+        if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 4, 1, 4, 0);
         System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
@@ -225,7 +236,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         int direction = random.nextInt(4);
         if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, depth, direction))
             return false;
-        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
+            return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
         rotatedCubeVolume(world, random, x, y, z, 0, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 11, direction);
         rotatedCubeVolume(world, random, x, y, z, 1, 0, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 4, 1, direction);
@@ -270,8 +283,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
                 || !rotatedCubeCanReplace(world, x, y, z, 0, 5, 0, width, 1, depth, direction)
                 || !rotatedCubeCanReplace(world, x, y, z, 2, 6, 0, 6, 3, depth, direction))
             return false;
-        rotatedCubeVolume(world, random, x, y, z, 0, -1, 0, BLBlockRegistry.pitstone, 0, width, 1, depth, direction);
-
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
+            return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
         rotatedCubeVolume(world, random, x, y, z, 1, 0, 1, BLBlockRegistry.pitstoneBrickStairs, 0, 1, 1, 12, direction);
         rotatedCubeVolume(world, random, x, y, z, 2, 0, 0, BLBlockRegistry.pitstoneBrickStairs, 2, 4, 1, 1, direction);
@@ -396,41 +410,72 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
 
-    public boolean rotatedCubeBlockCheck(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+    public boolean makePitstoneSupport(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeDepth, int direction, boolean simulate) {
         x -= width / 2;
         z -= depth / 2;
-        boolean isSame = true;
         switch (direction) {
             case 0:
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
-                        for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++)
-                            if (world.getBlock(xx, yy, zz) != blockType)
-                                isSame = false;
+                for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+                    for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
+                        int yy = y + offsetB;
+                        int times = 0;
+                        while (world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)) {
+                            if (!simulate)
+                                world.setBlock(xx, yy, zz, BLBlockRegistry.pitstone, 0, 2);
+                            yy--;
+                            times++;
+                            if (times > 4)
+                                return false;
+                        }
+                    }
                 break;
             case 1:
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
-                        for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++)
-                            if (world.getBlock(xx, yy, zz) != blockType)
-                                isSame = false;
+                for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+                    for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
+                        int yy = y + offsetB;
+                        int times = 0;
+                        while (world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)) {
+                            if (!simulate)
+                                world.setBlock(xx, yy, zz, BLBlockRegistry.pitstone, 0, 2);
+                            yy--;
+                            times++;
+                            if (times > 4)
+                                return false;
+                        }
+                    }
                 break;
             case 2:
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
-                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--)
-                            if (world.getBlock(xx, yy, zz) != blockType)
-                                isSame = false;
+                for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+                    for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
+                        int yy = y + offsetB;
+                        int times = 0;
+                        while (world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)) {
+                            if (!simulate)
+                                world.setBlock(xx, yy, zz, BLBlockRegistry.pitstone, 0, 2);
+                            yy--;
+                            times++;
+                            if (times > 4)
+                                return false;
+                        }
+                    }
                 break;
             case 3:
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
-                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--)
-                            if (world.getBlock(xx, yy, zz) != blockType)
-                                isSame = false;
+                for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+                    for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
+                        int yy = y + offsetB;
+                        int times = 0;
+                        while (world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)) {
+                            if (!simulate)
+                                world.setBlock(xx, yy, zz, BLBlockRegistry.pitstone, 0, 2);
+                            yy--;
+                            times++;
+                            if (times > 4)
+                                return false;
+                        }
+                    }
                 break;
         }
-        return isSame;
+        return true;
     }
 
     public boolean rotatedCubeCanReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {

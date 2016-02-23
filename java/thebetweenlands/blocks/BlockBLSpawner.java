@@ -16,7 +16,7 @@ public class BlockBLSpawner extends BlockMobSpawner {
 
     public static String[] entityList = new String[]{
             "thebetweenlands.swampHag",
-            "thebetweenlands.wight",};
+            "thebetweenlands.wight"};
 
     public BlockBLSpawner() {
         super();
