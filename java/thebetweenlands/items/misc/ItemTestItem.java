@@ -27,7 +27,7 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
         Random rand = new Random();
         if(!world.isRemote && player.isSneaking()) {
             WorldGenWightTower tower = new WorldGenWightTower();
-            //tower.generate(world, rand, x, y + 1, z);
+            tower.generate(world, rand, x, y + 1, z);
 
             //WorldGenSmallRuins ruin = new WorldGenSmallRuins();
             //ruin.generate(world, rand, x, y + 1, z);
