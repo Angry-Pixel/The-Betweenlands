@@ -15,11 +15,11 @@ public class WorldGenWightTower extends WorldGenerator {
     private int width = -1;
     private int height = -1;
     private int direction = -1;
-    private Block bricks = BLBlockRegistry.cragrockBrick;
-    private Block slab = BLBlockRegistry.cragrockBrickSlab;
-    private Block stairs = BLBlockRegistry.cragrockBrickStairs;
-    private Block polished = BLBlockRegistry.carvedCrag;
-    private Block wall = BLBlockRegistry.cragrockWall;
+    private Block bricks = BLBlockRegistry.limestoneBricks;
+    private Block slab = BLBlockRegistry.limestoneBrickSlab;
+    private Block stairs = BLBlockRegistry.limestoneBrickStairs;
+    private Block polished = BLBlockRegistry.polishedLimestone;
+    private Block wall = BLBlockRegistry.limestoneBrickWall;
     private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
     
     public WorldGenWightTower() {
