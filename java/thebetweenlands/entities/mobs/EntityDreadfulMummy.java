@@ -23,7 +23,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(1);
+        getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.9);
         getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
         getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1);
         getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
@@ -34,7 +34,6 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     public void onUpdate() {
         super.onUpdate();
         if (getEntityToAttack() != null) {
-            System.out.println("Spawn");
             if (untilSpawnMummy <= 0) spawnMummy();
         }
         if(untilSpawnMummy > 0) untilSpawnMummy--;
@@ -46,5 +45,6 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         mummy.setPosition(posX + (rand.nextInt(6) - 3), posY, posZ + (rand.nextInt(6) - 3));
         worldObj.spawnEntityInWorld(mummy);
         mummy.setAttackTarget((EntityLivingBase) getEntityToAttack());
+        mummy.setHealth(20);
     }
 }
