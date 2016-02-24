@@ -278,9 +278,9 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 //        f = mummy.ticksExisted;
 //        f1 = 1f;
 
-        float speed = 0.7f;
-        float degree = 1.2f;
-        float height = 1;
+        float speed = 0.5f;
+        float degree = 1.4f;
+        float height = 0.8f;
         swing(frontLeftArmJoint, speed, degree * 0.5f, false, 0f, 0.3f, f, f1);
         swing(frontRightArmJoint, speed, degree * 0.5f, false, 0f, 0f, f, f1);
         walk(spiderleg1, speed, degree * 0.4f, true, (float) (Math.PI / 2), -0.1f, f, f1);

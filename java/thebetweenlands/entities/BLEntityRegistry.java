@@ -4,37 +4,8 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
-import thebetweenlands.entities.mobs.EntityBlindCaveFish;
-import thebetweenlands.entities.mobs.EntityBloodSnail;
-import thebetweenlands.entities.mobs.EntityDarkDruid;
-import thebetweenlands.entities.mobs.EntityDragonFly;
-import thebetweenlands.entities.mobs.EntityDreadfulMummy;
-import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityGecko;
-import thebetweenlands.entities.mobs.EntityGiantToad;
-import thebetweenlands.entities.mobs.EntityLeech;
-import thebetweenlands.entities.mobs.EntityLurker;
-import thebetweenlands.entities.mobs.EntityMeleeGuardian;
-import thebetweenlands.entities.mobs.EntityMireSnail;
-import thebetweenlands.entities.mobs.EntityMireSnailEgg;
-import thebetweenlands.entities.mobs.EntityPeatMummy;
-import thebetweenlands.entities.mobs.EntityShallowBreath;
-import thebetweenlands.entities.mobs.EntitySiltCrab;
-import thebetweenlands.entities.mobs.EntitySludge;
-import thebetweenlands.entities.mobs.EntitySporeling;
-import thebetweenlands.entities.mobs.EntitySwampHag;
-import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.entities.mobs.EntityTarminion;
-import thebetweenlands.entities.mobs.EntityTermite;
-import thebetweenlands.entities.mobs.EntityWight;
-import thebetweenlands.entities.projectiles.EntityAngryPebble;
-import thebetweenlands.entities.projectiles.EntityBLArrow;
-import thebetweenlands.entities.projectiles.EntityElixir;
-import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
-import thebetweenlands.entities.projectiles.EntityThrownTarminion;
-import thebetweenlands.entities.projectiles.EntityVolatileSoul;
+import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.projectiles.*;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 
@@ -76,6 +47,7 @@ public class BLEntityRegistry
 		registerEntity(31, EntityDreadfulMummy.class, "dreadfulMummy", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(32, EntityShallowBreath.class, "shallowBreath", 0x005C3D, 0x2D4231, 10, 1, true);
 		registerEntity(33, EntityVolatileSoul.class, "volatileSoul", 64, 1, true);
+		registerEntity(34, EntitySludgeBall.class, "sludgeBall", 64, 20, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
