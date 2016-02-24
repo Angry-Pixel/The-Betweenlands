@@ -275,7 +275,66 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
+
     public boolean structure5(World world, Random random, int x, int y, int z) {
+        depth = 8;
+        width = 7;
+        int direction = random.nextInt(4);
+
+        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 5, depth, direction))
+            return false;
+        if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
+            return false;
+        makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
+
+        rotatedCubeVolume(world, random, x, y, z, 1, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 7, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 0, 6, BLBlockRegistry.pitstoneBricks, 0, 7, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 7, direction);
+        rotatedCubeVolume(world, random, x, y, z, 7, 0, 0, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 7, direction);
+        rotatedCubeVolume(world, random, x, y, z, 0, 0, 2, BLBlockRegistry.pitstoneBrickWall, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 0, 0, 4, BLBlockRegistry.pitstoneBrickWall, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 2, 0, 1, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 3, 0, 1, BLBlockRegistry.pitstoneBrickSlab, 8, 3, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 6, 0, 1, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 2, 0, 5, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 3, 0, 5, BLBlockRegistry.pitstoneBrickSlab, 8, 3, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 6, 0, 5, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, random, x, y, z, 1, 1, 0, BLBlockRegistry.pitstoneTiles, 0, 7, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 1, 6, BLBlockRegistry.pitstoneTiles, 0, 7, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 1, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 2, 7, direction);
+        rotatedCubeVolume(world, random, x, y, z, 7, 1, 0, BLBlockRegistry.pitstoneTiles, 0, 1, 2, 7, direction);
+        rotatedCubeVolume(world, random, x, y, z, 4, 1, 0, BLBlockRegistry.pitstoneBrickWall, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 4, 1, 6, BLBlockRegistry.pitstoneBrickWall, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 7, 1, 3, BLBlockRegistry.pitstoneBrickWall, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 1, 1, BLBlockRegistry.pitstoneBrickWall, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 1, 5, BLBlockRegistry.pitstoneBrickWall, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 0, 3, Blocks.air, 0, 1, 2, 1, direction);
+
+        rotatedCubeVolume(world, random, x, y, z, 0, 2, 2, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 2 : direction == 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 0, 2, 3, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 0, 2, 4, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 3 : direction == 1 ? 1 : direction == 2 ? 2 : 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, random, x, y, z, 1, 3, 0, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 2 : direction == 1 ? 0 : direction == 2 ? 3 : 1, 7, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 1, 3, 1, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 6, direction);
+        rotatedCubeVolume(world, random, x, y, z, 2, 3, 6, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 3 : direction == 1 ? 1 : direction == 2 ? 2 : 0, 6, 1, 1, direction);
+        rotatedCubeVolume(world, random, x, y, z, 7, 3, 1, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 5, direction);
+
+        rotatedCubeVolume(world, random, x, y, z, 2, 4, 1, BLBlockRegistry.pitstoneBrickSlab, 0, 5, 1, 5, direction);
+
+        if (random.nextInt(3) == 0)
+            rotatedLoot(world, random, x, y, z, 2, 1, 1, direction);
+        if (random.nextInt(3) == 0)
+            rotatedLoot(world, random, x, y, z, 2, 1, 5, direction);
+        if (random.nextInt(3) == 0)
+            rotatedLoot(world, random, x, y, z, 6, 1, 1, direction);
+        if (random.nextInt(3) == 0)
+            rotatedLoot(world, random, x, y, z, 6, 1, 5, direction);
+        System.out.println("generated at: " + x + " " + y + " " + z);
+        return true;
+    }
+
+    /*public boolean structure5(World world, Random random, int x, int y, int z) {
         depth = 13;
         width = 8;
         int direction = 0;//random.nextInt(4);
@@ -344,7 +403,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             rotatedLoot(world, random, x, y, z, 5, 1, 10, 0);
         System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
-    }
+    }*/
 
 
     public void rotatedCubeVolume(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
@@ -383,28 +442,16 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         z -= depth / 2;
         switch (direction) {
             case 0:
-                for (int yy = y + offsetB; yy < y + offsetB + 1; yy++)
-                    for (int xx = x + offsetA; xx < x + offsetA + 1; xx++)
-                        for (int zz = z + offsetC; zz < z + offsetC + 1; zz++)
-                            generateLoot(world, rand, xx, yy, zz);
+                generateLoot(world, rand, x + offsetA, y + offsetB, z + offsetC);
                 break;
             case 1:
-                for (int yy = y + offsetB; yy < y + offsetB + 1; yy++)
-                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - 2; zz--)
-                        for (int xx = x + offsetC; xx < x + offsetC + 1; xx++)
-                            generateLoot(world, rand, xx, yy, zz);
+                generateLoot(world, rand, x + offsetC, y + offsetB, z + depth - offsetA - 1);
                 break;
             case 2:
-                for (int yy = y + offsetB; yy < y + offsetB + 1; yy++)
-                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - 2; xx--)
-                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - 2; zz--)
-                            generateLoot(world, rand, xx, yy, zz);
+                generateLoot(world, rand, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
                 break;
             case 3:
-                for (int yy = y + offsetB; yy < y + offsetB + 1; yy++)
-                    for (int zz = z + offsetA; zz < z + offsetA + 1; zz++)
-                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - 2; xx--)
-                            generateLoot(world, rand, xx, yy, zz);
+                generateLoot(world, rand, x + width - offsetC - 1, y + offsetB, z + offsetA);
                 break;
         }
     }

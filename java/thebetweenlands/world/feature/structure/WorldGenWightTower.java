@@ -85,6 +85,15 @@ public class WorldGenWightTower extends WorldGenerator {
 			spawner.setMob(world, xx + 25, yy + 19, zz + 25, "thebetweenlands.wight");
 			spawner.setMob(world, xx + 6, yy + 19, zz + 25, "thebetweenlands.wight");
 		}
+		
+		//top tower floors
+		
+		//underneath
+		rotatedCubeVolume(world, rand, xx, yy, zz, 9, 17, 9, polished, 0, 14, 1, 14, 0);
+		//floor 1
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, polished, 0, 8, 1, 8, 0);
+		//floor2
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, polished, 0, 6, 1, 6, 0);
 
 		length = 13;
 		width = 13;
