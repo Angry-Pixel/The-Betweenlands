@@ -38,20 +38,22 @@ import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.LightingUtil;
 
 public class ItemAmulet extends Item {
+	public static List<Class<? extends EntityLivingBase>> supportedEntities = new ArrayList<Class<? extends EntityLivingBase>>();
 	private IIcon[] gemIcons = new IIcon[CircleGem.TYPES.length];
-	private List<Class<? extends EntityLivingBase>> supportedEntities = new ArrayList<Class<? extends EntityLivingBase>>();
+
+	static {
+		supportedEntities.add(EntityTarminion.class);
+		supportedEntities.add(EntityGiantToad.class);
+	}
 
 	public ItemAmulet() {
-		this.setUnlocalizedName("item.thebetweenlands.amulet.none");
+		this.setUnlocalizedName("thebetweenlands.amulet.none");
 
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 
 		this.setTextureName("thebetweenlands:amuletSocket");
-
-		this.supportedEntities.add(EntityTarminion.class);
-		this.supportedEntities.add(EntityGiantToad.class);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -124,16 +126,16 @@ public class ItemAmulet extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
-		if(!this.supportedEntities.isEmpty() && this.supportedEntities.contains(entity.getClass())) {
-			return addAmulet(player, itemstack, entity);
+		if(!supportedEntities.isEmpty() && supportedEntities.contains(entity.getClass())) {
+			addAmulet(player, itemstack, entity);
 		}
-		return false;
+		return true;
 	}
 
 	public static boolean addAmulet(EntityPlayer player, ItemStack stack, EntityLivingBase entity) {
 		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 		if(property != null) {
-			if(property.getAmulets().size() == 0 && CircleGem.getGem(stack) != CircleGem.NONE) {
+			if(property.getAmulets().size() < property.getAmuletSlots() && CircleGem.getGem(stack) != CircleGem.NONE) {
 				if(!player.worldObj.isRemote) {
 					property.addAmulet(stack, true);
 					if(!player.capabilities.isCreativeMode) 
@@ -149,7 +151,7 @@ public class ItemAmulet extends Item {
 	@SubscribeEvent
 	public void onInteract(EntityInteractEvent event) {
 		Entity entity = event.target;
-		if(event.entityPlayer != null && entity instanceof EntityLivingBase && !this.supportedEntities.isEmpty() && this.supportedEntities.contains(entity.getClass())) {
+		if(event.entityPlayer != null && entity instanceof EntityLivingBase && !supportedEntities.isEmpty() && supportedEntities.contains(entity.getClass())) {
 			EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 			if(property != null) {
 				if(event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() == null && property.getAmulets().size() > 0) {
@@ -193,20 +195,19 @@ public class ItemAmulet extends Item {
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onRenderLiving(RenderLivingEvent.Pre event) {
-		if(event.entity != null && !this.supportedEntities.isEmpty() && this.supportedEntities.contains(event.entity.getClass())) {
+	public void onRenderLiving(RenderLivingEvent.Post event) {
+		if(event.entity != null && !supportedEntities.isEmpty() && supportedEntities.contains(event.entity.getClass())) {
 			this.renderAmulet(event.entity, event.x, event.y, event.z, 0.0F);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onRenderPlayer(RenderPlayerEvent.Specials.Pre event) {
+	public void onRenderPlayer(RenderPlayerEvent.Post event) {
 		if(event.entityPlayer != null) {
 			GL11.glPushMatrix();
 			GL11.glRotated(-event.entityPlayer.rotationYaw, 0, 1, 0);
-			GL11.glScaled(1, -1, 1);
-			GL11.glTranslated(0, -0.5D, 0);
+			GL11.glTranslated(0, -0.7D, 0);
 			this.renderAmulet(
 					event.entityPlayer,
 					(event.entityPlayer.lastTickPosX + (event.entityPlayer.posX - event.entityPlayer.lastTickPosX) * event.partialRenderTick) - RenderManager.renderPosX,

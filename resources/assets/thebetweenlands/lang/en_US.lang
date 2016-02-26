@@ -399,6 +399,7 @@ item.thebetweenlands.amulet.none.name=Amulet Socket
 item.thebetweenlands.amulet.crimson.name=Crimson Middle Gem Amulet
 item.thebetweenlands.amulet.aqua.name=Aqua Middle Gem Amulet
 item.thebetweenlands.amulet.green.name=Green Middle Gem Amulet
+item.thebetweenlands.amuletSlot.name=Amulet Slot
 
 item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 
@@ -1180,6 +1181,9 @@ chat.manual.discover.page=You discovered a new page: %s
 chat.repeller.shimmerstone.missing=The repeller needs a Shimmerstone to run
 
 chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
+
+chat.amulet.slot.added=Added a new amulet slot
+chat.amulet.slot.full=Can't add any more amulet slots
 
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat

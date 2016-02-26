@@ -9,14 +9,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
-import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.EntityGem.Type;
 
 public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase> {
 	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
 	private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
+	private int amuletSlots = 1;
+	public static final int MAX_AMULET_SLOTS = 3;
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
@@ -35,6 +37,8 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 			amuletList.appendTag(amuletCompound);
 		}
 		nbt.setTag("amulets", amuletList);
+
+		nbt.setInteger("amuletSlots", this.amuletSlots);
 	}
 
 	@Override
@@ -58,6 +62,9 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 				this.amulets.add(amulet);
 			}
 		}
+
+		if(nbt.hasKey("amuletSlots"))
+			this.amuletSlots = nbt.getInteger("amuletSlots");
 	}
 
 	@Override
@@ -130,5 +137,13 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 			return true;
 		}
 		return false;
+	}
+
+	public int getAmuletSlots() {
+		return this.amuletSlots;
+	}
+
+	public void addAmuletSlot() {
+		this.amuletSlots++;
 	}
 }

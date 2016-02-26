@@ -107,6 +107,14 @@ public class EntityPropertiesHandler {
 		EntityPlayerMP player = (EntityPlayerMP) event.entity;
 		List<PropertiesTracker> trackers = this.trackerMap.get(player);
 		if(trackers != null && trackers.size() > 0) {
+			boolean hasPlayer = false;
+			for(PropertiesTracker tracker : trackers) {
+				if(hasPlayer = tracker.getEntity() == player) 
+					break;
+			}
+			if(!hasPlayer) {
+				this.addTracker(player, player);
+			}
 			Iterator<PropertiesTracker> it = trackers.iterator();
 			while(it.hasNext()) {
 				PropertiesTracker tracker = it.next();
