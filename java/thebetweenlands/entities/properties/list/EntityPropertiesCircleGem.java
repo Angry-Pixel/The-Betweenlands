@@ -1,27 +1,63 @@
 package thebetweenlands.entities.properties.list;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
+import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.EntityGem;
+import thebetweenlands.gemcircle.EntityGem.Type;
 
 public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase> {
-	private CircleGem circleGem = CircleGem.NONE;
-	private boolean hasAmulet = false;
-	private boolean isRemovable = false;
+	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
+	private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
-		nbt.setString("blCircleGem", this.circleGem.name);
-		nbt.setBoolean("blAmulet", this.hasAmulet);
-		nbt.setBoolean("blAmuletRemovable", this.isRemovable);
+		NBTTagList gemList = new NBTTagList();
+		for(EntityGem gem : this.circleGems) {
+			NBTTagCompound gemCompound = new NBTTagCompound();
+			gem.writeToNBT(gemCompound);
+			gemList.appendTag(gemCompound);
+		}
+		nbt.setTag("gems", gemList);
+
+		NBTTagList amuletList = new NBTTagList();
+		for(EntityAmulet amulet : this.amulets) {
+			NBTTagCompound amuletCompound = new NBTTagCompound();
+			amulet.writeToNBT(amuletCompound);
+			amuletList.appendTag(amuletCompound);
+		}
+		nbt.setTag("amulets", amuletList);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
-		this.circleGem = CircleGem.fromName(nbt.getString("blCircleGem"));
-		this.hasAmulet = nbt.getBoolean("blAmulet");
-		this.isRemovable = nbt.getBoolean("blAmuletRemovable");
+		this.circleGems.clear();
+		NBTTagList gemList = nbt.getTagList("gems", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < gemList.tagCount(); i++) {
+			NBTTagCompound gemCompound = gemList.getCompoundTagAt(i);
+			EntityGem gem = EntityGem.readFromNBT(gemCompound);
+			if(gem != null) {
+				this.circleGems.add(gem);
+			}
+		}
+
+		this.amulets.clear();
+		NBTTagList amuletList = nbt.getTagList("amulets", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < amuletList.tagCount(); i++) {
+			NBTTagCompound amuletCompound = amuletList.getCompoundTagAt(i);
+			EntityAmulet amulet = EntityAmulet.readFromNBT(amuletCompound);
+			if(amulet != null) {
+				this.amulets.add(amulet);
+			}
+		}
 	}
 
 	@Override
@@ -50,28 +86,49 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 		this.loadNBTData(nbt);
 	}
 
-	public void setGem(CircleGem gem) {
-		this.circleGem = gem != null ? gem : CircleGem.NONE;
+	public void addGem(CircleGem gem, EntityGem.Type type) {
+		this.circleGems.add(new EntityGem(gem, type));
 	}
 
-	public CircleGem getGem() {
-		return this.circleGem;
+	public void removeGem(CircleGem gem) {
+		this.circleGems.remove(gem);
 	}
 
-	public void addAmulet(boolean removable) {
-		this.hasAmulet = true;
-		this.isRemovable = removable;
+	public List<EntityGem> getGems() {
+		return this.circleGems;
 	}
 
-	public boolean isRemovable() {
-		return this.isRemovable;
+	public boolean hasGem(CircleGem gem) {
+		return this.circleGems.contains(gem);
 	}
 
-	public void removeAmulet() {
-		this.hasAmulet = false;
+	public List<EntityAmulet> getAmulets() {
+		return this.amulets;
 	}
 
-	public boolean hasAmulet() {
-		return this.hasAmulet;
+	public void removeAmulet(EntityAmulet amulet) {
+		if(this.amulets.remove(amulet)) {
+			EntityGem lastOccurrence = null;
+			for(int i = this.circleGems.size() - 1; i >= 0; i--) {
+				EntityGem currentGem = this.circleGems.get(i);
+				if(currentGem.getGem() == amulet.getAmuletGem() && currentGem.matches(Type.BOTH)) {
+					lastOccurrence = currentGem;
+					break;
+				}
+			}
+			if(lastOccurrence != null) {
+				this.circleGems.remove(lastOccurrence);
+			}
+		}
+	}
+
+	public boolean addAmulet(ItemStack item, boolean removable) {
+		CircleGem gem = CircleGem.getGem(item);
+		if(gem != CircleGem.NONE) {
+			this.amulets.add(new EntityAmulet(gem, removable));
+			this.addGem(gem, EntityGem.Type.BOTH);
+			return true;
+		}
+		return false;
 	}
 }

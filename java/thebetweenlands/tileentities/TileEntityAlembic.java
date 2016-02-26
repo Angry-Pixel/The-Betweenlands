@@ -12,6 +12,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.herblore.Amounts;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
@@ -21,7 +22,6 @@ import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.utils.EnumNBTTypes;
 
 public class TileEntityAlembic extends TileEntity {
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
@@ -109,7 +109,7 @@ public class TileEntityAlembic extends TileEntity {
 		this.running = nbt.getBoolean("running");
 		if(nbt.hasKey("producableItemAspects")) {
 			this.producableItemAspects.clear();
-			NBTTagList aspectList = nbt.getTagList("producableItemAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+			NBTTagList aspectList = nbt.getTagList("producableItemAspects", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < aspectList.tagCount(); i++) {
 				NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(i);
 				Aspect aspect = Aspect.readFromNBT(aspectCompound);

@@ -8,7 +8,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.utils.IGemTextureProvider;
 
 public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
@@ -36,7 +35,7 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconIndex(ItemStack stack) {
-		CircleGem gem = GemCircleHelper.getGem(stack);
+		CircleGem gem = CircleGem.getGem(stack);
 		if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length >= 1 && this.gemTextures[gem.ordinal()][0] != null) {
 			return this.gemItemIcons[gem.ordinal()];
 		}
@@ -46,7 +45,7 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getArmorTexture(ItemStack stack, Entity event, int slot, String type) {
-		CircleGem gem = GemCircleHelper.getGem(stack);
+		CircleGem gem = CircleGem.getGem(stack);
 		if (this.isLeggings(stack)) {
 			if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length >= 3) {
 				return this.gemTextures[gem.ordinal()][2];

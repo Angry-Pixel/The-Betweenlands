@@ -25,6 +25,7 @@ import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.misc.ItemAmulet;
 import thebetweenlands.utils.ItemRenderHelper;
@@ -164,23 +165,26 @@ public class GuiOverlay extends Gui {
 			int height = event.resolution.getScaledHeight();
 
 			EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesCircleGem.class);
-			if(property != null && property.hasAmulet()) {
-				CircleGem entityGem = property.getGem();
-				ItemStack gemItem = ItemAmulet.createStack(entityGem);
-				GL11.glPushMatrix();
-				int posX = (width / 2) - (27 / 2) + 115;
-				int posY = height - 8;
-				GL11.glTranslated(posX, posY, 0);
-				GL11.glColor4f(1, 1, 1, 1);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glScaled(10, -10, 10);
-				float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
-				GL11.glScaled(scale, scale, scale);
-				for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {
-					ItemRenderHelper.renderItem(gemItem, i);
+			if(property != null && property.getAmulets().size() > 0) {
+				for(int a = 0; a < property.getAmulets().size(); a++) {
+					EntityAmulet amulet = property.getAmulets().get(a);
+					CircleGem entityGem = amulet.getAmuletGem();
+					ItemStack gemItem = ItemAmulet.createStack(entityGem);
+					GL11.glPushMatrix();
+					int posX = (width / 2) - (27 / 2) + 115 + a * 8;
+					int posY = height - 8;
+					GL11.glTranslated(posX, posY, 0);
+					GL11.glColor4f(1, 1, 1, 1);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GL11.glScaled(10, -10, 10);
+					float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+					GL11.glScaled(scale, scale, scale);
+					for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {
+						ItemRenderHelper.renderItem(gemItem, i);
+					}
+					GL11.glPopMatrix();
 				}
-				GL11.glPopMatrix();
 			}
 
 			if (DecayManager.isDecayEnabled(mc.thePlayer)) {

@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
 import thebetweenlands.herblore.aspects.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
-import thebetweenlands.utils.EnumNBTTypes;
 
 public class DiscoveryContainer {
 	public static class AspectDiscovery {
@@ -183,13 +183,13 @@ public class DiscoveryContainer {
 	 */
 	public DiscoveryContainer updateFromNBT(NBTTagCompound nbt, boolean save) {
 		this.discoveredStaticAspects.clear();
-		NBTTagList discoveryList = nbt.getTagList("discoveries", EnumNBTTypes.NBT_COMPOUND.ordinal());
+		NBTTagList discoveryList = nbt.getTagList("discoveries", Constants.NBT.TAG_COMPOUND);
 		int discoveryEntries = discoveryList.tagCount();
 		for(int i = 0; i < discoveryEntries; i++) {
 			NBTTagCompound discoveryEntry = discoveryList.getCompoundTagAt(i);
 			AspectItem item = AspectItem.readFromNBT(discoveryEntry);
 			List<IAspectType> aspectTypeList = new ArrayList<IAspectType>();
-			NBTTagList aspectListCompound = discoveryEntry.getTagList("aspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+			NBTTagList aspectListCompound = discoveryEntry.getTagList("aspects", Constants.NBT.TAG_COMPOUND);
 			for(int c = 0; c < aspectListCompound.tagCount(); c++) {
 				NBTTagCompound aspectTypeCompound = aspectListCompound.getCompoundTagAt(c);
 				aspectTypeList.add(AspectManager.readAspectTypeFromNBT(aspectTypeCompound));

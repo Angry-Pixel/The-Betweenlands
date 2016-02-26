@@ -16,8 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.utils.EnumNBTTypes;
 import thebetweenlands.world.storage.BetweenlandsWorldData;
 
 public class AspectManager {
@@ -412,7 +412,7 @@ public class AspectManager {
 	public static List<Aspect> getDynamicAspects(ItemStack stack) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
 		if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+			NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < lst.tagCount(); i++) {
 				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
 				Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
@@ -436,7 +436,7 @@ public class AspectManager {
 		if(!stack.stackTagCompound.hasKey("herbloreAspects")) {
 			stack.stackTagCompound.setTag("herbloreAspects", new NBTTagList());
 		}
-		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+		NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
 		for(Aspect aspect : aspects) {
 			NBTTagCompound aspectCompound = new NBTTagCompound();
 			aspect.writeToNBT(aspectCompound);
@@ -466,7 +466,7 @@ public class AspectManager {
 	public static ItemStack removeDynamicAspects(ItemStack stack, IAspectType... types) {
 		for(IAspectType type : types) {
 			if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
 				int count = lst.tagCount();
 				for(int i = 0; i < count; i++) {
 					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
@@ -490,7 +490,7 @@ public class AspectManager {
 	public static ItemStack removeDynamicAspects(ItemStack stack, Aspect... aspects) {
 		for(Aspect aspect : aspects) {
 			if(stack.stackTagCompound != null && stack.stackTagCompound.hasKey("herbloreAspects")) {
-				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", EnumNBTTypes.NBT_COMPOUND.ordinal());
+				NBTTagList lst = stack.stackTagCompound.getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
 				int count = lst.tagCount();
 				for(int i = 0; i < count; i++) {
 					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
