@@ -136,6 +136,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		return "thebetweenlands:wightDeath";
 	}
 
+	public boolean canPossess(EntityLivingBase entity) {
+		return !(entity instanceof EntityPlayer && ((EntityPlayer)entity).getCurrentArmor(3) != null && ((EntityPlayer)entity).getCurrentArmor(3).getItem() == BLItemRegistry.skullMask);
+	}
+
 	@Override
 	public void onUpdate() {
 		EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
@@ -143,15 +147,15 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 25.0D);
 		}
 
-		if(target != null && !target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
+		if(target != null && !target.isSneaking()) {
 			this.setTargetSpotted(target, true);
 		}
 
-		if(target != null && target != this.previousTarget && target.isSneaking() && !(target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
+		if(target != null && target != this.previousTarget && target.isSneaking()) {
 			this.setTargetSpotted(target, false);
 		}
 
-		if((target == null && this.previousTarget != null) || (target != null && target.getCurrentArmor(3) != null && target.getCurrentArmor(3).getItem() == BLItemRegistry.skullMask)) {
+		if(target == null && this.previousTarget != null) {
 			this.setTargetSpotted(target, false);
 		}
 
@@ -169,7 +173,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if (!this.worldObj.isRemote && getAttackTarget() != null) {
 			this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
 
-			if(!this.isVolatile()) {
+			if(!this.isVolatile() && this.canPossess(this.getAttackTarget())) {
 				if(this.volatileCooldown > 0)
 					this.volatileCooldown--;
 				if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
@@ -177,6 +181,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 					this.volatileCooldown = this.getVolatileCooldown() + this.worldObj.rand.nextInt(this.getVolatileCooldown()) + 20;
 					this.volatileProgress = 0;
 				}
+			} else if(this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
+				this.setVolatile(false);
 			}
 		}
 
