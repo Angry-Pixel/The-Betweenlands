@@ -111,7 +111,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 		if(!worldObj.isRemote) {
 			this.despawnTicks++;
 			if(despawnTicks > 7200) {
-				setDead();
+				this.attackEntityFrom(DamageSource.generic, this.getMaxHealth());
 			}
 		}
 		if (worldObj.isRemote && ticksExisted%10 == 0)

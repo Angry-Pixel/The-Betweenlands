@@ -177,7 +177,7 @@ public class GuiOverlay extends Gui {
 					GL11.glColor4f(1, 1, 1, 1);
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-					GL11.glScaled(10, -10, 10);
+					GL11.glScaled(-10, -10, 10);
 					float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
 					GL11.glScaled(scale, scale, scale);
 					for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {

@@ -10,13 +10,14 @@ import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -24,11 +25,12 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.input.KeyBindingsBL;
+import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
-import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.client.PacketDropAmulet;
@@ -36,23 +38,63 @@ import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.LightingUtil;
 
 public class ItemAmulet extends Item {
+	private IIcon[] gemIcons = new IIcon[CircleGem.TYPES.length];
 	private List<Class<? extends EntityLivingBase>> supportedEntities = new ArrayList<Class<? extends EntityLivingBase>>();
 
 	public ItemAmulet() {
-		this.setUnlocalizedName("item.thebetweenlands.amulet");
+		this.setUnlocalizedName("item.thebetweenlands.amulet.none");
 
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 
-		this.setTextureName("thebetweenlands:strictlyHerblore/misc/vialGreen");
+		this.setTextureName("thebetweenlands:amuletSocket");
 
 		this.supportedEntities.add(EntityTarminion.class);
+		this.supportedEntities.add(EntityGiantToad.class);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister register) {
+		this.itemIcon = register.registerIcon(this.getIconString());
+		for(int i = 0; i < CircleGem.TYPES.length; i++) {
+			CircleGem gem = CircleGem.TYPES[i];
+			String texture = this.getIconString();
+			switch(gem) {
+			case CRIMSON:
+				texture = "thebetweenlands:amuletCrimsonMiddleGem";
+				break;
+			case AQUA:
+				texture = "thebetweenlands:amuletAquaMiddleGem";
+				break;
+			case GREEN:
+				texture = "thebetweenlands:amuletGreenMiddleGem";
+				break;
+			default:
+			}
+			this.gemIcons[i] = register.registerIcon(texture);
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconIndex(ItemStack stack) {
+		CircleGem gem = CircleGem.getGem(stack);
+		if(gem == CircleGem.NONE) {
+			return this.itemIcon;
+		} else {
+			return this.gemIcons[gem.ordinal()];
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(ItemStack stack, int pass) {
+		return getIconIndex(stack);
 	}
 
 	public static ItemStack createStack(CircleGem gem) {
 		ItemStack stack = new ItemStack(BLItemRegistry.amulet, 1, 0);
-		stack.stackTagCompound = new NBTTagCompound();
 		CircleGem.setGem(stack, gem);
 		return stack;
 	}
@@ -62,7 +104,7 @@ public class ItemAmulet extends Item {
 		try {
 			return "item.thebetweenlands.amulet." + CircleGem.getGem(stack).name;
 		} catch (Exception e) {
-			return "item.thebetweenlands.amulet";
+			return "item.thebetweenlands.amulet.none";
 		}
 	}
 
@@ -188,12 +230,24 @@ public class ItemAmulet extends Item {
 					GL11.glRotated(degOffset, 0, 1, 0);
 					EntityAmulet amulet = property.getAmulets().get(i);
 					CircleGem gem = amulet.getAmuletGem();
-					ItemStack gemItem = createStack(gem);
+					ItemStack gemItem = null;
+					switch(gem) {
+					case CRIMSON:
+						gemItem = new ItemStack(BLItemRegistry.crimsonMiddleGem);
+						break;
+					case AQUA:
+						gemItem = new ItemStack(BLItemRegistry.aquaMiddleGem);
+						break;
+					case GREEN:
+						gemItem = new ItemStack(BLItemRegistry.greenMiddleGem);
+						break;
+					default:
+					}
 					if(gemItem != null) {
 						GL11.glPushMatrix();
 						GL11.glRotated((entity.ticksExisted + partialTicks) * 1.5D, 0, 1, 0);
 						GL11.glTranslated(0, entity.getEyeHeight() / 1.5D + Math.sin((entity.ticksExisted + partialTicks) / 60.0D + (double)i / amulets * Math.PI * 2.0D) / 2.0D * entity.height / 4.0D, entity.width / 1.5D);
-						GL11.glScaled(0.35F * entity.height / 2.0D, 0.35F * entity.height / 2.0D, 0.35F * entity.height / 2.0D);
+						GL11.glScaled(0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D);
 						GL11.glEnable(GL11.GL_BLEND);
 						GL11.glColor4f(1, 1, 1, 0.8F);
 						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
