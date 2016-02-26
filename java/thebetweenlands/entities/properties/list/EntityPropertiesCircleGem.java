@@ -3,7 +3,7 @@ package thebetweenlands.entities.properties.list;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -14,7 +14,7 @@ import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.EntityGem.Type;
 
-public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase> {
+public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
 	private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
 	private int amuletSlots = 1;
@@ -73,8 +73,8 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 	}
 
 	@Override
-	public Class<EntityLivingBase> getEntityClass() {
-		return EntityLivingBase.class;
+	public Class<Entity> getEntityClass() {
+		return Entity.class;
 	}
 
 	@Override

@@ -82,14 +82,14 @@ public enum CircleGem {
 
 	/**
 	 * Applies the gem proc to the attacker or defender
-	 * @param owner
-	 * @param attacker
-	 * @param defender
-	 * @param attackerProc
-	 * @param defenderProc
-	 * @param strength
+	 * @param isAttacker Whether the owner is the attacker
+	 * @param owner Owner of the gem
+	 * @param source The source (damage source, e.g. the entity that shot the projectile)
+	 * @param attacker The entity that is actually attacking (can be both the owner himself or a projectile)
+	 * @param defender The defending entity
+	 * @param strength Attack strength
 	 */
-	public boolean applyProc(boolean isAttacker, Entity owner, Entity attacker, Entity defender, float strength) {
+	public boolean applyProc(boolean isAttacker, Entity owner, Entity source, Entity attacker, Entity defender, float strength) {
 		switch(this) {
 		case CRIMSON:
 			if(isAttacker) {
@@ -114,23 +114,31 @@ public enum CircleGem {
 					if(attacker instanceof EntityLivingBase) {
 						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
 					}
+					if(source != attacker && source instanceof EntityLivingBase) {
+						((EntityLivingBase)source).addPotionEffect(new PotionEffect(Potion.damageBoost.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
+					}
 					return true;
 				}
 			}
 			break;
 		case GREEN:
 			if(isAttacker) {
+				boolean healed = false;
 				if(attacker instanceof EntityLivingBase) {
 					((EntityLivingBase)attacker).heal(Math.min(Math.max(strength * 0.45F, 1.0F), 10.0F));
-					return true;
+					healed = true;
 				}
+				if(source != attacker && source instanceof EntityLivingBase) {
+					((EntityLivingBase)source).heal(Math.min(Math.max(strength * 0.45F, 1.0F), 10.0F));
+					healed = true;
+				}
+				return healed;
 			}
 			break;
 		case AQUA:
 			if(!isAttacker) {
 				if(defender instanceof EntityLivingBase) {
-					EntityLivingBase entityLiving = (EntityLivingBase)defender;
-					entityLiving.addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));
+					((EntityLivingBase)defender).addPotionEffect(new PotionEffect(Potion.resistance.getId(), 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));
 					return true;
 				}
 			}
@@ -154,27 +162,27 @@ public enum CircleGem {
 
 	/**
 	 * Handles an attack and returns the new damage
-	 * @param source
+	 * @param damageSource
 	 * @param attackedEntity
 	 * @param damage
 	 * @return
 	 */
-	public static float handleAttack(DamageSource source, EntityLivingBase attackedEntity, float damage) {
-		if(attackedEntity.hurtTime == 0 && attackedEntity.deathTime == 0 && source instanceof EntityDamageSource && (attackedEntity instanceof EntityPlayer == false || !((EntityPlayer)attackedEntity).capabilities.disableDamage)) {
+	public static float handleAttack(DamageSource damageSource, EntityLivingBase attackedEntity, float damage) {
+		if(attackedEntity.hurtTime == 0 && attackedEntity.deathTime == 0 && damageSource instanceof EntityDamageSource && (attackedEntity instanceof EntityPlayer == false || !((EntityPlayer)attackedEntity).capabilities.disableDamage)) {
 			Entity attacker = null;
-			Entity user = null;
-			if(source instanceof EntityDamageSourceIndirect) {
-				attacker = ((EntityDamageSourceIndirect)source).getSourceOfDamage();
-				user = ((EntityDamageSource)source).getEntity();
+			Entity source = null;
+			if(damageSource instanceof EntityDamageSourceIndirect) {
+				attacker = ((EntityDamageSourceIndirect)damageSource).getSourceOfDamage();
+				source = ((EntityDamageSource)damageSource).getEntity();
 			} else {
-				attacker = ((EntityDamageSource)source).getEntity();
-				user = attacker;
+				attacker = ((EntityDamageSource)damageSource).getEntity();
+				source = attacker;
 			}
-			if(attacker != null && user != null) {
+			if(attacker != null && source != null) {
 				List<EntityGem> attackerGems = getGems(attacker);
-				List<EntityGem> userGems = new ArrayList<EntityGem>();
-				if(user != attacker) {
-					userGems.addAll(getGems(user));
+				List<EntityGem> sourceGems = new ArrayList<EntityGem>();
+				if(source != attacker) {
+					sourceGems.addAll(getGems(source));
 				}
 				CircleGem attackerItemGem = CircleGem.NONE;
 				if(attacker instanceof EntityLivingBase) {
@@ -208,7 +216,7 @@ public enum CircleGem {
 					}
 				}
 				gemRelation += attackerItemGem.getRelation(attackedBlockingItemGem);
-				for(EntityGem gem : userGems) {
+				for(EntityGem gem : sourceGems) {
 					if(gem.matches(EntityGem.Type.OFFENSIVE)) {
 						for(EntityGem gemAttacked : attackedGems) {
 							if(gemAttacked.matches(EntityGem.Type.DEFENSIVE)) {
@@ -230,7 +238,7 @@ public enum CircleGem {
 								}
 							}
 							gemRelation += attackerItemGem.getRelation(armorGem);
-							for(EntityGem gem : userGems) {
+							for(EntityGem gem : sourceGems) {
 								if(gem.matches(EntityGem.Type.OFFENSIVE)) {
 									gemRelation += gem.getGem().getRelation(armorGem);
 								}
@@ -243,7 +251,7 @@ public enum CircleGem {
 					damage = Math.max(damage + gemDamageVariation, 1.0F);
 				}
 
-				boolean attackerProc = attacker.worldObj.rand.nextFloat() <= (user == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
+				boolean attackerProc = attacker.worldObj.rand.nextFloat() <= (source == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
 				boolean defenderProc = attacker.worldObj.rand.nextFloat() <= GEM_PROC_CHANCE;
 
 				boolean attackerProcd = false;
@@ -258,7 +266,7 @@ public enum CircleGem {
 				}
 				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
 				for(CircleGem gem : attackerGemCounts.keySet()) {
-					attackerProcd |= applyProc(gem, user, user, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage));
+					attackerProcd |= applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage));
 				}
 
 				//Defender gems
@@ -282,11 +290,11 @@ public enum CircleGem {
 				}
 				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
 				for(CircleGem gem : defenderGemCounts.keySet()) {
-					defenderProcd |= applyProc(gem, attackedEntity, user, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage));
+					defenderProcd |= applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage));
 				}
 
 				if(attackerProcd || defenderProcd) {
-					Random rnd = user.worldObj.rand;
+					Random rnd = source.worldObj.rand;
 					World world = attackedEntity.worldObj;
 					int dim = 0;
 					if (world instanceof WorldServer) {
@@ -298,7 +306,7 @@ public enum CircleGem {
 					if(defenderProcd) {
 						TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketGemProc((byte)1, attackedEntity.getEntityId())), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64D));
 					}
-					user.worldObj.playSoundAtEntity(user, "random.successful_hit", 1, 1);
+					source.worldObj.playSoundAtEntity(source, "random.successful_hit", 1, 1);
 					attackedEntity.worldObj.playSoundAtEntity(attackedEntity, "random.successful_hit", 1, 1);
 				}
 			}
@@ -314,10 +322,10 @@ public enum CircleGem {
 		return ret;
 	}
 
-	private static boolean applyProc(CircleGem gem, Entity owner, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
+	private static boolean applyProc(CircleGem gem, Entity owner, Entity source, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
 		boolean isAttacker = owner == attacker;
 		if((isAttacker && attackerProc) || (!isAttacker && defenderProc)) {
-			return gem.applyProc(isAttacker, owner, attacker, defender, strength);
+			return gem.applyProc(isAttacker, owner, source, attacker, defender, strength);
 		}
 		return false;
 	}
