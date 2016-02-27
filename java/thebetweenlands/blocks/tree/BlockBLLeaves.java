@@ -20,6 +20,7 @@ import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.world.events.impl.EventSpoopy;
 
 public class BlockBLLeaves extends BlockLeaves {
+	private int[] decayBlockCache;
 
 	private String type;
 	@SideOnly(Side.CLIENT)
@@ -45,6 +46,11 @@ public class BlockBLLeaves extends BlockLeaves {
 	public BlockBLLeaves setHasSpoopyTexture(boolean spoopyTexture) {
 		this.hasSpoopyTexture = spoopyTexture;
 		return this;
+	}
+
+	@Override
+	public boolean isLeaves(IBlockAccess world, int x, int y, int z) {
+		return true;
 	}
 
 	@Override
@@ -102,7 +108,7 @@ public class BlockBLLeaves extends BlockLeaves {
 
 
 	@Override
-	public void dropBlockAsItemWithChance (World world, int x, int y, int z, int meta, float chance, int fortune) {
+	public void dropBlockAsItemWithChance(World world, int x, int y, int z, int meta, float chance, int fortune) {
 		if (!world.isRemote) {
 			int dropChance = 35;
 
@@ -140,5 +146,102 @@ public class BlockBLLeaves extends BlockLeaves {
 				BLParticle.LEAF.spawn(world, x + rand.nextFloat(), y, z + rand.nextFloat());
 			}
 		}
+	}
+
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand) {
+		if (!world.isRemote) {
+			int blockMeta = world.getBlockMetadata(x, y, z);
+
+			if ((blockMeta & 8) != 0 && (blockMeta & 4) == 0) {
+				byte logReach = 8;
+				int checkRadius = logReach + 1;
+				byte cacheSize = 32;
+				int cacheSquared = cacheSize * cacheSize;
+				int cacheHalf = cacheSize / 2;
+
+				if (this.decayBlockCache == null) {
+					this.decayBlockCache = new int[cacheSize * cacheSize * cacheSize];
+				}
+
+				//states:
+				//0: can sustain leaves
+				//-1: can't sustain leaves
+				//-2: is leaves block
+
+				if (world.checkChunksExist(x - checkRadius, y - checkRadius, z - checkRadius, x + checkRadius, y + checkRadius, z + checkRadius)) {
+					//Pupulate block cache
+					for (int xo = -logReach; xo <= logReach; ++xo) {
+						for (int yo = -logReach; yo <= logReach; ++yo) {
+							for (int zo = -logReach; zo <= logReach; ++zo) {
+								Block block = world.getBlock(x + xo, y + yo, z + zo);
+
+								if (!block.canSustainLeaves(world, x + xo, y + yo, z + zo)) {
+									if (block.isLeaves(world, x + xo, y + yo, z + zo)) {
+										this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = -2;
+									} else {
+										this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = -1;
+									}
+								} else {
+									this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = 0;
+								}
+							}
+						}
+					}
+
+					//Iterate multiple times over the block cache
+					for (int distancePass = 1; distancePass <= logReach; ++distancePass) {
+						for (int xo = -logReach; xo <= logReach; ++xo) {
+							for (int yo = -logReach; yo <= logReach; ++yo) {
+								for (int zo = -logReach; zo <= logReach; ++zo) {
+									//If value != distancePass - 1 then it's not connected to a log
+									if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == distancePass - 1) {
+										//Check for adjacent leaves and set their value to the current distance pass
+
+										if (this.decayBlockCache[(xo + cacheHalf - 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf - 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf + 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf + 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf - 1) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf - 1) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf + 1) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf + 1) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + (zo + cacheHalf - 1)] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + (zo + cacheHalf - 1)] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf + 1] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf + 1] = distancePass;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//Get distance to log at center block
+				int distanceToLog = this.decayBlockCache[cacheHalf * cacheSquared + cacheHalf * cacheSize + cacheHalf];
+
+				if (distanceToLog >= 0) {
+					world.setBlockMetadataWithNotify(x, y, z, blockMeta & -9, 4);
+				} else {
+					this.removeLeaves(world, x, y, z);
+				}
+			}
+		}
+	}
+
+	private void removeLeaves(World world, int x, int y, int z) {
+		this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+		world.setBlockToAir(x, y, z);
 	}
 }

@@ -143,11 +143,11 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (world.getBlock(x1, y1, z1) != log && rand.nextInt(5) != 0)
 							world.setBlock(x1, y1, z1, leaves);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > y)
+					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && y1 > y)
 						if (world.getBlock(x1, y1, z1) != log)
 							world.setBlock(x1, y1, z1, log);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == y)
-						if (world.getBlock(x1, y1, z1) != log)
+						if (world.getBlock(x1, y1, z1) != log && world.getBlock(x1, y1 + 1, z1) == leaves)
 							for (int i = 1; i < 1 + rand.nextInt(3); i++)
 								world.setBlock(x1, y1 - i, z1, leaves);
 				}
