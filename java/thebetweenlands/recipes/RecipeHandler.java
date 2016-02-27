@@ -256,6 +256,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlope, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.thatch);
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.siltGlasPane, 6), "xxx", "xxx", 'x', BLBlockRegistry.siltGlas);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.polishedDentrothyst1Pane, 6), "xxx", "xxx", 'x', BLBlockRegistry.polishedDentrothyst1);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.polishedDentrothyst2Pane, 6), "xxx", "xxx", 'x', BLBlockRegistry.polishedDentrothyst2);
 
 		//Food
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.reedDonut, 1), " # ", "# #", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
@@ -307,6 +309,8 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.pitstone), new ItemStack(BLBlockRegistry.smoothPitstone), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone, 1, 1), new ItemStack(BLBlockRegistry.smoothCragrock), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.limestone), new ItemStack(BLBlockRegistry.polishedLimestone), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dentrothyst, 1, 0), new ItemStack(BLBlockRegistry.polishedDentrothyst1), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), new ItemStack(BLBlockRegistry.polishedDentrothyst2), 0F);
 		GameRegistry.addSmelting(ItemGeneric.createStack(EnumItemGeneric.SLUDGE_BALL), new ItemStack(BLItemRegistry.sludgeJello), 0F);
 		GameRegistry.addSmelting(ItemGeneric.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0), ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.silt), new ItemStack(BLBlockRegistry.siltGlas), 0F);
