@@ -25,7 +25,7 @@ public class ItemAmuletSlot extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
-		if(!ItemAmulet.supportedEntities.isEmpty() && ItemAmulet.supportedEntities.contains(entity.getClass())) {
+		if(player.capabilities.isCreativeMode || (!ItemAmulet.supportedEntities.isEmpty() && ItemAmulet.supportedEntities.contains(entity.getClass()))) {
 			addAmuletSlot(player, itemstack, entity);
 		}
 		return true;
@@ -34,7 +34,7 @@ public class ItemAmuletSlot extends Item {
 	public static boolean addAmuletSlot(EntityPlayer player, ItemStack stack, EntityLivingBase entity) {
 		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 		if(property != null) {
-			if(property.getAmuletSlots() < EntityPropertiesCircleGem.MAX_AMULET_SLOTS) {
+			if(player.capabilities.isCreativeMode || property.getAmuletSlots() < EntityPropertiesCircleGem.MAX_AMULET_SLOTS) {
 				if(!player.worldObj.isRemote) {
 					property.addAmuletSlot();
 					if(!player.capabilities.isCreativeMode) 

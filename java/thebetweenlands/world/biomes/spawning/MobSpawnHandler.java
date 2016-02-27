@@ -18,6 +18,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -461,6 +462,9 @@ public class MobSpawnHandler {
 							if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere())) {
 								groupSpawnedEntities++;
 								chunkSpawnedEntities++;
+
+								NBTTagCompound entityNBT = newEntity.getEntityData();
+								entityNBT.setBoolean("naturallySpawned", true);
 
 								world.spawnEntityInWorld(newEntity);
 

@@ -36,6 +36,7 @@ import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.entity.EntitySpawnHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PageDiscoveringEvent;
 import thebetweenlands.event.entity.PowerRingHandler;
@@ -196,6 +197,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
+		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();
