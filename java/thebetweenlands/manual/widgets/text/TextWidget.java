@@ -7,15 +7,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.manual.widgets.ManualWidgetsBase;
-import thebetweenlands.manual.widgets.text.FormatTags.TagColor;
-import thebetweenlands.manual.widgets.text.FormatTags.TagFont;
-import thebetweenlands.manual.widgets.text.FormatTags.TagNewLine;
-import thebetweenlands.manual.widgets.text.FormatTags.TagNewPage;
-import thebetweenlands.manual.widgets.text.FormatTags.TagPagelink;
-import thebetweenlands.manual.widgets.text.FormatTags.TagRainbow;
-import thebetweenlands.manual.widgets.text.FormatTags.TagScale;
-import thebetweenlands.manual.widgets.text.FormatTags.TagSimple;
-import thebetweenlands.manual.widgets.text.FormatTags.TagTooltip;
+import thebetweenlands.manual.widgets.text.FormatTags.*;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 
 /**
@@ -144,5 +136,11 @@ public class TextWidget extends ManualWidgetsBase {
 		super.resize();
 		this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRenderer);
 		this.init();
+	}
+
+
+	public TextWidget setWidth(int width) {
+		this.width = width;
+		return this;
 	}
 }

@@ -1,7 +1,5 @@
 package thebetweenlands.manual;
 
-import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,24 +10,13 @@ import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.widgets.AnimatorRecipeWidget;
-import thebetweenlands.manual.widgets.AspectItemSlideShowWidget;
-import thebetweenlands.manual.widgets.AspectSlideShowWidget;
-import thebetweenlands.manual.widgets.AspectWidget;
-import thebetweenlands.manual.widgets.ButtonWidget;
-import thebetweenlands.manual.widgets.CompostRecipeWidget;
-import thebetweenlands.manual.widgets.CraftingRecipeWidget;
-import thebetweenlands.manual.widgets.DruidAltarWidget;
-import thebetweenlands.manual.widgets.ItemWidget;
-import thebetweenlands.manual.widgets.ManualWidgetsBase;
-import thebetweenlands.manual.widgets.PestleAndMortarRecipeWidget;
-import thebetweenlands.manual.widgets.PictureWidget;
-import thebetweenlands.manual.widgets.PurifierRecipeWidget;
-import thebetweenlands.manual.widgets.RubberTabWidget;
-import thebetweenlands.manual.widgets.SmeltingRecipeWidget;
+import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.FormatTags;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextWidget;
+import thebetweenlands.recipes.PestleAndMortarRecipe;
+
+import java.util.ArrayList;
 
 /**
  * Created by Bart on 23/11/2015.
@@ -105,7 +92,7 @@ public class PageCreators {
 	 */
 	public static ArrayList<Page> pageCreatorMachines(String entryName, ItemStack machine, String imageLocation, int width, int height, boolean isHidden, Item manualType) {
 		ArrayList<Page> newPages = new ArrayList<>();
-		newPages.add(new Page(entryName, isHidden, manualType, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).setItem(machine).setParent());
+		newPages.add(new Page(entryName, isHidden, manualType, new TextWidget(15, 10, "manual." + entryName + ".title", 1.5f), new ItemWidget(73 - 24, 77, machine, 3)).addItem(machine).setParent());
 		newPages.add(new Page(entryName, isHidden, manualType, new PictureWidget(73 - width / 2, 70 - height / 2, imageLocation, width, height, 256.0D, 256.0D)));
 		newPages.addAll(TextPages(16, 10, "manual." + entryName + ".description", entryName, isHidden, manualType));
 		return newPages;
@@ -347,16 +334,17 @@ public class PageCreators {
 		ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
 		ArrayList<ManualWidgetsBase> widgets = new ArrayList<>();
 		widgets.add(new ItemWidget(18, 12, itemStack, 1f));
-		widgets.add(new TextWidget(38, 16, itemStack.getDisplayName(), true));
-		height += 22;
+		widgets.add(new ItemWidget(118, 12, PestleAndMortarRecipe.getInput(itemStack), 1f));
+		widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
+		height += 28;
 		widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"));
 		TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, StatCollector.translateToLocal("manual." + itemStack.getDisplayName().toLowerCase().replace(" ", "") + ".description"), Minecraft.getMinecraft().fontRenderer));
 
-		height += 6 + height - textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 4;
+		height += 18 + textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y;
 		widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
 		height += 18;
 		widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
-		newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().setItem(itemStack).setLocalizedPageName(itemStack.getDisplayName()));
+		newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItem(PestleAndMortarRecipe.getInput(itemStack)).setLocalizedPageName(itemStack.getDisplayName()));
 		return newPages;
 	}
 
@@ -371,13 +359,13 @@ public class PageCreators {
 		textContainer = parseTextContainer(textContainer);
 		if (textContainer.getPages().size() > 1) {
 			widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 0, 114, 130));
-			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
+			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).addItem(item));
 			widgets.clear();
 			widgets.add(new TextWidget(15, 14, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description", 1, 114, 130));
-			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setLocalizedPageName(item.getDisplayName()).setItem(item));
+			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setLocalizedPageName(item.getDisplayName()).addItem(item));
 		} else {
 			widgets.add(new TextWidget(15, height, "manual." + item.getDisplayName().replace(" ", "").replace("'", "") + ".description"));
-			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).setItem(item));
+			newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), widgets, false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).addItem(item));
 		}
 
 		return newPages;

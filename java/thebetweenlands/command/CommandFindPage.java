@@ -1,13 +1,14 @@
 package thebetweenlands.command;
 
-import java.util.List;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.ManualManager;
+
+import java.util.List;
 
 /**
  * Created by Bart on 28/11/2015.
@@ -29,10 +30,13 @@ public class CommandFindPage extends CommandBase {
 		if (sender.getEntityWorld() == null || !(sender instanceof EntityPlayer)) {
 			throw new CommandException("command.generic.noplayer");
 		}
-		if (ManualManager.findablePagesGuideBook.contains(args[0]))
+		if (ManualManager.findablePagesGuideBook.contains(args[0])) {
 			ManualManager.findPage((EntityPlayer) sender, args[0], BLItemRegistry.manualGuideBook);
-		else if (ManualManager.findablePagesHL.contains(args[0]))
+			((EntityPlayer) sender).addChatComponentMessage(new ChatComponentText("Added a new entry to the Guide Book"));
+		} else if (ManualManager.findablePagesHL.contains(args[0])) {
 			ManualManager.findPage((EntityPlayer) sender, args[0], BLItemRegistry.manualHL);
+			((EntityPlayer) sender).addChatComponentMessage(new ChatComponentText("Added a new entry to the Herblore Book"));
+		}
 	}
 
 	@Override

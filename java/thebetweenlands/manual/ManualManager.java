@@ -6,10 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentTranslation;
+import thebetweenlands.herblore.aspects.AspectManager;
+import thebetweenlands.herblore.aspects.DiscoveryContainer;
+import thebetweenlands.herblore.aspects.IDiscoveryProvider;
 import thebetweenlands.items.BLItemRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Bart on 21/11/2015.
@@ -110,6 +114,24 @@ public class ManualManager {
      * @return whether or not the player has found the specific page or not
      */
     public static boolean hasFoundPage(EntityPlayer player, String page, Item itemManual) {
+        ItemStack stack = player.getHeldItem();
+        if (stack != null && stack.getItem() == BLItemRegistry.manualHL) {
+            IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
+            DiscoveryContainer container = provider.getContainer(stack);
+            ItemStack ingredient = null;
+            Map<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
+            for (Map.Entry<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
+                if (e.getKey() != null) {
+                    if ((new ItemStack(e.getKey().item, 1, e.getKey().damage).getDisplayName().toLowerCase().replace(" ", "").equals(page))) {
+                        ingredient = new ItemStack(e.getKey().item, 1, e.getKey().damage);
+                        break;
+                    }
+                }
+            }
+            return ingredient != null && AspectManager.get(player.worldObj).getDiscoveredAspects(ingredient, container).size() > 0;
+        }
+
+
         return player != null && page != null && getFoundPages(player, itemManual) != null && getFoundPages(player, itemManual).contains(page);
     }
 
