@@ -6,10 +6,8 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -18,26 +16,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.client.input.KeyBindingsBL;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
+import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
+import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.network.base.SubscribePacket;
-import thebetweenlands.network.packet.client.PacketDropAmulet;
+import thebetweenlands.items.IEquippable;
 import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.LightingUtil;
 
-public class ItemAmulet extends Item {
+public class ItemAmulet extends Item implements IEquippable {
 	public static List<Class<? extends EntityLivingBase>> supportedEntities = new ArrayList<Class<? extends EntityLivingBase>>();
 	private IIcon[] gemIcons = new IIcon[CircleGem.TYPES.length];
 
@@ -118,7 +113,7 @@ public class ItemAmulet extends Item {
 		}
 	}
 
-	@Override
+	/*@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		addAmulet(player, stack, player);
 		return stack;
@@ -130,7 +125,7 @@ public class ItemAmulet extends Item {
 			addAmulet(player, itemstack, entity);
 		}
 		return true;
-	}
+	}*/
 
 	/**
 	 * Adds an amulet to an entity
@@ -139,9 +134,9 @@ public class ItemAmulet extends Item {
 	 * @param entity The entity
 	 * @return
 	 */
-	public static boolean addAmulet(EntityPlayer player, ItemStack stack, Entity entity) {
+	/*public static boolean addAmulet(EntityPlayer player, ItemStack stack, Entity entity) {
 		CircleGem gem = CircleGem.getGem(stack);
-		if(addAmulet(gem, entity, true)) {
+		if(addAmulet(gem, entity, true, true)) {
 			if(!player.capabilities.isCreativeMode && !player.worldObj.isRemote) {
 				stack.stackSize--;
 			}
@@ -149,7 +144,7 @@ public class ItemAmulet extends Item {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * Adds an amulet to an entity
@@ -158,22 +153,22 @@ public class ItemAmulet extends Item {
 	 * @param removable Whether the amulet can be retrieved with shift right click
 	 * @return
 	 */
-	public static boolean addAmulet(CircleGem gem, Entity entity, boolean removable) {
+	/*public static boolean addAmulet(CircleGem gem, Entity entity, boolean removable, boolean canDrop) {
 		if(gem == CircleGem.NONE)
 			return false;
 		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 		if(property != null) {
 			if(property.getAmulets().size() < property.getAmuletSlots()) {
 				if(!entity.worldObj.isRemote) {
-					property.addAmulet(gem, removable);
+					property.addAmulet(gem, removable, canDrop);
 				}
 				return true;
 			}
 		}
 		return false;
-	}
+	}*/
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void onInteract(EntityInteractEvent event) {
 		Entity entity = event.target;
 		if(event.entityPlayer != null && entity instanceof EntityLivingBase) {
@@ -200,9 +195,9 @@ public class ItemAmulet extends Item {
 				}
 			}
 		}
-	}
+	}/*
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		EntityLivingBase entity = event.entityLiving;
 		if(entity != null && !entity.worldObj.isRemote) {
@@ -210,26 +205,33 @@ public class ItemAmulet extends Item {
 			if(property != null) {
 				if(property.getAmulets().size() > 0) {
 					for(EntityAmulet amulet : property.getAmulets()) {
-						ItemStack stack = createStack(amulet.getAmuletGem());
-						entity.entityDropItem(stack, entity.getEyeHeight());
+						if(amulet.canDrop()) {
+							ItemStack stack = createStack(amulet.getAmuletGem());
+							entity.entityDropItem(stack, entity.getEyeHeight());
+						}
 					}
 				}
 			}
 		}
-	}
+	}*/
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderLiving(RenderLivingEvent.Post event) {
 		if(event.entity != null) {
+			GL11.glPushMatrix();
+			if(event.entity == TheBetweenlands.proxy.getClientPlayer()) {
+				GL11.glTranslated(0, 1.1D, 0);
+			}
 			this.renderAmulet(event.entity, event.x, event.y, event.z, 0.0F);
+			GL11.glPopMatrix();
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderPlayer(RenderPlayerEvent.Post event) {
-		if(event.entityPlayer != null) {
+		/*if(event.entityPlayer != null) {
 			GL11.glPushMatrix();
 			GL11.glRotated(-event.entityPlayer.rotationYaw, 0, 1, 0);
 			GL11.glTranslated(0, -0.7D, 0);
@@ -240,7 +242,7 @@ public class ItemAmulet extends Item {
 					(event.entityPlayer.lastTickPosZ + (event.entityPlayer.posZ - event.entityPlayer.lastTickPosZ) * event.partialRenderTick) - RenderManager.renderPosZ,
 					event.partialRenderTick);
 			GL11.glPopMatrix();
-		}
+		}*/
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -297,7 +299,7 @@ public class ItemAmulet extends Item {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if(KeyBindingsBL.dropAmulet.isPressed()) {
@@ -333,6 +335,57 @@ public class ItemAmulet extends Item {
 							sender.entityDropItem(stack, sender.getEyeHeight());
 						property.removeAmulet(amulet);
 					}
+				}
+			}
+		}
+	}*/
+
+	@Override
+	public EnumEquipmentCategory getEquipmentCategory(ItemStack stack) {
+		return null;
+	}
+
+	@Override
+	public boolean canEquip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+		if(entity instanceof EntityPlayer == false && !this.supportedEntities.contains(entity.getClass()))
+			return false;
+		if(CircleGem.getGem(stack) == CircleGem.NONE)
+			return false;
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			if(inventory.getEquipment(EnumEquipmentCategory.AMULET).size() < property.getAmuletSlots()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canUnequip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+		return true;
+	}
+
+	@Override
+	public boolean canDrop(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+		return true;
+	}
+
+	@Override
+	public void onEquip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			property.addAmulet(CircleGem.getGem(stack), true, true);
+		}
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			for(EntityAmulet amulet : property.getAmulets()) {
+				if(amulet.getAmuletGem() == CircleGem.getGem(stack)) {
+					property.removeAmulet(amulet);
+					break;
 				}
 			}
 		}

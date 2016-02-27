@@ -129,9 +129,9 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 		}
 	}
 
-	public boolean addAmulet(CircleGem gem, boolean removable) {
+	public boolean addAmulet(CircleGem gem, boolean removable, boolean canDrop) {
 		if(gem != CircleGem.NONE) {
-			this.amulets.add(new EntityAmulet(gem, removable));
+			this.amulets.add(new EntityAmulet(gem, removable, canDrop));
 			this.addGem(gem, EntityGem.Type.BOTH);
 			return true;
 		}

@@ -4,6 +4,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
+import thebetweenlands.entities.properties.list.equipment.EntityPropertiesEquipment;
 import thebetweenlands.manual.EntityPropertiesManual;
 
 public class BLEntityPropertiesRegistry {
@@ -15,5 +16,6 @@ public class BLEntityPropertiesRegistry {
 		HANDLER.registerProperties(EntityPropertiesManual.class);
 		HANDLER.registerProperties(EntityPropertiesCircleGem.class);
 		HANDLER.registerProperties(EntityPropertiesFood.class);
+		HANDLER.registerProperties(EntityPropertiesEquipment.class);
 	}
 }

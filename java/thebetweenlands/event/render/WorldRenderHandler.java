@@ -142,6 +142,7 @@ public class WorldRenderHandler {
 
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 
 			GL11.glColor4f(1, 1, 1, 1);
 			
@@ -162,6 +163,7 @@ public class WorldRenderHandler {
 				GL11.glCallList(this.sphereDispList);
 				GL11.glPopMatrix();
 			}
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glDepthMask(true);
 			GL11.glColor4f(1, 1, 1, 1);
