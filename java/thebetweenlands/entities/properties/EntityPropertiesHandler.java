@@ -103,7 +103,32 @@ public class EntityPropertiesHandler {
 
 	@SubscribeEvent
 	public void onEntityUpdate(LivingUpdateEvent event) {
-		if(event.entity.worldObj.isRemote || event.entity instanceof EntityPlayerMP == false) return;
+		if(event.entity.worldObj.isRemote || event.entity instanceof EntityPlayerMP == false) 
+			return;
+		if(event.entity instanceof EntityPlayerMP == false) {
+			/*World world = event.entity.worldObj;
+			if(world instanceof WorldServer) {
+				WorldServer worldServer = (WorldServer) world;
+				EntityTracker tracker = worldServer.getEntityTracker();
+				Set<EntityPlayer> trackingPlayers = tracker.getTrackingPlayers(event.entity);
+				for(EntityPlayer player : trackingPlayers) {
+					if(player instanceof EntityPlayerMP) {
+						List<PropertiesTracker> trackers = this.trackerMap.get(player);
+						boolean tracking = false;
+						for(PropertiesTracker propTracker : trackers) {
+							if(propTracker.getEntity() == event.entity) {
+								tracking = true;
+								break;
+							}
+						}
+						if(!tracking) {
+							this.addTracker((EntityPlayerMP)player, event.entity);
+						}
+					}
+				}
+			}*/
+			return;
+		}
 		EntityPlayerMP player = (EntityPlayerMP) event.entity;
 		List<PropertiesTracker> trackers = this.trackerMap.get(player);
 		if(trackers != null && trackers.size() > 0) {

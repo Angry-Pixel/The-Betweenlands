@@ -47,7 +47,7 @@ public class ItemAmulet extends Item {
 	}
 
 	public ItemAmulet() {
-		this.setUnlocalizedName("thebetweenlands.amulet.none");
+		this.setUnlocalizedName("thebetweenlands.amulet");
 
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
@@ -126,22 +126,47 @@ public class ItemAmulet extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
-		if(!supportedEntities.isEmpty() && supportedEntities.contains(entity.getClass())) {
+		if(player.capabilities.isCreativeMode || (!supportedEntities.isEmpty() && supportedEntities.contains(entity.getClass()))) {
 			addAmulet(player, itemstack, entity);
 		}
 		return true;
 	}
 
-	public static boolean addAmulet(EntityPlayer player, ItemStack stack, EntityLivingBase entity) {
+	/**
+	 * Adds an amulet to an entity
+	 * @param player The player adding the amulet to the entity
+	 * @param stack The amulet item
+	 * @param entity The entity
+	 * @return
+	 */
+	public static boolean addAmulet(EntityPlayer player, ItemStack stack, Entity entity) {
+		CircleGem gem = CircleGem.getGem(stack);
+		if(addAmulet(gem, entity, true)) {
+			if(!player.capabilities.isCreativeMode && !player.worldObj.isRemote) {
+				stack.stackSize--;
+			}
+			player.swingItem();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Adds an amulet to an entity
+	 * @param gem The amulet gem
+	 * @param entity The entity
+	 * @param removable Whether the amulet can be retrieved with shift right click
+	 * @return
+	 */
+	public static boolean addAmulet(CircleGem gem, Entity entity, boolean removable) {
+		if(gem == CircleGem.NONE)
+			return false;
 		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 		if(property != null) {
-			if(property.getAmulets().size() < property.getAmuletSlots() && CircleGem.getGem(stack) != CircleGem.NONE) {
-				if(!player.worldObj.isRemote) {
-					property.addAmulet(stack, true);
-					if(!player.capabilities.isCreativeMode) 
-						stack.stackSize--;
+			if(property.getAmulets().size() < property.getAmuletSlots()) {
+				if(!entity.worldObj.isRemote) {
+					property.addAmulet(gem, removable);
 				}
-				player.swingItem();
 				return true;
 			}
 		}
@@ -151,7 +176,7 @@ public class ItemAmulet extends Item {
 	@SubscribeEvent
 	public void onInteract(EntityInteractEvent event) {
 		Entity entity = event.target;
-		if(event.entityPlayer != null && entity instanceof EntityLivingBase && !supportedEntities.isEmpty() && supportedEntities.contains(entity.getClass())) {
+		if(event.entityPlayer != null && entity instanceof EntityLivingBase) {
 			EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
 			if(property != null) {
 				if(event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() == null && property.getAmulets().size() > 0) {
@@ -196,7 +221,7 @@ public class ItemAmulet extends Item {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onRenderLiving(RenderLivingEvent.Post event) {
-		if(event.entity != null && !supportedEntities.isEmpty() && supportedEntities.contains(event.entity.getClass())) {
+		if(event.entity != null) {
 			this.renderAmulet(event.entity, event.x, event.y, event.z, 0.0F);
 		}
 	}

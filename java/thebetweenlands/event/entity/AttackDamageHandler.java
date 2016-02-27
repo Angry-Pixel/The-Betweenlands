@@ -57,24 +57,6 @@ public class AttackDamageHandler {
 		event.ammount = damage;
 	}
 
-	@SubscribeEvent
-	public void onEntityAttack(EntityJoinWorldEvent event) {
-		if(event.entity instanceof EntityArrow) {
-			EntityArrow entityArrow = (EntityArrow)event.entity;
-			if(entityArrow.shootingEntity != null) {
-				if(entityArrow.shootingEntity instanceof EntityLivingBase) {
-					EntityLivingBase attacker = (EntityLivingBase)entityArrow.shootingEntity;
-					if(attacker.getHeldItem() != null) {
-						CircleGem gem = CircleGem.getGem(attacker.getHeldItem());
-						if(gem != CircleGem.NONE) {
-							CircleGem.addGem(entityArrow, gem, EntityGem.Type.OFFENSIVE);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	@SideOnly(Side.CLIENT)
 	@SubscribePacket
 	public static void onProcPacket(PacketGemProc packet) {
