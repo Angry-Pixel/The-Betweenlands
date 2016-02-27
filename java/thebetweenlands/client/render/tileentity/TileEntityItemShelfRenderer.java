@@ -1,5 +1,9 @@
 package thebetweenlands.client.render.tileentity;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockDoublePlant;
@@ -12,17 +16,12 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.blocks.plants.BlockBLSmallPlants;
 import thebetweenlands.blocks.terrain.BlockWisp;
 import thebetweenlands.client.model.block.ModelItemShelf;
 import thebetweenlands.items.throwable.ItemTarminion;
 import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.utils.ItemRenderHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
@@ -44,38 +43,38 @@ public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScalef(1F, -1F, -1F);
 		switch (meta) {
-			case 2:
-				GL11.glRotatef(180F, 0.0F, 1F, 0F);
-				rotation = 0F;
-				offSetX = unitPixel * 12;
-				offSetZ = unitPixel * 12;
-				offSetXX = unitPixel * 3.75;
-				offSetZZ = unitPixel * 12;
-				break;
-			case 3:
-				GL11.glRotatef(0F, 0.0F, 1F, 0F);
-				rotation = 180;
-				offSetX = unitPixel * 3.75;
-				offSetZ = unitPixel * 3.75;
-				offSetXX = unitPixel * 12;
-				offSetZZ = unitPixel * 3.75;
-				break;
-			case 4:
-				GL11.glRotatef(90F, 0.0F, 1F, 0F);
-				rotation = 90F;
-				offSetX = unitPixel * 12;
-				offSetZ = unitPixel * 3.75;
-				offSetXX = unitPixel * 12;
-				offSetZZ = unitPixel * 12;
-				break;
-			case 5:
-				GL11.glRotatef(-90F, 0.0F, 1F, 0F);
-				rotation = -90F;
-				offSetX = unitPixel * 3.75;
-				offSetZ = unitPixel * 12;
-				offSetXX = unitPixel * 3.75;
-				offSetZZ = unitPixel * 3.75;
-				break;
+		case 2:
+			GL11.glRotatef(180F, 0.0F, 1F, 0F);
+			rotation = 0F;
+			offSetX = unitPixel * 12;
+			offSetZ = unitPixel * 12;
+			offSetXX = unitPixel * 3.75;
+			offSetZZ = unitPixel * 12;
+			break;
+		case 3:
+			GL11.glRotatef(0F, 0.0F, 1F, 0F);
+			rotation = 180;
+			offSetX = unitPixel * 3.75;
+			offSetZ = unitPixel * 3.75;
+			offSetXX = unitPixel * 12;
+			offSetZZ = unitPixel * 3.75;
+			break;
+		case 4:
+			GL11.glRotatef(90F, 0.0F, 1F, 0F);
+			rotation = 90F;
+			offSetX = unitPixel * 12;
+			offSetZ = unitPixel * 3.75;
+			offSetXX = unitPixel * 12;
+			offSetZZ = unitPixel * 12;
+			break;
+		case 5:
+			GL11.glRotatef(-90F, 0.0F, 1F, 0F);
+			rotation = -90F;
+			offSetX = unitPixel * 3.75;
+			offSetZ = unitPixel * 12;
+			offSetXX = unitPixel * 3.75;
+			offSetZZ = unitPixel * 3.75;
+			break;
 		}
 		model.render();
 		GL11.glPopMatrix();
@@ -129,9 +128,12 @@ public class TileEntityItemShelfRenderer extends TileEntitySpecialRenderer {
 				entityitem.hoverStart = 0.0F;
 				RenderManager.instance.renderEntityWithPosYaw(entityitem, 0.0D, 0.0D, 0.0D, rotation, 0.0F);
 			} else {
-				GL11.glTranslated(0, -0.03, 0);
-				GL11.glScaled(0.25D, 0.25D, 0.25D);
-				ItemRenderHelper.renderItem(stack, 0);
+				GL11.glTranslated(-0.16D, -0.125, 0);
+				GL11.glScaled(0.33D, 0.33D, 0.33D);
+				/*for(int i = 0; i < stack.getItem().getRenderPasses(stack.getItemDamage()); i++) {
+					ItemRenderHelper.renderItem(stack, i);
+				}*/
+				ItemRenderHelper.renderItemIn3D(stack);
 			}
 			GL11.glPopMatrix();
 			GL11.glPopMatrix();
