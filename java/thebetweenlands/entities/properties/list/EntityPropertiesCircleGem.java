@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.EntityAmulet;
 import thebetweenlands.gemcircle.EntityGem;
-import thebetweenlands.gemcircle.EntityGem.Type;
 
 public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
-	//private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
 	private int amuletSlots = 1;
 	public static final int MAX_AMULET_SLOTS = 3;
 
@@ -29,14 +25,6 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 			gemList.appendTag(gemCompound);
 		}
 		nbt.setTag("gems", gemList);
-
-		/*NBTTagList amuletList = new NBTTagList();
-		for(EntityAmulet amulet : this.amulets) {
-			NBTTagCompound amuletCompound = new NBTTagCompound();
-			amulet.writeToNBT(amuletCompound);
-			amuletList.appendTag(amuletCompound);
-		}
-		nbt.setTag("amulets", amuletList);*/
 
 		nbt.setInteger("amuletSlots", this.amuletSlots);
 	}
@@ -52,16 +40,6 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 				this.circleGems.add(gem);
 			}
 		}
-
-		/*this.amulets.clear();
-		NBTTagList amuletList = nbt.getTagList("amulets", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < amuletList.tagCount(); i++) {
-			NBTTagCompound amuletCompound = amuletList.getCompoundTagAt(i);
-			EntityAmulet amulet = EntityAmulet.readFromNBT(amuletCompound);
-			if(amulet != null) {
-				this.amulets.add(amulet);
-			}
-		}*/
 
 		if(nbt.hasKey("amuletSlots"))
 			this.amuletSlots = nbt.getInteger("amuletSlots");
@@ -104,39 +82,6 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	public List<EntityGem> getGems() {
 		return this.circleGems;
 	}
-
-	public boolean hasGem(CircleGem gem) {
-		return this.circleGems.contains(gem);
-	}
-
-	/*public List<EntityAmulet> getAmulets() {
-		return this.amulets;
-	}
-
-	public void removeAmulet(EntityAmulet amulet) {
-		if(this.amulets.remove(amulet)) {
-			EntityGem lastOccurrence = null;
-			for(int i = this.circleGems.size() - 1; i >= 0; i--) {
-				EntityGem currentGem = this.circleGems.get(i);
-				if(currentGem.getGem() == amulet.getAmuletGem() && currentGem.matches(Type.BOTH)) {
-					lastOccurrence = currentGem;
-					break;
-				}
-			}
-			if(lastOccurrence != null) {
-				this.circleGems.remove(lastOccurrence);
-			}
-		}
-	}
-
-	public boolean addAmulet(CircleGem gem, boolean removable, boolean canDrop) {
-		if(gem != CircleGem.NONE) {
-			this.amulets.add(new EntityAmulet(gem, removable, canDrop));
-			this.addGem(gem, EntityGem.Type.BOTH);
-			return true;
-		}
-		return false;
-	}*/
 
 	public int getAmuletSlots() {
 		return this.amuletSlots;

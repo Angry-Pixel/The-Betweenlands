@@ -49,9 +49,9 @@ public class Categories {
 		}
 
 		@Override
-		public boolean onClicked(int mouseX, int mouseY) {
+		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
 			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketEquipment(0, this.slot)));
-			return true;
+			return mouseButton == 0;
 		}
 	}
 
@@ -69,9 +69,9 @@ public class Categories {
 		}
 
 		@Override
-		public boolean onClicked(int mouseX, int mouseY) {
+		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
 			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketEquipment(1, this.slot)));
-			return true;
+			return mouseButton == 0;
 		}
 	}
 }

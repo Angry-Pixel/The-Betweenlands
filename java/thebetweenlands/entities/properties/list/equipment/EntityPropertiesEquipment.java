@@ -2,9 +2,9 @@ package thebetweenlands.entities.properties.list.equipment;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.entities.properties.EntityProperties;
+import thebetweenlands.forgeevent.entity.EquipmentChangeEvent;
 
 public class EntityPropertiesEquipment extends EntityProperties<Entity> {
 	private EquipmentInventory equipment;
@@ -48,6 +48,11 @@ public class EntityPropertiesEquipment extends EntityProperties<Entity> {
 	@Override
 	public void loadTrackingSensitiveData(NBTTagCompound nbt) {
 		this.loadNBTData(nbt);
+	}
+
+	@Override
+	public void onSync() {
+		MinecraftForge.EVENT_BUS.post(new EquipmentChangeEvent(this.getEntity()));
 	}
 
 	public EquipmentInventory getEquipmentInventory() {

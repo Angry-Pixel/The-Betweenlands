@@ -152,6 +152,7 @@ public class EntityPropertiesHandler {
 				}
 				tracker.updateTracker();
 				if(tracker.isTrackerReady()) {
+					tracker.onSync();
 					MessageSyncEntityProperties message = new MessageSyncEntityProperties(tracker.getProperties(), tracker.getEntity());
 					TheBetweenlands.networkWrapper.sendTo(message, player);
 				}
