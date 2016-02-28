@@ -17,6 +17,8 @@ import java.util.Random;
  */
 public class WorldGenUnderGroundStructures extends WorldGenerator {
     private static final boolean markReplaceableCheck = false;
+    private static int[] stairSequence = new int[]{0, 3, 1, 2};
+    private static int[] upsideDownStairSequence = new int[]{4, 7, 5, 6};
     private int width = -1;
     private int depth = -1;
 
@@ -261,7 +263,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 0, 2, 3, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 8, direction);
         rotatedCubeVolume(world, x, y, z, 4, 2, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 7, direction);
         rotatedCubeVolume(world, x, y, z, 2, 2, 10, BLBlockRegistry.pitstoneBricks, 0, 1, 2, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 2, 2, 4, BLBlockRegistry.pitstoneBrickStairs, 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 2, 4, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 1, 3, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 6, direction);
         rotatedCubeVolume(world, x, y, z, 2, 3, 4, BLBlockRegistry.pitstoneBricks, 0, 1, 1, 6, direction);
@@ -313,14 +315,14 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 1, 1, 5, BLBlockRegistry.pitstoneBrickWall, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 1, 0, 3, Blocks.air, 0, 1, 2, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 0, 2, 2, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 2 : direction == 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 0, 2, 3, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 0, 2, 4, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 3 : direction == 1 ? 1 : direction == 2 ? 2 : 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 0, 2, 2, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 0, 2, 3, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 0, 2, 4, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 1, 3, 0, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 2 : direction == 1 ? 0 : direction == 2 ? 3 : 1, 7, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 1, 3, 1, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 6, direction);
-        rotatedCubeVolume(world, x, y, z, 2, 3, 6, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 3 : direction == 1 ? 1 : direction == 2 ? 2 : 0, 6, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 7, 3, 1, BLBlockRegistry.pitstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 5, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 3, 0, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(3, direction, stairSequence), 7, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 3, 1, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 6, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 3, 6, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(1, direction, stairSequence), 6, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, 3, 1, BLBlockRegistry.pitstoneBrickStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 5, direction);
 
         rotatedCubeVolume(world, x, y, z, 2, 4, 1, BLBlockRegistry.pitstoneBrickSlab, 0, 5, 1, 5, direction);
 
@@ -627,5 +629,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             default:
                 return BLBlockRegistry.lootPot1;
         }
+    }
+
+    public int getMetaFromDirection(int start, int direction, int[] sequence) {
+        return sequence[(direction + start) % sequence.length];
     }
 }

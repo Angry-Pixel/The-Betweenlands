@@ -15,6 +15,8 @@ import java.util.Random;
 public class WorldGenSmallRuins extends WorldGenerator {
 
     private static final boolean markReplaceableCheck = false;
+    private static int[] stairSequence = new int[]{0, 3, 1, 2};
+    private static int[] upsideDownStairSequence = new int[]{4, 7, 5, 6};
     private static Block betweenstoneTiles = BLBlockRegistry.betweenstoneTiles;
     private static Block betweenstoneBricks = BLBlockRegistry.betweenstoneBricks;
     private static Block betweenstoneBrickStairs = BLBlockRegistry.betweenstoneBrickStairs;
@@ -60,19 +62,19 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
         rotatedCubeVolume(world, x, y, z, 2, height - 5, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, height - 5, 0, betweenstoneBricks, 0, 1, 4, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 1, height - 5, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, height - 5, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 0, height - 4, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 2, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 3, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, height - 3, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, height - 3, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, height - 3, 0, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, height - 3, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 3, height - 2, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 6, height - 1, 0, betweenstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 7, height - 1, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 1, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, height - 1, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         if (random.nextInt(5) == 0)
             rotatedLoot(world, random, x, y, z, 4, height - 2, 0, direction);
@@ -101,15 +103,15 @@ public class WorldGenSmallRuins extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 2, height - 7, 0, betweenstoneBricks, 0, 1, 5, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, height - 7, 0, betweenstoneBricks, 0, 1, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 3, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, height - 6, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, height - 6, 0, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 6, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, height - 6, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 6, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 3, height - 5, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 2, height - 2, 0, betweenstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 1, height - 2, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, height - 2, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, height - 2, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
 
@@ -134,8 +136,8 @@ public class WorldGenSmallRuins extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 2, 0, 4, betweenstoneTiles, 0, 1, 4, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 0, 4, betweenstoneTiles, 0, 1, 4, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 1, 4, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 1, 4, 4, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 4, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 4, 4, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 4, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 4, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 4, 4, betweenstoneBricks, 0, 1, 2, 1, direction);
@@ -143,14 +145,14 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
         rotatedCubeVolume(world, x, y, z, 0, 5, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
 
-        rotatedCubeVolume(world, x, y, z, 3, 5, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 3, 5, 4, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, 5, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, 5, 4, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 2, 5, 1, betweenstoneBrickStairs, direction == 0 ? 7 : direction == 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 6, 5, 1, betweenstoneBrickStairs, direction == 0 ? 7 : direction == 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 2, 5, 3, betweenstoneBrickStairs, direction == 0 ? 6 : direction == 1 ? 4 : direction == 2 ? 7 : 5, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 6, 5, 3, betweenstoneBrickStairs, direction == 0 ? 6 : direction == 1 ? 4 : direction == 2 ? 7 : 5, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 5, 0, betweenstoneBrickStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 5, 4, betweenstoneBrickStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 5, 0, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 5, 4, betweenstoneBrickStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 5, 1, betweenstoneBrickStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 5, 1, betweenstoneBrickStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 5, 3, betweenstoneBrickStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 5, 3, betweenstoneBrickStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         rotatedCubeVolume(world, x, y, z, 3, 6, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 3, 6, 4, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
@@ -462,6 +464,10 @@ public class WorldGenSmallRuins extends WorldGenerator {
             default:
                 return BLBlockRegistry.lootPot1;
         }
+    }
+
+    public int getMetaFromDirection(int start, int direction, int[] sequence) {
+        return sequence[(direction + start) % sequence.length];
     }
 
 }
