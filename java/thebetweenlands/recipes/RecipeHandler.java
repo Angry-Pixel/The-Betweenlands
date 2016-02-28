@@ -140,7 +140,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
+		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		
 		//Machine Blocks
