@@ -185,6 +185,7 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.input.radialmenu.RadialMenuHandler;
 import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
@@ -291,6 +292,7 @@ public class ClientProxy extends CommonProxy {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityAnimator.class, Side.CLIENT);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(TileEntityDruidAltar.class, Side.CLIENT);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(AttackDamageHandler.class, Side.CLIENT);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(PowerRingHandler.class, Side.CLIENT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
