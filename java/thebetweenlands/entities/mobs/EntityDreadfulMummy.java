@@ -37,7 +37,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     public void onUpdate() {
         super.onUpdate();
         if (getEntityToAttack() != null) {
-            if (untilSpawnMummy <= 0) spawnMummy();
+//            if (untilSpawnMummy <= 0) spawnMummy();
             if (untilSpawnSludge <= 0) spawnSludge();
         }
         if(untilSpawnMummy > 0) untilSpawnMummy--;
