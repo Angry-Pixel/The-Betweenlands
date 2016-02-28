@@ -57,10 +57,10 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         width = 7;
         depth = 6;
         int direction = random.nextInt(4);
-        if (rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, 1, 4, depth, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 6, 0, 0, 1, 4, depth, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, 1, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 0, 0, 5, width, 4, 1, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, 1, 4, depth, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 6, 0, 0, 1, 4, depth, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 4, 1, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 0, 0, 5, width, 4, 1, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -105,7 +105,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 11;
         int direction = random.nextInt(4);
         int height = 6 + random.nextInt(2);
-        if (rotatedCubeCanReplace(world, x, y, z, 4, height - 3, 0, 5, height - 3, depth, direction) || rotatedCubeCanReplace(world, x, y, z, 0, height - 3, 6, 4, height - 3, 5, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 4, height - 3, 0, 5, height - 3, depth, direction) || rotatedCubeCantReplace(world, x, y, z, 0, height - 3, 6, 4, height - 3, 5, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 6, 1, 1, direction, true)
                 || !makePitstoneSupport(world, x, y, z, 0, -1, 10, 1, 1, direction, true)
@@ -185,7 +185,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         width = 6;
         depth = 6;
         int direction = 0;
-        if (rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 7, depth, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 7, depth, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -236,7 +236,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 11;
         width = 5;
         int direction = random.nextInt(4);
-        if (rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 4, depth, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 4, depth, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -283,7 +283,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         width = 7;
         int direction = random.nextInt(4);
 
-        if (rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 5, depth, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 5, depth, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -340,10 +340,10 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         width = 7;
         depth = 7;
         int direction = random.nextInt(4);
-        if (rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, 3, 2, 1, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 1, 0, 0, 1, 1, 1, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 6, 0, 3, 1, 2, 3, direction)
-                || rotatedCubeCanReplace(world, x, y, z, 2, 0, 6, 4, 3, 1, direction))
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, 3, 2, 1, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 1, 0, 0, 1, 1, 1, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 6, 0, 3, 1, 2, 3, direction)
+                || rotatedCubeCantReplace(world, x, y, z, 2, 0, 6, 4, 3, 1, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -371,9 +371,9 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         depth = 13;
         width = 8;
         int direction = 0;//random.nextInt(4);
-        if (!rotatedCubeCanReplace(world, x, y, z, 0, 0, 0, width, 1, depth, direction)
-                || !rotatedCubeCanReplace(world, x, y, z, 0, 5, 0, width, 1, depth, direction)
-                || !rotatedCubeCanReplace(world, x, y, z, 2, 6, 0, 6, 3, depth, direction))
+        if (!rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 1, depth, direction)
+                || !rotatedCubeCantReplace(world, x, y, z, 0, 5, 0, width, 1, depth, direction)
+                || !rotatedCubeCantReplace(world, x, y, z, 2, 6, 0, 6, 3, depth, direction))
             return false;
         if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
             return false;
@@ -558,7 +558,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
-    public boolean rotatedCubeCanReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+    public boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
         x -= width / 2;
         z -= depth / 2;
         boolean replaceable = true;
@@ -608,13 +608,12 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
     private void generateLoot(World world, Random random, int x, int y, int z) {
-        if (world.getBlock(x, y - 1, z) == BLBlockRegistry.pitstone) {
-            int randDirection = random.nextInt(4) + 2;
-            world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
-            TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
-            if (lootPot != null)
-                LootUtil.generateLoot(lootPot, random, LootBasicList.loot, 1, 2);
-        }
+        int randDirection = random.nextInt(4) + 2;
+        world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
+        TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
+        if (lootPot != null)
+            LootUtil.generateLoot(lootPot, random, LootBasicList.loot, 1, 2);
+
     }
 
     private Block getRandomBlock(Random rand) {

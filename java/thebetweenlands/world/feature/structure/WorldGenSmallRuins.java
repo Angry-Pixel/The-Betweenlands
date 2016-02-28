@@ -14,6 +14,16 @@ import java.util.Random;
 
 public class WorldGenSmallRuins extends WorldGenerator {
 
+    private static final boolean markReplaceableCheck = false;
+    private static Block betweenstoneTiles = BLBlockRegistry.betweenstoneTiles;
+    private static Block betweenstoneBricks = BLBlockRegistry.betweenstoneBricks;
+    private static Block betweenstoneBrickStairs = BLBlockRegistry.betweenstoneBrickStairs;
+    private static Block betweenstoneBrickSlab = BLBlockRegistry.betweenstoneBrickSlab;
+    private static Block chiseledBetweenstone = BLBlockRegistry.chiseledBetweenstone;
+    private static Block betweenstonePillar = BLBlockRegistry.betweenstonePillar;
+    private int width = -1;
+    private int depth = -1;
+
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
         int randomInt = random.nextInt(6);
@@ -37,306 +47,127 @@ public class WorldGenSmallRuins extends WorldGenerator {
 
     public boolean ark1(World world, Random random, int x, int y, int z) {
         int height = 9 + random.nextInt(2);
-        int width = 7;
-        if (random.nextBoolean()) {
-            for (int xx = x; xx < x + width; xx++)
-                for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(xx, yy, z) == Blocks.air || (world.getBlock(xx, yy, z) == BLBlockRegistry.swampWater && yy < y + height - 2)))
-                        return false;
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x + 1, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width - 2, y - 1, z)))
-                return false;
-            for (int yy = y; yy < y + height; yy++) {
-                if (yy <= y + height - 6)
-                    world.setBlock(x + 1, yy, z, BLBlockRegistry.betweenstoneTiles);
-                else if (yy <= y + height - 2)
-                    world.setBlock(x + 1, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else {
-                    world.setBlock(x + 1, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
-                }
-                if (yy == y + height - 3) {
-                    world.setBlock(x + 2, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                    world.setBlock(x + 2, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                    int xx;
-                    for (xx = x + 3; xx <= x + 3 + width - 7; xx++) {
-                        world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
-                        world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, z))) {
-                            generateLoot(world, random, xx, y, z);
-                        }
-                    }
-                    world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
-                    world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-            for (int yy = y; yy < y + height - 2; yy++) {
-                if (yy <= y + height - 6)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneTiles);
-                else if (yy <= y + height - 4)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else {
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 1, 3);
-                }
+        width = 8;
+        depth = 1;
+        int direction = random.nextInt(4);
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
+            return false;
+        if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+            return false;
 
-                if (yy == y + height - 4) {
-                    world.setBlock(x + width - 1, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                }
-                if (yy == y + height - 3) {
-                    world.setBlock(x + width - 1, yy, z, BLBlockRegistry.betweenstoneBrickSlab);
-                    world.setBlock(x + width, yy, z, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-        } else {
-            for (int zz = z; zz < z + width; zz++)
-                for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(x, yy, zz) == Blocks.air || (world.getBlock(x, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
-                        return false;
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width - 2)))
-                return false;
-            for (int yy = y; yy < y + height; yy++) {
-                if (yy <= y + height - 6)
-                    world.setBlock(x, yy, z + 1, BLBlockRegistry.betweenstoneTiles);
-                else if (yy <= y + height - 2)
-                    world.setBlock(x, yy, z + 1, BLBlockRegistry.betweenstoneBricks);
-                else {
-                    world.setBlock(x, yy, z + 1, BLBlockRegistry.betweenstoneBrickStairs, 3, 3);
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
-                }
-                if (yy == y + height - 3) {
-                    world.setBlock(x, yy, z + 2, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                    world.setBlock(x, yy + 1, z + 2, BLBlockRegistry.betweenstoneBrickSlab);
-                    int zz;
-                    for (zz = z + 3; zz <= z + 3 + width - 7; zz++) {
-                        world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
-                        world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, zz))) {
-                            generateLoot(world, random, x, y, zz);
-                        }
-                    }
-                    world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
-                    world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-            for (int yy = y; yy < y + height - 2; yy++) {
-                if (yy <= y + height - 6)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneTiles);
-                else if (yy <= y + height - 4)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneBricks);
-                else {
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneBrickStairs, 3, 3);
-                }
+        rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, height - 5, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, height - 5, 1, direction);
 
-                if (yy == y + height - 4) {
-                    world.setBlock(x, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                }
-                if (yy == y + height - 3) {
-                    world.setBlock(x, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab);
-                    world.setBlock(x, yy, z + width, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-        }
+        rotatedCubeVolume(world, x, y, z, 2, height - 5, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 5, 0, betweenstoneBricks, 0, 1, 4, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, height - 5, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 0, height - 4, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 2, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 4, height - 3, 0, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, height - 3, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 3, height - 2, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 6, height - 1, 0, betweenstoneBrickStairs, direction == 0 ? 0 : direction == 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, height - 1, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+
+        if (random.nextInt(5) == 0)
+            rotatedLoot(world, random, x, y, z, 4, height - 2, 0, direction);
         return true;
     }
 
 
     public boolean ark2(World world, Random random, int x, int y, int z) {
         int height = 13 + random.nextInt(2);
-        int width = 7;
-        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width - 2, y - 1, z)))
+        width = 7;
+        depth = 1;
+        int direction = random.nextInt(4);
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
             return false;
-        if (random.nextBoolean()) {
-            for (int xx = x; xx < x + width; xx++)
-                for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(xx, yy, z) == Blocks.air || (world.getBlock(xx, yy, z) == BLBlockRegistry.swampWater && yy < y + height - 2)))
-                        return false;
-            for (int yy = y; yy < y + height - 4; yy++) {
-                if (yy <= y + height - 9)
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneTiles);
-                else if (yy == y + height - 8 || yy == y + height - 6)
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 7)
-                    world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
-                else {
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickStairs);
-                    world.setBlock(x + 1, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                    world.setBlock(x + 1, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                    int xx;
-                    for (xx = x + 2; xx <= x + 2 + width - 6; xx++) {
-                        world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
-                        world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(xx, y - 1, z))) {
-                            generateLoot(world, random, xx, y, z);
-                        }
-                    }
-                    world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
-                    world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
+        if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+            return false;
+        rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, height - 9, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, height - 9, 1, direction);
 
-            for (int yy = y; yy < y + height; yy++) {
-                if (yy <= y + height - 9)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneTiles);
-                else if (yy == y + height - 8)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 7)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.chiseledBetweenstone);
-                else if (yy <= y + height - 2)
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 1) {
-                    world.setBlock(x + width - 2, yy, z, BLBlockRegistry.betweenstoneBrickStairs);
-                    world.setBlock(x + width - 1, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                    world.setBlock(x + width - 1, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                    world.setBlock(x + width, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-        } else {
-            for (int zz = z; zz < z + width; zz++)
-                for (int yy = y; yy < y + height; yy++)
-                    if (!(world.getBlock(x, yy, zz) == Blocks.air || (world.getBlock(x, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
-                        return false;
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width - 2)))
-                return false;
-            for (int yy = y; yy < y + height - 4; yy++) {
-                if (yy <= y + height - 9)
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneTiles);
-                else if (yy == y + height - 8 || yy == y + height - 6)
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 7)
-                    world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
-                else {
-                    world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 2, 3);
-                    world.setBlock(x, yy, z + 1, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                    world.setBlock(x, yy + 1, z + 1, BLBlockRegistry.betweenstoneBrickSlab);
-                    int zz;
-                    for (zz = z + 2; zz <= z + 2 + width - 6; zz++) {
-                        world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickSlab, 9, 3);
-                        world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                        if (random.nextInt(5) == 0 && SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, zz))) {
-                            generateLoot(world, random, x, y, zz);
-                        }
-                    }
-                    world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
-                    world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
-            for (int yy = y; yy < y + height; yy++) {
-                if (yy <= y + height - 9)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneTiles);
-                else if (yy == y + height - 8)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 7)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.chiseledBetweenstone);
-                else if (yy <= y + height - 2)
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneBricks);
-                else if (yy == y + height - 1) {
-                    world.setBlock(x, yy, z + width - 2, BLBlockRegistry.betweenstoneBrickStairs, 2, 3);
-                    world.setBlock(x, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                    world.setBlock(x, yy + 1, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab);
-                    world.setBlock(x, yy + 1, z + width, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-            }
+        rotatedCubeVolume(world, x, y, z, 2, height - 9, 0, betweenstoneBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 9, 0, betweenstoneBricks, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 2, height - 8, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 8, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 2, height - 7, 0, betweenstoneBricks, 0, 1, 5, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 7, 0, betweenstoneBricks, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 3, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 4, height - 6, 0, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, height - 6, 0, betweenstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 3, height - 5, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 2, height - 2, 0, betweenstoneBrickStairs, direction == 0 ? 1 : direction == 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, height - 2, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
+
+        if (random.nextInt(5) == 0) {
+            rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, betweenstoneBricks, 0, 1, 1, 1, direction);
+            rotatedLoot(world, random, x, y, z, 0, height, 0, direction);
         }
         return true;
     }
 
     public boolean ark3(World world, Random random, int x, int y, int z) {
-        int height = 6 + random.nextInt(2);
-        int width = 5;
-        for (int zz = z; zz < z + width; zz++)
-            for (int yy = y; yy < y + height; yy++)
-                for (int xx = x; xx > x - width; xx--)
-                    if (!(world.getBlock(xx, yy, zz) == Blocks.air || (world.getBlock(xx, yy, zz) == BLBlockRegistry.swampWater && yy < y + height - 2)))
-                        return false;
-        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width)))
+        width = 7;
+        depth = 5;
+        int direction = random.nextInt(4);
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 7, depth, direction))
             return false;
-        for (int yy = y; yy < y + height; yy++) {
-            if (yy <= y + height - 3)
-                world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneTiles);
-            else if (yy <= y + height - 1)
-                world.setBlock(x, yy, z, BLBlockRegistry.betweenstoneBricks);
-            if (yy == y + height - 1) {
-                world.setBlock(x - 1, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
-                world.setBlock(x - 1, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                int xx;
-                for (xx = x - 2; xx >= x - width + 2; xx--) {
-                    world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-                world.setBlock(xx, yy, z, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                world.setBlock(xx, yy + 1, z, BLBlockRegistry.betweenstoneBrickSlab);
-            }
-        }
+        if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 2, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED))
+            return false;
 
-        for (int yy = y; yy < y + height; yy++) {
-            if (yy <= y + height - 3)
-                world.setBlock(x - width, yy, z, BLBlockRegistry.betweenstoneTiles);
-            else if (yy <= y + height - 1)
-                world.setBlock(x - width, yy, z, BLBlockRegistry.betweenstoneBricks);
-            if (yy == y + height - 1) {
-                world.setBlock(x - width, yy, z + 1, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                world.setBlock(x - width, yy + 1, z + 1, BLBlockRegistry.betweenstoneBrickSlab);
-                int zz;
-                for (zz = z + 2; zz <= z + width - 2; zz++) {
-                    world.setBlock(x - width, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-                world.setBlock(x - width, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
-                world.setBlock(x - width, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-            }
-        }
+        rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, 4, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, 4, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 0, 4, betweenstoneTiles, 0, 1, 4, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 0, 4, betweenstoneTiles, 0, 1, 4, 1, direction);
 
-        for (int yy = y; yy < y + height; yy++) {
-            if (yy <= y + height - 3)
-                world.setBlock(x - width, yy, z + width, BLBlockRegistry.betweenstoneTiles);
-            else if (yy <= y + height - 1)
-                world.setBlock(x - width, yy, z + width, BLBlockRegistry.betweenstoneBricks);
-            if (yy == y + height - 1) {
-                world.setBlock(x - width + 1, yy, z + width, BLBlockRegistry.betweenstoneBrickStairs, 5, 3);
-                world.setBlock(x - width + 1, yy + 1, z + width, BLBlockRegistry.betweenstoneBrickSlab);
-                int xx;
-                for (xx = x - width + 2; xx <= x - 2; xx++) {
-                    world.setBlock(xx, yy + 1, z + width, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-                world.setBlock(xx, yy, z + width, BLBlockRegistry.betweenstoneBrickStairs, 4, 3);
-                world.setBlock(xx, yy + 1, z + width, BLBlockRegistry.betweenstoneBrickSlab);
-            }
-        }
+        rotatedCubeVolume(world, x, y, z, 1, 4, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 4, 4, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 4, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 4, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 4, 4, betweenstoneBricks, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 4, 4, betweenstoneBricks, 0, 1, 2, 1, direction);
 
-        for (int yy = y; yy < y + height; yy++) {
-            if (yy <= y + height - 3)
-                world.setBlock(x, yy, z + width, BLBlockRegistry.betweenstoneTiles);
-            else if (yy <= y + height - 1)
-                world.setBlock(x, yy, z + width, BLBlockRegistry.betweenstoneBricks);
-            if (yy == y + height - 1) {
-                world.setBlock(x, yy, z + width - 1, BLBlockRegistry.betweenstoneBrickStairs, 6, 3);
-                world.setBlock(x, yy + 1, z + width - 1, BLBlockRegistry.betweenstoneBrickSlab);
-                int zz;
-                for (zz = z + width - 2; zz >= z + 2; zz--) {
-                    world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-                }
-                world.setBlock(x, yy, zz, BLBlockRegistry.betweenstoneBrickStairs, 7, 3);
-                world.setBlock(x, yy + 1, zz, BLBlockRegistry.betweenstoneBrickSlab);
-            }
-        }
+        rotatedCubeVolume(world, x, y, z, 0, 5, 0, betweenstoneBrickSlab, 0, 2, 1, 1, direction);
 
+        rotatedCubeVolume(world, x, y, z, 3, 5, 0, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 5, 4, betweenstoneBrickStairs, direction == 0 ? 5 : direction == 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 5, 0, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 5, 4, betweenstoneBrickStairs, direction == 0 ? 4 : direction == 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 5, 1, betweenstoneBrickStairs, direction == 0 ? 7 : direction == 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 5, 1, betweenstoneBrickStairs, direction == 0 ? 7 : direction == 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 5, 3, betweenstoneBrickStairs, direction == 0 ? 6 : direction == 1 ? 4 : direction == 2 ? 7 : 5, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 5, 3, betweenstoneBrickStairs, direction == 0 ? 6 : direction == 1 ? 4 : direction == 2 ? 7 : 5, 1, 1, 1, direction);
 
-        if (SurfaceType.MIXED.matchBlock(world.getBlock(x - 3, y - 1, z + 3))) {
-            if (random.nextInt(8) == 0) {
-                generateLoot(world, random, x - 2, y, z + 2);
-            }
-            if (random.nextInt(8) == 0) {
-                generateLoot(world, random, x - 2, y, z + 3);
-            }
-            if (random.nextInt(8) == 0) {
-                generateLoot(world, random, x - 3, y, z + 2);
-            }
-            if (random.nextInt(8) == 0) {
-                generateLoot(world, random, x - 3, y, z + 3);
-            }
-        }
-
+        rotatedCubeVolume(world, x, y, z, 3, 6, 0, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 6, 4, betweenstoneBrickSlab, 0, 3, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 6, 1, betweenstoneBrickSlab, 0, 1, 1, 3, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 6, 1, betweenstoneBrickSlab, 0, 1, 1, 3, direction);
+        if (random.nextInt(5) == 0)
+            rotatedLoot(world, random, x, y, z, 2, 6, 0, direction);
+        if (random.nextInt(5) == 0)
+            rotatedLoot(world, random, x, y, z, 6, 6, 0, direction);
+        if (random.nextInt(5) == 0)
+            rotatedLoot(world, random, x, y, z, 2, 6, 4, direction);
+        if (random.nextInt(5) == 0)
+            rotatedLoot(world, random, x, y, z, 6, 6, 4, direction);
         return true;
     }
 
-
+    //TODO switch this to the new system at some point....
     public boolean ark4(World world, Random random, int x, int y, int z) {
         int height = 9 + random.nextInt(2);
         int width = 6;
@@ -430,71 +261,186 @@ public class WorldGenSmallRuins extends WorldGenerator {
     }
 
     public boolean pillar1(World world, Random random, int x, int y, int z) {
-        int height = 4 + random.nextInt(2);
-        if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)))
+        int height = 5 + random.nextInt(2);
+        width = 1;
+        depth = 1;
+        int direction = 0;
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
             return false;
-        for (int yy = y; yy <= y + height; yy++)
-            if (!(world.getBlock(x, yy, z) == Blocks.air))
-                return false;
-        for (int yy = y; yy <= y + height; yy++) {
-            if (yy == y)
-                world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
-            else if (yy == y + height) {
-                world.setBlock(x, yy, z, BLBlockRegistry.chiseledBetweenstone);
-                if (random.nextInt(5) == 0) {
-                    generateLoot(world, random, x, yy + 1, z);
-                }
-            } else
-                world.setBlock(x, yy, z, BLBlockRegistry.betweenstonePillar);
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+            return false;
+
+        rotatedCubeVolume(world, x, y, z, 0, 0, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 0, 1, 0, betweenstonePillar, 0, 1, height - 2, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+
+        if (random.nextInt(5) == 0) {
+            rotatedLoot(world, random, x, y, z, 0, height, 0, direction);
         }
         return true;
     }
 
     public boolean pillar2(World world, Random random, int x, int y, int z) {
-        int width = 4 + random.nextInt(2);
-        if (random.nextBoolean()) {
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x + width, y - 1, z)))
-                return false;
-            for (int xx = x; xx <= x + width; xx++)
-                if (!(world.getBlock(xx, y, z) == Blocks.air))
-                    return false;
-            for (int xx = x; xx <= x + width; xx++) {
-                if (xx == x) {
-                    world.setBlock(xx, y, z, BLBlockRegistry.chiseledBetweenstone);
-                    if (random.nextInt(5) == 0) {
-                        generateLoot(world, random, xx, y + 1, z);
-                    }
-                } else if (xx == x + width) {
-                    world.setBlock(xx, y, z, BLBlockRegistry.chiseledBetweenstone);
-                    if (random.nextInt(5) == 0) {
-                        generateLoot(world, random, xx, y + 1, z);
-                    }
-                } else
-                    world.setBlock(xx, y, z, BLBlockRegistry.betweenstonePillar, 5, 3);
-            }
-            return true;
-        } else {
-            if (!SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x, y - 1, z + width)))
-                return false;
-            for (int zz = z; zz <= z + width; zz++)
-                if (!(world.getBlock(x, y, zz) == Blocks.air))
-                    return false;
-            for (int zz = z; zz <= z + width; zz++) {
-                if (zz == z) {
-                    world.setBlock(x, y, zz, BLBlockRegistry.chiseledBetweenstone);
-                    if (random.nextInt(5) == 0) {
-                        generateLoot(world, random, x, y + 1, zz);
-                    }
-                } else if (zz == z + width) {
-                    world.setBlock(x, y, zz, BLBlockRegistry.chiseledBetweenstone);
-                    if (random.nextInt(5) == 0) {
-                        generateLoot(world, random, x, y + 1, zz);
-                    }
-                } else
-                    world.setBlock(x, y, zz, BLBlockRegistry.betweenstonePillar, 8, 3);
-            }
-            return true;
+        width = 5 + random.nextInt(2);
+        depth = 1;
+        int direction = random.nextInt(4);
+        if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 1, depth, direction))
+            return false;
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, width - 1, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+            return false;
+
+        rotatedCubeVolume(world, x, y, z, 0, 0, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 0, 0, betweenstonePillar, direction == 0 || direction == 2 ? 7 : 8, width - 2, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, width - 1, 0, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
+
+        if (random.nextInt(5) == 0) {
+            rotatedLoot(world, random, x, y, z, 0, 1, 0, direction);
         }
+        if (random.nextInt(5) == 0) {
+            rotatedLoot(world, random, x, y, z, width - 1, 1, 0, direction);
+        }
+        return true;
+    }
+
+    public void rotatedCubeVolume(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+        x -= width / 2;
+        z -= depth / 2;
+        switch (direction) {
+            case 0:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+                        for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++)
+                            world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
+                break;
+            case 1:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+                        for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++)
+                            world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
+                break;
+            case 2:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--)
+                            world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
+                break;
+            case 3:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--)
+                            world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
+                break;
+        }
+    }
+
+    public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction) {
+        x -= width / 2;
+        z -= depth / 2;
+        switch (direction) {
+            case 0:
+                generateLoot(world, rand, x + offsetA, y + offsetB, z + offsetC);
+                break;
+            case 1:
+                generateLoot(world, rand, x + offsetC, y + offsetB, z + depth - offsetA - 1);
+                break;
+            case 2:
+                generateLoot(world, rand, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
+                break;
+            case 3:
+                generateLoot(world, rand, x + width - offsetC - 1, y + offsetB, z + offsetA);
+                break;
+        }
+    }
+
+    public boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+        x -= width / 2;
+        z -= depth / 2;
+        boolean replaceable = true;
+        switch (direction) {
+            case 0:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+                        for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
+                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz))
+                                replaceable = false;
+                            if (markReplaceableCheck)
+                                world.setBlock(xx, yy, zz, Blocks.wool);
+                        }
+                break;
+            case 1:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+                        for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
+                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz))
+                                replaceable = false;
+                            if (markReplaceableCheck)
+                                world.setBlock(xx, yy, zz, Blocks.wool);
+                        }
+                break;
+            case 2:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
+                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz))
+                                replaceable = false;
+                            if (markReplaceableCheck)
+                                world.setBlock(xx, yy, zz, Blocks.wool);
+                        }
+                break;
+            case 3:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
+                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz))
+                                replaceable = false;
+                            if (markReplaceableCheck)
+                                world.setBlock(xx, yy, zz, Blocks.wool);
+                        }
+                break;
+        }
+        return !replaceable;
+    }
+
+    public boolean rotatedCubeMatches(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, SurfaceType type) {
+        x -= width / 2;
+        z -= depth / 2;
+        switch (direction) {
+            case 0:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+                        for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
+                            if (!type.matchBlock(world.getBlock(xx, yy, zz)))
+                                return false;
+                        }
+                break;
+            case 1:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+                        for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
+                            if (!type.matchBlock(world.getBlock(xx, yy, zz)))
+                                return false;
+                        }
+                break;
+            case 2:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
+                            if (!type.matchBlock(world.getBlock(xx, yy, zz)))
+                                return false;
+                        }
+                break;
+            case 3:
+                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+                    for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
+                            if (!type.matchBlock(world.getBlock(xx, yy, zz)))
+                                return false;
+                        }
+                break;
+        }
+        return true;
     }
 
     private void generateLoot(World world, Random random, int x, int y, int z) {
