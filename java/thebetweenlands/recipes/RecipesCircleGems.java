@@ -6,7 +6,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.misc.ItemGem;
 
 public class RecipesCircleGems implements IRecipe {
@@ -25,7 +24,7 @@ public class RecipesCircleGems implements IRecipe {
 					}
 					gem = stack;
 				} else {
-					if(!GemCircleHelper.isApplicable(stack)) {
+					if(!CircleGem.isApplicable(stack)) {
 						return false;
 					} else {
 						if(tool != null) {
@@ -36,7 +35,7 @@ public class RecipesCircleGems implements IRecipe {
 				}
 			}
 		}
-		return (tool != null && gem != null) && (GemCircleHelper.getGem(tool) != ((ItemGem)gem.getItem()).getCircleGem());
+		return (tool != null && gem != null) && (CircleGem.getGem(tool) != ((ItemGem)gem.getItem()).getCircleGem());
 	}
 
 	/**
@@ -51,7 +50,7 @@ public class RecipesCircleGems implements IRecipe {
 				if(stack.getItem() instanceof ItemGem) {
 					gem = stack;
 				} else {
-					if(GemCircleHelper.isApplicable(stack)) {
+					if(CircleGem.isApplicable(stack)) {
 						tool = stack;
 					}
 				}
@@ -63,12 +62,12 @@ public class RecipesCircleGems implements IRecipe {
 				result.stackTagCompound = new NBTTagCompound();
 			}
 			CircleGem appliedGem = ((ItemGem)gem.getItem()).getCircleGem();
-			CircleGem toolGem = GemCircleHelper.getGem(tool);
+			CircleGem toolGem = CircleGem.getGem(tool);
 			int gemRelation = appliedGem.getRelation(toolGem);
 			if(gemRelation == -1) {
-				GemCircleHelper.setGem(result, CircleGem.NONE);
+				CircleGem.setGem(result, CircleGem.NONE);
 			} else {
-				GemCircleHelper.setGem(result, ((ItemGem)gem.getItem()).getCircleGem());
+				CircleGem.setGem(result, ((ItemGem)gem.getItem()).getCircleGem());
 			}
 			return result;
 		}

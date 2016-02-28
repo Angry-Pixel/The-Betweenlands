@@ -7,8 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
+import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderBerserkerGuardian extends RenderLiving {
@@ -25,16 +25,18 @@ public class RenderBerserkerGuardian extends RenderLiving {
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		if(((EntityBerserkerGuardian)entity).getActive()) {
-			CircleGem gem = GemCircleHelper.getGem(entity);
-			switch(gem) {
-			case CRIMSON:
-				return activeTextureR;
-			case GREEN:
-				return activeTextureG;
-			case AQUA:
-				return activeTextureB;
-			default:
-				return activeTexture;
+			EntityGem gem = CircleGem.getGem(entity, 0);
+			if(gem != null) {
+				switch(gem.getGem()) {
+				case CRIMSON:
+					return activeTextureR;
+				case GREEN:
+					return activeTextureG;
+				case AQUA:
+					return activeTextureB;
+				default:
+					return activeTexture;
+				}
 			}
 		}
 		return inactiveTexture;

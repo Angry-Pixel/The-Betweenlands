@@ -460,7 +460,6 @@ public class BLBlockRegistry {
 	public static final BlockTemplePillar pitstonePillar = new BlockTemplePillar("pitstonePillar", "pitstonePillarTop");
 	public static final BlockTemplePillar limestonePillar = new BlockTemplePillar("limestonePillar", "limestonePillarTop");
 	public static final BlockTemplePillar cragrockPillar = new BlockTemplePillar("cragrockPillar", "cragrockPillarTop");
-
 	public static final Block thatch = new BlockBLGenericDeco("thatch", Material.cloth).setHardness(0.5F).setResistance(1.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block blockOfCompost = new BlockBLGenericDeco("blockOfCompost", Material.ground).setHardness(2F).setResistance(5.0F).setStepSound(Block.soundTypeGrass);
 	public static final Block mireCoralBlock = new BlockBLGenericDeco("mireCoralBlock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
@@ -477,7 +476,13 @@ public class BLBlockRegistry {
 	public static final BlockWalkway blockWalkWay = new BlockWalkway();
 	public static final Block blockTotem = new BlockTotem();
 	public static final Block siltGlas = new BlockBLGlass("siltGlass", "siltGlass1");
+	public static final Block polishedDentrothyst1 = new BlockBLGlass("polishedDentrothyst1", "polishedDentrothyst11");
+	public static final Block polishedDentrothyst2 = new BlockBLGlass("polishedDentrothyst2", "polishedDentrothyst21");
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
+	
+	public static final Block polishedDentrothyst1Pane = new BlockBLPane("polishedDentrothyst1", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
+	public static final Block polishedDentrothyst2Pane = new BlockBLPane("polishedDentrothyst2", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
+	
 	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
 	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
 	public static final Block slimyBoneBlock = new BlockBLGenericDeco("slimyBoneBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone);

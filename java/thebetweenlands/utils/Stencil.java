@@ -20,12 +20,12 @@ public final class Stencil {
 			GL11.glStencilOp(this.op_fail, this.op_zfail, this.op_zpass);
 		}
 	}
-
+	
 	private static final Stencil INSTANCE = new Stencil();
 	private final HashMap<Integer, StencilFunc> stencilFuncs = new HashMap<Integer, StencilFunc>();
 	private int layers = 1;
 	private boolean renderMask;
-
+	
 	private Stencil() {}
 
 	/**

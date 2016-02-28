@@ -1,4 +1,4 @@
-package thebetweenlands.world.storage;
+package thebetweenlands.world.storage.world;
 
 import net.minecraft.world.World;
 import thebetweenlands.herblore.aspects.AspectManager;
@@ -17,7 +17,7 @@ public class BetweenlandsWorldData extends WorldDataBase {
 	public BetweenlandsWorldData(String name) {
 		super(name);
 	}
-
+	
 	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}

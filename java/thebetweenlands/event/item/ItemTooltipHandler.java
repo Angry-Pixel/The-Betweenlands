@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.recipes.CompostRecipe;
 
@@ -270,7 +269,7 @@ public class ItemTooltipHandler {
 		if(CompostRecipe.getCompostRecipe(event.itemStack) != null) {
 			event.toolTip.add(StatCollector.translateToLocal("compost.compostable"));
 		}
-		CircleGem circleGem = GemCircleHelper.getGem(event.itemStack);
+		CircleGem circleGem = CircleGem.getGem(event.itemStack);
 		if(circleGem != CircleGem.NONE) {
 			String colorPrefix = "";
 			switch(circleGem){

@@ -7,71 +7,71 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import thebetweenlands.utils.EnumNBTTypes;
+import net.minecraftforge.common.util.Constants;
 
 public class TileEntityBLCraftingTable
-    extends TileEntity
+extends TileEntity
 {
-    public ItemStack[] crfSlots = new ItemStack[9];
-    public ItemStack crfResult;
-    public byte rotation = 0;
+	public ItemStack[] crfSlots = new ItemStack[9];
+	public ItemStack crfResult;
+	public byte rotation = 0;
 
-    @Override
-    public boolean canUpdate() {
-        return false;
-    }
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 
-    @Override
-    public Packet getDescriptionPacket() {
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, this.writeNbt(new NBTTagCompound()));
-    }
+	@Override
+	public Packet getDescriptionPacket() {
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, this.writeNbt(new NBTTagCompound()));
+	}
 
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        this.readNbt(pkt.func_148857_g());
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		this.readNbt(pkt.func_148857_g());
+	}
 
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        this.readNbt(nbt);
-    }
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		this.readNbt(nbt);
+	}
 
-    private NBTTagCompound readNbt(NBTTagCompound nbt) {
-        NBTTagList items = nbt.getTagList("items", EnumNBTTypes.NBT_COMPOUND.ordinal());
+	private NBTTagCompound readNbt(NBTTagCompound nbt) {
+		NBTTagList items = nbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
 
-        int count = items.tagCount();
-        for( int i = 0; i < count; i++ ) {
-            NBTTagCompound nbtItem = items.getCompoundTagAt(i);
-            this.crfSlots[nbtItem.getByte("slot")] = ItemStack.loadItemStackFromNBT(nbtItem);
-        }
+		int count = items.tagCount();
+		for( int i = 0; i < count; i++ ) {
+			NBTTagCompound nbtItem = items.getCompoundTagAt(i);
+			this.crfSlots[nbtItem.getByte("slot")] = ItemStack.loadItemStackFromNBT(nbtItem);
+		}
 
-        this.rotation = nbt.getByte("rotation");
+		this.rotation = nbt.getByte("rotation");
 
-        return nbt;
-    }
+		return nbt;
+	}
 
-    @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        this.writeNbt(nbt);
-    }
+	@Override
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		this.writeNbt(nbt);
+	}
 
-    private NBTTagCompound writeNbt(NBTTagCompound nbt) {
-        NBTTagList items = new NBTTagList();
-        for( int i = 0; i < crfSlots.length; i++ ) {
-            if( this.crfSlots[i] != null ) {
-                NBTTagCompound nbtItem = new NBTTagCompound();
-                nbtItem.setByte("slot", (byte) i);
-                this.crfSlots[i].writeToNBT(nbtItem);
-                items.appendTag(nbtItem);
-            }
-        }
+	private NBTTagCompound writeNbt(NBTTagCompound nbt) {
+		NBTTagList items = new NBTTagList();
+		for( int i = 0; i < crfSlots.length; i++ ) {
+			if( this.crfSlots[i] != null ) {
+				NBTTagCompound nbtItem = new NBTTagCompound();
+				nbtItem.setByte("slot", (byte) i);
+				this.crfSlots[i].writeToNBT(nbtItem);
+				items.appendTag(nbtItem);
+			}
+		}
 
-        nbt.setTag("items", items);
+		nbt.setTag("items", items);
 
-        nbt.setByte("rotation", this.rotation);
+		nbt.setByte("rotation", this.rotation);
 
-        return nbt;
-    }
+		return nbt;
+	}
 }

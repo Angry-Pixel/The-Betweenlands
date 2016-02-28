@@ -119,7 +119,7 @@ public class Page {
      * @param item the item the page contains
      * @return this page
      */
-    public Page setItem(ItemStack item) {
+    public Page addItem(ItemStack item) {
         pageItems.add(item);
         return this;
     }

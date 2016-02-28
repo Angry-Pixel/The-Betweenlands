@@ -29,11 +29,11 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
             WorldGenWightTower tower = new WorldGenWightTower();
             tower.generate(world, rand, x, y + 1, z);
 
-            //WorldGenSmallRuins ruin = new WorldGenSmallRuins();
-            //ruin.generate(world, rand, x, y + 1, z);
+          //  WorldGenSmallRuins ruin = new WorldGenSmallRuins();
+          //  ruin.generate(world, rand, x, y + 1, z);
 
-           // WorldGenUnderGroundStructures structure = new WorldGenUnderGroundStructures();
-          //  structure.generate(world, rand, x, y + 1, z);
+            //WorldGenUnderGroundStructures structure = new WorldGenUnderGroundStructures();
+            //structure.generate(world, rand, x, y + 1, z);
             return true;
         }
         return false;

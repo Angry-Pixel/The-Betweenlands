@@ -15,8 +15,8 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.IEntityBL;
+import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
 import thebetweenlands.items.tools.ItemSpadeBL;
@@ -52,27 +52,9 @@ public class AttackDamageHandler {
 			}
 		}
 
-		damage = GemCircleHelper.handleAttack(source, attackedEntity, damage);
+		damage = CircleGem.handleAttack(source, attackedEntity, damage);
 
 		event.ammount = damage;
-	}
-
-	@SubscribeEvent
-	public void onEntityAttack(EntityJoinWorldEvent event) {
-		if(event.entity instanceof EntityArrow) {
-			EntityArrow entityArrow = (EntityArrow)event.entity;
-			if(entityArrow.shootingEntity != null) {
-				if(entityArrow.shootingEntity instanceof EntityLivingBase) {
-					EntityLivingBase attacker = (EntityLivingBase)entityArrow.shootingEntity;
-					if(attacker.getHeldItem() != null) {
-						CircleGem gem = GemCircleHelper.getGem(attacker.getHeldItem());
-						if(gem != CircleGem.NONE) {
-							GemCircleHelper.setGem(entityArrow, gem);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	@SideOnly(Side.CLIENT)

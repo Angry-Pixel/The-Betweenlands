@@ -1,9 +1,6 @@
 package thebetweenlands.client.render.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 
 public class AOHelper {
@@ -37,9 +34,9 @@ public class AOHelper {
 	}
 
 	///// FUCK THIS SHIT /////
-	
+
 	public static float getBrightness(IBlockAccess blockAccess, int x, int y, int z, double dx, double dy, double dz) {
-		Block centerBlock = blockAccess.getBlock(x, y, z);
+		/*Block centerBlock = blockAccess.getBlock(x, y, z);
 		int centerBlockBrightness = centerBlock.getMixedBrightnessForBlock(blockAccess, x, y, z);
 		float br000 = getCornerLight(blockAccess, x, y, z);
 		float br100 = getCornerLight(blockAccess, x+1, y, z);
@@ -49,7 +46,8 @@ public class AOHelper {
 		float br101 = getCornerLight(blockAccess, x+1, y+1, z);
 		float br011 = getCornerLight(blockAccess, x, y+1, z+1);
 		float br111 = getCornerLight(blockAccess, x+1, y+1, z+1);
-		return triLerp((float)dx, (float)dy, (float)dz, br000, br001, br010, br011, br100, br101, br110, br111, 0, 1, 0, 1, 0, 1) * 1.5F;
+		return triLerp((float)dx, (float)dy, (float)dz, br000, br001, br010, br011, br100, br101, br110, br111, 0, 1, 0, 1, 0, 1) * 1.5F;*/
+		return blockAccess.getBlock(x, y, z).getMixedBrightnessForBlock(blockAccess, x, y, z) / 15.0F;
 	}
 
 	private static float lerp(float x, float x1, float x2, float q00, float q01) {
@@ -75,7 +73,7 @@ public class AOHelper {
 	}
 
 	///// FUCK THAT SHIT /////
-	 
+
 	private static float getCornerLight(IBlockAccess blockAccess, int x, int y, int z) {
 		float lightValue = 0.0F;
 		float values = 1.0F;
@@ -95,7 +93,7 @@ public class AOHelper {
 	}
 
 	///// AND FUCK THAT SHIT TOO /////
-	
+
 	private static float getCornerAO(IBlockAccess blockAccess, int x, int y, int z) {
 		float aoVal = 0.0F;
 		int values = 0;

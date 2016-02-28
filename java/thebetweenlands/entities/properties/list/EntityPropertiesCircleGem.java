@@ -1,27 +1,48 @@
 package thebetweenlands.entities.properties.list;
 
-import net.minecraft.entity.EntityLivingBase;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.EntityGem;
 
-public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase> {
-	private CircleGem circleGem = CircleGem.NONE;
-	private boolean hasAmulet = false;
-	private boolean isRemovable = false;
+public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
+	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
+	private int amuletSlots = 1;
+	public static final int MAX_AMULET_SLOTS = 3;
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
-		nbt.setString("blCircleGem", this.circleGem.name);
-		nbt.setBoolean("blAmulet", this.hasAmulet);
-		nbt.setBoolean("blAmuletRemovable", this.isRemovable);
+		NBTTagList gemList = new NBTTagList();
+		for(EntityGem gem : this.circleGems) {
+			NBTTagCompound gemCompound = new NBTTagCompound();
+			gem.writeToNBT(gemCompound);
+			gemList.appendTag(gemCompound);
+		}
+		nbt.setTag("gems", gemList);
+
+		nbt.setInteger("amuletSlots", this.amuletSlots);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound nbt) {
-		this.circleGem = CircleGem.fromName(nbt.getString("blCircleGem"));
-		this.hasAmulet = nbt.getBoolean("blAmulet");
-		this.isRemovable = nbt.getBoolean("blAmuletRemovable");
+		this.circleGems.clear();
+		NBTTagList gemList = nbt.getTagList("gems", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < gemList.tagCount(); i++) {
+			NBTTagCompound gemCompound = gemList.getCompoundTagAt(i);
+			EntityGem gem = EntityGem.readFromNBT(gemCompound);
+			if(gem != null) {
+				this.circleGems.add(gem);
+			}
+		}
+
+		if(nbt.hasKey("amuletSlots"))
+			this.amuletSlots = nbt.getInteger("amuletSlots");
 	}
 
 	@Override
@@ -30,8 +51,8 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 	}
 
 	@Override
-	public Class<EntityLivingBase> getEntityClass() {
-		return EntityLivingBase.class;
+	public Class<Entity> getEntityClass() {
+		return Entity.class;
 	}
 
 	@Override
@@ -50,28 +71,23 @@ public class EntityPropertiesCircleGem extends EntityProperties<EntityLivingBase
 		this.loadNBTData(nbt);
 	}
 
-	public void setGem(CircleGem gem) {
-		this.circleGem = gem != null ? gem : CircleGem.NONE;
+	public void addGem(CircleGem gem, EntityGem.Type type) {
+		this.circleGems.add(new EntityGem(gem, type));
 	}
 
-	public CircleGem getGem() {
-		return this.circleGem;
+	public void removeGem(EntityGem gem) {
+		this.circleGems.remove(gem);
 	}
 
-	public void addAmulet(boolean removable) {
-		this.hasAmulet = true;
-		this.isRemovable = removable;
+	public List<EntityGem> getGems() {
+		return this.circleGems;
 	}
 
-	public boolean isRemovable() {
-		return this.isRemovable;
+	public int getAmuletSlots() {
+		return this.amuletSlots;
 	}
 
-	public void removeAmulet() {
-		this.hasAmulet = false;
-	}
-
-	public boolean hasAmulet() {
-		return this.hasAmulet;
+	public void addAmuletSlot() {
+		this.amuletSlots++;
 	}
 }

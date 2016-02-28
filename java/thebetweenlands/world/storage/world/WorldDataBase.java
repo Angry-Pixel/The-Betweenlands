@@ -1,4 +1,4 @@
-package thebetweenlands.world.storage;
+package thebetweenlands.world.storage.world;
 
 import java.util.HashMap;
 import java.util.Iterator;

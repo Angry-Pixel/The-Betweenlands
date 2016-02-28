@@ -4,11 +4,8 @@ A large and expansive mod for Minecraft by Angry Pixel that adds a whole new dim
 To do for First Release:
 _____________________________________________________________________
 REALISTC GOALS
-- Underground pitstone structures
 - Wight tower
 - Any other little things we could get in e.g. small huts
-- Finish any remaining herblore stuff, including the guide
-- Finish the middle gem circle
 - Pieces of lore for loot
 - Finish/fix any loot
 - Dreadful Peatmummy (new mini-boss)
@@ -18,7 +15,6 @@ COSMETIC GOALS (NOT NECESSARY FOR AN ALPHA RELEASE)
 - Loading screens (if anyone knows someone who can do these then please grab em, because otherwise I'll do them and they'll suck)
 
 UNREALISTC GOALS
-- GET THE BASICS OF THE DAMN TEMPLES IN
 - Temple Guarians (finish off some AI/middle gem stuff and add the last one)
 - Stalker (new cave specific mob, WE NEED A MODEL FROM LEN)
 - Mud Golem (new utility mob)

@@ -32,6 +32,7 @@ public class MessageSyncEntityProperties extends AbstractMessage<MessageSyncEnti
 			if(prop instanceof EntityProperties) {
 				EntityProperties blProp = (EntityProperties)prop;
 				blProp.loadTrackingSensitiveData(message.nbt);
+				blProp.onSync();
 			}
 		}
 	}

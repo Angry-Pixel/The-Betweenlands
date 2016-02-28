@@ -34,12 +34,15 @@ import thebetweenlands.command.CommandResetAspects;
 import thebetweenlands.command.CommandTickSpeed;
 import thebetweenlands.entities.BLEntityRegistry;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.event.debugging.DebugHandlerChunkData;
 import thebetweenlands.event.elixirs.ElixirCommonHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
+import thebetweenlands.event.entity.EntitySpawnHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PageDiscoveringEvent;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.entity.VolarPadGlideHandler;
+import thebetweenlands.event.item.ItemEquipmentHandler;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
@@ -60,11 +63,12 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
-import thebetweenlands.network.packet.client.PacketDropAmulet;
+import thebetweenlands.network.packet.client.PacketEquipment;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
 import thebetweenlands.network.packet.server.PacketGemProc;
+import thebetweenlands.network.packet.server.PacketPowerRingHit;
 import thebetweenlands.network.packet.server.PacketRevengeTarget;
 import thebetweenlands.network.packet.server.PacketSnailHatchParticle;
 import thebetweenlands.network.packet.server.PacketTickspeed;
@@ -79,7 +83,9 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.spawning.MobSpawnHandler;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
-import thebetweenlands.world.storage.WorldDataBase;
+import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.world.storage.world.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -128,6 +134,7 @@ public class TheBetweenlands {
 		networkWrapper.registerMessage(MessageWeedwoodRowboatInput.class, MessageWeedwoodRowboatInput.class, 5, Side.SERVER);
 		networkWrapper.registerMessage(MessageLoadAspects.class, MessageLoadAspects.class, 6, Side.CLIENT);
 		BLEntityPropertiesRegistry.HANDLER.registerPacket(networkWrapper, 7);
+		BetweenlandsChunkData.CHUNK_SYNC_HANDLER.registerPacket(networkWrapper, 8);
 
 		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 
@@ -140,7 +147,8 @@ public class TheBetweenlands {
 		registerPacket(PacketAttackTarget.class);
 		registerPacket(PacketWeedWoodBushRustle.class);
 		registerPacket(PacketGemProc.class);
-		registerPacket(PacketDropAmulet.class);
+		registerPacket(PacketEquipment.class);
+		registerPacket(PacketPowerRingHit.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
@@ -193,9 +201,14 @@ public class TheBetweenlands {
 		FMLCommonHandler.instance().bus().register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
+		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
+		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.CHUNK_SYNC_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
+		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ItemEquipmentHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DebugHandlerChunkData.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

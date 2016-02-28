@@ -21,6 +21,7 @@ import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
+import thebetweenlands.event.item.ItemEquipmentHandler;
 import thebetweenlands.event.world.AspectLoadHandler;
 import thebetweenlands.event.world.PopulationHandler;
 import thebetweenlands.inventory.container.ContainerAnimator;
@@ -131,6 +132,7 @@ public class CommonProxy implements IGuiHandler {
 		// Register packet handlers
 		try {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemAmulet.class, Side.SERVER);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemEquipmentHandler.class, Side.SERVER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

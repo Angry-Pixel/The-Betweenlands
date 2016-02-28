@@ -109,6 +109,11 @@ public abstract class EntityProperties<E extends Entity> implements IExtendedEnt
 	 */
 	protected void loadTrackingSensitiveData(NBTTagCompound nbt) { }
 
+	/**
+	 * Called when the data is syncing
+	 */
+	protected void onSync() { }
+
 	public static final class PropertiesTracker {
 		private int trackingTimer = 0;
 		private int trackingUpdateTimer = 0;
@@ -175,6 +180,13 @@ public abstract class EntityProperties<E extends Entity> implements IExtendedEnt
 				return true;
 			}
 			return false;
+		}
+
+		/**
+		 * Called when the data is syncing
+		 */
+		void onSync() {
+			this.props.onSync();
 		}
 
 		/**

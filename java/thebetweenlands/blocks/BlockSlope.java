@@ -7,7 +7,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 public class BlockSlope extends BlockStairs {
 	public BlockSlope(Block block, int meta) {
 		super(block, meta);
-		//this.setLightOpacity(0);
+		this.setLightOpacity(0);
 	}
 
 	@Override

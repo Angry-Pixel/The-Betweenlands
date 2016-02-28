@@ -12,8 +12,8 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import thebetweenlands.client.model.ControlledAnimation;
+import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.gemcircle.GemCircleHelper;
 /** * Created by jnad325 on 7/14/15. */
 
 public class EntityTempleGuardian extends EntityMob implements IEntityBL {
@@ -33,7 +33,7 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 	@Override
 	public IEntityLivingData onSpawnWithEgg(IEntityLivingData livingData) {
 		int gemType = this.worldObj.rand.nextInt(3);
-		GemCircleHelper.setGem(this, CircleGem.TYPES[gemType]);
+		CircleGem.addGem(this, CircleGem.TYPES[gemType], EntityGem.Type.BOTH);
 		return super.onSpawnWithEgg(livingData);
 	}
 

@@ -140,7 +140,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
+		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		
 		//Machine Blocks
@@ -152,6 +152,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.infuser), "o o", "opo", "sos", 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'p', new ItemStack(BLItemRegistry.pestle), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.geckoCage), "sps", "rrr", "sps", 's', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT), 'p', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.weedwoodPlankSlab)), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.repeller), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodJukebox), "xxx", "xVx", "xxx", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks), 'V', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 		
 		//Deco Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
@@ -256,6 +257,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlope, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.thatch);
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.siltGlasPane, 6), "xxx", "xxx", 'x', BLBlockRegistry.siltGlas);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.polishedDentrothyst1Pane, 6), "xxx", "xxx", 'x', BLBlockRegistry.polishedDentrothyst1);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.polishedDentrothyst2Pane, 6), "xxx", "xxx", 'x', BLBlockRegistry.polishedDentrothyst2);
 
 		//Food
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.reedDonut, 1), " # ", "# #", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
@@ -307,6 +310,8 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.pitstone), new ItemStack(BLBlockRegistry.smoothPitstone), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.genericStone, 1, 1), new ItemStack(BLBlockRegistry.smoothCragrock), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.limestone), new ItemStack(BLBlockRegistry.polishedLimestone), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dentrothyst, 1, 0), new ItemStack(BLBlockRegistry.polishedDentrothyst1), 0F);
+		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), new ItemStack(BLBlockRegistry.polishedDentrothyst2), 0F);
 		GameRegistry.addSmelting(ItemGeneric.createStack(EnumItemGeneric.SLUDGE_BALL), new ItemStack(BLItemRegistry.sludgeJello), 0F);
 		GameRegistry.addSmelting(ItemGeneric.createStack(BLItemRegistry.weedwoodBucketRubber, 1, 0), ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL), 0F);
 		GameRegistry.addSmelting(new ItemStack(BLBlockRegistry.silt), new ItemStack(BLBlockRegistry.siltGlas), 0F);

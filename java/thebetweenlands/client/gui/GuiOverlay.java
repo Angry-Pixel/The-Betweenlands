@@ -1,5 +1,6 @@
 package thebetweenlands.client.gui;
 
+import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -16,14 +17,16 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.decay.DecayManager;
-import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
-import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
+import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
+import thebetweenlands.entities.properties.list.equipment.Equipment;
+import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.misc.ItemAmulet;
@@ -163,24 +166,53 @@ public class GuiOverlay extends Gui {
 			int width = event.resolution.getScaledWidth();
 			int height = event.resolution.getScaledHeight();
 
-			EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesCircleGem.class);
-			if(property != null && property.hasAmulet()) {
-				CircleGem entityGem = property.getGem();
-				ItemStack gemItem = ItemAmulet.createStack(entityGem);
-				GL11.glPushMatrix();
-				int posX = (width / 2) - (27 / 2) + 115;
-				int posY = height - 8;
-				GL11.glTranslated(posX, posY, 0);
-				GL11.glColor4f(1, 1, 1, 1);
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glScaled(10, -10, 10);
-				float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
-				GL11.glScaled(scale, scale, scale);
-				for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {
-					ItemRenderHelper.renderItem(gemItem, i);
+			/*EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesCircleGem.class);
+			if(property != null && property.getAmulets().size() > 0) {
+				for(int a = 0; a < property.getAmulets().size(); a++) {
+					EntityAmulet amulet = property.getAmulets().get(a);
+					CircleGem entityGem = amulet.getAmuletGem();
+					ItemStack gemItem = ItemAmulet.createStack(entityGem);
+					GL11.glPushMatrix();
+					int posX = (width / 2) - (27 / 2) + 115 + a * 8;
+					int posY = height - 8;
+					GL11.glTranslated(posX, posY, 0);
+					GL11.glColor4f(1, 1, 1, 1);
+					GL11.glEnable(GL11.GL_BLEND);
+					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GL11.glScaled(-10, -10, 10);
+					float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+					GL11.glScaled(scale, scale, scale);
+					for(int i = 0; i < gemItem.getItem().getRenderPasses(gemItem.getItemDamage()); i++) {
+						ItemRenderHelper.renderItem(gemItem, i);
+					}
+					GL11.glPopMatrix();
 				}
-				GL11.glPopMatrix();
+			}*/
+			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(this.mc.thePlayer);
+			int yOffset = 0;
+			for(EnumEquipmentCategory category : EnumEquipmentCategory.TYPES) {
+				List<Equipment> equipmentList = equipmentInventory.getEquipment(category);
+				if(equipmentList.size() > 0) {
+					int posX = (width / 2) - (27 / 2) + 113;
+					int posY = height - 6 + yOffset;
+					for(int a = 0; a < equipmentList.size(); a++) {
+						Equipment equipment = equipmentList.get(a);
+						GL11.glPushMatrix();
+						GL11.glTranslated(posX, posY, 0);
+						GL11.glColor4f(1, 1, 1, 1);
+						GL11.glEnable(GL11.GL_BLEND);
+						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+						GL11.glScaled(-10, -10, 10);
+						float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+						GL11.glScaled(scale, scale, scale);
+						for(int i = 0; i < equipment.item.getItem().getRenderPasses(equipment.item.getItemDamage()); i++) {
+							ItemRenderHelper.renderItem(equipment.item, i);
+						}
+						GL11.glPopMatrix();
+						posX += 8;
+					}
+					yOffset -= 13;
+				}
 			}
 
 			if (DecayManager.isDecayEnabled(mc.thePlayer)) {

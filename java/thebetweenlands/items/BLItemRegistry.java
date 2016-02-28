@@ -65,6 +65,7 @@ import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
 import thebetweenlands.items.misc.ItemAmulet;
+import thebetweenlands.items.misc.ItemAmuletSlot;
 import thebetweenlands.items.misc.ItemBLRecord;
 import thebetweenlands.items.misc.ItemBLSign;
 import thebetweenlands.items.misc.ItemCavingRope;
@@ -273,6 +274,7 @@ public class BLItemRegistry {
 	public static final Item weedwoodSign = new ItemBLSign(BLBlockRegistry.weedwoodWallSign, BLBlockRegistry.weedwoodSignStanding, "weedwood");
 	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBed");
 	public static final Item amulet = new ItemAmulet();
+	public static final Item amuletSlot = new ItemAmuletSlot();
 
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
@@ -329,11 +331,11 @@ public class BLItemRegistry {
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, 
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
-				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope, amulet);
+				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, tribalPants, skullMask, 
 				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
-				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord);
+				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
 				betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, 
 				valoniteAxe, valoniteShovel);
