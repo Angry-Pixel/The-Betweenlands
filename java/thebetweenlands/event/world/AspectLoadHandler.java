@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.network.message.MessageLoadAspects;
-import thebetweenlands.world.storage.BetweenlandsWorldData;
+import thebetweenlands.world.storage.world.BetweenlandsWorldData;
 
 public class AspectLoadHandler {
 	public static AspectLoadHandler INSTANCE = new AspectLoadHandler();

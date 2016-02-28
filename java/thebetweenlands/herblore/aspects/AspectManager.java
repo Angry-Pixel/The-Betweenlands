@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.world.storage.BetweenlandsWorldData;
+import thebetweenlands.world.storage.world.BetweenlandsWorldData;
 
 public class AspectManager {
 	public static enum AspectTier {

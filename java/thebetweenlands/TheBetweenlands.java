@@ -81,7 +81,8 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 import thebetweenlands.world.biomes.spawning.MobSpawnHandler;
 import thebetweenlands.world.feature.structure.WorldGenDruidCircle;
-import thebetweenlands.world.storage.WorldDataBase;
+import thebetweenlands.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.world.storage.world.WorldDataBase;
 import thebetweenlands.world.teleporter.TeleporterHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -195,6 +196,7 @@ public class TheBetweenlands {
 		FMLCommonHandler.instance().bus().register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
+		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);

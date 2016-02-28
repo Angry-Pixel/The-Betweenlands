@@ -22,7 +22,7 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
-import thebetweenlands.world.storage.BetweenlandsWorldData;
+import thebetweenlands.world.storage.world.BetweenlandsWorldData;
 
 /**
  *
