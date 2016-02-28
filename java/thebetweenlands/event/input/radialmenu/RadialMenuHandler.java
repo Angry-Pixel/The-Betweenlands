@@ -21,12 +21,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.input.KeyBindingsBL;
+import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.IEquippable;
 import thebetweenlands.utils.GuiUtil;
 import thebetweenlands.utils.MCStencil;
@@ -101,29 +102,37 @@ public class RadialMenuHandler {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		if(player != null) {
 			IInventory inventory = player.inventory;
-			for(int i = 0; i < inventory.getSizeInventory(); i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
-				if(stack != null && stack.getItem() == BLItemRegistry.amulet) {
-					this.rootCategory.addCategory(new Categories.EquipCategory("Equip", 0x0610AA10, 0x3010AA10, stack, i));
-				}
-			}
-
 			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
-
-			for(int i = 0; i < inventory.getSizeInventory(); i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
-				if(stack != null && stack.getItem() instanceof IEquippable) {
-					IEquippable equippable = (IEquippable) stack.getItem();
-					if(equippable.canEquip(stack, player, equipmentInventory)) {
-						this.rootCategory.addCategory(new Categories.EquipCategory("Equip", 0x0610AA10, 0x3010AA10, stack, i));
+			List<Category> categories = new ArrayList<Category>();
+			for(int c = 0; c < EnumEquipmentCategory.TYPES.length; c++) {
+				for(int i = 0; i < inventory.getSizeInventory(); i++) {
+					ItemStack stack = inventory.getStackInSlot(i);
+					if(stack != null && stack.getItem() instanceof IEquippable) {
+						IEquippable equippable = (IEquippable) stack.getItem();
+						if(equippable.getEquipmentCategory(stack) == EnumEquipmentCategory.TYPES[c]) {
+							if(equippable.canEquip(stack, player, player, equipmentInventory)) {
+								categories.add(new Categories.EquipCategory(StatCollector.translateToLocal("equipment.menu.equip"), 0x0610AA10, 0x3010AA10, stack, i));
+							}
+						}
 					}
 				}
 			}
-
 			for(Equipment equipment : equipmentInventory.getEquipment()) {
-				if(equipment.equippable.canUnequip(equipment.item, player, equipmentInventory)) {
-					this.rootCategory.addCategory(new Categories.UnequipCategory("Unquip", 0x06AA1010, 0x30AA1010, equipment.item, equipmentInventory.getEquipment().indexOf(equipment)));
+				if(equipment.equippable.canUnequip(equipment.item, player, player, equipmentInventory)) {
+					categories.add(new Categories.UnequipCategory(StatCollector.translateToLocal("equipment.menu.unequip"), 0x06AA1010, 0x30AA1010, equipment.item, equipmentInventory.getEquipment().indexOf(equipment)));
 				}
+			}
+			int page = 1;
+			int categoryLimit = 10;
+			Category currentCategory = this.rootCategory;
+			for(Category category : categories) {
+				if(currentCategory.getCategories().size() > categoryLimit) {
+					page++;
+					Category newPage = new Category(String.format(StatCollector.translateToLocal("equipment.menu.page"), page), 0x40101010, 0x80202020);
+					currentCategory.addCategory(newPage);
+					currentCategory = newPage;
+				}
+				currentCategory.addCategory(category);
 			}
 		}
 
@@ -239,13 +248,16 @@ public class RadialMenuHandler {
 				}
 				this.updateCounter++;
 				if(this.isOpen) {
-					if(this.currentCategory.getCategories().size() > 2) {
-						if(this.displayedCategories < this.currentCategory.getCategories().size()) {
-							this.displayedCategories++;
+					/*if(this.currentCategory.getCategories().size() > 2) {
+						for(int i = 0; i < 2; i++) {
+							if(this.displayedCategories < this.currentCategory.getCategories().size()) {
+								this.displayedCategories++;
+							}
 						}
 					} else {
 						this.displayedCategories = this.currentCategory.getCategories().size();
-					}
+					}*/
+					this.displayedCategories = this.currentCategory.getCategories().size();
 				}
 			} else {
 				if(this.repositionMouse) {
@@ -451,7 +463,6 @@ public class RadialMenuHandler {
 						this.currentCategory = category;
 						this.displayedCategories = 0;
 					} else {
-						System.out.println(category);
 						if(category.onClicked(mouseX, mouseY)) {
 							this.closeGUI();
 						}

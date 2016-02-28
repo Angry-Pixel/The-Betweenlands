@@ -53,12 +53,12 @@ public class ItemRingOfPower extends Item implements IEquippable, IManualEntryIt
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
 		return entity instanceof EntityPlayer && inventory.getEquipment(EnumEquipmentCategory.RING).size() == 0;
 	}
 
 	@Override
-	public boolean canUnequip(ItemStack stack, Entity entity, EquipmentInventory inventory) {
+	public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
 		return true;
 	}
 

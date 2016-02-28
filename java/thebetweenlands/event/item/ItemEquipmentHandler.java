@@ -2,8 +2,10 @@ package thebetweenlands.event.item;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -34,7 +36,7 @@ public class ItemEquipmentHandler {
 	}
 
 	private static void tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
-		if(EquipmentInventory.equipItem(target, stack) != null) {
+		if(EquipmentInventory.equipItem(player, target, stack) != null) {
 			if(!player.capabilities.isCreativeMode)
 				stack.stackSize--;
 			player.swingItem();
@@ -42,11 +44,24 @@ public class ItemEquipmentHandler {
 	}
 
 	private static void tryPlayerUnequip(EntityPlayer player, Entity target) {
-		ItemStack unequipped = EquipmentInventory.unequipItem(target);
+		ItemStack unequipped = EquipmentInventory.unequipItem(player, target);
 		if(unequipped != null) {
 			if(!player.inventory.addItemStackToInventory(unequipped))
 				target.entityDropItem(unequipped, target.getEyeHeight());
 			player.swingItem();
+		}
+	}
+
+	@SubscribeEvent
+	public void onDeath(LivingDeathEvent event) {
+		EntityLivingBase entity = event.entityLiving;
+		if(entity != null && !entity.worldObj.isRemote) {
+			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.entity);
+			for(Equipment equipment : equipmentInventory.getEquipment()) {
+				if(((IEquippable)equipment.item.getItem()).canDrop(equipment.item, entity, equipmentInventory)) {
+					entity.entityDropItem(equipment.item.copy(), entity.getEyeHeight());
+				}
+			}
 		}
 	}
 
@@ -55,7 +70,7 @@ public class ItemEquipmentHandler {
 		if(packet.getContext().getServerHandler() != null) {
 			EntityPlayer sender = packet.getContext().getServerHandler().playerEntity;
 			if(sender != null) {
-				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(sender);System.out.println(packet.getMode());
+				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(sender);
 				switch(packet.getMode()) {
 				default:
 				case 0:
@@ -63,7 +78,7 @@ public class ItemEquipmentHandler {
 						ItemStack item = sender.inventory.getStackInSlot(packet.getSlot());
 						if(item.getItem() instanceof IEquippable) {
 							IEquippable equippable = (IEquippable) item.getItem();
-							if(equippable.canEquip(item, sender, equipmentInventory)) {
+							if(equippable.canEquip(item, sender, sender, equipmentInventory)) {
 								tryPlayerEquip(sender, sender, item);
 							}
 						}
@@ -72,7 +87,7 @@ public class ItemEquipmentHandler {
 				case 1:
 					if(packet.getSlot() < equipmentInventory.getEquipment().size()) {
 						Equipment equipment = equipmentInventory.getEquipment().get(packet.getSlot());
-						if(equipment.equippable.canUnequip(equipment.item, sender, equipmentInventory)) {
+						if(equipment.equippable.canUnequip(equipment.item, sender, sender, equipmentInventory)) {
 							EquipmentInventory.unequipItem(sender, equipment);
 							if(!sender.inventory.addItemStackToInventory(equipment.item))
 								sender.entityDropItem(equipment.item, sender.getEyeHeight());

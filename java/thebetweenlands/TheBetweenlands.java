@@ -62,7 +62,6 @@ import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
-import thebetweenlands.network.packet.client.PacketDropAmulet;
 import thebetweenlands.network.packet.client.PacketEquipment;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
@@ -143,7 +142,6 @@ public class TheBetweenlands {
 		registerPacket(PacketAttackTarget.class);
 		registerPacket(PacketWeedWoodBushRustle.class);
 		registerPacket(PacketGemProc.class);
-		registerPacket(PacketDropAmulet.class);
 		registerPacket(PacketEquipment.class);
 	}
 

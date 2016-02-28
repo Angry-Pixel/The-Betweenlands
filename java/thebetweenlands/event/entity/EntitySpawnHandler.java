@@ -21,7 +21,7 @@ import thebetweenlands.items.misc.ItemAmulet;
 public class EntitySpawnHandler {
 	public static final EntitySpawnHandler INSTANCE = new EntitySpawnHandler();
 
-	public static final int AMULET_SPAWN_CHANCE = 50;
+	public static final int AMULET_SPAWN_CHANCE = 40;
 	public static final List<Class<? extends EntityLivingBase>> AMULET_SPAWNS = new ArrayList<Class<? extends EntityLivingBase>>();
 
 	static {
@@ -55,9 +55,7 @@ public class EntitySpawnHandler {
 				/*event.entity.getEntityData().hasKey("naturallySpawned") && event.entity.getEntityData().getBoolean("naturallySpawned") &&*/
 				event.entity.worldObj.rand.nextInt(AMULET_SPAWN_CHANCE) == 0) {
 			CircleGem gem = CircleGem.TYPES[event.entity.worldObj.rand.nextInt(CircleGem.TYPES.length - 1)];
-			
-			//TODO: Fix up
-			//ItemAmulet.addAmulet(gem, event.entity, false, false);
+			ItemAmulet.addAmulet(gem, event.entity, false, false);
 		}
 	}
 

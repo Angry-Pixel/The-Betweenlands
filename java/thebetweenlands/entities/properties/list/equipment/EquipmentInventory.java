@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -96,16 +97,17 @@ public class EquipmentInventory {
 
 	/**
 	 * Tries to equip the specified item
+	 * @param player
 	 * @param target
 	 * @param stack
 	 * @return
 	 */
-	public static Equipment equipItem(Entity target, ItemStack stack) {
+	public static Equipment equipItem(EntityPlayer player, Entity target, ItemStack stack) {
 		if(stack.getItem() instanceof IEquippable) {
 			EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(target, EntityPropertiesEquipment.class);
 			if(property != null) {
 				IEquippable equippable = (IEquippable) stack.getItem();
-				if(equippable.canEquip(stack, target, property.getEquipmentInventory())) {
+				if(equippable.canEquip(stack, player, target, property.getEquipmentInventory())) {
 					ItemStack copy = stack.copy();
 					copy.stackSize = 1;
 					Equipment equipment = new Equipment(copy, equippable.getEquipmentCategory(stack));
@@ -119,17 +121,18 @@ public class EquipmentInventory {
 
 	/**
 	 * Tries to unequip the last item that can be uneqipped in the equipment inventory
+	 * @param player
 	 * @param target
 	 * @return
 	 */
-	public static ItemStack unequipItem(Entity target) {
+	public static ItemStack unequipItem(EntityPlayer player, Entity target) {
 		EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(target, EntityPropertiesEquipment.class);
 		if(property != null) {
 			EquipmentInventory inventory = property.getEquipmentInventory();
 			for(int i = inventory.getEquipment().size() - 1; i >= 0; i--) {
 				Equipment equipment = inventory.getEquipment().get(i);
 				IEquippable equippable = (IEquippable) equipment.item.getItem();
-				if(equippable.canUnequip(equipment.item, target, inventory)) {
+				if(equippable.canUnequip(equipment.item, player, target, inventory)) {
 					if(!target.worldObj.isRemote) {
 						inventory.removeEquipment(equipment);
 					}
