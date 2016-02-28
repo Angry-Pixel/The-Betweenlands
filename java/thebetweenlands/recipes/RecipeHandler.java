@@ -152,6 +152,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.infuser), "o o", "opo", "sos", 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'p', new ItemStack(BLItemRegistry.pestle), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.geckoCage), "sps", "rrr", "sps", 's', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT), 'p', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.weedwoodPlankSlab)), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.repeller), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodJukebox), "xxx", "xVx", "xxx", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks), 'V', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 		
 		//Deco Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
