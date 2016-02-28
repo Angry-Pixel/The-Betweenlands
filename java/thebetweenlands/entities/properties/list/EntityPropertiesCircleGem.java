@@ -16,7 +16,7 @@ import thebetweenlands.gemcircle.EntityGem.Type;
 
 public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	private List<EntityGem> circleGems = new ArrayList<EntityGem>();
-	private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
+	//private List<EntityAmulet> amulets = new ArrayList<EntityAmulet>();
 	private int amuletSlots = 1;
 	public static final int MAX_AMULET_SLOTS = 3;
 
@@ -30,13 +30,13 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 		}
 		nbt.setTag("gems", gemList);
 
-		NBTTagList amuletList = new NBTTagList();
+		/*NBTTagList amuletList = new NBTTagList();
 		for(EntityAmulet amulet : this.amulets) {
 			NBTTagCompound amuletCompound = new NBTTagCompound();
 			amulet.writeToNBT(amuletCompound);
 			amuletList.appendTag(amuletCompound);
 		}
-		nbt.setTag("amulets", amuletList);
+		nbt.setTag("amulets", amuletList);*/
 
 		nbt.setInteger("amuletSlots", this.amuletSlots);
 	}
@@ -53,7 +53,7 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 			}
 		}
 
-		this.amulets.clear();
+		/*this.amulets.clear();
 		NBTTagList amuletList = nbt.getTagList("amulets", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < amuletList.tagCount(); i++) {
 			NBTTagCompound amuletCompound = amuletList.getCompoundTagAt(i);
@@ -61,7 +61,7 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 			if(amulet != null) {
 				this.amulets.add(amulet);
 			}
-		}
+		}*/
 
 		if(nbt.hasKey("amuletSlots"))
 			this.amuletSlots = nbt.getInteger("amuletSlots");
@@ -97,7 +97,7 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 		this.circleGems.add(new EntityGem(gem, type));
 	}
 
-	public void removeGem(CircleGem gem) {
+	public void removeGem(EntityGem gem) {
 		this.circleGems.remove(gem);
 	}
 
@@ -109,7 +109,7 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 		return this.circleGems.contains(gem);
 	}
 
-	public List<EntityAmulet> getAmulets() {
+	/*public List<EntityAmulet> getAmulets() {
 		return this.amulets;
 	}
 
@@ -129,14 +129,14 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 		}
 	}
 
-	public boolean addAmulet(CircleGem gem, boolean removable) {
+	public boolean addAmulet(CircleGem gem, boolean removable, boolean canDrop) {
 		if(gem != CircleGem.NONE) {
-			this.amulets.add(new EntityAmulet(gem, removable));
+			this.amulets.add(new EntityAmulet(gem, removable, canDrop));
 			this.addGem(gem, EntityGem.Type.BOTH);
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	public int getAmuletSlots() {
 		return this.amuletSlots;
