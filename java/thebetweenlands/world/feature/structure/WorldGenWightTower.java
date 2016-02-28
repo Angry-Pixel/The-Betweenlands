@@ -503,6 +503,8 @@ public class WorldGenWightTower extends WorldGenerator {
 		//top tower stairs
 		rotatedCubeVolume(world, rand, xx, yy, zz, 23, 17, 23, limestonePolished, 0, 1, 4, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 22, 18, 23, limestonePolished, 0, 1, 3, 1, direction);
+		
+		
 		//top tower floors
 		
 		//underneath
