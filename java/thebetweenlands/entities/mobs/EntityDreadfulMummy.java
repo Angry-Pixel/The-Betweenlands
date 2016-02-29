@@ -3,6 +3,7 @@ package thebetweenlands.entities.mobs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -57,9 +58,16 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
 
     private void spawnSludge() {
         untilSpawnSludge = SPAWN_SLUDGE_COOLDOWN;
-        EntitySludgeBall sludge = new EntitySludgeBall(worldObj, 0.29f, this);
-        sludge.setPositionAndRotation(posX, posY + 0.5, posZ, rotationYaw, 0);
-        sludge.motionY = 0.4;
-        if (!worldObj.isRemote) worldObj.spawnEntityInWorld(sludge);
+
+        Vec3 look = this.getLookVec();
+        double direction = Math.toRadians(renderYawOffset);
+        EntitySludgeBall sludge = new EntitySludgeBall(worldObj, 0.000029f, this);
+        sludge.setPosition(posX - Math.sin(direction) * 3.5, posY + height, posZ + Math.cos(direction) * 3.5);
+        sludge.motionX = look.xCoord * 0.5D;
+        sludge.motionY = look.yCoord;
+        sludge.motionZ = look.zCoord* 0.5D;
+        if (!worldObj.isRemote)
+        	worldObj.spawnEntityInWorld(sludge);
+        
     }
 }

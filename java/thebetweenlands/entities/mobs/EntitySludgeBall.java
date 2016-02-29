@@ -1,5 +1,7 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -9,8 +11,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 /**
  * Created by jnad325 on 2/23/16.
@@ -41,8 +41,6 @@ public class EntitySludgeBall extends EntityThrowable {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        //TODO Somehow ignores rotation
-        moveEntity(speed * Math.cos(rotationYaw * Math.PI/180), 0, speed * Math.sin(rotationYaw * Math.PI/180));
     }
 
     @Override
@@ -50,8 +48,8 @@ public class EntitySludgeBall extends EntityThrowable {
         if (collision.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && (collision.sideHit == 1 || collision.sideHit == 0)) {
             motionY *= -0.9;
             bounces++;
-            //TODO Somehow, teleports on second bounce. Teleport depends on speed. Speed 0.29 minimizes teleportation, so it is not visible atm. But this prevents me from making speed depend on target distance.
-            if (bounces == 3) explode();
+            if (bounces == 3)
+            	explode();
             else {
                 playSound("mob.slime.big", 1, 0.9f);
                 spawnBounceParticles(8);
