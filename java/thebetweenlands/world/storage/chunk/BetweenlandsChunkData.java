@@ -67,7 +67,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 			List<EntityPlayerMP> watchers = CHUNK_SYNC_HANDLER.chunkWatchers.get(pos);
 			if(watchers != null && !watchers.isEmpty()) {
 				for(EntityPlayerMP watcher : watchers) {
-					//System.out.println("SEND FOR: " + this.getChunk().worldObj);
 					TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this), watcher);
 				}
 			}
@@ -99,7 +98,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 				this.name = data.name;
 				NBTTagCompound nbtData = data.readData();
 				this.nbt = nbtData != null ? nbtData : new NBTTagCompound();
-				//System.out.println("SEND: " + this.nbt);
 			}
 
 			@Override
@@ -128,7 +126,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 
 			@Override
 			public void onMessageClientSide(MessageSyncChunkData message, EntityPlayer player) {
-				//System.out.println("RECEIVE: " + message.nbt);
 				synchronized(CHUNK_DATA_HANDLER) {
 					ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(message.chunkX, message.chunkZ);
 					NBTTagCompound currentNBT = CHUNK_NBT_CACHE.get(chunkPos);
@@ -200,19 +197,12 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 
 	@Override
 	protected void load() {
-		//System.out.println("LOAD CHUNK DATA");
 		try {
-			//System.out.println("TL: " + Thread.currentThread());
 			NBTTagCompound nbt = this.readData();
-			//System.out.println("Load data: " + nbt);
 			if(nbt.hasKey("storage")) {
 				this.storage.clear();
-				//System.out.println("LOAD STORAGE1 " + this.getChunk().worldObj + " NBT: " + nbt);
 				NBTTagList storageList = nbt.getTagList("storage", Constants.NBT.TAG_COMPOUND);
-				//System.out.println("NBT: " + storageList);
 				for(int i = 0; i < storageList.tagCount(); i++) {
-					//System.out.println("LOAD STORAGE");
-
 					NBTTagCompound storageCompound = storageList.getCompoundTagAt(i);
 					String type = storageCompound.getString("type");
 					Class<? extends ChunkStorage> storageClass = ChunkStorage.getStorageClass(type);
@@ -231,14 +221,10 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 
 	@Override
 	protected void save() {
-		//System.out.println("SAVE CHUNK DATA");
 		try {
-			//System.out.println("TS: " + Thread.currentThread());
 			if(!this.storage.isEmpty()) {
 				NBTTagList storageList = new NBTTagList();
 				for(ChunkStorage storage : this.storage) {
-					//System.out.println("SAVE STORAGE: " + this.getChunk().worldObj);
-
 					NBTTagCompound storageCompound = new NBTTagCompound();
 					storage.writeToNBT(storageCompound);
 					String type = ChunkStorage.getStorageType(storage.getClass());
@@ -250,7 +236,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setTag("storage", storageList);
 				this.writeData(nbt);
-				//System.out.println("NBT: " + storageList);
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();

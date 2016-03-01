@@ -4,10 +4,12 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
+import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
 public class WorldGenWightTower extends WorldGenerator {
 
@@ -44,6 +46,7 @@ public class WorldGenWightTower extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
+    	StorageHelper.addArea(world, "Wight tower", AxisAlignedBB.getBoundingBox(x, y, z, x + 32, y + 40, z + 32));
         return generateStructure(world, random, x, y, z);
     }
 
