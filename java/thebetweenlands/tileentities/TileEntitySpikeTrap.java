@@ -18,6 +18,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 
 	public int animationTicks;
 	public boolean active;
+	public byte type;
 
 	@Override
 	public boolean canUpdate() {
@@ -28,7 +29,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			if (!worldObj.isAirBlock(xCoord, yCoord + 1, zCoord)) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3);
+				setType((byte) 1);
 				setActive(true);
 				Block block = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
 				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 1, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord)));
@@ -36,15 +37,15 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
-			if (worldObj.rand.nextInt(50) == 0) {
-				if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0 && !active && animationTicks == 0)
-					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3);
+			if (worldObj.rand.nextInt(500) == 0) {
+				if (type != 0 && !active && animationTicks == 0)
+					setType((byte) 0);
 				else if (isBlockOccupied() == null)
-					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3);
+					setType((byte) 1);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			
-			if (isBlockOccupied() != null && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0) {
+			if (isBlockOccupied() != null && type != 0) {
 				if(!active && animationTicks == 0)
 					setActive(true);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
@@ -68,6 +69,10 @@ public class TileEntitySpikeTrap extends TileEntity {
 		active = isActive;
 	}
 
+	public void setType(byte blockType) {
+		type = blockType;
+	}
+
 	@SuppressWarnings("unchecked")
 	protected Entity activateBlock() {
 		float y = 1F / 16 * animationTicks;
@@ -76,7 +81,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
-					if (entity instanceof EntityPlayer)
+					//if (entity instanceof EntityPlayer)
 						((EntityLivingBase) entity).attackEntityFrom(DamageSource.generic, 2);
 			}
 		return null;
@@ -84,11 +89,11 @@ public class TileEntitySpikeTrap extends TileEntity {
 
 	@SuppressWarnings("unchecked")
 	protected Entity isBlockOccupied() {
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1D, yCoord + 2D, zCoord + 1D));
+		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord + 0.25D, yCoord, zCoord + 0.25D, xCoord + 0.75D, yCoord + 2D, zCoord + 0.75D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
-				if (entity instanceof EntityPlayer)
+				//if (entity instanceof EntityPlayer)
 					return entity;
 		}
 		return null;
@@ -99,6 +104,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 		super.writeToNBT(nbt);
 		nbt.setInteger("animationTicks", animationTicks);
 		nbt.setBoolean("active", active);
+		nbt.setByte("type", type);
 	}
 
 	@Override
@@ -106,6 +112,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 		super.readFromNBT(nbt);
 		animationTicks = nbt.getInteger("animationTicks");
 		active = nbt.getBoolean("active");
+		type = nbt.getByte("type");
 	}
 
 	@Override
@@ -113,6 +120,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 		NBTTagCompound nbt = new NBTTagCompound();
 		nbt.setInteger("animationTicks", animationTicks);
 		nbt.setBoolean("active", active);
+		nbt.setByte("type", type);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -121,5 +129,6 @@ public class TileEntitySpikeTrap extends TileEntity {
 			S35PacketUpdateTileEntity packet) {
 		animationTicks = packet.func_148857_g().getInteger("animationTicks");
 		active = packet.func_148857_g().getBoolean("active");
+		type = packet.func_148857_g().getByte("type");
 	}
 }
