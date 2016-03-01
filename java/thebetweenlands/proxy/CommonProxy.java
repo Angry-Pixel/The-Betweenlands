@@ -1,9 +1,5 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -64,6 +60,7 @@ import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityRepeller;
+import thebetweenlands.tileentities.TileEntitySpikeTrap;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
@@ -71,6 +68,10 @@ import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.TileEntityWraithPusher;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -122,6 +123,7 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityConnectionFastener.class, "fairyLightsFastener");
 		registerTileEntity(TileEntityWraithPusher.class, "wraithPusher");
+		registerTileEntity(TileEntitySpikeTrap.class, "spikeTrap");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

@@ -6,9 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
@@ -87,6 +84,7 @@ import thebetweenlands.blocks.stalactite.BlockStalactite;
 import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
+import thebetweenlands.blocks.structure.BlockSpikeTrap;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
 import thebetweenlands.blocks.structure.BlockWraithPusher;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
@@ -133,6 +131,9 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
@@ -552,6 +553,7 @@ public class BLBlockRegistry {
 	public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 	public static final BlockRope rope = new BlockRope();
 	public static final BlockWraithPusher wraith = new BlockWraithPusher();
+	public static final BlockSpikeTrap spikeTrap = new BlockSpikeTrap();
 	// SLABS
 	public static final BlockBLSlab weedwoodPlankSlab = new BlockBLSlab(false, Material.wood, "weedwoodPlanks", null, "axe");
 	public static final BlockBLSlab weedwoodPlankSlabDouble = new BlockBLSlab(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab, "axe");
