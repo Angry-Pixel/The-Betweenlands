@@ -1,6 +1,7 @@
 package thebetweenlands.world.storage.chunk;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,33 +16,23 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.network.message.base.AbstractMessage;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData.ChunkSyncHandler.MessageSyncChunkData;
+import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
 
 public class BetweenlandsChunkData extends ChunkDataBase {
-	public boolean hasData = false;
-
 	public BetweenlandsChunkData() {
 		super(ModInfo.ID + ":chunkData");
-	}
-
-	@Override
-	protected void load() {
-		//System.out.println("LOAD CHUNK DATA");
-		this.hasData = this.getData().getBoolean("hasData");
-	}
-
-	@Override
-	protected void save() {
-		//System.out.println("SAVE CHUNK DATA");
-		this.getData().setBoolean("hasData", this.hasData);
 	}
 
 	@Override
@@ -54,28 +45,29 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 		//System.out.println("DEFAULTS");
 	}
 
-	public static BetweenlandsChunkData forChunk(Chunk chunk) {
-		return ChunkDataBase.forChunk(chunk, BetweenlandsChunkData.class);
+	public static BetweenlandsChunkData forChunk(World world, Chunk chunk) {
+		return ChunkDataBase.forChunk(world, chunk, BetweenlandsChunkData.class);
 	}
 
 	@Override
 	public void markDirty() {
 		super.markDirty();
-		this.syncData();
+		this.save();
 	}
 
 	@Override
 	protected void postInit() {
+		this.save();
 		this.syncData();
 	}
 
 	public void syncData() {
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			this.save();
 			ChunkCoordIntPair pos = new ChunkCoordIntPair(this.getChunk().xPosition, this.getChunk().zPosition);
 			List<EntityPlayerMP> watchers = CHUNK_SYNC_HANDLER.chunkWatchers.get(pos);
 			if(watchers != null && !watchers.isEmpty()) {
 				for(EntityPlayerMP watcher : watchers) {
+					//System.out.println("SEND FOR: " + this.getChunk().worldObj);
 					TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this), watcher);
 				}
 			}
@@ -105,7 +97,8 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 				this.chunkX = data.getChunk().xPosition;
 				this.chunkZ = data.getChunk().zPosition;
 				this.name = data.name;
-				this.nbt = data.getData() != null ? data.getData() : new NBTTagCompound();
+				NBTTagCompound nbtData = data.readData();
+				this.nbt = nbtData != null ? nbtData : new NBTTagCompound();
 				//System.out.println("SEND: " + this.nbt);
 			}
 
@@ -145,8 +138,9 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 					CHUNK_NBT_CACHE.put(chunkPos, currentNBT);
 					for(Entry<ChunkDataTypePair, ChunkDataBase> dataPair : CACHE.entrySet()) {
 						if(message.name.equals(dataPair.getValue().name) && dataPair.getKey().pos.equals(chunkPos)) {
-							dataPair.getValue().readFromNBT(currentNBT);
+							dataPair.getValue().writeData(message.nbt);
 							dataPair.getValue().load();
+							//dataPair.getValue().load();
 						}
 					}
 				}
@@ -182,7 +176,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 				if(this.addWatcher(event.chunk, event.player)) {
 					synchronized(CHUNK_DATA_HANDLER) {
 						Chunk chunk = event.player.worldObj.getChunkFromChunkCoords(event.chunk.chunkXPos, event.chunk.chunkZPos);
-						BetweenlandsChunkData data = BetweenlandsChunkData.forChunk(chunk);
+						BetweenlandsChunkData data = BetweenlandsChunkData.forChunk(event.player.worldObj, chunk);
 						TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(data), event.player);
 					}
 				}
@@ -195,5 +189,77 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 		public void onChunkUnload(ChunkEvent.Unload event) {
 			this.chunkWatchers.remove(event.getChunk());
 		}
+	}
+
+
+
+
+	////////// Data //////////
+
+	private List<ChunkStorage> storage = new ArrayList<ChunkStorage>();
+
+	@Override
+	protected void load() {
+		//System.out.println("LOAD CHUNK DATA");
+		try {
+			//System.out.println("TL: " + Thread.currentThread());
+			NBTTagCompound nbt = this.readData();
+			//System.out.println("Load data: " + nbt);
+			if(nbt.hasKey("storage")) {
+				this.storage.clear();
+				//System.out.println("LOAD STORAGE1 " + this.getChunk().worldObj + " NBT: " + nbt);
+				NBTTagList storageList = nbt.getTagList("storage", Constants.NBT.TAG_COMPOUND);
+				//System.out.println("NBT: " + storageList);
+				for(int i = 0; i < storageList.tagCount(); i++) {
+					//System.out.println("LOAD STORAGE");
+
+					NBTTagCompound storageCompound = storageList.getCompoundTagAt(i);
+					String type = storageCompound.getString("type");
+					Class<? extends ChunkStorage> storageClass = ChunkStorage.getStorageClass(type);
+					if(storageClass == null)
+						throw new Exception("Chunk storage type not mapped!");
+					Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(Chunk.class);
+					ChunkStorage storage = ctor.newInstance(this.getChunk());
+					storage.readFromNBT(storageCompound);
+					this.storage.add(storage);
+				}
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void save() {
+		//System.out.println("SAVE CHUNK DATA");
+		try {
+			//System.out.println("TS: " + Thread.currentThread());
+			if(!this.storage.isEmpty()) {
+				NBTTagList storageList = new NBTTagList();
+				for(ChunkStorage storage : this.storage) {
+					//System.out.println("SAVE STORAGE: " + this.getChunk().worldObj);
+
+					NBTTagCompound storageCompound = new NBTTagCompound();
+					storage.writeToNBT(storageCompound);
+					String type = ChunkStorage.getStorageType(storage.getClass());
+					if(type == null)
+						throw new Exception("Chunk storage type not mapped!");
+					storageCompound.setString("type", type);
+					storageList.appendTag(storageCompound);
+				}
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setTag("storage", storageList);
+				this.writeData(nbt);
+				//System.out.println("NBT: " + storageList);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+
+		this.syncData();
+	}
+
+	public List<ChunkStorage> getStorage() {
+		return this.storage;
 	}
 }

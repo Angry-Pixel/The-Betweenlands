@@ -1,6 +1,5 @@
 package thebetweenlands.world.storage.chunk;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,44 +7,65 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.network.message.base.AbstractMessage;
+import net.minecraftforge.event.world.WorldEvent;
 
 public abstract class ChunkDataBase {
 	public final String name;
 
 	private NBTTagCompound data = new NBTTagCompound();
 	private Chunk chunk;
+	private World world;
 
 	public ChunkDataBase(String name) {
 		this.name = name;
 	}
 
-	public final void readFromNBT(NBTTagCompound compound) {
-		this.data = compound.getCompoundTag(this.name);
+	/**
+	 * Thread safe read from the NBT.
+	 * Read-only
+	 * @param compound
+	 */
+	public final NBTTagCompound readData() {
+		synchronized(this) {
+			return (NBTTagCompound) this.data.copy();
+		}
 	}
 
-	public final void writeToNBT(NBTTagCompound compound) {
-		this.save();
-		compound.setTag(this.name, this.data);
+	/**
+	 * Thread safe write to the NBT.
+	 * @param compound
+	 */
+	public final void writeData(NBTTagCompound compound) {
+		synchronized(this) {
+			this.data = (NBTTagCompound) compound.copy();
+		}
+	}
+
+	private final void writeToNBTInternal(NBTTagCompound compound) {
+		synchronized(this) {
+			compound.setTag(this.name, this.data);
+		}
+	}
+
+	private final void readFromNBTInternal(NBTTagCompound compound) {
+		synchronized(this) {
+			this.data = compound.getCompoundTag(this.name);
+		}
 	}
 
 	public Chunk getChunk() {
 		return this.chunk;
+	}
+
+	public World getWorld() {
+		return this.world;
 	}
 
 	/**
@@ -82,9 +102,14 @@ public abstract class ChunkDataBase {
 	 */
 	protected abstract void setDefaults();
 
-	public NBTTagCompound getData() {
+	/**
+	 * Called when the data is unloaded
+	 */
+	protected void onUnload() { }
+
+	/*public NBTTagCompound getData() {
 		return this.data;
-	}
+	}*/
 
 	protected static final Map<ChunkDataTypePair, ChunkDataBase> CACHE = new HashMap<ChunkDataTypePair, ChunkDataBase>();
 	protected static final Map<ChunkCoordIntPair, NBTTagCompound> CHUNK_NBT_CACHE = new HashMap<ChunkCoordIntPair, NBTTagCompound>();
@@ -92,18 +117,20 @@ public abstract class ChunkDataBase {
 
 	protected static class ChunkDataTypePair {
 		protected ChunkCoordIntPair pos;
+		protected World world;
 		protected Class<? extends ChunkDataBase> data;
-		private ChunkDataTypePair(ChunkCoordIntPair pos, Class<? extends ChunkDataBase> data) {
+		private ChunkDataTypePair(ChunkCoordIntPair pos, World world, Class<? extends ChunkDataBase> data) {
 			this.pos = pos;
+			this.world = world;
 			this.data = data;
 		}
 	}
 
-	private static ChunkDataBase getMatchingData(ChunkCoordIntPair pos, Class<? extends ChunkDataBase> clazz) {
+	private static ChunkDataBase getMatchingData(ChunkCoordIntPair pos, World world, Class<? extends ChunkDataBase> clazz) {
 		synchronized(CHUNK_DATA_HANDLER) {
 			for(Entry<ChunkDataTypePair, ChunkDataBase> cacheEntry : CACHE.entrySet()) {
 				ChunkDataTypePair pair = cacheEntry.getKey();
-				if(pair.pos.equals(pos) && pair.data.equals(clazz)) {
+				if(pair.pos.equals(pos) && pair.data.equals(clazz) && pair.world.equals(world)) {
 					return cacheEntry.getValue();
 				}
 			}
@@ -111,14 +138,15 @@ public abstract class ChunkDataBase {
 		}
 	}
 
-	public static <T extends ChunkDataBase> T forChunk(Chunk chunk, Class<T> clazz) {
+	public static <T extends ChunkDataBase> T forChunk(World world, Chunk chunk, Class<T> clazz) {
 		synchronized(CHUNK_DATA_HANDLER) {
 			ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(chunk.xPosition, chunk.zPosition);
 
-			ChunkDataBase cached = getMatchingData(chunkPos, clazz);
+			ChunkDataBase cached = getMatchingData(chunkPos, world, clazz);
 			if(cached != null) {
 				//Already cached
 				cached.chunk = chunk;
+				cached.world = world;
 				return (T) cached;
 			}
 
@@ -135,6 +163,7 @@ public abstract class ChunkDataBase {
 				nbt = new NBTTagCompound();
 
 			((ChunkDataBase)newInstance).chunk = chunk;
+			((ChunkDataBase)newInstance).world = world;
 
 			if(!nbt.hasKey(newInstance.name)) {
 				//System.out.println("CREATE NEW");
@@ -147,12 +176,12 @@ public abstract class ChunkDataBase {
 				//System.out.println("LOAD FROM NBT");
 				//Loading from chunk NBT
 				newInstance.init();
-				newInstance.readFromNBT(nbt);
+				((ChunkDataBase)newInstance).readFromNBTInternal(nbt);
 				newInstance.load();
 				newInstance.postInit();
 			}
 
-			CACHE.put(new ChunkDataTypePair(chunkPos, clazz), newInstance);
+			CACHE.put(new ChunkDataTypePair(chunkPos, world, clazz), newInstance);
 
 			return (T) newInstance;
 		}
@@ -179,9 +208,12 @@ public abstract class ChunkDataBase {
 					for(ChunkDataTypePair pair : CACHE.keySet()) {
 						if(pair.pos.equals(chunkPos)) {
 							NBTTagCompound chunkData = new NBTTagCompound();
-							CACHE.get(pair).writeToNBT(chunkData);
+							ChunkDataBase data = CACHE.get(pair);
+							synchronized(data) {
+								data.writeToNBTInternal(chunkData);
+							}
 							chunkNBT.setTag("extendedChunkData", chunkData);
-							//System.out.println("SAVE FOR: " + CACHE.get(pair) + " " + pair.pos.chunkXPos + " " + pair.pos.chunkZPos);
+							//System.out.println("SAVE FOR: " + CACHE.get(pair) + " " + pair.pos.chunkXPos + " " + pair.pos.chunkZPos + " ");
 						}
 					}
 
@@ -191,8 +223,11 @@ public abstract class ChunkDataBase {
 					while(unloadIT.hasNext()) {
 						Chunk unloadedChunk = unloadIT.next();
 						if(unloadedChunk == event.getChunk()) {
-							for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos)) {
+							for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos, event.world)) {
 								if(cpair != null) {
+									ChunkDataBase data = CACHE.get(cpair);
+									if(data != null)
+										data.onUnload();
 									CACHE.remove(cpair);
 								}
 							}
@@ -200,11 +235,21 @@ public abstract class ChunkDataBase {
 						}
 					}
 
+					/*if(!event.getChunk().isChunkLoaded) {
+						for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos, event.world)) {
+							ChunkDataBase data = CACHE.get(cpair);
+							if(data != null)
+								data.onUnload();
+							CACHE.remove(cpair);
+						}
+					}*/
+
 					CHUNK_NBT_CACHE.remove(chunkPos);
 				} else if(event instanceof ChunkDataEvent.Load) {
 					synchronized(CHUNK_DATA_HANDLER) {
 						if(chunkNBT.hasKey("extendedChunkData") && chunkNBT.getTag("extendedChunkData") instanceof NBTTagCompound) {
 							//Cache extended chunk data
+							//System.out.println("Load chunk data: " + chunkNBT.getCompoundTag("extendedChunkData"));
 							CHUNK_NBT_CACHE.put(chunkPos, chunkNBT.getCompoundTag("extendedChunkData"));
 						}
 					}
@@ -216,7 +261,7 @@ public abstract class ChunkDataBase {
 		public void onChunkUnload(ChunkEvent.Unload event) {
 			synchronized(CHUNK_DATA_HANDLER) {
 				ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(event.getChunk().xPosition, event.getChunk().zPosition);
-				for(ChunkDataTypePair pair : this.getDataCacheKeys(chunkPos)) {
+				for(ChunkDataTypePair pair : this.getDataCacheKeys(chunkPos, event.world)) {
 					//System.out.println("NBT Cache: " + CHUNK_NBT_CACHE.size());
 					//System.out.println("DATA CACHE: " + CACHE.size());
 
@@ -232,13 +277,23 @@ public abstract class ChunkDataBase {
 			}
 		}
 
-		private List<ChunkDataTypePair> getDataCacheKeys(ChunkCoordIntPair chunkPos) {
+		@SubscribeEvent
+		public void onWorldUnload(WorldEvent.Unload event) {
+			synchronized(CHUNK_DATA_HANDLER) {
+				//TODO: Test
+				/*CHUNK_UNLOAD_QUEUE.clear();
+				CHUNK_NBT_CACHE.clear();
+				CACHE.clear();*/
+			}
+		}
+
+		private List<ChunkDataTypePair> getDataCacheKeys(ChunkCoordIntPair chunkPos, World world) {
 			synchronized(CHUNK_DATA_HANDLER) {
 				List<ChunkDataTypePair> caches = new ArrayList<ChunkDataTypePair>();
 				Iterator<Entry<ChunkDataTypePair, ChunkDataBase>> pairIT = CACHE.entrySet().iterator();
 				while(pairIT.hasNext()) {
 					Entry<ChunkDataTypePair, ChunkDataBase> entry = pairIT.next();
-					if(entry.getKey().pos.equals(chunkPos)) {
+					if(entry.getKey().pos.equals(chunkPos) && entry.getKey().world.equals(world)) {
 						caches.add(entry.getKey());
 					}
 				}

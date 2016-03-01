@@ -373,7 +373,7 @@ public class RadialMenuHandler {
 				GL11.glTranslated(xOffset, yOffset, 0);
 				GL11.glColor4f(red, green, blue, alpha);
 
-				GuiUtil.drawPartialCircle(this.guiX, this.guiY, this.radius - 4, (int)(i * circleAngle), (int)((i + 1) * circleAngle));
+				GuiUtil.drawPartialCircle(this.guiX, this.guiY - 1, this.radius - 4, (int)(i * circleAngle), (int)((i + 1) * circleAngle));
 
 				GL11.glPopMatrix();
 			}
