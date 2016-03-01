@@ -37,10 +37,16 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (worldObj.rand.nextInt(50) == 0) {
-				if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0)
+				if (worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0 && !active && animationTicks == 0)
 					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 3);
 				else if (isBlockOccupied() == null)
 					worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 3);
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+			
+			if (isBlockOccupied() != null && worldObj.getBlockMetadata(xCoord, yCoord, zCoord) != 0) {
+				if(!active && animationTicks == 0)
+					setActive(true);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		}
@@ -48,9 +54,9 @@ public class TileEntitySpikeTrap extends TileEntity {
 			activateBlock();
 			if (animationTicks == 0)
 				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "tile.piston.out", 1.25F, 1.0F);
-			if (animationTicks <= 16)
+			if (animationTicks <= 20)
 				animationTicks++;
-			if (animationTicks == 16)
+			if (animationTicks == 20)
 				setActive(false);
 		}
 		if (!active)

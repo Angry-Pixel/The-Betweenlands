@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -31,16 +30,6 @@ public class BlockSpikeTrap extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntitySpikeTrap();
-	}
-
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-		int meta = world.getBlockMetadata(x, y, z);
-		TileEntitySpikeTrap tile = (TileEntitySpikeTrap) world.getTileEntity(x, y, z);
-		if (!world.isRemote && tile != null && meta == 1) {
-			if (!tile.active && tile.animationTicks == 0)
-				tile.setActive(true);
-		}
 	}
 
 	@Override
