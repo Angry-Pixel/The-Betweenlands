@@ -118,7 +118,6 @@ public class RadialMenuHandler {
 
 	public void updateMenu() {
 		int prevIndex = this.currentCategory != null ? this.currentCategory.index : 0;
-		System.out.println("S: " + prevIndex);
 		this.rootCategory.categories.clear();
 		this.currentCategory = this.rootCategory;
 		this.lastCategories.clear();
