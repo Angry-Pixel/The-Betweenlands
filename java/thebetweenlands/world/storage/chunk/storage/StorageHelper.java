@@ -23,7 +23,7 @@ public class StorageHelper {
 				double cez = Math.min(area.maxZ, (cz+1) * 16);
 				AxisAlignedBB clampedArea = AxisAlignedBB.getBoundingBox(csx, area.minY, csz, cex, area.maxY, cez);
 				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
-				chunkData.getStorage().add(new AreaStorage(chunk, name, clampedArea));
+				chunkData.getStorage().add(new LocationStorage(chunk, name, clampedArea));
 				chunkData.markDirty();
 			}
 		}
@@ -42,8 +42,8 @@ public class StorageHelper {
 				Iterator<ChunkStorage> storageIT = chunkData.getStorage().iterator();
 				while(storageIT.hasNext()) {
 					ChunkStorage storage = storageIT.next();
-					if(storage instanceof AreaStorage) {
-						AreaStorage areaStorage = (AreaStorage)storage;
+					if(storage instanceof LocationStorage) {
+						LocationStorage areaStorage = (LocationStorage)storage;
 						if(name.equals(areaStorage.getName())) {
 							storageIT.remove();
 							changed = true;

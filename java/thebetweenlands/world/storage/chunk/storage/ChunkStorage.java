@@ -23,7 +23,7 @@ public abstract class ChunkStorage {
 	}
 
 	static {
-		STORAGE_MAP.put("chunkArea", AreaStorage.class);
+		STORAGE_MAP.put("chunkArea", LocationStorage.class);
 	}
 
 	private final Chunk chunk;

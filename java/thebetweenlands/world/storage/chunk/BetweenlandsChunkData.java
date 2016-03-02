@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -128,17 +127,15 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 			public void onMessageClientSide(MessageSyncChunkData message, EntityPlayer player) {
 				synchronized(CHUNK_DATA_HANDLER) {
 					ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(message.chunkX, message.chunkZ);
-					NBTTagCompound currentNBT = CHUNK_NBT_CACHE.get(chunkPos);
+					NBTTagCompound currentNBT = ChunkDataBase.getNBTCache(chunkPos, player.worldObj);
 					if(currentNBT == null)
 						currentNBT = new NBTTagCompound();
 					currentNBT.setTag(message.name, message.nbt);
-					CHUNK_NBT_CACHE.put(chunkPos, currentNBT);
-					for(Entry<ChunkDataTypePair, ChunkDataBase> dataPair : CACHE.entrySet()) {
-						if(message.name.equals(dataPair.getValue().name) && dataPair.getKey().pos.equals(chunkPos)) {
-							dataPair.getValue().writeData(message.nbt);
-							dataPair.getValue().load();
-							//dataPair.getValue().load();
-						}
+					ChunkDataBase.addNBTCache(chunkPos, player.worldObj, currentNBT);
+					ChunkDataBase data = ChunkDataBase.getDataCache(chunkPos, player.worldObj, BetweenlandsChunkData.class);
+					if(data != null) {
+						data.writeData(message.nbt);
+						data.load();
 					}
 				}
 			}

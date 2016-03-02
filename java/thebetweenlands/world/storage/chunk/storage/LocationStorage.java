@@ -6,15 +6,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.chunk.Chunk;
 
-public class AreaStorage extends ChunkStorage {
+public class LocationStorage extends ChunkStorage {
 	private String name;
 	private AxisAlignedBB area;
 
-	public AreaStorage(Chunk chunk) {
+	public LocationStorage(Chunk chunk) {
 		super(chunk);
 	}
 
-	public AreaStorage(Chunk chunk, String name, AxisAlignedBB area) {
+	public LocationStorage(Chunk chunk, String name, AxisAlignedBB area) {
 		super(chunk);
 		this.name = name;
 		this.area = area;
@@ -72,7 +72,7 @@ public class AreaStorage extends ChunkStorage {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AreaStorage other = (AreaStorage) obj;
+		LocationStorage other = (LocationStorage) obj;
 		if (this.area == null) {
 			if (other.area != null)
 				return false;

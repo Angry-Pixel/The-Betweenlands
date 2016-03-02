@@ -13,7 +13,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
-import thebetweenlands.world.storage.chunk.storage.AreaStorage;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
 
 public class DebugHandlerChunkData {
@@ -32,8 +32,8 @@ public class DebugHandlerChunkData {
 
 					try {
 						for(ChunkStorage storage : data.getStorage()) {
-							if(storage instanceof AreaStorage) {
-								AreaStorage area = (AreaStorage) storage;
+							if(storage instanceof LocationStorage) {
+								LocationStorage area = (LocationStorage) storage;
 								//GL11.glTranslated(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
 								//GL11.glTranslated(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ);
 
