@@ -1,17 +1,5 @@
 package thebetweenlands.event.debugging;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.nio.IntBuffer;
-import java.text.DecimalFormat;
-
-import javax.imageio.ImageIO;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -25,6 +13,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.event.ClickEvent;
+import net.minecraft.item.ItemFood;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.StatCollector;
@@ -36,11 +25,16 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.gui.GuiDebugMenu;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.core.TheBetweenlandsClassTransformer;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.network.packet.server.PacketTickspeed;
 import thebetweenlands.proxy.ClientProxy;
@@ -48,6 +42,13 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.IntBuffer;
+import java.text.DecimalFormat;
 
 public class DebugHandlerClient extends DebugHandlerCommon {
 	public static final DebugHandlerClient INSTANCE = new DebugHandlerClient();
@@ -246,6 +247,12 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 			mc.fontRenderer.drawString("Active events: " + activeEvents, 2, yOffset += 8, 0xFFFFFFFF);
 			mc.fontRenderer.drawString("Tick speed: " + DECIMAL_FORMAT.format(ClientProxy.debugTimer.getTicksPerSecond()), 2, yOffset += 8, 0xFFFFFFFF);
 			TheBetweenlands.proxy.getCustomFontRenderer().drawString("Custom Font Test", 2, yOffset += 8, 0xFFFFFFFF);
+			if (mc.thePlayer.getCurrentEquippedItem() != null && mc.thePlayer.getCurrentEquippedItem().getItem() instanceof ItemFood) {
+				EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesFood.class);
+				mc.fontRenderer.drawString("Hatred: " + property.getFoodHatred((ItemFood) mc.thePlayer.getCurrentEquippedItem().getItem()), 2, yOffset += 8, 0xFFFFFFFF);
+				mc.fontRenderer.drawString("Sickness: " + property.getSickness((ItemFood) mc.thePlayer.getCurrentEquippedItem().getItem()), 2, yOffset += 8, 0xFFFFFFFF);
+				mc.fontRenderer.drawString("Last Sickness: " + property.getLastSickness(), 2, yOffset += 8, 0xFFFFFFFF);
+			}
 		}
 	}
 
