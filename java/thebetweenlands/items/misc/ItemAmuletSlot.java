@@ -12,9 +12,10 @@ import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 public class ItemAmuletSlot extends Item {
 	public ItemAmuletSlot() {
 		this.setUnlocalizedName("thebetweenlands.amuletSlot");
+		this.setTextureName("thebetweenlands:amuletSlot");
 
 		this.setMaxStackSize(1);
-		this.setMaxDamage(16);
+		this.setMaxDamage(30);
 	}
 
 	@Override
@@ -37,8 +38,13 @@ public class ItemAmuletSlot extends Item {
 			if(player.capabilities.isCreativeMode || property.getAmuletSlots() < EntityPropertiesCircleGem.MAX_AMULET_SLOTS) {
 				if(!player.worldObj.isRemote) {
 					property.addAmuletSlot();
-					if(!player.capabilities.isCreativeMode) 
-						stack.damageItem(1, entity);
+					if(!player.capabilities.isCreativeMode) {
+						if(entity instanceof EntityPlayer) {
+							stack.damageItem(5, player);
+						} else {
+							stack.damageItem(2, player);
+						}
+					}
 					player.addChatMessage(new ChatComponentTranslation("chat.amulet.slot.added"));
 				}
 				player.swingItem();

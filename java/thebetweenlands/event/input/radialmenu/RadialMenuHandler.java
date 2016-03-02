@@ -1,6 +1,7 @@
 package thebetweenlands.event.input.radialmenu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.lwjgl.input.Mouse;
@@ -49,6 +50,7 @@ public class RadialMenuHandler {
 
 
 	////// Input ///////
+	//TODO: Fix mouse clicks triggering ingame clicking
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
@@ -115,8 +117,11 @@ public class RadialMenuHandler {
 	}
 
 	public void updateMenu() {
+		int prevIndex = this.currentCategory != null ? this.currentCategory.index : 0;
+		System.out.println("S: " + prevIndex);
 		this.rootCategory.categories.clear();
 		this.currentCategory = this.rootCategory;
+		this.lastCategories.clear();
 
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		if(player != null) {
@@ -141,23 +146,41 @@ public class RadialMenuHandler {
 					categories.add(new Categories.UnequipCategory(StatCollector.translateToLocal("equipment.menu.unequip"), 0x60AA1010, 0xDDAA1010, equipment.item, equipmentInventory.getEquipment().indexOf(equipment)));
 				}
 			}
+			int index = 0;
 			int page = 1;
 			int categoryLimit = 10;
 			Category currentCategory = this.rootCategory;
+			List<Category> pages = new ArrayList<Category>();
 			for(Category category : categories) {
 				if(currentCategory.getCategories().size() > categoryLimit) {
 					page++;
 					Category newPage = new Category(String.format(StatCollector.translateToLocal("equipment.menu.page"), page), 0x80101010, 0xEE202020);
 					currentCategory.addCategory(newPage);
 					currentCategory = newPage;
+					pages.add(newPage);
 				}
 				currentCategory.addCategory(category);
 			}
+			List<Category> allCategories = new ArrayList<Category>();
+			allCategories.addAll(categories);
+			allCategories.addAll(pages);
+			for(Category category : allCategories) {
+				category.index = ++index;
+			}
+			for(Category category : allCategories) {
+				if(category.index == prevIndex && !category.getCategories().isEmpty()) {
+					Category parent = category;
+					while((parent = parent.parent) != null) {
+						this.lastCategories.add(parent);
+					}
+					Collections.reverse(this.lastCategories);
+					this.currentCategory = category;
+				}
+			}
 		}
 
-		this.lastCategories.clear();
 		//this.displayedCategories = 0;
-		this.displayedCategories = this.rootCategory.getCategories().size();
+		this.displayedCategories = this.currentCategory.getCategories().size();
 	}
 
 	@SubscribeEvent
@@ -170,6 +193,8 @@ public class RadialMenuHandler {
 	////// GUI ///////
 
 	public static class Category {
+		private Category parent;
+		private int index;
 		private List<Category> categories = new ArrayList<Category>();
 		private String name;
 		private int color;
@@ -209,6 +234,7 @@ public class RadialMenuHandler {
 		}
 
 		public Category addCategory(Category category) {
+			category.parent = this;
 			this.categories.add(category);
 			return this;
 		}
@@ -301,6 +327,7 @@ public class RadialMenuHandler {
 					if(!this.equippables.isEmpty()) {
 						this.updateMenu();
 					}
+					this.equippables.clear();
 					this.equippables.addAll(currentEquippables);
 				}
 			}
@@ -317,8 +344,6 @@ public class RadialMenuHandler {
 
 			if(!this.isOpen || this.currentCategory == null)
 				return;
-
-			//TODO: Implement menu refreshing
 
 			//TODO: Will look into this, it seems Forge is also doing some stencil buffer stuff, but it doesn't seem like there is any buffer properly set up
 			MCStencil.checkSetupFBO();

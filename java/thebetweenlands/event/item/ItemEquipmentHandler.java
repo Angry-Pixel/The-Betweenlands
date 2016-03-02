@@ -27,9 +27,10 @@ public class ItemEquipmentHandler {
 					EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.target, EntityPropertiesEquipment.class);
 					if(property != null) {
 						if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.target, property.getEquipmentInventory())) {
-							tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem());
-							if(event.entityPlayer.getHeldItem().stackSize <= 0)
-								event.entityPlayer.setCurrentItemOrArmor(0, null);
+							if(tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem())) {
+								if(event.entityPlayer.getHeldItem().stackSize <= 0)
+									event.entityPlayer.setCurrentItemOrArmor(0, null);
+							}
 						}
 					}
 				}
@@ -46,30 +47,35 @@ public class ItemEquipmentHandler {
 				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesEquipment.class);
 				if(property != null) {
 					if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.entityPlayer, property.getEquipmentInventory())) {
-						tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem());
-						if(event.entityPlayer.getHeldItem().stackSize <= 0)
-							event.entityPlayer.setCurrentItemOrArmor(0, null);
+						if(tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem())) {
+							if(event.entityPlayer.getHeldItem().stackSize <= 0)
+								event.entityPlayer.setCurrentItemOrArmor(0, null);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	private static void tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
+	private static boolean tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
 		if(EquipmentInventory.equipItem(player, target, stack) != null) {
 			if(!player.capabilities.isCreativeMode)
 				stack.stackSize--;
 			player.swingItem();
+			return true;
 		}
+		return false;
 	}
 
-	private static void tryPlayerUnequip(EntityPlayer player, Entity target) {
+	private static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
 		ItemStack unequipped = EquipmentInventory.unequipItem(player, target);
 		if(unequipped != null) {
 			if(!player.inventory.addItemStackToInventory(unequipped))
 				target.entityDropItem(unequipped, target.getEyeHeight());
 			player.swingItem();
+			return true;
 		}
+		return false;
 	}
 
 	@SubscribeEvent

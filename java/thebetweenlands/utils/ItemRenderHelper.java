@@ -24,11 +24,12 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 public class ItemRenderHelper
 {
-	public static void drawItemStack(ItemStack stack, int x, int y, String text) {
+	public static void drawItemStack(ItemStack stack, int x, int y, String text, boolean withColor) {
 		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
 		FontRenderer font = null;
 		if (stack != null) font = stack.getItem().getFontRenderer(stack);
 		if (font == null) font = Minecraft.getMinecraft().fontRenderer;
+		itemRender.renderWithColor = withColor;
 		itemRender.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, x, y);
 		itemRender.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, x, y, text);
 		GL11.glEnable(GL11.GL_LIGHTING);
