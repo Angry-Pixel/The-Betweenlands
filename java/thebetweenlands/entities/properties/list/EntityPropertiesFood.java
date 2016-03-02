@@ -107,6 +107,17 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 			hatredMap.put(food.getUnlocalizedName(), amount);
 		}
 		lastHatred = hatredMap.get(food.getUnlocalizedName());
+		decreaseHatredForAllExcept(food);
+	}
+
+	public void decreaseHatredForAllExcept(ItemFood food) {
+		Map<String, Integer> newHatredMap = Maps.newHashMap();
+		for (String key : hatredMap.keySet()) {
+			if (!key.equals(food.getUnlocalizedName())) {
+				newHatredMap.put(key, hatredMap.get(key) - 1);
+			}
+		}
+		hatredMap.putAll(newHatredMap);
 	}
 
 	public PlayerItemEventHandler.Sickness getSickness(ItemFood food) {
