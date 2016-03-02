@@ -30,7 +30,7 @@ public class BlockSpikeTrap extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return 0;
+		return 1;
 	}
 
 	@Override
