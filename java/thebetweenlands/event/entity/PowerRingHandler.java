@@ -3,6 +3,7 @@ package thebetweenlands.event.entity;
 import java.util.List;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -20,19 +21,35 @@ import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketPowerRingHit;
 
 public class PowerRingHandler {
+	public static final PowerRingHandler INSTANCE = new PowerRingHandler();
+
 	@SubscribeEvent
-	public void powerRingHandler(LivingHurtEvent event) {
+	public void onEntityHurt(LivingHurtEvent event) {
 		if(event.source.getEntity() instanceof EntityLivingBase){
 			EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
 			if(attacker instanceof EntityPlayerMP) {
 				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(attacker);
 				List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
 				for(Equipment equipment : equipmentList) {
-					if(equipment.item.getItem() instanceof ItemRingOfPower) {
+					if(equipment.item.getItem() instanceof ItemRingOfPower && equipment.item.getItemDamage() < equipment.item.getMaxDamage()) {
 						event.ammount *= 1.5f;
 						if(event.entity != null) 
 							TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketPowerRingHit(event.entity.getEntityId())), new TargetPoint(event.entity.dimension, event.entity.posX, event.entity.posY, event.entity.posZ, 64D));
 					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerTick(PlayerTickEvent event) {
+		if(event.player != null && event.player.ticksExisted % 20 == 0) {
+			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.player);
+			List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
+			for(Equipment equipment : equipmentList) {
+				if(equipment.item.getItem() instanceof ItemRingOfPower) {
+					if(equipment.item.getItemDamage() < equipment.item.getMaxDamage())
+						equipment.item.setItemDamage(equipment.item.getItemDamage() + 1);
 				}
 			}
 		}

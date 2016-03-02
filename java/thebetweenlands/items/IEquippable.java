@@ -15,6 +15,16 @@ public interface IEquippable {
 	public EnumEquipmentCategory getEquipmentCategory(ItemStack stack);
 
 	/**
+	 * Returns whether this item should be equipped on right click
+	 * @param stack
+	 * @param player
+	 * @param entity
+	 * @param inventory
+	 * @return
+	 */
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory);
+	
+	/**
 	 * Returns whether this item can be equipped
 	 * @param stack Item to equip
 	 * @param player Player that is interacting

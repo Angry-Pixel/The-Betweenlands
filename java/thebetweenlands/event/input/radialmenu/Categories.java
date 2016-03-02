@@ -34,16 +34,13 @@ public class Categories {
 		public void renderCategory(double centerX, double centerY, double dirX, double dirY, double radius, double startX, double startY, double angle, double segmentAngle) {
 			if(this.item != null) {
 				GL11.glPushMatrix();
-				double posX = centerX + startX + dirX * radius / 2.0D - 1;
-				double posY = centerY + startY + dirY * radius / 2.0D + 4;
+				double posX = centerX + startX + dirX * radius / 2.0D - 8;
+				double posY = centerY + startY + dirY * radius / 2.0D - 8;
 				GL11.glTranslated(posX, posY, 0);
 				GL11.glColor4f(1, 1, 1, 1);
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GL11.glScaled(-10, -10, 0);
-				for(int i = 0; i < this.item.getItem().getRenderPasses(this.item.getItemDamage()); i++) {
-					ItemRenderHelper.renderItem(this.item, i);
-				}
+				ItemRenderHelper.drawItemStack(this.getItem(), 0, 0, null);
 				GL11.glPopMatrix();
 			}
 		}

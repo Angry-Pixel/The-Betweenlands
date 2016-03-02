@@ -239,4 +239,9 @@ public class ItemAmulet extends Item implements IEquippable {
 			}
 		}
 	}
+
+	@Override
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
+		return true;
+	}
 }

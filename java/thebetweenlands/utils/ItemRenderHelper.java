@@ -5,9 +5,11 @@ import org.lwjgl.opengl.GL12;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -22,6 +24,18 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 
 public class ItemRenderHelper
 {
+	public static void drawItemStack(ItemStack stack, int x, int y, String text) {
+		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		FontRenderer font = null;
+		if (stack != null) font = stack.getItem().getFontRenderer(stack);
+		if (font == null) font = Minecraft.getMinecraft().fontRenderer;
+		itemRender.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, x, y);
+		itemRender.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft().getTextureManager(), stack, x, y, text);
+		GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        RenderHelper.disableStandardItemLighting();
+	}
+
 	/**
 	 * Renders an item with the size of a normal block.
 	 *

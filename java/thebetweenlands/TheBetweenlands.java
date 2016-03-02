@@ -187,7 +187,8 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
-		MinecraftForge.EVENT_BUS.register(new PowerRingHandler());
+		MinecraftForge.EVENT_BUS.register(PowerRingHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(PowerRingHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());
 		MinecraftForge.EVENT_BUS.register(new PageDiscoveringEvent());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);

@@ -6,7 +6,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.items.IEquippable;
@@ -18,6 +20,7 @@ import thebetweenlands.manual.IManualEntryItem;
 public class ItemRingOfPower extends Item implements IEquippable, IManualEntryItem {
 	public ItemRingOfPower() {
 		this.maxStackSize = 1;
+		this.setMaxDamage(1800);
 		this.setUnlocalizedName("thebetweenlands.ringOfPower");
 		setTextureName("thebetweenlands:ringOfPower");
 	}
@@ -53,6 +56,38 @@ public class ItemRingOfPower extends Item implements IEquippable, IManualEntryIt
 	}
 
 	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if(!world.isRemote) {
+			if(stack.getItemDamage() > 0 && player.experienceTotal > 0) {
+				int repairPerClick = 40;
+				//1 xp = 5 damage repaired
+				float conversion = 5.0F;
+				float requiredRepair = Math.min(repairPerClick, stack.getItemDamage() / conversion);
+				stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceiling_float_int(Math.min(repairPerClick, player.experienceTotal) * conversion)));
+				this.removeXp(player, MathHelper.ceiling_float_int(Math.min(requiredRepair, player.experienceTotal)));
+			}
+		}
+		return stack;
+	}
+
+	private void removeXp(EntityPlayer player, int amount){
+		int xpCap = Integer.MIN_VALUE + player.experienceTotal;
+		if (amount < xpCap) {
+			amount = xpCap;
+		}
+		player.experience -= (float)amount / (float)player.xpBarCap();
+		for (player.experienceTotal -= amount; player.experience <= 0.0F; player.experience /= (float)player.xpBarCap()) {
+			player.experience = (player.experience + 1.0F) * (float)player.xpBarCap();
+			player.experienceLevel -= 1;
+		}
+		if(player.experienceTotal <= 0) {
+			player.experience = 0;
+			player.experienceLevel = 0;
+			player.experienceTotal = 0;
+		}
+	}
+
+	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
 		return entity instanceof EntityPlayer && inventory.getEquipment(EnumEquipmentCategory.RING).size() == 0;
 	}
@@ -72,4 +107,9 @@ public class ItemRingOfPower extends Item implements IEquippable, IManualEntryIt
 
 	@Override
 	public void onUnequip(ItemStack stack, Entity entity, EquipmentInventory inventory) { }
+
+	@Override
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
+		return stack.getItemDamage() == 0 || player.experienceTotal == 0;
+	}
 }
