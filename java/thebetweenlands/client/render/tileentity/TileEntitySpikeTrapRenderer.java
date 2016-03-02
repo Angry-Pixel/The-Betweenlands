@@ -43,7 +43,9 @@ public class TileEntitySpikeTrapRenderer extends TileEntitySpecialRenderer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScaled(-1, -1, 1);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		model.render(spikes);
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
 
 	}
