@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
 
 public abstract class ChunkDataBase {
 	public final String name;
@@ -89,8 +88,8 @@ public abstract class ChunkDataBase {
 	 * Don't forget this if you want the data to be saved!
 	 */
 	public void markDirty() {
-		this.chunk.setChunkModified();
 		this.save();
+		this.chunk.setChunkModified();
 	}
 
 	/**
@@ -320,7 +319,7 @@ public abstract class ChunkDataBase {
 
 					//Write new extended chunk data
 					for(ChunkDataTypePair pair : CACHE.keySet()) {
-						if(pair.pos.equals(chunkPos)) {
+						if(pair.pos.equals(chunkPos) && pair.world.equals(event.world)) {
 							NBTTagCompound chunkData = new NBTTagCompound();
 							ChunkDataBase data = CACHE.get(pair);
 							data.writeToNBTInternal(chunkData);
@@ -403,7 +402,8 @@ public abstract class ChunkDataBase {
 			}
 		}
 
-		@SubscribeEvent
+		//TODO: Test if the caches are cleared properly on the client when unloading a world
+		/*@SubscribeEvent
 		public void onWorldUnload(WorldEvent.Unload event) {
 			synchronized(CHUNK_DATA_HANDLER) {
 				if(event.world.isRemote) {
@@ -412,7 +412,7 @@ public abstract class ChunkDataBase {
 					CACHE.clear();
 				}
 			}
-		}
+		}*/
 
 		private List<ChunkDataTypePair> getDataCacheKeys(ChunkCoordIntPair chunkPos, World world) {
 			synchronized(CHUNK_DATA_HANDLER) {

@@ -51,7 +51,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	@Override
 	public void markDirty() {
 		super.markDirty();
-		this.save();
 	}
 
 	@Override
@@ -207,11 +206,12 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 						throw new Exception("Chunk storage type not mapped!");
 					Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(Chunk.class);
 					ChunkStorage storage = ctor.newInstance(this.getChunk());
-					storage.readFromNBT(storageCompound);
+					storage.readFromNBT(storageCompound.getCompoundTag("storage"));
 					this.storage.add(storage);
 				}
 			}
 		} catch(Exception ex) {
+			this.markDirty();
 			ex.printStackTrace();
 		}
 	}
@@ -219,6 +219,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	@Override
 	protected void save() {
 		try {
+			NBTTagCompound nbt = new NBTTagCompound();
 			if(!this.storage.isEmpty()) {
 				NBTTagList storageList = new NBTTagList();
 				for(ChunkStorage storage : this.storage) {
@@ -227,13 +228,14 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 					String type = ChunkStorage.getStorageType(storage.getClass());
 					if(type == null)
 						throw new Exception("Chunk storage type not mapped!");
-					storageCompound.setString("type", type);
-					storageList.appendTag(storageCompound);
+					NBTTagCompound fullNBT = new NBTTagCompound();
+					fullNBT.setString("type", type);
+					fullNBT.setTag("storage", storageCompound);
+					storageList.appendTag(fullNBT);
 				}
-				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setTag("storage", storageList);
-				this.writeData(nbt);
 			}
+			this.writeData(nbt);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}

@@ -7,9 +7,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 
 public class StorageHelper {
-	public static void addArea(World world, String name, AxisAlignedBB area) {
+	public static void addArea(World world, String name, AxisAlignedBB area, EnumLocationType type) {
 		int sx = MathHelper.floor_double(area.minX / 16.0D);
 		int sz = MathHelper.floor_double(area.minZ / 16.0D);
 		int ex = MathHelper.floor_double(area.maxX / 16.0D);
@@ -23,7 +24,7 @@ public class StorageHelper {
 				double cez = Math.min(area.maxZ, (cz+1) * 16);
 				AxisAlignedBB clampedArea = AxisAlignedBB.getBoundingBox(csx, area.minY, csz, cex, area.maxY, cez);
 				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
-				chunkData.getStorage().add(new LocationStorage(chunk, name, clampedArea));
+				chunkData.getStorage().add(new LocationStorage(chunk, name, clampedArea, type));
 				chunkData.markDirty();
 			}
 		}

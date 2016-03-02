@@ -49,6 +49,7 @@ import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OverworldItemEventHandler;
 import thebetweenlands.event.player.PlayerItemEventHandler;
 import thebetweenlands.event.player.PlayerLanternEventHandler;
+import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
@@ -210,6 +211,8 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(DebugHandlerChunkData.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		FMLCommonHandler.instance().bus().register(ChunkDataBase.CHUNK_DATA_HANDLER);
+		MinecraftForge.EVENT_BUS.register(PlayerLocationHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(PlayerLocationHandler.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

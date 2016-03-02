@@ -1,5 +1,17 @@
 package thebetweenlands.event.debugging;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.IntBuffer;
+import java.text.DecimalFormat;
+
+import javax.imageio.ImageIO;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -25,9 +37,6 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.gui.GuiDebugMenu;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -42,13 +51,6 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEvent;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.lang.reflect.Field;
-import java.nio.IntBuffer;
-import java.text.DecimalFormat;
 
 public class DebugHandlerClient extends DebugHandlerCommon {
 	public static final DebugHandlerClient INSTANCE = new DebugHandlerClient();
@@ -77,6 +79,8 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 	public boolean denseFog = false;
 
 	public boolean ignoreStart = true;
+
+	public boolean worldLocations = false;
 
 	public boolean debugDeferredEffect = false;
 
@@ -145,6 +149,9 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 		if (Keyboard.isKeyDown(Keyboard.KEY_B)) {
 			saveAndLogImage(mc.getTextureMapBlocks().getGlTextureId(), "atlas-block.png", "block atlas");
 			saveAndLogImage(mc.renderEngine.getTexture(TextureMap.locationItemsTexture).getGlTextureId(), "atlas-item.png", "item atlas");
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_H)) {
+			worldLocations = !worldLocations;
 		}
 	}
 

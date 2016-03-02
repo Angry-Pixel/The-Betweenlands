@@ -51,6 +51,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private double waypointY;
 	private double waypointZ;
 	private boolean prevVolatile = false;
+	private boolean isLocationGuard = false;
 
 	public EntityWight(World world) {
 		super(world);
@@ -100,6 +101,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		nbt.setInteger("volatileCooldown", this.volatileCooldown);
 		nbt.setInteger("volatileProgress", this.volatileProgress);
 		nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
+		nbt.setBoolean("ignoreMask", this.isLocationGuard);
 	}
 
 	@Override
@@ -109,6 +111,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		this.volatileCooldown = nbt.getInteger("volatileCooldown");
 		this.volatileProgress = nbt.getInteger("volatileProgress");
 		this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
+		this.isLocationGuard = nbt.getBoolean("ignoreMask");
 	}
 
 	@Override
@@ -137,7 +140,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public boolean canPossess(EntityLivingBase entity) {
-		return !(entity instanceof EntityPlayer && ((EntityPlayer)entity).getCurrentArmor(3) != null && ((EntityPlayer)entity).getCurrentArmor(3).getItem() == BLItemRegistry.skullMask);
+		return this.isLocationGuard || !(entity instanceof EntityPlayer && ((EntityPlayer)entity).getCurrentArmor(3) != null && ((EntityPlayer)entity).getCurrentArmor(3).getItem() == BLItemRegistry.skullMask);
 	}
 
 	@Override
@@ -293,6 +296,14 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		}
 	}
 
+	public void setLocationGuard(boolean locationGuard) {
+		this.isLocationGuard = locationGuard;
+	}
+
+	public boolean isLocationGuard() {
+		return this.isLocationGuard;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	private void spawnVolatileParticles() {
 		final double radius = 0.3F;
@@ -457,7 +468,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(new ItemStack(BLItemRegistry.wightsHeart), 0F);
+		if(!this.isLocationGuard)
+			entityDropItem(new ItemStack(BLItemRegistry.wightsHeart), 0F);
 	}
 
 	@Override

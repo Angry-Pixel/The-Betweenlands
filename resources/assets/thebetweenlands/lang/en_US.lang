@@ -1204,3 +1204,7 @@ item.fairy_lights.pattern=Pattern:
 item.fairy_lights.colored_light=%1$s %2$s
 item.thebetweenlands.light.weedwood_lantern.name=Weedwood Lantern
 item.thebetweenlands.light_connection.name=Weedwood Lanterns
+
+# Locations
+location.wilderness.name=Wilderness
+location.wightTower.name=Wight Tower

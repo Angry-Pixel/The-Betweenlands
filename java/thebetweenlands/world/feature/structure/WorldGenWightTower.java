@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
 public class WorldGenWightTower extends WorldGenerator {
@@ -46,7 +47,7 @@ public class WorldGenWightTower extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-    	//StorageHelper.addArea(world, "Wight tower", AxisAlignedBB.getBoundingBox(x, y, z, x + 32, y + 40, z + 32));
+    	StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER);
         return generateStructure(world, random, x, y, z);
     }
 
