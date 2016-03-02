@@ -36,6 +36,15 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
+			if (!worldObj.isAirBlock(xCoord, yCoord + 2, zCoord)) {
+				setType((byte) 1);
+				setActive(true);
+				Block block = worldObj.getBlock(xCoord, yCoord + 2, zCoord);
+				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 2, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 2, zCoord)));
+				block.dropBlockAsItem(worldObj, xCoord, yCoord + 2, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 2, zCoord), 0);
+				worldObj.setBlockToAir(xCoord, yCoord + 2, zCoord);
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
 			if (worldObj.rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
 					setType((byte) 0);
