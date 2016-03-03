@@ -51,8 +51,8 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 	public ItemStack getSeedDrop(World world, int x, int y, int z) {
 		ItemStack stack = new ItemStack(BLItemRegistry.aspectrusCropSeed, 1);
 		Aspect aspect = this.getAspect(world, x, y, z);
-		if(aspect != null && aspect.amount - ASPECT_SEEDS_DEGRADATION > 0.0F)
-			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount - ASPECT_SEEDS_DEGRADATION));
+		if(aspect != null && aspect.getAmount() - ASPECT_SEEDS_DEGRADATION > 0.0F)
+			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.getAmount() - ASPECT_SEEDS_DEGRADATION));
 		return stack;
 	}
 
@@ -61,7 +61,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 		ItemStack stack = ItemGeneric.createStack(EnumItemGeneric.ASPECTRUS_FRUIT);
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.amount * ASPECT_FRUIT_MULTIPLIER));
+			AspectManager.addDynamicAspects(stack, new Aspect(aspect.type, aspect.getAmount() * ASPECT_FRUIT_MULTIPLIER));
 		return stack;	
 	}
 
@@ -129,7 +129,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 	public boolean shouldGrow(World world, int x, int y, int z) {
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			return world.rand.nextInt((int)(10 + aspect.amount * 20)) == 0;
+			return world.rand.nextInt((int)(10 + aspect.getAmount() * 20)) == 0;
 		return false;
 	}
 
@@ -137,7 +137,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 	public boolean shouldDecay(World world, int x, int y, int z) {
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			return world.rand.nextInt(Math.max((int)(BlockFarmedDirt.DECAY_CHANCE - aspect.amount * 35), 2)) == 0;
+			return world.rand.nextInt(Math.max((int)(BlockFarmedDirt.DECAY_CHANCE - aspect.getAmount() * 35), 2)) == 0;
 		return world.rand.nextInt(BlockFarmedDirt.DECAY_CHANCE) == 0;
 	}
 

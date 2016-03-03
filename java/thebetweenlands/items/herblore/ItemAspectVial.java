@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
@@ -156,7 +157,10 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
-		return new ItemStack(BLItemRegistry.dentrothystVial, itemStack.stackSize, itemStack.getItemDamage() % 2 == 0 ? 0 : 2);
+		NBTTagCompound nbt = itemStack.stackTagCompound != null ? itemStack.stackTagCompound : new NBTTagCompound();
+		boolean hasContainerItem = nbt.hasKey("containerItem");
+		ItemStack containerItem = hasContainerItem ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("containerItem")) : null;
+		return containerItem != null ? containerItem : new ItemStack(BLItemRegistry.dentrothystVial, itemStack.stackSize, itemStack.getItemDamage() % 2 == 0 ? 0 : 2);
 	}
 
 	@Override

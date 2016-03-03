@@ -69,11 +69,19 @@ public class RecipesAspectVials implements IRecipe {
 		if(emptyVials.size() == 0 && vials.size() == 1) {
 			return null;
 		} else {
+			for(ItemStack emptyVial : emptyVials) {
+				if(emptyVial.stackTagCompound != null)
+					emptyVial.stackTagCompound.removeTag("containerItem");
+			}
+			for(ItemStack vial : vials) {
+				if(vial.stackTagCompound != null)
+					vial.stackTagCompound.removeTag("containerItem");
+			}
 			ItemStack firstEmptyVial = emptyVials.get(0);
 			IAspectType type = AspectManager.getDynamicAspects(firstVial).get(0).type;
 			float amount = 0.0F;
 			for(ItemStack stack : vials) {
-				amount += AspectManager.getDynamicAspects(stack).get(0).amount * stack.stackSize;
+				amount += AspectManager.getDynamicAspects(stack).get(0).getAmount() * stack.stackSize;
 			}
 			ItemStack newStack = new ItemStack(firstVial.getItem(), emptyVials.size(), firstEmptyVial.getItemDamage() == 2 ? 1 : 0);
 			AspectManager.addDynamicAspects(newStack, new Aspect(type, amount / emptyVials.size()));
