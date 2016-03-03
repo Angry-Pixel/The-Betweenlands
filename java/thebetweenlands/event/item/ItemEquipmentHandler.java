@@ -78,7 +78,7 @@ public class ItemEquipmentHandler {
 		}
 	}
 
-	private static boolean tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
+	public static boolean tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
 		if(EquipmentInventory.equipItem(player, target, stack) != null) {
 			if(!player.capabilities.isCreativeMode)
 				stack.stackSize--;
@@ -88,7 +88,7 @@ public class ItemEquipmentHandler {
 		return false;
 	}
 
-	private static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
+	public static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
 		ItemStack unequipped = EquipmentInventory.unequipItem(player, target);
 		if(unequipped != null) {
 			if(!player.inventory.addItemStackToInventory(unequipped))
