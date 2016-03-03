@@ -20,14 +20,26 @@ public class ItemAmuletSlot extends Item {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		addAmuletSlot(player, stack, player);
+		if(player.isSneaking() && player.capabilities.isCreativeMode) {
+			if(!world.isRemote)
+				removeAmuletSlot(player);
+			player.swingItem();
+		} else {
+			addAmuletSlot(player, stack, player);
+		}
 		return stack;
 	}
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
 		if(player.capabilities.isCreativeMode || (!ItemAmulet.supportedEntities.isEmpty() && ItemAmulet.supportedEntities.contains(entity.getClass()))) {
-			addAmuletSlot(player, itemstack, entity);
+			if(player.isSneaking() && player.capabilities.isCreativeMode) {
+				if(!player.worldObj.isRemote)
+					removeAmuletSlot(entity);
+				player.swingItem();
+			} else {
+				addAmuletSlot(player, itemstack, entity);
+			}
 		}
 		return true;
 	}
@@ -54,5 +66,12 @@ public class ItemAmuletSlot extends Item {
 			}
 		}
 		return false;
+	}
+
+	public static void removeAmuletSlot(EntityLivingBase entity) {
+		EntityPropertiesCircleGem property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesCircleGem.class);
+		if(property != null) {
+			property.removeAmuletSlot();
+		}
 	}
 }

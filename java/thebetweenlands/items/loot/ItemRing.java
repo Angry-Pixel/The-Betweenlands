@@ -37,7 +37,7 @@ public abstract class ItemRing extends Item implements IEquippable {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if(!world.isRemote) {
+		if(!world.isRemote && !player.isSneaking()) {
 			if(stack.getItemDamage() > 0 && player.experienceTotal > 0) {
 				int repairPerClick = 40;
 				float conversion = this.getXPConversionRate(stack, player);
@@ -89,7 +89,7 @@ public abstract class ItemRing extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
-		return stack.getItemDamage() == 0 || player.experienceTotal == 0;
+		return stack.getItemDamage() == 0 || player.experienceTotal == 0 || player.isSneaking();
 	}
 
 	@Override

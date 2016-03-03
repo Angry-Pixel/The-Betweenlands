@@ -28,7 +28,7 @@ public class ItemEquipmentHandler {
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if(event.phase == Phase.END) {
 			World world = event.world;
-			for(Entity entity : (List<Entity>)world.getLoadedEntityList()) {
+			for(Entity entity : (List<Entity>)world.loadedEntityList) {
 				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
 				if(property != null) {
 					EquipmentInventory equipmentInventory = property.getEquipmentInventory();

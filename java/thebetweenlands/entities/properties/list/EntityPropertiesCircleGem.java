@@ -90,4 +90,13 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	public void addAmuletSlot() {
 		this.amuletSlots++;
 	}
+
+	public void removeAmuletSlot() {
+		if(this.amuletSlots > 0)
+			this.amuletSlots--;
+	}
+
+	public void setAmuletSlots(int slots) {
+		this.amuletSlots = slots;
+	}
 }
