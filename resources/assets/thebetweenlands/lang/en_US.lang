@@ -1197,7 +1197,7 @@ equipment.menu.page=Page %d
 # Key Binding
 key.categories.weedwoodRowboat=Weedwood Rowboat
 key.categories.betweenlands=Betweenlands Controls
-key.drop.amulet=Drop Amulet
+key.radialmenu=Equipment Menu
 
 tile.fairy_lights.name=Connection Fastener
 item.fairy_lights.pattern=Pattern:
