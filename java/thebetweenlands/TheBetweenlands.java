@@ -209,6 +209,7 @@ public class TheBetweenlands {
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
 		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemEquipmentHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(ItemEquipmentHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(DebugHandlerChunkData.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		FMLCommonHandler.instance().bus().register(ChunkDataBase.CHUNK_DATA_HANDLER);

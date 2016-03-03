@@ -770,7 +770,7 @@ circlegem.green=Green Gem
 circlegem.crimson=Crimson Gem
 circlegem.aqua=Aqua Gem
 octine.fire=Hot enough to set moss on fire
-power.ring.bonus=Grants a bonus to all stats
+ring.power.bonus=Grants a bonus to all stats
 aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 
 # Commands

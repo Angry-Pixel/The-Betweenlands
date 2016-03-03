@@ -23,7 +23,7 @@ public interface IEquippable {
 	 * @return
 	 */
 	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory);
-	
+
 	/**
 	 * Returns whether this item can be equipped
 	 * @param stack Item to equip
@@ -68,4 +68,11 @@ public interface IEquippable {
 	 * @param inventory Equipment inventory
 	 */
 	public void onUnequip(ItemStack stack, Entity entity, EquipmentInventory inventory);
+
+	/**
+	 * Called when the equipment is ticked
+	 * @param stack
+	 * @param entity
+	 */
+	public void onEquipmentTick(ItemStack stack, Entity entity);
 }

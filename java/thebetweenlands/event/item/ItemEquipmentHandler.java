@@ -1,10 +1,15 @@
 package thebetweenlands.event.item;
 
+import java.util.List;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -18,6 +23,24 @@ import thebetweenlands.network.packet.client.PacketEquipment;
 
 public class ItemEquipmentHandler {
 	public static final ItemEquipmentHandler INSTANCE = new ItemEquipmentHandler();
+
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		if(event.phase == Phase.END) {
+			World world = event.world;
+			for(Entity entity : (List<Entity>)world.getLoadedEntityList()) {
+				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
+				if(property != null) {
+					EquipmentInventory equipmentInventory = property.getEquipmentInventory();
+					for(Equipment equipment : equipmentInventory.getEquipment()) {
+						if(equipment.item != null && equipment.item.getItem() instanceof IEquippable) {
+							((IEquippable)equipment.item.getItem()).onEquipmentTick(equipment.item, entity);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public void onEntityInteract(EntityInteractEvent event) {

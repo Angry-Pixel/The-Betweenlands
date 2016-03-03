@@ -3,7 +3,6 @@ package thebetweenlands.event.entity;
 import java.util.List;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -31,25 +30,11 @@ public class PowerRingHandler {
 				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(attacker);
 				List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
 				for(Equipment equipment : equipmentList) {
-					if(equipment.item.getItem() instanceof ItemRingOfPower && equipment.item.getItemDamage() < equipment.item.getMaxDamage()) {
+					if(equipment.item.getItem() instanceof ItemRingOfPower && ((ItemRingOfPower)equipment.item.getItem()).isActive(equipment.item)) {
 						event.ammount *= 1.5f;
 						if(event.entity != null) 
 							TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketPowerRingHit(event.entity.getEntityId())), new TargetPoint(event.entity.dimension, event.entity.posX, event.entity.posY, event.entity.posZ, 64D));
 					}
-				}
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public void onPlayerTick(PlayerTickEvent event) {
-		if(event.player != null && event.player.ticksExisted % 20 == 0) {
-			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.player);
-			List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
-			for(Equipment equipment : equipmentList) {
-				if(equipment.item.getItem() instanceof ItemRingOfPower) {
-					if(equipment.item.getItemDamage() < equipment.item.getMaxDamage())
-						equipment.item.setItemDamage(equipment.item.getItemDamage() + 1);
 				}
 			}
 		}
