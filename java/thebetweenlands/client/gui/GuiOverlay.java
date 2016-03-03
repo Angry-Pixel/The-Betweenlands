@@ -31,6 +31,7 @@ import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.ItemRenderHelper;
+import thebetweenlands.utils.RenderUtils;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
@@ -94,6 +95,68 @@ public class GuiOverlay extends Gui {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}*/
+
+		//TODO: Textured radial menu WIP
+//		try {
+//			GL11.glPushMatrix();
+//			GL11.glTranslated(150, 150, 0);
+//
+//			double radius = 50;
+//			double innerRadius = 20;
+//			double x = 0;
+//			double y = 0;
+//			double maxAngle = 80.0D;
+//			int segments = (int)(maxAngle / 10.0D);
+//
+//			//GL11.glEnable(GL11.GL_POLYGON_MODE);
+//			//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+//
+//			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("thebetweenlands:textures/gui/radialMenuTest.png"));
+//
+//			GL11.glLineWidth(0.1F);
+//			//GL11.glDisable(GL11.GL_TEXTURE_2D);
+//			GL11.glEnable(GL11.GL_BLEND);
+//			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//
+//			/*RenderUtils.renderTexturedCircleSegment(100, 120, 60, 50, 40, 0, 1, 0, 1);
+//			GL11.glRotated(20, 0, 0, 1);
+//			RenderUtils.renderTexturedCircleSegment(100, 20, 60, 50, 40, 0, 1, 0, 1);*/
+//
+//			//GL11.glRotated(-140, 0, 0, 1);
+//
+//			//Gui.drawRect(0, 0, 2, 2, 0xFFFF0000);
+//			GL11.glColor4f(1, 1, 1, 1);
+//
+//			//Stencil.getInstance().createCirlce(0, 0, 40);
+//			//Stencil.getInstance().createCirlce(0, 0, 40);
+//
+//			GL11.glDisable(GL11.GL_TEXTURE_2D);
+//			//RenderUtils.renderTexturedCircleSegment(segments, maxAngle, 80, radius, innerRadius, 0, 0, 0, 0);
+//			GL11.glEnable(GL11.GL_TEXTURE_2D);
+//
+//			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+//
+//			RenderUtils.renderMappedCircleSegment(segments, maxAngle, 40, 80, 120, 40, 10, 
+//					0, 200/256.0D, 28/256.0D, 83/256.0D, 
+//					224/256.0D, 238/256.0D, 0, 1, 
+//					0, 200/256.0D, 0, 24/256.0D, 
+//					244/256.0D, 1, 0, 1, 
+//					0, 200/256.0D, 172/256.0D, 190/256.0D, 
+//					206/256.0D, 218/256.0D, 12/256.0D, 35/256.0D, 
+//					206/256.0D, 218/256.0D, 47/256.0D, 70/256.0D, 
+//					206/256.0D, 218/256.0D, 82/256.0D, 104/256.0D, 
+//					206/256.0D, 218/256.0D, 114/256.0D, 136/256.0D);
+//
+//			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+//
+//			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+//
+//			GL11.glEnable(GL11.GL_TEXTURE_2D);
+//
+//			GL11.glPopMatrix();
+//		} catch(Exception ex) {
+//			ex.printStackTrace();
+//		}
 
 		//Just some shader debugging stuff. Applies gaussian blur to the top half of the screen
 		if(DebugHandlerClient.INSTANCE.debugDeferredEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
