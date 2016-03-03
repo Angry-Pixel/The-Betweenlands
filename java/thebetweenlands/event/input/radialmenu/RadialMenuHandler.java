@@ -23,6 +23,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import thebetweenlands.TheBetweenlands;
@@ -50,7 +51,6 @@ public class RadialMenuHandler {
 
 
 	////// Input ///////
-	//TODO: Fix mouse clicks triggering ingame clicking
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
@@ -65,8 +65,9 @@ public class RadialMenuHandler {
 	}
 
 	@SubscribeEvent
-	public void onMouseInput(InputEvent.MouseInputEvent event) {
+	public void onMouseInput(MouseEvent event) {
 		if(this.isOpen) {
+			event.setCanceled(true);
 			if(Minecraft.getMinecraft().inGameHasFocus) {
 				Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
 				Minecraft.getMinecraft().inGameHasFocus = false;

@@ -50,10 +50,9 @@ public class ItemEquipmentHandler {
 					EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.target, EntityPropertiesEquipment.class);
 					if(property != null) {
 						if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.target, property.getEquipmentInventory())) {
-							if(tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem())) {
-								if(event.entityPlayer.getHeldItem().stackSize <= 0)
-									event.entityPlayer.setCurrentItemOrArmor(0, null);
-							}
+							tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem());
+							if(event.entityPlayer.getHeldItem().stackSize <= 0)
+								event.entityPlayer.setCurrentItemOrArmor(0, null);
 						}
 					}
 				}
@@ -65,15 +64,14 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public void onItemUse(PlayerInteractEvent event) {
-		if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR && event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
+		if((event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
 			if(event.entityPlayer.getHeldItem().getItem() instanceof IEquippable) {
 				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesEquipment.class);
 				if(property != null) {
 					if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.entityPlayer, property.getEquipmentInventory())) {
-						if(tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem())) {
-							if(event.entityPlayer.getHeldItem().stackSize <= 0)
-								event.entityPlayer.setCurrentItemOrArmor(0, null);
-						}
+						tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem());
+						if(event.entityPlayer.getHeldItem().stackSize <= 0)
+							event.entityPlayer.setCurrentItemOrArmor(0, null);
 					}
 				}
 			}
