@@ -25,20 +25,17 @@ public class TileEntitySwordStone extends TileEntity {
 	@Override
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
-			if (isBlockOccupied() != null) {
+			if (isBlockOccupied() != null)
 				if (!canBreak) {
 					setCanBeBroken(true);
 					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-					System.out.println("Should break!");
 				}
-			}
-			if (isBlockOccupied() == null) {
+
+			if (isBlockOccupied() == null)
 				if (canBreak) {
 					setCanBeBroken(false);
 					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-					System.out.println("Should NOT break!");
 				}
-			}
 		}
 	}
 

@@ -35,7 +35,7 @@ public class WorldGenWightTower extends WorldGenerator {
     private Block pitstoneChiselled = BLBlockRegistry.chiseledPitstone;
     private Block stagnantWater = BLBlockRegistry.stagnantWaterFluid;
     private Block spikeTrap = BLBlockRegistry.spikeTrap;
-    private Block peat = BLBlockRegistry.peat;
+    private Block swordStone = BLBlockRegistry.swordStone;
 
     private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
     
@@ -593,6 +593,12 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 22, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 9, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 22, 17, 9, betweenstoneBricks, 0, 1, 1, 1, 0);
+		
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 12, swordStone, 0, 1, 1, 1, 0);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 12, swordStone, 0, 1, 1, 1, 0);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 19, swordStone, 0, 1, 1, 1, 0);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 19, swordStone, 0, 1, 1, 1, 0);
+
 		//floor 1
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolished, 0, 8, 1, 8, 0);
 		//floor2
