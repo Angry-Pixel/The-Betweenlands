@@ -85,6 +85,7 @@ import thebetweenlands.blocks.structure.BlockDruidAltar;
 import thebetweenlands.blocks.structure.BlockDruidSpawner;
 import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.structure.BlockSpikeTrap;
+import thebetweenlands.blocks.structure.BlockSwordStone;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
 import thebetweenlands.blocks.structure.BlockWraithPusher;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
@@ -554,6 +555,7 @@ public class BLBlockRegistry {
 	public static final BlockRope rope = new BlockRope();
 	public static final BlockWraithPusher wraith = new BlockWraithPusher();
 	public static final BlockSpikeTrap spikeTrap = new BlockSpikeTrap();
+	public static final BlockSwordStone swordStone= new BlockSwordStone();
 	// SLABS
 	public static final BlockBLSlab weedwoodPlankSlab = new BlockBLSlab(false, Material.wood, "weedwoodPlanks", null, "axe");
 	public static final BlockBLSlab weedwoodPlankSlabDouble = new BlockBLSlab(true, Material.wood, "weedwoodPlanks", weedwoodPlankSlab, "axe");
