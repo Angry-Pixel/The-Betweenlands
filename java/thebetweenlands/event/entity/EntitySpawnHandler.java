@@ -16,7 +16,7 @@ import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.gemcircle.EntityGem;
-import thebetweenlands.items.misc.ItemAmulet;
+import thebetweenlands.items.equipment.ItemAmulet;
 
 public class EntitySpawnHandler {
 	public static final EntitySpawnHandler INSTANCE = new EntitySpawnHandler();

@@ -15,7 +15,7 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
-import thebetweenlands.items.loot.ItemRingOfPower;
+import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketPowerRingHit;
 

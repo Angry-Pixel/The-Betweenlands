@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
@@ -33,6 +34,8 @@ import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationT
 
 public class PlayerLocationHandler {
 	public static final PlayerLocationHandler INSTANCE = new PlayerLocationHandler();
+
+	private static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/locationTitle.png");
 
 	private List<LocationStorage> getLocations(Entity entity) {
 		List<LocationStorage> locations = new ArrayList<LocationStorage>();
@@ -99,10 +102,31 @@ public class PlayerLocationHandler {
 				float fade = Math.min(1.0F, 1.0F - (this.titleTicks - 20) / 60.0F + 0.02F) - Math.max(0, (-this.titleTicks + 5) / 5.0F);
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 				TheBetweenlands.proxy.getCustomFontRenderer().drawString(this.currentLocation, 0, 0, ColorUtils.toHex(1, 1, 1, fade));
-				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 				GL11.glPopMatrix();
+				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
+				GL11.glColor4f(1, 1, 1, fade);
+				GL11.glDisable(GL11.GL_CULL_FACE);
+				this.renderTexturedRect(strX - 12, strY + 17, strX + 2, strY + 40, 0, 9 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + 2, strY + 17, strX + strWidth / 2.0D - 10, strY + 40, 9 / 128.0D, 58 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D - 10, strY + 17, strX + strWidth / 2.0D + 10, strY + 40, 58 / 128.0D, 70 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D + 10, strY + 17, strX + strWidth - 2, strY + 40, 70 / 128.0D, 119 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth - 2, strY + 17, strX + strWidth + 12, strY + 40, 119 / 128.0D, 1, 0, 1);
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		}
+	}
+
+	private void renderTexturedRect(double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
+		GL11.glBegin(GL11.GL_QUADS);
+		GL11.glTexCoord2d(umin, vmin);
+		GL11.glVertex2d(x, y);
+		GL11.glTexCoord2d(umin, vmax);
+		GL11.glVertex2d(x, y2);
+		GL11.glTexCoord2d(umax, vmax);
+		GL11.glVertex2d(x2, y2);
+		GL11.glTexCoord2d(umax, vmin);
+		GL11.glVertex2d(x2, y);
+		GL11.glEnd();
 	}
 
 	@SubscribeEvent

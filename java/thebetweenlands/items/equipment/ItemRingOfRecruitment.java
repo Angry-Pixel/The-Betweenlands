@@ -1,4 +1,4 @@
-package thebetweenlands.items.loot;
+package thebetweenlands.items.equipment;
 
 import java.util.List;
 
@@ -6,27 +6,25 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import thebetweenlands.items.loot.ItemRing;
 import thebetweenlands.manual.IManualEntryItem;
 
-/**
- * Created by Bart on 8-7-2015.
- */
-public class ItemRingOfPower extends ItemRing implements IManualEntryItem {
-	public ItemRingOfPower() {
+public class ItemRingOfRecruitment extends ItemRing implements IManualEntryItem {
+	public ItemRingOfRecruitment() {
 		super();
-		this.setMaxDamage(1800);
-		this.setUnlocalizedName("thebetweenlands.ringOfPower");
-		this.setTextureName("thebetweenlands:ringOfPower");
+		this.setMaxDamage(450);
+		this.setUnlocalizedName("thebetweenlands.ringOfRecruitment");
+		this.setTextureName("ringOfRecruitment");
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-		list.add(StatCollector.translateToLocal("ring.power.bonus"));
+		list.add(StatCollector.translateToLocal("ring.recruitment.bonus"));
 	}
 
 	@Override
 	public String manualName(int meta) {
-		return "ringOfPower";
+		return "ringOfRecruitment";
 	}
 
 	@Override

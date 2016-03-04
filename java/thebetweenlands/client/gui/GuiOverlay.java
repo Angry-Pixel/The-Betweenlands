@@ -105,7 +105,7 @@ public class GuiOverlay extends Gui {
 //			double innerRadius = 20;
 //			double x = 0;
 //			double y = 0;
-//			double maxAngle = 80.0D;
+//			double maxAngle = 90.0D;
 //			int segments = (int)(maxAngle / 10.0D);
 //
 //			//GL11.glEnable(GL11.GL_POLYGON_MODE);
@@ -113,6 +113,9 @@ public class GuiOverlay extends Gui {
 //
 //			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("thebetweenlands:textures/gui/radialMenuTest.png"));
 //
+//			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+//			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+//			
 //			GL11.glLineWidth(0.1F);
 //			//GL11.glDisable(GL11.GL_TEXTURE_2D);
 //			GL11.glEnable(GL11.GL_BLEND);
@@ -136,16 +139,16 @@ public class GuiOverlay extends Gui {
 //
 //			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 //
-//			RenderUtils.renderMappedCircleSegment(segments, maxAngle, 40, 80, 120, 40, 10, 
-//					0, 200/256.0D, 28/256.0D, 83/256.0D, 
-//					224/256.0D, 238/256.0D, 0, 1, 
-//					0, 200/256.0D, 0, 24/256.0D, 
-//					244/256.0D, 1, 0, 1, 
+//			RenderUtils.renderMappedCircleSegment(segments, maxAngle, 40, 80, 55, 20, 3, 
+//					1/256.0D, 198/256.0D, 30/256.0D, 82/256.0D, 
+//					224/256.0D, 237/256.0D, 0, 1, 
+//					0, 199/256.0D, 0, 24/256.0D, 
+//					245/256.0D, 255/256.0D, 0, 1, 
 //					0, 200/256.0D, 172/256.0D, 190/256.0D, 
-//					206/256.0D, 218/256.0D, 12/256.0D, 35/256.0D, 
-//					206/256.0D, 218/256.0D, 47/256.0D, 70/256.0D, 
-//					206/256.0D, 218/256.0D, 82/256.0D, 104/256.0D, 
-//					206/256.0D, 218/256.0D, 114/256.0D, 136/256.0D);
+//					206/256.0D, 217/256.0D, 12/256.0D, 34/256.0D, 
+//					206/256.0D, 217/256.0D, 47/256.0D, 69/256.0D, 
+//					206/256.0D, 217/256.0D, 82/256.0D, 103/256.0D, 
+//					206/256.0D, 217/256.0D, 114/256.0D, 135/256.0D);
 //
 //			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 //

@@ -25,7 +25,7 @@ public abstract class ItemRing extends Item implements IEquippable {
 	}
 
 	public void drainPower(ItemStack stack) {
-		if(stack.getItemDamage() < stack.getMaxDamage() && stack.getItem() instanceof ItemRingOfPower && ((ItemRing)stack.getItem()).isActive(stack)) {
+		if(stack.getItemDamage() < stack.getMaxDamage() && stack.getItem() instanceof ItemRing && ((ItemRing)stack.getItem()).isActive(stack)) {
 			stack.setItemDamage(stack.getItemDamage() + 1);
 		}
 	}

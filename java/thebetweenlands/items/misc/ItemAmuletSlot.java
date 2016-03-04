@@ -8,6 +8,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
+import thebetweenlands.items.equipment.ItemAmulet;
 
 public class ItemAmuletSlot extends Item {
 	public ItemAmuletSlot() {

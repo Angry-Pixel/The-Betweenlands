@@ -6,7 +6,7 @@ public class RenderUtils {
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int i = 0; i < segments; i++) {
-			double angle = i * (maxAngle / segments);
+			double angle = (i)* (maxAngle / segments);
 			double nextAngle = (i + 0.99999999999D) * (maxAngle / segments);
 			double sin = Math.sin((angle * Math.PI) / 180D) * radius;
 			double cos = Math.cos((angle * Math.PI) / 180D) * radius;
@@ -81,8 +81,7 @@ public class RenderUtils {
 
 		//Border 3
 		GL11.glPushMatrix();
-		GL11.glTranslated(-borderWidth*Math.sqrt(2), 0, 0);
-		GL11.glTranslated(borderAngle, innerRadius, 0);
+		GL11.glTranslated(0, innerRadius, 0);
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2d(b3minU, b3minV);
 		GL11.glVertex2d(0, borderWidth);

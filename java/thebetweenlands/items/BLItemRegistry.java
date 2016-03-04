@@ -39,6 +39,9 @@ import thebetweenlands.items.bow.ItemBLArrow;
 import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.crops.ItemAspectrusCropSeed;
 import thebetweenlands.items.crops.ItemBLGenericSeed;
+import thebetweenlands.items.equipment.ItemAmulet;
+import thebetweenlands.items.equipment.ItemRingOfPower;
+import thebetweenlands.items.equipment.ItemRingOfRecruitment;
 import thebetweenlands.items.food.ItemBLFood;
 import thebetweenlands.items.food.ItemBlackHatMushroom;
 import thebetweenlands.items.food.ItemBulbCappedMushroom;
@@ -62,9 +65,7 @@ import thebetweenlands.items.lanterns.ItemConnectionFairyLights;
 import thebetweenlands.items.lanterns.ItemLight;
 import thebetweenlands.items.loot.ItemArtefact;
 import thebetweenlands.items.loot.ItemExplorerHat;
-import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.ItemAmulet;
 import thebetweenlands.items.misc.ItemAmuletSlot;
 import thebetweenlands.items.misc.ItemBLRecord;
 import thebetweenlands.items.misc.ItemBLSign;
@@ -279,7 +280,6 @@ public class BLItemRegistry {
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
-	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item swiftPick = new ItemSwiftPick(BLMaterial.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
 	public static final Item wightsBane = new ItemLootSword(BLMaterial.toolWeedWood)
 			.addInstantKills(EntityWight.class)
@@ -319,6 +319,10 @@ public class BLItemRegistry {
 	public static final ItemDentrothystVial dentrothystVial = new ItemDentrothystVial();
 	public static final ItemAspectVial aspectVial = new ItemAspectVial();
 
+	// EQUIPMENT
+	public static final Item ringOfPower = new ItemRingOfPower();
+	public static final Item ringOfRecruitment = new ItemRingOfRecruitment();
+
 	public static void init() {
 		initCreativeTabs();
 		registerItems();
@@ -333,7 +337,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, tribalPants, skullMask, 
-				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 

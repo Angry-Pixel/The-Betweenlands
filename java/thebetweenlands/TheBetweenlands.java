@@ -41,6 +41,7 @@ import thebetweenlands.event.entity.EntitySpawnHandler;
 import thebetweenlands.event.entity.MiscEntitySyncHandler;
 import thebetweenlands.event.entity.PageDiscoveringEvent;
 import thebetweenlands.event.entity.PowerRingHandler;
+import thebetweenlands.event.entity.RecruitmentRingHandler;
 import thebetweenlands.event.entity.VolarPadGlideHandler;
 import thebetweenlands.event.item.ItemEquipmentHandler;
 import thebetweenlands.event.player.ArmorHandler;
@@ -65,6 +66,7 @@ import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.client.PacketEquipment;
+import thebetweenlands.network.packet.client.PacketRecruitmentState;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
@@ -150,6 +152,7 @@ public class TheBetweenlands {
 		registerPacket(PacketGemProc.class);
 		registerPacket(PacketEquipment.class);
 		registerPacket(PacketPowerRingHit.class);
+		registerPacket(PacketRecruitmentState.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
@@ -215,6 +218,8 @@ public class TheBetweenlands {
 		FMLCommonHandler.instance().bus().register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerLocationHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(PlayerLocationHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(RecruitmentRingHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(RecruitmentRingHandler.INSTANCE);
 
 		RecipeHandler.init();
 		TeleporterHandler.init();

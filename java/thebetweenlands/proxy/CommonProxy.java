@@ -1,5 +1,9 @@
 package thebetweenlands.proxy;
 
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -17,6 +21,7 @@ import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
+import thebetweenlands.event.entity.RecruitmentRingHandler;
 import thebetweenlands.event.item.ItemEquipmentHandler;
 import thebetweenlands.event.world.AspectLoadHandler;
 import thebetweenlands.event.world.PopulationHandler;
@@ -36,7 +41,7 @@ import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
-import thebetweenlands.items.misc.ItemAmulet;
+import thebetweenlands.items.equipment.ItemAmulet;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
@@ -68,10 +73,6 @@ import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.TileEntityWraithPusher;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -135,6 +136,7 @@ public class CommonProxy implements IGuiHandler {
 		try {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemAmulet.class, Side.SERVER);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemEquipmentHandler.class, Side.SERVER);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(RecruitmentRingHandler.class, Side.SERVER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

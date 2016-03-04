@@ -1,4 +1,4 @@
-package thebetweenlands.items.misc;
+package thebetweenlands.items.equipment;
 
 import java.util.ArrayList;
 import java.util.List;
