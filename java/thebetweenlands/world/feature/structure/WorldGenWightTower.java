@@ -9,6 +9,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
+import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
@@ -598,6 +599,11 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 12, swordStone, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 19, swordStone, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 19, swordStone, 0, 1, 1, 1, 0);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 19, swordStone, 0, 1, 1, 1, 0);
+		
+		EntitySwordEnergy swordEnergy = new EntitySwordEnergy(world);
+		swordEnergy.setPosition(xx + 16D, yy + 21.5, zz + 16D);
+		world.spawnEntityInWorld(swordEnergy);
 
 		//floor 1
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolished, 0, 8, 1, 8, 0);
