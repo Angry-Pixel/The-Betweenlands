@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -78,6 +77,7 @@ import thebetweenlands.items.misc.ItemManual;
 import thebetweenlands.items.misc.ItemMob;
 import thebetweenlands.items.misc.ItemMossBed;
 import thebetweenlands.items.misc.ItemRope;
+import thebetweenlands.items.misc.ItemShockwaveSword;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemTestItem;
@@ -170,7 +170,7 @@ public class BLItemRegistry {
 
 	public static final Item net = new ItemNet();
 
-	public static final Item shockwaveSword = new ItemSword(BLMaterial.toolValonite);
+	public static final Item shockwaveSword = new ItemShockwaveSword(BLMaterial.toolValonite);
 
 	//LANTERN
 	public static final Item light = new ItemLight();

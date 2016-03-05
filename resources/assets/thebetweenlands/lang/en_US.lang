@@ -405,11 +405,7 @@ item.thebetweenlands.amulet.aqua.name=Aqua Middle Gem Amulet
 item.thebetweenlands.amulet.green.name=Green Middle Gem Amulet
 item.thebetweenlands.amuletSlot.name=Amulet Slot
 
-item.thebetweenlands.shockwaveSword.0.name=Shockwave Sword
-item.thebetweenlands.shockwaveSword.1.name=Shockwave Sword Piece
-item.thebetweenlands.shockwaveSword.2.name=Shockwave Sword Piece
-item.thebetweenlands.shockwaveSword.3.name=Shockwave Sword Piece
-item.thebetweenlands.shockwaveSword.4.name=Shockwave Sword Piece
+item.thebetweenlands.shockwaveSword.name=Shockwave Sword
 
 item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 
@@ -518,6 +514,10 @@ item.thebetweenlands.poisonGland.name=Poison Gland
 item.thebetweenlands.aspectrusFruit.name=Aspectrus Fruit
 item.thebetweenlands.weedwoodSign.name=Weedwood Sign
 item.thebetweenlands.parchment.name=Amate Paper
+item.thebetweenlands.shockwaveSword1.name=Shockwave Sword Piece
+item.thebetweenlands.shockwaveSword2.name=Shockwave Sword Piece
+item.thebetweenlands.shockwaveSword3.name=Shockwave Sword Piece
+item.thebetweenlands.shockwaveSword4.name=Shockwave Sword Piece
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
