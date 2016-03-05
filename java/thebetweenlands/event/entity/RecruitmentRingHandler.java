@@ -123,7 +123,6 @@ public class RecruitmentRingHandler {
 					prop.update();
 				}
 				event.player.motionX *= 0.05D;
-				event.player.motionY *= 0.05D;
 				event.player.motionZ *= 0.05D;
 			}
 		}

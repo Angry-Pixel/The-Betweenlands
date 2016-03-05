@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityMob;
@@ -175,8 +176,8 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 
 	private void addTasks() {
 		if(this.getEntity() instanceof EntityCreature) {
-			this.getEntity().tasks.addTask(Integer.MIN_VALUE, new EntityAIRecruitAttackOnCollide((EntityCreature)this.getEntity(), 1.0D, false));
-			this.getEntity().tasks.addTask(Integer.MIN_VALUE + 1, new EntityAIRecruitIgnoreRecruiter((EntityCreature)this.getEntity()));
+			this.getEntity().tasks.addTask(Integer.MIN_VALUE, new EntityAIRecruitAttackOnCollide((EntityCreature)this.getEntity(), 1.0D, true));
+			this.getEntity().targetTasks.addTask(Integer.MIN_VALUE + 1, new EntityAIRecruitIgnoreRecruiter((EntityCreature)this.getEntity()));
 			this.getEntity().targetTasks.addTask(Integer.MIN_VALUE, new EntityAIRecruitTargetMobs((EntityCreature)this.getEntity(), true));
 		}
 	}

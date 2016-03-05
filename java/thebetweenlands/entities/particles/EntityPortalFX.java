@@ -1,14 +1,12 @@
 package thebetweenlands.entities.particles;
 
-import javax.vecmath.Vector3d;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-import thebetweenlands.event.render.FogHandler;
 
 public class EntityPortalFX extends EntityFX {
 	private ResourceLocation particleTexture;
@@ -51,13 +49,14 @@ public class EntityPortalFX extends EntityFX {
 		float b = (float)(this.color & 0xff) / 255F;
 
 		par1Tessellator.startDrawingQuads();
+		par1Tessellator.setBrightness(this.getBrightnessForRender(partialTicks));
 		par1Tessellator.setColorRGBA_F(r, g, b, a);
 		par1Tessellator.addVertexWithUV(ipx - rx * this.scale - ryz * this.scale, ipy - rxz * this.scale, ipz - rz * this.scale - rxy * this.scale, 1.0D, (this.currentTexture + 1) * this.relativeTextureHeight);
 		par1Tessellator.addVertexWithUV(ipx - rx * this.scale + ryz * this.scale, ipy + rxz * this.scale, ipz - rz * this.scale + rxy * this.scale, 1.0D, this.currentTexture * this.relativeTextureHeight);
 		par1Tessellator.addVertexWithUV(ipx + rx * this.scale + ryz * this.scale, ipy + rxz * this.scale, ipz + rz * this.scale + rxy * this.scale, 0.0D, this.currentTexture * this.relativeTextureHeight);
 		par1Tessellator.addVertexWithUV(ipx + rx * this.scale - ryz * this.scale, ipy - rxz * this.scale, ipz + rz * this.scale - rxy * this.scale, 0.0D, (this.currentTexture + 1) * this.relativeTextureHeight);
 		par1Tessellator.draw();
-
+		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, prevTex);
 	}
 
