@@ -12,8 +12,8 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.entityAI.EntityAIBLBreakDoor;
 import thebetweenlands.entities.entityAI.EntityAIHurtByTargetImproved;
 import thebetweenlands.items.misc.ItemGeneric;
@@ -32,7 +32,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		super(world);
 		this.getNavigator().setBreakDoors(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIBLBreakDoor(this, Blocks.wooden_door, 10));
+		this.tasks.addTask(1, new EntityAIBLBreakDoor(this, BLBlockRegistry.doorWeedwood, 10));
 		// this.tasks.addTask(2, new EntityAIBLBreakDoor(this, Blocks.iron_door, 20));
 		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
 		this.tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, 1D, false));

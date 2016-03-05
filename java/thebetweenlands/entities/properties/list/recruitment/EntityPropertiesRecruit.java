@@ -1,5 +1,6 @@
 package thebetweenlands.entities.properties.list.recruitment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,12 +8,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitAttackOnCollide;
+import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitIgnoreRecruiter;
+import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitTargetMobs;
+import thebetweenlands.entities.entityAI.recruit.IRecruitAI;
 import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -26,11 +33,17 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 	//Client side
 	private boolean recruited = false;
 
+	//Workaround for old AI. isEntityAlive always returns false, making the creature set entityToAttack to null
 	private EntityLivingBase distractionEntity;
 
 	@Override
 	protected void initProperties() {
-		this.distractionEntity = new EntityLivingBase(this.getEntity().worldObj){
+		this.distractionEntity = new EntityLivingBase(this.getWorld()) {
+			@Override
+			public boolean isEntityAlive() {
+				return false;
+			}
+
 			@Override
 			public ItemStack getHeldItem() {
 				return null;
@@ -42,13 +55,13 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 			}
 
 			@Override
-			public void setCurrentItemOrArmor(int slot, ItemStack nbt) {
-			}
+			public void setCurrentItemOrArmor(int slot, ItemStack stack) { }
 
 			@Override
 			public ItemStack[] getLastActiveItems() {
 				return new ItemStack[0];
-			}};
+			}
+		};
 	}
 
 	@Override
@@ -119,23 +132,26 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 			this.time--;
 		}
 		if(this.time <= 0 || !this.shouldContinue()) {
+			if(this.hasTasks()) {
+				this.removeTasks();
+			}
 			this.setTarget(this.getRecruiter());
 			this.time = 0;
-		}
-
-		if(this.isRecruited()) {
+		} else if(this.isRecruited()) {
+			if(!this.hasTasks()) {
+				this.addTasks();
+			}
 			EntityPlayer recruiter = this.getRecruiter();
 			EntityLiving entity = this.getEntity();
-			this.distractionEntity.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, 0, 0);
 			if(entity.getAttackTarget() == recruiter) {
-				entity.setAttackTarget(this.distractionEntity);
+				entity.setAttackTarget(null);
 			}
 			if(entity.getAITarget() == recruiter) {
-				entity.setRevengeTarget(this.distractionEntity);
+				entity.setRevengeTarget(null);
 			}
 			if(entity instanceof EntityCreature) {
 				EntityCreature creature = (EntityCreature) entity;
-				if(creature.getEntityToAttack() == recruiter) {
+				if(creature.getEntityToAttack() == recruiter || !this.isValidTarget(creature.getEntityToAttack())) {
 					creature.setTarget(this.distractionEntity);
 				}
 			}
@@ -146,6 +162,60 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 					this.setTarget(newTarget);
 			}
 		}
+	}
+
+	public void setTarget(EntityLivingBase target) {
+		EntityLiving entity = this.getEntity();
+		entity.setAttackTarget(target);
+		entity.setRevengeTarget(target);
+		if(entity instanceof EntityCreature) {
+			((EntityCreature)entity).setTarget(target);
+		}
+	}
+
+	private void addTasks() {
+		if(this.getEntity() instanceof EntityCreature) {
+			this.getEntity().tasks.addTask(Integer.MIN_VALUE, new EntityAIRecruitAttackOnCollide((EntityCreature)this.getEntity(), 1.0D, false));
+			this.getEntity().tasks.addTask(Integer.MIN_VALUE + 1, new EntityAIRecruitIgnoreRecruiter((EntityCreature)this.getEntity()));
+			this.getEntity().targetTasks.addTask(Integer.MIN_VALUE, new EntityAIRecruitTargetMobs((EntityCreature)this.getEntity(), true));
+		}
+	}
+
+	private void removeTasks() {
+		if(this.getEntity() instanceof EntityCreature) {
+			List<EntityAIBase> tasksToRemove = new ArrayList<EntityAIBase>();
+			for(EntityAITaskEntry aiEntry : (List<EntityAITaskEntry>)this.getEntity().tasks.taskEntries) {
+				if(aiEntry.action instanceof IRecruitAI) {
+					tasksToRemove.add(aiEntry.action);
+				}
+			}
+			List<EntityAIBase> targetTasksToRemove = new ArrayList<EntityAIBase>();
+			for(EntityAITaskEntry aiEntry : (List<EntityAITaskEntry>)this.getEntity().targetTasks.taskEntries) {
+				if(aiEntry.action instanceof IRecruitAI) {
+					targetTasksToRemove.add(aiEntry.action);
+				}
+			}
+			for(EntityAIBase ai : tasksToRemove) {
+				this.getEntity().tasks.removeTask(ai);
+			}
+			for(EntityAIBase ai : targetTasksToRemove) {
+				this.getEntity().targetTasks.removeTask(ai);
+			}
+		}
+	}
+
+	private boolean hasTasks() {
+		for(EntityAITaskEntry aiEntry : (List<EntityAITaskEntry>)this.getEntity().tasks.taskEntries) {
+			if(aiEntry.action instanceof IRecruitAI) {
+				return true;
+			}
+		}
+		for(EntityAITaskEntry aiEntry : (List<EntityAITaskEntry>)this.getEntity().targetTasks.taskEntries) {
+			if(aiEntry.action instanceof IRecruitAI) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean shouldContinue() {
@@ -162,17 +232,8 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 		return hasActiveRing;
 	}
 
-	public void setTarget(EntityLivingBase target) {
-		EntityLiving entity = this.getEntity();
-		entity.setAttackTarget(target);
-		entity.setRevengeTarget(target);
-		if(entity instanceof EntityCreature) {
-			((EntityCreature)entity).setTarget(target);
-		}
-	}
-
 	private boolean isValidTarget(Entity target) {
-		return target != null && target.isEntityAlive() && target != this.getRecruiter() && target != this.distractionEntity;
+		return target != null && target.isEntityAlive() && target != this.getRecruiter();
 	}
 
 	public EntityLivingBase getMobToAttack() {

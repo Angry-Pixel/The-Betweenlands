@@ -10,6 +10,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +25,6 @@ import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityTempleGuardian;
 import thebetweenlands.entities.mobs.EntityWight;
-import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -55,9 +55,15 @@ public class RecruitmentRingHandler {
 			if(event.entityLiving instanceof EntityLiving && ((EntityLiving)event.entityLiving).getAttackTarget() != null) {
 				EntityPropertiesRecruit props = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityLiving, EntityPropertiesRecruit.class);
 				if(props != null && props.isRecruited()) {
-					if(((EntityLiving)event.entityLiving).getAttackTarget() == props.getRecruiter()) {
+					if(event.target == props.getRecruiter()) {
 						this.ignoreSetAttackTarget = true;
-						((EntityLiving)event.entityLiving).setAttackTarget(props.getMobToAttack());
+						EntityLivingBase newTarget = props.getMobToAttack();
+						((EntityLiving)event.entityLiving).setAttackTarget(newTarget);
+						event.entityLiving.setRevengeTarget(newTarget);
+						if(event.entityLiving instanceof EntityCreature) {
+							EntityCreature creature = (EntityCreature) event.entityLiving;
+							creature.setTarget(newTarget);
+						}
 					}
 				}
 			}
@@ -85,7 +91,7 @@ public class RecruitmentRingHandler {
 	@SubscribeEvent
 	public void onEntityInteract(EntityInteractEvent event) {
 		if(event.entityPlayer != null && event.target instanceof EntityLiving && !event.entityPlayer.worldObj.isRemote && 
-				event.target instanceof IEntityBL && !DISALOWWED_ENTITIES.contains(event.target.getClass())) {
+				!DISALOWWED_ENTITIES.contains(event.target.getClass())) {
 			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.entityPlayer);
 			List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
 			for(Equipment equipment : equipmentList) {
