@@ -1,16 +1,11 @@
 package thebetweenlands.blocks.structure;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.tileentities.TileEntitySwordStone;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockSwordStone extends BlockContainer {
 	public BlockSwordStone() {
@@ -38,30 +33,18 @@ public class BlockSwordStone extends BlockContainer {
     }
 
 	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
-        this.blockIcon = register.registerIcon(textureName);
-    }
+	public int getRenderType() {
+		return - 1;
+	}
 
-    @Override
-    public boolean shouldSideBeRendered (IBlockAccess iblockaccess, int x, int y, int z, int side) {
-        Block block = iblockaccess.getBlock(x, y, z);
-        return block != this;
-    }
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
 
-    @Override
-    public boolean renderAsNormalBlock() {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube() {
-        return false;
-    }
-
-    @Override
-    public int getRenderBlockPass () {
-        return 1;
-    }
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
 
 }

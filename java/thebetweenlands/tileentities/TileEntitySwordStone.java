@@ -14,7 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class TileEntitySwordStone extends TileEntity {
 
-	public byte type; // type will be used for each sword part
+	public byte type; // type will be used for each sword part rendering
 	public boolean canBreak;
 
 	@Override
