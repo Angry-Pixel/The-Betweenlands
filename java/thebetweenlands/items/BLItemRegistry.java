@@ -4,12 +4,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -101,6 +100,8 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterial;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -167,6 +168,8 @@ public class BLItemRegistry {
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
 
 	public static final Item net = new ItemNet();
+
+	public static final Item shockwaveSword = new ItemSword(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.shockwaveSword");
 
 	//LANTERN
 	public static final Item light = new ItemLight();
@@ -343,7 +346,7 @@ public class BLItemRegistry {
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
 				betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, 
 				valoniteAxe, valoniteShovel);
-		BLCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, 
+		BLCreativeTabs.gears.setTab(shockwaveSword,legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, 
 				lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, 
 				syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, 
 				weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, 
