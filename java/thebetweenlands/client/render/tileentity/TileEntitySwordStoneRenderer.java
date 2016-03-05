@@ -8,8 +8,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,6 +15,8 @@ import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelSwordStoneShield;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntitySwordStone;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -63,7 +63,22 @@ public class TileEntitySwordStoneRenderer extends TileEntitySpecialRenderer {
 
 		ghostItem = new EntityItem(swordStone.getWorldObj());
 		ghostItem.hoverStart = 0.0F;
-		ghostItem.setEntityItemStack(new ItemStack(Items.porkchop));
+		switch (swordStone.type) {
+		case 0:
+			ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_1));
+			break;
+		case 1:
+			ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_2));
+			break;
+		case 2:
+			ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_3));
+			break;
+		case 3:
+			ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_4));
+			break;
+		default:
+				ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_1));	
+		}
 		renderItemInBlock(x, y, z, ghostItem, ticks);
 
 		GL11.glPushMatrix();

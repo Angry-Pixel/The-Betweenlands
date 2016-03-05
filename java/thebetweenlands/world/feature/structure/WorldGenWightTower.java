@@ -10,6 +10,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.entities.EntitySwordEnergy;
+import thebetweenlands.tileentities.TileEntitySwordStone;
 import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
@@ -595,11 +596,10 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 9, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 22, 17, 9, betweenstoneBricks, 0, 1, 1, 1, 0);
 
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 12, swordStone, 0, 1, 1, 1, 0);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 12, swordStone, 0, 1, 1, 1, 0);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 22, 19, swordStone, 0, 1, 1, 1, 0);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 19, swordStone, 0, 1, 1, 1, 0);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 22, 19, swordStone, 0, 1, 1, 1, 0);
+		setSwordStone(world, rand, xx + 12, yy + 22, zz + 12, swordStone, 0, (byte) 0);
+		setSwordStone(world, rand, xx + 19, yy + 22, zz + 12, swordStone, 0, (byte) 1);
+		setSwordStone(world, rand, xx + 19, yy + 22, zz + 19, swordStone, 0, (byte) 2);
+		setSwordStone(world, rand, xx + 12, yy + 22, zz + 19, swordStone, 0, (byte) 3);
 		
 		EntitySwordEnergy swordEnergy = new EntitySwordEnergy(world);
 		swordEnergy.setPosition(xx + 16D, yy + 21.5, zz + 16D);
@@ -611,6 +611,13 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
 		
 	return true;
+    }
+    
+    public void setSwordStone(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta, byte type) {
+    	world.setBlock(x, y, z, blockType, blockMeta, 2);
+    	TileEntitySwordStone swordStone = (TileEntitySwordStone) world.getTileEntity(x, y, z);
+		if (swordStone != null)
+			swordStone.setType(type);
     }
 
     public void rotatedCubeVolume(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
