@@ -8,12 +8,16 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -37,7 +41,7 @@ public class PlayerLocationHandler {
 
 	private static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/locationTitle.png");
 
-	private List<LocationStorage> getLocations(Entity entity) {
+	public static List<LocationStorage> getLocations(Entity entity) {
 		List<LocationStorage> locations = new ArrayList<LocationStorage>();
 		Chunk chunk = entity.worldObj.getChunkFromBlockCoords(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posZ));
 		if(chunk != null) {
@@ -50,8 +54,8 @@ public class PlayerLocationHandler {
 		return locations;
 	}
 
-	private boolean isInLocationType(Entity entity, EnumLocationType type) {
-		List<LocationStorage> locations = this.getLocations(entity);
+	public static boolean isInLocationType(Entity entity, EnumLocationType type) {
+		List<LocationStorage> locations = getLocations(entity);
 		for(LocationStorage location : locations) {
 			if(location.getType() == type) 
 				return true;
@@ -116,6 +120,7 @@ public class PlayerLocationHandler {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void renderTexturedRect(double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glTexCoord2d(umin, vmin);
@@ -130,11 +135,41 @@ public class PlayerLocationHandler {
 	}
 
 	@SubscribeEvent
+	public void onPlayerTick(PlayerTickEvent event) {
+		if(!isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
+			event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
+		}
+	}
+
+	@SubscribeEvent
 	public void onBlockPlace(PlaceEvent event) {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null && !event.world.isRemote) {
 			if(event.player != null && !event.player.capabilities.isCreativeMode && this.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
-				this.spawnGuards(event.player);
+				int warnings = event.player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
+				if(warnings < 3) {
+					if(warnings == 0) {
+						event.player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning1"));
+					}
+					event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", warnings + 1);
+				} else {
+					event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
+					event.player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning2"));
+					this.spawnGuards(event.player);
+				}
+				EntityWight wight = new EntityWight(event.player.worldObj);
+				wight.setRepairGuard(event.x, event.y, event.z);
+				wight.setVolatile(true);
+				double rx = event.player.worldObj.rand.nextDouble() - 0.5F;
+				double ry = event.player.worldObj.rand.nextDouble() - 0.5F;
+				double rz = event.player.worldObj.rand.nextDouble() - 0.5F;
+				Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
+				dir = dir.normalize();
+				rx = dir.xCoord * 4.0F;
+				ry = dir.yCoord * 4.0F;
+				rz = dir.zCoord * 4.0F;
+				wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
+				event.player.worldObj.spawnEntityInWorld(wight);
 			}
 		}
 	}
@@ -142,10 +177,43 @@ public class PlayerLocationHandler {
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
-		if(chunk != null && !event.world.isRemote) {
+		if(chunk != null) {
+
 			EntityPlayer player = event.getPlayer();
 			if(player != null && !player.capabilities.isCreativeMode && this.isInLocationType(player, EnumLocationType.WIGHT_TOWER)) {
-				this.spawnGuards(player);
+				if(!event.world.isRemote) {
+					int warnings = player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
+					if(warnings < 3) {
+						if(warnings == 0) {
+							player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning1"));
+						}
+						player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", warnings + 1);
+					} else {
+						player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
+						player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning2"));
+						this.spawnGuards(player);
+					}
+					EntityWight wight = new EntityWight(player.worldObj);
+					wight.setRepairGuard(event.block, event.x, event.y, event.z, event.blockMetadata);
+					wight.setVolatile(true);
+					double rx = player.worldObj.rand.nextDouble() - 0.5F;
+					double ry = player.worldObj.rand.nextDouble() - 0.5F;
+					double rz = player.worldObj.rand.nextDouble() - 0.5F;
+					Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
+					dir = dir.normalize();
+					rx = dir.xCoord * 4.0F;
+					ry = dir.yCoord * 4.0F;
+					rz = dir.zCoord * 4.0F;
+					wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
+					player.worldObj.spawnEntityInWorld(wight);
+
+					event.world.setBlock(event.x, event.y, event.z, Blocks.air);
+					event.setCanceled(true);
+				} else {
+					event.world.playAuxSFXAtEntity(null, 2001, event.x, event.y, event.z, Block.getIdFromBlock(event.block));
+					event.world.setBlock(event.x, event.y, event.z, Blocks.air);
+					event.setCanceled(true);
+				}
 			}
 		}
 	}
@@ -161,7 +229,7 @@ public class PlayerLocationHandler {
 			if(guards < 3) {
 				for(int i = 0; i < 3 - guards; i++) {
 					EntityWight wight = new EntityWight(player.worldObj);
-					wight.setLocationGuard(true);
+					wight.setLocationGuard(player);
 					wight.setVolatile(true);
 					double rx = player.worldObj.rand.nextDouble() - 0.5F;
 					double ry = player.worldObj.rand.nextDouble() - 0.5F;

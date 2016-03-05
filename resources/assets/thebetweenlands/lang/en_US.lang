@@ -1191,6 +1191,9 @@ chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 chat.amulet.slot.added=Added a new amulet slot
 chat.amulet.slot.full=Can't add any more amulet slots
 
+chat.wightTower.warning1=Your actions have consequences...
+chat.wightTower.warning2=You have angered the guards...
+
 # Radial menu
 equipment.menu.equip=Equip
 equipment.menu.unequip=Unequip
