@@ -1,27 +1,17 @@
 package thebetweenlands.items.misc;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSapling;
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.tools.ItemSwordBL;
-import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
-
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemShockwaveSword extends ItemSword {
 
@@ -35,6 +25,7 @@ public class ItemShockwaveSword extends ItemSword {
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
         setHasSubtypes(true);
+        setUnlocalizedName("thebetweenlands.shockwaveSword");
 	}
 
 	@Override

@@ -113,6 +113,7 @@ public class BLItemRegistry {
 	// BASIC MATERIALS
 	public static final Item testItem = new ItemTestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
 	public static final Item swampTalisman = new ItemSwampTalisman();
+	
 	public static final Item itemsGeneric = new ItemGeneric();
 	public static final Item itemsGenericCrushed = new ItemGenericCrushed().setUnlocalizedName("thebetweenlands.groundStuff");
 	public static final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setUnlocalizedName("thebetweenlands.plantDrop");
@@ -169,7 +170,7 @@ public class BLItemRegistry {
 
 	public static final Item net = new ItemNet();
 
-	public static final Item shockwaveSword = new ItemSword(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.shockwaveSword");
+	public static final Item shockwaveSword = new ItemSword(BLMaterial.toolValonite);
 
 	//LANTERN
 	public static final Item light = new ItemLight();
