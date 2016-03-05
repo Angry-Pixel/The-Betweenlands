@@ -20,16 +20,16 @@ public class EntitySwordEnergy extends Entity {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		pulseFloat = pulse.swing(0.3F, 0.2F, false);
+		pulseFloat = pulse.swing(0.3F, 0.75F, false);
 		motionY = 0;
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound p_70037_1_) {
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound p_70014_1_) {
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
 	}
 
 }

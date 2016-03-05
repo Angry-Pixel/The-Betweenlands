@@ -24,16 +24,12 @@ public class RenderSwordEnergy extends Render {
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		renderSwordEnergy((EntitySwordEnergy) entity, x, y, z, rotationYaw, partialTickTime);
-		EntitySwordEnergy energyBall = (EntitySwordEnergy)entity;
-		GL11.glPushMatrix();
-		GL11.glScalef(2.5F + energyBall.pulseFloat, 2.5F + energyBall.pulseFloat, 2.5F + energyBall.pulseFloat);
-		GL11.glPopMatrix();
 	}
 
 	public void renderSwordEnergy(EntitySwordEnergy energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 		GL11.glPushMatrix();
-		GL11.glTranslated(x, y, z);
+		GL11.glTranslated(x, y -0.125D - energyBall.pulseFloat, z);
 		float f1 = ticks;
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(FORCE_TEXTURE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
@@ -47,6 +43,7 @@ public class RenderSwordEnergy extends Render {
 		GL11.glColor4f(f4, f4, f4, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+		GL11.glScalef(1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat);
 		model.render(0.0625F);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
 		GL11.glLoadIdentity();
