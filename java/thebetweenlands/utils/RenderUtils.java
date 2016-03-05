@@ -2,6 +2,8 @@ package thebetweenlands.utils;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.util.MathHelper;
+
 public class RenderUtils {
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
 		GL11.glBegin(GL11.GL_QUADS);
@@ -17,8 +19,8 @@ public class RenderUtils {
 
 			double diffU = maxU - minU;
 
-			double textureU = minU + (angle / wrapAngle * diffU) % (diffU);
-			double nextTextureU = minU + (nextAngle / wrapAngle * diffU) % (diffU);
+			double textureU = minU + (angle / wrapAngle * diffU) % diffU;
+			double nextTextureU = minU + (nextAngle / wrapAngle * diffU) % diffU;
 
 			GL11.glTexCoord2d(textureU, maxV);
 			GL11.glVertex2d(sin, cos);
@@ -30,6 +32,20 @@ public class RenderUtils {
 			GL11.glVertex2d(sin / len * innerRadius, cos / len * innerRadius);
 		}
 		GL11.glEnd();
+	}
+
+	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double wrapRadius, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
+		int requiredSegments = MathHelper.ceiling_double_int((radius - innerRadius) / wrapRadius);
+		for(int i = 1; i <= requiredSegments; i++) {
+			double renderInnerRadius = innerRadius + radius / requiredSegments * (i-1);
+			double renderOuterRadius = innerRadius + radius / requiredSegments * i;
+			if(renderOuterRadius > radius)
+				renderOuterRadius = radius;
+			double diffV = maxV - minV;
+			double textureV = minV + (diffV / radius * renderInnerRadius) % diffV;
+			double textureVOuter = minV + (diffV / radius * renderOuterRadius) % diffV;
+			renderTexturedCircleSegment(segments, maxAngle, wrapAngle, renderOuterRadius, renderInnerRadius, minU, maxU, minV, maxV);
+		}
 	}
 
 	public static void renderMappedCircleSegment(int segments, double maxAngle, double wrapAngle, double wrapRadius, 
@@ -55,7 +71,7 @@ public class RenderUtils {
 
 		//Inner segment
 		GL11.glPushMatrix();
-		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, radius - borderWidth, innerRadius + borderWidth, sminU, smaxU, sminV, smaxV);
+		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, wrapRadius, radius - borderWidth, innerRadius + borderWidth, sminU, smaxU, sminV, smaxV);
 		GL11.glPopMatrix();
 
 		//Border 1
