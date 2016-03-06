@@ -6,10 +6,11 @@ import net.minecraft.util.MathHelper;
 
 public class RenderUtils {
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int i = 0; i < segments; i++) {
-			double angle = (i)* (maxAngle / segments);
-			double nextAngle = (i + 0.99999999999D) * (maxAngle / segments);
+			double angle = i * (maxAngle / segments);
+			double nextAngle = (i + 1) * (maxAngle / segments);
 			double sin = Math.sin((angle * Math.PI) / 180D) * radius;
 			double cos = Math.cos((angle * Math.PI) / 180D) * radius;
 			double len = Math.sqrt(sin*sin+cos*cos);
@@ -19,32 +20,73 @@ public class RenderUtils {
 
 			double diffU = maxU - minU;
 
-			double textureU = minU + (angle / wrapAngle * diffU) % diffU;
-			double nextTextureU = minU + (nextAngle / wrapAngle * diffU) % diffU;
+			double textureU = minU + (diffU / wrapAngle * angle);
+			double nextTextureU = minU + (diffU / wrapAngle * nextAngle);
 
-			GL11.glTexCoord2d(textureU, maxV);
-			GL11.glVertex2d(sin, cos);
-			GL11.glTexCoord2d(nextTextureU, maxV);
-			GL11.glVertex2d(nextSin, nextCos);
-			GL11.glTexCoord2d(nextTextureU, minV);
-			GL11.glVertex2d(nextSin / nextLen * innerRadius, nextCos / nextLen * innerRadius);
-			GL11.glTexCoord2d(textureU, minV);
-			GL11.glVertex2d(sin / len * innerRadius, cos / len * innerRadius);
+			if(textureU % diffU > nextTextureU % diffU) {
+				double diffToLimit = maxU - textureU % diffU;
+
+				double interpolatedAngle = angle + (nextAngle - angle) / (nextTextureU - textureU) * diffToLimit;
+				double interpolatedSin = Math.sin((interpolatedAngle * Math.PI) / 180D) * radius;
+				double interpolatedCos = Math.cos((interpolatedAngle * Math.PI) / 180D) * radius;
+				double interpolatedLen = Math.sqrt(interpolatedSin*interpolatedSin+interpolatedCos*interpolatedCos);
+
+				textureU %= diffU;
+				nextTextureU %= diffU;
+
+				GL11.glTexCoord2d(textureU, maxV);
+				GL11.glVertex2d(sin, cos);
+				GL11.glTexCoord2d(maxU, maxV);
+				GL11.glVertex2d(interpolatedSin, interpolatedCos);
+				GL11.glTexCoord2d(maxU, minV);
+				GL11.glVertex2d(interpolatedSin / interpolatedLen * innerRadius, interpolatedCos / interpolatedLen * innerRadius);
+				GL11.glTexCoord2d(textureU, minV);
+				GL11.glVertex2d(sin / interpolatedLen * innerRadius, cos / interpolatedLen * innerRadius);
+
+				GL11.glTexCoord2d(minU, maxV);
+				GL11.glVertex2d(interpolatedSin, interpolatedCos);
+				GL11.glTexCoord2d(nextTextureU, maxV);
+				GL11.glVertex2d(nextSin, nextCos);
+				GL11.glTexCoord2d(nextTextureU, minV);
+				GL11.glVertex2d(nextSin / nextLen * innerRadius, nextCos / nextLen * innerRadius);
+				GL11.glTexCoord2d(minU, minV);
+				GL11.glVertex2d(interpolatedSin / interpolatedLen * innerRadius, interpolatedCos / interpolatedLen * innerRadius);
+			} else {
+				textureU %= diffU;
+				if(nextTextureU % diffU == textureU && nextTextureU > textureU) {
+					nextTextureU = maxU;
+				} else {
+					nextTextureU %= diffU;
+				}
+				GL11.glTexCoord2d(textureU, maxV);
+				GL11.glVertex2d(sin, cos);
+				GL11.glTexCoord2d(nextTextureU, maxV);
+				GL11.glVertex2d(nextSin, nextCos);
+				GL11.glTexCoord2d(nextTextureU, minV);
+				GL11.glVertex2d(nextSin / nextLen * innerRadius, nextCos / nextLen * innerRadius);
+				GL11.glTexCoord2d(textureU, minV);
+				GL11.glVertex2d(sin / len * innerRadius, cos / len * innerRadius);
+			}
 		}
 		GL11.glEnd();
 	}
 
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double wrapRadius, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
-		int requiredSegments = MathHelper.ceiling_double_int((radius - innerRadius) / wrapRadius);
-		for(int i = 1; i <= requiredSegments; i++) {
-			double renderInnerRadius = innerRadius + radius / requiredSegments * (i-1);
-			double renderOuterRadius = innerRadius + radius / requiredSegments * i;
-			if(renderOuterRadius > radius)
-				renderOuterRadius = radius;
-			double diffV = maxV - minV;
-			double textureV = minV + (diffV / radius * renderInnerRadius) % diffV;
-			double textureVOuter = minV + (diffV / radius * renderOuterRadius) % diffV;
-			renderTexturedCircleSegment(segments, maxAngle, wrapAngle, renderOuterRadius, renderInnerRadius, minU, maxU, minV, maxV);
+		double segmentWidth = (radius - innerRadius);
+		double requiredSegments = segmentWidth / wrapRadius;
+		double diffV = maxV - minV;
+		double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
+		for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+			double renderInnerRadius = segmentWidth / requiredSegments * i;
+			double renderOuterRadius = segmentWidth / requiredSegments * (i+1);
+			double segmentLength = renderOuterRadius - renderInnerRadius;
+			if(renderOuterRadius > segmentWidth)
+				renderOuterRadius = segmentWidth;
+
+			double textureV = minV;
+			double textureVOuter = minV + vPerSegment / segmentLength * (renderOuterRadius - renderInnerRadius);
+
+			renderTexturedCircleSegment(segments, maxAngle, wrapAngle, renderOuterRadius + innerRadius, renderInnerRadius + innerRadius, minU, maxU, textureV, textureVOuter);
 		}
 	}
 
@@ -75,44 +117,83 @@ public class RenderUtils {
 		GL11.glPopMatrix();
 
 		//Border 1
-		GL11.glPushMatrix();
-		GL11.glRotated(-maxAngle+borderAngle*2, 0, 0, 1);
-		GL11.glTranslated(0, innerRadius, 0);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glTexCoord2d(b1maxU, b1minV);
-		GL11.glVertex2d(0, radiusDiff - borderWidth);
-		GL11.glTexCoord2d(b1minU, b1minV);
-		GL11.glVertex2d(borderWidth, radiusDiff - borderWidth);
-		GL11.glTexCoord2d(b1minU, b1maxV);
-		GL11.glVertex2d(borderWidth, borderWidth);
-		GL11.glTexCoord2d(b1maxU, b1maxV);
-		GL11.glVertex2d(0, borderWidth);
-		GL11.glEnd();
-		GL11.glPopMatrix();
+		{
+			GL11.glPushMatrix();
+			GL11.glRotated(-maxAngle+borderAngle*2, 0, 0, 1);
+			GL11.glTranslated(0, innerRadius + borderWidth, 0);
+			GL11.glDisable(GL11.GL_CULL_FACE);
+			GL11.glBegin(GL11.GL_QUADS);
+
+			double borderLength = (radius - innerRadius - borderWidth * 2.0D);
+			double requiredSegments = borderLength / wrapRadius;
+			double diffV = b1maxV - b1minV;
+			double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
+			for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+				double renderInnerRadius = borderLength / requiredSegments * i;
+				double renderOuterRadius = borderLength / requiredSegments * (i+1);
+				double segmentLength = renderOuterRadius - renderInnerRadius;
+				if(renderOuterRadius > borderLength)
+					renderOuterRadius = borderLength;
+
+				double textureV = b1minV;
+				double textureVOuter = b1minV + vPerSegment / segmentLength * (renderOuterRadius - renderInnerRadius);
+
+				GL11.glTexCoord2d(b1maxU, textureV);
+				GL11.glVertex2d(0, renderInnerRadius);
+				GL11.glTexCoord2d(b1minU, textureV);
+				GL11.glVertex2d(borderWidth, renderInnerRadius);
+				GL11.glTexCoord2d(b1minU, textureVOuter);
+				GL11.glVertex2d(borderWidth, renderOuterRadius);
+				GL11.glTexCoord2d(b1maxU, textureVOuter);
+				GL11.glVertex2d(0, renderOuterRadius);
+			}
+
+			GL11.glEnd();
+			GL11.glPopMatrix();
+		}
 
 		//Border 2
 		GL11.glPushMatrix();
-		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, radius, radius - borderWidth, b2maxU, b2minU, b2maxV, b2minV);
+		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, radius, radius - borderWidth, b2minU, b2maxU, b2maxV, b2minV);
 		GL11.glPopMatrix();
 
 		//Border 3
-		GL11.glPushMatrix();
-		GL11.glTranslated(0, innerRadius, 0);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glTexCoord2d(b3minU, b3minV);
-		GL11.glVertex2d(0, borderWidth);
-		GL11.glTexCoord2d(b3maxU, b3minV);
-		GL11.glVertex2d(-borderWidth, borderWidth);
-		GL11.glTexCoord2d(b3maxU, b3maxV);
-		GL11.glVertex2d(-borderWidth, radiusDiff - borderWidth);
-		GL11.glTexCoord2d(b3minU, b3maxV);
-		GL11.glVertex2d(0, radiusDiff - borderWidth);
-		GL11.glEnd();
-		GL11.glPopMatrix();
+		{
+			GL11.glPushMatrix();
+			GL11.glTranslated(0, innerRadius + borderWidth, 0);
+			GL11.glBegin(GL11.GL_QUADS);
+
+			double borderLength = (radius - innerRadius - borderWidth * 2.0D);
+			double requiredSegments = borderLength / wrapRadius;
+			double diffV = b3maxV - b3minV;
+			double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
+			for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+				double renderInnerRadius = borderLength / requiredSegments * i;
+				double renderOuterRadius = borderLength / requiredSegments * (i+1);
+				double segmentLength = renderOuterRadius - renderInnerRadius;
+				if(renderOuterRadius > borderLength)
+					renderOuterRadius = borderLength;
+
+				double textureV = b3minV;
+				double textureVOuter = b3minV + vPerSegment / segmentLength * (renderOuterRadius - renderInnerRadius);
+
+				GL11.glTexCoord2d(b3minU, textureV);
+				GL11.glVertex2d(0, renderInnerRadius);
+				GL11.glTexCoord2d(b3maxU, textureV);
+				GL11.glVertex2d(-borderWidth, renderInnerRadius);
+				GL11.glTexCoord2d(b3maxU, textureVOuter);
+				GL11.glVertex2d(-borderWidth, renderOuterRadius);
+				GL11.glTexCoord2d(b3minU, textureVOuter);
+				GL11.glVertex2d(0, renderOuterRadius);
+			}
+
+			GL11.glEnd();
+			GL11.glPopMatrix();
+		}
 
 		//Border 4
 		GL11.glPushMatrix();
-		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngleInner, innerRadius + borderWidth, innerRadius, b4maxU, b4minU, b4maxV, b4minV);
+		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngleInner, innerRadius + borderWidth, innerRadius, b4minU, b4maxU, b4maxV, b4minV);
 		GL11.glPopMatrix();
 
 		//Corner 1
