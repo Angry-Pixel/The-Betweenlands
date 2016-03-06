@@ -83,7 +83,7 @@ public class RenderSwordEnergy extends Render {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) (y), (float) z);
 		GL11.glScalef(1.25F, 1.25F, 1.25F);
-		GL11.glRotatef(ticks, 0, 1, 0);
+		GL11.glRotatef(ticks * 4F, 0, 1, 0);
 		renderItem.doRender(ghostItem, 0, 0, 0, 0, 0);
 		GL11.glPopMatrix();
 	}
