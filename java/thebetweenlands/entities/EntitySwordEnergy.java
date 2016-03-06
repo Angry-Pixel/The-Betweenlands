@@ -1,5 +1,6 @@
 package thebetweenlands.entities;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -7,8 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntitySwordEnergy extends Entity {
+public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnData {
 	public float pulseFloat;
 	AnimationMathHelper pulse = new AnimationMathHelper();
 	public EntitySwordEnergy(World world) {
@@ -88,12 +90,34 @@ public class EntitySwordEnergy extends Entity {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+		nbt.setFloat("partPos1", getSwordPart1Pos());
+		nbt.setFloat("partPos2", getSwordPart2Pos());
+		nbt.setFloat("partPos3", getSwordPart3Pos());
+		nbt.setFloat("partPos4", getSwordPart4Pos());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+		setSwordPart1Pos(nbt.getFloat("partPos1"));
+		setSwordPart2Pos(nbt.getFloat("partPos2"));
+		setSwordPart3Pos(nbt.getFloat("partPos3"));
+		setSwordPart4Pos(nbt.getFloat("partPos4"));
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeFloat(dataWatcher.getWatchableObjectFloat(20));
+		buffer.writeFloat(dataWatcher.getWatchableObjectFloat(21));
+		buffer.writeFloat(dataWatcher.getWatchableObjectFloat(22));
+		buffer.writeFloat(dataWatcher.getWatchableObjectFloat(23));
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		dataWatcher.updateObject(20, additionalData.readFloat());
+		dataWatcher.updateObject(21, additionalData.readFloat());
+		dataWatcher.updateObject(22, additionalData.readFloat());
+		dataWatcher.updateObject(23, additionalData.readFloat());
 	}
 
 }
