@@ -11,6 +11,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import thebetweenlands.entities.EntitySwordEnergy;
 
 public class TileEntitySwordStone extends TileEntity {
 
@@ -26,25 +27,23 @@ public class TileEntitySwordStone extends TileEntity {
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			if (isBlockOccupied() != null)
-				if (!canBreak) {
+				if (!canBreak)
 					setCanBeBroken(true);
-					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
 
 			if (isBlockOccupied() == null)
-				if (canBreak) {
+				if (canBreak)
 					setCanBeBroken(false);
-					worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-				}
 		}
 	}
 
 	public void setCanBeBroken(boolean isBreakable) {
 		canBreak = isBreakable;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -54,6 +53,18 @@ public class TileEntitySwordStone extends TileEntity {
 			Entity entity = list.get(i);
 			if (entity != null)
 				if (entity instanceof EntityPlayer)
+					return entity;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Entity isSwordEnergyBelow() {
+		List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xCoord + 0.25D, yCoord - 1D, zCoord + 0.25D, xCoord + 0.75D, yCoord, zCoord + 0.75D));
+		for (int i = 0; i < list.size(); i++) {
+			Entity entity = list.get(i);
+			if (entity != null)
+				if (entity instanceof EntitySwordEnergy)
 					return entity;
 		}
 		return null;
