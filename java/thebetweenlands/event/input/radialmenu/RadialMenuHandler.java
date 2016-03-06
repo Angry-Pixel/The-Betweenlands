@@ -21,6 +21,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.MouseEvent;
@@ -34,8 +35,7 @@ import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.forgeevent.entity.EquipmentChangeEvent;
 import thebetweenlands.items.IEquippable;
 import thebetweenlands.utils.GuiUtil;
-import thebetweenlands.utils.MCStencil;
-import thebetweenlands.utils.Stencil;
+import thebetweenlands.utils.RenderUtils;
 
 @SideOnly(Side.CLIENT)
 public class RadialMenuHandler {
@@ -345,9 +345,6 @@ public class RadialMenuHandler {
 			if(!this.isOpen || this.currentCategory == null)
 				return;
 
-			//TODO: Will look into this, it seems Forge is also doing some stencil buffer stuff, but it doesn't seem like there is any buffer properly set up
-			MCStencil.checkSetupFBO();
-
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 
 			ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
@@ -364,24 +361,20 @@ public class RadialMenuHandler {
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-			Stencil.getInstance().startLayer();
-			Stencil.getInstance().setBuffer();
-			Stencil.getInstance().createCirlce(this.guiX, this.guiY, this.radius + 10);
-			Stencil.getInstance().setBuffer(false);
-			Stencil.getInstance().createCirlce(this.guiX, this.guiY, this.innerRadius);
-			Stencil.getInstance().cropInside();
-
 			double diffX = this.guiX - mouseX;
 			double diffY = this.guiY - mouseY;
 			double centerDistance = Math.sqrt(diffX * diffX + diffY * diffY);
 			double angle = 360 - (Math.toDegrees(Math.atan2(diffX, diffY)) + 180);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 			//Render circle sections
-			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
+			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("thebetweenlands:textures/gui/radialMenu.png"));
+			int segments = Math.min(this.currentCategory.getCategories().size(), this.displayedCategories);
+			for(int i = 0; i < segments; i++) {
 				Category category = this.currentCategory.getCategories().get(i);
 				float midAngle = i * circleAngle + circleAngle / 2.0F;
-				double xOffset = Math.sin(Math.toRadians(midAngle)) * 3.0;
-				double yOffset = Math.cos(Math.toRadians(180-midAngle)) * 3.0;
+				double xOffset = Math.sin(Math.toRadians(midAngle));
+				double yOffset = Math.cos(Math.toRadians(180-midAngle));
 
 				int color;
 				if(this.isInside((int)mouseX, (int)mouseY, i)) {
@@ -396,25 +389,74 @@ public class RadialMenuHandler {
 				float blue = (float)(color & 255) / 255.0F;
 
 				GL11.glPushMatrix();
-				GL11.glTranslated(xOffset, yOffset, 0);
-				GL11.glColor4f(red, green, blue, alpha);
+				GL11.glTranslated(this.guiX, this.guiY, 0);
+				GL11.glTranslated(xOffset*segments*2.8D, yOffset*segments*2.8D, 0);
 
-				GuiUtil.drawPartialCircle(this.guiX, this.guiY - 1, this.radius - 4, (int)(i * circleAngle), (int)((i + 1) * circleAngle));
+				GL11.glRotated(180.0D + 360.0D / Math.min(this.currentCategory.getCategories().size(), this.displayedCategories), 0, 0, 1);
+
+				GL11.glRotated(((i) * circleAngle), 0, 0, 1);
+
+				GL11.glColor4f(1, 1, 1, 1);
+
+				double radius = /*60*/this.radius;
+				double circumference = Math.PI * radius * 2.0D;
+				double innerRadius = /*30*/this.innerRadius;
+				double wrapRadius = ((radius - innerRadius - 8)) * 1;
+				if(this.isInside((int)mouseX, (int)mouseY, i)) {
+					radius = radius + 5;
+				}
+				double x = 0;
+				double y = 0;
+				double maxAngle = 360.0D / Math.min(this.currentCategory.getCategories().size(), this.displayedCategories);
+				int subSegments = (int)(maxAngle / 10.0D);
+
+				double wrapAngle = 90.0D * circumference / (Math.PI * radius * 2.0D);
+
+				double textureWidth = 160.0D;
+				double textureHeight = 64.0D;
+
+				//									         segments,    maxAngle, wrapAngle, wrapRadius, radius, innerRadius, borderWidth
+				RenderUtils.renderMappedCircleSegmentWrapped(subSegments, maxAngle, wrapAngle, wrapRadius, radius, MathHelper.clamp_double(innerRadius-segments*2.5D, 10, innerRadius), 8, 
+						//Central piece
+						0 / textureWidth, 100 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 1
+						111 / textureWidth, 120 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 2
+						0 / textureWidth, 100 / textureWidth, 0 / textureHeight, 9 / textureHeight,
+						//Border 3
+						121 / textureWidth, 130 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 4
+						0 / textureWidth, 100 / textureWidth, 48 / textureHeight, 57 / textureHeight,
+						//Corner 1
+						102 / textureWidth, 110 / textureWidth, 1 / textureHeight, 9 / textureHeight,
+						//Corner 2
+						102 / textureWidth, 110 / textureWidth, 11 / textureHeight, 19 / textureHeight,
+						//Corner 3
+						102 / textureWidth, 110 / textureWidth, 21 / textureHeight, 29 / textureHeight,
+						//Corner 4
+						102 / textureWidth, 110 / textureWidth, 31 / textureHeight, 39 / textureHeight);
+
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+
+				GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+
 
 				GL11.glPopMatrix();
 			}
 
-			Stencil.getInstance().stopLayer();
+			//Stencil.getInstance().stopLayer();
 
 			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
 				Category category = this.currentCategory.getCategories().get(i);
 				float midAngle = i * circleAngle + circleAngle / 2.0F;
-				double yOffset = Math.cos(Math.toRadians(180-midAngle)) * 3.0;
-				double xOffset = Math.sin(Math.toRadians(midAngle)) * 3.0;
+				double yOffset = Math.cos(Math.toRadians(180-midAngle))*segments*2.8D;
+				double xOffset = Math.sin(Math.toRadians(midAngle))*segments*2.8D;
 
 				//Render category stuff
 				double dst = Math.sqrt(xOffset*xOffset+yOffset*yOffset);
-				category.renderCategory(this.guiX, this.guiY, xOffset/dst, yOffset/dst, this.radius - this.innerRadius, xOffset/dst*this.innerRadius, yOffset/dst*this.innerRadius, (i + 0.5D) * circleAngle, circleAngle);
+				category.renderCategory(this.guiX+xOffset, this.guiY+yOffset, xOffset/dst, yOffset/dst, this.radius - this.innerRadius - 8, xOffset/dst*this.innerRadius, yOffset/dst*this.innerRadius, (i + 0.5D) * circleAngle, circleAngle);
 			}
 
 			//Render return button
@@ -438,8 +480,8 @@ public class RadialMenuHandler {
 
 				GL11.glEnable(GL11.GL_TEXTURE_2D);
 
-				double startX = this.guiX + Math.sin(Math.toRadians(midAngle)) * (this.radius + 2);
-				double startY = this.guiY + Math.cos(Math.toRadians(180-midAngle)) * (this.radius + 2);
+				double startX = this.guiX + Math.sin(Math.toRadians(midAngle)) * (this.radius + 5);
+				double startY = this.guiY + Math.cos(Math.toRadians(180-midAngle)) * (this.radius + 5);
 				double endX = this.guiX + Math.sin(Math.toRadians(midAngle)) * (this.radius + 40);
 				double endY = this.guiY + Math.cos(Math.toRadians(180-midAngle)) * (this.radius + 40);
 
@@ -459,6 +501,12 @@ public class RadialMenuHandler {
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glDisable(GL11.GL_TEXTURE_2D);
 				GL11.glLineWidth(3.0f);
+
+				GL11.glPushMatrix();
+				double yOffset = Math.cos(Math.toRadians(180-midAngle))*segments*2.8D;
+				double xOffset = Math.sin(Math.toRadians(midAngle))*segments*2.8D;
+				GL11.glTranslated(xOffset, yOffset, 0);
+
 				GL11.glBegin(GL11.GL_LINES);
 				GL11.glVertex2d(startX, startY);
 				if(Math.abs(endX - this.guiX) > 1) {
@@ -489,6 +537,8 @@ public class RadialMenuHandler {
 					Gui.drawRect((int)this.guiX - width / 2 - 1, (int)endY - 1, (int)this.guiX - width / 2 + width, (int)endY + 8, color);
 					Minecraft.getMinecraft().fontRenderer.drawString(category.getName(), (int)this.guiX - width / 2, (int)endY, textColor);
 				}
+
+				GL11.glPopMatrix();
 			}
 
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -549,7 +599,8 @@ public class RadialMenuHandler {
 		float circleAngle = 360.0F / this.currentCategory.getCategories().size();
 		double length = Math.sqrt(diffX * diffX + diffY * diffY);
 		double angle = (360 - (Math.toDegrees(Math.atan2(diffX, diffY)) + 180) + 180) % 360;
-		if(angle >= (int)(category * circleAngle) && angle < (int)((category + 1) * circleAngle) && length <= this.radius && length >= this.innerRadius) {
+		int segments = Math.min(this.currentCategory.getCategories().size(), this.displayedCategories);
+		if(angle >= (int)(category * circleAngle) && angle < (int)((category + 1) * circleAngle) && length <= this.radius + segments*2D && length >= MathHelper.clamp_double(this.innerRadius-segments*2.8D, 10, this.innerRadius) + segments*2D - 4) {
 			return true;
 		}
 		return false;
