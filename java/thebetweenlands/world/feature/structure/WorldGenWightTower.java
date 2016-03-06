@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.entities.EntitySwordEnergy;
-import thebetweenlands.tileentities.TileEntitySwordStone;
+import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
@@ -37,7 +37,7 @@ public class WorldGenWightTower extends WorldGenerator {
     private Block pitstoneChiselled = BLBlockRegistry.chiseledPitstone;
     private Block stagnantWater = BLBlockRegistry.stagnantWaterFluid;
     private Block spikeTrap = BLBlockRegistry.spikeTrap;
-    private Block swordStone = BLBlockRegistry.swordStone;
+    private Block swordStone = BLBlockRegistry.itemCage;
 
     private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
     
@@ -615,7 +615,7 @@ public class WorldGenWightTower extends WorldGenerator {
     
     public void setSwordStone(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta, byte type) {
     	world.setBlock(x, y, z, blockType, blockMeta, 2);
-    	TileEntitySwordStone swordStone = (TileEntitySwordStone) world.getTileEntity(x, y, z);
+    	TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(x, y, z);
 		if (swordStone != null)
 			swordStone.setType(type);
     }

@@ -6,29 +6,29 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.EntitySwordEnergy;
-import thebetweenlands.tileentities.TileEntitySwordStone;
+import thebetweenlands.tileentities.TileEntityItemCage;
 
-public class BlockSwordStone extends BlockContainer {
+public class BlockItemCage extends BlockContainer {
 
-	public BlockSwordStone() {
+	public BlockItemCage() {
 		super(Material.rock);
 		setHardness(15F);
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
 		setLightLevel(0.8F);
 		setCreativeTab(BLCreativeTabs.blocks);
-		setBlockName("thebetweenlands.swordStone");
+		setBlockName("thebetweenlands.itemCage");
 		setBlockTextureName("thebetweenlands:polishedDentrothyst21"); //temp spam reduction 
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntitySwordStone();
+		return new TileEntityItemCage();
 	}
 
 	@Override
     public float getBlockHardness(World world, int x, int y, int z) {
-		TileEntitySwordStone swordStone = (TileEntitySwordStone)world.getTileEntity(x, y, z);
+		TileEntityItemCage swordStone = (TileEntityItemCage)world.getTileEntity(x, y, z);
         if (swordStone != null && !swordStone.canBreak)
         	return -1;
         return blockHardness;
@@ -37,7 +37,7 @@ public class BlockSwordStone extends BlockContainer {
 	@Override
 	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
-			TileEntitySwordStone swordStone = (TileEntitySwordStone) world.getTileEntity(x, y, z);
+			TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(x, y, z);
 			if (swordStone != null && swordStone.isSwordEnergyBelow() != null) {
 				EntitySwordEnergy energyBall = (EntitySwordEnergy) swordStone.isSwordEnergyBelow();
 				switch (swordStone.type) {

@@ -70,19 +70,19 @@ public class RenderSwordEnergy extends Render {
 		ghostItem = new EntityItem(energyBall.worldObj);
 		ghostItem.hoverStart = 0.0F;
 		ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_1));
-		renderItemInBlock(x - energyBall.getSwordPart1Pos(), y + 0.75F, z - energyBall.getSwordPart1Pos(), ghostItem, ticks);
+		renderItemInBlock(x - energyBall.getSwordPart1Pos(), y + 0.725F, z - energyBall.getSwordPart1Pos(), ghostItem, ticks);
 		ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_2));
-		renderItemInBlock(x + energyBall.getSwordPart2Pos(), y + 0.75F, z - energyBall.getSwordPart2Pos(), ghostItem, ticks);
+		renderItemInBlock(x + energyBall.getSwordPart2Pos(), y + 0.725F, z - energyBall.getSwordPart2Pos(), ghostItem, ticks);
 		ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_3));
-		renderItemInBlock(x + energyBall.getSwordPart3Pos(), y + 0.75F, z + energyBall.getSwordPart3Pos(), ghostItem, ticks);
+		renderItemInBlock(x + energyBall.getSwordPart3Pos(), y + 0.725F, z + energyBall.getSwordPart3Pos(), ghostItem, ticks);
 		ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_4));
-		renderItemInBlock(x - energyBall.getSwordPart4Pos(), y + 0.75F, z + energyBall.getSwordPart4Pos(), ghostItem, ticks);
+		renderItemInBlock(x - energyBall.getSwordPart4Pos(), y + 0.725F, z + energyBall.getSwordPart4Pos(), ghostItem, ticks);
 	}
 
 	public void renderItemInBlock(double x, double y, double z, EntityItem ghostItem, float ticks) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) (y), (float) z);
-		GL11.glScalef(1.5F, 1.5F, 1.5F);
+		GL11.glScalef(1.25F, 1.25F, 1.25F);
 		GL11.glRotatef(ticks, 0, 1, 0);
 		renderItem.doRender(ghostItem, 0, 0, 0, 0, 0);
 		GL11.glPopMatrix();

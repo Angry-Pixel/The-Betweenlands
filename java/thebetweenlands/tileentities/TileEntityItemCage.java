@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import thebetweenlands.entities.EntitySwordEnergy;
 
-public class TileEntitySwordStone extends TileEntity {
+public class TileEntityItemCage extends TileEntity {
 
 	public byte type; // type will be used for each sword part rendering
 	public boolean canBreak;

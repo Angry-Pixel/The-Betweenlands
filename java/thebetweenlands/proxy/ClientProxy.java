@@ -135,7 +135,7 @@ import thebetweenlands.client.render.tileentity.TileEntityPestleAndMortarRendere
 import thebetweenlands.client.render.tileentity.TileEntityPurifierRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityRepellerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntitySpikeTrapRenderer;
-import thebetweenlands.client.render.tileentity.TileEntitySwordStoneRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityItemCageRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarBeastSpawnerRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarLootPot1Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarLootPot2Renderer;
@@ -225,7 +225,7 @@ import thebetweenlands.tileentities.TileEntityPestleAndMortar;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityRepeller;
 import thebetweenlands.tileentities.TileEntitySpikeTrap;
-import thebetweenlands.tileentities.TileEntitySwordStone;
+import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
@@ -373,7 +373,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new TileEntityRepellerRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWraithPusher.class, new TileEntityWraithPusherRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new TileEntitySpikeTrapRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySwordStone.class, new TileEntitySwordStoneRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new TileEntityItemCageRenderer());
 
 		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
