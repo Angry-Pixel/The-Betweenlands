@@ -97,87 +97,89 @@ public class GuiOverlay extends Gui {
 		}*/
 
 		//TODO: Textured radial menu WIP
-//		try {
-//			GL11.glPushMatrix();
-//			GL11.glTranslated(150, 150, 0);
-//
-//			double radius = /*60*/180;
-//			double innerRadius = /*30*/100;
-//			double x = 0;
-//			double y = 0;
-//			double maxAngle = 80.0D;
-//			int segments = (int)(maxAngle / 10.0D);
-//
-//			//GL11.glEnable(GL11.GL_POLYGON_MODE);
-//			//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-//
-//			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("thebetweenlands:textures/gui/radialMenuTest.png"));
-//
-//			//GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-//			//GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-//
-//			GL11.glLineWidth(0.1F);
-//			//GL11.glDisable(GL11.GL_TEXTURE_2D);
-//			GL11.glEnable(GL11.GL_BLEND);
-//			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-//
-//			/*RenderUtils.renderTexturedCircleSegment(100, 120, 60, 50, 40, 0, 1, 0, 1);
-//			GL11.glRotated(20, 0, 0, 1);
-//			RenderUtils.renderTexturedCircleSegment(100, 20, 60, 50, 40, 0, 1, 0, 1);*/
-//
-//			//GL11.glRotated(-140, 0, 0, 1);
-//
-//			//Gui.drawRect(0, 0, 2, 2, 0xFFFF0000);
-//			GL11.glColor4f(1, 1, 1, 1);
-//
-//			//Stencil.getInstance().createCirlce(0, 0, 40);
-//			//Stencil.getInstance().createCirlce(0, 0, 40);
-//
-//			GL11.glDisable(GL11.GL_TEXTURE_2D);
-//			//RenderUtils.renderTexturedCircleSegment(segments, maxAngle, 80, radius, innerRadius, 0, 0, 0, 0);
-//			GL11.glEnable(GL11.GL_TEXTURE_2D);
-//
-//			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-//
-//			double textureWidth = 160.0D;
-//			double textureHeight = 64.0D;
-//
-//			//Stencil.getInstance().createCirlce(0, 0, radius - innerRadius + 20 + 10);
-//
-//			//									  segments, maxAngle, wrapAngle, wrapRadius,                       radius, innerRadius, borderWidth
-//			RenderUtils.renderMappedCircleSegment(segments, maxAngle, maxAngle, ((radius - innerRadius) - 20) * 1D, radius, innerRadius, /*5*/20, 
-//					//Central piece
-//					0 / textureWidth, 100 / textureWidth, 10 / textureHeight, 44 / textureHeight,
-//					//Border 1
-//					111 / textureWidth, 120 / textureWidth, 0 / textureHeight, 64 / textureHeight,
-//					//Border 2
-//					0 / textureWidth, 100 / textureWidth, 0 / textureHeight, 9 / textureHeight,
-//					//Border 3
-//					121 / textureWidth, 130 / textureWidth, 0 / textureHeight, 64 / textureHeight,
-//					//Border 4
-//					0 / textureWidth, 100 / textureWidth, 45 / textureHeight, 54 / textureHeight,
-//					//Corner 1
-//					102 / textureWidth, 110 / textureWidth, 1 / textureHeight, 9 / textureHeight,
-//					//Corner 2
-//					102 / textureWidth, 110 / textureWidth, 11 / textureHeight, 19 / textureHeight,
-//					//Corner 3
-//					102 / textureWidth, 110 / textureWidth, 21 / textureHeight, 29 / textureHeight,
-//					//Corner 4
-//					102 / textureWidth, 110 / textureWidth, 31 / textureHeight, 39 / textureHeight);
-//
-//			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-//
-//			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-//
-//			GL11.glEnable(GL11.GL_TEXTURE_2D);
-//
-//			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-//			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-//
-//			GL11.glPopMatrix();
-//		} catch(Exception ex) {
-//			ex.printStackTrace();
-//		}
+		if(DebugHandlerClient.INSTANCE.debugDeferredEffect) {
+			try {
+				GL11.glPushMatrix();
+				GL11.glTranslated(150, 150, 0);
+
+				double radius = /*60*/60;
+				double innerRadius = /*30*/30;
+				double x = 0;
+				double y = 0;
+				double maxAngle = 180.0D;
+				int segments = (int)(maxAngle / 10.0D);
+
+				//GL11.glEnable(GL11.GL_POLYGON_MODE);
+				//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("thebetweenlands:textures/gui/radialMenuTest.png"));
+
+				//GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				//GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+
+				GL11.glLineWidth(0.1F);
+				//GL11.glDisable(GL11.GL_TEXTURE_2D);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+				/*RenderUtils.renderTexturedCircleSegment(100, 120, 60, 50, 40, 0, 1, 0, 1);
+			GL11.glRotated(20, 0, 0, 1);
+			RenderUtils.renderTexturedCircleSegment(100, 20, 60, 50, 40, 0, 1, 0, 1);*/
+
+				//GL11.glRotated(-140, 0, 0, 1);
+
+				//Gui.drawRect(0, 0, 2, 2, 0xFFFF0000);
+				GL11.glColor4f(1, 1, 1, 1);
+
+				//Stencil.getInstance().createCirlce(0, 0, 40);
+				//Stencil.getInstance().createCirlce(0, 0, 40);
+
+				GL11.glDisable(GL11.GL_TEXTURE_2D);
+				//RenderUtils.renderTexturedCircleSegment(segments, maxAngle, 80, radius, innerRadius, 0, 0, 0, 0);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+
+				double textureWidth = 160.0D;
+				double textureHeight = 64.0D;
+
+				//Stencil.getInstance().createCirlce(0, 0, radius - innerRadius + 20 + 10);
+
+				//									  segments, maxAngle, wrapAngle, wrapRadius,                       radius, innerRadius, borderWidth
+				RenderUtils.renderMappedCircleSegment(segments, maxAngle, 120, ((radius - innerRadius)) * 1D, radius, innerRadius, /*5*/8, 
+						//Central piece
+						0 / textureWidth, 100 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 1
+						111 / textureWidth, 120 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 2
+						0 / textureWidth, 100 / textureWidth, 0 / textureHeight, 9 / textureHeight,
+						//Border 3
+						121 / textureWidth, 130 / textureWidth, 10 / textureHeight, 47 / textureHeight,
+						//Border 4
+						0 / textureWidth, 100 / textureWidth, 48 / textureHeight, 57 / textureHeight,
+						//Corner 1
+						102 / textureWidth, 110 / textureWidth, 1 / textureHeight, 9 / textureHeight,
+						//Corner 2
+						102 / textureWidth, 110 / textureWidth, 11 / textureHeight, 19 / textureHeight,
+						//Corner 3
+						102 / textureWidth, 110 / textureWidth, 21 / textureHeight, 29 / textureHeight,
+						//Corner 4
+						102 / textureWidth, 110 / textureWidth, 31 / textureHeight, 39 / textureHeight);
+
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+
+				GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+
+				GL11.glPopMatrix();
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 
 		//Just some shader debugging stuff. Applies gaussian blur to the top half of the screen
 		if(DebugHandlerClient.INSTANCE.debugDeferredEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
