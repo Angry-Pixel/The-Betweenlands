@@ -10,6 +10,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL {
+	public static final int SHIELD_DW = 20;
+
 	public static final double SHIELD_OFFSET_X = 0.0D;
 	public static final double SHIELD_OFFSET_Y = 1D;
 	public static final double SHIELD_OFFSET_Z = 0.0D;
@@ -26,9 +28,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 		{7,10,3}, {7,6,10}, {7,11,6}, {11,0,6}, {0,1,6},
 		{6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11}
 	};
+	public static final float SHIELD_EXPLOSION = 0.2F;
 
 	private boolean[] activeShields = new boolean[20];
-	private float shieldExplosion = 0.2F;
 
 	public final AxisAlignedBB coreBoundingBox;
 
@@ -46,12 +48,38 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataWatcher.addObject(SHIELD_DW, (int) 0);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if(!this.worldObj.isRemote) {
+			this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
+		} else {
+			this.unpackShieldData(this.dataWatcher.getWatchableObjectInt(SHIELD_DW));
+		}
+	}
+
+	@Override
 	public String pageName() {
 		return "fortressBoss";
 	}
 
-	public float getShieldExplosion() {
-		return this.shieldExplosion;
+	private int packShieldData() {
+		int packedData = 0;
+		for(int i = 0; i <= 19; i++) {
+			packedData |= (this.activeShields[i] ? 1 : 0) << i;
+		}
+		return packedData;
+	}
+
+	private void unpackShieldData(int packedData) {
+		for(int i = 0; i <= 19; i++) {
+			this.activeShields[i] = ((packedData >> i) & 1) == 1 ? true : false;
+		}
 	}
 
 	public boolean hasShield() {
@@ -87,17 +115,26 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 			double centerY = (v1[1]+v2[1]+v3[1])/3;
 			double centerZ = (v1[2]+v2[2]+v3[2])/3;
 			double len = Math.sqrt(centerX*centerX + centerY*centerY + centerZ*centerZ);
-			Vec3 vec1 = Vec3.createVectorHelper(v1[0]+centerX/len*this.getShieldExplosion(), v1[1]+centerY/len*this.getShieldExplosion(), v1[2]+centerZ/len*this.getShieldExplosion());
-			Vec3 vec2 = Vec3.createVectorHelper(v2[0]+centerX/len*this.getShieldExplosion(), v2[1]+centerY/len*this.getShieldExplosion(), v2[2]+centerZ/len*this.getShieldExplosion());
-			Vec3 vec3 = Vec3.createVectorHelper(v3[0]+centerX/len*this.getShieldExplosion(), v3[1]+centerY/len*this.getShieldExplosion(), v3[2]+centerZ/len*this.getShieldExplosion());
+			double a = len + SHIELD_EXPLOSION;
+			Vec3 center = Vec3.createVectorHelper(centerX, centerY, centerZ);
+			centerX += this.posX + SHIELD_OFFSET_X;
+			centerY += this.posY + SHIELD_OFFSET_Y;
+			centerZ += this.posZ + SHIELD_OFFSET_Z;
+			Vec3 vert1 = Vec3.createVectorHelper(v1[0], v1[1], v1[2]);
+			double b = vert1.dotProduct(center);
+			double d = a * Math.tan(b);
+			double vertexExplode = Math.sqrt(a*a + d*d) - 1;
+			Vec3 v1Normalized = Vec3.createVectorHelper(v1[0], v1[1], v1[2]).normalize();
+			Vec3 v2Normalized = Vec3.createVectorHelper(v2[0], v2[1], v2[2]).normalize();
+			Vec3 v3Normalized = Vec3.createVectorHelper(v3[0], v3[1], v3[2]).normalize();
+			Vec3 vec1 = Vec3.createVectorHelper(v1[0]+v1Normalized.xCoord*vertexExplode, v1[1]+v1Normalized.yCoord*vertexExplode, v1[2]+v1Normalized.zCoord*vertexExplode);
+			Vec3 vec2 = Vec3.createVectorHelper(v2[0]+v2Normalized.xCoord*vertexExplode, v2[1]+v2Normalized.yCoord*vertexExplode, v2[2]+v2Normalized.zCoord*vertexExplode);
+			Vec3 vec3 = Vec3.createVectorHelper(v3[0]+v3Normalized.xCoord*vertexExplode, v3[1]+v3Normalized.yCoord*vertexExplode, v3[2]+v3Normalized.zCoord*vertexExplode);
 			vec1 = vec1.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 			vec2 = vec2.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 			vec3 = vec3.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 			Vec3 normal = vec2.subtract(vec1).crossProduct(vec3.subtract(vec1));
-			centerX += this.posX + SHIELD_OFFSET_X;
-			centerY += this.posY + SHIELD_OFFSET_Y;
-			centerZ += this.posZ + SHIELD_OFFSET_Z;
-			if(this.rayTraceTriangle(pos, ray, vec1, vec2, vec3) && (back || normal.dotProduct(ray) < Math.toRadians(45))) {
+			if(this.rayTraceTriangle(pos, ray, vec1, vec2, vec3) && (back || normal.normalize().dotProduct(ray.normalize()) < Math.cos(Math.toRadians(90)))) {
 				double dx = centerX - pos.xCoord;
 				double dy = centerY - pos.yCoord;
 				double dz = centerZ - pos.zCoord;
@@ -156,7 +193,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 				if(this.hasShield()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
-						this.setShieldActive(shieldHit, false);
+						if(!this.worldObj.isRemote && living.isSneaking())
+							this.setShieldActive(shieldHit, false);
 						return false;
 					}
 				}
@@ -168,6 +206,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 				}
 			}
 		}
-		return super.attackEntityFrom(source, damage);
+		return false;
+	}
+
+	@Override
+	public boolean canBePushed() {
+		return true;
 	}
 }

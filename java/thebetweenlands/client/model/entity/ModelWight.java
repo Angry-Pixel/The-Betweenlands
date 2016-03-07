@@ -131,9 +131,14 @@ public class ModelWight extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		EntityWight wight = (EntityWight) entity;
-		neck.rotateAngleX = 0.4009094953223726F + wight.getAnimation();
-		jaw.rotateAngleX = -0.4009094953223726F + 1F - wight.getAnimation();
+		if(entity instanceof EntityWight) {
+			EntityWight wight = (EntityWight) entity;
+			neck.rotateAngleX = 0.4009094953223726F + wight.getAnimation();
+			jaw.rotateAngleX = -0.4009094953223726F + 1F - wight.getAnimation();
+		} else {
+			neck.rotateAngleX = 0.4009094953223726F;
+			jaw.rotateAngleX = -0.4009094953223726F + 1;
+		}
 		armright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
 		armleft.rotateAngleX = -MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
 		legleft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
@@ -144,9 +149,14 @@ public class ModelWight extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		neck.render(unitPixel);
 		if(!this.renderHeadOnly) {
+			neck.render(unitPixel);
 			body_base.render(unitPixel);
+		} else {
+			head1.render(unitPixel);
+			head3.render(unitPixel);
+			jaw.render(unitPixel);
+			head2.render(unitPixel);
 		}
 	}
 
