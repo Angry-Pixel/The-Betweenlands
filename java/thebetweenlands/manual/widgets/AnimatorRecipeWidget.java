@@ -16,14 +16,11 @@ import java.util.ArrayList;
  * Created by Bart on 09/12/2015.
  */
 public class AnimatorRecipeWidget extends ManualWidgetsBase {
-    private static ResourceLocation animatorGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/animatorGrid.png");
-
-    ArrayList<ItemStack> outputs = new ArrayList<>();
-
     public static int width = 108;
     public static int height = 67;
-
+    private static ResourceLocation animatorGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/animatorGrid.png");
     public boolean input = true;
+    ArrayList<ItemStack> outputs = new ArrayList<>();
     int progress = 0;
     int currentRecipe = 0;
 
@@ -44,7 +41,6 @@ public class AnimatorRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        pageLinks.clear();
         if (outputs.size() > 0) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -54,10 +50,10 @@ public class AnimatorRecipeWidget extends ManualWidgetsBase {
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             AnimatorRecipe recipe = AnimatorRecipe.getRecipeFromOutput(outputs.get(currentRecipe));
             if (recipe != null) {
-                renderItem(xStart + 46, yStart + 16, outputs.get(currentRecipe), false, false);
-                renderItem(xStart + 1, yStart + 16, recipe.input, false, true);
-                renderItem(xStart + 1, yStart + 50, new ItemStack(BLItemRegistry.lifeCrystal), false, true);
-                renderItem(xStart + 91, yStart + 50, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.SULFUR), false, true);
+                renderItem(xStart + 46, yStart + 16, outputs.get(currentRecipe), false, false, manual.manualType);
+                renderItem(xStart + 1, yStart + 16, recipe.input, false, true, manual.manualType);
+                renderItem(xStart + 1, yStart + 50, new ItemStack(BLItemRegistry.lifeCrystal), false, true, manual.manualType);
+                renderItem(xStart + 91, yStart + 50, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.SULFUR), false, true, manual.manualType);
             }
             if (mouseX >= xStart + 18 && mouseX <= xStart + 89 && mouseY >= yStart + 42 && mouseY <= yStart + 66) {
                 ArrayList<String> recipeToolTips = new ArrayList<>();

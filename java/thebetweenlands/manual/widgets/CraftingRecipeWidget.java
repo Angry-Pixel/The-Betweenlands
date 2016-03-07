@@ -44,7 +44,6 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
     public void drawForeGround() {
         int newX = xStart + 1;
         int newY = yStart + 1;
-        pageLinks.clear();
         if (outputs.size() > 0) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -62,7 +61,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                     recipeType = StatCollector.translateToLocal("manual.widget.crafting.shaped.recipe");
                     for (int y = 0; y < shaped.recipeHeight; y++)
                         for (int x = 0; x < shaped.recipeWidth; x++)
-                            renderItem(newX + 18 * x, newY + 18 * y, shaped.recipeItems[y * shaped.recipeWidth + x], false, true);
+                            renderItem(newX + 18 * x, newY + 18 * y, shaped.recipeItems[y * shaped.recipeWidth + x], false, true, manual.manualType);
                 } else if (recipe instanceof ShapedOreRecipe) {
                     ShapedOreRecipe shaped = (ShapedOreRecipe) recipe;
                     recipeType = StatCollector.translateToLocal("manual.widget.crafting.shaped.recipe");
@@ -73,7 +72,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                         for (int x = 0; x < width; x++) {
                             Object input = shaped.getInput()[y * width + x];
                             if (input != null)
-                                renderItem(newX + 18 * x, newY + 18 * y, input instanceof ItemStack ? (ItemStack) input : ((ArrayList<ItemStack>) input).get(0), false, true);
+                                renderItem(newX + 18 * x, newY + 18 * y, input instanceof ItemStack ? (ItemStack) input : ((ArrayList<ItemStack>) input).get(0), false, true, manual.manualType);
                         }
                 } else if (recipe instanceof ShapelessRecipes) {
                     ShapelessRecipes shapeless = (ShapelessRecipes) recipe;
@@ -85,7 +84,7 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                                 int index = y * 3 + x;
                                 if (index >= shapeless.recipeItems.size())
                                     break drawGrid;
-                                renderItem(newX + 18 * x, newY + 18 * y, (ItemStack) shapeless.recipeItems.get(index), false, true);
+                                renderItem(newX + 18 * x, newY + 18 * y, (ItemStack) shapeless.recipeItems.get(index), false, true, manual.manualType);
                             }
                     }
                 } else if (recipe instanceof ShapelessOreRecipe) {
@@ -100,11 +99,11 @@ public class CraftingRecipeWidget extends ManualWidgetsBase {
                                     break drawGrid;
                                 Object input = shapeless.getInput().get(index);
                                 if (input != null)
-                                    renderItem(newX + 18 * x, newY + 18 * y, input instanceof ItemStack ? (ItemStack) input : ((ArrayList<ItemStack>) input).get(0), false, true);
+                                    renderItem(newX + 18 * x, newY + 18 * y, input instanceof ItemStack ? (ItemStack) input : ((ArrayList<ItemStack>) input).get(0), false, true, manual.manualType);
                             }
                     }
                 }
-                renderItem(newX + 94, newY + 18, recipe.getRecipeOutput(), false, false);
+                renderItem(newX + 94, newY + 18, recipe.getRecipeOutput(), false, false, manual.manualType);
             }
 
             if (mouseX >= xStart + 61 && mouseX <= xStart + 61 + 22 && mouseY >= yStart + 19 && mouseY <= yStart + 19 + 15) {
