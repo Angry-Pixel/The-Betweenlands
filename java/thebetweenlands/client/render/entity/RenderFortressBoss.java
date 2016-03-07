@@ -41,11 +41,11 @@ public class RenderFortressBoss extends Render {
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(1, 1, 1, 0.8F);
 		GL11.glTranslated(x, y + (boss.coreBoundingBox.maxY-boss.coreBoundingBox.minY) / 2.0D + 0.15D, z);
+
 		this.bindTexture(new ResourceLocation("thebetweenlands:textures/entity/wight.png"));
 		GL11.glRotated(180, 1, 0, 0);
 		GL11.glRotated(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0, 1, 0);
@@ -56,6 +56,12 @@ public class RenderFortressBoss extends Render {
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + EntityFortressBoss.SHIELD_OFFSET_X, y + EntityFortressBoss.SHIELD_OFFSET_Y, z + EntityFortressBoss.SHIELD_OFFSET_Z);
+
+		//Rotate shield
+		GL11.glRotated(boss.getShieldRotationPitch(partialTicks), 1, 0, 0);
+		GL11.glRotated(boss.getShieldRotationYaw(partialTicks), 0, 1, 0);
+		GL11.glRotated(boss.getShieldRotationRoll(partialTicks), 0, 0, 1);
+
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -80,11 +86,18 @@ public class RenderFortressBoss extends Render {
 
 		GL11.glDepthMask(false);
 		tessellator.startDrawing(4);
-		tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
 		tessellator.setBrightness(240);
 		for(int i = 0; i <= 19; i++) {
 			if(!boss.isShieldActive(i))
 				continue;
+			float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
+			if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
+				tessellator.setColorRGBA_F(0.4F - 0.4F / 20 * (shieldAnimationTicks), 1.0F / 20 * (shieldAnimationTicks), 1F - 1.0F / 20 * (shieldAnimationTicks), 0.8F);
+			} else if(shieldAnimationTicks > 20 && shieldAnimationTicks <= 40) {
+				tessellator.setColorRGBA_F(0.8F, 0.4F / 20 * (shieldAnimationTicks-20), 0.8F, 0.8F);
+			} else {
+				tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+			}
 			double v3[] = this.vertices[this.indices[i][0]];
 			double v2[] = this.vertices[this.indices[i][1]];
 			double v1[] = this.vertices[this.indices[i][2]];

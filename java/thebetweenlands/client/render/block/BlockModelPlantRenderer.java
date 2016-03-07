@@ -30,7 +30,7 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
 import thebetweenlands.utils.ModelConverter.Box;
 import thebetweenlands.utils.ModelConverter.Model;
-import thebetweenlands.utils.ModelConverter.Vec3;
+import thebetweenlands.utils.Vec3UV;
 
 @SideOnly(Side.CLIENT)
 public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
@@ -115,7 +115,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new ModelTubePlant(),
 						0.065D / 1.5D,
 						true);
-				plantModelInvTubePlant.offsetWS(new Vec3(0, -0.7, 0));
+				plantModelInvTubePlant.offsetWS(new Vec3UV(0, -0.7, 0));
 			}
 			plantModelInvTubePlant.renderWithTessellator(tessellator, 128, 128, BLBlockRegistry.pitcherPlant.modelTexture1);
 		}
@@ -156,7 +156,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						new ModelVolarpad(),
 						0.065D / 3.0D,
 						true);
-				plandModelInvVolarpad.offsetWS(new Vec3(0, -1.2, 0));
+				plandModelInvVolarpad.offsetWS(new Vec3UV(0, -1.2, 0));
 			}
 			plandModelInvVolarpad.renderWithTessellator(tessellator, 256, 256, BLBlockRegistry.volarpad.modelTexture1);
 		}
@@ -167,7 +167,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						modelWeepingBlue,
 						0.065D / 1.5D,
 						true);
-				plantModelInvWeepingBlue.offsetWS(new Vec3(0, -0.75, 0));
+				plantModelInvWeepingBlue.offsetWS(new Vec3UV(0, -0.75, 0));
 			}
 			plantModelInvWeepingBlue.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.weepingBlue.modelTexture1);
 		}
@@ -178,7 +178,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						modelSundew,
 						0.065D / 1.5D,
 						true);
-				plantModelInvSundew.offsetWS(new Vec3(0, -0.75, 0));
+				plantModelInvSundew.offsetWS(new Vec3UV(0, -0.75, 0));
 			}
 			plantModelInvSundew.renderWithTessellator(tessellator, 128, 128, BLBlockRegistry.sundew.topIcon);
 		}
@@ -224,15 +224,15 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			int randInt = rnd.nextInt(3);
 			if(randInt == 0) {
 				plantModelBlackHat1.getModel()
-				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0))
+				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3UV(0, 0, 0))
 				.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.blackHatMushroom.modelTexture1);
 			} else if(randInt == 1) {
 				plantModelBlackHat2.getModel()
-				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0))
+				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3UV(0, 0, 0))
 				.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.blackHatMushroom.modelTexture2);
 			} else {
 				plantModelBlackHat3.getModel()
-				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0))
+				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3UV(0, 0, 0))
 				.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.blackHatMushroom.modelTexture3);
 			}
 		} else if(block == BLBlockRegistry.flatHeadMushroom) {
@@ -250,11 +250,11 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 			}
 			if(rnd.nextInt(2) == 0) {
 				plantModelFlatHead1.getModel()
-				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0))
+				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3UV(0, 0, 0))
 				.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.flatHeadMushroom.modelTexture1);
 			} else {
 				plantModelFlatHead2.getModel()
-				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3(0, 0, 0))
+				.rotate(1.0F, rnd.nextFloat() * 40 - 20, rnd.nextFloat() * 180, 0.0F, new Vec3UV(0, 0, 0))
 				.renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.flatHeadMushroom.modelTexture2);
 			}
 		} else if(block == BLBlockRegistry.pitcherPlant && world.getBlock(x, y+1, z) == BLBlockRegistry.pitcherPlant) {
@@ -265,9 +265,9 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			float yScale = rnd.nextFloat() / 3.0F + 0.75F;
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, yScale * 1.5F - 1.5F, rnd.nextFloat()/2.0F - 0.25F);
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, yScale * 1.5F - 1.5F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelTubePlant.getModel().scale(1, yScale, 1).
-			rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0)).
+			rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3UV(0, 0, 0)).
 			offsetWS(offset).renderWithTessellator(tessellator, 128, 128, BLBlockRegistry.pitcherPlant.modelTexture1);
 		} else if(block == BLBlockRegistry.swampPlant) {
 			if(plantModelRegularPlant == null) {
@@ -279,9 +279,9 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 
 			float yScale = rnd.nextFloat() / 1.5F + 1.0F;
 			float xzScale = rnd.nextFloat() / 4.0F + 1.0F;
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 1.5F * (yScale - 1.0F), rnd.nextFloat()/2.0F - 0.25F);
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, 1.5F * (yScale - 1.0F), rnd.nextFloat()/2.0F - 0.25F);
 			float rotYaw = rnd.nextFloat() * 360.0F;
-			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).scale(xzScale, yScale, xzScale).
+			plantModelRegularPlant.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3UV(0.0F, 0.0F, 0.0F)).scale(xzScale, yScale, xzScale).
 			offsetWS(offset).renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.swampPlant.modelTexture1);
 		} else if(block == BLBlockRegistry.bulbCappedMushroom) {
 			if(plantModelBulbCappedMushroom == null) {
@@ -291,7 +291,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelBulbCappedMushroom.getModel().offsetWS(offset).renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.bulbCappedMushroom.modelTexture1);
 
 		} else if(block == BLBlockRegistry.venusFlyTrap) {
@@ -308,12 +308,12 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			int meta = world.getBlockMetadata(x, y, z);
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			if(meta == 0) {
-				plantModelVenusFlyTrap.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
+				plantModelVenusFlyTrap.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3UV(0, 0, 0))
 				.offsetWS(offset).renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.venusFlyTrap.modelTexture);
 			} else {
-				plantModelVenusFlyTrapBlooming.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
+				plantModelVenusFlyTrapBlooming.getModel().rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3UV(0, 0, 0))
 				.offsetWS(offset).renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.venusFlyTrap.modelTextureBlooming);
 			}
 		} else if(block == BLBlockRegistry.volarpad) {
@@ -343,36 +343,36 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 				for(Box box : convertedModel.getBoxes()) {
 					ModelRenderer mr = box.getModelRenderer();
 					if(mr == modelVolarpad.pad1) {
-						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						box.rotate(padRotation, 0, 1, 0, new Vec3UV(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
 						break;
 					}
 				}
-				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3UV(0, 0, 0)).
+				offsetWS(new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 				convertedModel.renderWithTessellator(tessellator, 256, 256, BLBlockRegistry.volarpad.modelTexture1);
 			} else if(randNum == 1) {
 				Model convertedModel = plantModelVolarpad2.getModel();
 				for(Box box : convertedModel.getBoxes()) {
 					ModelRenderer mr = box.getModelRenderer();
 					if(mr == modelVolarpad.pad1) {
-						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						box.rotate(padRotation, 0, 1, 0, new Vec3UV(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
 						break;
 					}
 				}
-				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3UV(0, 0, 0)).
+				offsetWS(new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 				convertedModel.renderWithTessellator(tessellator, 256, 256, BLBlockRegistry.volarpad.modelTexture2);
 			} else {
 				Model convertedModel = plantModelVolarpad3.getModel();
 				for(Box box : convertedModel.getBoxes()) {
 					ModelRenderer mr = box.getModelRenderer();
 					if(mr == modelVolarpad.pad1) {
-						box.rotate(padRotation, 0, 1, 0, new Vec3(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
+						box.rotate(padRotation, 0, 1, 0, new Vec3UV(mr.rotationPointX*0.065D+0.025, 0, mr.rotationPointY*0.065D+0.15));
 						break;
 					}
 				}
-				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3(0, 0, 0)).
-				offsetWS(new Vec3(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
+				convertedModel.rotate(rnd.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F, new Vec3UV(0, 0, 0)).
+				offsetWS(new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, plantHeightOffset, rnd.nextFloat()/2.0F - 0.25F));
 				convertedModel.renderWithTessellator(tessellator, 256, 256, BLBlockRegistry.volarpad.modelTexture3);
 			}
 		} else if(block == BLBlockRegistry.weepingBlue && world.getBlock(x, y+1, z) == BLBlockRegistry.weepingBlue) {
@@ -382,7 +382,7 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						0.065D,
 						true);
 			}
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, 0.0F, rnd.nextFloat()/2.0F - 0.25F);
 			plantModelWeepingBlue.getModel().offsetWS(offset).renderWithTessellator(tessellator, 64, 64, BLBlockRegistry.weepingBlue.modelTexture1);
 		} else if(block == BLBlockRegistry.sundew && world.getBlock(x, y+1, z) == BLBlockRegistry.sundew) {
 			if(plantModelSundew == null) {
@@ -392,8 +392,8 @@ public class BlockModelPlantRenderer implements ISimpleBlockRenderingHandler {
 						true);
 			}
 			double scale = rnd.nextFloat() * 0.4D + 0.6D;
-			Vec3 offset = new Vec3(rnd.nextFloat()/2.0F - 0.25F, -1.65F + scale/0.65F, rnd.nextFloat()/2.0F - 0.25F);
-			plantModelSundew.getModel().scale(scale, scale, scale).rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3(0, 0, 0))
+			Vec3UV offset = new Vec3UV(rnd.nextFloat()/2.0F - 0.25F, -1.65F + scale/0.65F, rnd.nextFloat()/2.0F - 0.25F);
+			plantModelSundew.getModel().scale(scale, scale, scale).rotate(rnd.nextFloat() * 360.0F, 0, 1, 0, new Vec3UV(0, 0, 0))
 			.offsetWS(offset).renderWithTessellator(tessellator, 128, 128, BLBlockRegistry.sundew.topIcon);
 		}
 
