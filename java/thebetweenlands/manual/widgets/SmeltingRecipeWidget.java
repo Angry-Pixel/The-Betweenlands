@@ -55,9 +55,9 @@ public class SmeltingRecipeWidget extends ManualWidgetsBase {
             manual.drawTexturedModalRect(xStart + 25, yStart + 17, 0, 0, progress, 16);
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            renderItem(newX, newY, getSmeltingIngredient(outputs.get(currentRecipe)), false, true);
-            renderItem(newX + 60, newY + 16, outputs.get(currentRecipe), false, false);
-            renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), true, true);
+            renderItem(newX, newY, getSmeltingIngredient(outputs.get(currentRecipe)), false, true, manual.manualType);
+            renderItem(newX + 60, newY + 16, outputs.get(currentRecipe), false, false, manual.manualType);
+            renderItem(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), true, true, manual.manualType);
             ArrayList<String> specialToolTips = new ArrayList<>();
             specialToolTips.add(burnTimeString.replace(".time.", "800"));
             addSpecialItemTooltip(newX, newY + 36, new ItemStack(BLItemRegistry.itemsGeneric, 1, ItemGeneric.EnumItemGeneric.SULFUR.id), specialToolTips);

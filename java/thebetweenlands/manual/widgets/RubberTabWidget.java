@@ -33,9 +33,9 @@ public class RubberTabWidget extends ManualWidgetsBase {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        renderItem(xStart, yStart, new ItemStack(BLItemRegistry.weedwoodBucket), false, true);
-        renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.rubberTreeLog)), false, false);
-        renderItem(xStart + 62, yStart + 22, new ItemStack(BLItemRegistry.weedwoodBucketRubber), false, false);
+        renderItem(xStart, yStart, new ItemStack(BLItemRegistry.weedwoodBucket), false, true, manual.manualType);
+        renderItem(xStart + 18, yStart + 22, new ItemStack(Item.getItemFromBlock(BLBlockRegistry.rubberTreeLog)), false, false, manual.manualType);
+        renderItem(xStart + 62, yStart + 22, new ItemStack(BLItemRegistry.weedwoodBucketRubber), false, false, manual.manualType);
         if (mouseX >= xStart + 18 && mouseX <= xStart + 34 && mouseY >= yStart + 4 && mouseY <= yStart + 20) {
             ArrayList<String> processTooltip = new ArrayList<>();
             processTooltip.add(StatCollector.translateToLocal("manual.widget.rubberTab.recipe"));

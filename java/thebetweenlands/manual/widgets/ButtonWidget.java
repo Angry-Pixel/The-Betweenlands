@@ -1,8 +1,5 @@
 package thebetweenlands.manual.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -13,32 +10,31 @@ import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.ManualManager;
 import thebetweenlands.manual.Page;
+import thebetweenlands.manual.widgets.text.FormatTags;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
-import thebetweenlands.manual.widgets.text.FormatTags;
 import thebetweenlands.utils.AspectIconRenderer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bart on 6-11-2015.
  */
 public class ButtonWidget extends ManualWidgetsBase {
-	private ArrayList<ItemStack> items = new ArrayList<>();
-	private IAspectType aspect;
 	public int pageNumber;
-	private TextContainer textContainer;
-
 	public int color = 0x808080;
-
-	private ResourceLocation resourceLocation;
-	private Page page;
-
 	public boolean isHidden;
-
 	public int width = 100;
 	public int height = 16;
 	int currentItem;
 	boolean renderSomething = true;
 	boolean doMathWithIndexPages = true;
+	private ArrayList<ItemStack> items = new ArrayList<>();
+	private IAspectType aspect;
+	private TextContainer textContainer;
+	private ResourceLocation resourceLocation;
+	private Page page;
 
 	public ButtonWidget(int xStart, int yStart, Page page) {
 		super(xStart, yStart);
@@ -46,8 +42,8 @@ public class ButtonWidget extends ManualWidgetsBase {
 		this.page = page;
 		if (page.pageItems.size() > 0)
 			this.items.addAll(page.pageItems);
-		else if (page.pageAspect != null) {
-			aspect = page.pageAspect;
+		else if (page.pageAspects.size() > 0) {
+			aspect = page.pageAspects.get(0);
 		} else if (page.resourceLocation != null) {
 			this.resourceLocation = new ResourceLocation(page.resourceLocation);
 		}
@@ -106,7 +102,7 @@ public class ButtonWidget extends ManualWidgetsBase {
 	public void drawForeGround() {
 		if (renderSomething) {
 			if (items.size() > 0)
-				renderItem(xStart, yStart, items.get(currentItem), false, false);
+				renderItem(xStart, yStart, items.get(currentItem), false, false, manual.manualType);
 			else if (aspect != null) {
 				AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
 				if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {
@@ -130,6 +126,7 @@ public class ButtonWidget extends ManualWidgetsBase {
 
 	@Override
 	public void mouseClicked(int x, int y, int mouseButton) {
+		super.mouseClicked(x, y, mouseButton);
 		if (mouseButton == 2 && x >= xStart && x <= xStart + 16 && y >= yStart && y <= yStart + height) {
 			if (currentItem + 1 < items.size()) {
 				currentItem++;
