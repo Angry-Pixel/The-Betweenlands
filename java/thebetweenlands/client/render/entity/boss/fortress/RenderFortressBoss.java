@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.entity;
+package thebetweenlands.client.render.entity.boss.fortress;
 
 import org.lwjgl.opengl.GL11;
 
@@ -14,7 +14,7 @@ import net.minecraft.util.Vec3;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.entities.mobs.EntityFortressBoss;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.utils.LightingUtil;
 
 public class RenderFortressBoss extends Render {
@@ -30,15 +30,19 @@ public class RenderFortressBoss extends Render {
 		EntityFortressBoss boss = (EntityFortressBoss) entity;
 
 		if(ShaderHelper.INSTANCE.canUseShaders()) {
-			float lightIntensity = 0.0F;
-			for(int i = 0; i <= 19; i++) {
-				float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
-				if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
-					lightIntensity += shieldAnimationTicks / 20.0F * 2.0F;
+			if(boss.hurtResistantTime == 0) {
+				float lightIntensity = 0.0F;
+				for(int i = 0; i <= 19; i++) {
+					float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
+					if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
+						lightIntensity += shieldAnimationTicks / 20.0F * 2.0F;
+					}
 				}
+				if(lightIntensity > 0.0F)
+					ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
+			} else {
+				ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 1.5F / boss.maxHurtResistantTime * (boss.hurtResistantTime + partialTicks), 0, 0));
 			}
-			if(lightIntensity > 0.0F)
-				ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 6.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
 		}
 
 		if(RenderManager.debugBoundingBox) {

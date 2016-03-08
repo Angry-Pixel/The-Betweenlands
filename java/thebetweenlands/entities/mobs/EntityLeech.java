@@ -15,6 +15,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.entityAI.EntityAIBLAvoidEntity;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
@@ -183,7 +184,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	@Override
 	public double getYOffset() {
-		if (ridingEntity != null && ridingEntity instanceof EntityPlayer) {
+		if (ridingEntity != null && ridingEntity instanceof EntityPlayer && this.ridingEntity == TheBetweenlands.proxy.getClientPlayer()) {
 			return -2;
 		}
 		return yOffset;

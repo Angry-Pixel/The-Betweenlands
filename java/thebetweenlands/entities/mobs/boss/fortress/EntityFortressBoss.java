@@ -1,7 +1,8 @@
-package thebetweenlands.entities.mobs;
+package thebetweenlands.entities.mobs.boss.fortress;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityMob;
@@ -10,10 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.utils.RotationMatrix;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL {
@@ -21,6 +24,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 
 	public static final int SHIELD_DW = 20;
 	public static final int SHIELD_ROTATION_DW = 21;
+	public static final int FLOATING_DW = 22;
 
 	public static final double SHIELD_OFFSET_X = 0.0D;
 	public static final double SHIELD_OFFSET_Y = 1D;
@@ -51,6 +55,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 
 	public float shieldRotationYaw, shieldRotationPitch, shieldRotationRoll, lastShieldRotationYaw, lastShieldRotationPitch, lastShieldRotationRoll;
 
+	private int groundTicks = 0;
+
+	private int turretTicks = -1;
+
 	public EntityFortressBoss(World world) {
 		super(world);
 		float width = 1.9F;
@@ -69,6 +77,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 		super.entityInit();
 		this.dataWatcher.addObject(SHIELD_DW, (int) 0);
 		this.dataWatcher.addObject(SHIELD_ROTATION_DW, 0.0F);
+		this.dataWatcher.addObject(FLOATING_DW, (byte) 1);
 	}
 
 	@Override
@@ -233,33 +242,45 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 		}
 	}
 
+	public boolean isFloating() {
+		return this.dataWatcher.getWatchableObjectByte(FLOATING_DW) == 1;
+	}
+
+	public void setFloating(boolean floating) {
+		this.dataWatcher.updateObject(FLOATING_DW, (byte)(floating ? 1 : 0));
+	}
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source instanceof EntityDamageSource) {
-			if(((EntityDamageSource)source).getEntity() instanceof EntityLivingBase) {
-				EntityLivingBase living = (EntityLivingBase) ((EntityDamageSource)source).getEntity();
-				Vec3 ray = living.getLookVec();
-				ray.xCoord = ray.xCoord * 640.0D;
-				ray.yCoord = ray.yCoord * 640.0D;
-				ray.zCoord = ray.zCoord * 640.0D;
-				Vec3 pos = Vec3.createVectorHelper(living.posX, living.posY + living.getEyeHeight() + (living instanceof EntityPlayer && ((EntityPlayer)living).isSneaking() ? -0.08D : 0.0D), living.posZ);
+			if(((EntityDamageSource)source).getEntity() instanceof Entity) {
+				Entity entity = (Entity) ((EntityDamageSource)source).getEntity();
+				if(source instanceof EntityDamageSourceIndirect)
+					entity = ((EntityDamageSourceIndirect)source).getSourceOfDamage();
+				Vec3 ray = entity.getLookVec();
+				if(entity instanceof EntityLivingBase == false)
+					ray = Vec3.createVectorHelper(entity.motionX, entity.motionY, entity.motionZ).normalize();
+				ray.xCoord = ray.xCoord * 64.0D;
+				ray.yCoord = ray.yCoord * 64.0D;
+				ray.zCoord = ray.zCoord * 64.0D;
+				Vec3 pos = Vec3.createVectorHelper(entity.posX, entity.posY + entity.getEyeHeight() + (entity instanceof EntityPlayer && ((EntityPlayer)entity).isSneaking() ? -0.08D : 0.0D), entity.posZ);
 				if(this.hasShield()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
-						if(!this.worldObj.isRemote && living.isSneaking())
+						if(!this.worldObj.isRemote && entity.isSneaking())
 							this.setShieldActive(shieldHit, false);
 						if(this.worldObj.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
 							this.worldObj.playSound(this.posX, this.posY, this.posZ, "random.anvil_land", 1.0F, 1.0F, false);
 						}
-						double dx = living.posX - this.posX;
-						double dy = living.posY - this.posY;
-						double dz = living.posZ - this.posZ;
+						double dx = entity.posX - this.posX;
+						double dy = entity.posY - this.posY;
+						double dz = entity.posZ - this.posZ;
 						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
-						living.motionX = dx / len * 0.8F;
-						living.motionY = dy / len * 0.8F;
-						living.motionZ = dz / len * 0.8F;
-						living.attackEntityFrom(DamageSource.magic, 2);
+						entity.motionX = dx / len * 0.8F;
+						entity.motionY = dy / len * 0.8F;
+						entity.motionZ = dz / len * 0.8F;
+						entity.attackEntityFrom(DamageSource.magic, 2);
 						return false;
 					}
 				}
@@ -297,6 +318,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 		nbt.setDouble("anchorY", this.anchorY);
 		nbt.setDouble("anchorZ", this.anchorZ);
 		nbt.setDouble("anchorRadius", this.anchorRadius);
+		nbt.setBoolean("floating", this.isFloating());
+		nbt.setInteger("groundTicks", this.groundTicks);
+		nbt.setInteger("turretTicks", this.turretTicks);
 	}
 
 	@Override
@@ -307,6 +331,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 		this.anchorY = nbt.getDouble("anchorY");
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.anchorRadius = nbt.getDouble("anchorRadius");
+		if(nbt.hasKey("floating"))
+			this.setFloating(nbt.getBoolean("floating"));
+		this.groundTicks = nbt.getInteger("groundTicks");
+		if(nbt.hasKey("turretTicks"))
+			this.turretTicks = nbt.getInteger("turretTicks");
 	}
 
 	@Override
@@ -320,16 +349,30 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void knockBack(Entity entity, float dmg, double x, double z) { 
 		this.motionX = 0;
 		this.motionY = 0;
 		this.motionZ = 0;
-		
+	}
+
+	@Override
+	public void onUpdate() {
 		super.onUpdate();
+
+		if(this.isFloating() && this.posY < this.anchorY) {
+			this.motionY = 0.1F;
+		} else if(!this.isFloating()) {
+			this.groundTicks++;
+			this.motionY += -0.1F;
+			if(this.groundTicks > 80) {
+				this.groundTicks = 0;
+				this.setFloating(true);
+			}
+		}
+
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;
 		this.lastShieldRotationRoll = this.shieldRotationRoll;
-
 
 		float shieldRotation;
 		if(this.worldObj.isRemote) {
@@ -338,15 +381,41 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 			shieldRotation = this.ticksExisted;
 			this.dataWatcher.updateObject(SHIELD_ROTATION_DW, shieldRotation);
 		}
-		this.shieldRotationYaw = shieldRotation * 2.0F;
-		this.shieldRotationPitch = shieldRotation * 3.0F;
-		this.shieldRotationRoll = shieldRotation * 5.0F;
+		int activeShields = 0;
+		for(int i = 0; i <= 19; i++) {
+			if(this.isShieldActive(i))
+				activeShields++;
+		}
+		this.shieldRotationYaw = shieldRotation * (1.0F + 6.0F / 20.0F * (20-activeShields));
+		this.shieldRotationPitch = shieldRotation * (1.4F + 8.0F / 20.0F * (20-activeShields));
+		this.shieldRotationRoll = shieldRotation * (1.6F + 10.0F / 20.0F * (20-activeShields));
 
 		if(!this.worldObj.isRemote) {
 			this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
 
 			if(this.getDistance(this.anchorX, this.anchorY, this.anchorZ) > this.anchorRadius) {
 				this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
+			}
+
+			if(this.isFloating() && this.posY >= this.anchorY) {
+				if(this.turretTicks <= 0) {
+					if(this.turretTicks == 0) {
+						for(int i = 0; i < this.worldObj.rand.nextInt(4) + 3; i++) {
+							double rx = this.worldObj.rand.nextFloat() - 0.5F;
+							double rz = this.worldObj.rand.nextFloat() - 0.5F;
+							double len = Math.sqrt(rx*rx+rz*rz);
+							rx = rx / len * 8.0D;
+							rz = rz / len * 8.0D;
+							EntityFortressBossTurret turret = new EntityFortressBossTurret(this.worldObj, this);
+							turret.setLocationAndAngles(this.posX + rx, this.posY, this.posZ + rz, 0, 0);
+							turret.setAnchor(this.posX + rx, this.posY, this.posZ + rz);
+							this.worldObj.spawnEntityInWorld(turret);
+						}
+					}
+					this.turretTicks = 100 + this.worldObj.rand.nextInt(200);
+				} else {
+					this.turretTicks--;
+				}
 			}
 		} else {
 			this.unpackShieldData(this.dataWatcher.getWatchableObjectInt(SHIELD_DW));
@@ -364,49 +433,53 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 
 	@Override
 	public void moveEntityWithHeading(float strafe, float forward) {
-		if (this.isInWater()) {
-			this.moveFlying(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.800000011920929D;
-			this.motionY *= 0.800000011920929D;
-			this.motionZ *= 0.800000011920929D;
-		} else if (this.handleLavaMovement()) {
-			this.moveFlying(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.5D;
-			this.motionY *= 0.5D;
-			this.motionZ *= 0.5D;
+		if(this.isFloating()) {
+			if (this.isInWater()) {
+				this.moveFlying(strafe, forward, 0.02F);
+				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.motionX *= 0.800000011920929D;
+				this.motionY *= 0.800000011920929D;
+				this.motionZ *= 0.800000011920929D;
+			} else if (this.handleLavaMovement()) {
+				this.moveFlying(strafe, forward, 0.02F);
+				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.motionX *= 0.5D;
+				this.motionY *= 0.5D;
+				this.motionZ *= 0.5D;
+			} else {
+				float friction = 0.91F;
+
+				if (this.onGround) {
+					friction = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.91F;
+				}
+
+				float groundFriction = 0.16277136F / (friction * friction * friction);
+				this.moveFlying(strafe, forward, this.onGround ? 0.1F * groundFriction : 0.02F);
+				friction = 0.91F;
+
+				if (this.onGround) {
+					friction = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.91F;
+				}
+
+				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.motionX *= (double)friction;
+				this.motionY *= (double)friction;
+				this.motionZ *= (double)friction;
+			}
+
+			this.prevLimbSwingAmount = this.limbSwingAmount;
+			double dx = this.posX - this.prevPosX;
+			double dz = this.posZ - this.prevPosZ;
+			float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
+
+			if (distanceMoved > 1.0F) {
+				distanceMoved = 1.0F;
+			}
+
+			this.limbSwingAmount += (distanceMoved - this.limbSwingAmount) * 0.4F;
+			this.limbSwing += this.limbSwingAmount;
 		} else {
-			float friction = 0.91F;
-
-			if (this.onGround) {
-				friction = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.91F;
-			}
-
-			float groundFriction = 0.16277136F / (friction * friction * friction);
-			this.moveFlying(strafe, forward, this.onGround ? 0.1F * groundFriction : 0.02F);
-			friction = 0.91F;
-
-			if (this.onGround) {
-				friction = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ)).slipperiness * 0.91F;
-			}
-
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
-			this.motionX *= (double)friction;
-			this.motionY *= (double)friction;
-			this.motionZ *= (double)friction;
+			super.moveEntityWithHeading(strafe, forward);
 		}
-
-		this.prevLimbSwingAmount = this.limbSwingAmount;
-		double dx = this.posX - this.prevPosX;
-		double dz = this.posZ - this.prevPosZ;
-		float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
-
-		if (distanceMoved > 1.0F) {
-			distanceMoved = 1.0F;
-		}
-
-		this.limbSwingAmount += (distanceMoved - this.limbSwingAmount) * 0.4F;
-		this.limbSwing += this.limbSwingAmount;
 	}
 }
