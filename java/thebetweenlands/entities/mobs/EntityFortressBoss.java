@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -19,6 +20,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 	public static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
 
 	public static final int SHIELD_DW = 20;
+	public static final int SHIELD_ROTATION_DW = 21;
 
 	public static final double SHIELD_OFFSET_X = 0.0D;
 	public static final double SHIELD_OFFSET_Y = 1D;
@@ -66,6 +68,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		this.dataWatcher.addObject(SHIELD_DW, (int) 0);
+		this.dataWatcher.addObject(SHIELD_ROTATION_DW, 0.0F);
 	}
 
 	@Override
@@ -239,14 +242,24 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 				ray.xCoord = ray.xCoord * 640.0D;
 				ray.yCoord = ray.yCoord * 640.0D;
 				ray.zCoord = ray.zCoord * 640.0D;
-				Vec3 pos = Vec3.createVectorHelper(living.posX, living.posY + living.getEyeHeight(), living.posZ);
+				Vec3 pos = Vec3.createVectorHelper(living.posX, living.posY + living.getEyeHeight() + (living instanceof EntityPlayer && ((EntityPlayer)living).isSneaking() ? -0.08D : 0.0D), living.posZ);
 				if(this.hasShield()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
 						if(!this.worldObj.isRemote && living.isSneaking())
 							this.setShieldActive(shieldHit, false);
-						if(this.worldObj.isRemote)
+						if(this.worldObj.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
+							this.worldObj.playSound(this.posX, this.posY, this.posZ, "random.anvil_land", 1.0F, 1.0F, false);
+						}
+						double dx = living.posX - this.posX;
+						double dy = living.posY - this.posY;
+						double dz = living.posZ - this.posZ;
+						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
+						living.motionX = dx / len * 0.8F;
+						living.motionY = dy / len * 0.8F;
+						living.motionZ = dz / len * 0.8F;
+						living.attackEntityFrom(DamageSource.magic, 2);
 						return false;
 					}
 				}
@@ -308,15 +321,26 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		this.motionX = 0;
+		this.motionY = 0;
+		this.motionZ = 0;
+		
 		super.onUpdate();
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;
 		this.lastShieldRotationRoll = this.shieldRotationRoll;
 
 
-		this.shieldRotationYaw = this.ticksExisted * 1.0F;
-		this.shieldRotationPitch = this.ticksExisted * 2.0F;
-		this.shieldRotationRoll = this.ticksExisted * 4.0F;
+		float shieldRotation;
+		if(this.worldObj.isRemote) {
+			shieldRotation = this.dataWatcher.getWatchableObjectFloat(SHIELD_ROTATION_DW);
+		} else {
+			shieldRotation = this.ticksExisted;
+			this.dataWatcher.updateObject(SHIELD_ROTATION_DW, shieldRotation);
+		}
+		this.shieldRotationYaw = shieldRotation * 2.0F;
+		this.shieldRotationPitch = shieldRotation * 3.0F;
+		this.shieldRotationRoll = shieldRotation * 5.0F;
 
 		if(!this.worldObj.isRemote) {
 			this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());

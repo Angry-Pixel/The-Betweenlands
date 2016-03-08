@@ -8,9 +8,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.entities.mobs.EntityFortressBoss;
 import thebetweenlands.utils.LightingUtil;
 
@@ -25,6 +28,18 @@ public class RenderFortressBoss extends Render {
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
 		EntityFortressBoss boss = (EntityFortressBoss) entity;
+
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			float lightIntensity = 0.0F;
+			for(int i = 0; i <= 19; i++) {
+				float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
+				if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
+					lightIntensity += shieldAnimationTicks / 20.0F * 2.0F;
+				}
+			}
+			if(lightIntensity > 0.0F)
+				ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 6.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
+		}
 
 		if(RenderManager.debugBoundingBox) {
 			GL11.glDepthMask(false);
@@ -257,7 +272,6 @@ public class RenderFortressBoss extends Render {
 			ray.xCoord = ray.xCoord * 640.0D;
 			ray.yCoord = ray.yCoord * 640.0D;
 			ray.zCoord = ray.zCoord * 640.0D;
-			//pos.yCoord = pos.yCoord + Minecraft.getMinecraft().thePlayer.getDefaultEyeHeight();
 			int hitShield = boss.rayTraceShield(pos, ray, false);
 			if(hitShield >= 0) {
 				double v3[] = this.vertices[this.indices[hitShield][0]];
