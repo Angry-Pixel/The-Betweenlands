@@ -59,15 +59,11 @@ public class EntitySludgeBall extends EntityThrowable {
             motionZ *= -1;
             bounces++;
             if (bounces == 3) explode();
-            System.out.println("Wall hit");
-            //TODO Not printing, not bouncing
         }
         else if (collision.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK && (collision.sideHit == 4 || collision.sideHit == 5)) {
             motionX *= -1;
             bounces++;
             if (bounces == 3) explode();
-            System.out.println("Wall hit");
-            //TODO Not printing, not bouncing
         }
         else if (collision.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) explode();
         //TODO Not colliding with entities

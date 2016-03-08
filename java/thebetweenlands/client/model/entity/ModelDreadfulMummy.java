@@ -320,11 +320,27 @@ public class ModelDreadfulMummy extends MowzieModelBase {
         float frame = entity.ticksExisted + delta;
         chainWave(tentacle1, 0.2f, 0.3f, -2, frame, 1);
         chainWave(tentacle2, 0.3f, 0.3f, -2, frame, 1);
-        walk(neck, 0.2f, 0.05f, true, 2, 0, frame, 1);
-        walk(head1, 0.2f, 0.05f, true, 1, 0, frame, 1);
-        walk(jaw, 0.2f, 0.2f, true, 0, 0.2f, frame, 1);
-        chainWave(tongue, 0.2f, -0.3f, -3, frame, 1);
-        walk(armleft1, 0.15f, 0.2f, true, 2, 0, frame, 1);
-        walk(armleft2, 0.15f, 0.2f, true, 1, 0, frame, 1);
+
+        if (((EntityDreadfulMummy) entity).eatPrey != null) {
+            walk(neck, 0.8f, 0.7f, false, 0, -0.2f, frame, 1);
+            walk(head1, 0.8f, 0.7f, true, 0, 0.2f, frame, 1);
+            walk(jaw, 0.8f, 0.8f, true, -0.7f, -0.6f, frame, 1);
+            walk(tongue1, 0.8f, 0.8f, true, -0.7f, -0.5f, frame, 1);
+            swing(neck, 0.4f, 0.3f, false, 0, 0, frame, 1);
+            swing(head1, 0.4f, 0.3f, false, 0, 0, frame, 1);
+            tongue2.rotateAngleX += Math.PI;
+            tongue3.rotateAngleX += Math.PI;
+            tongue4.rotateAngleX += Math.PI;
+            tongue5.rotateAngleX += Math.PI;
+            armleft1.rotateAngleX -= 1.2;
+        }
+        else {
+            chainWave(tongue, 0.2f, -0.3f, -3, frame, 1);
+            walk(neck, 0.2f, 0.05f, true, 2, 0, frame, 1);
+            walk(head1, 0.2f, 0.05f, true, 1, 0, frame, 1);
+            walk(jaw, 0.2f, 0.2f, true, 0, 0.2f, frame, 1);
+            walk(armleft1, 0.15f, 0.2f, true, 2, 0, frame, 1);
+            walk(armleft2, 0.15f, 0.2f, true, 1, 0, frame, 1);
+        }
     }
 }

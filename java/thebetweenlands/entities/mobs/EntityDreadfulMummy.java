@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -21,7 +23,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     int untilSpawnSludge = 0;
 
     int eatPreyTimer = 60;
-    private EntityLivingBase eatPrey;
+    public EntityLivingBase eatPrey;
 
     @Override
     public String pageName() {
@@ -32,10 +34,27 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7);
-        getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(170.0D);
+        getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
         getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(8);
         getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
         getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
+    }
+
+    @Override
+    protected String getLivingSound() {
+        int randomSound = rand.nextInt(3) + 1;
+        return "thebetweenlands:peatMummyLiving" + randomSound;
+    }
+
+    @Override
+    protected String getHurtSound() {
+        int randomSound = rand.nextInt(3) + 1;
+        return "thebetweenlands:peatMummyHurt" + randomSound;
+    }
+
+    @Override
+    protected String getDeathSound() {
+        return "thebetweenlands:peatMummyDeath";
     }
 
     @Override
@@ -46,9 +65,10 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
             if (untilSpawnSludge <= 0) spawnSludge();
         }
         eatPrey = (EntityLivingBase)getPrey();
-        if (eatPrey != null) updateEatPrey();
-
-//        System.out.println(eatPrey != null);
+        if (eatPrey != null) {
+            updateEatPrey();
+            if (eatPrey.isDead) setPrey(null);
+        }
 
         if (untilSpawnMummy > 0) untilSpawnMummy--;
         if (untilSpawnSludge > 0) untilSpawnSludge--;
@@ -82,7 +102,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
 
     @Override
     public boolean attackEntityAsMob(Entity target) {
-        if (rand.nextInt(5) == 0 && target != eatPrey) {setPrey(target);}
+        if (rand.nextInt(5) == 0 && target != eatPrey && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode)) {setPrey(target);}
         return super.attackEntityAsMob(target);
     }
 
@@ -91,7 +111,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         eatPrey.setPositionAndRotation(posX - Math.sin(direction) * 1.7, posY + 1.7, posZ + Math.cos(direction) * 1.7, (float) (Math.toDegrees(direction) + 180), 0);
         eatPrey.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
         eatPrey.fallDistance = 0;
-        if (ticksExisted % 10 == 0) attackEntityAsMob(eatPrey);
+        if (ticksExisted % 10 == 0) eatPrey.attackEntityFrom(DamageSource.causeMobDamage(this), 3);
     }
 
     private void setPrey(Entity prey) {
@@ -108,5 +128,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     protected void entityInit() {
         super.entityInit();
         this.dataWatcher.addObject(24, 0);
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float damage) {
+        if (source.getEntity() != null && source.getEntity() == eatPrey) return false;
+        return super.attackEntityFrom(source, damage);
     }
 }
