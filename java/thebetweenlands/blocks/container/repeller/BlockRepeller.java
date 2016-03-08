@@ -77,7 +77,7 @@ public class BlockRepeller extends BlockContainer {
 						List<Aspect> aspects = AspectManager.getDynamicAspects(player.getHeldItem());
 						if(!aspects.isEmpty() && aspects.get(0).type == AspectRegistry.BYARIIS) {
 							Aspect aspect = aspects.get(0);
-							if(!world.isRemote && tile.addFuel(aspect.amount)) {
+							if(!world.isRemote && tile.addFuel(aspect.getAmount())) {
 								if(!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, player.getHeldItem().getItem().getContainerItem(player.getHeldItem()));
 							}
 							return true;

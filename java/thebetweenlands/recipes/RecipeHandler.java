@@ -1,5 +1,7 @@
 package thebetweenlands.recipes;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -29,8 +31,6 @@ import thebetweenlands.lib.ModInfo;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 public class RecipeHandler {
 
@@ -107,7 +107,6 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.valoniteBoots, 1), "# #", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rubberBoots, 1), "# #", "# #", '#', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.rubberBootsImproved, 1), new ItemStack(BLItemRegistry.rubberBoots, 1), new ItemStack(BLItemRegistry.aquaMiddleGem, 1));
 
 		// Miscellaneous
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), ItemGeneric.createStack(EnumItemGeneric.SULFUR));
@@ -142,7 +141,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
-		
+
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
@@ -153,7 +152,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.geckoCage), "sps", "rrr", "sps", 's', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT), 'p', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.weedwoodPlankSlab)), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.repeller), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodJukebox), "xxx", "xVx", "xxx", 'x', new ItemStack(BLBlockRegistry.weedwoodPlanks), 'V', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
-		
+
 		//Deco Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.MUD_BRICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.smoothBetweenstone));
@@ -248,12 +247,12 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankSlab, 6), "###", '#', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankSlab, 6), "###", '#', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlab, 6), "###", '#', BLBlockRegistry.thatch);
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothBetweenstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothPitstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockPillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothCragrock));
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlope, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.thatch);
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.siltGlasPane, 6), "xxx", "xxx", 'x', BLBlockRegistry.siltGlas);
@@ -286,6 +285,8 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new RecipesAspectVials());
 		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
+		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
 
 		GameRegistry.addRecipe(new RecipeFairyLights());
 		for (LightVariant variant : LightVariant.values()) {

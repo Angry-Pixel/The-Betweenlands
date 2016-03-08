@@ -17,19 +17,19 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.event.debugging.DebugHandlerClient;
-import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.items.misc.ItemAmulet;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.ItemRenderHelper;
 
 @SideOnly(Side.CLIENT)
@@ -192,9 +192,29 @@ public class GuiOverlay extends Gui {
 			int yOffset = 0;
 			for(EnumEquipmentCategory category : EnumEquipmentCategory.TYPES) {
 				List<Equipment> equipmentList = equipmentInventory.getEquipment(category);
+				int posX = (width / 2) - (20) + 113;
+				int posY = height - 19 + yOffset;
 				if(equipmentList.size() > 0) {
-					int posX = (width / 2) - (27 / 2) + 113;
-					int posY = height - 6 + yOffset;
+					if(category == EnumEquipmentCategory.AMULET) {
+						EntityPropertiesCircleGem properties = BLEntityPropertiesRegistry.HANDLER.getProperties(this.mc.thePlayer, EntityPropertiesCircleGem.class);
+						if(properties != null) {
+							for(int a = 0; a < properties.getAmuletSlots(); a++) {
+								GL11.glPushMatrix();
+								GL11.glTranslated(posX, posY, 0);
+								GL11.glColor4f(1, 1, 1, 1);
+								GL11.glEnable(GL11.GL_BLEND);
+								GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+								float scale = 1.0F;
+								GL11.glScaled(scale, scale, scale);
+								GL11.glColor4f(0, 0, 0, 0.4F);
+								ItemRenderHelper.drawItemStack(new ItemStack(BLItemRegistry.amulet), 0, 0, null, false);
+								GL11.glColor4f(1, 1, 1, 1);
+								GL11.glPopMatrix();
+								posX += 8;
+							}
+						}
+					}
+					posX = (width / 2) - (20) + 113;
 					for(int a = 0; a < equipmentList.size(); a++) {
 						Equipment equipment = equipmentList.get(a);
 						GL11.glPushMatrix();
@@ -202,12 +222,10 @@ public class GuiOverlay extends Gui {
 						GL11.glColor4f(1, 1, 1, 1);
 						GL11.glEnable(GL11.GL_BLEND);
 						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						GL11.glScaled(-10, -10, 10);
-						float scale = ((float) Math.cos(mc.thePlayer.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+						float scale = 1.0F;
 						GL11.glScaled(scale, scale, scale);
-						for(int i = 0; i < equipment.item.getItem().getRenderPasses(equipment.item.getItemDamage()); i++) {
-							ItemRenderHelper.renderItem(equipment.item, i);
-						}
+						ItemRenderHelper.drawItemStack(equipment.item, 0, 0, null, true);
+						GL11.glColor4f(1, 1, 1, 1);
 						GL11.glPopMatrix();
 						posX += 8;
 					}

@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import thebetweenlands.blocks.plants.crops.BlockBLGenericCrop;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.utils.ModelConverter;
-import thebetweenlands.utils.ModelConverter.Vec3;
+import thebetweenlands.utils.Vec3UV;
 
 @SideOnly(Side.CLIENT)
 public class BlockBLGenericCropRenderer implements ISimpleBlockRenderingHandler {
@@ -64,9 +64,9 @@ public class BlockBLGenericCropRenderer implements ISimpleBlockRenderingHandler 
 		rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 		float yScale = rnd.nextFloat() * 0.2F + 1.0F;
 		float xzScale = rnd.nextFloat() * 0.2F + 1.0F;
-		Vec3 offset = new Vec3((rnd.nextFloat()/2.0F - 0.25F) * 0.8F, 1.5F * (yScale - 1.0F), (rnd.nextFloat()/2.0F - 0.25F) * 0.8F);
+		Vec3UV offset = new Vec3UV((rnd.nextFloat()/2.0F - 0.25F) * 0.8F, 1.5F * (yScale - 1.0F), (rnd.nextFloat()/2.0F - 0.25F) * 0.8F);
 		float rotYaw = rnd.nextFloat() * 360.0F;
-		model.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3(0.0F, 0.0F, 0.0F)).scale(xzScale, yScale, xzScale).
+		model.getModel().rotate(rotYaw, 0.0F, 1.0F, 0.0F, new Vec3UV(0.0F, 0.0F, 0.0F)).scale(xzScale, yScale, xzScale).
 		offsetWS(offset).renderWithTessellator(tessellator, textureDimensions[0], textureDimensions[1], icon);
 		tessellator.addTranslation(-(float)x, -(float)y, -(float)z);
 	}

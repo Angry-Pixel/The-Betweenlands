@@ -15,6 +15,7 @@ import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelBlockBucket;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.ModelConverter;
+import thebetweenlands.utils.Vec3UV;
 
 public class BlockRubberTapRenderer implements ISimpleBlockRenderingHandler {
 	public static ModelBlockBucket modelBlockBucket = new ModelBlockBucket();
@@ -63,7 +64,7 @@ public class BlockRubberTapRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator.instance.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 		Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z +0.5F);
 
-		ModelConverter.Model model = modelConverterBlockBucket.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new ModelConverter.Vec3(0, 0, 0));
+		ModelConverter.Model model = modelConverterBlockBucket.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new Vec3UV(0, 0, 0));
 
 		int rotation = 0;
 		int meta = world.getBlockMetadata(x, y, z);
@@ -86,7 +87,7 @@ public class BlockRubberTapRenderer implements ISimpleBlockRenderingHandler {
 			break;
 		}
 
-		model.rotate(rotation, 0, 1, 0, new ModelConverter.Vec3(0.0, 0, 0.0));
+		model.rotate(rotation, 0, 1, 0, new Vec3UV(0.0, 0, 0.0));
 
 		model.renderWithTessellator(Tessellator.instance, 128, 128, BLBlockRegistry.rubberTap.icon);
 

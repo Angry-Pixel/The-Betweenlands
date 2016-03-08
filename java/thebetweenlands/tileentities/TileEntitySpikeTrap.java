@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -35,6 +34,15 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 1, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord)));
 				block.dropBlockAsItem(worldObj, xCoord, yCoord + 1, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 1, zCoord), 0);
 				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+			if (!worldObj.isAirBlock(xCoord, yCoord + 2, zCoord)) {
+				setType((byte) 1);
+				setActive(true);
+				Block block = worldObj.getBlock(xCoord, yCoord + 2, zCoord);
+				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 2, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 2, zCoord)));
+				block.dropBlockAsItem(worldObj, xCoord, yCoord + 2, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 2, zCoord), 0);
+				worldObj.setBlockToAir(xCoord, yCoord + 2, zCoord);
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (worldObj.rand.nextInt(500) == 0) {

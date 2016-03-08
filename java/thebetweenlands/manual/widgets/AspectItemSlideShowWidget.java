@@ -1,9 +1,5 @@
 package thebetweenlands.manual.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -13,6 +9,10 @@ import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItem;
 import thebetweenlands.herblore.aspects.AspectManager.AspectItemEntry;
 import thebetweenlands.herblore.aspects.IAspectType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Created by Bart on 10/12/2015.
@@ -36,12 +36,11 @@ public class AspectItemSlideShowWidget extends ManualWidgetsBase {
 
 	@Override
 	public void drawForeGround() {
-		pageLinks.clear();
 		super.drawForeGround();
 		List<ItemStack> subItems = items.subList(currentItems, currentItems + (items.size() - currentItems > 5 ? 6 : items.size() - currentItems));
 		int width = 0;
 		for (ItemStack itemStack : subItems) {
-			renderItem(xStart + width, yStart, itemStack, false, true);
+			renderItem(xStart + width, yStart, itemStack, false, true, manual.manualType);
 			width += 18;
 		}
 	}

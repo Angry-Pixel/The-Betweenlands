@@ -1,9 +1,11 @@
 package thebetweenlands.entities.mobs;
 
 import java.util.List;
+import java.util.UUID;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,15 +20,21 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
+import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 
 public class EntityWight extends EntityMob implements IEntityBL {
 	public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute("bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
@@ -38,6 +46,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public static final int ATTACK_STATE_DW = 20;
 	public static final int ANIMATION_STATE_DW = 21;
 	public static final int VOLATILE_STATE_DW = 22;
+	public static final int GUARD_STATE_DW = 23;
+	public static final int REPAIR_X_DW = 24;
+	public static final int REPAIR_Y_DW = 25;
+	public static final int REPAIR_Z_DW = 26;
 
 	private EntityAIAttackOnCollide meleeAttack = new EntityAIAttackOnCollide(this, EntityPlayer.class, 0.5D, false);
 	private EntityPlayer previousTarget;
@@ -51,7 +63,15 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private double waypointY;
 	private double waypointZ;
 	private boolean prevVolatile = false;
-	private boolean isLocationGuard = false;
+
+	//Wight temple stuff
+	private String locationViolatorUUID = null;
+	private boolean breakBlock = false;
+	private Block repairBlock = null;
+	private int repairMeta = 0;
+	private int repairX = 0;
+	private int repairY = 0;
+	private int repairZ = 0;
 
 	public EntityWight(World world) {
 		super(world);
@@ -72,6 +92,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		this.dataWatcher.addObject(ATTACK_STATE_DW, (byte) 0);
 		this.dataWatcher.addObject(ANIMATION_STATE_DW, (float) 1);
 		this.dataWatcher.addObject(VOLATILE_STATE_DW, (byte) 0);
+		this.dataWatcher.addObject(GUARD_STATE_DW, (byte) 0);
+		this.dataWatcher.addObject(REPAIR_X_DW, 0);
+		this.dataWatcher.addObject(REPAIR_Y_DW, 0);
+		this.dataWatcher.addObject(REPAIR_Z_DW, 0);
 	}
 
 	@Override
@@ -82,7 +106,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(76.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
@@ -101,7 +125,18 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		nbt.setInteger("volatileCooldown", this.volatileCooldown);
 		nbt.setInteger("volatileProgress", this.volatileProgress);
 		nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
-		nbt.setBoolean("ignoreMask", this.isLocationGuard);
+		nbt.setBoolean("isLocationGuard", this.isLocationGuard());
+		if(this.locationViolatorUUID != null)
+			nbt.setString("locationViolatorUUID", this.locationViolatorUUID);
+
+		nbt.setBoolean("isRepairGuard", this.isRepairGuard());
+		nbt.setInteger("repairMeta", this.repairMeta);
+		nbt.setInteger("repairX", this.repairX);
+		nbt.setInteger("repairY", this.repairY);
+		nbt.setInteger("repairZ", this.repairZ);
+		nbt.setBoolean("breakBlock", this.breakBlock);
+		if(this.repairBlock != null)
+			nbt.setString("repairBlock", Block.blockRegistry.getNameForObject(this.repairBlock));
 	}
 
 	@Override
@@ -111,7 +146,21 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		this.volatileCooldown = nbt.getInteger("volatileCooldown");
 		this.volatileProgress = nbt.getInteger("volatileProgress");
 		this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
-		this.isLocationGuard = nbt.getBoolean("ignoreMask");
+		if(nbt.getBoolean("isLocationGuard"))
+			this.dataWatcher.updateObject(GUARD_STATE_DW, (byte) 1);
+		if(this.isLocationGuard() && nbt.hasKey("locationViolatorUUID"))
+			this.locationViolatorUUID = nbt.getString("locationViolatorUUID");
+
+		if(nbt.getBoolean("isRepairGuard"))
+			this.dataWatcher.updateObject(GUARD_STATE_DW, (byte) 2);
+		if(this.isRepairGuard()) {
+			this.repairMeta = nbt.getInteger("repairMeta");
+			this.repairX = nbt.getInteger("repairX");
+			this.repairY = nbt.getInteger("repairY");
+			this.repairZ = nbt.getInteger("repairZ");
+			this.breakBlock = nbt.getBoolean("breakBlock");
+			this.repairBlock = (Block) Block.blockRegistry.getObject(nbt.getString("repairBlock"));
+		}
 	}
 
 	@Override
@@ -140,149 +189,232 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public boolean canPossess(EntityLivingBase entity) {
-		return this.isLocationGuard || !(entity instanceof EntityPlayer && ((EntityPlayer)entity).getCurrentArmor(3) != null && ((EntityPlayer)entity).getCurrentArmor(3).getItem() == BLItemRegistry.skullMask);
+		return !this.isRepairGuard() && (this.isLocationGuard() || !(entity instanceof EntityPlayer && ((EntityPlayer)entity).getCurrentArmor(3) != null && ((EntityPlayer)entity).getCurrentArmor(3).getItem() == BLItemRegistry.skullMask));
 	}
 
 	@Override
 	public void onUpdate() {
-		EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
-		if(target == null || target.isDead || target.getDistanceToEntity(this) > this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue()) {
-			target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 25.0D);
-		}
-
-		if(target != null && !target.isSneaking()) {
-			this.setTargetSpotted(target, true);
-		}
-
-		if(target != null && target != this.previousTarget && target.isSneaking()) {
-			this.setTargetSpotted(target, false);
-		}
-
-		if(target == null && this.previousTarget != null) {
-			this.setTargetSpotted(target, false);
-		}
-
-		if(this.getAttackTarget() != null) {
-			if (getAnimation() > 0)
-				setAnimation(getAnimation() - 0.1F);
-		} else {
-			if (getAnimation() < 1)
-				setAnimation(getAnimation() + 0.1F);
-			if (getAnimation() == 0 && previousTarget != null) {
-				previousTarget = null;
-			}
-		}
-
-		if (!this.worldObj.isRemote && getAttackTarget() != null) {
-			this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
-
-			if(!this.isVolatile() && this.canPossess(this.getAttackTarget())) {
-				if(this.volatileCooldown > 0)
-					this.volatileCooldown--;
-				if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
-					this.setVolatile(true);
-					this.volatileCooldown = this.getVolatileCooldown() + this.worldObj.rand.nextInt(this.getVolatileCooldown()) + 20;
-					this.volatileProgress = 0;
+		if(!this.worldObj.isRemote) {
+			if(this.isLocationGuard() && (this.getViolator() == null || !this.getViolator().isEntityAlive())) {
+				this.setDead();
+			} else if(this.isLocationGuard() && this.getViolator() != null) {
+				if(!PlayerLocationHandler.isInLocationType(this.getViolator(), EnumLocationType.WIGHT_TOWER)) {
+					this.setDead();
+				} else {
+					this.setAttackTarget(this.getViolator());
 				}
-			} else if(this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
-				this.setVolatile(false);
 			}
 		}
 
-		if(this.isVolatile()) {
+		if(!this.isRepairGuard()) {
+			EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
+			if(target == null || target.isDead || target.getDistanceToEntity(this) > this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue()) {
+				target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 25.0D);
+			}
+
+			if(target != null && !target.isSneaking()) {
+				this.setTargetSpotted(target, true);
+			}
+
+			if(target != null && target != this.previousTarget && target.isSneaking()) {
+				this.setTargetSpotted(target, false);
+			}
+
+			if(target == null && this.previousTarget != null) {
+				this.setTargetSpotted(target, false);
+			}
+
 			if(this.getAttackTarget() != null) {
-				if(this.ridingEntity == null) {
-					double dx = this.getAttackTarget().posX - this.posX;
-					double dz = this.getAttackTarget().posZ - this.posZ;
-					double dy;
-					if (this.getAttackTarget() instanceof EntityLivingBase) {
-						EntityLivingBase entitylivingbase = (EntityLivingBase)this.getAttackTarget();
-						dy = entitylivingbase.posY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
-					} else {
-						dy = (this.getAttackTarget().boundingBox.minY + this.getAttackTarget().boundingBox.maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
-					}
-					double dist = (double)MathHelper.sqrt_double(dx * dx + dz * dz);
-					float yaw = (float)(Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
-					float pitch = (float)(-(Math.atan2(dy, dist) * 180.0D / Math.PI));
-					this.setRotation(yaw, pitch);
-					if(this.worldObj.isRemote) {
-						this.setRotationYawHead(yaw);
-					}
-				} else {
-					this.setRotation(this.ridingEntity.rotationYaw, 0);
-					if(this.worldObj.isRemote) {
-						this.setRotationYawHead(this.ridingEntity.rotationYaw);
-					}
+				if (getAnimation() > 0)
+					setAnimation(getAnimation() - 0.1F);
+			} else {
+				if (getAnimation() < 1)
+					setAnimation(getAnimation() + 0.1F);
+				if (getAnimation() == 0 && previousTarget != null) {
+					previousTarget = null;
 				}
 			}
-			if(!this.worldObj.isRemote) {
-				if(this.ridingEntity != null && this.ridingEntity.isDead) {
-					this.dismountEntity(this.ridingEntity);
-				}
-				if(this.volatileProgress < this.getEntityAttribute(VOLATILE_LENGTH_ATTRIB).getAttributeValue()) {
-					this.volatileProgress++;
-				}
-				if(this.volatileProgress >= 20) {
-					if(this.getAttackTarget() != null) {
-						this.waypointX = this.getAttackTarget().posX;
-						this.waypointY = this.getAttackTarget().boundingBox.minY + (this.getAttackTarget().boundingBox.maxY - this.getAttackTarget().boundingBox.minY) / 2.0D;
-						this.waypointZ = this.getAttackTarget().posZ;
-					} else {
-						this.waypointX = this.posX;
-						this.waypointY = this.posY;
-						this.waypointZ = this.posZ;
+
+			if (!this.worldObj.isRemote && getAttackTarget() != null) {
+				this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
+
+				if(!this.isVolatile() && this.canPossess(this.getAttackTarget())) {
+					if(this.volatileCooldown > 0)
+						this.volatileCooldown--;
+					if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
+						this.setVolatile(true);
+						this.volatileCooldown = this.getVolatileCooldown() + this.worldObj.rand.nextInt(this.getVolatileCooldown()) + 20;
+						this.volatileProgress = 0;
 					}
-				} else {
-					this.waypointX = this.posX;
-					this.waypointY = this.posY + 3.0D;
-					this.waypointZ = this.posZ;
+				} else if(this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
+					this.setVolatile(false);
 				}
-				if (getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 1) {
-					onCollideWithEntity(getAttackTarget());
-				}
-				if(this.ridingEntity != null) {
-					if(this.ticksExisted % 30 == 0) {
-						List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.boundingBox.expand(16.0D, 16.0D, 16.0D));
-						if(existingSouls.size() < 16) {
-							EntityVolatileSoul soul = new EntityVolatileSoul(this.worldObj);
-							float mx = this.worldObj.rand.nextFloat() - 0.5F;
-							float my = this.worldObj.rand.nextFloat() / 2.0F;
-							float mz = this.worldObj.rand.nextFloat() - 0.5F;
-							Vec3 dir = Vec3.createVectorHelper(mx, my, mz).normalize();
-							soul.setOwner(this.getUniqueID().toString());
-							soul.setLocationAndAngles(this.posX + dir.xCoord * 0.5D, this.posY + dir.yCoord * 1.5D, this.posZ + dir.zCoord * 0.5D, 0, 0);
-							soul.setThrowableHeading(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
-							this.worldObj.spawnEntityInWorld(soul);
+			}
+
+			if(this.isVolatile()) {
+				if(this.getAttackTarget() != null) {
+					if(this.ridingEntity == null) {
+						double dx = this.getAttackTarget().posX - this.posX;
+						double dz = this.getAttackTarget().posZ - this.posZ;
+						double dy;
+						if (this.getAttackTarget() instanceof EntityLivingBase) {
+							EntityLivingBase entitylivingbase = (EntityLivingBase)this.getAttackTarget();
+							dy = entitylivingbase.posY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
+						} else {
+							dy = (this.getAttackTarget().boundingBox.minY + this.getAttackTarget().boundingBox.maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
+						}
+						double dist = (double)MathHelper.sqrt_double(dx * dx + dz * dz);
+						float yaw = (float)(Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
+						float pitch = (float)(-(Math.atan2(dy, dist) * 180.0D / Math.PI));
+						this.setRotation(yaw, pitch);
+						if(this.worldObj.isRemote) {
+							this.setRotationYawHead(yaw);
+						}
+					} else {
+						this.setRotation(this.ridingEntity.rotationYaw, 0);
+						if(this.worldObj.isRemote) {
+							this.setRotationYawHead(this.ridingEntity.rotationYaw);
 						}
 					}
 				}
+				if(!this.worldObj.isRemote) {
+					if(this.ridingEntity != null && this.ridingEntity.isDead) {
+						this.dismountEntity(this.ridingEntity);
+					}
+					if(this.volatileProgress < this.getEntityAttribute(VOLATILE_LENGTH_ATTRIB).getAttributeValue()) {
+						this.volatileProgress++;
+					}
+					if(this.volatileProgress >= 20) {
+						if(this.getAttackTarget() != null) {
+							this.waypointX = this.getAttackTarget().posX;
+							this.waypointY = this.getAttackTarget().boundingBox.minY + (this.getAttackTarget().boundingBox.maxY - this.getAttackTarget().boundingBox.minY) / 2.0D;
+							this.waypointZ = this.getAttackTarget().posZ;
+						} else {
+							this.waypointX = this.posX;
+							this.waypointY = this.posY;
+							this.waypointZ = this.posZ;
+						}
+					} else {
+						this.waypointX = this.posX;
+						this.waypointY = this.posY + 3.0D;
+						this.waypointZ = this.posZ;
+					}
+					if (getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 1) {
+						onCollideWithEntity(getAttackTarget());
+					}
+					if(this.ridingEntity != null) {
+						if(this.ticksExisted % 30 == 0) {
+							List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.boundingBox.expand(16.0D, 16.0D, 16.0D));
+							if(existingSouls.size() < 16) {
+								EntityVolatileSoul soul = new EntityVolatileSoul(this.worldObj);
+								float mx = this.worldObj.rand.nextFloat() - 0.5F;
+								float my = this.worldObj.rand.nextFloat() / 2.0F;
+								float mz = this.worldObj.rand.nextFloat() - 0.5F;
+								Vec3 dir = Vec3.createVectorHelper(mx, my, mz).normalize();
+								soul.setOwner(this.getUniqueID().toString());
+								soul.setLocationAndAngles(this.posX + dir.xCoord * 0.5D, this.posY + dir.yCoord * 1.5D, this.posZ + dir.zCoord * 0.5D, 0, 0);
+								soul.setThrowableHeading(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
+								this.worldObj.spawnEntityInWorld(soul);
+							}
+						}
+					}
+				} else {
+					if(this.ridingEntity == null || this.ticksExisted % 4 == 0) {
+						this.spawnVolatileParticles();
+					}
+				}
+				this.setSize(0.7F, 0.7F);
 			} else {
-				if(this.ridingEntity == null || this.ticksExisted % 4 == 0) {
-					this.spawnVolatileParticles();
-				}
+				this.setSize(0.7F, 2.2F);
 			}
-			this.setSize(0.7F, 0.7F);
+
+			if (!this.worldObj.isRemote && getAttackTarget() == null) {
+				this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 0));
+			}
+
+			if(this.prevVolatile != this.isVolatile()) {
+				if(this.worldObj.isRemote) {
+					for(int i = 0; i < 80; i++) {
+						double px = this.posX + this.worldObj.rand.nextFloat() * 0.7F;
+						double py = this.posY + this.worldObj.rand.nextFloat() * 2.2F;
+						double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.7F;
+						Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.35F, this.posY + 1.1F, this.posZ + 0.35F)).normalize();
+						BLParticle.SWAMP_SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F, 1.0F);
+					}
+				}
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
+			}
+			this.prevVolatile = this.isVolatile();
 		} else {
-			this.setSize(0.7F, 2.2F);
-		}
+			this.setAttackTarget(null);
+			this.setVolatile(true);
+			this.waypointX = this.repairX + 0.5D;
+			this.waypointY = this.repairY + 0.5D;
+			this.waypointZ = this.repairZ + 0.5D;
 
-		if (!this.worldObj.isRemote && getAttackTarget() == null) {
-			this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 0));
-		}
+			if(this.getDistance(this.repairX + 0.5D, this.repairY + 0.5D, this.repairZ + 0.5D) <= this.getEntityAttribute(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue() + 0.1D) {
+				if(this.breakBlock) {
+					this.worldObj.setBlock(this.repairX, this.repairY, this.repairZ, Blocks.air);
+				} else {
+					if(this.repairBlock != null)
+						this.worldObj.setBlock(this.repairX, this.repairY, this.repairZ, this.repairBlock, this.repairMeta, 2);
+				}
+				this.setDead();
+			}
 
-		if(this.prevVolatile != this.isVolatile()) {
-			if(this.worldObj.isRemote) {
-				for(int i = 0; i < 80; i++) {
-					double px = this.posX + this.worldObj.rand.nextFloat() * 0.7F;
-					double py = this.posY + this.worldObj.rand.nextFloat() * 2.2F;
-					double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.7F;
-					Vec3 vec = Vec3.createVectorHelper(px, py, pz).subtract(Vec3.createVectorHelper(this.posX + 0.35F, this.posY + 1.1F, this.posZ + 0.35F)).normalize();
-					BLParticle.SWAMP_SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F, 1.0F);
+			if(!this.worldObj.isRemote) {
+				this.dataWatcher.updateObject(REPAIR_X_DW, this.repairX);
+				this.dataWatcher.updateObject(REPAIR_Y_DW, this.repairY);
+				this.dataWatcher.updateObject(REPAIR_Z_DW, this.repairZ);
+			} else {
+				this.spawnVolatileParticles();
+				this.repairX = this.dataWatcher.getWatchableObjectInt(REPAIR_X_DW);
+				this.repairY = this.dataWatcher.getWatchableObjectInt(REPAIR_Y_DW);
+				this.repairZ = this.dataWatcher.getWatchableObjectInt(REPAIR_Z_DW);
+				for(int i = 0; i <= 2; i++) {
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY, this.repairZ, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY, this.repairZ + 1, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ + 1, 0.0D, 0.0D, 0.0D, 0);
+				}
+				for(int i = 0; i <= 2; i++) {
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY + 0.5D * i, this.repairZ, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY + 0.5D * i, this.repairZ + 1, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ + 1, 0.0D, 0.0D, 0.0D, 0);
+				}
+				for(int i = 0; i <= 2; i++) {
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY, this.repairZ + 0.5D * i, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY +1, this.repairZ + 0.5D * i, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY, this.repairZ + 0.5D * i, 0.0D, 0.0D, 0.0D, 0);
+					BLParticle.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 1, this.repairZ + 0.5D * i, 0.0D, 0.0D, 0.0D, 0);
 				}
 			}
-			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
+			AxisAlignedBB repairBB = AxisAlignedBB.getBoundingBox(this.repairX, this.repairY, this.repairZ, this.repairX + 1, this.repairY + 1, this.repairZ + 1);
+			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, repairBB);
+			for(EntityLivingBase entity : entities) {
+				if(entity != this && entity instanceof EntityWight == false) {
+					if(entity.posX < this.repairX + 0.5D) {
+						entity.motionX = -0.5D;
+					} else if(entity.posX > this.repairX + 0.5D) {
+						entity.motionX = 0.5D;
+					}
+					if(entity.posY < this.repairY + 0.5D) {
+						entity.motionY = -0.5D;
+					} else if(entity.posY > this.repairY + 0.5D) {
+						entity.motionY = 0.5D;
+					}
+					if(entity.posZ < this.repairZ + 0.5D) {
+						entity.motionZ = -0.5D;
+					} else if(entity.posZ > this.repairZ + 0.5D) {
+						entity.motionZ = 0.5D;
+					}
+					entity.attackEntityFrom(DamageSource.magic, 4.0F);
+					entity.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 160, 2));
+					entity.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 160, 2));
+				}
+			}
 		}
-		this.prevVolatile = this.isVolatile();
 
 		super.onUpdate();
 	}
@@ -296,14 +428,50 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		}
 	}
 
-	public void setLocationGuard(boolean locationGuard) {
-		this.isLocationGuard = locationGuard;
+	public void setLocationGuard(EntityPlayer violator) {
+		this.dataWatcher.updateObject(GUARD_STATE_DW, (byte) 1);
+		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(999);
+		this.setHealth(999);
+		this.locationViolatorUUID = violator.getUniqueID().toString();
+	}
+
+	public EntityPlayer getViolator() {
+		if(this.locationViolatorUUID != null) {
+			try {
+				return this.worldObj.func_152378_a(UUID.fromString(this.locationViolatorUUID));
+			} catch(Exception ex) {
+				this.locationViolatorUUID = null;
+			}
+		}
+		return null;
 	}
 
 	public boolean isLocationGuard() {
-		return this.isLocationGuard;
+		return this.dataWatcher.getWatchableObjectByte(GUARD_STATE_DW) == 1;
 	}
-	
+
+	public void setRepairGuard(Block block, int x, int y, int z, int meta) {
+		this.dataWatcher.updateObject(GUARD_STATE_DW, (byte) 2);
+		this.breakBlock = false;
+		this.repairBlock = block;
+		this.repairX = x;
+		this.repairY = y;
+		this.repairZ = z;
+		this.repairMeta = meta;
+	}
+
+	public void setRepairGuard(int x, int y, int z) {
+		this.dataWatcher.updateObject(GUARD_STATE_DW, (byte) 2);
+		this.breakBlock = true;
+		this.repairX = x;
+		this.repairY = y;
+		this.repairZ = z;
+	}
+
+	public boolean isRepairGuard() {
+		return this.dataWatcher.getWatchableObjectByte(GUARD_STATE_DW) == 2;
+	}
+
 	@SideOnly(Side.CLIENT)
 	private void spawnVolatileParticles() {
 		final double radius = 0.3F;
@@ -468,7 +636,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		if(!this.isLocationGuard)
+		if(!this.isLocationGuard() && !this.isRepairGuard())
 			entityDropItem(new ItemStack(BLItemRegistry.wightsHeart), 0F);
 	}
 

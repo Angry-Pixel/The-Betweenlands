@@ -15,20 +15,22 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
-import thebetweenlands.items.loot.ItemRingOfPower;
+import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketPowerRingHit;
 
 public class PowerRingHandler {
+	public static final PowerRingHandler INSTANCE = new PowerRingHandler();
+
 	@SubscribeEvent
-	public void powerRingHandler(LivingHurtEvent event) {
+	public void onEntityHurt(LivingHurtEvent event) {
 		if(event.source.getEntity() instanceof EntityLivingBase){
 			EntityLivingBase attacker = (EntityLivingBase)event.source.getEntity();
 			if(attacker instanceof EntityPlayerMP) {
 				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(attacker);
 				List<Equipment> equipmentList = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
 				for(Equipment equipment : equipmentList) {
-					if(equipment.item.getItem() instanceof ItemRingOfPower) {
+					if(equipment.item.getItem() instanceof ItemRingOfPower && ((ItemRingOfPower)equipment.item.getItem()).isActive(equipment.item)) {
 						event.ammount *= 1.5f;
 						if(event.entity != null) 
 							TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketPowerRingHit(event.entity.getEntityId())), new TargetPoint(event.entity.dimension, event.entity.posX, event.entity.posY, event.entity.posZ, 64D));

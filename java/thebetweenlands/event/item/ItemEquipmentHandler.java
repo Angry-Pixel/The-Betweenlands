@@ -1,13 +1,20 @@
 package thebetweenlands.event.item;
 
+import java.util.List;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.equipment.EntityPropertiesEquipment;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.items.IEquippable;
@@ -18,12 +25,37 @@ public class ItemEquipmentHandler {
 	public static final ItemEquipmentHandler INSTANCE = new ItemEquipmentHandler();
 
 	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event) {
+		if(event.phase == Phase.END) {
+			World world = event.world;
+			for(Entity entity : (List<Entity>)world.loadedEntityList) {
+				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
+				if(property != null) {
+					EquipmentInventory equipmentInventory = property.getEquipmentInventory();
+					for(Equipment equipment : equipmentInventory.getEquipment()) {
+						if(equipment.item != null && equipment.item.getItem() instanceof IEquippable) {
+							((IEquippable)equipment.item.getItem()).onEquipmentTick(equipment.item, entity);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
 	public void onEntityInteract(EntityInteractEvent event) {
 		if(event.entityPlayer != null && event.target != null && event.target instanceof EntityPlayer == false) {
 			if(!event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() != null) {
-				tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem());
-				if(event.entityPlayer.getHeldItem().stackSize <= 0)
-					event.entityPlayer.setCurrentItemOrArmor(0, null);
+				if(event.entityPlayer.getHeldItem().getItem() instanceof IEquippable) {
+					EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.target, EntityPropertiesEquipment.class);
+					if(property != null) {
+						if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.target, property.getEquipmentInventory())) {
+							tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem());
+							if(event.entityPlayer.getHeldItem().stackSize <= 0)
+								event.entityPlayer.setCurrentItemOrArmor(0, null);
+						}
+					}
+				}
 			} else if(event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() == null) {
 				tryPlayerUnequip(event.entityPlayer, event.target);
 			}
@@ -32,28 +64,39 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public void onItemUse(PlayerInteractEvent event) {
-		if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR && event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
-			tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem());
-			if(event.entityPlayer.getHeldItem().stackSize <= 0)
-				event.entityPlayer.setCurrentItemOrArmor(0, null);
+		if((event.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR || event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) && event.entityPlayer != null && event.entityPlayer.getHeldItem() != null) {
+			if(event.entityPlayer.getHeldItem().getItem() instanceof IEquippable) {
+				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesEquipment.class);
+				if(property != null) {
+					if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.entityPlayer, property.getEquipmentInventory())) {
+						tryPlayerEquip(event.entityPlayer, event.entityPlayer, event.entityPlayer.getHeldItem());
+						if(event.entityPlayer.getHeldItem().stackSize <= 0)
+							event.entityPlayer.setCurrentItemOrArmor(0, null);
+					}
+				}
+			}
 		}
 	}
 
-	private static void tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
+	public static boolean tryPlayerEquip(EntityPlayer player, Entity target, ItemStack stack) {
 		if(EquipmentInventory.equipItem(player, target, stack) != null) {
 			if(!player.capabilities.isCreativeMode)
 				stack.stackSize--;
 			player.swingItem();
+			return true;
 		}
+		return false;
 	}
 
-	private static void tryPlayerUnequip(EntityPlayer player, Entity target) {
+	public static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
 		ItemStack unequipped = EquipmentInventory.unequipItem(player, target);
 		if(unequipped != null) {
 			if(!player.inventory.addItemStackToInventory(unequipped))
 				target.entityDropItem(unequipped, target.getEyeHeight());
 			player.swingItem();
+			return true;
 		}
+		return false;
 	}
 
 	@SubscribeEvent

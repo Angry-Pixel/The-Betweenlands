@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
@@ -39,6 +37,9 @@ import thebetweenlands.items.bow.ItemBLArrow;
 import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.crops.ItemAspectrusCropSeed;
 import thebetweenlands.items.crops.ItemBLGenericSeed;
+import thebetweenlands.items.equipment.ItemAmulet;
+import thebetweenlands.items.equipment.ItemRingOfPower;
+import thebetweenlands.items.equipment.ItemRingOfRecruitment;
 import thebetweenlands.items.food.ItemBLFood;
 import thebetweenlands.items.food.ItemBlackHatMushroom;
 import thebetweenlands.items.food.ItemBulbCappedMushroom;
@@ -62,9 +63,7 @@ import thebetweenlands.items.lanterns.ItemConnectionFairyLights;
 import thebetweenlands.items.lanterns.ItemLight;
 import thebetweenlands.items.loot.ItemArtefact;
 import thebetweenlands.items.loot.ItemExplorerHat;
-import thebetweenlands.items.loot.ItemRingOfPower;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.ItemAmulet;
 import thebetweenlands.items.misc.ItemAmuletSlot;
 import thebetweenlands.items.misc.ItemBLRecord;
 import thebetweenlands.items.misc.ItemBLSign;
@@ -78,6 +77,7 @@ import thebetweenlands.items.misc.ItemManual;
 import thebetweenlands.items.misc.ItemMob;
 import thebetweenlands.items.misc.ItemMossBed;
 import thebetweenlands.items.misc.ItemRope;
+import thebetweenlands.items.misc.ItemShockwaveSword;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemTestItem;
@@ -100,6 +100,8 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.recipes.BLMaterial;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -111,6 +113,7 @@ public class BLItemRegistry {
 	// BASIC MATERIALS
 	public static final Item testItem = new ItemTestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
 	public static final Item swampTalisman = new ItemSwampTalisman();
+	
 	public static final Item itemsGeneric = new ItemGeneric();
 	public static final Item itemsGenericCrushed = new ItemGenericCrushed().setUnlocalizedName("thebetweenlands.groundStuff");
 	public static final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setUnlocalizedName("thebetweenlands.plantDrop");
@@ -166,6 +169,8 @@ public class BLItemRegistry {
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
 
 	public static final Item net = new ItemNet();
+
+	public static final Item shockwaveSword = new ItemShockwaveSword(BLMaterial.toolValonite);
 
 	//LANTERN
 	public static final Item light = new ItemLight();
@@ -279,7 +284,6 @@ public class BLItemRegistry {
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
-	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item swiftPick = new ItemSwiftPick(BLMaterial.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
 	public static final Item wightsBane = new ItemLootSword(BLMaterial.toolWeedWood)
 			.addInstantKills(EntityWight.class)
@@ -319,6 +323,10 @@ public class BLItemRegistry {
 	public static final ItemDentrothystVial dentrothystVial = new ItemDentrothystVial();
 	public static final ItemAspectVial aspectVial = new ItemAspectVial();
 
+	// EQUIPMENT
+	public static final Item ringOfPower = new ItemRingOfPower();
+	public static final Item ringOfRecruitment = new ItemRingOfRecruitment();
+
 	public static void init() {
 		initCreativeTabs();
 		registerItems();
@@ -333,13 +341,13 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, tribalPants, skullMask, 
-				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
 				betweenstoneAxe, betweenstoneShovel, octineSword, octinePickaxe, octineAxe, octineShovel, valoniteSword, valonitePickaxe, 
 				valoniteAxe, valoniteShovel);
-		BLCreativeTabs.gears.setTab(legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, 
+		BLCreativeTabs.gears.setTab(shockwaveSword, legendarySword, legendaryBoots, legendaryChestplate, legendaryHelmet, legendaryLeggings, lurkerSkinHelmet, 
 				lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, 
 				syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, 
 				weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, 

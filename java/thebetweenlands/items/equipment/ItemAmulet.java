@@ -1,4 +1,4 @@
-package thebetweenlands.items.misc;
+package thebetweenlands.items.equipment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -239,4 +239,12 @@ public class ItemAmulet extends Item implements IEquippable {
 			}
 		}
 	}
+
+	@Override
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
+		return true;
+	}
+
+	@Override
+	public void onEquipmentTick(ItemStack stack, Entity entity) { }
 }

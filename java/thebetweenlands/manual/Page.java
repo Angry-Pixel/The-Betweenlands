@@ -17,7 +17,7 @@ public class Page {
     public int pageNumber;
     public ArrayList<ItemStack> pageItems = new ArrayList<>();
     public IManualEntryEntity pageEntity;
-    public IAspectType pageAspect;
+    public ArrayList<IAspectType> pageAspects = new ArrayList<>();
 
     public String resourceLocation;
     public int xStartTexture = 0;
@@ -142,7 +142,18 @@ public class Page {
      * @return this page
      */
     public Page setAspect(IAspectType aspect) {
-        pageAspect = aspect;
+        pageAspects.add(aspect);
+        return this;
+    }
+
+    /**
+     * Adds the aspect a page contains
+     *
+     * @param aspects the aspects the page contains
+     * @return this page
+     */
+    public Page setAspects(IAspectType[] aspects) {
+        Collections.addAll(pageAspects, aspects);
         return this;
     }
 

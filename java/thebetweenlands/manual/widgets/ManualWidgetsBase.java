@@ -7,12 +7,14 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.*;
 
@@ -24,85 +26,26 @@ import java.util.List;
  */
 @SideOnly(Side.CLIENT)
 public class ManualWidgetsBase {
-    public static class PageLink {
-        public int x;
-        public int y;
-        public int width;
-        public int height;
-        public int pageNumber;
-        public ManualCategory category;
-
-        public PageLink(int x, int y, int width, int height, ItemStack item) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            if (item != null) {
-                if (!(item.getItem() == BLItemRegistry.elixir)) {
-                    for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
-                        if (page.pageItems != null) {
-                            for (ItemStack stack : page.pageItems) {
-                                if (stack != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
-                                    pageNumber = page.pageNumber;
-                                    category = page.parentCategory;
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    for (Page page : HLEntryRegistry.elixirCategory.visiblePages) {
-                        if (page.pageItems != null) {
-                            for (ItemStack stack : page.pageItems) {
-
-                                if (stack != null && stack.getItem() == item.getItem() && (stack.getItemDamage() == item.getItemDamage() || stack.getItemDamage() == item.getItemDamage() - 1)) {
-                                    pageNumber = page.pageNumber;
-                                    category = page.parentCategory;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
-
+    public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
+    public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");
+    public static String processTimeSecondsString = StatCollector.translateToLocal("manual.widget.process.time.seconds");
+    public static String burnTimeString = StatCollector.translateToLocal("manual.widget.burn.time");
     public ArrayList<PageLink> pageLinks = new ArrayList<>();
     public GuiManualBase manual;
     public int unchangedXStart;
     public int unchangedYStart;
     public int xStart;
     public int yStart;
-    protected int mouseX;
-
-    protected int mouseY;
-
     public boolean isPageRight = false;
-
     public boolean isEmpty = false;
-
-
-    public static String processTimeString = StatCollector.translateToLocal("manual.widget.process.time");
-    public static String processTimeMinutesString = StatCollector.translateToLocal("manual.widget.process.time.minutes");
-    public static String processTimeSecondsString = StatCollector.translateToLocal("manual.widget.process.time.seconds");
-    public static String burnTimeString = StatCollector.translateToLocal("manual.widget.burn.time");
+    protected int mouseX;
+    protected int mouseY;
 
     @SideOnly(Side.CLIENT)
     public ManualWidgetsBase(int xStart, int yStart) {
         this.unchangedXStart = xStart;
         this.unchangedYStart = yStart;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void init(GuiManualBase manual) {
-        this.manual = manual;
-        resize();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void setPageToRight() {
-        this.isPageRight = true;
     }
 
     /**
@@ -209,10 +152,22 @@ public class ManualWidgetsBase {
     }
 
     @SideOnly(Side.CLIENT)
+    public void init(GuiManualBase manual) {
+        this.manual = manual;
+        resize();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setPageToRight() {
+        this.isPageRight = true;
+    }
+
+    @SideOnly(Side.CLIENT)
     public void draw(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
         drawBackGround();
+        pageLinks.clear();
         drawForeGround();
     }
 
@@ -265,11 +220,11 @@ public class ManualWidgetsBase {
 
     @SideOnly(Side.CLIENT)
     public void mouseClicked(int x, int y, int mouseButton) {
-        if (mouseButton == 0)
-            for (PageLink link : pageLinks) {
+        if (mouseButton == 0) {
+            for (PageLink link : pageLinks)
                 if (x >= link.x && y >= link.y && x <= link.x + link.width && y <= link.y + link.height)
                     manual.changeCategory(link.category, link.pageNumber + link.category.indexPages);
-            }
+        }
     }
 
     /**
@@ -281,7 +236,7 @@ public class ManualWidgetsBase {
      * @param hasSpecialTooltip whether or not the item has a special tooltip
      */
     @SideOnly(Side.CLIENT)
-    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink) {
+    public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink, Item book) {
         RenderItem render = new RenderItem();
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -296,7 +251,7 @@ public class ManualWidgetsBase {
         boolean shouldShowTooltip = false;
         if (addPageLink) {
             int lengthBefore = pageLinks.size();
-            PageLink link = new PageLink(xPos, yPos, 16, 16, stack);
+            PageLink link = new PageLink(xPos, yPos, 16, 16, stack, book);
             if (link.category != null)
                 pageLinks.add(link);
             shouldShowTooltip = pageLinks.size() > lengthBefore;
@@ -351,5 +306,75 @@ public class ManualWidgetsBase {
                 renderTooltip(mouseX, mouseY, parsedTooltip, 0xffffff, 0xf0100010);
             }
         }
+    }
+
+    public static class PageLink {
+        public int x;
+        public int y;
+        public int width;
+        public int height;
+        public int pageNumber;
+        public ManualCategory category;
+
+        public PageLink(int x, int y, int width, int height, ItemStack item, Item book) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            if (item != null) {
+                if (book == BLItemRegistry.manualHL) {
+                    for (ManualCategory category : HLEntryRegistry.CATEGORIES) {
+                        for (Page page : category.visiblePages) {
+                            if (page.pageItems.size() > 0) {
+                                for (ItemStack stack : page.pageItems) {
+                                    if (stack != null && stack.getItem() == item.getItem() && (stack.getItemDamage() == item.getItemDamage() || stack.getItemDamage() == item.getItemDamage() - 1)) {
+                                        this.pageNumber = page.pageNumber;
+                                        this.category = category;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
+                        if (page.pageItems.size() > 0) {
+                            for (ItemStack stack : page.pageItems) {
+                                if (stack != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
+                                    this.pageNumber = page.pageNumber;
+                                    this.category = GuideBookEntryRegistry.itemsCategory;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public PageLink(int x, int y, int width, int height, IAspectType aspectType) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            if (aspectType != null) {
+                for (Page page : HLEntryRegistry.aspectCategory.visiblePages) {
+                    if (page.pageAspects.size() > 0) {
+                        if (page.pageAspects.contains(aspectType)) {
+                            this.pageNumber = page.pageNumber;
+                            this.category = HLEntryRegistry.aspectCategory;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "page number: " + pageNumber + ", category name: " + category.name + ", xStart: " + x + ", yStart: " + y + ", width: " + width + ", height: " + height;
+        }
+
     }
 }

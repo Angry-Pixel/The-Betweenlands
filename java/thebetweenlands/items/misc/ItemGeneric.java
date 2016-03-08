@@ -2,8 +2,6 @@ package thebetweenlands.items.misc;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,6 +28,8 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.manual.IManualEntryItem;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGeneric extends Item implements IManualEntryItem {
 	public static ItemStack createStack(EnumItemGeneric enumGeneric) {
@@ -351,7 +351,8 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21), 
 		VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedWoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
 		RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
-		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34), PARCHMENT("parchment", 35);
+		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34), PARCHMENT("parchment", 35),
+		SHOCKWAVE_SWORD_1("shockwaveSword1", 36), SHOCKWAVE_SWORD_2("shockwaveSword2", 37), SHOCKWAVE_SWORD_3("shockwaveSword3", 38), SHOCKWAVE_SWORD_4("shockwaveSword4", 39);
 
 		public final String iconName;
 		public final int id;

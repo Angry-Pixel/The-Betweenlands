@@ -13,6 +13,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.model.block.ModelWalkway;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.utils.ModelConverter;
+import thebetweenlands.utils.Vec3UV;
 
 /**
  * Created by Bart on 12-6-2015.
@@ -68,12 +69,12 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 		Tessellator.instance.addTranslation(x + 0.5F, y + 1.5F, z +0.5F);
 
 		if( world.getBlockMetadata(x, y, z) == 1) {
-			ModelConverter.Model model = modelConverterWalkway.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new ModelConverter.Vec3(0, 0, 0));
+			ModelConverter.Model model = modelConverterWalkway.getModel().rotate(90, 0.0f, 1.0f, 0.0F, new Vec3UV(0, 0, 0));
 			for (ModelConverter.Box box : model.getBoxes()) {
 				if ((box.getModelRenderer() == modelWalkway.standright || box.getModelRenderer() == modelWalkway.standleft) && !World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) continue; //skips this part/box
 				for (ModelConverter.Quad quad : box.getQuads()) {
 					for (int i = 0; i < 4; i++) {
-						ModelConverter.Vec3 vec = quad.getVertices()[i];
+						Vec3UV vec = quad.getVertices()[i];
 						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(BLBlockRegistry.blockWalkWay.icon, 128), vec.getV(BLBlockRegistry.blockWalkWay.icon, 128));
 					}
 				}
@@ -83,7 +84,7 @@ public class BlockWalkwayRenderer implements ISimpleBlockRenderingHandler {
 				if ((box.getModelRenderer() == modelWalkway.standright || box.getModelRenderer() == modelWalkway.standleft) && !World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) continue; //skips this part/box
 				for (ModelConverter.Quad quad : box.getQuads()) {
 					for (int i = 0; i < 4; i++) {
-						ModelConverter.Vec3 vec = quad.getVertices()[i];
+						Vec3UV vec = quad.getVertices()[i];
 						Tessellator.instance.addVertexWithUV(vec.x, vec.y, vec.z, vec.getU(BLBlockRegistry.blockWalkWay.icon, 128), vec.getV(BLBlockRegistry.blockWalkWay.icon, 128));
 					}
 				}

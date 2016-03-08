@@ -15,13 +15,10 @@ import java.util.ArrayList;
  * Created by Bart on 9-8-2015.
  */
 public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
-    private static ResourceLocation pamGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/pamGrid.png");
-
-    ArrayList<ItemStack> outputs = new ArrayList<>();
-
     public static int width = 106;
     public static int height = 69;
-
+    private static ResourceLocation pamGrid = new ResourceLocation("thebetweenlands:textures/gui/manual/pamGrid.png");
+    ArrayList<ItemStack> outputs = new ArrayList<>();
     int progress = 0;
     int currentRecipe = 0;
 
@@ -42,7 +39,6 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawForeGround() {
-        pageLinks.clear();
         if (outputs.size() > 0) {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -53,13 +49,13 @@ public class PestleAndMortarRecipeWidget extends ManualWidgetsBase {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false, true);
-            renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false, false);
-            renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true, true);
+            renderItem(xStart + 1, yStart + 29, PestleAndMortarRecipe.getInput(outputs.get(currentRecipe)), false, true, manual.manualType);
+            renderItem(xStart + 89, yStart + 29, outputs.get(currentRecipe), false, false, manual.manualType);
+            renderItem(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), true, true, manual.manualType);
             ArrayList<String> extraToolTips = new ArrayList<>();
             extraToolTips.add(StatCollector.translateToLocal("manual.widget.pam.optional"));
             addSpecialItemTooltip(xStart + 45, yStart + 1, new ItemStack(BLItemRegistry.lifeCrystal), extraToolTips);
-            renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false, true);
+            renderItem(xStart + 45, yStart + 29, new ItemStack(BLItemRegistry.pestle), false, true, manual.manualType);
             if (mouseX >= xStart + 11 && mouseX <= xStart + 85 && mouseY >= yStart + 62 && mouseY <= yStart + 68) {
                 ArrayList<String> recipeToolTips = new ArrayList<>();
                 recipeToolTips.add(StatCollector.translateToLocal("manual.widget.pam.recipe"));
