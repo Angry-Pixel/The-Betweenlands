@@ -1,7 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -11,6 +9,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 /**
  * Created by jnad325 on 2/23/16.
@@ -82,7 +82,7 @@ public class EntitySludgeBall extends EntityThrowable {
         {
             if (entity instanceof EntityLivingBase && !(entity instanceof EntityPeatMummy) && !(entity instanceof EntityDreadfulMummy) && getDistanceSqToEntity(entity) < radiusSq)
             {
-                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 80, 2, false));
+                ((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 80, 3, false));
                 if (owner != null) entity.attackEntityFrom(DamageSource.causeMobDamage(owner), 3);
             }
         }

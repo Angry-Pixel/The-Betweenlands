@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -19,6 +20,9 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     static final int SPAWN_SLUDGE_COOLDOWN = 150;
     int untilSpawnSludge = 0;
 
+    int eatPreyTimer = 60;
+    private EntityLivingBase eatPrey;
+
     @Override
     public String pageName() {
         return null;
@@ -29,7 +33,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.7);
         getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(170.0D);
-        getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(10);
+        getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(8);
         getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
         getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
     }
@@ -41,8 +45,15 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
 //            if (untilSpawnMummy <= 0) spawnMummy();
             if (untilSpawnSludge <= 0) spawnSludge();
         }
-        if(untilSpawnMummy > 0) untilSpawnMummy--;
-        if(untilSpawnSludge > 0) untilSpawnSludge--;
+        eatPrey = (EntityLivingBase)getPrey();
+        if (eatPrey != null) updateEatPrey();
+
+//        System.out.println(eatPrey != null);
+
+        if (untilSpawnMummy > 0) untilSpawnMummy--;
+        if (untilSpawnSludge > 0) untilSpawnSludge--;
+        if (eatPreyTimer > 0 && eatPrey != null) eatPreyTimer--;
+        if (eatPreyTimer <= 0) {setPrey(null); eatPreyTimer = 60;}
     }
 
     private void spawnMummy() {
@@ -65,9 +76,37 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         sludge.setPosition(posX - Math.sin(direction) * 3.5, posY + height, posZ + Math.cos(direction) * 3.5);
         sludge.motionX = look.xCoord * 0.5D;
         sludge.motionY = look.yCoord;
-        sludge.motionZ = look.zCoord* 0.5D;
-        if (!worldObj.isRemote)
-        	worldObj.spawnEntityInWorld(sludge);
-        
+        sludge.motionZ = look.zCoord * 0.5D;
+        if (!worldObj.isRemote) worldObj.spawnEntityInWorld(sludge);
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity target) {
+        if (rand.nextInt(5) == 0 && target != eatPrey) {setPrey(target);}
+        return super.attackEntityAsMob(target);
+    }
+
+    private void updateEatPrey() {
+        double direction = Math.toRadians(renderYawOffset);
+        eatPrey.setPositionAndRotation(posX - Math.sin(direction) * 1.7, posY + 1.7, posZ + Math.cos(direction) * 1.7, (float) (Math.toDegrees(direction) + 180), 0);
+        eatPrey.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
+        eatPrey.fallDistance = 0;
+        if (ticksExisted % 10 == 0) attackEntityAsMob(eatPrey);
+    }
+
+    private void setPrey(Entity prey) {
+        if (prey == null) {dataWatcher.updateObject(24, -1); return;}
+        dataWatcher.updateObject(24, prey.getEntityId());
+    }
+
+    private Entity getPrey() {
+        int id = dataWatcher.getWatchableObjectInt(24);
+        return id != -1 ? worldObj.getEntityByID(id) : null;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataWatcher.addObject(24, 0);
     }
 }
