@@ -46,7 +46,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL {
 
 	private boolean[] activeShields = new boolean[20];
 
-	@SideOnly(Side.CLIENT)
 	public int[] shieldAnimationTicks = new int[20];
 
 	public final AxisAlignedBB coreBoundingBox;

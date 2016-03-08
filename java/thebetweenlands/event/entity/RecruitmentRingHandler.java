@@ -128,7 +128,6 @@ public class RecruitmentRingHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	private boolean wasPressed = false;
 
 	@SideOnly(Side.CLIENT)
