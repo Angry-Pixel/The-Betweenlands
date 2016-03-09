@@ -1,5 +1,4 @@
 package thebetweenlands.client.model.block;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
@@ -11,103 +10,145 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ModelWraithPusher extends ModelBase {
-	ModelRenderer hoodLT;
-	ModelRenderer hoodRT;
-	ModelRenderer hoodL;
-	ModelRenderer hoodR;
-	ModelRenderer head;
-	ModelRenderer body;
-	ModelRenderer leftArm;
-	ModelRenderer leftCuff;
-	ModelRenderer leftPalm;
-	ModelRenderer leftOutFinger;
-	ModelRenderer leftInFinger;
-	ModelRenderer leftThumb;
-	ModelRenderer rightArm;
-	ModelRenderer rightCuff;
-	ModelRenderer rightPalm;
-	ModelRenderer rightOutFinger;
-	ModelRenderer rightInFinger;
-	ModelRenderer rightThumb;
-
-	public ModelWraithPusher() {
-		textureWidth = 64;
-		textureHeight = 128;
-
-		hoodLT = new ModelRenderer(this, 39, 33);
-		hoodLT.addBox(-1.8F, -5.8F, -3.5F, 3, 1, 5);
-		hoodLT.setRotationPoint(0F, 16F, 0F);
-		setRotation(hoodLT, 0F, 0F, 0.296706F);
-		hoodRT = new ModelRenderer(this, 9, 33);
-		hoodRT.addBox(-1.2F, -5.8F, -3.5F, 3, 1, 5);
-		hoodRT.setRotationPoint(0F, 16F, 0F);
-		setRotation(hoodRT, 0F, 0F, -0.296706F);
-		hoodL = new ModelRenderer(this, 41, 40);
-		hoodL.addBox(2F, -5F, -3.5F, 1, 5, 5);
-		hoodL.setRotationPoint(0F, 16F, 0F);
-		setRotation(hoodL, 0F, 0F, -0.122173F);
-		hoodR = new ModelRenderer(this, 11, 40);
-		hoodR.addBox(-3F, -5F, -3.5F, 1, 5, 5);
-		hoodR.setRotationPoint(0F, 16F, 0F);
-		setRotation(hoodR, 0F, 0F, 0.122173F);
-		head = new ModelRenderer(this, 24, 42);
-		head.addBox(-2F, -5F, -2.5F, 4, 4, 4);
-		head.setRotationPoint(0F, 16F, 0F);
-		setRotation(head, 0F, 0F, 0F);
-		body = new ModelRenderer(this, 19, 51);
-		body.addBox(-3.5F, -1.5F, -2.5F, 7, 10, 6);
-		body.setRotationPoint(0F, 16F, 0F);
-		setRotation(body, 0.4363323F, 0F, 0F);
-		leftArm = new ModelRenderer(this, 46, 51);
-		leftArm.addBox(0.5F, -2F, -4F, 3, 4, 6);
-		leftArm.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftArm, 0F, 0F, 0F);
-		leftCuff = new ModelRenderer(this, 50, 62);
-		leftCuff.addBox(0F, -2F, -5F, 4, 5, 1);
-		leftCuff.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftCuff, 0F, 0F, 0F);
-		leftPalm = new ModelRenderer(this, 51, 69);
-		leftPalm.addBox(0.5F, -1F, -6F, 3, 3, 1);
-		leftPalm.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftPalm, 0F, 0F, 0F);
-		leftOutFinger = new ModelRenderer(this, 56, 74);
-		leftOutFinger.addBox(2.5F, 0F, -8F, 1, 1, 3);
-		leftOutFinger.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftOutFinger, -0.3490659F, 0F, 0F);
-		leftInFinger = new ModelRenderer(this, 47, 74);
-		leftInFinger.addBox(0.5F, 0F, -8F, 1, 1, 3);
-		leftInFinger.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftInFinger, -0.3490659F, 0F, 0F);
-		leftThumb = new ModelRenderer(this, 52, 79);
-		leftThumb.addBox(1.966667F, 1F, -7F, 1, 1, 2);
-		leftThumb.setRotationPoint(3F, 15F, 0F);
-		setRotation(leftThumb, 0F, 0.3490659F, 0F);
-		rightArm = new ModelRenderer(this, 0, 51);
-		rightArm.addBox(-3.5F, -2F, -4F, 3, 4, 6);
-		rightArm.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightArm, 0F, 0F, 0F);
-		rightCuff = new ModelRenderer(this, 4, 62);
-		rightCuff.addBox(-4F, -2F, -5F, 4, 5, 1);
-		rightCuff.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightCuff, 0F, 0F, 0F);
-		rightPalm = new ModelRenderer(this, 5, 69);
-		rightPalm.addBox(-3.5F, -1F, -6F, 3, 3, 1);
-		rightPalm.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightPalm, 0F, 0F, 0F);
-		rightOutFinger = new ModelRenderer(this, 0, 74);
-		rightOutFinger.addBox(-3.5F, 0F, -8F, 1, 1, 3);
-		rightOutFinger.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightOutFinger, -0.3490659F, 0F, 0F);
-		rightInFinger = new ModelRenderer(this, 9, 74);
-		rightInFinger.addBox(-1.5F, 0F, -8F, 1, 1, 3);
-		rightInFinger.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightInFinger, -0.3490659F, 0F, 0F);
-		rightThumb = new ModelRenderer(this, 5, 79);
-		rightThumb.addBox(-3F, 1F, -7F, 1, 1, 2);
-		rightThumb.setRotationPoint(-3F, 15F, 0F);
-		setRotation(rightThumb, 0F, -0.3490659F, 0F);
-	}
-
+  //fields
+    ModelRenderer head;
+    ModelRenderer foreHead;
+    ModelRenderer nose;
+    ModelRenderer cheekLeft;
+    ModelRenderer cheekRight;
+    ModelRenderer topJaw;
+    ModelRenderer leftTopFang;
+    ModelRenderer rightTopFang;
+    ModelRenderer tongueTop;
+    ModelRenderer tongueBottom;
+    ModelRenderer bottomJaw;
+    ModelRenderer leftBottomFang;
+    ModelRenderer rightBottomFang;
+    ModelRenderer body;
+    ModelRenderer leftArm1;
+    ModelRenderer leftArm2;
+    ModelRenderer leftPalm;
+    ModelRenderer leftOutFinger;
+    ModelRenderer leftInFinger;
+    ModelRenderer leftThumb;
+    ModelRenderer rightArm1;
+    ModelRenderer rightArm2;
+    ModelRenderer rightPalm;
+    ModelRenderer rightOutFinger;
+    ModelRenderer rightInFinger;
+    ModelRenderer rightThumb;
+  
+  public ModelWraithPusher() {
+    textureWidth = 64;
+    textureHeight = 64;
+    
+      head = new ModelRenderer(this, 22, 0);
+      head.addBox(-2.5F, -5.5F, -4.5F, 5, 4, 5);
+      head.setRotationPoint(0F, 16F, 0F);
+      setRotation(head, -0.5235988F, 0F, 0.2617994F);
+      foreHead = new ModelRenderer(this, 27, 10);
+      foreHead.addBox(-2F, -5F, -5.5F, 4, 2, 1);
+      foreHead.setRotationPoint(0F, 16F, 0F);
+      setRotation(foreHead, -0.5235988F, 0F, 0.2617994F);
+      nose = new ModelRenderer(this, 30, 14);
+      nose.addBox(-0.5F, -3F, -5.5F, 1, 1, 1);
+      nose.setRotationPoint(0F, 16F, 0F);
+      setRotation(nose, -0.5235988F, 0F, 0.2617994F);
+      cheekLeft = new ModelRenderer(this, 38, 10);
+      cheekLeft.addBox(2F, -4F, -5.5F, 1, 3, 5);
+      cheekLeft.setRotationPoint(0F, 16F, 0F);
+      setRotation(cheekLeft, -0.5235988F, 0F, 0.2617994F);
+      cheekRight = new ModelRenderer(this, 13, 10);
+      cheekRight.addBox(-3F, -4F, -5.5F, 1, 3, 5);
+      cheekRight.setRotationPoint(0F, 16F, 0F);
+      setRotation(cheekRight, -0.5235988F, 0F, 0.2617994F);
+      topJaw = new ModelRenderer(this, 27, 17);
+      topJaw.addBox(-2F, -2F, -5.5F, 4, 2, 1);
+      topJaw.setRotationPoint(0F, 16F, 0F);
+      setRotation(topJaw, -0.5235988F, 0F, 0.2617994F);
+      leftTopFang = new ModelRenderer(this, 33, 21);
+      leftTopFang.addBox(0.5F, -2.8F, -4.7F, 1, 2, 1);
+      leftTopFang.setRotationPoint(0F, 16F, 0F);
+      setRotation(leftTopFang, 0F, 0F, 0.2617994F);
+      rightTopFang = new ModelRenderer(this, 27, 21);
+      rightTopFang.addBox(-1.5F, -2.8F, -4.7F, 1, 2, 1);
+      rightTopFang.setRotationPoint(0F, 16F, 0F);
+      setRotation(rightTopFang, 0F, 0F, 0.2617994F);
+      tongueTop = new ModelRenderer(this, 26, 25);
+      tongueTop.addBox(-1F, -2.1F, -1.5F, 2, 1, 4);
+      tongueTop.setRotationPoint(0F, 16F, 0F);
+      setRotation(tongueTop, 1.047198F, 0F, 0.2617994F);
+      tongueBottom = new ModelRenderer(this, 27, 31);
+      tongueBottom.addBox(-1F, -2.6F, -2.8F, 2, 1, 3);
+      tongueBottom.setRotationPoint(0F, 16F, 0F);
+      setRotation(tongueBottom, 1.745329F, 0F, 0.2617994F);
+      bottomJaw = new ModelRenderer(this, 24, 36);
+      bottomJaw.addBox(-2F, -1.2F, -1.5F, 4, 1, 4);
+      bottomJaw.setRotationPoint(0F, 16F, 0F);
+      setRotation(bottomJaw, 1.047198F, 0F, 0.2617994F);
+      leftBottomFang = new ModelRenderer(this, 36, 42);
+      leftBottomFang.addBox(1F, -2.2F, -2.5F, 1, 2, 1);
+      leftBottomFang.setRotationPoint(0F, 16F, 0F);
+      setRotation(leftBottomFang, 1.029744F, 0F, 0.2617994F);
+      rightBottomFang = new ModelRenderer(this, 24, 42);
+      rightBottomFang.addBox(-2F, -2.2F, -2.5F, 1, 2, 1);
+      rightBottomFang.setRotationPoint(0F, 16F, 0F);
+      setRotation(rightBottomFang, 1.047198F, 0F, 0.2617994F);
+      body = new ModelRenderer(this, 22, 46);
+      body.addBox(-3F, -0.5F, -0.5F, 6, 8, 4);
+      body.setRotationPoint(0F, 16F, 0F);
+      setRotation(body, 0.715585F, 0F, 0F);
+      leftArm1 = new ModelRenderer(this, 47, 32);
+      leftArm1.addBox(-0.5F, 0F, -1F, 2, 6, 2);
+      leftArm1.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftArm1, 0.6981317F, 0.1396263F, -0.4886922F);
+      leftArm2 = new ModelRenderer(this, 43, 41);
+      leftArm2.addBox(0.5F, 4F, -3.5F, 2, 2, 6);
+      leftArm2.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftArm2, 0.3490659F, 0.3490659F, 0F);
+      leftPalm = new ModelRenderer(this, 47, 50);
+      leftPalm.addBox(0F, 3F, -4F, 3, 3, 1);
+      leftPalm.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftPalm, 0.3490659F, 0.3490659F, 0F);
+      leftOutFinger = new ModelRenderer(this, 56, 50);
+      leftOutFinger.addBox(2F, 4F, -5F, 1, 1, 3);
+      leftOutFinger.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftOutFinger, 0F, 0.3490659F, 0F);
+      leftInFinger = new ModelRenderer(this, 56, 55);
+      leftInFinger.addBox(0F, 4F, -5F, 1, 1, 3);
+      leftInFinger.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftInFinger, 0F, 0.3490659F, 0F);
+      leftThumb = new ModelRenderer(this, 43, 55);
+      leftThumb.addBox(0.5F, 5F, -5F, 1, 1, 2);
+      leftThumb.setRotationPoint(3F, 15F, 1F);
+      setRotation(leftThumb, 0.3490659F, 0.6981317F, 0F);
+      rightArm1 = new ModelRenderer(this, 8, 32);
+      rightArm1.addBox(-2F, -0.5F, -1F, 2, 6, 2);
+      rightArm1.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightArm1, 0.5235988F, -0.5235988F, 0.3316126F);
+      rightArm2 = new ModelRenderer(this, 4, 41);
+      rightArm2.addBox(-4F, 3F, -2.8F, 2, 2, 6);
+      rightArm2.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightArm2, -0.2617994F, -0.3490659F, 0F);
+      rightPalm = new ModelRenderer(this, 9, 50);
+      rightPalm.addBox(-4.5F, 1F, -4.5F, 3, 3, 1);
+      rightPalm.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightPalm, 0.0174533F, -0.3490659F, 0F);
+      rightOutFinger = new ModelRenderer(this, 0, 50);
+      rightOutFinger.addBox(-4.5F, 2.3F, -6.5F, 1, 1, 3);
+      rightOutFinger.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightOutFinger, -0.3490659F, -0.3490659F, 0F);
+      rightInFinger = new ModelRenderer(this, 0, 55);
+      rightInFinger.addBox(-2.5F, 2.333333F, -6.5F, 1, 1, 3);
+      rightInFinger.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightInFinger, -0.3316126F, -0.3490659F, 0F);
+      rightInFinger.mirror = false;
+      rightThumb = new ModelRenderer(this, 15, 55);
+      rightThumb.addBox(-3.8F, 1.5F, -6F, 1, 1, 2);
+      rightThumb.setRotationPoint(-3F, 15F, 1F);
+      setRotation(rightThumb, 0.3490659F, -0.6981317F, 0F);
+  }
+  
 	public void render(TileEntityWraithPusher tile) {
 		if (tile.active || !tile.active && tile.animationTicks > 8) {
 			GL11.glPushMatrix();
@@ -118,20 +159,31 @@ public class ModelWraithPusher extends ModelBase {
 			if (tile.animationTicks > 8)
 				GL11.glTranslatef(0F, 0F, 0F - 1F);
 			if (tile.animationTicks > 1) {
-				hoodLT.render(0.0625F);
-				hoodRT.render(0.0625F);
-				hoodL.render(0.0625F);
-				hoodR.render(0.0625F);
+				GL11.glPushMatrix();
+				GL11.glRotatef(tile.moveProgress, 0, 1, 0);
 				head.render(0.0625F);
+				foreHead.render(0.0625F);
+				nose.render(0.0625F);
+				cheekLeft.render(0.0625F);
+				cheekRight.render(0.0625F);
+				topJaw.render(0.0625F);
+				leftTopFang.render(0.0625F);
+				rightTopFang.render(0.0625F);
+				tongueTop.render(0.0625F);
+				tongueBottom.render(0.0625F);
+				bottomJaw.render(0.0625F);
+				leftBottomFang.render(0.0625F);
+				rightBottomFang.render(0.0625F);
+				GL11.glPopMatrix();
+				
 				body.render(0.0625F);
-
 				GL11.glPushMatrix();
 				if (tile.animationTicks > 8)
-					GL11.glRotatef(0F - tile.animationTicks * 0.75F, 0, 1, 0);
+					GL11.glRotatef(10F - tile.animationTicks, 0, 1, 0);
 				else
 					GL11.glRotatef(-0, 0, 1, 0);
-				rightArm.render(0.0625F);
-				rightCuff.render(0.0625F);
+				rightArm1.render(0.0625F);
+				rightArm2.render(0.0625F);
 				rightPalm.render(0.0625F);
 				rightOutFinger.render(0.0625F);
 				rightInFinger.render(0.0625F);
@@ -140,17 +192,16 @@ public class ModelWraithPusher extends ModelBase {
 
 				GL11.glPushMatrix();
 				if (tile.animationTicks > 8)
-					GL11.glRotatef(0F + tile.animationTicks * 0.75F, 0, 1, 0);
+					GL11.glRotatef(-10F + tile.animationTicks, 0, 1, 0);
 				else
 					GL11.glRotatef(0, 0, 1, 0);
-				leftArm.render(0.0625F);
-				leftCuff.render(0.0625F);
+				leftArm1.render(0.0625F);
+				leftArm2.render(0.0625F);
 				leftPalm.render(0.0625F);
 				leftOutFinger.render(0.0625F);
 				leftInFinger.render(0.0625F);
 				leftThumb.render(0.0625F);
 				GL11.glPopMatrix();
-
 			}
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();

@@ -13,7 +13,7 @@ import thebetweenlands.tileentities.TileEntityWraithPusher;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityWraithPusherRenderer extends TileEntitySpecialRenderer {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/wraithPusher.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/wraithTexture.png");
 
 	private final ModelWraithPusher model = new ModelWraithPusher();
 
