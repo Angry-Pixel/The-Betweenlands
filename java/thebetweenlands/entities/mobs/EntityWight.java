@@ -31,6 +31,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -223,6 +224,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if(target == null && this.previousTarget != null) {
 				this.setTargetSpotted(target, false);
 			}
+
+			if(this.getAttackTarget() instanceof EntityFortressBoss)
+				this.setTargetSpotted(null, false);
+			if(this.ridingEntity instanceof EntityFortressBoss)
+				this.dismountEntity(this.ridingEntity);
 
 			if(this.getAttackTarget() != null) {
 				if (getAnimation() > 0)

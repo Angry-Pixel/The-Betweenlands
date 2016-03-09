@@ -29,6 +29,7 @@ public class LocationStorage extends ChunkStorage {
 	private String name;
 	private AxisAlignedBB area;
 	private EnumLocationType type;
+	private int layer;
 
 	public LocationStorage(Chunk chunk) {
 		super(chunk);
@@ -41,6 +42,15 @@ public class LocationStorage extends ChunkStorage {
 		if(type == null)
 			type = EnumLocationType.NONE;
 		this.type = type;
+	}
+
+	public LocationStorage setLayer(int layer) {
+		this.layer = layer;
+		return this;
+	}
+
+	public int getLayer() {
+		return this.layer;
 	}
 
 	public String getLocalizedName() {
@@ -62,6 +72,7 @@ public class LocationStorage extends ChunkStorage {
 		double maxZ = nbt.getDouble("maxZ");
 		this.area = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
+		this.layer = nbt.getInteger("layer");
 	}
 
 	@Override
@@ -74,6 +85,7 @@ public class LocationStorage extends ChunkStorage {
 		nbt.setDouble("maxY", this.area.maxY);
 		nbt.setDouble("maxZ", this.area.maxZ);
 		nbt.setString("type", this.type.name);
+		nbt.setInteger("layer", this.layer);
 	}
 
 	public boolean isAreaEqual(AxisAlignedBB other) {

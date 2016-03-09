@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -17,20 +18,22 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.items.BLItemRegistry;
 
-public class EntityFortressBossBullet extends Entity implements IProjectile {
+public class EntityFortressBossProjectile extends Entity implements IProjectile {
 	public static final int OWNER_DW = 18;
 
+	private String throwerUUID = "";
 	private int ticksInAir = 0;
 	private boolean canDismount = false;
 
-	public EntityFortressBossBullet(World world) {
+	public EntityFortressBossProjectile(World world) {
 		super(world);
 		this.setSize(0.65F, 0.65F);
 		this.noClip = true;
 	}
 
-	public EntityFortressBossBullet(World world, Entity source) {
+	public EntityFortressBossProjectile(World world, Entity source) {
 		this(world);
 		if(source != null)
 			this.setOwner(source.getUniqueID().toString());
@@ -58,6 +61,20 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 		}
 	}
 
+	public void setThrower(String throwerUUID) {
+		this.throwerUUID = throwerUUID;
+	}
+
+
+	public Entity getThrower() {
+		try {
+			UUID uuid = UUID.fromString(this.throwerUUID);
+			return uuid == null ? null : this.getEntityByUUID(uuid);
+		} catch (IllegalArgumentException illegalargumentexception) {
+			return null;
+		}
+	}
+
 	private Entity getEntityByUUID(UUID p_152378_1_) {
 		for (int i = 0; i < this.worldObj.loadedEntityList.size(); ++i) {
 			Entity entity = (Entity)this.worldObj.loadedEntityList.get(i);
@@ -70,29 +87,41 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 
 	protected void onImpact(MovingObjectPosition target) {
 		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase) {
-			if(!this.worldObj.isRemote) {
-				if(target.entityHit instanceof EntityFortressBoss) {
-					EntityFortressBoss boss = (EntityFortressBoss) target.entityHit;
-					Vec3 ray = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
-					ray = ray.normalize();
-					ray.xCoord = ray.xCoord * 64.0D;
-					ray.yCoord = ray.yCoord * 64.0D;
-					ray.zCoord = ray.zCoord * 64.0D;
-					int shieldHit = boss.rayTraceShield(Vec3.createVectorHelper(this.posX, this.posY, this.posZ), ray, false);
-					if(shieldHit >= 0) {
+			if(target.entityHit instanceof EntityFortressBoss) {
+				EntityFortressBoss boss = (EntityFortressBoss) target.entityHit;
+				Vec3 ray = Vec3.createVectorHelper(this.motionX, this.motionY, this.motionZ);
+				ray = ray.normalize();
+				ray.xCoord = ray.xCoord * 64.0D;
+				ray.yCoord = ray.yCoord * 64.0D;
+				ray.zCoord = ray.zCoord * 64.0D;
+				int shieldHit = boss.rayTraceShield(Vec3.createVectorHelper(this.posX, this.posY, this.posZ), ray, false);
+				if(shieldHit >= 0) {
+					if(!this.worldObj.isRemote) {
 						boss.setShieldActive(shieldHit, false);
-					} else {
-						boss.attackEntityFrom(DamageSource.generic, 10);
+
+						double angle = Math.PI * 2.0D / 18;
+						for(int i = 0; i < 18; i++) {
+							Vec3 dir = Vec3.createVectorHelper(Math.sin(angle * i), 0, Math.cos(angle * i));
+							dir = dir.normalize();
+							float speed = 0.8F;
+							EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this.getOwner());
+							bullet.setLocationAndAngles(boss.posX, boss.posY, boss.posZ, 0, 0);
+							bullet.setThrowableHeading(dir.xCoord, dir.yCoord, dir.zCoord, speed, 0.0F);
+							this.worldObj.spawnEntityInWorld(bullet);
+						}
 					}
-					boss.setFloating(false);
 				} else {
-					target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 6);
+					boss.attackEntityFrom(DamageSource.generic, 10);
 				}
-				this.motionX = 0;
-				this.motionY = 0;
-				this.motionZ = 0;
-				this.setDead();
+				boss.setFloating(false);
+			} else {
+				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
 			}
+			this.motionX = 0;
+			this.motionY = 0;
+			this.motionZ = 0;
+			if(!this.worldObj.isRemote)
+				this.setDead();
 		} else if(target.typeOfHit == MovingObjectType.BLOCK) {
 			this.setDead();
 		}
@@ -110,9 +139,11 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 		} else {
 			this.setBeenAttacked();
 			if (source.getEntity() instanceof EntityPlayer) {
-				if(!this.worldObj.isRemote) {
-					this.mountEntity(source.getEntity());
-				}
+				ItemStack heldItem = ((EntityPlayer)source.getEntity()).getHeldItem();
+				if(heldItem != null && heldItem.getItem() == BLItemRegistry.shockwaveSword)
+					if(!this.worldObj.isRemote) {
+						this.mountEntity(source.getEntity());
+					}
 				return true;
 			} else {
 				return false;
@@ -138,23 +169,23 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 		if(!this.isDead) {
 			if(this.ridingEntity == null) {
 				this.ticksInAir++;
+				if(this.ticksInAir > 200)
+					this.setDead();
 				Vec3 currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
 				Vec3 nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-				MovingObjectPosition hitObject = null;
-				if(this.ticksInAir >= 10)
-					hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
+				MovingObjectPosition hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
 				currentPos = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
 				nextPos = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 				if (hitObject != null) {
 					nextPos = Vec3.createVectorHelper(hitObject.hitVec.xCoord, hitObject.hitVec.yCoord, hitObject.hitVec.zCoord);
 				}
 				Entity hitEntity = null;
-				List hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
+				List hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(0.1D, 0.1D, 0.1D));
 				double minDist = 0.0D;
 				for (int i = 0; i < hitEntities.size(); ++i) {
 					Entity entity = (Entity)hitEntities.get(i);
-					if (entity.canBeCollidedWith() && this.ticksInAir >= 10.0F) {
-						float f = 0.3F;
+					if (entity.canBeCollidedWith() && entity != this.getThrower()) {
+						float f = 0.1F;
 						AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f, (double)f, (double)f);
 						MovingObjectPosition movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
 						if (movingobjectposition1 != null) {
@@ -175,17 +206,25 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 				this.moveEntity(this.motionX, this.motionY, this.motionZ);
 			} else {
 				if(this.ridingEntity instanceof EntityPlayer) {
-					this.ticksInAir = 5;
 					EntityPlayer player = (EntityPlayer) this.ridingEntity;
-					if(player.isSwingInProgress) {
-						if(this.canDismount) {
-							Vec3 look = this.ridingEntity.getLookVec();
-							look.normalize();
-							this.setThrowableHeading(look.xCoord, look.yCoord, look.zCoord, 0.5F, 0.0F);
-							this.ridingEntity = null;
-						}
+					ItemStack heldItem = player.getHeldItem();
+					if(heldItem == null || heldItem.getItem() != BLItemRegistry.shockwaveSword) {
+						if(!this.worldObj.isRemote)
+							this.setDead();
 					} else {
-						this.canDismount = true;
+						player.setInWeb();
+						player.motionY -= 1.5D;
+						if(player.isSwingInProgress) {
+							if(this.canDismount) {
+								Vec3 look = this.ridingEntity.getLookVec();
+								look.normalize();
+								this.setThrowableHeading(look.xCoord, look.yCoord, look.zCoord, 0.5F, 0.0F);
+								this.ridingEntity = null;
+								this.setThrower(player.getUniqueID().toString());
+							}
+						} else {
+							this.canDismount = true;
+						}
 					}
 				}
 			}
@@ -218,6 +257,7 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		this.setOwner(nbt.getString("ownerUUID"));
+		this.setThrower(nbt.getString("throwerUUID"));
 		this.ticksInAir = nbt.getInteger("ticksInAir");
 		this.canDismount = nbt.getBoolean("canDismount");
 	}
@@ -225,6 +265,7 @@ public class EntityFortressBossBullet extends Entity implements IProjectile {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setString("ownerUUID", this.getOwnerUUID());
+		nbt.setString("throwerUUID", this.throwerUUID);
 		nbt.setInteger("ticksInAir", this.ticksInAir);
 		nbt.setBoolean("canDismount", this.canDismount);
 	}

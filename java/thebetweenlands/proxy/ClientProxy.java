@@ -102,7 +102,8 @@ import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBoss;
-import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossBullet;
+import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossProjectile;
+import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossSpawner;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossTurret;
 import thebetweenlands.client.render.entity.projectile.RenderAngryPebble;
 import thebetweenlands.client.render.entity.projectile.RenderBLArrow;
@@ -182,7 +183,8 @@ import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
-import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossBullet;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossProjectile;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossSpawner;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
 import thebetweenlands.entities.particles.EntityThemFX;
 import thebetweenlands.entities.particles.EntityWispFX;
@@ -353,8 +355,9 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwordEnergy.class, new RenderSwordEnergy());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBoss.class, new RenderFortressBoss());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTurret.class, new RenderFortressBossTurret());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBullet.class, new RenderFortressBossBullet());	
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, new RenderFortressBossProjectile());	
+		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossSpawner.class, new RenderFortressBossSpawner());	
+
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());

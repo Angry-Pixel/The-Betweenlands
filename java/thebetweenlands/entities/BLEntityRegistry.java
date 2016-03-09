@@ -30,7 +30,8 @@ import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
-import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossBullet;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossProjectile;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossSpawner;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
 import thebetweenlands.entities.projectiles.EntityAngryPebble;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
@@ -82,8 +83,9 @@ public class BLEntityRegistry
 		registerEntity(34, EntitySludgeBall.class, "sludgeBall", 64, 20, true);
 		registerEntity(35, EntitySwordEnergy.class, "swordEnergy", 64, 20, true);
 		registerEntity(36, EntityFortressBoss.class, "fortressBoss", 0x005C3D, 0x2D4231, 64, 1, true);
-		registerEntity(37, EntityFortressBossTurret.class, "fortressBossTurret", 0x005C3D, 0x2D4231, 64, 20, false);
-		registerEntity(38, EntityFortressBossBullet.class, "fortressBossBullet", 64, 10, false);
+		registerEntity(37, EntityFortressBossTurret.class, "fortressBossTurret", 64, 20, false);
+		registerEntity(38, EntityFortressBossProjectile.class, "fortressBossProjectile", 64, 5, true);
+		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 0x005C3D, 0x2D4231, 64, 20, false);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

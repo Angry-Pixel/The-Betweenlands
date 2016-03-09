@@ -18,6 +18,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 
 public class EntityVolatileSoul extends Entity implements IProjectile {
 	private Entity target = null;
@@ -132,6 +133,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 			this.setDead();
 			return;
 		}
+
+		if(!this.worldObj.isRemote)
+			if(this.target instanceof EntityFortressBoss)
+				this.setDead();
 
 		if(!this.isDead) {
 			this.ticksInAir++;

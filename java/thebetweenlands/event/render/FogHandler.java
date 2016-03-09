@@ -1,5 +1,7 @@
 package thebetweenlands.event.render;
 
+import java.util.List;
+
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -23,11 +25,14 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
@@ -140,6 +145,19 @@ public class FogHandler {
 			}
 			fogStart *= Math.min(multiplier * (1.0F + uncloudedStrength * (1.0F / multiplier - 1.0F)), 1.0F);
 			fogEnd *= Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
+		}
+
+		//Primordial malevolence boss fog
+		List<LocationStorage> locations = PlayerLocationHandler.getLocations(player);
+		LocationStorage highestLocation = null;
+		for(LocationStorage storage : locations) {
+			if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
+				highestLocation = storage;
+		}
+		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER && highestLocation.getName().equals("translate:wightTowerBoss")) {
+			fogStart = 12.0F;
+			fogEnd = 30.0F;
+			multiplier = 0.1F;
 		}
 
 		fogStart = Math.max(fogStart, 1);

@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import thebetweenlands.client.model.entity.ModelSwordEnergy;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -21,7 +22,8 @@ public class RenderFortressBoss extends Render {
 	private static double vertices[][] = EntityFortressBoss.ICOSAHEDRON_VERTICES;
 	private static int indices[][] = EntityFortressBoss.ICOSAHEDRON_INDICES;
 
-	private static final ResourceLocation shieldTexture = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ModelSwordEnergy BULLET_MODEL = new ModelSwordEnergy();
 
 	private static final ModelWight modelHeadOnly = new ModelWight().setRenderHeadOnly(true);
 
@@ -93,7 +95,7 @@ public class RenderFortressBoss extends Render {
 		double explode = boss.SHIELD_EXPLOSION;
 
 		float ticks = (float)entity.ticksExisted + partialTicks;
-		this.bindTexture(shieldTexture);
+		this.bindTexture(SHIELD_TEXTURE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
 		GL11.glLoadIdentity();
 		GL11.glPushMatrix();
@@ -301,13 +303,41 @@ public class RenderFortressBoss extends Render {
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 
+		GL11.glPopMatrix();
+
+		if(boss.getGroundAttackTicks() > 0) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y - 2.8D, z);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			this.bindTexture(SHIELD_TEXTURE);
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			float interpTicks = ticks + partialTicks;
+			float uOffsetAttack = interpTicks * 0.01F;
+			float vOffsetAttack = interpTicks * 0.01F;
+			GL11.glTranslatef(uOffsetAttack, vOffsetAttack, 0.0F);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GL11.glScaled(3.8D, 3.8D, 3.8D);
+			GL11.glColor4f(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.0F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
+			BULLET_MODEL.render(0.0625F);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
+		}
+
 		LightingUtil.INSTANCE.revert();
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 

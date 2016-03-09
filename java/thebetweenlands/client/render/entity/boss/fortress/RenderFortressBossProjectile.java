@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelSwordEnergy;
 
-public class RenderFortressBossBullet extends Render {
+public class RenderFortressBossProjectile extends Render {
 	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	private static final ModelSwordEnergy MODEL = new ModelSwordEnergy();
 
@@ -30,13 +30,12 @@ public class RenderFortressBossBullet extends Render {
 		GL11.glTranslatef(uOffset, vOffset, 0.0F);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glEnable(GL11.GL_BLEND);
-		float color = 0.5F;
-		GL11.glColor4f(color, color, color, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 		GL11.glScaled(0.6D, 0.6D, 0.6D);
 		if(energyBall.ridingEntity != null)
 			GL11.glDisable(GL11.GL_CULL_FACE);
+		GL11.glColor4f(0.8F, 0.0F, 0.4F, 1.0F);
 		MODEL.render(0.0625F);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);

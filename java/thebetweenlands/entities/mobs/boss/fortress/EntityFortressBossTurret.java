@@ -26,6 +26,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	private boolean particlesSpawned = false;
 	private double anchorX, anchorY, anchorZ;
 	private int attackTicks = 0;
+	private int attackDelay = 40;
 
 	public EntityFortressBossTurret(World world) {
 		super(world);
@@ -103,6 +104,14 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		return "thisShouldntHaveAPageButTheManualImplementationForcesMeToGiveItAPageName";
 	}
 
+	public int getAttackDelay() {
+		return this.attackDelay;
+	}
+
+	public void setAttackDelay(int delay) {
+		this.attackDelay = delay;
+	}
+
 	public void setAnchor(double x, double y, double z) {
 		this.anchorX = x;
 		this.anchorY = y;
@@ -138,6 +147,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		nbt.setDouble("anchorY", this.anchorY);
 		nbt.setDouble("anchorZ", this.anchorZ);
 		nbt.setString("targetUUID", this.getTargetUUID());
+		nbt.setInteger("attackDelay", this.attackDelay);
 	}
 
 	@Override
@@ -147,6 +157,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.anchorY = nbt.getDouble("anchorY");
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.setTargetUUID(nbt.getString("targetUUID"));
+		this.attackDelay = nbt.getInteger("attackDelay");
 	}
 
 	@Override
@@ -195,14 +206,17 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.faceEntity(this.getTarget(), 360.0F, 360.0F);
 			this.attackTicks++;
 
-			if(this.attackTicks > 40) {
+			if(this.attackTicks > this.attackDelay) {
 				if(!this.worldObj.isRemote) {
 					if(!this.isObstructedByBoss()) {
-						EntityFortressBossBullet bullet = new EntityFortressBossBullet(this.worldObj, this.getOwner());
+						Vec3 diff = Vec3.createVectorHelper(this.posX, this.posY, this.posZ)
+								.subtract(Vec3.createVectorHelper(this.getTarget().boundingBox.minX + (this.getTarget().boundingBox.maxX - this.getTarget().boundingBox.minX) / 2.0D,
+										this.getTarget().boundingBox.minY + (this.getTarget().boundingBox.maxY - this.getTarget().boundingBox.minY) / 2.0D,
+										this.getTarget().boundingBox.minZ + (this.getTarget().boundingBox.maxZ - this.getTarget().boundingBox.minZ) / 2.0D)).normalize();
+						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this.getOwner());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-						Vec3 lookVec = this.getLookVec();
 						float speed = 0.5F;
-						bullet.setThrowableHeading(lookVec.xCoord, lookVec.yCoord, lookVec.zCoord, speed, 0.0F);
+						bullet.setThrowableHeading(diff.xCoord, diff.yCoord, diff.zCoord, speed, 0.0F);
 						this.worldObj.spawnEntityInWorld(bullet);
 					}
 					this.setDead();
@@ -309,5 +323,10 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 
 		this.limbSwingAmount += (distanceMoved - this.limbSwingAmount) * 0.4F;
 		this.limbSwing += this.limbSwingAmount;
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity target) {
+		return false;
 	}
 }

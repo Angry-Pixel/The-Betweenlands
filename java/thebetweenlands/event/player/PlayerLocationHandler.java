@@ -80,7 +80,12 @@ public class PlayerLocationHandler {
 					if(this.currentLocation.length() > 0)
 						this.currentLocation = StatCollector.translateToLocal("location.wilderness.name");
 				} else {
-					this.currentLocation = locations.get(0).getLocalizedName();
+					LocationStorage highestLocation = null;
+					for(LocationStorage storage : locations) {
+						if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
+							highestLocation = storage;
+					}
+					this.currentLocation = highestLocation.getLocalizedName();
 				}
 				if(this.currentLocation.length() > 0 && !prevLocation.equals(this.currentLocation)) {
 					this.titleTicks = 80;
