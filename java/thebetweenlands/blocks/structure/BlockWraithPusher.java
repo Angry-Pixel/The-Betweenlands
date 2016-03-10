@@ -19,7 +19,7 @@ public class BlockWraithPusher extends BlockContainer {
 		setBlockUnbreakable();
 		setResistance(6000000.0F);
 		setCreativeTab(BLCreativeTabs.blocks);
-		setBlockTextureName("thebetweenlands:limestoneBricks");
+		setBlockTextureName("thebetweenlands:betweenstoneBricks");
 		setBlockName("thebetweenlands.wraithPusher");
 	}
 
