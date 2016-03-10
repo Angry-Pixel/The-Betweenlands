@@ -173,7 +173,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 					if(target.attackEntityFrom(DamageSource.magic, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase && 
 							((EntityLivingBase)this.getOwner()).getHealth() < ((EntityLivingBase)this.getOwner()).getMaxHealth() - damage) {
-						((EntityLivingBase)this.getOwner()).heal(damage);
+						((EntityLivingBase)this.getOwner()).heal(damage * 3.0F);
 					}
 				}
 			}
@@ -217,16 +217,6 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 					sz = this.getOwner().posZ;
 				}
 				this.worldObj.spawnParticle("portal", sx, sy, sz, ex - sx, ey - sy, ez - sz);
-
-				/*double dx = 0;
-				double dy = -4;
-				double dz = 0;
-				if(this.getOwner() != null) {
-					dx = -(this.getOwner().posX - rp.xCoord);
-					dy = -(this.getOwner().posY - rp.yCoord);
-					dz = -(this.getOwner().posZ - rp.xCoord);
-				}
-				this.worldObj.spawnParticle("portal",  - dx, this.posY + rp.yCoord - dy, this.posZ + rp.zCoord - dz, dx, dy, dz);*/
 			}
 		}
 	}

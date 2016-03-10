@@ -417,7 +417,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 			} else if(!this.isFloating()) {
 				this.motionY += -0.1F;
 				this.groundTicks++;
-				if(this.groundTicks > 160) {
+				if(this.groundTicks > 180 && this.groundAttackTicks > 20) {
 					this.groundTicks = 0;
 					this.setFloating(true);
 				}
@@ -475,7 +475,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 			if(!this.worldObj.isRemote) {
 				this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
 
-				if(this.getDistance(this.anchorX, this.anchorY, this.anchorZ) > this.anchorRadius) {
+				if(this.getDistance(this.anchorX, this.posY, this.anchorZ) > this.anchorRadius || Math.abs(this.posY - this.anchorY) > this.anchorRadius) {
 					this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
 				}
 
