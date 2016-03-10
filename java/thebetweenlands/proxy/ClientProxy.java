@@ -102,6 +102,7 @@ import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBoss;
+import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossBlockade;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossProjectile;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossSpawner;
 import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossTurret;
@@ -183,6 +184,7 @@ import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossBlockade;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossProjectile;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossSpawner;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
@@ -357,6 +359,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTurret.class, new RenderFortressBossTurret());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, new RenderFortressBossProjectile());	
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossSpawner.class, new RenderFortressBossSpawner());	
+		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBlockade.class, new RenderFortressBossBlockade());	
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());

@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -129,6 +130,12 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	public double getAnchorZ() {
 		return this.anchorZ;
 	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
+    }
 
 	@Override
 	public boolean canBeCollidedWith() {

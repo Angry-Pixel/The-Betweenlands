@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Vec3;
@@ -21,6 +22,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	private double anchorX, anchorY, anchorZ;
 	public int spawnDelay = 40;
 	public final int maxSpawnDelay = 40;
+	private String ownerUUID = "";
 
 	public EntityFortressBossSpawner(World world) {
 		super(world);
@@ -36,9 +38,15 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
+    }
+	
+	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(OWNER_DW, "");
+		this.dataWatcher.addObject(OWNER_DW, 0);
 	}
 
 	@Override
@@ -47,19 +55,25 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	}
 
 	public void setOwner(String ownerUUID) {
-		this.dataWatcher.updateObject(OWNER_DW, ownerUUID);
+		this.ownerUUID = ownerUUID == null ? "" : ownerUUID;
+		Entity owner = this.getOwnerFromUUID();
+		this.dataWatcher.updateObject(OWNER_DW, owner != null ? owner.getEntityId() : -1);
 	}
 
-	public String getOwnerUUID() {
-		return this.dataWatcher.getWatchableObjectString(OWNER_DW);
-	}
-
-	public Entity getOwner() {
+	private Entity getOwnerFromUUID() {
 		try {
-			UUID uuid = UUID.fromString(this.getOwnerUUID());
+			UUID uuid = UUID.fromString(this.ownerUUID);
 			return uuid == null ? null : this.getEntityByUUID(uuid);
 		} catch (IllegalArgumentException illegalargumentexception) {
 			return null;
+		}
+	}
+
+	public Entity getOwner() {
+		if(this.worldObj.isRemote) {
+			return this.worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(OWNER_DW));
+		} else {
+			return this.getOwnerFromUUID();
 		}
 	}
 
@@ -108,6 +122,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		nbt.setDouble("anchorY", this.anchorY);
 		nbt.setDouble("anchorZ", this.anchorZ);
 		nbt.setInteger("spawnDelay", this.spawnDelay);
+		nbt.setString("ownerUUID", this.ownerUUID != null ? this.ownerUUID : "");
 	}
 
 	@Override
@@ -117,6 +132,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.anchorY = nbt.getDouble("anchorY");
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.spawnDelay = nbt.getInteger("spawnDelay");
+		this.ownerUUID = nbt.getString("ownerUUID");
 	}
 
 	@Override
@@ -139,12 +155,30 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.motionZ = 0;
 		super.onUpdate();
 
+		if(this.worldObj.isRemote) {
+			Entity owner = this.getOwner();
+			if(owner != null) {
+				for(int i = 0; i < 3; i++) {
+					double sx = this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width;
+					double sy = this.posY + this.rand.nextDouble() * (double)this.height - 0.25D;
+					double sz = this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width;
+					double ex = owner.posX + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
+					double ey = owner.posY + this.rand.nextDouble() * (double)owner.height - 0.25D;
+					double ez = owner.posZ + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
+					this.worldObj.spawnParticle("portal", sx, sy, sz, ex - sx, ey - sy, ez - sz);
+				}
+			}
+		}
+
 		if(this.spawnDelay > 0) {
 			this.spawnDelay--;
 		} else {
 			if(!this.worldObj.isRemote) {
 				EntityWight wight = new EntityWight(this.worldObj);
 				wight.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+				wight.setCanTurnVolatile(false);
+				wight.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0D);
+				wight.setHealth(wight.getMaxHealth());
 				this.worldObj.spawnEntityInWorld(wight);
 				this.setDead();
 			} else {
@@ -179,7 +213,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.motionY = 0;
 		this.motionZ = 0;
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
 		return false;

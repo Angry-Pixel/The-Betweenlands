@@ -113,7 +113,8 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				} else {
 					boss.attackEntityFrom(DamageSource.generic, 10);
 				}
-				boss.setFloating(false);
+				if(!this.worldObj.isRemote)
+					boss.setFloating(false);
 			} else {
 				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
 			}

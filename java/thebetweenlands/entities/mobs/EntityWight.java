@@ -73,6 +73,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private int repairX = 0;
 	private int repairY = 0;
 	private int repairZ = 0;
+	private boolean canTurnVolatile = true;
 
 	public EntityWight(World world) {
 		super(world);
@@ -138,6 +139,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		nbt.setBoolean("breakBlock", this.breakBlock);
 		if(this.repairBlock != null)
 			nbt.setString("repairBlock", Block.blockRegistry.getNameForObject(this.repairBlock));
+		nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
 	}
 
 	@Override
@@ -162,6 +164,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			this.breakBlock = nbt.getBoolean("breakBlock");
 			this.repairBlock = (Block) Block.blockRegistry.getObject(nbt.getString("repairBlock"));
 		}
+		this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
 	}
 
 	@Override
@@ -244,7 +247,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if (!this.worldObj.isRemote && getAttackTarget() != null) {
 				this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
 
-				if(!this.isVolatile() && this.canPossess(this.getAttackTarget())) {
+				if(!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatile) {
 					if(this.volatileCooldown > 0)
 						this.volatileCooldown--;
 					if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
@@ -694,6 +697,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public void setVolatile(boolean v) {
+		if(!this.canTurnVolatile)
+			v = false;
 		this.dataWatcher.updateObject(VOLATILE_STATE_DW, (byte)(v ? 1 : 0));
 		this.volatileProgress = 0;
 		this.volatileReceivedDamage = 0.0F;
@@ -705,5 +710,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	public boolean isVolatile() {
 		return this.dataWatcher.getWatchableObjectByte(VOLATILE_STATE_DW) == 1;
+	}
+
+	public void setCanTurnVolatile(boolean canTurnVolatile) {
+		this.canTurnVolatile = canTurnVolatile;
 	}
 }

@@ -602,7 +602,7 @@ public class WorldGenWightTower extends WorldGenerator {
 
 		EntityFortressBoss boss = new EntityFortressBoss(world);
 		boss.setPosition(xx + 16, yy + 17 + 19 + 5.2D, zz + 16);
-		boss.setAnchor(xx + 16, yy + 17 + 19 + 5.2D, zz + 16, 10);
+		boss.setAnchor(xx + 16, yy + 17 + 19 + 5.2D, zz + 16, 6);
 		world.spawnEntityInWorld(boss);
 
 		//floor 1
