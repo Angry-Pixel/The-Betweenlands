@@ -113,11 +113,11 @@ public class RenderFortressBoss extends Render {
 				continue;
 			float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
 			if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
-				tessellator.setColorRGBA_F(0.4F - 0.4F / 20 * (shieldAnimationTicks), 1.0F / 20 * (shieldAnimationTicks), 1F - 1.0F / 20 * (shieldAnimationTicks), 0.8F);
+				tessellator.setColorRGBA_F(0.8F / 20 * (shieldAnimationTicks), 0.5F - 0.5F / 20 * (shieldAnimationTicks), 1F - 1F / 20 * (shieldAnimationTicks), 0.9F);
 			} else if(shieldAnimationTicks > 20 && shieldAnimationTicks <= 40) {
-				tessellator.setColorRGBA_F(0.8F, 0.4F / 20 * (shieldAnimationTicks-20), 0.8F, 0.8F);
+				tessellator.setColorRGBA_F(0.4F, 1F, 1F - 0.9F / 20 * (shieldAnimationTicks-20), 0.95F);
 			} else {
-				tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+				tessellator.setColorRGBA_F(0.4F, 0.8F, 0.9F, 0.25F);
 			}
 			double v3[] = this.vertices[this.indices[i][0]];
 			double v2[] = this.vertices[this.indices[i][1]];
@@ -160,7 +160,7 @@ public class RenderFortressBoss extends Render {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		tessellator.startDrawing(4);
-		tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+		tessellator.setColorRGBA_F(0.5F, 0.6F, 1F, 0.5F);
 		tessellator.setBrightness(240);
 		for(int i = 0; i <= 19; i++) {
 			if(!boss.isShieldActive(i))
@@ -249,7 +249,7 @@ public class RenderFortressBoss extends Render {
 
 		GL11.glLineWidth(1.0F);
 		tessellator.startDrawing(1);
-		tessellator.setColorRGBA_F(1F, 0.0F, 1F, 1.0F);
+		tessellator.setColorRGBA_F(0.5F, 0.75F, 1F, 1.0F);
 		for(int i = 0; i <= 19; i++) {
 			if(!boss.isShieldActive(i))
 				continue;
@@ -294,7 +294,7 @@ public class RenderFortressBoss extends Render {
 				vec2 = vec2.addVector(entity.posX, entity.posY, entity.posZ);
 				vec3 = vec3.addVector(entity.posX, entity.posY, entity.posZ);
 				tessellator.startDrawing(4);
-				tessellator.setColorRGBA_F(0F, 1F, 0F, 1.0F);
+				tessellator.setColorRGBA_F(1F, 0F, 0F, 1.0F);
 				tessellator.addVertex(v1[0]+centerX/len*explode, v1[1]+centerY/len*explode, v1[2]+centerZ/len*explode);
 				tessellator.addVertex(v2[0]+centerX/len*explode, v2[1]+centerY/len*explode, v2[2]+centerZ/len*explode);
 				tessellator.addVertex(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
@@ -321,7 +321,7 @@ public class RenderFortressBoss extends Render {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
 			GL11.glScaled(3.8D, 3.8D, 3.8D);
-			GL11.glColor4f(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.0F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
+			GL11.glColor4f(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.6F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
 			BULLET_MODEL.render(0.0625F);
 			GL11.glEnable(GL11.GL_CULL_FACE);
 			GL11.glMatrixMode(GL11.GL_TEXTURE);

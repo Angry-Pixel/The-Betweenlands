@@ -50,7 +50,7 @@ public class RenderFortressBossBlockade extends Render {
 		GL11.glDepthMask(false);
 		tessellator.startDrawing(4);
 		tessellator.setBrightness(240);
-		tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+		tessellator.setColorRGBA_F(0.5F, 0.6F, 1F, 0.5F);
 		double textureScale = 4.0D;
 		double cu = textureScale / 2.0D;
 		double cv = textureScale * Math.sqrt(2) / 2.0D;
@@ -84,7 +84,7 @@ public class RenderFortressBossBlockade extends Render {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		tessellator.startDrawing(4);
-		tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+		tessellator.setColorRGBA_F(0.5F, 0.6F, 1F, 0.5F);
 		tessellator.setBrightness(240);
 		tessellator.addVertex(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord);
 		tessellator.addVertex(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord);
@@ -98,7 +98,7 @@ public class RenderFortressBossBlockade extends Render {
 		GL11.glLineWidth(1.0F);
 
 		tessellator.startDrawing(1);
-		tessellator.setColorRGBA_F(1F, 0.0F, 1F, 1.0F);
+		tessellator.setColorRGBA_F(0.5F, 0.75F, 1F, 1.0F);
 		tessellator.addVertex(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord);
 		tessellator.addVertex(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord);
 		tessellator.addVertex(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord);

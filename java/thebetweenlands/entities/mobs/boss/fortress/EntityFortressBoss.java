@@ -306,7 +306,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 				ray.yCoord = ray.yCoord * 64.0D;
 				ray.zCoord = ray.zCoord * 64.0D;
 				Vec3 pos = Vec3.createVectorHelper(entity.posX, entity.posY + entity.getEyeHeight() + (entity instanceof EntityPlayer && ((EntityPlayer)entity).isSneaking() ? -0.08D : 0.0D), entity.posZ);
-				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode)) {
+				if(this.hasShield() /*&& (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode)*/) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
 						/*if(!this.worldObj.isRemote && entity.isSneaking())
@@ -507,7 +507,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 								if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
 									EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.worldObj, this);
 									blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
-									blockade.setTriangleSize(0.6F + this.worldObj.rand.nextFloat() * 1.8F);
+									blockade.setTriangleSize(1.2F + this.worldObj.rand.nextFloat() * 1.6F);
 									blockade.setMaxDespawnTicks(400);
 									this.worldObj.spawnEntityInWorld(blockade);
 								}

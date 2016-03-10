@@ -35,7 +35,7 @@ public class RenderFortressBossProjectile extends Render {
 		GL11.glScaled(0.6D, 0.6D, 0.6D);
 		if(energyBall.ridingEntity != null)
 			GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glColor4f(0.8F, 0.0F, 0.4F, 1.0F);
+		GL11.glColor4f(0.8F, 0.6F, 0.4F, 1.0F);
 		MODEL.render(0.0625F);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
