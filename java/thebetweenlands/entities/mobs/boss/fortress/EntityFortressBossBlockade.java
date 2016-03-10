@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	public static final int SIZE_DW = 19;
 	public static final int ROTATION_DW = 20;
 
+	private String ownerUUID = "";
 	private float rotation = 0.0F;
 	private int despawnTicks = 0;
 	private int maxDespawnTicks = 160;
@@ -44,25 +46,31 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(OWNER_DW, "");
+		this.dataWatcher.addObject(OWNER_DW, -1);
 		this.dataWatcher.addObject(SIZE_DW, 1.0F);
 		this.dataWatcher.addObject(ROTATION_DW, this.rotation);
 	}
 
 	public void setOwner(String ownerUUID) {
-		this.dataWatcher.updateObject(OWNER_DW, ownerUUID);
+		this.ownerUUID = ownerUUID == null ? "" : ownerUUID;
+		Entity owner = this.getOwnerFromUUID();
+		this.dataWatcher.updateObject(OWNER_DW, owner != null ? owner.getEntityId() : -1);
 	}
 
-	public String getOwnerUUID() {
-		return this.dataWatcher.getWatchableObjectString(OWNER_DW);
-	}
-
-	public Entity getOwner() {
+	private Entity getOwnerFromUUID() {
 		try {
-			UUID uuid = UUID.fromString(this.getOwnerUUID());
+			UUID uuid = UUID.fromString(this.ownerUUID);
 			return uuid == null ? null : this.getEntityByUUID(uuid);
 		} catch (IllegalArgumentException illegalargumentexception) {
 			return null;
+		}
+	}
+
+	public Entity getOwner() {
+		if(this.worldObj.isRemote) {
+			return this.worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(OWNER_DW));
+		} else {
+			return this.getOwnerFromUUID();
 		}
 	}
 
@@ -123,7 +131,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		nbt.setFloat("triangleSize", this.getTriangleSize());
 		nbt.setFloat("triangleRotation", this.dataWatcher.getWatchableObjectFloat(ROTATION_DW));
 		nbt.setInteger("despawnTicks", this.despawnTicks);
-		nbt.setInteger("maxDespawnTicks", this.maxDespawnTicks);;
+		nbt.setInteger("maxDespawnTicks", this.maxDespawnTicks);
+		nbt.setString("ownerUUID", this.ownerUUID != null ? this.ownerUUID : "");
 	}
 
 	@Override
@@ -133,6 +142,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		this.dataWatcher.updateObject(ROTATION_DW, nbt.getFloat("triangleRotation"));
 		this.despawnTicks = nbt.getInteger("despawnTicks");
 		this.maxDespawnTicks = nbt.getInteger("maxDespawnTicks");
+		this.setOwner(nbt.getString("ownerUUID"));
 	}
 
 	@Override
@@ -161,9 +171,9 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 				Vec3[] vertices = this.getTriangleVertices();
 				if(this.rayTraceTriangle(Vec3.createVectorHelper(target.posX - this.posX, this.posY + 1, target.posZ - this.posZ), Vec3.createVectorHelper(0, -16, 0), vertices[0], vertices[1], vertices[2])) {
 					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
-					if(target.attackEntityFrom(DamageSource.magic, damage) && this.getOwner() != null && this.getOwner() instanceof EntityFortressBoss && 
-							((EntityFortressBoss)this.getOwner()).getHealth() < ((EntityFortressBoss)this.getOwner()).getMaxHealth() - damage) {
-						((EntityFortressBoss)this.getOwner()).heal(damage);
+					if(target.attackEntityFrom(DamageSource.magic, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase && 
+							((EntityLivingBase)this.getOwner()).getHealth() < ((EntityLivingBase)this.getOwner()).getMaxHealth() - damage) {
+						((EntityLivingBase)this.getOwner()).heal(damage);
 					}
 				}
 			}
@@ -194,7 +204,29 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 						break;
 					}
 				}
-				this.worldObj.spawnParticle("portal", this.posX + rp.xCoord, this.posY + rp.yCoord + 4F, this.posZ + rp.zCoord, 0, -4, 0);
+
+				double sx = this.posX + rp.xCoord;
+				double sy = this.posY + rp.yCoord + 4;
+				double sz = this.posZ + rp.zCoord;
+				double ex = this.posX + rp.xCoord;
+				double ey = this.posY + rp.yCoord;
+				double ez = this.posZ + rp.zCoord;
+				if(this.getOwner() != null) {
+					sx = this.getOwner().posX;
+					sy = this.getOwner().posY;
+					sz = this.getOwner().posZ;
+				}
+				this.worldObj.spawnParticle("portal", sx, sy, sz, ex - sx, ey - sy, ez - sz);
+
+				/*double dx = 0;
+				double dy = -4;
+				double dz = 0;
+				if(this.getOwner() != null) {
+					dx = -(this.getOwner().posX - rp.xCoord);
+					dy = -(this.getOwner().posY - rp.yCoord);
+					dz = -(this.getOwner().posZ - rp.xCoord);
+				}
+				this.worldObj.spawnParticle("portal",  - dx, this.posY + rp.yCoord - dy, this.posZ + rp.zCoord - dz, dx, dy, dz);*/
 			}
 		}
 	}

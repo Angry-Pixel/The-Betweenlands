@@ -39,10 +39,10 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
-    }
-	
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
+	}
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -132,7 +132,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.anchorY = nbt.getDouble("anchorY");
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.spawnDelay = nbt.getInteger("spawnDelay");
-		this.ownerUUID = nbt.getString("ownerUUID");
+		this.setOwner(nbt.getString("ownerUUID"));
 	}
 
 	@Override

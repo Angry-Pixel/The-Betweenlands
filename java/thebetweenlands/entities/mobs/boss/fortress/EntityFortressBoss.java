@@ -101,7 +101,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(400.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(320.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0F);
 	}
 
@@ -488,9 +488,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 						if(this.wightSpawnTicks <= 0) {
 							if(this.wightSpawnTicks == 0) {
 								int spawnY = this.worldObj.getHeightValue(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posZ));
-								EntityFortressBossSpawner spawner = new EntityFortressBossSpawner(this.worldObj, this);
-								spawner.setLocationAndAngles(MathHelper.floor_double(this.posX), spawnY, MathHelper.floor_double(this.posZ), 0, 0);
-								this.worldObj.spawnEntityInWorld(spawner);
+								if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
+									EntityFortressBossSpawner spawner = new EntityFortressBossSpawner(this.worldObj, this);
+									spawner.setLocationAndAngles(MathHelper.floor_double(this.posX), spawnY, MathHelper.floor_double(this.posZ), 0, 0);
+									this.worldObj.spawnEntityInWorld(spawner);
+								}
 							}
 							this.wightSpawnTicks = 160 + this.worldObj.rand.nextInt(200);
 						}
@@ -502,11 +504,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 						if(this.blockadeSpawnTicks <= 0) {
 							if(this.blockadeSpawnTicks == 0) {
 								int spawnY = this.worldObj.getHeightValue(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posZ));
-								EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.worldObj, this);
-								blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
-								blockade.setTriangleSize(0.6F + this.worldObj.rand.nextFloat() * 1.8F);
-								blockade.setMaxDespawnTicks(400);
-								this.worldObj.spawnEntityInWorld(blockade);
+								if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
+									EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.worldObj, this);
+									blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
+									blockade.setTriangleSize(0.6F + this.worldObj.rand.nextFloat() * 1.8F);
+									blockade.setMaxDespawnTicks(400);
+									this.worldObj.spawnEntityInWorld(blockade);
+								}
 							}
 							this.blockadeSpawnTicks = 190 + this.worldObj.rand.nextInt(160);
 						}
@@ -576,7 +580,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 										dir.yCoord = dir.yCoord * 8.0D;
 										dir.zCoord = dir.zCoord * 8.0D;
 										EntityFortressBossTurret turret = new EntityFortressBossTurret(this.worldObj, this);
-										turret.setLocationAndAngles(this.posX + dir.xCoord, this.posY + dir.yCoord, this.posZ + dir.zCoord, 0, 0);
+										turret.setLocationAndAngles(this.anchorX + dir.xCoord, this.anchorY + dir.yCoord, this.anchorZ + dir.zCoord, 0, 0);
 										turret.setAnchor(this.posX + dir.xCoord, this.posY + dir.yCoord, this.posZ + dir.zCoord);
 										this.worldObj.spawnEntityInWorld(turret);
 									}
