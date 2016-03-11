@@ -572,10 +572,22 @@
 			"fortressBossLiving3"
 		]
 	},
-	"fortressBossLiving4": {
+	"fortressBossTeleport": {
 		"category": "hostile",
 		"sounds": [
-			"fortressBossLiving4"
+			"fortressBossTeleport"
+		]
+	},
+	"fortressBossSummonProjectiles": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossSummonProjectiles"
+		]
+	},
+	"fortressBossNope": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossNope"
 		]
 	},
 	"sorry": {

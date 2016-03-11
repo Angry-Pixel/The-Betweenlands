@@ -313,7 +313,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 							this.setShieldActive(shieldHit, false);*/
 						if(this.worldObj.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
-							this.worldObj.playSound(this.posX, this.posY, this.posZ, "random.anvil_land", 1.0F, 1.0F, false);
+							this.worldObj.playSound(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossNope", 1.0F, 1.0F, false);
 						}
 						double dx = entity.posX - this.posX;
 						double dy = entity.posY - this.posY;
@@ -519,7 +519,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 					this.teleportTicks--;
 					if(this.teleportTicks <= 0) {
 						if(this.teleportTicks == 0) {
-							this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
+							this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
 							this.setLocationAndAngles(this.anchorX + (this.worldObj.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), this.anchorY, this.anchorZ + (this.worldObj.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), 0, 0);
 						}
 						this.teleportTicks = 140 + this.worldObj.rand.nextInt(200);
@@ -542,7 +542,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 									turret.setAnchor(this.anchorX + dir.xCoord, this.anchorY + dir.yCoord, this.anchorZ + dir.zCoord);
 									turret.setAttackDelay(turretFrequency);
 									this.worldObj.spawnEntityInWorld(turret);
-									this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
+									this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossSummonProjectiles", 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
 								}
 							}
 							if(this.turretStreakTicks >= 300) {
@@ -559,7 +559,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 									turret.setAttackDelay(5 + i / 3);
 									this.worldObj.spawnEntityInWorld(turret);
 								}
-								this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
+								this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossSummonProjectiles", 1.0F, 1.0F);
 								this.turretStreakTicks = 0;
 								this.turretStreak = -1;
 							}
@@ -585,7 +585,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 										this.worldObj.spawnEntityInWorld(turret);
 									}
 								}
-								this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
+								this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossSummonProjectiles", 1.0F, 1.0F);
 							}
 							this.turretTicks = 100 + this.worldObj.rand.nextInt(200);
 						} else {
