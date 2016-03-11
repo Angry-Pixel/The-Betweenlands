@@ -49,19 +49,15 @@ public class BlockItemCage extends BlockContainer {
 				switch (swordStone.type) {
 				case 0:
 					energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
-					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 1:
 					energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
-					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 2:
 					energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
-					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 3:
 					energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
-					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				}
 			}

@@ -60,7 +60,7 @@ public class TileEntityItemCage extends TileEntity {
 
 	@SuppressWarnings("unchecked")
 	public Entity isSwordEnergyBelow() {
-		List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord - 1D, zCoord, xCoord + 1D, yCoord + 1D, zCoord + 1D));
+		List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox(xCoord - 1D, yCoord - 1D, zCoord - 1D, xCoord + 2D, yCoord + 1D, zCoord + 2D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
