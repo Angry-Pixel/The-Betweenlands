@@ -78,6 +78,9 @@ tile.thebetweenlands.geckoCage.name=Gecko Cage
 tile.thebetweenlands.blSpawner.name=Monster Spawner
 tile.thebetweenlands.lifeCrystalBlock.name=Life Crystal Block
 tile.thebetweenlands.repeller.name=Repeller
+tile.thebetweenlands.itemCage.name=Item Cage
+tile.thebetweenlands.spikeTrap.name=Spike Trap
+tile.thebetweenlands.possessedBlock.name=Possessed Block
 
 tile.thebetweenlands.farmedDirt_0.name=Purified Swamp Dirt
 tile.thebetweenlands.farmedDirt_1.name=Dug Swamp Dirt
