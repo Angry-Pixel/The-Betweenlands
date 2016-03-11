@@ -746,6 +746,9 @@ entity.thebetweenlands.blindCaveFish.name=Blind Cave Fish
 entity.thebetweenlands.tarminion.name=Tar Minion
 entity.thebetweenlands.peatMummy.name=Peat Mummy
 entity.thebetweenlands.dreadfulMummy.name=Dreadful Peat Mummy
+entity.thebetweenlands.fortressBoss.name=Primordial Malevolence
+entity.thebetweenlands.fortressBossTurret.name=Primordial Malevolence Turret
+entity.thebetweenlands.fortressBossProjectile.name=Primordial Malevolence Projectile
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
@@ -1218,4 +1221,6 @@ item.thebetweenlands.light_connection.name=Weedwood Lanterns
 
 # Locations
 location.wilderness.name=Wilderness
-location.wightTower.name=Wight Tower
+location.wightTower.name=Wight Fortress
+location.wightTowerPuzzle.name=Loft
+location.wightTowerBoss.name=Primordial Malevolence

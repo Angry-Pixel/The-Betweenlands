@@ -31,6 +31,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.items.BLItemRegistry;
@@ -72,6 +73,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private int repairX = 0;
 	private int repairY = 0;
 	private int repairZ = 0;
+	private boolean canTurnVolatile = true;
 
 	public EntityWight(World world) {
 		super(world);
@@ -137,6 +139,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		nbt.setBoolean("breakBlock", this.breakBlock);
 		if(this.repairBlock != null)
 			nbt.setString("repairBlock", Block.blockRegistry.getNameForObject(this.repairBlock));
+		nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
 	}
 
 	@Override
@@ -161,6 +164,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			this.breakBlock = nbt.getBoolean("breakBlock");
 			this.repairBlock = (Block) Block.blockRegistry.getObject(nbt.getString("repairBlock"));
 		}
+		this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
 	}
 
 	@Override
@@ -224,6 +228,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				this.setTargetSpotted(target, false);
 			}
 
+			if(this.getAttackTarget() instanceof EntityFortressBoss)
+				this.setTargetSpotted(null, false);
+			if(this.ridingEntity instanceof EntityFortressBoss)
+				this.dismountEntity(this.ridingEntity);
+
 			if(this.getAttackTarget() != null) {
 				if (getAnimation() > 0)
 					setAnimation(getAnimation() - 0.1F);
@@ -238,7 +247,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if (!this.worldObj.isRemote && getAttackTarget() != null) {
 				this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
 
-				if(!this.isVolatile() && this.canPossess(this.getAttackTarget())) {
+				if(!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatile) {
 					if(this.volatileCooldown > 0)
 						this.volatileCooldown--;
 					if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
@@ -688,6 +697,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public void setVolatile(boolean v) {
+		if(!this.canTurnVolatile)
+			v = false;
 		this.dataWatcher.updateObject(VOLATILE_STATE_DW, (byte)(v ? 1 : 0));
 		this.volatileProgress = 0;
 		this.volatileReceivedDamage = 0.0F;
@@ -699,5 +710,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	public boolean isVolatile() {
 		return this.dataWatcher.getWatchableObjectByte(VOLATILE_STATE_DW) == 1;
+	}
+
+	public void setCanTurnVolatile(boolean canTurnVolatile) {
+		this.canTurnVolatile = canTurnVolatile;
 	}
 }

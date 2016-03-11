@@ -15,14 +15,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.effect.DeferredEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.entities.mobs.boss.IBossBL;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
@@ -37,6 +42,7 @@ public class GuiOverlay extends Gui {
 	public static final GuiOverlay INSTANCE = new GuiOverlay();
 
 	private ResourceLocation decayBarTexture = new ResourceLocation("thebetweenlands:textures/gui/decayBar.png");
+	private ResourceLocation bossBarTexture = new ResourceLocation("thebetweenlands:textures/gui/bossHealthBar.png");
 	private Minecraft mc = Minecraft.getMinecraft();
 	private Random random = new Random();
 
@@ -263,6 +269,51 @@ public class GuiOverlay extends Gui {
 					if (i * 2 + 1 < decayLevel) drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
 					if (i * 2 + 1 == decayLevel) drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 				}
+			}
+		} else if(event.type == ElementType.BOSSHEALTH) {
+			Entity boss = null;
+			for(Entity entity : (List<Entity>) mc.theWorld.loadedEntityList) {
+				if(entity instanceof IBossBL) {
+					if(boss == null || entity.getDistanceToEntity(mc.thePlayer) < boss.getDistanceToEntity(mc.thePlayer))
+						boss = entity;
+				}
+			}
+			if(boss != null) {
+				float maxHealth = ((IBossBL) boss).getMaxHealth();
+				float health = ((IBossBL) boss).getHealth();
+				IChatComponent name = ((IBossBL) boss).func_145748_c_();
+				mc.getTextureManager().bindTexture(bossBarTexture);
+				int texWidth = 256;
+				int texHeight = 32/2;
+				double renderWidth = 250;
+				double renderHeight = (double)texHeight / (double)texWidth * renderWidth;
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glPushMatrix();
+				GL11.glTranslated(event.resolution.getScaledWidth() / 2 - renderWidth / 2.0D, 10, 0);
+				GL11.glBegin(GL11.GL_QUADS);
+				//Background
+				GL11.glTexCoord2f(0, 0);
+				GL11.glVertex2d(0, 0);
+				GL11.glTexCoord2f(0, 0.5F);
+				GL11.glVertex2d(0, renderHeight);
+				GL11.glTexCoord2f(1, 0.5F);
+				GL11.glVertex2d(renderWidth, renderHeight);
+				GL11.glTexCoord2f(1, 0);
+				GL11.glVertex2d(renderWidth, 0);
+				//Foreground
+				GL11.glTexCoord2f(0, 0.5F);
+				GL11.glVertex2d(0, 0);
+				GL11.glTexCoord2f(0, 1.0F);
+				GL11.glVertex2d(0, renderHeight);
+				GL11.glTexCoord2f(16.0F/texWidth + (1.0F-16.0F/texWidth) / maxHealth * health, 1.0F);
+				GL11.glVertex2d(renderWidth - (renderWidth-16.0F/texWidth*renderWidth-(renderWidth-16.0F/texWidth*renderWidth) / maxHealth * health), renderHeight);
+				GL11.glTexCoord2f(16.0F/texWidth + (1.0F-16.0F/texWidth) / maxHealth * health, 0.5F);
+				GL11.glVertex2d(renderWidth - (renderWidth-16.0F/texWidth*renderWidth-(renderWidth-16.0F/texWidth*renderWidth) / maxHealth * health), 0);
+				GL11.glEnd();
+				GL11.glPopMatrix();
+				int strWidth = TheBetweenlands.proxy.getCustomFontRenderer().getStringWidth(name.getFormattedText());
+				TheBetweenlands.proxy.getCustomFontRenderer().drawString(name.getFormattedText(), event.resolution.getScaledWidth() / 2 - strWidth / 2, 13, 0xFFFFFFFF);
 			}
 		}
 	}

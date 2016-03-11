@@ -8,18 +8,18 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.model.block.ModelWraithPusher;
-import thebetweenlands.tileentities.TileEntityWraithPusher;
+import thebetweenlands.client.model.block.ModelPossessedBlock;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityWraithPusherRenderer extends TileEntitySpecialRenderer {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/wraithPusher.png");
+public class TileEntityPossessedBlockRenderer extends TileEntitySpecialRenderer {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/possessedBlock.png");
 
-	private final ModelWraithPusher model = new ModelWraithPusher();
+	private final ModelPossessedBlock model = new ModelPossessedBlock();
 
 	@Override
 	public final void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
-		TileEntityWraithPusher wraith = (TileEntityWraithPusher) tile;
+		TileEntityPossessedBlock spook = (TileEntityPossessedBlock) tile;
 		int meta = tile.getBlockMetadata();
 		int brightness = 0;
 
@@ -61,7 +61,7 @@ public class TileEntityWraithPusherRenderer extends TileEntitySpecialRenderer {
 			break;
 		}
 
-		model.render(wraith);
+		model.render(spook);
 		GL11.glPopMatrix();
 	}
 }

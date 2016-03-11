@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.entity;
+package thebetweenlands.client.render.entity.boss.fortress;
 
 import org.lwjgl.opengl.GL11;
 
@@ -8,23 +8,44 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import thebetweenlands.client.model.entity.ModelSwordEnergy;
 import thebetweenlands.client.model.entity.ModelWight;
-import thebetweenlands.entities.mobs.EntityFortressBoss;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.utils.LightingUtil;
 
 public class RenderFortressBoss extends Render {
 	private static double vertices[][] = EntityFortressBoss.ICOSAHEDRON_VERTICES;
 	private static int indices[][] = EntityFortressBoss.ICOSAHEDRON_INDICES;
 
-	private static final ResourceLocation shieldTexture = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
+	private static final ModelSwordEnergy BULLET_MODEL = new ModelSwordEnergy();
 
 	private static final ModelWight modelHeadOnly = new ModelWight().setRenderHeadOnly(true);
 
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
 		EntityFortressBoss boss = (EntityFortressBoss) entity;
+
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			if(boss.hurtResistantTime == 0) {
+				float lightIntensity = 0.0F;
+				for(int i = 0; i <= 19; i++) {
+					float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
+					if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
+						lightIntensity += shieldAnimationTicks / 20.0F * 2.0F;
+					}
+				}
+				if(lightIntensity > 0.0F)
+					ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
+			} else {
+				ShaderHelper.INSTANCE.addDynLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 1.5F / boss.maxHurtResistantTime * (boss.hurtResistantTime + partialTicks), 0, 0));
+			}
+		}
 
 		if(RenderManager.debugBoundingBox) {
 			GL11.glDepthMask(false);
@@ -74,7 +95,7 @@ public class RenderFortressBoss extends Render {
 		double explode = boss.SHIELD_EXPLOSION;
 
 		float ticks = (float)entity.ticksExisted + partialTicks;
-		this.bindTexture(shieldTexture);
+		this.bindTexture(SHIELD_TEXTURE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
 		GL11.glLoadIdentity();
 		GL11.glPushMatrix();
@@ -92,11 +113,11 @@ public class RenderFortressBoss extends Render {
 				continue;
 			float shieldAnimationTicks = boss.shieldAnimationTicks[i] - 1.0F + partialTicks;
 			if(shieldAnimationTicks > 0 && shieldAnimationTicks <= 20) {
-				tessellator.setColorRGBA_F(0.4F - 0.4F / 20 * (shieldAnimationTicks), 1.0F / 20 * (shieldAnimationTicks), 1F - 1.0F / 20 * (shieldAnimationTicks), 0.8F);
+				tessellator.setColorRGBA_F(0.8F / 20 * (shieldAnimationTicks), 0.5F - 0.5F / 20 * (shieldAnimationTicks), 1F - 1F / 20 * (shieldAnimationTicks), 0.9F);
 			} else if(shieldAnimationTicks > 20 && shieldAnimationTicks <= 40) {
-				tessellator.setColorRGBA_F(0.8F, 0.4F / 20 * (shieldAnimationTicks-20), 0.8F, 0.8F);
+				tessellator.setColorRGBA_F(0.4F, 1F, 1F - 0.9F / 20 * (shieldAnimationTicks-20), 0.95F);
 			} else {
-				tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+				tessellator.setColorRGBA_F(0.4F, 0.8F, 0.9F, 0.25F);
 			}
 			double v3[] = this.vertices[this.indices[i][0]];
 			double v2[] = this.vertices[this.indices[i][1]];
@@ -139,7 +160,7 @@ public class RenderFortressBoss extends Render {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 
 		tessellator.startDrawing(4);
-		tessellator.setColorRGBA_F(0.8F, 0.0F, 1F, 0.5F);
+		tessellator.setColorRGBA_F(0.5F, 0.6F, 1F, 0.5F);
 		tessellator.setBrightness(240);
 		for(int i = 0; i <= 19; i++) {
 			if(!boss.isShieldActive(i))
@@ -156,7 +177,7 @@ public class RenderFortressBoss extends Render {
 			tessellator.addVertex(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
 		}
 		tessellator.draw();
-
+		
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		//if(RenderManager.debugBoundingBox) {
@@ -228,7 +249,7 @@ public class RenderFortressBoss extends Render {
 
 		GL11.glLineWidth(1.0F);
 		tessellator.startDrawing(1);
-		tessellator.setColorRGBA_F(1F, 0.0F, 1F, 1.0F);
+		tessellator.setColorRGBA_F(0.5F, 0.75F, 1F, 1.0F);
 		for(int i = 0; i <= 19; i++) {
 			if(!boss.isShieldActive(i))
 				continue;
@@ -257,7 +278,6 @@ public class RenderFortressBoss extends Render {
 			ray.xCoord = ray.xCoord * 640.0D;
 			ray.yCoord = ray.yCoord * 640.0D;
 			ray.zCoord = ray.zCoord * 640.0D;
-			//pos.yCoord = pos.yCoord + Minecraft.getMinecraft().thePlayer.getDefaultEyeHeight();
 			int hitShield = boss.rayTraceShield(pos, ray, false);
 			if(hitShield >= 0) {
 				double v3[] = this.vertices[this.indices[hitShield][0]];
@@ -274,7 +294,7 @@ public class RenderFortressBoss extends Render {
 				vec2 = vec2.addVector(entity.posX, entity.posY, entity.posZ);
 				vec3 = vec3.addVector(entity.posX, entity.posY, entity.posZ);
 				tessellator.startDrawing(4);
-				tessellator.setColorRGBA_F(0F, 1F, 0F, 1.0F);
+				tessellator.setColorRGBA_F(1F, 0F, 0F, 1.0F);
 				tessellator.addVertex(v1[0]+centerX/len*explode, v1[1]+centerY/len*explode, v1[2]+centerZ/len*explode);
 				tessellator.addVertex(v2[0]+centerX/len*explode, v2[1]+centerY/len*explode, v2[2]+centerZ/len*explode);
 				tessellator.addVertex(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
@@ -283,13 +303,41 @@ public class RenderFortressBoss extends Render {
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 
+		GL11.glPopMatrix();
+
+		if(boss.getGroundAttackTicks() > 0) {
+			GL11.glPushMatrix();
+			GL11.glTranslated(x, y - 2.8D, z);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			this.bindTexture(SHIELD_TEXTURE);
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			float interpTicks = ticks + partialTicks;
+			float uOffsetAttack = interpTicks * 0.01F;
+			float vOffsetAttack = interpTicks * 0.01F;
+			GL11.glTranslatef(uOffsetAttack, vOffsetAttack, 0.0F);
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glDisable(GL11.GL_LIGHTING);
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE);
+			GL11.glScaled(3.8D, 3.8D, 3.8D);
+			GL11.glColor4f(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.6F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
+			BULLET_MODEL.render(0.0625F);
+			GL11.glEnable(GL11.GL_CULL_FACE);
+			GL11.glMatrixMode(GL11.GL_TEXTURE);
+			GL11.glLoadIdentity();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
+		}
+		
 		LightingUtil.INSTANCE.revert();
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 

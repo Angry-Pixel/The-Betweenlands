@@ -836,5 +836,11 @@
 			"boatRowStart1",
 			"boatRowStart2"
 		]
-	}
+	},
+    "possessedScream": {
+        "catagory": "block",
+        "sounds": [
+            "scream4"
+        ]
+    }
 }

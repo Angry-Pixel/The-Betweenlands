@@ -13,12 +13,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.utils.AnimationMathHelper;
 
-public class TileEntityWraithPusher extends TileEntity {
+public class TileEntityPossessedBlock extends TileEntity {
 
 	public int animationTicks;
 	public boolean active;
-
+	AnimationMathHelper headShake = new AnimationMathHelper();
+	public float moveProgress;
 	@Override
     public boolean canUpdate() {
         return true;
@@ -31,7 +33,7 @@ public class TileEntityWraithPusher extends TileEntity {
 			if (active) {
 				activateBlock();
 				if (animationTicks == 0)
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "mob.ghast.scream", 0.25F, 1.25F);
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:possessedScream", 0.25F, 1.25F);
 				if (animationTicks <= 24)
 					animationTicks++;
 				if (animationTicks == 24)
@@ -40,9 +42,9 @@ public class TileEntityWraithPusher extends TileEntity {
 			if (!active)
 				if (animationTicks >= 1)
 					animationTicks--;
-
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+		moveProgress = 1 + headShake.swing(4, 1F, false);
 		if (worldObj.isRemote)
 			if(!active && animationTicks %8 > 0)
 				spawnParticles();
