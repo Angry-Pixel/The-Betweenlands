@@ -40,6 +40,7 @@ public class WorldGenWightTower extends WorldGenerator {
 	private Block spikeTrap = BLBlockRegistry.spikeTrap;
 	private Block swordStone = BLBlockRegistry.itemCage;
 	private Block root = BLBlockRegistry.root;
+	private Block possessedBlock = BLBlockRegistry.possessedBlock;
 
 	private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
 
@@ -308,6 +309,7 @@ public class WorldGenWightTower extends WorldGenerator {
 						rotatedCubeVolume(world, rand, x, y, z, 5, 16, 10, betweenstoneTiles, 0, 3, 1, 6, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 5, 11, 10, Blocks.air, 0, 3, 5, 2, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 5, 17, 10, Blocks.air, 0, 3, 4, 3, direction);
+						rotatedCubeVolume(world, rand, x, y, z, 4, 5, 12, possessedBlock, tower == 0 && direction == 0 ? 5 : tower == 0 && direction == 1 ? 2 : tower == 1 && direction == 0 ? 5 : tower == 1 && direction == 3 ? 3 : tower == 2 && direction == 2 ? 4 : tower == 2 && direction == 3 ? 3 : tower == 3 && direction == 1 ? 2 : 4, 1, 1, 1, direction);
 					}
 
 					//top Floor
@@ -537,7 +539,9 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 6, 24, betweenstoneBricks, 0, 3, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 7, 24, betweenstoneBricks, 0, 2, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 20, 8, 24, betweenstoneBricks, 0, 1, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 5, 23, betweenstoneBricks, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 10, 24, Blocks.air, 0, 3, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 22, 12, 24, possessedBlock, direction == 0 ? 4 : direction == 1 ? 3 : direction == 2 ? 5 : 2, 1, 1, 1, direction);
 
 		//3rd betweenstoneBrickStairs
 		for(int count = 0; count < 6 ;count ++)
