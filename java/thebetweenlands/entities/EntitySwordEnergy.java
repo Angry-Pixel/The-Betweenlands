@@ -15,7 +15,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	AnimationMathHelper pulse = new AnimationMathHelper();
 	public EntitySwordEnergy(World world) {
 		super(world);
-		setSize(8F, 0.5F);
+		setSize(7.5F, 1F);
 	}
 
 	@Override
@@ -24,6 +24,10 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 		dataWatcher.addObject(21, 3.5F);
 		dataWatcher.addObject(22, 3.5F);
 		dataWatcher.addObject(23, 3.5F);
+	}
+
+	@Override
+	public void applyEntityCollision(Entity entity) {
 	}
 
 	@Override

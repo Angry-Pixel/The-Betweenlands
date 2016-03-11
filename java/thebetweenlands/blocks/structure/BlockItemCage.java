@@ -3,6 +3,7 @@ package thebetweenlands.blocks.structure;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.EntitySwordEnergy;
@@ -35,6 +36,11 @@ public class BlockItemCage extends BlockContainer {
     }
 
 	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return null;
+    }
+
+	@Override
 	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
 		if (!world.isRemote) {
 			TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(x, y, z);
@@ -43,15 +49,19 @@ public class BlockItemCage extends BlockContainer {
 				switch (swordStone.type) {
 				case 0:
 					energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
+					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 1:
 					energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
+					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 2:
 					energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
+					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				case 3:
 					energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
+					System.out.println("Block Type: " + swordStone.type + " Entity Seen: " + energyBall);
 					break;
 				}
 			}
