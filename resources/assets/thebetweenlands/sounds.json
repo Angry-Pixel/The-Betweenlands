@@ -650,12 +650,6 @@
 			"grind"
 		]
 	},
-	"wallCreep": {
-		"category": "block",
-		"sounds": [
-			"wallCreep"
-		]
-	},
 	"fig": {
 		"category": "player",
 		"sounds": [
@@ -876,7 +870,7 @@
     "possessedScream": {
         "catagory": "block",
         "sounds": [
-            "scream4"
+            "possessedScream"
         ]
     }
 }
