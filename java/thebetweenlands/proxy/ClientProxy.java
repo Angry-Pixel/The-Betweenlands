@@ -154,7 +154,7 @@ import thebetweenlands.client.render.tileentity.TileEntityTarLootPot2Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityTarLootPot3Renderer;
 import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
-import thebetweenlands.client.render.tileentity.TileEntityWraithPusherRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityPossessedBlockRenderer;
 import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntityRopeNode;
 import thebetweenlands.entities.EntitySwordEnergy;
@@ -249,7 +249,7 @@ import thebetweenlands.tileentities.TileEntityTarLootPot2;
 import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
-import thebetweenlands.tileentities.TileEntityWraithPusher;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 import thebetweenlands.tileentities.connection.Connection;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -385,7 +385,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new TileEntityAspectrusCropRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBLSign.class, new TileEntityBLSignRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new TileEntityRepellerRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWraithPusher.class, new TileEntityWraithPusherRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new TileEntityPossessedBlockRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new TileEntitySpikeTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new TileEntityItemCageRenderer());
 

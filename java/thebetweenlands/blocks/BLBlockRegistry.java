@@ -87,7 +87,7 @@ import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.structure.BlockSpikeTrap;
 import thebetweenlands.blocks.structure.BlockItemCage;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
-import thebetweenlands.blocks.structure.BlockWraithPusher;
+import thebetweenlands.blocks.structure.BlockPossessedBlock;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.blocks.terrain.BlockBetweenstone;
@@ -553,7 +553,7 @@ public class BLBlockRegistry {
 	public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
 	public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 	public static final BlockRope rope = new BlockRope();
-	public static final BlockWraithPusher wraith = new BlockWraithPusher();
+	public static final BlockPossessedBlock possessedBlock = new BlockPossessedBlock();
 	public static final BlockSpikeTrap spikeTrap = new BlockSpikeTrap();
 	public static final BlockItemCage itemCage= new BlockItemCage();
 	// SLABS

@@ -9,23 +9,23 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.tileentities.TileEntityWraithPusher;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 
-public class BlockWraithPusher extends BlockContainer {
+public class BlockPossessedBlock extends BlockContainer {
 
-	public BlockWraithPusher() {
+	public BlockPossessedBlock() {
 		super(Material.rock);
 		setStepSound(Block.soundTypeStone);
 		setBlockUnbreakable();
 		setResistance(6000000.0F);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockTextureName("thebetweenlands:betweenstoneBricks");
-		setBlockName("thebetweenlands.wraithPusher");
+		setBlockName("thebetweenlands.possessedBlock");
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityWraithPusher();
+		return new TileEntityPossessedBlock();
 	}
 
 	@Override

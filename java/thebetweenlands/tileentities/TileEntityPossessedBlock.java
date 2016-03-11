@@ -15,7 +15,7 @@ import net.minecraft.util.DamageSource;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
-public class TileEntityWraithPusher extends TileEntity {
+public class TileEntityPossessedBlock extends TileEntity {
 
 	public int animationTicks;
 	public boolean active;
@@ -33,7 +33,7 @@ public class TileEntityWraithPusher extends TileEntity {
 			if (active) {
 				activateBlock();
 				if (animationTicks == 0)
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "mob.ghast.scream", 0.25F, 1.25F);
+					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:possessedScream", 0.25F, 1.25F);
 				if (animationTicks <= 24)
 					animationTicks++;
 				if (animationTicks == 24)

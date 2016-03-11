@@ -69,7 +69,7 @@ import thebetweenlands.tileentities.TileEntityTarLootPot2;
 import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
-import thebetweenlands.tileentities.TileEntityWraithPusher;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -124,7 +124,7 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityBLSign.class, "signBL");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityConnectionFastener.class, "fairyLightsFastener");
-		registerTileEntity(TileEntityWraithPusher.class, "wraithPusher");
+		registerTileEntity(TileEntityPossessedBlock.class, "possessedBlock");
 		registerTileEntity(TileEntitySpikeTrap.class, "spikeTrap");
 		registerTileEntity(TileEntityItemCage.class, "itemCage");
 	}

@@ -3,8 +3,6 @@ package thebetweenlands.blocks.plants.crops;
 import java.util.ArrayList;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.model.ModelBase;
@@ -25,6 +23,8 @@ import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockBLGenericCrop extends BlockCrops {
 	public static final int MATURE_CROP = 7, DECAYED_CROP = 8;
@@ -44,7 +44,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		setCreativeTab(BLCreativeTabs.plants);
 		this.type = blockName;
 		setBlockName("thebetweenlands." + type);
-		setBlockTextureName("thebetweenlands:" + type);
+		setBlockTextureName("thebetweenlands:" + "crops/" + type +"3"); //shows mature crop
 	}
 
 	/**

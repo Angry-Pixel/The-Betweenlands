@@ -4,12 +4,12 @@ import net.minecraft.client.model.ModelRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.tileentities.TileEntityWraithPusher;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelWraithPusher extends ModelBase {
+public class ModelPossessedBlock extends ModelBase {
   //fields
     ModelRenderer head;
     ModelRenderer foreHead;
@@ -38,7 +38,7 @@ public class ModelWraithPusher extends ModelBase {
     ModelRenderer rightInFinger;
     ModelRenderer rightThumb;
   
-  public ModelWraithPusher() {
+  public ModelPossessedBlock() {
     textureWidth = 64;
     textureHeight = 64;
     
@@ -149,7 +149,7 @@ public class ModelWraithPusher extends ModelBase {
       setRotation(rightThumb, 0.3490659F, -0.6981317F, 0F);
   }
   
-	public void render(TileEntityWraithPusher tile) {
+	public void render(TileEntityPossessedBlock tile) {
 		if (tile.active || !tile.active && tile.animationTicks > 8) {
 			GL11.glPushMatrix();
 			GL11.glEnable(GL11.GL_BLEND);
