@@ -12,12 +12,13 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.utils.AnimationMathHelper;
 
 public class TileEntityPossessedBlock extends TileEntity {
 
-	public int animationTicks;
+	public int animationTicks, coolDown;
 	public boolean active;
 	AnimationMathHelper headShake = new AnimationMathHelper();
 	public float moveProgress;
@@ -36,12 +37,17 @@ public class TileEntityPossessedBlock extends TileEntity {
 					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:possessedScream", 0.25F, 1.25F);
 				if (animationTicks <= 24)
 					animationTicks++;
-				if (animationTicks == 24)
+				if (animationTicks == 24) {
 					setActive(false);
+					coolDown = 200;
+				}
 			}
-			if (!active)
+			if (!active) {
 				if (animationTicks >= 1)
 					animationTicks--;
+				if(coolDown >= 0)
+					coolDown--;
+			}
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
 		moveProgress = 1 + headShake.swing(4, 1F, false);
@@ -78,12 +84,22 @@ public class TileEntityPossessedBlock extends TileEntity {
 
 	@SuppressWarnings("unchecked")
 	protected Entity findEnemyToAttack() {
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D).expand(2D, 1D, 2D));
-			for (int i = 0; i < list.size(); i++) {
+		int meta = getBlockMetadata();
+		float x = 0, z = 0;
+		if(meta == 4)
+			x = -1.25F;
+		if(meta == 5)
+			x = 1.25F;
+		if(meta == 2)
+			z = -1.25F;
+		if(meta == 3)
+			z = 1.25F;
+		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord + x, yCoord, zCoord + z, xCoord + 1D + x, yCoord + 1D, zCoord + 1D + z));
+		for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
 					if (entity instanceof EntityPlayer)
-						if (!active && animationTicks == 0)
+						if (!active && animationTicks == 0 && coolDown <= 0)
 							setActive(true);
 			}
 		return null;
@@ -94,20 +110,23 @@ public class TileEntityPossessedBlock extends TileEntity {
 		int meta = getBlockMetadata();
 		float x = 0, z = 0;
 		if(meta == 4)
-			x = -1F/16 * animationTicks;
+			x = -1.25F;
 		if(meta == 5)
-			x = 1F/16 * animationTicks;
+			x = 1.25F;
 		if(meta == 2)
-			z = -1F/16 * animationTicks;
+			z = -1.25F;
 		if(meta == 3)
-			z = 1F/16 * animationTicks;
+			z = 1.25F;
 		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord + x, yCoord, zCoord + z, xCoord + 1D + x, yCoord + 1D, zCoord + 1D + z));
-		if (animationTicks >= 1)
+		if (animationTicks == 1)
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
-					if (entity instanceof EntityPlayer)
+					if (entity instanceof EntityPlayer) {
+						int Knockback = 4;
+						entity.addVelocity(MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.2F, 0.3D, -MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.2F);
 						((EntityLivingBase) entity).attackEntityFrom(DamageSource.generic, 2);
+					}
 			}
 		return null;
 	}
