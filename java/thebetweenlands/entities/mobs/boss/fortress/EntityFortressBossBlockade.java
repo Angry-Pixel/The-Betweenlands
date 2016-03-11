@@ -213,7 +213,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 				double ez = this.posZ + rp.zCoord;
 				if(this.getOwner() != null) {
 					sx = this.getOwner().posX;
-					sy = this.getOwner().posY;
+					sy = this.getOwner().boundingBox.minY + (this.getOwner().boundingBox.maxY - this.getOwner().boundingBox.minY) / 2.0D;
 					sz = this.getOwner().posZ;
 				}
 				this.worldObj.spawnParticle("portal", sx, sy, sz, ex - sx, ey - sy, ez - sz);

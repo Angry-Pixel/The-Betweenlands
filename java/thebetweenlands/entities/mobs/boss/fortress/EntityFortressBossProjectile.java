@@ -142,13 +142,12 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			if (source.getEntity() instanceof EntityPlayer) {
 				ItemStack heldItem = ((EntityPlayer)source.getEntity()).getHeldItem();
 				if(heldItem != null && heldItem.getItem() == BLItemRegistry.shockwaveSword)
-					if(!this.worldObj.isRemote) {
+					if(!this.worldObj.isRemote && source.getEntity().riddenByEntity == null) {
 						this.mountEntity(source.getEntity());
+						return true;
 					}
-				return true;
-			} else {
-				return false;
 			}
+			return false;
 		}
 	}
 

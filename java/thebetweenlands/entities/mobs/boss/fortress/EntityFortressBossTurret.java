@@ -130,12 +130,12 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	public double getAnchorZ() {
 		return this.anchorZ;
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
-    }
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D);
+	}
 
 	@Override
 	public boolean canBeCollidedWith() {
@@ -248,7 +248,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		for (int i = 0; i < hitEntities.size(); ++i) {
 			Entity entity = (Entity)hitEntities.get(i);
 			if (entity.canBeCollidedWith()) {
-				float f = 0.3F;
+				float f = 0.65F / 2.0F + 0.1F + 0.1F;
 				AxisAlignedBB entityBB = entity.boundingBox.expand((double)f, (double)f, (double)f);
 				MovingObjectPosition result = entityBB.calculateIntercept(currentPos, nextPos);
 				if (result != null) {

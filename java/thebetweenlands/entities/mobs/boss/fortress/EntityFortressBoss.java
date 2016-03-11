@@ -12,6 +12,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -306,7 +307,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 				ray.yCoord = ray.yCoord * 64.0D;
 				ray.zCoord = ray.zCoord * 64.0D;
 				Vec3 pos = Vec3.createVectorHelper(entity.posX, entity.posY + entity.getEyeHeight() + (entity instanceof EntityPlayer && ((EntityPlayer)entity).isSneaking() ? -0.08D : 0.0D), entity.posZ);
-				if(this.hasShield() /*&& (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode)*/) {
+				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode)) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
 						/*if(!this.worldObj.isRemote && entity.isSneaking())
@@ -422,24 +423,32 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 					this.setFloating(true);
 				}
 			}
-		}
 
-		List<EntityLivingBase> currentlyTrackedEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(this.anchorRadius*2, 512, this.anchorRadius*2));
-		Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
-		while(it.hasNext()) {
-			EntityLivingBase living = it.next();
-			if(living.getDistance(this.anchorX, living.posY, this.anchorZ) > this.anchorRadius || Math.abs(living.posY - this.anchorY) > this.anchorRadius)
-				it.remove();
-		}
-		for(EntityLivingBase living : this.trackedEntities) {
-			if(!currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
-				living.setLocationAndAngles(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, living.rotationYaw, living.rotationPitch);
-				living.fallDistance = 0.0F;
-				living.addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 2));
+			//Teleport entities back
+			List<EntityLivingBase> currentlyTrackedEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+			Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
+			while(it.hasNext()) {
+				EntityLivingBase living = it.next();
+				if(living.getDistance(this.anchorX, living.posY, this.anchorZ) > this.anchorRadius || Math.abs(living.posY - this.anchorY) > this.anchorRadius)
+					it.remove();
 			}
+			for(EntityLivingBase living : this.trackedEntities) {
+				if(living != null && living.isEntityAlive() && !currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
+					if(living instanceof EntityPlayerMP) {
+						EntityPlayerMP player = (EntityPlayerMP) living;
+						player.mountEntity(null);
+						player.playerNetServerHandler.setPlayerLocation(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, player.rotationYaw, player.rotationPitch);
+					} else {
+						living.setLocationAndAngles(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, living.rotationYaw, living.rotationPitch);
+					}
+					living.fallDistance = 0.0F;
+					living.addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 2));
+					currentlyTrackedEntities.add(living);
+				}
+			}
+			this.trackedEntities.clear();
+			this.trackedEntities.addAll(currentlyTrackedEntities);
 		}
-		this.trackedEntities.clear();
-		this.trackedEntities.addAll(currentlyTrackedEntities);
 
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;

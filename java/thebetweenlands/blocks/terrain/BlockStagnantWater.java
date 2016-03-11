@@ -2,6 +2,7 @@ package thebetweenlands.blocks.terrain;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.decay.DecayManager;
-import thebetweenlands.recipes.BLMaterial;
 
 /**
  * Created by Bart on 29-8-2015.
@@ -19,9 +19,12 @@ import thebetweenlands.recipes.BLMaterial;
 public class BlockStagnantWater extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	protected IIcon stillIcon, flowingIcon;
+
 	public BlockStagnantWater() {
-		super(BLFluidRegistry.stagnantWater, BLMaterial.stagnantWater);
-		setBlockName("thebetweenlands.stagnantWater");
+		super(BLFluidRegistry.stagnantWater, Material.water);
+		this.setBlockName("thebetweenlands.stagnantWater");
+		this.setLightLevel(0.5F);
+		this.setMaxScaledLight(0);
 	}
 
 	@Override
