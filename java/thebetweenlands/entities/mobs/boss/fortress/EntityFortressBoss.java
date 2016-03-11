@@ -701,4 +701,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	protected boolean canDespawn() {
 		return false;
 	}
+
+	@Override
+	protected String getLivingSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:fortressBossLiving" + randomSound;
+	}
 }

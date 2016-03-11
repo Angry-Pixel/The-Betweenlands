@@ -554,6 +554,30 @@
 			"templeGuardianDeath"
 		]
 	},
+	"fortressBossLiving1": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossLiving1"
+		]
+	},
+	"fortressBossLiving2": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossLiving2"
+		]
+	},
+	"fortressBossLiving3": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossLiving3"
+		]
+	},
+	"fortressBossLiving4": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossLiving4"
+		]
+	},
 	"sorry": {
 		"category": "player",
 		"sounds": [
