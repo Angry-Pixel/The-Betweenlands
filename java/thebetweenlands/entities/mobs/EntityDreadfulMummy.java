@@ -17,7 +17,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         super(p_i1738_1_);
     }
 
-    static final int SPAWN_MUMMY_COOLDOWN = 300;
+    static final int SPAWN_MUMMY_COOLDOWN = 350;
     int untilSpawnMummy = 0;
     static final int SPAWN_SLUDGE_COOLDOWN = 150;
     int untilSpawnSludge = 0;
@@ -61,19 +61,21 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
     public void onUpdate() {
         super.onUpdate();
         if (getEntityToAttack() != null) {
-//            if (untilSpawnMummy <= 0) spawnMummy();
+            if (untilSpawnMummy <= 0) spawnMummy();
             if (untilSpawnSludge <= 0) spawnSludge();
         }
         eatPrey = (EntityLivingBase)getPrey();
         if (eatPrey != null) {
             updateEatPrey();
-            if (eatPrey.isDead) setPrey(null);
         }
 
         if (untilSpawnMummy > 0) untilSpawnMummy--;
         if (untilSpawnSludge > 0) untilSpawnSludge--;
         if (eatPreyTimer > 0 && eatPrey != null) eatPreyTimer--;
-        if (eatPreyTimer <= 0) {setPrey(null); eatPreyTimer = 60;}
+        if (eatPreyTimer <= 0) {
+            if (!worldObj.isRemote) setPrey(null);
+            eatPreyTimer = 60;
+        }
     }
 
     private void spawnMummy() {
@@ -112,6 +114,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
         eatPrey.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
         eatPrey.fallDistance = 0;
         if (ticksExisted % 10 == 0) eatPrey.attackEntityFrom(DamageSource.causeMobDamage(this), 3);
+        if (eatPrey.getHealth() <= 0 && !worldObj.isRemote) setPrey(null);
     }
 
     private void setPrey(Entity prey) {
