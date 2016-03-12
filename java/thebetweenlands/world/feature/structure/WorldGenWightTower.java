@@ -35,6 +35,7 @@ public class WorldGenWightTower extends WorldGenerator {
 	private Block betweenstoneTilesMossy = BLBlockRegistry.betweenstoneTilesMossy;
 	private Block betweenstoneTilesCracked = BLBlockRegistry.betweenstoneTilesCracked;
 	private Block betweenstoneTilesCollapsing = BLBlockRegistry.betweenstoneTilesCollapsing;
+	private Block betweenstoneTilesMossyCollapsing = BLBlockRegistry.betweenstoneTilesMossyCollapsing;
 	private Block betweenstoneBrickStairs = BLBlockRegistry.betweenstoneBrickStairs;
 	private Block betweenstoneBrickStairsMossy = BLBlockRegistry.betweenstoneBrickStairsMossy;
 	private Block betweenstoneBrickSlab = BLBlockRegistry.betweenstoneBrickSlab;
@@ -92,6 +93,10 @@ public class WorldGenWightTower extends WorldGenerator {
 			return betweenstoneTilesCracked;
 		}
 		return betweenstoneTiles;
+	}
+	
+	public Block getRandomCollapsingTiles(Random rand) {
+		return rand.nextBoolean() ? betweenstoneTilesCollapsing : betweenstoneTilesMossyCollapsing;
 	}
 
 	public Block getRandomSmoothBetweenstone(Random rand) {
@@ -706,6 +711,8 @@ public class WorldGenWightTower extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneStairsSmooth : getRandomSmoothBetweenstoneStairs(rand), blockMeta, 2);
 						else if(blockType == betweenstoneSmooth)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), blockMeta, 2);
+						else if(blockType == betweenstoneTilesCollapsing)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 						}
@@ -726,6 +733,8 @@ public class WorldGenWightTower extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneStairsSmooth : getRandomSmoothBetweenstoneStairs(rand), blockMeta, 2);
 						else if(blockType == betweenstoneSmooth)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), blockMeta, 2);
+						else if(blockType == betweenstoneTilesCollapsing)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -746,6 +755,8 @@ public class WorldGenWightTower extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneStairsSmooth : getRandomSmoothBetweenstoneStairs(rand), blockMeta, 2);
 						else if(blockType == betweenstoneSmooth)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), blockMeta, 2);
+						else if(blockType == betweenstoneTilesCollapsing)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 						}
@@ -766,6 +777,8 @@ public class WorldGenWightTower extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneStairsSmooth : getRandomSmoothBetweenstoneStairs(rand), blockMeta, 2);
 						else if(blockType == betweenstoneSmooth)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), blockMeta, 2);
+						else if(blockType == betweenstoneTilesCollapsing)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 						}
