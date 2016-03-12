@@ -435,6 +435,7 @@ public class BLBlockRegistry {
 	public static final Block betweenstoneTilesMossy = new BlockBLGenericDeco("betweenstoneTilesMossy", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTilesCracked = new BlockBLGenericDeco("betweenstoneTilesCracked", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTilesCollapsing = new BlockBLCollapsing("betweenstoneTilesCollapsing", Material.rock, false).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block betweenstoneTilesCollapsingMossy = new BlockBLCollapsing("betweenstoneTilesCollapsingMossy", Material.rock, false).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	
 	public static final Block betweenstoneSmoothMossy = new BlockBLGenericDeco("betweenstoneSmoothMossy", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block chiseledBetweenstone = new BlockBLGenericDeco("chiseledBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
