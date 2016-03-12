@@ -89,7 +89,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 
 	private int blockadeSpawnTicks = -1;
 
-	public int deathTicks;
+	public int deathTicks = 0;
 
 	public EntityFortressBoss(World world) {
 		super(world);
@@ -107,7 +107,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(/*320.0D*/40);//TODO: Undo
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(320.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0F);
 	}
 
@@ -741,8 +741,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		}
 
 		++this.deathTicks;
-
-		//TODO: Death animation
 
 		if(!this.worldObj.isRemote) {
 			this.dataWatcher.updateObject(SHIELD_ROTATION_DW, (float)((this.deathTicks/3.0F) * (this.deathTicks/3.0F)));
