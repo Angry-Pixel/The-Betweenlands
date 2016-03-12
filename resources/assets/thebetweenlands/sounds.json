@@ -614,6 +614,12 @@
 			"fortressBossNope"
 		]
 	},
+	"fortressBossShieldDown": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossShieldDown"
+		]
+	},
 	"fortressBossDeath": {
 		"category": "hostile",
 		"sounds": [
