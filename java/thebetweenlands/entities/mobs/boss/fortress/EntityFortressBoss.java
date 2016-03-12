@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -740,8 +741,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	protected void onDeathUpdate() {
 		if(this.deathTicks == 0) {
 			if(!this.worldObj.isRemote) {
+				this.worldObj.playSoundEffect(this.anchorX, this.anchorY, this.anchorZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
 				this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
-				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
 				AxisAlignedBB checkAABB = this.boundingBox.expand(16, 16, 16);
 				List<Entity> trackedEntities = this.worldObj.getEntitiesWithinAABB(EntityWight.class, this.boundingBox.expand(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<Entity> it = trackedEntities.iterator();
@@ -767,7 +768,22 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		}
 		this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
 		if(!this.worldObj.isRemote) {
+			if (this.deathTicks > 100 && this.deathTicks % 5 == 0) {
+				int xp = 800;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+				}
+			}
+
 			if(this.deathTicks > 130) {
+				int xp = 3000;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+				}
 				for(int c = 0; c < 4; c++) {
 					double yawAngle = Math.PI * 2.0D / 6;
 					for(int i = 0; i < 6; i++) {
@@ -836,8 +852,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 
 	@Override
 	public void playSound(String sound, float volume, float pitch) {
-		if(sound.equals(this.getDeathSound()))
+		if(sound != null && sound.equals(this.getDeathSound())) {
 			pitch = 1.0F;
+			volume = 3.0F;
+		}
 		this.worldObj.playSoundAtEntity(this, sound, volume, pitch);
 	}
 }
