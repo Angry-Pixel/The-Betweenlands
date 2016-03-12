@@ -248,6 +248,14 @@ tile.thebetweenlands.tarLootPot3.name=Pot of Chance
 tile.thebetweenlands.tarBeastSpawner.name=Tar Beast Spawner
 tile.thebetweenlands.thatchSlope.name=Thatch Roof
 tile.thebetweenlands.rubberTap.name=Weedwood Bucket
+tile.thebetweenlands.betweenstoneTilesCollapsing.name=Weak Betweenstone Tiles
+tile.thebetweenlands.betweenstoneTilesCollapsing.name=Weak Mossy Betweenstone Tiles
+tile.thebetweenlands.betweenstoneSmoothMossy.name=Mossy Smooth Betweenstone
+tile.thebetweenlands.betweenstoneBrickWallMossy.name=Mossy Betweenstone Brick Wall
+tile.thebetweenlands.betweenstoneTilesCracked.name=Cracked Betweenstone Tiles
+tile.thebetweenlands.betweenstoneBrickStairsMossy.name=Mossy Betweenstone Brick Stairs
+tile.thebetweenlands.betweenstoneBricksMossy.name=Mossy Betweenstone Brick
+tile.thebetweenlands.betweenstoneTilesMossy.name=Mossy Betweenstone Tiles
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom

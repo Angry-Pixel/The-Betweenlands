@@ -692,6 +692,12 @@
 			"spike"
 		]
 	},
+	"crumble": {
+		"category": "block",
+		"sounds": [
+			"crumble"
+		]
+	},
 	"fig": {
 		"category": "player",
 		"sounds": [
