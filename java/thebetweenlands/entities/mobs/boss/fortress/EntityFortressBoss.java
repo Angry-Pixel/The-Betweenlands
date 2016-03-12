@@ -717,4 +717,15 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		int randomSound = rand.nextInt(3) + 1;
 		return "thebetweenlands:fortressBossLiving" + randomSound;
 	}
+	
+	@Override
+	protected String getHurtSound() {
+		int randomSound = rand.nextInt(3) + 1;
+		return "thebetweenlands:fortressBossHurt" + randomSound;
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:fortressBossDeath";
+	}
 }

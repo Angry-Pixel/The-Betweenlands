@@ -62,7 +62,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "tile.piston.out", 1.25F, 1.0F);
+				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:spike", 1.25F, 1.0F);
 			if (animationTicks <= 20)
 				animationTicks++;
 			if (animationTicks == 20)

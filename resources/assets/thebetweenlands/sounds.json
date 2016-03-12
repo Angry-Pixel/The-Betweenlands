@@ -584,10 +584,40 @@
 			"fortressBossSummonProjectiles"
 		]
 	},
+	"fortressBossHurt1": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossHurt1"
+		]
+	},
+	"fortressBossHurt2": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossHurt2"
+		]
+	},
+	"fortressBossHurt3": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossHurt3"
+		]
+	},
+	"fortressBossHurt4": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossHurt4"
+		]
+	},
 	"fortressBossNope": {
 		"category": "hostile",
 		"sounds": [
 			"fortressBossNope"
+		]
+	},
+	"fortressBossDeath": {
+		"category": "hostile",
+		"sounds": [
+			"fortressBossDeath"
 		]
 	},
 	"sorry": {
@@ -648,6 +678,12 @@
 		"category": "block",
 		"sounds": [
 			"grind"
+		]
+	},
+	"spike": {
+		"category": "block",
+		"sounds": [
+			"spike"
 		]
 	},
 	"fig": {
