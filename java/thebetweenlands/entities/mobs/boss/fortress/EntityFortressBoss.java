@@ -70,7 +70,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 
 	private double anchorX, anchorY, anchorZ, anchorRadius;
 
-	public float shieldRotationYaw, shieldRotationPitch, shieldRotationRoll, lastShieldRotationYaw, lastShieldRotationPitch, lastShieldRotationRoll;
+	public float shieldRotationYaw, shieldRotationPitch, shieldRotationRoll, lastShieldRotationYaw, lastShieldRotationPitch, lastShieldRotationRoll, shieldExplosion, lastShieldExplosion;
 
 	private int groundTicks = 0;
 
@@ -129,12 +129,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		return "fortressBoss";
 	}
 
-	public float getShieldExplosion() {
-		if(this.isEntityAlive()) {
-			return 0.2F;
-		} else {
-			return 0.2F + (this.deathTicks % 16) / 16.0F * (this.deathTicks / 60.0F);
-		}
+	public float getShieldExplosion(float partialTicks) {
+		return this.lastShieldExplosion + (this.shieldExplosion - this.lastShieldExplosion) * partialTicks;
 	}
 
 	public void setAnchor(double x, double y, double z, double radius) {
@@ -233,7 +229,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 			double centerY = (v1[1]+v2[1]+v3[1])/3;
 			double centerZ = (v1[2]+v2[2]+v3[2])/3;
 			double len = Math.sqrt(centerX*centerX + centerY*centerY + centerZ*centerZ);
-			double a = len + this.getShieldExplosion();
+			double a = len + this.getShieldExplosion(1.0F);
 			Vec3 center = Vec3.createVectorHelper(centerX, centerY, centerZ);
 			centerX += this.posX + SHIELD_OFFSET_X;
 			centerY += this.posY + SHIELD_OFFSET_Y;
@@ -428,6 +424,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;
 		this.lastShieldRotationRoll = this.shieldRotationRoll;
+
+		this.lastShieldExplosion = this.shieldExplosion;
+		if(this.isEntityAlive()) {
+			this.shieldExplosion = 0.2F;
+		} else {
+			this.shieldExplosion = 0.2F + (this.deathTicks % 16) / 16.0F * (this.deathTicks / 60.0F);
+		}
 
 		float shieldRotation = 0.0F;
 		if(this.worldObj.isRemote) {
@@ -736,18 +739,34 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	@Override
 	protected void onDeathUpdate() {
 		if(this.deathTicks == 0) {
-			this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
-			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
+			if(!this.worldObj.isRemote) {
+				this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
+				AxisAlignedBB checkAABB = this.boundingBox.expand(16, 16, 16);
+				List<Entity> trackedEntities = this.worldObj.getEntitiesWithinAABB(EntityWight.class, this.boundingBox.expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+				Iterator<Entity> it = trackedEntities.iterator();
+				while(it.hasNext()) {
+					Entity entity = it.next();
+					if(entity.getDistance(this.anchorX, entity.posY, this.anchorZ) > this.anchorRadius || Math.abs(entity.posY - this.anchorY) > this.anchorRadius)
+						it.remove();
+				}
+				for(Entity entity : trackedEntities) {
+					if(entity instanceof EntityWight || entity instanceof EntityFortressBossSpawner || entity instanceof EntityFortressBossProjectile
+							|| entity instanceof EntityFortressBossTurret || entity instanceof EntityFortressBossBlockade) {
+						entity.setDead();
+					}
+				}
+			}
 		}
 
 		++this.deathTicks;
 
+		this.dataWatcher.updateObject(SHIELD_ROTATION_DW, (float)((this.deathTicks/3.0F) * (this.deathTicks/3.0F)));
+		for(int i = 0; i <= 19; i++) {
+			this.activeShields[i] = i * (130.0F / 19.0F) > this.deathTicks;
+		}
+		this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
 		if(!this.worldObj.isRemote) {
-			this.dataWatcher.updateObject(SHIELD_ROTATION_DW, (float)((this.deathTicks/3.0F) * (this.deathTicks/3.0F)));
-			for(int i = 0; i <= 19; i++) {
-				this.activeShields[i] = i * (130.0F / 19.0F) > this.deathTicks;
-			}
-			this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
 			if(this.deathTicks > 130) {
 				for(int c = 0; c < 4; c++) {
 					double yawAngle = Math.PI * 2.0D / 6;

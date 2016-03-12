@@ -92,7 +92,7 @@ public class RenderFortressBoss extends Render {
 
 		LightingUtil.INSTANCE.setLighting(255);
 
-		double explode = boss.getShieldExplosion();
+		double explode = boss.getShieldExplosion(partialTicks);
 
 		float ticks = (float)entity.ticksExisted + partialTicks;
 		this.bindTexture(SHIELD_TEXTURE);
