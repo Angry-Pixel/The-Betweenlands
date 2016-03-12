@@ -34,6 +34,7 @@ public class WorldGenWightTower extends WorldGenerator {
 	private Block betweenstoneTiles = BLBlockRegistry.betweenstoneTiles;
 	private Block betweenstoneTilesMossy = BLBlockRegistry.betweenstoneTilesMossy;
 	private Block betweenstoneTilesCracked = BLBlockRegistry.betweenstoneTilesCracked;
+	private Block betweenstoneTilesCollapsing = BLBlockRegistry.betweenstoneTilesCollapsing;
 	private Block betweenstoneBrickStairs = BLBlockRegistry.betweenstoneBrickStairs;
 	private Block betweenstoneBrickStairsMossy = BLBlockRegistry.betweenstoneBrickStairsMossy;
 	private Block betweenstoneBrickSlab = BLBlockRegistry.betweenstoneBrickSlab;
@@ -343,7 +344,7 @@ public class WorldGenWightTower extends WorldGenerator {
 						rotatedCubeVolume(world, rand, x, y, z, 8, 9, 11, betweenstoneBricks, 0, 1, 1, 5, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 4, 10, 11, betweenstoneBrickWall, 0, 1, 1, 5, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 8, 10, 11, betweenstoneBrickWall, 0, 1, 1, 5, direction);
-						rotatedCubeVolume(world, rand, x, y, z, 5, 10, 10, betweenstoneTiles, 0, 3, 1, 6, direction);
+						rotatedCubeVolume(world, rand, x, y, z, 5, 10, 10, betweenstoneTilesCollapsing, 0, 3, 1, 6, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 4, 11, 11, betweenstoneBricks, 0, 1, 1, 5, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 8, 11, 11, betweenstoneBricks, 0, 1, 1, 5, direction);
 						rotatedCubeVolume(world, rand, x, y, z, 4, 12, 11, betweenstoneBrickWall, 0, 1, 1, 5, direction);
