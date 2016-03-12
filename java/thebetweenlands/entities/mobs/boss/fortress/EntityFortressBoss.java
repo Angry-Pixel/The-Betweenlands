@@ -61,7 +61,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		{7,10,3}, {7,6,10}, {7,11,6}, {11,0,6}, {0,1,6},
 		{6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11}
 	};
-	public static final float SHIELD_EXPLOSION = 0.2F;
 
 	private boolean[] activeShields = new boolean[20];
 
@@ -128,6 +127,14 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	@Override
 	public String pageName() {
 		return "fortressBoss";
+	}
+
+	public float getShieldExplosion() {
+		if(this.isEntityAlive()) {
+			return 0.2F;
+		} else {
+			return 0.2F + (this.deathTicks % 16) / 16.0F * (this.deathTicks / 60.0F);
+		}
 	}
 
 	public void setAnchor(double x, double y, double z, double radius) {
@@ -226,7 +233,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 			double centerY = (v1[1]+v2[1]+v3[1])/3;
 			double centerZ = (v1[2]+v2[2]+v3[2])/3;
 			double len = Math.sqrt(centerX*centerX + centerY*centerY + centerZ*centerZ);
-			double a = len + SHIELD_EXPLOSION;
+			double a = len + this.getShieldExplosion();
 			Vec3 center = Vec3.createVectorHelper(centerX, centerY, centerZ);
 			centerX += this.posX + SHIELD_OFFSET_X;
 			centerY += this.posY + SHIELD_OFFSET_Y;
@@ -418,6 +425,43 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	public void onUpdate() {
 		super.onUpdate();
 
+		this.lastShieldRotationYaw = this.shieldRotationYaw;
+		this.lastShieldRotationPitch = this.shieldRotationPitch;
+		this.lastShieldRotationRoll = this.shieldRotationRoll;
+
+		float shieldRotation = 0.0F;
+		if(this.worldObj.isRemote) {
+			shieldRotation = this.dataWatcher.getWatchableObjectFloat(SHIELD_ROTATION_DW);
+			this.anchorX = this.dataWatcher.getWatchableObjectFloat(ANCHOR_X_DW);
+			this.anchorY = this.dataWatcher.getWatchableObjectFloat(ANCHOR_Y_DW);
+			this.anchorZ = this.dataWatcher.getWatchableObjectFloat(ANCHOR_Z_DW);
+			this.anchorRadius = this.dataWatcher.getWatchableObjectFloat(ANCHOR_RADIUS_DW);
+			this.unpackShieldData(this.dataWatcher.getWatchableObjectInt(SHIELD_DW));
+		} else {
+			if(this.isEntityAlive()) {
+				shieldRotation = this.ticksExisted;
+				this.dataWatcher.updateObject(SHIELD_ROTATION_DW, shieldRotation+1);
+			}
+			this.dataWatcher.updateObject(ANCHOR_X_DW, (float)this.anchorX);
+			this.dataWatcher.updateObject(ANCHOR_Y_DW, (float)this.anchorY);
+			this.dataWatcher.updateObject(ANCHOR_Z_DW, (float)this.anchorZ);
+			this.dataWatcher.updateObject(ANCHOR_RADIUS_DW, (float)this.anchorRadius);
+		}
+		int activeShields = 0;
+		for(int i = 0; i <= 19; i++) {
+			if(this.isShieldActive(i))
+				activeShields++;
+		}
+		if(this.isEntityAlive()) {
+			this.shieldRotationYaw = shieldRotation * (1.0F + 6.0F / 20.0F * (20-activeShields));
+			this.shieldRotationPitch = shieldRotation * (1.4F + 8.0F / 20.0F * (20-activeShields));
+			this.shieldRotationRoll = shieldRotation * (1.6F + 10.0F / 20.0F * (20-activeShields));
+		} else {
+			this.shieldRotationYaw = shieldRotation * 2.0F;
+			this.shieldRotationPitch = 0;
+			this.shieldRotationRoll = 0;
+		}
+
 		if(this.isEntityAlive()) {
 			if(!this.worldObj.isRemote) {
 				if(this.isFloating() && this.posY < this.anchorY) {
@@ -461,34 +505,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 				this.trackedEntities.clear();
 				this.trackedEntities.addAll(currentlyTrackedEntities);
 			}
-
-			this.lastShieldRotationYaw = this.shieldRotationYaw;
-			this.lastShieldRotationPitch = this.shieldRotationPitch;
-			this.lastShieldRotationRoll = this.shieldRotationRoll;
-
-			float shieldRotation;
-			if(this.worldObj.isRemote) {
-				shieldRotation = this.dataWatcher.getWatchableObjectFloat(SHIELD_ROTATION_DW);
-				this.anchorX = this.dataWatcher.getWatchableObjectFloat(ANCHOR_X_DW);
-				this.anchorY = this.dataWatcher.getWatchableObjectFloat(ANCHOR_Y_DW);
-				this.anchorZ = this.dataWatcher.getWatchableObjectFloat(ANCHOR_Z_DW);
-				this.anchorRadius = this.dataWatcher.getWatchableObjectFloat(ANCHOR_RADIUS_DW);
-			} else {
-				shieldRotation = this.ticksExisted;
-				this.dataWatcher.updateObject(SHIELD_ROTATION_DW, shieldRotation+1);
-				this.dataWatcher.updateObject(ANCHOR_X_DW, (float)this.anchorX);
-				this.dataWatcher.updateObject(ANCHOR_Y_DW, (float)this.anchorY);
-				this.dataWatcher.updateObject(ANCHOR_Z_DW, (float)this.anchorZ);
-				this.dataWatcher.updateObject(ANCHOR_RADIUS_DW, (float)this.anchorRadius);
-			}
-			int activeShields = 0;
-			for(int i = 0; i <= 19; i++) {
-				if(this.isShieldActive(i))
-					activeShields++;
-			}
-			this.shieldRotationYaw = shieldRotation * (1.0F + 6.0F / 20.0F * (20-activeShields));
-			this.shieldRotationPitch = shieldRotation * (1.4F + 8.0F / 20.0F * (20-activeShields));
-			this.shieldRotationRoll = shieldRotation * (1.6F + 10.0F / 20.0F * (20-activeShields));
 
 			AxisAlignedBB checkArea = this.boundingBox.expand(32, 16, 32);
 			List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
@@ -642,7 +658,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 						this.dataWatcher.updateObject(GROUND_ATTACK_STATE_DW, (byte) 0);
 					}
 				} else {
-					this.unpackShieldData(this.dataWatcher.getWatchableObjectInt(SHIELD_DW));
 					for(int i = 0; i <= 19; i++) {
 						if(this.shieldAnimationTicks[i] == 0 && this.worldObj.rand.nextInt(50) == 0)
 							this.shieldAnimationTicks[i] = 40;
@@ -730,7 +745,24 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		//TODO: Death animation
 
 		if(!this.worldObj.isRemote) {
-			if(this.deathTicks > 160) {
+			this.dataWatcher.updateObject(SHIELD_ROTATION_DW, (float)((this.deathTicks/3.0F) * (this.deathTicks/3.0F)));
+			for(int i = 0; i <= 19; i++) {
+				this.activeShields[i] = i * (130.0F / 19.0F) > this.deathTicks;
+			}
+			this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
+			if(this.deathTicks > 130) {
+				for(int c = 0; c < 4; c++) {
+					double yawAngle = Math.PI * 2.0D / 6;
+					for(int i = 0; i < 6; i++) {
+						Vec3 dir = Vec3.createVectorHelper(Math.sin(yawAngle * i), (c-2)/4.0D*2.0D, Math.cos(yawAngle * i));
+						dir = dir.normalize();
+						float speed = 0.8F;
+						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this);
+						bullet.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ, 0, 0);
+						bullet.setThrowableHeading(dir.xCoord, dir.yCoord, dir.zCoord, speed, 0.0F);
+						this.worldObj.spawnEntityInWorld(bullet);
+					}
+				}
 				this.setDead();
 			}
 		}
@@ -783,5 +815,12 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		} else {
 			super.playLivingSound();
 		}
+	}
+
+	@Override
+	public void playSound(String sound, float volume, float pitch) {
+		if(sound.equals(this.getDeathSound()))
+			pitch = 1.0F;
+		this.worldObj.playSoundAtEntity(this, sound, volume, pitch);
 	}
 }

@@ -92,7 +92,7 @@ public class RenderFortressBoss extends Render {
 
 		LightingUtil.INSTANCE.setLighting(255);
 
-		double explode = boss.SHIELD_EXPLOSION;
+		double explode = boss.getShieldExplosion();
 
 		float ticks = (float)entity.ticksExisted + partialTicks;
 		this.bindTexture(SHIELD_TEXTURE);
@@ -177,7 +177,7 @@ public class RenderFortressBoss extends Render {
 			tessellator.addVertex(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
 		}
 		tessellator.draw();
-		
+
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		//if(RenderManager.debugBoundingBox) {
@@ -331,7 +331,7 @@ public class RenderFortressBoss extends Render {
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glPopMatrix();
 		}
-		
+
 		LightingUtil.INSTANCE.revert();
 
 		GL11.glEnable(GL11.GL_LIGHTING);
