@@ -23,6 +23,7 @@ import thebetweenlands.entities.mobs.IEntityBL;
 public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	public static final int TARGET_DW = 17;
 	public static final int OWNER_DW = 18;
+	public static final int DEFLECTION_STATE_DW = 19;
 
 	private boolean particlesSpawned = false;
 	private double anchorX, anchorY, anchorZ;
@@ -47,6 +48,15 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		super.entityInit();
 		this.dataWatcher.addObject(TARGET_DW, "");
 		this.dataWatcher.addObject(OWNER_DW, "");
+		this.dataWatcher.addObject(DEFLECTION_STATE_DW, (byte)0);
+	}
+
+	public void setDeflectable(boolean deflectable) {
+		this.dataWatcher.updateObject(DEFLECTION_STATE_DW, (byte)(deflectable ? 1 : 0));
+	}
+
+	public boolean isDeflectable() {
+		return this.dataWatcher.getWatchableObjectByte(DEFLECTION_STATE_DW) == (byte) 1;
 	}
 
 	protected String getTargetUUID() {
@@ -155,6 +165,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		nbt.setDouble("anchorZ", this.anchorZ);
 		nbt.setString("targetUUID", this.getTargetUUID());
 		nbt.setInteger("attackDelay", this.attackDelay);
+		nbt.setBoolean("deflectable", this.isDeflectable());
 	}
 
 	@Override
@@ -165,6 +176,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.setTargetUUID(nbt.getString("targetUUID"));
 		this.attackDelay = nbt.getInteger("attackDelay");
+		this.setDeflectable(nbt.getBoolean("deflectable"));
 	}
 
 	@Override
@@ -221,6 +233,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 										this.getTarget().boundingBox.minY + (this.getTarget().boundingBox.maxY - this.getTarget().boundingBox.minY) / 2.0D,
 										this.getTarget().boundingBox.minZ + (this.getTarget().boundingBox.maxZ - this.getTarget().boundingBox.minZ) / 2.0D)).normalize();
 						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this.getOwner());
+						bullet.setDeflectable(this.isDeflectable());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						float speed = 0.5F;
 						bullet.setThrowableHeading(diff.xCoord, diff.yCoord, diff.zCoord, speed, 0.0F);

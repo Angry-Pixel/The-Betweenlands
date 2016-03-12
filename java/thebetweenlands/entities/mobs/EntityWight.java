@@ -108,7 +108,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
+		this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6D);
 		this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(76.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);

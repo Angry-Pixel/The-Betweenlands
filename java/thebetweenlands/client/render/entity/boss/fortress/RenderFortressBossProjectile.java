@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelSwordEnergy;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossProjectile;
 
 public class RenderFortressBossProjectile extends Render {
 	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
@@ -14,10 +15,10 @@ public class RenderFortressBossProjectile extends Render {
 
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
-		renderBullet(entity, x, y, z, rotationYaw, partialTickTime);
+		renderBullet((EntityFortressBossProjectile)entity, x, y, z, rotationYaw, partialTickTime);
 	}
 
-	public void renderBullet(Entity energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
+	public void renderBullet(EntityFortressBossProjectile energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y - 0.6D * 0.6D, z);
@@ -35,7 +36,11 @@ public class RenderFortressBossProjectile extends Render {
 		GL11.glScaled(0.6D, 0.6D, 0.6D);
 		if(energyBall.ridingEntity != null)
 			GL11.glDisable(GL11.GL_CULL_FACE);
-		GL11.glColor4f(0.8F, 0.6F, 0.4F, 1.0F);
+		if(!energyBall.isDeflectable()) {
+			GL11.glColor4f(0.8F, 0.6F, 0.4F, 1.0F);
+		} else {
+			GL11.glColor4f(0.15F, 1.0F, 0.35F, 1.0F);
+		}
 		MODEL.render(0.0625F);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);

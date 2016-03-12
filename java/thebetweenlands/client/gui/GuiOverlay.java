@@ -279,9 +279,9 @@ public class GuiOverlay extends Gui {
 				}
 			}
 			if(boss != null) {
-				float maxHealth = ((IBossBL) boss).getMaxHealth();
-				float health = ((IBossBL) boss).getHealth();
-				IChatComponent name = ((IBossBL) boss).func_145748_c_();
+				float maxHealth = ((IBossBL) boss).getMaxBossHealth();
+				float health = ((IBossBL) boss).getBossHealth();
+				IChatComponent name = ((IBossBL) boss).getBossName();
 				mc.getTextureManager().bindTexture(bossBarTexture);
 				int texWidth = 256;
 				int texHeight = 32/2;

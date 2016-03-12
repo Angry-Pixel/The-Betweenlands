@@ -2,6 +2,11 @@ package thebetweenlands.network.handlers;
 
 import java.util.HashMap;
 
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSound;
@@ -16,10 +21,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.client.audio.EntityIdleSound;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
@@ -30,14 +36,19 @@ import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import thebetweenlands.proxy.ClientProxy;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 
-import com.google.common.collect.Maps;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class ClientPacketHandler {
+
+	////// Entity idle sounds /////
+	@SubscribePacket
+	public static void handlePacketPlayIdleSound(PacketPlayIdleSound packet) {
+		World world = FMLClientHandler.instance().getWorldClient();
+		if(world != null && world.isRemote) {
+			Entity source = packet.getEntity(world);
+			if(source != null && Minecraft.getMinecraft().getSoundHandler() != null && source.isEntityAlive()) {
+				Minecraft.getMinecraft().getSoundHandler().playSound(new EntityIdleSound(source, new ResourceLocation(packet.name), packet.volume, packet.pitch));
+			}
+		}
+	}
 
 	////// Druid //////
 	@SubscribePacket
