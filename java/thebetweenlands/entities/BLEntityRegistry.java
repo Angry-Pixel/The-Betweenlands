@@ -86,8 +86,8 @@ public class BLEntityRegistry
 		registerEntity(36, EntityFortressBoss.class, "fortressBoss", 0x005C3D, 0x2D4231, 64, 1, true);
 		registerEntity(37, EntityFortressBossTurret.class, "fortressBossTurret", 64, 20, false);
 		registerEntity(38, EntityFortressBossProjectile.class, "fortressBossProjectile", 64, 5, true);
-		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 0x005C3D, 0x2D4231, 64, 20, false);
-		registerEntity(40, EntityFortressBossBlockade.class, "fortressBossBlockade", 0x005C3D, 0x2D4231, 64, 20, false);
+		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 64, 20, false);
+		registerEntity(40, EntityFortressBossBlockade.class, "fortressBossBlockade", 64, 20, false);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

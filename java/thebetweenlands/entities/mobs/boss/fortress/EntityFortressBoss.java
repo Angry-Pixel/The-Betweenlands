@@ -424,6 +424,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 				}
 			}
 
+			if(this.getDistance(this.anchorX, this.posY, this.anchorZ) > this.anchorRadius || Math.abs(this.posY - this.anchorY) > this.anchorRadius) {
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
+				this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
+			}
+			
 			//Teleport entities back
 			List<EntityLivingBase> currentlyTrackedEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(this.anchorRadius*2, 512, this.anchorRadius*2));
 			Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
@@ -483,10 +488,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		if(!players.isEmpty()) {
 			if(!this.worldObj.isRemote) {
 				this.dataWatcher.updateObject(SHIELD_DW, this.packShieldData());
-
-				if(this.getDistance(this.anchorX, this.posY, this.anchorZ) > this.anchorRadius || Math.abs(this.posY - this.anchorY) > this.anchorRadius) {
-					this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
-				}
 
 				if(this.isFloating() && this.posY >= this.anchorY) {
 					AxisAlignedBB checkAABB = this.boundingBox.expand(16, 16, 16);

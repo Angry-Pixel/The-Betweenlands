@@ -9,9 +9,12 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnData {
 	public float pulseFloat;
+	public float pos1, pos2, pos3, pos4, lastPos1, lastPos2, lastPos3, lastPos4;
 	AnimationMathHelper pulse = new AnimationMathHelper();
 	public EntitySwordEnergy(World world) {
 		super(world);
@@ -57,6 +60,15 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 				worldObj.spawnEntityInWorld(entityItem);
 				setDead();
 			}
+		} else {
+			this.lastPos1 = this.pos1;
+			this.lastPos2 = this.pos2;
+			this.lastPos3 = this.pos3;
+			this.lastPos4 = this.pos4;
+			this.pos1 = this.getSwordPart1Pos();
+			this.pos2 = this.getSwordPart2Pos();
+			this.pos3 = this.getSwordPart3Pos();
+			this.pos4 = this.getSwordPart4Pos();
 		}
 	}
 
