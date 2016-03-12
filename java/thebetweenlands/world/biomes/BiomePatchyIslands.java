@@ -38,7 +38,7 @@ extends BiomeGenBaseBetweenlands
 		setColors(0x314D31, 0x314D31);
 		setWeight(20);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT, 3);
-		this.setBiomeName("Patchy Islands");
+		this.setBiomeName("patchyIslands");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte)1);
 		this.addFeature(new PatchyIslandNoiseFeature())

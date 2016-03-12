@@ -32,8 +32,8 @@ public class BLBiomeRegistry {
 		coarseIslands = new BiomeCoarseIslands(ConfigHandler.BIOME_ID_COARSE_ISLANDS);
 		deepWater = new BiomeDeepWaters(ConfigHandler.BIOME_ID_DEEP_WATER);
 		patchyIslands = new BiomePatchyIslands(ConfigHandler.BIOME_ID_PATCHY_ISLANDS);
-		marsh1 = new BiomeMarsh(ConfigHandler.BIOME_ID_MARSH1, "Marsh 1", new Marsh1NoiseFeature());
-		marsh2 = new BiomeMarsh(ConfigHandler.BIOME_ID_MARSH2, "Marsh 2", new Marsh2NoiseFeature());
+		marsh1 = new BiomeMarsh(ConfigHandler.BIOME_ID_MARSH1, "marsh1", new Marsh1NoiseFeature());
+		marsh2 = new BiomeMarsh(ConfigHandler.BIOME_ID_MARSH2, "marsh2", new Marsh2NoiseFeature());
 		sludgePlains = new BiomeSludgePlains(ConfigHandler.BIOME_ID_SLUDGE_PLAINS);
 
 		swampLands.createMutation();

@@ -1224,7 +1224,16 @@ item.thebetweenlands.light.weedwood_lantern.name=Weedwood Lantern
 item.thebetweenlands.light_connection.name=Weedwood Lanterns
 
 # Locations
-location.wilderness.name=Wilderness
+location.wilderness.name=Wilderness - %s
 location.wightTower.name=Wight Fortress
 location.wightTowerPuzzle.name=Loft
 location.wightTowerBoss.name=Primordial Malevolence
+
+# Biomes
+biome.swamplands.name=Swamplands
+biome.coarseIslands.name=Coarse Islands
+biome.deepWaters.name=Deep Waters
+biome.patchyIslands.name=Patchy Islands
+biome.marsh1.name=Marsh
+biome.marsh2.name=Marsh
+biome.sludgePlains.name=Sludge Plains

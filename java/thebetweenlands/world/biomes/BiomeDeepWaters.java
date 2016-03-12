@@ -32,7 +32,7 @@ extends BiomeGenBaseBetweenlands
 		setColors(0x314D31, 0x314D31);
 		setWeight(15);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT - 20, 10);
-		this.setBiomeName("Deep Waters");
+		this.setBiomeName("deepWaters");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.swampGrass, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte) 5);
 		this.waterColorMultiplier = 0x1b3944;

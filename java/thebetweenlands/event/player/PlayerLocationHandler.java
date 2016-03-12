@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -77,8 +78,11 @@ public class PlayerLocationHandler {
 				List<LocationStorage> locations = this.getLocations(player);
 				String prevLocation = this.currentLocation;
 				if(locations.isEmpty()) {
-					if(this.currentLocation.length() > 0)
-						this.currentLocation = StatCollector.translateToLocal("location.wilderness.name");
+					BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
+					String biomeName = StatCollector.translateToLocal("biome." + biome.biomeName + ".name");
+					if(biomeName.equals("biome." + biome.biomeName + ".name"))
+						biomeName = biome.biomeName; //Not localized
+					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);
 				} else {
 					LocationStorage highestLocation = null;
 					for(LocationStorage storage : locations) {
@@ -101,10 +105,11 @@ public class PlayerLocationHandler {
 			if(this.titleTicks > 0) {
 				int width = event.resolution.getScaledWidth();
 				int height = event.resolution.getScaledHeight();
-				float scale = 3.0F;
+				float scale = 2F;
 				double strWidth = TheBetweenlands.proxy.getCustomFontRenderer().getStringWidth(this.currentLocation) * scale;
+				double strHeight = (TheBetweenlands.proxy.getCustomFontRenderer().FONT_HEIGHT) * scale;
 				double strX = width / 2.0D - strWidth / 2.0F;
-				double strY = height / 4.0D;
+				double strY = height / 5.0D;
 				GL11.glPushMatrix();
 				GL11.glTranslated(strX, strY, 0);
 				GL11.glScaled(scale, scale, 1.0F);
@@ -115,11 +120,12 @@ public class PlayerLocationHandler {
 				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
 				GL11.glColor4f(1, 1, 1, fade);
 				GL11.glDisable(GL11.GL_CULL_FACE);
-				this.renderTexturedRect(strX - 12, strY + 17, strX + 2, strY + 40, 0, 9 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + 2, strY + 17, strX + strWidth / 2.0D - 10, strY + 40, 9 / 128.0D, 58 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D - 10, strY + 17, strX + strWidth / 2.0D + 10, strY + 40, 58 / 128.0D, 70 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D + 10, strY + 17, strX + strWidth - 2, strY + 40, 70 / 128.0D, 119 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth - 2, strY + 17, strX + strWidth + 12, strY + 40, 119 / 128.0D, 1, 0, 1);
+				double sidePadding = 6;
+				this.renderTexturedRect(strX - sidePadding*scale, strY + strHeight - 5*scale, strX - sidePadding*scale + 9*scale, strY + strHeight - 5*scale + 16*scale, 0, 9 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX - sidePadding*scale + 9*scale, strY + strHeight - 5*scale, strX + strWidth / 2.0D - 6*scale, strY + strHeight - 5*scale + 16*scale, 9 / 128.0D, 58 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D - 6*scale, strY + strHeight - 5*scale, strX + strWidth / 2.0D + 6*scale, strY + strHeight - 5*scale + 16*scale, 58 / 128.0D, 70 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D + 6*scale, strY + strHeight - 5*scale, strX + strWidth + sidePadding*scale - 9*scale, strY + strHeight - 5*scale + 16*scale, 70 / 128.0D, 119 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth + sidePadding*scale - 9*scale, strY + strHeight - 5*scale, strX + strWidth + sidePadding*scale, strY + strHeight - 5*scale + 16*scale, 119 / 128.0D, 1, 0, 1);
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		}

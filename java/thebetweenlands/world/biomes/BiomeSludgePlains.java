@@ -33,7 +33,7 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 		setColors(0x314D31, 0x314D31);
 		setWeight(5);
 		this.setHeightAndVariation(WorldProviderBetweenlands.LAYER_HEIGHT + 8, 2);
-		this.setBiomeName("Sludge Plains");
+		this.setBiomeName("sludgePlains");
 		this.setBlocks(BLBlockRegistry.betweenstone, BLBlockRegistry.swampDirt, BLBlockRegistry.mud, BLBlockRegistry.mud, BLBlockRegistry.betweenlandsBedrock);
 		this.setFillerBlockHeight((byte) 1);
 		this.addFeature(new FlatLandNoiseFeature())
