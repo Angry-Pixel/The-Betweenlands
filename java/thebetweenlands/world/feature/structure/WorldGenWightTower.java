@@ -12,6 +12,9 @@ import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.tileentities.TileEntityItemCage;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
@@ -41,7 +44,10 @@ public class WorldGenWightTower extends WorldGenerator {
 	private Block swordStone = BLBlockRegistry.itemCage;
 	private Block root = BLBlockRegistry.root;
 	private Block possessedBlock = BLBlockRegistry.possessedBlock;
-
+	private Block chest = BLBlockRegistry.weedwoodChest;
+	private Block lootPot1 = BLBlockRegistry.lootPot1;
+	private Block lootPot2 = BLBlockRegistry.lootPot2;
+	private Block lootPot3 = BLBlockRegistry.lootPot3;
 	private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
 
 	public WorldGenWightTower() {
@@ -611,7 +617,9 @@ public class WorldGenWightTower extends WorldGenerator {
 
 		//floor 1
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolished, 0, 8, 1, 8, 0);
-		//floor2
+		placeChest(world, rand, xx + 15, yy + 24, zz + 15, 0);
+		placeChest(world, rand, xx + 16, yy + 24, zz + 15, 0);
+		//floor2 TODO Add teleporter block
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);
@@ -621,6 +629,13 @@ public class WorldGenWightTower extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 35, 14, betweenstoneTiles, 0, 1, 1, 4, 0);
 
 		return true;
+	}
+
+	private void placeChest(World world, Random rand, int x, int y, int z, int directionMeta) {
+		world.setBlock(x, y, z, chest, directionMeta, 2);
+		TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y, z);
+		if (lootChest != null)
+			LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
 	}
 
 	public void setSwordStone(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta, byte type) {
