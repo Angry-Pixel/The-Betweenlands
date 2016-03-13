@@ -23,6 +23,15 @@
 			}
 		]
 	},
+	"ambientWightFortress": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "ambience/WightFortressAmbience",
+				"stream": true
+			}
+		]
+	},
 	"druidChant": {
 		"category": "block",
 		"sounds": [
