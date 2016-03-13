@@ -461,6 +461,108 @@
 			"peatMummyEmerge"
 		]
 	},
+	"dreadfulPeatMummyEmerge": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyEmerge"
+		]
+	},
+	"dreadfulPeatMummyBite": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyBite"
+		]
+	},
+	"dreadfulPeatMummyRetch": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyRetch"
+		]
+	},
+	"dreadfulPeatMummySwipe": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummySwipe"
+		]
+	},
+	"dreadfulPeatMummyScream": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyScream"
+		]
+	},
+	"dreadfulPeatMummyLick": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyEmerge"
+		]
+	},
+	"dreadfulPeatMummyDeath": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyDeath"
+		]
+	},
+	"dreadfulPeatMummyLiving1": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyLiving1"
+		]
+	},
+	"dreadfulPeatMummyLiving2": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyLiving2"
+		]
+	},
+	"dreadfulPeatMummyLiving3": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyLiving3"
+		]
+	},
+	"dreadfulPeatMummyLiving4": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyLiving4"
+		]
+	},
+	"dreadfulPeatMummyLiving5": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyLiving5"
+		]
+	},
+	"dreadfulPeatMummyHurt1": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyHurt1"
+		]
+	},
+	"dreadfulPeatMummyHurt2": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyHurt2"
+		]
+	},
+	"dreadfulPeatMummyHurt3": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyHurt3"
+		]
+	},
+	"dreadfulPeatMummyHurt4": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyHurt4"
+		]
+	},
+	"dreadfulPeatMummyHurt5": {
+		"category": "hostile",
+		"sounds": [
+			"dreadfulPeatMummyHurt5"
+		]
+	},
 	"templeGuardianMeleeLiving1": {
 		"category": "hostile",
 		"sounds": [
