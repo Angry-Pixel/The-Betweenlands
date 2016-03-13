@@ -31,8 +31,8 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
@@ -147,17 +147,22 @@ public class FogHandler {
 			fogEnd *= Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
 		}
 
-		//Primordial malevolence boss fog
+		//Wight tower fog
 		List<LocationStorage> locations = PlayerLocationHandler.getLocations(player);
 		LocationStorage highestLocation = null;
 		for(LocationStorage storage : locations) {
 			if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
 				highestLocation = storage;
 		}
-		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER && highestLocation.getName().equals("translate:wightTowerBoss")) {
-			fogStart = 12.0F;
-			fogEnd = 30.0F;
-			multiplier = 0.1F;
+		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER) {
+			if(highestLocation.getName().equals("translate:wightTowerBoss")) {
+				fogStart = 12.0F;
+				fogEnd = 30.0F;
+				multiplier = 0.1F;
+			} else {
+				fogStart /= 4.5f / (1.0F + uncloudedStrength * 4.0F);
+				fogEnd /= 3.0f / (1.0F + uncloudedStrength * 2.0F);
+			}
 		}
 
 		fogStart = Math.max(fogStart, 1);

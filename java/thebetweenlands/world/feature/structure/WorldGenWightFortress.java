@@ -1,5 +1,6 @@
 package thebetweenlands.world.feature.structure;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -15,8 +16,11 @@ import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.loot.LootBasicList;
 import thebetweenlands.world.loot.LootUtil;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
+import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -68,7 +72,11 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
-		StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0);
+		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0);
+		for(LocationStorage location : addedLocations) {
+			location.addAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER));
+			location.getChunkData().markDirty();
+		}
 		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1);
 		StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 2);
 		return generateStructure(world, rand, x, y, z);
@@ -94,7 +102,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		return betweenstoneTiles;
 	}
-	
+
 	public Block getRandomCollapsingTiles(Random rand) {
 		return rand.nextBoolean() ? betweenstoneTilesCollapsing : betweenstoneTilesMossyCollapsing;
 	}
@@ -102,15 +110,15 @@ public class WorldGenWightFortress extends WorldGenerator {
 	public Block getRandomSmoothBetweenstone(Random rand) {
 		return rand.nextBoolean() ? betweenstoneSmooth : betweenstoneSmoothMossy;
 	}
-	
+
 	public Block getRandomSmoothBetweenstoneStairs(Random rand) {
 		return rand.nextBoolean() ? betweenstoneStairsSmooth : betweenstoneStairsSmoothMossy;
 	}
-	
+
 	public Block getRandomBetweenstoneBrickStairs(Random rand) {
 		return rand.nextBoolean() ? betweenstoneBrickStairs : betweenstoneBrickStairsMossy;
 	}
-	
+
 	public boolean generateStructure(World world, Random rand, int xx, int yy, int zz) {
 		// air just to erase old one :P
 		for (int xa = xx; xa <= xx + 32; ++xa) {
@@ -693,7 +701,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	public void rotatedCubeVolume(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
 		//special cases here
-			
+
 		switch (direction) {
 		case 0:
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
@@ -715,7 +723,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
-						}
+					}
 			break;
 		case 1:
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
@@ -759,7 +767,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
-						}
+					}
 			break;
 		case 3:
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
@@ -781,7 +789,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
-						}
+					}
 			break;
 		}
 	}

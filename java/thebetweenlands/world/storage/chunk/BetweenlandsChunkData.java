@@ -204,8 +204,8 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 					Class<? extends ChunkStorage> storageClass = ChunkStorage.getStorageClass(type);
 					if(storageClass == null)
 						throw new Exception("Chunk storage type not mapped!");
-					Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(Chunk.class);
-					ChunkStorage storage = ctor.newInstance(this.getChunk());
+					Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(Chunk.class, BetweenlandsChunkData.class);
+					ChunkStorage storage = ctor.newInstance(this.getChunk(), this);
 					storage.readFromNBT(storageCompound.getCompoundTag("storage"));
 					this.storage.add(storage);
 				}

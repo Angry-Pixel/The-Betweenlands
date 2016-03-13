@@ -13,7 +13,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public class DebugHandlerChunkData {
 	public static final DebugHandlerChunkData INSTANCE = new DebugHandlerChunkData();

@@ -35,7 +35,7 @@ import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class EntityWight extends EntityMob implements IEntityBL {
 	public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute("bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");

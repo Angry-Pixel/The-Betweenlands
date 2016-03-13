@@ -1,16 +1,20 @@
 package thebetweenlands.world.storage.chunk.storage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class StorageHelper {
-	public static void addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer) {
+	public static List<LocationStorage> addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer) {
+		List<LocationStorage> addedLocations = new ArrayList<LocationStorage>();
 		int sx = MathHelper.floor_double(area.minX / 16.0D);
 		int sz = MathHelper.floor_double(area.minZ / 16.0D);
 		int ex = MathHelper.floor_double(area.maxX / 16.0D);
@@ -24,10 +28,13 @@ public class StorageHelper {
 				double cez = Math.min(area.maxZ, (cz+1) * 16);
 				AxisAlignedBB clampedArea = AxisAlignedBB.getBoundingBox(csx, area.minY, csz, cex, area.maxY, cez);
 				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
-				chunkData.getStorage().add(new LocationStorage(chunk, name, clampedArea, type).setLayer(layer));
+				LocationStorage location = new LocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+				addedLocations.add(location);
+				chunkData.getStorage().add(location);
 				chunkData.markDirty();
 			}
 		}
+		return addedLocations;
 	}
 
 	public static void removeArea(World world, String name, AxisAlignedBB area) {

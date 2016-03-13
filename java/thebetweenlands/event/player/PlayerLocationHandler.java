@@ -34,8 +34,8 @@ import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class PlayerLocationHandler {
 	public static final PlayerLocationHandler INSTANCE = new PlayerLocationHandler();

@@ -1,11 +1,18 @@
-package thebetweenlands.world.storage.chunk.storage;
+package thebetweenlands.world.storage.chunk.storage.location;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
+import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
 
 public class LocationStorage extends ChunkStorage {
 	public static enum EnumLocationType {
@@ -30,13 +37,14 @@ public class LocationStorage extends ChunkStorage {
 	private AxisAlignedBB area;
 	private EnumLocationType type;
 	private int layer;
+	private final List<LocationAmbience> ambience = new ArrayList<LocationAmbience>();
 
-	public LocationStorage(Chunk chunk) {
-		super(chunk);
+	public LocationStorage(Chunk chunk, BetweenlandsChunkData data) {
+		super(chunk, data);
 	}
 
-	public LocationStorage(Chunk chunk, String name, AxisAlignedBB area, EnumLocationType type) {
-		super(chunk);
+	public LocationStorage(Chunk chunk, BetweenlandsChunkData data, String name, AxisAlignedBB area, EnumLocationType type) {
+		super(chunk, data);
 		this.name = name;
 		this.area = area;
 		if(type == null)
@@ -51,6 +59,19 @@ public class LocationStorage extends ChunkStorage {
 
 	public int getLayer() {
 		return this.layer;
+	}
+
+	public LocationStorage addAmbience(LocationAmbience ambience) {
+		this.ambience.add(ambience);
+		return this;
+	}
+
+	public boolean hasAmbience() {
+		return !this.ambience.isEmpty();
+	}
+
+	public List<LocationAmbience> getAmbiences() {
+		return this.ambience;
 	}
 
 	public String getLocalizedName() {
@@ -73,6 +94,14 @@ public class LocationStorage extends ChunkStorage {
 		this.area = AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
 		this.layer = nbt.getInteger("layer");
+		this.ambience.clear();
+		NBTTagList ambienceTagList = nbt.getTagList("ambience", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < ambienceTagList.tagCount(); i++) {
+			NBTTagCompound ambienceNBT = ambienceTagList.getCompoundTagAt(i);
+			LocationAmbience ambience = LocationAmbience.readFromNBT(ambienceNBT);
+			if(ambience != null)
+				this.ambience.add(ambience);
+		}
 	}
 
 	@Override
@@ -86,6 +115,15 @@ public class LocationStorage extends ChunkStorage {
 		nbt.setDouble("maxZ", this.area.maxZ);
 		nbt.setString("type", this.type.name);
 		nbt.setInteger("layer", this.layer);
+		NBTTagList ambienceTagList = new NBTTagList();
+		for(LocationAmbience ambience : this.ambience) {
+			if(ambience != null) {
+				NBTTagCompound ambienceNBT = new NBTTagCompound();
+				ambience.writeToNBT(ambienceNBT);
+				ambienceTagList.appendTag(ambienceNBT);
+			}
+		}
+		nbt.setTag("ambience", ambienceTagList);
 	}
 
 	public boolean isAreaEqual(AxisAlignedBB other) {

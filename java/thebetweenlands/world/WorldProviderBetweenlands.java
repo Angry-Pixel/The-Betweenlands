@@ -1,5 +1,7 @@
 package thebetweenlands.world;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -17,11 +19,14 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.world.BetweenlandsWorldData;
 
 /**
@@ -256,6 +261,20 @@ extends WorldProvider
 				m = 80;
 			}
 		}
+
+		//Wight tower fog
+		List<LocationStorage> locations = PlayerLocationHandler.getLocations(player);
+		LocationStorage highestLocation = null;
+		for(LocationStorage storage : locations) {
+			if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
+				highestLocation = storage;
+		}
+		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER) {
+			if(!highestLocation.getName().equals("translate:wightTowerBoss")) {
+				m = 80;
+			}
+		}
+
 		if(!ShaderHelper.INSTANCE.canUseShaders()) {
 			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()
 					|| WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
