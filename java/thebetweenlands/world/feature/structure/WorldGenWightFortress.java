@@ -18,7 +18,7 @@ import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.storage.chunk.storage.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
 
-public class WorldGenWightTower extends WorldGenerator {
+public class WorldGenWightFortress extends WorldGenerator {
 
 	private int length = -1;
 	private int width = -1;
@@ -59,7 +59,7 @@ public class WorldGenWightTower extends WorldGenerator {
 	private Block lootPot3 = BLBlockRegistry.lootPot3;
 	private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
 
-	public WorldGenWightTower() {
+	public WorldGenWightFortress() {
 		//these sizes are subject to change
 		length = 13;
 		width = 13;
