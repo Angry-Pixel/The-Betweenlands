@@ -19,7 +19,7 @@ public class LocationAmbienceType extends AmbienceType {
 		this.sound = sound;
 	}
 
-	private List<LocationStorage> getAmbientLocations() {
+	protected List<LocationStorage> getAmbientLocations() {
 		List<LocationStorage> locations = PlayerLocationHandler.getLocations(this.getPlayer());
 		Iterator<LocationStorage> locationIT = locations.iterator();
 		while(locationIT.hasNext()) {
@@ -30,7 +30,7 @@ public class LocationAmbienceType extends AmbienceType {
 		return locations;
 	}
 
-	private LocationStorage getHighestAmbientLocation() {
+	protected LocationStorage getHighestAmbientLocation() {
 		List<LocationStorage> ambientLocations = this.getAmbientLocations();
 		LocationStorage highestLocation = null;
 		for(LocationStorage location : ambientLocations) {
@@ -42,7 +42,17 @@ public class LocationAmbienceType extends AmbienceType {
 		return highestLocation;
 	}
 
-	private boolean hasAmbienceType(LocationStorage location) {
+	protected LocationStorage getHighestLocation() {
+		List<LocationStorage> ambientLocations = PlayerLocationHandler.getLocations(this.getPlayer());
+		LocationStorage highestLocation = null;
+		for(LocationStorage location : ambientLocations) {
+			if(highestLocation == null || highestLocation.getLayer() < location.getLayer())
+				highestLocation = location;
+		}
+		return highestLocation;
+	}
+
+	protected boolean hasAmbienceType(LocationStorage location) {
 		for(LocationAmbience ambience : location.getAmbiences())
 			if(ambience.type.equals(this.ambience))
 				return true;

@@ -19,7 +19,12 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new CaveAmbienceType());
 
 		//Locations
-		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, new ResourceLocation("thebetweenlands:ambientWightFortress")));
+		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, new ResourceLocation("thebetweenlands:ambientWightFortress")) {
+			@Override
+			public boolean isActive() {
+				return super.isActive() && !this.getHighestLocation().getName().equals("translate:wightTowerBoss");
+			}
+		});
 
 		//Events
 		AmbienceManager.INSTANCE.registerAmbience(new EventAmbienceType(EventSpoopy.class, new ResourceLocation("thebetweenlands:ambientSpoopy"), 0));
