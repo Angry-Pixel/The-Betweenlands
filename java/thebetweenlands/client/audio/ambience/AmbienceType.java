@@ -45,6 +45,11 @@ public abstract class AmbienceType {
 	 */
 	public abstract int getPriority();
 
+	/**
+	 * Returns the ambient music track.
+	 * Return null if you don't want to play a track (e.g. when you want to silence other ambient tracks).
+	 * @return
+	 */
 	public abstract ResourceLocation getSound();
 
 	public float getVolume() {

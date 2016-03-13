@@ -143,11 +143,13 @@ public class AmbienceManager {
 
 	private void playSound(AmbienceSound sound, int delay) {
 		this.playingAmbiences.add(sound);
-		if(delay == 0) {
-			Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-		} else {
-			this.delayedAmbiences.add(sound);
-			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(sound, delay);
+		if(sound.type.getSound() != null) {
+			if(delay == 0) {
+				Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+			} else {
+				this.delayedAmbiences.add(sound);
+				Minecraft.getMinecraft().getSoundHandler().playDelayedSound(sound, delay);
+			}
 		}
 	}
 

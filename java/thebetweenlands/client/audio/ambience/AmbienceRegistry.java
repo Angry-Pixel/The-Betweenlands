@@ -25,6 +25,12 @@ public class AmbienceRegistry {
 				return super.isActive() && !this.getHighestLocation().getName().equals("translate:wightTowerBoss");
 			}
 		});
+		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, null) { //Silences the other ambient tracks
+			@Override
+			public boolean isActive() {
+				return super.isActive() && this.getHighestLocation().getName().equals("translate:wightTowerBoss");
+			}
+		});
 
 		//Events
 		AmbienceManager.INSTANCE.registerAmbience(new EventAmbienceType(EventSpoopy.class, new ResourceLocation("thebetweenlands:ambientSpoopy"), 0));

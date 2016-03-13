@@ -14,7 +14,7 @@ public class ItemRingOfRecruitment extends ItemRing implements IManualEntryItem 
 		super();
 		this.setMaxDamage(450);
 		this.setUnlocalizedName("thebetweenlands.ringOfRecruitment");
-		this.setTextureName("ringOfRecruitment");
+		this.setTextureName("thebetweenlands:ringOfRecruitment");
 	}
 
 	@Override
