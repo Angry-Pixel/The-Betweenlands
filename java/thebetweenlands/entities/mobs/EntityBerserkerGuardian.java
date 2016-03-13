@@ -24,17 +24,17 @@ public class EntityBerserkerGuardian extends EntityTempleGuardian implements IEn
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-//		float vel = (float) Math.sqrt(Math.pow(posX - prevPosX, 2) + Math.pow(posZ - prevPosZ, 2));
-//		if (getCharging() && chargingTimer < 30 && vel < 0.01) {
-//			playSound("thebetweenlands:templeGuardianBerserkerImpact", 1, 1);
-//			setCharging(false);
-//			chargingTimer = -1;
-//			chargeAnim.setTimer(0);
-//			float speed = 1f;
-//			float x = -speed * (float) Math.sin(-rotationYaw * Math.PI / 180);
-//			float z = -speed * (float) Math.cos(-rotationYaw * Math.PI / 180);
-//			moveEntity(x, 1, z);
-//		}
+		//		float vel = (float) Math.sqrt(Math.pow(posX - prevPosX, 2) + Math.pow(posZ - prevPosZ, 2));
+		//		if (getCharging() && chargingTimer < 30 && vel < 0.01) {
+		//			playSound("thebetweenlands:templeGuardianBerserkerImpact", 1, 1);
+		//			setCharging(false);
+		//			chargingTimer = -1;
+		//			chargeAnim.setTimer(0);
+		//			float speed = 1f;
+		//			float x = -speed * (float) Math.sin(-rotationYaw * Math.PI / 180);
+		//			float z = -speed * (float) Math.cos(-rotationYaw * Math.PI / 180);
+		//			moveEntity(x, 1, z);
+		//		}
 
 		if (getAttackTarget() != null && timeUntilCharge == 0 && getDistanceToEntity(getAttackTarget()) > 4 && active.getTimer() == 20) {
 			setCharging(true);
@@ -62,8 +62,7 @@ public class EntityBerserkerGuardian extends EntityTempleGuardian implements IEn
 	@Override
 	protected String getLivingSound() {
 		if (!getActive()) return null;
-		int randomSound = rand.nextInt(4) + 1;
-		return "thebetweenlands:templeGuardianBerserkerLiving" + randomSound;
+		return "thebetweenlands:templeGuardianBerserkerLiving";
 	}
 
 	@Override

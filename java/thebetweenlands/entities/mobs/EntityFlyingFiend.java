@@ -8,25 +8,20 @@ public class EntityFlyingFiend extends EntityBat {
 	public EntityFlyingFiend(World world) {
 		super(world);
 	}
-	
-    @Override
-    protected String getLivingSound() {
-        int randomSound = rand.nextInt(4) + 1;
-        return "thebetweenlands:flyingFiendLiving" + randomSound;
-    }
+
+	@Override
+	protected String getLivingSound() {
+		return "thebetweenlands:flyingFiendLiving";
+	}
 
 	@Override
 	protected String getHurtSound() {
-		if (this.rand.nextBoolean()) {
-			return "thebetweenlands:flyingFiendHurt1";
-		} else {
-			return "thebetweenlands:flyingFiendHurt2";
-		}
+		return "thebetweenlands:flyingFiendHurt";
 	}
 
-    @Override
-    protected String getDeathSound() {
-        return "thebetweenlands:flyingFiendDeath";
-    }
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:flyingFiendDeath";
+	}
 
 }

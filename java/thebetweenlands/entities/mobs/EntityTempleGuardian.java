@@ -12,8 +12,8 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import thebetweenlands.client.model.ControlledAnimation;
-import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.gemcircle.EntityGem;
 /** * Created by jnad325 on 7/14/15. */
 
 public class EntityTempleGuardian extends EntityMob implements IEntityBL {
@@ -44,8 +44,7 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getHurtSound() {
-		int randomSound = rand.nextInt(3) + 1;
-		return "thebetweenlands:templeGuardianHurt" + randomSound;
+		return "thebetweenlands:templeGuardianHurt";
 	}
 
 	@Override
@@ -54,8 +53,7 @@ public class EntityTempleGuardian extends EntityMob implements IEntityBL {
 	@Override
 	protected void func_145780_a(int x, int y, int z, Block block) {// playStepSound
 		if (!getActive()) return;
-		int randomSound = rand.nextInt(3) + 1;
-		playSound("thebetweenlands:templeGuardianStep" + randomSound, 1F, 1F);
+		playSound("thebetweenlands:templeGuardianStep", 1F, 1F);
 	}
 
 	@Override

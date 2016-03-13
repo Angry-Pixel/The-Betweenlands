@@ -117,16 +117,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		int randomSound = rand.nextInt(3) + 1;
-		return "thebetweenlands:tarBeastLiving" + randomSound;
+		return "thebetweenlands:tarBeastLiving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		if (rand.nextBoolean())
-			return "thebetweenlands:tarBeastHurt1";
-		else
-			return "thebetweenlands:tarBeastHurt2";
+		return "thebetweenlands:tarBeastHurt";
 	}
 
 	@Override
@@ -164,8 +160,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void func_145780_a(int x, int y, int z, Block block) { // playStepSound
-		int randomSound = rand.nextInt(3) + 1;
-		playSound("thebetweenlands:tarBeastStep" + randomSound, 1F, 1F);
+		playSound("thebetweenlands:tarBeastStep", 1F, 1F);
 	}
 
 	@Override

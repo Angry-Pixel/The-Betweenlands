@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.entityAI.EntityAIApproachItem;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.manual.ManualManager;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -468,14 +467,12 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		int randomSound = rand.nextInt(5) + 1;
-		return "thebetweenlands:peatMummyLiving" + randomSound;
+		return "thebetweenlands:peatMummyLiving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		int randomSound = rand.nextInt(4) + 1;
-		return "thebetweenlands:peatMummyHurt" + randomSound;
+		return "thebetweenlands:peatMummyHurt";
 	}
 
 	@Override

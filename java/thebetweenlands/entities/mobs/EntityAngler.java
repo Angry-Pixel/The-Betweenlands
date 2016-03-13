@@ -47,10 +47,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	@Override
 	protected String getHurtSound() {
-		if (rand.nextBoolean())
-			return "thebetweenlands:anglerAttack1";
-		else
-			return "thebetweenlands:anglerAttack2";
+		return "thebetweenlands:anglerAttack";
 	}
 
 	@Override

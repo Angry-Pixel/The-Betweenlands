@@ -14,10 +14,8 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -81,10 +79,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		if(worldObj.rand.nextBoolean())
-			return "thebetweenlands:snailLiving1";
-		else
-			return "thebetweenlands:snailLiving2";
+		return "thebetweenlands:snailLiving";
 	}
 
 	@Override

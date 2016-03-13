@@ -84,7 +84,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		return "thebetweenlands:snailLiving1";
+		return "thebetweenlands:snailLiving";
 	}
 
 	@Override

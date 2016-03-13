@@ -174,17 +174,12 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		int randomSound = worldObj.rand.nextInt(4) + 1;
-		return "thebetweenlands:wightMoan" + randomSound;
+		return "thebetweenlands:wightMoan";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		if (this.rand.nextBoolean()) {
-			return "thebetweenlands:wightHurt1";
-		} else {
-			return "thebetweenlands:wightHurt2";
-		}
+		return "thebetweenlands:wightHurt";
 	}
 
 	@Override

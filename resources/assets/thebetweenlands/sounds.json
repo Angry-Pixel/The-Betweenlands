@@ -50,15 +50,10 @@
 			"darkDruidDeath"
 		]
 	},
-	"darkDruidLiving1": {
+	"darkDruidLiving": {
 		"category": "hostile",
 		"sounds": [
-			"darkDruidLiving1"
-		]
-	},
-	"darkDruidLiving2": {
-		"category": "hostile",
-		"sounds": [
+			"darkDruidLiving1",
 			"darkDruidLiving2"
 		]
 	},
@@ -74,16 +69,20 @@
 			"anglerDeath"
 		]
 	},
-	"anglerAttack1": {
+	"anglerAttack": {
 		"category": "hostile",
 		"sounds": [
-			"anglerAttack1"
+			"anglerAttack1",
+			"anglerAttack2"
 		]
 	},
-	"anglerAttack2": {
+	"swampHagLiving": {
 		"category": "hostile",
 		"sounds": [
-			"anglerAttack2"
+			"swampHagLiving1",
+			"swampHagLiving2",
+			"swampHagLiving3",
+			"swampHagLiving4"
 		]
 	},
 	"swampHagLiving1": {
@@ -110,21 +109,11 @@
 			"swampHagLiving4"
 		]
 	},
-	"swampHagHurt1": {
+	"swampHagHurt": {
 		"category": "hostile",
 		"sounds": [
-			"swampHagHurt1"
-		]
-	},
-	"swampHagHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"swampHagHurt2"
-		]
-	},
-	"swampHagHurt3": {
-		"category": "hostile",
-		"sounds": [
+			"swampHagHurt1",
+			"swampHagHurt2",
 			"swampHagHurt3"
 		]
 	},
@@ -140,51 +129,26 @@
 			"tarBeastSuck"
 		]
 	},
-	"tarBeastLiving1": {
+	"tarBeastLiving": {
 		"category": "hostile",
 		"sounds": [
-			"tarBeastLiving1"
-		]
-	},
-	"tarBeastLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"tarBeastLiving2"
-		]
-	},
-	"tarBeastLiving3": {
-		"category": "hostile",
-		"sounds": [
+			"tarBeastLiving1",
+			"tarBeastLiving2",
 			"tarBeastLiving3"
 		]
 	},
-	"tarBeastHurt1": {
+	"tarBeastHurt": {
 		"category": "hostile",
 		"sounds": [
-			"tarBeastHurt1"
-		]
-	},
-	"tarBeastHurt2": {
-		"category": "hostile",
-		"sounds": [
+			"tarBeastHurt1",
 			"tarBeastHurt2"
 		]
 	},
-	"tarBeastStep1": {
+	"tarBeastStep": {
 		"category": "hostile",
 		"sounds": [
-			"tarBeastStep1"
-		]
-	},
-	"tarBeastStep2": {
-		"category": "hostile",
-		"sounds": [
-			"tarBeastStep2"
-		]
-	},
-	"tarBeastStep3": {
-		"category": "hostile",
-		"sounds": [
+			"tarBeastStep1",
+			"tarBeastStep2",
 			"tarBeastStep3"
 		]
 	},
@@ -194,39 +158,19 @@
 			"tarBeastDeath"
 		]
 	},
-	"wightHurt1": {
+	"wightHurt": {
 		"category": "hostile",
 		"sounds": [
-			"wightHurt1"
-		]
-	},
-	"wightHurt2": {
-		"category": "hostile",
-		"sounds": [
+			"wightHurt1",
 			"wightHurt2"
 		]
 	},
-	"wightMoan1": {
+	"wightMoan": {
 		"category": "hostile",
 		"sounds": [
-			"wightMoan1"
-		]
-	},
-	"wightMoan2": {
-		"category": "hostile",
-		"sounds": [
-			"wightMoan2"
-		]
-	},
-	"wightMoan3": {
-		"category": "hostile",
-		"sounds": [
-			"wightMoan3"
-		]
-	},
-	"wightMoan4": {
-		"category": "hostile",
-		"sounds": [
+			"wightMoan1",
+			"wightMoan2",
+			"wightMoan3",
 			"wightMoan4"
 		]
 	},
@@ -266,15 +210,10 @@
 			"snailHurt"
 		]
 	},
-	"snailLiving1": {
+	"snailLiving": {
 		"category": "hostile",
 		"sounds": [
-			"snailLiving1"
-		]
-	},
-	"snailLiving2": {
-		"category": "hostile",
-		"sounds": [
+			"snailLiving1",
 			"snailLiving1"
 		]
 	},
@@ -290,57 +229,22 @@
 			"squish"
 		]
 	},
-	"lurkerLiving1": {
+	"lurkerLiving": {
 		"category": "hostile",
 		"sounds": [
-			"lurkerLiving1"
-		]
-	},
-	"lurkerLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"lurkerLiving2"
-		]
-	},
-	"lurkerLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"lurkerLiving3"
-		]
-	},
-	"lurkerLiving4": {
-		"category": "hostile",
-		"sounds": [
-			"lurkerLiving4"
-		]
-	},
-	"lurkerLiving5": {
-		"category": "hostile",
-		"sounds": [
+			"lurkerLiving1",
+			"lurkerLiving2",
+			"lurkerLiving3",
+			"lurkerLiving4",
 			"lurkerLiving5"
 		]
 	},
-	"lurkerHurt1": {
+	"lurkerHurt": {
 		"category": "hostile",
 		"sounds": [
-			"lurkerHurt1"
-		]
-	},
-	"lurkerHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"lurkerHurt2"
-		]
-	},
-	"lurkerHurt3": {
-		"category": "hostile",
-		"sounds": [
-			"lurkerHurt3"
-		]
-	},
-	"lurkerHurt4": {
-		"category": "hostile",
-		"sounds": [
+			"lurkerHurt1",
+			"lurkerHurt2",
+			"lurkerHurt3",
 			"lurkerHurt4"
 		]
 	},
@@ -383,63 +287,23 @@
 			"geckoHide"
 		]
 	},
-	"peatMummyLiving1": {
+	"peatMummyLiving": {
 		"category": "hostile",
 		"sounds": [
-			"peatMummyLiving1"
-		]
-	},
-	"peatMummyLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyLiving2"
-		]
-	},
-	"peatMummyLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyLiving3"
-		]
-	},
-	"peatMummyLiving4": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyLiving4"
-		]
-	},
-	"peatMummyLiving5": {
-		"category": "hostile",
-		"sounds": [
+			"peatMummyLiving1",
+			"peatMummyLiving2",
+			"peatMummyLiving3",
+			"peatMummyLiving4",
 			"peatMummyLiving5"
 		]
 	},
-	"peatMummyHurt1": {
+	"peatMummyHurt": {
 		"category": "hostile",
 		"sounds": [
-			"peatMummyHurt1"
-		]
-	},
-	"peatMummyHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyHurt2"
-		]
-	},
-	"peatMummyHurt3": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyHurt3"
-		]
-	},
-	"peatMummyHurt4": {
-		"category": "hostile",
-		"sounds": [
-			"peatMummyHurt4"
-		]
-	},
-	"peatMummyHurt5": {
-		"category": "hostile",
-		"sounds": [
+			"peatMummyHurt1",
+			"peatMummyHurt2",
+			"peatMummyHurt3",
+			"peatMummyHurt4",
 			"peatMummyHurt5"
 		]
 	},
@@ -503,111 +367,41 @@
 			"dreadfulPeatMummyDeath"
 		]
 	},
-	"dreadfulPeatMummyLiving1": {
+	"dreadfulPeatMummyLiving": {
 		"category": "hostile",
 		"sounds": [
-			"dreadfulPeatMummyLiving1"
-		]
-	},
-	"dreadfulPeatMummyLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyLiving2"
-		]
-	},
-	"dreadfulPeatMummyLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyLiving3"
-		]
-	},
-	"dreadfulPeatMummyLiving4": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyLiving4"
-		]
-	},
-	"dreadfulPeatMummyLiving5": {
-		"category": "hostile",
-		"sounds": [
+			"dreadfulPeatMummyLiving1",
+			"dreadfulPeatMummyLiving2",
+			"dreadfulPeatMummyLiving3",
+			"dreadfulPeatMummyLiving4",
 			"dreadfulPeatMummyLiving5"
 		]
 	},
-	"dreadfulPeatMummyHurt1": {
+	"dreadfulPeatMummyHurt": {
 		"category": "hostile",
 		"sounds": [
-			"dreadfulPeatMummyHurt1"
-		]
-	},
-	"dreadfulPeatMummyHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyHurt2"
-		]
-	},
-	"dreadfulPeatMummyHurt3": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyHurt3"
-		]
-	},
-	"dreadfulPeatMummyHurt4": {
-		"category": "hostile",
-		"sounds": [
-			"dreadfulPeatMummyHurt4"
-		]
-	},
-	"dreadfulPeatMummyHurt5": {
-		"category": "hostile",
-		"sounds": [
+			"dreadfulPeatMummyHurt1",
+			"dreadfulPeatMummyHurt2",
+			"dreadfulPeatMummyHurt3",
+			"dreadfulPeatMummyHurt4",
 			"dreadfulPeatMummyHurt5"
 		]
 	},
-	"templeGuardianMeleeLiving1": {
+	"templeGuardianMeleeLiving": {
 		"category": "hostile",
 		"sounds": [
-			"templeGuardianMeleeLiving1"
-		]
-	},
-	"templeGuardianMeleeLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianMeleeLiving2"
-		]
-	},
-	"templeGuardianMeleeLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianMeleeLiving3"
-		]
-	},
-	"templeGuardianMeleeLiving4": {
-		"category": "hostile",
-		"sounds": [
+			"templeGuardianMeleeLiving1",
+			"templeGuardianMeleeLiving2",
+			"templeGuardianMeleeLiving3",
 			"templeGuardianMeleeLiving4"
 		]
 	},
-	"templeGuardianBerserkerLiving1": {
+	"templeGuardianBerserkerLiving": {
 		"category": "hostile",
 		"sounds": [
-			"templeGuardianBerserkerLiving1"
-		]
-	},
-	"templeGuardianBerserkerLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianBerserkerLiving2"
-		]
-	},
-	"templeGuardianBerserkerLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianBerserkerLiving3"
-		]
-	},
-	"templeGuardianBerserkerLiving4": {
-		"category": "hostile",
-		"sounds": [
+			"templeGuardianBerserkerLiving1",
+			"templeGuardianBerserkerLiving2",
+			"templeGuardianBerserkerLiving3",
 			"templeGuardianBerserkerLiving4"
 		]
 	},
@@ -623,39 +417,19 @@
 			"templeGuardianBerserkerImpact"
 		]
 	},
-	"templeGuardianStep1": {
+	"templeGuardianStep": {
 		"category": "hostile",
 		"sounds": [
-			"templeGuardianStep1"
-		]
-	},
-	"templeGuardianStep2": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianStep2"
-		]
-	},
-	"templeGuardianStep3": {
-		"category": "hostile",
-		"sounds": [
+			"templeGuardianStep1",
+			"templeGuardianStep2",
 			"templeGuardianStep3"
 		]
 	},
-	"templeGuardianHurt1": {
+	"templeGuardianHurt": {
 		"category": "hostile",
 		"sounds": [
-			"templeGuardianHurt1"
-		]
-	},
-	"templeGuardianHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"templeGuardianHurt2"
-		]
-	},
-	"templeGuardianHurt3": {
-		"category": "hostile",
-		"sounds": [
+			"templeGuardianHurt1",
+			"templeGuardianHurt2",
 			"templeGuardianHurt3"
 		]
 	},
@@ -665,21 +439,11 @@
 			"templeGuardianDeath"
 		]
 	},
-	"fortressBossLiving1": {
+	"fortressBossLiving": {
 		"category": "hostile",
 		"sounds": [
-			"fortressBossLiving1"
-		]
-	},
-	"fortressBossLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"fortressBossLiving2"
-		]
-	},
-	"fortressBossLiving3": {
-		"category": "hostile",
-		"sounds": [
+			"fortressBossLiving1",
+			"fortressBossLiving2",
 			"fortressBossLiving3"
 		]
 	},
@@ -695,27 +459,12 @@
 			"fortressBossSummonProjectiles"
 		]
 	},
-	"fortressBossHurt1": {
+	"fortressBossHurt": {
 		"category": "hostile",
 		"sounds": [
-			"fortressBossHurt1"
-		]
-	},
-	"fortressBossHurt2": {
-		"category": "hostile",
-		"sounds": [
-			"fortressBossHurt2"
-		]
-	},
-	"fortressBossHurt3": {
-		"category": "hostile",
-		"sounds": [
-			"fortressBossHurt3"
-		]
-	},
-	"fortressBossHurt4": {
-		"category": "hostile",
-		"sounds": [
+			"fortressBossHurt1",
+			"fortressBossHurt2",
+			"fortressBossHurt3",
 			"fortressBossHurt4"
 		]
 	},
@@ -737,39 +486,19 @@
 			"fortressBossDeath"
 		]
 	},
-	"flyingFiendLiving1": {
+	"flyingFiendLiving": {
 		"category": "hostile",
 		"sounds": [
-			"flyingFiendLiving1"
-		]
-	},
-	"flyingFiendLiving2": {
-		"category": "hostile",
-		"sounds": [
-			"flyingFiendLiving2"
-		]
-	},
-	"flyingFiendLiving3": {
-		"category": "hostile",
-		"sounds": [
-			"flyingFiendLiving3"
-		]
-	},
-	"flyingFiendLiving4": {
-		"category": "hostile",
-		"sounds": [
+			"flyingFiendLiving1",
+			"flyingFiendLiving2",
+			"flyingFiendLiving3",
 			"flyingFiendLiving4"
 		]
 	},
-	"flyingFiendHurt1": {
+	"flyingFiendHurt": {
 		"category": "hostile",
 		"sounds": [
-			"flyingFiendHurt1"
-		]
-	},
-	"flyingFiendHurt2": {
-		"category": "hostile",
-		"sounds": [
+			"flyingFiendHurt1",
 			"flyingFiendHurt2"
 		]
 	},

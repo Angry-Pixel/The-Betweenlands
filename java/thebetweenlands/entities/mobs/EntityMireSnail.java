@@ -75,10 +75,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		if(worldObj.rand.nextBoolean())
-			return "thebetweenlands:snailLiving1";
-		else
-			return "thebetweenlands:snailLiving2";
+		return "thebetweenlands:snailLiving";
 	}
 
 	@Override

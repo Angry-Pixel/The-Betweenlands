@@ -175,8 +175,8 @@ public class EntityDarkDruid extends EntityMob {
 					druidParticlePacketTarget(newDruid);
 				} else
 					newDruid.setDead();
-				}
 			}
+		}
 
 		if (successful) {
 			worldObj.playSoundEffect(x, y, z, "thebetweenlands:druidTeleport", 1.0F, 1.0F);
@@ -275,10 +275,7 @@ public class EntityDarkDruid extends EntityMob {
 
 	@Override
 	protected String getLivingSound() {
-		if (rand.nextBoolean())
-			return "thebetweenlands:darkDruidLiving1";
-		else
-			return "thebetweenlands:darkDruidLiving2";
+		return "thebetweenlands:darkDruidLiving";
 	}
 
 	@Override

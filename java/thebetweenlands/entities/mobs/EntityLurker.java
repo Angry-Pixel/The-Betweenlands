@@ -17,12 +17,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.manual.ManualManager;
 import thebetweenlands.utils.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -433,16 +431,14 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		int randomSound = rand.nextInt(5) + 1;
-		return "thebetweenlands:lurkerLiving" + randomSound;
+		return "thebetweenlands:lurkerLiving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		int randomSound = rand.nextInt(4) + 1;
 		setShouldMouthBeOpen(true);
 		ticksUntilBiteDamage = 10;
-		return "thebetweenlands:lurkerHurt" + randomSound;
+		return "thebetweenlands:lurkerHurt";
 	}
 
 	@Override

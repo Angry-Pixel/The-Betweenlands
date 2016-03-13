@@ -12,8 +12,7 @@ public class EntityMeleeGuardian extends EntityTempleGuardian implements IEntity
 	@Override
 	protected String getLivingSound() {
 		if (!getActive()) return null;
-		int randomSound = rand.nextInt(4) + 1;
-		return "thebetweenlands:templeGuardianMeleeLiving" + randomSound;
+		return "thebetweenlands:templeGuardianMeleeLiving";
 	}
 
 	@Override

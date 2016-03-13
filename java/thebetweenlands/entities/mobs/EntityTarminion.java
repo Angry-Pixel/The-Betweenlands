@@ -100,8 +100,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	protected void func_145780_a(int x, int y, int z, Block block) {
 		if(rand.nextInt(10) == 0) {
-			int randomSound = rand.nextInt(3) + 1;
-			playSound("thebetweenlands:tarBeastStep" + randomSound, 0.8F, 1.5F);
+			playSound("thebetweenlands:tarBeastStep", 0.8F, 1.5F);
 		}
 	}
 

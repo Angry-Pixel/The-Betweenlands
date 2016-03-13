@@ -97,8 +97,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	protected String getHurtSound() {
 		setTalkSound(4);
 		setShouldJawMove(true);
-		int randomSound = rand.nextInt(3) + 1;
-		return "thebetweenlands:swampHagHurt" + randomSound;
+		return "thebetweenlands:swampHagHurt";
 	}
 
 	@Override
