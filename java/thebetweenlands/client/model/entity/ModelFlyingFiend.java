@@ -54,7 +54,7 @@ public class ModelFlyingFiend extends ModelBase {
         head_connection = new ModelRenderer(this, 21, 18);
         head_connection.setRotationPoint(0.0F, 2.0F, 0.0F);
         head_connection.addBox(-3.0F, 0.0F, -2.0F, 6, 2, 2, 0.0F);
-        neck = new ModelRenderer(this, 21, 0);
+        neck = new ModelRenderer(this, 21, 0);   //
         neck.setRotationPoint(0.0F, 0.0F, 2.0F);
         neck.addBox(-1.5F, 0.0F, -3.0F, 3, 3, 3, 0.0F);
         setRotation(neck, -0.7285004297824331F, 0.0F, 0.0F);
@@ -201,9 +201,11 @@ public class ModelFlyingFiend extends ModelBase {
 		 EntityFlyingFiend fiend = (EntityFlyingFiend) entity;
 		 GL11.glPushMatrix();
 	        if (fiend.getIsBatHanging()) {
-	            GL11.glTranslatef(0.0F, 2.25F, 0.0F);
+	            GL11.glTranslatef(0.0F, 2.125F, 0.0F);
 	        GL11.glRotatef(180, 1F, 0F, 0.0F);
 	        }
+	        else
+	        	GL11.glRotatef(40, 1F, 0F, 0.0F);
 	        body_base.render(unitPixel);
 	        GL11.glPopMatrix();
     }
@@ -228,7 +230,10 @@ public class ModelFlyingFiend extends ModelBase {
 			arm_right2.rotateAngleY = 0F;
 			arm_left1.rotateAngleY = -0.0091106186954104F;
 			arm_left2.rotateAngleY = 0;
-			
+
+			leg_right1.rotateAngleX = -2.276432943376204F;
+			leg_left1.rotateAngleX = -2.276432943376204F;
+
 			lil_tail1.rotateAngleX = 0.27314402793711257F;
 			lil_tail2.rotateAngleX = 0.36425021489121656F;
 			lil_tail3.rotateAngleX = 0.40980330836826856F;
@@ -238,6 +243,7 @@ public class ModelFlyingFiend extends ModelBase {
 			lil_tail3.rotateAngleX = 0.40980330836826856F;
 			
 			head_jaw1.rotateAngleX = 0.9560913642424937F;
+			head_base.rotateAngleX = 0.091106186954104F;
 		}
 		else {
 			float flap = MathHelper.sin((fiend.ticksExisted + partialRenderTicks) * 0.5F ) * 0.6F;
@@ -246,16 +252,22 @@ public class ModelFlyingFiend extends ModelBase {
 			arm_left1.rotateAngleZ = -0.5462880558742251F + flap * 0.5F;
 			arm_left2.rotateAngleZ = 0 + flap;
 			
-			arm_right1.rotateAngleY = 0.8091106186954104F - flap;
+			arm_right1.rotateAngleY = 0.9091106186954104F - flap;
 			arm_right2.rotateAngleY = 0F - flap;
-			arm_left1.rotateAngleY = -0.8091106186954104F + flap;
+			arm_left1.rotateAngleY = -0.9091106186954104F + flap;
 			arm_left2.rotateAngleY = 0 + flap;
+			
+			leg_right1.rotateAngleX = -2.276432943376204F + flap * 0.5F;
+			leg_left1.rotateAngleX = -2.276432943376204F + flap * 0.5F;
 			
 			lil_tail1.rotateAngleX = 0.27314402793711257F + flap * 0.5F;
 			lil_tail2.rotateAngleX = 0.36425021489121656F + flap * 0.25F;
 			lil_tail3.rotateAngleX = 0.40980330836826856F + flap * 0.125F;
 			
 			head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.25F;
+			GL11.glTranslatef(0.0F, 0F - flap * 0.5F, 0.0F);
+			head_base.rotateAngleX = -0.698132F;
+
 		}
 	}
 }

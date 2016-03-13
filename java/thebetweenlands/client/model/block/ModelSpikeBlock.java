@@ -64,7 +64,6 @@ public class ModelSpikeBlock extends ModelBase {
         block = new ModelRenderer(this, 0, 32);
         block.setRotationPoint(0.0F, 16.0F, 0.0F);
         block.addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16, 0.0F);
-
     }
 
 	public void renderSpikes(TileEntitySpikeTrap tile) {
