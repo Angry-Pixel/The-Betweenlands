@@ -154,7 +154,7 @@ public class BlockBLLeaves extends BlockLeaves {
 			int blockMeta = world.getBlockMetadata(x, y, z);
 
 			if ((blockMeta & 8) != 0 && (blockMeta & 4) == 0) {
-				byte logReach = 8;
+				byte logReach = 5;
 				int checkRadius = logReach + 1;
 				byte cacheSize = 32;
 				int cacheSquared = cacheSize * cacheSize;
