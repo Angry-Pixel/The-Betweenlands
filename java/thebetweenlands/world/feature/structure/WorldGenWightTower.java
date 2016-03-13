@@ -138,33 +138,33 @@ public class WorldGenWightTower extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, -1, 7, limestonePolished, 0, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 7, -1, 7, betweenstoneTiles, 0, 2, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, -1, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
-			//		if(rand.nextBoolean())
-			//			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 2, 6, spawner, 0, 1, 1, 1, direction);
-			//		spawner.setMob(world, xx + 6, yy + 2, zz + 6, "thebetweenlands.swampHag");
-			//		spawner.setMob(world, xx + 25, yy + 2, zz + 6, "thebetweenlands.swampHag");
-			//		spawner.setMob(world, xx + 25, yy + 2, zz + 25, "thebetweenlands.swampHag");
-			//		spawner.setMob(world, xx + 6, yy + 2, zz + 25, "thebetweenlands.swampHag");
+			if(rand.nextBoolean())
+				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 2, 6, spawner, 0, 1, 1, 1, direction);
+			spawner.setMob(world, xx + 6, yy + 2, zz + 6, "thebetweenlands.swampHag");
+			spawner.setMob(world, xx + 25, yy + 2, zz + 6, "thebetweenlands.swampHag");
+			spawner.setMob(world, xx + 25, yy + 2, zz + 25, "thebetweenlands.swampHag");
+			spawner.setMob(world, xx + 6, yy + 2, zz + 25, "thebetweenlands.swampHag");
 
 			//1st floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 3, 5, 3, limestonePolished, 0, 7, 1, 7, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 5, 5, limestoneChiselled, 0, 1, 1, 3, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, 5, 6, limestoneChiselled, 0, 3, 1, 1, direction);
-			//		if(rand.nextBoolean())
-			//			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 8, 6, spawner, 0, 1, 1, 1, direction);
-			//		spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.wight");
+			if(rand.nextBoolean())
+				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 8, 6, spawner, 0, 1, 1, 1, direction);
+			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.wight");
 
 			//2nd floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 11, 4, limestonePolished, 0, 5, 1, 5, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 11, 6, limestoneChiselled, 0, 1, 1, 1, direction);
-			//		if(rand.nextBoolean())
-			//			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 14, 6, spawner, 0, 1, 1, 1, direction);
-			//		spawner.setMob(world, xx + 6, yy + 14, zz + 6, "thebetweenlands.termite");
-			//		spawner.setMob(world, xx + 25, yy + 14, zz + 6, "thebetweenlands.termite");
-			//		spawner.setMob(world, xx + 25, yy + 14, zz + 25, "thebetweenlands.termite");
-			//		spawner.setMob(world, xx + 6, yy + 14, zz + 25, "thebetweenlands.termite");
+			if(rand.nextBoolean())
+				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 14, 6, spawner, 0, 1, 1, 1, direction);
+			spawner.setMob(world, xx + 6, yy + 14, zz + 6, "thebetweenlands.termite");
+			spawner.setMob(world, xx + 25, yy + 14, zz + 6, "thebetweenlands.termite");
+			spawner.setMob(world, xx + 25, yy + 14, zz + 25, "thebetweenlands.termite");
+			spawner.setMob(world, xx + 6, yy + 14, zz + 25, "thebetweenlands.termite");
 
 			//3rd floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 16, 4, limestoneChiselled, 0, 5, 1, 5, direction);
@@ -179,11 +179,11 @@ public class WorldGenWightTower extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 16, 7, limestonePolished, 0, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 7, 16, 7, betweenstoneTiles, 0, 2, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, 16, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
-			//		rotatedCubeVolume(world, rand, xx, yy, zz, 6, 19, 6, spawner, 0, 1, 1, 1, direction);
-			//		spawner.setMob(world, xx + 6, yy + 19, zz + 6, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 25, yy + 19, zz + 6, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 25, yy + 19, zz + 25, "thebetweenlands.wight");
-			//		spawner.setMob(world, xx + 6, yy + 19, zz + 25, "thebetweenlands.wight");
+			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 19, 6, spawner, 0, 1, 1, 1, direction);
+			spawner.setMob(world, xx + 6, yy + 19, zz + 6, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 25, yy + 19, zz + 6, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 25, yy + 19, zz + 25, "thebetweenlands.wight");
+			spawner.setMob(world, xx + 6, yy + 19, zz + 25, "thebetweenlands.wight");
 		}
 
 		length = 13;

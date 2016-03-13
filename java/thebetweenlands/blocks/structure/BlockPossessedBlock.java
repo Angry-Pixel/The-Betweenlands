@@ -16,8 +16,8 @@ public class BlockPossessedBlock extends BlockContainer {
 	public BlockPossessedBlock() {
 		super(Material.rock);
 		setStepSound(Block.soundTypeStone);
-		setBlockUnbreakable();
-		setResistance(6000000.0F);
+		setHardness(1.5F);
+		setResistance(10.0F);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockTextureName("thebetweenlands:betweenstoneBricks");
 		setBlockName("thebetweenlands.possessedBlock");
