@@ -60,4 +60,9 @@ public class TileEntityAspectrusCrop extends TileEntity {
 		NBTTagCompound nbt = packet.func_148857_g();
 		this.seedAspect = Aspect.readFromNBT(nbt);
 	}
+
+	@Override
+	public boolean canUpdate() {
+		return false;
+	}
 }

@@ -7,23 +7,13 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
 public class TileEntityItemShelf extends TileEntityBasicInventory {
-	private boolean updated = false;
-
 	public TileEntityItemShelf() {
 		super(4, "container.itemShelf");
 	}
 
 	@Override
 	public boolean canUpdate() {
-		return true;
-	}
-
-	@Override
-	public void updateEntity() {
-		if (!worldObj.isRemote && !updated) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			updated = true;
-		}
+		return false;
 	}
 
 	@Override

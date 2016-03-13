@@ -16,15 +16,7 @@ public class TileEntityLootPot1 extends TileEntityBasicInventory {
 
 	@Override
 	public boolean canUpdate() {
-		return true;
-	}
-
-	@Override
-	public void updateEntity() {
-		if (!worldObj.isRemote && !updated) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			updated = true;
-		}
+		return false;
 	}
 
 	public void setModelRotationOffset(int rotation) {

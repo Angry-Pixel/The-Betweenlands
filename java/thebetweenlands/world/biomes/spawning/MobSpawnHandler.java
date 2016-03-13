@@ -48,14 +48,14 @@ public class MobSpawnHandler {
 	private static final byte SPAWN_CHUNK_RIM = 2;
 
 	//How many attempts per spawning run
-	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 6;
+	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 5;
 	//How many attempts to reach the desired mob group size
 	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 30;
 
 	//Maximum spawns per spawning run
-	private static final int MAX_SPAWNS_PER_CHUNK = 6;
+	private static final int MAX_SPAWNS_PER_CHUNK = 5;
 	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
-	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = 2.4F;
+	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = 2.2F;
 
 	//World entity limit
 	private static final int HARD_ENTITY_LIMIT = 500;
@@ -262,7 +262,7 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning")) {
+			if(world.getGameRules().getGameRuleBooleanValue("doMobSpawning") && world.getWorldTime() % 5 == 0) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
