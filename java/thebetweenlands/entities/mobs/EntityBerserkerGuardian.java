@@ -62,7 +62,7 @@ public class EntityBerserkerGuardian extends EntityTempleGuardian implements IEn
 	@Override
 	protected String getLivingSound() {
 		if (!getActive()) return null;
-		int randomSound = rand.nextInt(3) + 1;
+		int randomSound = rand.nextInt(4) + 1;
 		return "thebetweenlands:templeGuardianBerserkerLiving" + randomSound;
 	}
 

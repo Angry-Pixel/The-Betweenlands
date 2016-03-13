@@ -433,13 +433,13 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	protected String getLivingSound() {
-		int randomSound = rand.nextInt(3) + 1;
+		int randomSound = rand.nextInt(5) + 1;
 		return "thebetweenlands:lurkerLiving" + randomSound;
 	}
 
 	@Override
 	protected String getHurtSound() {
-		int randomSound = rand.nextInt(3) + 1;
+		int randomSound = rand.nextInt(4) + 1;
 		setShouldMouthBeOpen(true);
 		ticksUntilBiteDamage = 10;
 		return "thebetweenlands:lurkerHurt" + randomSound;

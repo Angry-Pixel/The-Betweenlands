@@ -815,7 +815,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 
 	@Override
 	protected String getHurtSound() {
-		int randomSound = rand.nextInt(3) + 1;
+		int randomSound = rand.nextInt(4) + 1;
 		return "thebetweenlands:fortressBossHurt" + randomSound;
 	}
 

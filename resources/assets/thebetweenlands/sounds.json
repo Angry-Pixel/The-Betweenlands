@@ -626,6 +626,48 @@
 			"fortressBossDeath"
 		]
 	},
+	"flyingFiendLiving1": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendLiving1"
+		]
+	},
+	"flyingFiendLiving2": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendLiving2"
+		]
+	},
+	"flyingFiendLiving3": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendLiving3"
+		]
+	},
+	"flyingFiendLiving4": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendLiving4"
+		]
+	},
+	"flyingFiendHurt1": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendHurt1"
+		]
+	},
+	"flyingFiendHurt2": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendHurt2"
+		]
+	},
+	"flyingFiendDeath": {
+		"category": "hostile",
+		"sounds": [
+			"flyingFiendDeath"
+		]
+	},
 	"sorry": {
 		"category": "player",
 		"sounds": [
