@@ -30,6 +30,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
@@ -185,13 +186,19 @@ public class PlayerLocationHandler {
 		}
 	}
 
+	private static final List<Block> EXCLUDED_BLOCKS = new ArrayList<Block>();
+	static {
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.weedwoodChest);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.blSpawner);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.itemCage);
+	}
+
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null) {
-
 			EntityPlayer player = event.getPlayer();
-			if(player != null && !player.capabilities.isCreativeMode && this.isInLocationType(player, EnumLocationType.WIGHT_TOWER)) {
+			if(player != null && !player.capabilities.isCreativeMode && this.isInLocationType(player, EnumLocationType.WIGHT_TOWER) && !EXCLUDED_BLOCKS.contains(event.block)) {
 				if(!event.world.isRemote) {
 					int warnings = player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
 					if(warnings < 3) {

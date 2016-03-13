@@ -25,6 +25,7 @@ import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityTempleGuardian;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -46,6 +47,7 @@ public class RecruitmentRingHandler {
 		DISALOWWED_ENTITIES.add(EntityMeleeGuardian.class);
 		DISALOWWED_ENTITIES.add(EntityBerserkerGuardian.class);
 		DISALOWWED_ENTITIES.add(EntityDreadfulMummy.class);
+		DISALOWWED_ENTITIES.add(EntityFortressBoss.class);
 	}
 
 	private boolean ignoreSetAttackTarget = false;
