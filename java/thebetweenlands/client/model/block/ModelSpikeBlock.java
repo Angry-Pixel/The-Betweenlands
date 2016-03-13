@@ -20,10 +20,11 @@ public class ModelSpikeBlock extends ModelBase {
     ModelRenderer shaft7;
     ModelRenderer shaft8;
     ModelRenderer shaft9;
+    ModelRenderer block;
 
     public ModelSpikeBlock() {
         textureWidth = 64;
-        textureHeight = 32;
+        textureHeight = 64;
         shaft4 = new ModelRenderer(this, 27, 0);
         shaft4.setRotationPoint(-4.0F, 25.0F, 3.0F);
         shaft4.addBox(-1.0F, -11.0F, -1.0F, 2, 11, 2, 0.0F);
@@ -60,9 +61,14 @@ public class ModelSpikeBlock extends ModelBase {
         shaft2.setRotationPoint(4.0F, 25.0F, -4.0F);
         shaft2.addBox(-1.1F, -13.0F, -1.0F, 2, 13, 2, 0.0F);
         setRotation(shaft2, 0.136659280431156F, 0.31869712141416456F, 0.136659280431156F);
+        block = new ModelRenderer(this, 0, 32);
+        block.setRotationPoint(0.0F, 16.0F, 0.0F);
+        block.addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16, 0.0F);
+
     }
 
-	public void render(TileEntitySpikeTrap tile) {
+	public void renderSpikes(TileEntitySpikeTrap tile) {
+		block.render(0.0625F);
 		if (tile.active || !tile.active && tile.animationTicks > 0) {
 			if (tile.animationTicks <= 5)
 				GL11.glTranslatef(0F, 0F - 1F / 5 * tile.animationTicks, 0F);

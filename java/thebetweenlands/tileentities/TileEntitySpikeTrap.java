@@ -34,7 +34,6 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 1, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord)));
 				block.dropBlockAsItem(worldObj, xCoord, yCoord + 1, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 1, zCoord), 0);
 				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (!worldObj.isAirBlock(xCoord, yCoord + 2, zCoord)) {
 				setType((byte) 1);
@@ -43,21 +42,18 @@ public class TileEntitySpikeTrap extends TileEntity {
 				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 2, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 2, zCoord)));
 				block.dropBlockAsItem(worldObj, xCoord, yCoord + 2, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 2, zCoord), 0);
 				worldObj.setBlockToAir(xCoord, yCoord + 2, zCoord);
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			if (worldObj.rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
 					setType((byte) 0);
 				else if (isBlockOccupied() == null)
 					setType((byte) 1);
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 			
-			if (isBlockOccupied() != null && type != 0) {
+			if (isBlockOccupied() != null && type != 0)
 				if(!active && animationTicks == 0)
 					setActive(true);
-				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-			}
+
 		}
 		if (active) {
 			activateBlock();
@@ -75,10 +71,12 @@ public class TileEntitySpikeTrap extends TileEntity {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -133,8 +131,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net,
-			S35PacketUpdateTileEntity packet) {
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
 		animationTicks = packet.func_148857_g().getInteger("animationTicks");
 		active = packet.func_148857_g().getBoolean("active");
 		type = packet.func_148857_g().getByte("type");

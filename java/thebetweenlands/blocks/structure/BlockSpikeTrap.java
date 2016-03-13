@@ -30,7 +30,7 @@ public class BlockSpikeTrap extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return 1;
+		return -1;
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class BlockSpikeTrap extends BlockContainer {
 		return true;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		return BLBlockRegistry.polishedLimestone.getIcon(side, 0);
-	}
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int side, int meta) {	
+        return BLBlockRegistry.polishedLimestone.getBlockTextureFromSide(0);
+    }
+
 }
