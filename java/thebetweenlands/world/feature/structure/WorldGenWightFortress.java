@@ -160,9 +160,17 @@ public class WorldGenWightFortress extends WorldGenerator {
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 8, 6, spawner, 0, 1, 1, 1, direction);
 			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 6, yy + 8, zz + 6) != null)
+				spawner.getLogic(world, xx + 6, yy + 8, zz + 6).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 25, yy + 8, zz + 6) != null)
+				spawner.getLogic(world, xx + 25, yy + 8, zz + 6).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 25, yy + 8, zz + 25) != null)
+				spawner.getLogic(world, xx + 25, yy + 8, zz + 25).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 6, yy + 8, zz + 25) != null)
+				spawner.getLogic(world, xx + 6, yy + 8, zz + 25).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 
 			//2nd floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 11, 4, limestonePolished, 0, 5, 1, 5, direction);
@@ -189,9 +197,17 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, 16, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 19, 6, spawner, 0, 1, 1, 1, direction);
 			spawner.setMob(world, xx + 6, yy + 19, zz + 6, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 6, yy + 19, zz + 6) != null)
+				spawner.getLogic(world, xx + 6, yy + 19, zz + 6).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 25, yy + 19, zz + 6, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 25, yy + 19, zz + 6) != null)
+				spawner.getLogic(world, xx + 25, yy + 19, zz + 6).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 25, yy + 19, zz + 25, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 25, yy + 19, zz + 25) != null)
+				spawner.getLogic(world, xx + 25, yy + 19, zz + 25).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 6, yy + 19, zz + 25, "thebetweenlands.wight");
+			if(spawner.getLogic(world, xx + 6, yy + 19, zz + 25) != null)
+				spawner.getLogic(world, xx + 6, yy + 19, zz + 25).setCheckRange(25.0D).setDelay(3000, 5000).setMaxEntities(1);
 		}
 
 		length = 13;
