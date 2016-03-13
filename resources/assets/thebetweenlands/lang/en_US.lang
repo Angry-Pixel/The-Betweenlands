@@ -251,11 +251,19 @@ tile.thebetweenlands.rubberTap.name=Weedwood Bucket
 tile.thebetweenlands.betweenstoneTilesCollapsing.name=Weak Betweenstone Tiles
 tile.thebetweenlands.betweenstoneTilesMossyCollapsing.name=Weak Mossy Betweenstone Tiles
 tile.thebetweenlands.betweenstoneSmoothMossy.name=Mossy Smooth Betweenstone
+tile.thebetweenlands.betweenstoneSmoothStairsMossy.name=Mossy Smooth Betweenstone Stairs
 tile.thebetweenlands.betweenstoneBrickWallMossy.name=Mossy Betweenstone Brick Wall
 tile.thebetweenlands.betweenstoneTilesCracked.name=Cracked Betweenstone Tiles
 tile.thebetweenlands.betweenstoneBrickStairsMossy.name=Mossy Betweenstone Brick Stairs
-tile.thebetweenlands.betweenstoneBricksMossy.name=Mossy Betweenstone Brick
+tile.thebetweenlands.betweenstoneBricksMossy.name=Mossy Betweenstone Bricks
 tile.thebetweenlands.betweenstoneTilesMossy.name=Mossy Betweenstone Tiles
+tile.thebetweenlands.betweenstoneBricksCracked.name=Cracked Betweenstone Brick
+tile.thebetweenlands.betweenstoneBrickStairsCracked.name=Cracked Betweenstone Brick Stairs
+tile.thebetweenlands.betweenstoneBrickWallCracked.name=Cracked Betweenstone Brick Wall
+tile.thebetweenlands.smoothBetweenstoneWallMossy.name=Mossy Smooth Betweenstone Wall
+tile.thebetweenlands.betweenstoneSmoothMossySlab.name=Mossy Smooth Betweenstone Slab
+tile.thebetweenlands.betweenstoneBrickMossySlab.name=Mossy Betweenstone Brick Slab
+tile.thebetweenlands.betweenstoneBrickCrackedSlab.name=Cracked Betweenstone Brick Slab
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom

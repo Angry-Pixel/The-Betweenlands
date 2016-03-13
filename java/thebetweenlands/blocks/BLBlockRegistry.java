@@ -430,6 +430,7 @@ public class BLBlockRegistry {
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block betweenstoneBricks = new BlockBLGenericDeco("betweenstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block betweenstoneBricksCracked = new BlockBLGenericDeco("betweenstoneBricksCracked", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneBricksMossy = new BlockBLGenericDeco("betweenstoneBricksMossy", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTilesMossy = new BlockBLGenericDeco("betweenstoneTilesMossy", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
@@ -499,8 +500,10 @@ public class BLBlockRegistry {
 	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block mossyLimestoneBricks = new BlockBLGenericDeco("mossyLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block crackedLimestoneBricks = new BlockBLGenericDeco("crackedLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
+	
 	// STAIRS, SLABS, WALLS, FENCES, SIGNS, ETC.
 	public static final Block betweenstoneBrickStairs = new BlockBLStairs(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickStairs");
 	public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
@@ -523,7 +526,10 @@ public class BLBlockRegistry {
 	public static final Block limestoneBrickWall = new BlockBLWall(limestoneBricks, 0).setBlockName("thebetweenlands.limestoneBrickWall");
 	public static final Block limestoneWall = new BlockBLWall(limestone, 0).setBlockName("thebetweenlands.limestoneWall");
 	public static final Block smoothBetweenstoneWall = new BlockBLWall(smoothBetweenstone, 0).setBlockName("thebetweenlands.smoothBetweenstoneWall");
+	public static final Block smoothBetweenstoneWallMossy= new BlockBLWall(betweenstoneSmoothMossy, 0).setBlockName("thebetweenlands.smoothBetweenstoneWallMossy");
 	public static final Block betweenstoneBrickWallMossy = new BlockBLWall(betweenstoneBricksMossy, 0).setBlockName("thebetweenlands.betweenstoneBrickWallMossy");
+	public static final Block betweenstoneBrickWallCracked = new BlockBLWall(betweenstoneBricksCracked, 0).setBlockName("thebetweenlands.betweenstoneBrickWallCracked");
+	public static final Block betweenstoneBrickStairsCracked = new BlockBLStairs(betweenstoneBricksCracked, 0).setBlockName("thebetweenlands.betweenstoneBrickStairsCracked");
 	public static final Block smoothCragrockWall = new BlockBLWall(smoothCragrock, 0).setBlockName("thebetweenlands.smoothCragrockWall");
 	public static final Block smoothPitstoneWall = new BlockBLWall(smoothPitstone, 0).setBlockName("thebetweenlands.smoothPitstoneWall");
 	public static final Block solidTarWall = new BlockBLWall(solidTar, 0).setBlockName("thebetweenlands.solidTarWall");
@@ -595,6 +601,13 @@ public class BLBlockRegistry {
 	public static final BlockBLSlab thatchSlab = new BlockBLSlab(false, Material.cloth, "thatch", null, "axe");
 	public static final BlockBLSlab thatchSlabDouble = new BlockBLSlab(true, Material.cloth, "thatch", thatchSlab, "axe");
 	public static final Block thatchSlope = new BlockSlope(BLBlockRegistry.thatch, 0).setBlockName("thebetweenlands.thatchSlope").setCreativeTab(BLCreativeTabs.blocks);
+	public static final BlockBLSlab betweenstoneBrickSlabMossy = new BlockBLSlab(false, Material.rock, "betweenstoneBricksMossy", null, "pickaxe");
+	public static final BlockBLSlab betweenstoneBrickSlabMossyDouble = new BlockBLSlab(true, Material.rock, "betweenstoneBricksMossy", betweenstoneBrickSlabMossy, "pickaxe");
+	public static final BlockBLSlab smoothBetweenstoneSlabMossy = new BlockBLSlab(false, Material.rock, "betweenstoneSmoothMossy", null, "pickaxe");
+	public static final BlockBLSlab smoothBetweenstoneSlabMossyDouble = new BlockBLSlab(true, Material.rock, "betweenstoneSmoothMossy", smoothBetweenstoneSlabMossy, "pickaxe");	
+	public static final BlockBLSlab betweenstoneBrickSlabCracked = new BlockBLSlab(false, Material.rock, "betweenstoneBricksCracked", null, "pickaxe");
+	public static final BlockBLSlab betweenstoneBrickSlabCrackedDouble = new BlockBLSlab(true, Material.rock, "betweenstoneBricksCracked", betweenstoneBrickSlabCracked, "pickaxe");
+	
 	// PORTAL
 	public static BlockTreePortal treePortalBlock = new BlockTreePortal();
 
