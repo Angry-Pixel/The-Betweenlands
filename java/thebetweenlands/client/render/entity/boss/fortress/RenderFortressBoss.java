@@ -11,8 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+import thebetweenlands.client.model.entity.ModelFortressBoss;
 import thebetweenlands.client.model.entity.ModelSwordEnergy;
-import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
@@ -25,7 +25,8 @@ public class RenderFortressBoss extends Render {
 	private static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	private static final ModelSwordEnergy BULLET_MODEL = new ModelSwordEnergy();
 
-	private static final ModelWight modelHeadOnly = new ModelWight().setRenderHeadOnly(true);
+	private static final ResourceLocation MODEL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/fortressBoss.png");
+	private static final ModelFortressBoss MODEL = new ModelFortressBoss();
 
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
@@ -61,19 +62,28 @@ public class RenderFortressBoss extends Render {
 		}
 
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(1, 1, 1, 0.8F);
 		GL11.glTranslated(x, y + (boss.coreBoundingBox.maxY-boss.coreBoundingBox.minY) / 2.0D + 0.15D, z);
 
-		this.bindTexture(new ResourceLocation("thebetweenlands:textures/entity/wight.png"));
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glColor4f(1, 1, 1, 1);
+		this.bindTexture(MODEL_TEXTURE);
 		GL11.glRotated(180, 1, 0, 0);
 		GL11.glRotated(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0, 1, 0);
-		GL11.glTranslated(0, 0, 0.25D);
+		GL11.glRotated(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
+		GL11.glTranslated(0, -0.2D, 0);
 		GL11.glTranslated(Math.sin((entity.ticksExisted + partialTicks)/5.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/7.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/6.0D) * 0.1F);
-		modelHeadOnly.render(entity, entity.distanceWalkedModified, 360, entity.ticksExisted + partialTicks, 0, 0, 0.065F);
+		GL11.glScaled(0.55F, 0.55F, 0.55F);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		LightingUtil.INSTANCE.setLighting(255);
+		MODEL.render(entity, entity.distanceWalkedModified, 360, entity.ticksExisted + partialTicks, 0, 0, 0.065F);
+		LightingUtil.INSTANCE.revert();
+		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
+		GL11.glColor4f(1, 1, 1, 1);
+
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + EntityFortressBoss.SHIELD_OFFSET_X, y + EntityFortressBoss.SHIELD_OFFSET_Y, z + EntityFortressBoss.SHIELD_OFFSET_Z);

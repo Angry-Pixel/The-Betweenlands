@@ -317,11 +317,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 				ray.yCoord = ray.yCoord * 64.0D;
 				ray.zCoord = ray.zCoord * 64.0D;
 				Vec3 pos = Vec3.createVectorHelper(entity.posX, entity.posY + entity.getEyeHeight() + (entity instanceof EntityPlayer && ((EntityPlayer)entity).isSneaking() ? -0.08D : 0.0D), entity.posZ);
-				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode)) {
+				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode) || entity.isSneaking()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
-						/*if(!this.worldObj.isRemote && entity.isSneaking())
-							this.setShieldActive(shieldHit, false);*/
+						if(!this.worldObj.isRemote && entity.isSneaking() && ((EntityPlayer)entity).capabilities.isCreativeMode)
+							this.setShieldActive(shieldHit, false);
 						if(this.worldObj.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
 							this.worldObj.playSound(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossNope", 1.0F, 1.0F, false);
@@ -421,6 +421,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		EntityPlayer closestPlayer = this.worldObj.getClosestVulnerablePlayerToEntity(this, 32.0D);
+		if(closestPlayer != null)
+			this.faceEntity(closestPlayer, 360.0F, 360.0F);
 
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;
