@@ -51,7 +51,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block betweenstoneStairsSmooth = BLBlockRegistry.smoothBetweenstoneStairs;
 	private Block betweenstoneStairsSmoothMossy = BLBlockRegistry.betweenstoneSmoothStairsMossy;
 	private Block cragrockChiselled = BLBlockRegistry.carvedCrag;
-	private Block pitstoneChiselled = BLBlockRegistry.chiseledPitstone;
+	private Block pitstoneChiselled = BLBlockRegistry.betweenstoneTilesFortress;
 	private Block stagnantWater = BLBlockRegistry.stagnantWaterFluid;
 	private Block spikeTrap = BLBlockRegistry.spikeTrap;
 	private Block swordStone = BLBlockRegistry.itemCage;

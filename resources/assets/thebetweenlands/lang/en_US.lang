@@ -264,6 +264,7 @@ tile.thebetweenlands.smoothBetweenstoneWallMossy.name=Mossy Smooth Betweenstone 
 tile.thebetweenlands.betweenstoneSmoothMossySlab.name=Mossy Smooth Betweenstone Slab
 tile.thebetweenlands.betweenstoneBricksMossySlab.name=Mossy Betweenstone Brick Slab
 tile.thebetweenlands.betweenstoneBricksCrackedSlab.name=Cracked Betweenstone Brick Slab
+tile.thebetweenlands.betweenstoneTilesFortress.name=Glowing Betweenstone Tile
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom

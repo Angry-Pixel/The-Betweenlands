@@ -429,6 +429,7 @@ public class BLBlockRegistry {
 	public static final Block pestleAndMortar = new BlockPestleAndMortar();
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block betweenstoneTilesFortress = new BlockBLGenericDeco("betweenstoneTilesFortress", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block betweenstoneBricks = new BlockBLGenericDeco("betweenstoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneBricksCracked = new BlockBLGenericDeco("betweenstoneBricksCracked", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block betweenstoneTiles = new BlockBLGenericDeco("betweenstoneTiles", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
