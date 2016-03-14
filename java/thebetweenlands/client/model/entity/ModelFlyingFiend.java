@@ -200,7 +200,7 @@ public class ModelFlyingFiend extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		 EntityFlyingFiend fiend = (EntityFlyingFiend) entity;
 		 GL11.glPushMatrix();
-	        if (fiend.getIsBatHanging()) {
+	        if (fiend.getIsHanging()) {
 	            GL11.glTranslatef(0.0F, 2.125F, 0.0F);
 	        GL11.glRotatef(180, 1F, 0F, 0.0F);
 	        }
@@ -220,7 +220,7 @@ public class ModelFlyingFiend extends ModelBase {
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityFlyingFiend fiend = (EntityFlyingFiend) entity;
 	
-		if (fiend.getIsBatHanging()) {
+		if (fiend.getIsHanging()) {
 			arm_right1.rotateAngleZ = 0.5462880558742251F;
 			arm_right2.rotateAngleZ = 0F;
 			arm_left1.rotateAngleZ = -0.5462880558742251F;
