@@ -14,12 +14,18 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import thebetweenlands.TheBetweenlands;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesFood;
+import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.recipes.CompostRecipe;
@@ -285,6 +291,14 @@ public class ItemTooltipHandler {
 			default:
 			}
 			event.toolTip.add(colorPrefix + StatCollector.translateToLocal("circlegem." + circleGem.name));
+		}
+		if(event.itemStack.getItem() instanceof ItemFood) {
+			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+			if(player != null) {
+				EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
+				Sickness sickness = property.getSickness((ItemFood)event.itemStack.getItem());
+				event.toolTip.add(StatCollector.translateToLocal("food_sickness.state." + sickness.name().toLowerCase()));
+			}
 		}
 	}
 }

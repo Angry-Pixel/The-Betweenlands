@@ -804,6 +804,9 @@ octine.fire=Hot enough to set moss on fire
 ring.power.bonus=Grants a bonus to all stats
 ring.recruitment.bonus=Grants the power to recruit enemies
 aspectvial.byariis.fuel=Can be used as fuel for the Repeller
+food_sickness.state.fine=Tastes good
+food_sickness.state.half=Tastes plain
+food_sickness.state.sick=Can't eat this anymore
 
 # Commands
 command.generic.noplayer=You must be a player

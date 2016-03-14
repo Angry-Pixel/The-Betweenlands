@@ -15,15 +15,12 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.IManualEntryItem;
 
-public class ItemForbiddenFig
-extends ItemFood implements IDecayFood, IManualEntryItem
-{
+public class ItemForbiddenFig extends ItemFood implements IDecayFood, IManualEntryItem {
 	public ItemForbiddenFig() {
 		super(20, 5.0F, false);
 	}
 
-	public int getDecayHealAmount()
-	{
+	public int getDecayHealAmount(ItemStack stack) {
 		return 20;
 	}
 

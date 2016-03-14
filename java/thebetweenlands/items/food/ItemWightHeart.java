@@ -7,35 +7,42 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
 
-public class ItemWightHeart extends ItemFood implements IManualEntryItem
-{
-    public ItemWightHeart() {
-        super(0, 0.0F, false);
-    }
+public class ItemWightHeart extends ItemFood implements IManualEntryItem {
+	public ItemWightHeart() {
+		super(0, 0.0F, false);
+	}
 
-    @Override
-    protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
-        super.onFoodEaten(stack, world, player);
-        player.heal(8.0F);
-    }
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (player.getHealth() < player.getMaxHealth()) {
+			player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		}
+		return stack;
+	}
 
-    @Override
-    public String manualName(int meta) {
-        return "wightHeart";
-    }
+	@Override
+	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
+		super.onFoodEaten(stack, world, player);
+		player.heal(8.0F);
+	}
 
-    @Override
-    public Item getItem() {
-        return this;
-    }
+	@Override
+	public String manualName(int meta) {
+		return "wightHeart";
+	}
 
-    @Override
-    public int[] recipeType(int meta) {
-        return new int[0];
-    }
+	@Override
+	public Item getItem() {
+		return this;
+	}
 
-    @Override
-    public int metas() {
-        return 0;
-    }
+	@Override
+	public int[] recipeType(int meta) {
+		return new int[0];
+	}
+
+	@Override
+	public int metas() {
+		return 0;
+	}
 }

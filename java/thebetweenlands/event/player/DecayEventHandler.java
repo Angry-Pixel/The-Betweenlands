@@ -30,7 +30,7 @@ public class DecayEventHandler {
 	public void useItem(PlayerUseItemEvent.Finish event) {
 		if (event.item != null && DecayManager.isDecayEnabled(event.entityPlayer) && event.item.getItem() instanceof IDecayFood) {
 			IDecayFood food = (IDecayFood) event.item.getItem();
-			DecayManager.getDecayStats(event.entityPlayer).addStats(food.getDecayHealAmount(), 0.6F);
+			DecayManager.getDecayStats(event.entityPlayer).addStats(food.getDecayHealAmount(event.item), 0.6F);
 		}
 	}
 
