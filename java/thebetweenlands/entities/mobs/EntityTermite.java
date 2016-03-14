@@ -39,6 +39,11 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	protected void func_145780_a(int x, int y, int z, Block block) {
 		playSound("mob.spider.step", 0.15F, 1.0F);
 	}
+	
+	@Override
+	protected String getLivingSound() {
+		return "thebetweenlands:termiteLiving";
+	}
 
 	@Override
 	protected String getDeathSound() {

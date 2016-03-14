@@ -508,6 +508,13 @@
 			"flyingFiendDeath"
 		]
 	},
+	"termiteLiving": {
+		"category": "hostile",
+		"sounds": [
+			"termiteLiving1",
+			"termiteLiving2"
+		]
+	},
 	"sorry": {
 		"category": "player",
 		"sounds": [
