@@ -42,16 +42,22 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block betweenstoneTilesMossyCollapsing = BLBlockRegistry.betweenstoneTilesMossyCollapsing;
 	private Block betweenstoneBrickStairs = BLBlockRegistry.betweenstoneBrickStairs;
 	private Block betweenstoneBrickStairsMossy = BLBlockRegistry.betweenstoneBrickStairsMossy;
+	private Block betweenstoneBrickStairsCracked = BLBlockRegistry.betweenstoneBrickStairsCracked;
 	private Block betweenstoneBrickSlab = BLBlockRegistry.betweenstoneBrickSlab;
 	private Block betweenstoneBrickWall = BLBlockRegistry.betweenstoneBrickWall;
 	private Block betweenstoneBrickWallMossy = BLBlockRegistry.betweenstoneBrickWallMossy;
+	private Block betweenstoneBrickWallCracked = BLBlockRegistry.betweenstoneBrickWallCracked;
 	private Block betweenstoneBricks = BLBlockRegistry.betweenstoneBricks;
 	private Block betweenstoneBricksMossy = BLBlockRegistry.betweenstoneBricksMossy;
+	private Block betweenstoneBricksCracked = BLBlockRegistry.betweenstoneBricksCracked;
 	private Block betweenstonePillar = BLBlockRegistry.betweenstonePillar;
 	private Block betweenstoneStairsSmooth = BLBlockRegistry.smoothBetweenstoneStairs;
 	private Block betweenstoneStairsSmoothMossy = BLBlockRegistry.betweenstoneSmoothStairsMossy;
 	private Block cragrockChiselled = BLBlockRegistry.carvedCrag;
 	private Block pitstoneChiselled = BLBlockRegistry.betweenstoneTilesFortress;
+	private Block betweenstoneBricksEyes = BLBlockRegistry.spookyBetweenstoneBrick1;
+	private Block betweenstoneBricksCrumbled1 = BLBlockRegistry.spookyBetweenstoneBrick2;
+	private Block betweenstoneBricksCrumbled2 = BLBlockRegistry.spookyBetweenstoneBrick3;
 	private Block stagnantWater = BLBlockRegistry.stagnantWaterFluid;
 	private Block spikeTrap = BLBlockRegistry.spikeTrap;
 	private Block swordStone = BLBlockRegistry.itemCage;
@@ -83,11 +89,36 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	public Block getRandomWall(Random rand) {
-		return rand.nextBoolean() ? betweenstoneBrickWall : betweenstoneBrickWallMossy;
+		int type = rand.nextInt(3);
+		switch (type) {
+		case 0:
+			return betweenstoneBrickWall;
+		case 1:
+			return betweenstoneBrickWallMossy;
+		case 2:
+			return betweenstoneBrickWallCracked;
+		}
+		return betweenstoneBrickWall;
 	}
 
+
 	public Block getRandomBricks(Random rand) {
-		return rand.nextBoolean() ? betweenstoneBricks : betweenstoneBricksMossy;
+		int type = rand.nextInt(6);
+		switch (type) {
+		case 0:
+			return betweenstoneBricks;
+		case 1:
+			return betweenstoneBricksMossy;
+		case 2:
+			return betweenstoneBricksCracked;
+		case 3:
+			return betweenstoneBricksEyes;
+		case 4:
+			return betweenstoneBricksCrumbled1;
+		case 5:
+			return betweenstoneBricksCrumbled2;
+		}
+		return betweenstoneBricks;
 	}
 
 	public Block getRandomTiles(Random rand) {
@@ -116,7 +147,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	public Block getRandomBetweenstoneBrickStairs(Random rand) {
-		return rand.nextBoolean() ? betweenstoneBrickStairs : betweenstoneBrickStairsMossy;
+		int type = rand.nextInt(3);
+		switch (type) {
+		case 0:
+			return betweenstoneBrickStairs;
+		case 1:
+			return betweenstoneBrickStairsMossy;
+		case 2:
+			return betweenstoneBrickStairsCracked;
+		}
+		return betweenstoneBrickStairs;
 	}
 
 	public boolean generateStructure(World world, Random rand, int xx, int yy, int zz) {

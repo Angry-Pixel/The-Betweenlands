@@ -87,6 +87,7 @@ import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.structure.BlockItemCage;
 import thebetweenlands.blocks.structure.BlockPossessedBlock;
 import thebetweenlands.blocks.structure.BlockSpikeTrap;
+import thebetweenlands.blocks.structure.BlockSpookyBetweenstoneBrick;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
@@ -489,10 +490,8 @@ public class BLBlockRegistry {
 	public static final Block polishedDentrothyst1 = new BlockBLGlass("polishedDentrothyst1", "polishedDentrothyst11");
 	public static final Block polishedDentrothyst2 = new BlockBLGlass("polishedDentrothyst2", "polishedDentrothyst21");
 	public static final Block siltGlasPane = new BlockBLPane("siltGlass", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
-	
 	public static final Block polishedDentrothyst1Pane = new BlockBLPane("polishedDentrothyst1", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
 	public static final Block polishedDentrothyst2Pane = new BlockBLPane("polishedDentrothyst2", Material.glass, false).setHardness(0.3F).setStepSound(Block.soundTypeGlass);
-	
 	public static final Block repeller = new BlockRepeller().setBlockName("thebetweenlands.repeller").setBlockTextureName("thebetweenlands:weedwoodBark");
 	public static final BlockBLHopper syrmoriteHopper = new BlockBLHopper("syrmorite");
 	public static final Block slimyBoneBlock = new BlockBLGenericDeco("slimyBoneBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
@@ -501,6 +500,9 @@ public class BLBlockRegistry {
 	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block mossyLimestoneBricks = new BlockBLGenericDeco("mossyLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block crackedLimestoneBricks = new BlockBLGenericDeco("crackedLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block spookyBetweenstoneBrick1 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick1");
+	public static final Block spookyBetweenstoneBrick2 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick2");
+	public static final Block spookyBetweenstoneBrick3 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick3");
 	
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
