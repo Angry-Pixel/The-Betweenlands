@@ -264,7 +264,7 @@ public class ModelFlyingFiend extends ModelBase {
 			lil_tail2.rotateAngleX = 0.36425021489121656F + flap * 0.25F;
 			lil_tail3.rotateAngleX = 0.40980330836826856F + flap * 0.125F;
 			
-			head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.25F;
+			head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
 			GL11.glTranslatef(0.0F, 0F - flap * 0.5F, 0.0F);
 			head_base.rotateAngleX = -0.698132F;
 
