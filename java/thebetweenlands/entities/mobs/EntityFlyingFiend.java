@@ -1,10 +1,11 @@
 package thebetweenlands.entities.mobs;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -14,13 +15,12 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
 	public double waypointX;
 	public double waypointY;
 	public double waypointZ;
-	private Entity targetedEntity;
+	private EntityLivingBase targetedEntity;
 
 	public EntityFlyingFiend(World world) {
 		super(world);
 	    setSize(0.8F, 0.9F);
 	    setIsHanging(false);
-
 	}
 
     protected void entityInit() {
@@ -28,27 +28,33 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
         dataWatcher.addObject(16, new Byte((byte)0));
     }
 
-    @Override
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (motionY < 0 && posX != waypointX && posZ != waypointZ && targetedEntity == null) {
-			motionY *= 1D;
-			motionX *= 1D;
-			motionZ *= 1D;
+		if (!worldObj.isRemote) {
+			if (motionY < 0 && posX != waypointX && posZ != waypointZ && targetedEntity == null) {
+				motionY *= 1D;
+				motionX *= 1D;
+				motionZ *= 1D;
+			}
+			if (targetedEntity != null) {
+				if (targetedEntity instanceof EntityPlayer)
+					if (((EntityPlayer) targetedEntity).capabilities.isCreativeMode) {
+						targetedEntity = null;
+						return;
+					}
+				double standOffX = targetedEntity.posX;
+				double standOffZ = targetedEntity.posZ;
+				waypointX = standOffX;
+				waypointY = targetedEntity.posY + 1 - rand.nextFloat() * 0.3F;
+				waypointZ = standOffZ;
+			}
+			if (getIsHanging()) {
+				motionX = motionY = motionZ = 0.0D;
+				posY = (double) MathHelper.floor_double(posY) + 1.0D - (double) height;
+			} else
+				motionY *= 0.6000000238418579D;
 		}
-		if (targetedEntity != null) {
-			double standOffX = targetedEntity.posX;
-			double standOffZ = targetedEntity.posZ;
-			waypointX = standOffX;
-			waypointY = targetedEntity.posY + 1 - rand.nextFloat() * 0.3F;
-			waypointZ = standOffZ;
-		}
-        if (getIsHanging()) {
-            motionX = motionY = motionZ = 0.0D;
-            posY = (double)MathHelper.floor_double(posY) + 1.0D - (double)height;
-        }
-       else
-           motionY *= 0.6000000238418579D;
 	}
 
 	@Override
@@ -100,9 +106,8 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
 			if (targetedEntity != null && targetedEntity.isDead)
 				targetedEntity = null;
 
-			if (targetedEntity == null) {
-				targetedEntity = worldObj.getClosestVulnerablePlayerToEntity(this, 100.0D);
-			}
+			if (targetedEntity == null)
+				targetedEntity = worldObj.getClosestVulnerablePlayerToEntity(this, 32D);
 
 			if (targetedEntity != null) {
 				distanceX = targetedEntity.posX - posX;
@@ -112,7 +117,7 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
 			} else
 				renderYawOffset = rotationYaw = -((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI;
 
-			if (rand.nextInt(20) == 0 && worldObj.getBlock(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ)).isNormalCube())
+			if (targetedEntity == null && rand.nextInt(20) == 0 && worldObj.getBlock(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ)).isNormalCube())
 				setIsHanging(true);
 		}
 	}
@@ -129,6 +134,15 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
 				return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void onCollideWithPlayer(EntityPlayer player) {
+		super.onCollideWithPlayer(player);
+		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player))
+			if (getDistanceToEntity(player) <= 1.5F)
+				if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY)
+						player.attackEntityFrom(DamageSource.causeMobDamage(this), 2F);
 	}
 
 	@Override
