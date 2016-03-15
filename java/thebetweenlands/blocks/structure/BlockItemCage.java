@@ -12,14 +12,14 @@ import thebetweenlands.tileentities.TileEntityItemCage;
 public class BlockItemCage extends BlockContainer {
 
 	public BlockItemCage() {
-		super(Material.rock);
-		setHardness(15F);
+		super(Material.wood);
+		setHardness(10F);
 		setResistance(10.0F);
 		setStepSound(soundTypeStone);
 		setLightLevel(0.8F);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.itemCage");
-		setBlockTextureName("thebetweenlands:polishedDentrothyst21"); //temp spam reduction 
+		setBlockTextureName("thebetweenlands:weedwoodPlanks"); //temp spam reduction 
 	}
 
 	@Override
