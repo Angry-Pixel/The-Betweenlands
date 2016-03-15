@@ -508,6 +508,29 @@
 			"flyingFiendDeath"
 		]
 	},
+	"giantToadLiving": {
+		"category": "hostile",
+		"sounds": [
+			"giantToadLiving1",
+			"giantToadLiving2",
+			"giantToadLiving3",
+			"giantToadLiving4"
+		]
+	},
+	"giantToadHurt": {
+		"category": "hostile",
+		"sounds": [
+			"giantToadHurt1",
+			"giantToadHurt2",
+			"giantToadHurt3"
+		]
+	},
+	"giantToadDeath": {
+		"category": "hostile",
+		"sounds": [
+			"giantToadDeath"
+		]
+	},
 	"termiteLiving": {
 		"category": "hostile",
 		"sounds": [

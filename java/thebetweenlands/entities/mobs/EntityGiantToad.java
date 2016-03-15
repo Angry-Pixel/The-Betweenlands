@@ -87,4 +87,19 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public String pageName() {
 		return "giantToad";
 	}
+	
+	@Override
+	protected String getLivingSound() {
+		return "thebetweenlands:giantToadLiving";
+	}
+
+	@Override
+	protected String getHurtSound() {
+		return "thebetweenlands:giantToadHurt";
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:giantToadDeath";
+	}
 }
