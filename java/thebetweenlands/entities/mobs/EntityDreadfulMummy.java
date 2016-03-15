@@ -97,12 +97,14 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
 		sludge.motionX = look.xCoord * 0.5D;
 		sludge.motionY = look.yCoord;
 		sludge.motionZ = look.zCoord * 0.5D;
+		playSound("thebetweenlands:dreadfulPeatMummyRetch", 1, 0.7f + rand.nextFloat() * 0.6f);
 		if (!worldObj.isRemote) worldObj.spawnEntityInWorld(sludge);
 	}
 
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
 		if (rand.nextInt(5) == 0 && target != eatPrey && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode)) {setPrey(target);}
+		playSound("thebetweenlands:dreadfulPeatMummySwipe", 1, 0.7f + rand.nextFloat() * 0.6f);
 		return super.attackEntityAsMob(target);
 	}
 
@@ -111,7 +113,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL {
 		eatPrey.setPositionAndRotation(posX - Math.sin(direction) * 1.7, posY + 1.7, posZ + Math.cos(direction) * 1.7, (float) (Math.toDegrees(direction) + 180), 0);
 		eatPrey.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
 		eatPrey.fallDistance = 0;
-		if (ticksExisted % 10 == 0) eatPrey.attackEntityFrom(DamageSource.causeMobDamage(this), 3);
+		if (ticksExisted % 10 == 0)
+		{
+			eatPrey.attackEntityFrom(DamageSource.causeMobDamage(this), 3);
+			playSound("thebetweenlands:dreadfulPeatMummyBite", 1, 0.7f + rand.nextFloat() * 0.6f);
+		}
 		if (eatPrey.getHealth() <= 0 && !worldObj.isRemote) setPrey(null);
 	}
 
