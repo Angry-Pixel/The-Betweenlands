@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.decay.DecayManager;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 
 /**
  * Created by Bart on 29-8-2015.
@@ -41,10 +42,8 @@ public class BlockStagnantWater extends BlockFluidClassic {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (entity instanceof EntityPlayer) {
-			if(world.rand.nextInt(16) == 0) {
-				DecayManager.getDecayStats((EntityPlayer)entity).addExhaustion(4.0F);
-			}
+		if (entity instanceof EntityPlayer && !world.isRemote && !((EntityPlayer)entity).isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect())) {
+			((EntityPlayer)entity).addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
 		}
 	}
 

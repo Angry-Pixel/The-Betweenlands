@@ -210,6 +210,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.CHUNK_SYNC_HANDLER);
 		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(PlayerItemEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.amulet);
 		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);

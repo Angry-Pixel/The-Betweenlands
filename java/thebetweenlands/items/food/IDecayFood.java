@@ -1,6 +1,7 @@
 package thebetweenlands.items.food;
 
-public interface IDecayFood
-{
-    int getDecayHealAmount();
+import net.minecraft.item.ItemStack;
+
+public interface IDecayFood {
+    int getDecayHealAmount(ItemStack stack);
 }

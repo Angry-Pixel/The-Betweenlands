@@ -1,6 +1,9 @@
 package thebetweenlands.entities.properties.list;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,8 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
 import thebetweenlands.event.player.PlayerItemEventHandler;
-
-import java.util.Map;
+import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
 
 public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 	private Map<String, Integer> hatredMap = Maps.newHashMap();
@@ -27,59 +29,41 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
-		compound.setInteger("Size", hatredMap.size());
+		compound.setInteger("Size", this.hatredMap.size());
 		NBTTagList list = new NBTTagList();
-		for (Map.Entry<String, Integer> entry : hatredMap.entrySet()) {
+		for (Map.Entry<String, Integer> entry : this.hatredMap.entrySet()) {
 			NBTTagCompound listCompound = new NBTTagCompound();
 			listCompound.setString("Food", entry.getKey());
 			listCompound.setInteger("Level", entry.getValue());
 			list.appendTag(listCompound);
 		}
 		compound.setTag("HatredMap", list);
-		compound.setInteger("LastHatred", lastHatred);
+		compound.setInteger("LastHatred", this.lastHatred);
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		hatredMap = Maps.newHashMap();
+		this.hatredMap = Maps.newHashMap();
 		int size = compound.getInteger("Size");
 		NBTTagList list = compound.getTagList("HatredMap", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < size; i++) {
 			NBTTagCompound listCompound = list.getCompoundTagAt(i);
 			String food = listCompound.getString("Food");
 			int level = listCompound.getInteger("Level");
-			hatredMap.put(food, level);
+			this.hatredMap.put(food, level);
 		}
-		lastHatred = compound.getInteger("LastHatred");
+		this.lastHatred = compound.getInteger("LastHatred");
 	}
 
 	@Override
 	public boolean saveTrackingSensitiveData(NBTTagCompound compound) {
-		compound.setInteger("Size", hatredMap.size());
-		NBTTagList list = new NBTTagList();
-		for (Map.Entry<String, Integer> entry : hatredMap.entrySet()) {
-			NBTTagCompound listCompound = new NBTTagCompound();
-			listCompound.setString("Food", entry.getKey());
-			listCompound.setInteger("Level", entry.getValue());
-			list.appendTag(listCompound);
-		}
-		compound.setTag("HatredMap", list);
-		compound.setInteger("LastHatred", lastHatred);
+		this.saveNBTData(compound);
 		return true;
 	}
 
 	@Override
 	public void loadTrackingSensitiveData(NBTTagCompound compound) {
-		hatredMap = Maps.newHashMap();
-		int size = compound.getInteger("Size");
-		NBTTagList list = compound.getTagList("HatredMap", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < size; i++) {
-			NBTTagCompound listCompound = list.getCompoundTagAt(i);
-			String food = listCompound.getString("Food");
-			int level = listCompound.getInteger("Level");
-			hatredMap.put(food, level);
-		}
-		lastHatred = compound.getInteger("LastHatred");
+		this.loadNBTData(compound);
 	}
 
 	@Override
@@ -88,36 +72,35 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 	}
 
 	public int getFoodHatred(ItemFood food) {
-		if (hatredMap.containsKey(food.getUnlocalizedName())) {
-			return hatredMap.get(food.getUnlocalizedName());
+		if (this.hatredMap.containsKey(food.getUnlocalizedName())) {
+			return this.hatredMap.get(food.getUnlocalizedName());
 		} else {
 			return 0;
 		}
 	}
 
-	public void increaseFoodHatred(ItemFood food) {
-		increaseFoodHatred(food, 1);
-	}
-
-	public void increaseFoodHatred(ItemFood food, int amount) {
-		if (hatredMap.containsKey(food.getUnlocalizedName())) {
-			int currentAmount = hatredMap.get(food.getUnlocalizedName());
-			hatredMap.put(food.getUnlocalizedName(), currentAmount + amount);
+	public void increaseFoodHatred(ItemFood food, int amount, int decreaseForOthers) {
+		int finalMaxHatred = Sickness.VALUES[Math.max(Sickness.VALUES.length - 1, 0)].maxHatred;
+		if (this.hatredMap.containsKey(food.getUnlocalizedName())) {
+			int currentAmount = this.hatredMap.get(food.getUnlocalizedName());
+			this.hatredMap.put(food.getUnlocalizedName(), Math.min(currentAmount + amount, finalMaxHatred));
 		} else {
-			hatredMap.put(food.getUnlocalizedName(), amount);
+			this.hatredMap.put(food.getUnlocalizedName(), Math.min(amount, finalMaxHatred));
 		}
-		lastHatred = hatredMap.get(food.getUnlocalizedName());
-		decreaseHatredForAllExcept(food);
+		this.lastHatred = this.hatredMap.get(food.getUnlocalizedName());
+		decreaseHatredForAllExcept(food, decreaseForOthers);
 	}
 
-	public void decreaseHatredForAllExcept(ItemFood food) {
-		Map<String, Integer> newHatredMap = Maps.newHashMap();
-		for (String key : hatredMap.keySet()) {
-			if (!key.equals(food.getUnlocalizedName())) {
-				newHatredMap.put(key, hatredMap.get(key) - 1);
+	public void decreaseHatredForAllExcept(ItemFood food, int decrease) {
+		if(decrease > 0) {
+			Map<String, Integer> newHatredMap = Maps.newHashMap();
+			for (String key : this.hatredMap.keySet()) {
+				if (!key.equals(food.getUnlocalizedName())) {
+					newHatredMap.put(key, Math.max(this.hatredMap.get(key) - decrease, 0));
+				}
 			}
+			this.hatredMap.putAll(newHatredMap);
 		}
-		hatredMap.putAll(newHatredMap);
 	}
 
 	public PlayerItemEventHandler.Sickness getSickness(ItemFood food) {

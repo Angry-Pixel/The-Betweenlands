@@ -264,6 +264,10 @@ tile.thebetweenlands.smoothBetweenstoneWallMossy.name=Mossy Smooth Betweenstone 
 tile.thebetweenlands.betweenstoneSmoothMossySlab.name=Mossy Smooth Betweenstone Slab
 tile.thebetweenlands.betweenstoneBricksMossySlab.name=Mossy Betweenstone Brick Slab
 tile.thebetweenlands.betweenstoneBricksCrackedSlab.name=Cracked Betweenstone Brick Slab
+tile.thebetweenlands.betweenstoneTilesFortress.name=Glowing Betweenstone Tile
+tile.thebetweenlands.spookyBetweenstoneBrick1.name=Crumbling Betweenstone Bricks
+tile.thebetweenlands.spookyBetweenstoneBrick2.name=Crumbling Betweenstone Bricks
+tile.thebetweenlands.spookyBetweenstoneBrick3.name=Crumbling Betweenstone Bricks
 
 # Plants
 tile.thebetweenlands.blackHatMushroom.name=Black Hat Mushroom
@@ -804,6 +808,9 @@ octine.fire=Hot enough to set moss on fire
 ring.power.bonus=Grants a bonus to all stats
 ring.recruitment.bonus=Grants the power to recruit enemies
 aspectvial.byariis.fuel=Can be used as fuel for the Repeller
+food_sickness.state.fine=Tastes good
+food_sickness.state.half=Tastes plain
+food_sickness.state.sick=Can't eat this anymore
 
 # Commands
 command.generic.noplayer=You must be a player
