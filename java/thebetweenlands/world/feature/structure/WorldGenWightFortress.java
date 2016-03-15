@@ -53,11 +53,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block betweenstonePillar = BLBlockRegistry.betweenstonePillar;
 	private Block betweenstoneStairsSmooth = BLBlockRegistry.smoothBetweenstoneStairs;
 	private Block betweenstoneStairsSmoothMossy = BLBlockRegistry.betweenstoneSmoothStairsMossy;
-	private Block cragrockChiselled = BLBlockRegistry.carvedCrag;
-	private Block pitstoneChiselled = BLBlockRegistry.betweenstoneTilesFortress;
-	private Block betweenstoneBricksEyes = BLBlockRegistry.spookyBetweenstoneBrick1;
-	private Block betweenstoneBricksCrumbled1 = BLBlockRegistry.spookyBetweenstoneBrick2;
-	private Block betweenstoneBricksCrumbled2 = BLBlockRegistry.spookyBetweenstoneBrick3;
+	private Block betweenstoneTilesFortress = BLBlockRegistry.betweenstoneTilesFortress;
 	private Block stagnantWater = BLBlockRegistry.stagnantWaterFluid;
 	private Block spikeTrap = BLBlockRegistry.spikeTrap;
 	private Block swordStone = BLBlockRegistry.itemCage;
@@ -103,7 +99,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 
 	public Block getRandomBricks(Random rand) {
-		int type = rand.nextInt(6);
+		int type = rand.nextInt(3);
 		switch (type) {
 		case 0:
 			return betweenstoneBricks;
@@ -111,12 +107,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return betweenstoneBricksMossy;
 		case 2:
 			return betweenstoneBricksCracked;
-		case 3:
-			return betweenstoneBricksEyes;
-		case 4:
-			return betweenstoneBricksCrumbled1;
-		case 5:
-			return betweenstoneBricksCrumbled2;
 		}
 		return betweenstoneBricks;
 	}
@@ -357,7 +347,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					rotatedCubeVolume(world, rand, x, y, z, 7, 5, 2, betweenstoneBricks, 0, 2, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 5, 6, 2, betweenstoneBricks, 0, 1, 3, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 7, 6, 2, betweenstoneBricks, 0, 1, 3, 1, direction);
-					rotatedCubeVolume(world, rand, x, y, z, 6, 15, 3, pitstoneChiselled, 0, 1, 1, 1, direction);
+					rotatedCubeVolume(world, rand, x, y, z, 6, 15, 3, betweenstoneTilesFortress, 0, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 6, 14, 3, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 6, 9, 2, betweenstoneTiles, 0, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 6, 8, 2, betweenstoneBrickSlab, 8, 1, 1, 1, direction);
