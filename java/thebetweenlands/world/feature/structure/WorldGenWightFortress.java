@@ -189,10 +189,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, 5, 6, limestoneChiselled, 0, 3, 1, 1, direction);
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 8, 6, spawner, 0, 1, 1, 1, direction);
-			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.termite"); // TODO add flame thingy mob on this floor
-			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.termite");
-			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.termite");
-			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.termite");
+			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.floatingFlamme");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.floatingFlamme");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.floatingFlamme");
+			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.floatingFlamme");
 
 
 			//2nd floors
