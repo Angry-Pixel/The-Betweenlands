@@ -22,6 +22,7 @@ public class BlockBLSpawner extends BlockMobSpawner {
 	public BlockBLSpawner() {
 		super();
 		setLightLevel(0.9375F);
+		setHardness(10.0F);
 		setHarvestLevel("pickaxe", 0);
 		setBlockName("thebetweenlands.blSpawner");
 		setCreativeTab(BLCreativeTabs.blocks);
