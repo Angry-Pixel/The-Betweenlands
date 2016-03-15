@@ -773,7 +773,8 @@ entity.thebetweenlands.swordEnergy.name=Shockwave Sword Energy Ball
 entity.thebetweenlands.fortressBoss.name=Primordial Malevolence
 entity.thebetweenlands.fortressBossTurret.name=Primordial Malevolence Turret
 entity.thebetweenlands.fortressBossProjectile.name=Primordial Malevolence Projectile
-entity.thebetweenlands.flyingFiend.name=Flying Fiend
+entity.thebetweenlands.flyingFiend.name=Chiromaw
+entity.thebetweenlands.floatingFlamme.name=Floating Farty Pants
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks

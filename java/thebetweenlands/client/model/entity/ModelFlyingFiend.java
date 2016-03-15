@@ -204,9 +204,12 @@ public class ModelFlyingFiend extends ModelBase {
 	            GL11.glTranslatef(0.0F, 2.125F, 0.0F);
 	        GL11.glRotatef(180, 1F, 0F, 0.0F);
 	        }
-	        else
+	        else {
 	        	GL11.glRotatef(40, 1F, 0F, 0.0F);
+	        	 GL11.glTranslatef(0.0F, 0F, -0.8F);
+	        	}
 	        body_base.render(unitPixel);
+	        
 	        GL11.glPopMatrix();
     }
 
