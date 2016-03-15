@@ -28,7 +28,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private int width = -1;
 	private int height = -1;
 	private int direction = -1;
-	private int originX, originY, originZ = -1;
 
 	private Block limestonePolished = BLBlockRegistry.polishedLimestone;
 	private Block limestoneChiselled = BLBlockRegistry.chiseledLimestone;
@@ -86,9 +85,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1);
 		StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 2);
-		originX = x;
-		originY = y;
-		originZ = z;
 		return generateStructure(world, rand, x, y, z);
 	}
 
@@ -105,8 +101,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 		return betweenstoneBrickWall;
 	}
 
+
 	public Block getRandomBricks(Random rand) {
-		int type = rand.nextInt(4);
+		int type = rand.nextInt(6);
 		switch (type) {
 		case 0:
 			return betweenstoneBricks;
@@ -115,20 +112,11 @@ public class WorldGenWightFortress extends WorldGenerator {
 		case 2:
 			return betweenstoneBricksCracked;
 		case 3:
-			return rand.nextBoolean() ? betweenstoneBricksEyes : rand.nextBoolean() ? betweenstoneBricksCrumbled1: betweenstoneBricksCrumbled2;
-		}
-		return betweenstoneBricks;
-	}
-	
-	public Block getRandomBricksNoSpook(Random rand) {
-		int type = rand.nextInt(3);
-		switch (type) {
-		case 0:
-			return betweenstoneBricks;
-		case 1:
-			return betweenstoneBricksMossy;
-		case 2:
-			return betweenstoneBricksCracked;
+			return betweenstoneBricksEyes;
+		case 4:
+			return betweenstoneBricksCrumbled1;
+		case 5:
+			return betweenstoneBricksCrumbled2;
 		}
 		return betweenstoneBricks;
 	}
@@ -777,12 +765,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 					for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
 						if(blockType == betweenstoneTiles)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), blockMeta, 2);
-						else if(blockType == betweenstoneBricks) {
-							if(y < originY + 16)
-								world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), getRandomBricks(rand) != betweenstoneBricks || getRandomBricks(rand) != betweenstoneBricksMossy ? 0 : 0, 2);
-							else
-								world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricksNoSpook(rand), 0, 2);
-						}
+						else if(blockType == betweenstoneBricks)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickWall)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickStairs)
@@ -803,12 +787,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 					for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
 						if(blockType == betweenstoneTiles)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), blockMeta, 2);
-						else if(blockType == betweenstoneBricks) {
-							if(y < originY + 16)
-								world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), getRandomBricks(rand) != betweenstoneBricks || getRandomBricks(rand) != betweenstoneBricksMossy ? 3 : 0, 2);
-							else
-								world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricksNoSpook(rand), 0, 2);	
-						}
+						else if(blockType == betweenstoneBricks)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickWall)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickStairs)
@@ -829,12 +809,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 					for (int zz = z + length - offsetC - 1; zz > z + length - offsetC - sizeDepth - 1; zz--) {
 						if(blockType == betweenstoneTiles)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), blockMeta, 2);
-						else if(blockType == betweenstoneBricks) {
-							if(y < originY + 16)
-							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), getRandomBricks(rand) != betweenstoneBricks || getRandomBricks(rand) != betweenstoneBricksMossy ? 2 : 0, 2);
-						else
-							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricksNoSpook(rand), 0, 2);	
-						}
+						else if(blockType == betweenstoneBricks)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickWall)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickStairs)
@@ -855,12 +831,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 					for (int xx = x + length - offsetC - 1; xx > x + length - offsetC - sizeDepth - 1; xx--) {
 						if(blockType == betweenstoneTiles)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), blockMeta, 2);
-						else if(blockType == betweenstoneBricks) {
-							if(y < originY + 16)
-							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), getRandomBricks(rand) != betweenstoneBricks || getRandomBricks(rand) != betweenstoneBricksMossy ? 1 : 0, 2);
-							else
-								world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricksNoSpook(rand), 0, 2);	
-							}
+						else if(blockType == betweenstoneBricks)
+							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickWall)
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), blockMeta, 2);
 						else if(blockType == betweenstoneBrickStairs)

@@ -49,7 +49,6 @@ public class BlockSpookyBetweenstoneBrick
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack is) {
 		int rot = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 2.5D) & 3;
 		world.setBlockMetadataWithNotify(x, y, z, rot, 3);
-		System.out.println("Meta: " + rot);
 	}
 
 	@Override
