@@ -346,7 +346,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 						BLParticle.SWAMP_SMOKE.spawn(this.worldObj, px, py, pz, vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F, 1.0F);
 					}
 				}
-				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:druidTeleport", 1.6F, 1.0F);
+				this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:wightAttack", 1.6F, 1.0F);
 			}
 			this.prevVolatile = this.isVolatile();
 		} else {
