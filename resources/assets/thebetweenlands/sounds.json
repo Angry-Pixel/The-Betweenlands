@@ -625,6 +625,23 @@
 			"fig"
 		]
 	},
+	"music.blMenu": {
+		"category": "music",
+		"sounds": [
+			{
+				"name": "menu/TheAdventureBegins",
+				"stream": true
+			},
+			{
+				"name": "menu/AForebodingWelcome",
+				"stream": true
+			},
+			{
+				"name": "menu/LeechesAndFireflies",
+				"stream": true
+			}
+		]
+	},
 	"music.blDimension": {
 		"category": "music",
 		"sounds": [
