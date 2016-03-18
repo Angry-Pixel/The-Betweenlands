@@ -61,7 +61,6 @@ import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.lanterns.ItemConnectionFairyLights;
 import thebetweenlands.items.lanterns.ItemLight;
-import thebetweenlands.items.loot.ItemArtefact;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemVoodooDoll;
 import thebetweenlands.items.misc.ItemAmuletSlot;
@@ -299,8 +298,6 @@ public class BLItemRegistry {
 			.setMaxDamage(32).setUnlocalizedName("thebetweenlands.hagHacker").setTextureName("thebetweenlands:hagHacker");
 
 	public static final Item skullMask = new ItemSkullMask().setUnlocalizedName("thebetweenlands.skullMask").setTextureName("thebetweenlands:skullMask");
-	public static final Item tribalPants = new ItemArmor(ItemArmor.ArmorMaterial.CLOTH, 0, 2).setUnlocalizedName("thebetweenlands.tribalPants").setTextureName("thebetweenlands:tribalPants");
-	public static final Item itemArtefact = new ItemArtefact();
 
 	//DISCS
 	public static final Item astatos = new ItemBLRecord("Astatos");
@@ -334,13 +331,13 @@ public class BLItemRegistry {
 	}
 
 	private static void initCreativeTabs() {
-		BLCreativeTabs.items.setTab(net, rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, itemArtefact, sapBall, rottenFood, flatheadMushroomItem, 
+		BLCreativeTabs.items.setTab(net, rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem, 
 				blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, 
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
-		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, tribalPants, skullMask, 
+		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
 				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
