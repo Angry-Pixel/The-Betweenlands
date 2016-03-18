@@ -619,6 +619,24 @@
 			"crumble"
 		]
 	},
+	"fortressPuzzleCageBreak": {
+		"category": "block",
+		"sounds": [
+			"fortressPuzzleCageBreak"
+		]
+	},
+	"fortressPuzzleOrb": {
+		"category": "block",
+		"sounds": [
+			"fortressPuzzleOrb"
+		]
+	},
+	"fortressPuzzleSword": {
+		"category": "block",
+		"sounds": [
+			"fortressPuzzleSword"
+		]
+	},
 	"fig": {
 		"category": "player",
 		"sounds": [
