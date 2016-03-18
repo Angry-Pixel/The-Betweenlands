@@ -38,6 +38,7 @@ import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
 import thebetweenlands.entities.projectiles.EntityAngryPebble;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.entities.projectiles.EntityElixir;
+import thebetweenlands.entities.projectiles.EntityFlammeBall;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
@@ -92,6 +93,7 @@ public class BLEntityRegistry
 		registerEntity(40, EntityFortressBossBlockade.class, "fortressBossBlockade", 64, 20, false);
 		registerEntity(41, EntityFlyingFiend.class, "flyingFiend", 0x804E3D, 0x3D6F80);
 		registerEntity(42, EntityFloatingFlamme.class, "floatingFlamme", 0x005C3D, 0x2D4231, 64, 3, true);
+		registerEntity(43, EntityFlammeBall.class, "flammeBall");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

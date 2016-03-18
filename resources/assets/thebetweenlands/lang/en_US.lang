@@ -543,6 +543,7 @@ item.thebetweenlands.shockwaveSword1.name=Shockwave Sword Piece
 item.thebetweenlands.shockwaveSword2.name=Shockwave Sword Piece
 item.thebetweenlands.shockwaveSword3.name=Shockwave Sword Piece
 item.thebetweenlands.shockwaveSword4.name=Shockwave Sword Piece
+item.thebetweenlands.flammeBall.name=Flamme Ball
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
@@ -777,6 +778,7 @@ entity.thebetweenlands.fortressBossTurret.name=Primordial Malevolence Turret
 entity.thebetweenlands.fortressBossProjectile.name=Primordial Malevolence Projectile
 entity.thebetweenlands.flyingFiend.name=Chiromaw
 entity.thebetweenlands.floatingFlamme.name=Floating Farty Pants
+entity.thebetweenlands.flammeBall.name=Flamme Ball
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks

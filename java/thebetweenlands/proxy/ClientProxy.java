@@ -105,6 +105,7 @@ import thebetweenlands.client.render.entity.boss.fortress.RenderFortressBossTurr
 import thebetweenlands.client.render.entity.projectile.RenderAngryPebble;
 import thebetweenlands.client.render.entity.projectile.RenderBLArrow;
 import thebetweenlands.client.render.entity.projectile.RenderElixir;
+import thebetweenlands.client.render.entity.projectile.RenderFlammeBall;
 import thebetweenlands.client.render.entity.projectile.RenderSnailPoisonJet;
 import thebetweenlands.client.render.item.ItemAlembicRenderer;
 import thebetweenlands.client.render.item.ItemAnimatorRenderer;
@@ -191,6 +192,7 @@ import thebetweenlands.entities.particles.EntityWispFX;
 import thebetweenlands.entities.projectiles.EntityAngryPebble;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.entities.projectiles.EntityElixir;
+import thebetweenlands.entities.projectiles.EntityFlammeBall;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
@@ -368,6 +370,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBlockade.class, new RenderFortressBossBlockade());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingFiend.class, new RenderFlyingFiend());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFloatingFlamme.class, new RenderFloatingFlamme());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlammeBall.class, new RenderFlammeBall(1F));
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
