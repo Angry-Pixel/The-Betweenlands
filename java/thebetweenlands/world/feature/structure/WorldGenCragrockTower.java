@@ -33,9 +33,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
     private static Block smoothBetweenstoneWall = BLBlockRegistry.smoothBetweenstoneWall;
     private static Block cragrockBrickWall = BLBlockRegistry.cragrockWall;
     private static Block smoothCragrockWall = BLBlockRegistry.smoothCragrockWall;
-    private static Block bronzeCircleBrick = BLBlockRegistry.bronzeCircleBrick;
-    private static Block silverCircleBrick = BLBlockRegistry.silverCircleBrick;
-    private static Block goldCircleBrick = BLBlockRegistry.goldCircleBrick;
+    private static Block glowingSmoothCragrock = BLBlockRegistry.glowingSmoothCragrock;
     private static Block wisp = BLBlockRegistry.wisp;
     private static int cragrockMeta = 1;
     private static int mossyCragrockTopMeta = 2;
@@ -535,7 +533,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 7, 31, 12, smoothCragrockStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 31, 12, smoothCragrockStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 31, 10, smoothCragrock, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 11, 30, 10, bronzeCircleBrick, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 11, 30, 10, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 29, 10, smoothCragrockStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         //CEILING
@@ -584,7 +582,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 6, 40, 9, smoothCragrockStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 40, 8, smoothCragrockStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 40, 13, smoothCragrock, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 8, 39, 13, silverCircleBrick, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 8, 39, 13, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 38, 13, smoothCragrockStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
 
@@ -635,7 +633,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 9, 49, 8, smoothCragrockStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 10, 49, 8, smoothCragrockStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 49, 10, smoothCragrock, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, 48, 10, goldCircleBrick, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 48, 10, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 47, 10, smoothCragrockStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
         //CEILING
