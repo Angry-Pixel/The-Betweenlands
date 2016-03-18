@@ -21,10 +21,7 @@ import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
-import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
-import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
-import thebetweenlands.world.feature.structure.WorldGenUnderGroundStructures;
+import thebetweenlands.world.feature.structure.*;
 import thebetweenlands.world.feature.trees.*;
 
 import java.util.Random;
@@ -81,6 +78,7 @@ public class DecorationHelper {
 	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
 	private final static WorldGenIdolHeads GEN_HEADS = new WorldGenIdolHeads();
+	private final static WorldGenCragrockTower GEN_CRAGROCK_TOWER = new WorldGenCragrockTower();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -960,6 +958,17 @@ public class DecorationHelper {
 
 			if (checkSurface(SurfaceType.MIXED, x, y, z))
 				GEN_SMALL_HOLLOW_LOG.generate(world, rand, x, y, z);
+		}
+	}
+
+
+	public void generateCragrockTower(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x + this.offsetXZ();
+			int y = 81;
+			int z = this.z + this.offsetXZ();
+			if (checkSurface(SurfaceType.GRASS, x, y, z))
+				GEN_CRAGROCK_TOWER.generate(world, rand, x, y, z);
 		}
 	}
 

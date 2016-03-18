@@ -97,7 +97,6 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             rotatedLoot(world, random, x, y, z, 1, 0, 4, direction);
         if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 5, 0, 4, direction);
-        System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
     }
 
@@ -179,7 +178,6 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             rotatedLoot(world, random, x, y, z, 1, 0, 7, direction);
         if (random.nextInt(4) == 0)
             rotatedLoot(world, random, x, y, z, 7, 0, 9, direction);
-        System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
     }
 
@@ -230,7 +228,6 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             rotatedLoot(world, random, x, y, z, 1, 1, 4, 0);
         if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 4, 1, 4, 0);
-        System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
     }
 
@@ -275,7 +272,6 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             if (random.nextInt(4) == 0)
                 rotatedLoot(world, random, x, y, z, 3, 0, 5 + i, direction);
         }
-        System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
     }
 
@@ -334,7 +330,6 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
             rotatedLoot(world, random, x, y, z, 6, 1, 1, direction);
         if (random.nextInt(3) == 0)
             rotatedLoot(world, random, x, y, z, 6, 1, 5, direction);
-        System.out.println("generated at: " + x + " " + y + " " + z);
         return true;
     }
 
