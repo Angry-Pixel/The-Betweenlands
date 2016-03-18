@@ -204,6 +204,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorRubber, 1), "##", "##", "##", '#', BLBlockRegistry.rubberTreePlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.doorSyrmorite, 1), "##", "##", "##", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', "plankWeedwood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorRubberTreePlank, 2), "###", "###", '#', BLBlockRegistry.rubberTreePlanks));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorSyrmorite, 2), "###", "###", '#', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
 
 		// Stairs, slabs, walls, fences, pillars
