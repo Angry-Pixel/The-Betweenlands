@@ -50,7 +50,6 @@ public class LootBasicList {
             new LootItemStack(BLItemRegistry.hagHacker).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.sludgeSlicer).setAmount(1).setWeight(1),
             new LootItemStack(BLItemRegistry.skullMask).setAmount(1).setWeight(1),
-            new LootItemStack(BLItemRegistry.tribalPants).setAmount(1).setWeight(1)
 
     });
 }
