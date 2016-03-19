@@ -19,6 +19,7 @@ public class LootBasicList {
 			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(15),
 			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(15),
 			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(15),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.AMULET_SOCKET.id).setWeight(15),
 			//rare
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.VALONITE_SHARD.id).setAmount(1, 4).setWeight(9),
 			new LootItemStack(BLItemRegistry.angryPebble).setAmount(8, 16).setWeight(9),

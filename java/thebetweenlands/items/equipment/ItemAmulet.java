@@ -49,7 +49,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 
-		this.setTextureName("thebetweenlands:amuletSocket");
+		this.setTextureName("thebetweenlands:emptyAmulet");
 	}
 
 	@SideOnly(Side.CLIENT)

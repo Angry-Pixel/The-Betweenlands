@@ -262,7 +262,7 @@ public class FormatTags {
 
 		@Override
 		boolean push(TextContainer container, Tag previous, String argument, TextArea area, int pass) {
-			if(pass == 0) {
+			if(pass == 1) {
 				area.addProperty("rainbow");
 				return true;
 			}

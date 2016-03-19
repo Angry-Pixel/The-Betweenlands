@@ -424,7 +424,7 @@ item.thebetweenlands.legendaryBoots.name=Legendary Boots
 item.thebetweenlands.rubberBoots.name=Rubber Boots
 item.thebetweenlands.rubberBootsImproved.name=Boots of the Marsh Runner
 
-item.thebetweenlands.amulet.none.name=Amulet Socket
+item.thebetweenlands.amulet.none.name=Empty Amulet
 item.thebetweenlands.amulet.crimson.name=Crimson Middle Gem Amulet
 item.thebetweenlands.amulet.aqua.name=Aqua Middle Gem Amulet
 item.thebetweenlands.amulet.green.name=Green Middle Gem Amulet
@@ -544,6 +544,7 @@ item.thebetweenlands.shockwaveSword2.name=Shockwave Sword Piece
 item.thebetweenlands.shockwaveSword3.name=Shockwave Sword Piece
 item.thebetweenlands.shockwaveSword4.name=Shockwave Sword Piece
 item.thebetweenlands.flammeBall.name=Flamme Ball
+item.thebetweenlands.amuletSocket.name=Amulet Socket
 
 item.thebetweenlands.explorerHat.name=Explorer's Hat
 item.thebetweenlands.voodooDoll.name=Voodoo Doll
