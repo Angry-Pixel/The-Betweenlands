@@ -22,13 +22,13 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, new ResourceLocation("thebetweenlands:ambientWightFortress")) {
 			@Override
 			public boolean isActive() {
-				return super.isActive() && !this.getHighestLocation().getName().equals("translate:wightTowerBoss");
+				return super.isActive() && !this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
 			}
 		});
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, null) { //Silences the other ambient tracks
 			@Override
 			public boolean isActive() {
-				return super.isActive() && this.getHighestLocation().getName().equals("translate:wightTowerBoss");
+				return super.isActive() && this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
 			}
 		});
 

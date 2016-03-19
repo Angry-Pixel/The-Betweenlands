@@ -35,6 +35,7 @@ import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class EntityWight extends EntityMob implements IEntityBL {
@@ -197,7 +198,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if(this.isLocationGuard() && (this.getViolator() == null || !this.getViolator().isEntityAlive())) {
 				this.setDead();
 			} else if(this.isLocationGuard() && this.getViolator() != null) {
-				if(!PlayerLocationHandler.isInLocationType(this.getViolator(), EnumLocationType.WIGHT_TOWER)) {
+				if(!LocationStorage.isInLocationType(this.getViolator(), EnumLocationType.WIGHT_TOWER)) {
 					this.setDead();
 				} else {
 					this.setAttackTarget(this.getViolator());

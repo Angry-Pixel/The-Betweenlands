@@ -1,11 +1,7 @@
 package thebetweenlands.client.audio.ambience.list;
 
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.audio.ambience.AmbienceType;
-import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
@@ -19,49 +15,13 @@ public class LocationAmbienceType extends AmbienceType {
 		this.sound = sound;
 	}
 
-	protected List<LocationStorage> getAmbientLocations() {
-		List<LocationStorage> locations = PlayerLocationHandler.getLocations(this.getPlayer());
-		Iterator<LocationStorage> locationIT = locations.iterator();
-		while(locationIT.hasNext()) {
-			LocationStorage location = locationIT.next();
-			if(!location.hasAmbience())
-				locationIT.remove();
-		}
-		return locations;
-	}
-
-	protected LocationStorage getHighestAmbientLocation() {
-		List<LocationStorage> ambientLocations = this.getAmbientLocations();
-		LocationStorage highestLocation = null;
-		for(LocationStorage location : ambientLocations) {
-			if(this.hasAmbienceType(location)) {
-				if(highestLocation == null || highestLocation.getLayer() < location.getLayer())
-					highestLocation = location;
-			}
-		}
-		return highestLocation;
-	}
-
-	protected LocationStorage getHighestLocation() {
-		List<LocationStorage> ambientLocations = PlayerLocationHandler.getLocations(this.getPlayer());
-		LocationStorage highestLocation = null;
-		for(LocationStorage location : ambientLocations) {
-			if(highestLocation == null || highestLocation.getLayer() < location.getLayer())
-				highestLocation = location;
-		}
-		return highestLocation;
-	}
-
-	protected boolean hasAmbienceType(LocationStorage location) {
-		for(LocationAmbience ambience : location.getAmbiences())
-			if(ambience.type.equals(this.ambience))
-				return true;
-		return false;
+	protected LocationAmbience getAmbience() {
+		return LocationStorage.getAmbience(this.getPlayer());
 	}
 
 	@Override
 	public boolean isActive() {
-		return this.getHighestAmbientLocation() != null;
+		return this.getAmbience() != null;
 	}
 
 	@Override
@@ -71,8 +31,7 @@ public class LocationAmbienceType extends AmbienceType {
 
 	@Override
 	public int getPriority() {
-		LocationStorage highestLocation = this.getHighestAmbientLocation();
-		return 1 + (highestLocation != null ? highestLocation.getLayer() : 0);
+		return 2;
 	}
 
 	@Override

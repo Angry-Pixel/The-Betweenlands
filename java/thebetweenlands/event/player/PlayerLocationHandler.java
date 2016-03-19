@@ -23,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -43,26 +42,17 @@ public class PlayerLocationHandler {
 
 	private static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/locationTitle.png");
 
-	public static List<LocationStorage> getLocations(Entity entity) {
+	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		List<LocationStorage> locations = new ArrayList<LocationStorage>();
 		Chunk chunk = entity.worldObj.getChunkFromBlockCoords(MathHelper.floor_double(entity.posX), MathHelper.floor_double(entity.posZ));
 		if(chunk != null) {
 			BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(entity.worldObj, chunk);
 			for(ChunkStorage storage : chunkData.getStorage()) {
-				if(storage instanceof LocationStorage && ((LocationStorage)storage).isInside(entity))
+				if(storage instanceof LocationStorage && ((LocationStorage)storage).isInside(entity) && ((LocationStorage)storage).isVisible(entity))
 					locations.add((LocationStorage)storage);
 			}
 		}
 		return locations;
-	}
-
-	public static boolean isInLocationType(Entity entity, EnumLocationType type) {
-		List<LocationStorage> locations = getLocations(entity);
-		for(LocationStorage location : locations) {
-			if(location.getType() == type) 
-				return true;
-		}
-		return false;
 	}
 
 	private String currentLocation = "";
@@ -76,14 +66,19 @@ public class PlayerLocationHandler {
 			if(player != null) {
 				if(this.titleTicks > 0) 
 					this.titleTicks--;
-				List<LocationStorage> locations = this.getLocations(player);
+				List<LocationStorage> locations = getVisibleLocations(player);
 				String prevLocation = this.currentLocation;
 				if(locations.isEmpty()) {
-					BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
+					/*BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
 					String biomeName = StatCollector.translateToLocal("biome." + biome.biomeName + ".name");
 					if(biomeName.equals("biome." + biome.biomeName + ".name"))
 						biomeName = biome.biomeName; //Not localized
-					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);
+					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);*/
+					String location = StatCollector.translateToLocal("location.wilderness.name");
+					if(this.currentLocation == null || this.currentLocation.length() == 0) {
+						prevLocation = location;
+					}
+					this.currentLocation = location;
 				} else {
 					LocationStorage highestLocation = null;
 					for(LocationStorage storage : locations) {
@@ -148,7 +143,7 @@ public class PlayerLocationHandler {
 
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
-		if(!isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
+		if(!LocationStorage.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
 			event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
 		}
 	}
@@ -157,7 +152,7 @@ public class PlayerLocationHandler {
 	public void onBlockPlace(PlaceEvent event) {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null && !event.world.isRemote) {
-			if(event.player != null && !event.player.capabilities.isCreativeMode && this.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
+			if(event.player != null && !event.player.capabilities.isCreativeMode && LocationStorage.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
 				int warnings = event.player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
 				if(warnings < 3) {
 					if(warnings == 0) {
@@ -198,7 +193,7 @@ public class PlayerLocationHandler {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null) {
 			EntityPlayer player = event.getPlayer();
-			if(player != null && !player.capabilities.isCreativeMode && this.isInLocationType(player, EnumLocationType.WIGHT_TOWER) && !EXCLUDED_BLOCKS.contains(event.block)) {
+			if(player != null && !player.capabilities.isCreativeMode && LocationStorage.isInLocationType(player, EnumLocationType.WIGHT_TOWER) && !EXCLUDED_BLOCKS.contains(event.block)) {
 				if(!event.world.isRemote) {
 					int warnings = player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
 					if(warnings < 3) {

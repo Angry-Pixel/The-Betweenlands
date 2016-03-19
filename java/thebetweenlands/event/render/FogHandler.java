@@ -1,7 +1,5 @@
 package thebetweenlands.event.render;
 
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
@@ -25,14 +23,13 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.event.debugging.DebugHandlerClient;
-import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
@@ -147,21 +144,18 @@ public class FogHandler {
 			fogEnd *= Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
 		}
 
-		//Wight tower fog
-		List<LocationStorage> locations = PlayerLocationHandler.getLocations(player);
-		LocationStorage highestLocation = null;
-		for(LocationStorage storage : locations) {
-			if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
-				highestLocation = storage;
-		}
-		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER) {
-			if(highestLocation.getName().equals("translate:wightTowerBoss")) {
-				fogStart = 12.0F;
-				fogEnd = 30.0F;
-				multiplier = 0.1F;
-			} else {
-				fogStart /= 4.5f / (1.0F + uncloudedStrength * 4.0F);
-				fogEnd /= 3.0f / (1.0F + uncloudedStrength * 2.0F);
+		LocationAmbience ambience = LocationStorage.getAmbience(player);
+		if(ambience != null) {
+			if(ambience.hasFogRange()) {
+				fogStart = ambience.getFogStart();
+				fogEnd = ambience.getFogEnd();
+			}
+			if(ambience.hasFogRangeMultiplier()) {
+				fogStart *= ambience.getFogRangeMultiplier();
+				fogEnd *= ambience.getFogRangeMultiplier();
+			}
+			if(ambience.hasFogColorMultiplier()) {
+				multiplier = ambience.getFogColorMultiplier();
 			}
 		}
 

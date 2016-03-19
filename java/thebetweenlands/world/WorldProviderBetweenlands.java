@@ -1,7 +1,5 @@
 package thebetweenlands.world;
 
-import java.util.List;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -19,14 +17,13 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
-import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.biomes.base.BiomeGenBaseBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;
+import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 import thebetweenlands.world.storage.world.BetweenlandsWorldData;
 
 /**
@@ -262,17 +259,10 @@ extends WorldProvider
 			}
 		}
 
-		//Wight tower fog
-		List<LocationStorage> locations = PlayerLocationHandler.getLocations(player);
-		LocationStorage highestLocation = null;
-		for(LocationStorage storage : locations) {
-			if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
-				highestLocation = storage;
-		}
-		if(highestLocation != null && highestLocation.getType() == EnumLocationType.WIGHT_TOWER) {
-			if(!highestLocation.getName().equals("translate:wightTowerBoss")) {
-				m = 80;
-			}
+		LocationAmbience ambience = LocationStorage.getAmbience(player);
+
+		if(ambience != null && ambience.hasFogBrightness()) {
+			m = ambience.getFogBrightness();
 		}
 
 		if(!ShaderHelper.INSTANCE.canUseShaders()) {
@@ -282,9 +272,16 @@ extends WorldProvider
 			}
 		}
 
-		for(int i = 0; i < 3; i++) {
-			int diff = 255 - targetFogColor[i];
-			targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
+		if(ambience != null && ambience.hasFogColor()) {
+			for(int i = 0; i < 3; i++) {
+				int diff = 255 - ambience.getFogColor()[i];
+				targetFogColor[i] = (int) (ambience.getFogColor()[i] + (diff / 255.0D * m));
+			}
+		} else {
+			for(int i = 0; i < 3; i++) {
+				int diff = 255 - targetFogColor[i];
+				targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
+			}
 		}
 
 		for(int a = 0; a < 3; a++) {
