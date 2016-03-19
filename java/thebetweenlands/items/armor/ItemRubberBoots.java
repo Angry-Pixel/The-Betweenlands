@@ -11,9 +11,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

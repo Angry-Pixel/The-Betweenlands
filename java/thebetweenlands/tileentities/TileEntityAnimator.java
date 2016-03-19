@@ -9,7 +9,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.recipes.AnimatorRecipe;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
 
 public class TileEntityAnimator extends TileEntityBasicInventory {
 	//public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };

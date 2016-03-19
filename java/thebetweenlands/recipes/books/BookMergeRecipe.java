@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.books;
 
 import java.util.ArrayList;
 import java.util.List;

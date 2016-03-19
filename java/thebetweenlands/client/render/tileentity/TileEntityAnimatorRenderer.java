@@ -21,6 +21,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSpawnEggs;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.ItemRenderHelper;
 
@@ -106,30 +107,39 @@ public class TileEntityAnimatorRenderer extends TileEntitySpecialRenderer {
 		}
 
 		// Item
-		if (te.getStackInSlot(0) != null) {
+		ItemStack input = te.getStackInSlot(0);
+		if (input != null) {
 			GL11.glPushMatrix();
 			GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
 
-			if (te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) {
-				GL11.glTranslated(0.0D, -0.5D, 0.0D);
-				GL11.glRotated(viewRot +180, 0, 1, 0);
-			}
-			if (!(te.getStackInSlot(0).getItem() instanceof ItemMonsterPlacer) && te.getStackInSlot(0) != null) {
+			AnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
+
+			if (!(input.getItem() instanceof ItemMonsterPlacer) && (recipe == null || recipe.getRenderEntity() == null)) {
 				GL11.glScaled(0.3D, 0.3D, 0.3D);
 				GL11.glRotated(viewRot, 0, 1, 0);
 				ItemRenderHelper.renderItem(te.getStackInSlot(0), 0);
 			} else {
-				GL11.glScaled(0.5D, 0.5D, 0.5D);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.65F);
 				Entity entity = null;
-				if (te.getStackInSlot(0).getItem() instanceof ItemSpawnEggs)
-					entity = ItemSpawnEggs.getEntity(te.getWorldObj(), x, y, z, te.getStackInSlot(0));
-				else
-					entity = EntityList.createEntityByID(te.getStackInSlot(0).getItemDamage(), tileEntity.getWorldObj());
+				if(recipe.getRenderEntity() != null) {
+					entity = recipe.getRenderEntity();
+				} else if (input.getItem() instanceof ItemSpawnEggs) {
+					entity = ItemSpawnEggs.getEntity(te.getWorldObj(), x, y, z, input);
+				} else if(input.getItem() instanceof ItemMonsterPlacer) {
+					entity = EntityList.createEntityByID(input.getItemDamage(), tileEntity.getWorldObj());
+				}
 				if (entity != null) {
+					GL11.glTranslated(0.0D, -entity.height/4.0D, 0.0D);
+					GL11.glRotated(viewRot +180, 0, 1, 0);
+					GL11.glScaled(0.75D, 0.75D, 0.75D);
+					entity.setWorld(te.getWorldObj());
 					entity.setRotationYawHead(0F);
 					entity.rotationPitch = 0F;
 					RenderManager.instance.renderEntityWithPosYaw(entity, 0D, 0D, 0D, 0F, 0F);
 				}
+				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			}
 			GL11.glPopMatrix();
 		}

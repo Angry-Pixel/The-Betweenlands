@@ -21,7 +21,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
-import thebetweenlands.recipes.DruidAltarRecipe;
+import thebetweenlands.recipes.misc.DruidAltarRecipe;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 

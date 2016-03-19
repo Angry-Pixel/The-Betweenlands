@@ -26,7 +26,6 @@ import thebetweenlands.utils.confighandler.ConfigHandler;
 public class PlayerItemEventHandler {
 	public static final PlayerItemEventHandler INSTANCE = new PlayerItemEventHandler();
 
-	@SideOnly(Side.CLIENT)
 	private ItemStack lastUsedItem = null;
 
 	@SideOnly(Side.CLIENT)

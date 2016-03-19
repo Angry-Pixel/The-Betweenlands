@@ -7,8 +7,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterial;
 
 /**
  * Created by Bart on 11-9-2015.

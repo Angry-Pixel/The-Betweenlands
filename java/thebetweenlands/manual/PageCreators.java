@@ -15,7 +15,7 @@ import thebetweenlands.manual.widgets.*;
 import thebetweenlands.manual.widgets.text.FormatTags;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextWidget;
-import thebetweenlands.recipes.PestleAndMortarRecipe;
+import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
 
 import java.util.ArrayList;
 

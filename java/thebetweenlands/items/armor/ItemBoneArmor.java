@@ -4,9 +4,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterial;
 
 public class ItemBoneArmor extends ItemArmorBL implements IManualEntryItem {
 

@@ -8,7 +8,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.recipes.PestleAndMortarRecipe;
+import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
 
 public class TileEntityPestleAndMortar extends TileEntityBasicInventory { 
 

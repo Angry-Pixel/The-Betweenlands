@@ -13,11 +13,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -18,7 +18,7 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.recipes.PurifierRecipe;
+import thebetweenlands.recipes.purifier.PurifierRecipe;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler {
 

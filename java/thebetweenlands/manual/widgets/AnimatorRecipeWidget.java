@@ -8,7 +8,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.recipes.AnimatorRecipe;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.misc;
 
 import java.util.List;
 

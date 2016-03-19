@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.purifier;
 
 import java.util.ArrayList;
 import java.util.Collections;

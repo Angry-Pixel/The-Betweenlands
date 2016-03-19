@@ -1,11 +1,9 @@
 package thebetweenlands.items.tools;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class ItemSwiftPick extends ItemPickaxeBL {
 	public ItemSwiftPick(ToolMaterial material) {
@@ -14,9 +12,10 @@ public class ItemSwiftPick extends ItemPickaxeBL {
 
 	@Override
 	public float getDigSpeed(ItemStack stack, Block block, int meta) {
+		float digSpeed = super.getDigSpeed(stack, block, meta);
 		if (ForgeHooks.isToolEffective(stack, block, meta)) {
-            return 100.0F;
-        }
-		return 1.0F;
+			digSpeed = 100.0F;
+		}
+		return CorrodibleItemHelper.getDigSpeed(digSpeed, stack, block, meta);
 	}
 }

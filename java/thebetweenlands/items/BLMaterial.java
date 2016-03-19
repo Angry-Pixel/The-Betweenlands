@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.items;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -12,7 +12,7 @@ public class BLMaterial extends Material {
 	public static final ToolMaterial toolBetweenstone = EnumHelper.addToolMaterial("BETWEENSTONE", 1, 320, 4.0F, 1.0F, 5);
 	public static final ToolMaterial toolOctine = EnumHelper.addToolMaterial("OCTINE", 2, 900, 6.0F, 2.0F, 14);
 	public static final ToolMaterial toolValonite = EnumHelper.addToolMaterial("VALONITE", 3, 2500, 8.0F, 3.0F, 10);
-	public static final ToolMaterial toolLoot = EnumHelper.addToolMaterial("LOOT", 2, 250, 40.0F, 0.5F, 5);
+	public static final ToolMaterial toolLoot = EnumHelper.addToolMaterial("LOOT", 2, 7500, 2.0F, 0.5F, 5);
 	public static final ToolMaterial toolOfLegends = EnumHelper.addToolMaterial("LEGEND", 6, 10000, 16.0F, 6.0F, 20);
 
 	public static final ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("LURKERSKIN", 12, new int[]{1, 3, 2, 1}, 0);

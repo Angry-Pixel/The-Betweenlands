@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeHooks;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.recipes.BLMaterial;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
 import com.google.common.collect.HashMultimap;

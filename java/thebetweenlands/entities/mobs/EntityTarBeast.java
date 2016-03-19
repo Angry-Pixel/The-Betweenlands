@@ -29,13 +29,13 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
 import thebetweenlands.items.tools.ItemSpadeBL;
 import thebetweenlands.items.tools.ItemSwordBL;
-import thebetweenlands.recipes.BLMaterial;
 import thebetweenlands.utils.Mesh.Triangle.Vertex.Vector3D;
 
 public class EntityTarBeast extends EntityMob implements IEntityBL {

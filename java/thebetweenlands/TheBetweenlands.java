@@ -79,7 +79,7 @@ import thebetweenlands.network.packet.server.PacketTickspeed;
 import thebetweenlands.network.packet.server.PacketWeedWoodBushRustle;
 import thebetweenlands.precondition.TheBetweenlandsPreconditions;
 import thebetweenlands.proxy.CommonProxy;
-import thebetweenlands.recipes.RecipeHandler;
+import thebetweenlands.recipes.BLRecipes;
 import thebetweenlands.utils.PotionHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.BLGamerules;
@@ -224,7 +224,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RecruitmentRingHandler.INSTANCE);
 
-		RecipeHandler.init();
+		BLRecipes.init();
 		TeleporterHandler.init();
 
 		// Add the other door recipes back

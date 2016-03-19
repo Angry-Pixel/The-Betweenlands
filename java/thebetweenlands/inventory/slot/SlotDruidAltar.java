@@ -5,7 +5,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemSwampTalisman.EnumTalisman;
-import thebetweenlands.recipes.DruidAltarRecipe;
+import thebetweenlands.recipes.misc.DruidAltarRecipe;
 
 public class SlotDruidAltar extends Slot {
 

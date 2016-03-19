@@ -31,7 +31,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.CommonProxy;
-import thebetweenlands.recipes.AnimatorRecipe;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 
 public class BlockAnimator extends BlockContainer {

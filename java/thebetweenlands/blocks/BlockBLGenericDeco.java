@@ -1,5 +1,7 @@
 package thebetweenlands.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
@@ -8,10 +10,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 
-import java.util.Random;
-
 public class BlockBLGenericDeco extends Block implements IGrowable {
-	
+
 	private String type;
 
 	public BlockBLGenericDeco(String blockName, Material material) {
@@ -20,6 +20,11 @@ public class BlockBLGenericDeco extends Block implements IGrowable {
 		type = blockName;
 		setBlockName("thebetweenlands." + type);
 		setBlockTextureName("thebetweenlands:" + type);
+	}
+
+	public BlockBLGenericDeco(String blockName, Material material, String tool, int harvestLevel) {
+		this(blockName, material);
+		setHarvestLevel(tool, harvestLevel);
 	}
 
 	@Override

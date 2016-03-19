@@ -8,7 +8,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.recipes.CompostRecipe;
+import thebetweenlands.recipes.misc.CompostRecipe;
 
 import java.util.ArrayList;
 import java.util.Random;

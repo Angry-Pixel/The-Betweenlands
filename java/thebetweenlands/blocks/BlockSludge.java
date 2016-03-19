@@ -14,8 +14,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.recipes.BLMaterial;
 
 public class BlockSludge extends Block {
 	public BlockSludge() {

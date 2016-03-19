@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.misc;
 
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;

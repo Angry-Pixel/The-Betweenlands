@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.recipes.PestleAndMortarRecipe;
+import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
 
 import java.util.ArrayList;
 

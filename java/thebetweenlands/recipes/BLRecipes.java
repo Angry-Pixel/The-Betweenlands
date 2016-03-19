@@ -8,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -28,11 +29,24 @@ import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.recipes.books.BookCloneRecipe;
+import thebetweenlands.recipes.books.BookMergeRecipe;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
+import thebetweenlands.recipes.misc.CompostRecipe;
+import thebetweenlands.recipes.misc.DruidAltarRecipe;
+import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
+import thebetweenlands.recipes.misc.RecipeDyeColorNBT;
+import thebetweenlands.recipes.misc.RecipeFairyLights;
+import thebetweenlands.recipes.misc.RecipeImprovedRubberBoots;
+import thebetweenlands.recipes.misc.RecipesAspectVials;
+import thebetweenlands.recipes.misc.RecipesAspectrusSeeds;
+import thebetweenlands.recipes.misc.RecipesCircleGems;
+import thebetweenlands.recipes.purifier.PurifierRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
-public class RecipeHandler {
+public class BLRecipes {
 
 	public static void init() {
 		registerOreDictionary();
@@ -196,7 +210,7 @@ public class RecipeHandler {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneTilesMossy, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), new ItemStack(BLBlockRegistry.betweenstoneTiles));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneSmoothMossy, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), new ItemStack(BLBlockRegistry.smoothBetweenstone));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneSmoothMossy, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), new ItemStack(BLBlockRegistry.smoothBetweenstone));
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
@@ -224,7 +238,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairsMossy, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricksMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneSmoothStairsMossy, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneSmoothMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairsCracked, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricksCracked);
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstoneBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.pitstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.mudBrick);
@@ -239,7 +253,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickWallMossy, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneBricksMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickWallCracked, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneBricksCracked);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneWallMossy, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneSmoothMossy);
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.rubberTreePlanks));
 
@@ -263,7 +277,7 @@ public class RecipeHandler {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlabMossy, 6), "###", '#', BLBlockRegistry.betweenstoneBricksMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlabCracked, 6), "###", '#', BLBlockRegistry.betweenstoneBricksCracked);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneSlabMossy, 6), "###", '#', BLBlockRegistry.betweenstoneSmoothMossy);
-		
+
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothBetweenstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.smoothPitstone));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestonePillar, 2), "x", "x", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
@@ -440,19 +454,53 @@ public class RecipeHandler {
 	}
 
 	private static void registerAnimatorRecipes() {
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.scroll), 16, 16){
-			private final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.scroll), 16, 16) {
+			private final WeightedRandomItem[] items = new WeightedRandomItem[] { 
+					new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 8), 8),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.angryPebble, 16), 8),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.voodooDoll), 8),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.ringOfPower), 3),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.swiftPick), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.skullMask), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.wightsBane), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.sludgeSlicer), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.critterCruncher), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.hagHacker), 5),
+
+					//discs
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.astatos), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.betweenYouAndMe), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.christmasOnTheMarsh), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.theExplorer), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.hagDance), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.lonelyFire), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.mysteriousRecord), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.ancient), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.beneathAGreenSky), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.dJWightsMixtape), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.onwards), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.stuckInTheMud), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.wanderingWisps), 1),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.waterlogged), 1)
+			};
 
 			@Override
 			public ItemStack onAnimated(World world, int x, int y, int z) {
 				WeightedRandomItem randItem = (WeightedRandomItem) WeightedRandom.getRandomItem(world.rand, this.items);
 				ItemStack result = randItem.getItem(world.rand);
-				result.stackSize = Math.min(1 + world.rand.nextInt(randItem.itemWeight + 4), result.getMaxStackSize());
+				int minStackSize = MathHelper.ceiling_double_int(result.stackSize / 2.0D);
+				int maxStackSize = result.stackSize;
+				result = result.copy();
+				if(maxStackSize > minStackSize) {
+					result.stackSize = minStackSize + (maxStackSize - minStackSize);
+				} else {
+					result.stackSize = minStackSize;
+				}
 				return result;
 			}
 		});
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART), 32, 32, ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED)));
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 8, 8, new ItemStack(BLItemRegistry.tarminion)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART), 32, 32, ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED)).setRenderEntity("thebetweenlands.tarminion"));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 8, 8, new ItemStack(BLItemRegistry.tarminion)).setRenderEntity("thebetweenlands.tarminion"));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.testItem), 2, 1) {
 			@Override
 			public boolean onRetrieved(TileEntityAnimator tile, World world, int x, int y, int z) {
@@ -465,7 +513,7 @@ public class RecipeHandler {
 				return false;
 			}
 		});
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.spores), 8, 4, EntitySporeling.class));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.spores), 8, 4, EntitySporeling.class).setRenderEntity("thebetweenlands.sporeling"));
 	}
 
 	private static void registerCompostItems(){

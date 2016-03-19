@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.purifier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagInt;

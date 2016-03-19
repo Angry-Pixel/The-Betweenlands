@@ -1,4 +1,4 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.books;
 
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;

@@ -28,7 +28,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.ICorrodible;
-import thebetweenlands.recipes.CompostRecipe;
+import thebetweenlands.recipes.misc.CompostRecipe;
 
 /**
  * This class allows for the prevention of held item tooltips

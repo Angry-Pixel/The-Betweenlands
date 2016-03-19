@@ -4,8 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -98,9 +99,6 @@ import thebetweenlands.items.tools.ItemSyrmoriteShears;
 import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
-import thebetweenlands.recipes.BLMaterial;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -112,7 +110,7 @@ public class BLItemRegistry {
 	// BASIC MATERIALS
 	public static final Item testItem = new ItemTestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
 	public static final Item swampTalisman = new ItemSwampTalisman();
-	
+
 	public static final Item itemsGeneric = new ItemGeneric();
 	public static final Item itemsGenericCrushed = new ItemGenericCrushed().setUnlocalizedName("thebetweenlands.groundStuff");
 	public static final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setUnlocalizedName("thebetweenlands.plantDrop");
@@ -283,7 +281,7 @@ public class BLItemRegistry {
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
-	public static final Item swiftPick = new ItemSwiftPick(BLMaterial.toolLoot).setMaxDamage(64).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
+	public static final Item swiftPick = new ItemSwiftPick(BLMaterial.toolValonite).setUnlocalizedName("thebetweenlands.swiftPickaxe").setTextureName("thebetweenlands:swiftPick");
 	public static final Item wightsBane = new ItemLootSword(BLMaterial.toolWeedWood)
 			.addInstantKills(EntityWight.class)
 			.setMaxDamage(32).setUnlocalizedName("thebetweenlands.wightsBane").setTextureName("thebetweenlands:wightsBane");
@@ -307,7 +305,6 @@ public class BLItemRegistry {
 	public static final Item hagDance = new ItemBLRecord("HagDance");
 	public static final Item lonelyFire = new ItemBLRecord("LonelyFire");
 	public static final Item mysteriousRecord = new ItemBLRecord("16612");
-
 	public static final Item ancient = new ItemBLRecord("Ancient");
 	public static final Item beneathAGreenSky = new ItemBLRecord("BeneathAGreenSky");
 	public static final Item dJWightsMixtape = new ItemBLRecord("DJWightsMixtape");

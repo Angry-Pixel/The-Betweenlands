@@ -7,7 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import thebetweenlands.lib.ModInfo;
-import thebetweenlands.recipes.RecipeBuffers;
+import thebetweenlands.recipes.ConfigRecipe;
 
 import java.io.*;
 
@@ -93,7 +93,7 @@ public class ConfigHandler {
 			JsonReader jsonReader = new JsonReader(new FileReader(file));
 
 			jsonReader.beginObject();
-			RecipeBuffers.readJson(jsonReader);
+			ConfigRecipe.readJson(jsonReader);
 			jsonReader.endObject();
 
 			jsonReader.close();

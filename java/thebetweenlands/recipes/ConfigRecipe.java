@@ -5,6 +5,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
+import thebetweenlands.recipes.misc.CompostRecipe;
+import thebetweenlands.recipes.misc.DruidAltarRecipe;
+import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
+import thebetweenlands.recipes.purifier.PurifierRecipe;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by bart on 22-7-2015.
  */
-public class RecipeBuffers {
+public class ConfigRecipe {
     public static void readJson(JsonReader jsonReader) throws IOException {
         while (jsonReader.hasNext()) {
             String recipeName = jsonReader.nextName();

@@ -18,8 +18,8 @@ import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.armor.ItemRubberBoots;
-import thebetweenlands.recipes.BLMaterial;
 
 public class BlockMud extends Block {
 	public BlockMud() {

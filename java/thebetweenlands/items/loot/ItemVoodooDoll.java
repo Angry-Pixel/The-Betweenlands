@@ -1,5 +1,7 @@
 package thebetweenlands.items.loot;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -10,15 +12,13 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
 
-import java.util.List;
-
 /**
  * Created by Bart on 8-7-2015.
  */
 public class ItemVoodooDoll extends Item implements IManualEntryItem {
 	public ItemVoodooDoll() {
 		maxStackSize = 1;
-		setMaxDamage(4);
+		setMaxDamage(24);
 		setUnlocalizedName("thebetweenlands.voodooDoll");
 		setTextureName("thebetweenlands:voodooDoll");
 	}

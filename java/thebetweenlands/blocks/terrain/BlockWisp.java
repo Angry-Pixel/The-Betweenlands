@@ -13,7 +13,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.recipes.BLMaterial;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.events.EnvironmentEventRegistry;

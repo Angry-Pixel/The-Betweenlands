@@ -32,7 +32,7 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.recipes.BLMaterial;
+import thebetweenlands.items.BLMaterial;
 
 public class OverlayHandler {
 	public static final OverlayHandler INSTANCE = new OverlayHandler();

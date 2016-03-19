@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.mobs.EntityTarBeast;
-import thebetweenlands.recipes.BLMaterial;
+import thebetweenlands.items.BLMaterial;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

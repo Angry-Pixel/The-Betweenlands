@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
@@ -133,9 +136,6 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
@@ -143,7 +143,7 @@ public class BLBlockRegistry {
 	// TERRAIN
 	public static final Block betweenstone = new BlockBetweenstone();
 	public static final Block pitstone = new BlockPitstone();
-	public static final Block limestone = new BlockBLGenericDeco("limestone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
+	public static final Block limestone = new BlockBLGenericDeco("limestone", Material.rock, "pickaxe", 0).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block genericStone = new BlockGenericStone();
 	public static final Block druidStone1 = new BlockDruidStone("druidStone1");
 	public static final Block druidStone2 = new BlockDruidStone("druidStone2");
@@ -504,10 +504,10 @@ public class BLBlockRegistry {
 	public static final Block spookyBetweenstoneBrick2 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick2");
 	public static final Block spookyBetweenstoneBrick3 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick3");
 	public static final Block glowingSmoothCragrock = new BlockBLGenericDeco("glowingSmoothCragrock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
-	
+
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
-	
+
 	// STAIRS, SLABS, WALLS, FENCES, SIGNS, ETC.
 	public static final Block betweenstoneBrickStairs = new BlockBLStairs(betweenstoneBricks, 0).setBlockName("thebetweenlands.betweenstoneBrickStairs");
 	public static final Block mudBrickStairs = new BlockBLStairs(mudBrick, 0).setBlockName("thebetweenlands.mudBrickStairs");
@@ -612,7 +612,7 @@ public class BLBlockRegistry {
 	public static final BlockBLSlab smoothBetweenstoneSlabMossyDouble = new BlockBLSlab(true, Material.rock, "betweenstoneSmoothMossy", smoothBetweenstoneSlabMossy, "pickaxe");	
 	public static final BlockBLSlab betweenstoneBrickSlabCracked = new BlockBLSlab(false, Material.rock, "betweenstoneBricksCracked", null, "pickaxe");
 	public static final BlockBLSlab betweenstoneBrickSlabCrackedDouble = new BlockBLSlab(true, Material.rock, "betweenstoneBricksCracked", betweenstoneBrickSlabCracked, "pickaxe");
-	
+
 	// PORTAL
 	public static BlockTreePortal treePortalBlock = new BlockTreePortal();
 
@@ -684,11 +684,12 @@ public class BLBlockRegistry {
 		aquaMiddleGemOre.setHarvestLevel("shovel", 0);
 		crimsonMiddleGemOre.setHarvestLevel("shovel", 0);
 		greenMiddleGemOre.setHarvestLevel("shovel", 0);
-		octineOre.setHarvestLevel("pickaxe", 1);
-		sulfurOre.setHarvestLevel("pickaxe", 0);
 		boneOre.setHarvestLevel("pickaxe", 0);
+		sulfurOre.setHarvestLevel("pickaxe", 0);
+		octineOre.setHarvestLevel("pickaxe", 1);
+		syrmoriteOre.setHarvestLevel("pickaxe", 1);
 		valoniteOre.setHarvestLevel("pickaxe", 2);
-		lifeCrystalOre.setHarvestLevel("pickaxe", 0);
+		lifeCrystalOre.setHarvestLevel("pickaxe", 2);
 	}
 
 	public interface ISubBlocksBlock {

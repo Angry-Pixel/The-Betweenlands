@@ -21,7 +21,7 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.recipes.CompostRecipe;
+import thebetweenlands.recipes.misc.CompostRecipe;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 
 public class BlockCompostBin extends BlockContainer {

@@ -1,9 +1,12 @@
-package thebetweenlands.recipes;
+package thebetweenlands.recipes.misc;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.tileentities.TileEntityAnimator;
@@ -13,6 +16,8 @@ public class AnimatorRecipe {
 	public final int requiredFuel, requiredLife;
 	private ItemStack result = null;
 	private Class<? extends Entity> spawnEntity = null;
+	private String renderEntity = null;
+	private Entity renderEntityInstance = null;
 
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife) {
 		this.input = input;
@@ -28,6 +33,23 @@ public class AnimatorRecipe {
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife, Class<? extends Entity> result) {
 		this(input, requiredFuel, requiredLife);
 		this.spawnEntity = result;
+	}
+
+	public AnimatorRecipe setRenderEntity(String entity) {
+		this.renderEntity = entity;
+		return this;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Entity getRenderEntity() {
+		if(this.renderEntity != null && this.renderEntity.length() > 0) {
+			if(this.renderEntityInstance == null) {
+				Entity entity = EntityList.createEntityByName(this.renderEntity, (World)null);
+				this.renderEntityInstance = entity;
+			}
+			return this.renderEntityInstance;
+		}
+		return null;
 	}
 
 	public ItemStack getResult() {

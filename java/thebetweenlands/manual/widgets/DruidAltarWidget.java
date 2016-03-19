@@ -4,8 +4,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.recipes.misc.DruidAltarRecipe;
+
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.recipes.DruidAltarRecipe;
 
 import java.util.ArrayList;
 
