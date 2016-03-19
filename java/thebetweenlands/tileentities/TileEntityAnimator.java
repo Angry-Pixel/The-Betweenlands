@@ -15,7 +15,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	//public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
 	private int prevStackSize = 0;
 	public ItemStack itemToAnimate = null;
-	public int fuelBurnProgress, lifeCrystalLife, fuelConsumed = 0, requiredFuelCount = 32;
+	public int fuelBurnProgress, lifeCrystalLife, fuelConsumed = 0, requiredFuelCount = 32, requiredLifeCount = 32;
 	public boolean itemAnimated = false;
 	private ItemStack prevItem;
 	private ItemStack prevToAnimateItem;
@@ -30,12 +30,17 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			AnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
 			if(recipe != null) {
 				this.requiredFuelCount = recipe.requiredFuel;
+				this.requiredLifeCount = recipe.requiredLife;
 			}
 		}
 		if(worldObj.isRemote)
 			return;
 		if (isCrystalInslot())
 			lifeCrystalLife = 128 - getCrystalPower();
+		if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2) || fuelConsumed >= requiredFuelCount) {
+			fuelBurnProgress = 0;
+			fuelConsumed = 0;
+		}
 		if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
 			this.itemToAnimate = this.inventory[0];
 			if (lifeCrystalLife >= 1) {
@@ -44,8 +49,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 					fuelBurnProgress = 0;
 					decrStackSize(2, 1);
 					fuelConsumed++;
-					if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2) || fuelConsumed >= requiredFuelCount)
-						fuelBurnProgress = 0;
 				}
 			}
 		}

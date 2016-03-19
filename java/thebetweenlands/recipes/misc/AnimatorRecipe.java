@@ -111,7 +111,7 @@ public class AnimatorRecipe {
 
 	public static AnimatorRecipe getRecipe(ItemStack input) {
 		for(AnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
-			if(input.isItemEqual(recipe.input)) {
+			if(input != null && input.isItemEqual(recipe.input)) {
 				return recipe;
 			}
 		}
