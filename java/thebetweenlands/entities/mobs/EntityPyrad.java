@@ -5,12 +5,22 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.projectiles.EntityPyradFlame;
 
 public class EntityPyrad extends EntityBlaze {
 	private int shouldFire;
 	public EntityPyrad(World world) {
 		super(world);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		if(this.worldObj.isRemote) {
+			BLParticle.LEAF_SWIRL.spawn(this.worldObj, this.posX, this.posY, this.posZ, 0, 0, 0, 1, this);
+		}
 	}
 
 	@Override
@@ -53,7 +63,7 @@ public class EntityPyrad extends EntityBlaze {
 			hasAttacked = true;
 		}
 	}
-	
+
 	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:pyradLiving";

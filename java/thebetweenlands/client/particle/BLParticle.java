@@ -1,23 +1,36 @@
 package thebetweenlands.client.particle;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.EntityBreakingFX;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.EntityFlameFX;
+import net.minecraft.client.particle.EntitySmokeFX;
+import net.minecraft.client.particle.EntitySpellParticleFX;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.entities.particles.*;
+import thebetweenlands.entities.particles.EntityAltarCraftingFX;
+import thebetweenlands.entities.particles.EntityBLBubbleFX;
+import thebetweenlands.entities.particles.EntityBugFX;
+import thebetweenlands.entities.particles.EntityCaveWaterDripFX;
+import thebetweenlands.entities.particles.EntityDruidCastingFX;
+import thebetweenlands.entities.particles.EntityLeafFX;
+import thebetweenlands.entities.particles.EntityLeafSwirlFX;
 import thebetweenlands.entities.particles.EntityPortalFX;
 import thebetweenlands.entities.particles.EntitySplashFX;
+import thebetweenlands.entities.particles.EntityTarBeastDrip;
+import thebetweenlands.entities.particles.EntityWeedWoodRustleFX;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
-
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public enum BLParticle {
@@ -114,6 +127,14 @@ public enum BLParticle {
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5 };
+		}
+	},
+	LEAF_SWIRL(EntityLeafSwirlFX.class, ParticleArgs.NONE, int.class, float.class, int.class, ResourceLocation.class, int.class, Entity.class) {
+		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/leaf.png");
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5, (Entity)data[0]};
 		}
 	},
 	SPLASH(EntitySplashFX.class, ParticleArgs.VX_VY_VZ, int.class) {
