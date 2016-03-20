@@ -643,6 +643,12 @@
 			"fig"
 		]
 	},
+	"voodooDoll": {
+		"category": "player",
+		"sounds": [
+			"voodooDoll"
+		]
+	},
 	"music.blMenu": {
 		"category": "music",
 		"sounds": [
