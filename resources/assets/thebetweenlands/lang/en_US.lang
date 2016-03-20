@@ -1237,6 +1237,8 @@ chat.amulet.slot.full=Can't add any more amulet slots
 chat.wightTower.warning1=Your actions have consequences...
 chat.wightTower.warning2=You have angered the guards...
 
+chat.voodoo.no.mobs=There are no mobs to damage
+
 # Radial menu
 equipment.menu.equip=Equip
 equipment.menu.unequip=Unequip

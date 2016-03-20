@@ -10,6 +10,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.manual.IManualEntryItem;
 
 /**
@@ -25,19 +26,26 @@ public class ItemVoodooDoll extends Item implements IManualEntryItem {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (!world.isRemote) {
-			List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(player.posX, player.posY, player.posZ, player.posX, player.posY, player.posZ).expand(5, 5, 5));
-			int damageCount = 0;
-			for (EntityLivingBase entity : living) {
-				if (entity != player) {
-					damageCount++;
-					entity.attackEntityFrom(DamageSource.magic, 20);
+		List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(player.posX, player.posY, player.posZ, player.posX, player.posY, player.posZ).expand(5, 5, 5));
+		living.remove(player);
+		boolean attacked = false;
+		for (EntityLivingBase entity : living) {
+			if(entity.isEntityAlive()) {
+				if (!world.isRemote) {
+					attacked |= entity.attackEntityFrom(DamageSource.magic, 20);
+				} else if(!entity.isEntityInvulnerable()) {
+					attacked = true;
+					for(int i = 0; i < 20; i++)
+						BLParticle.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, 1.0F);
 				}
 			}
-			if (damageCount == 0) {
-				player.addChatMessage(new ChatComponentTranslation("voodoo.no.mobs"));
-			} else {
-				stack.damageItem(damageCount, player);
+		}
+		if(!world.isRemote) {
+			if (living.isEmpty()) {
+				player.addChatMessage(new ChatComponentTranslation("chat.voodoo.no.mobs"));
+			} else if(attacked) {
+				stack.damageItem(1, player);
+				world.playSoundEffect(player.posX, player.posY, player.posZ, "thebetweenlands:voodooDoll", 1.0F, 1.0F);
 			}
 		}
 		return stack;
