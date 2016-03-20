@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.equipment.EntityPropertiesEquipment;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -27,15 +28,28 @@ public class ItemEquipmentHandler {
 	@SubscribeEvent
 	public void onWorldTick(TickEvent.WorldTickEvent event) {
 		if(event.phase == Phase.END) {
-			World world = event.world;
-			for(Entity entity : (List<Entity>)world.loadedEntityList) {
-				EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
-				if(property != null) {
-					EquipmentInventory equipmentInventory = property.getEquipmentInventory();
-					for(Equipment equipment : equipmentInventory.getEquipment()) {
-						if(equipment.item != null && equipment.item.getItem() instanceof IEquippable) {
-							((IEquippable)equipment.item.getItem()).onEquipmentTick(equipment.item, entity);
-						}
+			this.tickEquipment(event.world);
+		}
+	}
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {
+		if(event.phase == Phase.END) {
+			World world = TheBetweenlands.proxy.getClientWorld();
+			if(world != null) {
+				this.tickEquipment(world);
+			}
+		}
+	}
+
+	private void tickEquipment(World world) {
+		for(Entity entity : (List<Entity>)world.loadedEntityList) {
+			EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
+			if(property != null) {
+				EquipmentInventory equipmentInventory = property.getEquipmentInventory();
+				for(Equipment equipment : equipmentInventory.getEquipment()) {
+					if(equipment.item != null && equipment.item.getItem() instanceof IEquippable) {
+						((IEquippable)equipment.item.getItem()).onEquipmentTick(equipment.item, entity);
 					}
 				}
 			}

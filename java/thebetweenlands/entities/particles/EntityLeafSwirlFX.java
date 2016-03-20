@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 
 public class EntityLeafSwirlFX extends EntityFX {
 	private ResourceLocation particleTexture;
@@ -29,7 +30,7 @@ public class EntityLeafSwirlFX extends EntityFX {
 		super(world, x, y, z, 0, 0, 0);
 		this.target = target;
 		this.posX = this.prevPosX = x - this.target.motionX * VELOCITY_OFFSET_MULTIPLIER;
-		this.posY = this.prevPosY = y + 0.8D - 1.6D - (this.target.isCollidedVertically ? 0.0D : this.target.motionY * VELOCITY_OFFSET_MULTIPLIER);
+		this.posY = this.prevPosY = y + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.8D) - 1.6D - (this.target.isCollidedVertically ? 0.0D : this.target.motionY * VELOCITY_OFFSET_MULTIPLIER);
 		this.posZ = this.prevPosZ = z - this.target.motionZ * VELOCITY_OFFSET_MULTIPLIER;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 		this.particleMaxAge = maxAge;
@@ -96,7 +97,7 @@ public class EntityLeafSwirlFX extends EntityFX {
 		this.lastTickPosZ = this.posZ;
 
 		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
-		this.posY = sy + connection.yCoord * this.progress + 0.8D;
+		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.8D);
 		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
 
 		this.textureCounter++;

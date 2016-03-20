@@ -39,6 +39,7 @@ import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.crops.ItemAspectrusCropSeed;
 import thebetweenlands.items.crops.ItemBLGenericSeed;
 import thebetweenlands.items.equipment.ItemAmulet;
+import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.items.equipment.ItemRingOfRecruitment;
 import thebetweenlands.items.food.ItemBLFood;
@@ -320,6 +321,7 @@ public class BLItemRegistry {
 	// EQUIPMENT
 	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item ringOfRecruitment = new ItemRingOfRecruitment();
+	public static final Item ringOfFlight = new ItemRingOfFlight();
 
 	public static void init() {
 		initCreativeTabs();
@@ -335,7 +337,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
