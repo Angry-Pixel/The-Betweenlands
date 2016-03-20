@@ -547,6 +547,28 @@
 			"termiteLiving2"
 		]
 	},
+	"pyradLiving": {
+		"category": "hostile",
+		"sounds": [
+			"pyradLiving1",
+			"pyradLiving2",
+			"pyradLiving3"
+		]
+	},
+	"pyradHurt": {
+		"category": "hostile",
+		"sounds": [
+			"pyradHurt1",
+			"pyradHurt2",
+			"pyradHurt3"
+		]
+	},
+	"pyradDeath": {
+		"category": "hostile",
+		"sounds": [
+			"pyradDeath"
+		]
+	},
 	"sorry": {
 		"category": "player",
 		"sounds": [
