@@ -66,8 +66,19 @@ public class PlayerLocationHandler {
 			if(player != null) {
 				if(this.titleTicks > 0) 
 					this.titleTicks--;
-				List<LocationStorage> locations = getVisibleLocations(player);
 				String prevLocation = this.currentLocation;
+
+				/*Entity boss = null;
+				for(Entity entity : (List<Entity>) player.worldObj.loadedEntityList) {
+					if(entity instanceof IBossBL) {
+						if((boss == null || entity.getDistanceToEntity(player) < boss.getDistanceToEntity(player)) && entity.getDistanceToEntity(player) <= 32.0D)
+							boss = entity;
+					}
+				}
+				if(boss != null) {
+					this.currentLocation = ((IBossBL)boss).getBossName().getFormattedText();
+				} else {*/
+				List<LocationStorage> locations = getVisibleLocations(player);
 				if(locations.isEmpty()) {
 					/*BiomeGenBase biome = player.worldObj.getBiomeGenForCoords(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posZ));
 					String biomeName = StatCollector.translateToLocal("biome." + biome.biomeName + ".name");
@@ -87,6 +98,8 @@ public class PlayerLocationHandler {
 					}
 					this.currentLocation = highestLocation.getLocalizedName();
 				}
+				//}
+
 				if(this.currentLocation.length() > 0 && !prevLocation.equals(this.currentLocation)) {
 					this.titleTicks = 80;
 				}

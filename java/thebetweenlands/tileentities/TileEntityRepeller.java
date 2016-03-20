@@ -12,6 +12,8 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
+import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.entities.mobs.boss.IBossBL;
 
 public class TileEntityRepeller extends TileEntity {
 	private static final float MAX_FUEL = 10.0F;
@@ -48,11 +50,11 @@ public class TileEntityRepeller extends TileEntity {
 		this.fuel += amount;
 		return true;
 	}
-	
+
 	public float getFuel() {
 		return this.fuel;
 	}
-	
+
 	public void emptyFuel() {
 		this.fuel = 0.0F;
 	}
@@ -95,17 +97,19 @@ public class TileEntityRepeller extends TileEntity {
 			AxisAlignedBB affectedBB = AxisAlignedBB.getBoundingBox(this.xCoord - this.radius - 5.0F, this.yCoord - this.radius - 5.0F, this.zCoord - this.radius - 5.0F, this.xCoord + this.radius + 5.0F, this.yCoord + this.radius + 5.0F, this.zCoord + this.radius + 5.0F);
 			List<EntityMob> affectedEntities = this.worldObj.getEntitiesWithinAABB(EntityMob.class, affectedBB);
 			for(EntityMob entity : affectedEntities) {
-				Vec3 closestPoint = this.getClosestAABBCorner(entity.boundingBox, centerX, centerY, centerZ);
-				if(closestPoint.squareDistanceTo(centerX, centerY, centerZ) < this.radius*this.radius) {
-					double diffX = closestPoint.xCoord - centerX;
-					double diffY = closestPoint.yCoord - centerY;
-					double diffZ = closestPoint.zCoord - centerZ;
-					double len = Math.sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
-					entity.moveEntity(diffX*0.1F, 0.0F, diffZ*0.1F);
-					entity.motionX = (float)(diffX / len) * 0.1F;
-					entity.motionZ = (float)(diffX / len) * 0.1F;
-					entity.setInWeb();
-					this.fuel -= 0.0035F;
+				if(entity instanceof EntityWight == false && entity instanceof IBossBL == false) {
+					Vec3 closestPoint = this.getClosestAABBCorner(entity.boundingBox, centerX, centerY, centerZ);
+					if(closestPoint.squareDistanceTo(centerX, centerY, centerZ) < this.radius*this.radius) {
+						double diffX = closestPoint.xCoord - centerX;
+						double diffY = closestPoint.yCoord - centerY;
+						double diffZ = closestPoint.zCoord - centerZ;
+						double len = Math.sqrt(diffX*diffX + diffY*diffY + diffZ*diffZ);
+						entity.moveEntity(diffX*0.1F, 0.0F, diffZ*0.1F);
+						entity.motionX = (float)(diffX / len) * 0.1F;
+						entity.motionZ = (float)(diffX / len) * 0.1F;
+						entity.setInWeb();
+						this.fuel -= 0.0035F;
+					}
 				}
 			}
 		} else {

@@ -11,6 +11,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.mobs.boss.IBossBL;
 import thebetweenlands.manual.IManualEntryItem;
 
 /**
@@ -30,7 +31,7 @@ public class ItemVoodooDoll extends Item implements IManualEntryItem {
 		living.remove(player);
 		boolean attacked = false;
 		for (EntityLivingBase entity : living) {
-			if(entity.isEntityAlive()) {
+			if(entity.isEntityAlive() && entity instanceof IBossBL == false) {
 				if (!world.isRemote) {
 					attacked |= entity.attackEntityFrom(DamageSource.magic, 20);
 				} else if(!entity.isEntityInvulnerable()) {
@@ -45,7 +46,7 @@ public class ItemVoodooDoll extends Item implements IManualEntryItem {
 				player.addChatMessage(new ChatComponentTranslation("chat.voodoo.no.mobs"));
 			} else if(attacked) {
 				stack.damageItem(1, player);
-				world.playSoundEffect(player.posX, player.posY, player.posZ, "thebetweenlands:voodooDoll", 1.0F, 1.0F);
+				world.playSoundEffect(player.posX, player.posY, player.posZ, "thebetweenlands:voodooDoll", 1.0F, 1.0F - world.rand.nextFloat() * 0.3F);
 			}
 		}
 		return stack;

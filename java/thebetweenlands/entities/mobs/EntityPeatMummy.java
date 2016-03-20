@@ -7,11 +7,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -101,10 +101,11 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 				entity.carryShimmerstone = true;
 			}
 		});
-		this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
-		this.tasks.addTask(3, new EntityAIAttackOnCollide(this, EntityLivingBase.class, 1D, false));
-		this.tasks.addTask(4, new EntityAIWander(this, 1D));
-		this.tasks.addTask(5, new EntityAILookIdle(this));
+		this.tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
+		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
+		this.tasks.addTask(5, new EntityAIWander(this, 1D));
+		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
 	}
@@ -115,7 +116,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(BASE_SPEED);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(110.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(BASE_DAMAGE);
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(80.0D);
+		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
 
 		this.getAttributeMap().registerAttribute(SPAWN_LENGTH_ATTRIB);
@@ -501,6 +502,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 		return "peatMummy";
 	}
 
+	public void setCarryShimmerStone(boolean shimmerStone) {
+		this.carryShimmerstone = shimmerStone;
+	}
 }
-
-

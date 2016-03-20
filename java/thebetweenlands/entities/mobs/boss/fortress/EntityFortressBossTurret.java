@@ -164,6 +164,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		nbt.setDouble("anchorY", this.anchorY);
 		nbt.setDouble("anchorZ", this.anchorZ);
 		nbt.setString("targetUUID", this.getTargetUUID());
+		nbt.setString("ownerUUID", this.getOwnerUUID());
 		nbt.setInteger("attackDelay", this.attackDelay);
 		nbt.setBoolean("deflectable", this.isDeflectable());
 	}
@@ -175,6 +176,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.anchorY = nbt.getDouble("anchorY");
 		this.anchorZ = nbt.getDouble("anchorZ");
 		this.setTargetUUID(nbt.getString("targetUUID"));
+		this.setOwner(nbt.getString("ownerUUID"));
 		this.attackDelay = nbt.getInteger("attackDelay");
 		this.setDeflectable(nbt.getBoolean("deflectable"));
 	}

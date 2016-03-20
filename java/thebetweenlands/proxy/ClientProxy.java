@@ -5,6 +5,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -74,7 +81,6 @@ import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderFirefly;
-import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderFlyingFiend;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
@@ -84,6 +90,7 @@ import thebetweenlands.client.render.entity.RenderMeleeGuardian;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
+import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderRopeNode;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
@@ -163,7 +170,6 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntityFlyingFiend;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
@@ -173,6 +179,7 @@ import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
+import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.EntitySludge;
 import thebetweenlands.entities.mobs.EntitySludgeBall;
@@ -208,13 +215,13 @@ import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.event.render.BrightnessHandler;
+import thebetweenlands.event.render.CameraPositionHandler;
 import thebetweenlands.event.render.DecayRenderHandler;
 import thebetweenlands.event.render.FogHandler;
 import thebetweenlands.event.render.FovHandler;
 import thebetweenlands.event.render.GLUProjectionHandler;
 import thebetweenlands.event.render.ItemTextureTicker;
 import thebetweenlands.event.render.OverlayHandler;
-import thebetweenlands.event.render.ScreenShakeHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.event.world.ThemHandler;
@@ -254,14 +261,6 @@ import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.utils.vectormath.Point3f;
-
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -474,7 +473,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(GLUProjectionHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(OverlayHandler.INSTANCE);
 		WeedwoodRowboatHandler.INSTANCE.init();
-		FMLCommonHandler.instance().bus().register(ScreenShakeHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(CameraPositionHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemTextureTicker.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ElixirClientHandler.INSTANCE);
