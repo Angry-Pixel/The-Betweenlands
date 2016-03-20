@@ -353,7 +353,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 		RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27),TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
 		SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34), PARCHMENT("parchment", 35),
 		SHOCKWAVE_SWORD_1("shockwaveSword1", 36), SHOCKWAVE_SWORD_2("shockwaveSword2", 37), SHOCKWAVE_SWORD_3("shockwaveSword3", 38), SHOCKWAVE_SWORD_4("shockwaveSword4", 39),
-		FLAMME_BALL("flammeBall", 40), AMULET_SOCKET("amuletSocket", 41);
+		PYRAD_FLAME("pyradFlame", 40), AMULET_SOCKET("amuletSocket", 41);
 
 		public final String iconName;
 		public final int id;

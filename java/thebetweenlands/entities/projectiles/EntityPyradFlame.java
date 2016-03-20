@@ -9,18 +9,18 @@ import thebetweenlands.client.particle.BLParticle;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityFlammeBall extends EntitySmallFireball {
+public class EntityPyradFlame extends EntitySmallFireball {
 
-	public EntityFlammeBall(World world) {
+	public EntityPyradFlame(World world) {
 		super(world);
 	}
 
-	public EntityFlammeBall(World world, EntityLivingBase entity, double x, double y, double z) {
+	public EntityPyradFlame(World world, EntityLivingBase entity, double x, double y, double z) {
 		super(world, entity, x, y, z);
 		setSize(0.3125F, 0.3125F);
 	}
 
-	public EntityFlammeBall(World world, double x, double y, double z, double targetX, double targetY, double targetZ) {
+	public EntityPyradFlame(World world, double x, double y, double z, double targetX, double targetY, double targetZ) {
 		super(world, x, y, z, targetX, targetY, targetZ);
 		setSize(0.3125F, 0.3125F);
 	}

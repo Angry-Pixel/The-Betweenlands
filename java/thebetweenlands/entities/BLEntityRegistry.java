@@ -11,7 +11,6 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityFloatingFlamme;
 import thebetweenlands.entities.mobs.EntityFlyingFiend;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
@@ -20,6 +19,7 @@ import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
+import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntityShallowBreath;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
 import thebetweenlands.entities.mobs.EntitySludge;
@@ -38,7 +38,7 @@ import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
 import thebetweenlands.entities.projectiles.EntityAngryPebble;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
 import thebetweenlands.entities.projectiles.EntityElixir;
-import thebetweenlands.entities.projectiles.EntityFlammeBall;
+import thebetweenlands.entities.projectiles.EntityPyradFlame;
 import thebetweenlands.entities.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
@@ -92,8 +92,8 @@ public class BLEntityRegistry
 		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 64, 20, false);
 		registerEntity(40, EntityFortressBossBlockade.class, "fortressBossBlockade", 64, 20, false);
 		registerEntity(41, EntityFlyingFiend.class, "flyingFiend", 0x804E3D, 0x3D6F80);
-		registerEntity(42, EntityFloatingFlamme.class, "floatingFlamme", 0x005C3D, 0x2D4231, 64, 3, true);
-		registerEntity(43, EntityFlammeBall.class, "flammeBall");
+		registerEntity(42, EntityPyrad.class, "pyrad", 0x005C3D, 0x2D4231, 64, 3, true);
+		registerEntity(43, EntityPyradFlame.class, "flammeBall");
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

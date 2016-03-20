@@ -5,11 +5,11 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.entities.projectiles.EntityFlammeBall;
+import thebetweenlands.entities.projectiles.EntityPyradFlame;
 
-public class EntityFloatingFlamme extends EntityBlaze {
+public class EntityPyrad extends EntityBlaze {
 	private int shouldFire;
-	public EntityFloatingFlamme(World world) {
+	public EntityPyrad(World world) {
 		super(world);
 	}
 
@@ -42,7 +42,7 @@ public class EntityFloatingFlamme extends EntityBlaze {
 					worldObj.playAuxSFXAtEntity((EntityPlayer) null, 1009, (int) posX, (int) posY, (int) posZ, 0);
 
 					for (int i = 0; i < 1; ++i) {
-						EntityFlammeBall flammeBall = new EntityFlammeBall(worldObj, this, d0 + rand.nextGaussian() * (double) f1, d1, d2 + rand.nextGaussian() * (double) f1);
+						EntityPyradFlame flammeBall = new EntityPyradFlame(worldObj, this, d0 + rand.nextGaussian() * (double) f1, d1, d2 + rand.nextGaussian() * (double) f1);
 						flammeBall.posY = posY + (double) (height / 2.0F) + 0.5D;
 						worldObj.spawnEntityInWorld(flammeBall);
 					}
