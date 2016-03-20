@@ -53,4 +53,19 @@ public class EntityPyrad extends EntityBlaze {
 			hasAttacked = true;
 		}
 	}
+	
+	@Override
+	protected String getLivingSound() {
+		return "thebetweenlands:pyradLiving";
+	}
+
+	@Override
+	protected String getHurtSound() {
+		return "thebetweenlands:pyradHurt";
+	}
+
+	@Override
+	protected String getDeathSound() {
+		return "thebetweenlands:pyradDeath";
+	}
 }
