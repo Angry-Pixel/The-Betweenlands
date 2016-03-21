@@ -65,6 +65,11 @@ public class EntityPyrad extends EntityBlaze {
 	}
 
 	@Override
+	public int getMaxSpawnedInChunk() {
+		return 3;
+	}
+
+	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:pyradLiving";
 	}

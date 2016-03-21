@@ -1,10 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -13,10 +8,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
+
+import org.lwjgl.opengl.GL11;
+
 import thebetweenlands.client.model.entity.ModelSwordEnergy;
 import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderSwordEnergy extends Render {
@@ -98,22 +99,26 @@ public class RenderSwordEnergy extends Render {
 		this.renderBeam(Vec3.createVectorHelper(x, y + 0.85F, z), Vec3.createVectorHelper(x - interpPos1 - 0.1F, y + 0.9F, z - interpPos1 - 0.1F), 0.05F, 0.25F);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x - interpPos1, y - 0.14F, z - interpPos1);
-		model.render(0.0625F);
+		if(energyBall.pos1 < 3.5F)
+			model.render(0.0625F);
 		GL11.glPopMatrix();
 		this.renderBeam(Vec3.createVectorHelper(x, y + 0.85F, z), Vec3.createVectorHelper(x + interpPos2 + 0.1F, y + 0.9F, z - interpPos2 - 0.1F), 0.05F, 0.25F);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + interpPos2, y - 0.14F, z - interpPos2);
-		model.render(0.0625F);
+		if(energyBall.pos2 < 3.5F)
+			model.render(0.0625F);
 		GL11.glPopMatrix();
 		this.renderBeam(Vec3.createVectorHelper(x, y + 0.85F, z), Vec3.createVectorHelper(x + interpPos3 + 0.1F, y + 0.9F, z + interpPos3 + 0.1F), 0.05F, 0.25F);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + interpPos3, y - 0.14F, z + interpPos3);
-		model.render(0.0625F);
+		if(energyBall.pos3 < 3.5F)
+			model.render(0.0625F);
 		GL11.glPopMatrix();
 		this.renderBeam(Vec3.createVectorHelper(x, y + 0.85F, z), Vec3.createVectorHelper(x - interpPos4 - 0.1F, y + 0.9F, z + interpPos4 + 0.1F), 0.05F, 0.25F);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x - interpPos4, y - 0.14F, z + interpPos4);
-		model.render(0.0625F);
+		if(energyBall.pos4 < 3.5F)
+			model.render(0.0625F);
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);

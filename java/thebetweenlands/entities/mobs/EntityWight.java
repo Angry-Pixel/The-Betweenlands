@@ -174,6 +174,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public int getMaxSpawnedInChunk() {
+		return 3;
+	}
+
+	@Override
 	protected String getLivingSound() {
 		return "thebetweenlands:wightMoan";
 	}

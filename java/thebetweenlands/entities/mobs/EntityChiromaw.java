@@ -187,4 +187,9 @@ public class EntityChiromaw extends EntityFlying implements IMob {
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
 	}
 
+	@Override
+	public int getMaxSpawnedInChunk() {
+		return 3;
+	}
+
 }

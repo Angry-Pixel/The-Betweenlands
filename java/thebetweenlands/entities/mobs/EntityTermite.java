@@ -31,6 +31,11 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public int getMaxSpawnedInChunk() {
+		return 3;
+	}
+
+	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ARTHROPOD;
 	}
