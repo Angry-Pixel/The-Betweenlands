@@ -29,10 +29,11 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private int width = -1;
 	private int height = -1;
 	private int direction = -1;
+	private int originX, originY, originZ = -1; 
 
 	private Block limestonePolished = BLBlockRegistry.polishedLimestone;
 	private Block limestoneChiselled = BLBlockRegistry.chiseledLimestone;
-	private Block limestoneBrickSlab = BLBlockRegistry.limestoneBrickSlab;
+	private Block limestonePolishedCollapsing = BLBlockRegistry.polishedLimestoneCollapsing;
 	private Block betweenstone = BLBlockRegistry.betweenstone;
 	private Block betweenstoneSmooth = BLBlockRegistry.smoothBetweenstone;
 	private Block betweenstoneSmoothMossy = BLBlockRegistry.betweenstoneSmoothMossy;
@@ -84,6 +85,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).getChunkData().markDirty();
 		}
+		originX = x;
+		originY = y;
+		originZ = z;
 		return generateStructure(world, rand, x, y, z);
 	}
 
@@ -156,7 +160,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		// air just to erase old one :P
 		for (int xa = xx; xa <= xx + 32; ++xa) {
 			for(int za = zz; za <= zz + 32; ++za) {
-				for(int ya = yy; ya < yy + 32; ++ya ) {
+				for(int ya = yy; ya < yy + 48; ++ya ) {
 					world.setBlockToAir(xa, ya, za);
 				}
 			}
@@ -192,10 +196,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, 5, 6, limestoneChiselled, 0, 3, 1, 1, direction);
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 8, 6, spawner, 0, 1, 1, 1, direction);
-			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.floatingFlamme");
-			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.floatingFlamme");
-			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.floatingFlamme");
-			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.floatingFlamme");
+			spawner.setMob(world, xx + 6, yy + 8, zz + 6, "thebetweenlands.pyrad");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 6, "thebetweenlands.pyrad");
+			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.pyrad");
+			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.pyrad");
 
 
 			//2nd floors
@@ -233,7 +237,12 @@ public class WorldGenWightFortress extends WorldGenerator {
 				spawner.getLogic(world, xx + 25, yy + 19, zz + 25).setCheckRange(16.0D).setDelay(3000, 5000).setMaxEntities(1);
 			spawner.setMob(world, xx + 6, yy + 19, zz + 25, "thebetweenlands.wight");
 			if(spawner.getLogic(world, xx + 6, yy + 19, zz + 25) != null)
-				spawner.getLogic(world, xx + 6, yy + 19, zz + 25).setCheckRange(16.0D).setDelay(3000, 5000).setMaxEntities(1);
+				spawner.getLogic(world, xx + 6, yy + 19, zz + 25).setCheckRange(16.0D).setDelay(3000, 5000).setMaxEntities(1);;
+				rotatedCubeVolume(world, rand, xx, yy, zz, 16, 26, 16, spawner, 0, 1, 1, 1, direction);
+				spawner.setMob(world, xx + 16, yy + 26, zz + 16,"thebetweenlands.flyingFiend");
+				spawner.setMob(world, xx + 16, yy + 26, zz + 15,"thebetweenlands.flyingFiend");
+				spawner.setMob(world, xx + 15, yy + 26, zz + 16,"thebetweenlands.flyingFiend");
+				spawner.setMob(world, xx + 15, yy + 26, zz + 15,"thebetweenlands.flyingFiend");
 		}
 
 		length = 13;
@@ -698,7 +707,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		for(int count = 0; count < 3 ;count ++)
 			rotatedCubeVolume(world, rand, xx, yy, zz, 17 + count, 18 + count, 23, betweenstoneBrickStairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 
-		for(int count = 0; count < 6 ;count ++)
+		for(int count = 0; count < 6 ;count ++)        
 			rotatedCubeVolume(world, rand, xx, yy, zz, 22 - count, 22 + count, 10, betweenstoneBrickStairs, direction == 0 ? 1 : direction== 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 27, 10, Blocks.air, 0, 1, 5, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 21, 22, 10, betweenstoneBricks, 0, 1, 1, 1, direction);
@@ -740,8 +749,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 		boss.setAnchor(xx + 16, yy + 17 + 19 + 5.2D, zz + 16, 6);
 		world.spawnEntityInWorld(boss);
 
-		//floor 1 TODO Add double loot chest
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolished, 0, 8, 1, 8, 0);
+		//floor 1
+		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolishedCollapsing, 0, 8, 1, 8, 0);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 16, 24, 16, chest, direction == 0 ? 5 : direction == 1 ? 2 : direction == 2 ? 4 : 3, 1, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 16, 24, 15, chest, direction == 0 ? 5 : direction == 1 ? 2 : direction == 2 ? 4 : 3, 1, 1, 1, direction);
 
 		//floor2 TODO Add teleporter block
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
@@ -780,18 +791,14 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	private void placeChest(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta) {
-		if(rand.nextInt(4) != 0)
-			return;
-		else {
-			world.setBlock(x, y, z, chest, blockMeta, 2);
-			TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y, z);
-			if (lootChest != null) {
-				world.setBlockMetadataWithNotify(x, y, z, blockMeta, 3);
-				LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
-			}
+		world.setBlock(x, y, z, chest, blockMeta, 2);
+		TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y, z);
+		if (lootChest != null) {
+			world.setBlockMetadataWithNotify(x, y, z, blockMeta, 3);
+			LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
 		}
 	}
-	
+
 	private void placeRandomisedLootPot(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta) {
 		if(rand.nextInt(5) != 0 || world.isAirBlock(x, y - 1, z))
 			return;
@@ -837,8 +844,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
-						else if(blockType == chest)
-							placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						else if (blockType == chest) {
+							if (yy <= originY + 17) {
+								if (rand.nextInt(4) == 0)
+									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+							} else if (yy > originY + 17)
+								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						}
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -863,8 +875,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
-						else if(blockType == chest)
-							placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						else if (blockType == chest) {
+							if (yy <= originY + 17) {
+								if (rand.nextInt(4) == 0)
+									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+							} else if (yy > originY + 17)
+								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						}
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -889,8 +906,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
-						else if(blockType == chest)
-							placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						else if (blockType == chest) {
+							if (yy <= originY + 17) {
+								if (rand.nextInt(4) == 0)
+									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+							} else if (yy > originY + 17)
+								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						}
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -915,8 +937,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlock(xx, yy, zz, rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), blockMeta, 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
-						else if(blockType == chest)
-							placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						else if (blockType == chest) {
+							if (yy <= originY + 17) {
+								if (rand.nextInt(4) == 0)
+									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+							} else if (yy > originY + 17)
+								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
+						}
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
