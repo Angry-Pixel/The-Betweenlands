@@ -2,6 +2,7 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -178,6 +179,12 @@ public class EntityFlyingFiend extends EntityFlying implements IMob {
 	@Override
 	protected String getDeathSound() {
 		return "thebetweenlands:flyingFiendDeath";
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
 	}
 
 }
