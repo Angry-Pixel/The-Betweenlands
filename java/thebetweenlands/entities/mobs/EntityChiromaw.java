@@ -11,14 +11,14 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
-public class EntityFlyingFiend extends EntityFlying implements IMob {
+public class EntityChiromaw extends EntityFlying implements IMob {
 	public int courseChangeCooldown;
 	public double waypointX;
 	public double waypointY;
 	public double waypointZ;
 	private EntityLivingBase targetedEntity;
 
-	public EntityFlyingFiend(World world) {
+	public EntityChiromaw(World world) {
 		super(world);
 	    setSize(0.8F, 0.9F);
 	    setIsHanging(false);

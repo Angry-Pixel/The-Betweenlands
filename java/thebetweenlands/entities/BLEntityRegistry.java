@@ -12,7 +12,7 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityFlyingFiend;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -91,7 +91,7 @@ public class BLEntityRegistry
 		registerEntity(38, EntityFortressBossProjectile.class, "fortressBossProjectile", 64, 5, true);
 		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 64, 20, false);
 		registerEntity(40, EntityFortressBossBlockade.class, "fortressBossBlockade", 64, 20, false);
-		registerEntity(41, EntityFlyingFiend.class, "flyingFiend", 0x804E3D, 0x3D6F80);
+		registerEntity(41, EntityChiromaw.class, "chiromaw", 0x804E3D, 0x3D6F80);
 		registerEntity(42, EntityPyrad.class, "pyrad", 0x005C3D, 0x2D4231, 64, 3, true);
 		registerEntity(43, EntityPyradFlame.class, "flammeBall");
 	}

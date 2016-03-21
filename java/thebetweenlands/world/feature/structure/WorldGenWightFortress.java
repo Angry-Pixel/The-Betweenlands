@@ -186,10 +186,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 			
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 2, 6, spawner, 0, 1, 1, 1, direction);
-			spawner.setMob(world, xx + 6, yy + 2, zz + 6, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 25, yy + 2, zz + 6, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 25, yy + 2, zz + 25, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 6, yy + 2, zz + 25, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.flyingFiend");
+			spawner.setMob(world, xx + 6, yy + 2, zz + 6, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 25, yy + 2, zz + 6, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 25, yy + 2, zz + 25, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 6, yy + 2, zz + 25, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.chiromaw");
 
 			//1st floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 3, 5, 3, limestonePolished, 0, 7, 1, 7, direction);
@@ -241,10 +241,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 				spawner.getLogic(world, xx + 6, yy + 19, zz + 25).setCheckRange(16.0D).setDelay(3000, 5000).setMaxEntities(1);
 			if (rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 16, 26, 16, spawner, 0, 1, 1, 1, direction);
-			spawner.setMob(world, xx + 16, yy + 26, zz + 16, "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 16, yy + 26, zz + 15, "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 15, yy + 26, zz + 16, "thebetweenlands.flyingFiend");
-			spawner.setMob(world, xx + 15, yy + 26, zz + 15, "thebetweenlands.flyingFiend");
+			spawner.setMob(world, xx + 16, yy + 26, zz + 16, "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 16, yy + 26, zz + 15, "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 15, yy + 26, zz + 16, "thebetweenlands.chiromaw");
+			spawner.setMob(world, xx + 15, yy + 26, zz + 15, "thebetweenlands.chiromaw");
 		}
 
 		length = 13;

@@ -8,12 +8,12 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.entities.mobs.EntityFlyingFiend;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelFlyingFiend extends ModelBase {
+public class ModelChiromaw extends ModelBase {
     ModelRenderer body_base;
     ModelRenderer body_buttpart;
     ModelRenderer neck;
@@ -44,7 +44,7 @@ public class ModelFlyingFiend extends ModelBase {
     ModelRenderer wing_right1;
     ModelRenderer wing_right2;
 
-    public ModelFlyingFiend() {
+    public ModelChiromaw() {
         textureWidth = 128;
         textureHeight = 64;
         leg_left1 = new ModelRenderer(this, 46, 0);
@@ -198,9 +198,9 @@ public class ModelFlyingFiend extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-		 EntityFlyingFiend fiend = (EntityFlyingFiend) entity;
+		 EntityChiromaw chiromaw = (EntityChiromaw) entity;
 		 GL11.glPushMatrix();
-	        if (fiend.getIsHanging()) {
+	        if (chiromaw.getIsHanging()) {
 	            GL11.glTranslatef(0.0F, 2.125F, 0.0F);
 	        GL11.glRotatef(180, 1F, 0F, 0.0F);
 	        }
@@ -221,9 +221,9 @@ public class ModelFlyingFiend extends ModelBase {
     
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
-		EntityFlyingFiend fiend = (EntityFlyingFiend) entity;
+		EntityChiromaw chiromaw = (EntityChiromaw) entity;
 	
-		if (fiend.getIsHanging()) {
+		if (chiromaw.getIsHanging()) {
 			arm_right1.rotateAngleZ = 0.5462880558742251F;
 			arm_right2.rotateAngleZ = 0F;
 			arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -249,7 +249,7 @@ public class ModelFlyingFiend extends ModelBase {
 			head_base.rotateAngleX = 0.091106186954104F;
 		}
 		else {
-			float flap = MathHelper.sin((fiend.ticksExisted + partialRenderTicks) * 0.5F ) * 0.6F;
+			float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F ) * 0.6F;
 			arm_right1.rotateAngleZ = 0.5462880558742251F - flap * 0.5F;
 			arm_right2.rotateAngleZ = 0F - flap;
 			arm_left1.rotateAngleZ = -0.5462880558742251F + flap * 0.5F;

@@ -7,23 +7,23 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.client.model.entity.ModelPyrad;
-import thebetweenlands.entities.mobs.EntityPyrad;
+import thebetweenlands.client.model.entity.ModelChiromaw;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.utils.LightingUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class RenderPyrad extends RenderLiving {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/pyrad.png");
-	private static final ResourceLocation GLOW_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/pyradGlow.png");
+public class RenderChiromaw extends RenderLiving {
+	private final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/chiromaw.png");
+	private final ResourceLocation GLOW_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/chiromawGlow.png");
 
-	public RenderPyrad() {
-		super(new ModelPyrad(), 0.5F);
-		setRenderPassModel(new ModelPyrad());
+	public RenderChiromaw() {
+		super(new ModelChiromaw(), 0.5F);
+		setRenderPassModel(new ModelChiromaw());
 	}
-	
-	protected int setMobTextureGlow(EntityPyrad entity, int pass, float partialTickTime) {
+
+	protected int setMobTextureGlow(EntityChiromaw entity, int pass, float partialTickTime) {
 		if(pass == 1) {
 			bindTexture(GLOW_TEXTURE);
 			float var4 = 1.0F;
@@ -41,11 +41,12 @@ public class RenderPyrad extends RenderLiving {
 	}
 
 	protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
-		return setMobTextureGlow((EntityPyrad) entity, pass, partialTickTime);
+		return setMobTextureGlow((EntityChiromaw) entity, pass, partialTickTime);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
 		return TEXTURE;
 	}
+
 }

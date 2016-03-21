@@ -81,7 +81,7 @@ import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderFirefly;
-import thebetweenlands.client.render.entity.RenderFlyingFiend;
+import thebetweenlands.client.render.entity.RenderChiromaw;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderLeech;
@@ -170,7 +170,7 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityFlyingFiend;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -367,7 +367,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, new RenderFortressBossProjectile());	
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossSpawner.class, new RenderFortressBossSpawner());	
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBlockade.class, new RenderFortressBossBlockade());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingFiend.class, new RenderFlyingFiend());
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, new RenderChiromaw());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, new RenderPyrad());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, new RenderPyradFlame(1F));
 
