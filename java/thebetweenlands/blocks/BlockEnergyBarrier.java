@@ -24,7 +24,7 @@ public class BlockEnergyBarrier extends Block {
 	public BlockEnergyBarrier() {
 		super(Material.glass);
 		setStepSound(soundTypeGlass);
-		setBlockName("thebetweenlands:energyBarrier");
+		setBlockName("thebetweenlands.energyBarrier");
 		setBlockTextureName("thebetweenlands:barrier");
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockUnbreakable();
