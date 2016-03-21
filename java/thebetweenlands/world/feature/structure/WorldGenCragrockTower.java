@@ -6,6 +6,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.tileentities.TileEntityLootPot1;
+import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.loot.LootBasicList;
 import thebetweenlands.world.loot.LootUtil;
 
@@ -58,8 +59,6 @@ public class WorldGenCragrockTower extends WorldGenerator {
         System.out.println("generating tower at: " + x + " " + y + " " + z);
 
         rotatedCubeSetToAir(world, x, y, z, 0, 0, 0, width, height, depth, direction);
-
-        rotatedCubeVolume(world, x, y, z, 0, -1, 0, BLBlockRegistry.swampGrass, 0, width, 1, depth, direction);
 
         //FLOOR 0
 
@@ -172,6 +171,9 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 12, 1, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 1, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 1, 14, root, 0, 1, 1 + random.nextInt(2), 1, direction);
+        rotatedLoot(world, random, x, y, z, 9, 1, 14, direction, 1, 3, 3);
+        rotatedLoot(world, random, x, y, z, 9, 1, 6, direction, 1, 3, 3);
+        rotatedLoot(world, random, x, y, z, 7, 1, 6, direction, 1, 3, 3);
 
         //FLOOR 1
         //WALLS
@@ -262,7 +264,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 9, 5, 6, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 5, 14, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 5, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
-
+        rotatedLoot(world, random, x, y, z, 8, 5, 6, direction, 1, 3, 3);
 
         //FLOOR 2
         //CEILING/WALLS
@@ -339,7 +341,10 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 7, 10, 9, root, 0, 1, 1 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 10, 11, root, 0, 1, 1 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 9, 10, 13, root, 0, 1, 1 + random.nextInt(2), 1, direction);
-
+        rotatedLoot(world, random, x, y, z, 8, 10, 6, direction, 1, 3, 3);
+        rotatedLoot(world, random, x, y, z, 8, 10, 13, direction, 1, 3, 3);
+        rotatedLoot(world, random, x, y, z, 4, 10, 9, direction, 1, 3, 3);
+        rotatedLoot(world, random, x, y, z, 12, 10, 9, direction, 1, 3, 3);
 
         //FLOOR 3
         //WALLS
@@ -489,7 +494,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 6, 43, 13, smoothCragrock, 0, 1, 8, 1, direction);
         rotatedCubeVolume(world, x, y, z, 10, 43, 13, smoothCragrock, 0, 1, 8, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 43, 14, smoothCragrock, 0, 3, 8, 1, direction);
-
+        rotatedLoot(world, random, x, y, z, 10, 15, 8, direction, 1, 4, 2);
 
         //FLOOR 4
         //INTERIOR
@@ -535,6 +540,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 11, 31, 10, smoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 30, 10, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 29, 10, smoothCragrockStairs, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedLoot(world, random, x, y, z, 10, 24, 12, direction, 2, 3, 3);
 
         //CEILING
         rotatedCubeVolume(world, x, y, z, 5, 32, 9, smoothCragrock, 0, 7, 1, 4, direction);
@@ -584,7 +590,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 40, 13, smoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 39, 13, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 38, 13, smoothCragrockStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
-
+        rotatedLoot(world, random, x, y, z, 6, 33, 12, direction, 2, 4, 3);
 
         //CEILING
         rotatedCubeVolume(world, x, y, z, 6, 41, 7, smoothCragrock, 0, 4, 1, 7, direction);
@@ -635,6 +641,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 5, 49, 10, smoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 48, 10, glowingSmoothCragrock, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 47, 10, smoothCragrockStairs, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 1, direction);
+        rotatedLoot(world, random, x, y, z, 6, 42, 8, direction, 3, 7, 3);
 
         //CEILING
         rotatedCubeVolume(world, x, y, z, 5, 50, 8, smoothCragrock, 0, 7, 1, 4, direction);
@@ -756,12 +763,12 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 62, 4, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 63, 4, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 53, 5, cragrockPillar, 0, 1, 6, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 11, 59, 5, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 11, 60, 5, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 11, 59, 5, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 11, 60, 5, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 61, 5, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 53, 8, cragrockPillar, 0, 1, 4, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 13, 57, 8, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 13, 58, 8, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 13, 57, 8, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 13, 58, 8, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 59, 8, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 52, 11, cragrockPillar, 0, 1, 3, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 55, 11, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
@@ -814,7 +821,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 5, 18, cragrockPillar, 0, 1, 6, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 11, 18, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 12, 18, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 8, 12, 18, wisp, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 8, 13, 18, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 0, 6, cragrockPillar, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 1, 6, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 2, 6, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
@@ -828,15 +835,15 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 16, 0, 12, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 2, 12, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 3, 12, cragrockPillar, 0, 1, 2, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 16, 5, 12, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 16, 6, 12, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 16, 5, 12, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 16, 6, 12, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 7, 12, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 0, 15, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 1, 15, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 3, 15, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 4, 15, cragrockPillar, 0, 1, 3, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 14, 7, 15, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 14, 8, 15, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 14, 7, 15, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 14, 8, 15, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 9, 15, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 0, 17, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 1, 17, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
@@ -1155,21 +1162,57 @@ public class WorldGenCragrockTower extends WorldGenerator {
         }
     }
 
-    public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction) {
+    public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, int min, int max, int chance) {
         x -= width / 2;
         z -= depth / 2;
+        if (rand.nextInt(chance) == 0)
+            return;
         switch (direction) {
             case 0:
-                generateLoot(world, rand, x + offsetA, y + offsetB, z + offsetC);
+                generateLoot(world, rand, x + offsetA, y + offsetB, z + offsetC, min, max);
                 break;
             case 1:
-                generateLoot(world, rand, x + offsetC, y + offsetB, z + depth - offsetA - 1);
+                generateLoot(world, rand, x + offsetC, y + offsetB, z + depth - offsetA - 1, min, max);
                 break;
             case 2:
-                generateLoot(world, rand, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
+                generateLoot(world, rand, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, min, max);
                 break;
             case 3:
-                generateLoot(world, rand, x + width - offsetC - 1, y + offsetB, z + offsetA);
+                generateLoot(world, rand, x + width - offsetC - 1, y + offsetB, z + offsetA, min, max);
+                break;
+        }
+    }
+
+    public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, int min, int max, int chance) {
+        x -= width / 2;
+        z -= depth / 2;
+        if (rand.nextInt(chance) == 0)
+            return;
+        TileEntityWeedWoodChest chest;
+        switch (direction) {
+            case 0:
+                world.setBlock(x + offsetA, y + offsetB, z + offsetC, BLBlockRegistry.weedwoodChest);
+                chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetA, y + offsetB, z + offsetC);
+                if (chest != null)
+                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                break;
+            case 1:
+                world.setBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1, BLBlockRegistry.weedwoodChest);
+                chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetC, y + offsetB, z + depth - offsetA - 1);
+                if (chest != null)
+                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                break;
+            case 2:
+                world.setBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, BLBlockRegistry.weedwoodChest);
+                chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
+                if (chest != null)
+                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                break;
+            case 3:
+                world.setBlock(x + width - offsetC - 1, y + offsetB, z + offsetA, BLBlockRegistry.weedwoodChest);
+                chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetC - 1, y + offsetB, z + offsetA);
+                if (chest != null)
+                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
                 break;
         }
     }
@@ -1281,12 +1324,12 @@ public class WorldGenCragrockTower extends WorldGenerator {
         return false;
     }
 
-    private void generateLoot(World world, Random random, int x, int y, int z) {
+    private void generateLoot(World world, Random random, int x, int y, int z, int min, int max) {
         int randDirection = random.nextInt(4) + 2;
         world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
         if (lootPot != null)
-            LootUtil.generateLoot(lootPot, random, LootBasicList.loot, 1, 2);
+            LootUtil.generateLoot(lootPot, random, LootBasicList.loot, min, max);
     }
 
     private Block getRandomBlock(Random rand) {
