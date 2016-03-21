@@ -965,10 +965,9 @@ public class DecorationHelper {
 	public void generateCragrockTower(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();
-			int y = 81;
+			int y = 86;
 			int z = this.z + this.offsetXZ();
-			if (checkSurface(SurfaceType.GRASS, x, y, z))
-				GEN_CRAGROCK_TOWER.generate(world, rand, x, y, z);
+			GEN_CRAGROCK_TOWER.generate(world, rand, x, y, z);
 		}
 	}
 
