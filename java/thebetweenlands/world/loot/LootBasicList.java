@@ -31,6 +31,7 @@ public class LootBasicList {
 			new LootItemStack(BLItemRegistry.explorerHat).setAmount(3).setWeight(2),
 			new LootItemStack(BLItemRegistry.voodooDoll).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.ringOfPower).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.ringOfFlight).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.swiftPick).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.wightsBane).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.critterCruncher).setAmount(1).setWeight(2),
