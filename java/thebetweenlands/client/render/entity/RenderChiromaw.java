@@ -3,6 +3,7 @@ package thebetweenlands.client.render.entity;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -22,8 +23,21 @@ public class RenderChiromaw extends RenderLiving {
 		super(new ModelChiromaw(), 0.5F);
 		setRenderPassModel(new ModelChiromaw());
 	}
+	
+	protected void preRenderCallback(EntityLivingBase entity, float partialTickTime) {
+		EntityChiromaw chiromaw = (EntityChiromaw) entity;
+		if (!chiromaw.getIsHanging()) {
+			float flap = MathHelper.sin((entity.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
+			GL11.glTranslatef(0.0F, 0F - flap * 0.5F, 0.0F);
+		}
+	}
 
 	protected int setMobTextureGlow(EntityChiromaw entity, int pass, float partialTickTime) {
+		float flap = MathHelper.sin((entity.ticksExisted + partialTickTime) * 0.5F ) * 0.6F;
+		GL11.glPushMatrix();
+		
+		GL11.glTranslatef(0.0F, 0F - flap * 0.5F, 0.0F);
+		GL11.glPopMatrix();
 		if(pass == 1) {
 			bindTexture(GLOW_TEXTURE);
 			float var4 = 1.0F;
@@ -37,6 +51,7 @@ public class RenderChiromaw extends RenderLiving {
 			LightingUtil.INSTANCE.revert();
 			GL11.glDisable(GL11.GL_BLEND);
 		}
+		
 		return -1;
 	}
 
