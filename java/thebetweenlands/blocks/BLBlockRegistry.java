@@ -505,6 +505,7 @@ public class BLBlockRegistry {
 	public static final Block spookyBetweenstoneBrick2 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick2");
 	public static final Block spookyBetweenstoneBrick3 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick3");
 	public static final Block glowingSmoothCragrock = new BlockBLGenericDeco("glowingSmoothCragrock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
+	public static final Block energyBarrier = new BlockEnergyBarrier();
 
 	// ALTARS
 	public static final Block druidAltar = new BlockDruidAltar();
