@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -55,19 +54,6 @@ public class BlockEnergyBarrier extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getCurrentEquippedItem();
-		if (stack != null && stack.getItem() == BLItemRegistry.shockwaveSword) {
-			if (!world.isRemote) {
-				world.playAuxSFXAtEntity(null, 2001, x, y + 1, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
-				world.setBlockToAir(x, y, z);
-			}
-			return true;
-		}
-		return false;
-	}
-
-	@Override
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		for( int i = 0; i < 4; i++ ) {
 			double particleX = x + rand.nextFloat();
@@ -89,8 +75,8 @@ public class BlockEnergyBarrier extends Block {
 				particleZ = z + 0.5D + 0.25D * multi;
 				motionZ = rand.nextFloat() * 2.0F * multi;
 			}
-				BLParticle.PORTAL.spawn(world, particleX, particleY, particleZ, motionX, motionY, motionZ, 0);
-			}
+			BLParticle.PORTAL.spawn(world, particleX, particleY, particleZ, motionX, motionY, motionZ, 0);
+		}
 	}
 
 	@Override
@@ -101,11 +87,28 @@ public class BlockEnergyBarrier extends Block {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		if (entity instanceof EntityLivingBase) {
-			int Knockback = 1;
-			entity.attackEntityFrom(DamageSource.cactus, 1);
-			entity.addVelocity(MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F, 0.08D, -MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F);
-			entity.worldObj.playSoundAtEntity(entity, "mob.ghast.scream", 1F, 0.5F);
+		if (entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			ItemStack stack = player.getCurrentEquippedItem();
+			if (stack != null && stack.getItem() == BLItemRegistry.shockwaveSword) {
+				if (!world.isRemote) {
+					for (int i = -7; i < 7; i++) {
+						for (int j = -7; j < 7; j++) {
+							for (int k = -7; k < 7; k++) {
+								if (world.getBlock(x + i, y + j, z + k) == this) {
+									world.playAuxSFXAtEntity(null, 2001, x + i, y + j, z + k, Block.getIdFromBlock(world.getBlock(x, y, z)));
+									world.setBlockToAir(x + i, y + j, z + k);
+								}
+							}
+						}
+					}
+				}
+			} else {
+				int Knockback = 1;
+				entity.attackEntityFrom(DamageSource.cactus, 1);
+				entity.addVelocity(MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F, 0.08D, -MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F);
+				entity.worldObj.playSoundAtEntity(entity, "mob.ghast.scream", 1F, 0.5F); //TODO add custom noise
+			}
 		}
 	}
 }
