@@ -328,6 +328,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					rotatedCubeVolume(world, rand, x, y, z, 5, 5, 0, betweenstoneBrickWall, 0, 3, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 4, 9, 1, betweenstoneBrickWall, 0, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 8, 9, 1, betweenstoneBrickWall, 0, 1, 1, 1, direction);
+
 					rotatedCubeVolume(world, rand, x, y, z, 4, 3, 2, betweenstoneBrickStairs, direction == 0 ? 7 : direction== 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 4, 4, 3, betweenstoneBrickStairs, direction == 0 ? 7 : direction== 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 8, 3, 2, betweenstoneBrickStairs, direction == 0 ? 7 : direction== 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
