@@ -223,6 +223,7 @@ public class TheBetweenlands {
 		FMLCommonHandler.instance().bus().register(PlayerLocationHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RecruitmentRingHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(BLItemRegistry.ringOfFlight);
 
 		BLRecipes.init();
 		TeleporterHandler.init();

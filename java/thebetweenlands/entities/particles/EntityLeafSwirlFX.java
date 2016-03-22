@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -23,16 +24,41 @@ public class EntityLeafSwirlFX extends EntityFX {
 	private final Entity target;
 	private final float startRotation;
 	private final float endRadius;
+	private double dragX, dragY, dragZ;
 
 	private static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
 
 	public EntityLeafSwirlFX(World world, double x, double y, double z, int maxAge, float scale, int color, ResourceLocation texture, int textures, Entity target) {
 		super(world, x, y, z, 0, 0, 0);
 		this.target = target;
-		this.posX = this.prevPosX = x - this.target.motionX * VELOCITY_OFFSET_MULTIPLIER;
-		this.posY = this.prevPosY = y + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.8D) - 1.6D - (this.target.isCollidedVertically ? 0.0D : this.target.motionY * VELOCITY_OFFSET_MULTIPLIER);
-		this.posZ = this.prevPosZ = z - this.target.motionZ * VELOCITY_OFFSET_MULTIPLIER;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
+
+		double tmx = this.target.posX - this.target.lastTickPosX;
+		double tmy = this.target.posY - this.target.lastTickPosY;
+		double tmz = this.target.posZ - this.target.lastTickPosZ;
+
+		double my = this.target.isCollidedVertically ? 0.0D : (tmy * VELOCITY_OFFSET_MULTIPLIER);
+		if(my < -0.3D) {
+			my = -0.3D;
+		}
+
+		this.dragX = MathHelper.clamp_double(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+		this.dragY = MathHelper.clamp_double(my, -0.3D, 1);
+		this.dragZ = MathHelper.clamp_double(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+
+		double sx = this.target.posX - this.dragX;
+		double sy = this.target.posY - 1.6D - this.dragY;
+		double sz = this.target.posZ - this.dragZ;
+
+		Vec3 connection = Vec3.createVectorHelper(this.target.posX - sx, this.target.posY - sy, this.target.posZ - sz);
+
+		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
+		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.6D);
+		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
+		this.lastTickPosX = this.posX;
+		this.lastTickPosY = this.posY;
+		this.lastTickPosZ = this.posZ;
+
 		this.particleMaxAge = maxAge;
 		this.noClip = false;
 		this.color = color;
@@ -86,9 +112,45 @@ public class EntityLeafSwirlFX extends EntityFX {
 
 		this.progress += 0.01F;
 
-		double sx = this.target.posX - this.target.motionX * VELOCITY_OFFSET_MULTIPLIER;
-		double sy = this.target.posY - 1.6D - (this.target.isCollidedVertically ? 0.0D : this.target.motionY * VELOCITY_OFFSET_MULTIPLIER);
-		double sz = this.target.posZ - this.target.motionZ * VELOCITY_OFFSET_MULTIPLIER;
+		float dragIncrement = 0.1F;
+
+		double tmx = this.target.posX - this.target.lastTickPosX;
+		double tmy = this.target.posY - this.target.lastTickPosY;
+		double tmz = this.target.posZ - this.target.lastTickPosZ;
+
+		if(this.dragX > tmx * VELOCITY_OFFSET_MULTIPLIER) {
+			this.dragX -= dragIncrement;
+		} else if(this.dragX < tmx * VELOCITY_OFFSET_MULTIPLIER) {
+			this.dragX += dragIncrement;
+		}
+		if(Math.abs(this.dragX - tmx * VELOCITY_OFFSET_MULTIPLIER) <= dragIncrement) {
+			this.dragX = tmx * VELOCITY_OFFSET_MULTIPLIER;
+		}
+		double my = this.target.isCollidedVertically ? 0.0D : (tmy * VELOCITY_OFFSET_MULTIPLIER);
+		if(this.dragY > my) {
+			this.dragY -= dragIncrement;
+		} else if(this.dragY < my) {
+			this.dragY += dragIncrement;
+		}
+		if(Math.abs(this.dragY - my) <= dragIncrement) {
+			this.dragY = my;
+		}
+		if(this.dragZ > tmz * VELOCITY_OFFSET_MULTIPLIER) {
+			this.dragZ -= dragIncrement;
+		} else if(this.dragZ < tmz * VELOCITY_OFFSET_MULTIPLIER) {
+			this.dragZ += dragIncrement;
+		}
+		if(Math.abs(this.dragZ - tmz * VELOCITY_OFFSET_MULTIPLIER) <= dragIncrement) {
+			this.dragZ = tmz * VELOCITY_OFFSET_MULTIPLIER;
+		}
+
+		this.dragX = MathHelper.clamp_double(this.dragX, -1, 1);
+		this.dragY = MathHelper.clamp_double(this.dragY, -0.3D, 1);
+		this.dragZ = MathHelper.clamp_double(this.dragZ, -1, 1);
+
+		double sx = this.target.posX - this.dragX;
+		double sy = this.target.posY - 1.6D - this.dragY;
+		double sz = this.target.posZ - this.dragZ;
 
 		Vec3 connection = Vec3.createVectorHelper(this.target.posX - sx, this.target.posY - sy, this.target.posZ - sz);
 
@@ -97,7 +159,7 @@ public class EntityLeafSwirlFX extends EntityFX {
 		this.lastTickPosZ = this.posZ;
 
 		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
-		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.8D);
+		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.6D);
 		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
 
 		this.textureCounter++;

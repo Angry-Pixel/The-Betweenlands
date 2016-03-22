@@ -12,6 +12,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
+import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
@@ -66,6 +67,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block lootPot2 = BLBlockRegistry.lootPot2;
 	private Block lootPot3 = BLBlockRegistry.lootPot3;
 	private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
+	private Block obviousSign = BLBlockRegistry.weedwoodWallSign;
+	private Block energyBarrier = BLBlockRegistry.energyBarrier;
 
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
@@ -719,7 +722,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 26, 10, betweenstoneBrickStairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 17, 26, 10, betweenstoneBrickStairs, direction == 0 ? 4 : direction== 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 26, 10, betweenstoneBrickStairs, direction == 0 ? 5 : direction== 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
-		
+		rotatedCubeVolume(world, rand, xx, yy, zz, 17, 29, 11, obviousSign, direction == 0 ? 2 : direction == 1 ? 4 : direction == 2 ? 3 : 5, 1, 1, 1, direction);
 		//top tower floors
 
 		//underneath
@@ -758,6 +761,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		//floor2 TODO Add teleporter block
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
+		//energy barrier
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 29, 13, energyBarrier, 0, 6, 6, 6, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 30, 14, Blocks.air, 0, 4, 4, 4, direction);
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 35, 12, betweenstoneTiles, 0, 4, 1, 1, 0);
@@ -765,7 +771,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 35, 14, betweenstoneTiles, 0, 1, 1, 4, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 19, 35, 14, betweenstoneTiles, 0, 1, 1, 4, 0);
 
-		// more loot pots
+		// more loot pots and energy barrier
 		for (direction = 0; direction < 4; direction++) {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 12, 17, 7, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 13, 17, 7, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
@@ -787,6 +793,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 14, 19, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 17, 19, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 19, 18, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
+			
+
 		}
 
 		return true;
@@ -821,6 +829,15 @@ public class WorldGenWightFortress extends WorldGenerator {
 		if (swordStone != null)
 			swordStone.setType(type);
 	}
+	
+	private void placeSign(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta) {
+		world.setBlock(x, y, z, obviousSign, blockMeta, 2);
+		TileEntityBLSign sign = (TileEntityBLSign) world.getTileEntity(x, y, z);
+		if (sign != null) {
+			sign.signText = new String[] {"Only The", "Sword Keeper", "May Pass", "This Point"};
+			world.markBlockForUpdate(x, y, z);
+		}
+	}
 
 	public void rotatedCubeVolume(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
 		//special cases here
@@ -853,6 +870,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							} else if (yy > originY + 17)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
+						else if (blockType == obviousSign)
+							placeSign(world, rand, xx, yy, zz, obviousSign, blockMeta);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -884,6 +903,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							} else if (yy > originY + 17)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
+						else if (blockType == obviousSign)
+							placeSign(world, rand, xx, yy, zz, obviousSign, blockMeta);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -915,6 +936,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							} else if (yy > originY + 17)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
+						else if (blockType == obviousSign)
+							placeSign(world, rand, xx, yy, zz, obviousSign, blockMeta);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
@@ -946,6 +969,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							} else if (yy > originY + 17)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
+						else if (blockType == obviousSign)
+							placeSign(world, rand, xx, yy, zz, obviousSign, blockMeta);
 						else
 							world.setBlock(xx, yy, zz, blockType, blockMeta, 2);
 					}
