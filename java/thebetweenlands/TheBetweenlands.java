@@ -66,6 +66,7 @@ import thebetweenlands.network.message.MessageLoadAspects;
 import thebetweenlands.network.message.MessageSyncEnvironmentEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import thebetweenlands.network.packet.client.PacketEquipment;
+import thebetweenlands.network.packet.client.PacketFlightState;
 import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.network.packet.client.PacketRecruitmentState;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
@@ -155,6 +156,7 @@ public class TheBetweenlands {
 		registerPacket(PacketPowerRingHit.class);
 		registerPacket(PacketRecruitmentState.class);
 		registerPacket(PacketPlayIdleSound.class);
+		registerPacket(PacketFlightState.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {
