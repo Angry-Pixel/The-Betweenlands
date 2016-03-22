@@ -107,7 +107,7 @@ public class BlockEnergyBarrier extends Block {
 				int Knockback = 1;
 				entity.attackEntityFrom(DamageSource.cactus, 1);
 				entity.addVelocity(MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F, 0.08D, -MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.1F);
-				entity.worldObj.playSoundAtEntity(entity, "mob.ghast.scream", 1F, 0.5F); //TODO add custom noise
+				entity.worldObj.playSoundAtEntity(entity, "thebetweenlands:rejected", 0.5F, 1F);
 			}
 		}
 	}

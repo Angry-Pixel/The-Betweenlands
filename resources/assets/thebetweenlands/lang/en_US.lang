@@ -214,6 +214,8 @@ tile.thebetweenlands.lootPot3.name=Pot of Chance
 
 tile.thebetweenlands.choca.name=Chock-A-Block
 
+tile.thebetweenlands.energyBarrier.name=Energy Barrier
+
 # Stairs, Slabs, Walls, Fences
 tile.thebetweenlands.mudBrickStairs.name=Mud Brick Stairs
 tile.thebetweenlands.cragrockBrickStairs.name=Cragrock Brick Stairs
