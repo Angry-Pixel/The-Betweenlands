@@ -1,6 +1,7 @@
 package thebetweenlands.world.feature.structure;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -42,7 +43,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-        while (world.isAirBlock(x, y, z))
+        while (world.getBlock(x, y, z) == Blocks.air && y > 80)
             y--;
         return tower(world, random, x, y, z);
     }
@@ -54,27 +55,44 @@ public class WorldGenCragrockTower extends WorldGenerator {
         int direction = random.nextInt(4);
         if (!canGenerate(world, x, y, z, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 3, -1, 3, 11, 1, 13, direction, SurfaceType.MIXED))
+        if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED)
+                || !rotatedCubeMatches(world, x, y, z, 14, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED))
             return false;
         System.out.println("generating tower at: " + x + " " + y + " " + z);
 
-        rotatedCubeSetToAir(world, x, y, z, 0, 0, 0, width, height, depth, direction);
+        rotatedCubeSetToAir(world, x, y, z, 0, 0, 3, width, height, depth - 3, direction);
+
 
         //FLOOR 0
-
         //WALLS
-        rotatedCubeVolume(world, x, y, z, 7, 0, 5, genericStone, cragrockMeta, 3, 3, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, 0, 6, genericStone, cragrockMeta, 2, 3, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 10, 0, 6, genericStone, cragrockMeta, 2, 3, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 4, 0, 7, genericStone, cragrockMeta, 1, 3, 2, direction);
-        rotatedCubeVolume(world, x, y, z, 12, 0, 7, genericStone, cragrockMeta, 1, 3, 2, direction);
-        rotatedCubeVolume(world, x, y, z, 3, 0, 9, genericStone, cragrockMeta, 1, 3, 3, direction);
-        rotatedCubeVolume(world, x, y, z, 13, 0, 9, genericStone, cragrockMeta, 1, 3, 3, direction);
-        rotatedCubeVolume(world, x, y, z, 12, 0, 12, genericStone, cragrockMeta, 1, 5, 2, direction);
-        rotatedCubeVolume(world, x, y, z, 4, 0, 12, genericStone, cragrockMeta, 1, 5, 2, direction);
-        rotatedCubeVolume(world, x, y, z, 10, 0, 14, genericStone, cragrockMeta, 2, 5, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 5, 0, 14, genericStone, cragrockMeta, 2, 5, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 7, 0, 15, genericStone, cragrockMeta, 3, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 7, 0, 5, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 8, 0, 5, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 9, 0, 5, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 5, 0, 6, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 6, 0, 6, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 10, 0, 6, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 11, 0, 6, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 4, 0, 7, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 4, 0, 8, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 12, 0, 7, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 12, 0, 8, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 3, 0, 9, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 3, 0, 10, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 3, 0, 11, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 13, 0, 9, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 13, 0, 10, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 13, 0, 11, genericStone, cragrockMeta, 1, 3, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 12, 0, 12, genericStone, cragrockMeta, 1, 5, 2, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 12, 0, 13, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 4, 0, 12, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 4, 0, 13, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 10, 0, 14, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 11, 0, 14, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 5, 0, 14, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 6, 0, 14, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 7, 0, 15, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 8, 0, 15, genericStone, cragrockMeta, 1, 5, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 9, 0, 15, genericStone, cragrockMeta, 1, 5, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 3, 5, cragrockBricks, 0, 3, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 3, 6, cragrockBricks, 0, 2, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 10, 3, 6, cragrockBricks, 0, 2, 2, 1, direction);
@@ -656,14 +674,13 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedLoot(world, random, x, y, z, 8, 42, 7, direction, 3, 7, 4);
         rotatedLoot(world, random, x, y, z, 7, 42, 7, direction, 3, 7, 4);
         rotatedLoot(world, random, x, y, z, 9, 42, 7, direction, 3, 7, 4);
-        rotatedLoot(world, random, x, y, z, 5, 42, 7, direction, 3, 7, 4);
-        rotatedLoot(world, random, x, y, z, 5, 42, 9, direction, 3, 7, 4);
+        rotatedLoot(world, random, x, y, z, 6, 42, 7, direction, 3, 7, 4);
+        rotatedLoot(world, random, x, y, z, 6, 42, 9, direction, 3, 7, 4);
 
         //CEILING
         rotatedCubeVolume(world, x, y, z, 5, 50, 8, smoothCragrock, 0, 7, 1, 4, direction);
         rotatedCubeVolume(world, x, y, z, 10, 50, 11, smoothCragrockSlab, 8, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 50, 7, smoothCragrock, 0, 3, 1, 1, direction);
-
 
         //TOP FLOOR
         rotatedCubeVolume(world, x, y, z, 7, 51, 6, smoothCragrockSlab, 0, 3, 1, 1, direction);
@@ -817,21 +834,23 @@ public class WorldGenCragrockTower extends WorldGenerator {
 
 
         //OUTSIDE DECORATION
-        rotatedCubeVolume(world, x, y, z, 0, 0, 6, cragrockPillar, 0, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 0, 0, 6, cragrockPillar, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 1, 6, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 2, 6, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 3, 6, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 0, 0, 9, cragrockBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 0, 0, 9, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 1, 9, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 3, 9, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 4, 9, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 5, 9, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 0, 0, 12, cragrockPillar, 0, 1, 2, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 0, 0, 12, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 2, 12, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 3, 12, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 5, 12, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 6, 12, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 0, 7, 12, wisp, 0, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 2, -1, 15, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 2, -1, 15, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 0, 15, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 1, 15, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 3, 15, cragrockBricks, 0, 1, 1, 1, direction);
@@ -839,6 +858,8 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 2, 7, 15, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 8, 15, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 2, 9, 15, wisp, 0, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 5, -1, 17, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 5, -1, 17, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 0, 17, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 1, 17, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 2, 17, cragrockPillar, 0, 1, 2, 1, direction);
@@ -847,7 +868,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 5, 9, 17, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 10, 17, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 5, 11, 17, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 8, 0, 18, genericStone, cragrockMeta, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 8, 0, 18, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 1, 18, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 2, 18, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 3, 18, cragrockPillar, 0, 1, 1, 1, direction);
@@ -856,28 +877,32 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 11, 18, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 12, 18, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 13, 18, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 16, 0, 6, cragrockPillar, 0, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 16, 0, 6, cragrockPillar, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 1, 6, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 2, 6, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 3, 6, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 16, 0, 9, cragrockBricks, 0, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 16, 0, 9, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 1, 9, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 3, 9, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 4, 9, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 5, 9, wisp, 0, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 16, 0, 12, cragrockPillar, 0, 1, 2, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 16, 0, 12, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 2, 12, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 3, 12, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 5, 12, smoothCragrockStairs, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 6, 12, smoothCragrockStairs, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 16, 7, 12, wisp, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 0, 15, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 14, -1, 15, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 14, -1, 15, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 1, 15, cragrockPillar, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 3, 15, cragrockBricks, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 4, 15, cragrockPillar, 0, 1, 3, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 7, 15, smoothCragrockStairs, getMetaFromDirection(1, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 8, 15, smoothCragrockStairs, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 14, 9, 15, wisp, 0, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 11, -1, 17, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 11, -1, 17, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 0, 17, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 1, 17, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 11, 2, 17, cragrockPillar, 0, 1, 2, 1, direction);
@@ -1142,27 +1167,56 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 12, 48, 12, cragrockBrickStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 49, 12, cragrockBrickStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 50, 12, cragrockBrickStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 7, 0, 4, genericStone, cragrockMeta, 1, 1, 1, direction);
+        rotatedCubeVolumeExtendDown(world, x, y, z, 7, 0, 4, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 1, 4, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 2, 4, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 8, -1, 4, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 8, -1, 4, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 0, 4, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 1, 4, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 9, -1, 4, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 9, -1, 4, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 9, 0, 4, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 7, -1, 3, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 7, -1, 3, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 0, 3, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 10, -1, 5, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 10, -1, 5, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 10, 0, 5, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 10, 1, 5, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 12, -1, 6, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 12, -1, 6, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 0, 6, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 1, 6, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 13, -1, 7, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 13, -1, 7, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 0, 7, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 13, -1, 8, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 13, -1, 8, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 0, 8, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 1, 8, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 6, -1, 5, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 6, -1, 5, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 0, 5, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 1, 5, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 2, 0, 6, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 4, -1, 6, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 4, -1, 6, genericStone, cragrockMeta, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 4, 0, 6, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
+        if (isReplacable(world, x, y, z, 3, -1, 8, direction))
+            rotatedCubeVolumeExtendDown(world, x, y, z, 3, -1, 8, genericStone, cragrockMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 3, 0, 8, genericStone, mossyCragrockBottomMeta, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 3, 1, 8, genericStone, mossyCragrockTopMeta, 1, 1, 1, direction);
         return true;
     }
+
+    private void rotatedCubeVolumeExtendDown(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+        while (isReplacable(world, x, y, z, offsetA, offsetB - 1, offsetC, direction)) {
+            offsetB--;
+            sizeHeight++;
+        }
+        rotatedCubeVolume(world, x, y, z, offsetA, offsetB, offsetC, blockType, blockMeta, sizeWidth, sizeHeight, sizeDepth, direction);
+    }
+
 
     private void rotatedCubeVolume(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
         x -= width / 2;
@@ -1214,6 +1268,22 @@ public class WorldGenCragrockTower extends WorldGenerator {
                 generateLoot(world, rand, x + width - offsetC - 1, y + offsetB, z + offsetA, min, max);
                 break;
         }
+    }
+
+    private boolean isReplacable(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction) {
+        x -= width / 2;
+        z -= depth / 2;
+        switch (direction) {
+            case 0:
+                return world.getBlock(x + offsetA, y + offsetB, z + offsetC).isReplaceable(world, x + offsetA, y + offsetB, z + offsetC);
+            case 1:
+                return world.getBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1).isReplaceable(world, x + offsetC, y + offsetB, z + depth - offsetA - 1);
+            case 2:
+                return world.getBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1).isReplaceable(world, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
+            case 3:
+                return world.getBlock(x + width - offsetC - 1, y + offsetB, z + offsetA).isReplaceable(world, x + width - offsetC - 1, y + offsetB, z + offsetA);
+        }
+        return false;
     }
 
     private void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, int min, int max, int chance) {
@@ -1356,7 +1426,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
                 for (int yy = y; yy < y + height; yy++)
                     for (int xx = x; xx < x + width; xx++)
                         for (int zz = z; zz < z + depth; zz++) {
-                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz) || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass)
+                            if (!(world.getBlock(xx, yy, zz) == BLBlockRegistry.betweenstone || world.getBlock(xx, yy, zz) == BLBlockRegistry.genericStone || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass || world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)))
                                 return false;
                         }
                 break;
@@ -1364,24 +1434,27 @@ public class WorldGenCragrockTower extends WorldGenerator {
                 for (int yy = y; yy < y + height; yy++)
                     for (int zz = z + depth - 1; zz > z + depth - width - 1; zz--)
                         for (int xx = x; xx < x + depth; xx++) {
-                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz) || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass)
+                            if (!(world.getBlock(xx, yy, zz) == BLBlockRegistry.betweenstone || world.getBlock(xx, yy, zz) == BLBlockRegistry.genericStone || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass || world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)))
                                 return false;
+
                         }
                 break;
             case 2:
                 for (int yy = y; yy < y + height; yy++)
                     for (int xx = x + width - 1; xx > x + width - width - 1; xx--)
                         for (int zz = z + depth - 1; zz > z + depth - depth - 1; zz--) {
-                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz) || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass)
+                            if (!(world.getBlock(xx, yy, zz) == BLBlockRegistry.betweenstone || world.getBlock(xx, yy, zz) == BLBlockRegistry.genericStone || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass || world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)))
                                 return false;
+
                         }
                 break;
             case 3:
                 for (int yy = y; yy < y + height; yy++)
                     for (int zz = z; zz < z + width; zz++)
                         for (int xx = x + width - 1; xx > x + width - depth - 1; xx--) {
-                            if (!world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz) || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass)
+                            if (!(world.getBlock(xx, yy, zz) == BLBlockRegistry.betweenstone || world.getBlock(xx, yy, zz) == BLBlockRegistry.genericStone || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampDirt || world.getBlock(xx, yy, zz) == BLBlockRegistry.swampGrass || world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz)))
                                 return false;
+
                         }
                 break;
         }
