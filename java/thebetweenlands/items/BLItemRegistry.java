@@ -82,6 +82,7 @@ import thebetweenlands.items.misc.ItemShockwaveSword;
 import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemTestItem;
+import thebetweenlands.items.misc.ItemTestItem2;
 import thebetweenlands.items.misc.ItemVolarPad;
 import thebetweenlands.items.misc.ItemWeedwoodRowboat;
 import thebetweenlands.items.throwable.ItemAngryPebble;
@@ -110,6 +111,7 @@ public class BLItemRegistry {
 
 	// BASIC MATERIALS
 	public static final Item testItem = new ItemTestItem().setUnlocalizedName("thebetweenlands.testItem").setTextureName("thebetweenlands:testItem");
+	public static final Item testItem2 = new ItemTestItem2().setUnlocalizedName("thebetweenlands.testItem2").setTextureName("thebetweenlands:testItem");
 	public static final Item swampTalisman = new ItemSwampTalisman();
 
 	public static final Item itemsGeneric = new ItemGeneric();
@@ -337,7 +339,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				testItem, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 

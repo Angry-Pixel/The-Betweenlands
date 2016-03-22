@@ -35,6 +35,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 	public ItemGenericCrushed() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		this.setUnlocalizedName("thebetweenlands.unknownCrushed");
 	}
 
 	@Override

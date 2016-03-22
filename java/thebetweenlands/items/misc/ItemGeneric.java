@@ -50,6 +50,7 @@ public class ItemGeneric extends Item implements IManualEntryItem {
 	public ItemGeneric() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		this.setUnlocalizedName("thebetweenlands.unknownGeneric");
 	}
 
 	@Override

@@ -65,9 +65,9 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			EntityPropertiesFlight props = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFlight.class);
+			player.getEntityData().setBoolean("thebetweenlands.hadFlightRing", true);
 			if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
 				double flightHeight = 2.1D;
-				player.getEntityData().setBoolean("thebetweenlands.hadFlightRing", true);
 				if(player.worldObj.isRemote || props.isFlying())
 					player.capabilities.allowFlying = true;
 				boolean isFlying = props.isFlying();
@@ -177,7 +177,7 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 					TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketFlightState(props.isFlying())));
 				}
 				if(event.phase == Phase.END) {
-					if(!canPlayerFly) {
+					if(!canPlayerFly || !props.isFlying()) {
 						NBTTagCompound playerNBT = player.getEntityData();
 						boolean hadFlightRing = playerNBT.getBoolean("thebetweenlands.hadFlightRing");
 						if(hadFlightRing) {

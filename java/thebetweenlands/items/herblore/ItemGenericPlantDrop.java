@@ -30,6 +30,7 @@ public class ItemGenericPlantDrop extends Item {
 	public ItemGenericPlantDrop() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		this.setUnlocalizedName("thebetweenlands.unknownPlantDrop");
 	}
 
 	@Override

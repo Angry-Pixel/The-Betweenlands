@@ -503,6 +503,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 							player.mountEntity(null);
 							player.playerNetServerHandler.setPlayerLocation(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, player.rotationYaw, player.rotationPitch);
 						} else {
+							living.mountEntity(null);
 							living.setLocationAndAngles(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, living.rotationYaw, living.rotationPitch);
 						}
 						living.fallDistance = 0.0F;

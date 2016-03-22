@@ -11,18 +11,22 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
 
 	private float getShakeStrength(float delta) {
 		float screenShake = 0.0F;
-		List<EntityPeatMummy> peatMummies = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPeatMummy.class, Minecraft.getMinecraft().renderViewEntity.boundingBox.expand(35, 35, 35));
+		World world = Minecraft.getMinecraft().theWorld;
+		EntityLivingBase renderViewEntity = Minecraft.getMinecraft().renderViewEntity;
+		List<EntityPeatMummy> peatMummies = world.getEntitiesWithinAABB(EntityPeatMummy.class, renderViewEntity.boundingBox.expand(35, 35, 35));
 		for(EntityPeatMummy peatMummy : peatMummies) {
 			if(peatMummy.isScreaming()) {
-				double dist = peatMummy.getDistanceToEntity(Minecraft.getMinecraft().renderViewEntity);
+				double dist = peatMummy.getDistanceToEntity(renderViewEntity);
 				float screamMult = (float) (1.0F - dist / 30.0F);
 				if(dist >= 30.0F) {
 					continue;
@@ -31,10 +35,10 @@ public class CameraPositionHandler {
 				screenShake += screamShake;
 			}
 		}
-		List<EntityDreadfulMummy> dreadfulMummies = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityDreadfulMummy.class, Minecraft.getMinecraft().renderViewEntity.boundingBox.expand(35, 35, 35));
+		List<EntityDreadfulMummy> dreadfulMummies = world.getEntitiesWithinAABB(EntityDreadfulMummy.class, renderViewEntity.boundingBox.expand(35, 35, 35));
 		for(EntityDreadfulMummy mummy : dreadfulMummies) {
 			if(mummy.deathTicks > 0) {
-				double dist = mummy.getDistanceToEntity(Minecraft.getMinecraft().renderViewEntity);
+				double dist = mummy.getDistanceToEntity(renderViewEntity);
 				float screamMult = (float) (1.0F - dist / 30.0F);
 				if(dist >= 30.0F) {
 					continue;
@@ -42,6 +46,10 @@ public class CameraPositionHandler {
 				float screamShake = (float) ((Math.sin(mummy.deathTicks / 120.0D * Math.PI) + 0.1F) * 0.15F * screamMult);
 				screenShake += screamShake;
 			}
+		}
+		List<EntityFortressBossTeleporter> fortressBossTeleporters = world.getEntitiesWithinAABB(EntityFortressBossTeleporter.class, renderViewEntity.boundingBox.expand(3, 3, 3));
+		for(EntityFortressBossTeleporter tp : fortressBossTeleporters) {
+			screenShake += Math.pow(tp.getTeleportProgress(), 3) / 2.0F;
 		}
 		return MathHelper.clamp_float(screenShake, 0.0F, 0.15F);
 	}

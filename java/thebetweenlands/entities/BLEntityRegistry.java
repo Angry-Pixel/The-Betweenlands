@@ -8,11 +8,11 @@ import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
-import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -35,6 +35,7 @@ import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossBlockade;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossProjectile;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossSpawner;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTurret;
 import thebetweenlands.entities.projectiles.EntityAngryPebble;
 import thebetweenlands.entities.projectiles.EntityBLArrow;
@@ -94,6 +95,7 @@ public class BLEntityRegistry
 		registerEntity(41, EntityChiromaw.class, "chiromaw", 0x804E3D, 0x3D6F80);
 		registerEntity(42, EntityPyrad.class, "pyrad", 0x005C3D, 0x2D4231, 64, 3, true);
 		registerEntity(43, EntityPyradFlame.class, "flammeBall");
+		registerEntity(44, EntityFortressBossTeleporter.class, "fortressBossTeleporter", 64, 20, false);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
