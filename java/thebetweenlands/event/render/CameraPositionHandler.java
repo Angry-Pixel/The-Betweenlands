@@ -47,9 +47,10 @@ public class CameraPositionHandler {
 				screenShake += screamShake;
 			}
 		}
-		List<EntityFortressBossTeleporter> fortressBossTeleporters = world.getEntitiesWithinAABB(EntityFortressBossTeleporter.class, renderViewEntity.boundingBox.expand(3, 3, 3));
+		List<EntityFortressBossTeleporter> fortressBossTeleporters = world.getEntitiesWithinAABB(EntityFortressBossTeleporter.class, renderViewEntity.boundingBox.expand(7, 7, 7));
 		for(EntityFortressBossTeleporter tp : fortressBossTeleporters) {
-			screenShake += Math.pow(tp.getTeleportProgress(), 3) / 2.0F;
+			if(tp.getTarget() == renderViewEntity)
+				screenShake += Math.pow(tp.getTeleportProgress(), 3) / 2.0F;
 		}
 		return MathHelper.clamp_float(screenShake, 0.0F, 0.15F);
 	}
