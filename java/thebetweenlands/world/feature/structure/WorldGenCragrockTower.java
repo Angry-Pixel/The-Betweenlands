@@ -187,7 +187,6 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 1, 14, smoothCragrock, 0, 1, 3, 1, direction);
         rotatedSpawner(world, x, y, z, 8, 2, 13, direction, "thebetweenlands.termite");
         rotatedCubeVolume(world, x, y, z, 9, 1, 11, root, 0, 1, 2 + random.nextInt(2), 1, direction);
-        rotatedCubeVolume(world, x, y, z, 12, 1, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 1, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 1, 14, root, 0, 1, 1 + random.nextInt(2), 1, direction);
         rotatedLoot(world, random, x, y, z, 9, 1, 14, direction, 1, 2, 3);
@@ -829,7 +828,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 10, 51, 11, root, 0, 1, 1 + random.nextInt(2), 1, direction);
         rotatedCubeVolume(world, x, y, z, 3, 52, 9, root, 0, 1, 2 + random.nextInt(3), 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 52, 13, root, 0, 1, 1 + random.nextInt(3), 1, direction);
-        rotatedCubeVolume(world, x, y, z, 7, 52, 15, root, 0, 1, 2 + random.nextInt(3), 1, direction);
+        rotatedCubeVolume(world, x, y, z, 9, 52, 15, root, 0, 1, 2 + random.nextInt(3), 1, direction);
         rotatedCubeVolume(world, x, y, z, 12, 52, 7, root, 0, 1, 1 + random.nextInt(3), 1, direction);
         rotatedCubeVolume(world, x, y, z, 13, 52, 10, root, 0, 1, 1 + random.nextInt(2), 1, direction);
 
