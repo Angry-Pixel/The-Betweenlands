@@ -1270,3 +1270,9 @@ biome.patchyIslands.name=Patchy Islands
 biome.marsh1.name=Marsh
 biome.marsh2.name=Marsh
 biome.sludgePlains.name=Sludge Plains
+
+# Wight Fortress Sign
+fortress.line1=Only The
+fortress.line2=Sword Keeper
+fortress.line3=May Pass
+fortress.line4=This Point

@@ -6,6 +6,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -761,9 +762,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		//floor2 TODO Add teleporter block
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
-		//energy barrier
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 29, 13, energyBarrier, 0, 6, 6, 6, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 30, 14, Blocks.air, 0, 4, 4, 4, direction);
+
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 35, 12, betweenstoneTiles, 0, 4, 1, 1, 0);
@@ -794,7 +793,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 17, 19, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 19, 18, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			
-
+			//energy barrier
+			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 29, 13, energyBarrier, 0, 2, 3, 1, direction);
 		}
 
 		return true;
@@ -834,7 +834,12 @@ public class WorldGenWightFortress extends WorldGenerator {
 		world.setBlock(x, y, z, obviousSign, blockMeta, 2);
 		TileEntityBLSign sign = (TileEntityBLSign) world.getTileEntity(x, y, z);
 		if (sign != null) {
-			sign.signText = new String[] {"Only The", "Sword Keeper", "May Pass", "This Point"};
+			sign.signText = new String[] {
+					StatCollector.translateToLocal("fortress.line1"),
+					StatCollector.translateToLocal("fortress.line2"),
+					StatCollector.translateToLocal("fortress.line3"),
+					StatCollector.translateToLocal("fortress.line4")
+					};
 			world.markBlockForUpdate(x, y, z);
 		}
 	}
