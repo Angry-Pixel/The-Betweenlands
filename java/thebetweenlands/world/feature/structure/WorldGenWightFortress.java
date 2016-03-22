@@ -794,7 +794,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 19, 18, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			
 			//energy barrier
-			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 29, 13, energyBarrier, 0, 2, 3, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
 		}
 
 		return true;
