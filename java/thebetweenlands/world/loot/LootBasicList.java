@@ -1,7 +1,4 @@
 package thebetweenlands.world.loot;
-import java.util.Random;
-
-import net.minecraft.item.Item;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 
@@ -30,55 +27,32 @@ public class LootBasicList {
 			new LootItemStack(BLItemRegistry.middleFruitSeeds).setAmount(1, 8).setWeight(9),
 			new LootItemStack(BLItemRegistry.aspectrusCropSeed).setAmount(1, 8).setWeight(9),
 			//very rare
-			new LootItemStack(BLItemRegistry.forbiddenFig).setWeight(2),
-			new LootItemStack(BLItemRegistry.explorerHat).setWeight(2),
-			new LootItemStack(BLItemRegistry.voodooDoll).setWeight(2),
-			new LootItemStack(BLItemRegistry.ringOfPower).setWeight(2),
-			new LootItemStack(BLItemRegistry.ringOfFlight).setWeight(2),
-			new LootItemStack(BLItemRegistry.swiftPick).setWeight(2),
-			new LootItemStack(BLItemRegistry.wightsBane).setWeight(2),
-			new LootItemStack(BLItemRegistry.critterCruncher).setWeight(2),
-			new LootItemStack(BLItemRegistry.hagHacker).setWeight(2),
-			new LootItemStack(BLItemRegistry.sludgeSlicer).setWeight(2),
-			new LootItemStack(BLItemRegistry.skullMask).setWeight(2),
+			new LootItemStack(BLItemRegistry.forbiddenFig).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.explorerHat).setAmount(3).setWeight(2),
+			new LootItemStack(BLItemRegistry.voodooDoll).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.ringOfPower).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.ringOfFlight).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.swiftPick).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.wightsBane).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.critterCruncher).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.hagHacker).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.sludgeSlicer).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.skullMask).setAmount(1).setWeight(2),
 
-			new LootItemStack(getARandomMusicDisk()).setWeight(1),
+			new LootItemStack(BLItemRegistry.astatos).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.betweenYouAndMe).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.christmasOnTheMarsh).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.theExplorer).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.hagDance).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.lonelyFire).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.mysteriousRecord).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.ancient).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.beneathAGreenSky).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.dJWightsMixtape).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.onwards).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.stuckInTheMud).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.wanderingWisps).setAmount(1).setWeight(1),
+			new LootItemStack(BLItemRegistry.waterlogged).setAmount(1).setWeight(1),
 
 	});
-	
-	public static Item getARandomMusicDisk() {
-		Random rand = new Random();
-		int disc = rand.nextInt(14);
-		switch (disc) {
-		case 0:
-			return BLItemRegistry.astatos;
-		case 1:
-			return BLItemRegistry.betweenYouAndMe;
-		case 2:
-			return BLItemRegistry.christmasOnTheMarsh;
-		case 3:
-			return BLItemRegistry.theExplorer;
-		case 4:
-			return BLItemRegistry.hagDance;
-		case 5:
-			return BLItemRegistry.lonelyFire;
-		case 6:
-			return BLItemRegistry.mysteriousRecord;
-		case 7:
-			return BLItemRegistry.ancient;
-		case 8:
-			return BLItemRegistry.beneathAGreenSky;
-		case 9:
-			return BLItemRegistry.dJWightsMixtape;
-		case 10:
-			return BLItemRegistry.onwards;
-		case 11:
-			return BLItemRegistry.stuckInTheMud;
-		case 12:
-			return BLItemRegistry.wanderingWisps;
-		case 13:
-			return BLItemRegistry.waterlogged;
-		}
-		return null;
-	}
 }
