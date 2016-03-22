@@ -49,20 +49,21 @@ public abstract class ItemRing extends Item implements IEquippable {
 		return stack;
 	}
 
-	protected void removeXp(EntityPlayer player, int amount){
-		int xpCap = Integer.MIN_VALUE + player.experienceTotal;
-		if (amount < xpCap) {
-			amount = xpCap;
-		}
-		player.experience -= (float)amount / (float)player.xpBarCap();
-		for (player.experienceTotal -= amount; player.experience <= 0.0F; player.experience /= (float)player.xpBarCap()) {
-			player.experience = (player.experience + 1.0F) * (float)player.xpBarCap();
-			player.experienceLevel -= 1;
-		}
-		if(player.experienceTotal <= 0) {
-			player.experience = 0;
-			player.experienceLevel = 0;
-			player.experienceTotal = 0;
+	protected void removeXp(EntityPlayer player, int amount) {
+		int newXP = Math.max(player.experienceTotal - amount, 0);
+		player.experienceTotal = 0;
+		player.experienceLevel = 0;
+		player.experience = 0;
+		if(newXP > 0) {
+			int xpCap = Integer.MAX_VALUE - player.experienceTotal;
+			if (newXP > xpCap) {
+				newXP = xpCap;
+			}
+			player.experience += (float)newXP / (float)player.xpBarCap();
+			for (player.experienceTotal += newXP; player.experience >= 1.0F; player.experience /= (float)player.xpBarCap()) {
+				player.experience = (player.experience - 1.0F) * (float)player.xpBarCap();
+				player.experienceLevel += 1;
+			}
 		}
 	}
 

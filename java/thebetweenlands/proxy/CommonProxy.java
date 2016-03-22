@@ -1,5 +1,9 @@
 package thebetweenlands.proxy;
 
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -38,6 +42,7 @@ import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.items.equipment.ItemAmulet;
+import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
@@ -53,15 +58,16 @@ import thebetweenlands.tileentities.TileEntityConnectionFastener;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
+import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityItemShelf;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityLootPot2;
 import thebetweenlands.tileentities.TileEntityLootPot3;
 import thebetweenlands.tileentities.TileEntityPestleAndMortar;
+import thebetweenlands.tileentities.TileEntityPossessedBlock;
 import thebetweenlands.tileentities.TileEntityPurifier;
 import thebetweenlands.tileentities.TileEntityRepeller;
 import thebetweenlands.tileentities.TileEntitySpikeTrap;
-import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.tileentities.TileEntityTarLootPot2;
@@ -69,11 +75,6 @@ import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
-import thebetweenlands.tileentities.TileEntityPossessedBlock;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -139,6 +140,7 @@ public class CommonProxy implements IGuiHandler {
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemAmulet.class, Side.SERVER);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemEquipmentHandler.class, Side.SERVER);
 			TheBetweenlands.sidedPacketHandler.registerPacketHandler(RecruitmentRingHandler.class, Side.SERVER);
+			TheBetweenlands.sidedPacketHandler.registerPacketHandler(ItemRingOfFlight.class, Side.SERVER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

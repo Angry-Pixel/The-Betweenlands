@@ -17,12 +17,16 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesFlight;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.loot.ItemRing;
 import thebetweenlands.manual.IManualEntryItem;
+import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packet.client.PacketFlightState;
 
 public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 	public ItemRingOfFlight() {
@@ -60,20 +64,18 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 	public void onEquipmentTick(ItemStack stack, Entity entity) {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if(this.canFly(player, stack)) {
+			EntityPropertiesFlight props = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFlight.class);
+			if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
 				double flightHeight = 2.1D;
 				player.getEntityData().setBoolean("thebetweenlands.hadFlightRing", true);
-				player.capabilities.allowFlying = true;
-				boolean isFlying = player.capabilities.isFlying || player.getEntityData().getBoolean("thebetweenlands.isFlying");
+				if(player.worldObj.isRemote || props.isFlying())
+					player.capabilities.allowFlying = true;
+				boolean isFlying = props.isFlying();
 				if(!entity.onGround) {
-					if(!entity.worldObj.isRemote && entity.ticksExisted % 20 == 0)
-						this.removeXp((EntityPlayer)entity, 2);
-
-					if(entity.worldObj.isRemote) {
-						BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
-					}
-
 					if(isFlying) {
+						if(!entity.worldObj.isRemote && entity.ticksExisted % 20 == 0)
+							this.removeXp((EntityPlayer)entity, 2);
+
 						if(entity.isSneaking()) {
 							entity.motionY = -0.2F;
 						} else {
@@ -106,18 +108,27 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 						}
 
 						entity.fallDistance = 0.0F;
-					}
 
-					if(!entity.onGround && entity.worldObj.isRemote) {
-						BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
+						if(!entity.onGround && entity.worldObj.isRemote) {
+							BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
+						}
 					}
 				} else {
-					player.getEntityData().setBoolean("thebetweenlands.isFlying", false);
+					props.setFlying(false);
 				}
-			} else {
-				if(!entity.onGround && entity.worldObj.isRemote) {
-					BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
-				}
+			} else if(props.isFlying() && !player.onGround && player.worldObj.isRemote) {
+				BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
+			}
+		}
+	}
+
+	@SubscribePacket
+	public static void onPacketEquipment(PacketFlightState packet) {
+		if(packet.getContext().getServerHandler() != null) {
+			EntityPlayer sender = packet.getContext().getServerHandler().playerEntity;
+			if(sender != null) {
+				EntityPropertiesFlight props = BLEntityPropertiesRegistry.HANDLER.getProperties(sender, EntityPropertiesFlight.class);
+				props.setFlying(packet.isFlying());
 			}
 		}
 	}
@@ -139,38 +150,46 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 	public void onPlayerTick(PlayerTickEvent event) {
 		if(event.player != null) {
 			EntityPlayer player = (EntityPlayer) event.player;
-			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
-			boolean canPlayerFly = false;
-			if(equipmentInventory != null) {
-				List<Equipment> rings = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
-				for(Equipment equipment : rings) {
-					if(equipment.item.getItem() == BLItemRegistry.ringOfFlight && ((ItemRingOfFlight)equipment.item.getItem()).canFly(player, equipment.item))
-						canPlayerFly = true;
-				}
-			}
-			if(canPlayerFly && player.worldObj.isRemote) {
-				if(event.phase == Phase.START) {
-					player.capabilities.isFlying = false;
-				} else {
-					if(player.capabilities.isFlying) {
-						boolean currentlyFlying = player.getEntityData().getBoolean("thebetweenlands.isFlying");
-						player.getEntityData().setBoolean("thebetweenlands.isFlying", !currentlyFlying);
+			if(!player.capabilities.isCreativeMode) {
+				EntityPropertiesFlight props = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFlight.class);
+				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
+				boolean canPlayerFly = false;
+				if(equipmentInventory != null) {
+					List<Equipment> rings = equipmentInventory.getEquipment(EnumEquipmentCategory.RING);
+					for(Equipment equipment : rings) {
+						if(equipment.item.getItem() == BLItemRegistry.ringOfFlight && ((ItemRingOfFlight)equipment.item.getItem()).canFly(player, equipment.item))
+							canPlayerFly = true;
 					}
 				}
-			}
-			if(event.phase == Phase.END) {
-				if(!canPlayerFly) {
-					NBTTagCompound playerNBT = player.getEntityData();
-					boolean hadFlightRing = playerNBT.getBoolean("thebetweenlands.hadFlightRing");
-					if(hadFlightRing) {
-						if(!player.capabilities.isCreativeMode) {
-							player.capabilities.isFlying = false;
-							player.capabilities.allowFlying = false;
-							if(player.worldObj.isRemote) {
-								player.capabilities.setFlySpeed(0.05F);
+				if(canPlayerFly && player.worldObj.isRemote) {
+					if(event.phase == Phase.START) {
+						player.capabilities.isFlying = false;
+					} else {
+						if(player.capabilities.isFlying) {
+							props.setFlying(!props.isFlying());
+							if(player == TheBetweenlands.proxy.getClientPlayer()) {
+								TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketFlightState(props.isFlying())));
 							}
 						}
-						playerNBT.setBoolean("thebetweenlands.hadFlightRing", false);
+					}
+				}
+				if(player == TheBetweenlands.proxy.getClientPlayer() && player.ticksExisted % 20 == 0) {
+					TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketFlightState(props.isFlying())));
+				}
+				if(event.phase == Phase.END) {
+					if(!canPlayerFly) {
+						NBTTagCompound playerNBT = player.getEntityData();
+						boolean hadFlightRing = playerNBT.getBoolean("thebetweenlands.hadFlightRing");
+						if(hadFlightRing) {
+							if(!player.capabilities.isCreativeMode) {
+								player.capabilities.isFlying = false;
+								player.capabilities.allowFlying = false;
+								if(player.worldObj.isRemote) {
+									player.capabilities.setFlySpeed(0.05F);
+								}
+							}
+							playerNBT.setBoolean("thebetweenlands.hadFlightRing", false);
+						}
 					}
 				}
 			}

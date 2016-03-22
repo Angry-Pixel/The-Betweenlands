@@ -2,6 +2,7 @@ package thebetweenlands.entities.properties;
 
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
 import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
+import thebetweenlands.entities.properties.list.EntityPropertiesFlight;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
 import thebetweenlands.entities.properties.list.equipment.EntityPropertiesEquipment;
@@ -21,5 +22,6 @@ public class BLEntityPropertiesRegistry {
 		HANDLER.registerProperties(EntityPropertiesEquipment.class);
 		HANDLER.registerProperties(EntityPropertiesRecruit.class);
 		HANDLER.registerProperties(EntityPropertiesRecruiter.class);
+		HANDLER.registerProperties(EntityPropertiesFlight.class);
 	}
 }
