@@ -671,6 +671,12 @@
 			"voodooDoll"
 		]
 	},
+	"rejected": {
+		"category": "player",
+		"sounds": [
+			"rejected"
+		]
+	},
 	"music.blMenu": {
 		"category": "music",
 		"sounds": [
