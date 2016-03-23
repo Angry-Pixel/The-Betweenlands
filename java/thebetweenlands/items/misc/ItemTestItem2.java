@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
 import thebetweenlands.manual.IManualEntryItem;
@@ -28,6 +29,8 @@ public class ItemTestItem2 extends ItemSword implements IManualEntryItem {
 		if(!world.isRemote && player.isSneaking()) {
 			EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
 			tp.setLocationAndAngles(x+hitX, y+hitY, z+hitZ, 0, 0);
+			tp.setTeleportDestination(Vec3.createVectorHelper(x+hitX, y+hitY+10, z+hitZ));
+			tp.setBossSpawnPosition(Vec3.createVectorHelper(x+hitX, y+hitY+15, z+hitZ));
 			world.spawnEntityInWorld(tp);
 			return true;
 		}

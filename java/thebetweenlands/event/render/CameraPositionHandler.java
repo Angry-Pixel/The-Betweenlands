@@ -1,5 +1,6 @@
 package thebetweenlands.event.render;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,12 +10,12 @@ import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.entities.mobs.EntityDreadfulMummy;
-import thebetweenlands.entities.mobs.EntityPeatMummy;
-import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
+import thebetweenlands.entities.ICameraOffset;
+import thebetweenlands.entities.IScreenShake;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
@@ -23,45 +24,13 @@ public class CameraPositionHandler {
 		float screenShake = 0.0F;
 		World world = Minecraft.getMinecraft().theWorld;
 		EntityLivingBase renderViewEntity = Minecraft.getMinecraft().renderViewEntity;
-		List<EntityPeatMummy> peatMummies = world.getEntitiesWithinAABB(EntityPeatMummy.class, renderViewEntity.boundingBox.expand(35, 35, 35));
-		for(EntityPeatMummy peatMummy : peatMummies) {
-			if(peatMummy.isScreaming()) {
-				double dist = peatMummy.getDistanceToEntity(renderViewEntity);
-				float screamMult = (float) (1.0F - dist / 30.0F);
-				if(dist >= 30.0F) {
-					continue;
-				}
-				float screamShake = (float) ((Math.sin(peatMummy.getScreamingProgress(delta) * Math.PI) + 0.1F) * 0.15F * screamMult);
-				screenShake += screamShake;
+		for(Entity entity : (List<Entity>) world.loadedEntityList) {
+			if(entity instanceof IScreenShake) {
+				IScreenShake shake = (IScreenShake) entity;
+				screenShake += shake.getShakeIntensity(renderViewEntity, delta);
 			}
-		}
-		List<EntityDreadfulMummy> dreadfulMummies = world.getEntitiesWithinAABB(EntityDreadfulMummy.class, renderViewEntity.boundingBox.expand(35, 35, 35));
-		for(EntityDreadfulMummy mummy : dreadfulMummies) {
-			if(mummy.deathTicks > 0) {
-				double dist = mummy.getDistanceToEntity(renderViewEntity);
-				float screamMult = (float) (1.0F - dist / 30.0F);
-				if(dist >= 30.0F) {
-					continue;
-				}
-				float screamShake = (float) ((Math.sin(mummy.deathTicks / 120.0D * Math.PI) + 0.1F) * 0.15F * screamMult);
-				screenShake += screamShake;
-			}
-		}
-		List<EntityFortressBossTeleporter> fortressBossTeleporters = world.getEntitiesWithinAABB(EntityFortressBossTeleporter.class, renderViewEntity.boundingBox.expand(7, 7, 7));
-		for(EntityFortressBossTeleporter tp : fortressBossTeleporters) {
-			if(tp.getTarget() == renderViewEntity)
-				screenShake += Math.pow(tp.getTeleportProgress(), 3) / 2.0F;
 		}
 		return MathHelper.clamp_float(screenShake, 0.0F, 0.15F);
-	}
-
-	private EntityDreadfulMummy getAttackingMummy() {
-		List<EntityDreadfulMummy> mummies = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityDreadfulMummy.class, Minecraft.getMinecraft().renderViewEntity.boundingBox.expand(10, 10, 10));
-		for(EntityDreadfulMummy mummy : mummies) {
-			if(mummy.currentEatPrey == Minecraft.getMinecraft().thePlayer)
-				return mummy;
-		}
-		return null;
 	}
 
 	private double prevPosX;
@@ -77,9 +46,13 @@ public class CameraPositionHandler {
 			return;
 
 		float shakeStrength = this.getShakeStrength(event.renderTickTime);
-		EntityDreadfulMummy attackingMummy = this.getAttackingMummy();
+		List<ICameraOffset> offsetEntities = new ArrayList<ICameraOffset>();
+		for(Entity entity : (List<Entity>) renderViewEntity.worldObj.loadedEntityList) {
+			if(entity instanceof ICameraOffset)
+				offsetEntities.add((ICameraOffset)entity);
+		}
 
-		boolean shouldChange = shakeStrength > 0.0F || attackingMummy != null;
+		boolean shouldChange = shakeStrength > 0.0F || !offsetEntities.isEmpty();
 
 		if((!shouldChange || Minecraft.getMinecraft().isGamePaused()) && !this.didChange)
 			return;
@@ -92,11 +65,10 @@ public class CameraPositionHandler {
 			renderViewEntity.posX += rnd.nextFloat() * shakeStrength;
 			renderViewEntity.posY += rnd.nextFloat() * shakeStrength;
 			renderViewEntity.posZ += rnd.nextFloat() * shakeStrength;
-			if(attackingMummy != null) {
-				double direction = Math.toRadians(attackingMummy.prevRenderYawOffset + (attackingMummy.renderYawOffset - attackingMummy.prevRenderYawOffset) * event.renderTickTime);
-				renderViewEntity.prevRotationYaw = renderViewEntity.rotationYaw = (float) (Math.toDegrees(direction) + 180);
-				renderViewEntity.prevRotationPitch = renderViewEntity.rotationPitch = 0;
-				renderViewEntity.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
+			if(!offsetEntities.isEmpty()) {
+				for(ICameraOffset offset : offsetEntities)
+					if(offset.applyOffset(renderViewEntity, event.renderTickTime))
+						break;
 			}
 			this.didChange = true;
 		} else {

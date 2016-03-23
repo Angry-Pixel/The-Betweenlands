@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -25,10 +26,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.entities.IScreenShake;
 import thebetweenlands.entities.entityAI.EntityAIApproachItem;
 import thebetweenlands.items.BLItemRegistry;
 
-public class EntityPeatMummy extends EntityMob implements IEntityBL {
+public class EntityPeatMummy extends EntityMob implements IEntityBL, IScreenShake {
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
 	public static final IAttribute SPAWN_OFFSET_ATTRIB = (new RangedAttribute("bl.spawnOffset", 2.0D, -Integer.MAX_VALUE, Integer.MAX_VALUE)).setDescription("Spawning Y Offset");
 	public static final IAttribute SPAWN_RANGE_ATTRIB = (new RangedAttribute("bl.spawnRange", 8.0D, 0, Double.MAX_VALUE)).setDescription("Spawning Range");
@@ -504,5 +506,19 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL {
 
 	public void setCarryShimmerStone(boolean shimmerStone) {
 		this.carryShimmerstone = shimmerStone;
+	}
+
+	@Override
+	public float getShakeIntensity(EntityLivingBase viewer, float partialTicks) {
+		if(this.isScreaming()) {
+			double dist = this.getDistanceToEntity(viewer);
+			float screamMult = (float) (1.0F - dist / 30.0F);
+			if(dist >= 30.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(this.getScreamingProgress(partialTicks) * Math.PI) + 0.1F) * 0.15F * screamMult);
+		} else {
+			return 0.0F;
+		}
 	}
 }

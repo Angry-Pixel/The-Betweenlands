@@ -24,9 +24,11 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.entities.ICameraOffset;
+import thebetweenlands.entities.IScreenShake;
 import thebetweenlands.entities.mobs.boss.IBossBL;
 
-public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL {
+public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL, IScreenShake, ICameraOffset {
 	public EntityDreadfulMummy(World world) {
 		super(world);
 		this.getNavigator().setCanSwim(true);
@@ -336,5 +338,31 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 	@Override
 	protected boolean isMovementBlocked() {
 		return this.isEntityAlive() && super.isMovementBlocked();
+	}
+
+	@Override
+	public float getShakeIntensity(EntityLivingBase viewer, float partialTicks) {
+		if(this.deathTicks > 0) {
+			double dist = this.getDistanceToEntity(viewer);
+			float screamMult = (float) (1.0F - dist / 30.0F);
+			if(dist >= 30.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(this.deathTicks / 120.0D * Math.PI) + 0.1F) * 0.15F * screamMult);
+		} else {
+			return 0.0F;
+		}
+	}
+
+	@Override
+	public boolean applyOffset(EntityLivingBase view, float partialTicks) {
+		if(this.currentEatPrey == view) {
+			double direction = Math.toRadians(this.prevRenderYawOffset + (this.renderYawOffset - this.prevRenderYawOffset) * partialTicks);
+			view.prevRotationYaw = view.rotationYaw = (float) (Math.toDegrees(direction) + 180);
+			view.prevRotationPitch = view.rotationPitch = 0;
+			view.setRotationYawHead((float) (Math.toDegrees(direction) + 180));
+			return true;
+		}
+		return false;
 	}
 }
