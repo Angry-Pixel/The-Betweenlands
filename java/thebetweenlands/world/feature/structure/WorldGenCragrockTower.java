@@ -18,6 +18,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 
     private static final int[] stairSequence = new int[]{0, 3, 1, 2};
     private static final int[] upsideDownStairSequence = new int[]{4, 7, 5, 6};
+    private static final int[] chestSequence = new int[]{2, 5, 3, 4};
     private static final Block genericStone = BLBlockRegistry.genericStone;
     private static final Block cragrockBricks = BLBlockRegistry.cragrockBrick;
     private static final Block smoothCragrockStairs = BLBlockRegistry.smoothCragrockStairs;
@@ -813,9 +814,9 @@ public class WorldGenCragrockTower extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 8, 52, 15, cragrockBrickWall, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 53, 15, cragrockBrickSlab, 0, 1, 1, 1, direction);
         rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands.wight");
-        rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2);
-        rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2);
-        rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2);
+        rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1);
+        rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1);
+        rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3);
         rotatedLoot(world, random, x, y, z, 10, 52, 6, direction, 3, 4, 3);
         rotatedLoot(world, random, x, y, z, 11, 52, 6, direction, 3, 4, 3);
         rotatedLoot(world, random, x, y, z, 6, 52, 6, direction, 3, 4, 3);
@@ -1286,7 +1287,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         return false;
     }
 
-    private void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, int min, int max, int chance) {
+    private void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, int min, int max, int chance, int sequenceStart) {
         x -= width / 2;
         z -= depth / 2;
         if (rand.nextInt(chance) == 0)
@@ -1294,25 +1295,25 @@ public class WorldGenCragrockTower extends WorldGenerator {
         TileEntityWeedWoodChest chest;
         switch (direction) {
             case 0:
-                world.setBlock(x + offsetA, y + offsetB, z + offsetC, BLBlockRegistry.weedwoodChest);
+                world.setBlock(x + offsetA, y + offsetB, z + offsetC, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetA, y + offsetB, z + offsetC);
                 if (chest != null)
                     LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
                 break;
             case 1:
-                world.setBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1, BLBlockRegistry.weedwoodChest);
+                world.setBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetC, y + offsetB, z + depth - offsetA - 1);
                 if (chest != null)
                     LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
                 break;
             case 2:
-                world.setBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, BLBlockRegistry.weedwoodChest);
+                world.setBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
                 if (chest != null)
                     LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
                 break;
             case 3:
-                world.setBlock(x + width - offsetC - 1, y + offsetB, z + offsetA, BLBlockRegistry.weedwoodChest);
+                world.setBlock(x + width - offsetC - 1, y + offsetB, z + offsetA, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetC - 1, y + offsetB, z + offsetA);
                 if (chest != null)
                     LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
