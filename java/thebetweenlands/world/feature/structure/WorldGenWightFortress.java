@@ -35,6 +35,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	private Block limestonePolished = BLBlockRegistry.polishedLimestone;
 	private Block limestoneChiselled = BLBlockRegistry.chiseledLimestone;
+	private Block limestoneBrickSlab = BLBlockRegistry.limestoneBrickSlab;
 	private Block limestonePolishedCollapsing = BLBlockRegistry.polishedLimestoneCollapsing;
 	private Block betweenstone = BLBlockRegistry.betweenstone;
 	private Block betweenstoneSmooth = BLBlockRegistry.smoothBetweenstone;
@@ -70,6 +71,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private BlockBLSpawner spawner = BLBlockRegistry.blSpawner;
 	private Block obviousSign = BLBlockRegistry.weedwoodWallSign;
 	private Block energyBarrier = BLBlockRegistry.energyBarrier;
+	private Block valoniteBlock = BLBlockRegistry.valoniteBlock;
+	private Block syrmoriteBlock = BLBlockRegistry.syrmoriteBlock;
+	private Block octineBlock = BLBlockRegistry.octineBlock;
 
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
@@ -94,7 +98,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		originZ = z;
 		return generateStructure(world, rand, x, y, z);
 	}
-
+	
 	public Block getRandomWall(Random rand) {
 		int type = rand.nextInt(3);
 		switch (type) {
@@ -107,7 +111,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		return betweenstoneBrickWall;
 	}
-
 
 	public Block getRandomBricks(Random rand) {
 		int type = rand.nextInt(3);
@@ -133,6 +136,19 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return betweenstoneTilesCracked;
 		}
 		return betweenstoneTiles;
+	}
+
+	public Block getRandomMetalBlock(Random rand) {
+		int type = rand.nextInt(3);
+		switch (type) {
+		case 0:
+			return syrmoriteBlock;
+		case 1:
+			return octineBlock;
+		case 2:
+			return valoniteBlock;
+		}
+		return syrmoriteBlock;
 	}
 
 	public Block getRandomCollapsingTiles(Random rand) {
@@ -170,11 +186,52 @@ public class WorldGenWightFortress extends WorldGenerator {
 			}
 		}
 
-		//ground floors
 		length = 32;
 		width = 32;
 
 		for (direction = 0; direction < 4; direction++) {
+			//loot room
+			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -7, 8, betweenstoneBricks, 0, 8, 6, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -7, 9, betweenstoneBricks, 0, 1, 6, 7, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -8, 8, betweenstoneSmooth, 0, 8, 1, 2, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -8, 9, betweenstoneSmooth, 0, 2, 1, 7, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -8, 10, betweenstoneTilesFortress, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -8, 10, betweenstoneTiles, 0, 5, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -8, 11, betweenstoneTiles, 0, 1, 1, 5, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -8, 11, betweenstoneSmooth, 0, 5, 1, 5, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 12, -7, 12, betweenstoneStairsSmooth, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 4, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 12, -7, 13, betweenstoneStairsSmooth, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 3, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -7, 13, stagnantWater, 0, 3, 1, 3, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -7, 9, betweenstoneTiles, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -6, 9, betweenstonePillar, 0, 1, 2, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -4, 9, betweenstoneTiles, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -3, 9, betweenstoneBricks, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -3, 10, betweenstoneBrickStairs, direction == 0 ? 7 : direction== 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 12, -3, 9, betweenstoneBrickStairs, direction == 0 ? 4 : direction== 1 ? 7 : direction == 2 ? 5 : 6, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 14, -3, 9, betweenstoneBrickStairs, direction == 0 ? 5 : direction== 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -7, 13, betweenstoneTiles, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -6, 13, betweenstonePillar, 0, 1, 2, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -4, 13, betweenstoneTiles, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -3, 13, betweenstoneBricks, 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -3, 13, betweenstoneBrickStairs, direction == 0 ? 5 : direction== 1 ? 6 : direction == 2 ? 4 : 7, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -3, 14, betweenstoneBrickStairs, direction == 0 ? 7 : direction== 1 ? 5 : direction == 2 ? 6 : 4, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -3, 12, betweenstoneBrickStairs, direction == 0 ? 6 : direction== 1 ? 4 : direction == 2 ? 7 : 5, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -2, 9, betweenstoneBricks, 0, 7, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -2, 10, betweenstoneBricks, 0, 1, 1, 6, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -2, 10, limestoneBrickSlab, 8, 3, 1, 3, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 14, -2, 10, limestoneBrickSlab, 8, 2, 1, 3, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -2, 14, limestoneBrickSlab, 8, 3, 1, 2, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 13, -2, 10, betweenstoneBricks, 0, 1, 1, 6, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -2, 13, betweenstoneBricks, 0, 6, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -7, 9, getRandomMetalBlock(rand), 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -6, 9, getRandomMetalBlock(rand), 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -5, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -7, 9, getRandomMetalBlock(rand), 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -6, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -7, 11, getRandomMetalBlock(rand), 0, 1, 1, 1, direction);
+			rotatedCubeVolume(world, rand, xx, yy, zz, 9, -6, 11, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
+
+			//ground floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 0, -1, 0, betweenstoneSmooth, 0, 13, 1, 13, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, -1, 4, betweenstoneTiles, 0, 3, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 4, -1, 5, betweenstoneTiles, 0, 2, 1, 1, direction);
