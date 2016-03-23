@@ -185,6 +185,15 @@ public class WorldGenWightFortress extends WorldGenerator {
 				}
 			}
 		}
+		
+		// loot room air just to erase old one
+				for (int xa = xx + 8; xa <= xx + 24; ++xa) {
+					for(int za = zz + 8; za <= zz + 24; ++za) {
+						for(int ya = yy - 8; ya < yy ; ++ya ) {
+							world.setBlockToAir(xa, ya, za);
+						}
+					}
+				}
 
 		length = 32;
 		width = 32;
