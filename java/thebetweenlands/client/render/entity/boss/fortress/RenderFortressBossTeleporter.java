@@ -2,6 +2,7 @@ package thebetweenlands.client.render.entity.boss.fortress;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -26,16 +27,22 @@ public class RenderFortressBossTeleporter extends Render {
 		GL11.glRotated(180, 1, 0, 0);
 		GL11.glTranslated(0, -0.25D, 0.1D);
 		GL11.glTranslated(MODEL.eye.rotationPointX * 0.065F / 2.0F, MODEL.eye.rotationPointY * 0.065F / 2.0F, MODEL.eye.rotationPointZ * 0.065F / 2.0F);
-		if(tp.getTarget() != null) {
+		if(tp.isLookingAtPlayer || tp.getTarget() != null) {
 			GL11.glRotated(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0, 1, 0);
 			GL11.glRotated(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
 		} else {
-			GL11.glRotated(-92, 1, 0, 0);
+			GL11.glRotated(88, 1, 0, 0);
 		}
 		GL11.glTranslated(-MODEL.eye.rotationPointX * 0.065F / 2.0F, -MODEL.eye.rotationPointY * 0.065F / 2.0F + 0.3D, -MODEL.eye.rotationPointZ * 0.065F / 2.0F);
 		if(tp.getTarget() != null)
 			GL11.glTranslated(Math.sin((entity.ticksExisted + partialTicks)/5.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/7.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/6.0D) * 0.1F);
-		GL11.glScaled(0.8F, 0.8F, 0.8F);
+		if(tp.getTarget() == null || tp.getTarget() != Minecraft.getMinecraft().renderViewEntity) {
+			GL11.glScaled(0.8F, 0.8F, 0.8F);
+		} else {
+			float scale = (float)Math.pow(tp.getTeleportProgress(), 3) * 2.5F;
+			GL11.glTranslated(0, scale / 2.0F, 0);
+			GL11.glScaled(0.8F + scale, 0.8F + scale, 0.8F);
+		}
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		LightingUtil.INSTANCE.setLighting(255);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -53,6 +60,15 @@ public class RenderFortressBossTeleporter extends Render {
 			MODEL.eye.render(0.065F);
 			GL11.glColorMask(true, true, true, true);
 			MODEL.eye.render(0.065F);
+
+			if(tp.getTarget() == Minecraft.getMinecraft().renderViewEntity) {
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				float alpha = (float) Math.pow(tp.getTeleportProgress(), 2.5D);
+				GL11.glColor4f(1, 1, 1, alpha);
+				MODEL.cap1.render(0.065F);
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			}
 		} else {
 			GL11.glColor4f(1, 1, 1, 0.15F);
 			GL11.glColorMask(false, false, false, false);
