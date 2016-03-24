@@ -180,6 +180,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	public boolean generateStructure(World world, Random rand, int xx, int yy, int zz) {
+		
+		for (int xa = xx; xa <= xx + 32; ++xa) {
+			for(int za = zz; za <= zz + 32; ++za) {
+				for(int ya = yy - 12 ; ya < yy; ++ya ) {
+					if(!world.getBlock(xa, ya, za).isNormalCube())
+					world.setBlock(xa, ya, za, betweenstone);
+				}
+			}
+		}
+		
 		// air just to erase old one :P
 		for (int xa = xx; xa <= xx + 32; ++xa) {
 			for(int za = zz; za <= zz + 32; ++za) {
