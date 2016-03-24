@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -31,6 +32,10 @@ import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityWight;
+import thebetweenlands.manual.widgets.text.FormatTags;
+import thebetweenlands.manual.widgets.text.TextContainer;
+import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
+import thebetweenlands.manual.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
@@ -55,8 +60,11 @@ public class PlayerLocationHandler {
 		return locations;
 	}
 
+	@SideOnly(Side.CLIENT)
+	private TextContainer titleContainer = null;
 	private String currentLocation = "";
 	private int titleTicks = 0;
+	private int maxTitleTicks = 120;
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -100,8 +108,35 @@ public class PlayerLocationHandler {
 				}
 				//}
 
-				if(this.currentLocation.length() > 0 && !prevLocation.equals(this.currentLocation)) {
-					this.titleTicks = 80;
+				if(this.currentLocation.length() > 0) {
+					if(this.currentLocation.contains(":")) {
+						int startIndex = this.currentLocation.indexOf(":");
+						String ticks = this.currentLocation.substring(0, startIndex);
+						this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
+						try {
+							this.maxTitleTicks = Integer.parseInt(ticks);
+						} catch(Exception ex) {
+							this.maxTitleTicks = 80;
+						}
+					}
+					if(!prevLocation.equals(this.currentLocation)) {
+						this.titleTicks = this.maxTitleTicks;
+						this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
+						this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);
+						this.titleContainer.registerTag(new FormatTags.TagNewLine());
+						this.titleContainer.registerTag(new FormatTags.TagScale(2.0F));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("bold", EnumChatFormatting.BOLD));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("obfuscated", EnumChatFormatting.OBFUSCATED));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("italic", EnumChatFormatting.ITALIC));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("strikethrough", EnumChatFormatting.STRIKETHROUGH));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("underline", EnumChatFormatting.UNDERLINE));
+						try {
+							this.titleContainer.parse();
+						} catch (Exception e) {
+							this.titleContainer = null;
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		}
@@ -111,30 +146,41 @@ public class PlayerLocationHandler {
 	@SubscribeEvent
 	public void onRenderScreen(RenderGameOverlayEvent.Post event) {
 		if(event.type == ElementType.TEXT) {
-			if(this.titleTicks > 0) {
+			if(this.titleTicks > 0 && this.titleContainer != null && !this.titleContainer.getPages().isEmpty()) {
+				TextPage page = this.titleContainer.getPages().get(0);
 				int width = event.resolution.getScaledWidth();
 				int height = event.resolution.getScaledHeight();
-				float scale = 2F;
-				double strWidth = TheBetweenlands.proxy.getCustomFontRenderer().getStringWidth(this.currentLocation) * scale;
-				double strHeight = (TheBetweenlands.proxy.getCustomFontRenderer().FONT_HEIGHT) * scale;
+				double strWidth = page.getTextWidth();
+				double strHeight = page.getTextHeight();
 				double strX = width / 2.0D - strWidth / 2.0F;
 				double strY = height / 5.0D;
 				GL11.glPushMatrix();
 				GL11.glTranslated(strX, strY, 0);
-				GL11.glScaled(scale, scale, 1.0F);
-				float fade = Math.min(1.0F, 1.0F - (this.titleTicks - 20) / 60.0F + 0.02F) - Math.max(0, (-this.titleTicks + 5) / 5.0F);
+				float fade = Math.min(1.0F, ((float)this.maxTitleTicks - (float)this.titleTicks) / Math.min(40.0F, this.maxTitleTicks - 5.0F) + 0.02F) - Math.max(0, (-this.titleTicks + 5) / 5.0F);
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-				TheBetweenlands.proxy.getCustomFontRenderer().drawString(this.currentLocation, 0, 0, ColorUtils.toHex(1, 1, 1, fade));
+				GL11.glEnable(GL11.GL_BLEND);
+				float averageScale = 0F;
+				for(TextSegment segment : page.getSegments()) {
+					GL11.glPushMatrix();
+					GL11.glTranslated(segment.x, segment.y, 0.0D);
+					GL11.glScalef(segment.scale, segment.scale, 1.0F);
+					float[] rgba = ColorUtils.getRGBA(segment.color);
+					segment.font.drawString(segment.text, 0, 0, ColorUtils.toHex(rgba[0], rgba[1], rgba[2], rgba[3] * fade));
+					GL11.glColor4f(1, 1, 1, 1);
+					GL11.glPopMatrix();
+					averageScale += segment.scale;
+				}
+				averageScale /= page.getSegments().size();
 				GL11.glPopMatrix();
 				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
 				GL11.glColor4f(1, 1, 1, fade);
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				double sidePadding = 6;
-				this.renderTexturedRect(strX - sidePadding*scale, strY + strHeight - 5*scale, strX - sidePadding*scale + 9*scale, strY + strHeight - 5*scale + 16*scale, 0, 9 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX - sidePadding*scale + 9*scale, strY + strHeight - 5*scale, strX + strWidth / 2.0D - 6*scale, strY + strHeight - 5*scale + 16*scale, 9 / 128.0D, 58 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D - 6*scale, strY + strHeight - 5*scale, strX + strWidth / 2.0D + 6*scale, strY + strHeight - 5*scale + 16*scale, 58 / 128.0D, 70 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D + 6*scale, strY + strHeight - 5*scale, strX + strWidth + sidePadding*scale - 9*scale, strY + strHeight - 5*scale + 16*scale, 70 / 128.0D, 119 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth + sidePadding*scale - 9*scale, strY + strHeight - 5*scale, strX + strWidth + sidePadding*scale, strY + strHeight - 5*scale + 16*scale, 119 / 128.0D, 1, 0, 1);
+				this.renderTexturedRect(strX - sidePadding*averageScale, strY + strHeight - 5*averageScale, strX - sidePadding*averageScale + 9*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 0, 9 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX - sidePadding*averageScale + 9*averageScale, strY + strHeight - 5*averageScale, strX + strWidth / 2.0D - 6*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 9 / 128.0D, 58 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D - 6*averageScale, strY + strHeight - 5*averageScale, strX + strWidth / 2.0D + 6*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 58 / 128.0D, 70 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D + 6*averageScale, strY + strHeight - 5*averageScale, strX + strWidth + sidePadding*averageScale - 9*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 70 / 128.0D, 119 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth + sidePadding*averageScale - 9*averageScale, strY + strHeight - 5*averageScale, strX + strWidth + sidePadding*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 119 / 128.0D, 1, 0, 1);
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		}

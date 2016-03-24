@@ -35,7 +35,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public void onUpdate() {
 		prevOnGround = onGround;
 		super.onUpdate();
-		if (!worldObj.isRemote) {
+		//TODO: RIP TPS, 2016 - 2016
+		//Keeps trying to pathfind causing huge stress on TPS
+		/*if (!worldObj.isRemote) {
 			if (getAttackTarget() != null) {
 				getNavigator().tryMoveToEntityLiving(getAttackTarget(), 0);
 			}
@@ -67,7 +69,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			} else {
 				leapingAnim.increaseTimer();
 			}
-		}
+		}*/
 	}
 
 	public float getLeapProgress(float partialRenderTicks) {

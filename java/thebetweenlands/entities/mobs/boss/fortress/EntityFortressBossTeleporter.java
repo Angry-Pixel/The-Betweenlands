@@ -12,6 +12,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.IScreenShake;
 
@@ -168,7 +169,8 @@ public class EntityFortressBossTeleporter extends Entity implements IScreenShake
 		double dy;
 		if (target instanceof EntityLivingBase) {
 			EntityLivingBase entitylivingbase = (EntityLivingBase)target;
-			dy = entitylivingbase.posY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
+			double actualPosY = entitylivingbase.posY + (entitylivingbase == TheBetweenlands.proxy.getClientPlayer() ? -0.65D : 0.0D);
+			dy = actualPosY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
 		} else {
 			dy = (target.boundingBox.minY + target.boundingBox.maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
 		}

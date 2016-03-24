@@ -63,7 +63,7 @@ public class FormatTags {
 
 		@Override
 		RangedTag create() {
-			return new TagScale(1.0F);
+			return new TagScale(this.scale);
 		}
 
 		@Override

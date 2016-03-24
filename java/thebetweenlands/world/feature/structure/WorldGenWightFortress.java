@@ -7,12 +7,13 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.entities.EntitySwordEnergy;
-import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
+import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
 import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityLootPot1;
@@ -89,7 +90,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).getChunkData().markDirty();
 		}
 		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1);
-		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 2);
+		StorageHelper.addArea(world, "translate:wightTowerTeleporter", AxisAlignedBB.getBoundingBox(x - 10 + 23, y + 17 + 12, z - 10 + 23, x + 42 - 23, y + 17 + 6 + 11, z + 42 - 23), EnumLocationType.WIGHT_TOWER, 2);
+		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 3);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).getChunkData().markDirty();
 		}
@@ -98,7 +100,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		originZ = z;
 		return generateStructure(world, rand, x, y, z);
 	}
-	
+
 	public Block getRandomWall(Random rand) {
 		int type = rand.nextInt(3);
 		switch (type) {
@@ -185,15 +187,15 @@ public class WorldGenWightFortress extends WorldGenerator {
 				}
 			}
 		}
-		
+
 		// loot room air just to erase old one
-				for (int xa = xx + 8; xa <= xx + 24; ++xa) {
-					for(int za = zz + 8; za <= zz + 24; ++za) {
-						for(int ya = yy - 8; ya < yy ; ++ya ) {
-							world.setBlockToAir(xa, ya, za);
-						}
-					}
+		for (int xa = xx + 8; xa <= xx + 24; ++xa) {
+			for(int za = zz + 8; za <= zz + 24; ++za) {
+				for(int ya = yy - 8; ya < yy ; ++ya ) {
+					world.setBlockToAir(xa, ya, za);
 				}
+			}
+		}
 
 		length = 32;
 		width = 32;
@@ -253,7 +255,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, -1, 7, limestonePolished, 0, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 7, -1, 7, betweenstoneTiles, 0, 2, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 5, -1, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
-			
+
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, xx, yy, zz, 6, 2, 6, spawner, 0, 1, 1, 1, direction);
 			spawner.setMob(world, xx + 6, yy + 2, zz + 6, rand.nextBoolean() ? "thebetweenlands.swampHag" : "thebetweenlands.chiromaw");
@@ -445,7 +447,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					rotatedCubeVolume(world, rand, x, y, z, 4, 8, 1, betweenstoneBrickStairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 8, 8, 1, betweenstoneBrickStairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 6, 11, 4, betweenstoneBrickStairs, direction == 0 ? 2 : direction== 1 ? 0 : direction == 2 ? 3 : 1, 1, 1, 1, direction);
-				// tower loot pots
+					// tower loot pots
 					rotatedCubeVolume(world, rand, x, y, z, 3, 0, 1, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 					rotatedCubeVolume(world, rand, x, y, z, 9, 0, 1, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 
@@ -453,8 +455,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 					rotatedCubeVolume(world, rand, x, y, z, 8, 6, 2, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 					if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2)
 						rotatedCubeVolume(world, rand, x, y, z, 6, 10, 2, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
-					
-				//	tower chests
+
+					//	tower chests
 					rotatedCubeVolume(world, rand, x, y, z, 4, 12, 4, chest,direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
 					if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
 						rotatedCubeVolume(world, rand, x, y, z, 5, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
@@ -696,7 +698,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 16, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 20, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
-		
+
 		}
 		//retro-gen betweenstoneBrickStairs
 		direction = rand.nextInt(4);
@@ -817,18 +819,19 @@ public class WorldGenWightFortress extends WorldGenerator {
 		swordEnergy.setPosition(xx + 16D, yy + 21.5, zz + 16D);
 		world.spawnEntityInWorld(swordEnergy);
 
-		EntityFortressBoss boss = new EntityFortressBoss(world);
-		boss.setPosition(xx + 16, yy + 17 + 19 + 5.2D, zz + 16);
-		boss.setAnchor(xx + 16, yy + 17 + 19 + 5.2D, zz + 16, 6);
-		world.spawnEntityInWorld(boss);
-
 		//floor 1
 		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 23, 12, limestonePolishedCollapsing, 0, 8, 1, 8, 0);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 16, 24, 16, chest, direction == 0 ? 5 : direction == 1 ? 2 : direction == 2 ? 4 : 3, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 16, 24, 15, chest, direction == 0 ? 5 : direction == 1 ? 2 : direction == 2 ? 4 : 3, 1, 1, 1, direction);
 
-		//floor2 TODO Add teleporter block
+		//floor2
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
+
+		EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
+		tp.setLocationAndAngles(xx + 16, yy + 30, zz + 16, 0, 0);
+		tp.setTeleportDestination(Vec3.createVectorHelper(xx + 16, yy + 17 + 19.2D, zz + 16));
+		tp.setBossSpawnPosition(Vec3.createVectorHelper(xx + 16, yy + 17 + 19 + 5.2D, zz + 16));
+		world.spawnEntityInWorld(tp);
 
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);
@@ -859,7 +862,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 14, 19, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 17, 19, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 19, 18, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
-			
+
 			//energy barrier
 			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
 		}
@@ -896,7 +899,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		if (swordStone != null)
 			swordStone.setType(type);
 	}
-	
+
 	private void placeSign(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta) {
 		world.setBlock(x, y, z, obviousSign, blockMeta, 2);
 		TileEntityBLSign sign = (TileEntityBLSign) world.getTileEntity(x, y, z);
@@ -906,7 +909,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					StatCollector.translateToLocal("fortress.line2"),
 					StatCollector.translateToLocal("fortress.line3"),
 					StatCollector.translateToLocal("fortress.line4")
-					};
+			};
 			world.markBlockForUpdate(x, y, z);
 		}
 	}

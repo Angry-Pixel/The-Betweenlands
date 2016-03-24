@@ -34,6 +34,22 @@ public class TextContainer {
 	}
 
 	/**
+	 * Returns the width of this container
+	 * @return
+	 */
+	public double getWidth() {
+		return this.pageWidth;
+	}
+
+	/**
+	 * Returns the height of this container
+	 * @return
+	 */
+	public double getHeight() {
+		return this.pageHeight;
+	}
+
+	/**
 	 * Returns the text pages
 	 * @return
 	 */
@@ -240,6 +256,33 @@ public class TextContainer {
 			this.width = width;
 			this.height = height;
 		}
+
+		/**
+		 * Returns the width of the area that contains text
+		 * @return
+		 */
+		public double getTextWidth() {
+			double furthest = 0.0D;
+			for(TextSegment segment : this.textSegments) {
+				if(segment.x + segment.width > furthest)
+					furthest = segment.x + segment.width;
+			}
+			return furthest;
+		}
+
+		/**
+		 * Returns the height of the area that contains text
+		 * @return
+		 */
+		public double getTextHeight() {
+			double furthest = 0.0D;
+			for(TextSegment segment : this.textSegments) {
+				if(segment.y + segment.height > furthest)
+					furthest = segment.y + segment.height;
+			}
+			return furthest;
+		}
+
 
 		/**
 		 * Returns a list of all text segmetns on this page
@@ -611,7 +654,8 @@ public class TextContainer {
 			WrapSegment prevWrapSegment = null;
 			final List<TextSegment> prevWrapTextSegments = new ArrayList<TextSegment>();
 			boolean newLine = false;
-			for(WrapSegment wrapSegment : wrapSegments) {
+			for(int w = 0; w < wrapSegments.size() - 1; w++) {
+				WrapSegment wrapSegment = wrapSegments.get(w);
 				double wrapSegmentWidth = 0.0D;
 				double wrapSegmentHeight = 0.0D;
 				final List<TextSegment> wrapTextSegments = new ArrayList<TextSegment>();

@@ -1259,10 +1259,11 @@ item.thebetweenlands.light.weedwood_lantern.name=Weedwood Lantern
 item.thebetweenlands.light_connection.name=Weedwood Lanterns
 
 # Locations
-location.wilderness.name=Wilderness
-location.wightTower.name=Wight Fortress
-location.wightTowerPuzzle.name=Loft
-location.wightTowerBoss.name=Primordial Malevolence
+location.wilderness.name=80:Wilderness
+location.wightTower.name=80:Wight Fortress
+location.wightTowerPuzzle.name=80:Loft
+location.wightTowerTeleporter.name=200:<scale:1>Beware that, when fighting monsters, you yourself do not become a monster... <nl>for when you gaze long into the abyss. The abyss gazes also into you.</scale>
+location.wightTowerBoss.name=80:Primordial Malevolence
 
 # Biomes
 biome.swamplands.name=Swamplands
