@@ -11,8 +11,8 @@ import net.minecraft.util.ResourceLocation;
  * Created by Bart on 23/03/2016.
  */
 public class GuiLorePage extends GuiScreen {
-    private static final double WIDTH = 256.0D;
-    private static final double HEIGHT = 256.0D;
+    private static final double WIDTH = 165.0D;
+    private static final double HEIGHT = 200.0D;
     public int xStart;
     public int yStart;
     private ResourceLocation page;
