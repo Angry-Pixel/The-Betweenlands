@@ -51,7 +51,9 @@ public class EntityLeafSwirlFX extends EntityFX {
 		double sz = this.target.posZ - this.dragZ;
 
 		Vec3 connection = Vec3.createVectorHelper(this.target.posX - sx, this.target.posY - sy, this.target.posZ - sz);
-
+		this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
+		this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
+		
 		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
 		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.6D);
 		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
@@ -66,8 +68,8 @@ public class EntityLeafSwirlFX extends EntityFX {
 		this.textures = textures;
 		this.relativeTextureHeight = 1.0D / this.textures;
 		this.particleTexture = texture;
-		this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
-		this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
+	//	this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
+	//	this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
 	}
 
 	@Override
