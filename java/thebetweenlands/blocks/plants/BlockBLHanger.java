@@ -60,11 +60,6 @@ public class BlockBLHanger extends BlockBush implements ISickleHarvestable, ISyr
 	}
 
 	@Override
-	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-		return true;
-	}
-
-	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
 	}
