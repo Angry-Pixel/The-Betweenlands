@@ -46,15 +46,6 @@ public class ItemLore extends Item {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean idk) {
-        super.addInformation(stack, player, list, idk);
-        String name = "";
-        if (stack != null && stack.getTagCompound() != null && stack.getTagCompound().hasKey("name"))
-            name = stack.getTagCompound().getString("name");
-        list.add(name);
-    }
-
-    @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
         setRandomPageName(itemStack, new Random());
         if (itemStack != null && itemStack.getTagCompound().hasKey("name"))
