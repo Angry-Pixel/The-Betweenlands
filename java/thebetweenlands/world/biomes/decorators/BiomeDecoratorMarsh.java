@@ -40,5 +40,6 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 		helper.generateBottleBrushGrass(5);
 		helper.generateStagnantWaterPool(5);
 		helper.generateUnderGroundStructures(100);
+		helper.generateWightFortress(1);
 	}
 }

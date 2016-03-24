@@ -1,5 +1,7 @@
 package thebetweenlands.world.biomes.decorators;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -16,15 +18,29 @@ import thebetweenlands.world.ChunkProviderBetweenlands;
 import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.biomes.feature.WorldGenFluidPool;
-import thebetweenlands.world.feature.gen.cave.*;
+import thebetweenlands.world.feature.gen.cave.WorldGenCaveGrass;
+import thebetweenlands.world.feature.gen.cave.WorldGenCaveMoss;
+import thebetweenlands.world.feature.gen.cave.WorldGenCavePots;
+import thebetweenlands.world.feature.gen.cave.WorldGenSpeleothem;
+import thebetweenlands.world.feature.gen.cave.WorldGenThorns;
 import thebetweenlands.world.feature.plants.WorldGenHugeMushroom;
 import thebetweenlands.world.feature.plants.WorldGenMossPatch;
 import thebetweenlands.world.feature.plants.WorldGenMushrooms;
 import thebetweenlands.world.feature.plants.WorldGenWeedWoodBush;
-import thebetweenlands.world.feature.structure.*;
-import thebetweenlands.world.feature.trees.*;
-
-import java.util.Random;
+import thebetweenlands.world.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.world.feature.structure.WorldGenIdolHeads;
+import thebetweenlands.world.feature.structure.WorldGenSmallRuins;
+import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.world.feature.structure.WorldGenUnderGroundStructures;
+import thebetweenlands.world.feature.structure.WorldGenWightFortress;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeAlive;
+import thebetweenlands.world.feature.trees.WorldGenGiantTreeDead;
+import thebetweenlands.world.feature.trees.WorldGenRottenLogs;
+import thebetweenlands.world.feature.trees.WorldGenRubberTree;
+import thebetweenlands.world.feature.trees.WorldGenSapTree;
+import thebetweenlands.world.feature.trees.WorldGenSmallHollowLog;
+import thebetweenlands.world.feature.trees.WorldGenSmallWeedWoodTree;
+import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
 
 public class DecorationHelper {
 	private final static WorldGenGiantTreeAlive GEN_GIANT_TREE = new WorldGenGiantTreeAlive();
@@ -79,6 +95,7 @@ public class DecorationHelper {
 	private final static WorldGenSpawnerStructure GEN_DUNGEON = new WorldGenSpawnerStructure();
 	private final static WorldGenIdolHeads GEN_HEADS = new WorldGenIdolHeads();
 	private final static WorldGenCragrockTower GEN_CRAGROCK_TOWER = new WorldGenCragrockTower();
+	private final static WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
 
 	private final Random rand;
 	private final int x, y, z;
@@ -961,13 +978,24 @@ public class DecorationHelper {
 		}
 	}
 
-
 	public void generateCragrockTower(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ() - 3;
 			int y = 86;
 			int z = this.z + this.offsetXZ() - 3;
 			GEN_CRAGROCK_TOWER.generate(world, rand, x, y, z);
+		}
+	}
+
+	public void generateWightFortress(int attempt) {
+		for (int i = 0; i < attempt; i++) {
+			int x = this.x;
+			int y = WorldProviderBetweenlands.LAYER_HEIGHT + 1;
+			int z = this.z;
+			if (checkSurface(SurfaceType.MIXED, x, y, z) && checkSurface(SurfaceType.MIXED, x + 32, y, z + 32) && checkSurface(SurfaceType.MIXED, x + 16, y, z + 16)  && checkSurface(SurfaceType.MIXED, x + 32, y, z) && checkSurface(SurfaceType.MIXED, x, y, z + 32)) {
+				GEN_WIGHT_FORTRESS.generate(world, rand, x, y, z);
+				break;
+			}
 		}
 	}
 

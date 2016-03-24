@@ -98,6 +98,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		originX = x;
 		originY = y;
 		originZ = z;
+		System.out.println("Fortress Here: X: " + x + " Y: " + y + " Z: "+ z);
 		return generateStructure(world, rand, x, y, z);
 	}
 
