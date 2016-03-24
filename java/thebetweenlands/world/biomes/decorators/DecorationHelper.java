@@ -992,9 +992,10 @@ public class DecorationHelper {
 			int x = this.x;
 			int y = WorldProviderBetweenlands.LAYER_HEIGHT + 1;
 			int z = this.z;
-			if (checkSurface(SurfaceType.MIXED, x, y, z) && checkSurface(SurfaceType.MIXED, x + 32, y, z + 32) && checkSurface(SurfaceType.MIXED, x + 16, y, z + 16)  && checkSurface(SurfaceType.MIXED, x + 32, y, z) && checkSurface(SurfaceType.MIXED, x, y, z + 32)) {
-				GEN_WIGHT_FORTRESS.generate(world, rand, x, y, z);
-				break;
+			if(rand.nextBoolean() && rand.nextBoolean())
+				if (checkSurface(SurfaceType.MIXED, x, y, z) && checkSurface(SurfaceType.MIXED, x + 32, y, z + 32) && checkSurface(SurfaceType.MIXED, x + 16, y, z + 16)  && checkSurface(SurfaceType.MIXED, x + 32, y, z) && checkSurface(SurfaceType.MIXED, x, y, z + 32)) {
+					GEN_WIGHT_FORTRESS.generate(world, rand, x, y, z);
+					break;
 			}
 		}
 	}
