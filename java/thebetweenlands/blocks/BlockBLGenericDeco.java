@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
@@ -26,6 +27,11 @@ public class BlockBLGenericDeco extends Block implements IGrowable {
 		this(blockName, material);
 		setHarvestLevel(tool, harvestLevel);
 	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        return null;
+    }
 
 	@Override
 	public String getLocalizedName() {

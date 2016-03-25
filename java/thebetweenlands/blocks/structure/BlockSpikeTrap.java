@@ -17,8 +17,8 @@ public class BlockSpikeTrap extends BlockContainer {
 	public BlockSpikeTrap() {
 		super(Material.rock);
 		setStepSound(Block.soundTypeStone);
-		setBlockUnbreakable();
-		setResistance(6000000.0F);
+		setHardness(10F);
+		setResistance(2000.0F);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.spikeTrap");
 	}
