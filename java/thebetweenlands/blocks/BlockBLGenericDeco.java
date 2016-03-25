@@ -29,11 +29,6 @@ public class BlockBLGenericDeco extends Block implements IGrowable {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return null;
-    }
-
-	@Override
 	public String getLocalizedName() {
 		return String.format(StatCollector.translateToLocal("tile.thebetweenlands." + type));
 	}
