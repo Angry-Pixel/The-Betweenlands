@@ -677,6 +677,18 @@
 			"rejected"
 		]
 	},
+	"fortressTeleport": {
+		"category": "player",
+		"sounds": [
+			"fortressTeleport"
+		]
+	},
+	"fortressBossLoop": {
+		"category": "music",
+		"sounds": [
+			"FortressBossLoop"
+		]
+	},
 	"music.blMenu": {
 		"category": "music",
 		"sounds": [
