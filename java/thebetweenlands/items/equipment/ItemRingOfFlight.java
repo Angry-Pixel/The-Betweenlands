@@ -110,14 +110,26 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 						entity.fallDistance = 0.0F;
 
 						if(!entity.onGround && entity.worldObj.isRemote) {
-							BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
+							if(props.flightTime > 40) {
+								BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity, 0.0F);
+							} else {
+								for(int i = 0; i < 5; i++) {
+									BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity, 1.0F - (props.flightTime + i / 5.0F) / 40.0F);
+								}
+							}
 						}
 					}
 				} else {
 					props.setFlying(false);
 				}
 			} else if(props.isFlying() && !player.onGround && player.worldObj.isRemote) {
-				BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity);
+				if(props.flightTime > 40) {
+					BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity, 0.0F);
+				} else {
+					for(int i = 0; i < 5; i++) {
+						BLParticle.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, 0, 0, 0, 1, entity, 1.0F - (props.flightTime + i / 5.0F) / 40.0F);
+					}
+				}
 			}
 		}
 	}
@@ -152,6 +164,9 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 			EntityPlayer player = (EntityPlayer) event.player;
 			if(!player.capabilities.isCreativeMode) {
 				EntityPropertiesFlight props = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFlight.class);
+				if(props.isFlying()) {
+					props.flightTime++;
+				}
 				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
 				boolean canPlayerFly = false;
 				if(equipmentInventory != null) {

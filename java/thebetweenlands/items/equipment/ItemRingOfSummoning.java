@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -113,11 +114,14 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 									hasTarget = true;
 								}
 							}
-							if(!hasTarget && entity.worldObj.rand.nextInt(4) == 0) {
+							if(!hasTarget && entity.worldObj.rand.nextInt(3) == 0) {
 								sx = MathHelper.floor_double(entity.posX) + entity.worldObj.rand.nextInt(16) - 8;
 								sy = MathHelper.floor_double(entity.posY + 0.5D) + entity.worldObj.rand.nextInt(6) - 3;
 								sz = MathHelper.floor_double(entity.posZ) + entity.worldObj.rand.nextInt(16) - 8;
-								hasTarget = true;
+								List<EntityMummyArm> armsUnderTarget = entity.worldObj.getEntitiesWithinAABB(EntityMummyArm.class, AxisAlignedBB.getBoundingBox(sx, sy, sz, sx+1, sy+1, sz+1));
+								if(armsUnderTarget.isEmpty()) {
+									hasTarget = true;
+								}
 							}
 							if(hasTarget && entity.worldObj.getBlock(sx, sy - 1, sz).isSideSolid(entity.worldObj, sx, sy - 1, sz, ForgeDirection.UP)) {
 								EntityMummyArm arm = new EntityMummyArm(entity.worldObj);

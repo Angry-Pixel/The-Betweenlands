@@ -19,7 +19,7 @@ public class EntityPyrad extends EntityBlaze {
 		super.onUpdate();
 
 		if(this.worldObj.isRemote) {
-			BLParticle.LEAF_SWIRL.spawn(this.worldObj, this.posX, this.posY, this.posZ, 0, 0, 0, 1, this);
+			BLParticle.LEAF_SWIRL.spawn(this.worldObj, this.posX, this.posY, this.posZ, 0, 0, 0, 1, this, 0.0F);
 		}
 	}
 

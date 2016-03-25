@@ -28,10 +28,11 @@ public class EntityLeafSwirlFX extends EntityFX {
 
 	private static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
 
-	public EntityLeafSwirlFX(World world, double x, double y, double z, int maxAge, float scale, int color, ResourceLocation texture, int textures, Entity target) {
+	public EntityLeafSwirlFX(World world, double x, double y, double z, int maxAge, float scale, int color, ResourceLocation texture, int textures, Entity target, float progress) {
 		super(world, x, y, z, 0, 0, 0);
 		this.target = target;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
+		this.progress = progress;
 
 		double tmx = this.target.posX - this.target.lastTickPosX;
 		double tmy = this.target.posY - this.target.lastTickPosY;
@@ -53,13 +54,13 @@ public class EntityLeafSwirlFX extends EntityFX {
 		Vec3 connection = Vec3.createVectorHelper(this.target.posX - sx, this.target.posY - sy, this.target.posZ - sz);
 		this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
 		this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
-		
+
 		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
 		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.6D);
 		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
-		this.lastTickPosX = this.posX;
-		this.lastTickPosY = this.posY;
-		this.lastTickPosZ = this.posZ;
+		this.lastTickPosX = this.prevPosX = this.posX;
+		this.lastTickPosY = this.prevPosY = this.posY;
+		this.lastTickPosZ = this.prevPosZ = this.posZ;
 
 		this.particleMaxAge = maxAge;
 		this.noClip = false;
@@ -68,8 +69,6 @@ public class EntityLeafSwirlFX extends EntityFX {
 		this.textures = textures;
 		this.relativeTextureHeight = 1.0D / this.textures;
 		this.particleTexture = texture;
-	//	this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
-	//	this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
 	}
 
 	@Override

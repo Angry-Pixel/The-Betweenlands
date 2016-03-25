@@ -6,6 +6,7 @@ import thebetweenlands.entities.properties.EntityProperties;
 
 public class EntityPropertiesFlight extends EntityProperties<EntityPlayer> {
 	private boolean flying = false;
+	public int flightTime = 0;
 
 	@Override
 	public void saveNBTData(NBTTagCompound nbt) {
@@ -45,6 +46,9 @@ public class EntityPropertiesFlight extends EntityProperties<EntityPlayer> {
 
 	public void setFlying(boolean flying) {
 		this.flying = flying;
+		if(!flying) {
+			this.flightTime = 0;
+		}
 	}
 
 	public boolean isFlying() {
