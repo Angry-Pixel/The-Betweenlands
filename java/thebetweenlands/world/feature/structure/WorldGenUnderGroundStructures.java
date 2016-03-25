@@ -17,8 +17,8 @@ import java.util.Random;
  */
 public class WorldGenUnderGroundStructures extends WorldGenerator {
     private static final boolean markReplaceableCheck = false;
-    private static int[] stairSequence = new int[]{0, 3, 1, 2};
-    private static int[] upsideDownStairSequence = new int[]{4, 7, 5, 6};
+    private static final int[] stairSequence = new int[]{0, 3, 1, 2};
+    private static final int[] upsideDownStairSequence = new int[]{4, 7, 5, 6};
     private int width = -1;
     private int depth = -1;
 
@@ -55,7 +55,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
 
-    public boolean structure1(World world, Random random, int x, int y, int z) {
+    private boolean structure1(World world, Random random, int x, int y, int z) {
         width = 7;
         depth = 6;
         int direction = random.nextInt(4);
@@ -101,7 +101,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
 
-    public boolean structure2(World world, Random random, int x, int y, int z) {
+    private boolean structure2(World world, Random random, int x, int y, int z) {
         width = 9;
         depth = 11;
         int direction = random.nextInt(4);
@@ -181,7 +181,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
-    public boolean structure3(World world, Random random, int x, int y, int z) {
+    private boolean structure3(World world, Random random, int x, int y, int z) {
         width = 6;
         depth = 6;
         int direction = 0;
@@ -231,7 +231,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
-    public boolean structure4(World world, Random random, int x, int y, int z) {
+    private boolean structure4(World world, Random random, int x, int y, int z) {
         depth = 11;
         width = 5;
         int direction = random.nextInt(4);
@@ -276,7 +276,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
 
-    public boolean structure5(World world, Random random, int x, int y, int z) {
+    private boolean structure5(World world, Random random, int x, int y, int z) {
         depth = 8;
         width = 7;
         int direction = random.nextInt(4);
@@ -333,7 +333,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
-    public boolean structure6(World world, Random random, int x, int y, int z) {
+    private boolean structure6(World world, Random random, int x, int y, int z) {
         width = 7;
         depth = 7;
         int direction = random.nextInt(4);
@@ -436,7 +436,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }*/
 
 
-    public void rotatedCubeVolume(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+    private void rotatedCubeVolume(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, Block blockType, int blockMeta, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
         x -= width / 2;
         z -= depth / 2;
         switch (direction) {
@@ -467,7 +467,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         }
     }
 
-    public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction) {
+    private void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction) {
         x -= width / 2;
         z -= depth / 2;
         switch (direction) {
@@ -487,7 +487,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
     }
 
 
-    public boolean makePitstoneSupport(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeDepth, int direction, boolean simulate) {
+    private boolean makePitstoneSupport(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeDepth, int direction, boolean simulate) {
         x -= width / 2;
         z -= depth / 2;
         switch (direction) {
@@ -555,7 +555,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         return true;
     }
 
-    public boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
+    private boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
         x -= width / 2;
         z -= depth / 2;
         boolean replaceable = true;
@@ -626,7 +626,7 @@ public class WorldGenUnderGroundStructures extends WorldGenerator {
         }
     }
 
-    public int getMetaFromDirection(int start, int direction, int[] sequence) {
+    private int getMetaFromDirection(int start, int direction, int[] sequence) {
         return sequence[(direction + start) % sequence.length];
     }
 }
