@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.proxy.CommonProxy;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -22,6 +22,29 @@ public class ItemLore extends Item {
         setTextureName("thebetweenlands:lore");
     }
 
+    public static ItemStack createPageStack(Random random) {
+        ItemStack stack = new ItemStack(BLItemRegistry.lore);
+        stack = setRandomPageName(stack, random);
+        return stack;
+    }
+
+    private static ItemStack setRandomPageName(ItemStack stack, Random random) {
+        setPageName(pages[random.nextInt(pages.length)], stack);
+        return stack;
+    }
+
+    private static ItemStack setPageName(String name, ItemStack stack) {
+        if (stack != null && name != null && stack.getItem() == BLItemRegistry.lore) {
+            if (stack.stackTagCompound == null) {
+                NBTTagCompound tagCompound = new NBTTagCompound();
+                tagCompound.setString("name", name);
+                stack.stackTagCompound = tagCompound;
+            } else
+                stack.stackTagCompound.setString("name", name);
+        }
+        return stack;
+    }
+
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         String name = "";
@@ -30,25 +53,9 @@ public class ItemLore extends Item {
         return "item.thebetweenlands.lore" + (name.length() > 0 ? "." + name : "");
     }
 
-    public void setRandomPageName(ItemStack stack, Random random) {
-        setPageName(pages[random.nextInt(pages.length)], stack);
-    }
-
-    private void setPageName(String name, ItemStack stack) {
-        if (stack != null && name != null && stack.getItem() == this) {
-            if (stack.stackTagCompound == null) {
-                NBTTagCompound tagCompound = new NBTTagCompound();
-                tagCompound.setString("name", name);
-                stack.stackTagCompound = tagCompound;
-            } else
-                stack.stackTagCompound.setString("name", name);
-        }
-    }
-
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-        setRandomPageName(itemStack, new Random());
-        if (itemStack != null && itemStack.getTagCompound().hasKey("name"))
+        if (itemStack != null && itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey("name"))
             player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LORE, world, (int) player.posX, (int) player.posY, (int) player.posZ);
         return itemStack;
     }

@@ -1,6 +1,11 @@
 package thebetweenlands.world.loot;
+
+import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.loot.ItemLore;
 import thebetweenlands.items.misc.ItemGeneric;
+
+import java.util.Random;
 
 public class LootBasicList {
 
@@ -38,6 +43,7 @@ public class LootBasicList {
 			new LootItemStack(BLItemRegistry.hagHacker).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.sludgeSlicer).setAmount(1).setWeight(2),
 			new LootItemStack(BLItemRegistry.skullMask).setAmount(1).setWeight(2),
+			new LootItemStack(BLItemRegistry.lore).setAmount(1).setWeight(2),
 
 			new LootItemStack(BLItemRegistry.astatos).setAmount(1).setWeight(1),
 			new LootItemStack(BLItemRegistry.betweenYouAndMe).setAmount(1).setWeight(1),
@@ -54,5 +60,13 @@ public class LootBasicList {
 			new LootItemStack(BLItemRegistry.wanderingWisps).setAmount(1).setWeight(1),
 			new LootItemStack(BLItemRegistry.waterlogged).setAmount(1).setWeight(1),
 
+	}).setPostProcessor(new IPostProcess() {
+		@Override
+		public ItemStack postProcessItem(ItemStack is, Random rand) {
+			if (is != null && is.getItem() == BLItemRegistry.lore) {
+				is = ItemLore.createPageStack(rand);
+			}
+			return is;
+		}
 	});
 }

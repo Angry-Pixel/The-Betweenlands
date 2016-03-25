@@ -56,7 +56,7 @@ public class GuiLorePage extends GuiScreen {
      * @param textureYStart the y start in the texture
      * @param textureYEnd   the y end in the texture
      */
-    public void drawTexture(int xStart, int yStart, int width, int height, double textureWidth, double textureHeight, double textureXStart, double textureXEnd, double textureYStart, double textureYEnd) {
+    private void drawTexture(int xStart, int yStart, int width, int height, double textureWidth, double textureHeight, double textureXStart, double textureXEnd, double textureYStart, double textureYEnd) {
         double umin = 1.0D / textureWidth * textureXStart;
         double umax = 1.0D / textureWidth * textureXEnd;
         double vmin = 1.0D / textureHeight * textureYStart;
@@ -72,5 +72,10 @@ public class GuiLorePage extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int button) {
         mc.displayGuiScreen(null);
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 }
