@@ -25,6 +25,10 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 
 	private int spawnTicks = 0;
 
+	private int despawnTicks = 0;
+
+	private int deathTicks = 0;
+
 	public EntityMummyArm(World world) {
 		super(world);
 		this.setSize(0.7F, 0.7F);
@@ -81,37 +85,51 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		if(!this.worldObj.isRemote) {
 			Entity owner = this.getOwner();
 			if(owner == null || owner.getDistanceToEntity(this) > 32.0D) {
-				this.setDead();
+				this.setHealth(0);
 			} else if(owner instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) owner;
 				if(!this.isUsingRing(player))
-					this.setDead();
+					this.setHealth(0);
 			} else {
-				this.setDead();
+				this.setHealth(0);
+			}
+
+			if(this.despawnTicks >= 300) {
+				this.setHealth(0);
+			} else {
+				this.despawnTicks++;
 			}
 		}
 
-		if(this.spawnTicks >= 20) {
-			List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox);
-			for(EntityLivingBase target : targets) {
-				if(target != this && target != this.getOwner()) {
-					target.attackEntityFrom(DamageSource.generic, 2.0F);
-					if(this.attackSwing <= 0)
-						this.attackSwing = 20;
-				}
-			}
-		}
-
-		if(this.spawnTicks < 40) {
-			this.spawnTicks++;
-			this.yOffset = -1 + this.spawnTicks / 40.0F;
-		} else {
+		if(this.deathTicks > 0) {
+			this.yOffset = -this.deathTicks / 40.0F;
+		} else if(this.spawnTicks >= 40) {
 			this.yOffset = 0.0F;
 		}
 
-		if(this.attackSwing > 0)
-			this.attackSwing--;
+		if(this.isEntityAlive()) {
+			if(this.spawnTicks >= 20) {
+				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox);
+				for(EntityLivingBase target : targets) {
+					if(target != this && target != this.getOwner()) {
+						target.attackEntityFrom(DamageSource.generic, 2.0F);
+						if(this.attackSwing <= 0)
+							this.attackSwing = 20;
+					}
+				}
+			}
 
+			if(this.spawnTicks < 40) {
+				this.spawnTicks++;
+				this.yOffset = -1 + this.spawnTicks / 40.0F;
+			} else {
+				this.yOffset = 0.0F;
+			}
+
+			if(this.attackSwing > 0)
+				this.attackSwing--;
+		}
+		
 		if(this.worldObj.isRemote && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
 			int x = MathHelper.floor_double(this.posX);
 			int y = MathHelper.floor_double(this.posY - 0.5D);
@@ -165,10 +183,22 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
+	protected void onDeathUpdate() {
+		this.deathTicks++;
+
+		if(!this.worldObj.isRemote) {
+			if(this.deathTicks >= 40)
+				this.setDead();
+		}
+	}
+
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setString("ownerUUID", this.getOwnerUUID());
 		nbt.setInteger("spawnTicks", this.spawnTicks);
+		nbt.setInteger("despawnTicks", this.despawnTicks);
+		nbt.setInteger("deathTicks", this.deathTicks);
 	}
 
 	@Override
@@ -176,5 +206,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		this.setOwner(nbt.getString("ownerUUID"));
 		this.spawnTicks = nbt.getInteger("spawnTicks");
+		this.despawnTicks = nbt.getInteger("despawnTicks");
+		this.deathTicks = nbt.getInteger("deathTicks");
 	}
 }

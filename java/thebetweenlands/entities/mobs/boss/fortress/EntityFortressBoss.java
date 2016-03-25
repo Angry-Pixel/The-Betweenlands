@@ -380,6 +380,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		nbt.setInteger("wightSpawnTicks", this.wightSpawnTicks);
 		nbt.setInteger("teleportTicks", this.teleportTicks);
 		nbt.setInteger("blockadeSpawnTicks", this.blockadeSpawnTicks);
+		nbt.setInteger("deathTicks", this.deathTicks);
 	}
 
 	@Override
@@ -399,6 +400,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		this.wightSpawnTicks = nbt.getInteger("wightSpawnTicks");
 		this.teleportTicks = nbt.getInteger("teleportTicks");
 		this.blockadeSpawnTicks = nbt.getInteger("blockadeSpawnTicks");
+		this.deathTicks = nbt.getInteger("deathTicks");
 	}
 
 	@Override

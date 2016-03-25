@@ -28,6 +28,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.ICorrodible;
+import thebetweenlands.items.IEquippable;
 import thebetweenlands.recipes.misc.CompostRecipe;
 
 /**
@@ -299,6 +300,9 @@ public class ItemTooltipHandler {
 				Sickness sickness = property.getSickness((ItemFood)event.itemStack.getItem());
 				event.toolTip.add(StatCollector.translateToLocal("food_sickness.state." + sickness.name().toLowerCase()));
 			}
+		}
+		if(event.itemStack.getItem() instanceof IEquippable) {
+			event.toolTip.add(StatCollector.translateToLocal("item.equippable"));
 		}
 	}
 }

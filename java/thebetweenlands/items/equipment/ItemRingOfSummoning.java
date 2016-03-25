@@ -53,8 +53,8 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 
 	@Override
 	protected float getXPConversionRate(ItemStack stack, EntityPlayer player) {
-		//1 xp = 1 damage repaired
-		return 1.0F;
+		//1 xp = 2 damage repaired
+		return 2.0F;
 	}
 
 	@Override
