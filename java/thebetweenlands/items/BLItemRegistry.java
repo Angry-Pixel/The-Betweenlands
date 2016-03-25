@@ -235,7 +235,7 @@ public class BLItemRegistry {
 	//MISC
 	public static final ItemShimmerStone shimmerStone = new ItemShimmerStone();
 	public static final Item angryPebble = new ItemAngryPebble();
-	public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(1);
+	public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(16);
 	public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
 	//public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(BLCreativeTabs.blocks);
 	public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(BLCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");

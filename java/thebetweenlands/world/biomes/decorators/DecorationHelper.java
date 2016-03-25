@@ -956,7 +956,7 @@ public class DecorationHelper {
 			GEN_DUNGEON.generate(world, rand, x, y, z);
 		}
 	}
-	
+
 	public void generateHeads(int attempt) {
 		for (int i = 0; i < attempt; i++) {
 			int x = this.x + this.offsetXZ();
@@ -996,13 +996,13 @@ public class DecorationHelper {
 				if (checkSurface(SurfaceType.MIXED, x, y, z) && checkSurface(SurfaceType.MIXED, x + 32, y, z + 32) && checkSurface(SurfaceType.MIXED, x + 16, y, z + 16)  && checkSurface(SurfaceType.MIXED, x + 32, y, z) && checkSurface(SurfaceType.MIXED, x, y, z + 32)) {
 					GEN_WIGHT_FORTRESS.generate(world, rand, x, y, z);
 					break;
-			}
+				}
 		}
 	}
 
 	public void populateCave() {
 		generateSpeleothems(60);
-		generateCavePots(20);
+		generateCavePots(this.rand.nextInt(3) == 0 ? 2 : 1);
 		generateThorns(200);
 		generateCaveMoss(100);
 		generateCaveGrass(120);
