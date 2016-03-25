@@ -54,6 +54,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block betweenstoneBrickWallMossy = BLBlockRegistry.betweenstoneBrickWallMossy;
 	private Block betweenstoneBrickWallCracked = BLBlockRegistry.betweenstoneBrickWallCracked;
 	private Block betweenstoneBricks = BLBlockRegistry.betweenstoneBricks;
+	private Block betweenstoneBricksMirage = BLBlockRegistry.betweenstoneBricksMirage;
 	private Block betweenstoneBricksMossy = BLBlockRegistry.betweenstoneBricksMossy;
 	private Block betweenstoneBricksCracked = BLBlockRegistry.betweenstoneBricksCracked;
 	private Block betweenstonePillar = BLBlockRegistry.betweenstonePillar;
@@ -85,6 +86,14 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		for (int xa = x; xa <= x + 32; ++xa) {
+			for(int za = z; za <= z + 32; ++za) {
+				for(int ya = y; ya < y + 42; ++ya ) {
+					if(!world.getBlock(xa, ya, za).isAir(world, xa, ya, za))
+						return false;
+				}
+			}
+		}
 		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).getChunkData().markDirty();
@@ -190,15 +199,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 			}
 		}
 
-		// air just to erase old one :P
-		for (int xa = xx; xa <= xx + 32; ++xa) {
-			for(int za = zz; za <= zz + 32; ++za) {
-				for(int ya = yy; ya < yy + 48; ++ya ) {
-					world.setBlockToAir(xa, ya, za);
-				}
-			}
-		}
-
 		// loot room air just to erase old one
 		for (int xa = xx + 8; xa <= xx + 24; ++xa) {
 			for(int za = zz + 8; za <= zz + 24; ++za) {
@@ -218,6 +218,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -8, 8, betweenstoneSmooth, 0, 8, 1, 2, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 8, -8, 9, betweenstoneSmooth, 0, 2, 1, 7, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -8, 10, betweenstoneTilesFortress, 0, 1, 1, 1, direction);
+			if(rand.nextBoolean())
+				rotatedCubeVolume(world, rand, xx, yy, zz, 10, -6, 10, spawner, 0, 1, 1, 1, direction);
+			spawner.setMob(world, xx + 10, yy -6, zz + 10, rand.nextBoolean() ? "thebetweenlands.swampHag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
+			spawner.setMob(world, xx + 21, yy -6, zz + 21, rand.nextBoolean() ? "thebetweenlands.swampHag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
+			spawner.setMob(world, xx + 10, yy -6, zz + 21, rand.nextBoolean() ? "thebetweenlands.swampHag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
+			spawner.setMob(world, xx + 21, yy -6, zz + 10, rand.nextBoolean() ? "thebetweenlands.swampHag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
+
 			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -8, 10, betweenstoneTiles, 0, 5, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 10, -8, 11, betweenstoneTiles, 0, 1, 1, 5, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 11, -8, 11, betweenstoneSmooth, 0, 5, 1, 5, direction);
@@ -712,21 +719,28 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		}
 		//retro-gen betweenstoneBrickStairs
-		direction = rand.nextInt(4);
+		direction = 0;//rand.nextInt(4);
 
 		//main betweenstoneBrickStairs
-		rotatedCubeVolume(world, rand, xx, yy, zz, 12, 0, 4, betweenstoneBricks, 0, 8, 4, 1, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 3, betweenstoneBricks, 0, 6, 3, 1, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 2, betweenstoneBricks, 0, 6, 2, 1, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 1, betweenstoneBricks, 0, 6, 1, 1, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 3, 3, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 2, 2, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 1, 1, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 0, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 3, 3, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 2, 2, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 1, 1, betweenstoneBricks, 0, 1, 2, 2, direction);
-		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 0, 0, betweenstoneBricks, 0, 1, 2, 2, direction);
+
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 3, betweenstoneBricks, 0, 1, 5, 2, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 2, betweenstoneBricks, 0, 1, 4, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 1, betweenstoneBricks, 0, 1, 3, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 0, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 0, 3, betweenstoneBricks, 0, 1, 5, 2, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 0, 2, betweenstoneBricks, 0, 1, 4, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 0, 1, betweenstoneBricks, 0, 1, 3, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 0, 0, betweenstoneBricks, 0, 1, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 0, 1, betweenstoneBricks, 0, 4, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 2, 4, betweenstoneBricks, 0, 4, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 2, 3, betweenstoneBricks, 0, 4, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 15, 0, 4, betweenstoneBricks, 0, 2, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, 0, 4, betweenstoneBricksMirage, 0, 1, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 17, 0, 4, betweenstoneBricksMirage, 0, 1, 2, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 14, -1, 0, betweenstoneTiles, 0, 4, 1, 4, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 15, 0, 3, chest, direction == 0 ? 4 : direction == 1 ? 3 : direction == 2 ? 5 : 2, 1, 1, 1, direction);
+		rotatedCubeVolume(world, rand, xx, yy, zz, 16, 0, 3, chest, direction == 0 ? 4 : direction == 1 ? 3 : direction == 2 ? 5 : 2, 1, 1, 1, direction);
+
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 5, 3, betweenstoneBrickWall, 0, 1, 2, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 4, 2, betweenstoneBrickWall, 0, 1, 2, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 13, 3, 1, betweenstoneBrickWall, 0, 1, 2, 1, direction);
@@ -952,10 +966,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
-							if (yy <= originY + 17) {
+							if (yy <= originY + 17 && yy != originY) {
 								if (rand.nextInt(4) == 0)
 									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
-							} else if (yy > originY + 17)
+							} else if (yy > originY + 17 || yy == originY)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
 						else if (blockType == obviousSign)
@@ -985,10 +999,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
-							if (yy <= originY + 17) {
+							if (yy <= originY + 17 && yy != originY) {
 								if (rand.nextInt(4) == 0)
 									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
-							} else if (yy > originY + 17)
+							} else if (yy > originY + 17 || yy == originY)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
 						else if (blockType == obviousSign)
@@ -1018,10 +1032,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
-							if (yy <= originY + 17) {
+							if (yy <= originY + 17 && yy != originY) {
 								if (rand.nextInt(4) == 0)
 									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
-							} else if (yy > originY + 17)
+							} else if (yy > originY + 17 || yy == originY)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
 						else if (blockType == obviousSign)
@@ -1051,10 +1065,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, xx, yy, zz, rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
-							if (yy <= originY + 17) {
+							if (yy <= originY + 17 && yy != originY) {
 								if (rand.nextInt(4) == 0)
 									placeChest(world, rand, xx, yy, zz, chest, blockMeta);
-							} else if (yy > originY + 17)
+							} else if (yy > originY + 17 || yy == originY)
 								placeChest(world, rand, xx, yy, zz, chest, blockMeta);
 						}
 						else if (blockType == obviousSign)
