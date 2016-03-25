@@ -30,7 +30,7 @@ public class RenderMummyArm extends Render {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glTranslated(x, y + arm.yOffset, z);
-		GL11.glScaled(0.5F, 0.5F, 0.5F);
+		GL11.glScaled(0.7F, 0.7F, 0.7F);
 
 		this.bindTexture(texture);
 		MODEL.setToInitPose();
@@ -38,12 +38,16 @@ public class RenderMummyArm extends Render {
 		MODEL.armleft.rotateAngleX = 0.3F;
 		MODEL.armleft.rotateAngleZ = -0.1F;
 		float offset = 0.0F;
-		if(arm.attackSwing > 0)
+		if(arm.attackSwing > 0) {
 			MODEL.walk(MODEL.armleft, 1, -0.4F, false, offset, 0, ((float)Math.abs(arm.attackSwing-10)/2.0F+Math.signum(arm.attackSwing-10)*-1*partialTicks/2.0F), 1);
+			MODEL.walk(MODEL.armleft2, 1, -0.6F, false, offset, 0, ((float)Math.abs(arm.attackSwing-10)/2.0F+Math.signum(arm.attackSwing-10)*-1*partialTicks/2.0F), 1);
+		}
 		if(arm.hurtTime > 0) {
-			MODEL.bob(MODEL.armleft, 1.4F, -10, true, (arm.hurtTime-partialTicks) / 5.0F, 1);
+			MODEL.bob(MODEL.armleft, 0.5F, -10, true, (arm.hurtTime-partialTicks) / 5.0F, 1);
 		}
 		MODEL.swing(MODEL.armleft, 1, 0.4f, false, offset, 0, (entity.ticksExisted + partialTicks) / 10.0F, 1);
+		MODEL.walk(MODEL.armleft2, 1, 0.4f, false, offset, 0, (entity.ticksExisted + partialTicks) / 8.0F, 1);
+		MODEL.swing(MODEL.armleft2, 1, 0.1f, false, offset, 0, (entity.ticksExisted + partialTicks) / 4.0F, 1);
 		MODEL.walk(MODEL.armleft, 1, 0.1F, false, offset, 0, (entity.ticksExisted + partialTicks) / 10.0F, 1);
 		MODEL.walk(MODEL.armleft, 2, 0.3F, false, offset, 0, (entity.ticksExisted + partialTicks) / 15.0F, 1);
 		MODEL.bob(MODEL.armleft, 2, 1.8F, false, (entity.ticksExisted + partialTicks) / 15.0F, 1);

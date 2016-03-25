@@ -8,10 +8,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -104,10 +106,11 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 				this.setHealth(0);
 			}
 
-			if(this.despawnTicks >= 300) {
+			if(this.despawnTicks >= 150) {
 				this.setHealth(0);
 			} else {
-				this.despawnTicks++;
+				if(this.spawnTicks >= 40)
+					this.despawnTicks++;
 			}
 		}
 
@@ -121,8 +124,17 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			if(this.spawnTicks >= 4) {
 				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox);
 				for(EntityLivingBase target : targets) {
-					if(target != this && target != this.getOwner()) {
-						target.attackEntityFrom(DamageSource.generic, 2.0F);
+					if(target != this && target != this.getOwner() && target instanceof EntityMob) {
+						DamageSource damageSource;
+						Entity owner = this.getOwner();
+						if(owner != null) {
+							damageSource = new EntityDamageSourceIndirect("mob", this, owner);
+						} else {
+							damageSource = DamageSource.causeMobDamage(this);
+						}
+						if(target.attackEntityFrom(damageSource, 2.0F)) {
+							this.despawnTicks = 0;
+						}
 						if(this.attackSwing <= 0)
 							this.attackSwing = 20;
 					}

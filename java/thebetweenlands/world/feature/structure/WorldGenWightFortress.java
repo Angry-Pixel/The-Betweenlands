@@ -21,10 +21,10 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class WorldGenWightFortress extends WorldGenerator {
 

@@ -9,8 +9,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class StorageHelper {
 	public static List<LocationStorage> addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer) {
@@ -63,5 +63,27 @@ public class StorageHelper {
 				}
 			}
 		}
+	}
+
+	public static List<LocationStorage> getAreas(World world, AxisAlignedBB area) {
+		List<LocationStorage> foundLocations = new ArrayList<LocationStorage>();
+		int sx = MathHelper.floor_double(area.minX / 16.0D);
+		int sz = MathHelper.floor_double(area.minZ / 16.0D);
+		int ex = MathHelper.floor_double(area.maxX / 16.0D);
+		int ez = MathHelper.floor_double(area.maxZ / 16.0D);
+		for(int cx = sx; cx <= ex; cx++) {
+			for(int cz = sz; cz <= ez; cz++) {
+				Chunk chunk = world.getChunkFromChunkCoords(cx, cz);
+				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
+				for(ChunkStorage storage : chunkData.getStorage()) {
+					if(storage instanceof LocationStorage) {
+						LocationStorage location = (LocationStorage) storage;
+						if(location.getArea().intersectsWith(area))
+							foundLocations.add(location);
+					}
+				}
+			}
+		}
+		return foundLocations;
 	}
 }

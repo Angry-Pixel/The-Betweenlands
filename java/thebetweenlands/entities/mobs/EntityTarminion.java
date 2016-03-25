@@ -144,7 +144,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			} else {
 				for(int i = 0; i < 8; i++) {
-					this.playSound("thebetweenlands:tarBeastStep" + (rand.nextInt(3) + 1), 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+					this.playSound("thebetweenlands:tarBeastStep", 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 				}
 				List<EntityCreature> affectedEntities = (List<EntityCreature>)this.worldObj.getEntitiesWithinAABB(EntityCreature.class, this.boundingBox.expand(5.25F, 5.25F, 5.25F));
 				for(EntityCreature e : affectedEntities) {
@@ -159,8 +159,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.INANIMATE_TARMINION), 0F);
 		}
 		if(playOnce) {
-			int randomSound = rand.nextInt(3) + 1;
-			worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:tarBeastStep" + randomSound, 2.5F, 0.5F);
+			worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:tarBeastStep", 2.5F, 0.5F);
 			playOnce = false;
 			if(this.worldObj.isRemote) {
 				for(int i = 0; i < 100; i++) {
@@ -209,8 +208,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				damageSource = DamageSource.causeMobDamage(this);
 			}
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
-			int randomSound = rand.nextInt(3) + 1;
-			worldObj.playSoundAtEntity(entity, "thebetweenlands:tarBeastStep" + randomSound, 1.0F, 2.0F);
+			worldObj.playSoundAtEntity(entity, "thebetweenlands:tarBeastStep", 1.0F, 2.0F);
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, worldObj.difficultySetting.ordinal() * 50, 0));
 			return true;
 		}

@@ -39,8 +39,8 @@ import thebetweenlands.manual.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class PlayerLocationHandler {
 	public static final PlayerLocationHandler INSTANCE = new PlayerLocationHandler();
@@ -241,6 +241,9 @@ public class PlayerLocationHandler {
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.weedwoodChest);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.blSpawner);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.itemCage);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot1);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot2);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot3);
 	}
 
 	@SubscribeEvent

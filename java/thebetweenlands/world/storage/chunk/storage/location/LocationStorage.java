@@ -16,24 +16,6 @@ import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
 
 public class LocationStorage extends ChunkStorage {
-	public static enum EnumLocationType {
-		NONE("none"), RUINS("ruins"), HUT("hut"), SHACK("shack"), WIGHT_TOWER("wightTower");
-
-		public static EnumLocationType[] TYPES = EnumLocationType.values();
-
-		public final String name;
-		private EnumLocationType(String name) {
-			this.name = name;
-		}
-		public static EnumLocationType fromName(String name) {
-			for(EnumLocationType type : TYPES){
-				if(type.name.equals(name))
-					return type;
-			}
-			return NONE;
-		}
-	}
-
 	private String name;
 	private AxisAlignedBB area;
 	private EnumLocationType type;

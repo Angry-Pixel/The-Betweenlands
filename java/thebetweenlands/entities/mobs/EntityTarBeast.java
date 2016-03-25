@@ -245,9 +245,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 
 				if(this.sheddingProgress > this.getSheddingSpeed()) {
-					this.playSound("thebetweenlands:tarBeastLiving" + (rand.nextInt(3) + 1), 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
+					this.playSound("thebetweenlands:tarBeastLiving", 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
 					for(int i = 0; i < 8; i++) {
-						this.playSound("thebetweenlands:tarBeastStep" + (rand.nextInt(3) + 1), 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+						this.playSound("thebetweenlands:tarBeastStep", 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
 					this.sheddingProgress = 0;
 					this.setShedding(false);
