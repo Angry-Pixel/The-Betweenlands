@@ -5,13 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -122,12 +115,15 @@ import thebetweenlands.client.render.item.ItemCompostBinRenderer;
 import thebetweenlands.client.render.item.ItemDruidAltarRenderer;
 import thebetweenlands.client.render.item.ItemGeckoCageRenderer;
 import thebetweenlands.client.render.item.ItemInfuserRenderer;
+import thebetweenlands.client.render.item.ItemItemCageRenderer;
+import thebetweenlands.client.render.item.ItemItemShelfRenderer;
 import thebetweenlands.client.render.item.ItemLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemLootPot3Renderer;
 import thebetweenlands.client.render.item.ItemPestleAndMortarRenderer;
 import thebetweenlands.client.render.item.ItemPurifierRenderer;
 import thebetweenlands.client.render.item.ItemRepellerRenderer;
+import thebetweenlands.client.render.item.ItemSpikeTrapRenderer;
 import thebetweenlands.client.render.item.ItemTarLootPot1Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot2Renderer;
 import thebetweenlands.client.render.item.ItemTarLootPot3Renderer;
@@ -266,6 +262,14 @@ import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.utils.vectormath.Point3f;
+
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -425,6 +429,9 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.geckoCage), new ItemGeckoCageRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.repeller), new ItemRepellerRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.itemCage), new ItemItemCageRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.spikeTrap), new ItemSpikeTrapRenderer());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.itemShelf), new ItemItemShelfRenderer());
 
 		//Register custom item renderer for aspect overlays
 		for(Item item : BLItemRegistry.ITEMS) {

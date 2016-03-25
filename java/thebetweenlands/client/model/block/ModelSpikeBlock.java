@@ -67,7 +67,7 @@ public class ModelSpikeBlock extends ModelBase {
     }
 
 	public void renderSpikes(TileEntitySpikeTrap tile) {
-		block.render(0.0625F);
+		renderBlock();
 		if (tile.active || !tile.active && tile.animationTicks > 0) {
 			if (tile.animationTicks <= 5)
 				GL11.glTranslatef(0F, 0F - 1F / 5 * tile.animationTicks, 0F);
@@ -83,6 +83,10 @@ public class ModelSpikeBlock extends ModelBase {
 	        shaft5.render(0.0625F);
 	        shaft2.render(0.0625F);
 		}
+	}
+	
+	public void renderBlock() {
+		block.render(0.0625F);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
