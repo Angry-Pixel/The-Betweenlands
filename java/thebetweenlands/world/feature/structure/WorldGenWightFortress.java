@@ -89,7 +89,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		for (int xa = x; xa <= x + 32; ++xa) {
 			for(int za = z; za <= z + 32; ++za) {
 				for(int ya = y; ya < y + 42; ++ya ) {
-					if(!world.getBlock(xa, ya, za).isAir(world, xa, ya, za))
+					if(!world.getBlock(xa, ya + 1, za).isAir(world, xa, ya + 1, za))
 						return false;
 				}
 			}
