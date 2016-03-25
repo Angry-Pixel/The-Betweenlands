@@ -93,9 +93,6 @@ public class PlayerLocationHandler {
 						biomeName = biome.biomeName; //Not localized
 					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);*/
 					String location = StatCollector.translateToLocal("location.wilderness.name");
-					if(this.currentLocation == null || this.currentLocation.length() == 0) {
-						prevLocation = location;
-					}
 					this.currentLocation = location;
 				} else {
 					LocationStorage highestLocation = null;
@@ -118,7 +115,7 @@ public class PlayerLocationHandler {
 							this.maxTitleTicks = 80;
 						}
 					}
-					if(!prevLocation.equals(this.currentLocation)) {
+					if(prevLocation != null && prevLocation.length() > 0 && !prevLocation.equals(this.currentLocation)) {
 						this.titleTicks = this.maxTitleTicks;
 						this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
 						this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);

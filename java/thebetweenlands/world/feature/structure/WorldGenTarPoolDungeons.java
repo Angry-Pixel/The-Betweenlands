@@ -9,13 +9,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.tileentities.TileEntityTarLootPot1;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
 
 public class WorldGenTarPoolDungeons extends WorldGenerator {
 
-	public static final WeightedLootList loot = LootBasicList.loot;
+	public static final WeightedLootList loot = LootTables.DUNGEON_POT_LOOT;
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {

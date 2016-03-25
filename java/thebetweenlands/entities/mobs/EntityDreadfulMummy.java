@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.ICameraOffset;
 import thebetweenlands.entities.IScreenShake;
 import thebetweenlands.entities.mobs.boss.IBossBL;
+import thebetweenlands.items.BLItemRegistry;
 
 public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL, IScreenShake, ICameraOffset {
 	public EntityDreadfulMummy(World world) {
@@ -377,5 +378,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		this.deathTicks = nbt.getInteger("deathTicks");
+	}
+
+	@Override
+	protected void dropFewItems(boolean killedByPlayer, int looting) {
+		this.dropItem(BLItemRegistry.ringOfSummoning, 1);
+		this.dropItem(BLItemRegistry.shimmerStone, this.worldObj.rand.nextInt(3) + 1 + this.worldObj.rand.nextInt(looting + 1) * 2);
 	}
 }

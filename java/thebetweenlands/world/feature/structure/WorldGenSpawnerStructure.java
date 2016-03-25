@@ -9,7 +9,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 
 /**
@@ -58,25 +58,25 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                         world.setBlock(x + 1, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 1);
                         if (lootChest != null)
-                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootTables.DUNGEON_CHEST_LOOT, 2, 4);
                         break;
                     case 1:
                         world.setBlock(x + 1, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 1, yy + 1, z + 3);
                         if (lootChest != null)
-                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootTables.DUNGEON_CHEST_LOOT, 2, 4);
                         break;
                     case 2:
                         world.setBlock(x + 3, yy + 1, z + 1, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 1);
                         if (lootChest != null)
-                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootTables.DUNGEON_CHEST_LOOT, 2, 4);
                         break;
                     case 3:
                         world.setBlock(x + 3, yy + 1, z + 3, BLBlockRegistry.weedwoodChest);
                         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x + 3, yy + 1, z + 3);
                         if (lootChest != null)
-                        	LootUtil.generateLoot(lootChest, random, LootBasicList.loot, 2, 4);
+                        	LootUtil.generateLoot(lootChest, random, LootTables.DUNGEON_CHEST_LOOT, 2, 4);
                         break;
                 }
             } else if (yy < y + 4) {

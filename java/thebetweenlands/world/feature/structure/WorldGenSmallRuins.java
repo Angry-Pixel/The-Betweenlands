@@ -7,7 +7,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 
 import java.util.Random;
@@ -450,7 +450,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
         world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
         if (lootPot != null)
-            LootUtil.generateLoot(lootPot, random, LootBasicList.loot, 1, 2);
+            LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 1, 2);
     }
 
     private Block getRandomBlock(Random rand) {
