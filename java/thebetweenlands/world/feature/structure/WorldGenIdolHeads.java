@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 
 public class WorldGenIdolHeads extends WorldGenerator {
@@ -124,7 +124,7 @@ public class WorldGenIdolHeads extends WorldGenerator {
         world.setBlock(x, y - 1, z, BLBlockRegistry.weedwoodChest);
         lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y - 1, z);
         if (lootChest != null)
-        	LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
+        	LootUtil.generateLoot(lootChest, rand, LootTables.COMMON_CHEST_LOOT, 4, 8);
         return true;
     }
 

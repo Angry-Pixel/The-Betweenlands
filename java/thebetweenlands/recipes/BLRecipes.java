@@ -462,17 +462,18 @@ public class BLRecipes {
 	private static void registerAnimatorRecipes() {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BLItemRegistry.scroll), 16, 16) {
 			private final WeightedRandomItem[] items = new WeightedRandomItem[] { 
-					new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 8), 8),
-					new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 8),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.angryPebble, 16), 8),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.voodooDoll), 8),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.ringOfPower), 3),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.swiftPick), 5),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.skullMask), 5),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.wightsBane), 5),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.sludgeSlicer), 5),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.critterCruncher), 5),
-					new WeightedRandomItem(new ItemStack(BLItemRegistry.hagHacker), 5),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.angryPebble, 30), 8),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.voodooDoll), 28),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.swiftPick), 20),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.skullMask), 20),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.wightsBane), 20),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.sludgeSlicer), 20),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.critterCruncher), 20),
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.hagHacker), 20),
+					new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 20),
+					new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 8), 20),
+
+					new WeightedRandomItem(new ItemStack(BLItemRegistry.ringOfPower), 10),
 
 					//discs
 					new WeightedRandomItem(new ItemStack(BLItemRegistry.astatos), 1),

@@ -8,11 +8,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
@@ -83,6 +87,14 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		super.onUpdate();
 
 		if(!this.worldObj.isRemote) {
+			int bx = MathHelper.floor_double(this.posX);
+			int by = MathHelper.floor_double(this.posY - 0.5D);
+			int bz = MathHelper.floor_double(this.posZ);
+			Block blockBelow = this.worldObj.getBlock(bx, by, bz);
+			if(blockBelow == Blocks.air || !this.worldObj.getBlock(bx, by, bz).isSideSolid(this.worldObj, bx, by, bz, ForgeDirection.UP)) {
+				this.setDead();
+			}
+
 			Entity owner = this.getOwner();
 			if(owner == null || owner.getDistanceToEntity(this) > 32.0D) {
 				this.setHealth(0);
@@ -94,10 +106,11 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 				this.setHealth(0);
 			}
 
-			if(this.despawnTicks >= 300) {
+			if(this.despawnTicks >= 150) {
 				this.setHealth(0);
 			} else {
-				this.despawnTicks++;
+				if(this.spawnTicks >= 40)
+					this.despawnTicks++;
 			}
 		}
 
@@ -108,11 +121,20 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		}
 
 		if(this.isEntityAlive()) {
-			if(this.spawnTicks >= 20) {
+			if(this.spawnTicks >= 4) {
 				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox);
 				for(EntityLivingBase target : targets) {
-					if(target != this && target != this.getOwner()) {
-						target.attackEntityFrom(DamageSource.generic, 2.0F);
+					if(target != this && target != this.getOwner() && target instanceof EntityMob) {
+						DamageSource damageSource;
+						Entity owner = this.getOwner();
+						if(owner != null) {
+							damageSource = new EntityDamageSourceIndirect("mob", this, owner);
+						} else {
+							damageSource = DamageSource.causeMobDamage(this);
+						}
+						if(target.attackEntityFrom(damageSource, 2.0F)) {
+							this.despawnTicks = 0;
+						}
 						if(this.attackSwing <= 0)
 							this.attackSwing = 20;
 					}
@@ -129,24 +151,26 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			if(this.attackSwing > 0)
 				this.attackSwing--;
 		}
-		
+
 		if(this.worldObj.isRemote && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
 			int x = MathHelper.floor_double(this.posX);
 			int y = MathHelper.floor_double(this.posY - 0.5D);
 			int z = MathHelper.floor_double(this.posZ);
 			Block block = this.worldObj.getBlock(x, y, z);
-			int metadata = this.worldObj.getBlockMetadata(x, y, z);
-			String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + metadata;
-			double px = this.posX;
-			double py = this.posY;
-			double pz = this.posZ;
-			for (int i = 0, amount = 2 + this.rand.nextInt(this.yOffset < 0.0F ? 8 : 3); i < amount; i++) {
-				double ox = this.rand.nextDouble() * 0.1F - 0.05F;
-				double oz = this.rand.nextDouble() * 0.1F - 0.05F;
-				double motionX = this.rand.nextDouble() * 0.2 - 0.1;
-				double motionY = this.rand.nextDouble() * 0.1 + 0.1;
-				double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
-				this.worldObj.spawnParticle(particle, px + ox, py, pz + oz, motionX, motionY, motionZ);
+			if(block != Blocks.air) {
+				int metadata = this.worldObj.getBlockMetadata(x, y, z);
+				String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + metadata;
+				double px = this.posX;
+				double py = this.posY;
+				double pz = this.posZ;
+				for (int i = 0, amount = 2 + this.rand.nextInt(this.yOffset < 0.0F ? 8 : 3); i < amount; i++) {
+					double ox = this.rand.nextDouble() * 0.1F - 0.05F;
+					double oz = this.rand.nextDouble() * 0.1F - 0.05F;
+					double motionX = this.rand.nextDouble() * 0.2 - 0.1;
+					double motionY = this.rand.nextDouble() * 0.1 + 0.1;
+					double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
+					this.worldObj.spawnParticle(particle, px + ox, py, pz + oz, motionX, motionY, motionZ);
+				}
 			}
 		}
 	}

@@ -39,8 +39,8 @@ import thebetweenlands.manual.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class PlayerLocationHandler {
 	public static final PlayerLocationHandler INSTANCE = new PlayerLocationHandler();
@@ -93,9 +93,6 @@ public class PlayerLocationHandler {
 						biomeName = biome.biomeName; //Not localized
 					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);*/
 					String location = StatCollector.translateToLocal("location.wilderness.name");
-					if(this.currentLocation == null || this.currentLocation.length() == 0) {
-						prevLocation = location;
-					}
 					this.currentLocation = location;
 				} else {
 					LocationStorage highestLocation = null;
@@ -118,7 +115,7 @@ public class PlayerLocationHandler {
 							this.maxTitleTicks = 80;
 						}
 					}
-					if(!prevLocation.equals(this.currentLocation)) {
+					if(prevLocation != null && prevLocation.length() > 0 && !prevLocation.equals(this.currentLocation)) {
 						this.titleTicks = this.maxTitleTicks;
 						this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
 						this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);
@@ -244,6 +241,9 @@ public class PlayerLocationHandler {
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.weedwoodChest);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.blSpawner);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.itemCage);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot1);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot2);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot3);
 	}
 
 	@SubscribeEvent

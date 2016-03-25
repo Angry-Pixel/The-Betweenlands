@@ -31,6 +31,7 @@ import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.entities.mobs.boss.IBossBL;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.utils.RotationMatrix;
 
@@ -862,5 +863,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 			volume = 3.0F;
 		}
 		this.worldObj.playSoundAtEntity(this, sound, volume, pitch);
+	}
+	
+	@Override
+	protected void dropFewItems(boolean killedByPlayer, int looting) {
+		this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
 	}
 }

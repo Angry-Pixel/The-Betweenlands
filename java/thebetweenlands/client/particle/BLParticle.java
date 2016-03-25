@@ -76,8 +76,8 @@ public enum BLParticle {
 	},
 	MOTH(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation[] textures = new ResourceLocation[] {
-			new ResourceLocation("thebetweenlands:textures/particle/moth1.png"),
-			new ResourceLocation("thebetweenlands:textures/particle/moth2.png")
+				new ResourceLocation("thebetweenlands:textures/particle/moth1.png"),
+				new ResourceLocation("thebetweenlands:textures/particle/moth2.png")
 		};
 
 		@Override
@@ -87,9 +87,9 @@ public enum BLParticle {
 	},
 	FISH(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation[] textures = new ResourceLocation[] {
-			new ResourceLocation("thebetweenlands:textures/particle/fish1.png"),
-			new ResourceLocation("thebetweenlands:textures/particle/fish2.png"),
-			new ResourceLocation("thebetweenlands:textures/particle/fish3.png")
+				new ResourceLocation("thebetweenlands:textures/particle/fish1.png"),
+				new ResourceLocation("thebetweenlands:textures/particle/fish2.png"),
+				new ResourceLocation("thebetweenlands:textures/particle/fish3.png")
 		};
 
 		@Override
@@ -129,12 +129,12 @@ public enum BLParticle {
 			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5 };
 		}
 	},
-	LEAF_SWIRL(EntityLeafSwirlFX.class, ParticleArgs.NONE, int.class, float.class, int.class, ResourceLocation.class, int.class, Entity.class) {
+	LEAF_SWIRL(EntityLeafSwirlFX.class, ParticleArgs.NONE, int.class, float.class, int.class, ResourceLocation.class, int.class, Entity.class, float.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/leaf.png");
 
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
-			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5, (Entity)data[0]};
+			return new Object[] { 400, 0.12F * world.rand.nextFloat() + 0.03F, 0xFFFFFFFF, texture, 5, (Entity)data[0], (float)data[1]};
 		}
 	},
 	SPLASH(EntitySplashFX.class, ParticleArgs.VX_VY_VZ, int.class) {

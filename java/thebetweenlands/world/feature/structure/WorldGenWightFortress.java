@@ -18,13 +18,13 @@ import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityItemCage;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.world.storage.chunk.storage.location.LocationStorage.EnumLocationType;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -180,16 +180,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	public boolean generateStructure(World world, Random rand, int xx, int yy, int zz) {
-		
+
 		for (int xa = xx; xa <= xx + 32; ++xa) {
 			for(int za = zz; za <= zz + 32; ++za) {
 				for(int ya = yy - 12 ; ya < yy; ++ya ) {
 					if(!world.getBlock(xa, ya, za).isNormalCube())
-					world.setBlock(xa, ya, za, betweenstone);
+						world.setBlock(xa, ya, za, betweenstone);
 				}
 			}
 		}
-		
+
 		// air just to erase old one :P
 		for (int xa = xx; xa <= xx + 32; ++xa) {
 			for(int za = zz; za <= zz + 32; ++za) {
@@ -794,7 +794,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 17 + count, 18 + count, 23, betweenstoneBrickStairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 19, 22, betweenstoneBricks, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 20, 21, 22, betweenstoneBrickSlab, 0, 1, 1, 1, direction);
-		
+
 		for(int count = 0; count < 6 ;count ++)        
 			rotatedCubeVolume(world, rand, xx, yy, zz, 22 - count, 22 + count, 10, betweenstoneBrickStairs, direction == 0 ? 1 : direction== 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, xx, yy, zz, 18, 27, 10, Blocks.air, 0, 1, 5, 1, direction);
@@ -888,7 +888,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		TileEntityWeedWoodChest lootChest = (TileEntityWeedWoodChest) world.getTileEntity(x, y, z);
 		if (lootChest != null) {
 			world.setBlockMetadataWithNotify(x, y, z, blockMeta, 3);
-			LootUtil.generateLoot(lootChest, rand, LootBasicList.loot, 4, 8);
+			LootUtil.generateLoot(lootChest, rand, LootTables.DUNGEON_CHEST_LOOT, 4, 8);
 		}
 	}
 
@@ -899,7 +899,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			world.setBlock(x, y, z, blockType, blockMeta, 2);
 			TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
 			if (lootPot != null) {
-				LootUtil.generateLoot(lootPot, rand, LootBasicList.loot, 1, 3);
+				LootUtil.generateLoot(lootPot, rand, LootTables.DUNGEON_POT_LOOT, 1, 3);
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.markBlockForUpdate(x, y, z);
 			}

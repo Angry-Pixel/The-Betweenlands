@@ -2,6 +2,7 @@ package thebetweenlands.event.input;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,15 @@ public class RingInputHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onClientTick(ClientTickEvent event) {
+		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		if(player != null && player.ticksExisted % 20 == 0) {
+			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketRingInput(KeyBindingsBL.useRing.getIsKeyPressed())));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
 	private void updateClientRecruitmentState() {
 		if(!this.wasPressed && KeyBindingsBL.useRing.getIsKeyPressed()) {
 			this.wasPressed = true;
@@ -35,7 +45,7 @@ public class RingInputHandler {
 	}
 
 	@SubscribePacket
-	public static void onInput(PacketRingInput packet) {
+	public static void onInputPacket(PacketRingInput packet) {
 		if(packet.getContext().getServerHandler() != null) {
 			EntityPlayer sender = packet.getContext().getServerHandler().playerEntity;
 			if(sender != null) {

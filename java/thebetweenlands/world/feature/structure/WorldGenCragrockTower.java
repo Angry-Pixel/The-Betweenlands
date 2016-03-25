@@ -9,7 +9,7 @@ import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
-import thebetweenlands.world.loot.LootBasicList;
+import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 
 import java.util.Random;
@@ -1298,25 +1298,25 @@ public class WorldGenCragrockTower extends WorldGenerator {
                 world.setBlock(x + offsetA, y + offsetB, z + offsetC, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetA, y + offsetB, z + offsetC);
                 if (chest != null)
-                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                    LootUtil.generateLoot(chest, rand, LootTables.DUNGEON_CHEST_LOOT, min, max);
                 break;
             case 1:
                 world.setBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + offsetC, y + offsetB, z + depth - offsetA - 1);
                 if (chest != null)
-                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                    LootUtil.generateLoot(chest, rand, LootTables.DUNGEON_CHEST_LOOT, min, max);
                 break;
             case 2:
                 world.setBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
                 if (chest != null)
-                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                    LootUtil.generateLoot(chest, rand, LootTables.DUNGEON_CHEST_LOOT, min, max);
                 break;
             case 3:
                 world.setBlock(x + width - offsetC - 1, y + offsetB, z + offsetA, BLBlockRegistry.weedwoodChest, getMetaFromDirection(sequenceStart, direction, chestSequence), 3);
                 chest = (TileEntityWeedWoodChest) world.getTileEntity(x + width - offsetC - 1, y + offsetB, z + offsetA);
                 if (chest != null)
-                    LootUtil.generateLoot(chest, rand, LootBasicList.loot, min, max);
+                    LootUtil.generateLoot(chest, rand, LootTables.DUNGEON_CHEST_LOOT, min, max);
                 break;
         }
     }
@@ -1467,7 +1467,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
         world.setBlock(x, y, z, getRandomBlock(random), randDirection, 3);
         TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
         if (lootPot != null)
-            LootUtil.generateLoot(lootPot, random, LootBasicList.loot, min, max);
+            LootUtil.generateLoot(lootPot, random, LootTables.DUNGEON_POT_LOOT, min, max);
     }
 
     private Block getRandomBlock(Random rand) {
