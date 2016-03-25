@@ -9,8 +9,6 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.utils.AnimationMathHelper;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnData {
 	public float pulseFloat;
@@ -39,6 +37,9 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 		pulseFloat = pulse.swing(0.3F, 0.75F, false);
 		motionY = 0;
 		if (!worldObj.isRemote) {
+			if(ticksExisted%140 == 0)
+				worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:fortressPuzzleOrb", 1.0F, 1.0F);
+			
 			if (getSwordPart1Pos() > 0 && getSwordPart1Pos() < 3.5F)
 				setSwordPart1Pos(getSwordPart1Pos() - 0.05F);
 
@@ -52,6 +53,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 				setSwordPart4Pos(getSwordPart4Pos() - 0.05F);
 
 			if (getSwordPart1Pos() <= 0 && getSwordPart2Pos() <= 0 && getSwordPart3Pos() <= 0 && getSwordPart4Pos() <= 0) {
+				worldObj.playSoundEffect(posX, posY, posZ, "thebetweenlands:fortressPuzzleSword", 1.0F, 1.0F);
 				EntityItem entityItem = new EntityItem(worldObj, posX, posY, posZ, new ItemStack(BLItemRegistry.shockwaveSword));
 				entityItem.motionX = 0;
 				entityItem.motionY = 0;

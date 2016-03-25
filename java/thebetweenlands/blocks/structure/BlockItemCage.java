@@ -46,6 +46,7 @@ public class BlockItemCage extends BlockContainer {
 			TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(x, y, z);
 			if (swordStone != null && swordStone.isSwordEnergyBelow() != null) {
 				EntitySwordEnergy energyBall = (EntitySwordEnergy) swordStone.isSwordEnergyBelow();
+				world.playSoundEffect(x, y, z, "thebetweenlands:fortressPuzzleCageBreak", 1.0F, 1.0F);
 				switch (swordStone.type) {
 				case 0:
 					energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
