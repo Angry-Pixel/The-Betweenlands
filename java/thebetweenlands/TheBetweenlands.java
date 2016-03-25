@@ -69,6 +69,7 @@ import thebetweenlands.network.packet.client.PacketEquipment;
 import thebetweenlands.network.packet.client.PacketFlightState;
 import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.network.packet.client.PacketRecruitmentState;
+import thebetweenlands.network.packet.client.PacketRingInput;
 import thebetweenlands.network.packet.server.PacketAttackTarget;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
@@ -157,6 +158,7 @@ public class TheBetweenlands {
 		registerPacket(PacketRecruitmentState.class);
 		registerPacket(PacketPlayIdleSound.class);
 		registerPacket(PacketFlightState.class);
+		registerPacket(PacketRingInput.class);
 	}
 
 	private static void registerPacket(Class<? extends IPacket> packetClass) {

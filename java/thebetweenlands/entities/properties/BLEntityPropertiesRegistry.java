@@ -5,6 +5,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.entities.properties.list.EntityPropertiesFlight;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.entities.properties.list.EntityPropertiesPortal;
+import thebetweenlands.entities.properties.list.EntityPropertiesRingInput;
 import thebetweenlands.entities.properties.list.equipment.EntityPropertiesEquipment;
 import thebetweenlands.entities.properties.list.recruitment.EntityPropertiesRecruit;
 import thebetweenlands.entities.properties.list.recruitment.EntityPropertiesRecruiter;
@@ -23,5 +24,6 @@ public class BLEntityPropertiesRegistry {
 		HANDLER.registerProperties(EntityPropertiesRecruit.class);
 		HANDLER.registerProperties(EntityPropertiesRecruiter.class);
 		HANDLER.registerProperties(EntityPropertiesFlight.class);
+		HANDLER.registerProperties(EntityPropertiesRingInput.class);
 	}
 }

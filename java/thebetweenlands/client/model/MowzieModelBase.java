@@ -27,7 +27,7 @@ public class MowzieModelBase extends ModelBase
      * Resets the rotate angles and rotation points to its original value if they were saved before.
      * Note: Call this at the beginning of setRotationAngles.
      */
-    protected void setToInitPose()
+    public void setToInitPose()
     {
         for (MowzieModelRenderer part : parts) part.setCurrentPoseToInitValues();
     }

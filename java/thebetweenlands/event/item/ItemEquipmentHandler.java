@@ -1,7 +1,5 @@
 package thebetweenlands.event.item;
 
-import java.util.List;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -47,7 +45,8 @@ public class ItemEquipmentHandler {
 	}
 
 	private void tickEquipment(World world) {
-		for(Entity entity : (List<Entity>)world.loadedEntityList) {
+		for(int i = 0; i < world.loadedEntityList.size(); i++) {
+			Entity entity = (Entity) world.loadedEntityList.get(i);
 			EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesEquipment.class);
 			if(property != null) {
 				EquipmentInventory equipmentInventory = property.getEquipmentInventory();

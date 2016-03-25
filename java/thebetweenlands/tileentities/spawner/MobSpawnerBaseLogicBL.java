@@ -144,8 +144,10 @@ public abstract class MobSpawnerBaseLogicBL {
 					EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving)entity : null;
 					entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
 
-					if (entityliving == null || entityliving.getCanSpawnHere()) {
+					if (entityliving != null && entityliving.getCanSpawnHere()) {
 						this.spawnEntity(entity);
+						entitySpawned = true;
+					} else if(entityliving == null) {
 						entitySpawned = true;
 					}
 				}

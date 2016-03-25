@@ -89,6 +89,7 @@ import thebetweenlands.client.render.entity.RenderLurker;
 import thebetweenlands.client.render.entity.RenderMeleeGuardian;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderMummyArm;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderRopeNode;
@@ -179,6 +180,7 @@ import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
+import thebetweenlands.entities.mobs.EntityMummyArm;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntitySiltCrab;
@@ -212,6 +214,7 @@ import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.gui.GuiOpenedHandler;
+import thebetweenlands.event.input.RingInputHandler;
 import thebetweenlands.event.input.radialmenu.RadialMenuHandler;
 import thebetweenlands.event.item.ItemNBTExclusionHandler;
 import thebetweenlands.event.item.ItemTooltipHandler;
@@ -373,6 +376,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, new RenderChiromaw());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, new RenderPyrad());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, new RenderPyradFlame(1F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, new RenderMummyArm());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
@@ -489,6 +493,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(RadialMenuHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RadialMenuHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(GuiOpenedHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(RingInputHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(

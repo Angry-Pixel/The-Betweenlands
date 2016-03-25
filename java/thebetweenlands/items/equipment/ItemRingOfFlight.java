@@ -139,7 +139,7 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 		if(result != null && result.typeOfHit == MovingObjectType.BLOCK) {
 			return result.hitVec.yCoord;
 		}
-		return 512.0D;
+		return -512.0D;
 	}
 
 	public boolean canFly(EntityPlayer player, ItemStack stack) {

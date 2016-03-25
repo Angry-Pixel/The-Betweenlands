@@ -19,6 +19,7 @@ import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntityMummyArm;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntityShallowBreath;
@@ -96,6 +97,7 @@ public class BLEntityRegistry
 		registerEntity(42, EntityPyrad.class, "pyrad", 0x005C3D, 0x2D4231, 64, 3, true);
 		registerEntity(43, EntityPyradFlame.class, "flammeBall");
 		registerEntity(44, EntityFortressBossTeleporter.class, "fortressBossTeleporter", 64, 5, false);
+		registerEntity(45, EntityMummyArm.class, "mummyArm", 0x804E3D, 0x3D6F80, 64, 20, false);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

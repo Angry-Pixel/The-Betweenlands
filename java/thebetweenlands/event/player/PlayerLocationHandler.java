@@ -60,7 +60,6 @@ public class PlayerLocationHandler {
 		return locations;
 	}
 
-	@SideOnly(Side.CLIENT)
 	private TextContainer titleContainer = null;
 	private String currentLocation = "";
 	private int titleTicks = 0;

@@ -12,10 +12,17 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.entities.ICameraOffset;
 import thebetweenlands.entities.IScreenShake;
+import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
+import thebetweenlands.entities.properties.list.EntityPropertiesRingInput;
+import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
+import thebetweenlands.entities.properties.list.equipment.Equipment;
+import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
+import thebetweenlands.items.BLItemRegistry;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
@@ -51,6 +58,26 @@ public class CameraPositionHandler {
 			if(entity instanceof ICameraOffset)
 				offsetEntities.add((ICameraOffset)entity);
 		}
+
+
+		//Ring of Summoning
+		for(EntityPlayer player : (List<EntityPlayer>)renderViewEntity.worldObj.playerEntities) {
+			if(player.getDistanceToEntity(renderViewEntity) < 32.0D) {
+				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
+				for(Equipment equipment : equipmentInventory.getEquipment(EnumEquipmentCategory.RING)) {
+					if(equipment.item.getItem() == BLItemRegistry.ringOfSummoning) {
+						EntityPropertiesRingInput prop = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesRingInput.class);
+						if(prop != null) {
+							if(prop.isInUse()) {
+								shakeStrength += 0.1F;
+							}
+						}
+					}
+				}
+			}
+		}
+
+
 
 		boolean shouldChange = shakeStrength > 0.0F || !offsetEntities.isEmpty();
 

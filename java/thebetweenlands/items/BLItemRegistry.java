@@ -1,5 +1,9 @@
 package thebetweenlands.items;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
@@ -9,9 +13,25 @@ import net.minecraft.util.StatCollector;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.entities.mobs.*;
+import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityDragonFly;
+import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityLeech;
+import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntitySludge;
+import thebetweenlands.entities.mobs.EntitySporeling;
+import thebetweenlands.entities.mobs.EntitySwampHag;
+import thebetweenlands.entities.mobs.EntityTermite;
+import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.gemcircle.CircleGem;
-import thebetweenlands.items.armor.*;
+import thebetweenlands.items.armor.ItemArmorOfLegends;
+import thebetweenlands.items.armor.ItemBoneArmor;
+import thebetweenlands.items.armor.ItemImprovedRubberBoots;
+import thebetweenlands.items.armor.ItemLurkerSkinArmor;
+import thebetweenlands.items.armor.ItemRubberBoots;
+import thebetweenlands.items.armor.ItemSkullMask;
+import thebetweenlands.items.armor.ItemSyrmoriteArmor;
+import thebetweenlands.items.armor.ItemValoniteArmor;
 import thebetweenlands.items.block.ItemBLDoor;
 import thebetweenlands.items.bow.EnumArrowType;
 import thebetweenlands.items.bow.ItemBLArrow;
@@ -22,23 +42,67 @@ import thebetweenlands.items.equipment.ItemAmulet;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.items.equipment.ItemRingOfRecruitment;
-import thebetweenlands.items.food.*;
-import thebetweenlands.items.herblore.*;
+import thebetweenlands.items.equipment.ItemRingOfSummoning;
+import thebetweenlands.items.food.ItemBLFood;
+import thebetweenlands.items.food.ItemBlackHatMushroom;
+import thebetweenlands.items.food.ItemBulbCappedMushroom;
+import thebetweenlands.items.food.ItemFlatheadMushroom;
+import thebetweenlands.items.food.ItemForbiddenFig;
+import thebetweenlands.items.food.ItemGertsDonut;
+import thebetweenlands.items.food.ItemMarshmallow;
+import thebetweenlands.items.food.ItemMarshmallowPink;
+import thebetweenlands.items.food.ItemNettleSoup;
+import thebetweenlands.items.food.ItemRottenFood;
+import thebetweenlands.items.food.ItemSapBall;
+import thebetweenlands.items.food.ItemSapJello;
+import thebetweenlands.items.food.ItemWeepingBluePetal;
+import thebetweenlands.items.food.ItemWightHeart;
+import thebetweenlands.items.herblore.ItemAspectVial;
+import thebetweenlands.items.herblore.ItemDentrothystVial;
+import thebetweenlands.items.herblore.ItemElixir;
+import thebetweenlands.items.herblore.ItemGenericCrushed;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.lanterns.ItemConnectionFairyLights;
 import thebetweenlands.items.lanterns.ItemLight;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemLore;
 import thebetweenlands.items.loot.ItemVoodooDoll;
-import thebetweenlands.items.misc.*;
+import thebetweenlands.items.misc.ItemAmuletSlot;
+import thebetweenlands.items.misc.ItemBLRecord;
+import thebetweenlands.items.misc.ItemBLSign;
+import thebetweenlands.items.misc.ItemCavingRope;
+import thebetweenlands.items.misc.ItemGem;
+import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.misc.ItemHLBook;
+import thebetweenlands.items.misc.ItemLifeCrystal;
+import thebetweenlands.items.misc.ItemManual;
+import thebetweenlands.items.misc.ItemMob;
+import thebetweenlands.items.misc.ItemMossBed;
+import thebetweenlands.items.misc.ItemRope;
+import thebetweenlands.items.misc.ItemShockwaveSword;
+import thebetweenlands.items.misc.ItemSpawnEggs;
+import thebetweenlands.items.misc.ItemSwampTalisman;
+import thebetweenlands.items.misc.ItemTestItem;
+import thebetweenlands.items.misc.ItemTestItem2;
+import thebetweenlands.items.misc.ItemVolarPad;
+import thebetweenlands.items.misc.ItemWeedwoodRowboat;
 import thebetweenlands.items.throwable.ItemAngryPebble;
 import thebetweenlands.items.throwable.ItemShimmerStone;
 import thebetweenlands.items.throwable.ItemTarminion;
-import thebetweenlands.items.tools.*;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import thebetweenlands.items.tools.ItemAxeBL;
+import thebetweenlands.items.tools.ItemLootSword;
+import thebetweenlands.items.tools.ItemNet;
+import thebetweenlands.items.tools.ItemPestle;
+import thebetweenlands.items.tools.ItemPickaxeBL;
+import thebetweenlands.items.tools.ItemSickle;
+import thebetweenlands.items.tools.ItemSpadeBL;
+import thebetweenlands.items.tools.ItemSwiftPick;
+import thebetweenlands.items.tools.ItemSwordBL;
+import thebetweenlands.items.tools.ItemSyrmoriteShears;
+import thebetweenlands.items.tools.ItemWeedwoodBucket;
+import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
+import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 
 
 public class BLItemRegistry {
@@ -230,6 +294,7 @@ public class BLItemRegistry {
 	public static final Item ringOfPower = new ItemRingOfPower();
 	public static final Item ringOfRecruitment = new ItemRingOfRecruitment();
 	public static final Item ringOfFlight = new ItemRingOfFlight();
+	public static final Item ringOfSummoning = new ItemRingOfSummoning();
 	private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
 	private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 
@@ -247,7 +312,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
