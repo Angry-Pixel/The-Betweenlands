@@ -52,7 +52,7 @@ extends WorldProvider
 	public float[] originalLightBrightnessTable = new float[16];
 
 	public WorldProviderBetweenlands() {
-		this.hasNoSky = false;
+		this.hasNoSky = true;
 	}
 	
 	@Override
