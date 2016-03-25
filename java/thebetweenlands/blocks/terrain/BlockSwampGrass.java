@@ -82,18 +82,17 @@ extends Block implements IGrowable {
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		if (!world.isRemote) {
-			if (world.getBlockLightValue(x, y + 1, z) < 4 && world.getBlockLightOpacity(x, y + 1, z) > 2) {
+			if (world.getBlockLightOpacity(x, y + 1, z) > 2) {
 				world.setBlock(x, y, z, BLBlockRegistry.swampDirt);
-			} else if (world.getBlockLightValue(x, y + 1, z) >= 9) {
+			} else {
 				for (int l = 0; l < 4; ++l) {
 					int xTarget = x + rand.nextInt(3) - 1;
 					int yTarget = y + rand.nextInt(5) - 3;
 					int zTarget = z + rand.nextInt(3) - 1;
 					Block block = world.getBlock(xTarget, yTarget + 1, zTarget);
 
-					if (world.getBlock(xTarget, yTarget, zTarget) == Blocks.dirt
+					if (world.getBlock(xTarget, yTarget, zTarget) == BLBlockRegistry.swampDirt
 							&& world.getBlockMetadata(xTarget, yTarget, zTarget) == 0
-							&& world.getBlockLightValue(xTarget, yTarget + 1, zTarget) >= 4
 							&& world.getBlockLightOpacity(xTarget, yTarget + 1, zTarget) <= 2) {
 						world.setBlock(xTarget, yTarget, zTarget, BLBlockRegistry.swampGrass);
 					}

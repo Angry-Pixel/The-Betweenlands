@@ -51,6 +51,10 @@ extends WorldProvider
 
 	public float[] originalLightBrightnessTable = new float[16];
 
+	public WorldProviderBetweenlands() {
+		this.hasNoSky = false;
+	}
+	
 	@Override
 	public boolean canRespawnHere() {
 		return true;

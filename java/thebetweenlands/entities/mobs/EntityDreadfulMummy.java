@@ -383,6 +383,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 	@Override
 	protected void dropFewItems(boolean killedByPlayer, int looting) {
 		this.dropItem(BLItemRegistry.ringOfSummoning, 1);
-		this.dropItem(BLItemRegistry.shimmerStone, this.worldObj.rand.nextInt(3) + 1 + this.worldObj.rand.nextInt(looting + 1) * 2);
+		for(int i = 0; i < this.worldObj.rand.nextInt(3) + 1 + this.worldObj.rand.nextInt(looting + 1) * 2; i++) {
+			this.dropItem(BLItemRegistry.shimmerStone, 1);
+		}
 	}
 }

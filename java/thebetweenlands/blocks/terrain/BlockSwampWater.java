@@ -43,14 +43,15 @@ public class BlockSwampWater extends BlockFluidClassic {
 
 	private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<Block, IWaterRenderer>();
 
-	public BlockSwampWater() {
-		super(BLFluidRegistry.swampWater, Material.water);
-		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-		setBlockName("thebetweenlands.swampWater");
-	}
-
 	public BlockSwampWater(Fluid fluid, Material material) {
 		super(fluid, material);
+		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		setBlockName("thebetweenlands.swampWater");
+		this.setMaxScaledLight(0);
+	}
+	
+	public BlockSwampWater() {
+		this(BLFluidRegistry.swampWater, Material.water);
 	}
 
 	public BlockSwampWater setSpecialRenderer(IWaterRenderer renderer) {

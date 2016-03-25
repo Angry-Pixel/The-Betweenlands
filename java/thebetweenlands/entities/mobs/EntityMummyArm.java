@@ -132,9 +132,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 						} else {
 							damageSource = DamageSource.causeMobDamage(this);
 						}
-						if(target.attackEntityFrom(damageSource, 2.0F)) {
-							this.despawnTicks = 0;
-						}
+						target.attackEntityFrom(damageSource, 2.0F);
 						if(this.attackSwing <= 0)
 							this.attackSwing = 20;
 					}
