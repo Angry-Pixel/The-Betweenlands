@@ -716,6 +716,12 @@ item.item.thebetweenlands.elixir.name=Elixir
 item.item.thebetweenlands.dentrothystVial.name=Dentrothyst Vial
 item.item.thebetweenlands.aspectVial.name=Aspect Vial
 
+#Lore
+item.thebetweenlands.lore.them=Lurking Shadows
+item.thebetweenlands.expedition.expedition=Expedition of Elcanrab
+item.thebetweenlands.mutants.them=Mutants of Terror
+item.thebetweenlands.shadows.them=Note from a Fallen Shadow
+
 # Elixirs
 bl.elixir.petrify=Petrify
 bl.elixir.strength=Elixir of Strength
