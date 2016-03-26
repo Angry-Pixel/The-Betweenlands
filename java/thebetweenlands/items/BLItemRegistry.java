@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
@@ -85,7 +83,7 @@ import thebetweenlands.items.misc.ItemSpawnEggs;
 import thebetweenlands.items.misc.ItemSwampTalisman;
 import thebetweenlands.items.misc.ItemTestItem;
 import thebetweenlands.items.misc.ItemTestItem2;
-import thebetweenlands.items.misc.ItemVolarPad;
+import thebetweenlands.items.misc.ItemVolarkite;
 import thebetweenlands.items.misc.ItemWeedwoodRowboat;
 import thebetweenlands.items.throwable.ItemAngryPebble;
 import thebetweenlands.items.throwable.ItemShimmerStone;
@@ -103,6 +101,8 @@ import thebetweenlands.items.tools.ItemSyrmoriteShears;
 import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -244,7 +244,7 @@ public class BLItemRegistry {
 	public static final Item manualGuideBook = new ItemManual().setUnlocalizedName("thebetweenlands.manual").setTextureName("thebetweenlands:manual");
 	public static final Item manualHL = new ItemHLBook().setUnlocalizedName("thebetweenlands.manualHL").setTextureName("thebetweenlands:manualHL");
 	public static final Item tarminion = new ItemTarminion().setUnlocalizedName("thebetweenlands.tarminion");
-	public static final Item volarPad = new ItemVolarPad().setMaxDamage(200);
+	public static final Item volarkite = new ItemVolarkite().setMaxDamage(200);
 	public static final Item weedwoodRowboat = new ItemWeedwoodRowboat();
 	public static final ItemRope rope = new ItemRope();
 	public static final Item fireFly = new ItemMob("fireFly");
@@ -305,7 +305,7 @@ public class BLItemRegistry {
 	}
 
 	private static void initCreativeTabs() {
-		BLCreativeTabs.items.setTab(lore, net, rope, weedwoodRowboat, volarPad, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem,
+		BLCreativeTabs.items.setTab(lore, net, rope, weedwoodRowboat, volarkite, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem,
 				blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, krakenTentacle, krakenCalamari, middleFruit, mincePie, weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, 

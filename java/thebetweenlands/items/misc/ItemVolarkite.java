@@ -10,11 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
 
-/**
- * Created by Bart on 25-9-2015.
- */
-public class ItemVolarPad extends Item implements IManualEntryItem {
-    public ItemVolarPad(){
+public class ItemVolarkite extends Item implements IManualEntryItem {
+    public ItemVolarkite(){
         maxStackSize = 1;
         setUnlocalizedName("thebetweenlands.volarkite");
     }

@@ -429,7 +429,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot1), new ItemTarLootPot1Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot2), new ItemTarLootPot2Renderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.tarLootPot3), new ItemTarLootPot3Renderer());
-		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarPad, new ItemVolarKiteRenderer());
+		MinecraftForgeClient.registerItemRenderer(BLItemRegistry.volarkite, new ItemVolarKiteRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.geckoCage), new ItemGeckoCageRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.repeller), new ItemRepellerRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.itemCage), new ItemItemCageRenderer());
