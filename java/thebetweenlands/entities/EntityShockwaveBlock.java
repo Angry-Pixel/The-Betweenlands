@@ -27,11 +27,6 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 	}
 
 	@Override
-	public boolean isAIEnabled() {
-		return true;
-	}
-
-	@Override
 	public void onUpdate() {
 		if (!worldObj.isRemote) {
 			if (ticksExisted <= 3)
