@@ -312,7 +312,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, manualGuideBook, manualHL, tarminion, 
+				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, sludgeSlicer, critterCruncher, hagHacker, manualGuideBook, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
