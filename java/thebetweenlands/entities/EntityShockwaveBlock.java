@@ -4,8 +4,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
@@ -44,7 +46,6 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 				if (posY <= originY) {
 					worldObj.setBlock(originX, originY, originZ, blockID, blockMeta, 3);
 					setDead();
-
 				}
 			}
 		}
@@ -54,6 +55,12 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 	@Override
 	protected void collideWithEntity(Entity entity) {
 		super.collideWithEntity(entity);
+		if (entity != null)
+			if (entity instanceof EntityLivingBase && !(entity instanceof EntityShockwaveBlock)) {
+				float Knockback = 0.5F;
+				entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) entity), 10F);
+				entity.addVelocity(-MathHelper.sin(entity.rotationYaw * -3.141593F + worldObj.rand.nextInt(3) + 0.141593F / 180.0F) * Knockback, 0.25D, MathHelper.cos(entity.rotationYaw * -3.141593F + worldObj.rand.nextInt(3) + 0.141593F / 180.0F) * Knockback);
+			}
 	}
 
 	@Override

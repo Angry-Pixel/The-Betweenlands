@@ -39,8 +39,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
-			int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		if (!stack.hasTagCompound()) {
 			stack.stackTagCompound = new NBTTagCompound();
 			return false;
@@ -52,7 +51,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 					double direction = Math.toRadians(player.rotationYaw);
 					for(int distance = 2; distance < stack.getTagCompound().getInteger("charge"); distance++) {
 						int originX = (MathHelper.floor_double(player.posX - Math.sin(direction) * distance));
-						int originY = MathHelper.floor_double(player.posY - 1);
+						int originY = y;
 						int originZ	= MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
 						Block block = world.getBlock(originX, originY, originZ);
 					
