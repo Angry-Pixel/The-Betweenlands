@@ -78,6 +78,17 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	}
 
 	@Override
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		this.corrosionIcons = corrosionIcons[0];
+		for(int i = 0; i < this.gemTextureIcons.length; i++) {
+			IIcon gemTextureIcon = this.gemTextureIcons[i][0];
+			if(gemTextureIcon != null) {
+				this.gemTextureIcons[i] = corrosionIcons[i + 1];
+			}
+		}
+	}
+	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister register) {
 		super.registerIcons(register);
@@ -85,17 +96,6 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 			String gemTexture = this.gemTextures[i];
 			if(gemTexture != null) {
 				this.gemTextureIcons[i][0] = register.registerIcon(gemTexture);
-			}
-		}
-	}
-
-	@Override
-	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
-		this.corrosionIcons = corrosionIcons[0];
-		for(int i = 0; i < this.gemTextureIcons.length; i++) {
-			IIcon gemTextureIcon = this.gemTextureIcons[i][0];
-			if(gemTextureIcon != null) {
-				this.gemTextureIcons[i] = corrosionIcons[i + 1];
 			}
 		}
 	}

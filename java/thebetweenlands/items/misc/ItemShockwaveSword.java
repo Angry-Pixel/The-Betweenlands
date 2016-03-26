@@ -1,5 +1,7 @@
 package thebetweenlands.items.misc;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -11,38 +13,54 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntityShockwaveBlock;
 import thebetweenlands.items.tools.ItemSwordBL;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.utils.CorrodibleItemHelper;
 
 public class ItemShockwaveSword extends ItemSwordBL {
 
 	@SideOnly(Side.CLIENT)
-	private IIcon icon, iconCharging;
+	private IIcon iconCharging;
+
+	@SideOnly(Side.CLIENT)
+	private IIcon[] iconsChargingCorroded;
 
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
-        setUnlocalizedName("thebetweenlands.shockwaveSword");
+		setUnlocalizedName("thebetweenlands.shockwaveSword");
+		setTextureName("thebetweenlands:shockwaveSword");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
 		super.registerIcons(reg);
-		icon = reg.registerIcon("thebetweenlands:shockwaveSword");
-		iconCharging = reg.registerIcon("thebetweenlands:shockwaveSwordDepleted");
+		this.iconCharging = reg.registerIcon("thebetweenlands:shockwaveSwordDepleted");
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public  IIcon getIcon(ItemStack stack, int pass) {
-		super.getIcon(stack, pass);
+	@Override
+	public IIcon getIconIndex(ItemStack stack) {
 		if (!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
 		if (!stack.getTagCompound().hasKey("uses"))
 			stack.getTagCompound().setInteger("uses", 0);
 		if(stack.getTagCompound().getInteger("uses") == 3)
-			return iconCharging;
-		return icon;
+			return this.iconsChargingCorroded[CorrodibleItemHelper.getCorrosionStage(stack)];
+		return super.getIconIndex(stack);
+	}
+
+	@Override
+	public IIcon[] getIcons() {
+		IIcon[] defaultIcons = super.getIcons();
+		IIcon[] allIcons = new IIcon[defaultIcons.length + 1];
+		System.arraycopy(defaultIcons, 0, allIcons, 0, defaultIcons.length);
+		allIcons[allIcons.length - 1] = this.iconCharging;
+		return allIcons;
+	}
+
+	@Override
+	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
+		super.setCorrosionIcons(corrosionIcons);
+		this.iconsChargingCorroded = corrosionIcons[corrosionIcons.length - 1];
 	}
 
 	@Override
