@@ -14,29 +14,46 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.BLMaterial;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.manual.IManualEntryItem;
 
-public class ItemLurkerSkinArmor extends ItemArmor implements IManualEntryItem{
+public class ItemLurkerSkinArmor extends ItemArmorBL implements IManualEntryItem {
 
 	public ItemLurkerSkinArmor(int armorType) {
-		super(BLMaterial.armorLurkerSkin, 2, armorType);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		if (stack.getItem() == BLItemRegistry.lurkerSkinLeggings)
-			return "thebetweenlands:textures/armour/lurker2.png";
-		else
-			return "thebetweenlands:textures/armour/lurker1.png";
+		super(BLMaterial.armorLurkerSkin, 2, armorType, "thebetweenlands:textures/armour/lurker1.png", "thebetweenlands:textures/armour/lurker2.png");
+		String itemTexture;
+		switch(armorType) {
+		default:
+		case 0:
+			itemTexture = "thebetweenlands:lurkerSkinHelmet";
+			break;
+		case 1:
+			itemTexture = "thebetweenlands:lurkerSkinChestplate";
+			break;
+		case 2:
+			itemTexture = "thebetweenlands:lurkerSkinLeggings";
+			break;
+		case 3:
+			itemTexture = "thebetweenlands:lurkerSkinBoots";
+			break;
+		}
+		this.setTextureName(itemTexture);
+		this.setGemTextures(CircleGem.AQUA, itemTexture + "AquaGem", "thebetweenlands:textures/armour/lurker1AquaGem.png", "thebetweenlands:textures/armour/lurker2AquaGem.png");
+		this.setGemTextures(CircleGem.CRIMSON, itemTexture + "CrimsonGem", "thebetweenlands:textures/armour/lurker1CrimsonGem.png", "thebetweenlands:textures/armour/lurker2CrimsonGem.png");
+		this.setGemTextures(CircleGem.GREEN, itemTexture + "GreenGem", "thebetweenlands:textures/armour/lurker1GreenGem.png", "thebetweenlands:textures/armour/lurker2GreenGem.png");
 	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack armour, ItemStack material) {
 		return material.getItem() == BLItemRegistry.itemsGeneric && material.getItemDamage() == EnumItemGeneric.LURKER_SKIN.id;
+	}
+	
+	@Override
+	protected boolean isLeggings(ItemStack stack) {
+		return stack.getItem() == BLItemRegistry.lurkerSkinLeggings;
 	}
 
 	@Override

@@ -166,10 +166,10 @@ public class BLItemRegistry {
 	public static final ItemGem crimsonMiddleGem = new ItemGem("crimsonMiddleGem", CircleGem.CRIMSON);
 	public static final ItemGem greenMiddleGem = new ItemGem("greenMiddleGem", CircleGem.GREEN);
 	// MISC ARMOUR
-	public static final Item lurkerSkinHelmet = new ItemLurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet").setTextureName("thebetweenlands:lurkerSkinHelmet");
-	public static final Item lurkerSkinChestplate = new ItemLurkerSkinArmor(1).setUnlocalizedName("thebetweenlands.lurkerSkinChestplate").setTextureName("thebetweenlands:lurkerSkinChestplate");
-	public static final Item lurkerSkinLeggings = new ItemLurkerSkinArmor(2).setUnlocalizedName("thebetweenlands.lurkerSkinLeggings").setTextureName("thebetweenlands:lurkerSkinLeggings");
-	public static final Item lurkerSkinBoots = new ItemLurkerSkinArmor(3).setUnlocalizedName("thebetweenlands.lurkerSkinBoots").setTextureName("thebetweenlands:lurkerSkinBoots");
+	public static final Item lurkerSkinHelmet = new ItemLurkerSkinArmor(0).setUnlocalizedName("thebetweenlands.lurkerSkinHelmet");
+	public static final Item lurkerSkinChestplate = new ItemLurkerSkinArmor(1).setUnlocalizedName("thebetweenlands.lurkerSkinChestplate");
+	public static final Item lurkerSkinLeggings = new ItemLurkerSkinArmor(2).setUnlocalizedName("thebetweenlands.lurkerSkinLeggings");
+	public static final Item lurkerSkinBoots = new ItemLurkerSkinArmor(3).setUnlocalizedName("thebetweenlands.lurkerSkinBoots");
 	public static final Item boneHelmet = new ItemBoneArmor(0).setUnlocalizedName("thebetweenlands.boneHelmet");
 	public static final Item boneChestplate = new ItemBoneArmor(1).setUnlocalizedName("thebetweenlands.boneChestplate");
 	public static final Item boneLeggings = new ItemBoneArmor(2).setUnlocalizedName("thebetweenlands.boneLeggings");
