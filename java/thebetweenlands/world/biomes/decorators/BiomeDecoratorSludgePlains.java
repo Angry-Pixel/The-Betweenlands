@@ -13,14 +13,12 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBaseBetweenlands {
         helper.populateCave();
         helper.generateTarPool(100);
         helper.generateSmallHollowLog(5);
-        helper.generateSmallRuins(2);
         helper.generateSmalWeedwoodTree(4);
+        helper.generateMudStructures(8);
 		helper.generateSludgecreep(50);
 		helper.generateDeadWeedwoodBush(10);
-        helper.generateDungeon(1);
         helper.generateRoots(10.0D, 2);
         helper.generateStagnantWaterPool(5);
         helper.generateUnderGroundStructures(100);
-        helper.generateMudStructures(8);
     }
 }
