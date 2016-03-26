@@ -12,9 +12,26 @@ public class ItemBoneArmor extends ItemArmorBL implements IManualEntryItem {
 
 	public ItemBoneArmor(int armorType) {
 		super(BLMaterial.armorBone, 2, armorType, "thebetweenlands:textures/armour/bone1.png", "thebetweenlands:textures/armour/bone2.png");
-		this.setGemTextures(CircleGem.AQUA, "thebetweenlands:textures/armour/bone1AquaGem.png", "thebetweenlands:textures/armour/bone2AquaGem.png");
-		this.setGemTextures(CircleGem.CRIMSON, "thebetweenlands:textures/armour/bone1CrimsonGem.png", "thebetweenlands:textures/armour/bone2CrimsonGem.png");
-		this.setGemTextures(CircleGem.GREEN, "thebetweenlands:textures/armour/bone1GreenGem.png", "thebetweenlands:textures/armour/bone2GreenGem.png");
+		String itemTexture;
+		switch(armorType) {
+		default:
+		case 0:
+			itemTexture = "thebetweenlands:boneHelmet";
+			break;
+		case 1:
+			itemTexture = "thebetweenlands:boneChestplate";
+			break;
+		case 2:
+			itemTexture = "thebetweenlands:boneLeggings";
+			break;
+		case 3:
+			itemTexture = "thebetweenlands:boneBoots";
+			break;
+		}
+		this.setTextureName(itemTexture);
+		this.setGemTextures(CircleGem.AQUA, itemTexture + "AquaGem", "thebetweenlands:textures/armour/bone1AquaGem.png", "thebetweenlands:textures/armour/bone2AquaGem.png");
+		this.setGemTextures(CircleGem.CRIMSON, itemTexture + "CrimsonGem", "thebetweenlands:textures/armour/bone1CrimsonGem.png", "thebetweenlands:textures/armour/bone2CrimsonGem.png");
+		this.setGemTextures(CircleGem.GREEN, itemTexture + "GreenGem", "thebetweenlands:textures/armour/bone1GreenGem.png", "thebetweenlands:textures/armour/bone2GreenGem.png");
 	}
 
 	@Override
