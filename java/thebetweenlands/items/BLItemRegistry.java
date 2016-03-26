@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
@@ -60,8 +62,6 @@ import thebetweenlands.items.herblore.ItemDentrothystVial;
 import thebetweenlands.items.herblore.ItemElixir;
 import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
-import thebetweenlands.items.lanterns.ItemConnectionFairyLights;
-import thebetweenlands.items.lanterns.ItemLight;
 import thebetweenlands.items.loot.ItemExplorerHat;
 import thebetweenlands.items.loot.ItemLore;
 import thebetweenlands.items.loot.ItemVoodooDoll;
@@ -101,8 +101,6 @@ import thebetweenlands.items.tools.ItemSyrmoriteShears;
 import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -158,9 +156,6 @@ public class BLItemRegistry {
 	public static final Item syrmoriteShears = new ItemSyrmoriteShears();
 	public static final Item net = new ItemNet();
 	public static final Item shockwaveSword = new ItemShockwaveSword(BLMaterial.toolValonite);
-	//LANTERN
-	public static final Item light = new ItemLight();
-	public static final Item fairyLights = new ItemConnectionFairyLights();
 	// GEMS
 	public static final ItemGem aquaMiddleGem = new ItemGem("aquaMiddleGem", CircleGem.AQUA);
 	public static final ItemGem crimsonMiddleGem = new ItemGem("crimsonMiddleGem", CircleGem.CRIMSON);
@@ -312,7 +307,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, sludgeSlicer, critterCruncher, hagHacker, manualGuideBook, manualHL, tarminion, 
+				testItem, testItem2, spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, sludgeSlicer, critterCruncher, hagHacker, manualHL, tarminion, 
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 

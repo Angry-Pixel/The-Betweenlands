@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPressurePlate;
 import net.minecraft.block.material.Material;
@@ -41,8 +44,6 @@ import thebetweenlands.blocks.container.BlockTarLootPot2;
 import thebetweenlands.blocks.container.BlockTarLootPot3;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.blocks.container.repeller.BlockRepeller;
-import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
-import thebetweenlands.blocks.lanterns.BlockConnectionFastenerFence;
 import thebetweenlands.blocks.ores.BlockGenericOre;
 import thebetweenlands.blocks.ores.BlockMiddleGemOre;
 import thebetweenlands.blocks.plants.BlockAlgae;
@@ -87,7 +88,6 @@ import thebetweenlands.blocks.structure.BlockDruidStone;
 import thebetweenlands.blocks.structure.BlockItemCage;
 import thebetweenlands.blocks.structure.BlockPossessedBlock;
 import thebetweenlands.blocks.structure.BlockSpikeTrap;
-import thebetweenlands.blocks.structure.BlockSpookyBetweenstoneBrick;
 import thebetweenlands.blocks.structure.BlockTarBeastSpawner;
 import thebetweenlands.blocks.terrain.BlockBLFallenLeaves;
 import thebetweenlands.blocks.terrain.BlockBetweenlandsBedrock;
@@ -133,9 +133,6 @@ import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
 import thebetweenlands.world.feature.trees.WorldGenRubberTree;
 import thebetweenlands.world.feature.trees.WorldGenSapTree;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodTree;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BLBlockRegistry {
 	// LIST WITH ALL BLOCKS IN THIS CLASS
@@ -313,9 +310,6 @@ public class BLBlockRegistry {
 	public static final Block wallPlants = new BlockWallPlants();
 	public static final Block bulbCappedMushroomStalk = new BlockBlubCappedMushroomStalk();
 	public static final Block bulbCappedMushroomTop = new BlockBlubCappedMushroomHead();
-	//LANTERN
-	public static final Block connectionFastener = new BlockConnectionFastener();
-	public static final Block connectionFastenerFence = new BlockConnectionFastenerFence();
 	// CROPS
 	public static final BlockBLGenericCrop middleFruitBush = new BlockBLGenericCrop("middleFruitBush"){
 		@Override

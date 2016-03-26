@@ -125,10 +125,6 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
 		return this;
 	}
 
-	public void addMeteorLightBox(float posX, float posY, float posZ, int width, int height, int depth, int type) {
-		cubeList.add(new ModelMeteorLightBox(this, textureOffsetX, textureOffsetY, posX, posY, posZ, width, height, depth, type));
-	}
-
 	@SideOnly(Side.CLIENT)
 	protected void compileDisplayList(float scale) {
 		displayList = GLAllocation.generateDisplayLists(1);

@@ -11,14 +11,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
-import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
@@ -56,7 +53,6 @@ import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityBush;
 import thebetweenlands.tileentities.TileEntityCompostBin;
-import thebetweenlands.tileentities.TileEntityConnectionFastener;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
@@ -128,7 +124,6 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectCrop");
 		registerTileEntity(TileEntityBLSign.class, "signBL");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
-		registerTileEntity(TileEntityConnectionFastener.class, "fairyLightsFastener");
 		registerTileEntity(TileEntityPossessedBlock.class, "possessedBlock");
 		registerTileEntity(TileEntitySpikeTrap.class, "spikeTrap");
 		registerTileEntity(TileEntityItemCage.class, "itemCage");
@@ -320,14 +315,6 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public ModelBiped getExplorersHatModel() {
-		return null;
-	}
-
-	public float getCatenaryOffset(EntityPlayer player) {
-		return 0;
-	}
-
-	public ItemStack getFairyLightsFastenerPickBlock(MovingObjectPosition target, World world, int x, int y, int z, BlockConnectionFastener block) {
 		return null;
 	}
 }

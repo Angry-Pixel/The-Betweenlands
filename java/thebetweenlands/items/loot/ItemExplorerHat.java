@@ -1,13 +1,13 @@
 package thebetweenlands.items.loot;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.items.BLMaterial;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.manual.IManualEntryItem;
 
@@ -15,7 +15,7 @@ public class ItemExplorerHat extends ItemArmor implements IManualEntryItem {
 	private static final String TEXTURE = ModInfo.ID + ":textures/armour/explorerHat.png";
 
 	public ItemExplorerHat() {
-		super(ArmorMaterial.CLOTH, 2, 0);
+		super(BLMaterial.armorBLCloth, 2, 0);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ItemExplorerHat extends ItemArmor implements IManualEntryItem {
 
 	@Override
 	public ArmorMaterial getArmorMaterial() {
-		return ArmorMaterial.CHAIN;
+		return BLMaterial.armorBLCloth;
 	}
 
 	@Override

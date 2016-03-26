@@ -812,6 +812,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 				}
 				
 				this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
+				this.dropItem(BLItemRegistry.amuletSlot, 1);
 				
 				this.setDead();
 			}

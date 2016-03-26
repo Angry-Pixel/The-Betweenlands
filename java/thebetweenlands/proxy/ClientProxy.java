@@ -5,6 +5,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
@@ -20,9 +27,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
@@ -30,7 +34,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.blocks.lanterns.BlockConnectionFastener;
 import thebetweenlands.client.audio.SuperbSoundRegistry;
 import thebetweenlands.client.audio.ambience.AmbienceRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
@@ -45,7 +48,6 @@ import thebetweenlands.client.model.block.crops.ModelCropFungus3;
 import thebetweenlands.client.model.block.crops.ModelCropFungus4;
 import thebetweenlands.client.model.block.crops.ModelCropFungus5;
 import thebetweenlands.client.model.item.ModelExplorersHat;
-import thebetweenlands.client.render.ConnectionRenderer;
 import thebetweenlands.client.render.block.BlockBLHopperRenderer;
 import thebetweenlands.client.render.block.BlockBLLeverRenderer;
 import thebetweenlands.client.render.block.BlockDoorRenderer;
@@ -239,7 +241,6 @@ import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityCompostBin;
-import thebetweenlands.tileentities.TileEntityConnectionFastener;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
 import thebetweenlands.tileentities.TileEntityInfuser;
@@ -259,19 +260,9 @@ import thebetweenlands.tileentities.TileEntityTarLootPot2;
 import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
-import thebetweenlands.tileentities.connection.Connection;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.utils.vectormath.Point3f;
-
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -499,7 +490,6 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemNBTExclusionHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemNBTExclusionHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(new ConnectionRenderer());
 		MinecraftForge.EVENT_BUS.register(RadialMenuHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RadialMenuHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(GuiOpenedHandler.INSTANCE);
@@ -663,48 +653,5 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public ModelBiped getExplorersHatModel() {
 		return EXPLORERS_HAT_MODEL;
-	}
-
-	@Override
-	public float getCatenaryOffset(EntityPlayer player) {
-		if (player == Minecraft.getMinecraft().thePlayer) {
-			return -player.height * 0.4F;
-		} else {
-			return player.height - player.height * 0.4F;
-		}
-	}
-
-	@Override
-	public ItemStack getFairyLightsFastenerPickBlock(MovingObjectPosition target, World world, int x, int y, int z, BlockConnectionFastener block) {
-		ItemStack itemStack = new ItemStack(block.getItem(world, x, y, z));
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		TileEntity tileEntity = world.getTileEntity(x, y, z);
-		double playerX = Minecraft.getMinecraft().thePlayer.posX, playerY = Minecraft.getMinecraft().thePlayer.posY, playerZ = Minecraft.getMinecraft().thePlayer.posZ;
-		if (tileEntity instanceof TileEntityConnectionFastener) {
-			TileEntityConnectionFastener lightsFastener = (TileEntityConnectionFastener) tileEntity;
-			Connection closetConnection = null;
-			float smallestDistance = Float.MAX_VALUE;
-			for (Connection connection : lightsFastener.getConnections()) {
-				Point3f to = connection.getTo();
-				if (to == null) {
-					continue;
-				}
-				float tx = to.x, ty = to.y, tz = to.z;
-				Point3f offset = ((BlockConnectionFastener) lightsFastener.getBlockType()).getOffsetForData(lightsFastener.getBlockMetadata(), 0.125F);
-				float dist = (float) Math.abs((offset.x + tx) * (offset.x + tx) - playerX * playerX + (offset.y + ty) * (offset.y + ty) - playerY * playerY + (offset.z + tz) * (offset.z + tz) - playerZ * playerZ);
-				if (dist < smallestDistance) {
-					smallestDistance = dist;
-					closetConnection = connection;
-				}
-			}
-			if (closetConnection != null) {
-				closetConnection.writeDetailsToNBT(tagCompound);
-				itemStack.func_150996_a(closetConnection.getType().getItem());
-			}
-		}
-		if (!tagCompound.hasNoTags()) {
-			itemStack.setTagCompound(tagCompound);
-		}
-		return itemStack;
 	}
 }

@@ -15,6 +15,7 @@ public class BLMaterial extends Material {
 	public static final ToolMaterial toolLoot = EnumHelper.addToolMaterial("LOOT", 2, 7500, 2.0F, 0.5F, 5);
 	public static final ToolMaterial toolOfLegends = EnumHelper.addToolMaterial("LEGEND", 6, 10000, 16.0F, 6.0F, 20);
 
+	public static final ArmorMaterial armorBLCloth = EnumHelper.addArmorMaterial("BLCLOTH", 12, new int[] {1, 3, 2, 1}, 0);
 	public static final ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("LURKERSKIN", 12, new int[]{1, 3, 2, 1}, 0);
 	public static final ArmorMaterial armorBone = EnumHelper.addArmorMaterial("SLIMYBONE", 6, new int[] {2, 5, 3, 1}, 0);
 	public static final ArmorMaterial armorOctine = EnumHelper.addArmorMaterial("OCTINE", 16, new int[] {2, 6, 5, 2}, 0);

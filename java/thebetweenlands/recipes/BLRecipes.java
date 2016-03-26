@@ -26,19 +26,15 @@ import thebetweenlands.items.herblore.ItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericCrushed.EnumItemGenericCrushed;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
-import thebetweenlands.items.lanterns.LightVariant;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.items.misc.ItemSwampTalisman;
-import thebetweenlands.lib.ModInfo;
 import thebetweenlands.recipes.books.BookCloneRecipe;
 import thebetweenlands.recipes.books.BookMergeRecipe;
 import thebetweenlands.recipes.misc.AnimatorRecipe;
 import thebetweenlands.recipes.misc.CompostRecipe;
 import thebetweenlands.recipes.misc.DruidAltarRecipe;
 import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
-import thebetweenlands.recipes.misc.RecipeDyeColorNBT;
-import thebetweenlands.recipes.misc.RecipeFairyLights;
 import thebetweenlands.recipes.misc.RecipeImprovedRubberBoots;
 import thebetweenlands.recipes.misc.RecipesAmulets;
 import thebetweenlands.recipes.misc.RecipesAspectVials;
@@ -323,13 +319,6 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
 		RecipeSorter.register("thebetweenlands:recipeAmulets", RecipesAmulets.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAmulets());
-
-		GameRegistry.addRecipe(new RecipeFairyLights());
-		for (LightVariant variant : LightVariant.values()) {
-			GameRegistry.addRecipe(new RecipeDyeColorNBT(variant.getCraftingResult(), variant.getCraftingRecipe()));
-		}
-		RecipeSorter.register(ModInfo.ID + ":fairy_lights", RecipeFairyLights.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
-		RecipeSorter.register(ModInfo.ID + ":dye_color_nbt", RecipeDyeColorNBT.class, RecipeSorter.Category.SHAPED, "after:minecraft:shaped");
 	}
 
 	private static void registerSmelting() {

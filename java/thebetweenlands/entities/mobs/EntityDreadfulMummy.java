@@ -387,6 +387,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 		for(int i = 0; i < this.worldObj.rand.nextInt(3) + 1 + this.worldObj.rand.nextInt(looting + 1) * 2; i++) {
 			this.dropItem(BLItemRegistry.shimmerStone, 1);
 		}
+		this.dropItem(BLItemRegistry.amuletSlot, 1);
 	}
 
 	@Override
