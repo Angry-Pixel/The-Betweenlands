@@ -812,15 +812,6 @@
 			}
 		]
 	},
-	"records.MarshFire": {
-		"catagory": "record",
-		"sounds": [
-			{
-				"name": "records/MarshFire",
-				"stream": true
-			}
-		]
-	},
 	"records.TheExplorer": {
 		"catagory": "record",
 		"sounds": [
