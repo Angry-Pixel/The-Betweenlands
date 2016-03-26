@@ -23,6 +23,7 @@ public class RenderShockwaveBlock extends Render {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 		GL11.glTranslatef(0.0F, 0.5F, 0.0F);
+		GL11.glRotated(-90, 0, 1, 0);
 		bindTexture(TextureMap.locationBlocksTexture);
 		blockRenderer.renderBlockAsItem(entity.blockID, entity.blockMeta, 1.0F);
 		GL11.glPopMatrix();

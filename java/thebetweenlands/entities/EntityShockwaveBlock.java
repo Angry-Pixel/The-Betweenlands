@@ -1,28 +1,30 @@
 package thebetweenlands.entities;
 
+import java.util.List;
+
+import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditionalSpawnData {
+public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpawnData {
 
 	public Block blockID;
 	public int blockMeta;
 	public int originX, originY, originZ, jumpDelay;
+	private double waveStartX, waveStartZ;
 
 	public EntityShockwaveBlock(World world) {
 		super(world);
-		setSize(0.9F, 0.9F);
+		setSize(1.0F, 1.0F);
 		setBlock(Blocks.stone, 0);
-		experienceValue = 0;
 	}
 
 	public void setBlock(Block blockID, int blockMeta) {
@@ -32,78 +34,117 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 
 	@Override
 	public void onUpdate() {
-		motionX = 0;
-		motionZ = 0;
-		posX = lastTickPosX;
-		posZ = lastTickPosZ;
-		if (!worldObj.isRemote) {
-			if (ticksExisted == jumpDelay)
-				motionY += 0.5D;
-			
-			if (ticksExisted > jumpDelay) {
-				motionY -= 0.15D;
+		this.motionX = 0;
+		this.motionZ = 0;
+		this.posX = this.lastTickPosX;
+		this.posZ = this.lastTickPosZ;
+		this.isAirBorne = true;
+		if (!this.worldObj.isRemote) {
+			if (this.ticksExisted == this.jumpDelay) {
+				this.motionY += 0.5D;
+			}
 
-				if (posY <= originY) {
-					worldObj.setBlock(originX, originY, originZ, blockID, blockMeta, 3);
-					setDead();
+			if (this.ticksExisted > this.jumpDelay) {
+				this.motionY -= 0.15D;
+
+				if (this.posY <= this.originY) {
+					this.worldObj.setBlock(this.originX, this.originY, this.originZ, this.blockID, this.blockMeta, 3);
+					this.setDead();
 				}
 			}
 		}
-		super.onUpdate();
+
+		if(this.motionY > 0.1D && !this.worldObj.isRemote) {
+			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox);
+			for(EntityLivingBase entity : entities) {
+				if (entity != null) {
+					if (entity instanceof EntityLivingBase) {
+						if(entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) entity), 10F)) {
+							float knockback = 1.5F;
+							Vec3 dir = Vec3.createVectorHelper(this.posX - this.waveStartX, 0, this.posZ - this.waveStartZ);
+							dir = dir.normalize();
+							entity.motionX = dir.xCoord * knockback;
+							entity.motionY = 0.5D;
+							entity.motionZ = dir.zCoord * knockback;
+						}
+					}
+				}
+			}
+		}
+
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 	}
 
 	@Override
 	public boolean handleWaterMovement() {
 		return false;
 	}
-	 
 
 	@Override
-	protected void collideWithEntity(Entity entity) {
-		super.collideWithEntity(entity);
-		if (entity != null)
-			if (entity instanceof EntityLivingBase && !(entity instanceof EntityShockwaveBlock)) {
-				float Knockback = 0.5F;
-				entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase) entity), 10F);
-				entity.addVelocity(-MathHelper.sin(entity.rotationYaw * -3.141593F + worldObj.rand.nextInt(3) + 0.141593F / 180.0F) * Knockback, 0.25D, MathHelper.cos(entity.rotationYaw * -3.141593F + worldObj.rand.nextInt(3) + 0.141593F / 180.0F) * Knockback);
-			}
+	protected boolean canTriggerWalking() {
+		return false;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBox(Entity entity) {
+		return null;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox() {
+		return this.boundingBox;
 	}
 
 	@Override
 	public boolean canBePushed() {
-		return true;
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound data) {
-		super.writeEntityToNBT(data);
-		data.setInteger("blockID", Block.getIdFromBlock(blockID));
-		data.setInteger("blockMeta", blockMeta);
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound data) {
-		super.readEntityFromNBT(data);
-		blockID = Block.getBlockById(data.getInteger("blockID"));
-		blockMeta = data.getInteger("blockMeta");
+		return false;
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		data.writeInt(Block.getIdFromBlock(blockID));
-		data.writeInt(blockMeta);
+		data.writeInt(Block.getIdFromBlock(this.blockID));
+		data.writeInt(this.blockMeta);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		blockID = Block.getBlockById(data.readInt());
-		blockMeta = data.readInt();
+		this.blockID = Block.getBlockById(data.readInt());
+		this.blockMeta = data.readInt();
 	}
 
-	public void setOrigin(int x, int y, int z, int delay) {
-		originX = x;
-		originY = y;
-		originZ = z;
-		jumpDelay = delay;
+	public void setOrigin(int x, int y, int z, int delay, double waveStartX, double waveStartZ) {
+		this.originX = x;
+		this.originY = y;
+		this.originZ = z;
+		this.jumpDelay = delay;
+		this.waveStartX = waveStartX;
+		this.waveStartZ = waveStartZ;
+	}
+
+	@Override
+	protected void entityInit() { }
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound data) {
+		this.blockID = Block.getBlockById(data.getInteger("blockID"));
+		this.blockMeta = data.getInteger("blockMeta");	
+		this.originX = data.getInteger("originX");
+		this.originY = data.getInteger("originY");
+		this.originZ = data.getInteger("originZ");
+		this.waveStartX = data.getDouble("waveStartX");
+		this.waveStartZ = data.getDouble("waveStartZ");
+		this.jumpDelay = data.getInteger("jumpDelay");
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound data) {
+		data.setInteger("blockID", Block.getIdFromBlock(this.blockID));
+		data.setInteger("blockMeta", this.blockMeta);
+		data.setInteger("originX", this.originX);
+		data.setInteger("originY", this.originY);
+		data.setInteger("originZ", this.originZ);
+		data.setDouble("waveStartX", this.waveStartX);
+		data.setDouble("waveStartZ", this.waveStartZ);
+		data.setInteger("jumpDelay", this.jumpDelay);
 	}
 }

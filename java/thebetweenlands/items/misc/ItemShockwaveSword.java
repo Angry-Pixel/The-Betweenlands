@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntityShockwaveBlock;
 import thebetweenlands.items.tools.ItemSwordBL;
@@ -99,26 +100,29 @@ public class ItemShockwaveSword extends ItemSwordBL {
 			if (!world.isRemote) {
 				if (stack.getTagCompound().getInteger("uses") < 3) {
 					double direction = Math.toRadians(player.rotationYaw);
+					Vec3 diag = Vec3.createVectorHelper(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
 					for (int distance = 2; distance < 16; distance++) {
-						int originX = (MathHelper.floor_double(player.posX - Math.sin(direction) * distance));
-						int originY = y;
-						int originZ = MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
-						Block block = world.getBlock(originX, originY, originZ);
+						for(int distance2 = -(distance-2); distance2 < (distance-2); distance2++) {
+							int originX = MathHelper.floor_double(player.posX - Math.sin(direction) * distance - diag.xCoord * distance2 * 0.25D);
+							int originY = y;
+							int originZ = MathHelper.floor_double(player.posZ + Math.cos(direction) * distance + diag.zCoord * distance2 * 0.25D);
+							
+							Block block = world.getBlock(originX, originY, originZ);
 
-						if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ))) {
-							world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.125F, 2.0F);
-							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
-							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
+							if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ)) 
+									&& block.getBlockHardness(world, originX, originY, originZ) <= 5.0F && block.getBlockHardness(world, originX, originY, originZ) >= 0.0F) {
+								world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.125F, 2.0F);
+								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
+								stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 
-							EntityShockwaveBlock shockwaveBlock;
-							shockwaveBlock = new EntityShockwaveBlock(world);
-							shockwaveBlock.setOrigin(originX, originY, originZ, distance);
-							shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
-							shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
-							world.setBlockToAir(originX, originY, originZ);
-							world.spawnEntityInWorld(shockwaveBlock);
+								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
+								shockwaveBlock.setOrigin(originX, originY, originZ, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ);
+								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
+								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
+								world.setBlockToAir(originX, originY, originZ);
+								world.spawnEntityInWorld(shockwaveBlock);
+							}
 						}
-
 					}
 					stack.getTagCompound().setInteger("uses", stack.getTagCompound().getInteger("uses") + 1);
 					if (stack.getTagCompound().getInteger("uses") >= 3) {
