@@ -20,7 +20,7 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 
 	public EntityShockwaveBlock(World world) {
 		super(world);
-		setSize(0.8F, 0.8F);
+		setSize(0.9F, 0.9F);
 		setBlock(Blocks.stone, 0);
 		experienceValue = 0;
 	}
@@ -51,6 +51,12 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 		}
 		super.onUpdate();
 	}
+
+	@Override
+	public boolean handleWaterMovement() {
+		return false;
+	}
+	 
 
 	@Override
 	protected void collideWithEntity(Entity entity) {
