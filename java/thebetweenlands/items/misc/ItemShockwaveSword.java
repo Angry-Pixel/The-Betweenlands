@@ -29,13 +29,13 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
 		if (!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
-		if (!stack.getTagCompound().hasKey("charge"))
-			stack.getTagCompound().setInteger("charge", 0);
+		if (!stack.getTagCompound().hasKey("cooldown"))
+			stack.getTagCompound().setInteger("cooldown", 0);
 		
-		if (stack.getTagCompound().getInteger("charge") < 16)
-			stack.getTagCompound().setInteger("charge", stack.getTagCompound().getInteger("charge") + 1);
-		if (stack.getTagCompound().getInteger("charge") >= 16)
-			stack.getTagCompound().setInteger("charge", 16);
+		if (stack.getTagCompound().getInteger("cooldown") < 30)
+			stack.getTagCompound().setInteger("cooldown", stack.getTagCompound().getInteger("cooldown") + 1);
+		if (stack.getTagCompound().getInteger("cooldown") >= 30)
+			stack.getTagCompound().setInteger("cooldown", 30);
 	}
 
 	@Override
@@ -50,17 +50,17 @@ public class ItemShockwaveSword extends ItemSwordBL {
 			return false;
 		}
 		if (side == 1 && player.isSneaking()) {
-			if (stack.getTagCompound().getInteger("charge") > 0) {
-				world.playSoundAtEntity(player, "mob.ghast.fireball", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			if (stack.getTagCompound().getInteger("cooldown") == 30) {
 				if (!world.isRemote) {
 					double direction = Math.toRadians(player.rotationYaw);
-					for(int distance = 2; distance < stack.getTagCompound().getInteger("charge"); distance++) {
+					for(int distance = 2; distance < 16; distance++) {
 						int originX = (MathHelper.floor_double(player.posX - Math.sin(direction) * distance));
 						int originY = y;
 						int originZ	= MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
 						Block block = world.getBlock(originX, originY, originZ);
 					
-						if (block != null && block.isNormalCube()) {
+						if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ))) {
+							world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.25F, 1.0F);
 							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
 							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 						
@@ -71,8 +71,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 							shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 							world.setBlockToAir(originX, originY, originZ);
 							world.spawnEntityInWorld(shockwaveBlock);
-							if(distance == stack.getTagCompound().getInteger("charge"))
-								stack.getTagCompound().setInteger("charge", 0);
+							stack.getTagCompound().setInteger("cooldown", 0);
 						}
 					}
 					return true;
