@@ -8,6 +8,7 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import thebetweenlands.client.model.block.ModelVolarpad;
+import thebetweenlands.client.model.item.ModelVolarkite;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,8 +16,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ItemVolarKiteRenderer implements IItemRenderer {
 
-	private final ModelVolarpad model = new ModelVolarpad();
-	private final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/volarpad1.png");
+	private final ModelVolarkite model = new ModelVolarkite();
+	private final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/items/volarkite.png");
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
@@ -56,7 +57,7 @@ public class ItemVolarKiteRenderer implements IItemRenderer {
 			GL11.glRotatef(180F, 1F, 0F, 0F);
 			GL11.glRotatef(180F, 0F, 1F, 0F);
 			GL11.glScaled(size + 0.2F, size + 0.2F, size + 0.2F);
-			model.renderKite();
+			model.render();
 			GL11.glPopMatrix();
 		} else {
 			GL11.glPushMatrix();
@@ -64,7 +65,7 @@ public class ItemVolarKiteRenderer implements IItemRenderer {
 			GL11.glRotatef(180F, 1F, 0F, 0F);
 			GL11.glRotatef(-90F, 0F, 1F, 0F);
 			GL11.glScaled(size, size, size);
-			model.renderKite();
+			model.render();
 			GL11.glPopMatrix();
 		}
 	}
@@ -75,7 +76,7 @@ public class ItemVolarKiteRenderer implements IItemRenderer {
 		GL11.glRotatef(180F, 1F, 0F, 0F);
 		GL11.glRotatef(90F, 0F, 1F, 0F);
 		GL11.glScaled(size, size, size);
-		model.renderKite();
+		model.render();
 		GL11.glPopMatrix();
 	}
 }
