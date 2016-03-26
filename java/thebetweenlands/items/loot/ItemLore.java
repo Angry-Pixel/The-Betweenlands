@@ -15,7 +15,7 @@ import java.util.Random;
  * Created by Bart on 23/03/2016.
  */
 public class ItemLore extends Item {
-    private static final String[] pages = new String[]{"them", "mutants", "shadows", "ruins", "heads", "tar", "dungeon", "pitstone", "tower"};
+    private static final String[] pages = new String[]{"them", "mutants", "shadows", "ruins", "heads", "tar", "dungeon", "pitstone", "tower", "fort"};
 
     public ItemLore() {
         this.maxStackSize = 1;

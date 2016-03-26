@@ -726,6 +726,7 @@ item.thebetweenlands.lore.tar.name=Explorer's Entries: Pools of Tar
 item.thebetweenlands.lore.dungeon.name=Explorer's Entries: Dungeon Shrine
 item.thebetweenlands.lore.pitstone.name=Explorer's Entries: Underground Ruins
 item.thebetweenlands.lore.tower.name=Explorer's Entries: The Tower
+item.thebetweenlands.lore.fort.name=Explorer's Entries: The Fortress
 
 # Elixirs
 bl.elixir.petrify=Petrify
