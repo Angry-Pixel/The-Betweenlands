@@ -1,13 +1,13 @@
 package thebetweenlands.manual;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.items.BLItemRegistry;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Bart on 22/11/2015.
@@ -68,7 +68,7 @@ public class GuideBookEntryRegistry {
      * initializes the item pages
      */
     public static void initItemEntries() {
-        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.itemsGeneric, (IManualEntryItem) BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarPad, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
+        IManualEntryItem[] itemEntryItem = new IManualEntryItem[]{(IManualEntryItem) BLItemRegistry.itemsGeneric, (IManualEntryItem) BLItemRegistry.itemsGenericCrushed, (IManualEntryItem) BLItemRegistry.weedwoodRowboat, (IManualEntryItem) BLItemRegistry.volarkite, (IManualEntryItem) BLItemRegistry.swampTalisman, (IManualEntryItem) BLItemRegistry.rope, (IManualEntryItem) BLItemRegistry.lifeCrystal, (IManualEntryItem) BLItemRegistry.weedwoodBow, (IManualEntryItem) BLItemRegistry.skullMask, (IManualEntryItem) BLBlockRegistry.weedwoodJukebox, (IManualEntryItem) BLItemRegistry.explorerHat, (IManualEntryItem) BLItemRegistry.ringOfPower, (IManualEntryItem) BLItemRegistry.voodooDoll, (IManualEntryItem) BLItemRegistry.tarminion, (IManualEntryItem) BLItemRegistry.shimmerStone, (IManualEntryItem) BLItemRegistry.angryPebble};
 
         itemPages.clear();
         for (IManualEntryItem item : itemEntryItem)
