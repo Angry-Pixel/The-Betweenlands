@@ -4,6 +4,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
@@ -60,5 +61,6 @@ extends BiomeGenBaseBetweenlands
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySiltCrab.class, (short) 50).setHostile(true).setGroupSize(2, 8));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 30).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D).setGroupSize(1, 5));
 	}
 }

@@ -3,6 +3,7 @@ package thebetweenlands.world.biomes;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
@@ -52,6 +53,7 @@ extends BiomeGenBaseBetweenlands
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 42).setHostile(true).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 110).setHostile(true).setSpawnCheckRadius(6.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D).setGroupSize(1, 5));
 	}
 
 	/*private NoiseGeneratorPerlin islandNoiseGen;
