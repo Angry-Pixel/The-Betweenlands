@@ -5,6 +5,7 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
@@ -103,5 +104,10 @@ public class BlockBulbCappedMushroom extends BlockBLSmallPlants implements IGrow
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return false;
+	}
+	
+	@Override	
+	protected boolean canPlaceBlockOn(Block block) {
+		return super.canPlaceBlockOn(block) || block.isNormalCube();
 	}
 }

@@ -39,16 +39,19 @@ public class DebugHandlerChunkData {
 
 
 									GL11.glPushMatrix();
+									//GL11.glDisable(GL11.GL_DEPTH_TEST);
+									GL11.glDepthMask(false);
 									GL11.glDisable(GL11.GL_TEXTURE_2D);
 									GL11.glEnable(GL11.GL_BLEND);
+									GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 									GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 									GL11.glColor4f(1, 1, 1, 1);
 									GL11.glLineWidth(1.2f);
 
-									float red = 0.1F;
+									float red = 0.1F + area.getLayer() / 5.0F;
 									float green = 0.4F;
-									float blue = 1.0F;
-									float alpha = 0.8F;
+									float blue = 1.0F - area.getLayer() / 5.0F;
+									float alpha = 0.1F;
 
 									GL11.glColor4f(red/1.5f, green/1.5f, blue/1.5f, alpha/1.5f);
 									this.drawBoundingBox(area.getArea().getOffsetBoundingBox(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ));
@@ -56,6 +59,8 @@ public class DebugHandlerChunkData {
 									this.drawBoundingBoxOutline(area.getArea().getOffsetBoundingBox(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ));
 									GL11.glEnable(GL11.GL_TEXTURE_2D);
 
+									GL11.glDepthMask(true);
+									//GL11.glEnable(GL11.GL_DEPTH_TEST);
 									GL11.glPopMatrix();
 								}
 							}

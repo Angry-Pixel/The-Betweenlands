@@ -2,6 +2,7 @@ package thebetweenlands.blocks.plants;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -52,5 +53,10 @@ public class BlockFlatHeadMushroom extends BlockBLSmallPlants {
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return false;
+	}
+	
+	@Override	
+	protected boolean canPlaceBlockOn(Block block) {
+		return super.canPlaceBlockOn(block) || block.isNormalCube();
 	}
 }

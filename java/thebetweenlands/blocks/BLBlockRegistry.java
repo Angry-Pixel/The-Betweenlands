@@ -502,9 +502,9 @@ public class BLBlockRegistry {
 	public static final Block greenMiddleGemBlock = new BlockBLGenericDeco("greenMiddleGemBlock", Material.rock).setHardness(10F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block mossyLimestoneBricks = new BlockBLGenericDeco("mossyLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block crackedLimestoneBricks = new BlockBLGenericDeco("crackedLimestoneBricks", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
-	public static final Block spookyBetweenstoneBrick1 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick1");
+	/*public static final Block spookyBetweenstoneBrick1 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick1");
 	public static final Block spookyBetweenstoneBrick2 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick2");
-	public static final Block spookyBetweenstoneBrick3 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick3");
+	public static final Block spookyBetweenstoneBrick3 = new BlockSpookyBetweenstoneBrick("spookyBetweenstoneBrick3");*/
 	public static final Block glowingSmoothCragrock = new BlockBLGenericDeco("glowingSmoothCragrock", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);
 	public static final Block energyBarrier = new BlockEnergyBarrier();
 

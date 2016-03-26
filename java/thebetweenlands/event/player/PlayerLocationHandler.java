@@ -244,6 +244,9 @@ public class PlayerLocationHandler {
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot1);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot2);
 		EXCLUDED_BLOCKS.add(BLBlockRegistry.lootPot3);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.octineBlock);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.valoniteBlock);
+		EXCLUDED_BLOCKS.add(BLBlockRegistry.syrmoriteBlock);
 	}
 
 	@SubscribeEvent

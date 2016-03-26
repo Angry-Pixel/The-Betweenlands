@@ -26,7 +26,7 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	public void registerIcons(IIconRegister register) {
 		super.registerIcons(register);
 		for(int i = 0; i < this.gemTextures.length; i++) {
-			if(this.gemTextures[i].length >= 1 && this.gemTextures[i][0] != null) {
+			if(this.gemTextures[i].length > 2 && this.gemTextures[i][0] != null) {
 				this.gemItemIcons[i] = register.registerIcon(this.gemTextures[i][0]);
 			}
 		}
@@ -36,7 +36,7 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconIndex(ItemStack stack) {
 		CircleGem gem = CircleGem.getGem(stack);
-		if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length >= 1 && this.gemTextures[gem.ordinal()][0] != null) {
+		if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length > 2 && this.gemTextures[gem.ordinal()][0] != null) {
 			return this.gemItemIcons[gem.ordinal()];
 		}
 		return super.getIconIndex(stack);
@@ -47,16 +47,24 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	public String getArmorTexture(ItemStack stack, Entity event, int slot, String type) {
 		CircleGem gem = CircleGem.getGem(stack);
 		if (this.isLeggings(stack)) {
-			if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length >= 3) {
-				return this.gemTextures[gem.ordinal()][2];
+			if(gem != CircleGem.NONE) {
+				if(this.gemTextures[gem.ordinal()].length >= 3) {
+					return this.gemTextures[gem.ordinal()][2];
+				} else {
+					return this.gemTextures[gem.ordinal()][1];
+				}
 			}
 			if(this.armorTexture2 != null) {
 				return this.armorTexture2;
 			}
 			return this.armorTexture1;
 		} else {
-			if(gem != CircleGem.NONE && this.gemTextures[gem.ordinal()].length >= 2) {
-				return this.gemTextures[gem.ordinal()][1];
+			if(gem != CircleGem.NONE) {
+				if(this.gemTextures[gem.ordinal()].length >= 3) {
+					return this.gemTextures[gem.ordinal()][1];
+				} else {
+					return this.gemTextures[gem.ordinal()][0];
+				}
 			}
 			return this.armorTexture1;
 		}
@@ -68,7 +76,7 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 
 	/**
 	 * Registers alternative gem textures.
-	 * Args: Gem, Item texture, Armor texture 1, Armor texture 2
+	 * Args: Gem, Item texture (optional), Armor texture 1, Armor texture 2
 	 */
 	@Override
 	public ItemArmorBL setGemTextures(CircleGem gem, String... textures) {

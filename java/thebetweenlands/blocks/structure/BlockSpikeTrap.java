@@ -21,6 +21,7 @@ public class BlockSpikeTrap extends BlockContainer {
 		setResistance(2000.0F);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.spikeTrap");
+		setBlockTextureName("thebetweenlands:limestone");
 	}
 
 	@Override
