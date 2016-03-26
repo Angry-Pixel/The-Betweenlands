@@ -717,10 +717,15 @@ item.item.thebetweenlands.dentrothystVial.name=Dentrothyst Vial
 item.item.thebetweenlands.aspectVial.name=Aspect Vial
 
 #Lore
-item.thebetweenlands.lore.them=Lurking Shadows
-item.thebetweenlands.expedition.expedition=Expedition of Elcanrab
-item.thebetweenlands.mutants.them=Mutants of Terror
-item.thebetweenlands.shadows.them=Note from a Fallen Shadow
+item.thebetweenlands.lore.them.name=Lurking Shadows
+item.thebetweenlands.lore.mutants.name=Mutants of Terror
+item.thebetweenlands.lore.shadows.name=Note from a Fallen Shadow
+item.thebetweenlands.lore.ruins.name=Explorer's Entries: Marsh Ruins
+item.thebetweenlands.lore.heads.name=Explorer's Entries: Idol Heads
+item.thebetweenlands.lore.tar.name=Explorer's Entries: Pools of Tar
+item.thebetweenlands.lore.dungeon.name=Explorer's Entries: Dungeon Shrine
+item.thebetweenlands.lore.pitstone.name=Explorer's Entries: Underground Ruins
+item.thebetweenlands.lore.tower.name=Explorer's Entries: The Tower
 
 # Elixirs
 bl.elixir.petrify=Petrify

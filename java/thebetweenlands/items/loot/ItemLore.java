@@ -15,7 +15,7 @@ import java.util.Random;
  * Created by Bart on 23/03/2016.
  */
 public class ItemLore extends Item {
-    private static final String[] pages = new String[]{"them", "expedition", "mutants", "shadows", "banishment", "ruins", "heads", "tar", "dungeon", "ruins", "tower", "temple", "wicked"};
+    private static final String[] pages = new String[]{"them", "mutants", "shadows", "ruins", "heads", "tar", "dungeon", "pitstone", "tower"};
 
     public ItemLore() {
         this.maxStackSize = 1;
@@ -55,7 +55,6 @@ public class ItemLore extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-    	setRandomPageName(itemStack, new Random());
         if (itemStack != null && itemStack.getTagCompound() != null && itemStack.getTagCompound().hasKey("name"))
             player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LORE, world, (int) player.posX, (int) player.posY, (int) player.posZ);
         return itemStack;
