@@ -4,12 +4,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.projectiles.EntityPyradFlame;
+import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
 public class EntityPyrad extends EntityMob {
 	private int shouldFire;
@@ -76,12 +76,15 @@ public class EntityPyrad extends EntityMob {
 	}
 
 	@Override
-    protected void fall(float p_70069_1_) {}
+    protected void fall(float distance) {}
 
 	@Override
-    protected Item getDropItem() {
-        return Items.blaze_rod;
-    }
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 1);
+		int count = 1 + rand.nextInt(3) + rand.nextInt(1 + looting);
+		for (int a = 0; a < count; ++a)
+			entityDropItem(ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT), 0.0F);
+	}
 
 	@Override
 	public void onLivingUpdate() {
