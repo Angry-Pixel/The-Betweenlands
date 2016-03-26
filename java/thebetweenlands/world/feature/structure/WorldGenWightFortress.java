@@ -76,6 +76,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Block valoniteBlock = BLBlockRegistry.valoniteBlock;
 	private Block syrmoriteBlock = BLBlockRegistry.syrmoriteBlock;
 	private Block octineBlock = BLBlockRegistry.octineBlock;
+	private Block mushroomBlackHat = BLBlockRegistry.blackHatMushroom;
+	private Block mushroomBulbCapped = BLBlockRegistry.bulbCappedMushroom;
+	private Block mushroomflatHead = BLBlockRegistry.flatHeadMushroom;
 
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
@@ -161,6 +164,19 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return valoniteBlock;
 		}
 		return syrmoriteBlock;
+	}
+	
+	public Block getRandomMushroom(Random rand) {
+		int type = rand.nextInt(3);
+		switch (type) {
+		case 0:
+			return mushroomflatHead;
+		case 1:
+			return mushroomBlackHat;
+		case 2:
+			return mushroomBulbCapped;
+		}
+		return mushroomBlackHat;
 	}
 
 	public Block getRandomCollapsingTiles(Random rand) {
@@ -716,10 +732,18 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 16, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 20, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
-
+		
 		}
 		//retro-gen betweenstoneBrickStairs
-		direction = 0;//rand.nextInt(4);
+		direction = rand.nextInt(4);
+
+		for (int xa = xx + 1; xa <= xx + 31; ++xa) {
+			for(int za = zz + 1; za <= zz + 31; ++za) {
+				if(world.getBlock(xa, yy -1, za).isNormalCube() && world.getBlock(xa, yy, za).isAir(world, xa, yy, za))
+					if(rand.nextInt(5) == 0)
+							world.setBlock(xa, yy, za, getRandomMushroom(rand));
+			}
+		}
 
 		//main betweenstoneBrickStairs
 
