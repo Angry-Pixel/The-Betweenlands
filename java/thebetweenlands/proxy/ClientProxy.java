@@ -86,6 +86,7 @@ import thebetweenlands.client.render.entity.RenderMummyArm;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderRopeNode;
+import thebetweenlands.client.render.entity.RenderShockwaveBlock;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
@@ -159,6 +160,7 @@ import thebetweenlands.client.render.tileentity.TileEntityWeedWoodChestRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityWispRenderer;
 import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntityRopeNode;
+import thebetweenlands.entities.EntityShockwaveBlock;
 import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
@@ -381,6 +383,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, new RenderPyrad());
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, new RenderPyradFlame(1F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, new RenderMummyArm());
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, new RenderShockwaveBlock());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());

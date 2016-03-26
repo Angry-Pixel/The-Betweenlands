@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.entities.EntityShockwaveBlock;
 import thebetweenlands.items.tools.ItemSwordBL;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,9 +52,18 @@ public class ItemShockwaveSword extends ItemSwordBL {
 				if (!world.isRemote) {
 					double direction = Math.toRadians(player.rotationYaw);
 					for(int distance = 2; distance < stack.getTagCompound().getInteger("charge"); distance++) {
-						Block block = world.getBlock((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance));
-					if (block != null)
-						world.setBlock((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance), Blocks.stone);
+						Block block = world.getBlock((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance));
+					if (block != null) {
+						stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(MathHelper.floor_double(player.posX - Math.sin(direction) * distance), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance))));
+						stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(MathHelper.floor_double(player.posX - Math.sin(direction) * distance), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance)));
+						
+						EntityShockwaveBlock shockwaveBlock;
+						shockwaveBlock = new EntityShockwaveBlock(world);
+						shockwaveBlock.setLocationAndAngles(MathHelper.floor_double(player.posX - Math.sin(direction) * distance) + 0.5D, MathHelper.floor_double(player.posY - 1),  MathHelper.floor_double(player.posZ + Math.cos(direction) * distance) + 0.5D, 0.0F, 0.0F);
+						shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
+						world.setBlockToAir((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance));
+						world.spawnEntityInWorld(shockwaveBlock);	
+					}
 					}
 					stack.getTagCompound().setInteger("charge", 0);
 					return true;

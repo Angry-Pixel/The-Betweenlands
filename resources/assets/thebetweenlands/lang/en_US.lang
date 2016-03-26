@@ -786,6 +786,7 @@ entity.thebetweenlands.fortressBossProjectile.name=Primordial Malevolence Projec
 entity.thebetweenlands.chiromaw.name=Chiromaw
 entity.thebetweenlands.pyrad.name=Pyrad
 entity.thebetweenlands.pyradFlame.name=Pyrad Flame
+entity.thebetweenlands.shockwaveBlock.name=ShockWave Block
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
