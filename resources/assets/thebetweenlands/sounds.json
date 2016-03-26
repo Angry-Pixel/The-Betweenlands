@@ -698,6 +698,15 @@
 			}
 		]
 	},
+	"dreadfulPeatMummyLoop": {
+		"category": "music",
+		"sounds": [
+			{
+				"name": "boss/DreadfulPeatMummyLoop",
+				"stream": true
+			}
+		]
+	},
 	"music.blMenu": {
 		"category": "music",
 		"sounds": [
