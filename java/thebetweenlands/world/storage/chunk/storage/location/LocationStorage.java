@@ -23,6 +23,7 @@ public class LocationStorage extends ChunkStorage {
 	private LocationAmbience ambience = null;
 	private boolean visible = true;
 	private boolean inheritAmbience = true;
+	private long locationSeed = 0L;
 
 	public LocationStorage(Chunk chunk, BetweenlandsChunkData data) {
 		super(chunk, data);
@@ -35,6 +36,15 @@ public class LocationStorage extends ChunkStorage {
 		if(type == null)
 			type = EnumLocationType.NONE;
 		this.type = type;
+	}
+
+	public LocationStorage setSeed(long seed) {
+		this.locationSeed = seed;
+		return this;
+	}
+
+	public long getSeed() {
+		return this.locationSeed;
 	}
 
 	public LocationStorage setInheritAmbience(boolean inherit) {

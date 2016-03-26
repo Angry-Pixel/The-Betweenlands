@@ -792,8 +792,10 @@ public class TextContainer {
 					if(!newLine || segment.significant || this.newLine > 0) {
 						//// Create text segment ////
 						TextSegment textSegment = new TextSegment(area.page, word, cursorX, cursorY, strWidth, strHeight, this.currentColor, this.currentScale, this.currentFont);
-						currentPage.textSegments.add(textSegment);
-						currentPage.textAreas.addAll(this.textAreas);
+						if(word.length() > 0) {
+							currentPage.textSegments.add(textSegment);
+							currentPage.textAreas.addAll(this.textAreas);
+						}
 						if(!segment.significant) {
 							wrapTextSegments.add(textSegment);
 						}

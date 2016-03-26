@@ -109,8 +109,8 @@ public class BiomeDecoratorBaseBetweenlands
 		}
 		for(int i = 0; i < cycles; i++) {
 			if(this.rand.nextInt(9 / cycles + 1) == 0) {
-				int xx = this.x + this.rand.nextInt(16);
-				int zz = this.z + this.rand.nextInt(16);
+				int xx = this.x + this.rand.nextInt(16) - 8;
+				int zz = this.z + this.rand.nextInt(16) - 8;
 				int yy = this.world.getHeightValue(xx, zz) - 1;
 				boolean hasMud = false;
 				for(int yo = 0; yo < 16; yo++) {

@@ -3,6 +3,7 @@ package thebetweenlands.world.feature.structure;
 import java.util.Random;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -11,6 +12,8 @@ import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
+import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 
 /**
  * Created by Bart on 05/02/2016.
@@ -99,7 +102,9 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
                 }
             }
         }
-
+        
+        StorageHelper.addArea(world, "translate:smallDungeon", AxisAlignedBB.getBoundingBox(x, y, z, x + 5, y + 5, z + 5).expand(2, 2, 2), EnumLocationType.DUNGEON, 0);
+        
         return true;
     }
 }

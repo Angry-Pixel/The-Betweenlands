@@ -810,6 +810,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 						this.worldObj.spawnEntityInWorld(bullet);
 					}
 				}
+				
+				this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
+				
 				this.setDead();
 			}
 		}
@@ -869,11 +872,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 			volume = 3.0F;
 		}
 		this.worldObj.playSoundAtEntity(this, sound, volume, pitch);
-	}
-
-	@Override
-	protected void dropFewItems(boolean killedByPlayer, int looting) {
-		this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
 	}
 
 	@Override

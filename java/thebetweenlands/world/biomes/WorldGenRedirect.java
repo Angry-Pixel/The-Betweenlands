@@ -19,7 +19,7 @@ public class WorldGenRedirect implements IWorldGenerator {
 	public void generate(Random random, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.provider.dimensionId == ConfigHandler.DIMENSION_ID) {
-			int recChunkGenLimit = 3;
+			int recChunkGenLimit = 4;
 			long chunkID = ChunkCoordIntPair.chunkXZ2Int(chunkX, chunkZ);
 			for(Long lc : this.generatingChunks) {
 				if(lc.longValue() == chunkID) return;

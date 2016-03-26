@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.blocks.BLBlockRegistry;
@@ -12,6 +13,8 @@ import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
 import thebetweenlands.world.loot.WeightedLootList;
+import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 
 public class WorldGenTarPoolDungeons extends WorldGenerator {
 
@@ -72,6 +75,9 @@ public class WorldGenTarPoolDungeons extends WorldGenerator {
 			}
 		}
 		world.setBlock(x + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), y, z + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), BLBlockRegistry.tarBeastSpawner, 0, 3);
+
+		StorageHelper.addArea(world, "translate:tarPoolDungeon", AxisAlignedBB.getBoundingBox(x - halfSize, y - 1, z - halfSize, x + halfSize, y + height, z + halfSize).expand(1, 1, 1), EnumLocationType.DUNGEON, 0);
+
 		return true;
 	}
 

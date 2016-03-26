@@ -68,7 +68,7 @@ public class PlayerLocationHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
-		if(event.phase == Phase.START) {
+		if(event.phase == Phase.START && !Minecraft.getMinecraft().isGamePaused()) {
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			if(player != null) {
 				if(this.titleTicks > 0) 
@@ -172,11 +172,14 @@ public class PlayerLocationHandler {
 				GL11.glColor4f(1, 1, 1, fade);
 				GL11.glDisable(GL11.GL_CULL_FACE);
 				double sidePadding = 6;
-				this.renderTexturedRect(strX - sidePadding*averageScale, strY + strHeight - 5*averageScale, strX - sidePadding*averageScale + 9*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 0, 9 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX - sidePadding*averageScale + 9*averageScale, strY + strHeight - 5*averageScale, strX + strWidth / 2.0D - 6*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 9 / 128.0D, 58 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D - 6*averageScale, strY + strHeight - 5*averageScale, strX + strWidth / 2.0D + 6*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 58 / 128.0D, 70 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth / 2.0D + 6*averageScale, strY + strHeight - 5*averageScale, strX + strWidth + sidePadding*averageScale - 9*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 70 / 128.0D, 119 / 128.0D, 0, 1);
-				this.renderTexturedRect(strX + strWidth + sidePadding*averageScale - 9*averageScale, strY + strHeight - 5*averageScale, strX + strWidth + sidePadding*averageScale, strY + strHeight - 5*averageScale + 16*averageScale, 119 / 128.0D, 1, 0, 1);
+				double yOffset = 5;
+				double sy = strY + strHeight - yOffset*averageScale;
+				double ey = strY + strHeight - yOffset*averageScale + 15*averageScale;
+				this.renderTexturedRect(strX - sidePadding*averageScale, sy, strX - sidePadding*averageScale + 9*averageScale, ey, 0, 9 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX - sidePadding*averageScale + 9*averageScale, sy, strX + strWidth / 2.0D - 6*averageScale, ey, 9 / 128.0D, 58 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D - 6*averageScale, sy, strX + strWidth / 2.0D + 6*averageScale, ey, 58 / 128.0D, 70 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth / 2.0D + 6*averageScale, sy, strX + strWidth + sidePadding*averageScale - 9*averageScale, ey, 70 / 128.0D, 119 / 128.0D, 0, 1);
+				this.renderTexturedRect(strX + strWidth + sidePadding*averageScale - 9*averageScale, sy, strX + strWidth + sidePadding*averageScale, ey, 119 / 128.0D, 1, 0, 1);
 				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		}
