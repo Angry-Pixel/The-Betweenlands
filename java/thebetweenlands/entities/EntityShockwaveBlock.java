@@ -20,7 +20,7 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 
 	public EntityShockwaveBlock(World world) {
 		super(world);
-		setSize(0.9F, 0.9F);
+		setSize(0.8F, 0.8F);
 		setBlock(Blocks.stone, 0);
 		experienceValue = 0;
 	}
