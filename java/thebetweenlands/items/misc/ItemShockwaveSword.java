@@ -111,12 +111,13 @@ public class ItemShockwaveSword extends ItemSwordBL {
 							Block block = world.getBlock(originX, originY, originZ);
 
 							if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ)) 
-									&& block.getBlockHardness(world, originX, originY, originZ) <= 5.0F && block.getBlockHardness(world, originX, originY, originZ) >= 0.0F) {
+									&& block.getBlockHardness(world, originX, originY, originZ) <= 5.0F && block.getBlockHardness(world, originX, originY, originZ) >= 0.0F
+									&& (world.isAirBlock(originX, originY+1, originZ) || world.getBlock(originX, originY+1, originZ).isReplaceable(world, originX, originY+1, originZ))) {
 								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
 								stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-								shockwaveBlock.setOrigin(originX, originY, originZ, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ);
+								shockwaveBlock.setOrigin(originX, originY, originZ, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ, player);
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 								world.setBlockToAir(originX, originY, originZ);
