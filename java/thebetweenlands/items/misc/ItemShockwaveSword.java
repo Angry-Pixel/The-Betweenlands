@@ -60,7 +60,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 						Block block = world.getBlock(originX, originY, originZ);
 					
 						if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ))) {
-							world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.25F, 1.0F);
+							world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.125F, 2.0F);
 							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
 							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 						
