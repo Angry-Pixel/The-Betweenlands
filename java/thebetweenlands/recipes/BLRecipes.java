@@ -155,7 +155,9 @@ public class BLRecipes {
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGem.NONE), "XXX", "X X", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
-
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BLBlockRegistry.volarpad));
+		
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
