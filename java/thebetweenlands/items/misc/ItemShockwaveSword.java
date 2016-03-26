@@ -1,6 +1,7 @@
 package thebetweenlands.items.misc;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,15 +17,28 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemShockwaveSword extends ItemSwordBL {
 
 	@SideOnly(Side.CLIENT)
-	private IIcon[] icons;
+	private IIcon icon, iconCharging;
 
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
-        setHasSubtypes(true);
         setUnlocalizedName("thebetweenlands.shockwaveSword");
-        setTextureName("thebetweenlands:shockwaveSword");
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister reg) {
+		icon = reg.registerIcon("thebetweenlands:shockwaveSword");
+		iconCharging = reg.registerIcon("thebetweenlands:shockwaveSwordDepleted");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public  IIcon getIcon(ItemStack stack, int pass) {
+		if(stack.hasTagCompound() && stack.getTagCompound().getInteger("uses") == 3)
+			return iconCharging;
+		return icon;
+	}
+
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
 		if (!stack.hasTagCompound())
