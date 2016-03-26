@@ -31,6 +31,11 @@ public class ItemShockwaveSword extends ItemSwordBL {
 			stack.stackTagCompound = new NBTTagCompound();
 		if (!stack.getTagCompound().hasKey("charge"))
 			stack.getTagCompound().setInteger("charge", 0);
+		
+		if (stack.getTagCompound().getInteger("charge") < 16)
+			stack.getTagCompound().setInteger("charge", stack.getTagCompound().getInteger("charge") + 1);
+		if (stack.getTagCompound().getInteger("charge") >= 16)
+			stack.getTagCompound().setInteger("charge", 16);
 	}
 
 	@Override
@@ -55,7 +60,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 						int originZ	= MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
 						Block block = world.getBlock(originX, originY, originZ);
 					
-						if (block != null) {
+						if (block != null && block.isNormalCube()) {
 							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
 							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 						
@@ -66,23 +71,14 @@ public class ItemShockwaveSword extends ItemSwordBL {
 							shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 							world.setBlockToAir(originX, originY, originZ);
 							world.spawnEntityInWorld(shockwaveBlock);
+							if(distance == stack.getTagCompound().getInteger("charge"))
+								stack.getTagCompound().setInteger("charge", 0);
 						}
 					}
-					stack.getTagCompound().setInteger("charge", 0);
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (stack.getTagCompound().getInteger("charge") < 16)
-			stack.getTagCompound().setInteger("charge", stack.getTagCompound().getInteger("charge") + 1);
-		if (stack.getTagCompound().getInteger("charge") >= 16)
-			stack.getTagCompound().setInteger("charge", 16);
-		return stack;
-	}
-	
 }
