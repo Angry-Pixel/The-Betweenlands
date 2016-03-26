@@ -683,6 +683,12 @@
 			"fortressTeleport"
 		]
 	},
+	"shockwaveSword": {
+		"category": "player",
+		"sounds": [
+			"shockwaveSword"
+		]
+	},
 	"fortressBossLoop": {
 		"category": "music",
 		"sounds": [
