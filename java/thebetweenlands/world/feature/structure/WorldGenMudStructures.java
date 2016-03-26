@@ -28,7 +28,15 @@ public class WorldGenMudStructures extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-        return structure1(world, random, x, y, z);
+        int randomInt = random.nextInt(2);
+        switch (randomInt) {
+            case 0:
+                return structure1(world, random, x, y, z);
+            case 1:
+                return structure2(world, random, x, y, z);
+            default:
+                return false;
+        }
     }
 
     private boolean structure1(World world, Random random, int x, int y, int z) {

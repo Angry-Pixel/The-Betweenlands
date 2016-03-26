@@ -21,5 +21,6 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBaseBetweenlands {
         helper.generateRoots(10.0D, 2);
         helper.generateStagnantWaterPool(5);
         helper.generateUnderGroundStructures(100);
+        helper.generateMudStructures(8);
     }
 }
