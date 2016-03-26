@@ -31,11 +31,17 @@ public class ItemShockwaveSword extends ItemSwordBL {
 			stack.stackTagCompound = new NBTTagCompound();
 		if (!stack.getTagCompound().hasKey("cooldown"))
 			stack.getTagCompound().setInteger("cooldown", 0);
-		
-		if (stack.getTagCompound().getInteger("cooldown") < 30)
-			stack.getTagCompound().setInteger("cooldown", stack.getTagCompound().getInteger("cooldown") + 1);
-		if (stack.getTagCompound().getInteger("cooldown") >= 30)
-			stack.getTagCompound().setInteger("cooldown", 30);
+		if (!stack.getTagCompound().hasKey("uses"))
+			stack.getTagCompound().setInteger("uses", 0);
+
+		if(stack.getTagCompound().getInteger("uses") == 3) {
+			if (stack.getTagCompound().getInteger("cooldown") < 60)
+				stack.getTagCompound().setInteger("cooldown", stack.getTagCompound().getInteger("cooldown") + 1);
+			if (stack.getTagCompound().getInteger("cooldown") >= 60) {
+				stack.getTagCompound().setInteger("cooldown", 60);
+				stack.getTagCompound().setInteger("uses", 0);
+			}
+		}
 	}
 
 	@Override
@@ -44,26 +50,28 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world,
+			int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		if (!stack.hasTagCompound()) {
 			stack.stackTagCompound = new NBTTagCompound();
 			return false;
 		}
 		if (side == 1 && player.isSneaking()) {
-			if (stack.getTagCompound().getInteger("cooldown") == 30) {
-				if (!world.isRemote) {
+
+			if (!world.isRemote) {
+				if (stack.getTagCompound().getInteger("uses") < 3) {
 					double direction = Math.toRadians(player.rotationYaw);
-					for(int distance = 2; distance < 16; distance++) {
+					for (int distance = 2; distance < 16; distance++) {
 						int originX = (MathHelper.floor_double(player.posX - Math.sin(direction) * distance));
 						int originY = y;
-						int originZ	= MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
+						int originZ = MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
 						Block block = world.getBlock(originX, originY, originZ);
-					
+
 						if (block != null && block.isNormalCube() && !block.hasTileEntity(world.getBlockMetadata(originX, originY, originZ))) {
 							world.playSoundEffect(x, y, z, "thebetweenlands:shockwaveSword", 0.125F, 2.0F);
 							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
 							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
-						
+
 							EntityShockwaveBlock shockwaveBlock;
 							shockwaveBlock = new EntityShockwaveBlock(world);
 							shockwaveBlock.setOrigin(originX, originY, originZ, distance);
@@ -71,8 +79,13 @@ public class ItemShockwaveSword extends ItemSwordBL {
 							shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 							world.setBlockToAir(originX, originY, originZ);
 							world.spawnEntityInWorld(shockwaveBlock);
-							stack.getTagCompound().setInteger("cooldown", 0);
 						}
+
+					}
+					stack.getTagCompound().setInteger("uses", stack.getTagCompound().getInteger("uses") + 1);
+					if (stack.getTagCompound().getInteger("uses") >= 3) {
+						stack.getTagCompound().setInteger("uses", 3);
+						stack.getTagCompound().setInteger("cooldown", 0);
 					}
 					return true;
 				}
