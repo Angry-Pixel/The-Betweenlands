@@ -8,20 +8,20 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.google.common.collect.Lists;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.AnimationFrame;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.util.ResourceLocation;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.utils.CorrodibleItemHelper;
-
-import com.google.common.collect.Lists;
 
 public class TextureCorrosion extends TextureAtlasSprite {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -41,11 +41,11 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	private int corrosionAmount;
 
-	public TextureCorrosion(String iconName, String baseIconName, int corrosionAmount) {
+	public TextureCorrosion(String iconName, String baseIconName, int corrosionAmount, long seed) {
 		super(iconName);
 		this.baseIconName = baseIconName;
 		this.corrosionAmount = corrosionAmount;
-		seed = baseIconName.hashCode();
+		this.seed = seed;
 	}
 
 	private void resetSprite() {
@@ -106,7 +106,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		this.height = height;
 
 		int[][] mipmapLevels = new int[mipmapImages.length][];
-		RANDOM.setSeed(seed);
 		BufferedImage bufferedimage = mipmapImages[0];
 
 		mipmapLevels[0] = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
@@ -114,15 +113,19 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
+				if(y % width == 0) {
+					//Reset seed for every frame
+					RANDOM.setSeed(seed);
+				}
 				int pixel = mipmapLevels[0][x + y * width];
 				int corrosion = 0;
-				if (pixel >>> 24 != 0 && RANDOM.nextBoolean()) {
+				if (pixel >>> 24 != 0 && RANDOM.nextInt(3) != 0) {
 					corrosion = corrosionPixels[(x % width % corrosionWidth) + (y % width % corrosionWidth) * corrosionWidth];
 				}
 				int r1 = pixel >> 16 & 0xFF;
 				int g1 = pixel >> 8 & 0xFF;
 				int b1 = pixel & 0xFF;
-				float alpha = corrosionAmount / (float) (CorrodibleItemHelper.CORROSION_STAGE_COUNT - 1) * ((corrosion >>> 24 & 0xFF) / 255F);
+				float alpha = (corrosionAmount / (float) (CorrodibleItemHelper.CORROSION_STAGE_COUNT - 1) * ((corrosion >>> 24 & 0xFF) / 255F)) * (0.25F + RANDOM.nextFloat() * 0.75F);
 				int r2 = corrosion >> 16 & 0xFF;
 				int g2 = corrosion >> 8 & 0xFF;
 				int b2 = corrosion & 0xFF;
@@ -196,5 +199,27 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		}
 
 		return newFrameData;
+	}
+
+	@Override
+	public void updateAnimation() {
+		++this.tickCounter;
+
+		if (this.tickCounter >= this.animationMetadata.getFrameTimeSingle(this.frameCounter)) {
+			int i = this.animationMetadata.getFrameIndex(this.frameCounter);
+			int j = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
+			this.frameCounter = (this.frameCounter + 1) % j;
+			this.tickCounter = 0;
+			int k = this.animationMetadata.getFrameIndex(this.frameCounter);
+
+			if (i != k && k >= 0 && k < this.framesTextureData.size()) {
+				TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(k), this.width, this.height, this.originX, this.originY, false, false);
+			}
+		}
+	}
+
+	@Override
+	public boolean hasAnimationMetadata() {
+		return this.animationMetadata != null;
 	}
 }
