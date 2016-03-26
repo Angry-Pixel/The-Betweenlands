@@ -6,6 +6,7 @@ GENERAL STUFF -
 MORE CHANGES TO THE OVERWORLD -
 * A rift in the sky or something like that
 * Possibly a new mob or event
+* A new ore used to coat tools, to prevent corrosion
 
 TRIBE STUFF - 
 *Shops - haggle system!
