@@ -1,15 +1,18 @@
 package thebetweenlands.utils.confighandler;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import com.google.gson.stream.JsonReader;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.recipes.ConfigRecipe;
-
-import java.io.*;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
@@ -18,7 +21,7 @@ public class ConfigHandler {
 	//////// Values ///////
 	public static int DIMENSION_ID;
 	public static int DRUID_CIRCLE_FREQUENCY;
-	
+
 	public static int BIOME_ID_SWAMPLANDS;
 	public static int BIOME_ID_COARSE_ISLANDS;
 	public static int BIOME_ID_DEEP_WATER;
@@ -58,7 +61,7 @@ public class ConfigHandler {
 		BIOME_ID_MARSH2 = config.get(CATEGORIES[0], "Marsh 2 Biome ID", 55).getInt(55);
 		BIOME_ID_SLUDGE_PLAINS = config.get(CATEGORIES[0], "Sludge Plains Biome ID", 56).getInt(56);
 		BIOME_ID_LIMIT = config.getBoolean("Biome ID Limit", CATEGORIES[0], true, "Prevents any biome IDs higher than 127. Setting this to false \nis NOT recommended unless you know what you're doing!");
-		DIMENSION_BRIGHTNESS = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 60).setMinValue(0).setMaxValue(100).getInt(60);
+		DIMENSION_BRIGHTNESS = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 
 		WISP_QUALITY = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_LIGHTING = config.getBoolean("Firefly block lighting", CATEGORIES[1], true, "");

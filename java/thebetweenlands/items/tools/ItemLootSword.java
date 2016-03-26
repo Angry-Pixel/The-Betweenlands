@@ -7,12 +7,14 @@ import java.util.List;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import thebetweenlands.creativetabs.BLCreativeTabs;
 
 public class ItemLootSword extends ItemSwordBL {
 	private List<Class<? extends EntityLivingBase>> instantKills = new ArrayList<Class<? extends EntityLivingBase>>();
 
 	public ItemLootSword(ToolMaterial material) {
 		super(material);
+		this.setCreativeTab(BLCreativeTabs.gears);
 	}
 
 	public ItemLootSword addInstantKills(Class<? extends EntityLivingBase>... instantKills) {

@@ -35,15 +35,13 @@ public class WorldGenSmallRuins extends WorldGenerator {
 	private static final Block weedwoodLog = BLBlockRegistry.weedwoodLog;
 	private static final Block weedwoodPlankStairs = BLBlockRegistry.weedwoodPlankStairs;
 	private static final Block weedwoodPlankSlab = BLBlockRegistry.weedwoodPlankSlab;
-	private ArrayList<RuinLocation> ruinLocations = new ArrayList<>();
-	private ArrayList<LocationStorage> generatedLocations = new ArrayList<>();
 	private int width = -1;
 	private int depth = -1;
 
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
-		ruinLocations.clear();
-		generatedLocations.clear();
+		ArrayList<RuinLocation> ruinLocations = new ArrayList<>();
+		ArrayList<LocationStorage> generatedLocations = new ArrayList<>();
 		int attempts = 40;
 		while (attempts >= 0) {
 			x = x + random.nextInt(16) - 8;
@@ -52,31 +50,31 @@ public class WorldGenSmallRuins extends WorldGenerator {
 			int randomInt = random.nextInt(7);
 			switch (randomInt) {
 			case 0:
-				if (structure1(world, random, x, y, z, false))
+				if (structure1(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 1:
-				if (structure2(world, random, x, y, z, false))
+				if (structure2(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 2:
-				if (structure3(world, random, x, y, z, false))
+				if (structure3(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 3:
-				if (structure4(world, random, x, y, z, false))
+				if (structure4(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 4:
-				if (structure5(world, random, x, y, z, false))
+				if (structure5(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 5:
-				if (structure6(world, random, x, y, z, false))
+				if (structure6(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			case 6:
-				if (structure7(world, random, x, y, z, false))
+				if (structure7(world, random, x, y, z, false, generatedLocations))
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
 				break;
 			}
@@ -91,29 +89,29 @@ public class WorldGenSmallRuins extends WorldGenerator {
 			for (RuinLocation location : ruinLocations) {
 				switch (location.structureID) {
 				case 0:
-					structure1(location.world, location.random, location.x, location.y, location.z, true);
+					structure1(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 1:
-					structure2(location.world, location.random, location.x, location.y, location.z, true);
+					structure2(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 2:
-					structure3(location.world, location.random, location.x, location.y, location.z, true);
+					structure3(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 3:
-					structure4(location.world, location.random, location.x, location.y, location.z, true);
+					structure4(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 4:
-					structure5(location.world, location.random, location.x, location.y, location.z, true);
+					structure5(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 5:
-					structure6(location.world, location.random, location.x, location.y, location.z, true);
+					structure6(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				case 6:
-					structure7(location.world, location.random, location.x, location.y, location.z, true);
+					structure7(location.world, location.random, location.x, location.y, location.z, true, generatedLocations);
 					break;
 				}
 			}
-			for(LocationStorage location : this.generatedLocations) {
+			for(LocationStorage location : generatedLocations) {
 				location.setSeed(random.nextLong());
 			}
 			return true;
@@ -121,7 +119,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 			return false;
 	}
 
-	private boolean structure1(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure1(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		int height = 9 + random.nextInt(2);
 		width = 8;
 		depth = 1;
@@ -132,7 +130,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 			return false;
 
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, height - 5, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, height - 5, 1, direction);
@@ -159,7 +157,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		return true;
 	}
 
-	private boolean structure2(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure2(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		int height = 13 + random.nextInt(2);
 		width = 7;
 		depth = 1;
@@ -169,7 +167,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
 			return false;
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, height - 9, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, height - 9, 1, direction);
@@ -203,7 +201,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		return true;
 	}
 
-	private boolean structure3(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure3(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		width = 7;
 		depth = 5;
 		int direction = random.nextInt(4);
@@ -212,7 +210,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 2, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED))
 			return false;
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 7, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 7, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 2, 0, 0, betweenstoneTiles, 0, 1, 4, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 0, 0, betweenstoneTiles, 0, 1, 4, 1, direction);
@@ -254,7 +252,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 	}
 
 	//TODO switch this to the new system at some point....
-	private boolean structure4(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure4(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		int height = 9 + random.nextInt(2);
 		int width = 6;
 		for (int zz = z; zz < z + width; zz++)
@@ -266,7 +264,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - width, y - 1, z + width - 1)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)) || !SurfaceType.MIXED.matchBlock(world.getBlock(x - 1, y - 1, z + width)))
 			return false;
 		if (doGen) {
-			this.generatedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x - width, y, z, x, y + height, z + width).expand(6, 6, 6), EnumLocationType.RUINS, 0));
+			generatedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x - width, y, z, x, y + height, z + width).expand(6, 6, 6), EnumLocationType.RUINS, 0));
 
 			for (int yy = y; yy < y + height; yy++) {
 				if (yy <= y + height - 5) {
@@ -349,7 +347,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		return true;
 	}
 
-	private boolean structure5(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure5(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		int height = 5 + random.nextInt(2);
 		width = 1;
 		depth = 1;
@@ -359,7 +357,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
 			return false;
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 0, 0, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 0, 1, 0, betweenstonePillar, 0, 1, height - 2, 1, direction);
@@ -371,7 +369,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		return true;
 	}
 
-	private boolean structure6(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure6(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		width = 5 + random.nextInt(2);
 		depth = 1;
 		int direction = random.nextInt(4);
@@ -380,7 +378,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, width - 1, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
 			return false;
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 1, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 1, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 0, 0, 0, chiseledBetweenstone, 0, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 1, 0, 0, betweenstonePillar, direction == 0 || direction == 2 ? 7 : 8, width - 2, 1, 1, direction);
@@ -396,7 +394,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		return true;
 	}
 
-	private boolean structure7(World world, Random random, int x, int y, int z, boolean doGen) {
+	private boolean structure7(World world, Random random, int x, int y, int z, boolean doGen, List<LocationStorage> generatedLocations) {
 		width = 12;
 		depth = 12;
 		int direction = random.nextInt(4);
@@ -405,7 +403,7 @@ public class WorldGenSmallRuins extends WorldGenerator {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
 			return false;
 		if (doGen) {
-			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 13, depth, direction, this.generatedLocations);
+			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 13, depth, direction, generatedLocations);
 
 			rotatedCubeVolume(world, x, y, z, 0, 0, 0, betweenstoneBricks, 0, 1, 1, 4, direction);
 			rotatedCubeVolume(world, x, y, z, 0, 1, 0, betweenstoneBricks, 0, 1, 1, 3, direction);
