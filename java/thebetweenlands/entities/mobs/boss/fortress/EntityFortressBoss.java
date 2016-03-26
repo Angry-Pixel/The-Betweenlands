@@ -487,7 +487,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 					}
 				}
 
-				if(this.getDistance(this.anchorX, this.posY, this.anchorZ) > this.anchorRadius || Math.abs(this.posY - this.anchorY) > this.anchorRadius) {
+				if(this.isFloating() && (this.getDistance(this.anchorX, this.posY, this.anchorZ) > this.anchorRadius || Math.abs(this.posY - this.anchorY) > this.anchorRadius)) {
 					this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:fortressBossTeleport", 1.0F, 1.0F);
 					this.setPosition(this.anchorX, this.anchorY, this.anchorZ);
 				}
@@ -500,19 +500,24 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 					if(living.getDistance(this.anchorX, living.posY, this.anchorZ) > this.anchorRadius || Math.abs(living.posY - this.anchorY) > this.anchorRadius)
 						it.remove();
 				}
-				for(EntityLivingBase living : this.trackedEntities) {
-					if(living != null && living.isEntityAlive() && !currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
-						if(living instanceof EntityPlayerMP) {
-							EntityPlayerMP player = (EntityPlayerMP) living;
-							player.mountEntity(null);
-							player.playerNetServerHandler.setPlayerLocation(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, player.rotationYaw, player.rotationPitch);
-						} else {
-							living.mountEntity(null);
-							living.setLocationAndAngles(this.anchorX, this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ)), this.anchorZ, living.rotationYaw, living.rotationPitch);
+				if(!this.trackedEntities.isEmpty()) {
+					int tpy = this.worldObj.getHeightValue(MathHelper.floor_double(this.anchorX), MathHelper.floor_double(this.anchorZ));
+					if(Math.abs(this.anchorY - tpy) < this.anchorRadius) {
+						for(EntityLivingBase living : this.trackedEntities) {
+							if(living != null && living.isEntityAlive() && !currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
+								if(living instanceof EntityPlayerMP) {
+									EntityPlayerMP player = (EntityPlayerMP) living;
+									player.mountEntity(null);
+									player.playerNetServerHandler.setPlayerLocation(this.anchorX, tpy, this.anchorZ, player.rotationYaw, player.rotationPitch);
+								} else {
+									living.mountEntity(null);
+									living.setLocationAndAngles(this.anchorX, tpy, this.anchorZ, living.rotationYaw, living.rotationPitch);
+								}
+								living.fallDistance = 0.0F;
+								living.addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 2));
+								currentlyTrackedEntities.add(living);
+							}
 						}
-						living.fallDistance = 0.0F;
-						living.addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 2));
-						currentlyTrackedEntities.add(living);
 					}
 				}
 				this.trackedEntities.clear();

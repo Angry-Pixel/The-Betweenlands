@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -18,7 +19,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.items.BLItemRegistry;
 
 public class EntityFortressBossProjectile extends Entity implements IProjectile {
 	public static final int OWNER_DW = 18;
@@ -155,7 +155,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				this.setBeenAttacked();
 				if (source.getEntity() instanceof EntityPlayer) {
 					ItemStack heldItem = ((EntityPlayer)source.getEntity()).getHeldItem();
-					if(heldItem != null && heldItem.getItem() == BLItemRegistry.shockwaveSword)
+					if(heldItem != null && heldItem.getItem() instanceof ItemSword)
 						if(!this.worldObj.isRemote && source.getEntity().riddenByEntity == null) {
 							this.mountEntity(source.getEntity());
 							return true;
@@ -226,7 +226,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				if(this.ridingEntity instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) this.ridingEntity;
 					ItemStack heldItem = player.getHeldItem();
-					if(!this.isDeflectable() || heldItem == null || heldItem.getItem() != BLItemRegistry.shockwaveSword) {
+					if(!this.isDeflectable() || heldItem == null || heldItem.getItem() instanceof ItemSword == false) {
 						if(!this.worldObj.isRemote)
 							this.setDead();
 					} else {
