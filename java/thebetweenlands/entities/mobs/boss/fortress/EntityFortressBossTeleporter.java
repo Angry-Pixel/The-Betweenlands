@@ -2,6 +2,9 @@ package thebetweenlands.entities.mobs.boss.fortress;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +16,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.client.audio.TeleporterSound;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.IScreenShake;
 
@@ -25,7 +29,7 @@ public class EntityFortressBossTeleporter extends Entity implements IScreenShake
 	private EntityPlayer target = null;
 
 	private int teleportTicks = 0;
-	private final int maxTeleportTicks = 80;
+	private final int maxTeleportTicks = 75;
 
 	public boolean isLookingAtPlayer = false;
 
@@ -94,6 +98,7 @@ public class EntityFortressBossTeleporter extends Entity implements IScreenShake
 				this.dataWatcher.updateObject(TARGET_ID_DW, this.target.getEntityId());
 			}
 		} else {
+			Entity prevTarget = this.target;
 			Entity target = this.worldObj.getEntityByID(this.dataWatcher.getWatchableObjectInt(TARGET_ID_DW));
 			if(target instanceof EntityPlayer) {
 				if(this.target == null) {
@@ -104,6 +109,9 @@ public class EntityFortressBossTeleporter extends Entity implements IScreenShake
 				this.target = (EntityPlayer) target;
 			} else {
 				this.target = null;
+			}
+			if(this.target != null && prevTarget != this.target && this.worldObj.isRemote) {
+				this.playTeleportSound();
 			}
 		}
 
@@ -161,6 +169,11 @@ public class EntityFortressBossTeleporter extends Entity implements IScreenShake
 				this.isLookingAtPlayer = false;
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void playTeleportSound() {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new TeleporterSound(this, 1, 1));
 	}
 
 	public void faceEntity(Entity target) {

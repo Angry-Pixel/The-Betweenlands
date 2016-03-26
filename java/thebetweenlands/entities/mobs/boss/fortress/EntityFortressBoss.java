@@ -28,6 +28,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.entities.IEntityMusic;
 import thebetweenlands.entities.mobs.EntityWight;
 import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.entities.mobs.boss.IBossBL;
@@ -35,7 +36,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.utils.RotationMatrix;
 
-public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL {
+public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL, IEntityMusic {
 	public static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
 
 	public static final int SHIELD_DW = 20;
@@ -864,9 +865,24 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL 
 		}
 		this.worldObj.playSoundAtEntity(this, sound, volume, pitch);
 	}
-	
+
 	@Override
 	protected void dropFewItems(boolean killedByPlayer, int looting) {
 		this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
+	}
+
+	@Override
+	public String getMusicFile(EntityPlayer listener) {
+		return "thebetweenlands:fortressBossLoop";
+	}
+
+	@Override
+	public double getMusicRange(EntityPlayer listener) {
+		return 20.0D;
+	}
+
+	@Override
+	public boolean isMusicActive(EntityPlayer listener) {
+		return this.isEntityAlive();
 	}
 }

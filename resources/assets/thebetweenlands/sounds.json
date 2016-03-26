@@ -686,7 +686,10 @@
 	"fortressBossLoop": {
 		"category": "music",
 		"sounds": [
-			"FortressBossLoop"
+			{
+				"name": "boss/FortressBossLoop",
+				"stream": true
+			}
 		]
 	},
 	"music.blMenu": {
