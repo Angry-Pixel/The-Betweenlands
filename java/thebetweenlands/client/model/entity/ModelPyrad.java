@@ -3,6 +3,9 @@ package thebetweenlands.client.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
+import thebetweenlands.entities.mobs.EntityPyrad;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -48,8 +51,7 @@ public class ModelPyrad extends ModelBase {
 		chestpiece_right = new ModelRenderer(this, 0, 14);
 		chestpiece_right.setRotationPoint(0.0F, -6.0F, 0.0F);
 		chestpiece_right.addBox(-6.0F, 0.0F, 0.0F, 6, 6, 8, 0.0F);
-		setRotation(chestpiece_right, -0.09145525280450287F,
-				0.09075712110370514F, -0.008377580409572781F);
+		setRotation(chestpiece_right, -0.09145525280450287F, 0.09075712110370514F, -0.008377580409572781F);
 		staffleaf2 = new ModelRenderer(this, 99, 35);
 		staffleaf2.setRotationPoint(-3.0F, 0.0F, 0.0F);
 		staffleaf2.addBox(-3.0F, -2.0F, 0.0F, 3, 4, 0, 0.0F);
@@ -77,8 +79,7 @@ public class ModelPyrad extends ModelBase {
 		chestpiece_left = new ModelRenderer(this, 29, 14);
 		chestpiece_left.setRotationPoint(0.0F, -6.0F, 0.0F);
 		chestpiece_left.addBox(0.0F, 0.01F, 0.0F, 6, 6, 8, 0.0F);
-		setRotation(chestpiece_left, -0.09145525280450287F,
-				-0.09058258817850572F, 0.008377580409572781F);
+		setRotation(chestpiece_left, -0.09145525280450287F, -0.09058258817850572F, 0.008377580409572781F);
 		lowerjaw_iguess = new ModelRenderer(this, 60, 19);
 		lowerjaw_iguess.setRotationPoint(0.0F, 2.0F, -3.0F);
 		lowerjaw_iguess.addBox(-3.015F, -3.0F, -7.0F, 6, 3, 7, 0.0F);
@@ -101,8 +102,7 @@ public class ModelPyrad extends ModelBase {
 		leaf_headleft1 = new ModelRenderer(this, 35, 2);
 		leaf_headleft1.setRotationPoint(4.0F, -3.0F, -2.0F);
 		leaf_headleft1.addBox(0.0F, -2.0F, 0.0F, 0, 4, 3, 0.0F);
-		setRotation(leaf_headleft1, 0.22759093446006054F,
-				0.4553564018453205F, 0.091106186954104F);
+		setRotation(leaf_headleft1, 0.22759093446006054F, 0.4553564018453205F, 0.091106186954104F);
 		staffleaf1 = new ModelRenderer(this, 99, 30);
 		staffleaf1.setRotationPoint(0.0F, -3.0F, 1.0F);
 		staffleaf1.addBox(-3.0F, -2.0F, 0.0F, 3, 4, 0, 0.0F);
@@ -187,7 +187,24 @@ public class ModelPyrad extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
+		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 		bodybase.render(0.0625F);
+	}
+
+	@Override
+	public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+		headbase.rotateAngleY = rotationYaw / (180F / (float) Math.PI);
+		headbase.rotateAngleX = rotationPitch / (180F / (float) Math.PI);
+	}
+
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+		EntityPyrad pyrad = (EntityPyrad) entity;
+		float flap = MathHelper.sin((pyrad.ticksExisted + partialRenderTicks) * 0.05F ) * 0.5F;
+		plate_back1.rotateAngleX = 0.22759093446006054F + flap;
+		plate_right1.rotateAngleZ = 0.36425021489121656F + flap;
+		plate_left1.rotateAngleZ = -0.36425021489121656F - flap;
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

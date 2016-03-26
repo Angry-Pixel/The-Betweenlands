@@ -2,12 +2,10 @@ package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
@@ -108,6 +106,11 @@ public class EntityPyrad extends EntityMob {
 	@Override
     public boolean isBurning(){
     	return false;
+    }
+
+	@Override
+    protected boolean isValidLightLevel() {
+        return true;
     }
 
 	@Override
