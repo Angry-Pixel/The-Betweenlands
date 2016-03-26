@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.world.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.world.feature.structure.WorldGenCragrockTower;
 
 public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public ItemTestItem() {
@@ -29,16 +29,16 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
            // WorldGenWightFortress tower = new WorldGenWightFortress();
             //tower.generate(world, rand, x, y + 1, z);
 
-            //WorldGenCragrockTower tower = new WorldGenCragrockTower();
-            //tower.generate(world, rand, x, y + 1, z);
+            WorldGenCragrockTower tower = new WorldGenCragrockTower();
+            tower.generate(world, rand, x, y + 1, z);
             //WorldGenMudStructures ruin = new WorldGenMudStructures();
             //ruin.generate(world, rand, x, y + 1, z);
            // WorldGenSmallRuins ruin = new WorldGenSmallRuins();
             //ruin.generate(world, rand, x, y + 1, z);
             //WorldGenUnderGroundStructures structure = new WorldGenUnderGroundStructures();
             //structure.generate(world, rand, x, y + 1, z);
-        	WorldGenSpawnerStructure ruin = new WorldGenSpawnerStructure();
-            ruin.generate(world, rand, x, y + 1, z);
+        	//WorldGenSpawnerStructure ruin = new WorldGenSpawnerStructure();
+            //ruin.generate(world, rand, x, y + 1, z);
             return true;
         }
         return false;

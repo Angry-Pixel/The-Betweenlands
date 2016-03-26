@@ -26,11 +26,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.entities.ICameraOffset;
+import thebetweenlands.entities.IEntityMusic;
 import thebetweenlands.entities.IScreenShake;
 import thebetweenlands.entities.mobs.boss.IBossBL;
 import thebetweenlands.items.BLItemRegistry;
 
-public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL, IScreenShake, ICameraOffset {
+public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL, IScreenShake, ICameraOffset, IEntityMusic {
 	public EntityDreadfulMummy(World world) {
 		super(world);
 		this.getNavigator().setCanSwim(true);
@@ -386,5 +387,20 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 		for(int i = 0; i < this.worldObj.rand.nextInt(3) + 1 + this.worldObj.rand.nextInt(looting + 1) * 2; i++) {
 			this.dropItem(BLItemRegistry.shimmerStone, 1);
 		}
+	}
+
+	@Override
+	public String getMusicFile(EntityPlayer listener) {
+		return "thebetweenlands:dreadfulPeatMummyLoop";
+	}
+
+	@Override
+	public double getMusicRange(EntityPlayer listener) {
+		return 32.0D;
+	}
+
+	@Override
+	public boolean isMusicActive(EntityPlayer listener) {
+		return this.isEntityAlive();
 	}
 }
