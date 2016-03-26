@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
@@ -13,6 +14,7 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 
 	public Block blockID;
 	public int blockMeta;
+	public int originX, originY, originZ, jumpDelay;
 
 	public EntityShockwaveBlock(World world) {
 		super(world);
@@ -28,18 +30,22 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 
 	@Override
 	public void onUpdate() {
+		motionX = 0;
+		motionZ = 0;
+		posX = lastTickPosX;
+		posZ = lastTickPosZ;
 		if (!worldObj.isRemote) {
-			if (ticksExisted <= 3)
-				motionY += 0.20000000149011612D;
-			motionX = 0;
-			motionZ = 0;
-			if (ticksExisted > 3)
+			if (ticksExisted == jumpDelay)
+				motionY += 0.5D;
+			
+			if (ticksExisted > jumpDelay) {
 				motionY -= 0.15D;
 
-			if (onGround || ticksExisted > 10) {
-				worldObj.setBlock((int) (posX - 0.5D), (int) posY, (int) (posZ - 0.5D), blockID, blockMeta, 3);
-				setDead();
+				if (posY <= originY) {
+					worldObj.setBlock(originX, originY, originZ, blockID, blockMeta, 3);
+					setDead();
 
+				}
 			}
 		}
 		super.onUpdate();
@@ -48,6 +54,11 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 	@Override
 	protected void collideWithEntity(Entity entity) {
 		super.collideWithEntity(entity);
+	}
+
+	@Override
+	public boolean canBePushed() {
+		return true;
 	}
 
 	@Override
@@ -74,5 +85,12 @@ public class EntityShockwaveBlock extends EntityFlying implements IEntityAdditio
 	public void readSpawnData(ByteBuf data) {
 		blockID = Block.getBlockById(data.readInt());
 		blockMeta = data.readInt();
+	}
+
+	public void setOrigin(int x, int y, int z, int delay) {
+		originX = x;
+		originY = y;
+		originZ = z;
+		jumpDelay = delay;
 	}
 }

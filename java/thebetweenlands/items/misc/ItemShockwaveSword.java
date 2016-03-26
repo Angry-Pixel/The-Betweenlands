@@ -3,7 +3,6 @@ package thebetweenlands.items.misc;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -52,18 +51,23 @@ public class ItemShockwaveSword extends ItemSwordBL {
 				if (!world.isRemote) {
 					double direction = Math.toRadians(player.rotationYaw);
 					for(int distance = 2; distance < stack.getTagCompound().getInteger("charge"); distance++) {
-						Block block = world.getBlock((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance));
-					if (block != null) {
-						stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(MathHelper.floor_double(player.posX - Math.sin(direction) * distance), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance))));
-						stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(MathHelper.floor_double(player.posX - Math.sin(direction) * distance), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance)));
+						int originX = (MathHelper.floor_double(player.posX - Math.sin(direction) * distance));
+						int originY = MathHelper.floor_double(player.posY - 1);
+						int originZ	= MathHelper.floor_double(player.posZ + Math.cos(direction) * distance);
+						Block block = world.getBlock(originX, originY, originZ);
+					
+						if (block != null) {
+							stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlock(originX, originY, originZ)));
+							stack.getTagCompound().setInteger("blockMeta", world.getBlockMetadata(originX, originY, originZ));
 						
-						EntityShockwaveBlock shockwaveBlock;
-						shockwaveBlock = new EntityShockwaveBlock(world);
-						shockwaveBlock.setLocationAndAngles(MathHelper.floor_double(player.posX - Math.sin(direction) * distance) + 0.5D, MathHelper.floor_double(player.posY - 1),  MathHelper.floor_double(player.posZ + Math.cos(direction) * distance) + 0.5D, 0.0F, 0.0F);
-						shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
-						world.setBlockToAir((MathHelper.floor_double(player.posX - Math.sin(direction) * distance)), MathHelper.floor_double(player.posY - 1), MathHelper.floor_double(player.posZ + Math.cos(direction) * distance));
-						world.spawnEntityInWorld(shockwaveBlock);	
-					}
+							EntityShockwaveBlock shockwaveBlock;
+							shockwaveBlock = new EntityShockwaveBlock(world);
+							shockwaveBlock.setOrigin(originX, originY, originZ, distance);
+							shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
+							shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
+							world.setBlockToAir(originX, originY, originZ);
+							world.spawnEntityInWorld(shockwaveBlock);
+						}
 					}
 					stack.getTagCompound().setInteger("charge", 0);
 					return true;
