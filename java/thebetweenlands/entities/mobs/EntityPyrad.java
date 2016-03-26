@@ -1,27 +1,42 @@
 package thebetweenlands.entities.mobs;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.projectiles.EntityPyradFlame;
 
-public class EntityPyrad extends EntityBlaze {
+public class EntityPyrad extends EntityMob {
 	private int shouldFire;
+    private float heightOffset = 0.5F;
+    private int heightOffsetUpdateTime;
 	public EntityPyrad(World world) {
 		super(world);
+		isImmuneToFire = true;
+        experienceValue = 10;
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(this.worldObj.isRemote) {
-			BLParticle.LEAF_SWIRL.spawn(this.worldObj, this.posX, this.posY, this.posZ, 0, 0, 0, 1, this, 0.0F);
+		if(worldObj.isRemote) {
+			BLParticle.LEAF_SWIRL.spawn(worldObj, posX, posY, posZ, 0, 0, 0, 1, this, 0.0F);
 		}
 	}
+
+	@Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0D);
+    }
 
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
@@ -38,13 +53,11 @@ public class EntityPyrad extends EntityBlaze {
 
 				if (shouldFire == 1) {
 					attackTime = 60;
-					func_70844_e(true);
 				} else if (shouldFire <= 4) {
 					attackTime = 6;
 				} else {
 					attackTime = 100;
 					shouldFire = 0;
-					func_70844_e(false);
 				}
 
 				if (shouldFire > 1) {
@@ -63,6 +76,39 @@ public class EntityPyrad extends EntityBlaze {
 			hasAttacked = true;
 		}
 	}
+
+	@Override
+    protected void fall(float p_70069_1_) {}
+
+	@Override
+    protected Item getDropItem() {
+        return Items.blaze_rod;
+    }
+
+	@Override
+	public void onLivingUpdate() {
+		if (!worldObj.isRemote) {
+			--heightOffsetUpdateTime;
+
+			if (heightOffsetUpdateTime <= 0) {
+				heightOffsetUpdateTime = 100;
+				heightOffset = 0.5F + (float) rand.nextGaussian() * 3.0F;
+			}
+
+			if (getEntityToAttack() != null && getEntityToAttack().posY + (double) getEntityToAttack().getEyeHeight() > posY + (double) getEyeHeight() + (double) heightOffset)
+				motionY += (0.30000001192092896D - motionY) * 0.30000001192092896D;
+		}
+
+		if (!onGround && motionY < 0.0D)
+			motionY *= 0.6D;
+
+		super.onLivingUpdate();
+	}
+
+	@Override
+    public boolean isBurning(){
+    	return false;
+    }
 
 	@Override
 	public int getMaxSpawnedInChunk() {
