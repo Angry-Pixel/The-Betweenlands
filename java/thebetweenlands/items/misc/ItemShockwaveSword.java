@@ -27,6 +27,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg) {
+		super.registerIcons(reg);
 		icon = reg.registerIcon("thebetweenlands:shockwaveSword");
 		iconCharging = reg.registerIcon("thebetweenlands:shockwaveSwordDepleted");
 	}
@@ -34,7 +35,12 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public  IIcon getIcon(ItemStack stack, int pass) {
-		if(stack.hasTagCompound() && stack.getTagCompound().getInteger("uses") == 3)
+		super.getIcon(stack, pass);
+		if (!stack.hasTagCompound())
+			stack.stackTagCompound = new NBTTagCompound();
+		if (!stack.getTagCompound().hasKey("uses"))
+			stack.getTagCompound().setInteger("uses", 0);
+		if(stack.getTagCompound().getInteger("uses") == 3)
 			return iconCharging;
 		return icon;
 	}
