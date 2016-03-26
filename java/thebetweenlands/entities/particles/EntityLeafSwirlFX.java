@@ -160,7 +160,7 @@ public class EntityLeafSwirlFX extends EntityFX {
 		this.lastTickPosZ = this.posZ;
 
 		this.posX = sx + connection.xCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
-		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 0.6D);
+		this.posY = sy + connection.yCoord * this.progress + (this.target == TheBetweenlands.proxy.getClientPlayer() ? -1.25D : 1.0D);
 		this.posZ = sz + connection.zCoord * (1-(1-this.progress)*(1-this.progress)*(1-this.progress)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
 
 		this.textureCounter++;
