@@ -2,6 +2,7 @@ package thebetweenlands.world.biomes;
 
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
@@ -50,5 +51,6 @@ public class BiomeSludgePlains extends BiomeGenBaseBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySludge.class, (short) 60).setHostile(true).setGroupSize(1, 3).setGroupSpawnRadius(4.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 10).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D).setGroupSize(1, 5));
 	}
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
+import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -50,6 +51,7 @@ extends BiomeGenBaseBetweenlands
 
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityPeatMummy.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 20).setHostile(true).setSpawnCheckRadius(30.0D).setGroupSize(1, 5));
 	}
 
 	private int[] recalculatedFogColor = new int[]{(int) 255, (int) 255, (int) 255};

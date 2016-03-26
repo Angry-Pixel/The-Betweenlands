@@ -308,7 +308,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 			spawner.setMob(world, xx + 25, yy + 8, zz + 25, "thebetweenlands.pyrad");
 			spawner.setMob(world, xx + 6, yy + 8, zz + 25, "thebetweenlands.pyrad");
 
-
 			//2nd floors
 			rotatedCubeVolume(world, rand, xx, yy, zz, 4, 11, 4, limestonePolished, 0, 5, 1, 5, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 6, 11, 6, limestoneChiselled, 0, 1, 1, 1, direction);
@@ -740,7 +739,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		for (int xa = xx + 1; xa <= xx + 31; ++xa) {
 			for(int za = zz + 1; za <= zz + 31; ++za) {
 				if(world.getBlock(xa, yy -1, za).isNormalCube() && world.getBlock(xa, yy, za).isAir(world, xa, yy, za))
-					if(rand.nextInt(5) == 0)
+					if(rand.nextInt(8) == 0)
 							world.setBlock(xa, yy, za, getRandomMushroom(rand));
 			}
 		}
