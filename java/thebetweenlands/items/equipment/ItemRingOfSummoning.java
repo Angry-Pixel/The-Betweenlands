@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.entities.mobs.EntityMummyArm;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesRingInput;
+import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.items.loot.ItemRing;
 import thebetweenlands.manual.IManualEntryItem;
 
@@ -29,26 +32,16 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 		this.setTextureName("thebetweenlands:ringOfSummoning");
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.summoning.bonus"));
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip").length() > 10) {
-            String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip");
-            String[] toolTopWords = toolTip.split(" ");
-            String temp = "";
-            for (String string : toolTopWords){
-                if ((temp + string).length() >= 25) {
-                    list.add(temp);
-                    temp = "";
-                } else {
-                    temp += " " + string;
-                }
-            }
-            if (temp.length() > 0)
-                list.add(temp);
-        } else {
-            list.add(StatCollector.translateToLocal("item.thebetweenlands.press.shift"));
-        }
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip").length() > 10) {
+			String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip");
+			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
+		} else {
+			list.add(StatCollector.translateToLocal("item.thebetweenlands.press.shift"));
+		}
 	}
 
 	@Override
