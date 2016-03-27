@@ -14,6 +14,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.misc.ItemBLRecord;
 import thebetweenlands.manual.IManualEntryItem;
 
 /**
@@ -36,7 +37,7 @@ public class BlockBLJukebox extends BlockJukebox implements IManualEntryItem {
         if (world.getBlockMetadata(x, y, z) == 0) {
             if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemRecord) {
                 ((BlockJukebox) Blocks.jukebox).func_149926_b(world, x, y, z, player.getHeldItem());
-                world.playAuxSFXAtEntity((EntityPlayer) null, 1005, x, y, z, Item.getIdFromItem(player.getHeldItem().getItem()));
+                world.playAuxSFXAtEntity(null, 1005, x, y, z, Item.getIdFromItem(player.getHeldItem().getItem()));
                 --player.getHeldItem().stackSize;
                 return true;
             } else if (player.getHeldItem() != null && (player.getHeldItem().getItem() == BLItemRegistry.gertsDonut || player.getHeldItem().getItem() == BLItemRegistry.jamDonut || player.getHeldItem().getItem() == BLItemRegistry.reedDonut)) {
@@ -51,6 +52,16 @@ public class BlockBLJukebox extends BlockJukebox implements IManualEntryItem {
             this.func_149925_e(world, x, y, z);
             return true;
         }
+    }
+
+    @Override
+    public int getComparatorInputOverride(World world, int x, int y, int z, int meta) {
+        ItemStack itemstack = ((BlockJukebox.TileEntityJukebox) world.getTileEntity(x, y, z)).func_145856_a();
+        if (itemstack != null && itemstack.getItem() instanceof ItemBLRecord)
+            return Item.getIdFromItem(itemstack.getItem()) + 1 - Item.getIdFromItem(BLItemRegistry.astatos);
+        else if (itemstack != null && itemstack.getItem() == BLItemRegistry.gertsDonut)
+            return 15;
+        return 0;
     }
 
     @Override
