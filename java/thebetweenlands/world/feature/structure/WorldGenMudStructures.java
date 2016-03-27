@@ -65,15 +65,6 @@ public class WorldGenMudStructures extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 6, 1, 4, mudBrickStair, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 0, 3, mudBrick, 0, 1, 1, 1, direction);
         rotatedLoot(world, random, x, y, z, 5, 0, 3, direction, 1, 3, 2);
-
-        rotatedCubeVolume(world, x, y, z, 1, 1, 2, mudBrickStair, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 3, direction);
-        rotatedCubeVolume(world, x, y, z, 4, 1, 2, mudBrickStair, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 3, direction);
-        rotatedLoot(world, random, x, y, z, 1, 0, 2, direction, 1, 2, 3);
-        rotatedLoot(world, random, x, y, z, 1, 0, 3, direction, 1, 2, 3);
-        rotatedLoot(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3);
-        rotatedLoot(world, random, x, y, z, 4, 0, 2, direction, 1, 2, 3);
-        rotatedLoot(world, random, x, y, z, 4, 0, 3, direction, 1, 2, 3);
-        rotatedLoot(world, random, x, y, z, 4, 0, 4, direction, 1, 2, 3);
         return true;
     }
 
@@ -92,7 +83,7 @@ public class WorldGenMudStructures extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 0, 0, 1, mudBrick, 0, 1, 1, 5, direction);
         rotatedCubeVolume(world, x, y, z, 0, 1, 1, mudBrickStair, getMetaFromDirection(0, direction, stairSequence), 1, 1, 5, direction);
         rotatedCubeVolume(world, x, y, z, 1, 0, 1, mudBrick, 0, 1, 2, 1, direction);
-        rotatedCubeVolume(world, x, y, z, 1, 1, 1, mudBrickSlab, 0, 4, 1, 4, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 2, 1, mudBrickSlab, 0, 4, 1, 4, direction);
         rotatedCubeVolume(world, x, y, z, 1, 0, 5, mudBrick, 0, 5, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 1, 1, 5, mudBrickStair, getMetaFromDirection(1, direction, stairSequence), 5, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 0, 1, mudBrick, 0, 1, 2, 1, direction);
@@ -100,6 +91,15 @@ public class WorldGenMudStructures extends WorldGenerator {
         rotatedCubeVolume(world, x, y, z, 5, 1, 1, mudBrickStair, getMetaFromDirection(2, direction, stairSequence), 1, 1, 4, direction);
         rotatedCubeVolume(world, x, y, z, 4, 0, 0, mudBrick, 0, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 4, 1, 0, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 1, 1, 2, mudBrickStair, getMetaFromDirection(2, direction, upsideDownStairSequence), 1, 1, 3, direction);
+        rotatedCubeVolume(world, x, y, z, 4, 1, 2, mudBrickStair, getMetaFromDirection(0, direction, upsideDownStairSequence), 1, 1, 3, direction);
+        rotatedLoot(world, random, x, y, z, 1, 0, 2, direction, 1, 2, 3);
+        rotatedLoot(world, random, x, y, z, 1, 0, 3, direction, 1, 2, 3);
+        rotatedLoot(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3);
+        rotatedLoot(world, random, x, y, z, 4, 0, 2, direction, 1, 2, 3);
+        rotatedLoot(world, random, x, y, z, 4, 0, 3, direction, 1, 2, 3);
+        rotatedLoot(world, random, x, y, z, 4, 0, 4, direction, 1, 2, 3);
         return true;
     }
 
