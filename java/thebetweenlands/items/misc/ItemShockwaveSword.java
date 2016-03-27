@@ -1,5 +1,7 @@
 package thebetweenlands.items.misc;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -13,6 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntityShockwaveBlock;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.food.ItemForbiddenFig;
 import thebetweenlands.items.tools.ItemSwordBL;
 import thebetweenlands.utils.CorrodibleItemHelper;
 
@@ -28,6 +32,15 @@ public class ItemShockwaveSword extends ItemSwordBL {
 		super(material);
 		setUnlocalizedName("thebetweenlands.shockwaveSword");
 		setTextureName("thebetweenlands:shockwaveSword");
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+		ItemShockwaveSword item = (ItemShockwaveSword) stack.getItem();
+		if (item == BLItemRegistry.shockwaveSword)
+			list.add("Shift, right-click on the ground to create a shockwave");
 	}
 
 	@Override
