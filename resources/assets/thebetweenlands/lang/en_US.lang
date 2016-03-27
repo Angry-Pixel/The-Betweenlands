@@ -834,11 +834,16 @@ ring.power.bonus=Grants a bonus to all stats
 ring.recruitment.bonus=Grants the power to recruit enemies
 ring.flight.bonus=Grants the gift of levitation
 ring.summoning.bonus=Grants the ability to summon allies from the depths
+item.thebetweenlands.ringOfSummoning.tooltip=Equip using the radial menu [default 'F'], scream using 'R' [default]
+item.thebetweenlands.ringOfFlight.tooltip=Equip using the radial menu [default 'F'], double jump to activate
+item.thebetweenlands.ringOfPower.tooltip=Equip using the radial menu [default 'F']
+item.thebetweenlands.ringOfRecruitment.tooltip=Equip using the radial menu [default 'F'], right click on mobs to active
 aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 food_sickness.state.fine=Tastes good
 food_sickness.state.half=Tastes plain
 food_sickness.state.sick=Can't eat this anymore
 item.equippable=Equippable
+item.thebetweenlands.press.shift=Hold 'shift' to view more
 
 # Commands
 command.generic.noplayer=You must be a player

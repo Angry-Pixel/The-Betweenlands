@@ -2,6 +2,8 @@ package thebetweenlands.items.equipment;
 
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -38,6 +40,23 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.flight.bonus"));
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip").length() > 10) {
+            String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip");
+            String[] toolTopWords = toolTip.split(" ");
+            String temp = "";
+            for (String string : toolTopWords){
+                if ((temp + string).length() >= 25) {
+                    list.add(temp);
+                    temp = "";
+                } else {
+                    temp += " " + string;
+                }
+            }
+            if (temp.length() > 0)
+                list.add(temp);
+        } else {
+            list.add(StatCollector.translateToLocal("item.thebetweenlands.press.shift"));
+        }
 	}
 
 	@Override

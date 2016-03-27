@@ -3,6 +3,8 @@ package thebetweenlands.items.equipment;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,6 +32,23 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.summoning.bonus"));
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip").length() > 10) {
+            String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfSummoning.tooltip");
+            String[] toolTopWords = toolTip.split(" ");
+            String temp = "";
+            for (String string : toolTopWords){
+                if ((temp + string).length() >= 25) {
+                    list.add(temp);
+                    temp = "";
+                } else {
+                    temp += " " + string;
+                }
+            }
+            if (temp.length() > 0)
+                list.add(temp);
+        } else {
+            list.add(StatCollector.translateToLocal("item.thebetweenlands.press.shift"));
+        }
 	}
 
 	@Override
