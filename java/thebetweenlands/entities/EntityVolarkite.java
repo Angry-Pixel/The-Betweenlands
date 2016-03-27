@@ -23,8 +23,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityVolarkite extends Entity implements
-		IEntityAdditionalSpawnData {
+public class EntityVolarkite extends Entity implements IEntityAdditionalSpawnData {
 
 	private static Map<EntityPlayer, Integer> gliderMap = new WeakHashMap<EntityPlayer, Integer>();
 	private static Map<EntityPlayer, Integer> gliderClientMap = new WeakHashMap<EntityPlayer, Integer>();
@@ -41,9 +40,9 @@ public class EntityVolarkite extends Entity implements
 		Integer gliderId = gliderClientMap.get(player);
 		if (gliderId != null) {
 			Entity glider = player.worldObj.getEntityByID(gliderId);
-			if (glider instanceof EntityVolarkite) return ((EntityVolarkite)glider).isPlayerOnGround();
+			if (glider instanceof EntityVolarkite)
+				return ((EntityVolarkite)glider).isPlayerOnGround();
 		}
-
 		return true;
 	}
 
@@ -54,28 +53,19 @@ public class EntityVolarkite extends Entity implements
 			Entry<EntityPlayer, Integer> next = it.next();
 			EntityPlayer player = next.getKey();
 			Entity entity = worldObj.getEntityByID(next.getValue());
-			if (!(entity instanceof EntityVolarkite)) continue;
+			if (!(entity instanceof EntityVolarkite))
+				continue;
 			EntityVolarkite glider = (EntityVolarkite)entity;
-			if (player == null
-					|| player.isDead
-					|| glider.isDead
-					|| player.getHeldItem() == null
-					|| !(player.getHeldItem().getItem() instanceof ItemVolarkite)
-					|| player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
+			if (player == null || player.isDead || glider.isDead || player.getHeldItem() == null || !(player.getHeldItem().getItem() instanceof ItemVolarkite) || player.worldObj.provider.dimensionId != glider.worldObj.provider.dimensionId) {
 				glider.setDead();
 				it.remove();
-			} else {
+			} else 
 				glider.fixPositions(Minecraft.getMinecraft().thePlayer);
-			}
-
 		}
 	}
 
 	private EntityPlayer player;
-	/*
-	 * Let the glider handle it's own disposal to centralize reference
-	 * management in one place.
-	 */
+
 	private boolean shouldDespawn = false;
 
 	public EntityVolarkite(World world) {
@@ -106,13 +96,11 @@ public class EntityVolarkite extends Entity implements
 		if (player == null) {
 			setDead();
 		} else {
-			if (!worldObj.isRemote) {
+			if (!worldObj.isRemote)
 				this.dataWatcher.updateObject(2, Byte.valueOf((byte)(player.onGround? 1 : 0)));
-			}
+
 			ItemStack held = player.getHeldItem();
-			if (player.isDead || held == null || held.getItem() == null
-					|| held.getItem() != BLItemRegistry.volarkite
-					|| shouldDespawn || player.dimension != this.dimension) {
+			if (player.isDead || held == null || held.getItem() == null || held.getItem() != BLItemRegistry.volarkite || shouldDespawn || player.dimension != this.dimension) {
 				getMapForSide(worldObj.isRemote).remove(player);
 				setDead();
 			} else {
@@ -126,13 +114,11 @@ public class EntityVolarkite extends Entity implements
 				if (!player.onGround && player.motionY < 0) {
 					player.motionY *= verticalSpeed;
 					motionY *= verticalSpeed;
-					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
-					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90))
-							* horizontalSpeed;
+					double x = Math.cos(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
+					double z = Math.sin(Math.toRadians(player.rotationYawHead + 90)) * horizontalSpeed;
 					player.motionX += x;
 					player.motionZ += z;
-					player.fallDistance = 0f; /* Don't like getting hurt :( */
+					player.fallDistance = 0f;
 				}
 			}
 		}
@@ -200,7 +186,6 @@ public class EntityVolarkite extends Entity implements
 			gliderClientMap.put(player, getEntityId());
 		}
 	}
-
 }
 
 

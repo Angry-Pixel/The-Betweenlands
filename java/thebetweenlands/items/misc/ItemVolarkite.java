@@ -51,12 +51,12 @@ public class ItemVolarkite extends Item implements IManualEntryItem {
 		if (map.containsKey(player)) {
 			int entityId = map.get(player);
 			Entity entity = world.getEntityByID(entityId);
-			if (!(entity instanceof EntityVolarkite)) { return itemStack; }
+			if (!(entity instanceof EntityVolarkite)) 
+				return itemStack;
 			EntityVolarkite kite = (EntityVolarkite)entity;
 			kite.despawnGlider();
-		} else {
+		} else
 			spawnGlider(world, player);
-		}
 		return itemStack;
 	}
 
