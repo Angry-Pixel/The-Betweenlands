@@ -1,7 +1,5 @@
 package thebetweenlands.items.misc;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,9 +10,12 @@ import net.minecraft.world.World;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBossTeleporter;
 import thebetweenlands.manual.IManualEntryItem;
 
+import java.util.Random;
+
 public class ItemTestItem2 extends ItemSword implements IManualEntryItem {
 	public ItemTestItem2() {
 		super(Item.ToolMaterial.IRON);
+		this.setCreativeTab(null);
 	}
 
 	@Override

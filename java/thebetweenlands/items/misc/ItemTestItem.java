@@ -1,7 +1,5 @@
 package thebetweenlands.items.misc;
 
-import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -11,9 +9,12 @@ import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.world.feature.structure.WorldGenWightFortress;
 
+import java.util.Random;
+
 public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public ItemTestItem() {
         super(Item.ToolMaterial.IRON);
+        this.setCreativeTab(null);
     }
 
     @Override

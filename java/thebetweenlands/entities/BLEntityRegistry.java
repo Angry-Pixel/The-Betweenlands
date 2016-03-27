@@ -59,7 +59,7 @@ public class BLEntityRegistry
 		registerEntity(42, EntityPyrad.class, "pyrad", 0x005C3D, 0x2D4231, 64, 3, true);
 		registerEntity(43, EntityPyradFlame.class, "flammeBall");
 		registerEntity(44, EntityFortressBossTeleporter.class, "fortressBossTeleporter", 64, 5, false);
-		registerEntity(45, EntityMummyArm.class, "mummyArm", 0x804E3D, 0x3D6F80, 64, 20, false);
+		registerEntity(45, EntityMummyArm.class, "mummyArm", /*0x804E3D, 0x3D6F80,*/ 64, 20, false);
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
 		registerEntity(47, EntityVolarkite.class, "volakite", 64, 20, true);
 	}

@@ -10,6 +10,7 @@ import thebetweenlands.manual.IManualEntryItem;
 public class ItemBLFood extends ItemFood implements IManualEntryItem{
     public ItemBLFood(int healAmount, float saturationModifier, boolean isWolfsFavoriteMeat) {
         super(healAmount, saturationModifier, isWolfsFavoriteMeat);
+        this.setCreativeTab(null);
     }
 
     @Override
