@@ -9,11 +9,13 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class AmbienceSound extends MovingSound {
 	private boolean fadeOut = false;
+	private boolean isLowPriority = false;
 
 	public final EntityPlayer player;
 	public final AmbienceType type;
+	public final AmbienceManager mgr;
 
-	public AmbienceSound(AmbienceType type, EntityPlayer player, ResourceLocation sound) {
+	public AmbienceSound(AmbienceType type, EntityPlayer player, ResourceLocation sound, AmbienceManager mgr) {
 		super(sound);
 		this.type = type;
 		this.player = player;
@@ -21,6 +23,7 @@ public class AmbienceSound extends MovingSound {
 		this.field_147666_i = AttenuationType.NONE;
 		this.volume = 0.1F; //Start at 0.1 and fade in
 		this.field_147663_c = this.type.getPitch();
+		this.mgr = mgr;
 	}
 
 	@Override
@@ -33,6 +36,8 @@ public class AmbienceSound extends MovingSound {
 		float incr = Math.max(desiredVolume / (float)fadeTicks, 0.001F);
 		if(this.isStopping())
 			desiredVolume = 0.0F;
+		if(this.isLowPriority)
+			desiredVolume = Math.min(desiredVolume, this.mgr.getLowerPriorityVolume());
 
 		if(this.volume > desiredVolume) {
 			this.volume -= incr;
@@ -83,5 +88,9 @@ public class AmbienceSound extends MovingSound {
 	 */
 	public boolean isStopping() {
 		return this.donePlaying || this.fadeOut || !this.type.isActive();
+	}
+
+	void setLowPriority(boolean lowPriority) {
+		this.isLowPriority = lowPriority;
 	}
 }
