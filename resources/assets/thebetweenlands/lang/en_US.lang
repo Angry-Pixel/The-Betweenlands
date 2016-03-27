@@ -844,12 +844,9 @@ food_sickness.state.fine=Tastes good
 food_sickness.state.half=Tastes plain
 food_sickness.state.sick=Can't eat this anymore
 item.equippable=Equippable
-<<<<<<< HEAD
 item.thebetweenlands.press.shift=Hold 'shift' to view more
-=======
 fig.tooltip=Looks tempting...
 chiromawWing.taste=Anything will taste better after eating this...
->>>>>>> origin/master
 
 # Commands
 command.generic.noplayer=You must be a player
