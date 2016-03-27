@@ -227,6 +227,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.ringOfFlight);
+		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());
 		MinecraftForge.EVENT_BUS.register(BLItemRegistry.volarkite);
 
 		BLRecipes.init();

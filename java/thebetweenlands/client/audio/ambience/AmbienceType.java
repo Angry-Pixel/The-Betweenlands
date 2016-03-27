@@ -26,7 +26,7 @@ public abstract class AmbienceType {
 		return this.player;
 	}
 
-	public AmbienceType setPlayer(EntityPlayer player) {
+	AmbienceType setPlayer(EntityPlayer player) {
 		this.player = player;
 		return this;
 	}
@@ -52,23 +52,52 @@ public abstract class AmbienceType {
 	 */
 	public abstract ResourceLocation getSound();
 
+	/**
+	 * Returns the default volume of this ambience
+	 * @return
+	 */
 	public float getVolume() {
 		return 1.0F;
 	}
 
+	/**
+	 * Returns the pitch of this ambience
+	 * @return
+	 */
 	public float getPitch() {
 		return 1.0F;
 	}
 
+	/**
+	 * Returns whether this ambience stops music from playing
+	 * @return
+	 */
 	public boolean stopsMusic() {
 		return false;
 	}
 
+	/**
+	 * Returns the start delay in ticks
+	 * @return
+	 */
 	public int getDelay() {
 		return 0;
 	}
-	
+
+	/**
+	 * Returns the fading time in ticks
+	 * @return
+	 */
 	public int getFadeTime() {
 		return 20;
+	}
+
+	/**
+	 * Returns the volume that lower priority ambiences should be clamped to.
+	 * Return <= 0 if other sounds should should stop playing completely.
+	 * @return
+	 */
+	public float getLowerPriorityVolume() {
+		return -1F;
 	}
 }

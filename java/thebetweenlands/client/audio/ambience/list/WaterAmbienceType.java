@@ -39,4 +39,9 @@ public class WaterAmbienceType extends AmbienceType {
 	public int getFadeTime() {
 		return 5;
 	}
+
+	@Override
+	public float getLowerPriorityVolume() {
+		return 0.1F;
+	}
 }

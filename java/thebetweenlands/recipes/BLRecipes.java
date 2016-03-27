@@ -36,6 +36,7 @@ import thebetweenlands.recipes.misc.CompostRecipe;
 import thebetweenlands.recipes.misc.DruidAltarRecipe;
 import thebetweenlands.recipes.misc.PestleAndMortarRecipe;
 import thebetweenlands.recipes.misc.RecipeImprovedRubberBoots;
+import thebetweenlands.recipes.misc.RecipeSummonMummy;
 import thebetweenlands.recipes.misc.RecipesAmulets;
 import thebetweenlands.recipes.misc.RecipesAspectVials;
 import thebetweenlands.recipes.misc.RecipesAspectrusSeeds;
@@ -157,7 +158,7 @@ public class BLRecipes {
 		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGem.NONE), "XXX", "X X", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BLBlockRegistry.volarpad));
-		
+
 		//Machine Blocks
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
@@ -320,7 +321,8 @@ public class BLRecipes {
 		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
 		RecipeSorter.register("thebetweenlands:recipeAmulets", RecipesAmulets.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipesAmulets());
+		GameRegistry.addRecipe(new RecipeSummonMummy());
+		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
 	}
 
 	private static void registerSmelting() {

@@ -96,6 +96,31 @@ public class AmbienceManager {
 				if(!availableAmbiences.isEmpty()) {
 					List<AmbienceType> sorted = this.sortByPriority(availableAmbiences);
 
+					//Add ambient tracks that should be playing
+					boolean lowerOthers = true;
+					int typeIndex = 0;
+					for(int i = 0; i < sorted.size() && typeIndex < tracks; i++) {
+						AmbienceType type = sorted.get(i);
+						if(type.isActive()) {
+							typeIndex++;
+							boolean isPlaying = false;
+							for(AmbienceSound sound : this.playingAmbiences) {
+								if(type.equals(sound.type)) {
+									sound.setLowPriority(false);
+									isPlaying = true;
+									if(sound.isFadingOut())
+										sound.cancelFade();
+									break;
+								}
+							}
+							if(!isPlaying) {
+								this.playSound(new AmbienceSound(type, player, type.getSound(), this), type.getDelay());
+							}
+							if(type.getLowerPriorityVolume() < 0.0F)
+								lowerOthers = false;
+						}
+					}
+
 					//Stop any ambient tracks that don't have priority or shouldn't play
 					for(AmbienceSound sound : this.playingAmbiences) {
 						if(!sound.isStopping()) {
@@ -111,34 +136,27 @@ public class AmbienceManager {
 									}
 								}
 							}
-							if(!hasPriority)
-								sound.stop();
-						}
-					}
-
-					//Add ambient tracks that should be playing
-					int index = 0;
-					for(int i = 0; i < sorted.size() && index < tracks; i++) {
-						AmbienceType type = sorted.get(i);
-						if(type.isActive()) {
-							index++;
-							boolean isPlaying = false;
-							for(AmbienceSound sound : this.playingAmbiences) {
-								if(type.equals(sound.type)) {
-									isPlaying = true;
-									if(sound.isFadingOut())
-										sound.cancelFade();
-									break;
+							if(!hasPriority) {
+								if(!lowerOthers) {
+									sound.stop();
+								} else {
+									sound.setLowPriority(true);
 								}
-							}
-							if(!isPlaying) {
-								this.playSound(new AmbienceSound(type, player, type.getSound()), type.getDelay());
 							}
 						}
 					}
 				}
 			}
 		}
+	}
+
+	float getLowerPriorityVolume() {
+		float lowest = Float.MAX_VALUE;
+		for(AmbienceSound sound : this.playingAmbiences) {
+			if(sound.type.getLowerPriorityVolume() > 0.0F && sound.type.getLowerPriorityVolume() < lowest)
+				lowest = sound.type.getLowerPriorityVolume();
+		}
+		return lowest;
 	}
 
 	private void playSound(AmbienceSound sound, int delay) {
