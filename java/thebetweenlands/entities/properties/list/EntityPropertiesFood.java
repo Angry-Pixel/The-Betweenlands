@@ -83,9 +83,9 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		int finalMaxHatred = Sickness.VALUES[Math.max(Sickness.VALUES.length - 1, 0)].maxHatred;
 		if (this.hatredMap.containsKey(food.getUnlocalizedName())) {
 			int currentAmount = this.hatredMap.get(food.getUnlocalizedName());
-			this.hatredMap.put(food.getUnlocalizedName(), Math.min(currentAmount + amount, finalMaxHatred));
+			this.hatredMap.put(food.getUnlocalizedName(), Math.max(Math.min(currentAmount + amount, finalMaxHatred), 0));
 		} else {
-			this.hatredMap.put(food.getUnlocalizedName(), Math.min(amount, finalMaxHatred));
+			this.hatredMap.put(food.getUnlocalizedName(), Math.max(Math.min(amount, finalMaxHatred), 0));
 		}
 		this.lastHatred = this.hatredMap.get(food.getUnlocalizedName());
 		decreaseHatredForAllExcept(food, decreaseForOthers);

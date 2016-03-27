@@ -441,6 +441,7 @@ item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 item.thebetweenlands.sapBall.name=Ball of Sap
 item.thebetweenlands.rottenFood.name=Rotten Food
 item.thebetweenlands.tangledRoot.name=Tangled Root
+item.thebetweenlands.chiromawWing.name=Chiromaw Wing
 
 item.thebetweenlands.anglerMeatRaw.name=Raw Angler Meat
 item.thebetweenlands.anglerMeatCooked.name=Angler Meat Steak
@@ -843,7 +844,12 @@ food_sickness.state.fine=Tastes good
 food_sickness.state.half=Tastes plain
 food_sickness.state.sick=Can't eat this anymore
 item.equippable=Equippable
+<<<<<<< HEAD
 item.thebetweenlands.press.shift=Hold 'shift' to view more
+=======
+fig.tooltip=Looks tempting...
+chiromawWing.taste=Anything will taste better after eating this...
+>>>>>>> origin/master
 
 # Commands
 command.generic.noplayer=You must be a player
@@ -1280,6 +1286,7 @@ key.radialmenu=Equipment Menu
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
+location.caverns.name=80:<scale:1.75>Caverns</scale>
 location.ruins.name=80:<scale:1.75>Ruins</scale>
 location.smallDungeon.name=80:<scale:1.75>Shrine Dungeon</scale>
 location.tarPoolDungeon.name=80:<scale:1.75>Tar Pool Dungeon</scale>

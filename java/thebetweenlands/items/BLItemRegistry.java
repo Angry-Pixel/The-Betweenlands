@@ -46,6 +46,7 @@ import thebetweenlands.items.equipment.ItemRingOfSummoning;
 import thebetweenlands.items.food.ItemBLFood;
 import thebetweenlands.items.food.ItemBlackHatMushroom;
 import thebetweenlands.items.food.ItemBulbCappedMushroom;
+import thebetweenlands.items.food.ItemChiromawWing;
 import thebetweenlands.items.food.ItemFlatheadMushroom;
 import thebetweenlands.items.food.ItemForbiddenFig;
 import thebetweenlands.items.food.ItemGertsDonut;
@@ -224,6 +225,7 @@ public class BLItemRegistry {
 	public static final Item candyBlue = new ItemBLFood(3, 1.0F, false).setUnlocalizedName("thebetweenlands.candyBlue").setTextureName("thebetweenlands:sweetBlue");
 	public static final Item candyRed = new ItemBLFood(3, 1.0F, false).setUnlocalizedName("thebetweenlands.candyRed").setTextureName("thebetweenlands:sweetRed");
 	public static final Item candyYellow = new ItemBLFood(3, 1.0F, false).setUnlocalizedName("thebetweenlands.candyYellow").setTextureName("thebetweenlands:sweetYellow");
+	public static final Item chiromawWing = new ItemChiromawWing();
 	//DOORS
 	public static final Item doorWeedwood = new ItemBLDoor(BLBlockRegistry.doorWeedwood);
 	public static final Item doorRubber = new ItemBLDoor(BLBlockRegistry.doorRubber);

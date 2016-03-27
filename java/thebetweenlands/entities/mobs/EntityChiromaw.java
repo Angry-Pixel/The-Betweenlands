@@ -10,6 +10,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.misc.ItemGeneric;
 
 public class EntityChiromaw extends EntityFlying implements IMob {
 	public int courseChangeCooldown;
@@ -165,6 +167,11 @@ public class EntityChiromaw extends EntityFlying implements IMob {
         else
             dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
     }
+
+	@Override
+	protected void dropFewItems(boolean recentlyHit, int looting) {
+		entityDropItem(ItemGeneric.createStack(BLItemRegistry.chiromawWing, 1, 0), 0.0F);
+	}
 
 	@Override
 	protected String getLivingSound() {
