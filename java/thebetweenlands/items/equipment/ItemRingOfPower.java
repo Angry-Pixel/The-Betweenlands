@@ -29,7 +29,7 @@ public class ItemRingOfPower extends ItemRing implements IManualEntryItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.power.bonus"));
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfPower.tooltip").length() > 10) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfPower.tooltip");
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {

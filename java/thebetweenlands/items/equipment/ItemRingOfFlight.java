@@ -44,7 +44,7 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.flight.bonus"));
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip").length() > 10) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip");
             list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
         } else {
