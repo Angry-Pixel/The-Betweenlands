@@ -23,6 +23,7 @@ public class ItemVolarkite extends Item implements IManualEntryItem {
     public ItemVolarkite(){
         maxStackSize = 1;
         setUnlocalizedName("thebetweenlands.volarkite");
+        setTextureName("thebetweenlands:volarkiteItem");
     }
 
     @Override
