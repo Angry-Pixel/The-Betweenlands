@@ -32,6 +32,15 @@
 			}
 		]
 	},
+	"ambientWater": {
+		"category": "ambient",
+		"sounds": [
+			{
+				"name": "ambience/WaterAmbience",
+				"stream": true
+			}
+		]
+	},
 	"druidChant": {
 		"category": "block",
 		"sounds": [
