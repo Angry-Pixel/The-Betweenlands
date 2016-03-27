@@ -31,7 +31,7 @@ public class LocationAmbienceType extends AmbienceType {
 
 	@Override
 	public int getPriority() {
-		return 2;
+		return 5;
 	}
 
 	@Override

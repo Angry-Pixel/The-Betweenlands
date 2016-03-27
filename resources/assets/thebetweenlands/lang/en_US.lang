@@ -1259,7 +1259,7 @@ chat.amulet.slot.full=Can't add any more amulet slots
 chat.guard.warning1=Your actions have consequences...
 chat.guard.warning2=You have angered the guards...
 
-chat.guard.drop=This locations seems to be no longer guarded
+chat.guard.drop=This location seems to be no longer guarded
 
 chat.voodoo.no.mobs=There are no mobs to damage
 

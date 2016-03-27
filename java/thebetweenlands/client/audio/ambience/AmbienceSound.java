@@ -29,18 +29,20 @@ public class AmbienceSound extends MovingSound {
 			this.field_147663_c = this.type.getPitch();
 
 		float desiredVolume = this.type.getVolume();
+		int fadeTicks = Math.max(this.type.getFadeTime(), 1);
+		float incr = Math.max(desiredVolume / (float)fadeTicks, 0.001F);
 		if(this.isStopping())
 			desiredVolume = 0.0F;
 
 		if(this.volume > desiredVolume) {
-			this.volume -= 0.02F;
+			this.volume -= incr;
 			if(this.volume < desiredVolume) {
 				this.volume = desiredVolume;
 				if(this.isStopping())
 					this.donePlaying = true;
 			}
 		} else if(this.volume < desiredVolume) {
-			this.volume += 0.02F;
+			this.volume += incr;
 			if(this.volume > desiredVolume) {
 				this.volume = desiredVolume;
 			}

@@ -67,4 +67,8 @@ public abstract class AmbienceType {
 	public int getDelay() {
 		return 0;
 	}
+	
+	public int getFadeTime() {
+		return 20;
+	}
 }

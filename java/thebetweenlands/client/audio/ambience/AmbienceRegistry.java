@@ -7,6 +7,7 @@ import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
 import thebetweenlands.client.audio.ambience.list.EventAmbienceType;
 import thebetweenlands.client.audio.ambience.list.LocationAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
+import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
 import thebetweenlands.world.events.impl.EventBloodSky;
 import thebetweenlands.world.events.impl.EventSpoopy;
 import thebetweenlands.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
@@ -17,6 +18,7 @@ public class AmbienceRegistry {
 		//Base ambience
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new CaveAmbienceType());
+		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType());
 
 		//Locations
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, new ResourceLocation("thebetweenlands:ambientWightFortress")) {
