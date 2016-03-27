@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -35,6 +36,9 @@ import thebetweenlands.entities.mobs.boss.IBossBL;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.network.packet.client.PacketPlayIdleSound;
 import thebetweenlands.utils.RotationMatrix;
+import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.GuardedLocationStorage;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL, IEntityMusic {
 	public static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
@@ -810,10 +814,27 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 						this.worldObj.spawnEntityInWorld(bullet);
 					}
 				}
-				
+
 				this.dropItem(BLItemRegistry.ringOfRecruitment, 1);
 				this.dropItem(BLItemRegistry.amuletSlot, 1);
-				
+
+				boolean hadArea = false;
+				List<LocationStorage> locations = StorageHelper.getAreas(this.worldObj, AxisAlignedBB.getBoundingBox(this.anchorX - 60, this.anchorY - 100, this.anchorZ - 60, this.anchorX + 60, this.anchorY + 40, this.anchorZ + 60));
+				for(LocationStorage location : locations) {
+					if(location instanceof GuardedLocationStorage) {
+						((GuardedLocationStorage)location).setGuarded(false);
+						location.getChunkData().markDirty();
+						hadArea = true;
+					}
+				}
+				if(hadArea) {
+					AxisAlignedBB checkAABB = AxisAlignedBB.getBoundingBox(this.anchorX - 60, this.anchorY - 100, this.anchorZ - 60, this.anchorX + 60, this.anchorY + 40, this.anchorZ + 60);
+					List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
+					for(EntityPlayer player : players) {
+						player.addChatMessage(new ChatComponentTranslation("chat.guard.drop"));
+					}
+				}
+
 				this.setDead();
 			}
 		}

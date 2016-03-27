@@ -97,13 +97,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 				}
 			}
 		}
-		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0);
+		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0, true);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).getChunkData().markDirty();
 		}
-		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1);
-		StorageHelper.addArea(world, "translate:wightTowerTeleporter", AxisAlignedBB.getBoundingBox(x - 10 + 23, y + 17 + 12, z - 10 + 23, x + 42 - 23, y + 17 + 6 + 11, z + 42 - 23), EnumLocationType.WIGHT_TOWER, 2);
-		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 3);
+		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1, true);
+		StorageHelper.addArea(world, "translate:wightTowerTeleporter", AxisAlignedBB.getBoundingBox(x - 10 + 23, y + 17 + 12, z - 10 + 23, x + 42 - 23, y + 17 + 6 + 11, z + 42 - 23), EnumLocationType.WIGHT_TOWER, 2, true);
+		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 3, true);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).getChunkData().markDirty();
 		}
@@ -165,7 +165,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		return syrmoriteBlock;
 	}
-	
+
 	public Block getRandomMushroom(Random rand) {
 		int type = rand.nextInt(3);
 		switch (type) {
@@ -731,7 +731,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, xx, yy, zz, 15, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 16, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 			rotatedCubeVolume(world, rand, xx, yy, zz, 20, 11, 9, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
-		
+
 		}
 		//retro-gen betweenstoneBrickStairs
 		direction = rand.nextInt(4);
@@ -740,7 +740,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			for(int za = zz + 1; za <= zz + 31; ++za) {
 				if(world.getBlock(xa, yy -1, za).isNormalCube() && world.getBlock(xa, yy, za).isAir(world, xa, yy, za))
 					if(rand.nextInt(8) == 0)
-							world.setBlock(xa, yy, za, getRandomMushroom(rand));
+						world.setBlock(xa, yy, za, getRandomMushroom(rand));
 			}
 		}
 
