@@ -7,6 +7,8 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +26,7 @@ import thebetweenlands.entities.properties.list.EntityPropertiesFlight;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
+import thebetweenlands.event.item.ItemTooltipHandler;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.loot.ItemRing;
 import thebetweenlands.manual.IManualEntryItem;
@@ -37,23 +40,13 @@ public class ItemRingOfFlight extends ItemRing implements IManualEntryItem {
 		this.setTextureName("thebetweenlands:ringOfFlight");
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		list.add(StatCollector.translateToLocal("ring.flight.bonus"));
-        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip").length() > 10) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             String toolTip = StatCollector.translateToLocal("item.thebetweenlands.ringOfFlight.tooltip");
-            String[] toolTopWords = toolTip.split(" ");
-            String temp = "";
-            for (String string : toolTopWords){
-                if ((temp + string).length() >= 25) {
-                    list.add(temp);
-                    temp = "";
-                } else {
-                    temp += " " + string;
-                }
-            }
-            if (temp.length() > 0)
-                list.add(temp);
+            list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
         } else {
             list.add(StatCollector.translateToLocal("item.thebetweenlands.press.shift"));
         }

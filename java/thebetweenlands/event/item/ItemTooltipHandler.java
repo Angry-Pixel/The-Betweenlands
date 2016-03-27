@@ -305,4 +305,15 @@ public class ItemTooltipHandler {
 			event.toolTip.add(StatCollector.translateToLocal("item.equippable"));
 		}
 	}
+
+	public static List<String> splitTooltip(String tooltip, int indent) {
+		String indentStr = new String(new char[indent]).replace('\0', ' ');
+		List<String> lines = new ArrayList<String>();
+		String[] splits = tooltip.split("\\\\n");
+		for(int i = 0; i < splits.length; i++) {
+			splits[i] = indentStr + splits[i];
+		}
+		lines.addAll(Arrays.asList(splits));
+		return lines;
+	}
 }
