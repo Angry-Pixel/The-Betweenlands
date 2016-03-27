@@ -199,4 +199,13 @@ public class LocationStorage extends ChunkStorage {
 		}
 		return false;
 	}
+
+	public static boolean isLocationGuarded(Entity entity) {
+		List<LocationStorage> locations = getLocations(entity);
+		for(LocationStorage location : locations) {
+			if(location instanceof GuardedLocationStorage && ((GuardedLocationStorage)location).isGuarded()) 
+				return true;
+		}
+		return false;
+	}
 }

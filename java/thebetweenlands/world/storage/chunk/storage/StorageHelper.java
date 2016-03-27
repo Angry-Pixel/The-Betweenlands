@@ -10,10 +10,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.GuardedLocationStorage;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public class StorageHelper {
 	public static List<LocationStorage> addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer) {
+		return addArea(world, name, area, type, layer, false);
+	}
+
+	public static List<LocationStorage> addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer, boolean guarded) {
 		List<LocationStorage> addedLocations = new ArrayList<LocationStorage>();
 		int sx = MathHelper.floor_double(area.minX / 16.0D);
 		int sz = MathHelper.floor_double(area.minZ / 16.0D);
@@ -28,7 +33,12 @@ public class StorageHelper {
 				double cez = Math.min(area.maxZ, (cz+1) * 16);
 				AxisAlignedBB clampedArea = AxisAlignedBB.getBoundingBox(csx, area.minY, csz, cex, area.maxY, cez);
 				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
-				LocationStorage location = new LocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+				LocationStorage location;
+				if(guarded) {
+					location = new GuardedLocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+				} else {
+					location = new LocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+				}
 				addedLocations.add(location);
 				chunkData.getStorage().add(location);
 				chunkData.markDirty();

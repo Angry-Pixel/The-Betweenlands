@@ -202,7 +202,7 @@ public class PlayerLocationHandler {
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event) {
 		if(!LocationStorage.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
-			event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
+			event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
 		}
 	}
 
@@ -210,16 +210,16 @@ public class PlayerLocationHandler {
 	public void onBlockPlace(PlaceEvent event) {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null && !event.world.isRemote) {
-			if(event.player != null && !event.player.capabilities.isCreativeMode && LocationStorage.isInLocationType(event.player, EnumLocationType.WIGHT_TOWER)) {
-				int warnings = event.player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
+			if(event.player != null && !event.player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(event.player)) {
+				int warnings = event.player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
 				if(warnings < 3) {
 					if(warnings == 0) {
-						event.player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning1"));
+						event.player.addChatMessage(new ChatComponentTranslation("chat.guard.warning1"));
 					}
-					event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", warnings + 1);
+					event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
 				} else {
-					event.player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
-					event.player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning2"));
+					event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
+					event.player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
 					this.spawnGuards(event.player);
 				}
 				EntityWight wight = new EntityWight(event.player.worldObj);
@@ -257,17 +257,17 @@ public class PlayerLocationHandler {
 		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
 		if(chunk != null) {
 			EntityPlayer player = event.getPlayer();
-			if(player != null && !player.capabilities.isCreativeMode && LocationStorage.isInLocationType(player, EnumLocationType.WIGHT_TOWER) && !EXCLUDED_BLOCKS.contains(event.block)) {
+			if(player != null && !player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(player) && !EXCLUDED_BLOCKS.contains(event.block)) {
 				if(!event.world.isRemote) {
-					int warnings = player.getEntityData().getInteger("thebetweenlands.blWightTowerWarnings");
+					int warnings = player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
 					if(warnings < 3) {
 						if(warnings == 0) {
-							player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning1"));
+							player.addChatMessage(new ChatComponentTranslation("chat.guard.warning1"));
 						}
-						player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", warnings + 1);
+						player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
 					} else {
-						player.getEntityData().setInteger("thebetweenlands.blWightTowerWarnings", 0);
-						player.addChatMessage(new ChatComponentTranslation("chat.wightTower.warning2"));
+						player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
+						player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
 						this.spawnGuards(player);
 					}
 					EntityWight wight = new EntityWight(player.worldObj);

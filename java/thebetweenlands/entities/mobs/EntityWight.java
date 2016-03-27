@@ -202,7 +202,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			if(this.isLocationGuard() && (this.getViolator() == null || !this.getViolator().isEntityAlive())) {
 				this.setDead();
 			} else if(this.isLocationGuard() && this.getViolator() != null) {
-				if(!LocationStorage.isInLocationType(this.getViolator(), EnumLocationType.WIGHT_TOWER)) {
+				if(!LocationStorage.isLocationGuarded(this.getViolator())) {
 					this.setDead();
 				} else {
 					this.setAttackTarget(this.getViolator());

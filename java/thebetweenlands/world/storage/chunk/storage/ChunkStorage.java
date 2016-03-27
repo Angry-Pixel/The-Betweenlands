@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.world.storage.chunk.storage.location.GuardedLocationStorage;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public abstract class ChunkStorage {
@@ -26,6 +27,7 @@ public abstract class ChunkStorage {
 
 	static {
 		STORAGE_MAP.put("chunkArea", LocationStorage.class);
+		STORAGE_MAP.put("guardedChunkArea", GuardedLocationStorage.class);
 	}
 
 	private final Chunk chunk;
