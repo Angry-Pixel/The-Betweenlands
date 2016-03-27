@@ -31,7 +31,7 @@ public class ItemSummonMummy extends Item {
 					for(int yo = -3; yo <= -1; yo++) {
 						for(int xo = -1; xo <= 1 && canSpawn; xo++) {
 							for(int zo = -1; zo <= 1 && canSpawn; zo++) {
-								Block block = entityItem.worldObj.getBlock(bx+xo, by-1, bz+zo);
+								Block block = entityItem.worldObj.getBlock(bx+xo, by+yo, bz+zo);
 								if(!block.isNormalCube() && !block.isSideSolid(entityItem.worldObj, bx+xo, by+yo, bz+zo, ForgeDirection.UP))
 									canSpawn = false;
 							}
