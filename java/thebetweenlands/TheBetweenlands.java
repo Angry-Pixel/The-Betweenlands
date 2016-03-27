@@ -198,7 +198,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		MinecraftForge.EVENT_BUS.register(PowerRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(PowerRingHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(new VolarPadGlideHandler());
 		MinecraftForge.EVENT_BUS.register(new PageDiscoveringEvent());
 		FMLCommonHandler.instance().bus().register(EnvironmentEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.INSTANCE);
@@ -228,6 +227,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RecruitmentRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(BLItemRegistry.ringOfFlight);
+		MinecraftForge.EVENT_BUS.register(BLItemRegistry.volarkite);
 
 		BLRecipes.init();
 		TeleporterHandler.init();

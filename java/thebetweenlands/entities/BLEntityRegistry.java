@@ -99,6 +99,7 @@ public class BLEntityRegistry
 		registerEntity(44, EntityFortressBossTeleporter.class, "fortressBossTeleporter", 64, 5, false);
 		registerEntity(45, EntityMummyArm.class, "mummyArm", 0x804E3D, 0x3D6F80, 64, 20, false);
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
+		registerEntity(47, EntityVolarkite.class, "volakite", 64, 20, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

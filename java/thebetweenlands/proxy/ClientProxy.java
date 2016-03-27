@@ -76,6 +76,7 @@ import thebetweenlands.client.render.entity.RenderChiromaw;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
+import thebetweenlands.client.render.entity.RenderEntityVolarkite;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
@@ -164,6 +165,7 @@ import thebetweenlands.entities.EntityBLItemFrame;
 import thebetweenlands.entities.EntityRopeNode;
 import thebetweenlands.entities.EntityShockwaveBlock;
 import thebetweenlands.entities.EntitySwordEnergy;
+import thebetweenlands.entities.EntityVolarkite;
 import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
@@ -375,6 +377,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, new RenderPyradFlame(1F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, new RenderMummyArm());
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, new RenderShockwaveBlock());
+		RenderingRegistry.registerEntityRenderingHandler(EntityVolarkite.class, new RenderEntityVolarkite());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
