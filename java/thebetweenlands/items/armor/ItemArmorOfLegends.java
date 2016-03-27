@@ -1,10 +1,6 @@
 package thebetweenlands.items.armor;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.BLMaterial;
@@ -16,6 +12,7 @@ import thebetweenlands.manual.IManualEntryItem;
 public class ItemArmorOfLegends extends ItemArmorBL implements IManualEntryItem {
     public ItemArmorOfLegends(int armorType) {
         super(BLMaterial.armorOfLegends, 2, armorType, "thebetweenlands:textures/armour/legendary1.png", "thebetweenlands:textures/armour/legendary2.png");
+        this.setCreativeTab(null);
     }
 
     @Override

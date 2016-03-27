@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import thebetweenlands.manual.IManualEntryItem;
-import thebetweenlands.world.feature.structure.WorldGenWightFortress;
+import thebetweenlands.world.feature.structure.WorldGenMudStructures;
 
 import java.util.Random;
 
@@ -27,13 +27,13 @@ public class ItemTestItem extends ItemSword implements IManualEntryItem {
     public boolean onItemUse(ItemStack is, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         Random rand = new Random();
         if (!world.isRemote && player.isSneaking()) {
-            WorldGenWightFortress tower = new WorldGenWightFortress();
-            tower.generate(world, rand, x, y + 1, z);
+            //WorldGenWightFortress tower = new WorldGenWightFortress();
+            //tower.generate(world, rand, x, y + 1, z);
 
             //WorldGenCragrockTower tower = new WorldGenCragrockTower();
             //tower.generate(world, rand, x, y + 1, z);
-            //WorldGenMudStructures ruin = new WorldGenMudStructures();
-            //ruin.generate(world, rand, x, y + 1, z);
+            WorldGenMudStructures ruin = new WorldGenMudStructures();
+            ruin.generate(world, rand, x, y + 1, z);
            // WorldGenSmallRuins ruin = new WorldGenSmallRuins();
             //ruin.generate(world, rand, x, y + 1, z);
             //WorldGenUnderGroundStructures structure = new WorldGenUnderGroundStructures();

@@ -1,11 +1,7 @@
 package thebetweenlands.items.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -26,6 +22,9 @@ import thebetweenlands.manual.IManualEntryItem;
 import thebetweenlands.utils.CorrodibleItemHelper;
 import thebetweenlands.utils.IGemTextureProvider;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryItem, IGemTextureProvider {
 	private IIcon[] corrosionIcons;
 	private String[] gemTextures = new String[CircleGem.TYPES.length];
@@ -36,6 +35,7 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	public ItemSwordBL(ToolMaterial material) {
 		super(material);
 		attackDamageWeaponModifier = 4 + material.getDamageVsEntity();
+		this.setCreativeTab(null);
 	}
 
 	@Override

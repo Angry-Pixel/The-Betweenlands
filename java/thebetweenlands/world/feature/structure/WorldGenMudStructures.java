@@ -28,12 +28,14 @@ public class WorldGenMudStructures extends WorldGenerator {
 
     @Override
     public boolean generate(World world, Random random, int x, int y, int z) {
-        int randomInt = random.nextInt(2);
+        int randomInt = 2;//random.nextInt(3);
         switch (randomInt) {
             case 0:
                 return structure1(world, random, x, y, z);
             case 1:
                 return structure2(world, random, x, y, z);
+            case 2:
+                return structure3(world, random, x, y, z);
             default:
                 return false;
         }
@@ -113,10 +115,40 @@ public class WorldGenMudStructures extends WorldGenerator {
         if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
             return false;
         rotatedCubeVolume(world, x, y, z, 1, 0, 1, mudBrick, 0, 4, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 1, 1, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 2, 1, rottenBark, 0, 1, 1, 7, direction);
+        rotatedCubeVolume(world, x, y, z, 4, 1, 1, mudBrick, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 4, 2, 1, mudBrickStair, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 6, 0, 1, mudBrick, 0, 1, 2, 1, direction);
         rotatedCubeVolume(world, x, y, z, 7, 0, 1, mudBrick, 0, 1, 1, 6, direction);
-        rotatedCubeVolume(world, x, y, z, 7, 0, 0, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 4, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, 0, 0, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
 
+        rotatedCubeVolume(world, x, y, z, 0, 0, 2, mudBrick, 0, 3, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 0, 1, 2, mudBrickStair, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 1, 2, mudBrick, 0, 2, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 2, 2, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 2, 2, mudBrickSlab, 8, 1, 1, 4, direction);
+
+        rotatedCubeVolume(world, x, y, z, 1, 2, 3, mudBrickSlab, 8, 1, 1, 3, direction);
+        rotatedCubeVolume(world, x, y, z, 2, 0, 3, mudBrick, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, 1, 3, mudBrickStair, getMetaFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 4, 2, 4, mudBrickSlab, 8, 1, 1, 2, direction);
+        rotatedCubeVolume(world, x, y, z, 7, 0, 4, mudBrick, 0, 1, 2, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 2, 0, 5, mudBrick, 0, 1, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 2, 5, rottenBark, 0, 1, 1, 3, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 0, 5, BLBlockRegistry.geckoCage, 0, 1, 1, 1, direction);
+
+        rotatedCubeVolume(world, x, y, z, 0, 0, 6, mudBrick, 0, 4, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 0, 1, 6, mudBrickStair, getMetaFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 1, 6, mudBrick, 0, 3, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 1, 2, 6, mudBrick, 0, 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 3, 2, 6, mudBrick, 0, 2, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 5, 0, 6, mudBrick, 0, 2, 2, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 6, 2, 6, mudBrickStair, getMetaFromDirection(2, direction, stairSequence), 1, 1, 1, direction);
+        rotatedCubeVolume(world, x, y, z, 7, 1, 6, mudBrickSlab, 0, 1, 1, 1, direction);
+        rotatedLoot(world, random, x, y, z, 1, 0, 3, direction, 1, 4, 2);
         return true;
     }
 
