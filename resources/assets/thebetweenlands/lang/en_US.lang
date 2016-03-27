@@ -1278,6 +1278,7 @@ key.radialmenu=Equipment Menu
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
+location.caverns.name=80:<scale:1.75>Caverns</scale>
 location.ruins.name=80:<scale:1.75>Ruins</scale>
 location.smallDungeon.name=80:<scale:1.75>Shrine Dungeon</scale>
 location.tarPoolDungeon.name=80:<scale:1.75>Tar Pool Dungeon</scale>

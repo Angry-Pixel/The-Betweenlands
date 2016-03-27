@@ -37,6 +37,7 @@ import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 import thebetweenlands.manual.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.utils.ColorUtils;
+import thebetweenlands.world.WorldProviderBetweenlands;
 import thebetweenlands.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.world.storage.chunk.storage.ChunkStorage;
 import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
@@ -92,7 +93,28 @@ public class PlayerLocationHandler {
 					if(biomeName.equals("biome." + biome.biomeName + ".name"))
 						biomeName = biome.biomeName; //Not localized
 					this.currentLocation = String.format(StatCollector.translateToLocal("location.wilderness.name"), biomeName);*/
-					String location = StatCollector.translateToLocal("location.wilderness.name");
+					String location;
+					if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+						String strippedName = StatCollector.translateToLocal("location.wilderness.name");
+						if(strippedName.contains(":")) {
+							int startIndex = strippedName.indexOf(":");
+							strippedName = strippedName.substring(startIndex+1, strippedName.length());
+						}
+						if(this.currentLocation.equals(strippedName)) {
+							prevLocation = "";
+						}
+						location = StatCollector.translateToLocal("location.caverns.name");
+					} else {
+						String strippedName = StatCollector.translateToLocal("location.caverns.name");
+						if(strippedName.contains(":")) {
+							int startIndex = strippedName.indexOf(":");
+							strippedName = strippedName.substring(startIndex+1, strippedName.length());
+						}
+						if(this.currentLocation.equals(strippedName)) {
+							prevLocation = "";
+						}
+						location = StatCollector.translateToLocal("location.wilderness.name");
+					}
 					this.currentLocation = location;
 				} else {
 					LocationStorage highestLocation = null;
