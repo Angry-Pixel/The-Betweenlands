@@ -156,7 +156,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 3), 0F);
+		this.entityDropItem(ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, this.worldObj.rand.nextInt(3) + 1), 0F);
 	}
 
 	@Override
