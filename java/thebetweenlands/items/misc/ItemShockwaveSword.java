@@ -112,6 +112,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 
 			if (!world.isRemote) {
 				if (stack.getTagCompound().getInteger("uses") < 3) {
+					stack.damageItem(2, player);
 					world.playSoundEffect(player.posX, player.posY, player.posZ, "thebetweenlands:shockwaveSword", 1.0F, 2.0F);
 					double direction = Math.toRadians(player.rotationYaw);
 					Vec3 diag = Vec3.createVectorHelper(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
