@@ -19,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import thebetweenlands.TheBetweenlands;
-import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
@@ -39,7 +38,6 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	static {
 		supportedEntities.add(EntityTarminion.class);
-		supportedEntities.add(EntityGiantToad.class);
 	}
 
 	public ItemAmulet() {
