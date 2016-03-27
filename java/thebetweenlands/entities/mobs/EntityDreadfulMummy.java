@@ -34,10 +34,10 @@ import thebetweenlands.entities.mobs.boss.IBossBL;
 import thebetweenlands.items.BLItemRegistry;
 
 public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL, IScreenShake, ICameraOffset, IEntityMusic {
-	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 100.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
-	public static final IAttribute SPAWN_OFFSET_ATTRIB = (new RangedAttribute("bl.spawnOffset", 2.0D, -Integer.MAX_VALUE, Integer.MAX_VALUE)).setDescription("Spawning Y Offset");
+	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute("bl.spawnLength", 180.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
+	public static final IAttribute SPAWN_OFFSET_ATTRIB = (new RangedAttribute("bl.spawnOffset", 3.0D, -Integer.MAX_VALUE, Integer.MAX_VALUE)).setDescription("Spawning Y Offset");
 
-	private static final int BREAK_COUNT = 5;
+	private static final int BREAK_COUNT = 20;
 
 	public EntityDreadfulMummy(World world) {
 		super(world);
@@ -169,7 +169,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 		}
 
 		if(this.worldObj.isRemote) {
-			if(this.getSpawningProgress() != 1.0F && this.getSpawningProgress() != 0.0F) {
+			if(this.getSpawningProgress() < 1.0F) {
 				this.yOffset = this.getCurrentOffset();
 				this.motionX = 0;
 				this.motionY = 0;
@@ -180,8 +180,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 				int breakPoint = getSpawningLength() / BREAK_COUNT;
 				if ((getSpawningState() - breakPoint / 2 - 1) % breakPoint == 0) {
 					int x = MathHelper.floor_double(this.posX), y = MathHelper.floor_double(this.posY - this.yOffset), z = MathHelper.floor_double(this.posZ);
-					Block block = this.worldObj.getBlock(x, y, z);
-					int metadata = this.worldObj.getBlockMetadata(x, y, z);
+					Block block = this.worldObj.getBlock(x, y-1, z);
+					int metadata = this.worldObj.getBlockMetadata(x, y-1, z);
 					String particle = "blockdust_" + Block.getIdFromBlock(block) + "_" + metadata;
 					double px = this.posX + this.rand.nextDouble() - 0.5F;
 					double py = this.posY - this.yOffset + this.rand.nextDouble() * 0.2 + 0.075;
@@ -204,7 +204,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 				this.prevYOffset = this.yOffset;
 
 				if(this.getSpawningState() == 0) {
-					this.playSound("thebetweenlands:peatMummyEmerge", 1.2F, 1.0F);
+					this.playSound("thebetweenlands:dreadfulPeatMummyEmerge", 1.2F, 1.0F);
 				}
 				this.updateSpawningState();
 
@@ -217,7 +217,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 				if(this.getSpawningState() == this.getSpawningLength() - 1) {
 					this.setPosition(this.posX, this.posY + 0.22D, this.posZ);
 				}
-			} else {
+			} else if(this.deathTicks < 80) {
 				this.yOffset = 0;
 				this.prevYOffset = 0;
 			}

@@ -13,8 +13,8 @@ import thebetweenlands.world.biomes.base.BLBiomeRegistry;
 
 public class ItemSummonMummy extends Item {
 	public ItemSummonMummy() {
-		this.setUnlocalizedName("thebetweenlands.summonMummy");
-		this.setTextureName("thebetweenlands:summonMummy");
+		this.setUnlocalizedName("thebetweenlands.mummyBait");
+		this.setTextureName("thebetweenlands:mummyBait");
 		this.setCreativeTab(BLCreativeTabs.specials);
 	}
 
@@ -28,11 +28,13 @@ public class ItemSummonMummy extends Item {
 				BiomeGenBase biome = entityItem.worldObj.getBiomeGenForCoords(bx, bz);
 				if(biome == BLBiomeRegistry.sludgePlains || biome == BLBiomeRegistry.marsh1 || biome == BLBiomeRegistry.marsh2) {
 					boolean canSpawn = true;
-					for(int xo = -1; xo <= 1 && canSpawn; xo++) {
-						for(int zo = -1; zo <= 1 && canSpawn; zo++) {
-							Block block = entityItem.worldObj.getBlock(bx+xo, by-1, bz+zo);
-							if(!block.isNormalCube() && !block.isSideSolid(entityItem.worldObj, bx+xo, by-1, bz+zo, ForgeDirection.UP))
-								canSpawn = false;
+					for(int yo = -3; yo <= -1; yo++) {
+						for(int xo = -1; xo <= 1 && canSpawn; xo++) {
+							for(int zo = -1; zo <= 1 && canSpawn; zo++) {
+								Block block = entityItem.worldObj.getBlock(bx+xo, by-1, bz+zo);
+								if(!block.isNormalCube() && !block.isSideSolid(entityItem.worldObj, bx+xo, by+yo, bz+zo, ForgeDirection.UP))
+									canSpawn = false;
+							}
 						}
 					}
 					if(canSpawn) {
