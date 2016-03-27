@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemForbiddenFig extends ItemFood implements IDecayFood, IManualEntryItem {
@@ -28,9 +28,7 @@ public class ItemForbiddenFig extends ItemFood implements IDecayFood, IManualEnt
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		ItemForbiddenFig item = (ItemForbiddenFig) stack.getItem();
-		if (item == BLItemRegistry.forbiddenFig)
-			list.add("Looks tempting...");
+		list.add(StatCollector.translateToLocal("fig.tooltip"));
 	}
 
 	@Override
