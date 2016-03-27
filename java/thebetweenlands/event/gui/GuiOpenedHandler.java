@@ -13,8 +13,9 @@ public class GuiOpenedHandler {
 
     @SubscribeEvent
     public void onGuiOpened(GuiOpenEvent event) {
-        if (event.gui instanceof GuiMainMenu && !(event.gui instanceof GuiBLMainMenu)) {
+    	//TODO: Implement main menu
+        /*if (event.gui instanceof GuiMainMenu && !(event.gui instanceof GuiBLMainMenu)) {
             event.gui = new GuiBLMainMenu();
-        }
+        }*/
     }
 }
