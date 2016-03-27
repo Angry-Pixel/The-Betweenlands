@@ -265,6 +265,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 			mummy.setHealth(30);
 			this.worldObj.spawnEntityInWorld(mummy);
 			mummy.setCarryShimmerStone(false);
+			this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "thebetweenlands:dreadfulPeatMummyScream", 1, 1);
 		} else {
 			//Try again the next tick
 			this.untilSpawnMummy = 1;
