@@ -3,6 +3,7 @@ package thebetweenlands.event.entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import thebetweenlands.entities.EntityVolarkite;
 import thebetweenlands.items.misc.ItemVolarkite;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -16,11 +17,12 @@ public class VolarPadGlideHandler {
 		if (event.entityLiving != null) {
 			EntityLivingBase entity = event.entityLiving;
 			if (entity.getHeldItem() != null && entity.getHeldItem().getItem() instanceof ItemVolarkite) {
-				if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isCreativeMode) {
-					entity.getHeldItem().setItemDamage(entity.getHeldItem().getItemDamage() + 1);
-					if (entity.getHeldItem().getItemDamage() > entity.getHeldItem().getMaxDamage())
-						((EntityPlayer) entity).destroyCurrentEquippedItem();
-				}
+				if (entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isCreativeMode && entity.worldObj.getWorldTime()%5 == 0)
+					if(!entity.onGround)
+						if (EntityVolarkite.isEntityHoldingGlider(entity))
+							entity.getHeldItem().setItemDamage(entity.getHeldItem().getItemDamage() + 1);
+				if (entity.getHeldItem().getItemDamage() > entity.getHeldItem().getMaxDamage())
+					((EntityPlayer) entity).destroyCurrentEquippedItem();
 			}
 		}
 	}
