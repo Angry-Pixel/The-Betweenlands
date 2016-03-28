@@ -1,4 +1,4 @@
-package thebetweenlands.utils.confighandler;
+package thebetweenlands.utils.config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.IConfigElement;
-import thebetweenlands.lib.ModInfo;
+import thebetweenlands.common.lib.ModInfo;
 
 public class ConfigGUI extends GuiConfig {
 	public ConfigGUI(GuiScreen parent) {

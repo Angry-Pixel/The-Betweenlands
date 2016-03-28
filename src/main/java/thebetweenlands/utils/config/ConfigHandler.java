@@ -1,4 +1,4 @@
-package thebetweenlands.utils.confighandler;
+package thebetweenlands.utils.config;
 
 import java.io.File;
 
@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.lib.ModInfo;
+import thebetweenlands.common.lib.ModInfo;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();

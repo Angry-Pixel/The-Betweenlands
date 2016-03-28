@@ -1,4 +1,4 @@
-package thebetweenlands.utils.confighandler;
+package thebetweenlands.utils.config;
 
 import java.util.Set;
 
