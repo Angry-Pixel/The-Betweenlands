@@ -12,5 +12,4 @@ public class ModInfo {
 	public static final String CLIENTPACKETPROXY_LOCATION = "thebetweenlands.common.network.base.impl.ClientPacketProxy";
 	public static final String COMMONPACKETPROXY_LOCATION = "thebetweenlands.common.network.base.impl.CommonPacketProxy";
 	public static final String CONFIG_GUI = "thebetweenlands.utils.config.ConfigGuiFactory";
-	public static final int DIMENSION_ID = ConfigHandler.DIMENSION_ID;
 }

@@ -26,4 +26,16 @@ public class CommonProxy implements IGuiHandler {
 	public void postInit() {
 
 	}
+
+	public void registerEventHandlers() {
+
+	}
+
+	public EntityPlayer getClientPlayer() {
+		return null;
+	}
+
+	public World getClientWorld() {
+		return null;
+	}
 }

@@ -3,6 +3,8 @@ package thebetweenlands.common;
 import java.io.File;
 import java.util.ArrayList;
 
+import net.minecraft.world.DimensionType;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -20,6 +22,8 @@ import thebetweenlands.common.network.base.impl.CommonPacketProxy;
 import thebetweenlands.common.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.utils.config.ConfigHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -44,12 +48,16 @@ public class TheBetweenlands {
 
 	public static final Registries REGISTRIES = new Registries();
 
+	public static DimensionType dimensionType;
+	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
 		configDir = event.getModConfigurationDirectory();
 
+		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.DIMENSION_ID, WorldProviderBetweenlands.class, false);
+		
 		REGISTRIES.preInit();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
@@ -69,6 +77,8 @@ public class TheBetweenlands {
 		REGISTRIES.init();
 
 		proxy.init();
+
+		this.registerEventHandlers();
 	}
 
 	@EventHandler
@@ -101,5 +111,14 @@ public class TheBetweenlands {
 	public static TheBetweenlands createInstance() {
 		//TheBetweenlandsPreconditions.check();
 		return new TheBetweenlands();
+	}
+
+	/**
+	 * Register event handlers here
+	 */
+	private void registerEventHandlers() {
+		proxy.registerEventHandlers();
+		
+		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 	}
 }
