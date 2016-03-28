@@ -1,16 +1,14 @@
-[
-{
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
-}
-]
+[{
+    "modid": "thebetweenlands",
+	"name": "The Betweenlands",
+	"description": "Introducing The Betweenlands... a dark and hostile environment. This large and expansive mod adds a whole new dimension to the game.",
+	"version": "1.9-1.0",
+	"mcversion": "1.9",
+	"url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/mods-discussion/1441135",
+	"updateUrl": "",
+	"authorList": [ "Angry Pixel" ],
+	"credits": "Angry Pixel",
+	"logoFile": "",
+	"screenshots": [],
+	"dependencies": []
+}]
