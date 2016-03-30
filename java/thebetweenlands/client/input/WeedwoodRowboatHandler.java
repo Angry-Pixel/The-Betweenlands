@@ -18,7 +18,6 @@ import thebetweenlands.client.perspective.rowboat.PerspectiveWeedwoodRowboatThir
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
-import thebetweenlands.forgeevent.client.GetMouseOverEvent;
 import thebetweenlands.forgeevent.client.RenderEntitiesEvent;
 import thebetweenlands.network.message.MessageWeedwoodRowboatInput;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -118,13 +117,6 @@ public class WeedwoodRowboatHandler {
 	}
 
 	@SubscribeEvent
-	public void onGetMouseOver(GetMouseOverEvent.Pre event) {
-		if (shouldPreventWorldInteraction()) {
-			event.setCanceled(true);
-		}
-	}
-
-	@SubscribeEvent
 	public void onPlayerUseItemEventStart(PlayerUseItemEvent.Start event) {
 		if (shouldPreventWorldInteraction()) {
 			event.setCanceled(true);
@@ -145,7 +137,7 @@ public class WeedwoodRowboatHandler {
 		}
 	}
 
-	private boolean shouldPreventWorldInteraction() {
+	public boolean shouldPreventWorldInteraction() {
 		return isPlayerInRowboat() && THIRD_PERSON_PERSPECTIVE.isCurrentPerspective();
 	}
 

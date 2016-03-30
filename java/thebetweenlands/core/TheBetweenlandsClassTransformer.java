@@ -1,32 +1,12 @@
 package thebetweenlands.core;
 
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.ASTORE;
-import static org.objectweb.asm.Opcodes.DADD;
-import static org.objectweb.asm.Opcodes.DLOAD;
-import static org.objectweb.asm.Opcodes.DSTORE;
-import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.F2D;
-import static org.objectweb.asm.Opcodes.FLOAD;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.GETSTATIC;
-import static org.objectweb.asm.Opcodes.ICONST_0;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
-import static org.objectweb.asm.Opcodes.SWAP;
-import static org.objectweb.asm.tree.AbstractInsnNode.LDC_INSN;
-import static org.objectweb.asm.tree.AbstractInsnNode.METHOD_INSN;
+import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.tree.AbstractInsnNode.*;
 
 import java.util.Iterator;
 import java.util.ListIterator;
+
+import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -36,13 +16,13 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
-
-import net.minecraft.launchwrapper.IClassTransformer;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static boolean constructed;
@@ -445,13 +425,25 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				needsRenderWorld = false;
 			}
 			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {
-				method.localVariables.clear();
-				method.instructions.clear();
-				method.instructions.add(new VarInsnNode(ALOAD, 0));
-				method.instructions.add(new VarInsnNode(FLOAD, 1));
-				method.instructions.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "getMouseOver", getMouseOverBLDesc, false));
-				method.instructions.add(new FieldInsnNode(PUTFIELD, entityRenderer, pointedEntity, entityDesc));
-				method.instructions.add(new InsnNode(RETURN));
+				for (int i = 0; i < method.instructions.size(); i++) {
+					AbstractInsnNode insn = method.instructions.get(i);
+					if (insn.getOpcode() == ACONST_NULL) {
+						LabelNode ifNotCancelled = null;
+						for (i += 2; i < method.instructions.size(); i++) {
+							AbstractInsnNode search = method.instructions.get(i);
+							if (search.getType() == LABEL) {
+								ifNotCancelled = (LabelNode) search;
+								break;
+							}
+						} 
+						InsnList hook = new InsnList();
+						hook.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "getMouseOverHook", "()Z", false));
+						hook.add(new JumpInsnNode(IFEQ, ifNotCancelled));
+						hook.add(new InsnNode(RETURN));
+						method.instructions.insert(insn.getNext(), hook);
+						break;
+					}
+				}
 				needsGetMouseOver = false;
 			}
 			if (!needsOrientCamera && !needsRenderWorld && !needsGetMouseOver) {
