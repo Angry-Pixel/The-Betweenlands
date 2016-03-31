@@ -363,12 +363,14 @@ public class MobSpawnHandler {
 			weightedPossibleSpawns.recalculateWeight();
 
 			BLSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(world.rand);
+			if(spawnEntry == null)
+				continue;
 
 			int dynamicLimit = (int)((double)entityLimit / (double)totalBaseWeight * (double)spawnEntry.getBaseWeight());
 
 			int spawnEntityCount = this.entityCounts.get(spawnEntry.entityType);
 
-			if(spawnEntry == null || spawnEntityCount >= dynamicLimit || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
+			if(spawnEntityCount >= dynamicLimit || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
 				//Entity reached world spawning limit
 				continue;
 
