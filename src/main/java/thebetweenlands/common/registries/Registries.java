@@ -20,6 +20,7 @@ public class Registries {
 	}
 
 	public void init() {
+		this.blockRegistry.init();
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
 	}

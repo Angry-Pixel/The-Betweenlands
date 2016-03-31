@@ -85,13 +85,13 @@ public class TheBetweenlands {
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
 
-		if (ConfigHandler.DEBUG) {
+		/*if (ConfigHandler.DEBUG) {
 			System.out.println("==================================================");
 			for (String name : unlocalizedNames) {
 				System.out.println("needs translation: " + name);
 			}
 			System.out.println("==================================================");
-		}
+		}*/
 	}
 
 	@EventHandler
