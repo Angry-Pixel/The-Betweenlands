@@ -533,12 +533,12 @@ public class DecorationHelper {
 		}
 	}
 
-	public void generateSmalWeedwoodTree(int attempts) {
+	public void generateSmallWeedwoodTree(int attempts) {
 		if (canShortThingsGenerateHere()) {
 			for (int i = 0; i < attempts; i++) {
-				int x = this.x + this.offsetXZ();
+				int x = this.x + rand.nextInt(12) + 10;
 				int y = this.y - 8 + this.rand.nextInt(16);
-				int z = this.z + this.offsetXZ();
+				int z = this.z  + rand.nextInt(12) + 10;
 				if (this.checkSurface(SurfaceType.DIRT, x, y, z) || this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)|| this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 					GEN_SMAL_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 			}
@@ -917,9 +917,9 @@ public class DecorationHelper {
 
 	public void generateSmallRuins(int attempt) {
 		for (int i = 0; i < attempt; i++) {
-			int x = this.x + this.offsetXZ();
+			int x = this.x + 16;
 			int y = this.y - 8 + this.rand.nextInt(16);
-			int z = this.z + this.offsetXZ();
+			int z = this.z + 16;
 			GEN_SMALL_RUINS.generate(world, rand, x, y, z);
 		}
 	}

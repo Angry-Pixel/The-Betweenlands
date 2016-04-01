@@ -29,7 +29,7 @@ public class WorldGenSmallWeedWoodTree extends WorldGenerator {
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
 			for (int zz = z - maxRadius; zz <= z + maxRadius; zz++)
 				for (int yy = y + 2; yy < y + height; yy++)
-					if (!world.isAirBlock(xx, yy, zz) && world.getBlock(xx, yy, zz).isNormalCube())
+					if (!world.isAirBlock(xx, yy, zz) && !world.getBlock(xx, yy, zz).isReplaceable(world, xx, yy, zz))
 						return false;
 
 		
