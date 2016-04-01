@@ -90,6 +90,11 @@ public class BlockPoisonIvy extends BlockVine implements ISickleHarvestable, ISy
 	}
 
 	@Override
+    public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
+        return false;
+    }
+
+	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		ArrayList<ItemStack> dropList = new ArrayList<ItemStack>();
 		dropList.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));

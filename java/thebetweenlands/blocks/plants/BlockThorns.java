@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
@@ -53,6 +54,11 @@ public class BlockThorns extends BlockVine implements ISickleHarvestable, ISyrmo
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;
 	}
+
+	@Override
+    public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
+        return false;
+    }
 
 	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
