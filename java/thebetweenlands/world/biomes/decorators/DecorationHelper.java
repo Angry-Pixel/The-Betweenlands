@@ -553,9 +553,9 @@ public class DecorationHelper {
 	public void generateSmallWeedwoodTree(int attempts) {
 		if (canShortThingsGenerateHere()) {
 			for (int i = 0; i < attempts; i++) {
-				int x = this.x + rand.nextInt(12) + 10;
+				int x = this.x + rand.nextInt(10) + 11;
 				int y = this.y - 8 + this.rand.nextInt(16);
-				int z = this.z  + rand.nextInt(12) + 10;
+				int z = this.z  + rand.nextInt(10) + 11;
 				if (this.checkSurface(SurfaceType.DIRT, x, y, z) || this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z)|| this.checkBelowWater(SurfaceType.DIRT, x, y, z) && this.checkBelowWater(SurfaceType.WATER, x, y + 1, z))
 					GEN_SMAL_WEEDWOOD_TREE.generate(this.world, this.rand, x, y, z);
 			}
