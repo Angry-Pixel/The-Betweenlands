@@ -589,8 +589,8 @@ public class DecorationHelper {
 	public void generateRubberTree(int attempts) {
 		if (canShortThingsGenerateHere()) {
 			for (int i = 0; i < attempts; i++) {
-				int x = this.x + this.offsetXZ();
-				int y = this.y - 8 + this.rand.nextInt(16);
+				int x = this.x  + this.rand.nextInt(20) + 6;
+				int y = this.y - 8 + this.rand.nextInt(20) + 6;
 				int z = this.z + this.offsetXZ();
 				if (this.checkSurface(SurfaceType.SWAMP_GRASS, x, y, z))
 					GEN_RUBBER_TREE.generate(this.world, this.rand, x, y, z);
