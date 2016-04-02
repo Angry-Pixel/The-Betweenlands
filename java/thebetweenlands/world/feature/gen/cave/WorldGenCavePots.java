@@ -25,11 +25,11 @@ public class WorldGenCavePots extends WorldGenCave {
 		if (y > 70)
 			return false;
 		int randDirection = random.nextInt(4) + 2;
-		for (int xx = x - 4; xx <= x + 4; xx++) {
-			for (int zz = z - 4; zz <= z + 4; zz++) {
+		for (int xx = x - 3; xx <= x + 3; xx++) {
+			for (int zz = z - 3; zz <= z + 3; zz++) {
 				for(int yy = y - 1; yy <= y + 1; yy++) {
 					double dst = Math.sqrt((xx-x)*(xx-x)+(yy-y)*(yy-y)+(zz-z)*(zz-z));
-					if (random.nextInt(MathHelper.ceiling_double_int(dst / 1.2D) + 1) == 0) {
+					if (random.nextInt(MathHelper.ceiling_double_int(dst / 1.4D) + 1) == 0) {
 						if (world.getBlock(xx, yy, zz) == Blocks.air && SurfaceType.UNDERGROUND.matchBlock(world.getBlock(xx, yy - 1, zz))) {
 							world.setBlock(xx, yy, zz, getRandomBlock(random), randDirection, 3);
 							TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, yy, zz);
