@@ -1,7 +1,10 @@
 package thebetweenlands.common;
 
 import java.io.File;
+import java.io.StringWriter;
 import java.util.ArrayList;
+
+import com.google.gson.stream.JsonWriter;
 
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
@@ -16,6 +19,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import thebetweenlands.client.render.models.ModelSundew;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.base.SidedPacketHandler;
 import thebetweenlands.common.network.base.impl.CommonPacketProxy;
@@ -24,6 +28,10 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.utils.ModelConverter;
+import thebetweenlands.utils.ModelConverter.AlignedQuad;
+import thebetweenlands.utils.ModelConverter.Box;
+import thebetweenlands.utils.ModelConverter.Model;
 import thebetweenlands.utils.config.ConfigHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -49,7 +57,7 @@ public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
 
 	public static DimensionType dimensionType;
-	
+
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		//Configuration File
@@ -57,7 +65,7 @@ public class TheBetweenlands {
 		configDir = event.getModConfigurationDirectory();
 
 		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.DIMENSION_ID, WorldProviderBetweenlands.class, false);
-		
+
 		REGISTRIES.preInit();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
@@ -79,6 +87,18 @@ public class TheBetweenlands {
 		proxy.init();
 
 		this.registerEventHandlers();
+
+
+		//TODO: Test
+		StringWriter strWriter = new StringWriter();
+		JsonWriter jsonWriter = new JsonWriter(strWriter);
+		ModelConverter converter = new ModelConverter(new ModelSundew(), 0.065D, false);
+		Model model = converter.getModel();
+		for(Box box : model.getBoxes()) {
+			for(AlignedQuad quad : box.getAlignedQuads()) {
+				System.out.println("C: " + quad.x + " " + quad.y + " " + quad.z + " D: " + quad.width + " " + quad.height + " R: " + quad.rx + " " + quad.ry + " " + quad.rz);
+			}
+		}
 	}
 
 	@EventHandler
@@ -118,7 +138,7 @@ public class TheBetweenlands {
 	 */
 	private void registerEventHandlers() {
 		proxy.registerEventHandlers();
-		
+
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 	}
 }

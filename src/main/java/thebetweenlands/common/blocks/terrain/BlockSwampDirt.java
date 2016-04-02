@@ -12,7 +12,6 @@ public class BlockSwampDirt extends BasicBlock {
 		super(materialIn);
 		this.setStepSound(SoundType.GROUND);
 		this.setHardness(0.5F);
-		this.setCreativeTab(BLCreativeTabs.blocks);
 		this.setUnlocalizedName(ModInfo.NAME_PREFIX + "swamp_dirt");
 		this.setHarvestLevel("shovel", 0);
 	}
