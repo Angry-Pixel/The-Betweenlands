@@ -64,7 +64,7 @@ public class TheBetweenlands {
 		ConfigHandler.INSTANCE.loadConfig(event);
 		configDir = event.getModConfigurationDirectory();
 
-		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.DIMENSION_ID, WorldProviderBetweenlands.class, false);
+		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
 
 		REGISTRIES.preInit();
 
