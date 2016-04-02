@@ -9,10 +9,10 @@ import thebetweenlands.common.lib.ModInfo;
 /**
  * Created by Bart on 02/04/2016.
  */
-public class ItemArmorBL extends ItemArmor {
+public class ItemBLArmor extends ItemArmor {
     private final String armorTexture1, armorTexture2;
 
-    public ItemArmorBL(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String armorName) {
+    public ItemBLArmor(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String armorName) {
         super(materialIn, renderIndexIn, equipmentSlotIn);
         this.armorTexture1 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_1.png";
         this.armorTexture2 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_2.png";
