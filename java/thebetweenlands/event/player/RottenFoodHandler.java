@@ -6,7 +6,11 @@
  *******************************************************************************************************************/
 package thebetweenlands.event.player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -17,38 +21,54 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RottenFoodHandler
 {
-    public static final RottenFoodHandler INSTANCE = new RottenFoodHandler();
+	public static final RottenFoodHandler INSTANCE = new RottenFoodHandler();
 
-    private static final ImmutableList<Item> EXCEPTION_INSTS;
+	private static final ImmutableList<Item> EXCEPTION_INSTS;
 
-    static {
-        List<Item> items = new ArrayList<Item>();
-        items.add(BLItemRegistry.rottenFood);
-        items.add(Items.rotten_flesh);
-        items.add(Items.potionitem);
+	static {
+		List<Item> items = new ArrayList<Item>();
+		items.add(BLItemRegistry.rottenFood);
+		items.add(Items.rotten_flesh);
+		items.add(Items.potionitem);
 
-        items.addAll(BLItemRegistry.ITEMS);
+		items.addAll(BLItemRegistry.ITEMS);
 
-        EXCEPTION_INSTS = ImmutableList.copyOf(items);
-    }
+		EXCEPTION_INSTS = ImmutableList.copyOf(items);
+	}
 
-    @SubscribeEvent
-    public void onEntitySpawn(EntityJoinWorldEvent event) {
-        if( (event.entity instanceof EntityPlayer) && event.entity.dimension == ModInfo.DIMENSION_ID ) {
-            EntityPlayer player = (EntityPlayer) event.entity;
+	@SubscribeEvent
+	public void onEntitySpawn(EntityJoinWorldEvent event) {
+		if(event.entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.entity;
 
-            int invCount = player.inventory.getSizeInventory();
-            for( int i = 0; i < invCount; i++ ) {
-                ItemStack stack = player.inventory.getStackInSlot(i);
-                if( stack != null && stack.getItem() instanceof ItemFood && !EXCEPTION_INSTS.contains(stack.getItem()) ) {
-                    player.inventory.setInventorySlotContents(i, new ItemStack(BLItemRegistry.rottenFood, stack.stackSize));
-                }
-            }
-        }
-    }
+			int invCount = player.inventory.getSizeInventory();
+			if(event.entity.dimension == ModInfo.DIMENSION_ID) {
+				//Set to rotten food
+				for(int i = 0; i < invCount; i++) {
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if(stack != null && stack.getItem() instanceof ItemFood && !EXCEPTION_INSTS.contains(stack.getItem())) {
+						ItemStack rottenFoodStack = new ItemStack(BLItemRegistry.rottenFood, stack.stackSize);
+						BLItemRegistry.rottenFood.setOriginalStack(rottenFoodStack, stack);
+						player.inventory.setInventorySlotContents(i, rottenFoodStack);
+					}
+				}
+			} else {
+				//Revert rotten food
+				for(int i = 0; i < invCount; i++) {
+					ItemStack stack = player.inventory.getStackInSlot(i);
+					if(stack != null && stack.getItem() == BLItemRegistry.rottenFood) {
+						ItemStack originalStack = BLItemRegistry.rottenFood.getOriginalStack(stack);
+						if(originalStack != null) {
+							originalStack.stackSize = stack.stackSize;
+							player.inventory.setInventorySlotContents(i, originalStack);
+						} else {
+							player.inventory.setInventorySlotContents(i, null);
+						}
+					}
+				}
+			}
+		}
+	}
 }

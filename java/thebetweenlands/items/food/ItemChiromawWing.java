@@ -46,6 +46,12 @@ public class ItemChiromawWing extends ItemFood implements IManualEntryItem {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
 		list.add(StatCollector.translateToLocal("chiromawWing.taste"));
+		EntityPropertiesFood prop = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFood.class);
+		if(prop != null) {
+			if(prop.getSickness(this) == Sickness.SICK) {
+				list.add(StatCollector.translateToLocal("chiromawWing.dontEat"));
+			}
+		}
 	}
 
 	@Override

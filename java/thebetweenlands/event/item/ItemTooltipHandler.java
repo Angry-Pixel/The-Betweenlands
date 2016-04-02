@@ -27,6 +27,7 @@ import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
 import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
 import thebetweenlands.gemcircle.CircleGem;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ICorrodible;
 import thebetweenlands.items.IEquippable;
 import thebetweenlands.recipes.misc.CompostRecipe;
@@ -293,7 +294,7 @@ public class ItemTooltipHandler {
 			}
 			event.toolTip.add(colorPrefix + StatCollector.translateToLocal("circlegem." + circleGem.name));
 		}
-		if(event.itemStack.getItem() instanceof ItemFood) {
+		if(event.itemStack.getItem() instanceof ItemFood && event.itemStack.getItem() != BLItemRegistry.chiromawWing && event.itemStack.getItem() != BLItemRegistry.rottenFood) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			if(player != null) {
 				EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
