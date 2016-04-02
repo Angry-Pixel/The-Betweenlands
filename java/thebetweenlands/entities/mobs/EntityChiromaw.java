@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 
-public class EntityChiromaw extends EntityFlying implements IMob {
+public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	public int courseChangeCooldown;
 	public double waypointX;
 	public double waypointY;
@@ -199,4 +199,8 @@ public class EntityChiromaw extends EntityFlying implements IMob {
 		return 3;
 	}
 
+	@Override
+	public String pageName() {
+		return "chiromaw";
+	}
 }

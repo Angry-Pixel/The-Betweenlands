@@ -27,6 +27,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -669,7 +670,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				this.setVolatile(false);
 			}
 		}
-		this.canTurnVolatileOnTarget = true;
+		if(this.getAttackTarget() != null && source instanceof EntityDamageSource && ((EntityDamageSource)source).getEntity() == this.getAttackTarget())
+			this.canTurnVolatileOnTarget = true;
 		return ret;
 	}
 
@@ -679,7 +681,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			return false;
 		}
 		if(super.attackEntityAsMob(entity)) {
-			this.canTurnVolatileOnTarget = true;
+			if(entity == this.getAttackTarget())
+				this.canTurnVolatileOnTarget = true;
 			return true;
 		}
 		return false;

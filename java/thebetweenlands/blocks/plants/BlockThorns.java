@@ -13,6 +13,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
+import thebetweenlands.entities.mobs.IEntityBL;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop;
 import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.tools.ISickleHarvestable;
@@ -31,7 +32,8 @@ public class BlockThorns extends BlockVine implements ISickleHarvestable, ISyrmo
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-		entity.attackEntityFrom(DamageSource.cactus, 1);
+		if(entity instanceof IEntityBL == false)
+			entity.attackEntityFrom(DamageSource.cactus, 1);
 	}
 
 	@Override
@@ -56,9 +58,9 @@ public class BlockThorns extends BlockVine implements ISickleHarvestable, ISyrmo
 	}
 
 	@Override
-    public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-        return false;
-    }
+	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
+		return false;
+	}
 
 	@Override
 	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
