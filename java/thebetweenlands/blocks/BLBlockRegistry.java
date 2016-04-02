@@ -216,7 +216,7 @@ public class BLBlockRegistry {
 	};
 	public static final Block weedwoodLog = new BlockBLLog("weedwoodLog").setHasSpoopyTexture(true);
 	public static final Block weedwood = new BlockBLLog("weedwood").setHasSperateTopIcon(false);
-	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark").setHasSperateTopIcon(false);
+	public static final Block weedwoodBark = new BlockBLLog("weedwoodBark").setHasSperateTopIcon(false).setHasSpoopyTexture(true);
 	public static final Block rottenWeedwoodBark = new BlockBLLog("rottenWeedwoodBark") {
 		@Override
 		public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
