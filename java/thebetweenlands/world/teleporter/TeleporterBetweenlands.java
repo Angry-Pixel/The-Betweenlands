@@ -7,7 +7,9 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -15,6 +17,7 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.feature.trees.WorldGenWeedWoodPortalTree;
 
 public final class TeleporterBetweenlands extends Teleporter {
@@ -86,36 +89,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 			}
 
 			entity.motionX = entity.motionY = entity.motionZ = 0.0;
-
-			int entityFacing = MathHelper.floor_double(entity.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-			float entityRotation = /*0*/ entity.rotationYaw;
-			double offsetX = 0.5D;
-			double offsetZ = 0.5D;
-
-			switch (entityFacing) {
-			case 0:
-				//entityRotation = 180;
-				//offsetX = 0.5D;
-				//offsetZ = -4.5D;
-				break;
-			case 1:
-				//entityRotation = 270;
-				//offsetX = 4.5D;
-				//offsetZ = 0.5D;
-				break;
-			case 2:
-				//entityRotation = 0;
-				//offsetX = 0.5D;
-				//offsetZ = 4.5D;
-				break;
-			case 3:
-				//entityRotation = 90;
-				//offsetX = -0.5D;
-				//offsetZ = 4.5D;
-				break;
-			}
-
-			entity.setLocationAndAngles(posX + offsetX, posY, posZ + offsetZ, entityRotation, entity.rotationPitch);
+			entity.setLocationAndAngles(posX + 0.5D, posY, posZ + 0.5D, entity.rotationYaw, entity.rotationPitch);
+			if(entity.worldObj.provider.dimensionId != ConfigHandler.DIMENSION_ID)
+				setDefaultPlayerSpawnLocation(entity);
 			return true;
 		}
 
@@ -190,4 +166,23 @@ public final class TeleporterBetweenlands extends Teleporter {
 			}
 		}
 	}
+
+	public void setDefaultPlayerSpawnLocation(Entity entity) {
+		if (!(entity instanceof EntityPlayerMP))
+			return;
+
+		EntityPlayerMP player = (EntityPlayerMP) entity;
+		ChunkCoordinates coords = player.getBedLocation(ConfigHandler.DIMENSION_ID);
+
+		if (coords == null) {
+			coords = player.getPlayerCoordinates();
+			int spawnFuzz = 64;
+			int spawnFuzzHalf = spawnFuzz / 2;
+			coords.posX += worldServerInstance.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
+			coords.posZ += worldServerInstance.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
+			coords.posY = worldServerInstance.getTopSolidOrLiquidBlock(coords.posX, coords.posZ);
+			player.setSpawnChunk(coords, true, ConfigHandler.DIMENSION_ID);
+		}
+	}
+
 }
