@@ -82,7 +82,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float minBrightness = (float) (1.0F / 10000000.0F * Math.pow(ConfigHandler.DIMENSION_BRIGHTNESS, 3.2F) + 0.002F);
+		float minBrightness = (float) (1.0F / 10000000.0F * Math.pow(ConfigHandler.dimensionBrightness, 3.2F) + 0.002F);
 		for(int i = 0; i <= 15; i++) {
 			float f1 = 1F - (i*i) / (15F*15F);
 			this.lightBrightnessTable[i] = ((1F - f1) / (f1 * 6F + 1F) * (1F - minBrightness) + minBrightness);
@@ -94,7 +94,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public void registerWorldChunkManager() {
 		//TODO: Chunk manager
 		//this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
-		this.setDimension(ConfigHandler.DIMENSION_ID);
+		this.setDimension(ConfigHandler.dimensionId);
 	}
 
 	//TODO: Chunk provider
