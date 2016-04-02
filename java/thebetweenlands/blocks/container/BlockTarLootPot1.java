@@ -95,7 +95,6 @@ public class BlockTarLootPot1 extends BlockContainer {
 			TileEntityTarLootPot1 tile = (TileEntityTarLootPot1) world.getTileEntity(x, y, z);
 			if (player.getCurrentEquippedItem() != null) {
 				int meta = world.getBlockMetadata(x, y, z);
-				System.out.println("Block Meta is: "+ meta);
 				ItemStack item = player.getCurrentEquippedItem();
 				for (int i = 0; i < 3; i++) {
 					if (tile.getStackInSlot(i) == null) {
