@@ -2,6 +2,7 @@ package thebetweenlands.common.proxy;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -41,6 +42,10 @@ public class CommonProxy implements IGuiHandler {
 	}
 	
 	public void registerDefaultBlockItemRenderer(Block block) {
-		
+
+	}
+
+	public void registerDefaultItemRenderer(Item item) {
+
 	}
 }
