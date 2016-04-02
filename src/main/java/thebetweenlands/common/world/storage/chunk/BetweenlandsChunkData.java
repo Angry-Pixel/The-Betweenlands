@@ -21,11 +21,13 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.message.base.AbstractMessage;
+import thebetweenlands.common.network.BLMessage;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData.ChunkSyncHandler.MessageSyncChunkData;
 import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
 
@@ -79,11 +81,11 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 		 * @param networkWrapper
 		 * @param packetID
 		 */
-		public void registerPacket(SimpleNetworkWrapper networkWrapper, int packetID) {
-			networkWrapper.registerMessage(MessageSyncChunkData.class, MessageSyncChunkData.class, packetID, Side.CLIENT);
+		public void registerPacket(SimpleNetworkWrapper networkWrapper) {
+			TheBetweenlands.registerMessage(MessageSyncChunkData.class, Side.CLIENT);
 		}
 
-		public static class MessageSyncChunkData extends AbstractMessage<MessageSyncChunkData> {
+		public static class MessageSyncChunkData extends BLMessage {
 			private int chunkX, chunkZ;
 			private String name;
 			private NBTTagCompound nbt;
@@ -99,7 +101,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 			}
 
 			@Override
-			public void fromBytes(ByteBuf buf) {
+			public void deserialize(PacketBuffer buf) {
 				this.chunkX = buf.readInt();
 				this.chunkZ = buf.readInt();
 				PacketBuffer packetBuffer = new PacketBuffer(buf);
@@ -111,7 +113,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 			}
 
 			@Override
-			public void toBytes(ByteBuf buf) {
+			public void serialize(PacketBuffer buf) {
 				buf.writeInt(this.chunkX);
 				buf.writeInt(this.chunkZ);
 				PacketBuffer packetBuffer = new PacketBuffer(buf);
@@ -120,24 +122,23 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 			}
 
 			@Override
-			public void onMessageClientSide(MessageSyncChunkData message, EntityPlayer player) {
+			public IMessage process(MessageContext ctx) {
 				synchronized(CHUNK_DATA_HANDLER) {
-					ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(message.chunkX, message.chunkZ);
-					NBTTagCompound currentNBT = ChunkDataBase.getNBTCache(chunkPos, player.worldObj);
+					World world = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
+					ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(chunkX, chunkZ);
+					NBTTagCompound currentNBT = ChunkDataBase.getNBTCache(chunkPos, world);
 					if(currentNBT == null)
 						currentNBT = new NBTTagCompound();
-					currentNBT.setTag(message.name, message.nbt);
-					ChunkDataBase.addNBTCache(chunkPos, player.worldObj, currentNBT);
-					ChunkDataBase data = ChunkDataBase.getDataCache(chunkPos, player.worldObj, BetweenlandsChunkData.class);
+					currentNBT.setTag(name, nbt);
+					ChunkDataBase.addNBTCache(chunkPos, world, currentNBT);
+					ChunkDataBase data = ChunkDataBase.getDataCache(chunkPos, world, BetweenlandsChunkData.class);
 					if(data != null) {
-						data.writeData(message.nbt);
+						data.writeData(nbt);
 						data.load();
 					}
 				}
+				return null;
 			}
-
-			@Override
-			public void onMessageServerSide(MessageSyncChunkData message, EntityPlayer player) { }
 		}
 
 

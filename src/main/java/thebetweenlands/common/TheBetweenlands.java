@@ -18,12 +18,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.render.models.ModelSundew;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.base.SidedPacketHandler;
-import thebetweenlands.common.network.base.impl.CommonPacketProxy;
-import thebetweenlands.common.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.common.network.BLMessage;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -44,10 +46,6 @@ public class TheBetweenlands {
 
 	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
-	public static final SidedPacketHandler SIDED_PACKET_HANDLER = new SidedPacketHandler();
-	public static final IDPacketObjectSerializer PACKET_REGISTRY = new IDPacketObjectSerializer();
-	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
-	public static CommonPacketProxy packetProxy;
 
 	private static File configDir;
 
@@ -57,6 +55,8 @@ public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
 
 	public static DimensionType dimensionType;
+
+	private static int nextMessageId;
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
@@ -75,9 +75,17 @@ public class TheBetweenlands {
 
 		/// Network ///
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-		SIDED_PACKET_HANDLER.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(PACKET_REGISTRY);
 
 		proxy.preInit();
+	}
+
+	public static <M extends BLMessage> void registerMessage(Class<M> messageType, Side toSide) {
+		networkWrapper.registerMessage(new IMessageHandler<M, IMessage>() {
+			@Override
+			public IMessage onMessage(M message, MessageContext ctx) {
+				return message.process(ctx);
+			}
+		}, messageType, nextMessageId++, toSide);
 	}
 
 	@EventHandler
