@@ -28,6 +28,16 @@ public final class CorrodibleItemHelper {
 	private CorrodibleItemHelper() {
 	}
 
+	public static int getCoating(ItemStack itemStack) {
+		if (itemStack.hasTagCompound()) {
+			NBTTagCompound tagCompound = itemStack.getTagCompound();
+			if (tagCompound.hasKey("CorrosionCoating", 3)) {
+				return tagCompound.getInteger("CorrosionCoating");
+			}
+		}
+		return 0;
+	}
+
 	public static int getCorrosion(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
@@ -36,6 +46,10 @@ public final class CorrodibleItemHelper {
 			}
 		}
 		return 0;
+	}
+
+	public static void setCoating(ItemStack itemStack, int coating) {
+		itemStack.setTagInfo("CorrosionCoating", new NBTTagInt(coating));
 	}
 
 	public static void setCorrosion(ItemStack itemStack, int corrosion) {
@@ -70,7 +84,12 @@ public final class CorrodibleItemHelper {
 					probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
 				}
 				if (world.rand.nextFloat() < probability) {
-					setCorrosion(itemStack, corrosion + 1);
+					int coating = getCoating(itemStack);
+					if(coating > 0) {
+						setCoating(itemStack, coating - 1);
+					} else {
+						setCorrosion(itemStack, corrosion + 1);
+					}
 				}
 			}
 		}
@@ -78,6 +97,7 @@ public final class CorrodibleItemHelper {
 
 	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		int corrosion = getCorrosion(itemStack);
+		int coating = getCoating(itemStack);
 		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
 		corrosionInfo.append(getCorrosionStage(corrosion));
 		corrosionInfo.replace(0, corrosionInfo.length(), StatCollector.translateToLocal(corrosionInfo.toString()));
@@ -87,6 +107,9 @@ public final class CorrodibleItemHelper {
 			corrosionInfo.append(TOOLTIP_PART);
 		}
 		lines.add(corrosionInfo.toString());
+		if(coating > 0) {
+			lines.add(StatCollector.translateToLocal("tooltip.coated"));
+		}
 	}
 
 	public static int getCorrosionStage(ItemStack itemStack) {

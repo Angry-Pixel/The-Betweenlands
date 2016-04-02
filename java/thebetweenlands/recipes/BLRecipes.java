@@ -13,6 +13,7 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
+import net.minecraftforge.oredict.RecipeSorter.Category;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
@@ -41,6 +42,7 @@ import thebetweenlands.recipes.misc.RecipesAmulets;
 import thebetweenlands.recipes.misc.RecipesAspectVials;
 import thebetweenlands.recipes.misc.RecipesAspectrusSeeds;
 import thebetweenlands.recipes.misc.RecipesCircleGems;
+import thebetweenlands.recipes.misc.RecipesCoating;
 import thebetweenlands.recipes.purifier.PurifierRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
@@ -323,6 +325,8 @@ public class BLRecipes {
 		RecipeSorter.register("thebetweenlands:recipeAmulets", RecipesAmulets.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipeSummonMummy());
 		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesCoating());
+		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, Category.SHAPED, "after:minecraft:shapeless");
 	}
 
 	private static void registerSmelting() {

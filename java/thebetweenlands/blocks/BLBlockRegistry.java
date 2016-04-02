@@ -190,6 +190,7 @@ public class BLBlockRegistry {
 	}.setXP(2, 5);
 	public static final Block valoniteOre = new BlockGenericOre("valoniteOre", ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD)).setXP(5, 12);
 	public static final BlockLifeCrystalOre lifeCrystalOre = (BlockLifeCrystalOre) new BlockLifeCrystalOre().setLightLevel(0.4F);
+	public static final Block scabystOre = new BlockGenericOre("scabystOre", ItemGeneric.createStack(EnumItemGeneric.SCABYST)).setDropsAmounts(1, 3).setXP(2, 5);
 	// TREES
 	public static final Block saplingWeedwood = new BlockBLSapling("saplingWeedwood").setTreeGenerator(new WorldGenWeedWoodTree());
 	public static final Block saplingSapTree = new BlockBLSapling("saplingSapTree").setTreeGenerator(new WorldGenSapTree());

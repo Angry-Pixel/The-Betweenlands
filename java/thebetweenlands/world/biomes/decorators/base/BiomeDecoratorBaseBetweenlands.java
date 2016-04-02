@@ -100,6 +100,7 @@ public class BiomeDecoratorBaseBetweenlands
 		this.generateOre(10, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(1, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(3, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(4, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(200, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
 		//Generate middle gems

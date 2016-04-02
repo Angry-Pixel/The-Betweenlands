@@ -30,6 +30,9 @@ public class OreGens {
 	public static final WorldGenMinableBetweenlands VALONITE = 
 			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.valoniteOre, 0, 2, BLBlockRegistry.pitstone, false);
 
+	public static final WorldGenMinableBetweenlands SCABYST = 
+			new WorldGenMinableBetweenlands().prepare(BLBlockRegistry.scabystOre, 0, 2, BLBlockRegistry.pitstone, false);
+	
 	public static final WorldGenerator LIFE_GEM = 
 			new WorldGenerator() {
 		@Override

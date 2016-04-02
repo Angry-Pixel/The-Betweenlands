@@ -21,6 +21,7 @@ public class BlockGenericOre extends Block {
 	private ItemStack oreDrops;
 	private Random rand = new Random();
 
+	private int minDropAmount = 1, maxDropAmount = 1;
 	private int minXP = 0, maxXP = 0;
 
 	public BlockGenericOre(String blockName, ItemStack oreDrops) {
@@ -35,6 +36,12 @@ public class BlockGenericOre extends Block {
 		setBlockTextureName("thebetweenlands:" + type);
 	}
 
+	public BlockGenericOre setDropsAmounts(int min, int max) {
+		this.minDropAmount = min;
+		this.maxDropAmount = max;
+		return this;
+	}
+	
 	public BlockGenericOre setXP(int min, int max) {
 		this.minXP = min;
 		this.maxXP = max;
@@ -50,7 +57,7 @@ public class BlockGenericOre extends Block {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 
 		if(oreDrops != null)
-			for(int dropFortune = 0; dropFortune < 1 + fortune; dropFortune++)
+			for(int dropFortune = 0; dropFortune < 1 + fortune + world.rand.nextInt(this.maxDropAmount - this.minDropAmount + 1) + this.minDropAmount; dropFortune++)
 				drops.add(getOreDropped());
 		else
 			drops.add(new ItemStack(Item.getItemFromBlock(this)));
