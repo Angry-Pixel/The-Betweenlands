@@ -3,13 +3,13 @@ package thebetweenlands.common.registries;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import thebetweenlands.client.tabs.BLCreativeTabs;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.BLMaterial;
-import thebetweenlands.common.items.BasicItem;
-import thebetweenlands.common.items.armor.ItemArmorBL;
+import thebetweenlands.common.item.BLMaterial;
+import thebetweenlands.common.item.BasicItem;
+import thebetweenlands.common.item.armor.ItemArmorBL;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.utils.TranslationHelper;
+import thebetweenlands.util.TranslationHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

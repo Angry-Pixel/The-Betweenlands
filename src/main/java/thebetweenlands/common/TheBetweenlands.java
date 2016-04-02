@@ -30,11 +30,11 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
-import thebetweenlands.utils.ModelConverter;
-import thebetweenlands.utils.ModelConverter.AlignedQuad;
-import thebetweenlands.utils.ModelConverter.Box;
-import thebetweenlands.utils.ModelConverter.Model;
-import thebetweenlands.utils.config.ConfigHandler;
+import thebetweenlands.util.ModelConverter;
+import thebetweenlands.util.ModelConverter.AlignedQuad;
+import thebetweenlands.util.ModelConverter.Box;
+import thebetweenlands.util.ModelConverter.Model;
+import thebetweenlands.util.config.ConfigHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {

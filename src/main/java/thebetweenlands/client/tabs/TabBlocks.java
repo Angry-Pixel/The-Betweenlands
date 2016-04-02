@@ -2,6 +2,7 @@ package thebetweenlands.client.tabs;
 
 import java.util.Comparator;
 
+import thebetweenlands.client.tab.CreativeTabBetweenlands;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

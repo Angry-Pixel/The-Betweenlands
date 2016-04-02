@@ -20,10 +20,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.events.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.utils.config.ConfigHandler;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();

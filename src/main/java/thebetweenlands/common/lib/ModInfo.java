@@ -9,5 +9,5 @@ public class ModInfo {
 	public static final String CHANNEL = ID;
 	public static final String CLIENTPROXY_LOCATION = "thebetweenlands.client.proxy.ClientProxy";
 	public static final String COMMONPROXY_LOCATION = "thebetweenlands.common.proxy.CommonProxy";
-	public static final String CONFIG_GUI = "thebetweenlands.utils.config.ConfigGuiFactory";
+	public static final String CONFIG_GUI = "thebetweenlands.util.config.ConfigGuiFactory";
 }

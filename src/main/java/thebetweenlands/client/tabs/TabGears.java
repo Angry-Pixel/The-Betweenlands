@@ -1,5 +1,6 @@
 package thebetweenlands.client.tabs;
 
+import thebetweenlands.client.tab.CreativeTabBetweenlands;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 

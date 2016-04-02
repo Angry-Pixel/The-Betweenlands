@@ -13,11 +13,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.client.tabs.BLCreativeTabs;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.blocks.BasicBlock;
-import thebetweenlands.common.blocks.terrain.BlockGenericOre;
-import thebetweenlands.common.blocks.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.terrain.BlockGenericOre;
+import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
 
 public class BlockRegistry {

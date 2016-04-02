@@ -1,10 +1,10 @@
 package thebetweenlands.common.world.storage.world;
 
 import net.minecraft.world.World;
-import thebetweenlands.common.herblore.aspects.AspectManager;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.events.EnvironmentEvent;
-import thebetweenlands.common.world.events.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.EnvironmentEvent;
+import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
 public class BetweenlandsWorldData extends WorldDataBase {
 	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
