@@ -1,16 +1,17 @@
 package thebetweenlands.client.render.tileentity;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.model.block.ModelItemCage;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.tileentities.TileEntityItemCage;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class TileEntityItemCageRenderer extends TileEntitySpecialRenderer {
@@ -24,6 +25,14 @@ public class TileEntityItemCageRenderer extends TileEntitySpecialRenderer {
 		TileEntityItemCage swordStone = (TileEntityItemCage) tile;
 		int type = swordStone.type;
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
+
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			ShaderHelper.INSTANCE.addDynLight(new LightSource(tile.xCoord + 0.5D, tile.yCoord + 0.5D, tile.zCoord + 0.5D, 
+					2f,
+					5.0f / 255.0f * 13.0F, 
+					40.0f / 255.0f * 13.0F, 
+					60.0f / 255.0f * 13.0F));
+		}
 
 		int brightness = 0;
 		brightness = tile.getWorldObj().getLightBrightnessForSkyBlocks(tile.xCoord, tile.yCoord, tile.zCoord, 0);

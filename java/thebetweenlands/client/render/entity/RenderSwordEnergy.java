@@ -1,5 +1,10 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -8,16 +13,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.model.entity.ModelSwordEnergy;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.entities.EntitySwordEnergy;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderSwordEnergy extends Render {
@@ -44,6 +45,14 @@ public class RenderSwordEnergy extends Render {
 	}
 
 	public void renderSwordEnergy(EntitySwordEnergy energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			ShaderHelper.INSTANCE.addDynLight(new LightSource(energyBall.posX, energyBall.posY + 0.5D, energyBall.posZ, 
+					2f,
+					5.0f / 255.0f * 13.0F, 
+					40.0f / 255.0f * 13.0F, 
+					60.0f / 255.0f * 13.0F));
+		}
+
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y - 0.0625D - energyBall.pulseFloat, z);
@@ -83,8 +92,8 @@ public class RenderSwordEnergy extends Render {
 		double interpPos4 = energyBall.lastPos4 + (energyBall.pos4 - energyBall.lastPos4) * partialTickTime;
 		ghostItem.setEntityItemStack(ItemGeneric.createStack(EnumItemGeneric.SHOCKWAVE_SWORD_4));
 		renderItemInBlock(x - interpPos4, y + 0.725F, z + interpPos4, ghostItem, ticks);
-		
-		
+
+
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(FORCE_TEXTURE);
 		GL11.glMatrixMode(GL11.GL_TEXTURE);
 		GL11.glLoadIdentity();
@@ -149,9 +158,9 @@ public class RenderSwordEnergy extends Render {
 		Vec3 upVec = Vec3.createVectorHelper(0, 1, 0);
 		Vec3 localSide = dir.crossProduct(upVec).normalize();
 		Vec3 localUp = localSide.crossProduct(dir).normalize();
-		
+
 		Tessellator tessellator = Tessellator.instance;
-		
+
 		/*tessellator.startDrawing(3);
 		tessellator.addVertex(start.xCoord, start.yCoord, start.zCoord);
 		tessellator.addVertex(start.xCoord + diff.xCoord, start.yCoord + diff.yCoord, start.zCoord + diff.zCoord);
@@ -160,39 +169,39 @@ public class RenderSwordEnergy extends Render {
 		tessellator.addVertex(start.xCoord, start.yCoord, start.zCoord);
 		tessellator.addVertex(start.xCoord + localSide.xCoord, start.yCoord + localSide.yCoord, start.zCoord + localSide.zCoord);
 		tessellator.draw();*/
-		
+
 		double maxVStart = diff.lengthVector() / 8.0D;
 		double maxVEnd = diff.lengthVector() / 8.0D;
 		double minVStart = 0.0D;
 		double minVEnd = 0.0D;
 		double maxU = diff.lengthVector() / 2.0D;
-		
+
 		tessellator.startDrawingQuads();
 		tessellator.addVertexWithUV(start.xCoord + (localSide.xCoord + localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord + localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord + localUp.zCoord) * startWidth, 0, minVStart);
 		tessellator.addVertexWithUV(start.xCoord + (localSide.xCoord - localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord - localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord - localUp.zCoord) * startWidth, 0, maxVStart);
 		tessellator.addVertexWithUV(end.xCoord + (localSide.xCoord - localUp.xCoord) * endWidth, end.yCoord + (localSide.yCoord - localUp.yCoord) * endWidth, end.zCoord + (localSide.zCoord - localUp.zCoord) * endWidth, maxU, maxVEnd);
 		tessellator.addVertexWithUV(end.xCoord + (localSide.xCoord + localUp.xCoord) * endWidth, end.yCoord + (localSide.yCoord + localUp.yCoord) * endWidth, end.zCoord + (localSide.zCoord + localUp.zCoord) * endWidth, maxU, minVEnd);
-		
+
 		tessellator.addVertexWithUV(end.xCoord + (-localSide.xCoord + localUp.xCoord) * endWidth, end.yCoord + (-localSide.yCoord + localUp.yCoord) * endWidth, end.zCoord + (-localSide.zCoord + localUp.zCoord) * endWidth, maxU, minVEnd);
 		tessellator.addVertexWithUV(end.xCoord + (-localSide.xCoord - localUp.xCoord) * endWidth, end.yCoord + (-localSide.yCoord - localUp.yCoord) * endWidth, end.zCoord + (-localSide.zCoord - localUp.zCoord) * endWidth, maxU, maxVEnd);
 		tessellator.addVertexWithUV(start.xCoord + (-localSide.xCoord - localUp.xCoord) * startWidth, start.yCoord + (-localSide.yCoord - localUp.yCoord) * startWidth, start.zCoord + (-localSide.zCoord - localUp.zCoord) * startWidth, 0, maxVStart);
 		tessellator.addVertexWithUV(start.xCoord + (-localSide.xCoord + localUp.xCoord) * startWidth, start.yCoord + (-localSide.yCoord + localUp.yCoord) * startWidth, start.zCoord + (-localSide.zCoord + localUp.zCoord) * startWidth, 0, minVStart);
-		
+
 		tessellator.addVertexWithUV(end.xCoord + (localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord + localSide.zCoord) * endWidth, maxU, minVEnd);
 		tessellator.addVertexWithUV(end.xCoord + (localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord - localSide.zCoord) * endWidth, maxU, maxVEnd);
 		tessellator.addVertexWithUV(start.xCoord + (localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord - localSide.zCoord) * startWidth, 0, maxVStart);
 		tessellator.addVertexWithUV(start.xCoord + (localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord + localSide.zCoord) * startWidth, 0, minVStart);
-		
+
 		tessellator.addVertexWithUV(start.xCoord + (-localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord + localSide.zCoord) * startWidth, 0, minVStart);
 		tessellator.addVertexWithUV(start.xCoord + (-localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord - localSide.zCoord) * startWidth, 0, maxVStart);
 		tessellator.addVertexWithUV(end.xCoord + (-localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord - localSide.zCoord) * endWidth, maxU, maxVEnd);
 		tessellator.addVertexWithUV(end.xCoord + (-localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord + localSide.zCoord) * endWidth, maxU, minVEnd);
-		
+
 		tessellator.addVertexWithUV(start.xCoord + (localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord - localSide.zCoord) * startWidth, 0, 1);
 		tessellator.addVertexWithUV(start.xCoord + (-localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord - localSide.zCoord) * startWidth, 1, 1);
 		tessellator.addVertexWithUV(start.xCoord + (-localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord + localSide.zCoord) * startWidth, 1, 0);
 		tessellator.addVertexWithUV(start.xCoord + (localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord + localSide.zCoord) * startWidth, 0, 0);
-		
+
 		tessellator.addVertexWithUV(end.xCoord + (localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord + localSide.zCoord) * endWidth, 0, 0);
 		tessellator.addVertexWithUV(end.xCoord + (-localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord + localSide.zCoord) * endWidth, 1, 0);
 		tessellator.addVertexWithUV(end.xCoord + (-localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord - localSide.zCoord) * endWidth, 1, 1);
