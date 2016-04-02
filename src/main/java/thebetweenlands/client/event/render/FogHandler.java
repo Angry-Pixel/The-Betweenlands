@@ -46,7 +46,7 @@ public class FogHandler {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			boolean denseFog = false;
-			if((!ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())/* ||
+			if((!ConfigHandler.debug && eeRegistry.DENSE_FOG.isActive())/* ||
 					(DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
 					(!DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())*/) {
 				denseFog = true;
@@ -89,7 +89,7 @@ public class FogHandler {
 		World world = TheBetweenlands.proxy.getClientWorld();
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
-		if(world == null || player == null || this.farPlaneDistance == 0.0F || player.dimension != ConfigHandler.DIMENSION_ID) return;
+		if(world == null || player == null || this.farPlaneDistance == 0.0F || player.dimension != ConfigHandler.dimensionId) return;
 
 		BiomeGenBase biome = world.getBiomeGenForCoords(player.getPosition());
 
@@ -208,7 +208,7 @@ public class FogHandler {
 			return;
 		} else if(world.isRemote) {
 			Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
-			if(renderView == null || renderView.dimension != ConfigHandler.DIMENSION_ID) {
+			if(renderView == null || renderView.dimension != ConfigHandler.dimensionId) {
 				return;
 			}
 			Block block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(world, renderView, (float) event.getRenderPartialTicks()).getBlock();
