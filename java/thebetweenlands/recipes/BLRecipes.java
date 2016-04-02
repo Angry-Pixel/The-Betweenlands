@@ -1,7 +1,6 @@
 package thebetweenlands.recipes;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -16,6 +15,7 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.RecipeSorter.Category;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.plants.BlockWallPlants;
 import thebetweenlands.blocks.terrain.BlockGenericStone;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.gemcircle.CircleGem;
@@ -156,6 +156,8 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.wallPlants, 1, BlockWallPlants.META_MOSS), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.caveMoss), 'P', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGem.NONE), "XXX", "X X", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
