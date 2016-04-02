@@ -180,7 +180,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			int spawnFuzzHalf = spawnFuzz / 2;
 			coords.posX += worldServerInstance.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
 			coords.posZ += worldServerInstance.rand.nextInt(spawnFuzz) - spawnFuzzHalf;
-			coords.posY = worldServerInstance.getTopSolidOrLiquidBlock(coords.posX, coords.posZ);
+			coords.posY = worldServerInstance.getTopSolidOrLiquidBlock(coords.posX, coords.posZ) + 1;
 			player.setSpawnChunk(coords, true, ConfigHandler.DIMENSION_ID);
 		}
 	}
