@@ -102,9 +102,9 @@ public class PlayerItemEventHandler {
 	}
 
 	public enum Sickness {
-		FINE(32),
-		HALF(48),
-		SICK(64);
+		FINE(22),
+		HALF(34),
+		SICK(50);
 
 		public final String[] lines;
 		public final int maxHatred;
