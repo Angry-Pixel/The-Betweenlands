@@ -42,7 +42,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			}
 			if (targetedEntity != null) {
 				if (targetedEntity instanceof EntityPlayer)
-					if (((EntityPlayer) targetedEntity).capabilities.isCreativeMode) {
+					if (((EntityPlayer) targetedEntity).capabilities.isCreativeMode || !getEntitySenses().canSee((EntityPlayer) targetedEntity)) {
 						targetedEntity = null;
 						return;
 					}
