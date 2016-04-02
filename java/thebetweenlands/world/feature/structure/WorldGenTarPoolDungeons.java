@@ -77,7 +77,7 @@ public class WorldGenTarPoolDungeons extends WorldGenerator {
 		world.setBlock(x + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), y, z + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), BLBlockRegistry.tarBeastSpawner, 0, 3);
 
 		StorageHelper.addArea(world, "translate:tarPoolDungeon", AxisAlignedBB.getBoundingBox(x - halfSize, y - 1, z - halfSize, x + halfSize, y + height, z + halfSize).expand(1, 1, 1), EnumLocationType.DUNGEON, 0);
-
+		
 		return true;
 	}
 

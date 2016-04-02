@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.tileentities.TileEntityTarBeastSpawner;
+import thebetweenlands.tileentities.spawner.MobSpawnerBaseLogicBL;
 
 public class BlockTarBeastSpawner extends BlockMobSpawner {
 
@@ -22,7 +23,12 @@ public class BlockTarBeastSpawner extends BlockMobSpawner {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		TileEntityTarBeastSpawner tile = new TileEntityTarBeastSpawner();
-		tile.func_145881_a().setEntityName("thebetweenlands.tarBeast");
+		MobSpawnerBaseLogicBL spawnerLogic = tile.getSpawnerLogic();
+		spawnerLogic.setEntityName("thebetweenlands.tarBeast");
+		spawnerLogic.setHasParticles(false);
+		spawnerLogic.setMaxEntities(1);
+		spawnerLogic.setCheckRange(16.0D);
+		spawnerLogic.setDelay(1400, 2000);
 		return tile;
 	}
 }

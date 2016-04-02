@@ -78,14 +78,14 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 					this.strikes++;
 					return;
 				}
-				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 6);
+				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
 				if(!this.isDead && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
 					target.entityHit.setDead();
-					EntityWight wight = new EntityWight(this.worldObj);
+					/*EntityWight wight = new EntityWight(this.worldObj);
 					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY + 0.05D, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
 					if(this.worldObj.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
 						this.worldObj.spawnEntityInWorld(wight);
-					}
+					}*/
 				}
 				this.setDead();
 				this.motionX = 0;
@@ -134,9 +134,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile {
 			return;
 		}
 
-		if(!this.worldObj.isRemote)
-			if(this.target instanceof EntityFortressBoss)
+		if(!this.worldObj.isRemote) {
+			if((this.getOwner() == null || !this.getOwner().isEntityAlive() || this.getOwner() instanceof EntityWight == false || !((EntityWight)this.getOwner()).isVolatile()) || this.target instanceof EntityFortressBoss)
 				this.setDead();
+		}
 
 		if(!this.isDead) {
 			this.ticksInAir++;

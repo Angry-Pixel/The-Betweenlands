@@ -34,7 +34,6 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public class EntityWight extends EntityMob implements IEntityBL {
@@ -42,7 +41,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute("bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
 	public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute("bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
 	public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute("bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
-	public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute("bl.volatileMaxDamage", 30.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
+	public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute("bl.volatileMaxDamage", 20.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
 
 	public static final int ATTACK_STATE_DW = 20;
 	public static final int ANIMATION_STATE_DW = 21;
@@ -74,6 +73,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private int repairY = 0;
 	private int repairZ = 0;
 	private boolean canTurnVolatile = true;
+	private boolean canTurnVolatileOnTarget = false;
 
 	public EntityWight(World world) {
 		super(world);
@@ -140,6 +140,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if(this.repairBlock != null)
 			nbt.setString("repairBlock", Block.blockRegistry.getNameForObject(this.repairBlock));
 		nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
+		nbt.setBoolean("canTurnVolatileOnTarget", this.canTurnVolatileOnTarget);
 	}
 
 	@Override
@@ -165,6 +166,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			this.repairBlock = (Block) Block.blockRegistry.getObject(nbt.getString("repairBlock"));
 		}
 		this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
+		this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
 	}
 
 	@Override
@@ -213,7 +215,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if(!this.isRepairGuard()) {
 			EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer)this.getAttackTarget() : null;
 			if(target == null || target.isDead || target.getDistanceToEntity(this) > this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue()) {
-				target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 25.0D);
+				target = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
 			}
 
 			if(target != null && !target.isSneaking()) {
@@ -244,10 +246,14 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				}
 			}
 
+			if(this.getAttackTarget() == null) {
+				this.canTurnVolatileOnTarget = false;
+			}
+
 			if (!this.worldObj.isRemote && getAttackTarget() != null) {
 				this.dataWatcher.updateObject(ATTACK_STATE_DW, Byte.valueOf((byte) 1));
 
-				if(!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatile) {
+				if(!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatile && this.canTurnVolatileOnTarget) {
 					if(this.volatileCooldown > 0)
 						this.volatileCooldown--;
 					if(this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
@@ -663,6 +669,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				this.setVolatile(false);
 			}
 		}
+		this.canTurnVolatileOnTarget = true;
 		return ret;
 	}
 
@@ -671,7 +678,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if(this.isVolatile()) {
 			return false;
 		}
-		return super.attackEntityAsMob(entity);
+		if(super.attackEntityAsMob(entity)) {
+			this.canTurnVolatileOnTarget = true;
+			return true;
+		}
+		return false;
 	}
 
 	@Override

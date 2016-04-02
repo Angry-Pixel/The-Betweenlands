@@ -44,7 +44,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(12.0D);
 		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}

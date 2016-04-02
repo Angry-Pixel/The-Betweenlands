@@ -4,6 +4,7 @@ import java.util.List;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -55,6 +56,12 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		dataWatcher.addObject(HIDING_ID, (byte) 0);
 	}
 
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(12.0D);
+	}
+	
 	public void setHidingBush(int x, int y, int z) {
 		hidingBushX = x;
 		hidingBushY = y;

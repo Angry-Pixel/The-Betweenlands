@@ -30,12 +30,22 @@ public abstract class MobSpawnerBaseLogicBL {
 	/** The range coefficient for spawning entities around. */
 	private int spawnRange = 4;
 	private double checkRange = 8.0D;
+	private boolean hasParticles = true;
 
 	/**
 	 * Gets the entity name that should be spawned.
 	 */
 	public String getEntityNameToSpawn() {
 		return this.entityTypeName;
+	}
+
+	public MobSpawnerBaseLogicBL setHasParticles(boolean hasParticles) {
+		this.hasParticles = hasParticles;
+		return this;
+	}
+
+	public boolean hasParticles() {
+		return this.hasParticles;
 	}
 
 	public MobSpawnerBaseLogicBL setMaxEntities(int maxEntities) {
@@ -98,13 +108,15 @@ public abstract class MobSpawnerBaseLogicBL {
 					--this.spawnDelay;
 				}
 
-				double rx = (double)(this.getSpawnerWorld().rand.nextFloat());
-				double ry = (double)(this.getSpawnerWorld().rand.nextFloat());
-				double rz = (double)(this.getSpawnerWorld().rand.nextFloat());
-				double len = Math.sqrt(rx*rx+ry*ry+rz*rz);
-				BLParticle.PORTAL.spawn(this.getSpawnerWorld(), 
-						(float)this.getSpawnerX() + rx, (float)this.getSpawnerY() + ry, (float)this.getSpawnerZ() + rz, 
-						(rx-0.5D)/len*0.05D, (ry-0.5D)/len*0.05D, (rz-0.5D)/len*0.05D, 0);
+				if(this.hasParticles()) {
+					double rx = (double)(this.getSpawnerWorld().rand.nextFloat());
+					double ry = (double)(this.getSpawnerWorld().rand.nextFloat());
+					double rz = (double)(this.getSpawnerWorld().rand.nextFloat());
+					double len = Math.sqrt(rx*rx+ry*ry+rz*rz);
+					BLParticle.PORTAL.spawn(this.getSpawnerWorld(), 
+							(float)this.getSpawnerX() + rx, (float)this.getSpawnerY() + ry, (float)this.getSpawnerZ() + rz, 
+							(rx-0.5D)/len*0.05D, (ry-0.5D)/len*0.05D, (rz-0.5D)/len*0.05D, 0);
+				}
 
 				this.lastEntityRotation = this.entityRotation;
 				this.entityRotation = (this.entityRotation + (double)(1000.0F / ((float)this.spawnDelay + 200.0F))) % 360.0D;
@@ -206,6 +218,10 @@ public abstract class MobSpawnerBaseLogicBL {
 			this.checkRange = nbt.getDouble("CheckRange");
 		}
 
+		if (nbt.hasKey("HasParticles")) {
+			this.hasParticles = nbt.getBoolean("HasParticles");
+		}
+		
 		if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
 			this.cachedEntity = null;
 		}
@@ -221,6 +237,7 @@ public abstract class MobSpawnerBaseLogicBL {
 		nbt.setShort("RequiredPlayerRange", (short)this.activatingRangeFromPlayer);
 		nbt.setShort("SpawnRange", (short)this.spawnRange);
 		nbt.setDouble("CheckRange", this.checkRange);
+		nbt.setBoolean("HasParticles", this.hasParticles);
 	}
 
 	/**

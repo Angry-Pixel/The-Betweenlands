@@ -1,5 +1,5 @@
 package thebetweenlands.tileentities;
 
-import net.minecraft.tileentity.TileEntityMobSpawner;
+import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 
-public class TileEntityTarBeastSpawner extends TileEntityMobSpawner {}
+public class TileEntityTarBeastSpawner extends TileEntityBLSpawner {}
