@@ -25,6 +25,9 @@ import thebetweenlands.items.loot.ItemRing;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
+	public static final int MAX_USE_TIME = 100;
+	public static final int USE_COOLDOWN = 120;
+
 	public ItemRingOfSummoning() {
 		super();
 		this.setMaxDamage(256);
@@ -93,11 +96,13 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 				if(stack.stackTagCompound == null)
 					stack.stackTagCompound = new NBTTagCompound();
 				NBTTagCompound nbt = stack.stackTagCompound;
-				if(prop.isInUse()) {
+				int useTime = nbt.getInteger("useTime");
+				int useCooldown = nbt.getInteger("useCooldown");
+				if(prop.isInUse() && useTime < MAX_USE_TIME && useCooldown <= 0) {
+					nbt.setInteger("useTime", useTime + 1);
 					if(!entity.worldObj.isRemote) {
 						if(!nbt.getBoolean("wasUsing"))
-							entity.worldObj.playSoundEffect(entity.posX, entity.posY, entity.posZ, "thebetweenlands:peatMummyCharge", 0.8F, (entity.worldObj.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
-
+							entity.worldObj.playSoundEffect(entity.posX, entity.posY, entity.posZ, "thebetweenlands:peatMummyCharge", 0.6F, (entity.worldObj.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 						List<EntityMummyArm> arms = entity.worldObj.getEntitiesWithinAABB(EntityMummyArm.class, entity.boundingBox.expand(18, 18, 18));
 						int armCount = 0;
 						for(EntityMummyArm arm : arms) {
@@ -148,7 +153,14 @@ public class ItemRingOfSummoning extends ItemRing implements IManualEntryItem {
 					}
 					nbt.setBoolean("wasUsing", true);
 				} else {
-					nbt.setBoolean("wasUsing", false);
+					if(!prop.isInUse()) {
+						if(nbt.getBoolean("wasUsing"))
+							nbt.setInteger("useCooldown", USE_COOLDOWN);
+						nbt.setBoolean("wasUsing", false);
+						nbt.setInteger("useTime", 0);
+					}
+					if(useCooldown > 0)
+						nbt.setInteger("useCooldown", useCooldown - 1);
 				}
 			}
 		}

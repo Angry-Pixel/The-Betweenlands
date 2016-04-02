@@ -23,6 +23,7 @@ import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
 import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.equipment.ItemRingOfSummoning;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
@@ -65,11 +66,14 @@ public class CameraPositionHandler {
 			if(player.getDistanceToEntity(renderViewEntity) < 32.0D) {
 				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(player);
 				for(Equipment equipment : equipmentInventory.getEquipment(EnumEquipmentCategory.RING)) {
-					if(equipment.item.getItem() == BLItemRegistry.ringOfSummoning) {
-						EntityPropertiesRingInput prop = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesRingInput.class);
-						if(prop != null) {
-							if(prop.isInUse()) {
-								shakeStrength += 0.1F;
+					if(equipment.item.getItem() == BLItemRegistry.ringOfSummoning && equipment.item.stackTagCompound != null && equipment.item.stackTagCompound.hasKey("useTime")) {
+						int useTime = equipment.item.stackTagCompound.getInteger("useTime");
+						if(useTime < ItemRingOfSummoning.MAX_USE_TIME && (!equipment.item.stackTagCompound.hasKey("useCooldown") || equipment.item.stackTagCompound.getInteger("useCooldown") <= 0)) {
+							EntityPropertiesRingInput prop = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesRingInput.class);
+							if(prop != null) {
+								if(prop.isInUse()) {
+									shakeStrength += (ItemRingOfSummoning.MAX_USE_TIME - useTime) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
+								}
 							}
 						}
 					}
