@@ -5,10 +5,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientProxy extends CommonProxy {
     @Override
@@ -32,10 +36,20 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerDefaultItemRenderer(Item item) {
-        String name = item.getUnlocalizedName();
-        String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
-        //ModelLoader.registerItemVariants(item, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+        List<ItemStack> list = new ArrayList<>();
+        item.getSubItems(item, null, list);
+        if (list.size() > 0) {
+            for (ItemStack itemStack : list) {
+                String name = item.getUnlocalizedName(itemStack);
+                String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
+                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+                ModelLoader.setCustomModelResourceLocation(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+            }
+        } else {
+            String name = item.getUnlocalizedName();
+            String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
+            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+        }
     }
 }
