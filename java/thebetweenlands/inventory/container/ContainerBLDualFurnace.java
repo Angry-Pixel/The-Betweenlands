@@ -1,7 +1,5 @@
 package thebetweenlands.inventory.container;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,6 +12,8 @@ import thebetweenlands.inventory.slot.SlotRestriction;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ContainerBLDualFurnace extends Container {
 	private TileEntityBLDualFurnace tileFurnace;
@@ -30,12 +30,12 @@ public class ContainerBLDualFurnace extends Container {
 		addSlotToContainer(new Slot(tile, 0, 56, 21));
 		addSlotToContainer(new Slot(tile, 1, 56, 57));
 		addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 39));
-		Slot fluxSlot1 = new SlotRestriction(tile, 6, 26, 39, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
+		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
 		addSlotToContainer(fluxSlot1);
 
-		addSlotToContainer(new Slot(tile, 3, 56, 92));
-		addSlotToContainer(new Slot(tile, 4, 56, 128));
-		addSlotToContainer(new SlotFurnace(inventory.player, tile, 5, 116, 110));
+		addSlotToContainer(new Slot(tile, 4, 56, 92));
+		addSlotToContainer(new Slot(tile, 5, 56, 128));
+		addSlotToContainer(new SlotFurnace(inventory.player, tile, 6, 116, 110));
 		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
 		addSlotToContainer(fluxSlot2);
 
@@ -133,28 +133,32 @@ public class ContainerBLDualFurnace extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (slotIndex == 2 || slotIndex == 5) {
-				if (!mergeItemStack(itemstack1, 6, 42, true))
+			if (slotIndex == 2 || slotIndex == 6) {
+				if (!mergeItemStack(itemstack1, 8, 44, true))
 					return null;
 				slot.onSlotChange(itemstack1, itemstack);
 			}
-			else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 4 && slotIndex != 3) {
+			else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 3 && slotIndex != 4 && slotIndex != 5 && slotIndex != 7) {
 				if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
-					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 3, 4, false))
+					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 4, 5, false))
 						return null;
 				}
 				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.id) {
-					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 4, 5, false))
+					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 5, 6, false))
 						return null;
 				}
-				else if (slotIndex >= 6 && slotIndex < 33) {
-					if (!mergeItemStack(itemstack1, 33, 42, false))
+				 else if (itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id) {
+	                    if (!mergeItemStack(itemstack1, 3, 4, false) && !mergeItemStack(itemstack1, 7, 8, false))
+	                        return null;
+	                }
+				else if (slotIndex >= 8 && slotIndex < 35) {
+					if (!mergeItemStack(itemstack1, 35, 44, false))
 						return null;
 				}
-				else if (slotIndex >= 33 && slotIndex < 42 && !mergeItemStack(itemstack1, 6, 33, false))
+				else if (slotIndex >= 35 && slotIndex < 44 && !mergeItemStack(itemstack1, 8, 35, false))
 					return null;
 			}
-			else if (!mergeItemStack(itemstack1, 6, 42, false))
+			else if (!mergeItemStack(itemstack1, 8, 44, false))
 				return null;
 			if (itemstack1.stackSize == 0)
 				slot.putStack((ItemStack)null);

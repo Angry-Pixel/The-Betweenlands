@@ -102,7 +102,7 @@ public class ContainerBLFurnace extends Container {
                     return null;
                 slot.onSlotChange(itemstack1, itemstack);
             }
-            else if (slotIndex != 1 && slotIndex != 0) {
+            else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 3) {
                 if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
                     if (!mergeItemStack(itemstack1, 0, 1, false))
                         return null;
@@ -111,14 +111,18 @@ public class ContainerBLFurnace extends Container {
                     if (!mergeItemStack(itemstack1, 1, 2, false))
                         return null;
                 }
-                else if (slotIndex >= 3 && slotIndex < 30) {
-                    if (!mergeItemStack(itemstack1, 30, 39, false))
+                else if (itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id) {
+                    if (!mergeItemStack(itemstack1, 3, 4, false))
                         return null;
                 }
-                else if (slotIndex >= 30 && slotIndex < 39 && !mergeItemStack(itemstack1, 3, 30, false))
+                else if (slotIndex >= 3 && slotIndex <= 30) {
+                    if (!mergeItemStack(itemstack1, 31, 40, false))
+                        return null;
+                }
+                else if (slotIndex >= 31 && slotIndex < 40 && !mergeItemStack(itemstack1, 4, 30, false))
                     return null;
             }
-            else if (!mergeItemStack(itemstack1, 3, 39, false))
+            else if (!mergeItemStack(itemstack1, 4, 39, false))
                 return null;
             if (itemstack1.stackSize == 0)
                 slot.putStack((ItemStack)null);
