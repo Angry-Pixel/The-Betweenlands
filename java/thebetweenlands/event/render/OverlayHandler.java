@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -79,6 +80,8 @@ public class OverlayHandler {
 			this.mERrenderHand.invoke(Minecraft.getMinecraft().entityRenderer, partialTicks, renderPass);
 		} catch (Exception e) {
 			e.printStackTrace();
+			if(e.getCause() != null)
+				e.getCause().printStackTrace();
 		}
 		this.cancelOverlay = false;
 	}
@@ -100,15 +103,18 @@ public class OverlayHandler {
 		//Render decay overlay
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
-		if (this.modelArmOverride == null && playerRenderer.modelBipedMain != null) {
-			this.modelArmOverride = new ModelArmOverride(playerRenderer.modelBipedMain);
+		//Should fix compatibility issues with mods that replace the player renderer or parts of it (e.g. More Player Models)
+		if(playerRenderer.getClass() == RenderPlayer.class && playerRenderer.modelBipedMain.getClass() == ModelBiped.class) {
+			if (this.modelArmOverride == null && playerRenderer.modelBipedMain != null) {
+				this.modelArmOverride = new ModelArmOverride(playerRenderer.modelBipedMain);
+			}
+			this.modelArmOverride.parent = playerRenderer.modelBipedMain.bipedRightArm;
+			this.modelArmOverride.entity = Minecraft.getMinecraft().thePlayer;
+			ModelRenderer previousModel = playerRenderer.modelBipedMain.bipedRightArm;
+			playerRenderer.modelBipedMain.bipedRightArm = this.modelArmOverride;
+			this.renderHand(event.partialTicks, event.renderPass, false);
+			playerRenderer.modelBipedMain.bipedRightArm = previousModel;
 		}
-		this.modelArmOverride.parent = playerRenderer.modelBipedMain.bipedRightArm;
-		this.modelArmOverride.entity = Minecraft.getMinecraft().thePlayer;
-		ModelRenderer previousModel = playerRenderer.modelBipedMain.bipedRightArm;
-		playerRenderer.modelBipedMain.bipedRightArm = this.modelArmOverride;
-		this.renderHand(event.partialTicks, event.renderPass, false);
-		playerRenderer.modelBipedMain.bipedRightArm = previousModel;
 
 		//Render other overlays
 		if (view == null || world == null) {
