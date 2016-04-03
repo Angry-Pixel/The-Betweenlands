@@ -1,5 +1,7 @@
 package thebetweenlands.blocks.terrain;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -14,8 +16,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.entities.mobs.EntityTarBeast;
 import thebetweenlands.items.BLMaterial;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockTarFluid extends BlockFluidClassic {
 
@@ -69,41 +69,44 @@ public class BlockTarFluid extends BlockFluidClassic {
 
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
-		solidifyTar(world, x, y, z);
+		this.solidifyTar(world, x, y, z);
 		super.onBlockAdded(world, x, y, z);
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		solidifyTar(world, x, y, z);
+		this.solidifyTar(world, x, y, z);
 		super.onNeighborBlockChange(world, x, y, z, block);
 	}
 
 	private void solidifyTar(World world, int x, int y, int z) {
 		if (world.getBlock(x, y, z) == this) {
-			if (this.blockMaterial == BLMaterial.tar) {
-				boolean placeTar = false;
+			boolean placeTar = false;
 
-				if (placeTar || world.getBlock(x, y, z - 1).getMaterial() == Material.water)
-					placeTar = true;
+			if (!placeTar && world.getBlock(x, y, z - 1).getMaterial() == Material.water)
+				placeTar = true;
 
-				if (placeTar || world.getBlock(x, y, z + 1).getMaterial() == Material.water)
-					placeTar = true;
+			if (!placeTar && world.getBlock(x, y, z + 1).getMaterial() == Material.water)
+				placeTar = true;
 
-				if (placeTar || world.getBlock(x - 1, y, z).getMaterial() == Material.water)
-					placeTar = true;
+			if (!placeTar && world.getBlock(x - 1, y, z).getMaterial() == Material.water)
+				placeTar = true;
 
-				if (placeTar || world.getBlock(x + 1, y, z).getMaterial() == Material.water)
-					placeTar = true;
+			if (!placeTar && world.getBlock(x + 1, y, z).getMaterial() == Material.water)
+				placeTar = true;
 
-				if (placeTar || world.getBlock(x, y + 1, z).getMaterial() == Material.water)
-					placeTar = true;
+			if (!placeTar && world.getBlock(x, y + 1, z).getMaterial() == Material.water)
+				placeTar = true;
 
-				if (placeTar) {
-					world.setBlock(x, y, z, BLBlockRegistry.solidTar);
-					if(world.isRemote) {
-						playEffects(world, x, y, z);
-					}
+			if (!placeTar && world.getBlock(x, y - 1, z).getMaterial() == Material.water) {
+				//Set water block below to solid tar
+				world.setBlock(x, y - 1, z, BLBlockRegistry.solidTar);
+			}
+
+			if (placeTar) {
+				world.setBlock(x, y, z, BLBlockRegistry.solidTar);
+				if(world.isRemote) {
+					playEffects(world, x, y, z);
 				}
 			}
 		}
