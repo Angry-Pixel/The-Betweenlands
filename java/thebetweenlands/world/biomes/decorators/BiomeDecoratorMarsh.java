@@ -20,7 +20,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBaseBetweenlands {
 
 		helper.populateCave();
 		helper.generateGiantWeedwoodTree(70);
-		helper.generateWightFortress(5);
+		helper.generateWightFortress(10);
 		helper.generateWeedwoodTree(1);
 		helper.generateSmallRuins(2);
 		helper.generateSmallHollowLog(5);

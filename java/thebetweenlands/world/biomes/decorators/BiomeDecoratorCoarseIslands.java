@@ -28,6 +28,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBaseBetweenlands 
 		helper.generateWaterWeeds(6, 6, 30);
 		helper.generateStagnantWaterPool(5);
 		if(this.rand.nextInt(5) == 0)
-			helper.generateCragrockTower(1);
+			helper.generateCragrockTower(5);
 	}
 }
