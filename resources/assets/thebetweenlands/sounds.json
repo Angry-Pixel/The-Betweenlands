@@ -460,9 +460,18 @@
 	"fortressBossLiving": {
 		"category": "hostile",
 		"sounds": [
-			"fortressBossLiving1",
-			"fortressBossLiving2",
-			"fortressBossLiving3"
+			{
+				"name": "fortressBossLiving1",
+				"stream": true
+			},
+			{
+				"name": "fortressBossLiving2",
+				"stream": true
+			},
+			{
+				"name": "fortressBossLiving3",
+				"stream": true
+			}
 		]
 	},
 	"fortressBossTeleport": {
