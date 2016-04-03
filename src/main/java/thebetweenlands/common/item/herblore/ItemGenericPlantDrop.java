@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.item.ICustomResourceLocationItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by Bart on 03/04/2016.
  */
-public class ItemGenericPlantDrop extends Item {
+public class ItemGenericPlantDrop extends Item implements ICustomResourceLocationItem {
     public ItemGenericPlantDrop() {
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -56,6 +57,11 @@ public class ItemGenericPlantDrop extends Item {
         } catch (Exception e) {
             return "item.thebetweenlands.unknownPlantDrop";
         }
+    }
+
+    @Override
+    public String getCustomResourceLocation(int meta) {
+        return "strictlyHerblore/plantDrops/" + getEnumFromID(meta).iconName;
     }
 
     public enum EnumItemPlantDrop {

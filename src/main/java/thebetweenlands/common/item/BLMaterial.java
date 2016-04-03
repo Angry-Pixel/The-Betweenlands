@@ -14,9 +14,9 @@ public class BLMaterial {
     public static final ToolMaterial toolOfLegends = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 20);
 
     //TODO add armor equip sounds maybe?
-    public static final ArmorMaterial armorBLCloth = EnumHelper.addArmorMaterial("bl_cloth", "bl_cloth", 12, new int[]{1, 3, 2, 1}, 0, SoundEvents.item_armor_equip_leather);
-    public static final ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("lurker_skin", "lurker_skin", 12, new int[]{1, 3, 2, 1}, 0, SoundEvents.item_armor_equip_leather);
-    public static final ArmorMaterial armorBone = EnumHelper.addArmorMaterial("slimy_bone", "slimy_bone", 6, new int[]{2, 5, 3, 1}, 0, SoundEvents.item_armor_equip_chain);
+    public static final ArmorMaterial armorBLCloth = EnumHelper.addArmorMaterial("blCloth", "blCloth", 12, new int[]{1, 3, 2, 1}, 0, SoundEvents.item_armor_equip_leather);
+    public static final ArmorMaterial armorLurkerSkin = EnumHelper.addArmorMaterial("lurkerSkin", "lurkerSkin", 12, new int[]{1, 3, 2, 1}, 0, SoundEvents.item_armor_equip_leather);
+    public static final ArmorMaterial armorBone = EnumHelper.addArmorMaterial("slimyBone", "slimyBone", 6, new int[]{2, 5, 3, 1}, 0, SoundEvents.item_armor_equip_chain);
     public static final ArmorMaterial armorSyrmorite = EnumHelper.addArmorMaterial("syrmorite", "syrmorite", 16, new int[]{2, 6, 5, 2}, 0, SoundEvents.item_armor_equip_iron);
     public static final ArmorMaterial armorValonite = EnumHelper.addArmorMaterial("valonite", "valonite", 35, new int[]{3, 8, 6, 3}, 0, SoundEvents.item_armor_equip_diamond);
     public static final ArmorMaterial armorRubber = EnumHelper.addArmorMaterial("rubber", "rubber", 10, new int[]{0, 0, 0, 1}, 0, SoundEvents.item_armor_equip_generic);

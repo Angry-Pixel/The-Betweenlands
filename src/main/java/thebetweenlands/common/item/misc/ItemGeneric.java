@@ -280,16 +280,16 @@ public class ItemGeneric extends Item {
 
     public enum EnumItemGeneric {
         INVALID("invalid", 1024),
-        BLOOD_SNAIL_SHELL("blood_snail_shell", 3), MIRE_SNAIL_SHELL("mire_snail_shell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonfly_wing", 6),
-        LURKER_SKIN("lurker_skin", 7), SWAMP_REED("swamp_reed", 8), DRIED_SWAMP_REED("dried_swamp_reed", 9), SWAMP_REED_ROPE("swamp_reed_rope", 10),
-        TANGLED_ROOT("tangled_root", 11), PLANT_TONIC("plant_tonic", 12),
-        MUD_BRICK("mud_brick", 13), SYRMORITE_INGOT("syrmorite_ingot", 14), OCTINE_INGOT("octine_ingot", 15), ROTTEN_BARK("rotten_bark", 16), SLIMY_BONE("slimy_bone", 17),
-        SLUDGE_BALL("sludge_ball", 18), SNAPPER_ROOT("snapper_root", 19), STALKER_EYE("stalker_eye", 20), SULFUR("sulfur", 21),
-        VALONITE_SHARD("valonite_shard", 22), WEEDWOOD_STICK("weedwood_stick", 23), ANGLER_TOOTH("angler_tooth", 24), WEEDWOOD_BOWL("weedwood_bowl", 25),
-        RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tar_beast_heart", 27), TAR_BEAST_HEART_ANIMATED("tar_beast_heart_animated", 28), TAR_DRIP("tar_drip", 29), LIMESTONE_FLUX("limestone_flux", 30),
-        SWAMP_KELP("swamp_kelp", 31), INANIMATE_TARMINION("inanimate_tarminion", 32), POISON_GLAND("poison_gland", 33), ASPECTRUS_FRUIT("aspectrus_fruit", 34), PARCHMENT("parchment", 35),
-        SHOCKWAVE_SWORD_1("shockwave_sword_1", 36), SHOCKWAVE_SWORD_2("shockwave_sword_2", 37), SHOCKWAVE_SWORD_3("shockwave_sword_3", 38), SHOCKWAVE_SWORD_4("shockwave_sword_4", 39),
-        PYRAD_FLAME("pyrad_flame", 40), AMULET_SOCKET("amulet_socket", 41), SCABYST("scabyst", 42);
+        BLOOD_SNAIL_SHELL("bloodSnailShell", 3), MIRE_SNAIL_SHELL("mireSnailShell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonflyWing", 6),
+        LURKER_SKIN("lurkerSkin", 7), SWAMP_REED("swampReed", 8), DRIED_SWAMP_REED("driedSwampReed", 9), SWAMP_REED_ROPE("swampReedRope", 10),
+        TANGLED_ROOT("tangledRoot", 11), PLANT_TONIC("plantTonic", 12),
+        MUD_BRICK("mudBrick", 13), SYRMORITE_INGOT("syrmoriteIngot", 14), OCTINE_INGOT("octineIngot", 15), ROTTEN_BARK("rottenBark", 16), SLIMY_BONE("slimyBone", 17),
+        SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21),
+        VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedwoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
+        RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27), TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
+        SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34), PARCHMENT("parchment", 35),
+        SHOCKWAVE_SWORD_1("shockwaveSword1", 36), SHOCKWAVE_SWORD_2("shockwaveSword2", 37), SHOCKWAVE_SWORD_3("shockwaveSword3", 38), SHOCKWAVE_SWORD_4("shockwaveSword4", 39),
+        PYRAD_FLAME("pyradFlame", 40), AMULET_SOCKET("amuletSocket", 41), SCABYST("scabyst", 42);
 
         public static final EnumItemGeneric[] VALUES = values();
         public final String iconName;

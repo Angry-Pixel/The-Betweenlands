@@ -43,7 +43,7 @@ public class ItemSwampTalisman extends Item {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName() + "." + stack.getItemDamage();
+        return super.getUnlocalizedName() + "." + "swampTalisman" + stack.getItemDamage();
     }
 
     @Override

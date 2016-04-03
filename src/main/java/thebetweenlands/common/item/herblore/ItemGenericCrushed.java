@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.item.ICustomResourceLocationItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * Created by Bart on 03/04/2016.
  */
-public class ItemGenericCrushed extends Item {
+public class ItemGenericCrushed extends Item implements ICustomResourceLocationItem {
     public ItemGenericCrushed() {
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -84,6 +85,11 @@ public class ItemGenericCrushed extends Item {
             }
         }
         return EnumActionResult.FAIL;
+    }
+
+    @Override
+    public String getCustomResourceLocation(int meta) {
+        return "strictlyHerblore/ground/" + getEnumFromID(meta).name;
     }
 
     public enum EnumItemGenericCrushed {
