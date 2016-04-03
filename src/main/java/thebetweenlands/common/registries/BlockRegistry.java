@@ -1,10 +1,5 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -20,17 +15,20 @@ import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
 
-public class BlockRegistry {
-	public final List<Block> blocks = new ArrayList<Block>();
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
+public class BlockRegistry {
+	public static final Block swampWater = new Block(Material.water).setUnlocalizedName(ModInfo.NAME_PREFIX + "swampWater");
+	public final List<Block> blocks = new ArrayList<Block>();
 	public final Block betweenstone = new BasicBlock(Material.rock)
 			.setStepSound2(SoundType.STONE)
 			.setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone")
 			.setHardness(1.5F)
 			.setResistance(10.0F);
-
 	public final Block swampDirt = new BlockSwampDirt(Material.ground);
-
 	public final Block octineOre = new BlockGenericOre(Material.rock) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {

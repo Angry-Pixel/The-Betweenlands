@@ -17,9 +17,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemSwampTalisman extends Item {
     public ItemSwampTalisman() {
         this.setMaxDamage(0);

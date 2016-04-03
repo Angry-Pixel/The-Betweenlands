@@ -5,9 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemGeneric;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemNettleSoup extends ItemBLFood {
     public ItemNettleSoup() {
         super(10, 8.4F, false);

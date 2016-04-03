@@ -8,6 +8,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.render.renderer.RenderFactoryAngler;
+import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.item.ICustomItemRenderType;
 import thebetweenlands.common.item.ICustomResourceLocationItem;
 import thebetweenlands.common.lib.ModInfo;
@@ -96,5 +99,10 @@ public class ClientProxy extends CommonProxy {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void preInit() {
+        RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderFactoryAngler());
     }
 }

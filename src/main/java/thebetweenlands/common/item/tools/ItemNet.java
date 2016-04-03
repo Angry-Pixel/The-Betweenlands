@@ -2,9 +2,6 @@ package thebetweenlands.common.item.tools;
 
 import net.minecraft.item.Item;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemNet extends Item {
 
     public ItemNet() {

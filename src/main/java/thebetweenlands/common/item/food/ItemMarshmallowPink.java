@@ -6,9 +6,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemMarshmallowPink extends ItemBLFood {
     public ItemMarshmallowPink() {
         super(4, 10F, false);

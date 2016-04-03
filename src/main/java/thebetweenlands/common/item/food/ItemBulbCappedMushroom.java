@@ -6,9 +6,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemBulbCappedMushroom extends ItemBLFood {
     public ItemBulbCappedMushroom() {
         super(3, 0.6F, false);

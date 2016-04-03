@@ -2,9 +2,7 @@ package thebetweenlands.common.item.food;
 
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-/**
- * Created by Bart on 03/04/2016.
- */
+
 public class ItemChiromawWing extends ItemBLFood {
     public ItemChiromawWing() {
         super(0, 0, false);

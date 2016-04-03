@@ -8,9 +8,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import thebetweenlands.util.TranslationHelper;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemRottenFood extends ItemBLFood {
     public ItemRottenFood() {
         super(-1, -1.0F, false);

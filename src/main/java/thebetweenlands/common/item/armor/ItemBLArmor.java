@@ -6,9 +6,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.lib.ModInfo;
 
-/**
- * Created by Bart on 02/04/2016.
- */
 public class ItemBLArmor extends ItemArmor {
     private final String armorTexture1, armorTexture2;
 

@@ -4,9 +4,6 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.item.ICustomItemRenderType;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemWeedwoodBow extends ItemBow implements ICustomItemRenderType {
     public static final int ANIMATION_LENGTH = 3;
 

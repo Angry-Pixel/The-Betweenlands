@@ -10,9 +10,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemGenericPlantDrop extends Item implements ICustomResourceLocationItem {
     public ItemGenericPlantDrop() {
         setMaxDamage(0);

@@ -4,9 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemWightHeart extends ItemBLFood {
     public ItemWightHeart() {
         super(0, 0.0F, false);

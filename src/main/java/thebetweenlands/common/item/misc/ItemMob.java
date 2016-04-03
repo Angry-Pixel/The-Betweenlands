@@ -11,9 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemMob extends Item {
     String name = "";
 

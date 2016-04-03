@@ -18,9 +18,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemGenericCrushed extends Item implements ICustomResourceLocationItem {
     public ItemGenericCrushed() {
         setMaxDamage(0);

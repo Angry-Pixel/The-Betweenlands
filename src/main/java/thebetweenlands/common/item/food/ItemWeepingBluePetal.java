@@ -4,9 +4,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemWeepingBluePetal extends ItemBLFood {
     public ItemWeepingBluePetal() {
         super(4, 1.2F, false);

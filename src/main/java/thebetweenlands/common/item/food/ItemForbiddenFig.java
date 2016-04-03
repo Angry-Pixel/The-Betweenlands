@@ -12,9 +12,7 @@ import thebetweenlands.util.TranslationHelper;
 
 import java.util.List;
 
-/**
- * Created by Bart on 03/04/2016.
- */
+
 public class ItemForbiddenFig extends ItemBLFood {
     public ItemForbiddenFig() {
         super(20, 5.0F, false);

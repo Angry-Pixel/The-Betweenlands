@@ -12,10 +12,10 @@ public class Registries {
 	public final BiomeRegistry biomeRegistry = new BiomeRegistry();
 
 	public void preInit() {
+		this.fluidRegistry.preInit();
 		this.blockRegistry.preInit();
 		this.itemRegistry.preInit();
 		this.entityRegistry.preInit();
-		this.fluidRegistry.preInit();
 		this.biomeRegistry.preInit();
 	}
 

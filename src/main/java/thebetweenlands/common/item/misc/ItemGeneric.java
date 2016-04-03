@@ -16,9 +16,6 @@ import thebetweenlands.util.TranslationHelper;
 
 import java.util.List;
 
-/**
- * Created by Bart on 03/04/2016.
- */
 public class ItemGeneric extends Item {
     public ItemGeneric() {
         setMaxDamage(0);
