@@ -42,8 +42,8 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory  {
 	private boolean circleShouldRevert = true;
 	private int[] damageValues = {0, 0, 0, 0};
 
-	//11 seconds crafting time
-	public static final int CRAFTING_TIME = 20*17;
+	//14.25 seconds crafting time
+	public static final int CRAFTING_TIME = 20*14 + 5;
 
 	public TileEntityDruidAltar() {
 		super(5, "druidAltar");
