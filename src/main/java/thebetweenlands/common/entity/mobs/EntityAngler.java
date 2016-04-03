@@ -118,7 +118,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
                         motionY -= 0.08D;
                         motionY *= 0.9800000190734863D;
                         motionZ = 0.0D;
-                    } else if (onGround) {
+                    } else {
                         setIsLeaping(false);
                         motionY += 0.4F;
                         motionX += (rand.nextFloat() - rand.nextFloat()) * 0.3F;
@@ -162,7 +162,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
             setAir(80);
     }
 
-    public void swimAbout() {
+    private void swimAbout() {
         if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.water || currentSwimTarget.getY() < 1))
             currentSwimTarget = null;
 
@@ -172,7 +172,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
         swimToTarget();
     }
 
-    protected void swimToTarget() {
+    private void swimToTarget() {
         double targetX = currentSwimTarget.getX() + 0.5D - posX;
         double targetY = currentSwimTarget.getY() + 0.5D - posY;
         double targetZ = currentSwimTarget.getZ() + 0.5D - posZ;
@@ -216,7 +216,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
         return dataWatcher.get(IS_LEAPING);
     }
 
-    public void setIsLeaping(boolean leaping) {
+    private void setIsLeaping(boolean leaping) {
         dataWatcher.set(IS_LEAPING, leaping);
     }
 

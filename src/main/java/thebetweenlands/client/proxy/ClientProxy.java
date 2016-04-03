@@ -45,6 +45,8 @@ public class ClientProxy extends CommonProxy {
         ModelLoader.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + blockName, "inventory"));
         //FIXME: Uhm yeah, ModelLoader#registerItemVariants (the proper way afaik?) doesn't seem to work, so I've also added this here
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + blockName, "inventory"));
+        if (ConfigHandler.debug && createJSONFile)
+            createJSONForBlock(blockName);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class ClientProxy extends CommonProxy {
             location = ((ICustomResourceLocationItem) item).getCustomResourceLocation(meta);
         else
             location = itemName;
-        String path = "models/" + itemName + ".json";
+        String path = "models/item/" + itemName + ".json";
 
         String renderType;
         if (item instanceof ICustomItemRenderType)
@@ -93,6 +95,43 @@ public class ClientProxy extends CommonProxy {
                         "   \"textures\": {\n" +
                         "     \"layer0\": \"thebetweenlands:items/" + location + "\"\n" +
                         "   }");
+                writer.println("}");
+                writer.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void createJSONForBlock(String blockName) {
+        String path = "models/block/" + blockName + ".json";
+
+        String renderType = "block/cube_all";
+        File file = new File(path);
+        try {
+            if (file.createNewFile()) {
+                PrintWriter writer = new PrintWriter(file);
+                writer.println("{");
+                writer.println("  \"parent\": \"" + renderType + "\",\n" +
+                        "   \"textures\": {\n" +
+                        "     \"all\": \"thebetweenlands:blocks/" + blockName + "\"\n" +
+                        "   }");
+                writer.println("}");
+                writer.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        path = "models/item/" + blockName + ".json";
+
+        renderType = "thebetweenlands:block/" + blockName;
+        file = new File(path);
+        try {
+            if (file.createNewFile()) {
+                PrintWriter writer = new PrintWriter(file);
+                writer.println("{");
+                writer.println("  \"parent\": \"" + renderType);
                 writer.println("}");
                 writer.close();
             }

@@ -1,11 +1,6 @@
 package thebetweenlands.common;
 
-import java.io.File;
-import java.io.StringWriter;
-import java.util.ArrayList;
-
 import com.google.gson.stream.JsonWriter;
-
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -22,6 +17,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.render.models.ModelSundew;
 import thebetweenlands.common.lib.ModInfo;
@@ -29,6 +25,7 @@ import thebetweenlands.common.network.BLMessage;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.util.ModelConverter;
 import thebetweenlands.util.ModelConverter.AlignedQuad;
@@ -36,26 +33,23 @@ import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.config.ConfigHandler;
 
+import java.io.File;
+import java.io.StringWriter;
+import java.util.ArrayList;
+
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
+	public static final Registries REGISTRIES = new Registries();
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
-
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands instance;
-
 	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
-
-	private static File configDir;
-
 	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 	public static boolean isShadersModInstalled = false;
-
-	public static final Registries REGISTRIES = new Registries();
-
 	public static DimensionType dimensionType;
-
+	private static File configDir;
 	private static int nextMessageId;
 
 	@EventHandler
@@ -88,6 +82,12 @@ public class TheBetweenlands {
 		}, messageType, nextMessageId++, toSide);
 	}
 
+	@InstanceFactory
+	public static TheBetweenlands createInstance() {
+		//TheBetweenlandsPreconditions.check();
+		return new TheBetweenlands();
+	}
+
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
@@ -95,6 +95,8 @@ public class TheBetweenlands {
 		proxy.init();
 
 		this.registerEventHandlers();
+
+		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
 
 
 		//TODO: Test
@@ -133,12 +135,6 @@ public class TheBetweenlands {
 			event.registerServerCommand(new CommandTickSpeed());
 		}
 		BLGamerules.INSTANCE.onServerStarting(event);*/
-	}
-
-	@InstanceFactory
-	public static TheBetweenlands createInstance() {
-		//TheBetweenlandsPreconditions.check();
-		return new TheBetweenlands();
 	}
 
 	/**
