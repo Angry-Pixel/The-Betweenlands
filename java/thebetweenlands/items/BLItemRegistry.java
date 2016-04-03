@@ -103,6 +103,7 @@ import thebetweenlands.items.tools.ItemSyrmoriteShears;
 import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 
 
 public class BLItemRegistry {
@@ -311,7 +312,7 @@ public class BLItemRegistry {
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
 				forbiddenFig, candyBlue, candyRed, candyYellow, cavingRope);
 		BLCreativeTabs.specials.setTab(aquaMiddleGem, crimsonMiddleGem, greenMiddleGem, gecko, fireFly, shimmerStone, skullMask, 
-				/*testItem, testItem2,*/ spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, sludgeSlicer, critterCruncher, hagHacker, manualHL, tarminion,
+				spawnEggs, angryPebble, scroll, voodooDoll, ringOfPower, ringOfRecruitment, ringOfFlight, ringOfSummoning, swiftPick, wightsBane, sludgeSlicer, critterCruncher, hagHacker, manualHL, tarminion,
 				astatos, betweenYouAndMe, theExplorer, christmasOnTheMarsh, ancient, beneathAGreenSky, dJWightsMixtape, onwards, stuckInTheMud, 
 				wanderingWisps, waterlogged, hagDance, lonelyFire, mysteriousRecord, amulet, amuletSlot);
 		BLCreativeTabs.gears.setTab(weedwoodSword, weedwoodPickaxe, weedwoodAxe, weedwoodShovel, betweenstoneSword, betweenstonePickaxe, 
@@ -325,6 +326,10 @@ public class BLItemRegistry {
 		BLCreativeTabs.plants.setTab(middleFruitSeeds, spores);
 		BLCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir, dentrothystVial, 
 				aspectVial);
+
+		if(ConfigHandler.DEBUG) {
+			BLCreativeTabs.specials.setTab(testItem, testItem2);
+		}
 	}
 
 	private static void registerItems() {

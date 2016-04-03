@@ -102,7 +102,7 @@ public class ItemGenericPlantDrop extends Item {
 		PICKEREL_WEED_FLOWER("pickerelWeedFlower", 23), SHOOT_LEAVES("shootLeaves", 24), SLUDGECREEP_LEAVES("sludgecreepLeaves", 25), SOFT_RUSH_LEAVES("softRushLeaves", 26),
 		SUNDEW_HEAD("sundewHead", 27), SWAMP_TALL_GRASS_BLADES("swampTallGrassBlades", 28), CAVE_MOSS("caveMoss", 29), MOSS("moss", 30), MILK_WEED("milkWeed", 31), 
 		HANGER("hanger", 32), PITCHER_PLANT_TRAP("pitcherPlantTrap", 33), WATER_WEEDS("waterWeeds", 34), VENUS_FLY_TRAP("venusFlyTrap", 35), VOLARPAD("volarpad", 36), THORNS("thorns", 37),
-		POISON_IVY("poisonIvy", 38);
+		POISON_IVY("poisonIvy", 38), WATER_FLOWER_STALK("waterFlowerStalk", 39), WATER_FLOWER("waterFlower", 40);
 
 		public final String iconName;
 		public final int id;

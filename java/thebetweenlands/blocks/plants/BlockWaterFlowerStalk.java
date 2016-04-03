@@ -1,5 +1,8 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -7,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,12 +21,14 @@ import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.render.block.water.WaterSimplePlantRenderer;
 import thebetweenlands.creativetabs.BLCreativeTabs;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.items.tools.ISickleHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-import java.util.Random;
-
-public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable {
+public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable, ISyrmoriteShearable, ISickleHarvestable {
 	public IIcon iconStalk;
 
 	public BlockWaterFlowerStalk() {
@@ -63,7 +69,7 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 
 	@Override
 	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z));
+		return super.canPlaceBlockAt(world, x, y, z) && this.canBlockStay(world, x, y, z) && this.canPlaceBlockOn(world.getBlock(x, y-1, z)) && world.getBlock(x, y, z).getMaterial() == Material.water;
 	}
 
 	@Override
@@ -87,16 +93,16 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 		return ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED).getItemDamage();
 	}
 
-    @Override
-    public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
-        return false;
-    }
-	
-    @Override
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z) {
+		return false;
+	}
+
+	@Override
 	public Item getItemDropped(int p_149650_1_, Random random, int meta) {
-        return null;
-    }
-    
+		return null;
+	}
+
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
@@ -107,5 +113,27 @@ public class BlockWaterFlowerStalk extends BlockSwampWater implements IPlantable
 
 	protected boolean canPlaceBlockOn(Block block) {
 		return block instanceof BlockWaterFlowerStalk || block == BLBlockRegistry.mud;
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		drops.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_FLOWER_STALK));
+		return drops;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

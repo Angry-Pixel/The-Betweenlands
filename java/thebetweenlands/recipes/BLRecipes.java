@@ -453,6 +453,8 @@ public class BLRecipes {
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.POISON_IVY));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_PITCHER_PLANT), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.PITCHER_PLANT_TRAP));
 		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GENERIC_LEAF), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.GENERIC_LEAF));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_FLOWER), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_FLOWER));
+		PestleAndMortarRecipe.addRecipe(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_FLOWER_STALK), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_FLOWER_STALK));
 	}
 
 	private static void registerDruidAltarRecipes() {

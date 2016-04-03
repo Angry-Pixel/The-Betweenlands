@@ -69,16 +69,6 @@ public class ElixirRecipes {
 	}
 
 	public static void init() {
-		//Just for testing
-		registerRecipe(new ElixirRecipe("Test Elixir", 0xFF0000FF, 0xFFFF0000, 0xFF332902,      //Name & Infusion colors
-				2000, 200,                                                                      //Infusion times
-				1200, 8000,                                                                     //Base duration & Duration modifier
-				1200, 8000,																		//Negative base duration & negative duration modifier
-				ElixirEffectRegistry.EFFECT_TEST, ElixirEffectRegistry.EFFECT_TEST,                         //Result elixirs
-				AspectRegistry.ARMANIIS, AspectRegistry.FERGALAZ,								    //Strength aspect & duration aspect
-				new IAspectType[]{AspectRegistry.BYARIIS}));                                     //Required aspects
-
-
 		//Tier 1
 		registerRecipe(new ElixirRecipe("Elixir of Strength", 0xFF0000FF, 0xFFFF0000, 0xFF332902, 
 				2000, 200, 

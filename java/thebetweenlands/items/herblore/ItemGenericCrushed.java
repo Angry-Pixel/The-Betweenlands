@@ -153,7 +153,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 		GROUND_PHRAGMITES("groundPhragmites", 40), GROUND_SLUDGECREEP("groundSludgecreep", 41), GROUND_SUNDEW("groundSundew", 42), GROUND_SWAMP_KELP("groundSwampKelp", 43),
 		GROUND_TANGLED_ROOTS("groundTangledRoot", 44), GROUND_AQUA_MIDDLE_GEM("groundAquaMiddleGem", 45), GROUND_PITCHER_PLANT("groundPitcherPlant", 46), 
 		GROUND_WATER_WEEDS("groundWaterWeeds", 47), GROUND_VENUS_FLY_TRAP("groundVenusFlyTrap", 48), GROUND_VOLARPAD("groundVolarpad", 49), GROUND_THORNS("groundThorns", 50),
-		GROUND_POISON_IVY("groundPoisonIvy", 51);
+		GROUND_POISON_IVY("groundPoisonIvy", 51), GROUND_WATER_FLOWER_STALK("groundWaterFlowerStalk", 52), GROUND_WATER_FLOWER("groundWaterFlower", 53);
 
 		public final String name;
 		public final int id;

@@ -24,7 +24,7 @@ public class ItemLore extends Item {
 	public ItemLore() {
 		this.maxStackSize = 1;
 		setTextureName("thebetweenlands:lore");
-		setUnlocalizedName("item.thebetweenlands.lore");
+		setUnlocalizedName("thebetweenlands.lore");
 	}
 
 	public static ItemStack createPageStack(Random random) {

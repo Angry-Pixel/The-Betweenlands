@@ -1,11 +1,15 @@
 package thebetweenlands.blocks.plants;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -13,10 +17,12 @@ import net.minecraftforge.common.IPlantable;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.creativetabs.BLCreativeTabs;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop;
+import thebetweenlands.items.herblore.ItemGenericPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.items.tools.ISickleHarvestable;
+import thebetweenlands.items.tools.ISyrmoriteShearable;
 
-import java.util.Random;
-
-public class BlockWaterFlower extends BlockBush implements IPlantable {
+public class BlockWaterFlower extends BlockBush implements IPlantable, ISyrmoriteShearable, ISickleHarvestable {
 	public BlockWaterFlower() {
 		super(Material.plants);
 		this.setTickRandomly(true);
@@ -31,17 +37,18 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
 	}
-	
+
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random random, int meta) {
-        return null;
-    }
-	
+		return null;
+	}
+
 	@Override
 	public boolean canPlaceBlockOn(Block block) {
 		return block == BLBlockRegistry.waterFlowerStalk;
 	}
 
+	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 		this.checkBlock(world, x, y, z);
 	}
@@ -56,11 +63,12 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 		}
 	}
 
-	public boolean canPlaceBlockAt(World world, int x, int y, int z)
-	{
-		return canPlaceBlockOn(world.getBlock(x, y - 1, z));
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		return world.isAirBlock(x, y, z) && canPlaceBlockOn(world.getBlock(x, y - 1, z));
 	}
 
+	@Override
 	protected void checkAndDropBlock(World world, int x, int y, int z) {
 		super.checkAndDropBlock(world, x, y, z);
 	}
@@ -92,7 +100,7 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 	public int getPlantMetadata(IBlockAccess world, int x, int y, int z) {
 		return world.getBlockMetadata(x, y, z);
 	}
-	
+
 	public static void generateFlowerPatch(World world, int x, int y, int z, int tries, int radius) {
 		for(int i = 0; i < tries; i++) {
 			int bx = x + world.rand.nextInt(radius) - radius/2;
@@ -106,7 +114,7 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 			}
 		}
 	}
-	
+
 	public static void generateFlower(World world, int x, int y, int z) {
 		if(!world.isRemote) {
 			int yo = 0;
@@ -122,12 +130,34 @@ public class BlockWaterFlower extends BlockBush implements IPlantable {
 			}
 		}
 	}
-		
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
 		if(world.rand.nextInt(40) == 0) {
 			BLParticle.MOTH.spawn(world, x, y + 1.5, z, 0.0D, 0.0D, 0.0D, 0);
 		}
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ArrayList<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+		drops.add(ItemGenericPlantDrop.createStack(EnumItemPlantDrop.WATER_FLOWER));
+		return drops;
+	}
+
+	@Override
+	public boolean isSyrmoriteShearable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public ItemStack getSyrmoriteShearableSpecialDrops(Block block, int x, int y, int z, int meta) {
+		return null;
 	}
 }

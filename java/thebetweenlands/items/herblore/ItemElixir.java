@@ -105,7 +105,7 @@ public class ItemElixir extends Item {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		try {
-			return "item.thebetweenlands.elixir." + this.getElixirFromItem(stack).getEffectName();
+			return "item.thebetweenlands." + this.getElixirFromItem(stack).getEffectName();
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknown";
 		}

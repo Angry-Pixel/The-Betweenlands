@@ -11,8 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ElixirEffectRegistry {
-	//Test
-	public static final ElixirEffect EFFECT_TEST = new ElixirEffect(69, "bl.elixir.test", new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/vialGreen.png"));
 	//Elixirs
 	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/vialGreen.png")).addAttributeModifier(SharedMonsterAttributes.attackDamage, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.0D, 2);
 	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/items/strictlyHerblore/misc/vialGreen.png")).addAttributeModifier(SharedMonsterAttributes.movementSpeed, "645a98a2-7bfd-11e5-8bcf-feff819cdc9f", 0.2D, 2);

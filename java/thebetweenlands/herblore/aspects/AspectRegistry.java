@@ -108,6 +108,8 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_THORNS)), 				AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F), 3);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_POISON_IVY)), 			AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F), 3);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_GENERIC_LEAF)), 		AspectTier.COMMON, AspectGroup.HERB, 0.15F, 0.2F), 4);
+		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_FLOWER)), 		AspectTier.COMMON, AspectGroup.HERB, 0.25F, 0.5F), 2);
+		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WATER_FLOWER_STALK)), 	AspectTier.COMMON, AspectGroup.HERB, 0.15F, 0.5F), 4);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLOOD_SNAIL_SHELL)), 	AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 1.0F), 2);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLUE_IRIS)), 			AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 1.0F));
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_BLUE_EYED_GRASS)), 	AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 0.65F));
