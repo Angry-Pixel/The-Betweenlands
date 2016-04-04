@@ -9,6 +9,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import thebetweenlands.common.registries.Registries;
 import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.Random;
@@ -128,16 +129,16 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
     private Block getRandomBlock(Random rand) {
         switch (rand.nextInt(5)) {
-            /*case 0:
-                return BlockRegistry.druidStone1;
+            case 0:
+                return Registries.INSTANCE.blockRegistry.druidStone1;
             case 1:
-                return BlockRegistry.druidStone2;
+                return Registries.INSTANCE.blockRegistry.druidStone2;
             case 2:
-                return BlockRegistry.druidStone3;
+                return Registries.INSTANCE.blockRegistry.druidStone3;
             case 3:
-                return BlockRegistry.druidStone4;
+                return Registries.INSTANCE.blockRegistry.druidStone4;
             case 4:
-                return BlockRegistry.druidStone5;*/
+                return Registries.INSTANCE.blockRegistry.druidStone5;
             default:
                 return Blocks.stone;
         }

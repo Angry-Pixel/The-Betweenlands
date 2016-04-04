@@ -28,6 +28,36 @@ public class BlockRegistry {
 			.setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone")
 			.setHardness(1.5F)
 			.setResistance(10.0F);
+	public final Block druidStone1 = new BasicBlock(Material.rock)
+			.setStepSound2(SoundType.STONE)
+			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone1")
+			.setHardness(1.5F)
+			.setResistance(10.0F)
+			.setLightLevel(0.8F);
+	public final Block druidStone2 = new BasicBlock(Material.rock)
+			.setStepSound2(SoundType.STONE)
+			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone2")
+			.setHardness(1.5F)
+			.setResistance(10.0F)
+			.setLightLevel(0.8F);
+	public final Block druidStone3 = new BasicBlock(Material.rock)
+			.setStepSound2(SoundType.STONE)
+			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone3")
+			.setHardness(1.5F)
+			.setResistance(10.0F)
+			.setLightLevel(0.8F);
+	public final Block druidStone4 = new BasicBlock(Material.rock)
+			.setStepSound2(SoundType.STONE)
+			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone4")
+			.setHardness(1.5F)
+			.setResistance(10.0F)
+			.setLightLevel(0.8F);
+	public final Block druidStone5 = new BasicBlock(Material.rock)
+			.setStepSound2(SoundType.STONE)
+			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone5")
+			.setHardness(1.5F)
+			.setResistance(10.0F)
+			.setLightLevel(0.8F);
 	public final Block swampDirt = new BlockSwampDirt(Material.ground);
 	public final Block octineOre = new BlockGenericOre(Material.rock) {
 		@Override

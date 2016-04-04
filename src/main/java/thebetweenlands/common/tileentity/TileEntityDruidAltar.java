@@ -1,5 +1,7 @@
 package thebetweenlands.common.tileentity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -7,9 +9,12 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.recipe.DruidAltarRecipe;
+import thebetweenlands.common.registries.Registries;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
     @SideOnly(Side.CLIENT)
@@ -169,7 +174,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         }
     }*/
 
-    /*TODO enable when druid stone is added
     private void checkDruidCircleMeta(World world) {
         int baseRadius = 6;
         for (int y = 0; y < 6; y++) {
@@ -179,11 +183,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                     if (Math.round(Math.sqrt(dSq)) == baseRadius) {
                         BlockPos pos1 = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                         Block block = world.getBlockState(pos1).getBlock();
-                        if (block == BlockRegistry.druidStone1
-                                || block == BlockRegistry.druidStone2
-                                || block == BlockRegistry.druidStone3
-                                || block == BlockRegistry.druidStone4
-                                || block == BlockRegistry.druidStone5) {
+                        if (block == Registries.INSTANCE.blockRegistry.druidStone1
+                                || block == Registries.INSTANCE.blockRegistry.druidStone2
+                                || block == Registries.INSTANCE.blockRegistry.druidStone3
+                                || block == Registries.INSTANCE.blockRegistry.druidStone4
+                                || block == Registries.INSTANCE.blockRegistry.druidStone5) {
                             IBlockState state = world.getBlockState(pos1);
                             int meta = state.getBlock().getMetaFromState(state);
                             if (craftingProgress == 0 && meta >= 4 || circleShouldRevert && meta >= 4) {
@@ -196,7 +200,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                 }
             }
         }
-    }*/
+    }
 
 
     @Override
