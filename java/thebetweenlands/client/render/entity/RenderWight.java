@@ -78,6 +78,7 @@ public class RenderWight extends RenderLiving {
 
 		if(pass == 0) {
 			GL11.glScalef(0.9F, 0.9F, 0.9F);
+			GL11.glTranslated(0, 0.175D, 0);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glColorMask(false, false, false, false);
 			GL11.glColor4f(1, 1, 1, 1);

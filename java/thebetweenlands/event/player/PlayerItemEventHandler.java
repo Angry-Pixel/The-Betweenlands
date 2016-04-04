@@ -20,6 +20,7 @@ import thebetweenlands.decay.DecayStats;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesDecay;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
+import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.food.IDecayFood;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
@@ -48,7 +49,7 @@ public class PlayerItemEventHandler {
 
 	@SubscribeEvent
 	public void onStartItemUse(PlayerUseItemEvent.Start event) {
-		if (event.entityPlayer != null && event.entityPlayer.dimension == ConfigHandler.DIMENSION_ID && event.item != null && event.item.getItem() instanceof ItemFood) {
+		if (event.entityPlayer != null && event.entityPlayer.dimension == ConfigHandler.DIMENSION_ID && event.item != null && event.item.getItem() instanceof ItemFood && BLItemRegistry.ITEMS.contains(event.item.getItem())) {
 			EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
 			ItemFood food = (ItemFood) event.item.getItem();
 			Sickness sickness = property.getSickness(food);
@@ -59,7 +60,7 @@ public class PlayerItemEventHandler {
 
 	@SubscribeEvent
 	public void onFinishItemUse(PlayerUseItemEvent.Finish event) {
-		if (event.entityPlayer != null && event.entityPlayer.dimension == ConfigHandler.DIMENSION_ID && event.item != null && event.item.getItem() instanceof ItemFood) {
+		if (event.entityPlayer != null && event.entityPlayer.dimension == ConfigHandler.DIMENSION_ID && event.item != null && event.item.getItem() instanceof ItemFood && BLItemRegistry.ITEMS.contains(event.item.getItem())) {
 			EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
 			ItemFood food = (ItemFood) event.item.getItem();
 

@@ -294,7 +294,7 @@ public class ItemTooltipHandler {
 			}
 			event.toolTip.add(colorPrefix + StatCollector.translateToLocal("circlegem." + circleGem.name));
 		}
-		if(event.itemStack.getItem() instanceof ItemFood && event.itemStack.getItem() != BLItemRegistry.chiromawWing && event.itemStack.getItem() != BLItemRegistry.rottenFood) {
+		if(event.itemStack.getItem() instanceof ItemFood && event.itemStack.getItem() != BLItemRegistry.chiromawWing && event.itemStack.getItem() != BLItemRegistry.rottenFood && BLItemRegistry.ITEMS.contains(event.itemStack.getItem())) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			if(player != null) {
 				EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.entityPlayer, EntityPropertiesFood.class);
