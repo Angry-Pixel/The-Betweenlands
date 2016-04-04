@@ -198,7 +198,7 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.valoniteBlock), "xxx", "xxx", "xxx", 'x', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 9), new ItemStack(BLBlockRegistry.valoniteBlock));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatch, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED));
-		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.rubberTreePlanks, 4), new ItemStack(BLBlockRegistry.rubberTreeLog));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.rubberTreePlanks, 4), new ItemStack(BLBlockRegistry.rubberTreeLog, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mireCoralBlock, 4), "xx", "xx", 'x', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MIRE_CORAL));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.deepWaterCoralBlock, 4), "xx", "xx", 'x', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.DEEP_WATER_CORAL));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.bulbCappedMushroomTop, 4), "xx", "xx", 'x',  BLItemRegistry.bulbCappedMushroomItem);

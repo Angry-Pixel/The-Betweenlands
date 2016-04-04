@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.tree.BlockRubberLog;
@@ -36,19 +37,20 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		int meta = world.getBlockMetadata(x, y, z);
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.setBrightness(world.getLightBrightnessForSkyBlocks(x, y, z, 0));
 		tessellator.setColorOpaque_F(1, 1, 1);
-		IIcon topIcon = ((BlockRubberLog)block).getTopIcon(0);
-		IIcon sideIcon = ((BlockRubberLog)block).getSideIcon(0);
+		IIcon topIcon = ((BlockRubberLog)block).getTopIcon(meta);
+		IIcon sideIcon = ((BlockRubberLog)block).getSideIcon(meta);
 
-		boolean yp = this.isValidBlock(world.getBlock(x, y+1, z));
-		boolean ym = this.isValidBlock(world.getBlock(x, y-1, z)) || 
+		boolean yp = this.isValidBlock(world, x, y+1, z, meta);
+		boolean ym = this.isValidBlock(world, x, y-1, z, meta) || 
 				world.getBlock(x, y-1, z).isSideSolid(world, x, y-1, z, ForgeDirection.UP);
-		boolean xp = this.isValidBlock(world.getBlock(x+1, y, z));
-		boolean xm = this.isValidBlock(world.getBlock(x-1, y, z));
-		boolean zp = this.isValidBlock(world.getBlock(x, y, z+1));
-		boolean zm = this.isValidBlock(world.getBlock(x, y, z-1));
+		boolean xp = this.isValidBlock(world, x+1, y, z, meta);
+		boolean xm = this.isValidBlock(world, x-1, y, z, meta);
+		boolean zp = this.isValidBlock(world, x, y, z+1, meta);
+		boolean zm = this.isValidBlock(world, x, y, z-1, meta);
 
 		int sideIndex = 0;
 		int sideCount = 0;
@@ -619,8 +621,10 @@ public class BlockRubberLogRenderer implements ISimpleBlockRenderingHandler {
 				x2, y1, z1);
 	}
 
-	public boolean isValidBlock(Block block) {
-		return block == BLBlockRegistry.rubberTreeLog || block == BLBlockRegistry.rubberTreeLeaves;
+	public boolean isValidBlock(IBlockAccess world, int x, int y, int z, int centerMeta) {
+		Block block = world.getBlock(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		return (block == BLBlockRegistry.rubberTreeLog && meta == centerMeta) || block == BLBlockRegistry.rubberTreeLeaves;
 	}
 
 	@Override
