@@ -144,12 +144,6 @@ public class EntityPropertiesHandler {
 			while(it.hasNext()) {
 				PropertiesTracker tracker = it.next();
 				Entity entity = tracker.getEntity();
-				WorldServer entityWorld = DimensionManager.getWorld(entity.dimension);
-				if(entity == null || entity.isDead || entityWorld == null || !entityWorld.loadedEntityList.contains(entity)) {
-					it.remove();
-					tracker.removeTracker();
-					continue;
-				}
 				tracker.updateTracker();
 				if(tracker.isTrackerReady()) {
 					tracker.onSync();
@@ -244,6 +238,18 @@ public class EntityPropertiesHandler {
 						trackerMapIT.remove();
 						for(PropertiesTracker tracker : trackerEntry.getValue()) {
 							tracker.removeTracker();
+						}
+					} else {
+						Iterator<PropertiesTracker> it = trackerEntry.getValue().iterator();
+						while(it.hasNext()) {
+							PropertiesTracker tracker = it.next();
+							Entity entity = tracker.getEntity();
+							WorldServer entityWorld = DimensionManager.getWorld(entity.dimension);
+							if(entity == null || entity.isDead || entityWorld == null || !entityWorld.loadedEntityList.contains(entity)) {
+								it.remove();
+								tracker.removeTracker();
+								continue;
+							}
 						}
 					}
 				}

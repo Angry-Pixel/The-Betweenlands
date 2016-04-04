@@ -7,6 +7,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
 import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.utils.MathUtils;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -126,6 +129,8 @@ public class ModelDarkDruid extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
+		GL11.glPushMatrix();
+		GL11.glTranslated(0, 0.15D, 0);
 		setRotationAngles(limbSwing, limbSwingAngle, ticksExisted, rotationYaw, rotationPitch, scale, entity);
 		beard.render(scale);
 		rightArm.render(scale);
@@ -148,6 +153,7 @@ public class ModelDarkDruid extends ModelBase {
 		robe5.render(scale);
 		robe6.render(scale);
 		robe7.render(scale);
+		GL11.glPopMatrix();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

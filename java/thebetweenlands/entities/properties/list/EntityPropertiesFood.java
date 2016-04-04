@@ -58,7 +58,7 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 	@Override
 	public boolean saveTrackingSensitiveData(NBTTagCompound compound) {
 		this.saveNBTData(compound);
-		return true;
+		return false;
 	}
 
 	@Override
