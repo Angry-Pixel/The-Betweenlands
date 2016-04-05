@@ -1,6 +1,7 @@
 package thebetweenlands.recipes;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -43,6 +44,7 @@ import thebetweenlands.recipes.misc.RecipesAspectVials;
 import thebetweenlands.recipes.misc.RecipesAspectrusSeeds;
 import thebetweenlands.recipes.misc.RecipesCircleGems;
 import thebetweenlands.recipes.misc.RecipesCoating;
+import thebetweenlands.recipes.misc.RecipesLifeCrystal;
 import thebetweenlands.recipes.purifier.PurifierRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
@@ -308,28 +310,37 @@ public class BLRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL), BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettle);
 
 		// Special Items
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 0), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 1));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 1), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 2));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 2), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 3));
-		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lifeCrystal, 1, 3), "xxx", "xcx", "xxx", 'x', new ItemStack(BLItemRegistry.wightsHeart), 'c', new ItemStack(BLItemRegistry.lifeCrystal, 1, 4));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP), 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED));
+
 		RecipeSorter.register("thebetweenlands:bookCloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new BookCloneRecipe());
+
 		RecipeSorter.register("thebetweenlands:bookMerging", BookMergeRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new BookMergeRecipe());
+
 		RecipeSorter.register("thebetweenlands:recipesCircleGems", RecipesCircleGems.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCircleGems());
+
 		RecipeSorter.register("thebetweenlands:recipesAspectVials", RecipesAspectVials.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAspectVials());
+
 		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
+
 		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
+
 		RecipeSorter.register("thebetweenlands:recipeAmulets", RecipesAmulets.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipeSummonMummy());
+		GameRegistry.addRecipe(new RecipesAmulets());
+
 		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipeSummonMummy());
+
+		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, Category.SHAPED, "before:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCoating());
-		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, Category.SHAPED, "after:minecraft:shapeless");
+		
+		RecipeSorter.register("thebetweenlands:recipesLifeCrystal", RecipesLifeCrystal.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesLifeCrystal());
 	}
 
 	private static void registerSmelting() {

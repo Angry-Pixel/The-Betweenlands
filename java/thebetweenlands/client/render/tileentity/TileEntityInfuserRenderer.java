@@ -111,7 +111,15 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		rand.setSeed((long) (tile.xCoord + tile.yCoord + tile.zCoord));
 		for(int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 			float randRot = rand.nextFloat() * 360.0F;
-			renderItemInSlot(infuser, i, x + 0.5D - 0.2D + rand.nextFloat() * 0.4D, itemY, z + 0.5D - 0.2D + rand.nextFloat() * 0.4D, amount >= 100 ? (i % 2 == 0 ? (itemBob * 0.01D) : ((-itemBob + 20) * 0.01D)) : 0.0D, (stirProgress < 90 && amount >= 100 ? stirProgress * 4D + 45D : 45D) + randRot);
+			double xo = -0.2D + rand.nextFloat() * 0.4D;
+			double zo = -0.2D + rand.nextFloat() * 0.4D;
+			double rot = (stirProgress < 90 && amount >= 100 ? stirProgress * 4D + 45D : 45D) + randRot;
+			GL11.glPushMatrix();
+			GL11.glTranslated(x + 0.5D, 0, z + 0.5D);
+			GL11.glRotated(-rot, 0, 1, 0);
+			GL11.glTranslated(xo, 0, zo);
+			renderItemInSlot(infuser, i, 0, itemY, 0, amount >= 100 ? (i % 2 == 0 ? (itemBob * 0.01D) : ((-itemBob + 20) * 0.01D)) : 0.0D, -rot);
+			GL11.glPopMatrix();
 		}
 		renderItemInSlot(infuser, TileEntityInfuser.MAX_INGREDIENTS + 1, x + 0.5, y + 1.43D, z + 0.5D, itemBob * 0.01D, crystalRotation);
 	}

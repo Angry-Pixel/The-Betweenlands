@@ -107,6 +107,7 @@ public class ItemGenericCrushed extends Item implements IManualEntryItem {
 						if (growable.func_149852_a(world, world.rand, x, y, z)) {
 							growable.func_149853_b(world, world.rand, x, y, z);
 						}
+						world.playAuxSFX(2005, x, y, z, 0);
 						--stack.stackSize;
 					}
 					return true;
