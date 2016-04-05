@@ -1,9 +1,5 @@
 package thebetweenlands.proxy;
 
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -17,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.client.gui.GuiLorePage;
+import thebetweenlands.client.gui.GuiLurkerPouchSmall;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.entity.RecruitmentRingHandler;
@@ -29,6 +26,7 @@ import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
+import thebetweenlands.inventory.container.ContainerLurkerPouchSmall;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
@@ -41,6 +39,7 @@ import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.items.equipment.ItemAmulet;
+import thebetweenlands.items.equipment.ItemBasicInventory;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.manual.GuiManualBase;
 import thebetweenlands.manual.GuiManualHerblore;
@@ -73,6 +72,10 @@ import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -96,6 +99,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_HL = 10;
 
 	public static final int GUI_LORE = 11;
+	
+	public static final int GUI_LURKER_POUCH_SMALL = 12;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -208,6 +213,9 @@ public class CommonProxy implements IGuiHandler {
 			}
 			break;
 		}
+		
+		case GUI_LURKER_POUCH_SMALL:
+			return new ContainerLurkerPouchSmall(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs Localising)"));
 		}
 
 		return null;
@@ -274,8 +282,9 @@ public class CommonProxy implements IGuiHandler {
 			return new GuiManualHerblore(player);
 		case GUI_LORE:
 			return new GuiLorePage(player.getCurrentEquippedItem());
-		}
-
+		case GUI_LURKER_POUCH_SMALL:
+			return new GuiLurkerPouchSmall((ContainerLurkerPouchSmall) new ContainerLurkerPouchSmall(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs localising)")));
+	}
 		return null;
 	}
 

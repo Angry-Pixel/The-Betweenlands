@@ -37,7 +37,7 @@ import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.crops.ItemAspectrusCropSeed;
 import thebetweenlands.items.crops.ItemBLGenericSeed;
 import thebetweenlands.items.equipment.ItemAmulet;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouchSmall;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.items.equipment.ItemRingOfRecruitment;
@@ -255,7 +255,7 @@ public class BLItemRegistry {
 	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBed");
 	public static final Item amulet = new ItemAmulet();
 	public static final Item amuletSlot = new ItemAmuletSlot();
-	public static final Item lurkerSkinPouch = new ItemLurkerSkinPouch();
+	public static final Item lurkerSkinPouch = new ItemLurkerSkinPouchSmall();
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
