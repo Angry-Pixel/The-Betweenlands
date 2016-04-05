@@ -1,11 +1,9 @@
 package thebetweenlands.entities;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.EntityAngler;
-import thebetweenlands.entities.mobs.EntityBerserkerGuardian;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityChiromaw;
@@ -16,7 +14,6 @@ import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityLurker;
-import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntityMireSnailEgg;
 import thebetweenlands.entities.mobs.EntityMummyArm;
@@ -47,6 +44,7 @@ import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.misc.ItemSpawnEggs;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BLEntityRegistry
 {
