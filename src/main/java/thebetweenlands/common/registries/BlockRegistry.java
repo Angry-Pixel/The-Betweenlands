@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
@@ -28,36 +29,11 @@ public class BlockRegistry {
 			.setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone")
 			.setHardness(1.5F)
 			.setResistance(10.0F);
-	public final Block druidStone1 = new BasicBlock(Material.rock)
-			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone1")
-			.setHardness(1.5F)
-			.setResistance(10.0F)
-			.setLightLevel(0.8F);
-	public final Block druidStone2 = new BasicBlock(Material.rock)
-			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone2")
-			.setHardness(1.5F)
-			.setResistance(10.0F)
-			.setLightLevel(0.8F);
-	public final Block druidStone3 = new BasicBlock(Material.rock)
-			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone3")
-			.setHardness(1.5F)
-			.setResistance(10.0F)
-			.setLightLevel(0.8F);
-	public final Block druidStone4 = new BasicBlock(Material.rock)
-			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone4")
-			.setHardness(1.5F)
-			.setResistance(10.0F)
-			.setLightLevel(0.8F);
-	public final Block druidStone5 = new BasicBlock(Material.rock)
-			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "druidStone5")
-			.setHardness(1.5F)
-			.setResistance(10.0F)
-			.setLightLevel(0.8F);
+	public final Block druidStone1 = new BlockDruidStone(Material.rock, "druidStone1");
+	public final Block druidStone2 = new BlockDruidStone(Material.rock, "druidStone2");
+	public final Block druidStone3 = new BlockDruidStone(Material.rock, "druidStone3");
+	public final Block druidStone4 = new BlockDruidStone(Material.rock, "druidStone4");
+	public final Block druidStone5 = new BlockDruidStone(Material.rock, "druidStone5");
 	public final Block swampDirt = new BlockSwampDirt(Material.ground);
 	public final Block octineOre = new BlockGenericOre(Material.rock) {
 		@Override

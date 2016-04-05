@@ -4,6 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 
 public class EntityRegistry {
 	private static void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
@@ -25,6 +28,9 @@ public class EntityRegistry {
 	}
 
 	public void preInit() {
-		registerEntity(20, EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
+		registerEntity(1, EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
+		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x8E9456, 0xF2FA96);
+		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg");
+		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0xD0D1C2, 0xECEDDF);
 	}
 }

@@ -33,18 +33,28 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 14;
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
-
+	public float[] originalLightBrightnessTable = new float[16];
 	@SideOnly(Side.CLIENT)
 	private double[] currentFogColor;
 	@SideOnly(Side.CLIENT)
 	private double[] lastFogColor;
-
 	private boolean allowHostiles, allowAnimals;
-
-	public float[] originalLightBrightnessTable = new float[16];
+	private BetweenlandsWorldData worldData;
 
 	public WorldProviderBetweenlands() {
 		this.hasNoSky = true;
+	}
+
+	/**
+	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
+	 *
+	 * @param world
+	 */
+	public static final WorldProviderBetweenlands getProvider(World world) {
+		if (world != null && world.provider instanceof WorldProviderBetweenlands) {
+			return (WorldProviderBetweenlands) world.provider;
+		}
+		return null;
 	}
 
 	@Override
@@ -80,6 +90,12 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return new Vec3d(r / 255D, g / 255D, b / 255D);
 	}
 
+	//TODO: Chunk provider
+	/*@Override
+	public IChunkGenerator createChunkGenerator() {
+		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), BLBlockRegistry.betweenstone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
+	}*/
+
 	@Override
 	protected void generateLightBrightnessTable() {
 		float minBrightness = (float) (1.0F / 10000000.0F * Math.pow(ConfigHandler.dimensionBrightness, 3.2F) + 0.002F);
@@ -96,12 +112,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		//this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
 		this.setDimension(ConfigHandler.dimensionId);
 	}
-
-	//TODO: Chunk provider
-	/*@Override
-	public IChunkGenerator createChunkGenerator() {
-		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), BLBlockRegistry.betweenstone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
-	}*/
 
 	@Override
 	public boolean isSurfaceWorld() {
@@ -144,8 +154,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 		return spawnPos;
 	}
-
-	private BetweenlandsWorldData worldData;
 
 	public BetweenlandsWorldData getWorldData() {
 		if(this.worldData == null) {
@@ -190,7 +198,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	private int[] getTargetFogColor(EntityPlayer player) {
 		BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(player.getPosition());
-		int[] targetFogColor = new int[]{(int) 255, (int) 255, (int) 255};
+		int[] targetFogColor = new int[]{255, 255, 255};
 
 		//TODO: Biome fog
 		/*if(biome instanceof BiomeGenBaseBetweenlands) {
@@ -296,35 +304,24 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		}
 	}
 
-	//Fix for buggy rain (?)
-	@Override
-	public void calculateInitialWeather() { 
-		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
-		this.worldObj.getWorldInfo().setThundering(false);
-		super.calculateInitialWeather();
-	}
-
-	//TODO: Sky renderer
+	//TODO: Sky render
 	/*@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		return BLSkyRenderer.INSTANCE;
 	}*/
 
-	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
-		return this.getWorldData().getEnvironmentEventRegistry();
+	//Fix for buggy rain (?)
+	@Override
+	public void calculateInitialWeather() {
+		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		this.worldObj.getWorldInfo().setThundering(false);
+		super.calculateInitialWeather();
 	}
 
-	/**
-	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
-	 * @param world
-	 */
-	public static final WorldProviderBetweenlands getProvider(World world) {
-		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-			return (WorldProviderBetweenlands) world.provider;
-		}
-		return null;
+	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+		return this.getWorldData().getEnvironmentEventRegistry();
 	}
 
 	@Override
