@@ -34,18 +34,12 @@ implements IWorldGenerator
 	private void generate(World world, Random random, int x, int z) {
 		if(world.checkChunksExist(x - baseRadius - 1, 64, z - baseRadius - 1, x + baseRadius + 1, 64, z + baseRadius + 1)) {
 			BiomeGenBase biomeBase = world.getBiomeGenForCoords(x, z);
-			int newY = 63 + random.nextInt(20) - 10;
+			int newY = world.getHeightValue(x, z);
 			if(BiomeDictionary.isBiomeOfType(biomeBase, Type.SWAMP)) {
-				for(int newX = x - baseRadius; newX <= x + baseRadius; ++newX) {
-					for(int newZ = z - baseRadius; newZ <= z + baseRadius; ++newZ) {
-						if(world.isAirBlock(x, newY + 1, z)) {
-							Block block = world.getBlock(newX, newY, newZ);
-							if(block != null && block == biomeBase.topBlock) {
-								if(random.nextInt(ConfigHandler.DRUID_CIRCLE_FREQUENCY) == 0) {
-									generateStructure(world, random, x, newY + 1, z);
-								}
-							}
-						}
+				Block block = world.getBlock(x, newY, z);
+				if(block != null && block == biomeBase.topBlock) {
+					if(random.nextInt(ConfigHandler.DRUID_CIRCLE_FREQUENCY) == 0) {
+						generateStructure(world, random, x, newY + 1, z);
 					}
 				}
 			}

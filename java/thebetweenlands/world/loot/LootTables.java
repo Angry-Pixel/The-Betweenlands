@@ -21,10 +21,10 @@ public class LootTables {
 			new LootItemStack(BLItemRegistry.anglerToothArrow).setAmount(6, 16).setWeight(12),
 			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(8),
 			new LootItemStack(BLItemRegistry.poisonedAnglerToothArrow).setAmount(6, 14).setWeight(7),
-			new LootItemStack(BLItemRegistry.weepingBluePetal).setAmount(2, 8).setWeight(7),
 			new LootItemStack(BLItemRegistry.octineArrow).setAmount(6, 16).setWeight(7),
 			new LootItemStack(BLItemRegistry.wightsHeart).setAmount(1, 3).setWeight(6),
 			new LootItemStack(BLItemRegistry.basiliskArrow).setAmount(8).setWeight(6),
+			new LootItemStack(BLItemRegistry.weepingBluePetal).setAmount(1, 3).setWeight(6),
 
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.VALONITE_SHARD.id).setAmount(1, 4).setWeight(3),
 

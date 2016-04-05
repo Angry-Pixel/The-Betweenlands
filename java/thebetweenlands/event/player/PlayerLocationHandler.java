@@ -230,33 +230,33 @@ public class PlayerLocationHandler {
 
 	@SubscribeEvent
 	public void onBlockPlace(PlaceEvent event) {
-		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
-		if(chunk != null && !event.world.isRemote) {
-			if(event.player != null && !event.player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(event.player)) {
-				int warnings = event.player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
-				if(warnings < 3) {
-					if(warnings == 0) {
+		if(event.world.difficultySetting != EnumDifficulty.PEACEFUL) {
+			Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
+			if(chunk != null && !event.world.isRemote) {
+				if(event.player != null && !event.player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(event.player)) {
+					int warnings = event.player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
+					if(warnings < 6) {
 						event.player.addChatMessage(new ChatComponentTranslation("chat.guard.warning1"));
+						event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
+					} else {
+						event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
+						event.player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
+						this.spawnGuards(event.player);
 					}
-					event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
-				} else {
-					event.player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
-					event.player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
-					this.spawnGuards(event.player);
+					EntityWight wight = new EntityWight(event.player.worldObj);
+					wight.setRepairGuard(event.x, event.y, event.z);
+					wight.setVolatile(true);
+					double rx = event.player.worldObj.rand.nextDouble() - 0.5F;
+					double ry = event.player.worldObj.rand.nextDouble() - 0.5F;
+					double rz = event.player.worldObj.rand.nextDouble() - 0.5F;
+					Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
+					dir = dir.normalize();
+					rx = dir.xCoord * 4.0F;
+					ry = dir.yCoord * 4.0F;
+					rz = dir.zCoord * 4.0F;
+					wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
+					event.player.worldObj.spawnEntityInWorld(wight);
 				}
-				EntityWight wight = new EntityWight(event.player.worldObj);
-				wight.setRepairGuard(event.x, event.y, event.z);
-				wight.setVolatile(true);
-				double rx = event.player.worldObj.rand.nextDouble() - 0.5F;
-				double ry = event.player.worldObj.rand.nextDouble() - 0.5F;
-				double rz = event.player.worldObj.rand.nextDouble() - 0.5F;
-				Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
-				dir = dir.normalize();
-				rx = dir.xCoord * 4.0F;
-				ry = dir.yCoord * 4.0F;
-				rz = dir.zCoord * 4.0F;
-				wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
-				event.player.worldObj.spawnEntityInWorld(wight);
 			}
 		}
 	}
@@ -276,42 +276,42 @@ public class PlayerLocationHandler {
 
 	@SubscribeEvent
 	public void onBlockBreak(BreakEvent event) {
-		Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
-		if(chunk != null) {
-			EntityPlayer player = event.getPlayer();
-			if(player != null && !player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(player) && !EXCLUDED_BLOCKS.contains(event.block)) {
-				if(!event.world.isRemote) {
-					int warnings = player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
-					if(warnings < 3) {
-						if(warnings == 0) {
+		if(event.world.difficultySetting != EnumDifficulty.PEACEFUL) {
+			Chunk chunk = event.world.getChunkFromChunkCoords(event.x / 16, event.z / 16);
+			if(chunk != null) {
+				EntityPlayer player = event.getPlayer();
+				if(player != null && !player.capabilities.isCreativeMode && LocationStorage.isLocationGuarded(player) && !EXCLUDED_BLOCKS.contains(event.block)) {
+					if(!event.world.isRemote) {
+						int warnings = player.getEntityData().getInteger("thebetweenlands.blGuardWarnings");
+						if(warnings < 6) {
 							player.addChatMessage(new ChatComponentTranslation("chat.guard.warning1"));
+							player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
+						} else {
+							player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
+							player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
+							this.spawnGuards(player);
 						}
-						player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", warnings + 1);
-					} else {
-						player.getEntityData().setInteger("thebetweenlands.blGuardWarnings", 0);
-						player.addChatMessage(new ChatComponentTranslation("chat.guard.warning2"));
-						this.spawnGuards(player);
-					}
-					EntityWight wight = new EntityWight(player.worldObj);
-					wight.setRepairGuard(event.block, event.x, event.y, event.z, event.blockMetadata);
-					wight.setVolatile(true);
-					double rx = player.worldObj.rand.nextDouble() - 0.5F;
-					double ry = player.worldObj.rand.nextDouble() - 0.5F;
-					double rz = player.worldObj.rand.nextDouble() - 0.5F;
-					Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
-					dir = dir.normalize();
-					rx = dir.xCoord * 4.0F;
-					ry = dir.yCoord * 4.0F;
-					rz = dir.zCoord * 4.0F;
-					wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
-					player.worldObj.spawnEntityInWorld(wight);
+						EntityWight wight = new EntityWight(player.worldObj);
+						wight.setRepairGuard(event.block, event.x, event.y, event.z, event.blockMetadata);
+						wight.setVolatile(true);
+						double rx = player.worldObj.rand.nextDouble() - 0.5F;
+						double ry = player.worldObj.rand.nextDouble() - 0.5F;
+						double rz = player.worldObj.rand.nextDouble() - 0.5F;
+						Vec3 dir = Vec3.createVectorHelper(rx, ry, rz);
+						dir = dir.normalize();
+						rx = dir.xCoord * 4.0F;
+						ry = dir.yCoord * 4.0F;
+						rz = dir.zCoord * 4.0F;
+						wight.setLocationAndAngles(event.x + rx, event.y + ry, event.z + rz, 0, 0);
+						player.worldObj.spawnEntityInWorld(wight);
 
-					event.world.setBlock(event.x, event.y, event.z, Blocks.air);
-					event.setCanceled(true);
-				} else {
-					event.world.playAuxSFXAtEntity(null, 2001, event.x, event.y, event.z, Block.getIdFromBlock(event.block));
-					event.world.setBlock(event.x, event.y, event.z, Blocks.air);
-					event.setCanceled(true);
+						event.world.setBlock(event.x, event.y, event.z, Blocks.air);
+						event.setCanceled(true);
+					} else {
+						event.world.playAuxSFXAtEntity(null, 2001, event.x, event.y, event.z, Block.getIdFromBlock(event.block));
+						event.world.setBlock(event.x, event.y, event.z, Blocks.air);
+						event.setCanceled(true);
+					}
 				}
 			}
 		}

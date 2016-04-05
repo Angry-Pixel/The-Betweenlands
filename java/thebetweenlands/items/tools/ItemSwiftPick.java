@@ -13,7 +13,7 @@ public class ItemSwiftPick extends ItemPickaxeBL {
 	@Override
 	public float getDigSpeed(ItemStack stack, Block block, int meta) {
 		float digSpeed = super.getDigSpeed(stack, block, meta);
-		if (ForgeHooks.isToolEffective(stack, block, meta)) {
+		if (ForgeHooks.isToolEffective(stack, block, meta) || this.func_150893_a(stack, block) == this.efficiencyOnProperMaterial) {
 			digSpeed = 100.0F;
 		}
 		return CorrodibleItemHelper.getDigSpeed(digSpeed, stack, block, meta);

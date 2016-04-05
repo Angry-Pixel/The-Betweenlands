@@ -8,14 +8,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.mobs.IEntityBL;
-import thebetweenlands.gemcircle.EntityGem;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.tools.ItemAxeBL;
 import thebetweenlands.items.tools.ItemPickaxeBL;
@@ -38,9 +35,12 @@ public class AttackDamageHandler {
 		DamageSource source = event.source;
 		float damage = event.ammount;
 
-		//BL mobs overworld item resistance
 		if(attackedEntity instanceof IEntityBL) {
 			if (source.getSourceOfDamage() instanceof EntityPlayer) {
+				//Cap damage of overly OP weapons
+				damage = Math.min(damage, 40.0F);
+
+				//BL mobs overworld item resistance
 				EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
 				ItemStack heldItem = entityPlayer.getCurrentEquippedItem();
 				if (heldItem != null) {

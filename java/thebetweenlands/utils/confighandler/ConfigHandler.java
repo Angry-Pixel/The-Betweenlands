@@ -52,7 +52,7 @@ public class ConfigHandler {
 
 	private void syncConfigs() {
 		DIMENSION_ID = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
-		DRUID_CIRCLE_FREQUENCY = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 6).getInt(6);
+		DRUID_CIRCLE_FREQUENCY = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 8).getInt(8);
 		BIOME_ID_SWAMPLANDS = config.get(CATEGORIES[0], "Swamplands Biome ID", 50).getInt(50);
 		BIOME_ID_COARSE_ISLANDS = config.get(CATEGORIES[0], "Coarse Islands Biome ID", 51).getInt(51);
 		BIOME_ID_DEEP_WATER = config.get(CATEGORIES[0], "Deep Water Biome ID", 52).getInt(52);
