@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -22,7 +23,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
     public EntityMireSnail(World world) {
         super(world);
-        //getNavigator().setAvoidsWater(true);
+        setPathPriority(PathNodeType.WATER, -1.0f);
 
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(1, new EntityAIPanic(this, 0.4D));
