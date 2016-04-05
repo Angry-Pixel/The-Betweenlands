@@ -18,6 +18,7 @@ import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntityMeleeGuardian;
 import thebetweenlands.entities.mobs.EntityMireSnail;
+import thebetweenlands.entities.mobs.EntityMireSnailEgg;
 import thebetweenlands.entities.mobs.EntityMummyArm;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntityPyrad;
@@ -63,7 +64,7 @@ public class BLEntityRegistry
 		registerEntity(9, EntityDragonFly.class, "dragonfly", 0x31B53C, 0x779E3C);
 		registerEntity(10, EntityBloodSnail.class, "bloodSnail", 0x8E9456, 0xB3261E);
 		registerEntity(11, EntityMireSnail.class, "mireSnail", 0x8E9456, 0xF2FA96);
-		registerEntity(12, EntitySwordEnergy.class, "mireSnailEgg");
+		registerEntity(12, EntityMireSnailEgg.class, "mireSnailEgg");
 		registerEntity(13, EntityAngryPebble.class, "angryPebble");
 		registerEntity(14, EntityBLArrow.class, "blArrow", 64, 20, true);
 		registerEntity(15, EntitySiltCrab.class, "siltCrab", 0x086A87, 0xB43104);
