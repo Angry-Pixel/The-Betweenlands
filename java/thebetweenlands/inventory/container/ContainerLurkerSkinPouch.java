@@ -7,6 +7,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemBasicInventory;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouchLarge;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouchSmall;
 
 public class ContainerLurkerSkinPouch extends Container {
 	public final ItemBasicInventory inventory;
@@ -38,33 +40,28 @@ public class ContainerLurkerSkinPouch extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		ItemStack is = null;
+		ItemStack stack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
-			ItemStack is1 = slot.getStack();
-			is = is1.copy();
+			ItemStack stack1 = slot.getStack();
+			stack = stack1.copy();
 
-			if (slotIndex < numRows * 9) {
-				if (!mergeItemStack(is1, numRows * 9, inventorySlots.size(), true))
-					return null;
-			} else if (!mergeItemStack(is1, 0, numRows * 9, false))
+			if (stack1.getItem() instanceof ItemLurkerSkinPouchSmall || stack1.getItem() instanceof ItemLurkerSkinPouchLarge)
 				return null;
 
-			if (is1.stackSize == 0)
+			if (slotIndex < numRows * 9) {
+				if (!mergeItemStack(stack1, numRows * 9, inventorySlots.size(), true))
+					return null;
+			} else if (!mergeItemStack(stack1, 0, numRows * 9, false))
+				return null;
+
+			if (stack1.stackSize == 0)
 				slot.putStack(null);
 			else
 				slot.onSlotChanged();
 		}
 
-		return is;
+		return stack;
 	}
-
-	@Override
-	public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player) {
-		if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem())
-			return null;
-		return super.slotClick(slot, button, flag, player);
-	} 
-
 }

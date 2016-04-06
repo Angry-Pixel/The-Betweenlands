@@ -14,6 +14,6 @@ public class SlotLurkerSkinPouch extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return !(stack.getItem() instanceof ItemLurkerSkinPouchSmall) || !(stack.getItem() instanceof ItemLurkerSkinPouchLarge);
+		return !(stack.getItem() instanceof ItemLurkerSkinPouchSmall) && !(stack.getItem() instanceof ItemLurkerSkinPouchLarge);
 	}
 }
