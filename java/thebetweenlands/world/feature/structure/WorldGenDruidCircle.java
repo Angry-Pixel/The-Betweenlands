@@ -13,33 +13,34 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
-public class WorldGenDruidCircle
-implements IWorldGenerator
-{
-	private int height = -1;
-	private int baseRadius = -1;
-
-	public WorldGenDruidCircle() {
-		height = 4;
-		baseRadius = 6;
-	}
+public class WorldGenDruidCircle implements IWorldGenerator {
+	private final int height = 4;
+	private final int baseRadius = 6;
+	private final int checkRadius = 32;
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if(world.provider.dimensionId == 0) {
-			generate(world, random, chunkX * 16 + 8 + world.rand.nextInt(16), chunkZ * 16 + 8 + world.rand.nextInt(16));
+			generate(world, random, chunkX * 16, chunkZ * 16);
 		}
 	}
 
-	private void generate(World world, Random random, int x, int z) {
-		if(world.checkChunksExist(x - baseRadius - 1, 64, z - baseRadius - 1, x + baseRadius + 1, 64, z + baseRadius + 1)) {
-			BiomeGenBase biomeBase = world.getBiomeGenForCoords(x, z);
-			int newY = world.getHeightValue(x, z);
-			if(BiomeDictionary.isBiomeOfType(biomeBase, Type.SWAMP)) {
-				Block block = world.getBlock(x, newY, z);
-				if(block != null && block == biomeBase.topBlock) {
-					if(random.nextInt(ConfigHandler.DRUID_CIRCLE_FREQUENCY) == 0) {
-						generateStructure(world, random, x, newY + 1, z);
+	private void generate(World world, Random random, int startX, int startZ) {
+		for(int xo = baseRadius + 1; xo <= checkRadius - (baseRadius + 1); xo++) {
+			for(int zo = baseRadius + 1; zo <= checkRadius - (baseRadius + 1); zo++) {
+				int x = startX + xo;
+				int z = startZ + zo;
+				if(world.checkChunksExist(x - baseRadius - 1, 64, z - baseRadius - 1, x + baseRadius + 1, 64, z + baseRadius + 1)) {
+					BiomeGenBase biomeBase = world.getBiomeGenForCoords(x, z);
+					int newY = world.getHeightValue(x, z);
+					if(BiomeDictionary.isBiomeOfType(biomeBase, Type.SWAMP)) {
+						Block block = world.getBlock(x, newY, z);
+						if(block != null && block == biomeBase.topBlock) {
+							if(random.nextInt(ConfigHandler.DRUID_CIRCLE_FREQUENCY) == 0) {
+								if(generateStructure(world, random, x, newY + 1, z))
+									return;
+							}
+						}
 					}
 				}
 			}
