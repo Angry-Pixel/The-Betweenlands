@@ -60,4 +60,11 @@ public class ContainerLurkerSkinPouch extends Container {
 		return is;
 	}
 
+	@Override
+	public ItemStack slotClick(int slot, int button, int flag, EntityPlayer player) {
+		if (slot >= 0 && getSlot(slot) != null && getSlot(slot).getStack() == player.getHeldItem())
+			return null;
+		return super.slotClick(slot, button, flag, player);
+	} 
+
 }
