@@ -1,8 +1,6 @@
 package thebetweenlands.recipes;
 
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -49,6 +47,7 @@ import thebetweenlands.recipes.purifier.PurifierRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.utils.WeightedRandomItem;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class BLRecipes {
 
@@ -99,6 +98,9 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rope, 1), "#", "#", "#", '#', new ItemStack(BLBlockRegistry.hanger));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.net, 1), "SRR", "SRR", "S  ", 'S', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinPouchSmall, 1), "RRR", "LSL", "LLL", 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'S', ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinPouchLarge, 1), "RRR", "LVL", "LLL", 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD));
 
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.swampTalisman, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE, 1), new ItemStack(BLItemRegistry.lifeCrystal, 1));
