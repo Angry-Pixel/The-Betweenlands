@@ -96,9 +96,6 @@ public class ItemBasicInventory implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		// Don't want to be able to store the inventory item within itself
-		// Bad things will happen, like losing your inventory
-		// Actually, this needs a custom Slot to work
 		return !(itemstack.getItem() instanceof ItemLurkerSkinPouchSmall) || !(itemstack.getItem() instanceof ItemLurkerSkinPouchLarge);
 	}
 
