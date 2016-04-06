@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
@@ -217,9 +218,9 @@ public class CommonProxy implements IGuiHandler {
 		}
 		
 		case GUI_LURKER_POUCH_SMALL:
-			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs Localising)"));
+			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, StatCollector.translateToLocal("lurkerSkinPouch.small")));
 		case GUI_LURKER_POUCH_LARGE:
-			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, "Large Pouch (needs Localising)"));
+			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, StatCollector.translateToLocal("lurkerSkinPouch.large")));
 		}
 
 		return null;
@@ -287,9 +288,9 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LORE:
 			return new GuiLorePage(player.getCurrentEquippedItem());
 		case GUI_LURKER_POUCH_SMALL:
-			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs localising)")));
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, StatCollector.translateToLocal("lurkerSkinPouch.small"))));
 		case GUI_LURKER_POUCH_LARGE:
-			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, "Large Pouch (needs localising)")));
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, StatCollector.translateToLocal("lurkerSkinPouch.large"))));
 		}
 		return null;
 	}
