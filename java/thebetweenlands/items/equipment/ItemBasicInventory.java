@@ -99,7 +99,7 @@ public class ItemBasicInventory implements IInventory {
 		// Don't want to be able to store the inventory item within itself
 		// Bad things will happen, like losing your inventory
 		// Actually, this needs a custom Slot to work
-		return !(itemstack.getItem() instanceof ItemLurkerSkinPouchSmall);
+		return !(itemstack.getItem() instanceof ItemLurkerSkinPouchSmall) || !(itemstack.getItem() instanceof ItemLurkerSkinPouchLarge);
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {

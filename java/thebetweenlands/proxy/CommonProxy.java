@@ -13,7 +13,6 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.client.gui.GuiLorePage;
-import thebetweenlands.client.gui.GuiLurkerPouchSmall;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.entity.RecruitmentRingHandler;
@@ -26,7 +25,7 @@ import thebetweenlands.inventory.container.ContainerBLCraftingTable;
 import thebetweenlands.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.inventory.container.ContainerBLFurnace;
 import thebetweenlands.inventory.container.ContainerDruidAltar;
-import thebetweenlands.inventory.container.ContainerLurkerPouchSmall;
+import thebetweenlands.inventory.container.ContainerLurkerSkinPouch;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
@@ -35,6 +34,7 @@ import thebetweenlands.inventory.gui.GuiBLCrafting;
 import thebetweenlands.inventory.gui.GuiBLDualFurnace;
 import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
+import thebetweenlands.inventory.gui.GuiLurkerSkinPouch;
 import thebetweenlands.inventory.gui.GuiPestleAndMortar;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
@@ -99,8 +99,10 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_HL = 10;
 
 	public static final int GUI_LORE = 11;
-	
+
 	public static final int GUI_LURKER_POUCH_SMALL = 12;
+
+	public static final int GUI_LURKER_POUCH_LARGE = 13;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -215,7 +217,9 @@ public class CommonProxy implements IGuiHandler {
 		}
 		
 		case GUI_LURKER_POUCH_SMALL:
-			return new ContainerLurkerPouchSmall(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs Localising)"));
+			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs Localising)"));
+		case GUI_LURKER_POUCH_LARGE:
+			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, "Large Pouch (needs Localising)"));
 		}
 
 		return null;
@@ -283,8 +287,10 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LORE:
 			return new GuiLorePage(player.getCurrentEquippedItem());
 		case GUI_LURKER_POUCH_SMALL:
-			return new GuiLurkerPouchSmall((ContainerLurkerPouchSmall) new ContainerLurkerPouchSmall(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs localising)")));
-	}
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, "Small Pouch (needs localising)")));
+		case GUI_LURKER_POUCH_LARGE:
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, "Large Pouch (needs localising)")));
+		}
 		return null;
 	}
 

@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui;
+package thebetweenlands.inventory.gui;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
@@ -6,19 +6,19 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.inventory.container.ContainerLurkerPouchSmall;
+import thebetweenlands.inventory.container.ContainerLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemBasicInventory;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class GuiLurkerPouchSmall extends GuiContainer {
+public class GuiLurkerSkinPouch extends GuiContainer {
 
 	private static final ResourceLocation guiTexture = new ResourceLocation("textures/gui/container/generic_54.png");
 	private final ItemBasicInventory inventory;
     private int inventoryRows;
 
-	public GuiLurkerPouchSmall(ContainerLurkerPouchSmall pouch) {
+	public GuiLurkerSkinPouch(ContainerLurkerSkinPouch pouch) {
 		super(pouch);
 		this.inventory = pouch.inventory;
         short short1 = 222;

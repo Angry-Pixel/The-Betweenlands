@@ -7,13 +7,13 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.proxy.CommonProxy;
 
-public class ItemLurkerSkinPouchSmall extends Item {
+public class ItemLurkerSkinPouchLarge extends Item {
 
-	public ItemLurkerSkinPouchSmall() {
+	public ItemLurkerSkinPouchLarge() {
 		super();
 		setMaxStackSize(1);
-		setUnlocalizedName("thebetweenlands.lurkerSkinPouchSmall");
-		setTextureName("thebetweenlands:lurkerSkinPouchSmall");
+		setUnlocalizedName("thebetweenlands.lurkerSkinPouchLarge");
+		setTextureName("thebetweenlands:lurkerSkinPouchLarge");
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class ItemLurkerSkinPouchSmall extends Item {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 		if (!world.isRemote) {
 			if (!player.isSneaking()) {
-				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_SMALL, world, 0, 0, 0);
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_LARGE, world, 0, 0, 0);
 			}
 		}
 
