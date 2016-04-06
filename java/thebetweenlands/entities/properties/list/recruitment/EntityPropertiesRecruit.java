@@ -8,15 +8,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import thebetweenlands.entities.EntityTargetDistraction;
 import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitAttackOnCollide;
 import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitIgnoreRecruiter;
 import thebetweenlands.entities.entityAI.recruit.EntityAIRecruitTargetMobs;
@@ -39,30 +38,7 @@ public class EntityPropertiesRecruit extends EntityProperties<EntityLiving> {
 
 	@Override
 	protected void initProperties() {
-		this.distractionEntity = new EntityLivingBase(this.getWorld()) {
-			@Override
-			public boolean isEntityAlive() {
-				return false;
-			}
-
-			@Override
-			public ItemStack getHeldItem() {
-				return null;
-			}
-
-			@Override
-			public ItemStack getEquipmentInSlot(int slot) {
-				return null;
-			}
-
-			@Override
-			public void setCurrentItemOrArmor(int slot, ItemStack stack) { }
-
-			@Override
-			public ItemStack[] getLastActiveItems() {
-				return new ItemStack[0];
-			}
-		};
+		this.distractionEntity = new EntityTargetDistraction(this.getWorld());
 	}
 
 	@Override

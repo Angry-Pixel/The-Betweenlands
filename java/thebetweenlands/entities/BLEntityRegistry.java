@@ -1,5 +1,6 @@
 package thebetweenlands.entities;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
@@ -44,7 +45,6 @@ import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.misc.ItemSpawnEggs;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BLEntityRegistry
 {
@@ -97,7 +97,8 @@ public class BLEntityRegistry
 		registerEntity(44, EntityFortressBossTeleporter.class, "fortressBossTeleporter", 64, 5, false);
 		registerEntity(45, EntityMummyArm.class, "mummyArm", /*0x804E3D, 0x3D6F80,*/ 64, 20, false);
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
-		registerEntity(47, EntityVolarkite.class, "volakite", 64, 20, true);
+		registerEntity(47, EntityVolarkite.class, "volarkite", 64, 20, true);
+		registerEntity(48, EntityTargetDistraction.class, "targetDistraction", 0, Integer.MAX_VALUE, false);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
