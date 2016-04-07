@@ -74,6 +74,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				} else if(infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
 						&& infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
 					//finished
+					if(this.currentInfusionState != 2) {
+						this.worldObj.playSound(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, "thebetweenlands:infuserFinished", 1, 1, false);
+					}
 					this.currentInfusionState = 2;
 				} else {
 					//progress
