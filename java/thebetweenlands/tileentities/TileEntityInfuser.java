@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -42,7 +40,12 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	private float crystalVelocity = 0.0F;
 	private float crystalRotation = 0.0F;
 	private ElixirRecipe infusingRecipe = null;
-	private boolean checkedRecipe = false;
+
+	public int currentInfusionState = 0;
+	public float[] prevInfusionColor = new float[4];
+	public float[] currentInfusionColor = new float[4];
+	/** 0 = no progress, 1 = in progress, 2 = finished, 3 = failed **/
+	public int infusionColorGradientTicks = 0;
 
 	public TileEntityInfuser() {
 		super(MAX_INGREDIENTS + 2, "infuser");
@@ -56,16 +59,40 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public void updateEntity() {
-		if(this.hasInfusion) {
-			if(!this.checkedRecipe) {
-				this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
-				this.checkedRecipe = true;
+		if(this.hasInfusion && this.infusingRecipe != null) {
+			this.infusionTime+=1;
+			if(this.worldObj.isRemote) {
+				int prevInfusionState = this.currentInfusionState;
+				if(infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+					//fail
+					this.currentInfusionState = 3;
+				} else if(infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
+						&& infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+					//finished
+					this.currentInfusionState = 2;
+				} else {
+					//progress
+					this.currentInfusionState = 1;
+				}
+				if(this.infusionColorGradientTicks > 0) {
+					this.infusionColorGradientTicks++;
+				} else {
+					this.prevInfusionColor = this.currentInfusionColor;
+					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+				}
+				if(this.currentInfusionState != prevInfusionState) {
+					//start gradient animation
+					this.infusionColorGradientTicks = 1;
+				}
+				if(this.infusionColorGradientTicks > 30) {
+					this.infusionColorGradientTicks = 0;
+				}
 			}
-			this.infusionTime++;
 		} else {
-			this.infusingRecipe = null;
-			this.checkedRecipe = false;
+			this.currentInfusionState = 0;
 			this.infusionTime = 0;
+			this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+			this.prevInfusionColor = this.currentInfusionColor;
 		}
 		if (worldObj.isRemote) {
 			if (isCrystalInstalled()) {
@@ -278,6 +305,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
+		this.updateInfusingRecipe();
 	}
 
 	@Override
@@ -316,6 +344,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			else
 				inventory[i] = null;
 		}
+		this.updateInfusingRecipe();
 	}
 
 	public boolean hasIngredients() {
@@ -376,5 +405,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	public ElixirRecipe getInfusingRecipe() {
 		return this.infusingRecipe;
+	}
+
+	public void updateInfusingRecipe() {
+		this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
 	}
 }

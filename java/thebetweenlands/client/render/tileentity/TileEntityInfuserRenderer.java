@@ -19,7 +19,6 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.terrain.BlockSwampWater;
 import thebetweenlands.client.model.block.ModelInfuser;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
-import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.tileentities.TileEntityInfuser;
 import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.confighandler.ConfigHandler;
@@ -66,7 +65,7 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 
-		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infuser.getInfusingAspects());
+		ElixirRecipe recipe = infuser.getInfusingRecipe();
 
 		if(ConfigHandler.DEBUG) {
 			String elixirName = recipe != null ? recipe.name : " N/A";
@@ -88,12 +87,18 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			float tz = (float) z + 0.0F;
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
-			if(!infuser.hasInfusion()) {
-				tess.setColorRGBA_F(0.2F, 0.6F, 0.4F, 1.0F);
+			float[] targetColor;
+			if(infuser.infusionColorGradientTicks > 0) {
+				targetColor = new float[] {
+						infuser.prevInfusionColor[0] + (infuser.currentInfusionColor[0] - infuser.prevInfusionColor[0]) / 30.0F * infuser.infusionColorGradientTicks,
+						infuser.prevInfusionColor[1] + (infuser.currentInfusionColor[1] - infuser.prevInfusionColor[1]) / 30.0F * infuser.infusionColorGradientTicks,
+						infuser.prevInfusionColor[2] + (infuser.currentInfusionColor[2] - infuser.prevInfusionColor[2]) / 30.0F * infuser.infusionColorGradientTicks,
+						infuser.prevInfusionColor[3] + (infuser.currentInfusionColor[3] - infuser.prevInfusionColor[3]) / 30.0F * infuser.infusionColorGradientTicks
+				};
 			} else {
-				float[] colors = ElixirRecipe.getInfusionColor(!infuser.hasInfusion() ? null : recipe, infuser.getInfusionTime());
-				tess.setColorRGBA_F(colors[0], colors[1], colors[2], colors[3]);
+				targetColor = infuser.currentInfusionColor;
 			}
+			tess.setColorRGBA_F(targetColor[0], targetColor[1], targetColor[2], targetColor[3]);
 			tess.addVertexWithUV(0.1875, 0, 0.1875, waterIcon.getMinU(), waterIcon.getMinV());
 			tess.addVertexWithUV(0.1875, 0, 0.8125, waterIcon.getMinU(), waterIcon.getMaxV());
 			tess.addVertexWithUV(0.8125, 0, 0.8125, waterIcon.getMaxU(), waterIcon.getMaxV());

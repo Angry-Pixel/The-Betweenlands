@@ -64,6 +64,7 @@ public class BlockInfuser extends BlockContainer {
 							ItemStack singleIngredient = ingredient.copy();
 							singleIngredient.stackSize = 1;
 							tile.setInventorySlotContents(i, singleIngredient);
+							tile.updateInfusingRecipe();
 							if (!player.capabilities.isCreativeMode) player.getCurrentEquippedItem().stackSize--;
 							world.markBlockForUpdate(x, y, z);
 							return true;
@@ -73,6 +74,7 @@ public class BlockInfuser extends BlockContainer {
 				if(player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() == BLItemRegistry.lifeCrystal) {
 					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, player.getCurrentEquippedItem());
+						tile.updateInfusingRecipe();
 						if (!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, null);
 					}
 					return true;
@@ -85,6 +87,7 @@ public class BlockInfuser extends BlockContainer {
 						EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(tile.getStackInSlot(i).copy(), false);
 						if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
 						tile.setInventorySlotContents(i, null);
+						tile.updateInfusingRecipe();
 						world.markBlockForUpdate(x, y, z);
 						return true;
 					}
@@ -96,6 +99,7 @@ public class BlockInfuser extends BlockContainer {
 					EntityItem itemEntity = player.dropPlayerItemWithRandomChoice(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).copy(), false);
 					if(itemEntity != null) itemEntity.delayBeforeCanPickup = 0;
 					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
+					tile.updateInfusingRecipe();
 					world.markBlockForUpdate(x, y, z);
 					return true;
 				}
