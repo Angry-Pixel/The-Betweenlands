@@ -15,6 +15,8 @@ public class ContainerLurkerSkinPouch extends Container {
 
 	public ContainerLurkerSkinPouch(EntityPlayer player, InventoryPlayer playerInventory, ItemBasicInventory itemInventory) {
 		inventory = itemInventory;
+		if(inventory == null)
+			return;
 		numRows = inventory.getSizeInventory() / 9;
         int i = (this.numRows - 4) * 18;
         int j;

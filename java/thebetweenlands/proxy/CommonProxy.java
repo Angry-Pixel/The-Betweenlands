@@ -37,6 +37,7 @@ import thebetweenlands.inventory.gui.GuiBLFurnace;
 import thebetweenlands.inventory.gui.GuiDruidAltar;
 import thebetweenlands.inventory.gui.GuiLurkerSkinPouch;
 import thebetweenlands.inventory.gui.GuiPestleAndMortar;
+import thebetweenlands.inventory.gui.GuiPouchNaming;
 import thebetweenlands.inventory.gui.GuiPurifier;
 import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.items.equipment.ItemAmulet;
@@ -102,6 +103,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LORE = 11;
 
 	public static final int GUI_LURKER_POUCH = 12;
+
+	public static final int GUI_LURKER_POUCH_NAMING = 13;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -214,9 +217,10 @@ public class CommonProxy implements IGuiHandler {
 			}
 			break;
 		}
-		
 		case GUI_LURKER_POUCH:
 			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch")));
+		case GUI_LURKER_POUCH_NAMING:
+			return new ContainerLurkerSkinPouch(player, player.inventory, null);
 		}
 
 		return null;
@@ -285,6 +289,8 @@ public class CommonProxy implements IGuiHandler {
 			return new GuiLorePage(player.getCurrentEquippedItem());
 		case GUI_LURKER_POUCH:
 			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch"))));
+		case GUI_LURKER_POUCH_NAMING:
+			return new GuiPouchNaming(player);
 		}
 		return null;
 	}

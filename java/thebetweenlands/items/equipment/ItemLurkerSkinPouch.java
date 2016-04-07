@@ -43,6 +43,9 @@ public class ItemLurkerSkinPouch extends Item {
 				int meta = stack.getItemDamage();
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
 			}
+			else {
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_NAMING, world, 0, 0, 0);
+			}
 		}
 		return stack;
 	}
