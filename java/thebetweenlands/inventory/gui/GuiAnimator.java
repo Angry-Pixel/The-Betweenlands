@@ -7,12 +7,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.inventory.container.ContainerAnimator;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.recipes.misc.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
 
 @SideOnly(Side.CLIENT)
@@ -48,10 +50,14 @@ public class GuiAnimator extends GuiContainer {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
-		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.isValidFocalItem()) {
+		if (tile.isCrystalInslot()) {
 			//Life crystal bar
 			int lifeCrystalCount = 40 - tile.lifeCrystalLife / 3;
 			this.drawTexturedModalRect(k + 39, l + 8 + lifeCrystalCount, 175, 2 + lifeCrystalCount, 6, 42);
+		}
+		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.isValidFocalItem()) {
+			//Required life crystal bar
+			int lifeCrystalCount = 40 - tile.lifeCrystalLife / 3;
 			int requiredLifeCrystal = tile.requiredLifeCount / 3;
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glColor4f(1.0F, 0.1F, 0.1F, 0.35F + (float)(Math.cos((this.updateTicks + partialTickTime) / 10.0F)+1.0F)/2.0F*0.65F);
@@ -93,7 +99,14 @@ public class GuiAnimator extends GuiContainer {
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		if (tile.itemAnimated)
+		boolean shouldClose = false;
+		ItemStack input = tile.getStackInSlot(0);
+		if (input != null) {
+			AnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
+			if(recipe != null)
+				shouldClose = recipe.getCloseOnFinish();
+		}
+		if (tile.itemAnimated && shouldClose)
 			playerSent.closeScreen();
 		this.updateTicks++;
 	}

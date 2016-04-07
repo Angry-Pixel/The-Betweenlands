@@ -40,6 +40,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	private float crystalVelocity = 0.0F;
 	private float crystalRotation = 0.0F;
 	private ElixirRecipe infusingRecipe = null;
+	private boolean updateRecipe = false;
 
 	public int currentInfusionState = 0;
 	public float[] prevInfusionColor = new float[4];
@@ -59,6 +60,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public void updateEntity() {
+		if(this.updateRecipe) {
+			this.updateInfusingRecipe();
+			this.updateRecipe = false;
+		}
 		if(this.hasInfusion && this.infusingRecipe != null) {
 			this.infusionTime+=1;
 			if(this.worldObj.isRemote) {
@@ -305,7 +310,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
-		this.updateInfusingRecipe();
+		this.updateRecipe = true;
 	}
 
 	@Override
@@ -408,6 +413,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	public void updateInfusingRecipe() {
-		this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
+		if(this.worldObj != null)
+			this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
 	}
 }

@@ -18,6 +18,7 @@ public class AnimatorRecipe {
 	private Class<? extends Entity> spawnEntity = null;
 	private String renderEntity = null;
 	private Entity renderEntityInstance = null;
+	private boolean closeOnFinish = false;
 
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife) {
 		this.input = input;
@@ -33,6 +34,7 @@ public class AnimatorRecipe {
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife, Class<? extends Entity> result) {
 		this(input, requiredFuel, requiredLife);
 		this.spawnEntity = result;
+		this.closeOnFinish = true;
 	}
 
 	public AnimatorRecipe setRenderEntity(String entity) {
@@ -97,6 +99,24 @@ public class AnimatorRecipe {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Returns whether the GUI should close when the animator has finished
+	 * @return
+	 */
+	public boolean getCloseOnFinish() {
+		return this.closeOnFinish;
+	}
+
+	/**
+	 * Sets whether the GUI should close when the animator has finished
+	 * @param close
+	 * @return
+	 */
+	public AnimatorRecipe setCloseOnFinish(boolean close) {
+		this.closeOnFinish = close;
+		return this;
 	}
 
 	private static final List<AnimatorRecipe> RECIPES = new ArrayList<AnimatorRecipe>();

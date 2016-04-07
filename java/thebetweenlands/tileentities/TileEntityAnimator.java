@@ -37,7 +37,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 			return;
 		if (isCrystalInslot())
 			lifeCrystalLife = 128 - getCrystalPower();
-		if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2) || fuelConsumed >= requiredFuelCount) {
+		if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2)) {
 			fuelBurnProgress = 0;
 			fuelConsumed = 0;
 		}
