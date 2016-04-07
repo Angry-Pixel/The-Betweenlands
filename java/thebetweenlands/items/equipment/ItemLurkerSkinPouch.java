@@ -31,8 +31,8 @@ public class ItemLurkerSkinPouch extends Item {
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean showAdvancedInfo) {
-		int meta = stack.getItemDamage();
-		list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocalFormatted("lurkerSkinPouch.size", 9 + (meta * 9)));
+		int slots = 9 + (stack.getItemDamage() * 9);
+		list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("lurkerSkinPouch.size") + " " + slots);
 		list.add(EnumChatFormatting.GRAY + StatCollector.translateToLocal("lurkerSkinPouch.info"));
 	}
 
