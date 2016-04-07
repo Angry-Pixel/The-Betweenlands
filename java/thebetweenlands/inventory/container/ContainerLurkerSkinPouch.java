@@ -7,8 +7,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.inventory.slot.SlotLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemBasicInventory;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchLarge;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchSmall;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 
 public class ContainerLurkerSkinPouch extends Container {
 	public final ItemBasicInventory inventory;
@@ -47,7 +46,7 @@ public class ContainerLurkerSkinPouch extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 
-			if (stack1.getItem() instanceof ItemLurkerSkinPouchSmall || stack1.getItem() instanceof ItemLurkerSkinPouchLarge)
+			if (stack1.getItem() instanceof ItemLurkerSkinPouch)
 				return null;
 
 			if (slotIndex < numRows * 9) {

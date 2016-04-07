@@ -444,8 +444,7 @@ item.thebetweenlands.shockwaveSword.name=Shockwave Sword
 
 item.thebetweenlands.weedwoodBow.name=Weedwood Bow
 
-item.thebetweenlands.lurkerSkinPouchSmall.name=Small Lurker Skin Pouch
-item.thebetweenlands.lurkerSkinPouchLarge.name=Large Lurker Skin Pouch
+item.thebetweenlands.lurkerSkinPouch.name=Lurker Skin Pouch
 
 item.thebetweenlands.sapBall.name=Ball of Sap
 item.thebetweenlands.rottenFood.name=Rotten Food
@@ -832,8 +831,7 @@ container.furnaceBL=Sulfur Furnace
 container.dualFurnaceBL=Dual Sulfur Furnace
 tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.purifier.name=Purifier
-lurkerSkinPouch.small=Small Pouch
-lurkerSkinPouch.large=Large Pouch
+container.lurkerSkinPouch=Lurker Skin Pouch
 
 # Tooltips
 corrosion.0=Good as new!
@@ -867,6 +865,8 @@ item.thebetweenlands.press.shift=Hold 'shift' to view more
 fig.tooltip=Looks tempting...
 chiromawWing.taste=Anything will taste better after eating this...
 chiromawWing.dontEat=I probably shouldn't eat this anymore...
+lurkerSkinPouch.size=Inventory slots
+lurkerSkinPouch.info=Craft surrounded with Lurker Skin to upgrade
 
 # Commands
 command.generic.noplayer=You must be a player

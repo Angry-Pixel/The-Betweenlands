@@ -96,7 +96,7 @@ public class ItemBasicInventory implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return !(itemstack.getItem() instanceof ItemLurkerSkinPouchSmall) || !(itemstack.getItem() instanceof ItemLurkerSkinPouchLarge);
+		return !(itemstack.getItem() instanceof ItemLurkerSkinPouch);
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {

@@ -3,8 +3,7 @@ package thebetweenlands.inventory.slot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchLarge;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchSmall;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 
 public class SlotLurkerSkinPouch extends Slot {
 
@@ -14,6 +13,6 @@ public class SlotLurkerSkinPouch extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return !(stack.getItem() instanceof ItemLurkerSkinPouchSmall) && !(stack.getItem() instanceof ItemLurkerSkinPouchLarge);
+		return !(stack.getItem() instanceof ItemLurkerSkinPouch);
 	}
 }

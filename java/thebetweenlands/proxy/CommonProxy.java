@@ -101,9 +101,7 @@ public class CommonProxy implements IGuiHandler {
 
 	public static final int GUI_LORE = 11;
 
-	public static final int GUI_LURKER_POUCH_SMALL = 12;
-
-	public static final int GUI_LURKER_POUCH_LARGE = 13;
+	public static final int GUI_LURKER_POUCH = 12;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -217,10 +215,8 @@ public class CommonProxy implements IGuiHandler {
 			break;
 		}
 		
-		case GUI_LURKER_POUCH_SMALL:
-			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, StatCollector.translateToLocal("lurkerSkinPouch.small")));
-		case GUI_LURKER_POUCH_LARGE:
-			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, StatCollector.translateToLocal("lurkerSkinPouch.large")));
+		case GUI_LURKER_POUCH:
+			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch")));
 		}
 
 		return null;
@@ -287,10 +283,8 @@ public class CommonProxy implements IGuiHandler {
 			return new GuiManualHerblore(player);
 		case GUI_LORE:
 			return new GuiLorePage(player.getCurrentEquippedItem());
-		case GUI_LURKER_POUCH_SMALL:
-			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 27, StatCollector.translateToLocal("lurkerSkinPouch.small"))));
-		case GUI_LURKER_POUCH_LARGE:
-			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 54, StatCollector.translateToLocal("lurkerSkinPouch.large"))));
+		case GUI_LURKER_POUCH:
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch"))));
 		}
 		return null;
 	}

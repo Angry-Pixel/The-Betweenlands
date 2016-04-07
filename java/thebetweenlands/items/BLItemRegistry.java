@@ -37,8 +37,7 @@ import thebetweenlands.items.bow.ItemWeedwoodBow;
 import thebetweenlands.items.crops.ItemAspectrusCropSeed;
 import thebetweenlands.items.crops.ItemBLGenericSeed;
 import thebetweenlands.items.equipment.ItemAmulet;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchLarge;
-import thebetweenlands.items.equipment.ItemLurkerSkinPouchSmall;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.items.equipment.ItemRingOfPower;
 import thebetweenlands.items.equipment.ItemRingOfRecruitment;
@@ -256,8 +255,7 @@ public class BLItemRegistry {
 	public static final Item mossBed = new ItemMossBed().setUnlocalizedName("thebetweenlands.mossBedItem").setTextureName("thebetweenlands:mossBed");
 	public static final Item amulet = new ItemAmulet();
 	public static final Item amuletSlot = new ItemAmuletSlot();
-	public static final Item lurkerSkinPouchSmall = new ItemLurkerSkinPouchSmall();
-	public static final Item lurkerSkinPouchLarge = new ItemLurkerSkinPouchLarge();
+	public static final Item lurkerSkinPouch = new ItemLurkerSkinPouch();
 	//LOOT
 	public static final Item voodooDoll = new ItemVoodooDoll();
 	public static final Item explorerHat = new ItemExplorerHat().setUnlocalizedName("thebetweenlands.explorerHat").setTextureName("thebetweenlands:explorersHat");
@@ -326,7 +324,7 @@ public class BLItemRegistry {
 				lurkerSkinChestplate, lurkerSkinLeggings, lurkerSkinBoots, boneHelmet, boneChestplate, boneLeggings, boneBoots, syrmoriteHelmet, 
 				syrmoriteChestplate, syrmoriteLeggings, syrmoriteBoots, valoniteHelmet, valoniteChestplate, valoniteLeggings, valoniteBoots, 
 				weedwoodBow, anglerToothArrow, poisonedAnglerToothArrow, octineArrow, basiliskArrow, explorerHat, rubberBoots, 
-				rubberBootsImproved, lurkerSkinPouchSmall, lurkerSkinPouchLarge);
+				rubberBootsImproved, lurkerSkinPouch);
 		BLCreativeTabs.plants.setTab(middleFruitSeeds, spores);
 		BLCreativeTabs.herbLore.setTab(pestle, itemsGenericCrushed, itemsGenericPlantDrop, weedwoodBucketInfusion, elixir, dentrothystVial, 
 				aspectVial);
