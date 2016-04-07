@@ -677,6 +677,12 @@
 			"fortressPuzzleSword"
 		]
 	},
+	"infuserFinished": {
+		"category": "block",
+		"sounds": [
+			"infuserFinished"
+		]
+	},
 	"fig": {
 		"category": "player",
 		"sounds": [
