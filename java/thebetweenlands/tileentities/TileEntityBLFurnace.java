@@ -1,8 +1,5 @@
 package thebetweenlands.tileentities;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +20,9 @@ import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 {
@@ -300,6 +300,10 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 		return getItemBurnTime(itemstack) > 0;
 	}
 
+	public static boolean isItemFlux(ItemStack itemstack) {
+		return itemstack.getItem() == BLItemRegistry.itemsGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id;
+	}
+
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : player.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64.0D;
@@ -313,7 +317,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return slot == 2 ? false : (slot == 1 ? isItemFuel(itemstack) : true);
+		return slot == 2 ? false : slot == 1 ? isItemFuel(itemstack) : slot == 3 ? isItemFlux(itemstack) : true;
 	}
 
 	@Override

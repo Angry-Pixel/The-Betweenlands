@@ -395,6 +395,10 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 		return getItemBurnTime(itemstack) > 0;
 	}
 
+	public static boolean isItemFlux(ItemStack itemstack) {
+		return itemstack.getItem() == BLItemRegistry.itemsGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id;
+	}
+
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : player.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64.0D;
@@ -408,12 +412,12 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return slot == 2 || slot == 6 ? false : (slot == 1 || slot == 4 ? isItemFuel(itemstack) : true);
+		return slot == 2 || slot == 6 ? false : (slot == 1 || slot == 5) ? isItemFuel(itemstack) : (slot == 3 || slot == 7) ? isItemFlux(itemstack) : true; 
 	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return side == 0 || side == 3 ? slotsBottom : (side == 1 || side == 4 ? slotsTop : slotsSides);
+		return side == 0 ? slotsBottom : (side == 1 ? slotsTop : slotsSides);
 	}
 
 	@Override
@@ -423,6 +427,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
-		return side != 0 || slot != 1 || side != 3 || slot != 5 || itemstack.getItem() == Items.bucket;
+		return side != 0 || slot != 1 && slot != 5 || itemstack.getItem() == Items.bucket;
 	}
+
 }
