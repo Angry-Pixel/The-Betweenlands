@@ -9,12 +9,11 @@ import thebetweenlands.items.misc.ItemGeneric;
 
 public class LootTables {
 	public static final WeightedLootList COMMON_POT_LOOT = new WeightedLootList(new LootItemStack[] {
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH.id).setAmount(2, 6).setWeight(42),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(1, 4).setWeight(42),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(6, 14).setWeight(42),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(2, 6).setWeight(42),
 			new LootItemStack(BLItemRegistry.sapBall).setAmount(2, 6).setWeight(22),
 
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(1, 4).setWeight(10),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(10),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(10),
 			new LootItemStack(BLItemRegistry.anglerToothArrow).setAmount(6, 16).setWeight(12),
@@ -43,7 +42,6 @@ public class LootTables {
 
 	public static final WeightedLootList COMMON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {
 			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(22),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH.id).setAmount(4, 8).setWeight(18),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(18),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(18),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(18),
@@ -89,8 +87,6 @@ public class LootTables {
 			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(24),
 			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(24),
 
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH.id).setAmount(4, 8).setWeight(15),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(15),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(15),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(15),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.VALONITE_SHARD.id).setAmount(1, 4).setWeight(15),
@@ -122,7 +118,6 @@ public class LootTables {
 			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(17),
 			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(17),
 
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH.id).setAmount(4, 8).setWeight(12),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(12),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(12),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(12),
