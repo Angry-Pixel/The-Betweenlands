@@ -46,7 +46,7 @@ public class GuiPouchNaming extends GuiContainer {
 		buttonList.clear();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		buttonList.add(new GuiButton(0, xOffSet, yOffSet - 16, 32, 16, "Save"));
+		buttonList.add(new GuiPouchNamingButton(0, xOffSet, yOffSet - 16, 32, 16, "Save"));
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class GuiPouchNaming extends GuiContainer {
 
 	@Override
 	protected void actionPerformed(GuiButton guibutton) {
-		if (guibutton instanceof GuiButton)
+		if (guibutton instanceof GuiPouchNamingButton)
 			if (guibutton.id == 0) {
 				if (StringUtils.isNullOrEmpty(textFieldName.getText()))
 					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming(playerSent, StatCollector.translateToLocal("container.lurkerSkinPouch")));
