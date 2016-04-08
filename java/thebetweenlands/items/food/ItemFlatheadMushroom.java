@@ -14,7 +14,7 @@ import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemFlatheadMushroom extends ItemFood implements IManualEntryItem {
 	public ItemFlatheadMushroom() {
-		super(3, 0.6F, false);
+		super(1, 0.6F, false);
 	}
 
 	@Override
