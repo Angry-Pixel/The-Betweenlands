@@ -23,7 +23,7 @@ public class GuiPouchNaming extends GuiContainer {
 
 	public GuiPouchNaming(EntityPlayer player) {
 		super(new ContainerLurkerSkinPouch(player, player.inventory, null));
-		xSize = 177;
+		xSize = 181;
 		ySize = 55;
 		playerSent = player;
 	}
@@ -39,14 +39,14 @@ public class GuiPouchNaming extends GuiContainer {
 	@SuppressWarnings("unchecked")
 	public void initGui() {
 		super.initGui();
-		textFieldName = new GuiTextField(fontRendererObj, 20, 17, 136, 20);
+		textFieldName = new GuiTextField(fontRendererObj, 22, 17, 136, 20);
 		textFieldName.setMaxStringLength(20);
 		textFieldName.setFocused(false);
 		textFieldName.setTextColor(5635925);
 		buttonList.clear();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		buttonList.add(new GuiPouchNamingButton(0, xOffSet, yOffSet - 16, 32, 16, "Save"));
+		buttonList.add(new GuiPouchNamingButton(0, xOffSet, yOffSet - 18, 46, 18, "Save"));
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class GuiPouchNaming extends GuiContainer {
 	@Override
 	public void mouseClicked(int i, int j, int k) {
 		super.mouseClicked(i, j, k);
-		textFieldName.mouseClicked(20, 17, k);
+		textFieldName.mouseClicked(22, 17, k);
 	}
 
 	@Override
