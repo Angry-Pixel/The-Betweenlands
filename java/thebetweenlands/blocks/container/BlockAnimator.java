@@ -6,8 +6,6 @@ import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -33,6 +31,8 @@ import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.CommonProxy;
 import thebetweenlands.recipes.misc.AnimatorRecipe;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockAnimator extends BlockContainer {
 
