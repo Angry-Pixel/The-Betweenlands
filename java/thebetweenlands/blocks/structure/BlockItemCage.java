@@ -1,7 +1,10 @@
 package thebetweenlands.blocks.structure;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -63,6 +66,11 @@ public class BlockItemCage extends BlockContainer {
 				}
 			}
 		}
+	}
+
+	@Override
+	public Item getItemDropped(int meta, Random random, int fortune) {
+		return null;
 	}
 
 	@Override

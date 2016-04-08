@@ -40,6 +40,7 @@ public class BlockAnimator extends BlockContainer {
 
 	public BlockAnimator() {
 		super(Material.rock);
+		setHardness(2.0F);
 		setStepSound(soundTypeStone);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.animator");
