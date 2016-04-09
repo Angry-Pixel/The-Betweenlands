@@ -150,7 +150,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	public float getSwimProgress(float partialRenderTicks) {
-		return Math.min((1F - (float)Math.pow(1-this.swimmingAnim.getAnimationFraction(partialRenderTicks), 2)) * 2 * this.swimmingAnim.getAnimationFraction(partialRenderTicks), 1.0F);
+		return Math.min((1F - (float)Math.pow(1-this.swimmingAnim.getAnimationFraction(partialRenderTicks), 2)) * 2.5F * this.swimmingAnim.getAnimationFraction(partialRenderTicks), 1.0F);
 	}
 
 	@Override
@@ -295,8 +295,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	@Override
 	public double getMountedYOffset() {
-		boolean onWaterSurface = this.inWater || this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
-		return super.getMountedYOffset() + (onWaterSurface ? -0.6D + (this.swimmingAnim.getAnimationFraction(1) > 0 ? -0.2D : 0) : 0.0D) + 0.2D + (this.leapingAnim.getAnimationFraction(1) > 0 ? -this.getLeapProgress(1) * 0.4D : 0.0D);
+		return super.getMountedYOffset();
 	}
 
 	@SideOnly(Side.CLIENT)
