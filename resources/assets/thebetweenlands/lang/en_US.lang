@@ -1292,6 +1292,8 @@ equipment.menu.page=Page %d
 key.categories.weedwoodRowboat=Weedwood Rowboat
 key.categories.betweenlands=Betweenlands Controls
 key.radialmenu=Equipment Menu
+key.useRing=Use Ring
+key.openPouch=Open Pouch
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
