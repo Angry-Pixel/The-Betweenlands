@@ -441,16 +441,17 @@ public class ModelGiantToad extends MowzieModelBase {
 			leg_front_right2.rotateAngleY += 0.6;
 		}
 
+
 		//Swimming
 		if(swimProgress - 0.05F > leapingProgress) {
 			body_base.rotateAngleX += 0.2 * swimProgress;
 
 			leg_back_left1.rotateAngleY += -0.1F * swimProgress;
 			leg_back_right1.rotateAngleY += 0.1F * swimProgress;
-			leg_back_left1.rotateAngleX += 1.5 * swimProgress;
-			leg_back_right1.rotateAngleX += 1.5 * swimProgress;
-			leg_back_left1.rotateAngleZ -= 0.2 * swimProgress;
-			leg_back_right1.rotateAngleZ += 0.2 * swimProgress;
+			leg_back_left1.rotateAngleX += 1.8 * swimProgress;
+			leg_back_right1.rotateAngleX += 1.8 * swimProgress;
+			leg_back_left1.rotateAngleZ -= 1.2 * swimProgress;
+			leg_back_right1.rotateAngleZ += 1.2 * swimProgress;
 			foot_back_left1.rotateAngleX += 2 * swimProgress;
 			foot_back_right1.rotateAngleX += 2 * swimProgress;
 			leg_back_left2.rotateAngleX -= 2 * swimProgress;

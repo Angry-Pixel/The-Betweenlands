@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityTarminion;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesCircleGem;
@@ -33,12 +34,12 @@ import thebetweenlands.utils.ItemRenderHelper;
 import thebetweenlands.utils.LightingUtil;
 
 public class ItemAmulet extends Item implements IEquippable {
-	public static List<Class<? extends EntityLivingBase>> supportedEntities = new ArrayList<Class<? extends EntityLivingBase>>();
+	public static final List<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new ArrayList<Class<? extends EntityLivingBase>>();
 	private IIcon[] gemIcons = new IIcon[CircleGem.TYPES.length];
 
 	static {
-		supportedEntities.add(EntityTarminion.class);
-		//supportedEntities.add(EntityGiantToad.class);
+		SUPPORTED_ENTITIES.add(EntityTarminion.class);
+		SUPPORTED_ENTITIES.add(EntityGiantToad.class);
 	}
 
 	public ItemAmulet() {
@@ -198,7 +199,7 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity entity, EquipmentInventory inventory) {
-		if(entity instanceof EntityPlayer == false && !this.supportedEntities.contains(entity.getClass()) && player != null)
+		if(entity instanceof EntityPlayer == false && !this.SUPPORTED_ENTITIES.contains(entity.getClass()) && player != null)
 			return false;
 		if(CircleGem.getGem(stack) == CircleGem.NONE)
 			return false;

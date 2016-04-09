@@ -68,14 +68,18 @@ public class ItemEquipmentHandler {
 					EntityPropertiesEquipment property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.target, EntityPropertiesEquipment.class);
 					if(property != null) {
 						if(((IEquippable)event.entityPlayer.getHeldItem().getItem()).canEquipOnRightClick(event.entityPlayer.getHeldItem(), event.entityPlayer, event.target, property.getEquipmentInventory())) {
-							tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem());
+							if(tryPlayerEquip(event.entityPlayer, event.target, event.entityPlayer.getHeldItem())) {
+								event.setCanceled(true);
+							}
 							if(event.entityPlayer.getHeldItem().stackSize <= 0)
 								event.entityPlayer.setCurrentItemOrArmor(0, null);
 						}
 					}
 				}
 			} else if(event.entityPlayer.isSneaking() && event.entityPlayer.getHeldItem() == null) {
-				tryPlayerUnequip(event.entityPlayer, event.target);
+				if(tryPlayerUnequip(event.entityPlayer, event.target)) {
+					event.setCanceled(true);
+				}
 			}
 		}
 	}
