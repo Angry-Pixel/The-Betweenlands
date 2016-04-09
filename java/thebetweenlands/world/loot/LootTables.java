@@ -9,14 +9,14 @@ import thebetweenlands.items.misc.ItemGeneric;
 
 public class LootTables {
 	public static final WeightedLootList COMMON_POT_LOOT = new WeightedLootList(new LootItemStack[] {
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(6, 14).setWeight(42),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(2, 6).setWeight(42),
-			new LootItemStack(BLItemRegistry.sapBall).setAmount(2, 6).setWeight(22),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(2, 6).setWeight(45),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(2, 10).setWeight(40),
+			new LootItemStack(BLItemRegistry.sapBall).setAmount(2, 6).setWeight(26),
 
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(1, 4).setWeight(10),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(10),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(10),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(1, 4).setWeight(12),
 			new LootItemStack(BLItemRegistry.anglerToothArrow).setAmount(6, 16).setWeight(12),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(2, 8).setWeight(11),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(2, 8).setWeight(11),
 			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(8),
 			new LootItemStack(BLItemRegistry.poisonedAnglerToothArrow).setAmount(6, 14).setWeight(7),
 			new LootItemStack(BLItemRegistry.octineArrow).setAmount(6, 16).setWeight(7),
@@ -41,19 +41,19 @@ public class LootTables {
 	});
 
 	public static final WeightedLootList COMMON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {
-			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(22),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(18),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(18),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(18),
-			new LootItemStack(BLItemRegistry.anglerToothArrow).setAmount(12, 26).setWeight(18),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(18),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(18),
+			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(24),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(20),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(20),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(20),
+			new LootItemStack(BLItemRegistry.anglerToothArrow).setAmount(12, 26).setWeight(20),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(20),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(20),
 
-			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(17),
-			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(17),
-			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(17),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.AMULET_SOCKET.id).setWeight(17),
-			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(15),
+			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(18),
+			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(18),
+			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(18),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.AMULET_SOCKET.id).setWeight(18),
+			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(16),
 			new LootItemStack(BLItemRegistry.sapBall).setAmount(8, 16).setWeight(13),
 			new LootItemStack(BLItemRegistry.poisonedAnglerToothArrow).setAmount(8, 16).setWeight(13),
 
@@ -79,13 +79,13 @@ public class LootTables {
 	});
 
 	public static final WeightedLootList DUNGEON_POT_LOOT = new WeightedLootList(new LootItemStack[] {
-			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(24),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(24),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(24),
-			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(24),
-			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(24),
-			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(24),
-			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(24),
+			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(28),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(28),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(28),
+			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(28),
+			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(28),
+			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(28),
+			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(26),
 
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(15),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SWAMP_REED_ROPE.id).setAmount(4, 8).setWeight(15),
@@ -109,14 +109,14 @@ public class LootTables {
 	});
 
 	public static final WeightedLootList DUNGEON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {
-			new LootItemStack(BLItemRegistry.sapBall).setAmount(8, 32).setWeight(22),
-			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(20),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(17),
-			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(17),
-			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(17),
-			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(17),
-			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(17),
-			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(17),
+			new LootItemStack(BLItemRegistry.sapBall).setAmount(8, 32).setWeight(28),
+			new LootItemStack(BLItemRegistry.marshmallowPink).setAmount(1).setWeight(26),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SYRMORITE_INGOT.id).setAmount(4, 16).setWeight(20),
+			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.OCTINE_INGOT.id).setAmount(4, 16).setWeight(20),
+			new LootItemStack(BLItemRegistry.marshmallow).setAmount(1).setWeight(20),
+			new LootItemStack(BLItemRegistry.reedDonut).setAmount(2, 4).setWeight(20),
+			new LootItemStack(BLItemRegistry.jamDonut).setAmount(2, 4).setWeight(20),
+			new LootItemStack(BLItemRegistry.scroll).setAmount(1).setWeight(20),
 
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.LURKER_SKIN.id).setAmount(2, 4).setWeight(12),
 			new LootItemStack(BLItemRegistry.itemsGeneric).setDamage(ItemGeneric.EnumItemGeneric.SULFUR.id).setAmount(8, 16).setWeight(12),

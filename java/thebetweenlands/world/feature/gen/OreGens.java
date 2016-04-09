@@ -46,7 +46,7 @@ public class OreGens {
 					height = rand.nextInt(Math.min(height - 1, 6)) + 2;
 					int oreBlock = rand.nextInt(height);
 					for(int i = 0; i <= height; i++) {
-						world.setBlock(x, y + i, z, BLBlockRegistry.lifeCrystalOre, genOre && (i == oreBlock || rand.nextInt(9) == 0) ? 1 : 0, 2);
+						world.setBlock(x, y + i, z, BLBlockRegistry.lifeCrystalOre, genOre && (i == oreBlock || rand.nextInt(18) == 0) ? 1 : 0, 2);
 					}
 				}
 			}

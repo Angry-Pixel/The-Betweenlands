@@ -25,8 +25,8 @@ public class WorldGenCavePots extends WorldGenCave {
 		if (y > 70)
 			return false;
 		int randDirection = random.nextInt(4) + 2;
-		for (int xx = x - 3; xx <= x + 3; xx++) {
-			for (int zz = z - 3; zz <= z + 3; zz++) {
+		for (int xx = x - 2; xx <= x + 3; xx++) {
+			for (int zz = z - 2; zz <= z + 3; zz++) {
 				for(int yy = y - 1; yy <= y + 1; yy++) {
 					double dst = Math.sqrt((xx-x)*(xx-x)+(yy-y)*(yy-y)+(zz-z)*(zz-z));
 					if (random.nextInt(MathHelper.ceiling_double_int(dst / 1.4D) + 1) == 0) {
@@ -34,7 +34,7 @@ public class WorldGenCavePots extends WorldGenCave {
 							world.setBlock(xx, yy, zz, getRandomBlock(random), randDirection, 3);
 							TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(xx, yy, zz);
 							if (lootPot != null)
-								LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 1, 2);
+								LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 0, 2);
 						}
 					}
 				}
