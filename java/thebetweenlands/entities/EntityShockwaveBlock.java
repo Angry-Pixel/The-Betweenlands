@@ -63,6 +63,12 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void onUpdate() {
+		if(!this.worldObj.isRemote && (this.isDead || this.getDistance(this.originX + 0.5D, this.originY, this.originZ + 0.5D) > 2)) {
+			if(this.worldObj.isAirBlock(this.originX, this.originY, this.originZ)) {
+				this.worldObj.setBlock(this.originX, this.originY, this.originZ, this.blockID, this.blockMeta, 3);
+			}
+		}
+
 		this.motionX = 0;
 		this.motionZ = 0;
 		this.posX = this.lastTickPosX;
@@ -76,7 +82,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			if (this.ticksExisted > this.jumpDelay) {
 				this.motionY -= 0.15D;
 
-				if (this.posY <= this.originY) {
+				if (this.posY <= this.originY || this.onGround) {
 					this.worldObj.setBlock(this.originX, this.originY, this.originZ, this.blockID, this.blockMeta, 3);
 					this.setDead();
 				}
@@ -109,6 +115,14 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+	}
+
+	@Override
+	public void setDead() {
+		if(this.worldObj.isAirBlock(this.originX, this.originY, this.originZ)) {
+			this.worldObj.setBlock(this.originX, this.originY, this.originZ, this.blockID, this.blockMeta, 3);
+		}
+		super.setDead();
 	}
 
 	@Override
