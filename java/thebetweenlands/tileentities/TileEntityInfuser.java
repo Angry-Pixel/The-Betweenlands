@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
@@ -42,11 +43,14 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	private ElixirRecipe infusingRecipe = null;
 	private boolean updateRecipe = false;
 
-	public int currentInfusionState = 0;
+	/** 0 = no progress, 1 = in progress, 2 = finished, 3 = failed **/
+	private int currentInfusionState = 0;
+	private int prevInfusionState = 0;
+	private int infusionColorGradientTicks = 0;
+
 	public float[] prevInfusionColor = new float[4];
 	public float[] currentInfusionColor = new float[4];
-	/** 0 = no progress, 1 = in progress, 2 = finished, 3 = failed **/
-	public int infusionColorGradientTicks = 0;
+	private float[] currentInfusionColorState2 = new float[4];
 
 	public TileEntityInfuser() {
 		super(MAX_INGREDIENTS + 2, "infuser");
@@ -64,46 +68,74 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			this.updateInfusingRecipe();
 			this.updateRecipe = false;
 		}
+		boolean updateBlock = false;
 		if(this.hasInfusion && this.infusingRecipe != null) {
-			this.infusionTime+=1;
-			if(this.worldObj.isRemote) {
-				int prevInfusionState = this.currentInfusionState;
-				if(infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
-					//fail
-					this.currentInfusionState = 3;
-				} else if(infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
-						&& infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
-					//finished
-					if(this.currentInfusionState != 2) {
+			if(!this.worldObj.isRemote) {
+				this.infusionTime++;
+			} else {
+				if(this.prevInfusionState != this.currentInfusionState) {
+					if(this.currentInfusionState == 2) {
 						this.worldObj.playSound(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D, "thebetweenlands:infuserFinished", 1, 1, false);
 					}
+					this.prevInfusionColor = this.currentInfusionColor;
+					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+				} else {
+					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+				}
+			}
+			this.prevInfusionState = this.currentInfusionState;
+			if(!this.worldObj.isRemote) {
+				if(this.infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+					//fail
+					if(this.currentInfusionState != 3)
+						updateBlock = true;
+					this.currentInfusionState = 3;
+				} else if(this.infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
+						&& this.infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+					//finished
+					if(this.currentInfusionState != 2)
+						updateBlock = true;
 					this.currentInfusionState = 2;
 				} else {
 					//progress
+					if(this.currentInfusionState != 1)
+						updateBlock = true;
 					this.currentInfusionState = 1;
 				}
-				if(this.infusionColorGradientTicks > 0) {
-					this.infusionColorGradientTicks++;
-				} else {
-					this.prevInfusionColor = this.currentInfusionColor;
-					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
-				}
-				if(this.currentInfusionState != prevInfusionState) {
-					//start gradient animation
-					this.infusionColorGradientTicks = 1;
-				}
-				if(this.infusionColorGradientTicks > 30) {
-					this.infusionColorGradientTicks = 0;
+			}
+			if(this.infusionColorGradientTicks > 0) {
+				this.infusionColorGradientTicks++;
+			}
+			if(!this.worldObj.isRemote && this.currentInfusionState != prevInfusionState) {
+				//start gradient animation
+				this.infusionColorGradientTicks = 1;
+				updateBlock = true;
+			}
+			if(!this.worldObj.isRemote && this.infusionColorGradientTicks > 30) {
+				this.infusionColorGradientTicks = 0;
+				updateBlock = true;
+			}
+			if(this.worldObj.isRemote && this.infusionColorGradientTicks > 0) {
+				if(this.worldObj.isRemote && this.currentInfusionState == 2) {
+					for(int i = 0; i < 10; i++) {
+						double x = this.xCoord + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
+						double z = this.zCoord + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
+						BLParticle.STEAM_PURIFIER.spawn(this.worldObj, x, this.yCoord + 1.0D - this.worldObj.rand.nextFloat() * 0.2F, z, 0.0D, 0.0D, 0.0D, 0);
+					}
 				}
 			}
 		} else {
+			if(this.currentInfusionState != 0)
+				updateBlock = true;
 			this.currentInfusionState = 0;
 			this.infusionTime = 0;
 			this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
 			this.prevInfusionColor = this.currentInfusionColor;
 		}
+		if(!this.worldObj.isRemote && updateBlock)
+			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		if (worldObj.isRemote) {
-			if (isCrystalInstalled()) {
+			if (isValidCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
 				crystalRotation += this.crystalVelocity;
 				if (crystalRotation >= 360.0F) {
@@ -169,7 +201,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			evaporation--;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
-		if(isCrystalInstalled()) {
+		if(isValidCrystalInstalled()) {
 			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion) {
 				inventory[MAX_INGREDIENTS + 1].setItemDamage(inventory[MAX_INGREDIENTS + 1].getItemDamage() + 1);
 				stirProgress = 0;
@@ -180,6 +212,22 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			hasCrystal = false;
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		}
+	}
+
+	/**
+	 * Returns the current infusing state:
+	 * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
+	 */
+	public int getInfusingState()  {
+		return this.currentInfusionState;
+	}
+
+	/**
+	 * Returns the infusion color gradient ticks
+	 * @return
+	 */
+	public int getInfusionColorGradientTicks() {
+		return this.infusionColorGradientTicks;
 	}
 
 	@Override
@@ -287,8 +335,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return waterTank.getFluid() != null ? (int) ((float) waterTank.getFluid().amount / (float) waterTank.getCapacity() * scale) : 0;
 	}
 
-	public boolean isCrystalInstalled() {
-		return inventory[MAX_INGREDIENTS + 1] != null && inventory[MAX_INGREDIENTS + 1].getItem() == BLItemRegistry.lifeCrystal && inventory[MAX_INGREDIENTS + 1].getItemDamage() <= inventory[MAX_INGREDIENTS + 1].getMaxDamage();
+	public boolean isValidCrystalInstalled() {
+		return inventory[MAX_INGREDIENTS + 1] != null && inventory[MAX_INGREDIENTS + 1].getItem() == BLItemRegistry.lifeCrystal && inventory[MAX_INGREDIENTS + 1].getItemDamage() < inventory[MAX_INGREDIENTS + 1].getMaxDamage();
 	}
 
 	@Override
@@ -301,6 +349,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
+		nbt.setInteger("infusionState", this.currentInfusionState);
+		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
 	}
 
 	@Override
@@ -313,6 +363,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
+		currentInfusionState = nbt.getInteger("infusionState");
+		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
 		this.updateRecipe = true;
 	}
 
@@ -333,6 +385,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			} 
 			nbt.setTag("slotItem" + i, itemStackCompound);
 		}
+		nbt.setInteger("infusionState", this.currentInfusionState);
+		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
 		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 	}
 
@@ -352,6 +406,8 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			else
 				inventory[i] = null;
 		}
+		currentInfusionState = packet.func_148857_g().getInteger("infusionState");
+		infusionColorGradientTicks = packet.func_148857_g().getInteger("infusionColorGradientTicks");
 		this.updateInfusingRecipe();
 	}
 

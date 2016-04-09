@@ -54,17 +54,18 @@ public class GuiAnimator extends GuiContainer {
 			//Life crystal bar
 			int lifeCrystalCount = 40 - tile.lifeCrystalLife / 3;
 			this.drawTexturedModalRect(k + 39, l + 8 + lifeCrystalCount, 175, 2 + lifeCrystalCount, 6, 42);
-		}
-		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.isValidFocalItem()) {
-			//Required life crystal bar
-			int lifeCrystalCount = 40 - tile.lifeCrystalLife / 3;
-			int requiredLifeCrystal = tile.requiredLifeCount / 3;
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glColor4f(1.0F, 0.1F, 0.1F, 0.35F + (float)(Math.cos((this.updateTicks + partialTickTime) / 10.0F)+1.0F)/2.0F*0.65F);
-			this.drawTexturedModalRect(k + 39, l + 8 + lifeCrystalCount, 175, 2 + lifeCrystalCount, 6, requiredLifeCrystal);
-			GL11.glColor4f(1, 1, 1, 1);
-			GL11.glDisable(GL11.GL_BLEND);
 
+			if(tile.isValidFocalItem()) {
+				//Required life crystal bar
+				int requiredLifeCrystal = tile.requiredLifeCount / 3;
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glColor4f(1.0F, 0.1F, 0.1F, 0.35F + (float)(Math.cos((this.updateTicks + partialTickTime) / 10.0F)+1.0F)/2.0F*0.65F);
+				this.drawTexturedModalRect(k + 39, l + 8 + lifeCrystalCount, 175, 2 + lifeCrystalCount, 6, requiredLifeCrystal);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glDisable(GL11.GL_BLEND);
+			}
+		}
+		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.lifeCrystalLife >= tile.requiredLifeCount && tile.isValidFocalItem()) {
 			//Fuel bar
 			int fuelBurnProgress = tile.fuelBurnProgress;
 			drawTexturedModalRect(k + 129, l + 8 + fuelBurnProgress, 175, 2 + fuelBurnProgress, 6, 42);

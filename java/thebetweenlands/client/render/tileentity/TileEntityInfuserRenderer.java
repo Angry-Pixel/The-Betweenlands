@@ -88,12 +88,12 @@ public class TileEntityInfuserRenderer extends TileEntitySpecialRenderer {
 			tess.addTranslation(tx, ty, tz);
 			tess.startDrawingQuads();
 			float[] targetColor;
-			if(infuser.infusionColorGradientTicks > 0) {
+			if(infuser.getInfusionColorGradientTicks() > 0) {
 				targetColor = new float[] {
-						infuser.prevInfusionColor[0] + (infuser.currentInfusionColor[0] - infuser.prevInfusionColor[0]) / 30.0F * infuser.infusionColorGradientTicks,
-						infuser.prevInfusionColor[1] + (infuser.currentInfusionColor[1] - infuser.prevInfusionColor[1]) / 30.0F * infuser.infusionColorGradientTicks,
-						infuser.prevInfusionColor[2] + (infuser.currentInfusionColor[2] - infuser.prevInfusionColor[2]) / 30.0F * infuser.infusionColorGradientTicks,
-						infuser.prevInfusionColor[3] + (infuser.currentInfusionColor[3] - infuser.prevInfusionColor[3]) / 30.0F * infuser.infusionColorGradientTicks
+						infuser.prevInfusionColor[0] + (infuser.currentInfusionColor[0] - infuser.prevInfusionColor[0]) / 30.0F * infuser.getInfusionColorGradientTicks(),
+						infuser.prevInfusionColor[1] + (infuser.currentInfusionColor[1] - infuser.prevInfusionColor[1]) / 30.0F * infuser.getInfusionColorGradientTicks(),
+						infuser.prevInfusionColor[2] + (infuser.currentInfusionColor[2] - infuser.prevInfusionColor[2]) / 30.0F * infuser.getInfusionColorGradientTicks(),
+						infuser.prevInfusionColor[3] + (infuser.currentInfusionColor[3] - infuser.prevInfusionColor[3]) / 30.0F * infuser.getInfusionColorGradientTicks()
 				};
 			} else {
 				targetColor = infuser.currentInfusionColor;

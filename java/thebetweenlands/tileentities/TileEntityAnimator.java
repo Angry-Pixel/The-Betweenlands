@@ -43,13 +43,14 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 		}
 		if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
 			this.itemToAnimate = this.inventory[0];
-			if (lifeCrystalLife >= 1) {
+			if (lifeCrystalLife >= this.requiredLifeCount) {
 				++fuelBurnProgress;
 				if (fuelBurnProgress >= 42) {
 					fuelBurnProgress = 0;
 					decrStackSize(2, 1);
 					fuelConsumed++;
 				}
+				this.itemAnimated = false;
 			}
 		}
 		if (isSlotInUse(2) && !this.itemAnimated) {
@@ -83,7 +84,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isCrystalInslot() {
-		return isSlotInUse(1) && inventory[1].getItem() == BLItemRegistry.lifeCrystal;
+		return isSlotInUse(1) && inventory[1].getItem() == BLItemRegistry.lifeCrystal && inventory[1].getItemDamage() < inventory[1].getMaxDamage();
 	}
 
 	public int getCrystalPower() {
@@ -101,7 +102,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory {
 	}
 
 	public boolean isValidFocalItem() {
-		return AnimatorRecipe.getRecipe(inventory[0]) != null;
+		return inventory[0] != null && AnimatorRecipe.getRecipe(inventory[0]) != null;
 	}
 
 	public void sendGUIData(ContainerAnimator animator, ICrafting craft) {

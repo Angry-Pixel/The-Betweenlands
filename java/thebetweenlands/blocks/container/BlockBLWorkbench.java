@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -20,18 +21,18 @@ import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 
 public class BlockBLWorkbench extends Block {
 
-    @SideOnly(Side.CLIENT)
-    private IIcon topIcon;
-    @SideOnly(Side.CLIENT)
-    private IIcon sideIcon;
+	@SideOnly(Side.CLIENT)
+	private IIcon topIcon;
+	@SideOnly(Side.CLIENT)
+	private IIcon sideIcon;
 
-    public BlockBLWorkbench() {
-    	super(Material.wood);
+	public BlockBLWorkbench() {
+		super(Material.wood);
 		setCreativeTab(BLCreativeTabs.blocks);
 		setBlockName("thebetweenlands.weedwoodCraftingTable");
 		setHardness(2.5F);
 		setBlockTextureName("thebetweenlands:weedwoodCraftingTable");
-    }
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
@@ -39,37 +40,58 @@ public class BlockBLWorkbench extends Block {
 			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CRAFT, world, x, y, z);
 		}
 
-        return true;
+		return true;
 	}
 
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
-        int rotation = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-        ++rotation;
-        rotation %= 4;
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase placer, ItemStack stack) {
+		int rotation = MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		++rotation;
+		rotation %= 4;
 
-        ((TileEntityBLCraftingTable) world.getTileEntity(x, y, z)).rotation = (byte) rotation;
-    }
+		((TileEntityBLCraftingTable) world.getTileEntity(x, y, z)).rotation = (byte) rotation;
+	}
 
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        return side == 1 ? topIcon : (side == 0 ? BLBlockRegistry.weedwoodPlanks.getBlockTextureFromSide(side) : (side != 2 && side != 4 ? blockIcon : sideIcon));
-    }
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return side == 1 ? topIcon : (side == 0 ? BLBlockRegistry.weedwoodPlanks.getBlockTextureFromSide(side) : (side != 2 && side != 4 ? blockIcon : sideIcon));
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister icon) {
-        blockIcon = icon.registerIcon(getTextureName() + "Side");
-        topIcon = icon.registerIcon(getTextureName() + "Top");
-        sideIcon = icon.registerIcon(getTextureName() + "Front");
-    }
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister icon) {
+		blockIcon = icon.registerIcon(getTextureName() + "Side");
+		topIcon = icon.registerIcon(getTextureName() + "Top");
+		sideIcon = icon.registerIcon(getTextureName() + "Front");
+	}
 
-    @Override
-    public boolean hasTileEntity(int metadata) {
-        return true;
-    }
+	@Override
+	public boolean hasTileEntity(int metadata) {
+		return true;
+	}
 
-    @Override
-    public TileEntity createTileEntity(World world, int metadata) {
-        return new TileEntityBLCraftingTable();
-    }
+	@Override
+	public TileEntity createTileEntity(World world, int metadata) {
+		return new TileEntityBLCraftingTable();
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
+		if(world.isRemote)
+			return;
+		TileEntityBLCraftingTable tile = (TileEntityBLCraftingTable) world.getTileEntity(x, y, z);
+		for(ItemStack stack : tile.crfSlots) {
+			if (stack != null) {
+				if (!world.isRemote && world.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+					float f = 0.7F;
+					double rx = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double ry = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double rz = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					EntityItem entityitem = new EntityItem(world, x + rx, y + ry, z + rz, stack);
+					entityitem.delayBeforeCanPickup = 10;
+					world.spawnEntityInWorld(entityitem);
+				}
+			}
+		}
+		super.breakBlock(world, x, y, z, block, meta);
+	}
 }

@@ -81,12 +81,12 @@ public class BLEntityRegistry
 		registerEntity(28, EntityPeatMummy.class, "peatMummy", 0x524D3A, 0x69463F, 64, 1, true);
 		registerEntity(29, EntityElixir.class, "thrownElixir", 64, 10, true);
 		registerEntity(30, EntityRopeNode.class, "ropeNode", 64, 1, true);
-		registerEntity(31, EntityDreadfulMummy.class, "dreadfulMummy", /*0x000000, 0x2E2E2E,*/ 64, 1, true);
+		registerEntity(31, EntityDreadfulMummy.class, "dreadfulMummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(32, EntityShallowBreath.class, "shallowBreath", /*0x005C3D, 0x2D4231,*/ 10, 1, true);
 		registerEntity(33, EntityVolatileSoul.class, "volatileSoul", 64, 1, true);
 		registerEntity(34, EntitySludgeBall.class, "sludgeBall", 64, 20, true);
 		registerEntity(35, EntitySwordEnergy.class, "swordEnergy", 64, 20, true);
-		registerEntity(36, EntityFortressBoss.class, "fortressBoss", /*0x005C3D, 0x2D4231,*/ 64, 1, true);
+		registerEntity(36, EntityFortressBoss.class, "fortressBoss", 0x000000, 0x00FFFA, 64, 1, true);
 		registerEntity(37, EntityFortressBossTurret.class, "fortressBossTurret", 64, 20, false);
 		registerEntity(38, EntityFortressBossProjectile.class, "fortressBossProjectile", 64, 5, true);
 		registerEntity(39, EntityFortressBossSpawner.class, "fortressBossSpawner", 64, 20, false);

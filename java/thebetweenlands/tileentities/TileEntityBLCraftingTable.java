@@ -9,9 +9,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
-public class TileEntityBLCraftingTable
-extends TileEntity
-{
+public class TileEntityBLCraftingTable extends TileEntity {
 	public ItemStack[] crfSlots = new ItemStack[9];
 	public ItemStack crfResult;
 	public byte rotation = 0;

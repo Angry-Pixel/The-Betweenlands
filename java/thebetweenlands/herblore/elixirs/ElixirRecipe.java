@@ -61,7 +61,7 @@ public class ElixirRecipe {
 			if(infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFailedColor);
 			} else if(infusionTime > recipe.idealInfusionTime - recipe.infusionTimeVariation
-					&& infusionTime < recipe.idealInfusionTime + recipe.infusionTimeVariation) {
+					&& infusionTime <= recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFinishedColor);
 			} else {
 				float startR = 0.2F;
