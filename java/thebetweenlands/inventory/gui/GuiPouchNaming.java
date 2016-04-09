@@ -62,7 +62,9 @@ public class GuiPouchNaming extends GuiContainer {
 	@Override
 	protected void keyTyped(char key, int keycode) {
 		textFieldName.textboxKeyTyped(key, keycode);
-		if (!(keycode != Keyboard.KEY_NONE && textFieldName.isFocused()))
+		if(keycode == Keyboard.KEY_ESCAPE)
+			playerSent.closeScreen();
+		else if (!(keycode != Keyboard.KEY_NONE && textFieldName.isFocused()))
 			super.keyTyped(key, keycode);
 	}
 
