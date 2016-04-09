@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.render;
+package thebetweenlands.client.render.render.entity;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;

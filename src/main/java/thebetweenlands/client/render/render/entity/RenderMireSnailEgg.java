@@ -1,17 +1,17 @@
-package thebetweenlands.client.render.render;
+package thebetweenlands.client.render.render.entity;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.client.render.models.entity.ModelSnailEgg;
+import thebetweenlands.client.render.models.entity.ModelMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 
 public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {
     private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/mireSnailEgg.png");
 
     public RenderMireSnailEgg(RenderManager manager) {
-        super(manager, new ModelSnailEgg(), 0.1F);
+        super(manager, new ModelMireSnailEgg(), 0.1F);
     }
 
     @Override

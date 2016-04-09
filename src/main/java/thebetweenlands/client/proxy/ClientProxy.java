@@ -9,14 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import thebetweenlands.client.render.render.RenderFactoryAngler;
-import thebetweenlands.client.render.render.RenderFactoryBlindCaveFish;
-import thebetweenlands.client.render.render.RenderFactoryMireSnail;
-import thebetweenlands.client.render.render.RenderFactoryMireSnailEgg;
-import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
-import thebetweenlands.common.entity.mobs.EntityMireSnail;
-import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.client.render.render.entity.*;
+import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
+import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.item.ICustomItemRenderType;
 import thebetweenlands.common.item.ICustomResourceLocationItem;
 import thebetweenlands.common.lib.ModInfo;
@@ -152,5 +148,8 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, new RenderFactoryBlindCaveFish());
         RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, new RenderFactoryMireSnail());
         RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, new RenderFactoryMireSnailEgg());
+        RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, new RenderFactoryBloodSnail());
+        RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderFactorySnailPoisonJet());
+        RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderFactorySwampHag());
     }
 }

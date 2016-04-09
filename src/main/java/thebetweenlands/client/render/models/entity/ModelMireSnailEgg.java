@@ -8,11 +8,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
-public class ModelSnailEgg extends ModelBase {
+public class ModelMireSnailEgg extends ModelBase {
     ModelRenderer shell;
     ModelRenderer inners;
 
-    public ModelSnailEgg() {
+    public ModelMireSnailEgg() {
         this.textureWidth = 64;
         this.textureHeight = 32;
         this.shell = new ModelRenderer(this, 0, 0);
