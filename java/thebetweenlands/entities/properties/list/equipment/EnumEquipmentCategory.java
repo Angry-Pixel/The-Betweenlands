@@ -1,7 +1,7 @@
 package thebetweenlands.entities.properties.list.equipment;
 
 public enum EnumEquipmentCategory {
-	NONE("none"), AMULET("amulet"), RING("ring");
+	NONE("none"), AMULET("amulet"), RING("ring"), POUCH("pouch");
 
 	public static final EnumEquipmentCategory[] TYPES = EnumEquipmentCategory.values();
 

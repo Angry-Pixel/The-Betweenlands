@@ -29,16 +29,16 @@ public class RingInputHandler {
 	public void onClientTick(ClientTickEvent event) {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		if(player != null && player.ticksExisted % 20 == 0) {
-			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketRingInput(KeyBindingsBL.useRing.getIsKeyPressed())));
+			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketRingInput(KeyBindingsBL.USE_RING.getIsKeyPressed())));
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	private void updateClientRecruitmentState() {
-		if(!this.wasPressed && KeyBindingsBL.useRing.getIsKeyPressed()) {
+		if(!this.wasPressed && KeyBindingsBL.USE_RING.getIsKeyPressed()) {
 			this.wasPressed = true;
 			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketRingInput(true)));
-		} else if(this.wasPressed && !KeyBindingsBL.useRing.getIsKeyPressed()) {
+		} else if(this.wasPressed && !KeyBindingsBL.USE_RING.getIsKeyPressed()) {
 			this.wasPressed = false;
 			TheBetweenlands.networkWrapper.sendToServer(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketRingInput(false)));
 		}

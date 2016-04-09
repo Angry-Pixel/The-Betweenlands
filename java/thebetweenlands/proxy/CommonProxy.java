@@ -1,5 +1,9 @@
 package thebetweenlands.proxy;
 
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
@@ -7,13 +11,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockWeedWoodChest;
-import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.entity.RecruitmentRingHandler;
@@ -30,21 +34,10 @@ import thebetweenlands.inventory.container.ContainerLurkerSkinPouch;
 import thebetweenlands.inventory.container.ContainerPestleAndMortar;
 import thebetweenlands.inventory.container.ContainerPurifier;
 import thebetweenlands.inventory.container.ContainerWeedWoodChest;
-import thebetweenlands.inventory.gui.GuiAnimator;
-import thebetweenlands.inventory.gui.GuiBLCrafting;
-import thebetweenlands.inventory.gui.GuiBLDualFurnace;
-import thebetweenlands.inventory.gui.GuiBLFurnace;
-import thebetweenlands.inventory.gui.GuiDruidAltar;
-import thebetweenlands.inventory.gui.GuiLurkerSkinPouch;
-import thebetweenlands.inventory.gui.GuiPestleAndMortar;
-import thebetweenlands.inventory.gui.GuiPouchNaming;
-import thebetweenlands.inventory.gui.GuiPurifier;
-import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.items.equipment.ItemAmulet;
 import thebetweenlands.items.equipment.ItemBasicInventory;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
-import thebetweenlands.manual.GuiManualBase;
-import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
@@ -74,10 +67,6 @@ import thebetweenlands.tileentities.TileEntityTarLootPot3;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
 import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -105,6 +94,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH = 12;
 
 	public static final int GUI_LURKER_POUCH_NAMING = 13;
+
+	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 
 	public void registerTileEntities() {
 		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
@@ -219,6 +210,11 @@ public class CommonProxy implements IGuiHandler {
 		}
 		case GUI_LURKER_POUCH:
 			return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch")));
+		case GUI_LURKER_POUCH_KEYBIND:
+			ItemStack pouch = ItemLurkerSkinPouch.getFirstPouch(player);
+			if(pouch != null)
+				return new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(pouch, 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch")));
+			break;
 		case GUI_LURKER_POUCH_NAMING:
 			return new ContainerLurkerSkinPouch(player, player.inventory, null);
 		}
@@ -228,70 +224,6 @@ public class CommonProxy implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		switch (ID) {
-		case GUI_DRUID_ALTAR: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityDruidAltar) {
-				return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
-			}
-			break;
-		}
-		case GUI_WEEDWOOD_CRAFT: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLCraftingTable) {
-				return new GuiBLCrafting(player.inventory, (TileEntityBLCraftingTable) tileentity);
-			}
-			break;
-		}
-		case GUI_WEEDWOOD_CHEST:
-			IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
-			return new GuiWeedWoodChest(player.inventory, inventory);
-		case GUI_BL_FURNACE: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLFurnace) {
-				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
-			}
-			break;
-		}
-		case GUI_BL_DUAL_FURNACE: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityBLDualFurnace) {
-				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
-			}
-			break;
-		}
-		case GUI_ANIMATOR: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityAnimator) {
-				return new GuiAnimator(player, (TileEntityAnimator) tileentity);
-			}
-			break;
-		}
-		case GUI_PURIFIER: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPurifier) {
-				return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
-			}
-			break;
-		}
-		case GUI_PESTLE_AND_MORTAR: {
-			TileEntity tileentity = world.getTileEntity(x, y, z);
-			if (tileentity instanceof TileEntityPestleAndMortar) {
-				return new GuiPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
-			}
-			break;
-		}
-		case GUI_MANUAL:
-			return new GuiManualBase(player);
-		case GUI_HL:
-			return new GuiManualHerblore(player);
-		case GUI_LORE:
-			return new GuiLorePage(player.getCurrentEquippedItem());
-		case GUI_LURKER_POUCH:
-			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch"))));
-		case GUI_LURKER_POUCH_NAMING:
-			return new GuiPouchNaming(player);
-		}
 		return null;
 	}
 

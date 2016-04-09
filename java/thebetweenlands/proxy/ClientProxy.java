@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
@@ -25,20 +26,25 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.blocks.container.BlockWeedWoodChest;
 import thebetweenlands.client.audio.SuperbSoundRegistry;
 import thebetweenlands.client.audio.ambience.AmbienceRegistry;
 import thebetweenlands.client.event.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.BLMusicHandler;
 import thebetweenlands.client.event.CorrosionTextureStitchHandler;
+import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiOverlay;
 import thebetweenlands.client.input.KeyBindingsBL;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
@@ -214,6 +220,7 @@ import thebetweenlands.event.elixirs.ElixirClientHandler;
 import thebetweenlands.event.entity.AttackDamageHandler;
 import thebetweenlands.event.entity.PowerRingHandler;
 import thebetweenlands.event.gui.GuiOpenedHandler;
+import thebetweenlands.event.input.KeyInputHandler;
 import thebetweenlands.event.input.RingInputHandler;
 import thebetweenlands.event.input.radialmenu.RadialMenuHandler;
 import thebetweenlands.event.item.ItemNBTExclusionHandler;
@@ -230,8 +237,23 @@ import thebetweenlands.event.render.OverlayHandler;
 import thebetweenlands.event.render.ShaderHandler;
 import thebetweenlands.event.render.WorldRenderHandler;
 import thebetweenlands.event.world.ThemHandler;
+import thebetweenlands.inventory.container.ContainerLurkerSkinPouch;
+import thebetweenlands.inventory.gui.GuiAnimator;
+import thebetweenlands.inventory.gui.GuiBLCrafting;
+import thebetweenlands.inventory.gui.GuiBLDualFurnace;
+import thebetweenlands.inventory.gui.GuiBLFurnace;
+import thebetweenlands.inventory.gui.GuiDruidAltar;
+import thebetweenlands.inventory.gui.GuiLurkerSkinPouch;
+import thebetweenlands.inventory.gui.GuiPestleAndMortar;
+import thebetweenlands.inventory.gui.GuiPouchNaming;
+import thebetweenlands.inventory.gui.GuiPurifier;
+import thebetweenlands.inventory.gui.GuiWeedWoodChest;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.items.equipment.ItemBasicInventory;
+import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.lib.ModInfo;
+import thebetweenlands.manual.GuiManualBase;
+import thebetweenlands.manual.GuiManualHerblore;
 import thebetweenlands.manual.GuideBookEntryRegistry;
 import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
@@ -239,6 +261,8 @@ import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
+import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityBLSign;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
@@ -495,6 +519,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(RadialMenuHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(GuiOpenedHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RingInputHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(KeyInputHandler.INSTANCE);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(
@@ -563,6 +588,83 @@ public class ClientProxy extends CommonProxy {
 		// Init manual
 		GuideBookEntryRegistry.init();
 		HLEntryRegistry.init();
+	}
+
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		switch (ID) {
+		case GUI_DRUID_ALTAR: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityDruidAltar) {
+				return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tileentity);
+			}
+			break;
+		}
+		case GUI_WEEDWOOD_CRAFT: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLCraftingTable) {
+				return new GuiBLCrafting(player.inventory, (TileEntityBLCraftingTable) tileentity);
+			}
+			break;
+		}
+		case GUI_WEEDWOOD_CHEST:
+			IInventory inventory = BlockWeedWoodChest.getInventory(world, x, y, z);
+			return new GuiWeedWoodChest(player.inventory, inventory);
+		case GUI_BL_FURNACE: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLFurnace) {
+				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tileentity);
+			}
+			break;
+		}
+		case GUI_BL_DUAL_FURNACE: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityBLDualFurnace) {
+				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tileentity);
+			}
+			break;
+		}
+		case GUI_ANIMATOR: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityAnimator) {
+				return new GuiAnimator(player, (TileEntityAnimator) tileentity);
+			}
+			break;
+		}
+		case GUI_PURIFIER: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPurifier) {
+				return new GuiPurifier(player.inventory, (TileEntityPurifier) tileentity);
+			}
+			break;
+		}
+		case GUI_PESTLE_AND_MORTAR: {
+			TileEntity tileentity = world.getTileEntity(x, y, z);
+			if (tileentity instanceof TileEntityPestleAndMortar) {
+				return new GuiPestleAndMortar(player.inventory, (TileEntityPestleAndMortar) tileentity);
+			}
+			break;
+		}
+		case GUI_MANUAL:
+			return new GuiManualBase(player);
+		case GUI_HL:
+			return new GuiManualHerblore(player);
+		case GUI_LORE:
+			return new GuiLorePage(player.getCurrentEquippedItem());
+		case GUI_LURKER_POUCH:
+			return new GuiLurkerSkinPouch((ContainerLurkerSkinPouch) new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(player.getHeldItem(), 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch"))));
+		case GUI_LURKER_POUCH_KEYBIND:
+			ItemStack pouch = ItemLurkerSkinPouch.getFirstPouch(player);
+			if(pouch != null) {
+				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F));
+				ContainerLurkerSkinPouch container = new ContainerLurkerSkinPouch(player, player.inventory, new ItemBasicInventory(pouch, 9 + (x * 9), StatCollector.translateToLocal("container.lurkerSkinPouch")));
+				return new GuiLurkerSkinPouch(container);
+			}
+			break;
+		case GUI_LURKER_POUCH_NAMING:
+			return new GuiPouchNaming(player);
+		}
+		return null;
 	}
 
 	@Override

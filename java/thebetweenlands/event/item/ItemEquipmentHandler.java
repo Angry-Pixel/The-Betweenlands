@@ -8,10 +8,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import thebetweenlands.TheBetweenlands;
@@ -117,13 +118,17 @@ public class ItemEquipmentHandler {
 	}
 
 	@SubscribeEvent
-	public void onDeath(LivingDeathEvent event) {
+	public void onDeathDrops(LivingDropsEvent event) {
 		EntityLivingBase entity = event.entityLiving;
 		if(entity != null && !entity.worldObj.isRemote) {
 			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.entity);
-			for(Equipment equipment : equipmentInventory.getEquipment()) {
-				if(((IEquippable)equipment.item.getItem()).canDrop(equipment.item, entity, equipmentInventory)) {
-					entity.entityDropItem(equipment.item.copy(), entity.getEyeHeight());
+			if(equipmentInventory != null) {
+				for(Equipment equipment : equipmentInventory.getEquipment()) {
+					if(((IEquippable)equipment.item.getItem()).canDrop(equipment.item, entity, equipmentInventory)) {
+						EntityItem equipmentDrop = new EntityItem(entity.worldObj, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ, equipment.item.copy());
+						equipmentDrop.delayBeforeCanPickup = 10;
+						event.drops.add(equipmentDrop);
+					}
 				}
 			}
 		}

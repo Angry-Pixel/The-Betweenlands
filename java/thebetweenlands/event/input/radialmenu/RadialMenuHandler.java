@@ -54,8 +54,8 @@ public class RadialMenuHandler {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if(KeyBindingsBL.radialMenu.isPressed()) {
-			KeyBinding.setKeyBindState(KeyBindingsBL.radialMenu.getKeyCode(), false);
+		if(KeyBindingsBL.RADIAL_MENU.isPressed()) {
+			KeyBinding.setKeyBindState(KeyBindingsBL.RADIAL_MENU.getKeyCode(), false);
 			if(!this.isOpen) {
 				this.openGUI();
 			} else {
