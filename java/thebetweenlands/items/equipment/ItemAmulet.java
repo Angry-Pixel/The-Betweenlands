@@ -115,11 +115,11 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void onRenderLiving(RenderLivingEvent.Post event) {
+	public void onRenderLiving(RenderLivingEvent.Specials.Post event) {
 		if(event.entity != null) {
 			GL11.glPushMatrix();
 			if(event.entity == TheBetweenlands.proxy.getClientPlayer()) {
-				GL11.glTranslated(0, 1.1D, 0);
+				GL11.glTranslated(0, 1.65D, 0);
 			}
 			this.renderAmulet(event.entity, event.x, event.y, event.z, 0.0F);
 			GL11.glPopMatrix();
@@ -155,7 +155,10 @@ public class ItemAmulet extends Item implements IEquippable {
 				if(gemItem != null) {
 					GL11.glPushMatrix();
 					GL11.glRotated((entity.ticksExisted + partialTicks) * 1.5D, 0, 1, 0);
-					GL11.glTranslated(0, entity.getEyeHeight() / 1.5D + Math.sin((entity.ticksExisted + partialTicks) / 60.0D + (double)i / amulets * Math.PI * 2.0D) / 2.0D * entity.height / 4.0D, entity.width / 1.5D);
+					double eyeHeight = entity.getEyeHeight();
+					if(entity == TheBetweenlands.proxy.getClientPlayer())
+						eyeHeight = -0.65D;
+					GL11.glTranslated(0, eyeHeight / 1.5D + Math.sin((entity.ticksExisted + partialTicks) / 60.0D + (double)i / amulets * Math.PI * 2.0D) / 2.0D * entity.height / 4.0D, entity.width / 1.5D);
 					GL11.glScaled(0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D);
 					GL11.glEnable(GL11.GL_BLEND);
 					GL11.glColor4f(1, 1, 1, 0.8F);

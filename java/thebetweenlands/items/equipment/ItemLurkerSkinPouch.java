@@ -2,9 +2,13 @@ package thebetweenlands.items.equipment;
 
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
@@ -12,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.properties.list.equipment.EnumEquipmentCategory;
 import thebetweenlands.entities.properties.list.equipment.Equipment;
@@ -19,6 +24,7 @@ import thebetweenlands.entities.properties.list.equipment.EquipmentInventory;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.IEquippable;
 import thebetweenlands.proxy.CommonProxy;
+import thebetweenlands.utils.ItemRenderHelper;
 
 public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
@@ -110,5 +116,51 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 			}
 		}
 		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onRenderPlayer(RenderPlayerEvent.Specials.Post event) {
+		if(event.entityPlayer != null) {
+			GL11.glPushMatrix();
+			if(event.entityPlayer == TheBetweenlands.proxy.getClientPlayer()) {
+				GL11.glTranslated(0, 1.65D, 0);
+			}
+			double rx = event.entityPlayer.prevPosX + (event.entityPlayer.posX - event.entityPlayer.prevPosX) * event.partialRenderTick;
+			double ry = event.entityPlayer.prevPosY + (event.entityPlayer.posY - event.entityPlayer.prevPosY) * event.partialRenderTick;
+			double rz = event.entityPlayer.prevPosZ + (event.entityPlayer.posZ - event.entityPlayer.prevPosZ) * event.partialRenderTick;
+			this.renderPouch(event.entityPlayer, rx, ry, rz, (float)event.partialRenderTick);
+			GL11.glPopMatrix();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void renderPouch(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
+		EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(entity);
+		List<Equipment> equippedPouches = equipmentInventory.getEquipment(EnumEquipmentCategory.POUCH);
+		if(!equippedPouches.isEmpty()) {
+			Equipment pouch = equippedPouches.get(0);
+			ItemStack stack = pouch.item;
+			if(stack != null) {
+				GL11.glPushMatrix();
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glColor4f(1, 1, 1, 1);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glRotated(180, 1, 0, 0);
+				GL11.glTranslated(0, 1.25D, 0);
+				GL11.glRotated(entity.isSneaking() ? 28 : 0, 1, 0, 0);
+				GL11.glTranslated(0, entity.isSneaking() ? -0.05D : 0, entity.isSneaking() ? -0.37D : -0.18D);
+				GL11.glPushMatrix();
+				GL11.glTranslated(0, 0, 0.02D);
+				GL11.glScaled(0.33D, 0.33D, 0.5D);
+				ItemRenderHelper.renderItem(stack, 0);
+				GL11.glPopMatrix();
+				GL11.glPushMatrix();
+				GL11.glScaled(0.3D, 0.3D, 0.5D);
+				ItemRenderHelper.renderItem(stack, 0);
+				GL11.glPopMatrix();
+				GL11.glPopMatrix();
+			}
+		}
 	}
 }

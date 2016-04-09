@@ -520,6 +520,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(GuiOpenedHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(RingInputHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(KeyInputHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BLItemRegistry.amulet);
+		MinecraftForge.EVENT_BUS.register(BLItemRegistry.lurkerSkinPouch);
 
 		// Crop renderers
 		BLBlockRegistry.fungusCrop.setCropModels(
