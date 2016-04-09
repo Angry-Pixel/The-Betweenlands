@@ -1,12 +1,11 @@
 package thebetweenlands.client.model.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.MathHelper;
-
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
@@ -294,10 +293,49 @@ public class ModelGiantToad extends MowzieModelBase {
 		setToInitPose();
 		float frame = toad.ticksExisted + partialRenderTicks;
 		float leapingProgress = toad.getLeapProgress(partialRenderTicks);
+		float swimProgress = toad.getSwimProgress(partialRenderTicks);
 
 		float bagScale = (1 + 3.5F * (MathHelper.sin(0.12F * frame - MathHelper.cos(0.12F * frame)) + 1) / 2);
 		blowbag.setScale(bagScale);
 
+		if(entity.isInWater()) {
+			torso1.rotateAngleX += 0.4;
+			torso2.rotateAngleX -= 0.3;
+			head1.rotateAngleX += -0.1;
+			
+			leftback1.rotateAngleX += 0.4;
+			rightback1.rotateAngleX += 0.4;
+			
+			leftfront1.rotateAngleX -= 0.5;
+			rightfront1.rotateAngleX -= 0.5;
+			leftfront2.rotateAngleY -= 0.4;
+			rightfront2.rotateAngleY += 0.4;
+		}
+		
+		//Swimming
+		torso1.rotateAngleX += 0.3 * swimProgress;
+		torso2.rotateAngleX -= 0.2 * swimProgress;
+		
+		leftback1.rotateAngleY += -0.8F * swimProgress;
+		rightback1.rotateAngleY += 0.8F * swimProgress;
+		leftback1.rotateAngleX += 2.1 * swimProgress;
+		rightback1.rotateAngleX += 2.1 * swimProgress;
+		leftback1.rotateAngleZ -= 0.2 * swimProgress;
+		rightback1.rotateAngleZ += 0.2 * swimProgress;
+		leftback3.rotateAngleX -= 2 * swimProgress;
+		rightback3.rotateAngleX -= 2 * swimProgress;
+		leftback2.rotateAngleX += 2 * swimProgress;
+		rightback2.rotateAngleX += 2 * swimProgress;
+
+		leftfront1.rotateAngleX += 0.8*2 * swimProgress;
+		leftfront1.rotateAngleZ -= 0.4*2 * swimProgress;
+		leftfront2.rotateAngleY -= 1.8*2 * swimProgress;
+		rightfront1.rotateAngleX += 0.8*2 * swimProgress;
+		rightfront1.rotateAngleZ += 0.4*2 * swimProgress;
+		rightfront2.rotateAngleY += 1.8*2 * swimProgress;
+
+
+		//Jumping
 		torso1.rotateAngleX += 0.3 * leapingProgress;
 		torso2.rotateAngleX -= 0.2 * leapingProgress;
 
