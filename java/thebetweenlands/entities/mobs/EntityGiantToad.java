@@ -22,13 +22,21 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private boolean prevOnGround;
 	private ControlledAnimation leapingAnim = new ControlledAnimation(4);
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
-	
+
+	public static final int DW_SWIM_STROKE = 20;
+
 	public EntityGiantToad(World worldObj) {
 		super(worldObj);
 		getNavigator().setAvoidsWater(true);
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(5, new EntityAIWander(this, 0));
 		this.setSize(2F, 1.5F);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(DW_SWIM_STROKE, (byte) 0);
 	}
 
 	@Override
@@ -45,16 +53,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		} else {
 			this.ticksOnGround = 0;
 		}
-		//TODO: RIP TPS, 2016 - 2016
-		//Keeps trying to pathfind causing huge stress on TPS
 		if(this.strokeTicks > 0) {
 			this.strokeTicks--;
+			if(!this.worldObj.isRemote)
+				this.dataWatcher.updateObject(DW_SWIM_STROKE, (byte) 1);
+		} else if(!this.worldObj.isRemote) {
+			this.dataWatcher.updateObject(DW_SWIM_STROKE, (byte) 0);
 		}
 		if (!worldObj.isRemote) {
 			this.setAir(20);
-			/*if (getAttackTarget() != null) {
-				getNavigator().tryMoveToEntityLiving(getAttackTarget(), 0);
-			}*/
 			PathEntity path = getNavigator().getPath();
 			if (path != null && !path.isFinished() && onGround && !this.isMovementBlocked()) {
 				if (this.ticksOnGround > 20) {
@@ -67,47 +74,35 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 						float distance = (float) Math.sqrt(x * x + z * z);
 						if (distance > 1) {
 							motionY += 0.6;
-							motionX += 0.3 * MathHelper.cos(angle);
-							motionZ += 0.3 * MathHelper.sin(angle);
-						}/* else {
-							getNavigator().clearPathEntity();
-						}*/
+							motionX += 0.5 * MathHelper.cos(angle);
+							motionZ += 0.5 * MathHelper.sin(angle);
+						}
 					}
 				}
 			}
+		}
+
+		leapingAnim.updateTimer();
+		if (this.inWater || onGround || prevOnGround) {
+			leapingAnim.decreaseTimer();
 		} else {
-			leapingAnim.updateTimer();
-			// allow 1 tick lag time to prevent single tick onGround == false
-			if (this.inWater || onGround || prevOnGround) {
-				leapingAnim.decreaseTimer();
-			} else {
-				leapingAnim.increaseTimer();
-			}
-			
-			this.swimmingAnim.updateTimer();
-			if(this.inWater && Math.sqrt(this.motionX*this.motionX+this.motionZ*this.motionZ) > 0.04D) {
-				this.swimmingAnim.increaseTimer();
-			} else {
-				this.swimmingAnim.decreaseTimer();
-			}
+			leapingAnim.increaseTimer();
+		}
+
+		this.swimmingAnim.updateTimer();
+		if(this.inWater && this.dataWatcher.getWatchableObjectByte(DW_SWIM_STROKE) == 1 && Math.sqrt(this.motionX*this.motionX+this.motionZ*this.motionZ) > 0.25D) {
+			this.swimmingAnim.increaseTimer();
+		} else {
+			this.swimmingAnim.decreaseTimer();
 		}
 	}
 
 	public float getLeapProgress(float partialRenderTicks) {
-		return easeInOut(leapingAnim.getAnimationProgressSinSqrt(partialRenderTicks));
-	}
-	
-	public float getSwimProgress(float partialRenderTicks) {
-		return easeInOut(this.swimmingAnim.getAnimationProgressSinToTenWithoutReturn(partialRenderTicks));
+		return leapingAnim.getAnimationProgressSinSqrt(partialRenderTicks);
 	}
 
-	private static float easeInOut(float t) {
-		return t;
-		//		final float d = 1, c = 1, b = 0;
-		//		float s = 1.70158f;
-		//		if ((t /= d / 2) < 1)
-		//			return c / 2 * (t * t * (((s *= (1.525f)) + 1) * t - s)) + b;
-		//		return c / 2 * ((t -= 2) * t * (((s *= (1.525f)) + 1) * t + s) + 2) + b;
+	public float getSwimProgress(float partialRenderTicks) {
+		return Math.min((1F - (float)Math.pow(1-this.swimmingAnim.getAnimationFraction(partialRenderTicks), 2)) * 2 * this.swimmingAnim.getAnimationFraction(partialRenderTicks), 1.0F);
 	}
 
 	@Override
@@ -158,6 +153,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	public void moveEntityWithHeading(float strafing, float forward) {
 		if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase) {
+			this.stepHeight = 1F;
 			this.prevRotationYaw = this.rotationYaw = this.riddenByEntity.rotationYaw;
 			this.rotationPitch = this.riddenByEntity.rotationPitch * 0.5F;
 			this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -169,30 +165,50 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				forward *= 0.25F;
 			}
 
-			boolean onWaterSurface = !this.onGround && this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
-			
-			if(!onWaterSurface) {
-				if (this.onGround && forward != 0.0F && this.ticksOnGround > 4) {
+			boolean onWaterSurface = this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
+
+			if(!this.inWater || !onWaterSurface) {
+				if (this.onGround && forward != 0.0F) {
 					if(!this.worldObj.isRemote) {
-						motionY += 0.6;
-						motionX += forward * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
-						motionZ += forward * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
-						motionX += strafing / 2.0F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
-						motionZ += strafing / 2.0F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
+						if(this.ticksOnGround > 4) {
+							motionY += 0.5;
+							motionX += forward / 1.5F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
+							motionZ += forward / 1.5F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
+							motionX += strafing / 2.0F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
+							motionZ += strafing / 2.0F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
+						}
 					}
 				}
 			} else {
-				if(this.motionY < 0.0F)
-					this.motionY *= 0.25F;
-				this.motionY += 0.01F;
+				if(this.motionY < 0.0F) {
+					if(this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.9D), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid()) {
+						this.motionY *= 0.05F;
+					}
+				}
+				if(this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1.1D), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid()) {
+					this.motionY += 0.02F;
+				}
 
 				if(!this.worldObj.isRemote) {
+					if(this.isCollidedHorizontally) {
+						this.motionY += 0.2D;
+						this.strokeTicks = 0;
+					}
+				}
+
+				if(!this.worldObj.isRemote && forward > 0.0F) {
 					if(forward != 0.0F && this.strokeTicks == 0) {
-						motionX += forward / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
-						motionZ += forward / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
+						motionX += forward * 1F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
+						motionZ += forward * 1F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
+						motionX += strafing / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
+						motionZ += strafing / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
 						this.strokeTicks = 20;
 					}
 				}
+			}
+			if(!this.worldObj.isRemote && forward > 0.0F) {
+				motionX += 0.05D * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
+				motionZ += 0.05D * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 			}
 
 			super.moveEntityWithHeading(0, 0);
@@ -201,5 +217,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			this.jumpMovementFactor = 0.02F;
 			super.moveEntityWithHeading(strafing, forward);
 		}
+	}
+
+	@Override
+	public double getMountedYOffset() {
+		boolean onWaterSurface = this.inWater || this.worldObj.getBlock(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1), MathHelper.floor_double(this.posZ)).getMaterial().isLiquid();
+		return super.getMountedYOffset() + (onWaterSurface ? -0.6D + (this.swimmingAnim.getAnimationFraction(1) > 0 ? -0.2D : 0) : 0.0D) + 0.2D + (this.leapingAnim.getAnimationFraction(1) > 0 ? -this.getLeapProgress(1) * 0.4D : 0.0D);
 	}
 }

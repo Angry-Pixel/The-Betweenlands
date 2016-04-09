@@ -302,55 +302,56 @@ public class ModelGiantToad extends MowzieModelBase {
 			torso1.rotateAngleX += 0.4;
 			torso2.rotateAngleX -= 0.3;
 			head1.rotateAngleX += -0.1;
-			
+
 			leftback1.rotateAngleX += 0.4;
 			rightback1.rotateAngleX += 0.4;
-			
+
 			leftfront1.rotateAngleX -= 0.5;
 			rightfront1.rotateAngleX -= 0.5;
 			leftfront2.rotateAngleY -= 0.4;
 			rightfront2.rotateAngleY += 0.4;
 		}
-		
+
 		//Swimming
-		torso1.rotateAngleX += 0.3 * swimProgress;
-		torso2.rotateAngleX -= 0.2 * swimProgress;
-		
-		leftback1.rotateAngleY += -0.8F * swimProgress;
-		rightback1.rotateAngleY += 0.8F * swimProgress;
-		leftback1.rotateAngleX += 2.1 * swimProgress;
-		rightback1.rotateAngleX += 2.1 * swimProgress;
-		leftback1.rotateAngleZ -= 0.2 * swimProgress;
-		rightback1.rotateAngleZ += 0.2 * swimProgress;
-		leftback3.rotateAngleX -= 2 * swimProgress;
-		rightback3.rotateAngleX -= 2 * swimProgress;
-		leftback2.rotateAngleX += 2 * swimProgress;
-		rightback2.rotateAngleX += 2 * swimProgress;
+		if(swimProgress > leapingProgress) {
+			torso1.rotateAngleX += 0.3 * swimProgress;
+			torso2.rotateAngleX -= 0.2 * swimProgress;
 
-		leftfront1.rotateAngleX += 0.8*2 * swimProgress;
-		leftfront1.rotateAngleZ -= 0.4*2 * swimProgress;
-		leftfront2.rotateAngleY -= 1.8*2 * swimProgress;
-		rightfront1.rotateAngleX += 0.8*2 * swimProgress;
-		rightfront1.rotateAngleZ += 0.4*2 * swimProgress;
-		rightfront2.rotateAngleY += 1.8*2 * swimProgress;
+			leftback1.rotateAngleY += -0.8F * swimProgress;
+			rightback1.rotateAngleY += 0.8F * swimProgress;
+			leftback1.rotateAngleX += 2.1 * swimProgress;
+			rightback1.rotateAngleX += 2.1 * swimProgress;
+			leftback1.rotateAngleZ -= 0.2 * swimProgress;
+			rightback1.rotateAngleZ += 0.2 * swimProgress;
+			leftback3.rotateAngleX -= 2 * swimProgress;
+			rightback3.rotateAngleX -= 2 * swimProgress;
+			leftback2.rotateAngleX += 2 * swimProgress;
+			rightback2.rotateAngleX += 2 * swimProgress;
 
+			leftfront1.rotateAngleX += 0.8*2 * swimProgress;
+			leftfront1.rotateAngleZ -= 0.4*2 * swimProgress;
+			leftfront2.rotateAngleY -= 1.8*2 * swimProgress;
+			rightfront1.rotateAngleX += 0.8*2 * swimProgress;
+			rightfront1.rotateAngleZ += 0.4*2 * swimProgress;
+			rightfront2.rotateAngleY += 1.8*2 * swimProgress;
+		} else {
+			//Jumping
+			torso1.rotateAngleX += 0.3 * leapingProgress;
+			torso2.rotateAngleX -= 0.2 * leapingProgress;
 
-		//Jumping
-		torso1.rotateAngleX += 0.3 * leapingProgress;
-		torso2.rotateAngleX -= 0.2 * leapingProgress;
+			leftback1.rotateAngleX += 2.3 * leapingProgress;
+			rightback1.rotateAngleX += 2.3 * leapingProgress;
+			leftback1.rotateAngleZ -= 0.2 * leapingProgress;
+			rightback1.rotateAngleZ += 0.2 * leapingProgress;
+			leftback3.rotateAngleX -= 2 * leapingProgress;
+			rightback3.rotateAngleX -= 2 * leapingProgress;
+			leftback2.rotateAngleX += 2 * leapingProgress;
+			rightback2.rotateAngleX += 2 * leapingProgress;
 
-		leftback1.rotateAngleX += 2.3 * leapingProgress;
-		rightback1.rotateAngleX += 2.3 * leapingProgress;
-		leftback1.rotateAngleZ -= 0.2 * leapingProgress;
-		rightback1.rotateAngleZ += 0.2 * leapingProgress;
-		leftback3.rotateAngleX -= 2 * leapingProgress;
-		rightback3.rotateAngleX -= 2 * leapingProgress;
-		leftback2.rotateAngleX += 2 * leapingProgress;
-		rightback2.rotateAngleX += 2 * leapingProgress;
-
-		leftfront1.rotateAngleX -= 0.8 * leapingProgress;
-		rightfront1.rotateAngleX -= 0.8 * leapingProgress;
-		leftfront2.rotateAngleZ -= 0.8 * leapingProgress;
-		rightfront2.rotateAngleZ += 0.8 * leapingProgress;
+			leftfront1.rotateAngleX -= 0.8 * leapingProgress;
+			rightfront1.rotateAngleX -= 0.8 * leapingProgress;
+			leftfront2.rotateAngleZ -= 0.8 * leapingProgress;
+			rightfront2.rotateAngleZ += 0.8 * leapingProgress;
+		}
 	}
 }
