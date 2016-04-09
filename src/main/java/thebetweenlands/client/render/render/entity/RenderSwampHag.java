@@ -50,5 +50,4 @@ public class RenderSwampHag extends RenderLiving<EntitySwampHag> {
     protected int shouldRenderPass(EntityLivingBase entity, int pass, float partialTickTime) {
         return setSwampHagEyeBrightness((EntitySwampHag) entity, pass, partialTickTime);
     }
-
 }
