@@ -1,6 +1,5 @@
 package thebetweenlands.entities;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.TheBetweenlands;
@@ -12,6 +11,7 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityFrog;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -46,6 +46,7 @@ import thebetweenlands.entities.projectiles.EntityThrownTarminion;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
 import thebetweenlands.entities.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.items.misc.ItemSpawnEggs;
+import cpw.mods.fml.common.registry.EntityRegistry;
 
 public class BLEntityRegistry
 {
@@ -100,6 +101,7 @@ public class BLEntityRegistry
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
 		registerEntity(47, EntityVolarkite.class, "volarkite", 64, 20, true);
 		registerEntity(48, EntityTargetDistraction.class, "targetDistraction", 0, Integer.MAX_VALUE, false);
+		registerEntity(49, EntityFrog.class, "frog", 0x283320, 0x827856);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

@@ -5,13 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -84,6 +77,7 @@ import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderEntityVolarkite;
 import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderFrog;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderLeech;
@@ -181,6 +175,7 @@ import thebetweenlands.entities.mobs.EntityDarkDruid;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityFrog;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -289,6 +284,14 @@ import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
+
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -402,6 +405,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, new RenderMummyArm());
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, new RenderShockwaveBlock());
 		RenderingRegistry.registerEntityRenderingHandler(EntityVolarkite.class, new RenderEntityVolarkite());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFrog());
 
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
