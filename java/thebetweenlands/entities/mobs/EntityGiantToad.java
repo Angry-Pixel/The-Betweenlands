@@ -90,7 +90,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		prevOnGround = onGround;
+
+		//Extend AABB so that the player doesn't suffocate in blocks
+		if(this.riddenByEntity != null) {
+			this.boundingBox.maxY = this.boundingBox.minY + this.height + this.riddenByEntity.height - 1F;
+		}
 		super.onUpdate();
+		this.boundingBox.maxY = this.boundingBox.minY + this.height;
+
 		if(this.onGround) {
 			this.ticksOnGround++;
 		} else {
@@ -121,8 +128,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 							float angle = (float) (Math.atan2(z, x));
 							float distance = (float) Math.sqrt(x * x + z * z);
 							if (distance > 1) {
-								motionX += 0.6F * MathHelper.cos(angle);
-								motionZ += 0.6F * MathHelper.sin(angle);
+								motionX += Math.min(distance, 2.0F) / 2.0F * 0.6F * MathHelper.cos(angle);
+								motionZ += Math.min(distance, 2.0F) / 2.0F * 0.6F * MathHelper.sin(angle);
 								this.strokeTicks = 60;
 							}
 						}
