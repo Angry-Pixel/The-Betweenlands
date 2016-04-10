@@ -23,4 +23,9 @@ public class AspectFergalaz implements IAspectType {
 	public int getIconIndex() {
 		return 6;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF29B539;
+	}
 }

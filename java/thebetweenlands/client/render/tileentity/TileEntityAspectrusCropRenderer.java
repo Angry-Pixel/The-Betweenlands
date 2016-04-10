@@ -18,6 +18,7 @@ import thebetweenlands.client.model.block.crops.ModelAspectrusCrop3;
 import thebetweenlands.client.model.block.crops.ModelAspectrusCrop4;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
+import thebetweenlands.utils.ColorUtils;
 import thebetweenlands.utils.LightingUtil;
 
 public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
@@ -98,9 +99,6 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 		int rndRot = rnd.nextInt(4);
 
 		Aspect aspect = cropTile.getAspect();
-		Random colorRnd = new Random();
-		if(aspect != null)
-			colorRnd.setSeed(aspect.type.getName().hashCode());
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
@@ -152,7 +150,8 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 			break;
 		case 4:
 			if(aspect != null) {
-				GL11.glColor4f(colorRnd.nextFloat(), colorRnd.nextFloat(), colorRnd.nextFloat(), 0.65F);
+				float[] rgba = ColorUtils.getRGBA(aspect.getType().getColor());
+				GL11.glColor4f(rgba[0], rgba[1], rgba[2], 0.65F);
 				LightingUtil.INSTANCE.setLighting(255);
 			}
 			MODEL3.renderFruitAspects();
@@ -165,7 +164,8 @@ public class TileEntityAspectrusCropRenderer extends TileEntitySpecialRenderer {
 		case 5:
 		default:
 			if(aspect != null) {
-				GL11.glColor4f(colorRnd.nextFloat(), colorRnd.nextFloat(), colorRnd.nextFloat(), 0.65F);
+				float[] rgba = ColorUtils.getRGBA(aspect.getType().getColor());
+				GL11.glColor4f(rgba[0], rgba[1], rgba[2], 0.65F);
 				LightingUtil.INSTANCE.setLighting(255);
 			}
 			MODEL4.renderFruitAspects();

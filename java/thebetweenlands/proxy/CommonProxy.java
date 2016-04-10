@@ -40,12 +40,12 @@ import thebetweenlands.items.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.items.equipment.ItemRingOfFlight;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityAspectVial;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
 import thebetweenlands.tileentities.TileEntityBLFurnace;
 import thebetweenlands.tileentities.TileEntityBLSign;
-import thebetweenlands.tileentities.TileEntityBush;
 import thebetweenlands.tileentities.TileEntityCompostBin;
 import thebetweenlands.tileentities.TileEntityDruidAltar;
 import thebetweenlands.tileentities.TileEntityGeckoCage;
@@ -104,7 +104,6 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityBLDualFurnace.class, "dualFurnaceBL");
 		registerTileEntity(TileEntityBLCraftingTable.class, "crfTableBL");
 		registerTileEntity(TileEntityWisp.class, "wisp");
-		registerTileEntity(TileEntityBush.class, "weedWoodBush");
 		registerTileEntity(TileEntityAnimator.class, "animator");
 		registerTileEntity(TileEntityPurifier.class, "purifier");
 		registerTileEntity(TileEntityCompostBin.class, "compostBin");
@@ -127,6 +126,7 @@ public class CommonProxy implements IGuiHandler {
 		registerTileEntity(TileEntityPossessedBlock.class, "possessedBlock");
 		registerTileEntity(TileEntitySpikeTrap.class, "spikeTrap");
 		registerTileEntity(TileEntityItemCage.class, "itemCage");
+		registerTileEntity(TileEntityAspectVial.class, "aspectVialBlock");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

@@ -23,4 +23,9 @@ public class AspectByariis implements IAspectType {
 	public int getIconIndex() {
 		return 2;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF293828;
+	}
 }

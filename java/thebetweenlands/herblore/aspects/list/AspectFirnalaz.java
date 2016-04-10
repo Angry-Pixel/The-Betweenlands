@@ -23,4 +23,9 @@ public class AspectFirnalaz implements IAspectType {
 	public int getIconIndex() {
 		return 7;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFF7F00;
+	}
 }

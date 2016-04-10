@@ -23,4 +23,9 @@ public class AspectYeowynn implements IAspectType {
 	public int getIconIndex() {
 		return 11;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFC0069;
+	}
 }

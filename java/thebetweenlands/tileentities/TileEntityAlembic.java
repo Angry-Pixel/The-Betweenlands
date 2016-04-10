@@ -206,8 +206,8 @@ public class TileEntityAlembic extends TileEntity {
 			}
 		}
 		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
-		float relStrengthAmount = strengthAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
-		float relDurationAmount = durationAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
+		float relStrengthAmount = strengthAspectAmount / Amounts.MAX_VIAL_ASPECT_AMOUNT;
+		float relDurationAmount = durationAspectAmount / Amounts.MAX_VIAL_ASPECT_AMOUNT;
 		this.producableStrength = MathHelper.floor_float(relStrengthAmount * 4.0F);
 		if(isPositive) {
 			this.producableDuration = recipe.baseDuration + MathHelper.floor_float(recipe.durationModifier * relDurationAmount * 2.0F);

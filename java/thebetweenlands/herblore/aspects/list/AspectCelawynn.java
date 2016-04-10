@@ -23,4 +23,9 @@ public class AspectCelawynn implements IAspectType {
 	public int getIconIndex() {
 		return 4;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF4ACE48;
+	}
 }

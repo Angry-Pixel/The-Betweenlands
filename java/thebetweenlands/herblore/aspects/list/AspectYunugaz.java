@@ -22,4 +22,9 @@ public class AspectYunugaz implements IAspectType {
 	public int getIconIndex() {
 		return 13;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF00FFBB;
+	}
 }

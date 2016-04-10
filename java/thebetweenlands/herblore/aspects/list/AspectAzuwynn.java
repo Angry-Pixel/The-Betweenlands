@@ -23,4 +23,9 @@ public class AspectAzuwynn implements IAspectType {
 	public int getIconIndex() {
 		return 1;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFE01414;
+	}
 }

@@ -9,6 +9,7 @@ import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.utils.AdvancedRecipeHelper;
 
 public class RecipeImprovedRubberBoots implements IRecipe {
 	/**
@@ -57,9 +58,7 @@ public class RecipeImprovedRubberBoots implements IRecipe {
 		ItemStack newVial = new ItemStack(BLItemRegistry.aspectVial, vial.stackSize, vial.getItemDamage());
 		Aspect newVialAspect = new Aspect(vialAspect.type, vialAspect.amount - 0.2F);
 		AspectManager.addDynamicAspects(newVial, newVialAspect);
-		if(vial.stackTagCompound == null)
-			vial.stackTagCompound = new NBTTagCompound();
-		vial.stackTagCompound.setTag("containerItem", newVial.writeToNBT(new NBTTagCompound()));
+		AdvancedRecipeHelper.setContainerItem(vial, newVial, "rubberBoots");
 		return new ItemStack(BLItemRegistry.rubberBootsImproved);
 	}
 

@@ -23,4 +23,9 @@ public class AspectByrginaz implements IAspectType {
 	public int getIconIndex() {
 		return 3;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF1EBBDB;
+	}
 }

@@ -6,9 +6,12 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
+import thebetweenlands.blocks.BLBlockRegistry;
 
 public class ItemDentrothystVial extends Item {
 	@SideOnly(Side.CLIENT)
@@ -87,5 +90,24 @@ public class ItemDentrothystVial extends Item {
 	 */
 	public ItemStack createStack(int vialType, int size) {
 		return new ItemStack(this, size, vialType);
+	}
+
+	@Override
+	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+		return world.getBlock(x, y, z) == BLBlockRegistry.vial;
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if(player.isSneaking() && side == 1) {
+			if(world.isAirBlock(x, y + 1, z)) {
+				if(!world.isRemote) {
+					ItemAspectVial.placeAspectVial(world, x, y + 1, z, stack.getItemDamage() == 2 ? 1 : 0, null);
+					stack.stackSize--;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }

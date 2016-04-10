@@ -23,4 +23,9 @@ public class AspectYihinren implements IAspectType {
 	public int getIconIndex() {
 		return 12;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFFFFFF;
+	}
 }

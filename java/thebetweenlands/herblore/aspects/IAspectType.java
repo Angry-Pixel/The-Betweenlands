@@ -10,4 +10,6 @@ public interface IAspectType {
 	String getDescription();
 	
 	int getIconIndex();
+	
+	int getColor();
 }

@@ -23,4 +23,9 @@ public class AspectFreiwynn implements IAspectType {
 	public int getIconIndex() {
 		return 8;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFC1D8F4;
+	}
 }

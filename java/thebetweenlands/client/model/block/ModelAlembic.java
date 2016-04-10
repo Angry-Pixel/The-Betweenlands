@@ -12,8 +12,8 @@ public class ModelAlembic extends ModelBase {
 	ModelRenderer alembic_base;
 	ModelRenderer alembic_liquid;
 	ModelRenderer stand;
-	ModelRenderer davids_jar;
-	ModelRenderer jar_liquid;
+	public ModelRenderer davids_jar;
+	public ModelRenderer jar_liquid;
 	ModelRenderer alembic_midpiece;
 	ModelRenderer alembic_top1;
 	ModelRenderer alembic_top2;

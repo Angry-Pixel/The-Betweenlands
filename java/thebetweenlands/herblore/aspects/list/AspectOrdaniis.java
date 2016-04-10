@@ -23,4 +23,9 @@ public class AspectOrdaniis implements IAspectType {
 	public int getIconIndex() {
 		return 10;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF64EF99;
+	}
 }

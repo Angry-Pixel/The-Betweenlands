@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.container.BlockAlembic;
 import thebetweenlands.blocks.container.BlockAnimator;
+import thebetweenlands.blocks.container.BlockAspectVial;
 import thebetweenlands.blocks.container.BlockBLDualFurnace;
 import thebetweenlands.blocks.container.BlockBLFurnace;
 import thebetweenlands.blocks.container.BlockBLSign;
@@ -422,6 +423,7 @@ public class BLBlockRegistry {
 	public static final Block compostBin = new BlockCompostBin();
 	public static final Block alembic = new BlockAlembic();
 	public static final Block infuser = new BlockInfuser();
+	public static final Block vial = new BlockAspectVial();
 	public static final Block pestleAndMortar = new BlockPestleAndMortar();
 	public static final Block mudBrick = new BlockBLGenericDeco("mudBrick", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone);
 	public static final Block angryBetweenstone = new BlockBLGenericDeco("angryBetweenstone", Material.rock).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundTypeStone).setLightLevel(0.875F);

@@ -23,4 +23,9 @@ public class AspectArmaniis implements IAspectType {
 	public int getIconIndex() {
 		return 0;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFFCC00;
+	}
 }

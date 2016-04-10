@@ -23,4 +23,9 @@ public class AspectDayuniis implements IAspectType {
 	public int getIconIndex() {
 		return 5;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFB148CE;
+	}
 }

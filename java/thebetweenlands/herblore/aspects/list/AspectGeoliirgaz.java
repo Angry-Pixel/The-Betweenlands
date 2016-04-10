@@ -23,4 +23,9 @@ public class AspectGeoliirgaz implements IAspectType {
 	public int getIconIndex() {
 		return 9;
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF222228;
+	}
 }

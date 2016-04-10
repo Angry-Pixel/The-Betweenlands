@@ -12,6 +12,7 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.herblore.ItemAspectVial;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.utils.AdvancedRecipeHelper;
 
 public class RecipeSummonMummy implements IRecipe {
 	/**
@@ -72,9 +73,8 @@ public class RecipeSummonMummy implements IRecipe {
 		ItemStack newVial = new ItemStack(BLItemRegistry.aspectVial, vial.stackSize, vial.getItemDamage());
 		Aspect newVialAspect = new Aspect(vialAspect.type, vialAspect.amount - 1.0F);
 		AspectManager.addDynamicAspects(newVial, newVialAspect);
-		if(vial.stackTagCompound == null)
-			vial.stackTagCompound = new NBTTagCompound();
-		vial.stackTagCompound.setTag("containerItem", newVial.writeToNBT(new NBTTagCompound()));
+		
+		AdvancedRecipeHelper.setContainerItem(vial, newVial, "bait");
 
 		return new ItemStack(BLItemRegistry.summonMummy);
 	}

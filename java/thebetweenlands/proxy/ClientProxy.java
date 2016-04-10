@@ -5,6 +5,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Iterator;
 
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -137,6 +144,7 @@ import thebetweenlands.client.render.item.ItemWeedWoodChestRenderer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tileentity.TileEntityAlembicRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAnimatorRenderer;
+import thebetweenlands.client.render.tileentity.TileEntityAspectVialRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityAspectrusCropRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLSignRenderer;
 import thebetweenlands.client.render.tileentity.TileEntityBLSpawnerRenderer;
@@ -256,6 +264,7 @@ import thebetweenlands.manual.HLEntryRegistry;
 import thebetweenlands.network.handlers.ClientPacketHandler;
 import thebetweenlands.tileentities.TileEntityAlembic;
 import thebetweenlands.tileentities.TileEntityAnimator;
+import thebetweenlands.tileentities.TileEntityAspectVial;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 import thebetweenlands.tileentities.TileEntityBLCraftingTable;
 import thebetweenlands.tileentities.TileEntityBLDualFurnace;
@@ -284,14 +293,6 @@ import thebetweenlands.tileentities.TileEntityWisp;
 import thebetweenlands.tileentities.spawner.TileEntityBLSpawner;
 import thebetweenlands.utils.TimerDebug;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-
-import com.google.common.base.Throwables;
-
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	public enum BlockRenderIDs {
@@ -434,7 +435,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new TileEntityPossessedBlockRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new TileEntitySpikeTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new TileEntityItemCageRenderer());
-
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectVial.class, new TileEntityAspectVialRenderer());
+		
 		// Item Entity Renderer
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.druidAltar), new ItemDruidAltarRenderer());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BLBlockRegistry.animator), new ItemAnimatorRenderer());

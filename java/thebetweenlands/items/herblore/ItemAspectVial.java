@@ -1,7 +1,6 @@
 package thebetweenlands.items.herblore;
 
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
@@ -12,15 +11,18 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectRegistry;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.tileentities.TileEntityAspectVial;
+import thebetweenlands.utils.AdvancedRecipeHelper;
 import thebetweenlands.utils.AtlasIcon;
 import thebetweenlands.utils.ColorUtils;
 
@@ -75,9 +77,8 @@ public class ItemAspectVial extends Item {
 			List<Aspect> aspects = AspectManager.getDynamicAspects(stack);
 			if(aspects.size() > 0) {
 				Aspect aspect = aspects.get(0);
-				Random rnd = new Random();
-				rnd.setSeed(aspect.type.getName().hashCode());
-				return ColorUtils.toHex(rnd.nextFloat(), rnd.nextFloat(), rnd.nextFloat(), 1.0F);
+				float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
+				return ColorUtils.toHex(aspectRGBA[0], aspectRGBA[1], aspectRGBA[2], 1.0F);
 			}
 			return 0xFFFFFFFF;
 		case 2:
@@ -157,10 +158,9 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
-		NBTTagCompound nbt = itemStack.stackTagCompound != null ? itemStack.stackTagCompound : new NBTTagCompound();
-		boolean hasContainerItem = nbt.hasKey("containerItem");
-		ItemStack containerItem = hasContainerItem ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("containerItem")) : null;
-		return containerItem != null ? containerItem : new ItemStack(BLItemRegistry.dentrothystVial, itemStack.stackSize, itemStack.getItemDamage() % 2 == 0 ? 0 : 2);
+		ItemStack containerRubberBoots = AdvancedRecipeHelper.getContainerItem(itemStack, null, "rubberBoots");
+		ItemStack containerBait = AdvancedRecipeHelper.getContainerItem(itemStack, null, "bait");
+		return containerRubberBoots != null ? containerRubberBoots : (containerBait != null ? containerBait : null);
 	}
 
 	@Override
@@ -174,5 +174,39 @@ public class ItemAspectVial extends Item {
 		if(!AspectManager.getDynamicAspects(stack).isEmpty() && AspectManager.getDynamicAspects(stack).get(0).type == AspectRegistry.BYARIIS) {
 			lst.add(StatCollector.translateToLocal("aspectvial.byariis.fuel"));
 		}
+	}
+
+	/**
+	 * Places an aspect vial with the specified aspects in it (can be null)
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param vialType Vial type: 0: green, 1: orange
+	 * @param aspect
+	 */
+	public static void placeAspectVial(World world, int x, int y, int z, int vialType, Aspect aspect) {
+		world.setBlock(x, y, z, BLBlockRegistry.vial, vialType, 2);
+		TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(x, y, z);
+		if(tile != null)
+			tile.setAspect(aspect);
+	}
+
+	@Override
+	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+		return world.getBlock(x, y, z) == BLBlockRegistry.vial;
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+		if(player.isSneaking() && AspectManager.getDynamicAspects(stack).size() == 1 && side == 1) {
+			if(world.isAirBlock(x, y + 1, z)) {
+				if(!world.isRemote) {
+					ItemAspectVial.placeAspectVial(world, x, y + 1, z, stack.getItemDamage(), AspectManager.getDynamicAspects(stack).get(0));
+					stack.stackSize--;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 }
