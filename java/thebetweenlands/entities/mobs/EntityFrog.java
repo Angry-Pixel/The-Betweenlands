@@ -35,7 +35,7 @@ public class EntityFrog extends EntityCreature {
 		this.tasks.addTask(1, new EntityAIWander(this, 0));
 		this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(3, new EntityAILookIdle(this));
-		setSize(0.7F, 0.7F);
+		setSize(0.7F, 0.5F);
 		this.stepHeight = 1.0F;
 	}
 
