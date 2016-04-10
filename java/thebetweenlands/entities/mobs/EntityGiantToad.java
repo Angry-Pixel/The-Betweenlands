@@ -33,6 +33,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private boolean prevOnGround;
 	private ControlledAnimation leapingAnim = new ControlledAnimation(4);
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
+	private ControlledAnimation waterStanceAnim = new ControlledAnimation(4);
 
 	public static final int DW_SWIM_STROKE = 20;
 	public static final int DW_TAMED = 21;
@@ -144,9 +145,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 							float angle = (float) (Math.atan2(z, x));
 							float distance = (float) Math.sqrt(x * x + z * z);
 							if (distance > 1) {
-								motionY += 0.6;
-								motionX += 0.5 * MathHelper.cos(angle);
-								motionZ += 0.5 * MathHelper.sin(angle);
+								motionY += Math.min(distance, 2.0F) / 2.0F * 0.6;
+								motionX += Math.min(distance, 2.0F) / 2.0F * 0.5 * MathHelper.cos(angle);
+								motionZ += Math.min(distance, 2.0F) / 2.0F * 0.5 * MathHelper.sin(angle);
 							}
 						}
 					}
@@ -164,6 +165,13 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		}
 
 		if(this.worldObj.isRemote) {
+			waterStanceAnim.updateTimer();
+			if(this.inWater) {
+				waterStanceAnim.increaseTimer();
+			} else {
+				waterStanceAnim.decreaseTimer();
+			}
+
 			leapingAnim.updateTimer();
 			if (this.inWater || onGround || prevOnGround) {
 				leapingAnim.decreaseTimer();
@@ -195,6 +203,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	public float getSwimProgress(float partialRenderTicks) {
 		return Math.min((1F - (float)Math.pow(1-this.swimmingAnim.getAnimationFraction(partialRenderTicks), 2)) * 2.5F * this.swimmingAnim.getAnimationFraction(partialRenderTicks), 1.0F);
+	}
+
+	public float getWaterStanceProgress(float partialRenderTicks) {
+		return waterStanceAnim.getAnimationProgressSinSqrt(partialRenderTicks);
 	}
 
 	@Override
@@ -236,9 +248,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					} else {
 						this.worldObj.setEntityState(this, (byte)6);
 					}
-					player.getHeldItem().stackSize--;
-					if(player.getHeldItem().stackSize <= 0)
-						player.setCurrentItemOrArmor(0, null);
+					if(!player.capabilities.isCreativeMode) {
+						player.getHeldItem().stackSize--;
+						if(player.getHeldItem().stackSize <= 0)
+							player.setCurrentItemOrArmor(0, null);
+					}
 				}
 				if(this.getHealth() < this.getMaxHealth()){
 					this.worldObj.setEntityState(this, (byte)6);

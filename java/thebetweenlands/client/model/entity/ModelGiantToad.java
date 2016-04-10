@@ -427,19 +427,45 @@ public class ModelGiantToad extends MowzieModelBase {
 		float frame = toad.ticksExisted + partialRenderTicks;
 		float leapingProgress = toad.getLeapProgress(partialRenderTicks);
 		float swimProgress = toad.getSwimProgress(partialRenderTicks);
+		float inWaterProgress = toad.getWaterStanceProgress(partialRenderTicks);
 
-		if(entity.isInWater()) {
-			body_base.rotateAngleX += 0.25;
-			head_base.rotateAngleX -= 0.5;
+		bob(body_base, 0.07f, 0.1f, false, frame, 1);
+		bob(leg_back_left1, 0.07f, -0.1f, false, frame, 1);
+		bob(leg_back_right1, 0.07f, -0.1f, false, frame, 1);
+		bob(leg_front_left1, 0.07f, -0.1f, false, frame, 1);
+		bob(leg_front_right1, 0.07f, -0.1f, false, frame, 1);
 
-			leg_back_left1.rotateAngleX += 0.8;
-			leg_back_right1.rotateAngleX += 0.8;
+		walk(head_base, 0.07f, 0.035f, false, 1, 0, frame, 1);
 
-			leg_front_left1.rotateAngleX -= 0.6;
-			leg_front_right1.rotateAngleX -= 0.6;
-			leg_front_left2.rotateAngleY -= 0.6;
-			leg_front_right2.rotateAngleY += 0.6;
-		}
+		walk(beardthing_left1, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+		walk(beardthing_right1, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+		walk(beardthing_left2, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+		walk(beardthing_right2, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+
+		walk(beardthing_left3, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+		walk(beardthing_right3, 0.07f, -0.15f, false, 1.8f, 0, frame, 1);
+
+		walk(eyebrow_left1, 0.07f, 0.1f, false, 1f, 0, frame, 1);
+		walk(eyebrow_left3, 0.07f, -0.1f, false, 1f, 0, frame, 1);
+		walk(eyebrow_left2, 0.1f, 0.2f, false, 2, 0, frame, 1);
+		bob(eyebrow_left1, 0.07f, 0.2f, false, frame, 1);
+
+		walk(eyebrow_right1, 0.07f, 0.1f, false, 1f, 0, frame, 1);
+		walk(eyebrow_right3, 0.07f, -0.1f, false, 1f, 0, frame, 1);
+		walk(eyebrow_right2, 0.1f, 0.2f, false, 2, 0, frame, 1);
+		bob(eyebrow_right1, 0.07f, 0.2f, false, frame, 1);
+
+		
+		//Water stance
+		bob(body_base, 0.1f, 0.6f * inWaterProgress, false, frame, 1);
+		body_base.rotateAngleX += 0.25 * inWaterProgress;
+		head_base.rotateAngleX -= 0.5 * inWaterProgress;
+		leg_back_left1.rotateAngleX += 0.8 * inWaterProgress;
+		leg_back_right1.rotateAngleX += 0.8 * inWaterProgress;
+		leg_front_left1.rotateAngleX -= 0.6 * inWaterProgress;
+		leg_front_right1.rotateAngleX -= 0.6 * inWaterProgress;
+		leg_front_left2.rotateAngleY -= 0.6 * inWaterProgress;
+		leg_front_right2.rotateAngleY += 0.6 * inWaterProgress;
 
 
 		//Swimming
