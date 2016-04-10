@@ -186,29 +186,22 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		else
 			setSkin(rand.nextInt(5));
 	}
-	/*
-	protected String getJumpingSound() {
-		return null;
-
-	}
 
 	@Override
 	protected String getLivingSound() {
-		return null;
-
+		return "thebetweenlands:frogLiving";
 	}
 
 	@Override
 	protected String getHurtSound() {
-		return null;
-
+		return "thebetweenlands:frogHurt";
 	}
 
 	@Override
 	protected String getDeathSound() {
-		return null;
+		return "thebetweenlands:frogDeath";
 	}
-	 */
+	
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (isBurning())

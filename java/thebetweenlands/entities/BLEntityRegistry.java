@@ -73,7 +73,7 @@ public class BLEntityRegistry
 		registerEntity(18, EntityBLItemFrame.class, "itemFrameBL");
 		registerEntity(19, EntityGecko.class, "gecko", 0xFF8000, 0x22E0B1, 64, 1, true);
 		registerEntity(20, EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
-		registerEntity(21, EntityGiantToad.class, "toad", 0x283320, 0x827856);
+		registerEntity(21, EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
 		//registerEntity(22, EntityMeleeGuardian.class, "meleeGuardian", /*0x283320, 0x827856,*/ 64, 1, true);
 		//registerEntity(23, EntityBerserkerGuardian.class, "berserkerGuardian", /*0x283320, 0x827856,*/ 64, 1, true);
 		registerEntity(24, EntityBlindCaveFish.class, "blindCaveFish", 0xD0D1C2, 0xECEDDF);
@@ -101,7 +101,7 @@ public class BLEntityRegistry
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
 		registerEntity(47, EntityVolarkite.class, "volarkite", 64, 20, true);
 		registerEntity(48, EntityTargetDistraction.class, "targetDistraction", 0, Integer.MAX_VALUE, false);
-		registerEntity(49, EntityFrog.class, "frog", 0x283320, 0x827856, 64, 20, true);
+		registerEntity(49, EntityFrog.class, "frog", 0x559653, 0xC72C2C, 64, 20, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
