@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
@@ -249,6 +250,25 @@ public class GuiOverlay extends Gui {
 					if (duration > 0) {
 						startY -= 12;
 					}
+				}
+
+				//Ridden entity hearts offset
+				Entity ridingEntity = mc.thePlayer.ridingEntity;
+				if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
+					EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
+					int entityHealth = (int)Math.ceil((double)riddenEntity.getHealth());
+					float maxEntityHealth = riddenEntity.getMaxHealth();
+					int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
+					if (maxHealthHearts > 30) {
+						maxHealthHearts = 30;
+					}
+					int guiOffsetY = 0;
+					for (int column = 0; maxHealthHearts > 0; column += 20) {
+						int renderedHearts = Math.min(maxHealthHearts, 10);
+						maxHealthHearts -= renderedHearts;
+						guiOffsetY -= 10;
+					}
+					startY += guiOffsetY + 10;
 				}
 
 				int decayLevel = DecayManager.getDecayLevel(mc.thePlayer);
