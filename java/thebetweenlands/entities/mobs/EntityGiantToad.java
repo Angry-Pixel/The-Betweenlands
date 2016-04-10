@@ -45,7 +45,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	public EntityGiantToad(World worldObj) {
 		super(worldObj);
-		getNavigator().setAvoidsWater(true);
+		this.getNavigator().setCanSwim(true);
+		this.getNavigator().setAvoidsWater(true);
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 0.1D));
 		this.tasks.addTask(2, new EntityAIWander(this, 0));

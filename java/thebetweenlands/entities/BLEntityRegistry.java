@@ -101,7 +101,7 @@ public class BLEntityRegistry
 		registerEntity(46, EntityShockwaveBlock.class, "shockwaveBlock", 64, 20, true);
 		registerEntity(47, EntityVolarkite.class, "volarkite", 64, 20, true);
 		registerEntity(48, EntityTargetDistraction.class, "targetDistraction", 0, Integer.MAX_VALUE, false);
-		registerEntity(49, EntityFrog.class, "frog", 0x283320, 0x827856);
+		registerEntity(49, EntityFrog.class, "frog", 0x283320, 0x827856, 64, 20, true);
 	}
 
 	private static final void registerEntity(int id, Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

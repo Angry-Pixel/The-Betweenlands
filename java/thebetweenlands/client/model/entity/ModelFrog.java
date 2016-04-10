@@ -85,30 +85,66 @@ public class ModelFrog extends ModelBase {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-	
+
 	@Override
 	public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		head.rotateAngleY = rotationYaw / (180F / (float) Math.PI);
-		head.rotateAngleX = rotationPitch / (180F / (float) Math.PI) -0.07435719668865202F;
+		head.rotateAngleX = rotationPitch / (180F / (float) Math.PI) -0.07435719668865202F + (float)Math.sin(entityTickTime / 8.0F) / 15.0F;
 	}
-	
+
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityFrog frog = (EntityFrog)entity;
-		float leapProgress = frog.jumpticks + (frog.jumpticks - frog.prevJumpticks) * partialRenderTicks;
-		if (frog.onGround) {
-			legbackleft1.rotateAngleX = -0.296705972839036F;
-			legbackright1.rotateAngleX = -0.296705972839036F;
-			legbackleft2.rotateAngleX = 0.45378560551852565F;
-			legbackright2.rotateAngleX = 0.45378560551852565F;
-			
-			legfrontleft1.rotateAngleZ = -0.3717860877513886F;
-			legfrontright1.rotateAngleZ = 0.37178999185562134F;
-			legfrontleft2.rotateAngleZ = 0.5948578119277954F;
-			legfrontright2.rotateAngleZ = -0.5948606133460999F;
+		float leapProgress = frog.prevJumpAnimationTicks + (frog.jumpAnimationTicks - frog.prevJumpAnimationTicks) * partialRenderTicks;
+
+		if(!frog.isInWater()) {
+			//Idle animation
+			this.torso.rotateAngleX = -0.55F - (float)(Math.sin((entity.ticksExisted + partialRenderTicks) / 10.0F) + 1) / 35.0F;
+			this.torso.rotationPointY = 19 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 15.0F;
+
+			this.legbackleft1.rotationPointY = 22;
+			this.legbackright1.rotationPointY = 22;
+
+			this.head.rotationPointY = 19;
+			this.legfrontleft1.rotationPointY = 20;
+			this.legfrontleft2.rotationPointY = 20;
+			this.legfrontright1.rotationPointY = 20;
+			this.legfrontright2.rotationPointY = 20;
+
+			this.legbackleft2.rotateAngleX = 0.5F;
+			this.legbackright2.rotateAngleX = 0.5F;
+
+			if(frog.onGround) {
+				legbackleft1.rotateAngleX = -0.296705972839036F;
+				legbackright1.rotateAngleX = -0.296705972839036F;
+				legbackleft2.rotateAngleX = 0.45378560551852565F;
+				legbackright2.rotateAngleX = 0.45378560551852565F;
+
+				legfrontleft1.rotateAngleZ = -0.3717860877513886F;
+				legfrontright1.rotateAngleZ = 0.37178999185562134F;
+				legfrontleft2.rotateAngleZ = 0.5948578119277954F;
+				legfrontright2.rotateAngleZ = -0.5948606133460999F;
+			}
+		} else {
+			//Idle animation
+			this.torso.rotateAngleX = -0.1F - (float)(Math.sin((entity.ticksExisted + partialRenderTicks) / 10.0F) + 1) / 35.0F;
+
+			//Water bobbing animation
+			this.torso.rotationPointY = 19 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legbackleft1.rotationPointY = 21 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legbackright1.rotationPointY = 21 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.head.rotationPointY = 19 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legfrontleft1.rotationPointY = 20 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legfrontleft2.rotationPointY = 20 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legfrontright1.rotationPointY = 20 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+			this.legfrontright2.rotationPointY = 20 + (float)Math.sin((entity.ticksExisted + partialRenderTicks) / 8.0F) / 2.0F;
+
+			this.legbackleft2.rotateAngleX = 0.5F + 0.6F;
+			this.legbackright2.rotateAngleX = 0.5F + 0.6F;
 		}
-		else {
-			if (frog.jumpticks > 0 && frog.jumpticks <= 7) {
+
+		if(!frog.onGround || frog.jumpAnimationTicks > 0) {
+			if(frog.jumpAnimationTicks > 0 && frog.jumpAnimationTicks <= 7) {
 				legbackleft1.rotateAngleX = -0.296705972839036F + 0.15F * leapProgress;
 				legbackright1.rotateAngleX = -0.296705972839036F + 0.15F * leapProgress;
 				legbackleft2.rotateAngleX = 0.45378560551852565F + 0.2F * leapProgress;
@@ -119,7 +155,7 @@ public class ModelFrog extends ModelBase {
 				legfrontleft2.rotateAngleZ = 0.5948578119277954F - 0.15F * leapProgress;
 				legfrontright2.rotateAngleZ = -0.5948606133460999F + 0.15F * leapProgress;
 			}
-			if (frog.jumpticks > 7 && frog.jumpticks <= 14) {
+			if(frog.jumpAnimationTicks > 7 && frog.jumpAnimationTicks <= 14) {
 				legbackleft1.rotateAngleX = -0.296705972839036F + 1.05F - 0.075F * leapProgress;
 				legbackright1.rotateAngleX = -0.296705972839036F + 1.05F - 0.075F * leapProgress;
 				legbackleft2.rotateAngleX = 0.45378560551852565F + 1.4F - 0.1F * leapProgress;
@@ -132,5 +168,4 @@ public class ModelFrog extends ModelBase {
 			}
 		}
 	}
-
 }
