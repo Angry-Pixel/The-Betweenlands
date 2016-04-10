@@ -308,7 +308,7 @@ public class BLItemRegistry {
 
 	private static void initCreativeTabs() {
 		BLCreativeTabs.items.setTab(lore, net, rope, weedwoodRowboat, volarkite, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem,
-				blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, /*frogLegsRaw, frogLegsCooked,*/ snailFleshRaw,
+				blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, /*krakenTentacle, krakenCalamari,*/ middleFruit, /*mincePie,*/ weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, 
 				marshmallowPink, weedwoodBucket, weedwoodBucketStagnantWater, weedwoodBucketWater, weedwoodBucketTar, lifeCrystal, gertsDonut, 
