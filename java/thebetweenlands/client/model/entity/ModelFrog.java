@@ -87,6 +87,12 @@ public class ModelFrog extends ModelBase {
 	}
 	
 	@Override
+	public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+		head.rotateAngleY = rotationYaw / (180F / (float) Math.PI);
+		head.rotateAngleX = rotationPitch / (180F / (float) Math.PI) -0.07435719668865202F;
+	}
+	
+	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityFrog frog = (EntityFrog)entity;
 		float leapProgress = frog.jumpticks + (frog.jumpticks - frog.prevJumpticks) * partialRenderTicks;
