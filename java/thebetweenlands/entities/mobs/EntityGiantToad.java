@@ -8,8 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
@@ -41,8 +44,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public EntityGiantToad(World worldObj) {
 		super(worldObj);
 		getNavigator().setAvoidsWater(true);
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(5, new EntityAIWander(this, 0));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIPanic(this, 0.1D));
+		this.tasks.addTask(2, new EntityAIWander(this, 0));
+		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		this.tasks.addTask(4, new EntityAILookIdle(this));
 		this.setSize(1.6F, 1.5F);
 	}
 
@@ -120,45 +126,83 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			PathEntity path = getNavigator().getPath();
 			if (path != null && !path.isFinished() && !this.isMovementBlocked()) {
 				if(this.inWater) {
-					if(this.strokeTicks == 0) {
-						int index = path.getCurrentPathIndex();
-						if (index < path.getCurrentPathLength()) {
-							PathPoint nextHopSpot = path.getPathPointFromIndex(index);
-							float x = (float) (nextHopSpot.xCoord - posX);
-							float z = (float) (nextHopSpot.zCoord - posZ);
-							float angle = (float) (Math.atan2(z, x));
-							float distance = (float) Math.sqrt(x * x + z * z);
-							if (distance > 1) {
-								motionX += Math.min(distance, 2.0F) / 2.0F * 0.6F * MathHelper.cos(angle);
-								motionZ += Math.min(distance, 2.0F) / 2.0F * 0.6F * MathHelper.sin(angle);
-								this.strokeTicks = 60;
+					int index = path.getCurrentPathIndex();
+					if (index < path.getCurrentPathLength()) {
+						PathPoint nextHopSpot = path.getPathPointFromIndex(index);
+						float x = (float) (nextHopSpot.xCoord - posX);
+						float z = (float) (nextHopSpot.zCoord - posZ);
+						float angle = (float) (Math.atan2(z, x));
+						float distance = (float) Math.sqrt(x * x + z * z);
+						if (distance > 1) {
+							if(this.strokeTicks == 0) {
+								double speedMultiplier = (Math.min(distance, 2.0F) / 2.0F * 0.8F + 0.2F);
+								motionX += speedMultiplier * 0.8F * MathHelper.cos(angle);
+								motionZ += speedMultiplier * 0.8F * MathHelper.sin(angle);
+								this.worldObj.setEntityState(this, (byte)8);
+								this.strokeTicks = 40;
+							} else if(this.isCollidedHorizontally) {
+								motionX += 0.01 * MathHelper.cos(angle);
+								motionZ += 0.01 * MathHelper.sin(angle);
 							}
 						}
 					}
 				} else if(onGround) {
-					if (this.ticksOnGround > 20) {
-						int index = path.getCurrentPathIndex();
-						if (index < path.getCurrentPathLength()) {
-							PathPoint nextHopSpot = path.getPathPointFromIndex(index);
-							float x = (float) (nextHopSpot.xCoord - posX);
-							float z = (float) (nextHopSpot.zCoord - posZ);
-							float angle = (float) (Math.atan2(z, x));
-							float distance = (float) Math.sqrt(x * x + z * z);
-							if (distance > 1) {
-								motionY += Math.min(distance, 2.0F) / 2.0F * 0.6;
-								motionX += Math.min(distance, 2.0F) / 2.0F * 0.5 * MathHelper.cos(angle);
-								motionZ += Math.min(distance, 2.0F) / 2.0F * 0.5 * MathHelper.sin(angle);
+					int index = path.getCurrentPathIndex();
+					if (index < path.getCurrentPathLength()) {
+						PathPoint nextHopSpot = path.getPathPointFromIndex(index);
+						float x = (float) (nextHopSpot.xCoord - posX);
+						float z = (float) (nextHopSpot.zCoord - posZ);
+						float angle = (float) (Math.atan2(z, x));
+						float distance = (float) Math.sqrt(x * x + z * z);
+						if (distance > 1) {
+							if (this.ticksOnGround > 20) {
+								double speedMultiplier = (Math.min(distance, 2.0F) / 2.0F * 0.8F + 0.2F);
+								motionY += speedMultiplier * 0.6;
+								motionX += speedMultiplier * 0.5 * MathHelper.cos(angle);
+								motionZ += speedMultiplier * 0.5 * MathHelper.sin(angle);
+							} else if(this.isCollidedHorizontally) {
+								motionX += 0.01 * MathHelper.cos(angle);
+								motionZ += 0.01 * MathHelper.sin(angle);
 							}
 						}
 					}
 				}
 			}
 			if(this.riddenByEntity != null) {
-				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.2D, 0.2D, 0.2D));
+				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.7D, 0.7D, 0.7D));
+				EntityLivingBase closestTarget = null;
+				float lastAngDiff = 0.0F;
 				for(EntityLivingBase target : targets) {
 					if(target.getAITarget() == this.riddenByEntity || (this.riddenByEntity instanceof EntityLivingBase && ((EntityLivingBase)this.riddenByEntity).getAITarget() == target || ((EntityLivingBase)this.riddenByEntity).getAITarget() == target)) {
-						DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, this.riddenByEntity);
-						target.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
+						float x = (float) (target.posX - posX);
+						float z = (float) (target.posZ - posZ);
+						float angle = (float) (Math.atan2(z, x));
+						float angDiff = (float)Math.abs(this.rotationYaw % 360.0F - Math.toDegrees(angle) % 360.0F + 90) % 360.0F;
+						//Only attack mobs in front of the toad (+-50°)
+						if(angDiff <= 50 && (angDiff < lastAngDiff || closestTarget == null)) {
+							closestTarget = target;
+							lastAngDiff = angDiff;
+						}
+					}
+				}
+				if(closestTarget != null) {
+					DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, this.riddenByEntity);
+					float attackDamage = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+					if(closestTarget.attackEntityFrom(damageSource, attackDamage)) {
+						float x = (float) (closestTarget.posX - posX);
+						float z = (float) (closestTarget.posZ - posZ);
+						if(this.onGround || (this.inWater && this.strokeTicks == 0)) {
+							float angle = (float) (Math.atan2(z, x));
+							if(!this.inWater)
+								motionY += 0.4;
+							motionX += 0.5 * MathHelper.cos(angle);
+							motionZ += 0.5 * MathHelper.sin(angle);
+							if(this.inWater) {
+								this.strokeTicks = 20;
+								this.worldObj.setEntityState(this, (byte)8);
+							}
+						}
+						closestTarget.knockBack(this, attackDamage, -x, -z);
 					}
 				}
 			}
@@ -181,10 +225,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 			this.swimmingAnim.updateTimer();
 			if(this.dataWatcher.getWatchableObjectByte(DW_SWIM_STROKE) == 1) {
-				this.strokeTicks++;
-				if(this.strokeTicks > 20) {
-					this.strokeTicks = 0;
-				}
+				if(this.strokeTicks < 20)
+					this.strokeTicks++;
 			} else {
 				this.strokeTicks = 0;
 			}
@@ -330,11 +372,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 				if(!this.worldObj.isRemote && forward > 0.0F) {
 					if(forward != 0.0F && this.strokeTicks == 0) {
-						this.worldObj.setEntityState(this, (byte)8);
 						motionX += forward / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
 						motionZ += forward / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 						motionX += strafing / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
 						motionZ += strafing / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
+						this.worldObj.setEntityState(this, (byte)8);
 						this.strokeTicks = 20;
 					}
 				}

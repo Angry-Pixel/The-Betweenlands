@@ -3,6 +3,7 @@ package thebetweenlands.client.model.entity;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import thebetweenlands.client.model.AdvancedModelRenderer;
 import thebetweenlands.client.model.MowzieModelBase;
 import thebetweenlands.client.model.MowzieModelRenderer;
 import thebetweenlands.entities.mobs.EntityGiantToad;
@@ -28,7 +29,7 @@ public class ModelGiantToad extends MowzieModelBase {
 	public MowzieModelRenderer eyebrow_right1;
 	public MowzieModelRenderer beardthing_left1;
 	public MowzieModelRenderer beardthing_right1;
-	public MowzieModelRenderer snout2;
+	public AdvancedModelRenderer snout2;
 	public MowzieModelRenderer beardthing_left3;
 	public MowzieModelRenderer beardthing_right3;
 	public MowzieModelRenderer eyebrow_left2;
@@ -103,7 +104,7 @@ public class ModelGiantToad extends MowzieModelBase {
 		this.sexy_toad_butt.setRotationPoint(0.0F, -2.0F, 16.0F);
 		this.sexy_toad_butt.addBox(-7.0F, 0.0F, 0.0F, 14, 10, 6, 0.0F);
 		this.setRotateAngle(sexy_toad_butt, -0.5009094953223726F, 0.0F, 0.0F);
-		this.snout2 = new MowzieModelRenderer(this, 73, 29);
+		this.snout2 = new AdvancedModelRenderer(this, 73, 29);
 		this.snout2.setRotationPoint(0.0F, 0.0F, -6.0F);
 		this.snout2.addBox(-5.0F, 0.0F, -5.0F, 10, 5, 5, 0.0F);
 		this.setRotateAngle(snout2, 0.5918411493512771F, 0.0F, 0.0F);
@@ -429,6 +430,10 @@ public class ModelGiantToad extends MowzieModelBase {
 		float swimProgress = toad.getSwimProgress(partialRenderTicks);
 		float inWaterProgress = toad.getWaterStanceProgress(partialRenderTicks);
 
+		//Fixes some z-fighting
+		snout2.setScale(0.998F);
+
+		//Idle animation
 		bob(body_base, 0.07f, 0.1f, false, frame, 1);
 		bob(leg_back_left1, 0.07f, -0.1f, false, frame, 1);
 		bob(leg_back_right1, 0.07f, -0.1f, false, frame, 1);
@@ -455,11 +460,12 @@ public class ModelGiantToad extends MowzieModelBase {
 		walk(eyebrow_right2, 0.1f, 0.2f, false, 2, 0, frame, 1);
 		bob(eyebrow_right1, 0.07f, 0.2f, false, frame, 1);
 
-		
+
 		//Water stance
 		bob(body_base, 0.1f, 0.6f * inWaterProgress, false, frame, 1);
 		body_base.rotateAngleX += 0.25 * inWaterProgress;
-		head_base.rotateAngleX -= 0.5 * inWaterProgress;
+		head_base.rotateAngleX -= 0.4 * inWaterProgress;
+		head_base.rotationPointZ += 2.5F * inWaterProgress;
 		leg_back_left1.rotateAngleX += 0.8 * inWaterProgress;
 		leg_back_right1.rotateAngleX += 0.8 * inWaterProgress;
 		leg_front_left1.rotateAngleX -= 0.6 * inWaterProgress;
@@ -498,7 +504,7 @@ public class ModelGiantToad extends MowzieModelBase {
 			foot_front_right1.rotateAngleZ += 1.5 * swimProgress;
 		} else {
 			//Jumping
-			this.body_base.rotateAngleX += 0.2 * leapingProgress;
+			body_base.rotateAngleX += 0.2 * leapingProgress;
 
 
 			leg_back_left1.rotateAngleX += 2.3 * leapingProgress;
