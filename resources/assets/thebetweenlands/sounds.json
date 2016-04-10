@@ -558,6 +558,29 @@
 			"giantToadDeath"
 		]
 	},
+	"frogLiving": {
+		"category": "hostile",
+		"sounds": [
+			"frogLiving1",
+			"frogLiving2",
+			"frogLiving3",
+			"frogLiving4"
+		]
+	},
+	"frogHurt": {
+		"category": "hostile",
+		"sounds": [
+			"frogHurt1",
+			"frogHurt2",
+			"frogHurt3"
+		]
+	},
+	"frogDeath": {
+		"category": "hostile",
+		"sounds": [
+			"frogDeath"
+		]
+	},
 	"termiteLiving": {
 		"category": "hostile",
 		"sounds": [
