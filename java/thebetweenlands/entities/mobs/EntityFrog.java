@@ -12,7 +12,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.BLItemRegistry;
@@ -50,6 +53,13 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	protected boolean isAIEnabled() {
 		return true;
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(3.0);
+		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3);
 	}
 
 	@Override
@@ -139,15 +149,19 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-	}
-
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(3.0);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3);
+	public void onCollideWithPlayer(EntityPlayer player) {
+		super.onCollideWithPlayer(player);
+		byte duration = 0;
+		if(getSkin() == 4) {
+			if (!worldObj.isRemote && player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY && player.boundingBox.maxX >= boundingBox.minX && player.boundingBox.minX <= boundingBox.maxX && player.boundingBox.maxZ >= boundingBox.minZ && player.boundingBox.minZ <= boundingBox.maxZ) {
+				if (worldObj.difficultySetting == EnumDifficulty.NORMAL)
+					duration = 5;
+				else if (worldObj.difficultySetting == EnumDifficulty.HARD)
+				duration = 10;
+				if (duration > 0)
+					player.addPotionEffect(new PotionEffect(Potion.poison.id, duration * 20, 0));
+			}
+		}
 	}
 
 	public int getSkin() {
