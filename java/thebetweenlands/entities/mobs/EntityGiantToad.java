@@ -137,7 +137,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 						float distance = (float) Math.sqrt(x * x + z * z);
 						if (distance > 1) {
 							if(this.strokeTicks == 0) {
-								double speedMultiplier = (Math.min(distance, 2.0F) / 2.0F * 0.8F + 0.2F);
+								double speedMultiplier = (Math.min(distance, 4.0F) / 4.0F * 0.8F + 0.2F);
 								motionX += speedMultiplier * 0.8F * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.8F * MathHelper.sin(angle);
 								this.worldObj.setEntityState(this, (byte)8);
