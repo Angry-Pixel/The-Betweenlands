@@ -816,6 +816,7 @@ entity.thebetweenlands.chiromaw.name=Chiromaw
 entity.thebetweenlands.pyrad.name=Pyrad
 entity.thebetweenlands.pyradFlame.name=Pyrad Flame
 entity.thebetweenlands.shockwaveBlock.name=ShockWave Block
+entity.thebetweenlands.frog.name=Frog
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
