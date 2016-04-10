@@ -1,10 +1,13 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.model.ControlledAnimation;
@@ -39,6 +43,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(5, new EntityAIWander(this, 0));
 		this.setSize(1.6F, 1.5F);
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0D);
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4);
 	}
 
 	@Override
@@ -93,6 +105,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			}
 		}
 		if (!worldObj.isRemote) {
+			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
+				this.heal(1.0F);
+			}
 			this.setAir(20);
 			PathEntity path = getNavigator().getPath();
 			if (path != null && !path.isFinished() && !this.isMovementBlocked()) {
@@ -127,6 +142,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionZ += 0.5 * MathHelper.sin(angle);
 							}
 						}
+					}
+				}
+			}
+			if(this.riddenByEntity != null) {
+				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.2D, 0.2D, 0.2D));
+				for(EntityLivingBase target : targets) {
+					if(target.getAITarget() == this.riddenByEntity || (this.riddenByEntity instanceof EntityLivingBase && ((EntityLivingBase)this.riddenByEntity).getAITarget() == target || ((EntityLivingBase)this.riddenByEntity).getAITarget() == target)) {
+						DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, this.riddenByEntity);
+						target.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
 					}
 				}
 			}

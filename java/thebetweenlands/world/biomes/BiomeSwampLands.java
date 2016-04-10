@@ -9,6 +9,7 @@ import thebetweenlands.entities.mobs.EntityBloodSnail;
 import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityGecko;
+import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
 import thebetweenlands.entities.mobs.EntityMireSnail;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -54,8 +55,9 @@ extends BiomeGenBaseBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(800));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		//this.blSpawnEntries.add(new CaveSpawnEntry(EntityGiantToad.class, (short) 20).setSpawnCheckRadius(30.0D));
-		
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGiantToad.class, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityGiantToad.class, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+
 		this.blSpawnEntries.add(new TarSpawnEntry(EntityTarBeast.class, (short) 20).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 40).setHostile(true));
@@ -66,7 +68,7 @@ extends BiomeGenBaseBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 25).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 2).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 30).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
-	
+
 		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
 	}
 
