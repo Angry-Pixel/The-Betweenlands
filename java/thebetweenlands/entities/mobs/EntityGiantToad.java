@@ -1,5 +1,6 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.relauncher.Side;
@@ -37,6 +38,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private ControlledAnimation leapingAnim = new ControlledAnimation(4);
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
 	private ControlledAnimation waterStanceAnim = new ControlledAnimation(4);
+	private List<EntityLivingBase> trackedTargets = new ArrayList<EntityLivingBase>();
 
 	public static final int DW_SWIM_STROKE = 20;
 	public static final int DW_TAMED = 21;
@@ -169,19 +171,20 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 			}
 			if(this.riddenByEntity != null) {
-				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.7D, 0.7D, 0.7D));
+				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.6D, 0.6D, 0.6D));
 				EntityLivingBase closestTarget = null;
 				float lastAngDiff = 0.0F;
 				for(EntityLivingBase target : targets) {
-					if(target.getAITarget() == this.riddenByEntity || (this.riddenByEntity instanceof EntityLivingBase && ((EntityLivingBase)this.riddenByEntity).getAITarget() == target || ((EntityLivingBase)this.riddenByEntity).getAITarget() == target)) {
+					if(target.getAITarget() == this.riddenByEntity || (this.riddenByEntity instanceof EntityLivingBase && ((EntityLivingBase)this.riddenByEntity).getAITarget() == target)) {
 						float x = (float) (target.posX - posX);
 						float z = (float) (target.posZ - posZ);
 						float angle = (float) (Math.atan2(z, x));
 						float angDiff = (float)Math.abs(this.rotationYaw % 360.0F - Math.toDegrees(angle) % 360.0F + 90) % 360.0F;
-						//Only attack mobs in front of the toad (+-50°)
-						if(angDiff <= 50 && (angDiff < lastAngDiff || closestTarget == null)) {
+						float angDiffWrapped = Math.min(angDiff, Math.abs(360.0F - angDiff));
+						//Only attack mobs in front of the toad (+-50 deg.)
+						if(angDiffWrapped <= 50 && (angDiffWrapped < lastAngDiff || closestTarget == null)) {
 							closestTarget = target;
-							lastAngDiff = angDiff;
+							lastAngDiff = angDiffWrapped;
 						}
 					}
 				}
@@ -189,9 +192,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, this.riddenByEntity);
 					float attackDamage = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
 					if(closestTarget.attackEntityFrom(damageSource, attackDamage)) {
+						boolean doesJump = true;
+						//Random chance for the target to attack back
+						if(this.rand.nextInt(35) == 0) {
+							if(closestTarget.attackEntityAsMob(this))
+								doesJump = false;
+						}
 						float x = (float) (closestTarget.posX - posX);
 						float z = (float) (closestTarget.posZ - posZ);
-						if(this.onGround || (this.inWater && this.strokeTicks == 0)) {
+						if(doesJump && ((this.onGround && this.ticksOnGround >= 5) || (this.inWater && this.strokeTicks == 0))) {
 							float angle = (float) (Math.atan2(z, x));
 							if(!this.inWater)
 								motionY += 0.4;
@@ -201,6 +210,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								this.strokeTicks = 20;
 								this.worldObj.setEntityState(this, (byte)8);
 							}
+							this.onGround = false;
 						}
 						closestTarget.knockBack(this, attackDamage, -x, -z);
 					}
