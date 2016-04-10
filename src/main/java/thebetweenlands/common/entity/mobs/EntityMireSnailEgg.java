@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
-    private static final DataParameter<Integer> HATCH_TICKS = EntityDataManager.createKey(EntityMireSnail.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> HATCH_TICKS = EntityDataManager.createKey(EntityMireSnailEgg.class, DataSerializers.VARINT);
     public float pulseFloat;
     AnimationMathHelper pulse = new AnimationMathHelper();
 

@@ -5,19 +5,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.models.AdvancedModelRenderer;
 import thebetweenlands.client.render.models.MowzieModelBase;
 import thebetweenlands.client.render.models.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 
-//TODO // FIXME: 09/04/2016 Add the advancedModelRenderer
 @SideOnly(Side.CLIENT)
 public class ModelSwampHag extends MowzieModelBase {
     MowzieModelRenderer body_base;
-    //AdvancedModelRenderer neck;
-    //AdvancedModelRenderer body_top;
+    AdvancedModelRenderer neck;
+    AdvancedModelRenderer body_top;
     MowzieModelRenderer toadstool1;
     MowzieModelRenderer mushroomstem;
-    //AdvancedModelRenderer armright;
+    AdvancedModelRenderer armright;
     MowzieModelRenderer legright1;
     MowzieModelRenderer legleft1;
     MowzieModelRenderer body_inner;
@@ -80,10 +80,10 @@ public class ModelSwampHag extends MowzieModelBase {
         body_inner = new MowzieModelRenderer(this, 42, 44);
         body_inner.setRotationPoint(0.0F, 0.0F, 0.0F);
         body_inner.addBox(-4.0F, -1.5F, -0.5F, 8, 9, 5, 0.0F);
-        //neck = new AdvancedModelRenderer(this, 70, 0);
-        //neck.setRotationPoint(-0.7F, -7.4F, 0.0F);
-        //neck.addBox(-2.0F, -4.0F, -2.0F, 4, 5, 4, 0.0F);
-        //setRotation(neck, 0.8196066167365371F, 0.045553093477052F, -0.045553093477052F);
+        neck = new AdvancedModelRenderer(this, 70, 0);
+        neck.setRotationPoint(-0.7F, -7.4F, 0.0F);
+        neck.addBox(-2.0F, -4.0F, -2.0F, 4, 5, 4, 0.0F);
+        setRotation(neck, 0.8196066167365371F, 0.045553093477052F, -0.045553093477052F);
         body_base = new MowzieModelRenderer(this, 0, 0);
         body_base.setRotationPoint(0.0F, -15F, 0.0F);
         body_base.addBox(-5.0F, -1.5F, -1.0F, 10, 10, 6, 0.0F);
@@ -91,10 +91,10 @@ public class ModelSwampHag extends MowzieModelBase {
         toadstool2.setRotationPoint(0.0F, -3.0F, 0.0F);
         toadstool2.addBox(-2.5F, 0.0F, -3.0F, 6, 1, 3, 0.0F);
         setRotation(toadstool2, 0.0F, -0.22759093446006054F, 0.0F);
-        //body_top = new AdvancedModelRenderer(this, 0, 17);
-        //body_top.setRotationPoint(0.0F, 0.0F, 0.0F);
-        //body_top.addBox(-6.0F, -8.0F, -2.0F, 12, 8, 8, 0.0F);
-        //setRotation(body_top, 0.18203784098300857F, 0.136659280431156F, -0.091106186954104F);
+        body_top = new AdvancedModelRenderer(this, 0, 17);
+        body_top.setRotationPoint(0.0F, 0.0F, 0.0F);
+        body_top.addBox(-6.0F, -8.0F, -2.0F, 12, 8, 8, 0.0F);
+        setRotation(body_top, 0.18203784098300857F, 0.136659280431156F, -0.091106186954104F);
         legleft1 = new MowzieModelRenderer(this, 42, 32);
         legleft1.setRotationPoint(3.0F, 8.0F, 2.0F);
         legleft1.addBox(-1.5F, 0.0F, -1.5F, 3, 8, 3, 0.0F);
@@ -118,9 +118,9 @@ public class ModelSwampHag extends MowzieModelBase {
         head1.setRotationPoint(0.0F, -2.0F, 0.5F);
         head1.addBox(-4.0F, -6.0F, -8.5F, 8, 6, 8, 0.0F);
         setRotation(head1, -0.9560913642424937F, 0.045553093477052F, 0.045553093477052F);
-        //armright = new AdvancedModelRenderer(this, 42, 0);
-        //armright.setRotationPoint(-7.0F, -6.0F, 2.0F);
-        //armright.addBox(-0.5F, -1.0F, -1.5F, 2, 16, 3, 0.0F);
+        armright = new AdvancedModelRenderer(this, 42, 0);
+        armright.setRotationPoint(-7.0F, -6.0F, 2.0F);
+        armright.addBox(-0.5F, -1.0F, -1.5F, 2, 16, 3, 0.0F);
         legright1 = new MowzieModelRenderer(this, 42, 20);
         legright1.setRotationPoint(-3.0F, 8.0F, 2.0F);
         legright1.addBox(-1.5F, 0.0F, -1.5F, 3, 8, 3, 0.0F);
@@ -149,27 +149,27 @@ public class ModelSwampHag extends MowzieModelBase {
         body_base.addChild(body_inner);
         toadstool1.addChild(toadstool2);
 
-        //neck.addChild(head1);
+        neck.addChild(head1);
 
         legleft1.addChild(legleft2);
         legright1.addChild(legright2);
 
         body_base.addChild(body_inner);
-        //body_inner.addChild(body_top);
+        body_inner.addChild(body_top);
 
-        //body_top.addChild(armright);
-        //body_top.addChild(neck);
+        body_top.addChild(armright);
+        body_top.addChild(neck);
         body_base.addChild(legleft1);
         body_base.addChild(legright1);
 
         mushroomstem.addChild(mushroomhat);
         mushroomstem.addChild(mushroomhat2);
-        //body_top.addChild(mushroomstem);
-        //body_top.addChild(toadstool1);
+        body_top.addChild(mushroomstem);
+        body_top.addChild(toadstool1);
 
         modelCore.addChild(body_base);
 
-        parts = new MowzieModelRenderer[]{body_base, /*neck, body_top,*/ toadstool1, mushroomstem, /*armright,*/ legright1, legleft1, body_inner, vines2, toadstool1b, toadstool2, toadstool3, vines1, toadstool2b, mushroomhat, mushroomhat2, legright2, legleft2, head1, head2, jaw, toadstool4, brain, modelCore};
+        parts = new MowzieModelRenderer[]{body_base, neck, body_top, toadstool1, mushroomstem, armright, legright1, legleft1, body_inner, vines2, toadstool1b, toadstool2, toadstool3, vines1, toadstool2b, mushroomhat, mushroomhat2, legright2, legleft2, head1, head2, jaw, toadstool4, brain, modelCore};
         setInitPose();
     }
 
@@ -205,20 +205,20 @@ public class ModelSwampHag extends MowzieModelBase {
     }
 
     @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-        EntitySwampHag hag = (EntitySwampHag) entityIn;
+    public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+        super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+        EntitySwampHag hag = (EntitySwampHag) entity;
 
         jaw.rotateAngleX = hag.jawFloat;
 //		head2.rotateAngleX = hag.jawFloat - 0.8196066167365371F;
         head2.rotateAngleX = -0.8196066167365371F;
 
-        head1.rotateAngleY = netHeadYaw / (180F / (float) Math.PI) - 0.045553093477052F;
-        head1.rotateAngleX = headPitch / (180F / (float) Math.PI) - 0.8196066167365371F;
-        head1.rotateAngleZ = headPitch / (180F / (float) Math.PI) + 0.045553093477052F;
-        /*if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
+        head1.rotateAngleY = rotationYaw / (180F / (float) Math.PI) - 0.045553093477052F;
+        head1.rotateAngleX = rotationPitch / (180F / (float) Math.PI) - 0.8196066167365371F;
+        head1.rotateAngleZ = rotationPitch / (180F / (float) Math.PI) + 0.045553093477052F;
+        if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
             armright.rotateAngleX += -((float) Math.PI / 2.5F);
-        }*/
+        }
 //		else {
 //			armright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAngle;
 //			armright.rotateAngleZ = hag.breatheFloat* 0.5F;
@@ -241,50 +241,50 @@ public class ModelSwampHag extends MowzieModelBase {
         limbSwing = limpSwing;
 
 //        bob(modelCore, 1 * globalSpeed, 1 * globalDegree, false, limbSwing, limbSwingAngle);
-        walk(body_base, 1F * globalSpeed, 0.1F * globalDegree, true, 0, 0.05F * globalDegree, limbSwing, limbSwingAmount);
-        walk(legleft1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAmount);
-        walk(legright1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAmount);
-        //walk(body_top, 1F * globalSpeed, 0.1F * globalDegree, true, -1f, 0.05F * globalDegree, limbSwing, limbSwingAmount);
-        //walk(neck, 1F * globalSpeed, 0.1F * globalDegree, true, -2f, 0.05F * globalDegree, limbSwing, limbSwingAmount);
-        walk(head1, 1F * globalSpeed, 0.1F * globalDegree, true, -3f, -0.15F * globalDegree, limbSwing, limbSwingAmount);
+        walk(body_base, 1F * globalSpeed, 0.1F * globalDegree, true, 0, 0.05F * globalDegree, limbSwing, limbSwingAngle);
+        walk(legleft1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAngle);
+        walk(legright1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAngle);
+        walk(body_top, 1F * globalSpeed, 0.1F * globalDegree, true, -1f, 0.05F * globalDegree, limbSwing, limbSwingAngle);
+        walk(neck, 1F * globalSpeed, 0.1F * globalDegree, true, -2f, 0.05F * globalDegree, limbSwing, limbSwingAngle);
+        walk(head1, 1F * globalSpeed, 0.1F * globalDegree, true, -3f, -0.15F * globalDegree, limbSwing, limbSwingAngle);
 
-        walk(legleft1, 0.5F * globalSpeed, 0.7F * legDegree, false, 0, 0F, limbSwing, limbSwingAmount);
-        walk(legleft2, 0.5F * globalSpeed, 0.8F * legDegree, false, -2f, 0.6F * legDegree, limbSwing, limbSwingAmount);
+        walk(legleft1, 0.5F * globalSpeed, 0.7F * legDegree, false, 0, 0F, limbSwing, limbSwingAngle);
+        walk(legleft2, 0.5F * globalSpeed, 0.8F * legDegree, false, -2f, 0.6F * legDegree, limbSwing, limbSwingAngle);
 
-        walk(legright1, 0.5F * globalSpeed, 0.7F * legDegree, true, 0, 0F, limbSwing, limbSwingAmount);
-        walk(legright2, 0.5F * globalSpeed, 0.8F * legDegree, true, -2f, 0.6F * legDegree, limbSwing, limbSwingAmount);
+        walk(legright1, 0.5F * globalSpeed, 0.7F * legDegree, true, 0, 0F, limbSwing, limbSwingAngle);
+        walk(legright2, 0.5F * globalSpeed, 0.8F * legDegree, true, -2f, 0.6F * legDegree, limbSwing, limbSwingAngle);
 
-        //walk(armright, 1 * globalSpeed, 0.2f * globalDegree, true, -1f, -0.3f * globalDegree, limbSwing, limbSwingAmount);
-        flap(modelCore, 0.5f * globalSpeed, 0.2f * globalDegree, false, 3f, 0.4f, limbSwing, limbSwingAmount);
-        //flap(body_top, 0.5f * globalSpeed, 0.1f * globalDegree, false, 1f, 0.1f, limbSwing, limbSwingAmount);
-        //flap(armright, 0.5f * globalSpeed, 0.2f * globalDegree, true, 0.5f, 0.3f, limbSwing, limbSwingAmount);
-        //flap(neck, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0.5f, 0.1f, limbSwing, limbSwingAmount);
-        flap(head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAmount);
-        body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAmount;
+        walk(armright, 1 * globalSpeed, 0.2f * globalDegree, true, -1f, -0.3f * globalDegree, limbSwing, limbSwingAngle);
+        flap(modelCore, 0.5f * globalSpeed, 0.2f * globalDegree, false, 3f, 0.4f, limbSwing, limbSwingAngle);
+        flap(body_top, 0.5f * globalSpeed, 0.1f * globalDegree, false, 1f, 0.1f, limbSwing, limbSwingAngle);
+        flap(armright, 0.5f * globalSpeed, 0.2f * globalDegree, true, 0.5f, 0.3f, limbSwing, limbSwingAngle);
+        flap(neck, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0.5f, 0.1f, limbSwing, limbSwingAngle);
+        flap(head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAngle);
+        body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
     }
 
     @Override
-    public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float p_78086_2_, float p_78086_3_, float partialTickTime) {
-        super.setLivingAnimations(entitylivingbaseIn, p_78086_2_, p_78086_3_, partialTickTime);
+    public void setLivingAnimations(EntityLivingBase entity, float p_78086_2_, float p_78086_3_, float partialRenderTicks) {
+        super.setLivingAnimations(entity, p_78086_2_, p_78086_3_, partialRenderTicks);
         setToInitPose();
 
-        float frame = entitylivingbaseIn.ticksExisted + partialTickTime;
-        //body_top.setScaleX((float) (1 + 0.08*Math.sin(frame * 0.07)));
-        // body_top.setScaleY((float) (1 + 0.08 * Math.sin(frame * 0.07)));
-        //body_top.setScaleZ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        float frame = entity.ticksExisted + partialRenderTicks;
+        body_top.setScaleX((float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        body_top.setScaleY((float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        body_top.setScaleZ((float) (1 + 0.08 * Math.sin(frame * 0.07)));
 
-        //neck.setScaleX(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
-        //neck.setScaleY(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
-        //neck.setScaleZ(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        neck.setScaleX(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        neck.setScaleY(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        neck.setScaleZ(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
 
-        //armright.setScaleX(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
-        //armright.setScaleY(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
-        //armright.setScaleZ(1/(float) (1 + 0.08*Math.sin(frame * 0.07)));
+        armright.setScaleX(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        armright.setScaleY(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
+        armright.setScaleZ(1 / (float) (1 + 0.08 * Math.sin(frame * 0.07)));
 
-        //walk(body_top, 0.07f, 0.05f, false, 1, 0, frame, 1);
-        //walk(neck, 0.07f, 0.05f, false, 0.5f, 0, frame, 1);
+        walk(body_top, 0.07f, 0.05f, false, 1, 0, frame, 1);
+        walk(neck, 0.07f, 0.05f, false, 0.5f, 0, frame, 1);
         walk(head1, 0.07f, 0.05f, false, 0f, 0, frame, 1);
-        //walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, frame, 1);
-        //flap(armright, 0.07f, 0.1f, true, 0.5f, 0.15f, frame, 1);
+        walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, frame, 1);
+        flap(armright, 0.07f, 0.1f, true, 0.5f, 0.15f, frame, 1);
     }
 }

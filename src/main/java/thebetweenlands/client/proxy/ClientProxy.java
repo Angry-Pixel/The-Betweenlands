@@ -30,6 +30,8 @@ public class ClientProxy extends CommonProxy {
     //Please turn this off again after using
     private static final boolean createJSONFile = false;
 
+    public static RenderFactoryDragonfly dragonFlyRenderer;
+
     @Override
     public EntityPlayer getClientPlayer() {
         return Minecraft.getMinecraft().thePlayer;
@@ -151,5 +153,8 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, new RenderFactoryBloodSnail());
         RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderFactorySnailPoisonJet());
         RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderFactorySwampHag());
+        RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, new RenderFactoryChiromaw());
+        RenderingRegistry.registerEntityRenderingHandler(EntityDragonfly.class, dragonFlyRenderer = new RenderFactoryDragonfly());
+        RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, new RenderFactoryLurker());
     }
 }
