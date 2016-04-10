@@ -3,6 +3,8 @@ package thebetweenlands.blocks.plants.crops;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.client.model.ModelBase;
@@ -23,8 +25,6 @@ import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.proxy.ClientProxy.BlockRenderIDs;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockBLGenericCrop extends BlockCrops {
 	public static final int MATURE_CROP = 7, DECAYED_CROP = 8;
@@ -44,7 +44,6 @@ public class BlockBLGenericCrop extends BlockCrops {
 		setCreativeTab(BLCreativeTabs.plants);
 		this.type = blockName;
 		setBlockName("thebetweenlands." + type);
-		setBlockTextureName("thebetweenlands:" + "crops/" + type +"3"); //shows mature crop
 	}
 
 	/**
@@ -490,7 +489,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		if(this.cropRenderer != null) {
+		if(this.cropRenderer != null || this.blockIcon == null) {
 			if (meta <= MATURE_CROP) {
 				if(meta == MATURE_CROP - 1) meta = MATURE_CROP - 2;
 				return this.cropIconArray[meta >> 1];
@@ -503,7 +502,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		if(this.cropRenderer != null) {
+		if(this.cropRenderer != null || this.textureName == null) {
 			cropIconArray = new IIcon[5];
 			for (int i = 0; i < cropIconArray.length; ++i) {
 				cropIconArray[i] = iconRegister.registerIcon("thebetweenlands:crops/" + type + i);
