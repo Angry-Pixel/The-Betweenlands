@@ -192,9 +192,9 @@ public class BLItemRegistry {
 	//FOOD
 	public static final Item sapBall = new ItemSapBall().setUnlocalizedName("thebetweenlands.sapBall").setTextureName("thebetweenlands:sapBall");
 	public static final ItemRottenFood rottenFood = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible().setUnlocalizedName("thebetweenlands.rottenFood").setTextureName("thebetweenlands:rottenFood");
-	public static final Item middleFruitSeeds = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.middleFruitBush, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.middleFruitSeeds").setTextureName("thebetweenlands:middleFruitSeeds");
-	public static final Item spores = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.fungusCrop, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.spores").setTextureName("thebetweenlands:spores");
-	public static final Item aspectrusCropSeed = new ItemAspectrusCropSeed(0, 0F).setUnlocalizedName("thebetweenlands.aspectrusSeeds").setTextureName("thebetweenlands:aspectrusSeeds");
+	public static final Item middleFruitSeeds = new ItemBLGenericSeed(BLBlockRegistry.middleFruitBush, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.middleFruitSeeds").setTextureName("thebetweenlands:middleFruitSeeds");
+	public static final Item spores = new ItemBLGenericSeed(BLBlockRegistry.fungusCrop, BLBlockRegistry.farmedDirt).setUnlocalizedName("thebetweenlands.spores").setTextureName("thebetweenlands:spores");
+	public static final Item aspectrusCropSeed = new ItemAspectrusCropSeed().setUnlocalizedName("thebetweenlands.aspectrusSeeds").setTextureName("thebetweenlands:aspectrusSeeds");
 	public static final Item anglerMeatRaw = new ItemBLFood(4, 0.4F, false).setUnlocalizedName("thebetweenlands.anglerMeatRaw").setTextureName("thebetweenlands:anglerFlesh");
 	public static final Item anglerMeatCooked = new ItemBLFood(8, 0.8F, false).setUnlocalizedName("thebetweenlands.anglerMeatCooked").setTextureName("thebetweenlands:cookedAnglerFlesh");
 	public static final Item frogLegsRaw = new ItemBLFood(3, 0.4F, false).setUnlocalizedName("thebetweenlands.frogLegsRaw").setTextureName("thebetweenlands:frogLegs");

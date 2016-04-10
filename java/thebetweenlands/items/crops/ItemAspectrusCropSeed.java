@@ -13,8 +13,8 @@ import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.tileentities.TileEntityAspectrusCrop;
 
 public class ItemAspectrusCropSeed extends ItemBLGenericSeed {
-	public ItemAspectrusCropSeed(int healAmount, float saturation) {
-		super(healAmount, saturation, BLBlockRegistry.aspectrusCrop, BLBlockRegistry.farmedDirt);
+	public ItemAspectrusCropSeed() {
+		super(BLBlockRegistry.aspectrusCrop, BLBlockRegistry.farmedDirt);
 		this.setCreativeTab(BLCreativeTabs.plants);
 	}
 

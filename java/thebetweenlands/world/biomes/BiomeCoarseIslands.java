@@ -8,6 +8,7 @@ import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityFrog;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityLurker;
 import thebetweenlands.entities.mobs.EntitySporeling;
@@ -48,6 +49,7 @@ extends BiomeGenBaseBetweenlands
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 36).setGroupSize(1, 2).setSpawnCheckRadius(32.0D).setSpawningInterval(400));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 25).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 52).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFrog.class, (short) 30).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(100));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 

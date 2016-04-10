@@ -1,5 +1,7 @@
 package thebetweenlands.entities.mobs;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -16,10 +18,8 @@ import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public class EntityFrog extends EntityCreature {
+public class EntityFrog extends EntityCreature implements IEntityBL {
 	private int ticksOnGround = 0;
 	public int jumpAnimationTicks;
 	public int prevJumpAnimationTicks;
@@ -212,5 +212,10 @@ public class EntityFrog extends EntityCreature {
 		if (type == 8) {
 			this.strokeTicks = 0;
 		}
+	}
+
+	@Override
+	public String pageName() {
+		return "frog";
 	}
 }

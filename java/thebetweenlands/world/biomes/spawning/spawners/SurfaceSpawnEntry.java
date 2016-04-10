@@ -12,12 +12,19 @@ import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
  * Prevents entities from spawning in caves.
  */
 public class SurfaceSpawnEntry extends BLSpawnEntry {
+	private boolean canSpawnOnWater = false;
+
 	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType) {
 		super(entityType);
 	}
 
 	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
 		super(entityType, weight);
+	}
+
+	public SurfaceSpawnEntry setCanSpawnOnWater(boolean spawnOnWater) {
+		this.canSpawnOnWater = spawnOnWater;
+		return this;
 	}
 
 	@Override
@@ -32,6 +39,6 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	protected boolean canSpawn(World world, Chunk chunk, int x, int y, int z, Block spawnBlock, Block surfaceBlock) {
-		return surfaceBlock.isNormalCube() || SurfaceType.MIXED.matchBlock(surfaceBlock);
+		return surfaceBlock.isNormalCube() || SurfaceType.MIXED.matchBlock(surfaceBlock) || (this.canSpawnOnWater && surfaceBlock.getMaterial().isLiquid());
 	}
 }
