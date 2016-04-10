@@ -99,7 +99,7 @@ public class ItemDentrothystVial extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		if(player.isSneaking() && side == 1) {
+		if(player.isSneaking() && side == 1 && stack.getItemDamage() != 1) {
 			if(world.isAirBlock(x, y + 1, z)) {
 				if(!world.isRemote) {
 					ItemAspectVial.placeAspectVial(world, x, y + 1, z, stack.getItemDamage() == 2 ? 1 : 0, null);
