@@ -1,7 +1,5 @@
 package thebetweenlands.entities.mobs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -14,8 +12,12 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.misc.ItemGeneric;
+import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityFrog extends EntityCreature {
 	private int ticksOnGround = 0;
@@ -42,6 +44,7 @@ public class EntityFrog extends EntityCreature {
 		super.entityInit();
 		dataWatcher.addObject(18, (byte) 0);
 		dataWatcher.addObject(DW_SWIM_STROKE, (byte) 0);
+		dataWatcher.addObject(30, new Integer(rand.nextInt(5)));
 	}
 
 	@Override
@@ -125,6 +128,9 @@ public class EntityFrog extends EntityCreature {
 				}
 			}
 		}
+		if (worldObj.isRemote && getSkin() == 4 && worldObj.getWorldTime()%10 == 0) {
+			BLParticle.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ, 0, 0, 0, 0);
+		}
 	}
 
 	@Override
@@ -144,16 +150,27 @@ public class EntityFrog extends EntityCreature {
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3);
 	}
 
+	public int getSkin() {
+		return dataWatcher.getWatchableObjectInt(30);
+	}
+
+	public void setSkin(int skinType) {
+		dataWatcher.updateObject(30, new Integer(skinType));
+	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		// TODO Texture types
+		nbt.setInteger("skin", getSkin());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		// TODO Texture types
+		if (nbt.hasKey("skin"))
+			setSkin(nbt.getInteger("skin"));
+		else
+			setSkin(rand.nextInt(5));
 	}
 	/*
 	protected String getJumpingSound() {
@@ -182,8 +199,11 @@ public class EntityFrog extends EntityCreature {
 	protected void dropFewItems(boolean recentlyHit, int looting) {
 		if (isBurning())
 			entityDropItem(ItemGeneric.createStack(BLItemRegistry.frogLegsCooked, 1, 0), 0.0F);
-		else
+		else {
 			entityDropItem(ItemGeneric.createStack(BLItemRegistry.frogLegsRaw, 1, 0), 0.0F);
+			if(getSkin() == 4)
+				entityDropItem(ItemGeneric.createStack(EnumItemGeneric.POISON_GLAND, 1), 0.0F);
+			}
 	}
 
 	@SideOnly(Side.CLIENT)
