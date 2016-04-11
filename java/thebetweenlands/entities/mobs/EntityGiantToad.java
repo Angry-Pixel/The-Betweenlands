@@ -3,8 +3,6 @@ package thebetweenlands.entities.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +24,8 @@ import thebetweenlands.client.model.ControlledAnimation;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.IEquippable;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by jnad325 on 7/14/15.
@@ -82,6 +82,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		this.setTamed(nbt.getBoolean("Tamed"));
 		this.temper = nbt.getInteger("Temper");
+	}
+
+	@Override
+	protected boolean canDespawn() {
+		return !isTamed();
 	}
 
 	public boolean isTamed() {
