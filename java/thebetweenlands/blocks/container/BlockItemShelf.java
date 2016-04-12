@@ -193,12 +193,14 @@ public class BlockItemShelf extends BlockContainer {
 			if (player.getCurrentEquippedItem() != null && slotClicked != -1) {
 				ItemStack item = player.getCurrentEquippedItem();
 				if (tile.getStackInSlot(slotClicked) == null) {
-					ItemStack stackCopy = item.copy();
-					stackCopy.stackSize = 1;
-					tile.setInventorySlotContents(slotClicked, stackCopy);
-					if (!player.capabilities.isCreativeMode)
-						player.getCurrentEquippedItem().stackSize--;
-					world.markBlockForUpdate(x, y, z);
+					if (!world.isRemote) {
+						ItemStack stackCopy = item.copy();
+						stackCopy.stackSize = 1;
+						tile.setInventorySlotContents(slotClicked, stackCopy);
+						if (!player.capabilities.isCreativeMode)
+							player.getCurrentEquippedItem().stackSize--;
+						world.markBlockForUpdate(x, y, z);
+					}
 					return true;
 				}
 			}
