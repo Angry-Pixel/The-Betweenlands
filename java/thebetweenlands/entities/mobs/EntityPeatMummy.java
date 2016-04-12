@@ -367,6 +367,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IScreenShak
 		if(this.isCharging()) {
 			this.stopCharging();
 		}
+		if(this.getSpawningProgress() < 1.0F)
+			return false;
 		return super.attackEntityAsMob(entity);
 	}
 
