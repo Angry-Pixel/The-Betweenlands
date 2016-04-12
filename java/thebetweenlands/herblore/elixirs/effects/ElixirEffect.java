@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import thebetweenlands.manual.widgets.text.TextContainer;
 import thebetweenlands.manual.widgets.text.TextContainer.TextPage;
 import thebetweenlands.utils.PotionHelper;
+import thebetweenlands.utils.confighandler.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +52,7 @@ public class ElixirEffect {
 	}
 
 	public void registerPotion() {
-		this.potionID = PotionHelper.getFreePotionId();
+		this.potionID = ConfigHandler.potionIDs[this.getID()];
 		this.potionEffect = new ElixirPotionEffect(this, this.effectName, this.color, this.icon);
 		for(ElixirAttributeModifier modifier : this.elixirAttributeModifiers) {
 			this.potionEffect.func_111184_a(modifier.attribute, modifier.uuid, modifier.modifier, modifier.operation);

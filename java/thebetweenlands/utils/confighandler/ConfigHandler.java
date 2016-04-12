@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.stream.JsonReader;
 
@@ -11,12 +13,14 @@ import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
+import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.recipes.ConfigRecipe;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General", "CustomRecipes"};
+	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General", "CustomRecipes", "Potion effects"};
 
 	//////// Values ///////
 	public static int DIMENSION_ID;
@@ -39,6 +43,8 @@ public class ConfigHandler {
 	public static int SKY_RESOLUTION;
 
 	public static boolean rowboatView;
+
+	public static int[] potionIDs = new int[ElixirEffectRegistry.getEffects().size()];
 
 	public Configuration config;
 	public static String path = "";
@@ -73,6 +79,17 @@ public class ConfigHandler {
 		DEBUG_MENU_ON_START = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
 
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
+
+		Map<Integer, ElixirEffect> usedIDs = new HashMap<Integer, ElixirEffect>();
+		int potionStartID = 50;
+		for(int i = 0; i < ElixirEffectRegistry.getEffects().size(); i++) {
+			ElixirEffect elixir = ElixirEffectRegistry.getEffects().get(i);
+			int id = config.get(CATEGORIES[4], elixir.getEffectName(), potionStartID + i).getInt(potionStartID + i);
+			if(usedIDs.containsKey(Integer.valueOf(id)))
+				throw new RuntimeException("Duplicate potion ID for: " + elixir.getEffectName() + " and " + usedIDs.get(Integer.valueOf(id)).getEffectName() + " ID: " + id);
+			usedIDs.put(id, elixir);
+			potionIDs[elixir.getID()] = id;
+		}
 
 		save();
 	}

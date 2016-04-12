@@ -55,6 +55,7 @@ import thebetweenlands.event.player.PlayerPortalHandler;
 import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.lib.ModInfo;
 import thebetweenlands.mods.RecurrentComplexModule;
@@ -128,6 +129,9 @@ public class TheBetweenlands {
 		BLBiomeRegistry.init();
 		BLItemRegistry.init();
 		BLEntityRegistry.init();
+		
+		PotionHelper.initPotionArray();
+		ElixirEffectRegistry.registerElixirs();
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
 
@@ -186,9 +190,6 @@ public class TheBetweenlands {
 
 		proxy.registerTileEntities();
 		proxy.init();
-
-		PotionHelper.initPotionArray();
-		PotionHelper.registerPotions();
 
 		FMLCommonHandler.instance().bus().register(ConfigHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(DecayEventHandler.INSTANCE);
