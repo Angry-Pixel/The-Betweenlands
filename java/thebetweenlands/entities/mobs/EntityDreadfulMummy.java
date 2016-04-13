@@ -289,6 +289,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBossBL
 
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
+		if(this.getSpawningProgress() < 1.0F)
+			return false;
 		boolean attacked = super.attackEntityAsMob(target);
 		if (attacked && this.rand.nextInt(6) == 0 && target != this.currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !this.worldObj.isRemote) {
 			setPrey((EntityLivingBase)target);

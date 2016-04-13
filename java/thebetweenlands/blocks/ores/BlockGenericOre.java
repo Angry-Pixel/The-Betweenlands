@@ -57,7 +57,7 @@ public class BlockGenericOre extends Block {
 		ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
 
 		if(oreDrops != null)
-			for(int dropFortune = 0; dropFortune < 1 + fortune + world.rand.nextInt(this.maxDropAmount - this.minDropAmount + 1) + this.minDropAmount; dropFortune++)
+			for(int dropFortune = 0; dropFortune < fortune + world.rand.nextInt(this.maxDropAmount - this.minDropAmount + 1) + this.minDropAmount; dropFortune++)
 				drops.add(getOreDropped());
 		else
 			drops.add(new ItemStack(Item.getItemFromBlock(this)));

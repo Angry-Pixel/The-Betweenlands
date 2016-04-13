@@ -1,14 +1,23 @@
 package thebetweenlands.herblore.elixirs;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.util.ResourceLocation;
-import thebetweenlands.herblore.elixirs.effects.*;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.herblore.elixirs.effects.ElixirDecay;
+import thebetweenlands.herblore.elixirs.effects.ElixirDraining;
+import thebetweenlands.herblore.elixirs.effects.ElixirEffect;
+import thebetweenlands.herblore.elixirs.effects.ElixirFeasting;
+import thebetweenlands.herblore.elixirs.effects.ElixirHealing;
+import thebetweenlands.herblore.elixirs.effects.ElixirMasking;
+import thebetweenlands.herblore.elixirs.effects.ElixirPetrify;
+import thebetweenlands.herblore.elixirs.effects.ElixirRipening;
+import thebetweenlands.herblore.elixirs.effects.ElixirStarvation;
+import thebetweenlands.herblore.elixirs.effects.ElixirSwiftarm;
 
 public class ElixirEffectRegistry {
 	//Elixirs
@@ -52,23 +61,11 @@ public class ElixirEffectRegistry {
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
 	static {
-		registerElixirs();
-	}
-
-	private static void registerElixirs() {
+		//Add elixirs to list
 		try {
 			for (Field f : ElixirEffectRegistry.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof ElixirEffect) register((ElixirEffect) obj);
-			}
-			Collections.sort(EFFECTS, new Comparator<ElixirEffect>() {
-				@Override
-				public int compare(ElixirEffect e1, ElixirEffect e2) {
-					return e2.getID() - e1.getID();
-				}
-			});
-			for(ElixirEffect e : EFFECTS) {
-				e.registerPotion();
 			}
 		}
 		catch (IllegalAccessException e) {
@@ -76,11 +73,31 @@ public class ElixirEffectRegistry {
 		}
 	}
 
-	public static void register(ElixirEffect effect) {
+	public static void registerElixirs() {
+		Collections.sort(EFFECTS, new Comparator<ElixirEffect>() {
+			@Override
+			public int compare(ElixirEffect e1, ElixirEffect e2) {
+				return e2.getID() - e1.getID();
+			}
+		});
+		for(ElixirEffect e : EFFECTS) {
+			e.registerPotion();
+		}
+	}
+
+	private static void register(ElixirEffect effect) {
 		EFFECTS.add(effect);
 	}
 
 	public static List<ElixirEffect> getEffects() {
 		return EFFECTS;
+	}
+	
+	public static ElixirEffect getByID(int id) {
+		for(ElixirEffect effect : EFFECTS) {
+			if(effect.getID() == id)
+				return effect;
+		}
+		return null;
 	}
 }
