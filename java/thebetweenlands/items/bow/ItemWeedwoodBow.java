@@ -205,4 +205,13 @@ public class ItemWeedwoodBow extends ItemBow implements ICorrodible, IManualEntr
 	public int metas() {
 		return 0;
 	}
+	
+	@Override
+	 public int getItemEnchantability() {
+	  return 0;
+	 }
+	 @Override
+	 public boolean isBookEnchantable(ItemStack is, ItemStack book) {
+	  return false;
+	 }
 }

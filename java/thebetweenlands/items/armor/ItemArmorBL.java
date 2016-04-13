@@ -88,4 +88,13 @@ public class ItemArmorBL extends ItemArmor implements IGemTextureProvider {
 	public String[] getGemTextures(CircleGem gem) {
 		return this.gemTextures[gem.ordinal()];
 	}
+	
+	@Override
+	 public int getItemEnchantability() {
+	  return 0;
+	 }
+	 @Override
+	 public boolean isBookEnchantable(ItemStack is, ItemStack book) {
+	  return false;
+	 }
 }

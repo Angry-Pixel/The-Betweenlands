@@ -148,4 +148,13 @@ public class ItemSwordBL extends ItemSword implements ICorrodible, IManualEntryI
 	public String[] getGemTextures(CircleGem gem) {
 		return new String[]{this.gemTextures[gem.ordinal()]};
 	}
+	
+	@Override
+	 public int getItemEnchantability() {
+	  return 0;
+	 }
+	 @Override
+	 public boolean isBookEnchantable(ItemStack is, ItemStack book) {
+	  return false;
+	 }
 }
