@@ -324,7 +324,7 @@ public class MobSpawnHandler {
 			totalEligibleEntityCount += count;
 		}
 
-		int maxEntitiesForLoadedArea = (int) (spawnerChunks.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER);
+		int maxEntitiesForLoadedArea = Math.min(HARD_ENTITY_LIMIT, (int) (spawnerChunks.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER));
 
 		if(totalEligibleEntityCount >= maxEntitiesForLoadedArea)
 			//Too many entities, don't spawn any more entities
@@ -337,7 +337,7 @@ public class MobSpawnHandler {
 
 		for(ChunkCoordIntPair chunkPos : spawnerChunks) {
 			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
-					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, Math.min(maxEntitiesForLoadedArea * 2, HARD_ENTITY_LIMIT));
+					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, maxEntitiesForLoadedArea);
 		}
 	}
 
@@ -357,7 +357,8 @@ public class MobSpawnHandler {
 				if(centerSpawnBlock.isNormalCube()) 
 					continue;
 
-				short totalBaseWeight = 0;
+				int totalBaseWeight = 0;
+				int totalWeight = 0;
 
 				//Get possible spawn entries and update weights
 				List<BLSpawnEntry> biomeSpawns = ((BiomeGenBaseBetweenlands)biome).getSpawnEntries();
@@ -367,6 +368,7 @@ public class MobSpawnHandler {
 						totalBaseWeight += spawnEntry.getBaseWeight();
 						possibleSpawns.add(spawnEntry);
 						spawnEntry.update(world, spawnPos.chunkPosX, spawnPos.chunkPosY, spawnPos.chunkPosZ);
+						totalWeight += spawnEntry.getWeight();
 					}
 				}
 
@@ -381,11 +383,12 @@ public class MobSpawnHandler {
 				if(spawnEntry == null)
 					continue;
 
-				int dynamicLimit = (int)((double)entityLimit / (double)totalBaseWeight * (spawnEntry.getWeight()+spawnEntry.getBaseWeight()*2.0D) / 3.0D);
+				int dynamicLimitBase = (int)((double)entityLimit / (double)totalBaseWeight * spawnEntry.getBaseWeight());
+				int dynamicLimit = (int)((double)entityLimit / (double)totalWeight * spawnEntry.getWeight());
 
 				int spawnEntityCount = this.entityCounts.get(spawnEntry.entityType);
 
-				if(spawnEntityCount >= dynamicLimit || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
+				if(spawnEntityCount >= Math.max(dynamicLimit, dynamicLimitBase) || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
 					//Entity reached world spawning limit
 					continue;
 
