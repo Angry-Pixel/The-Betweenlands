@@ -23,6 +23,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.particles.EntityAnimatorFX2;
 import thebetweenlands.herblore.aspects.Aspect;
@@ -126,8 +127,21 @@ public class BlockRepeller extends BlockContainer {
 				entityitem.delayBeforeCanPickup = 10;
 				world.spawnEntityInWorld(entityitem);
 			}
+
+			float f = 0.7F;
+			double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+			double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+			double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+			EntityItem entityitem = new EntityItem(world, x + d0, y + d1, z + d2, new ItemStack(BLBlockRegistry.repeller, 1));
+			entityitem.delayBeforeCanPickup = 10;
+			world.spawnEntityInWorld(entityitem);
 		}
 		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int meta, int fortune) {
+		return new ArrayList<ItemStack>();
 	}
 
 	@Override
@@ -151,6 +165,8 @@ public class BlockRepeller extends BlockContainer {
 
 	protected void checkAndBreakBlock(World world, int x, int y, int z) {
 		if (!this.canBlockStay(world, x, y, z)) {
+			int meta = world.getBlockMetadata(x, y, z);
+			this.breakBlock(world, x, y, z, world.getBlock(x, y, z), meta);
 			world.setBlock(x, y, z, getBlockById(0), 0, 3);
 		}
 	}
