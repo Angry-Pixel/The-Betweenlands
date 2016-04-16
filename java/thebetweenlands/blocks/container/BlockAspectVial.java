@@ -126,7 +126,7 @@ public class BlockAspectVial extends BlockContainer {
 								vial.setItemDamage(1);
 								break;
 							}
-							AspectManager.addDynamicAspects(vial, new Aspect(tile.getAspect().type, removedAmount));
+							AspectManager.addDynamicAspects(vial, new Aspect(aspect.type, removedAmount));
 
 							heldItem.stackSize--;
 							if(heldItem.stackSize <= 0)
