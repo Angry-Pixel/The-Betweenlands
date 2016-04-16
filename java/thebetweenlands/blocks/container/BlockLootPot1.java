@@ -2,6 +2,8 @@ package thebetweenlands.blocks.container;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -20,8 +22,6 @@ import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.mobs.EntityTermite;
 import thebetweenlands.tileentities.TileEntityLootPot1;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLootPot1 extends BlockContainer {
 
@@ -41,7 +41,7 @@ public class BlockLootPot1 extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-		
+
 		return Blocks.stained_hardened_clay.getIcon(side, 1);
 	}
 
@@ -103,18 +103,33 @@ public class BlockLootPot1 extends BlockContainer {
 			TileEntityLootPot1 tile = (TileEntityLootPot1) world.getTileEntity( x, y, z);
 			if (player.getCurrentEquippedItem() != null) {
 				ItemStack item = player.getCurrentEquippedItem();
+				ItemStack toAdd = item.copy();
+				toAdd.stackSize = 1;
 				for (int i = 0; i < 3; i++) {
 					if (tile.getStackInSlot(i) == null) {
-						tile.setInventorySlotContents(i, new ItemStack(item.getItem(), 1, item.getItemDamage()));
-						if (!player.capabilities.isCreativeMode)
-							player.getCurrentEquippedItem().stackSize--;
-						world.markBlockForUpdate(x, y, z);
+						if(!world.isRemote) {
+							tile.setInventorySlotContents(i, toAdd);
+							if (!player.capabilities.isCreativeMode)
+								item.stackSize--;
+							world.markBlockForUpdate(x, y, z);
+						}
 						return true;
+					} else {
+						ItemStack inSlot = tile.getStackInSlot(i);
+						if(inSlot.stackSize < inSlot.getMaxStackSize() && inSlot.getItemDamage() == toAdd.getItemDamage() && inSlot.getItem() == toAdd.getItem() && inSlot.areItemStackTagsEqual(inSlot, toAdd)) {
+							if(!world.isRemote) {
+								inSlot.stackSize++;
+								if (!player.capabilities.isCreativeMode)
+									item.stackSize--;
+								world.markBlockForUpdate(x, y, z);
+							}
+							return true;
+						}
 					}
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override
