@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -96,6 +97,9 @@ public class ItemWeedwoodBucket extends Item implements IManualEntryItem {
 								world.setBlock(tx, y, tz, BLBlockRegistry.rubberTap, 0, 0);
 								stack.stackSize--;
 								return stack;
+							} else {
+								if(!world.isRemote)
+									player.addChatMessage(new ChatComponentTranslation("chat.bucket.needsrope"));
 							}
 						}
 					}
