@@ -74,7 +74,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
         for (int i = 0; i < this.layerTextures.length; i++) {
             ResourceLocation layerTexture = this.layerTextures[i];
             this.mc.getTextureManager().bindTexture(layerTexture);
-            drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) - (-i * 20), 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height);
+            drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height);
         }
 
         Random rand = new Random();
