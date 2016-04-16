@@ -1,8 +1,8 @@
 #version 120
 
 //Definitions
-#define GL_EXP 2048
-#define GL_LINEAR 9729
+#define CONST_EXP 2048
+#define CONST_LINEAR 9729
 
 //Sampler that holds the rendered world
 uniform sampler2D s_diffuse;
@@ -65,10 +65,10 @@ vec3 getFragPos(sampler2D depthMap) {
 
 //Returns the fog color multiplier for a fragment
 float getFogMultiplier(vec3 fragPos) {
-    if(u_fogMode == GL_LINEAR) {
+    if(u_fogMode == CONST_LINEAR) {
         //Calculate linear fog
         return clamp((length(fragPos) - gl_Fog.start) * gl_Fog.scale, 0.0F, 1.0F);
-    } else if(u_fogMode == GL_EXP) {
+    } else if(u_fogMode == CONST_EXP) {
         //Calculate exponential fog
         return 1.0F - clamp(exp(-gl_Fog.density * length(fragPos)), 0.0F, 1.0F);
     }
