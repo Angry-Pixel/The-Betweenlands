@@ -75,5 +75,13 @@ void main(){
 	}
 	v = mix(vec3(length(v)), v, saturation); //color adjust
 	
-	gl_FragColor = vec4(v * 0.01F * vec3(0.4F, 1.0F, 1.0F), 1.0F);
+	float alpha = 1.0F;
+	float centerDistance = length(uv - vec2(0.5F, 0.5F));
+	float fadeStart = 0.15F;
+	float fadeEnd = 0.8F;
+	if(centerDistance > fadeStart) {
+		alpha *= 1.0F - ((centerDistance - fadeStart) / (0.5F - fadeStart)) * (1.0F / fadeEnd);
+	}
+	
+	gl_FragColor = vec4(v * 0.01F * vec3(0.4F, 1.0F, 1.0F) * alpha, alpha);
 }

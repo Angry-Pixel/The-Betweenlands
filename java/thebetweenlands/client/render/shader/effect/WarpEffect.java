@@ -1,7 +1,6 @@
 package thebetweenlands.client.render.shader.effect;
 
-import org.lwjgl.opengl.ARBShaderObjects;
-
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class WarpEffect extends DeferredEffect {
@@ -42,7 +41,7 @@ public class WarpEffect extends DeferredEffect {
 		this.yOffset = yOffset;
 		return this;
 	}
-	
+
 	public WarpEffect setWarpDir(float warpX, float warpY) {
 		this.warpX = warpX;
 		this.warpY = warpY;
@@ -51,14 +50,14 @@ public class WarpEffect extends DeferredEffect {
 
 	@Override
 	protected boolean initEffect() {
-		this.timeUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_msTime");
-		this.scaleUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_scale");
-		this.timeScaleUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_timeScale");
-		this.multiplierUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_multiplier");
-		this.xOffsetUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_xOffset");
-		this.yOffsetUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_yOffset");
-		this.warpXUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_warpX");
-		this.warpYUniformID = ARBShaderObjects.glGetUniformLocationARB(this.getShaderProgram(), "u_warpY");
+		this.timeUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_msTime");
+		this.scaleUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_scale");
+		this.timeScaleUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_timeScale");
+		this.multiplierUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_multiplier");
+		this.xOffsetUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_xOffset");
+		this.yOffsetUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_yOffset");
+		this.warpXUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_warpX");
+		this.warpYUniformID = OpenGlHelper.func_153194_a(this.getShaderProgram(), "u_warpY");
 		return /*this.timeUniformID >= 0 && this.scaleUniformID >= 0 && this.timeScaleUniformID >= 0 && this.multiplierUniformID >= 0 && this.xOffsetUniformID >= 0 && this.yOffsetUniformID >= 0*/true;
 	}
 
@@ -69,13 +68,13 @@ public class WarpEffect extends DeferredEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		ARBShaderObjects.glUniform1fARB(this.timeUniformID, System.nanoTime() / 1000000.0F);
-		ARBShaderObjects.glUniform1fARB(this.scaleUniformID, this.scale);
-		ARBShaderObjects.glUniform1fARB(this.timeScaleUniformID, this.timeScale);
-		ARBShaderObjects.glUniform1fARB(this.multiplierUniformID, this.multipier);
-		ARBShaderObjects.glUniform1fARB(this.xOffsetUniformID, this.xOffset);
-		ARBShaderObjects.glUniform1fARB(this.yOffsetUniformID, this.yOffset);
-		ARBShaderObjects.glUniform1fARB(this.warpXUniformID, this.warpX);
-		ARBShaderObjects.glUniform1fARB(this.warpYUniformID, this.warpY);
+		OpenGlHelper.func_153168_a(this.timeUniformID, this.getSingleFloatBuffer(System.nanoTime() / 1000000.0F));
+		OpenGlHelper.func_153168_a(this.scaleUniformID, this.getSingleFloatBuffer(this.scale));
+		OpenGlHelper.func_153168_a(this.timeScaleUniformID, this.getSingleFloatBuffer(this.timeScale));
+		OpenGlHelper.func_153168_a(this.multiplierUniformID, this.getSingleFloatBuffer(this.multipier));
+		OpenGlHelper.func_153168_a(this.xOffsetUniformID, this.getSingleFloatBuffer(this.xOffset));
+		OpenGlHelper.func_153168_a(this.yOffsetUniformID, this.getSingleFloatBuffer(this.yOffset));
+		OpenGlHelper.func_153168_a(this.warpXUniformID, this.getSingleFloatBuffer(this.warpX));
+		OpenGlHelper.func_153168_a(this.warpYUniformID, this.getSingleFloatBuffer(this.warpY));
 	}
 }

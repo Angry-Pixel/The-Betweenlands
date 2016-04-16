@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.shader.effect;
 
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 import org.apache.commons.io.IOUtils;
@@ -13,13 +14,9 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.shader.MainShader;
-import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.event.render.ShaderHandler;
 
 public abstract class DeferredEffect {
 	//Clear colors
@@ -30,7 +27,7 @@ public abstract class DeferredEffect {
 
 	//Buffers
 	private static final FloatBuffer TEXEL_SIZE_BUFFER = BufferUtils.createFloatBuffer(2);
-	
+
 	private int shaderProgramID = -1;
 	private int diffuseSamplerUniformID = -1;
 	private int texelSizeUniformID = -1;
@@ -79,7 +76,7 @@ public abstract class DeferredEffect {
 	 * Deletes all shaders and frees memory
 	 */
 	public final void delete() {
-		ARBShaderObjects.glDeleteObjectARB(this.shaderProgramID);
+		OpenGlHelper.func_153187_e(this.shaderProgramID);
 		if(this.stages != null && this.stages.length > 0) {
 			for(DeferredEffect stage : this.stages) {
 				stage.delete();
@@ -101,16 +98,25 @@ public abstract class DeferredEffect {
 	public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
 		this.apply(src, dst, blitBuffer, prev, renderWidth, renderHeight, true);
 	}
-	
+
 	private final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore) {
 		if(this.shaderProgramID == -1 || dst == null) return;
 
+		//Bind destination FBO
+		dst.bindFramebuffer(true);
+
 		if(restore) {
-			//Backup matrices
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPushMatrix();
+			//Backup attributes
+			GL11.glPushAttrib(GL11.GL_MATRIX_MODE);
 			GL11.glPushAttrib(GL11.GL_VIEWPORT_BIT);
 			GL11.glPushAttrib(GL11.GL_TRANSFORM_BIT);
+
+			//Backup matrices
+			GL11.glPushMatrix();
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glPushMatrix();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPushMatrix();
 
 			//Set up 2D matrices
 			GL11.glMatrixMode(GL11.GL_PROJECTION);
@@ -121,19 +127,16 @@ public abstract class DeferredEffect {
 			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
 		}
 
-		//Bind destination FBO
-		dst.bindFramebuffer(true);
-
 		//Clear buffers
 		GL11.glClearColor(this.cr, this.cg, this.cb, this.ca);
 		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 
 		//Use shader
-		ARBShaderObjects.glUseProgramObjectARB(this.shaderProgramID);
+		OpenGlHelper.func_153161_d(this.shaderProgramID);
 
 		//Upload sampler uniform (src texture ID)
 		if(this.diffuseSamplerUniformID >= 0 && src >= 0) {
-			ARBShaderObjects.glUniform1iARB(this.diffuseSamplerUniformID, 0);
+			OpenGlHelper.func_153163_f(this.diffuseSamplerUniformID, 0);
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, src);
@@ -145,7 +148,7 @@ public abstract class DeferredEffect {
 			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayWidth);
 			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayHeight);
 			TEXEL_SIZE_BUFFER.flip();
-			ARBShaderObjects.glUniform2ARB(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
+			OpenGlHelper.func_153177_b(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
 		}
 
 		//Uploads additional uniforms
@@ -192,14 +195,23 @@ public abstract class DeferredEffect {
 				GL11.glEnd();
 			}
 		}
-		
+
 		//Unbind shader
-		ARBShaderObjects.glUseProgramObjectARB(0);
+		OpenGlHelper.func_153161_d(0);
 
 		if(restore) {
 			//Restore matrices
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			GL11.glPopMatrix();
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GL11.glPopMatrix();
+
+			//Restore attributes
 			GL11.glPopAttrib();
 			GL11.glPopAttrib();
+			GL11.glPopAttrib();
+
+			//Restore matrices
 			GL11.glPopMatrix();
 
 			//Bind previous FBO
@@ -212,7 +224,7 @@ public abstract class DeferredEffect {
 	 */
 	private void initShaders() {
 		if(this.shaderProgramID == -1) {
-			this.shaderProgramID = ARBShaderObjects.glCreateProgramObjectARB();
+			this.shaderProgramID = OpenGlHelper.func_153183_d();
 			int vertexShaderID = -1;
 			int fragmentShaderID = -1;
 			try {
@@ -234,31 +246,37 @@ public abstract class DeferredEffect {
 			}
 			if(this.shaderProgramID != -1 && vertexShaderID != -1 && fragmentShaderID != -1) {
 				//Attach and link vertex and fragment shader to shader program
-				ARBShaderObjects.glAttachObjectARB(this.shaderProgramID, vertexShaderID);
-				ARBShaderObjects.glAttachObjectARB(this.shaderProgramID, fragmentShaderID);
-				ARBShaderObjects.glLinkProgramARB(this.shaderProgramID);
+				OpenGlHelper.func_153178_b(this.shaderProgramID, vertexShaderID);
+				OpenGlHelper.func_153178_b(this.shaderProgramID, fragmentShaderID);
+				OpenGlHelper.func_153179_f(this.shaderProgramID);
 
 				//Check for errors
-				if (ARBShaderObjects.glGetObjectParameteriARB(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
-					throw new RuntimeException("Error creating shader: " + getLogInfo(this.shaderProgramID));
+				if (OpenGlHelper.func_153175_a(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
+					throw new RuntimeException("Error creating shader: " + getLogInfoProgram(this.shaderProgramID));
 				}
-				ARBShaderObjects.glValidateProgramARB(this.shaderProgramID);
-				if (ARBShaderObjects.glGetObjectParameteriARB(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-					throw new RuntimeException("Error creating shader: " + getLogInfo(this.shaderProgramID));
+				GL20.glValidateProgram(this.shaderProgramID);
+				//ARBShaderObjects.glValidateProgramARB(this.shaderProgramID);
+				if (OpenGlHelper.func_153175_a(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
+					throw new RuntimeException("Error creating shader: " + getLogInfoProgram(this.shaderProgramID));
 				}
 
 				//Delete vertex and fragment shader
-				ARBShaderObjects.glDeleteObjectARB(vertexShaderID);
-				ARBShaderObjects.glDeleteObjectARB(fragmentShaderID);
+				OpenGlHelper.func_153180_a(vertexShaderID);
+				OpenGlHelper.func_153180_a(fragmentShaderID);
 
 				//Get uniforms
-				this.diffuseSamplerUniformID = ARBShaderObjects.glGetUniformLocationARB(this.shaderProgramID, "s_diffuse");
-				this.texelSizeUniformID = ARBShaderObjects.glGetUniformLocationARB(this.shaderProgramID, "u_oneTexel");
+				this.diffuseSamplerUniformID = OpenGlHelper.func_153194_a(this.shaderProgramID, "s_diffuse");
+				this.texelSizeUniformID = OpenGlHelper.func_153194_a(this.shaderProgramID, "u_oneTexel");
 
 				//Unbind shader
-				ARBShaderObjects.glUseProgramObjectARB(0);
-			} else if(this.shaderProgramID != -1) {
-				ARBShaderObjects.glDeleteObjectARB(this.shaderProgramID);
+				OpenGlHelper.func_153161_d(0);
+			} else {
+				if(vertexShaderID != -1)
+					OpenGlHelper.func_153180_a(vertexShaderID);
+				if(fragmentShaderID != 1)
+					OpenGlHelper.func_153180_a(fragmentShaderID);
+				if(this.shaderProgramID != -1)
+					OpenGlHelper.func_153187_e(this.shaderProgramID);
 			}
 		}
 	}
@@ -273,23 +291,30 @@ public abstract class DeferredEffect {
 	private static int createShader(String shaderCode, int shaderType) throws Exception {
 		int shader = 0;
 		try {
-			shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
+			shader = OpenGlHelper.func_153195_b(shaderType);
 			if(shader == 0) {
 				return 0;
 			}
-			ARBShaderObjects.glShaderSourceARB(shader, shaderCode);
-			ARBShaderObjects.glCompileShaderARB(shader);
-			if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
-				throw new RuntimeException("Error creating shader: " + getLogInfo(shader));
+			byte[] shaderCodeBytes = shaderCode.getBytes();
+			ByteBuffer shaderCodeByteBuffer = BufferUtils.createByteBuffer(shaderCodeBytes.length);
+			shaderCodeByteBuffer.put(shaderCodeBytes);
+			shaderCodeByteBuffer.position(0);
+			OpenGlHelper.func_153169_a(shader, shaderCodeByteBuffer);
+			OpenGlHelper.func_153170_c(shader);
+			if (OpenGlHelper.func_153157_c(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
+				throw new RuntimeException("Error creating shader: " + getLogInfoShader(shader));
 			}
 			return shader;
 		} catch(Exception exc) {
-			ARBShaderObjects.glDeleteObjectARB(shader);
+			OpenGlHelper.func_153180_a(shader);
 			throw exc;
 		}
 	}
-	private static String getLogInfo(int obj) {
-		return ARBShaderObjects.glGetInfoLogARB(obj, ARBShaderObjects.glGetObjectParameteriARB(obj, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
+	private static String getLogInfoShader(int obj) {
+		return OpenGlHelper.func_153158_d(obj, OpenGlHelper.func_153157_c(obj, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
+	}
+	private static String getLogInfoProgram(int obj) {
+		return OpenGlHelper.func_153166_e(obj, OpenGlHelper.func_153175_a(obj, ARBShaderObjects.GL_OBJECT_INFO_LOG_LENGTH_ARB));
 	}
 
 	/**
@@ -319,4 +344,11 @@ public abstract class DeferredEffect {
 	 * Return false if something during initializiation goes wrong.
 	 */
 	protected boolean initEffect() { return true; }
+
+	protected FloatBuffer getSingleFloatBuffer(float value) {
+		FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(1);
+		floatBuffer.put(value);
+		floatBuffer.position(0);
+		return floatBuffer;
+	}
 }

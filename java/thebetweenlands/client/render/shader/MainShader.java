@@ -37,11 +37,8 @@ import thebetweenlands.event.debugging.DebugHandlerClient;
 import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.GLUProjection.ClampMode;
 import thebetweenlands.utils.GLUProjection.Projection;
-import thebetweenlands.utils.GLUProjection.Vector3D;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import thebetweenlands.utils.GLUProjection.Projection.Type;
 import thebetweenlands.world.WorldProviderBetweenlands;
-import thebetweenlands.world.events.impl.EventBloodSky;
 
 public class MainShader extends CShader {
 	private Framebuffer depthBuffer;
@@ -385,7 +382,7 @@ public class MainShader extends CShader {
 	@Override
 	public void postShader(CShaderGroup shaderGroup, float partialTicks) {
 		if(!ShaderHelper.INSTANCE.canUseShaders()) return;
-		
+
 		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
@@ -393,7 +390,7 @@ public class MainShader extends CShader {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glLoadIdentity();
 		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
-		
+
 		this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
 
@@ -404,7 +401,7 @@ public class MainShader extends CShader {
 		float skyTransparency = 0.0F;
 
 		boolean hasBeat = false;
-		
+
 		World world = Minecraft.getMinecraft().theWorld;
 		if(world != null) {
 			if(world.provider instanceof WorldProviderBetweenlands) {
@@ -422,7 +419,7 @@ public class MainShader extends CShader {
 		} else if(skyTransparency > 1.0F) {
 			skyTransparency = 1.0F;
 		}
-		
+
 		if(this.occlusionExtractor == null) {
 			this.occlusionExtractor = (OcclusionExtractor) new OcclusionExtractor().init();
 		}
@@ -469,9 +466,9 @@ public class MainShader extends CShader {
 
 		Framebuffer worldDepthBuffer = this.getDepthBuffer();
 		Framebuffer clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer();
-		
+
 		if(worldDepthBuffer == null || clipPlaneBuffer == null) return; //FBOs not yet ready
-		
+
 		//Extract occluding objects
 		this.occlusionExtractor.setFBOs(worldDepthBuffer, clipPlaneBuffer);
 		this.occlusionExtractor.apply(Minecraft.getMinecraft().getFramebuffer().framebufferTexture, this.getBlitBuffer("bloodSkyBlitBuffer1"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
@@ -639,7 +636,7 @@ public class MainShader extends CShader {
 		//Update starfield texture
 		if(this.starfieldTextureFBO == null) {
 			this.starfieldTextureFBO = new Framebuffer(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION, false);
-			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect().init();
+			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect(true).init();
 		} else {
 			float offX = (float)(RenderManager.renderPosX / 8000.0D);
 			float offY = (float)(-RenderManager.renderPosZ / 8000.0D);
