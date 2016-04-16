@@ -106,7 +106,8 @@ public class GuiBLMainMenu extends GuiMainMenu {
 
     protected void drawStarfield() {
         if (ShaderHelper.INSTANCE.canUseShaders() && this.starfieldEffect != null && this.starfieldTextureFBO != null) {
-            this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F);
+            this.starfieldEffect.setTimeScale(0.0000005F).setZoom(4.8F);
+            this.starfieldEffect.setOffset(this.layerTick / 8000.0F, 0, 0);
             int renderDimension = Math.max(this.width, this.height);
             this.starfieldEffect.apply(-1, this.starfieldTextureFBO, null, Minecraft.getMinecraft().getFramebuffer(), renderDimension, renderDimension);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.starfieldTextureFBO.framebufferTexture);
