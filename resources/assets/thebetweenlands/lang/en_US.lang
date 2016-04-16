@@ -1297,6 +1297,8 @@ chat.guard.drop=This location seems to be no longer guarded
 
 chat.voodoo.no.mobs=There are no mobs to damage
 
+chat.bucket.needsrope=You need a Reed Rope to attach the bucket to the tree
+
 # Radial menu
 equipment.menu.equip=Equip
 equipment.menu.unequip=Unequip
