@@ -87,4 +87,13 @@ public class ItemAxeBL extends ItemAxe implements ICorrodible, IManualEntryItem 
 	public int metas() {
 		return 0;
 	}
+	
+	@Override
+	 public int getItemEnchantability() {
+	  return 0;
+	 }
+	 @Override
+	 public boolean isBookEnchantable(ItemStack is, ItemStack book) {
+	  return false;
+	 }
 }

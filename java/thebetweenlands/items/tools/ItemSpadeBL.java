@@ -93,4 +93,13 @@ public class ItemSpadeBL extends ItemSpade implements ICorrodible, IManualEntryI
 	public boolean func_150897_b(Block block) {
 		return block == BLBlockRegistry.sludge || super.func_150897_b(block);
 	}
+	
+	@Override
+	 public int getItemEnchantability() {
+	  return 0;
+	 }
+	 @Override
+	 public boolean isBookEnchantable(ItemStack is, ItemStack book) {
+	  return false;
+	 }
 }
