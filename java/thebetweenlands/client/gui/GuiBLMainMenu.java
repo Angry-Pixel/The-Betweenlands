@@ -74,17 +74,17 @@ public class GuiBLMainMenu extends GuiMainMenu {
         for (int i = 0; i < this.layerTextures.length; i++) {
             ResourceLocation layerTexture = this.layerTextures[i];
             this.mc.getTextureManager().bindTexture(layerTexture);
-            drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height);
+            drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
         }
 
         Random rand = new Random();
-        if (rand.nextInt(128) == 0) {
-            fireFlies.add(new GuiFirefly(rand.nextInt(this.width), -50, (rand.nextFloat() - rand.nextFloat()), rand.nextFloat() - rand.nextFloat()));
+        if (rand.nextInt(16) == 0) {
+            fireFlies.add(new GuiFirefly(this.width + 50, rand.nextInt(this.height), rand.nextFloat() - rand.nextFloat(), rand.nextFloat() - rand.nextFloat()));
         }
 
         for (int i = 0; i < fireFlies.size(); i++) {
             if (fireFlies.get(i).posY < this.height + 40) {
-                fireFlies.get(i).drawFireFly(this.mc, this);
+                fireFlies.get(i).drawFireFly(this.mc);
             } else {
                 fireFlies.remove(i);
             }
@@ -129,15 +129,15 @@ public class GuiBLMainMenu extends GuiMainMenu {
         }
     }
 
-    public void drawTexturedModalRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
+    public void drawTexturedModalRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight, double zLevel) {
         double f = 1.0F / textureWidth;
         double f1 = 1.0F / textureHeight;
         Tessellator tessellator = Tessellator.instance;
         tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, (u) * f, (v + height) * f1);
-        tessellator.addVertexWithUV(x + width, y + height, this.zLevel, (u + width) * f, (v + height) * f1);
-        tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, (u + width) * f, v * f1);
-        tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, u * f, v * f1);
+        tessellator.addVertexWithUV(x + 0, y + height, zLevel, (u) * f, (v + height) * f1);
+        tessellator.addVertexWithUV(x + width, y + height, zLevel, (u + width) * f, (v + height) * f1);
+        tessellator.addVertexWithUV(x + width, y + 0, zLevel, (u + width) * f, v * f1);
+        tessellator.addVertexWithUV(x + 0, y + 0, zLevel, u * f, v * f1);
         tessellator.draw();
     }
 }
