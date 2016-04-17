@@ -40,8 +40,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	private String type;
 
 	public BlockBLGenericCrop(String blockName) {
-		setStepSound(soundTypeGrass);
-		setCreativeTab(BLCreativeTabs.plants);
+		super();
 		this.type = blockName;
 		setBlockName("thebetweenlands." + type);
 	}
@@ -368,7 +367,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 		this.checkAndDropBlock(world, x, y, z);
 
 		if (this.shouldGrow(world, x, y, z)) {
-			int metaDirt = world.getBlockMetadata(x, y - 1, z);
+			int metaDirt = this.getSoilMetadata(world, x, y, z);
 			int meta = world.getBlockMetadata(x, y, z);
 			int prevMeta = meta;
 			this.preGrow(world, x, y, z, meta);
@@ -389,7 +388,7 @@ public class BlockBLGenericCrop extends BlockCrops {
 	 * @return
 	 */
 	public boolean shouldGrow(World world, int x, int y, int z) {
-		return world.rand.nextInt(25) == 0;
+		return world.rand.nextInt(3) == 0;
 	}
 
 	/**
