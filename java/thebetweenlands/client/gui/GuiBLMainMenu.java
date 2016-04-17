@@ -79,7 +79,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
         }
 
         Random rand = new Random();
-        if (rand.nextInt(16) == 0) {
+        if (rand.nextInt(32) == 0) {
             fireFlies.add(new GuiFirefly(this.width + 50, rand.nextInt(this.height), rand.nextFloat() - rand.nextFloat(), rand.nextFloat() - rand.nextFloat()));
         }
 
