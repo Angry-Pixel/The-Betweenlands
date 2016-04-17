@@ -28,6 +28,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
     private ResourceLocation[] layerTextures = new ResourceLocation[GuiBLMainMenu.LAYER_COUNT];
     private int layerTick;
 
+    private Random random = new Random();
     private StarfieldEffect starfieldEffect;
     private Framebuffer starfieldTextureFBO = null;
 
@@ -61,6 +62,10 @@ public class GuiBLMainMenu extends GuiMainMenu {
     @Override
     public void updateScreen() {
         this.layerTick++;
+
+        if (random.nextInt(16) == 0) {
+            fireFlies.add(new GuiFirefly(this.width + 50, random.nextInt(this.height), random.nextFloat() - random.nextFloat(), random.nextFloat() - random.nextFloat()));
+        }
     }
 
     @Override
@@ -76,11 +81,6 @@ public class GuiBLMainMenu extends GuiMainMenu {
             ResourceLocation layerTexture = this.layerTextures[i];
             this.mc.getTextureManager().bindTexture(layerTexture);
             drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
-        }
-
-        Random rand = new Random();
-        if (rand.nextInt(32) == 0) {
-            fireFlies.add(new GuiFirefly(this.width + 50, rand.nextInt(this.height), rand.nextFloat() - rand.nextFloat(), rand.nextFloat() - rand.nextFloat()));
         }
 
         for (int i = 0; i < fireFlies.size(); i++) {
