@@ -44,7 +44,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
         this.buttonList.add(new GuiButton(4, this.width - 25, this.height - 25, 20, 20, "Q"));
 
         for (int i = 0; i < this.layerTextures.length; i++) {
-            this.layerTextures[i] = new ResourceLocation(ModInfo.ID, "textures/gui/main/layer" + (this.layerTextures.length - i - 1) + ".png");
+            this.layerTextures[i] = new ResourceLocation(ModInfo.ID, "textures/gui/main/layer" + i + ".png");
         }
 
         if (this.starfieldTextureFBO != null) {
