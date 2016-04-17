@@ -77,10 +77,26 @@ public class GuiBLMainMenu extends GuiMainMenu {
         GL11.glEnable(GL11.GL_BLEND);
         this.drawStarfield();
 
-        for (int i = 0; i < this.layerTextures.length - 1; i++) {
+        for (int i = 0; i < this.layerTextures.length; i++) {
             ResourceLocation layerTexture = this.layerTextures[i];
             this.mc.getTextureManager().bindTexture(layerTexture);
-            drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
+            //drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
+            
+            double u = ((layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F) / 4000.0F;
+            double v = 0.0F;
+            
+            double visibleU = (this.width / (double)this.height) * (256.0D / (1024.0D * i));
+            
+            double x = 0;
+            double y = 0;
+            
+            Tessellator tessellator = Tessellator.instance;
+            tessellator.startDrawingQuads();
+            tessellator.addVertexWithUV(x + 0, y + height, zLevel, u, 1);
+            tessellator.addVertexWithUV(x + width, y + height, zLevel, u + visibleU, 1);
+            tessellator.addVertexWithUV(x + width, y + 0, zLevel, u + visibleU, 0);
+            tessellator.addVertexWithUV(x + 0, y + 0, zLevel, u, 0);
+            tessellator.draw();
         }
 
         for (int i = 0; i < fireFlies.size(); i++) {
@@ -94,10 +110,10 @@ public class GuiBLMainMenu extends GuiMainMenu {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        int i = this.layerTextures.length - 1;
-        ResourceLocation layerTexture = this.layerTextures[i];
-        this.mc.getTextureManager().bindTexture(layerTexture);
-        drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
+        //int i = this.layerTextures.length - 1;
+        //ResourceLocation layerTexture = this.layerTextures[i];
+        //this.mc.getTextureManager().bindTexture(layerTexture);
+        //drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         drawRect(0, this.height - 30, this.width, this.height, 0x60000000);
