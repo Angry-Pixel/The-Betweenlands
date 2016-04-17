@@ -42,17 +42,17 @@ public class GuiFirefly extends Gui {
         GL11.glPushMatrix();
         GL11.glScalef(0.1F, 0.1F, 0.1F);
         GL11.glDepthMask(false);
-        GL11.glEnable(3042);
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(770, 1);
         minecraft.getTextureManager().bindTexture(FIREFLY_TEXTURE);
         GL11.glTranslatef(posX * 10 + (float) (Math.sin(updateCounter) * 500), posY * 10, 0);
 
-        GL11.glScalef(0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 3, 0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 3, 0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 3);
+        GL11.glScalef(0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 4, 0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 4, 0.1F + (float) (Math.sin(updateCounter) * Math.sin(updateCounter)) / 4);
 
         this.drawTexturedModalRectWithColor(-125, -125, 0, 0, 250, 250, 0xFFEC810E, this.zLevel);
         this.drawTexturedModalRectWithColor(-125, -125, 0, 0, 250, 250, 0xFFEC810E, this.zLevel);
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        GL11.glDisable(3042);
+        GL11.glDisable(GL11.GL_BLEND);
         GL11.glDepthMask(true);
         GL11.glPopMatrix();
     }

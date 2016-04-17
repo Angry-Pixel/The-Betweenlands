@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -71,7 +72,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
         GL11.glEnable(GL11.GL_BLEND);
         this.drawStarfield();
 
-        for (int i = 0; i < this.layerTextures.length; i++) {
+        for (int i = 0; i < this.layerTextures.length - 1; i++) {
             ResourceLocation layerTexture = this.layerTextures[i];
             this.mc.getTextureManager().bindTexture(layerTexture);
             drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
@@ -90,13 +91,21 @@ public class GuiBLMainMenu extends GuiMainMenu {
             }
         }
 
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        int i = this.layerTextures.length - 1;
+        ResourceLocation layerTexture = this.layerTextures[i];
+        this.mc.getTextureManager().bindTexture(layerTexture);
+        drawTexturedModalRect(0, 0, (layerTick / (float) (this.layerTextures.length - i)) + partialTicks / (float) (i + 1) + 1024 * i / 4.0F, 0, this.width, this.height, 1024 / (this.layerTextures.length - i) * (this.height / 128.0F), this.height, this.zLevel);
+
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         drawRect(0, this.height - 30, this.width, this.height, 0x60000000);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
         this.mc.getTextureManager().bindTexture(GuiBLMainMenu.LOGO_TEXTURE);
-        drawTexturedModalRect(this.width / 2 - 161 / 2, 10, 0, 0, 161, 79);
+        drawTexturedModalRect(this.width / 2 - 161 / 2, 20 + MathHelper.sin(((float) layerTick + partialTicks) / 16.0F) * 6.0F, 0, 0, 161, 79, 256, 256, zLevel);
         drawTexturedModalRect(0, 0, 239, 0, 17, 16);
 
         for (GuiButton button : (List<GuiButton>) this.buttonList) {
