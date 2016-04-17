@@ -22,7 +22,7 @@ import java.util.Random;
 @SideOnly(Side.CLIENT)
 public class GuiBLMainMenu extends GuiMainMenu {
     public static final ResourceLocation LOGO_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/main/logo.png");
-    public static final int LAYER_COUNT = 2;
+    public static final int LAYER_COUNT = 4;
 
     private List<GuiFirefly> fireFlies = new ArrayList<>();
     private ResourceLocation[] layerTextures = new ResourceLocation[GuiBLMainMenu.LAYER_COUNT];
