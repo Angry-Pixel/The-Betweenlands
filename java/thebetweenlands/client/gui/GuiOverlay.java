@@ -109,7 +109,7 @@ public class GuiOverlay extends Gui {
 				if(shader != null) {
 					if(this.tb1 == null) {
 						this.tb1 = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
-						this.de = new StarfieldEffect().init();
+						this.de = new StarfieldEffect(true).init();
 					} else {
 						if(this.tb1.framebufferWidth != Minecraft.getMinecraft().displayWidth / 2 || this.tb1.framebufferHeight != Minecraft.getMinecraft().displayHeight / 2) {
 							this.tb1.deleteFramebuffer();

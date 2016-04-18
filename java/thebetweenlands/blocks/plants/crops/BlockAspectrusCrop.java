@@ -129,7 +129,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 	public boolean shouldGrow(World world, int x, int y, int z) {
 		Aspect aspect = this.getAspect(world, x, y, z);
 		if(aspect != null)
-			return world.rand.nextInt((int)(10 + aspect.getAmount() * 20)) == 0;
+			return world.rand.nextInt((int)(1 + aspect.getAmount() * 8)) == 0;
 		return false;
 	}
 
@@ -156,6 +156,7 @@ public class BlockAspectrusCrop extends BlockBLGenericCrop implements ITileEntit
 
 	@Override
 	public void onGrow(World world, int x, int y, int z) {
+		super.onGrow(world, x, y, z);
 		Block blockBelow = world.getBlock(x, y - 1, z);
 		if(blockBelow instanceof BlockAspectrusCrop)
 			this.setAspect(world, x, y, z, ((BlockAspectrusCrop)blockBelow).getAspect(world, x, y - 1, z));
