@@ -95,8 +95,98 @@ public abstract class DeferredEffect {
 	 * @param renderWidth Render width in pixels (relative to dst FBO size)
 	 * @param renderHeight Render height in pixels (relative to dst FBO size)
 	 */
-	public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
+	/*public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
 		this.apply(src, dst, blitBuffer, prev, renderWidth, renderHeight, true);
+	}*/
+
+	/**
+	 * Returns the effect builder
+	 * @param dst
+	 * @return
+	 */
+	public EffectBuilder create(Framebuffer dst) {
+		return new EffectBuilder(this, dst);
+	}
+
+	public static final class EffectBuilder {
+		private final DeferredEffect effect;
+		private final Framebuffer dst;
+
+		private int src = -1;
+		private Framebuffer blitFBO = null;
+		private Framebuffer prevFBO = null;
+		private double renderWidth = -1.0D;
+		private double renderHeight = -1.0D;
+		private boolean restore = true;
+
+		protected EffectBuilder(DeferredEffect effect, Framebuffer dst) {
+			this.effect = effect;
+			this.dst = dst;
+		}
+
+		/**
+		 * Sets the source texture the effect should read from.
+		 * @param src
+		 * @return
+		 */
+		public EffectBuilder setSource(int src) {
+			this.src = src;
+			return this;
+		}
+
+		/**
+		 * Sets the blit FBO if this effect requires one
+		 * @param blitFBO
+		 * @return
+		 */
+		public EffectBuilder setBlitFBO(Framebuffer blitFBO) {
+			this.blitFBO = blitFBO;
+			return this;
+		}
+
+		/**
+		 * Sets which FBO should be bound after applying the effect
+		 * @param prevFBO
+		 * @return
+		 */
+		public EffectBuilder setPreviousFBO(Framebuffer prevFBO) {
+			this.prevFBO = prevFBO;
+			return this;
+		}
+
+		/**
+		 * Sets the render dimensions for this effect. 
+		 * Uses the destination FBO dimensions by default
+		 * @param renderWidth
+		 * @param renderHeight
+		 * @return
+		 */
+		public EffectBuilder setRenderDimensions(double renderWidth, double renderHeight) {
+			this.renderWidth = renderWidth;
+			this.renderHeight = renderHeight;
+			return this;
+		}
+
+		/**
+		 * Sets whether the GL states should be restored after applying the effect. 
+		 * True by default
+		 * @param restore
+		 * @return
+		 */
+		public EffectBuilder setRestoreGlState(boolean restore) {
+			this.restore = restore;
+			return this;
+		}
+		
+		public void apply() {
+			double renderWidth = this.renderWidth;
+			double renderHeight = this.renderHeight;
+			if(renderWidth < 0.0D || renderHeight < 0.0D) {
+				renderWidth = this.dst.framebufferWidth;
+				renderHeight = this.dst.framebufferHeight;
+			}
+			this.effect.apply(this.src, this.dst, this.blitFBO, this.prevFBO, renderWidth, renderHeight, restore);
+		}
 	}
 
 	private final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore) {
