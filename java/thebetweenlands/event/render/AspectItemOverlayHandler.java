@@ -1,6 +1,7 @@
 package thebetweenlands.event.render;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -25,6 +26,8 @@ import thebetweenlands.utils.AspectIconRenderer;
 public class AspectItemOverlayHandler {
 	public static final AspectItemOverlayHandler INSTANCE = new AspectItemOverlayHandler();
 
+	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
+
 	private Field f_theSlot = ReflectionHelper.findField(GuiContainer.class, "theSlot", "field_147006_u", "u");
 
 	@SideOnly(Side.CLIENT)
@@ -47,7 +50,7 @@ public class AspectItemOverlayHandler {
 					RenderHelper.disableStandardItemLighting();
 					if(aspects != null && aspects.size() > 0) {
 						for(Aspect aspect : aspects) {
-							String aspectText = aspect.type.getName() + " (" + aspect.getAmount() + ")";
+							String aspectText = aspect.type.getName() + " (" + ASPECT_AMOUNT_FORMAT.format(aspect.getAmount()) + ")";
 							String aspectTypeText = aspect.type.getType();
 							Minecraft.getMinecraft().fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
 							Minecraft.getMinecraft().fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);

@@ -16,6 +16,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
+import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.herblore.aspects.Aspect;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.AspectRegistry;
@@ -50,7 +51,7 @@ public class ItemAspectVial extends Item {
 		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(stack, null);
 		if(itemAspects.size() >= 1) {
 			Aspect aspect = itemAspects.get(0);
-			return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + aspect.getAmount() + ")";
+			return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + AspectItemOverlayHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getAmount()) + ")";
 		}
 		return super.getItemStackDisplayName(stack);
 	}
