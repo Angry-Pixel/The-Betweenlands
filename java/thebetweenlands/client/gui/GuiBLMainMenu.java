@@ -50,13 +50,15 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			this.layerTextures[i] = new ResourceLocation(ModInfo.ID, "textures/gui/main/layer" + i + ".png");
 		}
 
-		if (this.starfieldTextureFBO != null) {
-			this.starfieldTextureFBO.deleteFramebuffer();
-		}
-		this.starfieldTextureFBO = new Framebuffer(this.width, this.height, false);
+		if (ShaderHelper.INSTANCE.canUseShaders()) {
+			if (this.starfieldTextureFBO != null) {
+				this.starfieldTextureFBO.deleteFramebuffer();
+			}
+			this.starfieldTextureFBO = new Framebuffer(this.width, this.height, false);
 
-		if (this.starfieldEffect == null) {
-			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect(false).init();
+			if (this.starfieldEffect == null) {
+				this.starfieldEffect = (StarfieldEffect) new StarfieldEffect(false).init();
+			}
 		}
 	}
 

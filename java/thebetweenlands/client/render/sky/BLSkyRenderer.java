@@ -471,7 +471,10 @@ public class BLSkyRenderer extends IRenderHandler {
 		if (starBrightness > 0.0F && !useShaderSky) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+			GL11.glPushMatrix();
+			GL11.glRotated(55, 1, 0, 0);
 			this.starMesh.render();
+			GL11.glPopMatrix();
 			GL14.glBlendColor(1, 1, 1, 1);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 		}
