@@ -421,7 +421,9 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						}
 					}
 				}
-				classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
+				if (needsFrustumStuff) {
+					classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
+				}
 				needsRenderWorld = false;
 			}
 			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {
