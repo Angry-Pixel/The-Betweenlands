@@ -46,6 +46,8 @@ public class ConfigHandler {
 
 	public static int[] potionIDs = new int[ElixirEffectRegistry.getEffects().size()];
 
+	public static boolean useBLMainMenu;
+	
 	public Configuration config;
 	public static String path = "";
 
@@ -91,6 +93,8 @@ public class ConfigHandler {
 			potionIDs[elixir.getID()] = id;
 		}
 
+		useBLMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
+		
 		save();
 	}
 
