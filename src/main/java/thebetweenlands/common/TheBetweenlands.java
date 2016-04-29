@@ -49,6 +49,7 @@ public class TheBetweenlands {
 	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 	public static boolean isShadersModInstalled = false;
 	public static DimensionType dimensionType;
+	public static File sourceFile;
 	private static File configDir;
 	private static int nextMessageId;
 
@@ -57,6 +58,7 @@ public class TheBetweenlands {
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
 		configDir = event.getModConfigurationDirectory();
+		sourceFile = event.getSourceFile();
 
 		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
 

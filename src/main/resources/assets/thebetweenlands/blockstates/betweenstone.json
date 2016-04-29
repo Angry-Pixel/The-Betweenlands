@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal":  { "model": "thebetweenlands:betweenstone" }
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:betweenstone"
     }
+  } 
 }

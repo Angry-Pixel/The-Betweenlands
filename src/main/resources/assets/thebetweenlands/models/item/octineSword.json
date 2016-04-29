@@ -1,6 +1,6 @@
 {
-  "parent": "item/handheld",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/octineSword"
+    "layer0": "thebetweenlands:items/octineSword" 
   }
 }

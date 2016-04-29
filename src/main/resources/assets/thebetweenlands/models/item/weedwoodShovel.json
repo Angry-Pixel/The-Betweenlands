@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "thebetweenlands:items/weedwoodShovel"
+    "layer0": "thebetweenlands:items/weedwoodShovel" 
   }
 }

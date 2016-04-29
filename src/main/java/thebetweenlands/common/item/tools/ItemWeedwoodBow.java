@@ -2,9 +2,8 @@ package thebetweenlands.common.item.tools;
 
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.item.ICustomItemRenderType;
 
-public class ItemWeedwoodBow extends ItemBow implements ICustomItemRenderType {
+public class ItemWeedwoodBow extends ItemBow {
     public static final int ANIMATION_LENGTH = 3;
 
     public ItemWeedwoodBow() {
@@ -13,11 +12,6 @@ public class ItemWeedwoodBow extends ItemBow implements ICustomItemRenderType {
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
         return 100000;
-    }
-
-    @Override
-    public String getCustomRenderType(int meta) {
-        return "item/handheld";
     }
 /*
     @Override

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/strictlyHerblore/ground/groundArrowArum"
+    "layer0": "thebetweenlands:items/strictlyHerblore/ground/groundArrowArum" 
   }
 }

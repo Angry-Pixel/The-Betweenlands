@@ -5,12 +5,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.ICustomResourceLocationItem;
+import thebetweenlands.client.render.json.JsonRenderGenerator;
+import thebetweenlands.common.item.ICustomJsonGenerationItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
-public class ItemGenericPlantDrop extends Item implements ICustomResourceLocationItem {
+public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationItem {
     public ItemGenericPlantDrop() {
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -57,8 +58,8 @@ public class ItemGenericPlantDrop extends Item implements ICustomResourceLocatio
     }
 
     @Override
-    public String getCustomResourceLocation(int meta) {
-        return "strictlyHerblore/plantDrops/" + getEnumFromID(meta).iconName;
+    public String getJsonText(int meta) {
+        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/plantDrops/" + getEnumFromID(meta).iconName);
     }
 
     public enum EnumItemPlantDrop {

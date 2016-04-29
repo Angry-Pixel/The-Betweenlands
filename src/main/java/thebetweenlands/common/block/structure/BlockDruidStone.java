@@ -10,12 +10,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.ICustomJsonGenerationBlock;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-public class BlockDruidStone extends BasicBlock {
+public class BlockDruidStone extends BasicBlock implements ICustomJsonGenerationBlock {
     public static final PropertyInteger RANDOM = PropertyInteger.create("random", 0, 7);
     private String type;
 
@@ -48,7 +53,7 @@ public class BlockDruidStone extends BasicBlock {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        int rot = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 2.5D) & 3;
+        int rot = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 2.5D) + 2 & 3;
         worldIn.setBlockState(pos, getStateFromMeta(rot), 3);
     }
 
@@ -88,5 +93,45 @@ public class BlockDruidStone extends BasicBlock {
                     BLParticle.DRUID_MAGIC_BIG.spawn(world, particleX, particleY, particleZ, (rand.nextFloat() - rand.nextFloat()) *0.1, 0, (rand.nextFloat() - rand.nextFloat())*0.1, rand.nextFloat() + 0.5F);*/
             }
         }
+    }
+
+    @Override
+    public String getBlockStateText() {
+        Map<String, String> map = new HashMap<>();
+        map.put("0", "\"thebetweenlands:" + type + "\"");
+        map.put("1", "\"thebetweenlands:" + type + "\", \"y\": 90");
+        map.put("2", "\"thebetweenlands:" + type + "\", \"y\": 180");
+        map.put("3", "\"thebetweenlands:" + type + "\", \"y\": -90");
+        map.put("4", "\"thebetweenlands:" + type + "Active\"");
+        map.put("5", "\"thebetweenlands:" + type + "Active\", \"y\": 90");
+        map.put("6", "\"thebetweenlands:" + type + "Active\", \"y\": 180");
+        map.put("7", "\"thebetweenlands:" + type + "Active\", \"y\": -90");
+        return JsonRenderGenerator.complexBlockStates("random", map);
+    }
+
+    @Override
+    public String getBlockModelText(int meta) {
+        String format;
+        if (meta == 0)
+            format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type, "stone", "stone", type, "stone", "stone", "stone");
+        else
+            format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type + "Active", "stone", "stone", type + "Active", "stone", "stone", "stone");
+        return format.replace("thebetweenlands:blocks/stone", "blocks/stone");
+    }
+
+    @Override
+    public String getFileNameFromMeta(int meta) {
+        return meta == 0 ? type : type + "Active";
+    }
+
+    @Override
+    public void getMetas(List<Integer> list) {
+        list.add(0);
+        list.add(4);
+    }
+
+    @Override
+    public String getBlockModelForItem() {
+        return null;
     }
 }

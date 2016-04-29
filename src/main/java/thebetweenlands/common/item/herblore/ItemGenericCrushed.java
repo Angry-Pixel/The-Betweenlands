@@ -13,12 +13,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.ICustomResourceLocationItem;
+import thebetweenlands.client.render.json.JsonRenderGenerator;
+import thebetweenlands.common.item.ICustomJsonGenerationItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
-public class ItemGenericCrushed extends Item implements ICustomResourceLocationItem {
+public class ItemGenericCrushed extends Item implements ICustomJsonGenerationItem {
     public ItemGenericCrushed() {
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -84,9 +85,10 @@ public class ItemGenericCrushed extends Item implements ICustomResourceLocationI
         return EnumActionResult.FAIL;
     }
 
+
     @Override
-    public String getCustomResourceLocation(int meta) {
-        return "strictlyHerblore/ground/" + getEnumFromID(meta).name;
+    public String getJsonText(int meta) {
+        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/ground/" + getEnumFromID(meta).name);
     }
 
     public enum EnumItemGenericCrushed {

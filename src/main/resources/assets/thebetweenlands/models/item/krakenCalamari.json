@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/krakenCalamari"
+    "layer0": "thebetweenlands:items/krakenCalamari" 
   }
 }
