@@ -66,7 +66,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 	public void updateScreen() {
 		this.layerTick++;
 
-		if (random.nextInt(16) == 0) {
+		if (random.nextInt(32) == 0) {
 			fireFlies.add(new GuiFirefly(this.width + 50, random.nextInt(this.height), random.nextFloat() - random.nextFloat(), random.nextFloat() - random.nextFloat()));
 		}
 	}
