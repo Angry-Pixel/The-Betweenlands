@@ -128,12 +128,14 @@ public class MainShader extends CShader {
 				0);
 
 		for(Entry<String, GeometryBuffer> geomBufferEntry : this.geometryBuffers.entrySet()) {
-			geomBufferEntry.getValue().update(input);
+			geomBufferEntry.getValue().updateBuffers(input);
+			if(geomBufferEntry.getValue().hasDepthBuffer())
+				geomBufferEntry.getValue().updateDepth();
 			String samplerName = geomBufferEntry.getKey();
-			Framebuffer geomBuffer = geomBufferEntry.getValue().getGeometryBuffer();
-			Framebuffer geomDepthBuffer = geomBufferEntry.getValue().getGeometryDepthBuffer();
+			int geomBuffer = geomBufferEntry.getValue().getDiffuseTexture();
+			int geomDepthBuffer = geomBufferEntry.getValue().getDepthTexture();
 			this.updateSampler(samplerName, geomBuffer);
-			if(geomDepthBuffer != null) {
+			if(geomDepthBuffer >= 0) {
 				this.updateSampler(samplerName + "_depth", geomDepthBuffer);
 			}
 		}
@@ -465,17 +467,17 @@ public class MainShader extends CShader {
 		}
 
 		Framebuffer worldDepthBuffer = this.getDepthBuffer();
-		Framebuffer clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getGeometryDepthBuffer();
+		int clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getDepthTexture();
 
-		if(worldDepthBuffer == null || clipPlaneBuffer == null) return; //FBOs not yet ready
+		if(worldDepthBuffer == null || clipPlaneBuffer < 0) return; //FBOs not yet ready
 
 		//Extract occluding objects
-		this.occlusionExtractor.setFBOs(worldDepthBuffer, clipPlaneBuffer);
+		this.occlusionExtractor.setDepthTextures(worldDepthBuffer.framebufferTexture, clipPlaneBuffer);
 		this.occlusionExtractor.create(this.getBlitBuffer("bloodSkyBlitBuffer1"))
 		.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
 		.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
 		.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-		.apply();
+		.render();
 
 		//Apply god's ray
 		float beat = 0.0F;
@@ -488,7 +490,7 @@ public class MainShader extends CShader {
 		.setSource(this.getBlitBuffer("bloodSkyBlitBuffer1").framebufferTexture)
 		.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
 		.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-		.apply();
+		.render();
 
 		//Render to screen
 		//Render blit buffer to main buffer
@@ -571,7 +573,7 @@ public class MainShader extends CShader {
 			.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
 			.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
 			.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-			.apply();
+			.render();
 
 			ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
 
@@ -641,7 +643,7 @@ public class MainShader extends CShader {
 				GL11.glClearColor(1, 1, 1, 1);
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-				this.gasWarpEffect.create(this.gasTextureFBO).setSource(this.gasTextureBaseFBO.framebufferTexture).setPreviousFBO(Minecraft.getMinecraft().getFramebuffer()).setRenderDimensions(128.0F * 20.0F, 128.0F * 20.0F).apply();
+				this.gasWarpEffect.create(this.gasTextureFBO).setSource(this.gasTextureBaseFBO.framebufferTexture).setPreviousFBO(Minecraft.getMinecraft().getFramebuffer()).setRenderDimensions(128.0F * 20.0F, 128.0F * 20.0F).render();
 			}
 		}
 
@@ -656,7 +658,7 @@ public class MainShader extends CShader {
 			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
 			this.starfieldEffect.create(this.starfieldTextureFBO)
 			.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
-			.setRenderDimensions(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION).apply();
+			.setRenderDimensions(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION).render();
 		}
 	}
 }

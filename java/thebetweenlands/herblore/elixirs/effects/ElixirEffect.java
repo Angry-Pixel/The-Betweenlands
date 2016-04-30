@@ -52,7 +52,7 @@ public class ElixirEffect {
 	}
 
 	public void registerPotion() {
-		this.potionID = ConfigHandler.potionIDs[this.getID()];
+		this.potionID = ConfigHandler.potionIDs.get(this.getID());
 		this.potionEffect = new ElixirPotionEffect(this, this.effectName, this.color, this.icon);
 		for(ElixirAttributeModifier modifier : this.elixirAttributeModifiers) {
 			this.potionEffect.func_111184_a(modifier.attribute, modifier.uuid, modifier.modifier, modifier.operation);

@@ -123,7 +123,7 @@ public class GuiOverlay extends Gui {
 					.setSource(this.tb1.framebufferTexture)
 					.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
 					.setRenderDimensions(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2)
-					.apply();
+					.render();
 
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glEnable(GL11.GL_BLEND);

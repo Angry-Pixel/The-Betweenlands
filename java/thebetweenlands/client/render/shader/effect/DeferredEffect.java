@@ -86,20 +86,6 @@ public abstract class DeferredEffect {
 	}
 
 	/**
-	 * Applies the effect to a texture and renders it to the destination FBO.
-	 * Handles perspective only. Blending, texture mode, lighting etc. have to be
-	 * handled manually.
-	 * @param src Source texture ID (optional)
-	 * @param dst Destination FBO
-	 * @param prev Previous FBO (optional)
-	 * @param renderWidth Render width in pixels (relative to dst FBO size)
-	 * @param renderHeight Render height in pixels (relative to dst FBO size)
-	 */
-	/*public final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight) {
-		this.apply(src, dst, blitBuffer, prev, renderWidth, renderHeight, true);
-	}*/
-
-	/**
 	 * Returns the effect builder
 	 * @param dst
 	 * @return
@@ -177,29 +163,34 @@ public abstract class DeferredEffect {
 			this.restore = restore;
 			return this;
 		}
-		
-		public void apply() {
+
+		public void render() {
 			double renderWidth = this.renderWidth;
 			double renderHeight = this.renderHeight;
 			if(renderWidth < 0.0D || renderHeight < 0.0D) {
 				renderWidth = this.dst.framebufferWidth;
 				renderHeight = this.dst.framebufferHeight;
 			}
-			this.effect.apply(this.src, this.dst, this.blitFBO, this.prevFBO, renderWidth, renderHeight, restore);
+			this.effect.render(this.src, this.dst, this.blitFBO, this.prevFBO, renderWidth, renderHeight, restore);
 		}
 	}
 
-	private final void apply(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore) {
+	private final void render(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore) {
 		if(this.shaderProgramID == -1 || dst == null) return;
 
 		//Bind destination FBO
 		dst.bindFramebuffer(true);
 
+		int prevShaderProgram = 0;
+
 		if(restore) {
 			//Backup attributes
-			GL11.glPushAttrib(GL11.GL_MATRIX_MODE);
-			GL11.glPushAttrib(GL11.GL_VIEWPORT_BIT);
-			GL11.glPushAttrib(GL11.GL_TRANSFORM_BIT);
+			GL11.glPushAttrib(
+					GL11.GL_MATRIX_MODE | 
+					GL11.GL_VIEWPORT_BIT | 
+					GL11.GL_TRANSFORM_BIT
+					);
+			prevShaderProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
 
 			//Backup matrices
 			GL11.glPushMatrix();
@@ -264,10 +255,10 @@ public abstract class DeferredEffect {
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
 			for(DeferredEffect stage : this.stages) {
 				//Render to blit buffer
-				stage.apply(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight, false);
+				stage.render(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight, false);
 
 				//Render from blit buffer to destination buffer
-				dst.bindFramebuffer(false);
+				dst.bindFramebuffer(true);
 				GL11.glBindTexture(GL11.GL_TEXTURE_2D, blitBuffer.framebufferTexture);
 				GL11.glBegin(GL11.GL_TRIANGLES);
 				GL11.glTexCoord2d(0, 1);
@@ -286,8 +277,8 @@ public abstract class DeferredEffect {
 			}
 		}
 
-		//Unbind shader
-		OpenGlHelper.func_153161_d(0);
+		//Bind previous shader
+		OpenGlHelper.func_153161_d(prevShaderProgram);
 
 		if(restore) {
 			//Restore matrices
@@ -297,8 +288,6 @@ public abstract class DeferredEffect {
 			GL11.glPopMatrix();
 
 			//Restore attributes
-			GL11.glPopAttrib();
-			GL11.glPopAttrib();
 			GL11.glPopAttrib();
 
 			//Restore matrices

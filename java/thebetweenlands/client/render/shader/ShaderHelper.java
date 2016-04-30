@@ -28,7 +28,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	private boolean needsReload = false;
 
 	public boolean canUseShaders() {
-		return this.isShaderSupported() && ConfigHandler.USE_SHADER;
+		return OpenGlHelper.isFramebufferEnabled() && this.isShaderSupported() && ConfigHandler.USE_SHADER;
 	}
 
 	public boolean isShaderSupported() {

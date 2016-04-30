@@ -145,7 +145,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			this.starfieldEffect.create(this.starfieldTextureFBO)
 			.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
 			.setRenderDimensions(renderDimension, renderDimension)
-			.apply();
+			.render();
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.starfieldTextureFBO.framebufferTexture);
 
 			GL11.glBegin(GL11.GL_TRIANGLES);

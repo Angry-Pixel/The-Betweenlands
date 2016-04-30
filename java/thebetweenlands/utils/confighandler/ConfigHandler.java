@@ -44,7 +44,7 @@ public class ConfigHandler {
 
 	public static boolean rowboatView;
 
-	public static int[] potionIDs = new int[ElixirEffectRegistry.getEffects().size()];
+	public static Map<Integer, Integer> potionIDs = new HashMap<Integer, Integer>();
 
 	public static boolean useBLMainMenu;
 	
@@ -60,7 +60,7 @@ public class ConfigHandler {
 
 	private void syncConfigs() {
 		DIMENSION_ID = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
-		DRUID_CIRCLE_FREQUENCY = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 1400).getInt(1400);
+		DRUID_CIRCLE_FREQUENCY = config.get(CATEGORIES[0], "Frequency of Druid Circles", 1400, "Higher numbers decrease rate").getInt(1400);
 		BIOME_ID_SWAMPLANDS = config.get(CATEGORIES[0], "Swamplands Biome ID", 50).getInt(50);
 		BIOME_ID_COARSE_ISLANDS = config.get(CATEGORIES[0], "Coarse Islands Biome ID", 51).getInt(51);
 		BIOME_ID_DEEP_WATER = config.get(CATEGORIES[0], "Deep Water Biome ID", 52).getInt(52);
@@ -73,14 +73,14 @@ public class ConfigHandler {
 
 		WISP_QUALITY = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 100).setMinValue(0).setMaxValue(100).getInt(100);
 		FIREFLY_BLOCK_LIGHTING = config.getBoolean("Firefly block lighting", CATEGORIES[1], false, "");
-		USE_SHADER = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
-		SKY_RESOLUTION = config.get(CATEGORIES[1], "Sky texture resolution (only when shaders are enabled)", 1024).getInt(1024);
+		USE_SHADER = config.getBoolean("Use shaders for rendering", CATEGORIES[1], true, "This forces FBOs to be enabled. \nIf you use OptiFine set \"Fast Render\" to OFF and restart the game!");
+		SKY_RESOLUTION = config.get(CATEGORIES[1], "Sky texture resolution", 1024, "Only when shaders are enabled").getInt(1024);
 
 		// Replaced with false by gradle for release version
 		DEBUG = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
 		DEBUG_MENU_ON_START = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
 
-		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
+		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switched to rowboat perspective when you enter a rowboat, otherwise first-person");
 
 		Map<Integer, ElixirEffect> usedIDs = new HashMap<Integer, ElixirEffect>();
 		int potionStartID = 50;
@@ -90,7 +90,7 @@ public class ConfigHandler {
 			if(usedIDs.containsKey(Integer.valueOf(id)))
 				throw new RuntimeException("Duplicate potion ID for: " + elixir.getEffectName() + " and " + usedIDs.get(Integer.valueOf(id)).getEffectName() + " ID: " + id);
 			usedIDs.put(id, elixir);
-			potionIDs[elixir.getID()] = id;
+			potionIDs.put(elixir.getID(), id);
 		}
 
 		useBLMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
