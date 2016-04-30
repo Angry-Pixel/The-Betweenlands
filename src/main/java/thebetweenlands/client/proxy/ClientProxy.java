@@ -42,11 +42,11 @@ public class ClientProxy extends CommonProxy {
     public void registerDefaultBlockItemRenderer(Block block) {
         String name = block.getUnlocalizedName();
         String blockName = name.substring(name.lastIndexOf(".") + 1, name.length());
+        if (ConfigHandler.debug && createJSONFile)
+            JsonRenderGenerator.createJSONForBlock(block, blockName);
         ModelLoader.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + blockName, "inventory"));
         //FIXME: Uhm yeah, ModelLoader#registerItemVariants (the proper way afaik?) doesn't seem to work, so I've also added this here
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + blockName, "inventory"));
-        if (ConfigHandler.debug && createJSONFile)
-            JsonRenderGenerator.createJSONForBlock(block, blockName);
     }
 
     @Override
@@ -57,18 +57,18 @@ public class ClientProxy extends CommonProxy {
             for (ItemStack itemStack : list) {
                 String name = item.getUnlocalizedName(itemStack);
                 String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
-                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
-                ModelLoader.setCustomModelResourceLocation(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
                 if (ConfigHandler.debug && createJSONFile)
                     JsonRenderGenerator.createJSONForItem(item, itemStack.getItemDamage(), itemName);
+                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+                ModelLoader.setCustomModelResourceLocation(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
             }
         } else {
             String name = item.getUnlocalizedName();
             String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
-            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
             if (ConfigHandler.debug && createJSONFile)
                 JsonRenderGenerator.createJSONForItem(item, 0, itemName);
+            Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
         }
     }
 
