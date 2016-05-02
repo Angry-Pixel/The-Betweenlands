@@ -32,8 +32,11 @@ public class ShaderHandler {
 
 		GL11.glPushMatrix();
 		//Small fix for hand depth buffer issues because the hand is rendered after the depth buffer has been cleared
+		//Also makes the overlays render to the depth buffer, preventing the world glowing through the overlays
 		GL11.glColorMask(false, false, false, false);
-		OverlayHandler.INSTANCE.renderHand(event.partialTicks, event.renderPass, false);
+		boolean prevCancel = event.isCanceled();
+		OverlayHandler.INSTANCE.onRenderHand(event);
+		event.setCanceled(prevCancel);
 		GL11.glColorMask(true, true, true, true);
 		GL11.glPopMatrix();
 
