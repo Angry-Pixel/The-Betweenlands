@@ -112,7 +112,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		Tessellator tessellator = Tessellator.instance;
 
 		//tessellator.startDrawingQuads();
-		GL11.glBegin(GL11.GL_QUADS);
+		//GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < 1500; ++i) {
 			double rx = (double)(random.nextFloat() * 2.0F - 1.0F);
 			double ry = (double)(random.nextFloat() * 0.5F - 1.0F);
@@ -171,7 +171,7 @@ public class BLSkyRenderer extends IRenderHandler {
 				triangles.add(t2);
 			}
 		}
-		GL11.glEnd();
+		//GL11.glEnd();
 		//tessellator.draw();
 
 		return new Mesh(triangles);
