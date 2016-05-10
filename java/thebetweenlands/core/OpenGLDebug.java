@@ -73,8 +73,8 @@ public class OpenGLDebug implements IClassTransformer {
 		return false;
 	}
 
-	public static class OpenGLException extends RuntimeException {
-		public OpenGLException(String errors) {
+	public static class OpenGLError extends Error {
+		public OpenGLError(String errors) {
 			super("An OpenGL Error has occurred: " + errors);
 		}
 	}
@@ -94,7 +94,8 @@ public class OpenGLDebug implements IClassTransformer {
 					if(i < foundErrors.size() - 1)
 						errors.append(", ");
 				}
-				throw new OpenGLException(errors.toString());
+				foundErrors.clear();
+				throw new OpenGLError(errors.toString());
 			}
 		}
 	}
