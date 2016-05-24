@@ -10,7 +10,7 @@ import thebetweenlands.util.TranslationHelper;
 
 public class ItemRottenFood extends ItemBLFood {
     public ItemRottenFood() {
-        super(-1, -1.0F, false);
+        super(-1, -1.0F, false, "rottenFood");
     }
 
     @Override

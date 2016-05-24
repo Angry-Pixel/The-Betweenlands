@@ -13,6 +13,23 @@ public class ItemBLArmor extends ItemArmor {
         super(materialIn, renderIndexIn, equipmentSlotIn);
         this.armorTexture1 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_1.png";
         this.armorTexture2 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_2.png";
+
+        switch (equipmentSlotIn) {
+            case HEAD:
+                setRegistryName(armorName + "Helmet");
+                break;
+            case CHEST:
+                setRegistryName(armorName + "ChestPlate");
+                break;
+            case LEGS:
+                setRegistryName(armorName + "Leggings");
+                break;
+            case FEET:
+                setRegistryName(armorName + "Boots");
+                break;
+        }
+
+        setUnlocalizedName(getRegistryName().toString());
     }
 
 

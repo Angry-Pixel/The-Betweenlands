@@ -5,8 +5,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemChiromawWing extends ItemBLFood {
     public ItemChiromawWing() {
-        super(0, 0, false);
-        this.setUnlocalizedName("thebetweenlands.chiromawWing");
+        super(0, 0, false, "chiromawWing");
         this.setCreativeTab(BLCreativeTabs.items);
     }
 

@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -11,12 +9,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import thebetweenlands.common.block.BasicBlock;
 
+import java.util.Random;
+
 public class BlockGenericOre extends BasicBlock {
 	private Random rand = new Random();
 	private int minXP = 0, maxXP = 0;
 
-	public BlockGenericOre(Material materialIn) {
-		super(materialIn);
+	public BlockGenericOre(Material materialIn, String name) {
+		super(materialIn, name);
 	}
 
 	public BlockGenericOre setXP(int min, int max) {

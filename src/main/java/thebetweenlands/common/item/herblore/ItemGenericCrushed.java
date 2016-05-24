@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.Registries;
 
 import java.util.List;
 
@@ -23,7 +23,8 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
     public ItemGenericCrushed() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setUnlocalizedName("thebetweenlands.unknownCrushed");
+        this.setRegistryName("unknownCrushed");
+        this.setUnlocalizedName(getRegistryName().toString());
     }
 
     public static ItemStack createStack(EnumItemGenericCrushed enumCrushed) {
@@ -31,7 +32,7 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
     }
 
     public static ItemStack createStack(EnumItemGenericCrushed enumCrushed, int size) {
-        return new ItemStack(ItemRegistry.itemsGenericCrushed, size, enumCrushed.id);
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGenericCrushed, size, enumCrushed.id);
     }
 
     public static ItemStack createStack(Item item, int size, int meta) {

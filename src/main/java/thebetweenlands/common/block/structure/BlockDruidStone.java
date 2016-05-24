@@ -25,7 +25,7 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
     private String type;
 
     public BlockDruidStone(Material blockMaterialIn, String blockName) {
-        super(blockMaterialIn);
+        super(blockMaterialIn, blockName);
         setHardness(1.5F);
         setResistance(10.0F);
         setStepSound(SoundType.STONE);
@@ -33,7 +33,6 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
         setLightLevel(0.8F);
         setCreativeTab(BLCreativeTabs.blocks);
         this.type = blockName;
-        setUnlocalizedName("thebetweenlands." + blockName);
     }
 
     @Override

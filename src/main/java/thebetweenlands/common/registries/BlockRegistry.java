@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -24,9 +25,8 @@ import java.util.Random;
 public class BlockRegistry {
 	public static final Block swampWater = new Block(Material.water).setUnlocalizedName(ModInfo.NAME_PREFIX + "swampWater");
 	public final List<Block> blocks = new ArrayList<Block>();
-	public final Block betweenstone = new BasicBlock(Material.rock)
+	public final Block betweenstone = new BasicBlock(Material.rock, "betweenstone")
 			.setStepSound2(SoundType.STONE)
-			.setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone")
 			.setHardness(1.5F)
 			.setResistance(10.0F);
 	public final Block druidStone1 = new BlockDruidStone(Material.rock, "druidStone1");
@@ -35,12 +35,12 @@ public class BlockRegistry {
 	public final Block druidStone4 = new BlockDruidStone(Material.rock, "druidStone4");
 	public final Block druidStone5 = new BlockDruidStone(Material.rock, "druidStone5");
 	public final Block swampDirt = new BlockSwampDirt(Material.ground);
-	public final Block octineOre = new BlockGenericOre(Material.rock) {
+	public final Block octineOre = new BlockGenericOre(Material.rock, "octine_ore") {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return new ItemStack(Item.getItemFromBlock(this));
 		}
-	}.setUnlocalizedName(ModInfo.NAME_PREFIX + "octine_ore");
+	};
 
 	public void preInit() {
 		try {
@@ -67,9 +67,9 @@ public class BlockRegistry {
 	}
 
 	private void registerBlock(Block block) {
-		String name = block.getUnlocalizedName();
-		String blockName = name.substring(name.lastIndexOf(".") + 1, name.length());
-		GameRegistry.registerBlock(block, blockName);
+		GameRegistry.register(block);
+		ItemBlock itemBlock = new ItemBlock(block);
+		GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
 		this.blocks.add(block);
 	}
 }

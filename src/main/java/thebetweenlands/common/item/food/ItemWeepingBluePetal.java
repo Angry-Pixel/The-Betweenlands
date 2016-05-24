@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 public class ItemWeepingBluePetal extends ItemBLFood {
     public ItemWeepingBluePetal() {
-        super(4, 1.2F, false);
+        super(4, 1.2F, false, "weepingBluePetal");
         this.setAlwaysEdible();
     }
 

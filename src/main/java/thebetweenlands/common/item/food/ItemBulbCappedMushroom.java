@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class ItemBulbCappedMushroom extends ItemBLFood {
     public ItemBulbCappedMushroom() {
-        super(3, 0.6F, false);
+        super(3, 0.6F, false, "bulbCappedMushroomItem");
     }
         /*@Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

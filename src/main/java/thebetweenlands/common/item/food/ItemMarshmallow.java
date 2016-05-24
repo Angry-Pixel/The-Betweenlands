@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class ItemMarshmallow extends ItemBLFood {
     public ItemMarshmallow() {
-        super(4, 10F, false);
+        super(4, 10F, false, "marshmallow");
     }
 
     @Override

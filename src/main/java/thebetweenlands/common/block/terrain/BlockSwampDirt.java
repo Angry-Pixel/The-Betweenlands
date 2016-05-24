@@ -2,17 +2,14 @@ package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.lib.ModInfo;
 
 public class BlockSwampDirt extends BasicBlock {
 
 	public BlockSwampDirt(Material materialIn) {
-		super(materialIn);
+		super(materialIn, "swamp_dirt");
 		this.setStepSound(SoundType.GROUND);
 		this.setHardness(0.5F);
-		this.setUnlocalizedName(ModInfo.NAME_PREFIX + "swamp_dirt");
 		this.setHarvestLevel("shovel", 0);
 	}
 

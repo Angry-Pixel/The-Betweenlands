@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.Registries;
 
 import java.util.List;
 
@@ -15,7 +15,8 @@ public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationI
     public ItemGenericPlantDrop() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setUnlocalizedName("thebetweenlands.unknownPlantDrop");
+        this.setRegistryName("unknownPlantDrop");
+        this.setUnlocalizedName(getRegistryName().toString());
     }
 
     public static ItemStack createStack(EnumItemPlantDrop enumPlantDrop) {
@@ -23,7 +24,7 @@ public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationI
     }
 
     public static ItemStack createStack(EnumItemPlantDrop enumPlantDrop, int size) {
-        return new ItemStack(ItemRegistry.itemsGenericPlantDrop, size, enumPlantDrop.id);
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGenericPlantDrop, size, enumPlantDrop.id);
     }
 
     public static ItemStack createStack(Item item, int size, int meta) {

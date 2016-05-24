@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.Registries;
 import thebetweenlands.util.TranslationHelper;
 
 import java.util.List;
@@ -20,7 +20,8 @@ public class ItemGeneric extends Item {
     public ItemGeneric() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setUnlocalizedName("thebetweenlands.unknownGeneric");
+        this.setRegistryName("unknownGeneric");
+        this.setUnlocalizedName(getRegistryName().toString());
     }
 
     public static ItemStack createStack(EnumItemGeneric enumGeneric) {
@@ -28,7 +29,7 @@ public class ItemGeneric extends Item {
     }
 
     public static ItemStack createStack(EnumItemGeneric enumGeneric, int size) {
-        return new ItemStack(ItemRegistry.itemsGeneric, size, enumGeneric.id);
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumGeneric.id);
     }
 
     public static ItemStack createStack(Item item, int size, int meta) {

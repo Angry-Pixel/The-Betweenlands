@@ -24,7 +24,7 @@ import java.util.List;
 public class ClientProxy extends CommonProxy {
 
     //Please turn this off again after using
-    private static final boolean createJSONFile = true;
+    private static final boolean createJSONFile = false;
 
     public static RenderFactoryDragonfly dragonFlyRenderer;
 
@@ -40,8 +40,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerDefaultBlockItemRenderer(Block block) {
-        String name = block.getUnlocalizedName();
-        String blockName = name.substring(name.lastIndexOf(".") + 1, name.length());
+        String blockName = block.getRegistryName().toString().replace(ModInfo.ASSETS_PREFIX, "");
         if (ConfigHandler.debug && createJSONFile)
             JsonRenderGenerator.createJSONForBlock(block, blockName);
         ModelLoader.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + blockName, "inventory"));
@@ -55,6 +54,7 @@ public class ClientProxy extends CommonProxy {
         item.getSubItems(item, null, list);
         if (list.size() > 0) {
             for (ItemStack itemStack : list) {
+                //Leaving this like this because of easier "multi item items"
                 String name = item.getUnlocalizedName(itemStack);
                 String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
                 if (ConfigHandler.debug && createJSONFile)
@@ -63,8 +63,7 @@ public class ClientProxy extends CommonProxy {
                 ModelLoader.setCustomModelResourceLocation(item, itemStack.getItemDamage(), new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
             }
         } else {
-            String name = item.getUnlocalizedName();
-            String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
+            String itemName = item.getRegistryName().toString().replace(ModInfo.ASSETS_PREFIX, "");
             if (ConfigHandler.debug && createJSONFile)
                 JsonRenderGenerator.createJSONForItem(item, 0, itemName);
             Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));

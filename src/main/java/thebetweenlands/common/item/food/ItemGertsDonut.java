@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class ItemGertsDonut extends ItemBLFood {
     public ItemGertsDonut() {
-        super(6, 13.2F, false);
+        super(6, 13.2F, false, "gertsDonut");
     }
 
     @Override

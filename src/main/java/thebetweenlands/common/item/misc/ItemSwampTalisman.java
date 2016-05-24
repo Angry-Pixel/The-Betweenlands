@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.Registries;
 
 import java.util.List;
 
@@ -22,11 +22,12 @@ public class ItemSwampTalisman extends Item {
         this.setMaxDamage(0);
         this.maxStackSize = 1;
         this.setHasSubtypes(true);
-        this.setUnlocalizedName("thebetweenlands.swampTalisman");
+        this.setRegistryName("swampTalisman");
+        this.setUnlocalizedName(getRegistryName().toString());
     }
 
     public static ItemStack createStack(EnumTalisman swampTalisman, int size) {
-        return new ItemStack(ItemRegistry.swampTalisman, size, swampTalisman.ordinal());
+        return new ItemStack(Registries.INSTANCE.itemRegistry.swampTalisman, size, swampTalisman.ordinal());
     }
 
     @Override
