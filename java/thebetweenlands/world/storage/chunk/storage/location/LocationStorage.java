@@ -132,6 +132,10 @@ public class LocationStorage extends ChunkStorage {
 	public boolean isInside(Entity entity) {
 		return this.area.isVecInside(Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ));
 	}
+	
+	public boolean isInside(double x, double y, double z) {
+		return this.area.isVecInside(Vec3.createVectorHelper(x, y, z));
+	}
 
 	public AxisAlignedBB getArea() {
 		return this.area;

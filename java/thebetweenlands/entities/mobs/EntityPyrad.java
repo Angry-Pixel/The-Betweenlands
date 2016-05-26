@@ -11,7 +11,7 @@ import thebetweenlands.entities.projectiles.EntityPyradFlame;
 import thebetweenlands.items.misc.ItemGeneric;
 import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
 
-public class EntityPyrad extends EntityMob {
+public class EntityPyrad extends EntityMob implements IEntityBL /*grrrrrrrr*/ {
 	private int shouldFire;
     private float heightOffset = 0.5F;
     private int heightOffsetUpdateTime;
@@ -134,5 +134,10 @@ public class EntityPyrad extends EntityMob {
 	@Override
 	protected String getDeathSound() {
 		return "thebetweenlands:pyradDeath";
+	}
+
+	@Override
+	public String pageName() {
+		return "pyrad";
 	}
 }

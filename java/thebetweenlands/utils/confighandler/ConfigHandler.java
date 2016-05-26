@@ -20,7 +20,7 @@ import thebetweenlands.recipes.ConfigRecipe;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General", "CustomRecipes", "Potion effects"};
+	public static final String[] CATEGORIES = { "World and Dimension", "Rendering", "General", "CustomRecipes", "Potion effects", "Mob Spawning"};
 
 	//////// Values ///////
 	public static int DIMENSION_ID;
@@ -47,7 +47,10 @@ public class ConfigHandler {
 	public static Map<Integer, Integer> potionIDs = new HashMap<Integer, Integer>();
 
 	public static boolean useBLMainMenu;
-	
+
+	public static int maxEntitiesPerLoadedArea;
+	public static int hardEntityLimit;
+
 	public Configuration config;
 	public static String path = "";
 
@@ -94,7 +97,10 @@ public class ConfigHandler {
 		}
 
 		useBLMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
-		
+
+		maxEntitiesPerLoadedArea = config.get(CATEGORIES[5], "Max. entities per loaded area", 100, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
+		hardEntityLimit = config.get(CATEGORIES[5], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);
+
 		save();
 	}
 

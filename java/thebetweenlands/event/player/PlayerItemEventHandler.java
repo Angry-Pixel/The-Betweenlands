@@ -67,6 +67,7 @@ public class PlayerItemEventHandler {
 			if(event.entityPlayer.worldObj.isRemote && property.getLastSickness() == Sickness.SICK)
 				this.addSicknessMessage(event.entityPlayer, event.item, property.getSickness(food));
 
+			int prevFoodHatred = property.getFoodHatred(food);
 			Sickness currentSickness = property.getSickness(food);
 			if(currentSickness == Sickness.SICK) {
 				int foodLevel = ((ItemFood)event.item.getItem()).func_150905_g(event.item);
@@ -94,18 +95,18 @@ public class PlayerItemEventHandler {
 					}
 				}
 				if(!event.entityPlayer.worldObj.isRemote)
-					property.increaseFoodHatred(food, 1, 0);
+					property.increaseFoodHatred(food, 5, 0);
 			} else {
 				if(!event.entityPlayer.worldObj.isRemote)
-					property.increaseFoodHatred(food, 1, currentSickness == Sickness.FINE ? 2 : 1);
+					property.increaseFoodHatred(food, 5, prevFoodHatred <= 2 * 4 ? 4 : 3);
 			}
 		}
 	}
 
 	public enum Sickness {
-		FINE(22),
-		HALF(34),
-		SICK(50);
+		FINE(6 * 5),
+		HALF(12 * 5),
+		SICK(24 * 5);
 
 		public final String[] lines;
 		public final int maxHatred;

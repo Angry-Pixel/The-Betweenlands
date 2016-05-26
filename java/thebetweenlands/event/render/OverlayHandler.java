@@ -100,11 +100,15 @@ public class OverlayHandler {
 		//Offset hand so that it doesn't clip with the world
 		//This is used over clearing the depth for compatibility with other shader mods
 		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-		GL11.glPolygonOffset(0.0F, -1000000.0F);
+		GL11.glPolygonOffset(0.0F, -2000000.0F);
 
 		//Render normal hand with overlays
+		//Rendered twice with a forward and then backwards offset, a bit hacky but works
 		this.renderHand(event.partialTicks, event.renderPass, true);
-
+		GL11.glPolygonOffset(0.0F, 7000000.0F);
+		this.renderHand(event.partialTicks, event.renderPass, true);
+		GL11.glPolygonOffset(0.0F, -7000000.0F);
+		
 		//Render decay overlay
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
 		//Should fix compatibility issues with mods that replace the player renderer or parts of it (e.g. More Player Models)

@@ -6,15 +6,32 @@ import static thebetweenlands.blocks.BLBlockRegistry.weedwoodBark;
 import static thebetweenlands.blocks.BLBlockRegistry.weedwoodLeaves;
 import static thebetweenlands.blocks.BLBlockRegistry.weedwoodLog;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import thebetweenlands.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
+import thebetweenlands.world.storage.chunk.storage.location.LocationStorage;
 
 public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 	private static final ForgeDirection[] SHUFFLED_DIRECTIONS = DIRECTIONS.clone();
+
+	@Override
+	public boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
+		boolean gen = super.generateTree(world, rand, blockX, blockY, blockZ);
+		if(gen) {
+			List<LocationStorage> addedLocations = StorageHelper.addArea(world, "giantTree", AxisAlignedBB.getBoundingBox(blockX - 32, blockY - 10, blockZ - 32, blockX + 32, blockY + 80, blockZ + 32), EnumLocationType.GIANT_TREE, 0);
+			for(LocationStorage location : addedLocations) {
+				location.setVisible(false).getChunkData().markDirty();
+			}
+		}
+		return gen;
+	}
 
 	@Override
 	protected int getRadiusHeightRatio() {
