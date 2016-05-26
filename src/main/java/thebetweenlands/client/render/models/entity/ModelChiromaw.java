@@ -2,12 +2,12 @@ package thebetweenlands.client.render.models.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 
 @SideOnly(Side.CLIENT)
@@ -197,17 +197,17 @@ public class ModelChiromaw extends ModelBase {
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         if (chiromaw.getIsHanging()) {
-            GL11.glTranslatef(0.0F, 2.125F, 0.0F);
-            GL11.glRotatef(180, 1F, 0F, 0.0F);
+            GlStateManager.translate(0.0F, 2.125F, 0.0F);
+            GlStateManager.rotate(180, 1F, 0F, 0.0F);
         } else {
-            GL11.glRotatef(40, 1F, 0F, 0.0F);
-            GL11.glTranslatef(0.0F, 0F, -0.8F);
+            GlStateManager.rotate(40, 1F, 0F, 0.0F);
+            GlStateManager.translate(0.0F, 0F, -0.8F);
         }
         body_base.render(unitPixel);
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public void setRotation(ModelRenderer modelRenderer, float x, float y, float z) {

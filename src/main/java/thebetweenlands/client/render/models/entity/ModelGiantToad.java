@@ -3,11 +3,14 @@ package thebetweenlands.client.render.models.entity;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.models.AdvancedModelRenderer;
 import thebetweenlands.client.render.models.MowzieModelBase;
 import thebetweenlands.client.render.models.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 
+@SideOnly(Side.CLIENT)
 public class ModelGiantToad extends MowzieModelBase {
     public MowzieModelRenderer body_base;
     public MowzieModelRenderer tubbyneck;
