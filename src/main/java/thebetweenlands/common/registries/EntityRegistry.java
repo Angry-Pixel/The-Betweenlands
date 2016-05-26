@@ -39,7 +39,9 @@ public class EntityRegistry {
         registerEntity(EntityMireSnailEgg.class, "mireSnailEgg");
         registerEntity(EntitySnailPoisonJet.class, "snailPoisonJet");
         registerEntity(EntityLurker.class, "lurker", 0x283320, 0x827856);
+        registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
         registerEntity(EntityBlindCaveFish.class, "blindCaveFish", 0xD0D1C2, 0xECEDDF);
         registerEntity(EntityChiromaw.class, "chiromaw", 0x3F5A69, 0xA16A77);
+        registerEntity(EntityFrog.class, "frog", 0x559653, 0xC72C2C, 64, 20, true);
     }
 }
