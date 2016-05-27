@@ -159,8 +159,8 @@ public class FogHandler {
 			}
 		}
 
-		fogStart = Math.max(fogStart, 1);
-		fogEnd = Math.max(fogEnd, 3);
+		fogStart = Math.max(fogStart, 2);
+		fogEnd = Math.max(fogEnd, 6);
 
 		if(this.currentFogStart < 0.0F || this.currentFogEnd < 0.0F) {
 			this.currentFogStart = fogStart;
