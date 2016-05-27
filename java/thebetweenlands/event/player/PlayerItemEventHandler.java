@@ -98,7 +98,7 @@ public class PlayerItemEventHandler {
 					property.increaseFoodHatred(food, 5, 0);
 			} else {
 				if(!event.entityPlayer.worldObj.isRemote)
-					property.increaseFoodHatred(food, 5, prevFoodHatred <= 2 * 4 ? 4 : 3);
+					property.increaseFoodHatred(food, 5, prevFoodHatred <= 2 * 5 ? 4 : 3);
 			}
 		}
 	}

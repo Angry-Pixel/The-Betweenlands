@@ -314,8 +314,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBossBL,
 		if(source instanceof EntityDamageSource) {
 			if(((EntityDamageSource)source).getEntity() instanceof Entity) {
 				Entity entity = (Entity) ((EntityDamageSource)source).getEntity();
-				if(source instanceof EntityDamageSourceIndirect)
+				if(source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect)source).getSourceOfDamage() != null)
 					entity = ((EntityDamageSourceIndirect)source).getSourceOfDamage();
+				if(entity == null)
+					return false;
 				Vec3 ray = entity.getLookVec();
 				if(entity instanceof EntityLivingBase == false)
 					ray = Vec3.createVectorHelper(entity.motionX, entity.motionY, entity.motionZ).normalize();
