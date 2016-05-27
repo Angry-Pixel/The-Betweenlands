@@ -1,11 +1,11 @@
-package thebetweenlands.client.render.render.entity;
+package thebetweenlands.client.render.render.entity.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.models.entity.ModelDragonfly;
 import thebetweenlands.common.entity.mobs.EntityDragonfly;
 
@@ -23,7 +23,7 @@ public class RenderDragonfly extends RenderLiving<EntityDragonfly> {
     }
 
     protected void scaleDragonFly(EntityDragonfly dragonFly, float partialTickTime) {
-        GL11.glScalef(0.6F, 0.6F, 0.6F);
+        GlStateManager.scale(0.6F, 0.6F, 0.6F);
     }
 
     @Override

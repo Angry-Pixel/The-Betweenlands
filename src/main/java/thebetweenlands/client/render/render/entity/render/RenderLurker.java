@@ -1,9 +1,9 @@
-package thebetweenlands.client.render.render.entity;
+package thebetweenlands.client.render.render.entity.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.models.entity.ModelLurker;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 
@@ -22,6 +22,6 @@ public class RenderLurker extends RenderLiving<EntityLurker> {
     @Override
     protected void rotateCorpse(EntityLurker lurker, float headPitch, float yaw, float partialTicks) {
         super.rotateCorpse(lurker, headPitch, yaw, partialTicks);
-        GL11.glRotatef((lurker).getRotationPitch(partialTicks), 1, 0, 0);
+        GlStateManager.rotate((lurker).getRotationPitch(partialTicks), 1, 0, 0);
     }
 }

@@ -1,9 +1,10 @@
-package thebetweenlands.client.render.render.entity;
+package thebetweenlands.client.render.render.entity.render;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.models.entity.ModelSporeling;
+import thebetweenlands.client.render.render.entity.layer.LayerSporelingEyes;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 
 public class RenderSporeling extends RenderLiving<EntitySporeling> {

@@ -1,9 +1,10 @@
-package thebetweenlands.client.render.render.entity;
+package thebetweenlands.client.render.render.entity.layer;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.render.render.entity.render.RenderSporeling;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.util.LightingUtil;
 

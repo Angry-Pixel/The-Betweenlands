@@ -1,9 +1,9 @@
-package thebetweenlands.client.render.render.entity;
+package thebetweenlands.client.render.render.entity.render;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.models.entity.ModelMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 
@@ -16,8 +16,7 @@ public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {
 
     @Override
     protected void preRenderCallback(EntityMireSnailEgg entitylivingbaseIn, float partialTickTime) {
-        EntityMireSnailEgg egg = entitylivingbaseIn;
-        GL11.glScalef(2.5F + egg.pulseFloat, 2.5F + egg.pulseFloat, 2.5F + egg.pulseFloat);
+        GlStateManager.scale(2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat);
     }
 
 
