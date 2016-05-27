@@ -6,9 +6,11 @@ import java.util.Random;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -24,8 +26,8 @@ import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.food.IDecayFood;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 
-public class PlayerItemEventHandler {
-	public static final PlayerItemEventHandler INSTANCE = new PlayerItemEventHandler();
+public class FoodSicknessEventHandler {
+	public static final FoodSicknessEventHandler INSTANCE = new FoodSicknessEventHandler();
 
 	private ItemStack lastUsedItem = null;
 

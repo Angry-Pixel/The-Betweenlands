@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.entities.properties.EntityProperties;
-import thebetweenlands.event.player.PlayerItemEventHandler;
-import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
+import thebetweenlands.event.player.FoodSicknessEventHandler;
+import thebetweenlands.event.player.FoodSicknessEventHandler.Sickness;
 
 public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 	private Map<String, Integer> hatredMap = Maps.newHashMap();
@@ -103,11 +103,11 @@ public class EntityPropertiesFood extends EntityProperties<EntityPlayer> {
 		}
 	}
 
-	public PlayerItemEventHandler.Sickness getSickness(ItemFood food) {
-		return PlayerItemEventHandler.Sickness.getSicknessForHatred(getFoodHatred(food));
+	public FoodSicknessEventHandler.Sickness getSickness(ItemFood food) {
+		return FoodSicknessEventHandler.Sickness.getSicknessForHatred(getFoodHatred(food));
 	}
 
-	public PlayerItemEventHandler.Sickness getLastSickness() {
-		return PlayerItemEventHandler.Sickness.getSicknessForHatred(this.lastHatred);
+	public FoodSicknessEventHandler.Sickness getLastSickness() {
+		return FoodSicknessEventHandler.Sickness.getSicknessForHatred(this.lastHatred);
 	}
 }

@@ -48,7 +48,7 @@ import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
 import thebetweenlands.event.player.OverworldItemEventHandler;
-import thebetweenlands.event.player.PlayerItemEventHandler;
+import thebetweenlands.event.player.FoodSicknessEventHandler;
 import thebetweenlands.event.player.PlayerLanternEventHandler;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
@@ -198,7 +198,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(new OverworldItemEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerLanternEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
 		MinecraftForge.EVENT_BUS.register(PowerRingHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(PowerRingHandler.INSTANCE);
@@ -216,8 +215,8 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.CHUNK_SYNC_HANDLER);
-		MinecraftForge.EVENT_BUS.register(PlayerItemEventHandler.INSTANCE);
-		FMLCommonHandler.instance().bus().register(PlayerItemEventHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FoodSicknessEventHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(FoodSicknessEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EntitySpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemEquipmentHandler.INSTANCE);
 		FMLCommonHandler.instance().bus().register(ItemEquipmentHandler.INSTANCE);

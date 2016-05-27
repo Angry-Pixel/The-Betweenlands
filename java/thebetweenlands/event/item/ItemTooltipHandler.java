@@ -25,7 +25,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
-import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
+import thebetweenlands.event.player.FoodSicknessEventHandler.Sickness;
 import thebetweenlands.gemcircle.CircleGem;
 import thebetweenlands.items.BLItemRegistry;
 import thebetweenlands.items.ICorrodible;
