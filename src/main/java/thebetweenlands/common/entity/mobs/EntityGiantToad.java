@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
@@ -70,8 +70,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(DW_SWIM_STROKE, (byte) 0);
-        dataWatcher.register(DW_TAMED, false);
+        dataManager.register(DW_SWIM_STROKE, (byte) 0);
+        dataManager.register(DW_TAMED, false);
     }
 
     @Override
@@ -94,11 +94,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
     }
 
     public boolean isTamed() {
-        return this.dataWatcher.get(DW_TAMED);
+        return this.dataManager.get(DW_TAMED);
     }
 
     public void setTamed(boolean tamed) {
-        this.dataWatcher.set(DW_TAMED, tamed);
+        this.dataManager.set(DW_TAMED, tamed);
     }
 
     @Override
@@ -125,9 +125,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
         if (!this.worldObj.isRemote) {
             if (this.strokeTicks > 0) {
                 this.strokeTicks--;
-                this.dataWatcher.set(DW_SWIM_STROKE, (byte) 1);
+                this.dataManager.set(DW_SWIM_STROKE, (byte) 1);
             } else {
-                this.dataWatcher.set(DW_SWIM_STROKE, (byte) 0);
+                this.dataManager.set(DW_SWIM_STROKE, (byte) 0);
             }
         }
         if (!worldObj.isRemote) {
@@ -135,7 +135,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
                 this.heal(1.0F);
             }
             this.setAir(20);
-            PathEntity path = getNavigator().getPath();
+            Path path = getNavigator().getPath();
             if (path != null && !path.isFinished() && !this.isMovementBlocked()) {
                 if (this.inWater) {
                     int index = path.getCurrentPathIndex();
@@ -244,14 +244,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
             }
 
             this.swimmingAnim.updateTimer();
-            if (this.dataWatcher.get(DW_SWIM_STROKE) == 1) {
+            if (this.dataManager.get(DW_SWIM_STROKE) == 1) {
                 if (this.strokeTicks < 20)
                     this.strokeTicks++;
             } else {
                 this.strokeTicks = 0;
             }
 
-            if (this.inWater && this.dataWatcher.get(DW_SWIM_STROKE) == 1 && this.strokeTicks < 12) {
+            if (this.inWater && this.dataManager.get(DW_SWIM_STROKE) == 1 && this.strokeTicks < 12) {
                 this.swimmingAnim.increaseTimer();
             } else {
                 this.swimmingAnim.decreaseTimer();
@@ -297,8 +297,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
             boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
             if (holdsEquipment)
                 return false;
-            boolean holdsWings = player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == Registries.INSTANCE.itemRegistry.itemsGeneric && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.id;
-            if (this.isBeingRidden() && this.getPassengers().get(0) == null && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
+            boolean holdsWings = player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == Registries.INSTANCE.itemRegistry.itemsGeneric && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.ordinal();
+            if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
                 this.startRiding(this);
             } else if (holdsWings) {
                 if (!this.isTamed()) {
@@ -330,7 +330,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
     @Override
     public boolean canBePushed() {
-        return this.isBeingRidden();
+        return !this.isBeingRidden();
     }
 
     @Override
@@ -442,7 +442,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
             this.spawnToadParticles(true);
         } else if (id == 6) {
             this.spawnToadParticles(false);
-            this.playSound(SoundEvents.entity_generic_eat, this.getSoundVolume(), this.getSoundPitch());
+            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
         } else {
             super.handleStatusUpdate(id);
         }

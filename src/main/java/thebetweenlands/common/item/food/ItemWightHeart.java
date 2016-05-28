@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 
 public class ItemWightHeart extends ItemBLFood {
     public ItemWightHeart() {
-        super(0, 0.0F, false, "wightHeart");
+        super(0, 0.0F, false);
     }
 
     /*

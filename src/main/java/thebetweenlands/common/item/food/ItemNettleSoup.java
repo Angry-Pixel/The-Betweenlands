@@ -7,7 +7,7 @@ import thebetweenlands.common.item.misc.ItemGeneric;
 
 public class ItemNettleSoup extends ItemBLFood {
     public ItemNettleSoup() {
-        super(10, 8.4F, false, "nettleSoup");
+        super(10, 8.4F, false);
     }
 
     @Override

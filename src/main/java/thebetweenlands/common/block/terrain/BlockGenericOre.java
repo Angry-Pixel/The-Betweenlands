@@ -15,8 +15,8 @@ public class BlockGenericOre extends BasicBlock {
 	private Random rand = new Random();
 	private int minXP = 0, maxXP = 0;
 
-	public BlockGenericOre(Material materialIn, String name) {
-		super(materialIn, name);
+	public BlockGenericOre(Material materialIn) {
+		super(materialIn);
 	}
 
 	public BlockGenericOre setXP(int min, int max) {

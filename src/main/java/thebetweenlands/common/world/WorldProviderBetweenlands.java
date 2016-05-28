@@ -8,7 +8,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldSettings.GameType;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -107,7 +107,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	@Override
-	public void registerWorldChunkManager() {
+	public void createBiomeProvider() {
 		//TODO: Chunk manager
 		//this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
 		this.setDimension(ConfigHandler.dimensionId);
@@ -197,7 +197,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	private int[] getTargetFogColor(EntityPlayer player) {
-		BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(player.getPosition());
+		Biome biome = this.worldObj.getBiomeGenForCoords(player.getPosition());
 		int[] targetFogColor = new int[]{255, 255, 255};
 
 		//TODO: Biome fog

@@ -7,11 +7,12 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.Potion;
@@ -28,7 +29,6 @@ import thebetweenlands.common.registries.Registries;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
     private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);
-    //private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> SKIN = EntityDataManager.createKey(EntityFrog.class, DataSerializers.VARINT);
     public int jumpAnimationTicks;
     public int prevJumpAnimationTicks;
@@ -53,8 +53,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(DW_SWIM_STROKE, (byte) 0);
-        dataWatcher.register(SKIN, rand.nextInt(5));
+        dataManager.register(DW_SWIM_STROKE, (byte) 0);
+        dataManager.register(SKIN, rand.nextInt(5));
     }
 
     @Override
@@ -86,12 +86,12 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
         if (!this.worldObj.isRemote) {
             if (this.strokeTicks > 0) {
                 this.strokeTicks--;
-                this.dataWatcher.set(DW_SWIM_STROKE, (byte) 1);
+                this.dataManager.set(DW_SWIM_STROKE, (byte) 1);
             } else {
-                this.dataWatcher.set(DW_SWIM_STROKE, (byte) 0);
+                this.dataManager.set(DW_SWIM_STROKE, (byte) 0);
             }
         } else {
-            if (this.dataWatcher.get(DW_SWIM_STROKE) == 1) {
+            if (this.dataManager.get(DW_SWIM_STROKE) == 1) {
                 if (this.strokeTicks < 20)
                     this.strokeTicks++;
             } else {
@@ -101,7 +101,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
         if (!this.worldObj.isRemote) {
             this.setAir(20);
 
-            PathEntity path = getNavigator().getPath();
+            Path path = getNavigator().getPath();
             if (path != null && !path.isFinished() && (onGround || this.isInWater()) && !this.isMovementBlocked()) {
                 int index = path.getCurrentPathIndex();
                 if (index < path.getCurrentPathLength()) {
@@ -162,7 +162,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
         super.onCollideWithPlayer(player);
         byte duration = 0;
         if (getSkin() == 4) {
-            if (!worldObj.isRemote && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+            if (!worldObj.isRemote && !player.capabilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
                 if (worldObj.getDifficulty() == EnumDifficulty.NORMAL)
                     duration = 5;
                 else if (worldObj.getDifficulty() == EnumDifficulty.HARD)
@@ -174,11 +174,11 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
     }
 
     public int getSkin() {
-        return dataWatcher.get(SKIN);
+        return dataManager.get(SKIN);
     }
 
     public void setSkin(int skinType) {
-        dataWatcher.set(SKIN, skinType);
+        dataManager.set(SKIN, skinType);
     }
 
     @Override
@@ -217,11 +217,11 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.frogLegsCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.frogLegsCooked, 1, 0), 0.0F);
         else {
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.frogLegsRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.frogLegsRaw, 1, 0), 0.0F);
             if (getSkin() == 4)
-                entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND, 1), 0.0F);
+                entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND), 0.0F);
         }
     }
 

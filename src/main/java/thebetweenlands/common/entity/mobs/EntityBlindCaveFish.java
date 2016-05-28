@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
@@ -50,8 +51,9 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     protected SoundEvent getSwimSound() {
-        return SoundEvents.entity_hostile_swim;
+        return SoundEvents.ENTITY_HOSTILE_SWIM;
     }
 
     @Override
@@ -109,7 +111,7 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
     }
 
     public void swimAbout() {
-        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.water || currentSwimTarget.getY() < 1))
+        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
             currentSwimTarget = null;
 
         if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)

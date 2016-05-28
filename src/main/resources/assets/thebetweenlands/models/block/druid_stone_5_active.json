@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/druid_stone_5_active",
+    "up": "blocks/stone",
+    "down": "blocks/stone",
+    "north": "thebetweenlands:blocks/druid_stone_5_active",
+    "east": "blocks/stone",
+    "south": "blocks/stone",
+    "west": "blocks/stone"
+  }
+}

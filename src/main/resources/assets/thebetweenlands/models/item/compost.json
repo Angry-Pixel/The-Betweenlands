@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
-  "textures": {
+  "textures": { 
     "layer0": "thebetweenlands:items/compost" 
   }
 }

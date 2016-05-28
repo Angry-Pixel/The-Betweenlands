@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -16,7 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.item.misc.ItemGeneric;
 import thebetweenlands.common.registries.Registries;
 
 public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
@@ -35,7 +35,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(IS_HANGING, false);
+        dataManager.register(IS_HANGING, false);
     }
 
     @Override
@@ -73,11 +73,13 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
         if (getIsHanging()) {
             if (!worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ))).isNormalCube()) {
                 setIsHanging(false);
-                worldObj.playAuxSFXAtEntity(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
+                //TODO add fix when sounds are added
+                //worldObj.playSound(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
             } else {
                 if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null) {
                     setIsHanging(false);
-                    worldObj.playAuxSFXAtEntity(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
+                    //TODO add fix when sounds are added
+                    //worldObj.playSound(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
                 }
             }
         } else {
@@ -164,16 +166,16 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
     }
 
     public boolean getIsHanging() {
-        return dataWatcher.get(IS_HANGING);
+        return dataManager.get(IS_HANGING);
     }
 
     public void setIsHanging(boolean hanging) {
-        dataWatcher.set(IS_HANGING, hanging);
+        dataManager.set(IS_HANGING, hanging);
     }
 
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
-        entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.chiromawWing, 1, 0), 0.0F);
+        entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.chiromawWing, 1, 0), 0.0F);
     }
 
     //TODO add flyingFiendLiving sound

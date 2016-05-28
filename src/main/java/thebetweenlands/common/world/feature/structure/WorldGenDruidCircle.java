@@ -5,7 +5,7 @@ import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -31,9 +31,9 @@ public class WorldGenDruidCircle implements IWorldGenerator {
     }
 
     private void generate(World world, Random random, int x, int z) {
-        BiomeGenBase biomeBase = world.getBiomeGenForCoords(new BlockPos(x, 1, z));
+        Biome biomeBase = world.getBiomeGenForCoords(new BlockPos(x, 1, z));
         int newY = 63;
-        if (biomeBase == Biomes.swampland) {
+        if (biomeBase == Biomes.SWAMPLAND) {
             for (int newX = x - baseRadius; newX <= x + baseRadius; ++newX) {
                 for (int newZ = z - baseRadius; newZ <= z + baseRadius; ++newZ) {
                     Block block = world.getBlockState(new BlockPos(newX, newY, newZ)).getBlock();
@@ -70,7 +70,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
                 }
 
                 if (Math.round(Math.sqrt(dSq)) <= baseRadius) {
-                    world.setBlockState(new BlockPos(x + newX, y - 1, z + newZ), Blocks.grass.getDefaultState());
+                    world.setBlockState(new BlockPos(x + newX, y - 1, z + newZ), Blocks.GRASS.getDefaultState());
                 }
             }
         }
@@ -83,7 +83,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
     private void placeAir(World world, int x, int y, int z) {
         for (int yNew = y; height + y >= yNew; ++yNew) {
-            world.setBlockState(new BlockPos(x, yNew, z), Blocks.air.getDefaultState());
+            world.setBlockState(new BlockPos(x, yNew, z), Blocks.AIR.getDefaultState());
         }
     }
 
@@ -94,7 +94,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
             if (rand.nextBoolean()) {
                 world.setBlockState(new BlockPos(x, yy, z), getRandomBlock(rand).getStateFromMeta(randDirection), 3);
             } else {
-                world.setBlockState(new BlockPos(x, yy, z), Blocks.stone.getDefaultState());
+                world.setBlockState(new BlockPos(x, yy, z), Blocks.STONE.getDefaultState());
                 for (int vineCount = 0; vineCount < 4; vineCount++) {
                     setRandomFoliage(world, x, yy, z, rand);
                 }
@@ -106,22 +106,22 @@ public class WorldGenDruidCircle implements IWorldGenerator {
         switch (rand.nextInt(4)) { // get random side
             case 0:
                 if (world.isAirBlock(new BlockPos(x + 1, y, z))) {
-                    world.setBlockState(new BlockPos(x + 1, y, z), Blocks.vine.getStateFromMeta(2), 3);
+                    world.setBlockState(new BlockPos(x + 1, y, z), Blocks.VINE.getStateFromMeta(2), 3);
                 }
                 break;
             case 1:
                 if (world.isAirBlock(new BlockPos(x - 1, y, z))) {
-                    world.setBlockState(new BlockPos(x - 1, y, z), Blocks.vine.getStateFromMeta(8), 3);
+                    world.setBlockState(new BlockPos(x - 1, y, z), Blocks.VINE.getStateFromMeta(8), 3);
                 }
                 break;
             case 2:
                 if (world.isAirBlock(new BlockPos(x, y, z + 1))) {
-                    world.setBlockState(new BlockPos(x, y, z + 1), Blocks.vine.getStateFromMeta(4), 3);
+                    world.setBlockState(new BlockPos(x, y, z + 1), Blocks.VINE.getStateFromMeta(4), 3);
                 }
                 break;
             case 3:
                 if (world.isAirBlock(new BlockPos(x, y, z - 1))) {
-                    world.setBlockState(new BlockPos(x, y, z - 1), Blocks.vine.getStateFromMeta(1), 3);
+                    world.setBlockState(new BlockPos(x, y, z - 1), Blocks.VINE.getStateFromMeta(1), 3);
                 }
                 break;
         }
@@ -140,7 +140,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
             case 4:
                 return Registries.INSTANCE.blockRegistry.druidStone5;
             default:
-                return Blocks.stone;
+                return Blocks.STONE;
         }
     }
 

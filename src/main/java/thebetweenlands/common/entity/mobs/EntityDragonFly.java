@@ -74,7 +74,7 @@ public class EntityDragonfly extends EntityAmbientCreature implements IEntityBL 
 
     @Override
     protected void playStepSound(BlockPos pos, Block blockIn) {
-        playSound(SoundEvents.entity_spider_step, 0.15F, 1.0F);
+        playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class EntityDragonfly extends EntityAmbientCreature implements IEntityBL 
                 if (isInWater()) {
                     motionY += 0.2F;
                 }
-                if (worldObj.isAnyLiquid(getEntityBoundingBox().expand(0D, 1D, 0D))) {
+                if (worldObj.containsAnyLiquid(getEntityBoundingBox().expand(0D, 1D, 0D))) {
                     flyAbout();
                 }
                 if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null) {
@@ -129,7 +129,7 @@ public class EntityDragonfly extends EntityAmbientCreature implements IEntityBL 
 
     public void flyAbout() {
         if (currentFlightTarget != null) {
-            if (!worldObj.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || worldObj.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.water) {
+            if (!worldObj.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || worldObj.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.WATER) {
                 currentFlightTarget = null;
             }
         }
@@ -148,7 +148,7 @@ public class EntityDragonfly extends EntityAmbientCreature implements IEntityBL 
             motionY += (Math.signum(targetY) * 0.7D - motionY) * 0.1D;
             motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.1D;
             float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-            float rotation = MathHelper.wrapAngleTo180_float(angle - rotationYaw);
+            float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
             moveForward = 0.5F;
             rotationYaw += rotation;
         }

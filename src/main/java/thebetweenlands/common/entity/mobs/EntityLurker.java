@@ -69,9 +69,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(IS_LEAPING, false);
-        dataWatcher.register(SHOULD_MOUTH_BE_OPEN, false);
-        dataWatcher.register(MOUTH_MOVE_SPEED, 1.0f);
+        dataManager.register(IS_LEAPING, false);
+        dataManager.register(SHOULD_MOUTH_BE_OPEN, false);
+        dataManager.register(MOUTH_MOVE_SPEED, 1.0f);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     public boolean isInWater() {
-        return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.water, this);
+        return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
     }
 
     private Block getRelativeBlock(int offsetY) {
@@ -181,7 +181,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     private int getWaterColor() {
         int blockX = MathHelper.floor_double(posX), blockZ = MathHelper.floor_double(posZ);
         int y = 0;
-        while (getRelativeBlock(y--) == Blocks.air && posY - y > 0) ;
+        while (getRelativeBlock(y--) == Blocks.AIR && posY - y > 0) ;
         int blockY = MathHelper.floor_double(getEntityBoundingBox().minY + y);
         Block block = worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
         if (block.getMaterial(worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ))).isLiquid()) {
@@ -191,11 +191,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
                 r = 147;
                 g = 132;
                 b = 83;
-            } else if (block == Blocks.water || block == Blocks.flowing_water) {
+            } else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
                 r = 49;
                 g = 70;
                 b = 245;
-            } else if (block == Blocks.lava || block == Blocks.flowing_lava) {
+            } else if (block == Blocks.WATER || block == Blocks.FLOWING_LAVA) {
                 r = 207;
                 g = 85;
                 b = 16;
@@ -301,7 +301,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 
     public void swimAbout() {
-        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getMaterial() != Material.water || currentSwimTarget.getY() < 1)) {
+        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getMaterial() != Material.WATER || currentSwimTarget.getY() < 1)) {
             currentSwimTarget = null;
         }
         int x = MathHelper.floor_double(posX);
@@ -402,27 +402,27 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     }
 
     public boolean isLeaping() {
-        return dataWatcher.get(IS_LEAPING);
+        return dataManager.get(IS_LEAPING);
     }
 
     public void setIsLeaping(boolean isLeaping) {
-        dataWatcher.set(IS_LEAPING, isLeaping);
+        dataManager.set(IS_LEAPING, isLeaping);
     }
 
     public boolean shouldMouthBeOpen() {
-        return dataWatcher.get(SHOULD_MOUTH_BE_OPEN);
+        return dataManager.get(SHOULD_MOUTH_BE_OPEN);
     }
 
     public void setShouldMouthBeOpen(boolean shouldMouthBeOpen) {
-        dataWatcher.set(SHOULD_MOUTH_BE_OPEN, shouldMouthBeOpen);
+        dataManager.set(SHOULD_MOUTH_BE_OPEN, shouldMouthBeOpen);
     }
 
     public float getMouthMoveSpeed() {
-        return dataWatcher.get(MOUTH_MOVE_SPEED);
+        return dataManager.get(MOUTH_MOVE_SPEED);
     }
 
     public void setMouthMoveSpeed(float mouthMoveSpeed) {
-        dataWatcher.set(MOUTH_MOVE_SPEED, mouthMoveSpeed);
+        dataManager.set(MOUTH_MOVE_SPEED, mouthMoveSpeed);
     }
 
     public float getRotationPitch(float partialRenderTicks) {

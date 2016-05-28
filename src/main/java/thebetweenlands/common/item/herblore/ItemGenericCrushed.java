@@ -15,34 +15,31 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ItemGenericCrushed extends Item implements ICustomJsonGenerationItem {
+public class ItemGenericCrushed extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {
     public ItemGenericCrushed() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setRegistryName("unknownCrushed");
-        this.setUnlocalizedName(getRegistryName().toString());
     }
 
-    public static ItemStack createStack(EnumItemGenericCrushed enumCrushed) {
-        return createStack(enumCrushed, 1);
+    public static ItemStack createStack(EnumItemGenericCrushed enumItemGeneric) {
+        return createStack(enumItemGeneric, 1);
     }
 
-    public static ItemStack createStack(EnumItemGenericCrushed enumCrushed, int size) {
-        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGenericCrushed, size, enumCrushed.id);
-    }
-
-    public static ItemStack createStack(Item item, int size, int meta) {
-        return new ItemStack(item, size, meta);
+    public static ItemStack createStack(EnumItemGenericCrushed enumItemGeneric, int size) {
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemGenericCrushed getEnumFromID(int id) {
         for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
             EnumItemGenericCrushed enumGeneric = EnumItemGenericCrushed.VALUES[i];
-            if (enumGeneric.id == id) return enumGeneric;
+            if (enumGeneric.ordinal() == id) return enumGeneric;
         }
         return EnumItemGenericCrushed.INVALID;
     }
@@ -51,9 +48,8 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < EnumItemGenericCrushed.VALUES.length; i++) {
-            if (EnumItemGenericCrushed.VALUES[i] != EnumItemGenericCrushed.INVALID)
-                list.add(new ItemStack(item, 1, EnumItemGenericCrushed.VALUES[i].id));
+        for (EnumItemGenericCrushed itemGeneric : EnumItemGenericCrushed.values()) {
+            list.add(new ItemStack(item, 1, itemGeneric.ordinal()));
         }
     }
 
@@ -68,7 +64,7 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.id) {
+        if (stack.getItemDamage() == EnumItemGenericCrushed.GROUND_DRIED_SWAMP_REED.ordinal()) {
             Block block = worldIn.getBlockState(pos).getBlock();
             if (block instanceof IGrowable) {
                 IGrowable growable = (IGrowable) block;
@@ -88,36 +84,82 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
 
 
     @Override
-    public String getJsonText(int meta) {
-        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/ground/" + getEnumFromID(meta).name);
+    public String getJsonText(String itemNAme) {
+        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/ground/" + itemNAme);
+    }
+
+    @Override
+    public List<String> getModels() {
+        List<String> models = new ArrayList<String>();
+        for (EnumItemGenericCrushed type : EnumItemGenericCrushed.values())
+            models.add(type.name);
+        return models;
     }
 
     public enum EnumItemGenericCrushed {
-        INVALID("invalid", 1024),
-        GROUND_GENERIC_LEAF("groundGenericLeaf", 0), GROUND_CATTAIL("groundCatTail", 1), GROUND_SWAMP_GRASS_TALL("groundSwampTallgrass", 2), GROUND_SHOOTS("groundShoots", 3),
-        GROUND_ARROW_ARUM("groundArrowArum", 4), GROUND_BUTTON_BUSH("groundButtonBush", 5), GROUND_MARSH_HIBISCUS("groundMarshHibiscus", 6),
-        GROUND_PICKEREL_WEED("groundPickerelWeed", 7), GROUND_SOFT_RUSH("groundSoftRush", 8), GROUND_MARSH_MALLOW("groundMarshMallow", 9),
-        GROUND_MILKWEED("groundMilkweed", 10), GROUND_BLUE_IRIS("groundBlueIris", 11), GROUND_COPPER_IRIS("groundCopperIris", 12), GROUND_BLUE_EYED_GRASS("groundBlueEyedGrass", 13),
-        GROUND_BONESET("groundBoneset", 14), GROUND_BOTTLE_BRUSH_GRASS("groundBottleBrushGrass", 15), GROUND_WEEDWOOD_BARK("groundWeedwoodBark", 16),
-        GROUND_DRIED_SWAMP_REED("groundDriedSwampReed", 17), GROUND_ALGAE("groundAlgae", 18), GROUND_ANGLER_TOOTH("groundAnglerTooth", 19),
-        GROUND_BLACKHAT_MUSHROOM("groundBlackHatMushroom", 20), GROUND_BLOOD_SNAIL_SHELL("groundBloodSnailShell", 21), GROUND_BOG_BEAN("groundBogBean", 22),
-        GROUND_BROOM_SEDGE("groundBroomSedge", 23), GROUND_BULB_CAPPED_MUSHROOM("groundBulbCappedMushroom", 24), GROUND_CARDINAL_FLOWER("groundCardinalFlower", 25),
-        GROUND_CAVE_GRASS("groundCaveGrass", 26), GROUND_CAVE_MOSS("groundCaveMoss", 27), GROUND_CRIMSON_MIDDLE_GEM("groundCrimsonMiddleGem", 28),
-        GROUND_DEEP_WATER_CORAL("groundDeepWaterCoral", 29), GROUND_FLATHEAD_MUSHROOM("groundFlatheadMushroom", 30), GROUND_GOLDEN_CLUB("groundGoldenClub", 31),
-        GROUND_GREEN_MIDDLE_GEM("groundGreenMiddleGem", 32), GROUND_HANGER("groundHanger", 33), GROUND_LICHEN("groundLichen", 34), GROUND_MARSH_MARIGOLD("groundMarshMarigold", 35),
-        GROUND_MIRE_CORAL("groundMireCoral", 36), GROUND_MIRE_SNAIL_SHELL("groundMireSnailShell", 37), GROUND_MOSS("groundMoss", 38), GROUND_NETTLE("groundNettle", 39),
-        GROUND_PHRAGMITES("groundPhragmites", 40), GROUND_SLUDGECREEP("groundSludgecreep", 41), GROUND_SUNDEW("groundSundew", 42), GROUND_SWAMP_KELP("groundSwampKelp", 43),
-        GROUND_TANGLED_ROOTS("groundTangledRoot", 44), GROUND_AQUA_MIDDLE_GEM("groundAquaMiddleGem", 45), GROUND_PITCHER_PLANT("groundPitcherPlant", 46),
-        GROUND_WATER_WEEDS("groundWaterWeeds", 47), GROUND_VENUS_FLY_TRAP("groundVenusFlyTrap", 48), GROUND_VOLARPAD("groundVolarpad", 49), GROUND_THORNS("groundThorns", 50),
-        GROUND_POISON_IVY("groundPoisonIvy", 51);
+        GROUND_GENERIC_LEAF,
+        GROUND_CATTAIL,
+        GROUND_SWAMP_GRASS_TALL,
+        GROUND_SHOOTS,
+        GROUND_ARROW_ARUM,
+        GROUND_BUTTON_BUSH,
+        GROUND_MARSH_HIBISCUS,
+        GROUND_PICKEREL_WEED,
+        GROUND_SOFT_RUSH,
+        GROUND_MARSH_MALLOW,
+        GROUND_MILKWEED,
+        GROUND_BLUE_IRIS,
+        GROUND_COPPER_IRIS,
+        GROUND_BLUE_EYED_GRASS,
+        GROUND_BONESET,
+        GROUND_BOTTLE_BRUSH_GRASS,
+        GROUND_WEEDWOOD_BARK,
+        GROUND_DRIED_SWAMP_REED,
+        GROUND_ALGAE,
+        GROUND_ANGLER_TOOTH,
+        GROUND_BLACKHAT_MUSHROOM,
+        GROUND_BLOOD_SNAIL_SHELL,
+        GROUND_BOG_BEAN,
+        GROUND_BROOM_SEDGE,
+        GROUND_BULB_CAPPED_MUSHROOM,
+        GROUND_CARDINAL_FLOWER,
+        GROUND_CAVE_GRASS,
+        GROUND_CAVE_MOSS,
+        GROUND_CRIMSON_MIDDLE_GEM,
+        GROUND_DEEP_WATER_CORAL,
+        GROUND_FLATHEAD_MUSHROOM,
+        GROUND_GOLDEN_CLUB,
+        GROUND_GREEN_MIDDLE_GEM,
+        GROUND_HANGER,
+        GROUND_LICHEN,
+        GROUND_MARSH_MARIGOLD,
+        GROUND_MIRE_CORAL,
+        GROUND_MIRE_SNAIL_SHELL,
+        GROUND_MOSS,
+        GROUND_NETTLE,
+        GROUND_PHRAGMITES,
+        GROUND_SLUDGECREEP,
+        GROUND_SUNDEW,
+        GROUND_SWAMP_KELP,
+        GROUND_TANGLED_ROOTS,
+        GROUND_AQUA_MIDDLE_GEM,
+        GROUND_PITCHER_PLANT,
+        GROUND_WATER_WEEDS,
+        GROUND_VENUS_FLY_TRAP,
+        GROUND_VOLARPAD,
+        GROUND_THORNS,
+        GROUND_POISON_IVY,
+
+        //KEEP AT BOTTOM
+        INVALID;
 
         public static final EnumItemGenericCrushed[] VALUES = values();
-        public final String name;
-        public final int id;
 
-        EnumItemGenericCrushed(String unlocName, int id) {
-            name = unlocName;
-            this.id = id;
+        public final String name;
+
+
+        EnumItemGenericCrushed() {
+            name = name().toLowerCase(Locale.ENGLISH);
         }
     }
 }

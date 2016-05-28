@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ItemForbiddenFig extends ItemBLFood {
     public ItemForbiddenFig() {
-        super(20, 5.0F, false, "forbiddenFig");
+        super(20, 5.0F, false);
     }
 
     public int getDecayHealAmount(ItemStack stack) {

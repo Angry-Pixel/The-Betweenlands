@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 public class ItemFlatheadMushroom extends ItemBLFood {
     public ItemFlatheadMushroom() {
-        super(3, 0.6F, false, "flatheadMushroomItem");
+        super(3, 0.6F, false);
     }
 
             /*@Override

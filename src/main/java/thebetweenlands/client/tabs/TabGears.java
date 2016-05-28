@@ -1,8 +1,8 @@
 package thebetweenlands.client.tabs;
 
-import thebetweenlands.client.tab.CreativeTabBetweenlands;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import thebetweenlands.client.tab.CreativeTabBetweenlands;
 
 public class TabGears extends CreativeTabBetweenlands {
 	public TabGears() {
@@ -11,6 +11,6 @@ public class TabGears extends CreativeTabBetweenlands {
 
 	@Override
 	public Item getTabIconItem() {
-		return /*BLItemRegistry.valonitePickaxe*/Item.getItemFromBlock(Blocks.stone);
+		return /*BLItemRegistry.valonitePickaxe*/Item.getItemFromBlock(Blocks.STONE);
 	}
 }

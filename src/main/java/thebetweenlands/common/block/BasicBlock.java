@@ -5,14 +5,12 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
 public class BasicBlock extends Block {
-	public BasicBlock(Material materialIn, String name) {
+	public BasicBlock(Material materialIn) {
 		super(materialIn);
-		setRegistryName(name);
-		setUnlocalizedName(getRegistryName().toString());
 	}
 
 	public BasicBlock setStepSound2(SoundType sound) {
-		super.setStepSound(sound);
+		super.setSoundType(sound);
 		return this;
 	}
 

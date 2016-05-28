@@ -1,10 +1,5 @@
 package thebetweenlands.common.world.storage.world;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -12,13 +7,60 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public abstract class WorldDataBase extends WorldSavedData {
-	private World world;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
+public abstract class WorldDataBase extends WorldSavedData {
+	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
+	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new HashMap<WorldDataTypePair, WorldDataBase>();
+	private World world;
 	private NBTTagCompound data = new NBTTagCompound();
 
 	public WorldDataBase(String name) {
 		super(name);
+	}
+
+	private static WorldDataBase getMatchingData(World world, Class<? extends WorldDataBase> clazz) {
+		for (Entry<WorldDataTypePair, WorldDataBase> cacheEntry : CACHE.entrySet()) {
+			WorldDataTypePair pair = cacheEntry.getKey();
+			if (pair.world == world && pair.data.equals(clazz)) {
+				return cacheEntry.getValue();
+			}
+		}
+		return null;
+	}
+
+	public static <T extends WorldDataBase> T forWorld(World world, Class<T> clazz) {
+		WorldDataBase cached = getMatchingData(world, clazz);
+		if (cached != null) {
+			cached.world = world;
+			return (T) cached;
+		}
+		MapStorage storage = world.getPerWorldStorage();
+		T newInstance = null;
+		try {
+			newInstance = clazz.getConstructor().newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		WorldDataBase result = (WorldDataBase) storage.getOrLoadData(clazz, newInstance.mapName);
+		if (result == null) {
+			result = newInstance;
+			result.world = world;
+			result.init();
+			result.setDefaults();
+			result.save();
+			storage.setData(result.mapName, result);
+		} else {
+			result.world = world;
+			result.init();
+			result.load();
+		}
+		CACHE.put(new WorldDataTypePair(world, clazz), result);
+		return (T) result;
 	}
 
 	public World getWorld() {
@@ -30,10 +72,13 @@ public abstract class WorldDataBase extends WorldSavedData {
 		this.data = compound.getCompoundTag("worldData");
 	}
 
+	//TODO check this please
 	@Override
-	public final void writeToNBT(NBTTagCompound compound) {
+	@ParametersAreNonnullByDefault
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
 		this.save();
-		compound.setTag("worldData", this.data);
+		nbtTagCompound.setTag("worldData", this.data);
+		return nbtTagCompound;
 	}
 
 	/**
@@ -68,50 +113,6 @@ public abstract class WorldDataBase extends WorldSavedData {
 			this.data = data;
 		}
 	}
-
-	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new HashMap<WorldDataTypePair, WorldDataBase>();
-
-	private static WorldDataBase getMatchingData(World world, Class<? extends WorldDataBase> clazz) {
-		for(Entry<WorldDataTypePair, WorldDataBase> cacheEntry : CACHE.entrySet()) {
-			WorldDataTypePair pair = cacheEntry.getKey();
-			if(pair.world == world && pair.data.equals(clazz)) {
-				return cacheEntry.getValue();
-			}
-		}
-		return null;
-	}
-
-	public static <T extends WorldDataBase> T forWorld(World world, Class<T> clazz) {
-		WorldDataBase cached = getMatchingData(world, clazz);
-		if(cached != null) {
-			cached.world = world;
-			return (T) cached;
-		}
-		MapStorage storage = world.getPerWorldStorage();
-		T newInstance = null;
-		try {
-			newInstance = clazz.getConstructor().newInstance();
-		} catch(Exception ex) {
-			throw new RuntimeException(ex);
-		}
-		WorldDataBase result = (WorldDataBase)storage.loadData(clazz, newInstance.mapName);
-		if (result == null) {
-			result = newInstance;
-			result.world = world;
-			result.init();
-			result.setDefaults();
-			result.save();
-			storage.setData(result.mapName, result);
-		} else {
-			result.world = world;
-			result.init();
-			result.load();
-		}
-		CACHE.put(new WorldDataTypePair(world, clazz), result);
-		return (T) result;
-	}
-
-	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
 
 	public static class WorldUnloadHandler {
 		private WorldUnloadHandler(){}

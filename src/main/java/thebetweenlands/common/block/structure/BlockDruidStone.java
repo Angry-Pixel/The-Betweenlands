@@ -25,10 +25,10 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
     private String type;
 
     public BlockDruidStone(Material blockMaterialIn, String blockName) {
-        super(blockMaterialIn, blockName);
+        super(blockMaterialIn);
         setHardness(1.5F);
         setResistance(10.0F);
-        setStepSound(SoundType.STONE);
+        setSoundType(SoundType.STONE);
         setHarvestLevel("pickaxe", 0);
         setLightLevel(0.8F);
         setCreativeTab(BLCreativeTabs.blocks);
@@ -101,10 +101,10 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
         map.put("1", "\"thebetweenlands:" + type + "\", \"y\": 90");
         map.put("2", "\"thebetweenlands:" + type + "\", \"y\": 180");
         map.put("3", "\"thebetweenlands:" + type + "\", \"y\": -90");
-        map.put("4", "\"thebetweenlands:" + type + "Active\"");
-        map.put("5", "\"thebetweenlands:" + type + "Active\", \"y\": 90");
-        map.put("6", "\"thebetweenlands:" + type + "Active\", \"y\": 180");
-        map.put("7", "\"thebetweenlands:" + type + "Active\", \"y\": -90");
+        map.put("4", "\"thebetweenlands:" + type + "_active\"");
+        map.put("5", "\"thebetweenlands:" + type + "_active\", \"y\": 90");
+        map.put("6", "\"thebetweenlands:" + type + "_active\", \"y\": 180");
+        map.put("7", "\"thebetweenlands:" + type + "_active\", \"y\": -90");
         return JsonRenderGenerator.complexBlockStates("random", map);
     }
 
@@ -114,7 +114,7 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
         if (meta == 0)
             format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type, "stone", "stone", type, "stone", "stone", "stone");
         else
-            format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type + "Active", "stone", "stone", type + "Active", "stone", "stone", "stone");
+            format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type + "_active", "stone", "stone", type + "_active", "stone", "stone", "stone");
         return format.replace("thebetweenlands:blocks/stone", "blocks/stone");
     }
 

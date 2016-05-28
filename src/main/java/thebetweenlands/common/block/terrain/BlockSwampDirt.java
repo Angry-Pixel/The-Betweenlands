@@ -7,8 +7,8 @@ import thebetweenlands.common.block.BasicBlock;
 public class BlockSwampDirt extends BasicBlock {
 
 	public BlockSwampDirt(Material materialIn) {
-		super(materialIn, "swamp_dirt");
-		this.setStepSound(SoundType.GROUND);
+		super(materialIn);
+		this.setSoundType(SoundType.GROUND);
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
 	}

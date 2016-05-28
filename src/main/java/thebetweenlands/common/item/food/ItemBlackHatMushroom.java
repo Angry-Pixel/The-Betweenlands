@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class ItemBlackHatMushroom extends ItemBLFood {
     public ItemBlackHatMushroom() {
-        super(3, 0.6f, false, "blackHatMushroomItem");
+        super(3, 0.6f, false);
     }
 
     /*@Override

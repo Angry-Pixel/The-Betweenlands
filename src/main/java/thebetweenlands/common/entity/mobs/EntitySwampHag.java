@@ -47,9 +47,9 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(TALK_SOUND, (byte) 0);
-        dataWatcher.register(SHOULD_JAW_MOVE, false);
-        dataWatcher.register(LIVING_SOUND_TIMER, 0);
+        dataManager.register(TALK_SOUND, (byte) 0);
+        dataManager.register(SHOULD_JAW_MOVE, false);
+        dataManager.register(LIVING_SOUND_TIMER, 0);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
     @Override
     public boolean getCanSpawnHere() {
-        return worldObj.checkNoEntityCollision(getEntityBoundingBox()) && worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.isAnyLiquid(getEntityBoundingBox());
+        return worldObj.checkNoEntityCollision(getEntityBoundingBox()) && worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
     }
 
     @Override
@@ -131,29 +131,29 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
     }
 
     private byte getTalkSound() {
-        return dataWatcher.get(TALK_SOUND);
+        return dataManager.get(TALK_SOUND);
     }
 
     private void setTalkSound(int soundIndex) {
-        dataWatcher.set(TALK_SOUND, (byte) soundIndex);
+        dataManager.set(TALK_SOUND, (byte) soundIndex);
     }
 
     public void setShouldJawMove(boolean jawState) {
-        dataWatcher.set(SHOULD_JAW_MOVE, jawState);
+        dataManager.set(SHOULD_JAW_MOVE, jawState);
         if (jawState)
             animationTick = 20;
     }
 
     public boolean shouldJawMove() {
-        return dataWatcher.get(SHOULD_JAW_MOVE);
+        return dataManager.get(SHOULD_JAW_MOVE);
     }
 
     private void updateLivingSoundTime() {
-        dataWatcher.set(LIVING_SOUND_TIMER, livingSoundTime);
+        dataManager.set(LIVING_SOUND_TIMER, livingSoundTime);
     }
 
     private int getLivingSoundTime() {
-        return dataWatcher.get(LIVING_SOUND_TIMER);
+        return dataManager.get(LIVING_SOUND_TIMER);
     }
 
     @Override

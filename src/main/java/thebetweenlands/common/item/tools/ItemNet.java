@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 public class ItemNet extends Item {
 
     public ItemNet() {
-        this.setUnlocalizedName("thebetweenlands.net");
         this.maxStackSize = 1;
         this.setMaxDamage(32);
     }

@@ -7,34 +7,31 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationItem {
+public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {
     public ItemGenericPlantDrop() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setRegistryName("unknownPlantDrop");
-        this.setUnlocalizedName(getRegistryName().toString());
     }
 
-    public static ItemStack createStack(EnumItemPlantDrop enumPlantDrop) {
-        return createStack(enumPlantDrop, 1);
+    public static ItemStack createStack(ItemGenericCrushed.EnumItemGenericCrushed enumItemGeneric) {
+        return createStack(enumItemGeneric, 1);
     }
 
-    public static ItemStack createStack(EnumItemPlantDrop enumPlantDrop, int size) {
-        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGenericPlantDrop, size, enumPlantDrop.id);
-    }
-
-    public static ItemStack createStack(Item item, int size, int meta) {
-        return new ItemStack(item, size, meta);
+    public static ItemStack createStack(ItemGenericCrushed.EnumItemGenericCrushed enumItemGeneric, int size) {
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemPlantDrop getEnumFromID(int id) {
         for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
             EnumItemPlantDrop enumGeneric = EnumItemPlantDrop.VALUES[i];
-            if (enumGeneric.id == id) return enumGeneric;
+            if (enumGeneric.ordinal() == id) return enumGeneric;
         }
         return EnumItemPlantDrop.INVALID;
     }
@@ -43,46 +40,84 @@ public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationI
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < EnumItemPlantDrop.VALUES.length; i++) {
-            if (EnumItemPlantDrop.VALUES[i] != EnumItemPlantDrop.INVALID)
-                list.add(new ItemStack(item, 1, EnumItemPlantDrop.VALUES[i].id));
+        for (EnumItemPlantDrop itemGeneric : EnumItemPlantDrop.values()) {
+            list.add(new ItemStack(item, 1, itemGeneric.ordinal()));
         }
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         try {
-            return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
+            return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).name;
         } catch (Exception e) {
             return "item.thebetweenlands.unknownPlantDrop";
         }
     }
 
     @Override
-    public String getJsonText(int meta) {
-        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/plantDrops/" + getEnumFromID(meta).iconName);
+    public String getJsonText(String itemName) {
+        return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/plantDrops/" + itemName);
+    }
+
+    @Override
+    public List<String> getModels() {
+        List<String> models = new ArrayList<String>();
+        for (EnumItemPlantDrop type : EnumItemPlantDrop.values())
+            models.add(type.name);
+        return models;
     }
 
     public enum EnumItemPlantDrop {
-        INVALID("invalid", 1024),
-        GENERIC_LEAF("genericLeaf", 0), ALGAE("algae", 1), ARROW_ARUM_LEAF("arrowArumLeaf", 2), BLUE_EYED_GRASS_FLOWERS("blueEyedGrassFlowers", 3), BLUE_IRIS_PETAL("blueIrisPetals", 4),
-        MIRE_CORAL("mireCoral", 5), DEEP_WATER_CORAL("deepWaterCoral", 6), BOG_BEAN_FLOWER("bogBeanFlower", 7), BONESET_FLOWERS("bonesetFlowers", 8),
-        BOTTLE_BRUSH_GRASS_BLADES("bottleBrushGrassBlades", 9), BROOM_SEDGE_LEAVES("broomSedgeLeaves", 10), BUTTON_BUSH_FLOWERS("buttonBushFlowers", 11),
-        CARDINAL_FLOWER_PETALS("cardinalFlowerPetals", 12), CATTAIL_HEAD("cattailHead", 13), CAVE_GRASS_BLADES("caveGrassBlades", 14),
-        COPPER_IRIS_PETALS("copperIrisPetals", 15), GOLDEN_CLUB_FLOWERS("goldenClubFlowers", 16), LICHEN("lichen", 17), MARSH_HIBISCUS_FLOWER("marshHibiscusFlower", 18),
-        MARSH_MALLOW_FLOWER("marshMallowFlower", 19), MARSH_MARIGOLD_FLOWER("marshMarigoldFlower", 20), NETTLE_LEAF("nettleLeaf", 21), PHRAGMITE_STEMS("phragmiteStems", 22),
-        PICKEREL_WEED_FLOWER("pickerelWeedFlower", 23), SHOOT_LEAVES("shootLeaves", 24), SLUDGECREEP_LEAVES("sludgecreepLeaves", 25), SOFT_RUSH_LEAVES("softRushLeaves", 26),
-        SUNDEW_HEAD("sundewHead", 27), SWAMP_TALL_GRASS_BLADES("swampTallGrassBlades", 28), CAVE_MOSS("caveMoss", 29), MOSS("moss", 30), MILK_WEED("milkWeed", 31),
-        HANGER("hanger", 32), PITCHER_PLANT_TRAP("pitcherPlantTrap", 33), WATER_WEEDS("waterWeeds", 34), VENUS_FLY_TRAP("venusFlyTrap", 35), VOLARPAD("volarpad", 36), THORNS("thorns", 37),
-        POISON_IVY("poisonIvy", 38);
+        GENERIC_LEAF,
+        ALGAE,
+        ARROW_ARUM_LEAF,
+        BLUE_EYED_GRASS_FLOWERS,
+        BLUE_IRIS_PETAL,
+        MIRE_CORAL,
+        DEEP_WATER_CORAL,
+        BOG_BEAN_FLOWER,
+        BONESET_FLOWERS,
+        BOTTLE_BRUSH_GRASS_BLADES,
+        BROOM_SEDGE_LEAVES,
+        BUTTON_BUSH_FLOWERS,
+        CARDINAL_FLOWER_PETALS,
+        CATTAIL_HEAD,
+        CAVE_GRASS_BLADES,
+        COPPER_IRIS_PETALS,
+        GOLDEN_CLUB_FLOWERS,
+        LICHEN,
+        MARSH_HIBISCUS_FLOWER,
+        MARSH_MALLOW_FLOWER,
+        MARSH_MARIGOLD_FLOWER,
+        NETTLE_LEAF,
+        PHRAGMITE_STEMS,
+        PICKEREL_WEED_FLOWER,
+        SHOOT_LEAVES,
+        SLUDGECREEP_LEAVES,
+        SOFT_RUSH_LEAVES,
+        SUNDEW_HEAD,
+        SWAMP_TALL_GRASS_BLADES,
+        CAVE_MOSS,
+        MOSS,
+        MILK_WEED,
+        HANGER,
+        PITCHER_PLANT_TRAP,
+        WATER_WEEDS,
+        VENUS_FLY_TRAP,
+        VOLARPAD,
+        THORNS,
+        POISON_IVY,
+
+        //KEEP AT BOTTOM
+        INVALID;
 
         public static final EnumItemPlantDrop[] VALUES = values();
-        public final String iconName;
-        public final int id;
 
-        EnumItemPlantDrop(String unlocName, int id) {
-            iconName = unlocName;
-            this.id = id;
+        public final String name;
+
+
+        EnumItemPlantDrop() {
+            name = name().toLowerCase(Locale.ENGLISH);
         }
     }
 }

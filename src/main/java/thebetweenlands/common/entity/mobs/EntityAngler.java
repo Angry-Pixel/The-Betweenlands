@@ -8,6 +8,7 @@ import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -37,7 +38,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(IS_LEAPING, false);
+        dataManager.register(IS_LEAPING, false);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
     @Override
     protected SoundEvent getSwimSound() {
-        return SoundEvents.entity_hostile_swim;
+        return SoundEvents.ENTITY_HOSTILE_SWIM;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
                 if (rand.nextBoolean())
                     entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.ANGLER_TOOTH, 3), 0.0F);
                 else
-                    entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.anglerMeatRaw, 1, 0), 0.0F);
+                    entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.anglerMeatRaw, 1, 0), 0.0F);
             }
         }
     }
@@ -89,7 +90,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
     @Override
     public boolean isInWater() {
-        return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.water, this);
+        return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
     }
 
     public boolean isGrounded() {
@@ -101,7 +102,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
         super.onLivingUpdate();
 
         if (!this.worldObj.isRemote) {
-            EntityPlayer target = worldObj.func_184139_a(this.getPosition(), 16.0D, 16.0D);
+            EntityPlayer target = worldObj.getClosestPlayerToEntity(this, 16.0D);
             setAttackTarget(target);
             if (isInWater()) {
                 if (!worldObj.isRemote) {
@@ -163,7 +164,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
     }
 
     private void swimAbout() {
-        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.water || currentSwimTarget.getY() < 1))
+        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
             currentSwimTarget = null;
 
         if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)
@@ -213,11 +214,11 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
     }
 
     public boolean isLeaping() {
-        return dataWatcher.get(IS_LEAPING);
+        return dataManager.get(IS_LEAPING);
     }
 
     private void setIsLeaping(boolean leaping) {
-        dataWatcher.set(IS_LEAPING, leaping);
+        dataManager.set(IS_LEAPING, leaping);
     }
 
 }

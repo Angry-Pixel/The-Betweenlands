@@ -56,7 +56,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
     @Override
     public void onUpdate() {
         if (!this.isInWater()) {
-            if (!onGround && motionY < 0D && worldObj.getBlockState(getPosition().down()).getBlock() == Blocks.air) {
+            if (!onGround && motionY < 0D && worldObj.getBlockState(getPosition().down()).getBlock() == Blocks.AIR) {
                 motionY *= 0.7D;
                 renderYawOffset += 10;
                 setIsFalling(true);

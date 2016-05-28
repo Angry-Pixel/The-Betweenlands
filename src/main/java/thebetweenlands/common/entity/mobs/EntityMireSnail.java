@@ -28,6 +28,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(1, new EntityAIPanic(this, 0.4D));
         tasks.addTask(2, new EntityAIMate(this, 0.4D));
+        //FIXME I think this wont work because of meta?
         tasks.addTask(3, new EntityAITempt(this, 0.4D, ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.SLUDGE_BALL).getItem(), false));
         tasks.addTask(5, new EntityAIWander(this, 0.4D));
         tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
@@ -39,8 +40,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(HAS_MATED, false);
-
+        dataManager.register(HAS_MATED, false);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
     @Override
     public boolean getCanSpawnHere() {
-        return worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.isAnyLiquid(getEntityBoundingBox());
+        return worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
     }
 
     @Override
@@ -92,12 +92,12 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.snailFleshCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshCooked, 1, 0), 0.0F);
         else
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.snailFleshRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshRaw, 1, 0), 0.0F);
 
         if (rand.nextBoolean())
-            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.MIRE_SNAIL_SHELL, 1), 0.0F);
+            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.MIRE_SNAIL_SHELL), 0.0F);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
     @Override
     public boolean isBreedingItem(ItemStack is) {
-        return is != null && is.getItem() == Registries.INSTANCE.itemRegistry.itemsGeneric && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.id;
+        return is != null && is.getItem() == Registries.INSTANCE.itemRegistry.itemsGeneric && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.ordinal();
     }
 
     @Override
@@ -126,11 +126,11 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     }
 
     public void setHasMated(boolean hasMated) {
-        dataWatcher.set(HAS_MATED, hasMated);
+        dataManager.set(HAS_MATED, hasMated);
     }
 
     public boolean hasMated() {
-        return dataWatcher.get(HAS_MATED);
+        return dataManager.get(HAS_MATED);
     }
 
     @Override

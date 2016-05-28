@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemSapJello extends ItemBLFood {
     public ItemSapJello() {
-        super(4, 15f, false, "sapJello");
+        super(4, 15f, false);
         setAlwaysEdible();
     }
 

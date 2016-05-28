@@ -1,5 +1,6 @@
 package thebetweenlands.common.tileentity;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -35,7 +36,8 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    @MethodsReturnNonnullByDefault
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         NBTTagList tags = new NBTTagList();
 
@@ -49,6 +51,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
         }
 
         nbt.setTag("Items", tags);
+        return nbt;
     }
 
     @Override

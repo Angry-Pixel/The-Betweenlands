@@ -1,11 +1,11 @@
 package thebetweenlands.client.tabs;
 
-import java.util.Comparator;
-
-import thebetweenlands.client.tab.CreativeTabBetweenlands;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.client.tab.CreativeTabBetweenlands;
+
+import java.util.Comparator;
 
 public class TabBlocks extends CreativeTabBetweenlands {
 	Comparator<ItemStack> sortedBlocks;
@@ -16,6 +16,6 @@ public class TabBlocks extends CreativeTabBetweenlands {
 
 	@Override
 	public Item getTabIconItem() {
-		return /*Item.getItemFromBlock(BLBlockRegistry.swampGrass)*/Item.getItemFromBlock(Blocks.stone);
+		return /*Item.getItemFromBlock(BLBlockRegistry.swampGrass)*/Item.getItemFromBlock(Blocks.STONE);
 	}
 }

@@ -8,6 +8,7 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -40,7 +41,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(RANGE_ATTACK_TIMER, 0);
+        dataManager.register(RANGE_ATTACK_TIMER, 0);
     }
 
     @Override
@@ -60,14 +61,14 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.snailFleshCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshCooked, 1, 0), 0.0F);
         else
-            entityDropItem(ItemGeneric.createStack(Registries.INSTANCE.itemRegistry.snailFleshRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshRaw, 1, 0), 0.0F);
 
         if (rand.nextBoolean())
-            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.BLOOD_SNAIL_SHELL, 1), 0.0F);
+            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.BLOOD_SNAIL_SHELL), 0.0F);
         else
-            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND, 2), 0.0F);
+            entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND), 0.0F);
     }
 
     @Override
@@ -140,10 +141,10 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
     }
 
     public int getRangeAttackTimer() {
-        return dataWatcher.get(RANGE_ATTACK_TIMER);
+        return dataManager.get(RANGE_ATTACK_TIMER);
     }
 
     public void setRangeAttackTimer(int size) {
-        dataWatcher.set(RANGE_ATTACK_TIMER, size);
+        dataManager.set(RANGE_ATTACK_TIMER, size);
     }
 }

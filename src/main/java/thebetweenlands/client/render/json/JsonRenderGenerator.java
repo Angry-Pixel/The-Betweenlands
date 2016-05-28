@@ -105,14 +105,14 @@ public class JsonRenderGenerator {
     }
 
 
-    public static void createJSONForItem(Item item, int meta, String itemName) {
+    public static void createJSONForItem(Item item, String itemName) {
         (new File(assetsFolder, "models")).mkdir();
         File dir = new File(assetsFolder, "models/item");
         dir.mkdir();
         File file = new File(dir, itemName + ".json");
         String jsonText;
         if (item instanceof ICustomJsonGenerationItem)
-            jsonText = ((ICustomJsonGenerationItem) item).getJsonText(meta);
+            jsonText = ((ICustomJsonGenerationItem) item).getJsonText(itemName);
         else if (item instanceof ItemTool)
             jsonText = String.format(ITEM_TOOL_FORMAT, itemName);
         else

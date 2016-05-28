@@ -1,5 +1,6 @@
 package thebetweenlands.common.registries;
 
+import com.google.common.base.CaseFormat;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,19 +24,19 @@ import java.util.List;
 import java.util.Random;
 
 public class BlockRegistry {
-	public static final Block swampWater = new Block(Material.water).setUnlocalizedName(ModInfo.NAME_PREFIX + "swampWater");
+	public static final Block swampWater = new Block(Material.WATER);
 	public final List<Block> blocks = new ArrayList<Block>();
-	public final Block betweenstone = new BasicBlock(Material.rock, "betweenstone")
+	public final Block betweenstone = new BasicBlock(Material.ROCK)
 			.setStepSound2(SoundType.STONE)
 			.setHardness(1.5F)
 			.setResistance(10.0F);
-	public final Block druidStone1 = new BlockDruidStone(Material.rock, "druidStone1");
-	public final Block druidStone2 = new BlockDruidStone(Material.rock, "druidStone2");
-	public final Block druidStone3 = new BlockDruidStone(Material.rock, "druidStone3");
-	public final Block druidStone4 = new BlockDruidStone(Material.rock, "druidStone4");
-	public final Block druidStone5 = new BlockDruidStone(Material.rock, "druidStone5");
-	public final Block swampDirt = new BlockSwampDirt(Material.ground);
-	public final Block octineOre = new BlockGenericOre(Material.rock, "octine_ore") {
+	public final Block druidStone1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
+	public final Block druidStone2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");
+	public final Block druidStone3 = new BlockDruidStone(Material.ROCK, "druid_stone_3");
+	public final Block druidStone4 = new BlockDruidStone(Material.ROCK, "druid_stone_4");
+	public final Block druidStone5 = new BlockDruidStone(Material.ROCK, "druid_stone_5");
+	public final Block swampDirt = new BlockSwampDirt(Material.GROUND);
+	public final Block octineOre = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return new ItemStack(Item.getItemFromBlock(this));
@@ -47,7 +48,7 @@ public class BlockRegistry {
 			for(Field field : this.getClass().getDeclaredFields()) {
 				if(field.getType().isAssignableFrom(Block.class)) {
 					Block block = (Block) field.get(this);
-					registerBlock(block);
+					registerBlock(block, field.getName());
 
 					if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 						if(block.getCreativeTabToDisplayOn() == null)
@@ -66,10 +67,19 @@ public class BlockRegistry {
 		}
 	}
 
-	private void registerBlock(Block block) {
-		GameRegistry.register(block);
+	private void registerBlock(Block block, String fieldName) {
+		String itemName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
+		GameRegistry.register(block.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + itemName));
 		ItemBlock itemBlock = new ItemBlock(block);
-		GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
+		GameRegistry.register((ItemBlock) itemBlock.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + itemName));
 		this.blocks.add(block);
+	}
+
+	public interface IHasCustomItem {
+		ItemBlock getItemBlock();
+	}
+
+	public interface ISubBlocksBlock {
+		List<String> getModels();
 	}
 }

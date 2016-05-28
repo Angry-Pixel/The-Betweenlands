@@ -11,35 +11,32 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.util.TranslationHelper;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ItemGeneric extends Item {
+public class ItemGeneric extends Item implements ItemRegistry.ISubItemsItem {
     public ItemGeneric() {
         setMaxDamage(0);
         setHasSubtypes(true);
-        this.setRegistryName("unknownGeneric");
-        this.setUnlocalizedName(getRegistryName().toString());
     }
 
-    public static ItemStack createStack(EnumItemGeneric enumGeneric) {
-        return createStack(enumGeneric, 1);
+    public static ItemStack createStack(EnumItemGeneric enumItemGeneric) {
+        return createStack(enumItemGeneric, 1);
     }
 
-    public static ItemStack createStack(EnumItemGeneric enumGeneric, int size) {
-        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumGeneric.id);
-    }
-
-    public static ItemStack createStack(Item item, int size, int meta) {
-        return new ItemStack(item, size, meta);
+    public static ItemStack createStack(EnumItemGeneric enumItemGeneric, int size) {
+        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemGeneric getEnumFromID(int id) {
         for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
             EnumItemGeneric enumGeneric = EnumItemGeneric.VALUES[i];
-            if (enumGeneric.id == id) return enumGeneric;
+            if (enumGeneric.ordinal() == id) return enumGeneric;
         }
         return EnumItemGeneric.INVALID;
     }
@@ -48,16 +45,15 @@ public class ItemGeneric extends Item {
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({"unchecked", "rawtypes"})
     public void getSubItems(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < EnumItemGeneric.VALUES.length; i++) {
-            if (EnumItemGeneric.VALUES[i] != EnumItemGeneric.INVALID)
-                list.add(new ItemStack(item, 1, EnumItemGeneric.VALUES[i].id));
+        for (EnumItemGeneric itemGeneric : EnumItemGeneric.values()) {
+            list.add(new ItemStack(item, 1, itemGeneric.ordinal()));
         }
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
         try {
-            return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).iconName;
+            return "item.thebetweenlands." + getEnumFromID(stack.getItemDamage()).name;
         } catch (Exception e) {
             return "item.thebetweenlands.unknownGeneric";
         }
@@ -65,7 +61,7 @@ public class ItemGeneric extends Item {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        if (stack.getItemDamage() == EnumItemGeneric.ASPECTRUS_FRUIT.id) {
+        if (stack.getItemDamage() == EnumItemGeneric.ASPECTRUS_FRUIT.ordinal()) {
             List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
             if (!itemAspects.isEmpty()) {
                 Aspect aspect = itemAspects.get(0);
@@ -156,9 +152,9 @@ public class ItemGeneric extends Item {
 
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
-        if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.id)
+        if (stack.getItemDamage() == EnumItemGeneric.TANGLED_ROOT.ordinal())
             return EnumAction.EAT;
-        if (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id)
+        if (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.ordinal())
             return EnumAction.BOW;
         return null;
     }
@@ -223,8 +219,8 @@ public class ItemGeneric extends Item {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List info, boolean debug) {
-        if (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.id)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean debug) {
+        if (stack.getItemDamage() == EnumItemGeneric.OCTINE_INGOT.ordinal())
             info.add(TranslationHelper.translateToLocal("octine.fire"));
         super.addInformation(stack, player, info, debug);
     }
@@ -267,35 +263,69 @@ public class ItemGeneric extends Item {
 
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         if (!world.isRemote)
-            player.curePotionEffects(new ItemStack(Items.milk_bucket));
+            player.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
     }
 
     @Override
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 32;
+    public List<String> getModels() {
+        List<String> models = new ArrayList<String>();
+        for (EnumItemGeneric type : EnumItemGeneric.values())
+            models.add(type.name);
+        return models;
     }
 
 
     public enum EnumItemGeneric {
-        INVALID("invalid", 1024),
-        BLOOD_SNAIL_SHELL("bloodSnailShell", 3), MIRE_SNAIL_SHELL("mireSnailShell", 4), COMPOST("compost", 5), DRAGONFLY_WING("dragonflyWing", 6),
-        LURKER_SKIN("lurkerSkin", 7), SWAMP_REED("swampReed", 8), DRIED_SWAMP_REED("driedSwampReed", 9), SWAMP_REED_ROPE("swampReedRope", 10),
-        TANGLED_ROOT("tangledRoot", 11), PLANT_TONIC("plantTonic", 12),
-        MUD_BRICK("mudBrick", 13), SYRMORITE_INGOT("syrmoriteIngot", 14), OCTINE_INGOT("octineIngot", 15), ROTTEN_BARK("rottenBark", 16), SLIMY_BONE("slimyBone", 17),
-        SLUDGE_BALL("sludgeBall", 18), SNAPPER_ROOT("snapperRoot", 19), STALKER_EYE("stalkerEye", 20), SULFUR("sulfur", 21),
-        VALONITE_SHARD("valoniteShard", 22), WEEDWOOD_STICK("weedwoodStick", 23), ANGLER_TOOTH("anglerTooth", 24), WEEDWOOD_BOWL("weedwoodBowl", 25),
-        RUBBER_BALL("rubber", 26), TAR_BEAST_HEART("tarBeastHeart", 27), TAR_BEAST_HEART_ANIMATED("tarBeastHeartAnimated", 28), TAR_DRIP("tarDrip", 29), LIMESTONE_FLUX("limestoneFlux", 30),
-        SWAMP_KELP("swampKelp", 31), INANIMATE_TARMINION("inanimateTarminion", 32), POISON_GLAND("poisonGland", 33), ASPECTRUS_FRUIT("aspectrusFruit", 34), PARCHMENT("parchment", 35),
-        SHOCKWAVE_SWORD_1("shockwaveSword1", 36), SHOCKWAVE_SWORD_2("shockwaveSword2", 37), SHOCKWAVE_SWORD_3("shockwaveSword3", 38), SHOCKWAVE_SWORD_4("shockwaveSword4", 39),
-        PYRAD_FLAME("pyradFlame", 40), AMULET_SOCKET("amuletSocket", 41), SCABYST("scabyst", 42);
+        BLOOD_SNAIL_SHELL,
+        MIRE_SNAIL_SHELL,
+        COMPOST,
+        DRAGONFLY_WING,
+        LURKER_SKIN,
+        SWAMP_REED,
+        DRIED_SWAMP_REED,
+        SWAMP_REED_ROPE,
+        TANGLED_ROOT,
+        PLANT_TONIC,
+        MUD_BRICK,
+        SYRMORITE_INGOT,
+        OCTINE_INGOT,
+        ROTTEN_BARK,
+        SLIMY_BONE,
+        SLUDGE_BALL,
+        SNAPPER_ROOT,
+        STALKER_EYE,
+        SULFUR,
+        VALONITE_SHARD,
+        WEEDWOOD_STICK,
+        ANGLER_TOOTH,
+        WEEDWOOD_BOWL,
+        RUBBER_BALL,
+        TAR_BEAST_HEART,
+        TAR_BEAST_HEART_ANIMATED,
+        TAR_DRIP,
+        LIMESTONE_FLUX,
+        SWAMP_KELP,
+        INANIMATE_TARMINION,
+        POISON_GLAND,
+        ASPECTRUS_FRUIT,
+        PARCHMENT,
+        SHOCKWAVE_SWORD_1,
+        SHOCKWAVE_SWORD_2,
+        SHOCKWAVE_SWORD_3,
+        SHOCKWAVE_SWORD_4,
+        PYRAD_FLAME,
+        AMULET_SOCKET,
+        SCABYST,
+
+        //KEEP AT THE BOTTOM
+        INVALID;
 
         public static final EnumItemGeneric[] VALUES = values();
-        public final String iconName;
-        public final int id;
+        public final String name;
 
-        EnumItemGeneric(String unlocName, int id) {
-            iconName = unlocName;
-            this.id = id;
+
+        EnumItemGeneric() {
+            name = name().toLowerCase(Locale.ENGLISH);
         }
     }
 }

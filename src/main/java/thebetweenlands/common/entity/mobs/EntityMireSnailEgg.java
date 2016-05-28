@@ -23,7 +23,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataWatcher.register(HATCH_TICKS, 0);
+        dataManager.register(HATCH_TICKS, 0);
     }
 
     @Override
@@ -82,11 +82,11 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
     }
 
     public int getHatchTime() {
-        return dataWatcher.get(HATCH_TICKS);
+        return dataManager.get(HATCH_TICKS);
     }
 
     public void setHatchTime(int hatchTime) {
-        dataWatcher.set(HATCH_TICKS, hatchTime);
+        dataManager.set(HATCH_TICKS, hatchTime);
     }
 
     @Override

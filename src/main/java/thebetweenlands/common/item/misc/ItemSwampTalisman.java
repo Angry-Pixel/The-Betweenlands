@@ -22,8 +22,6 @@ public class ItemSwampTalisman extends Item {
         this.setMaxDamage(0);
         this.maxStackSize = 1;
         this.setHasSubtypes(true);
-        this.setRegistryName("swampTalisman");
-        this.setUnlocalizedName(getRegistryName().toString());
     }
 
     public static ItemStack createStack(EnumTalisman swampTalisman, int size) {
@@ -41,7 +39,7 @@ public class ItemSwampTalisman extends Item {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return super.getUnlocalizedName() + "." + "swampTalisman" + stack.getItemDamage();
+        return "item.thebetweenlands.swamp_talisman_" + stack.getItemDamage();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package thebetweenlands.client.event.render;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -9,7 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
@@ -18,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
@@ -27,6 +26,15 @@ import thebetweenlands.util.config.ConfigHandler;
 
 public class FogHandler {
 	public static final FogHandler INSTANCE = new FogHandler();
+	////// Biome specific fog + smooth transition //////
+	private float currentFogStart = -1.0F;
+	private float currentFogEnd = -1.0F;
+	private float lastFogStart = -1.0F;
+	private float lastFogEnd = -1.0F;
+	private float currentFogColorMultiplier = -1.0F;
+	private float lastFogColorMultiplier = -1.0F;
+	private float farPlaneDistance = 0.0F;
+	private int fogMode;
 
 	public float getCurrentFogStart() {
 		return this.currentFogStart;
@@ -56,15 +64,6 @@ public class FogHandler {
 		return false;
 	}
 
-	////// Biome specific fog + smooth transition //////
-	private float currentFogStart = -1.0F;
-	private float currentFogEnd = -1.0F;
-	private float lastFogStart = -1.0F;
-	private float lastFogEnd = -1.0F;
-	private float currentFogColorMultiplier = -1.0F;
-	private float lastFogColorMultiplier = -1.0F;
-	private float farPlaneDistance = 0.0F;
-	private int fogMode;
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onFogRenderEvent(RenderFogEvent event) {
@@ -91,7 +90,7 @@ public class FogHandler {
 
 		if(world == null || player == null || this.farPlaneDistance == 0.0F || player.dimension != ConfigHandler.dimensionId) return;
 
-		BiomeGenBase biome = world.getBiomeGenForCoords(player.getPosition());
+		Biome biome = world.getBiomeGenForCoords(player.getPosition());
 
 		float fogStart = this.farPlaneDistance * 0.25F;
 		float fogEnd = this.farPlaneDistance;

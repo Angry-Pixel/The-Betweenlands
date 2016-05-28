@@ -48,4 +48,8 @@ public class CommonProxy implements IGuiHandler {
 	public void registerDefaultItemRenderer(Item item) {
 
 	}
+
+	public void changeFileNames() {
+
+	}
 }
