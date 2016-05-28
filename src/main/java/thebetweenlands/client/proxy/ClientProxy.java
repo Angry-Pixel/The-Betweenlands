@@ -13,6 +13,7 @@ import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.*;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.lib.ModInfo;
@@ -45,11 +46,15 @@ public class ClientProxy extends CommonProxy {
     public void registerDefaultBlockItemRenderer(Block block) {
         if (block instanceof BlockRegistry.ISubBlocksBlock) {
             List<String> models = ((BlockRegistry.ISubBlocksBlock) block).getModels();
-            for (int i = 0; i < models.size(); i++) {
-                if (ConfigHandler.debug && createJSONFile)
-                    JsonRenderGenerator.createJSONForBlock(block, models.get(i));
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ID + ":" + models.get(i), "inventory"));
-            }
+            if (block instanceof BlockDruidAltar) {
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ID + ":" + models.get(0), "inventory"));
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 4, new ModelResourceLocation(ModInfo.ID + ":" + models.get(1), "inventory"));
+            } else
+                for (int i = 0; i < models.size(); i++) {
+                    if (ConfigHandler.debug && createJSONFile)
+                        JsonRenderGenerator.createJSONForBlock(block, models.get(i));
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ID + ":" + models.get(i), "inventory"));
+                }
         } else {
             ResourceLocation name = block.getRegistryName();
             if (ConfigHandler.debug && createJSONFile)

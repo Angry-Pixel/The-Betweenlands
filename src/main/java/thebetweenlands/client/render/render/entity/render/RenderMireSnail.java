@@ -10,7 +10,7 @@ import thebetweenlands.common.entity.mobs.EntityMireSnail;
 
 @SideOnly(Side.CLIENT)
 public class RenderMireSnail extends RenderLiving<EntityMireSnail> {
-    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/mireSnail.png");
+    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/mire_snail.png");
 
     public RenderMireSnail(RenderManager manager) {
         super(manager, new ModelMireSnail(), 0.5F);

@@ -11,7 +11,7 @@ import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 
 @SideOnly(Side.CLIENT)
 public class RenderBlindCaveFish extends RenderLiving<EntityBlindCaveFish> {
-    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/blindCaveFish.png");
+    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/blind_cave_fish.png");
 
     public RenderBlindCaveFish(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelBlindCaveFish(), 0.2f);

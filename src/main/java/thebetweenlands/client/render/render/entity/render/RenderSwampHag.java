@@ -12,7 +12,7 @@ import thebetweenlands.common.entity.mobs.EntitySwampHag;
 
 @SideOnly(Side.CLIENT)
 public class RenderSwampHag extends RenderLiving<EntitySwampHag> {
-    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/swampHag.png");
+    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/swamp_hag.png");
 
     public RenderSwampHag(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelSwampHag(), 0.5F);

@@ -14,13 +14,11 @@ import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.ICustomJsonGenerationBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-public class BlockDruidStone extends BasicBlock implements ICustomJsonGenerationBlock {
+public class BlockDruidStone extends BasicBlock implements ICustomJsonGenerationBlock, BlockRegistry.ISubBlocksBlock {
     public static final PropertyInteger RANDOM = PropertyInteger.create("random", 0, 7);
     private String type;
 
@@ -132,5 +130,13 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
     @Override
     public String getBlockModelForItem() {
         return null;
+    }
+
+    @Override
+    public List<String> getModels() {
+        List<String> list = new ArrayList<>();
+        list.add(type);
+        list.add(type + "_active");
+        return list;
     }
 }

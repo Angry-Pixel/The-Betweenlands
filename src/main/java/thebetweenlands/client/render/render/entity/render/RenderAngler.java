@@ -7,16 +7,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.models.entity.ModelAngler;
+import thebetweenlands.client.render.render.entity.layer.LayerAnglerEyes;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 
 @SideOnly(Side.CLIENT)
 public class RenderAngler extends RenderLiving<EntityAngler> {
     private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/angler.png");
-    private final ResourceLocation eyeTexture = new ResourceLocation("thebetweenlands:textures/entity/anglerGlow.png");
 
     public RenderAngler(RenderManager manager) {
         super(manager, new ModelAngler(), 0.5F);
-        //setRenderPassModel(new ModelAngler());
+        addLayer(new LayerAnglerEyes<EntityAngler>(this));
     }
 
     @Override

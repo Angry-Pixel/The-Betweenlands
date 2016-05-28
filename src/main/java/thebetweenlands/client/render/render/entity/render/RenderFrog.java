@@ -11,11 +11,11 @@ import thebetweenlands.common.entity.mobs.EntityFrog;
 @SideOnly(Side.CLIENT)
 public class RenderFrog extends RenderLiving<EntityFrog> {
     private static final ResourceLocation[] TEXTURES = new ResourceLocation[]{
-            new ResourceLocation("thebetweenlands:textures/entity/frog0.png"),
-            new ResourceLocation("thebetweenlands:textures/entity/frog1.png"),
-            new ResourceLocation("thebetweenlands:textures/entity/frog2.png"),
-            new ResourceLocation("thebetweenlands:textures/entity/frog3.png"),
-            new ResourceLocation("thebetweenlands:textures/entity/frogPoison.png")
+            new ResourceLocation("thebetweenlands:textures/entity/frog_0.png"),
+            new ResourceLocation("thebetweenlands:textures/entity/frog_1.png"),
+            new ResourceLocation("thebetweenlands:textures/entity/frog_2.png"),
+            new ResourceLocation("thebetweenlands:textures/entity/frog_3.png"),
+            new ResourceLocation("thebetweenlands:textures/entity/frog_poison.png")
     };
 
     public RenderFrog(RenderManager rendermanagerIn) {

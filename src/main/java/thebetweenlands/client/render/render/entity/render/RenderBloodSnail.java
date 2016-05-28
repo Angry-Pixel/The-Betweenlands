@@ -7,7 +7,7 @@ import thebetweenlands.client.render.models.entity.ModelBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 
 public class RenderBloodSnail extends RenderLiving<EntityBloodSnail> {
-    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/bloodSnail.png");
+    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/blood_snail.png");
 
     public RenderBloodSnail(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelBloodSnail(), 0.2F);

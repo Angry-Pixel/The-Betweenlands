@@ -70,7 +70,11 @@ public class BlockRegistry {
 	private void registerBlock(Block block, String fieldName) {
 		String itemName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
 		GameRegistry.register(block.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + itemName));
-		ItemBlock itemBlock = new ItemBlock(block);
+		ItemBlock itemBlock;
+		if (block instanceof IHasCustomItem)
+			itemBlock = ((IHasCustomItem) block).getItemBlock();
+		else
+			itemBlock = new ItemBlock(block);
 		GameRegistry.register((ItemBlock) itemBlock.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + itemName));
 		this.blocks.add(block);
 	}
