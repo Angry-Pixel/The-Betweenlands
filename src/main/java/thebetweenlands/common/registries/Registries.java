@@ -17,11 +17,14 @@ public class Registries {
 		this.itemRegistry.preInit();
 		this.entityRegistry.preInit();
 		this.biomeRegistry.preInit();
+
+		this.blockRegistry.init();
+		this.itemRegistry.init();
 	}
 
 	public void init() {
-		this.blockRegistry.init();
-		this.itemRegistry.init();
+		//this.blockRegistry.init();
+		//this.itemRegistry.init();
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
 	}
