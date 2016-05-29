@@ -70,9 +70,9 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.setTemperatureRainfall(2.0f, 0.0f);
 
 		this.blSpawnEntries.add(new EventSpawnEntry(EntityFirefly.class, (short) 150, "bloodSky").setSpawnCheckRadius(32.0D));
-		this.blSpawnEntries.add(new EventSpawnEntry(EntitySwampHag.class, (short) 175, "bloodSky"));
-		this.blSpawnEntries.add(new EventSpawnEntry(EntityPeatMummy.class, (short) 65, "bloodSky").setSpawnCheckRadius(20.0D));
-		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
+		this.blSpawnEntries.add(new EventSpawnEntry(EntitySwampHag.class, (short) 175, "bloodSky").setHostile(true));
+		this.blSpawnEntries.add(new EventSpawnEntry(EntityPeatMummy.class, (short) 65, "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
+		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
 
 	/**
