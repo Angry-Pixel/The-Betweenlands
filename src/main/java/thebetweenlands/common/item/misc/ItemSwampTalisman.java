@@ -13,11 +13,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ItemSwampTalisman extends Item {
+public class ItemSwampTalisman extends Item implements ItemRegistry.ISubItemsItem {
     public ItemSwampTalisman() {
         this.setMaxDamage(0);
         this.maxStackSize = 1;
@@ -64,18 +67,26 @@ public class ItemSwampTalisman extends Item {
         return EnumActionResult.FAIL;
     }
 
+    @Override
+    public List<String> getModels() {
+        List<String> models = new ArrayList<String>();
+        for (ItemGeneric.EnumItemGeneric type : ItemGeneric.EnumItemGeneric.values())
+            models.add(type.name);
+        return models;
+    }
+
     public enum EnumTalisman {
-        SWAMP_TALISMAN("swampTalisman"),
-        SWAMP_TALISMAN_1("swampTalisman1"),
-        SWAMP_TALISMAN_2("swampTalisman2"),
-        SWAMP_TALISMAN_3("swampTalisman3"),
-        SWAMP_TALISMAN_4("swampTalisman4");
+        SWAMP_TALISMAN,
+        SWAMP_TALISMAN_1,
+        SWAMP_TALISMAN_2,
+        SWAMP_TALISMAN_3,
+        SWAMP_TALISMAN_4;
 
         public static final EnumTalisman[] VALUES = values();
-        public final String iconName;
+        public final String name;
 
-        EnumTalisman(String unlocName) {
-            this.iconName = unlocName;
+        EnumTalisman() {
+            name = name().toLowerCase(Locale.ENGLISH);
         }
     }
 }
