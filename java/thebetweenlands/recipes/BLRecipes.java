@@ -472,7 +472,7 @@ public class BLRecipes {
 		OreDictionary.registerOre("bowlWood", ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL));
 		OreDictionary.registerOre("materialRubber", ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		OreDictionary.registerOre("materialTar", ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
-		OreDictionary.registerOre("dustFlux", ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX));
+		OreDictionary.registerOre("dusteFlux", ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX));
 		OreDictionary.registerOre("dustLimestone", ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX));
 		OreDictionary.registerOre("cropSwampKelp", ItemGeneric.createStack(EnumItemGeneric.SWAMP_KELP));
 
