@@ -75,17 +75,17 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
     }
 
     public enum EnumTalisman {
-        SWAMP_TALISMAN("swampTalisman"),
-        SWAMP_TALISMAN_1("swampTalisman1"),
-        SWAMP_TALISMAN_2("swampTalisman2"),
-        SWAMP_TALISMAN_3("swampTalisman3"),
-        SWAMP_TALISMAN_4("swampTalisman4");
+        SWAMP_TALISMAN,
+        SWAMP_TALISMAN_1,
+        SWAMP_TALISMAN_2,
+        SWAMP_TALISMAN_3,
+        SWAMP_TALISMAN_4;
 
         public static final EnumTalisman[] VALUES = values();
-        public final String iconName;
+        public final String name;
 
-        EnumTalisman(String unlocName) {
-            this.iconName = unlocName;
+        EnumTalisman() {
+            name = name().toLowerCase(Locale.ENGLISH);
         }
     }
 }
