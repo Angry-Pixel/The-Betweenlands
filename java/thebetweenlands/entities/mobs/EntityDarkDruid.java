@@ -27,6 +27,7 @@ import thebetweenlands.network.packet.server.PacketDruidTeleportParticle;
 import thebetweenlands.utils.MathUtils;
 
 public class EntityDarkDruid extends EntityMob {
+	private static final int MIN_ATTACK_DELAY = 40, MAX_ATTACK_DELAY = 120;
 	private static final int MAX_ATTACK_TIME = 20;
 
 	private static final int MAX_ATTACK_ANIMATION_TIME = 8;
@@ -35,6 +36,7 @@ public class EntityDarkDruid extends EntityMob {
 	private EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
 	private EntityAIWatchClosest watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
 
+	private int attackDelayCounter;
 	private int attackCounter;
 	private int teleportCooldown;
 	private boolean isWatching = true;
@@ -54,7 +56,7 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(6, new EntityAIDruidTeleport(this));
 		targetTasks.addTask(1, new EntityAIHurtByTargetDruid(this));
 		targetTasks.addTask(2, new EntityAINearestAttackableTargetDruid(this));
-		setSize(1.1F, 2.1F);
+		setSize(0.9F, 1.9F);
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class EntityDarkDruid extends EntityMob {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23);
 		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(1);
+		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(5);
 		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16);
 		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.5);
 	}
@@ -76,27 +78,40 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getAttackTarget() != null && getEntitySenses().canSee(getAttackTarget())) {
-			if (attackCounter == 0) {
-				attackCounter++;
-				if (!worldObj.isRemote) {
-					tasks.removeTask(meleeAI);
-				}
-			} else if (attackCounter < MAX_ATTACK_TIME) {
-				attackCounter++;
-				startCasting();
-				if (!worldObj.isRemote) {
-					chargeSpell(getAttackTarget());
-				}
-			} else if (attackCounter >= MAX_ATTACK_TIME) {
-				attackCounter = 0;
-				stopCasting();
-				if (!worldObj.isRemote) {
-					castSpell(getAttackTarget());
-					tasks.addTask(2, meleeAI);
+		if (getAttackTarget() != null) {
+			if(this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistanceToEntity(this) < 10.0D) {
+				this.attackDelayCounter--;
+			}
+			if(this.attackDelayCounter <= 0 || this.attackCounter > 0) {
+				if(getEntitySenses().canSee(getAttackTarget())) {
+					if (attackCounter == 0) {
+						if(getAttackTarget().onGround) {
+							attackCounter++;
+							if (!worldObj.isRemote) {
+								tasks.removeTask(meleeAI);
+							}
+						}
+					} else if (attackCounter < MAX_ATTACK_TIME) {
+						attackCounter++;
+						startCasting();
+						if (!worldObj.isRemote) {
+							chargeSpell(getAttackTarget());
+						}
+					} else if (attackCounter >= MAX_ATTACK_TIME) {
+						this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
+						attackCounter = 0;
+						stopCasting();
+						if (!worldObj.isRemote) {
+							castSpell(getAttackTarget());
+							tasks.addTask(2, meleeAI);
+						}
+					}
 				}
 			}
 		} else if (isCasting() || attackCounter != 0) {
+			if(this.attackDelayCounter <= 0) {
+				this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
+			}
 			attackCounter = 0;
 			stopCasting();
 		}
@@ -167,6 +182,7 @@ public class EntityDarkDruid extends EntityMob {
 				newDruid.copyDataFrom(this, true);
 				newDruid.setPosition(targetX, targetY, targetZ);
 				newDruid.faceEntity(entity, 100, 100);
+				newDruid.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
 				if (worldObj.getCollidingBoundingBoxes(newDruid, newDruid.boundingBox).isEmpty() && !worldObj.isAnyLiquid(newDruid.boundingBox)) {
 					successful = true;
 					setDead();
@@ -217,8 +233,11 @@ public class EntityDarkDruid extends EntityMob {
 
 	public void chargeSpell(Entity entity) {
 		if (entity.getDistanceToEntity(this) <= 4) {
-			entity.motionX = 1.5 * Math.signum(entity.posX - posX);
-			entity.motionZ = 1.5 * Math.signum(entity.posZ - posZ);
+			double dx = entity.posX - this.posX;
+			double dz = entity.posZ - this.posZ;
+			double len = Math.sqrt(dx*dx+dz*dz);
+			entity.motionX = 1.5 * dx / len;
+			entity.motionZ = 1.5 * dz / len;
 		} else {
 			entity.motionX = 0;
 			entity.motionZ = 0;
@@ -228,9 +247,12 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	public void castSpell(Entity entity) {
-		entity.motionX = 0.5 * Math.signum(entity.posX - posX);
-		entity.motionZ = 0.5 * Math.signum(entity.posZ - posZ);
-		entity.motionY = 1.5;
+		double dx = entity.posX - this.posX;
+		double dz = entity.posZ - this.posZ;
+		double len = Math.sqrt(dx*dx+dz*dz);
+		entity.motionX = 0.5 * dx / len;
+		entity.motionZ = 0.5 * dz / len;
+		entity.motionY = 1.05D;
 		entity.velocityChanged = true;
 	}
 

@@ -4,7 +4,6 @@ import static org.objectweb.asm.Opcodes.*;
 import static org.objectweb.asm.tree.AbstractInsnNode.*;
 
 import java.util.Iterator;
-import java.util.ListIterator;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -344,27 +343,28 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		String entityDesc = obf ? "Lsa;" : "Lnet/minecraft/entity/Entity;";
 		String getMouseOverBLDesc = "(F)" + entityDesc;
 		String entityRenderer = obf ? "blt" : "net/minecraft/client/renderer/EntityRenderer";
+		String cloudFog = obf ? "ab" : "cloudFog";
 		String pointedEntity = obf ? "x" : "pointedEntity";
+		// Bait vars
+		String worldClient = obf ? "bjf" : "net/minecraft/client/multiplayer/WorldClient";
+		String rayTraceBlocks = obf ? "a" : "rayTraceBlocks";
+		String rayTraceBlocksDesc = obf ? "(Lazw;Lazw;)Lazu;" : "(Lnet/minecraft/util/Vec3;Lnet/minecraft/util/Vec3;)Lnet/minecraft/util/MovingObjectPosition;";
+		// End
 		boolean needsOrientCamera = true;
 		boolean needsRenderWorld = true;
 		boolean needsGetMouseOver = true;
 		for (MethodNode method : classNode.methods) {
 			if (needsOrientCamera && orientCamera.equals(method.name) && "(F)V".equals(method.desc)) {
 				method.localVariables.clear();
-				ListIterator<AbstractInsnNode> insns = method.instructions.iterator();
-				while (insns.hasNext()) {
-					AbstractInsnNode insnNode = insns.next();
-					if (insnNode.getOpcode() == INVOKEVIRTUAL && "(DDDF)Z".equals(((MethodInsnNode) insnNode).desc)) {
-						InsnList invocation = new InsnList();
-						invocation.add(new VarInsnNode(ALOAD, 0));
-						invocation.add(new VarInsnNode(FLOAD, 1));
-						invocation.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "orient", "(F)Z", false));
-						method.instructions.insertBefore(insnNode, invocation);
-						insns.remove();
-						break;
-					}
-					insns.remove();
-				}
+				InsnList insns = method.instructions;
+				insns.clear();
+				insns.add(new VarInsnNode(ALOAD, 0));
+				insns.add(new VarInsnNode(FLOAD, 1));
+				insns.add(new MethodInsnNode(INVOKESTATIC, PERSPECTIVE, "orient", "(F)Z", false));
+				insns.add(new FieldInsnNode(PUTFIELD, entityRenderer, cloudFog, "Z"));
+				insns.add(new InsnNode(RETURN));
+				// Factorization bait
+				insns.add(new MethodInsnNode(INVOKEVIRTUAL, worldClient, rayTraceBlocks, rayTraceBlocksDesc, false));
 				needsOrientCamera = false;
 			}
 			if (needsRenderWorld && "(FJ)V".equals(method.desc)) {
@@ -421,7 +421,9 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						}
 					}
 				}
-				classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
+				if (needsFrustumStuff) {
+					classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
+				}
 				needsRenderWorld = false;
 			}
 			if (needsGetMouseOver && getMouseOver.equals(method.name) && "(F)V".equals(method.desc)) {

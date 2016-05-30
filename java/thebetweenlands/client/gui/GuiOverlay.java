@@ -119,7 +119,11 @@ public class GuiOverlay extends Gui {
 
 					((StarfieldEffect)this.de).setTimeScale(0.000003F);
 
-					this.de.apply(this.tb1.framebufferTexture, shader.getBlitBuffer("starfieldBlitBuffer"), null, Minecraft.getMinecraft().getFramebuffer(), Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2);
+					this.de.create(shader.getBlitBuffer("starfieldBlitBuffer"))
+					.setSource(this.tb1.framebufferTexture)
+					.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
+					.setRenderDimensions(Minecraft.getMinecraft().displayWidth / 2, Minecraft.getMinecraft().displayHeight / 2)
+					.render();
 
 					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GL11.glEnable(GL11.GL_BLEND);

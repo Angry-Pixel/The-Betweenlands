@@ -569,7 +569,7 @@ public class BLBlockRegistry {
 	public static final Block trapDoorRubberTreePlank = new BlockBLTrapDoor("rubberTreePlank", Material.wood);
 	public static final Block trapDoorSyrmorite = new BlockBLTrapDoor("syrmorite", Material.rock);
 	// OTHER THINGS
-	public static final Block druidSpawner = new BlockDruidSpawner("darkDruid");
+	public static final Block druidSpawner = new BlockDruidSpawner();
 	public static final Block tarBeastSpawner = new BlockTarBeastSpawner();
 	public static final BlockBLSpawner blSpawner = new BlockBLSpawner();
 	public static final BlockRope rope = new BlockRope();

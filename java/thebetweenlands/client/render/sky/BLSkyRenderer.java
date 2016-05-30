@@ -112,7 +112,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		Tessellator tessellator = Tessellator.instance;
 
 		//tessellator.startDrawingQuads();
-		GL11.glBegin(GL11.GL_QUADS);
+		//GL11.glBegin(GL11.GL_QUADS);
 		for (int i = 0; i < 1500; ++i) {
 			double rx = (double)(random.nextFloat() * 2.0F - 1.0F);
 			double ry = (double)(random.nextFloat() * 0.5F - 1.0F);
@@ -171,7 +171,7 @@ public class BLSkyRenderer extends IRenderHandler {
 				triangles.add(t2);
 			}
 		}
-		GL11.glEnd();
+		//GL11.glEnd();
 		//tessellator.draw();
 
 		return new Mesh(triangles);
@@ -282,6 +282,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glDisable(GL11.GL_FOG);
 			GL11.glColor4f(1, 1, 1, 1);
+			this.clipPlaneBuffer.updateBuffers(Minecraft.getMinecraft().getFramebuffer());
 			this.clipPlaneBuffer.bind();
 			this.clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 			tessellator.startDrawingQuads();
@@ -291,16 +292,13 @@ public class BLSkyRenderer extends IRenderHandler {
 			tessellator.addVertex(9000.0D, -90.0D, 9000.0D);
 			tessellator.addVertex(9000.0D, -90.0D, -9000.0D);
 			tessellator.draw();
-			this.clipPlaneBuffer.update(Minecraft.getMinecraft().getFramebuffer());
-			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+			this.clipPlaneBuffer.updateDepth();
+			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 		}
 
 		GL11.glPopMatrix();
-		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
 	}
 
 	private void renderAuroras(Minecraft mc) {
@@ -471,7 +469,10 @@ public class BLSkyRenderer extends IRenderHandler {
 		if (starBrightness > 0.0F && !useShaderSky) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+			GL11.glPushMatrix();
+			GL11.glRotated(55, 1, 0, 0);
 			this.starMesh.render();
+			GL11.glPopMatrix();
 			GL14.glBlendColor(1, 1, 1, 1);
 			GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
 		}
@@ -532,13 +533,14 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 		if(useShaderSky) {
+			//Render shader sky dome
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
@@ -549,11 +551,38 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDepthMask(true);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
+
+			//Render sky clip plane
+			this.renderSkyTexture(mc, true);
 		} else {
-			this.renderSkyTexture(mc, false);
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+				//Render fancy non-shader sky dome
+				mc.renderEngine.bindTexture(SKY_TEXTURE_RES);
+				GL11.glDisable(GL11.GL_ALPHA_TEST);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glEnable(GL11.GL_TEXTURE_2D);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glDepthMask(false);
+				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+				GL11.glCallList(this.skyDispListStart);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+				GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+				GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+				GL11.glDepthMask(true);
+				GL11.glDisable(GL11.GL_BLEND);
+				GL11.glEnable(GL11.GL_ALPHA_TEST);
+			} else {
+				//Render flat sky
+				this.renderSkyTexture(mc, false);
+			}
 		}
 
-		this.renderSkyTexture(mc, true);
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
 		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
 			GL11.glColor4f(1, 1, 1, 1);

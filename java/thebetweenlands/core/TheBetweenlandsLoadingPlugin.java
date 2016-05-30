@@ -11,6 +11,10 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 public class TheBetweenlandsLoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {
+		boolean useGLDebug = "true".equals(System.getProperty("bl.glDebug"));
+		if(useGLDebug) {
+			return new String[] { TheBetweenlandsClassTransformer.class.getCanonicalName(), OpenGLDebug.class.getCanonicalName() };
+		}
 		return new String[] { TheBetweenlandsClassTransformer.class.getCanonicalName() };
 	}
 

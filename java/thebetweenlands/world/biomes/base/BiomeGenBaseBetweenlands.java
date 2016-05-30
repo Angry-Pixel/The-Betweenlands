@@ -15,6 +15,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
+import thebetweenlands.entities.mobs.EntityPyrad;
 import thebetweenlands.entities.mobs.EntitySwampHag;
 import thebetweenlands.utils.IWeightProvider;
 import thebetweenlands.world.ChunkProviderBetweenlands;
@@ -23,6 +24,8 @@ import thebetweenlands.world.biomes.decorators.base.BiomeDecoratorBaseBetweenlan
 import thebetweenlands.world.biomes.feature.base.BiomeNoiseFeature;
 import thebetweenlands.world.biomes.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.world.biomes.spawning.spawners.EventSpawnEntry;
+import thebetweenlands.world.biomes.spawning.spawners.LocationSpawnEntry;
+import thebetweenlands.world.storage.chunk.storage.location.EnumLocationType;
 
 /**
  *
@@ -67,8 +70,9 @@ public abstract class BiomeGenBaseBetweenlands extends BiomeGenBase implements I
 		this.setTemperatureRainfall(2.0f, 0.0f);
 
 		this.blSpawnEntries.add(new EventSpawnEntry(EntityFirefly.class, (short) 150, "bloodSky").setSpawnCheckRadius(32.0D));
-		this.blSpawnEntries.add(new EventSpawnEntry(EntitySwampHag.class, (short) 175, "bloodSky"));
-		this.blSpawnEntries.add(new EventSpawnEntry(EntityPeatMummy.class, (short) 65, "bloodSky").setSpawnCheckRadius(20.0D));
+		this.blSpawnEntries.add(new EventSpawnEntry(EntitySwampHag.class, (short) 175, "bloodSky").setHostile(true));
+		this.blSpawnEntries.add(new EventSpawnEntry(EntityPeatMummy.class, (short) 65, "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
+		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
 
 	/**

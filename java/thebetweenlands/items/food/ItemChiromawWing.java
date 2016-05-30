@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import thebetweenlands.creativetabs.BLCreativeTabs;
 import thebetweenlands.entities.properties.BLEntityPropertiesRegistry;
 import thebetweenlands.entities.properties.list.EntityPropertiesFood;
-import thebetweenlands.event.player.PlayerItemEventHandler.Sickness;
+import thebetweenlands.event.player.FoodSicknessEventHandler.Sickness;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemChiromawWing extends ItemFood implements IManualEntryItem {

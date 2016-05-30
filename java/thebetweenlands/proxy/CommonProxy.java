@@ -1,5 +1,6 @@
 package thebetweenlands.proxy;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -23,6 +24,7 @@ import thebetweenlands.event.debugging.DebugHandlerCommon;
 import thebetweenlands.event.entity.RecruitmentRingHandler;
 import thebetweenlands.event.input.RingInputHandler;
 import thebetweenlands.event.item.ItemEquipmentHandler;
+import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.world.AspectLoadHandler;
 import thebetweenlands.event.world.PopulationHandler;
 import thebetweenlands.inventory.container.ContainerAnimator;
@@ -147,6 +149,8 @@ public class CommonProxy implements IGuiHandler {
 
 		MinecraftForge.EVENT_BUS.register(AspectLoadHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(PopulationHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(RottenFoodHandler.INSTANCE);
+		FMLCommonHandler.instance().bus().register(RottenFoodHandler.INSTANCE);
 	}
 
 	public void postInit() {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -87,7 +88,7 @@ public class OverlayHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOW) //Makes sure that this is executed after ShaderHandler#onRenderHand
 	public void onRenderHand(RenderHandEvent event) {
 		EntityLivingBase view = Minecraft.getMinecraft().renderViewEntity;
 		World world = Minecraft.getMinecraft().theWorld;
@@ -96,12 +97,19 @@ public class OverlayHandler {
 
 		GL11.glPushMatrix();
 
-		//Render normal hand with overlays
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-		this.renderHand(event.partialTicks, event.renderPass, true);
+		//Offset hand so that it doesn't clip with the world
+		//This is used over clearing the depth for compatibility with other shader mods
+		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+		GL11.glPolygonOffset(0.0F, -2000000.0F);
 
+		//Render normal hand with overlays
+		//Rendered twice with a forward and then backwards offset, a bit hacky but works
+		this.renderHand(event.partialTicks, event.renderPass, true);
+		GL11.glPolygonOffset(0.0F, 7000000.0F);
+		this.renderHand(event.partialTicks, event.renderPass, true);
+		GL11.glPolygonOffset(0.0F, -7000000.0F);
+		
 		//Render decay overlay
-		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
 		//Should fix compatibility issues with mods that replace the player renderer or parts of it (e.g. More Player Models)
 		if(playerRenderer.getClass() == RenderPlayer.class && playerRenderer.modelBipedMain.getClass() == ModelBiped.class) {
@@ -119,9 +127,13 @@ public class OverlayHandler {
 		//Render other overlays
 		if (view == null || world == null) {
 			GL11.glPopMatrix();
+			GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
 			return;
 		}
 
+		//Offset overlays so that it doesn't clip with the world
+		GL11.glPolygonOffset(0.0F, -9000000.0F);
+		
 		//Get the view block
 		Vec3 vec = Vec3.createVectorHelper(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ);
 		ChunkPosition chunkposition = new ChunkPosition(vec);
@@ -144,7 +156,6 @@ public class OverlayHandler {
 		boolean inMud = block.getMaterial() == BLMaterial.mud;
 		boolean inBlock = inTar || inMud || inStagnantWater;
 		if (inBlock && !this.cancelOverlay) {
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			Minecraft mc = Minecraft.getMinecraft();
 			if (inTar) {
 				mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
@@ -158,8 +169,9 @@ public class OverlayHandler {
 			}
 
 			this.renderWarpedTextureOverlay(event.partialTicks);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		}
+
+		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
 		GL11.glPopMatrix();
 	}
 

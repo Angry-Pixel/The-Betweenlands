@@ -43,25 +43,25 @@ public class MobSpawnHandler {
 	//How many times a chunk should be populated with mobs when it generates
 	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
 
-	//Maximum distance from the player where mobs can still spawn
+	//Distance from the player where mobs spawn (middle of the spawner chunk rim)
 	private static final byte SPAWN_CHUNK_DISTANCE = 4;
-	//Width of the chunk rim where mobs can spawn
+	//Size of the chunk rim where mobs can spawn (SPAWN_CHUNK_DISTANCE +- SPAWN_CHUNK_RIM)
 	private static final byte SPAWN_CHUNK_RIM = 2;
 
 	//How many attempts per spawning run
-	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 6;
+	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 8;
 	//How many attempts to reach the desired mob group size
-	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 30;
+	private static final int SPAWNING_ATTEMPTS_PER_GROUP = 32;
 
 	//Maximum spawns per spawning run
 	private static final int MAX_SPAWNS_PER_CHUNK = 6;
 	//Maximum entities per loaded area around a player
-	private static final int MAX_ENTITIES_PER_LOADED_AREA = 80;
+	private static final int MAX_ENTITIES_PER_LOADED_AREA = ConfigHandler.maxEntitiesPerLoadedArea;
 	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
 	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = (float)MAX_ENTITIES_PER_LOADED_AREA / (float)((SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM)*(SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM) - SPAWN_CHUNK_RIM*SPAWN_CHUNK_RIM);
 
 	//World entity limit
-	private static final int HARD_ENTITY_LIMIT = 500;
+	private static final int HARD_ENTITY_LIMIT = ConfigHandler.hardEntityLimit;
 
 
 
@@ -287,7 +287,7 @@ public class MobSpawnHandler {
 			int spawnedEntities = 0;
 			for(int i = 0; i < CHUNK_GEN_SPAWN_RUNS; i++) {
 				spawnedEntities += this.populateChunk(world, new ChunkCoordIntPair(event.chunkX, event.chunkZ), spawnHostiles, spawnAnimals, false, true,
-						SPAWNING_ATTEMPTS_PER_CHUNK, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT);
+						SPAWNING_ATTEMPTS_PER_CHUNK, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT, 1.0F);
 			}
 			//System.out.println("Spawned: " + spawnedEntities + " Time: " + (System.nanoTime() - start) / 1000000.0F);
 		}
@@ -335,14 +335,16 @@ public class MobSpawnHandler {
 		boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
+		float areaMultiplier = (float)spawnerChunks.size() / (float)((SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM)*(SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM) - SPAWN_CHUNK_RIM*SPAWN_CHUNK_RIM);
+
 		for(ChunkCoordIntPair chunkPos : spawnerChunks) {
 			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
-					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, maxEntitiesForLoadedArea);
+					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, maxEntitiesForLoadedArea, areaMultiplier);
 		}
 	}
 
 	private int populateChunk(World world, ChunkCoordIntPair chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreTimers,
-			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit) {
+			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float areaMultiplier) {
 		int attempts = 0, chunkSpawnedEntities = 0;
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
@@ -433,7 +435,9 @@ public class MobSpawnHandler {
 							spawnEntry.lastSpawn = world.getTotalWorldTime();
 							continue;
 						}
-						if(world.getTotalWorldTime() - spawnEntry.lastSpawn < spawnEntry.spawningInterval)
+						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
+						int adjustedInterval = (int)(spawnEntry.spawningInterval / areaMultiplier);
+						if(world.getTotalWorldTime() - spawnEntry.lastSpawn < adjustedInterval)
 							//Too early, don't spawn yet
 							continue;
 					}
