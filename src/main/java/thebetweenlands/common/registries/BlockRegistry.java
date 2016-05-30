@@ -14,6 +14,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
@@ -42,6 +43,8 @@ public class BlockRegistry {
 			return new ItemStack(Item.getItemFromBlock(this));
 		}
 	};
+
+	public final Block treePortal = new BlockTreePortal();
 
 	public void preInit() {
 		try {
