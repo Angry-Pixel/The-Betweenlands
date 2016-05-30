@@ -72,7 +72,14 @@ public class ClientProxy extends CommonProxy {
                     JsonRenderGenerator.createJSONForItem(item, models.get(i));
                 ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
             }
-        } else {
+        } else if(item instanceof ItemRegistry.ISingleJsonSubItems){
+            List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
+            for (int i = 0; i < types.size(); i++) {
+                //if (ConfigHandler.debug && createJSONFile)
+                    //JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
+                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX+item.getRegistryName().getResourcePath(), types.get(i)));
+            }
+        } else{
             String itemName = item.getRegistryName().toString().replace("thebetweenlands:", "");
             if (ConfigHandler.debug && createJSONFile)
                 JsonRenderGenerator.createJSONForItem(item, itemName);

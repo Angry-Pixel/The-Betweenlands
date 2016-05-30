@@ -136,4 +136,8 @@ public class ItemRegistry {
     public interface ISubItemsItem {
         List<String> getModels();
     }
+
+    public interface ISingleJsonSubItems{
+        List<String> getTypes();
+    }
 }

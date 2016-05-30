@@ -13,11 +13,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ItemSwampTalisman extends Item {
+public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
     public ItemSwampTalisman() {
         this.setMaxDamage(0);
         this.maxStackSize = 1;
@@ -62,6 +64,14 @@ public class ItemSwampTalisman extends Item {
             }
         }
         return EnumActionResult.FAIL;
+    }
+
+    @Override
+    public List<String> getTypes() {
+        List<String> models = new ArrayList<String>();
+        for (EnumTalisman type : EnumTalisman.values())
+            models.add(type.iconName);
+        return models;
     }
 
     public enum EnumTalisman {

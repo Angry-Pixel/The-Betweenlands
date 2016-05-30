@@ -1,0 +1,36 @@
+{
+  "forge_marker": 1,
+  "defaults": {"transform": "forge:default-item"},
+  "variants": {
+    "swamptalisman": {
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman0"
+      }
+    },
+    "swamptalisman1":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman_1"
+      }
+    },
+    "swamptalisman2":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman_2"
+      }
+    },
+    "swamptalisman3":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman_3"
+      }
+    },
+    "swamptalisman4":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman_4"
+      }
+    }
+  }
+}
