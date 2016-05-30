@@ -25,10 +25,10 @@ import java.util.List;
 
 public class ItemRegistry {
     //generic
-    public final Item itemsGeneric = new ItemGeneric().setCreativeTab(BLCreativeTabs.items);
-    public final Item itemsGenericCrushed = new ItemGenericCrushed().setCreativeTab(BLCreativeTabs.herbLore);
-    public final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setCreativeTab(BLCreativeTabs.herbLore);
-    public final Item swampTalisman = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.items);
+    public final Item itemsGeneric = new ItemGeneric().setCreativeTab(BLCreativeTabs.ITEMS);
+    public final Item itemsGenericCrushed = new ItemGenericCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public final Item itemsGenericPlantDrop = new ItemGenericPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public final Item swampTalisman = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.ITEMS);
     //food
     public final Item sapBall = new ItemSapBall();
     public final ItemRottenFood rottenFood = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
@@ -69,39 +69,39 @@ public class ItemRegistry {
     public final Item candyYellow = new ItemBLFood(3, 1.0F, false);
     public final Item chiromawWing = new ItemChiromawWing();
     //armor
-    public final Item syrmoriteHelmet = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 0, EntityEquipmentSlot.HEAD, "syrmorite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item syrmoriteChestplate = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 1, EntityEquipmentSlot.CHEST, "syrmorite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item syrmoriteLeggings = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 2, EntityEquipmentSlot.LEGS, "syrmorite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item syrmoriteBoots = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 3, EntityEquipmentSlot.FEET, "syrmorite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item lurkerSkinHelmet = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 0, EntityEquipmentSlot.HEAD, "lurkerSkin").setCreativeTab(BLCreativeTabs.gears);
-    public final Item lurkerSkinChestplate = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 1, EntityEquipmentSlot.CHEST, "lurkerSkin").setCreativeTab(BLCreativeTabs.gears);
-    public final Item lurkerSkinLeggings = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 2, EntityEquipmentSlot.LEGS, "lurkerSkin").setCreativeTab(BLCreativeTabs.gears);
-    public final Item lurkerSkinBoots = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 3, EntityEquipmentSlot.FEET, "lurkerSkin").setCreativeTab(BLCreativeTabs.gears);
-    public final Item boneHelmet = new ItemBLArmor(BLMaterial.ARMOR_BONE, 0, EntityEquipmentSlot.HEAD, "bone").setCreativeTab(BLCreativeTabs.gears);
-    public final Item boneChestplate = new ItemBLArmor(BLMaterial.ARMOR_BONE, 1, EntityEquipmentSlot.CHEST, "bone").setCreativeTab(BLCreativeTabs.gears);
-    public final Item boneLeggings = new ItemBLArmor(BLMaterial.ARMOR_BONE, 2, EntityEquipmentSlot.LEGS, "bone").setCreativeTab(BLCreativeTabs.gears);
-    public final Item boneBoots = new ItemBLArmor(BLMaterial.ARMOR_BONE, 3, EntityEquipmentSlot.FEET, "bone").setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteHelmet = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 0, EntityEquipmentSlot.HEAD, "valonite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteChestplate = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 1, EntityEquipmentSlot.CHEST, "valonite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteLeggings = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteBoots = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.gears);
+    public final Item syrmoriteHelmet = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 0, EntityEquipmentSlot.HEAD, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item syrmoriteChestplate = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 1, EntityEquipmentSlot.CHEST, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item syrmoriteLeggings = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 2, EntityEquipmentSlot.LEGS, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item syrmoriteBoots = new ItemBLArmor(BLMaterial.ARMOR_SYRMORITE, 3, EntityEquipmentSlot.FEET, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item lurkerSkinHelmet = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 0, EntityEquipmentSlot.HEAD, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item lurkerSkinChestplate = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 1, EntityEquipmentSlot.CHEST, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item lurkerSkinLeggings = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 2, EntityEquipmentSlot.LEGS, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item lurkerSkinBoots = new ItemBLArmor(BLMaterial.ARMOR_LURKER_SKIN, 3, EntityEquipmentSlot.FEET, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item boneHelmet = new ItemBLArmor(BLMaterial.ARMOR_BONE, 0, EntityEquipmentSlot.HEAD, "bone").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item boneChestplate = new ItemBLArmor(BLMaterial.ARMOR_BONE, 1, EntityEquipmentSlot.CHEST, "bone").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item boneLeggings = new ItemBLArmor(BLMaterial.ARMOR_BONE, 2, EntityEquipmentSlot.LEGS, "bone").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item boneBoots = new ItemBLArmor(BLMaterial.ARMOR_BONE, 3, EntityEquipmentSlot.FEET, "bone").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteHelmet = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 0, EntityEquipmentSlot.HEAD, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteChestplate = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 1, EntityEquipmentSlot.CHEST, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteLeggings = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteBoots = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
     //tools
-    public final Item weedwoodSword = new ItemBLSword(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.gears);
-    public final Item weedwoodShovel = new ItemBLShovel(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.gears);
-    //public static final Item weedwoodAxe = new ItemBLAxe(BLMaterial.TOOL_WEEDWOOD).setUnlocalizedName(ModInfo.NAME_PREFIX + "weedwood_axe").setCreativeTab(BLCreativeTabs.gears);
-    public final Item weedwoodPickaxe = new ItemBLPickaxe(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.gears);
-    public final Item betweenstoneSword = new ItemBLSword(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.gears);
-    public final Item betweenstoneShovel = new ItemBLShovel(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.gears);
-    //public static final Item betweenstoneAxe = new ItemBLAxe(BLMaterial.TOOL_BETWEENSTONE).setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone_axe").setCreativeTab(BLCreativeTabs.gears);
-    public final Item betweenstonePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.gears);
-    public final Item octineSword = new ItemBLSword(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.gears);
-    public final Item octineShovel = new ItemBLShovel(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.gears);
-    //public static final Item octineAxe = new ItemBLAxe(BLMaterial.TOOL_OCTINE).setUnlocalizedName(ModInfo.NAME_PREFIX + "octine_axe").setCreativeTab(BLCreativeTabs.gears);
-    public final Item octinePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteSword = new ItemBLSword(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.gears);
-    public final Item valoniteShovel = new ItemBLShovel(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.gears);
-    //public static final Item valoniteAxe = new ItemBLAxe(BLMaterial.TOOL_VALONITE).setUnlocalizedName(ModInfo.NAME_PREFIX + "valonite_axe").setCreativeTab(BLCreativeTabs.gears);
-    public final Item valonitePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.gears);
+    public final Item weedwoodSword = new ItemBLSword(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item weedwoodShovel = new ItemBLShovel(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
+    //public static final Item weedwoodAxe = new ItemBLAxe(BLMaterial.TOOL_WEEDWOOD).setUnlocalizedName(ModInfo.NAME_PREFIX + "weedwood_axe").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item weedwoodPickaxe = new ItemBLPickaxe(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item betweenstoneSword = new ItemBLSword(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item betweenstoneShovel = new ItemBLShovel(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
+    //public static final Item betweenstoneAxe = new ItemBLAxe(BLMaterial.TOOL_BETWEENSTONE).setUnlocalizedName(ModInfo.NAME_PREFIX + "betweenstone_axe").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item betweenstonePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item octineSword = new ItemBLSword(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item octineShovel = new ItemBLShovel(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+    //public static final Item octineAxe = new ItemBLAxe(BLMaterial.TOOL_OCTINE).setUnlocalizedName(ModInfo.NAME_PREFIX + "octine_axe").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item octinePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteSword = new ItemBLSword(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valoniteShovel = new ItemBLShovel(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
+    //public static final Item valoniteAxe = new ItemBLAxe(BLMaterial.TOOL_VALONITE).setUnlocalizedName(ModInfo.NAME_PREFIX + "valonite_axe").setCreativeTab(BLCreativeTabs.GEARS);
+    public final Item valonitePickaxe = new ItemBLPickaxe(BLMaterial.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
 
     public final List<Item> items = new ArrayList<Item>();
 

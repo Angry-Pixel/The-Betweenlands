@@ -1,19 +1,14 @@
 package thebetweenlands.client.tab;
 
-import thebetweenlands.client.tabs.TabBlocks;
-import thebetweenlands.client.tabs.TabGears;
-import thebetweenlands.client.tabs.TabHerblore;
-import thebetweenlands.client.tabs.TabItems;
-import thebetweenlands.client.tabs.TabPlants;
-import thebetweenlands.client.tabs.TabSpecialItems;
+import thebetweenlands.client.tabs.*;
 
 
 public class BLCreativeTabs
 {
-	public static CreativeTabBetweenlands blocks = new TabBlocks();
-	public static CreativeTabBetweenlands items = new TabItems();
-	public static CreativeTabBetweenlands gears = new TabGears();
-	public static CreativeTabBetweenlands specials = new TabSpecialItems();
-	public static CreativeTabBetweenlands plants = new TabPlants();
-	public static CreativeTabBetweenlands herbLore = new TabHerblore();
+	public static CreativeTabBetweenlands BLOCKS = new TabBlocks();
+	public static CreativeTabBetweenlands ITEMS = new TabItems();
+	public static CreativeTabBetweenlands GEARS = new TabGears();
+	public static CreativeTabBetweenlands SPECIALS = new TabSpecialItems();
+	public static CreativeTabBetweenlands PLANTS = new TabPlants();
+	public static CreativeTabBetweenlands HERBLORE = new TabHerblore();
 }

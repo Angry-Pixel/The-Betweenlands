@@ -19,7 +19,7 @@ public class BlockTreePortal extends BasicBlock {
         super(Material.PORTAL);
         setLightLevel(1.0F);
         setBlockUnbreakable();
-        setStepSound2(SoundType.GLASS);
+        setSoundType2(SoundType.GLASS);
     }
 
     /*public static boolean makePortalX(World world, int x, int y, int z) {

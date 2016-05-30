@@ -9,7 +9,7 @@ public class BasicBlock extends Block {
 		super(materialIn);
 	}
 
-	public BasicBlock setStepSound2(SoundType sound) {
+	public BasicBlock setSoundType2(SoundType sound) {
 		super.setSoundType(sound);
 		return this;
 	}
