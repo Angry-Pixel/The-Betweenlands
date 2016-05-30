@@ -69,37 +69,37 @@ public class BLRecipes {
 
 	private static void registerRecipes() {
 		// Tools & Weapons
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodPickaxe, 1), "XXX", " # ", " # ", '#', "stickWeedwood", 'X', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodShovel, 1), "X", "#", "#", '#', "stickWeedwood", 'X', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodAxe, 1), "XX", "X#", " #", '#', "stickWeedwood", 'X', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodSword, 1), "X", "X", "#", '#', "stickWeedwood", 'X', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodPickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', new ItemStack(BLBlockRegistry.weedwoodPlanks));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstonePickaxe, 1), "XXX", " # ", " # ", '#', "stickWeedwood", 'X', "materialBoneSlimy"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneShovel, 1), "X", "#", "#", '#', "stickWeedwood", 'X', "materialBoneSlimy"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneAxe, 1), "XX", "X#", " #", '#', "stickWeedwood", 'X', "materialBoneSlimy"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneSword, 1), "X", "X", "#", '#', "stickWeedwood", 'X', "materialBoneSlimy"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstonePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "materialBoneSlimy"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "materialBoneSlimy"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "materialBoneSlimy"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.betweenstoneSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "materialBoneSlimy"));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octinePickaxe, 1), "XXX", " # ", " # ", '#', "stickWeedwood", 'X', "ingotOctine"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineShovel, 1), "X", "#", "#", '#', "stickWeedwood", 'X', "ingotOctine"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineAxe, 1), "XX", "X#", " #", '#', "stickWeedwood", 'X', "ingotOctine"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineSword, 1), "X", "X", "#", '#', "stickWeedwood", 'X', "ingotOctine"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octinePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "ingotOctine"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "ingotOctine"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "ingotOctine"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "ingotOctine"));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valonitePickaxe, 1), "XXX", " # ", " # ", '#', "stickWeedwood", 'X', "gemValonite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteShovel, 1), "X", "#", "#", '#', "stickWeedwood", 'X', "gemValonite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteAxe, 1), "XX", "X#", " #", '#', "stickWeedwood", 'X', "gemValonite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteSword, 1), "X", "X", "#", '#', "stickWeedwood", 'X', "gemValonite"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valonitePickaxe, 1), "XXX", " # ", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "gemValonite"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteShovel, 1), "X", "#", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "gemValonite"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteAxe, 1), "XX", "X#", " #", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "gemValonite"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.valoniteSword, 1), "X", "X", "#", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "gemValonite"));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodBow, 1), " #X", "# X", " #X", '#', "stickWeedwood", 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', "stickWeedwood", 'X', ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH), 'Y', "wingDragonfly"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', "stickWeedwood", 'X', "ingotOctine", 'Y', "wingDragonfly"));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBow, 1), " #X", "# X", " #X", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.anglerToothArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', ItemGeneric.createStack(EnumItemGeneric.ANGLER_TOOTH), 'Y', "wingDragonfly"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.octineArrow, 4), "X", "#", "Y", '#', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'X', "ingotOctine", 'Y', "wingDragonfly"));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.poisonedAnglerToothArrow, 1), ItemGeneric.createStack(EnumItemGeneric.POISON_GLAND), new ItemStack(BLItemRegistry.anglerToothArrow));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.syrmoriteShears, 1), " #", "# ", '#', "ingotSyrmorite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', "gemValonite", 's', "stickWeedwood", 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.sickle, 1), " vv", "v s", "  r", 'v', "gemValonite", 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.rope, 1), "#", "#", "#", '#', new ItemStack(BLBlockRegistry.hanger));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.net, 1), "SRR", "SRR", "S  ", 'S', "stickWeedwood", 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.net, 1), "SRR", "SRR", "S  ", 'S', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.lurkerSkinPouch, 1), "RRR", "L L", "LLL", 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
 		GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
@@ -131,55 +131,55 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.rubberBoots, 1), "# #", "# #", '#', "materialRubber"));
 
 		// Miscellaneous
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), "stickWeedwood", "dustSulfur"));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BLBlockRegistry.sulfurTorch, 4), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), "dustSulfur"));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlanks, 4), new ItemStack(BLBlockRegistry.weedwoodBark, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlanks, 4), new ItemStack(BLBlockRegistry.weedwoodLog, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlanks, 4), new ItemStack(BLBlockRegistry.weedwood, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addRecipe(new ShapedOreRecipe(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK, 4), "p", "p", 'p', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodCraftingTable), "xx", "xx", 'x', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodChest), "xxx", "x x", "xxx", 'x', "plankWeedwood"));
+		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK, 4), "p", "p", 'p', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodCraftingTable), "xx", "xx", 'x', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodChest), "xxx", "x x", "xxx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.furnaceBL), "xxx", "x x", "xxx", 'x', BLBlockRegistry.betweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.dualFurnaceBL), "xxx", "xfx", "xxx", 'x', BLBlockRegistry.betweenstone, 'f', BLBlockRegistry.furnaceBL);
 		GameRegistry.addRecipe(new ShapedOreRecipe(ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE, 4), "p", "p" , "p", 'p', "cropSwampReed"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL, 4), "x x", " x ", 'x', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodBucket), " X ", "x x", " x ", 'x', "plankWeedwood",'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder, 3), "X X", "xxx", "X X", 'x', "stickWeedwood",'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankButton), "plankWeedwood"));
+		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL, 4), "x x", " x ", 'x', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodBucket), " X ", "x x", " x ", 'x', BLBlockRegistry.weedwoodPlanks,'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLadder, 3), "X X", "xxx", "X X", 'x', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK),'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankButton), BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneButton), new ItemStack(BLBlockRegistry.smoothBetweenstone));
 		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.PLANT_TONIC), new ItemStack(BLItemRegistry.weedwoodBucketWater), new ItemStack(BLItemRegistry.sapBall));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankPressurePlate), "xx", 'x', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstonePressurePlate), "xx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.syrmoritePressurePlate), "xx", 'x', "blockSyrmorite"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.mudFlowerPot), "x x", " x " , 'x', "ingotBrickMud"));;
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', "stickWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', "stickWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodLever), "X", "x", 'x', new ItemStack(BLBlockRegistry.weedwoodBark), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.pestle), "X", "x", "x", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 'X', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.itemShelf, 3), "xxx", "   ", "xxx", 'x', BLBlockRegistry.weedwoodPlankSlab);
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		GameRegistry.addRecipe(BLItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BLBlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', "plankWeedwood", 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP)));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BLBlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.cavingRope, 4), "rrr", "ror", "rrr", 'r', new ItemStack(BLItemRegistry.rope), 'o', "ingotOctine"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.syrmoriteHopper), "s s", "scs", " s ", 's', "ingotSyrmorite", 'c', new ItemStack(BLBlockRegistry.weedwoodChest)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  "stickWeedwood", 'S', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), 'P', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.wallPlants, 1, BlockWallPlants.META_MOSS), 'P', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.caveMoss), 'P', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.weedwoodSign, 3), "SSS", "SSS", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.MOSS), 'P', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), 'P', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.wallPlants, 1, BlockWallPlants.META_MOSS), 'P', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.mossBed), "xxx", "PPP", 'x',  new ItemStack(BLBlockRegistry.caveMoss), 'P', BLBlockRegistry.weedwoodPlanks);
 		GameRegistry.addRecipe(ItemGeneric.createStack(EnumItemGeneric.PARCHMENT, 3), "###", '#', ItemGeneric.createStack(EnumItemGeneric.ROTTEN_BARK));
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  ItemGeneric.createStack(EnumItemGeneric.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
 		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGem.NONE), "XXX", "X X", " # ", '#', ItemGeneric.createStack(EnumItemGeneric.AMULET_SOCKET), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  "stickWeedwood", 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  "stickWeedwood", 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BLBlockRegistry.volarpad)));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BLBlockRegistry.volarpad));
 
 		//Machine Blocks
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', "plankWeedwood", 'o', "ingotOctine"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', "plankWeedwood", 'b', "ingotSyrmorite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.animator), "xxx", "shs", "bbb", 'x', "plankWeedwood", 's', "stickWeedwood", 'h', new ItemStack(BLItemRegistry.wightsHeart), 'b' ,new ItemStack(BLBlockRegistry.betweenstone)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.pestleAndMortar), "x x", "xxx", "s s", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 's', "stickWeedwood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.purifier), "x x", "xxx", "ooo", 'x', BLBlockRegistry.weedwoodPlanks, 'o', "ingotOctine"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.compostBin), "bxb", "x x", "x x", 'x', BLBlockRegistry.weedwoodPlanks, 'b', "ingotSyrmorite"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.animator), "xxx", "shs", "bbb", 'x', BLBlockRegistry.weedwoodPlanks, 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'h', new ItemStack(BLItemRegistry.wightsHeart), 'b' ,new ItemStack(BLBlockRegistry.betweenstone));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pestleAndMortar), "x x", "xxx", "s s", 'x', new ItemStack(BLBlockRegistry.genericStone, 1, 1), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.alembic), " o ", " dv", "coc", 'o', "ingotOctine", 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.infuser), "o o", "opo", "sos", 'o', "ingotOctine", 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'p', new ItemStack(BLItemRegistry.pestle), 's', "stickWeedwood"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.infuser), "o o", "opo", "sos", 'o', "ingotOctine", 'd', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.dentrothyst)), 'p', new ItemStack(BLItemRegistry.pestle), 's', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK)));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.geckoCage), "sps", "rrr", "sps", 's', "ingotSyrmorite", 'p', new ItemStack(Item.getItemFromBlock(BLBlockRegistry.weedwoodPlankSlab)), 'r', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.repeller), " wv", " w ", " c ", 'w', "stickWeedwood", 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1)));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodJukebox), "xxx", "xVx", "xxx", 'x', "plankWeedwood", 'V', "gemValonite"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.repeller), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(BLItemRegistry.dentrothystVial), 'c', new ItemStack(BLBlockRegistry.genericStone, 1, 1));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodJukebox), "xxx", "xVx", "xxx", 'x', BLBlockRegistry.weedwoodPlanks, 'V', "gemValonite"));
 
 		//Deco Blocks
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.mudBrick, 4), "xx", "xx", 'x', "ingotBrickMud"));
@@ -195,8 +195,8 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneTiles, 4), "xx", "xx", 'x', new ItemStack(BLBlockRegistry.polishedLimestone));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.limestoneBricks, 4), "xx", "xx", 'x', "limestone"));
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.chiseledLimestone, 4), "x", "x", 'x', new ItemStack(BLBlockRegistry.limestoneBrickSlab));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.sulphurBlock), "xxx", "xxx", "xxx", 'x', "dustSulfur"));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemGeneric.createStack(EnumItemGeneric.SULFUR, 9), "blockSulfur"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.sulphurBlock), "xxx", "xxx", "xxx", 'x', ItemGeneric.createStack(EnumItemGeneric.SULFUR));
+		GameRegistry.addShapelessRecipe(ItemGeneric.createStack(EnumItemGeneric.SULFUR, 9), BLBlockRegistry.sulphurBlock);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.octineBlock), "xxx", "xxx", "xxx", 'x', "ingotOctine"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.syrmoriteBlock), "xxx", "xxx", "xxx", 'x', "ingotSyrmorite"));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemGeneric.createStack(EnumItemGeneric.SYRMORITE_INGOT, 9), "blockSyrmorite"));
@@ -226,13 +226,13 @@ public class BLRecipes {
 		GameRegistry.addShapelessRecipe(new ItemStack(BLBlockRegistry.betweenstoneSmoothMossy, 1), ItemGenericPlantDrop.createStack(EnumItemPlantDrop.CAVE_MOSS), new ItemStack(BLBlockRegistry.smoothBetweenstone));
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWoodChipPath, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  "stickWeedwood", 'S', "plankWeedwood"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.weedwoodPlanks);
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorRubber, 1), "##", "##", "##", '#', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.doorWeedwood, 1), "##", "##", "##", '#', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.doorRubber, 1), "##", "##", "##", '#', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.doorSyrmorite, 1), "##", "##", "##", '#', "ingotSyrmorite"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorRubberTreePlank, 2), "###", "###", '#', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorWeedwood, 2), "###", "###", '#', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.trapDoorRubberTreePlank, 2), "###", "###", '#', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.trapDoorSyrmorite, 2), "###", "###", '#', "ingotSyrmorite"));
 
 		// Stairs, slabs, walls, fences, pillars
@@ -241,14 +241,14 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.mudBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.cragrockBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.limestoneBricks);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.limestoneStairs, 4), "x  ", "xx ", "xxx", 'x', "limestone"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.limestone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothCragrockStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.smoothCragrock);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothPitstoneStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.smoothPitstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.solidTar);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.templeBrick);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankStairs, 4), "x  ", "xx ", "xxx", 'x', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankStairs, 4), "x  ", "xx ", "xxx", 'x', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankStairs, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairsMossy, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricksMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneSmoothStairsMossy, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneSmoothMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickStairsCracked, 4), "x  ", "xx ", "xxx", 'x', BLBlockRegistry.betweenstoneBricksCracked);
@@ -258,7 +258,7 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.mudBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.cragrockBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.limestoneBricks);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.limestoneWall, 6), "xxx", "xxx", 'x', "limestone"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.limestone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.solidTar);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickWall, 6), "xxx", "xxx", 'x', BLBlockRegistry.templeBrick);
@@ -268,25 +268,25 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickWallCracked, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneBricksCracked);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneWallMossy, 6), "xxx", "xxx", 'x', BLBlockRegistry.betweenstoneSmoothMossy);
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFence, 3), "SxS", "SxS", 'x',  "stickWeedwood", 'S', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFence, 3), "SxS", "SxS", 'x',  "stickWeedwood", 'S', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFence, 3), "SxS", "SxS", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.rubberTreePlanks);
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFenceGate, 1), "xSx", "xSx", 'x',  "stickWeedwood", 'S', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFenceGate, 1), "xSx", "xSx", 'x',  "stickWeedwood", 'S', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankFenceGate, 1), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankFenceGate, 1), "xSx", "xSx", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', BLBlockRegistry.rubberTreePlanks);
 
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlab, 6), "###", '#', BLBlockRegistry.betweenstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.mudBrickSlab, 6), "###", '#', BLBlockRegistry.mudBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.cragrockBrickSlab, 6), "###", '#', BLBlockRegistry.cragrockBrick);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneBrickSlab, 6), "###", '#', BLBlockRegistry.limestoneBricks);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.limestoneSlab, 6), "###", '#', "limestone"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.limestoneSlab, 6), "###", '#', BLBlockRegistry.limestone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothBetweenstoneSlab, 6), "###", '#', BLBlockRegistry.smoothBetweenstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothCragrockSlab, 6), "###", '#', BLBlockRegistry.smoothCragrock);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.smoothPitstoneSlab, 6), "###", '#', BLBlockRegistry.smoothPitstone);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.pitstoneBrickSlab, 6), "###", '#', BLBlockRegistry.pitstoneBricks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.solidTarSlab, 6), "###", '#', BLBlockRegistry.solidTar);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.templeBrickSlab, 6), "###", '#', BLBlockRegistry.templeBrick);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankSlab, 6), "###", '#', "plankWeedwood"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankSlab, 6), "###", '#', "plankWoodRubber"));
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.weedwoodPlankSlab, 6), "###", '#', BLBlockRegistry.weedwoodPlanks);
+		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.rubberTreePlankSlab, 6), "###", '#', BLBlockRegistry.rubberTreePlanks);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.thatchSlab, 6), "###", '#', BLBlockRegistry.thatch);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlabMossy, 6), "###", '#', BLBlockRegistry.betweenstoneBricksMossy);
 		GameRegistry.addRecipe(new ItemStack(BLBlockRegistry.betweenstoneBrickSlabCracked, 6), "###", '#', BLBlockRegistry.betweenstoneBricksCracked);
@@ -310,8 +310,8 @@ public class BLRecipes {
 		GameRegistry.addRecipe(new ItemStack(BLItemRegistry.crabstick, 3), "  #", " # ", "#  ", '#', new ItemStack(BLItemRegistry.siltCrabClaw));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.sapJello, 1), new ItemStack(BLItemRegistry.sludgeJello), new ItemStack(BLItemRegistry.sapBall));
 		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.middleFruitJello, 1), new ItemStack(BLItemRegistry.sludgeJello), new ItemStack(BLItemRegistry.middleFruit));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), "bowlWeedwood", BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettleFlowered));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), "bowlWeedwood", BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettle));
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL), BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettleFlowered);
+		GameRegistry.addShapelessRecipe(new ItemStack(BLItemRegistry.nettleSoup, 1), ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL), BLItemRegistry.blackHatMushroomItem, BLItemRegistry.flatheadMushroomItem, BLBlockRegistry.nettle);
 
 		// Special Items
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BLItemRegistry.tarminion, 1), "ttt", "tht", "ttt", 't', "materialTar", 'h', ItemGeneric.createStack(EnumItemGeneric.TAR_BEAST_HEART_ANIMATED)));
@@ -422,10 +422,9 @@ public class BLRecipes {
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingRubberTree));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BLBlockRegistry.saplingSpiritTree));
 
-		OreDictionary.registerOre("plankWeedwood", new ItemStack(BLBlockRegistry.weedwoodPlanks));
 		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.weedwoodPlanks));
-		OreDictionary.registerOre("plankWoodRubber", new ItemStack(BLBlockRegistry.rubberTreePlanks));
 		OreDictionary.registerOre("plankWood", new ItemStack(BLBlockRegistry.rubberTreePlanks));
+		OreDictionary.registerOre("plankWoodRubber", new ItemStack(BLBlockRegistry.rubberTreePlanks));
 
 		OreDictionary.registerOre("blockGlass", new ItemStack(BLBlockRegistry.siltGlas));
 		OreDictionary.registerOre("blockGlassGray", new ItemStack(BLBlockRegistry.siltGlas));
@@ -440,14 +439,12 @@ public class BLRecipes {
 		OreDictionary.registerOre("paneGlass", new ItemStack(BLBlockRegistry.polishedDentrothyst2Pane));
 		OreDictionary.registerOre("paneGlassOrange", new ItemStack(BLBlockRegistry.polishedDentrothyst2Pane));
 
-		OreDictionary.registerOre("crafterWeedwood", new ItemStack(BLBlockRegistry.weedwoodCraftingTable));
 		OreDictionary.registerOre("crafterWood", new ItemStack(BLBlockRegistry.weedwoodCraftingTable));
-		OreDictionary.registerOre("chestWeedwood", new ItemStack(BLBlockRegistry.weedwoodChest));
 		OreDictionary.registerOre("chestWood", new ItemStack(BLBlockRegistry.weedwoodChest));
 		OreDictionary.registerOre("furnaceBetweenstone", new ItemStack(BLBlockRegistry.furnaceBL));
 		OreDictionary.registerOre("furnaceStone", new ItemStack(BLBlockRegistry.furnaceBL));
-		OreDictionary.registerOre("furnaceBetweenstone", new ItemStack(BLBlockRegistry.dualFurnaceBL));
-		OreDictionary.registerOre("furnaceStone", new ItemStack(BLBlockRegistry.dualFurnaceBL));
+		OreDictionary.registerOre("furnaceDualBetweenstone", new ItemStack(BLBlockRegistry.dualFurnaceBL));
+		OreDictionary.registerOre("furnaceDualStone", new ItemStack(BLBlockRegistry.dualFurnaceBL));
 
 		OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.bulbCappedMushroomItem));
 		OreDictionary.registerOre("foodMushroom", new ItemStack(BLItemRegistry.blackHatMushroomItem));
@@ -467,13 +464,11 @@ public class BLRecipes {
 		OreDictionary.registerOre("materialCompost", ItemGeneric.createStack(EnumItemGeneric.COMPOST));
 		OreDictionary.registerOre("wingDragonfly", ItemGeneric.createStack(EnumItemGeneric.DRAGONFLY_WING));
 		OreDictionary.registerOre("cropSwampReed", ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED));
-		OreDictionary.registerOre("materialRoot", ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT));	//not sure about this one
+		OreDictionary.registerOre("materialRoot", ItemGeneric.createStack(EnumItemGeneric.TANGLED_ROOT));
 		OreDictionary.registerOre("materialBoneSlimy", ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE));
-		OreDictionary.registerOre("dustSulfur", ItemGeneric.createStack(EnumItemGeneric.SULFUR));	//it's not really dust though, maybe gemSulfur?
+		OreDictionary.registerOre("dustSulfur", ItemGeneric.createStack(EnumItemGeneric.SULFUR));
 		OreDictionary.registerOre("dustSulphur", ItemGeneric.createStack(EnumItemGeneric.SULFUR));
-		OreDictionary.registerOre("stickWeedwood", ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
 		OreDictionary.registerOre("stickWood", ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK));
-		OreDictionary.registerOre("bowlWeedwood", ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL));
 		OreDictionary.registerOre("bowlWood", ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_BOWL));
 		OreDictionary.registerOre("materialRubber", ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		OreDictionary.registerOre("materialTar", ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
@@ -481,21 +476,16 @@ public class BLRecipes {
 		OreDictionary.registerOre("dustLimestone", ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX));
 		OreDictionary.registerOre("cropSwampKelp", ItemGeneric.createStack(EnumItemGeneric.SWAMP_KELP));
 
-		OreDictionary.registerOre("bucketWeedwood", new ItemStack(BLItemRegistry.weedwoodBucket));
 		OreDictionary.registerOre("bucketWood", new ItemStack(BLItemRegistry.weedwoodBucket));
-		OreDictionary.registerOre("doorWeedwood", new ItemStack(BLItemRegistry.doorWeedwood));
 		OreDictionary.registerOre("doorWood", new ItemStack(BLItemRegistry.doorWeedwood));
 		OreDictionary.registerOre("doorWoodRubber", new ItemStack(BLItemRegistry.doorRubber));
 		OreDictionary.registerOre("doorWood", new ItemStack(BLItemRegistry.doorRubber));
 		OreDictionary.registerOre("doorSyrmorite", new ItemStack(BLItemRegistry.doorSyrmorite));
-		OreDictionary.registerOre("trapdoordoorWeedwood", new ItemStack(BLBlockRegistry.trapDoorWeedwood));
 		OreDictionary.registerOre("trapdoordoorWood", new ItemStack(BLBlockRegistry.trapDoorWeedwood));
 		OreDictionary.registerOre("trapdoordoorWoodRubber", new ItemStack(BLBlockRegistry.trapDoorRubberTreePlank));
 		OreDictionary.registerOre("trapdoordoorWood", new ItemStack(BLBlockRegistry.trapDoorRubberTreePlank));
 		OreDictionary.registerOre("trapdoordoorSyrmorite", new ItemStack(BLBlockRegistry.trapDoorSyrmorite));
-		OreDictionary.registerOre("signWeedwood", new ItemStack(BLItemRegistry.weedwoodSign));
 		OreDictionary.registerOre("signWood", new ItemStack(BLItemRegistry.weedwoodSign));
-		OreDictionary.registerOre("bedWeedwood", new ItemStack(BLItemRegistry.mossBed));
 		OreDictionary.registerOre("bedWood", new ItemStack(BLItemRegistry.mossBed));
 
 		OreDictionary.registerOre("dustMiddleGemAqua", ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_AQUA_MIDDLE_GEM));
