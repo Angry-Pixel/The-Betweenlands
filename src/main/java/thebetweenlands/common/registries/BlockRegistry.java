@@ -14,6 +14,8 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockPortalFrame;
+import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
@@ -27,7 +29,7 @@ public class BlockRegistry {
 	public static final Block swampWater = new Block(Material.WATER);
 	public final List<Block> blocks = new ArrayList<Block>();
 	public final Block betweenstone = new BasicBlock(Material.ROCK)
-			.setStepSound2(SoundType.STONE)
+			.setSoundType2(SoundType.STONE)
 			.setHardness(1.5F)
 			.setResistance(10.0F);
 	public final Block druidStone1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
@@ -43,6 +45,9 @@ public class BlockRegistry {
 		}
 	};
 
+	public final Block treePortal = new BlockTreePortal();
+	public final Block portalFrame = new BlockPortalFrame();
+
 	public void preInit() {
 		try {
 			for(Field field : this.getClass().getDeclaredFields()) {
@@ -52,7 +57,7 @@ public class BlockRegistry {
 
 					if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 						if(block.getCreativeTabToDisplayOn() == null)
-							block.setCreativeTab(BLCreativeTabs.blocks);
+							block.setCreativeTab(BLCreativeTabs.BLOCKS);
 					}
 				}
 			}

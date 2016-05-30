@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "frame_position=portal_corner_bottom_right": {
+      "model": "thebetweenlands:portal_corner_bottom_right"
+    },
+    "frame_position=portal_top": {
+      "model": "thebetweenlands:portal_top"
+    },
+    "frame_position=portal_side_left": {
+      "model": "thebetweenlands:portal_side_left"
+    },
+    "frame_position=portal_bottom": {
+      "model": "thebetweenlands:portal_bottom"
+    },
+    "frame_position=portal_corner_top_right": {
+      "model": "thebetweenlands:portal_corner_top_right"
+    },
+    "frame_position=portal_corner_top_left": {
+      "model": "thebetweenlands:portal_corner_top_left"
+    },
+    "frame_position=portal_side_right": {
+      "model": "thebetweenlands:portal_side_right"
+    },
+    "frame_position=portal_corner_bottom_left": {
+      "model": "thebetweenlands:portal_corner_bottom_left"
+    }
+  }
+}

@@ -68,13 +68,13 @@ public class JsonRenderGenerator {
     public static final String ITEM_DEFAULT_FORMAT = "{ \n" +
             "  \"parent\": \"item/generated\", \n" +
             "  \"textures\": { \n" +
-            "    \"layer0\": \"thebetweenlands:items/%s\" \n" +
+            "    \"layer0\": \"thebetweenlands:ITEMS/%s\" \n" +
             "  }\n" +
             "}"; //<texture name>
     public static final String ITEM_TOOL_FORMAT = "{ \n" +
             "  \"parent\": \"item/handheld\", \n" +
             "  \"textures\": { \n" +
-            "    \"layer0\": \"thebetweenlands:items/%s\" \n" +
+            "    \"layer0\": \"thebetweenlands:ITEMS/%s\" \n" +
             "  }\n" +
             "}"; //<texture name>
     private static File assetsFolder = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands");
@@ -199,7 +199,7 @@ public class JsonRenderGenerator {
         dir.mkdir();
 
         File file = new File(dir, blockName + ".json");
-        if (block instanceof ICustomJsonGenerationBlock)
+        if (block instanceof ICustomJsonGenerationBlock && ((ICustomJsonGenerationBlock) block).getBlockModelForItem() != null)
             blockName = ((ICustomJsonGenerationBlock) block).getBlockModelForItem();
         String jsonText = String.format(ITEM_BLOCK_DEFAULT_FORMAT, blockName);
 

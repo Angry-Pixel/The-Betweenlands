@@ -29,7 +29,7 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
         setSoundType(SoundType.STONE);
         setHarvestLevel("pickaxe", 0);
         setLightLevel(0.8F);
-        setCreativeTab(BLCreativeTabs.blocks);
+        setCreativeTab(BLCreativeTabs.BLOCKS);
         this.type = blockName;
     }
 
@@ -113,7 +113,7 @@ public class BlockDruidStone extends BasicBlock implements ICustomJsonGeneration
             format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type, "stone", "stone", type, "stone", "stone", "stone");
         else
             format = String.format(JsonRenderGenerator.BLOCK_CUBE_FORMAT, type + "_active", "stone", "stone", type + "_active", "stone", "stone", "stone");
-        return format.replace("thebetweenlands:blocks/stone", "blocks/stone");
+        return format.replace("thebetweenlands:BLOCKS/stone", "BLOCKS/stone");
     }
 
     @Override

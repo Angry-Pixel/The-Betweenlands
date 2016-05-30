@@ -6,7 +6,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 public class ItemChiromawWing extends ItemBLFood {
     public ItemChiromawWing() {
         super(0, 0, false);
-        this.setCreativeTab(BLCreativeTabs.items);
+        this.setCreativeTab(BLCreativeTabs.ITEMS);
     }
 
     /*
