@@ -76,7 +76,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
     }
 
     public enum EnumTalisman {
-        SWAMP_TALISMAN,
+        SWAMP_TALISMAN_0,
         SWAMP_TALISMAN_1,
         SWAMP_TALISMAN_2,
         SWAMP_TALISMAN_3,
