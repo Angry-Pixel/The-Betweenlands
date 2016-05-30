@@ -16,6 +16,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
@@ -47,6 +48,7 @@ public class BlockRegistry {
 
 	public final Block treePortal = new BlockTreePortal();
 	public final Block portalFrame = new BlockPortalFrame();
+	public final Block betweenlandsBedrock = new BlockBetweenlandsBedrock();
 
 	public void preInit() {
 		try {
