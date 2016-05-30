@@ -1,8 +1,8 @@
 package thebetweenlands.util;
 
-import net.minecraft.util.math.MathHelper;
-
 import javax.vecmath.Point3f;
+
+import net.minecraft.util.math.MathHelper;
 
 public final class MathUtils {
     public static final float TAU = (float) (2 * StrictMath.PI);

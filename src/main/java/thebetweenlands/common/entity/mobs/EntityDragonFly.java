@@ -21,11 +21,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemGeneric;
 
-public class EntityDragonfly extends EntityAmbientCreature implements IEntityBL {
+public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
     public BlockPos currentFlightTarget;
     public boolean entityFlying;
 
-    public EntityDragonfly(World world) {
+    public EntityDragonFly(World world) {
         super(world);
         setSize(0.9F, 0.5F);
         tasks.addTask(0, new EntityAISwimming(this));

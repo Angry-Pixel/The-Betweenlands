@@ -35,7 +35,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     private int attackTime;
 
-    private Class<?>[] prey = {EntityAngler.class, EntityDragonfly.class};
+    private Class<?>[] prey = {EntityAngler.class, EntityDragonFly.class};
 
     private float prevRotationPitchBody;
     private float rotationPitchBody;
@@ -352,7 +352,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         if (entityBeingBit != null || getRidingEntity() != null || entityIn.getRidingEntity() != null) {
             return false;
         }
-        if (inWater && entityIn instanceof EntityDragonfly && !isLeaping() && distance < 5) {
+        if (inWater && entityIn instanceof EntityDragonFly && !isLeaping() && distance < 5) {
             setIsLeaping(true);
             double distanceX = entityIn.posX - posX;
             double distanceZ = entityIn.posZ - posZ;
@@ -369,7 +369,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             entityBeingBit = entityIn;
 
             //TODO // FIXME: 10/04/2016 doesn't seem to work atm
-            if (isLeaping() && entityIn instanceof EntityDragonfly) {
+            if (isLeaping() && entityIn instanceof EntityDragonFly) {
                 entityIn.startRiding(this, true);
                 setAttackTarget(null);
             }

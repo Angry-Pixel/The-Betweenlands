@@ -1,5 +1,9 @@
 package thebetweenlands.client.render.models.entity;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -8,18 +12,16 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
 import thebetweenlands.client.proxy.ClientProxy;
 import thebetweenlands.client.render.models.AdvancedModelRenderer;
 import thebetweenlands.client.render.models.IModelRenderCallback;
-import thebetweenlands.common.entity.mobs.EntityDragonfly;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.util.MathUtils;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 @SideOnly(Side.CLIENT)
 public class ModelLurker extends ModelBase implements IModelRenderCallback {
@@ -253,7 +255,7 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 
     @Override
     public void render(AdvancedModelRenderer advancedModelRenderer, float scale) {
-        if (currentLurker.getRidingEntity() instanceof EntityDragonfly) {
+        if (currentLurker.getRidingEntity() instanceof EntityDragonFly) {
             GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer);
             boolean texture2D = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
             int textureBinding2D = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
@@ -262,7 +264,7 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
             GL11.glTranslatef(0, 0, 0.5F);
             GL11.glColor3f(1, 1, 1);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
-            EntityDragonfly dragonfly = (EntityDragonfly) currentLurker.getRidingEntity();
+            EntityDragonFly dragonfly = (EntityDragonFly) currentLurker.getRidingEntity();
             dragonfly.prevRenderYawOffset = dragonfly.renderYawOffset = 0;
             dragonfly.prevRotationYaw = dragonfly.rotationYaw = 0;
             dragonfly.prevRotationYawHead = dragonfly.rotationYawHead = 0;

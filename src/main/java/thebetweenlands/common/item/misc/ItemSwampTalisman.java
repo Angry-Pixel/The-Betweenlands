@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,9 +19,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
     public ItemSwampTalisman() {
@@ -70,7 +71,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
     public List<String> getTypes() {
         List<String> models = new ArrayList<String>();
         for (EnumTalisman type : EnumTalisman.values())
-            models.add(type.iconName);
+            models.add(type.name());
         return models;
     }
 

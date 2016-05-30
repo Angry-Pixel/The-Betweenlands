@@ -8,11 +8,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.models.AdvancedModelRenderer;
-import thebetweenlands.common.entity.mobs.EntityDragonfly;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.util.MathUtils;
 
 @SideOnly(Side.CLIENT)
-public class ModelDragonfly extends ModelBase {
+public class ModelDragonFly extends ModelBase {
     private ModelRenderer antennaleft;
     private ModelRenderer antennaright;
     private ModelRenderer head1;
@@ -45,7 +45,7 @@ public class ModelDragonfly extends ModelBase {
     private AdvancedModelRenderer wingright1;
     private AdvancedModelRenderer wingright2;
 
-    public ModelDragonfly() {
+    public ModelDragonFly() {
         textureWidth = 128;
         textureHeight = 64;
         init();
@@ -218,7 +218,7 @@ public class ModelDragonfly extends ModelBase {
 
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
-        EntityDragonfly dragonFly = (EntityDragonfly) entity;
+        EntityDragonFly dragonFly = (EntityDragonFly) entity;
         if (entity.ticksExisted % 20 == 0)
             init();
         wingright1.rotateAngleX = 0.1745329F;

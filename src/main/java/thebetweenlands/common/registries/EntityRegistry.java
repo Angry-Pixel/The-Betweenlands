@@ -3,7 +3,18 @@ package thebetweenlands.common.registries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 
 public class EntityRegistry {
@@ -34,7 +45,7 @@ public class EntityRegistry {
         registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
         registerEntity(EntitySwampHag.class, "swamp_hag", 0x0B3B0B, 0xDBA901);
         registerEntity(EntitySporeling.class, "sporeling", 0x696144, 0xFFFB00, 64, 1, true);
-        registerEntity(EntityDragonfly.class, "dragonfly", 0x31B53C, 0x779E3C);
+        registerEntity(EntityDragonFly.class, "dragonfly", 0x31B53C, 0x779E3C);
         registerEntity(EntityBloodSnail.class, "blood_snail", 0x8E9456, 0xB3261E);
         registerEntity(EntityMireSnail.class, "mire_snail", 0x8E9456, 0xF2FA96);
         registerEntity(EntityMireSnailEgg.class, "mire_snail_egg");
