@@ -1,20 +1,18 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -27,8 +25,13 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry.IHasCustomItem;
 import thebetweenlands.common.registries.BlockRegistry.ISubBlocksBlock;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class BlockPortalFrame extends BasicBlock implements IHasCustomItem, ISubBlocksBlock {
     public static final PropertyEnum<EnumPortalFrame> FRAME_POSITION = PropertyEnum.create("frame_position", EnumPortalFrame.class);
+    public static final PropertyBool X_AXIS = PropertyBool.create("x_axis");
 
     public BlockPortalFrame() {
         super(Material.WOOD);
@@ -49,42 +52,49 @@ public class BlockPortalFrame extends BasicBlock implements IHasCustomItem, ISub
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
-    
-	@Override
-	public List<String> getModels() {
-		List<String> models = new ArrayList<String>();
-		for (EnumPortalFrame type : EnumPortalFrame.values())
-			models.add(type.getName());
-		return models;
-	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
-		for (EnumPortalFrame type : EnumPortalFrame.values())
-			list.add(new ItemStack(item, 1, type.ordinal()));
-	}
+    @Override
+    public List<String> getModels() {
+        List<String> models = new ArrayList<String>();
+        for (EnumPortalFrame type : EnumPortalFrame.values())
+            models.add(type.getName());
+        return models;
+    }
 
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FRAME_POSITION });
-	}
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+        for (EnumPortalFrame type : EnumPortalFrame.values())
+            list.add(new ItemStack(item, 1, type.ordinal()));
+    }
 
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta]);
-	}
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FRAME_POSITION, X_AXIS);
+    }
 
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		EnumPortalFrame type = state.getValue(FRAME_POSITION);
-		return type.ordinal();
-	}
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta > 7 ? meta - 8 : meta]).withProperty(X_AXIS, meta > 7);
+    }
 
-	@Override
-	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, EnumPortalFrame.class);
-	}
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        EnumPortalFrame type = state.getValue(FRAME_POSITION);
+        return type.ordinal() + (state.getValue(X_AXIS) ? 8 : 0);
+    }
+
+    @Override
+    public ItemBlock getItemBlock() {
+        return ItemBlockEnum.create(this, EnumPortalFrame.class);
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+        if (placer.getHorizontalFacing().getAxis() == EnumFacing.Axis.X)
+            worldIn.setBlockState(pos, state.withProperty(X_AXIS, true));
+    }
 
     public enum EnumPortalFrame implements IStringSerializable {
         PORTAL_CORNER_TOP_LEFT,
@@ -96,9 +106,9 @@ public class BlockPortalFrame extends BasicBlock implements IHasCustomItem, ISub
         PORTAL_BOTTOM,
         PORTAL_CORNER_BOTTOM_RIGHT;
 
-		@Override
-		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
+        @Override
+        public String getName() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
     }
 }
