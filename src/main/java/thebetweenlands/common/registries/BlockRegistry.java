@@ -23,6 +23,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
@@ -46,7 +47,7 @@ public class BlockRegistry {
 			return new ItemStack(Item.getItemFromBlock(this));
 		}
 	};
-
+	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
 	
@@ -104,3 +105,6 @@ public class BlockRegistry {
 		List<String> getModels();
 	}
 }
+
+
+
