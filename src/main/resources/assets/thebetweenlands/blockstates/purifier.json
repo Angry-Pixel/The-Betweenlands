@@ -1,0 +1,16 @@
+{
+  "variants": { 
+    "facing=west": {
+      "model": "thebetweenlands:blank"
+    },
+    "facing=east": {
+      "model": "thebetweenlands:blank"
+    },
+    "facing=north": {
+      "model": "thebetweenlands:blank"
+    },
+    "facing=south": {
+      "model": "thebetweenlands:blank"
+    }
+  } 
+}

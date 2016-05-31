@@ -9,9 +9,13 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
@@ -26,6 +30,7 @@ import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMi
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnailEgg;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySporeling;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySwampHag;
+import thebetweenlands.client.render.tile.TilePurifierRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
@@ -40,10 +45,12 @@ import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
+import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tileentity.TileEntityPurifier;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -52,6 +59,20 @@ public class ClientProxy extends CommonProxy {
     private static final boolean createJSONFile = false;
 
     public static RenderFactoryDragonFly dragonFlyRenderer;
+
+    @Override
+    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+        switch (id) {
+            case GUI_PURIFIER: {
+                if (tile instanceof TileEntityPurifier) {
+                    return new GuiPurifier(player.inventory, (TileEntityPurifier) tile);
+                }
+                break;
+            }
+        }
+        return null;
+    }
 
     @Override
     public EntityPlayer getClientPlayer() {
@@ -156,5 +177,10 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFactoryFrog());
         RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
+    }
+
+    @Override
+    public void postInit() {
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new TilePurifierRenderer());
     }
 }

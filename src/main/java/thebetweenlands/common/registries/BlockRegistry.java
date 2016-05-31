@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -53,6 +54,7 @@ public class BlockRegistry {
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
 	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
 	public static final Block DRUID_ALTAR = new BlockDruidAltar();
+	public static final Block PURIFIER = new BlockPurifier();
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	public static void preInit() {
@@ -85,7 +87,7 @@ public class BlockRegistry {
 				ResourceLocation name = block.getRegistryName();
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
-	}
+    }
 	
 	public static void registerBlock(String name, Block block) {
 		BLOCKS.add(block);
