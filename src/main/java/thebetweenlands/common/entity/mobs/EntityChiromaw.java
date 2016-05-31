@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
     private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityChiromaw.class, DataSerializers.BOOLEAN);
@@ -175,7 +175,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
-        entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.chiromawWing, 1, 0), 0.0F);
+        entityDropItem(new ItemStack(ItemRegistry.chiromawWing, 1, 0), 0.0F);
     }
 
     //TODO add flyingFiendLiving sound

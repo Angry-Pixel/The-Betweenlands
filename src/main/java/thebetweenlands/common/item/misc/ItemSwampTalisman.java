@@ -1,9 +1,5 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,7 +14,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.Registries;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
     public ItemSwampTalisman() {
@@ -28,7 +27,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
     }
 
     public static ItemStack createStack(EnumTalisman swampTalisman, int size) {
-        return new ItemStack(Registries.INSTANCE.itemRegistry.swampTalisman, size, swampTalisman.ordinal());
+        return new ItemStack(ItemRegistry.swampTalisman, size, swampTalisman.ordinal());
     }
 
     @Override

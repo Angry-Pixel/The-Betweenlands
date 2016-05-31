@@ -1,11 +1,5 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -20,6 +14,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
@@ -28,8 +24,13 @@ import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+
 public class BlockRegistry {
-	private static final List<Block> BLOCKS = new ArrayList<Block>();
 	public static final Block SWAMP_WATER = new Block(Material.WATER);
 	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK)
 			.setSoundType2(SoundType.STONE)
@@ -50,6 +51,9 @@ public class BlockRegistry {
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
+	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
+	public static final Block DRUID_ALTAR = new BlockDruidAltar();
+	private static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	public static void preInit() {
 		try {

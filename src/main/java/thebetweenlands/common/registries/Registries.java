@@ -13,7 +13,7 @@ public class Registries {
 
 	public void preInit() {
 		this.fluidRegistry.preInit();
-		this.blockRegistry.preInit();
+		BlockRegistry.preInit();
 		this.itemRegistry.preInit();
 		this.entityRegistry.preInit();
 		this.biomeRegistry.preInit();

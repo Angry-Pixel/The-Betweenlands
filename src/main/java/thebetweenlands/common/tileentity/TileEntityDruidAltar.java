@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.recipe.DruidAltarRecipe;
-import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
     @SideOnly(Side.CLIENT)
@@ -182,11 +182,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                     if (Math.round(Math.sqrt(dSq)) == baseRadius) {
                         BlockPos pos1 = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                         Block block = world.getBlockState(pos1).getBlock();
-                        if (block == Registries.INSTANCE.blockRegistry.DRUID_STONE_1
-                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_2
-                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_3
-                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_4
-                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_5) {
+                        if (block == BlockRegistry.DRUID_STONE_1
+                                || block == BlockRegistry.DRUID_STONE_2
+                                || block == BlockRegistry.DRUID_STONE_3
+                                || block == BlockRegistry.DRUID_STONE_4
+                                || block == BlockRegistry.DRUID_STONE_5) {
                             IBlockState state = world.getBlockState(pos1);
                             int meta = state.getBlock().getMetaFromState(state);
                             if (craftingProgress == 0 && meta >= 4 || circleShouldRevert && meta >= 4) {

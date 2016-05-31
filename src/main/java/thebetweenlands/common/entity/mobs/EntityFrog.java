@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemGeneric;
-import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
     private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);
@@ -217,9 +217,9 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.frogLegsCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.frogLegsCooked, 1, 0), 0.0F);
         else {
-            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.frogLegsRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.frogLegsRaw, 1, 0), 0.0F);
             if (getSkin() == 4)
                 entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND), 0.0F);
         }

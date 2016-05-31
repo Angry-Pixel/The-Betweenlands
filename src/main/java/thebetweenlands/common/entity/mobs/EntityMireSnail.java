@@ -15,7 +15,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemGeneric;
-import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     private static final DataParameter<Boolean> HAS_MATED = EntityDataManager.createKey(EntityMireSnail.class, DataSerializers.BOOLEAN);
@@ -92,9 +92,9 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.snailFleshCooked, 1, 0), 0.0F);
         else
-            entityDropItem(new ItemStack(Registries.INSTANCE.itemRegistry.snailFleshRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.snailFleshRaw, 1, 0), 0.0F);
 
         if (rand.nextBoolean())
             entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.MIRE_SNAIL_SHELL), 0.0F);
@@ -117,7 +117,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
     @Override
     public boolean isBreedingItem(ItemStack is) {
-        return is != null && is.getItem() == Registries.INSTANCE.itemRegistry.itemsGeneric && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.ordinal();
+        return is != null && is.getItem() == ItemRegistry.itemsGeneric && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.ordinal();
     }
 
     @Override

@@ -12,7 +12,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.Registries;
 import thebetweenlands.util.TranslationHelper;
 
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ public class ItemGeneric extends Item implements ItemRegistry.ISubItemsItem {
     }
 
     public static ItemStack createStack(EnumItemGeneric enumItemGeneric, int size) {
-        return new ItemStack(Registries.INSTANCE.itemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
+        return new ItemStack(ItemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemGeneric getEnumFromID(int id) {

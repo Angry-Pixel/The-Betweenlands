@@ -1,27 +1,24 @@
 package thebetweenlands.common.world.feature.structure;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
-import net.minecraft.init.Biomes;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class WorldGenDruidCircle implements IWorldGenerator {
-    private int height = -1;
-    private int baseRadius = -1;
+import java.util.Random;
 
-    public WorldGenDruidCircle() {
-        height = 4;
-        baseRadius = 6;
-    }
+public class WorldGenDruidCircle implements IWorldGenerator {
+    private final int height = 4;
+    private final int baseRadius = 6;
+    private final int checkRadius = 32;
 
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
@@ -30,19 +27,23 @@ public class WorldGenDruidCircle implements IWorldGenerator {
         }
     }
 
-    private void generate(World world, Random random, int x, int z) {
-        Biome biomeBase = world.getBiomeGenForCoords(new BlockPos(x, 1, z));
-        int newY = 63;
-        if (biomeBase == Biomes.SWAMPLAND) {
-            for (int newX = x - baseRadius; newX <= x + baseRadius; ++newX) {
-                for (int newZ = z - baseRadius; newZ <= z + baseRadius; ++newZ) {
-                    Block block = world.getBlockState(new BlockPos(newX, newY, newZ)).getBlock();
-                    if (block != null && block == biomeBase.topBlock) {
-                        if (random.nextInt(ConfigHandler.druidCircleFrequency) == 0) { // this may need to change ie. give it a config option
-                            generateStructure(world, random, x, newY, z);
+    private void generate(World world, Random random, int startX, int startZ) {
+        for (int xo = baseRadius + 1; xo <= checkRadius - (baseRadius + 1); xo++) {
+            for (int zo = baseRadius + 1; zo <= checkRadius - (baseRadius + 1); zo++) {
+                int x = startX + xo;
+                int z = startZ + zo;
+                Biome biome = world.getBiomeGenForCoords(new BlockPos(x, 0, z));
+                int newY = world.getHeight(new BlockPos(x, 0, z)).getY();
+                if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SWAMP)) {
+                    IBlockState block = world.getBlockState(new BlockPos(x, newY, z));
+                    if (block != null && block == biome.topBlock) {
+                        if (random.nextInt(ConfigHandler.druidCircleFrequency) == 0) {
+                            if (generateStructure(world, random, x, newY + 1, z))
+                                return;
                         }
                     }
                 }
+
             }
         }
     }
@@ -70,13 +71,13 @@ public class WorldGenDruidCircle implements IWorldGenerator {
                 }
 
                 if (Math.round(Math.sqrt(dSq)) <= baseRadius) {
-                    world.setBlockState(new BlockPos(x + newX, y - 1, z + newZ), Blocks.GRASS.getDefaultState());
+                    world.setBlockState(new BlockPos(x + newX, y - 1, z + newZ), world.getBiomeGenForCoords(new BlockPos(x, 0, z)).topBlock);
                 }
             }
         }
 
-        //world.setBlockState(new BlockPos(x, y, z), BlockRegistry.druidAltar.getDefaultState());
-        //world.setBlockState(new BlockPos(x, y - 1, z), BlockRegistry.druidSpawner.getDefaultState());
+        world.setBlockState(new BlockPos(x, y, z), BlockRegistry.DRUID_ALTAR.getDefaultState());
+        world.setBlockState(new BlockPos(x, y - 1, z), BlockRegistry.DRUID_SPAWNER.getDefaultState());
 
         return true;
     }
@@ -130,15 +131,15 @@ public class WorldGenDruidCircle implements IWorldGenerator {
     private Block getRandomBlock(Random rand) {
         switch (rand.nextInt(5)) {
             case 0:
-                return Registries.INSTANCE.blockRegistry.DRUID_STONE_1;
+                return BlockRegistry.DRUID_STONE_1;
             case 1:
-                return Registries.INSTANCE.blockRegistry.DRUID_STONE_2;
+                return BlockRegistry.DRUID_STONE_2;
             case 2:
-                return Registries.INSTANCE.blockRegistry.DRUID_STONE_3;
+                return BlockRegistry.DRUID_STONE_3;
             case 3:
-                return Registries.INSTANCE.blockRegistry.DRUID_STONE_4;
+                return BlockRegistry.DRUID_STONE_4;
             case 4:
-                return Registries.INSTANCE.blockRegistry.DRUID_STONE_5;
+                return BlockRegistry.DRUID_STONE_5;
             default:
                 return Blocks.STONE;
         }
