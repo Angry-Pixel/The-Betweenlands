@@ -75,7 +75,7 @@ public class BlockPortalFrame extends BasicBlock implements IHasCustomItem, ISub
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta > 7 ? meta - 7 : meta]).withProperty(X_AXIS, meta > 7);
+        return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta > 7 ? meta - 8 : meta]).withProperty(X_AXIS, meta > 7);
     }
 
     @Override
