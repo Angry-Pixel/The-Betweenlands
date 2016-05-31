@@ -1,28 +1,60 @@
 {
   "variants": {
-    "frame_position=portal_corner_bottom_right": {
+    "frame_position=portal_corner_bottom_right,x_axis=false": {
       "model": "thebetweenlands:portal_corner_bottom_right"
     },
-    "frame_position=portal_top": {
+    "frame_position=portal_top,x_axis=false": {
       "model": "thebetweenlands:portal_top"
     },
-    "frame_position=portal_side_left": {
+    "frame_position=portal_side_left,x_axis=false": {
       "model": "thebetweenlands:portal_side_left"
     },
-    "frame_position=portal_bottom": {
+    "frame_position=portal_bottom,x_axis=false": {
       "model": "thebetweenlands:portal_bottom"
     },
-    "frame_position=portal_corner_top_right": {
+    "frame_position=portal_corner_top_right,x_axis=false": {
       "model": "thebetweenlands:portal_corner_top_right"
     },
-    "frame_position=portal_corner_top_left": {
+    "frame_position=portal_corner_top_left,x_axis=false": {
       "model": "thebetweenlands:portal_corner_top_left"
     },
-    "frame_position=portal_side_right": {
+    "frame_position=portal_side_right,x_axis=false": {
       "model": "thebetweenlands:portal_side_right"
     },
-    "frame_position=portal_corner_bottom_left": {
+    "frame_position=portal_corner_bottom_left,x_axis=false": {
       "model": "thebetweenlands:portal_corner_bottom_left"
+    },
+    "frame_position=portal_corner_bottom_right,x_axis=true": {
+      "model": "thebetweenlands:portal_corner_bottom_right",
+      "y": 90
+    },
+    "frame_position=portal_top,x_axis=true": {
+      "model": "thebetweenlands:portal_top",
+      "y": 90
+    },
+    "frame_position=portal_side_left,x_axis=true": {
+      "model": "thebetweenlands:portal_side_left",
+      "y": 90
+    },
+    "frame_position=portal_bottom,x_axis=true": {
+      "model": "thebetweenlands:portal_bottom",
+      "y": 90
+    },
+    "frame_position=portal_corner_top_right,x_axis=true": {
+      "model": "thebetweenlands:portal_corner_top_right",
+      "y": 90
+    },
+    "frame_position=portal_corner_top_left,x_axis=true": {
+      "model": "thebetweenlands:portal_corner_top_left",
+      "y": 90
+    },
+    "frame_position=portal_side_right,x_axis=true": {
+      "model": "thebetweenlands:portal_side_right",
+      "y": 90
+    },
+    "frame_position=portal_corner_bottom_left,x_axis=true": {
+      "model": "thebetweenlands:portal_corner_bottom_left",
+      "y": 90
     }
   }
 }
