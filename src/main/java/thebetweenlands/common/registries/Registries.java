@@ -18,7 +18,6 @@ public class Registries {
 		this.entityRegistry.preInit();
 		this.biomeRegistry.preInit();
 
-		this.blockRegistry.init();
 		this.itemRegistry.init();
 	}
 

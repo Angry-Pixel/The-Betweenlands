@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -22,8 +24,6 @@ import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemGeneric;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.MathUtils;
-
-import java.util.List;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
     private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
@@ -86,7 +86,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     public boolean getCanSpawnHere() {
-        return worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && getRelativeBlock(0) == BlockRegistry.swampWater;
+        return worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && getRelativeBlock(0) == BlockRegistry.SWAMP_WATER;
     }
 
     @Override
@@ -187,7 +187,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         if (block.getMaterial(worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ))).isLiquid()) {
             int r = 255, g = 255, b = 255;
             // TODO: automatically build a map of all liquid blocks to the average color of there texture to get color from
-            if (block == BlockRegistry.swampWater) {
+            if (block == BlockRegistry.SWAMP_WATER) {
                 r = 147;
                 g = 132;
                 b = 83;

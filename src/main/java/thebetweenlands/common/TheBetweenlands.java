@@ -72,6 +72,8 @@ public class TheBetweenlands {
 		/// Network ///
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
+		//Renderers
+		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
 	}
 

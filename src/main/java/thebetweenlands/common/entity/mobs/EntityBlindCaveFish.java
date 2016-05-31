@@ -63,12 +63,12 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
 
     @Override
     public boolean getCanSpawnHere() {
-        return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.swampWater;
+        return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
     }
 
     @Override
     public boolean isInWater() {
-        return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.swampWater;
+        return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
     }
 
     public void swimAbout() {
-        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.swampWater && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
+        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.SWAMP_WATER && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
             currentSwimTarget = null;
 
         if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)

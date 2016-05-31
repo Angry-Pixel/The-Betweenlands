@@ -1,6 +1,7 @@
 package thebetweenlands.common.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
@@ -51,5 +52,15 @@ public class CommonProxy implements IGuiHandler {
 
 	public void changeFileNames() {
 
+	}
+
+	public void registerItemAndBlockRenderers() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setCustomStateMap(Block block, StateMap stateMap) {
+		// TODO Auto-generated method stub
+		
 	}
 }

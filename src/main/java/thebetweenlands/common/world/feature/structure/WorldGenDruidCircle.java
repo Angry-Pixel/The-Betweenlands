@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.feature.structure;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -11,8 +13,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.util.Random;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
     private int height = -1;
@@ -130,15 +130,15 @@ public class WorldGenDruidCircle implements IWorldGenerator {
     private Block getRandomBlock(Random rand) {
         switch (rand.nextInt(5)) {
             case 0:
-                return Registries.INSTANCE.blockRegistry.druidStone1;
+                return Registries.INSTANCE.blockRegistry.DRUID_STONE_1;
             case 1:
-                return Registries.INSTANCE.blockRegistry.druidStone2;
+                return Registries.INSTANCE.blockRegistry.DRUID_STONE_2;
             case 2:
-                return Registries.INSTANCE.blockRegistry.druidStone3;
+                return Registries.INSTANCE.blockRegistry.DRUID_STONE_3;
             case 3:
-                return Registries.INSTANCE.blockRegistry.druidStone4;
+                return Registries.INSTANCE.blockRegistry.DRUID_STONE_4;
             case 4:
-                return Registries.INSTANCE.blockRegistry.druidStone5;
+                return Registries.INSTANCE.blockRegistry.DRUID_STONE_5;
             default:
                 return Blocks.STONE;
         }

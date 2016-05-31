@@ -182,11 +182,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                     if (Math.round(Math.sqrt(dSq)) == baseRadius) {
                         BlockPos pos1 = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
                         Block block = world.getBlockState(pos1).getBlock();
-                        if (block == Registries.INSTANCE.blockRegistry.druidStone1
-                                || block == Registries.INSTANCE.blockRegistry.druidStone2
-                                || block == Registries.INSTANCE.blockRegistry.druidStone3
-                                || block == Registries.INSTANCE.blockRegistry.druidStone4
-                                || block == Registries.INSTANCE.blockRegistry.druidStone5) {
+                        if (block == Registries.INSTANCE.blockRegistry.DRUID_STONE_1
+                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_2
+                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_3
+                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_4
+                                || block == Registries.INSTANCE.blockRegistry.DRUID_STONE_5) {
                             IBlockState state = world.getBlockState(pos1);
                             int meta = state.getBlock().getMetaFromState(state);
                             if (craftingProgress == 0 && meta >= 4 || circleShouldRevert && meta >= 4) {

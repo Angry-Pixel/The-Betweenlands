@@ -1,13 +1,19 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -17,26 +23,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.item.ItemBlockEnum;
+import thebetweenlands.common.registries.BlockRegistry.IHasCustomItem;
+import thebetweenlands.common.registries.BlockRegistry.ISubBlocksBlock;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-public class BlockPortalFrame extends BasicBlock implements BlockRegistry.ISubBlocksBlock {
-    public static final PropertyEnum FRAME_POSITION = PropertyEnum.create("frame_position", EnumPortalFrame.class);
+public class BlockPortalFrame extends BasicBlock implements IHasCustomItem, ISubBlocksBlock {
+    public static final PropertyEnum<EnumPortalFrame> FRAME_POSITION = PropertyEnum.create("frame_position", EnumPortalFrame.class);
 
     public BlockPortalFrame() {
         super(Material.WOOD);
         setHardness(2.0F);
         setSoundType(SoundType.WOOD);
         setCreativeTab(BLCreativeTabs.PLANTS);
-        setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.PORTAL_BOTTOM));
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return "tile.thebetweenlands.portalBarkFrame";
+        setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.PORTAL_CORNER_TOP_LEFT));
     }
 
     @Override
@@ -50,44 +49,42 @@ public class BlockPortalFrame extends BasicBlock implements BlockRegistry.ISubBl
     public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         return true;
     }
+    
+	@Override
+	public List<String> getModels() {
+		List<String> models = new ArrayList<String>();
+		for (EnumPortalFrame type : EnumPortalFrame.values())
+			models.add(type.getName());
+		return models;
+	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
+		for (EnumPortalFrame type : EnumPortalFrame.values())
+			list.add(new ItemStack(item, 1, type.ordinal()));
+	}
 
-    @Override
-    public List<String> getModels() {
-        List<String> models = new ArrayList<>();
-        for (EnumPortalFrame frame : EnumPortalFrame.VALUES)
-            models.add(frame.name);
-        return models;
-    }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FRAME_POSITION });
+	}
 
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta]);
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-        for (int i = 0; i < EnumPortalFrame.VALUES.length; i++)
-            list.add(new ItemStack(item, 1, i));
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		EnumPortalFrame type = state.getValue(FRAME_POSITION);
+		return type.ordinal();
+	}
 
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FRAME_POSITION);
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        for (EnumPortalFrame frame : EnumPortalFrame.VALUES)
-            if (frame.ordinal() == meta)
-                return this.getDefaultState().withProperty(FRAME_POSITION, frame);
-        return this.getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.PORTAL_BOTTOM);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        if (state.getValue(FRAME_POSITION) instanceof EnumPortalFrame)
-            return ((EnumPortalFrame) state.getValue(FRAME_POSITION)).ordinal();
-        return 0;
-    }
-
+	@Override
+	public ItemBlock getItemBlock() {
+		return ItemBlockEnum.create(this, EnumPortalFrame.class);
+	}
 
     public enum EnumPortalFrame implements IStringSerializable {
         PORTAL_CORNER_TOP_LEFT,
@@ -99,17 +96,9 @@ public class BlockPortalFrame extends BasicBlock implements BlockRegistry.ISubBl
         PORTAL_BOTTOM,
         PORTAL_CORNER_BOTTOM_RIGHT;
 
-        public static final EnumPortalFrame[] VALUES = values();
-        public final String name;
-
-
-        EnumPortalFrame() {
-            name = name().toLowerCase(Locale.ENGLISH);
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
+		@Override
+		public String getName() {
+			return name().toLowerCase(Locale.ENGLISH);
+		}
     }
 }

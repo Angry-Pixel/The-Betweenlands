@@ -1,8 +1,12 @@
 package thebetweenlands.client.proxy;
 
+import java.io.File;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
@@ -10,19 +14,37 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
-import thebetweenlands.client.render.render.entity.renderfactory.*;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryChiromaw;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryDragonFly;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryFrog;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryGiantToad;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryLurker;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnail;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnailEgg;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySporeling;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySwampHag;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.structure.BlockDruidStone;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.io.File;
-import java.util.List;
 
 public class ClientProxy extends CommonProxy {
 
@@ -40,7 +62,18 @@ public class ClientProxy extends CommonProxy {
     public World getClientWorld() {
         return Minecraft.getMinecraft().theWorld;
     }
+    
+	@Override
+	public void registerItemAndBlockRenderers() {
+		//TODO ItemRegistry.registerRenderers();
+		BlockRegistry.registerRenderers();
+	}
 
+	@Override
+	public void setCustomStateMap(Block block, StateMap stateMap) {
+		ModelLoader.setCustomStateMapper(block, stateMap);
+	}
+/*
     @Override
     public void registerDefaultBlockItemRenderer(Block block) {
         if (block instanceof BlockRegistry.ISubBlocksBlock) {
@@ -61,7 +94,7 @@ public class ClientProxy extends CommonProxy {
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
         }
     }
-
+*/
     @Override
     public void registerDefaultItemRenderer(Item item) {
         if (item instanceof ItemRegistry.ISubItemsItem) {
