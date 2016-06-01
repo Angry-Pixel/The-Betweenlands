@@ -55,6 +55,11 @@ public class BlockRegistry {
 	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block GENERICSTONE = new BlockGenericStone();
 	public static final Block MUD = new BlockMud();
+	
+	
+	//TREES
+	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
+	public static final Block LOG_SAP = new BlockLogBetweenlands();
 
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
