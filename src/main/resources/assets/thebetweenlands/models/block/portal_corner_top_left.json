@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "thebetweenlands:blocks/portal_bark",
-    "up": "thebetweenlands:blocks/portal_bark",
-    "down": "thebetweenlands:blocks/portal_bark",
+    "particle": "thebetweenlands:blocks/log_portal",
+    "up": "thebetweenlands:blocks/log_portal",
+    "down": "thebetweenlands:blocks/log_portal",
     "north": "thebetweenlands:blocks/portal_corner_top_left",
-    "east": "thebetweenlands:blocks/portal_bark",
+    "east": "thebetweenlands:blocks/log_portal",
     "south": "thebetweenlands:blocks/portal_corner_top_right",
-    "west": "thebetweenlands:blocks/portal_bark"
+    "west": "thebetweenlands:blocks/log_portal"
   }
 }
