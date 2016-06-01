@@ -92,9 +92,9 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(new ItemStack(ItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED, 1, 0), 0.0F);
         else
-            entityDropItem(new ItemStack(ItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW, 1, 0), 0.0F);
 
         if (rand.nextBoolean())
             entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.MIRE_SNAIL_SHELL), 0.0F);
@@ -117,7 +117,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
     @Override
     public boolean isBreedingItem(ItemStack is) {
-        return is != null && is.getItem() == ItemRegistry.itemsGeneric && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.ordinal();
+        return is != null && is.getItem() == ItemRegistry.ITEMS_GENERIC && is.getItemDamage() == ItemGeneric.EnumItemGeneric.SLUDGE_BALL.ordinal();
     }
 
     @Override

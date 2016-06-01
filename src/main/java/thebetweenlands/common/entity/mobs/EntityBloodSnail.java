@@ -61,9 +61,9 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(new ItemStack(ItemRegistry.snailFleshCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED, 1, 0), 0.0F);
         else
-            entityDropItem(new ItemStack(ItemRegistry.snailFleshRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW, 1, 0), 0.0F);
 
         if (rand.nextBoolean())
             entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.BLOOD_SNAIL_SHELL), 0.0F);

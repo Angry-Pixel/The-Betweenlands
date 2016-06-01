@@ -13,7 +13,6 @@ import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 //MINE!!
 public class TestItem extends Item {
     public TestItem() {
-        setUnlocalizedName("thebetweenlands.testItem");
         this.setMaxStackSize(1);
     }
 

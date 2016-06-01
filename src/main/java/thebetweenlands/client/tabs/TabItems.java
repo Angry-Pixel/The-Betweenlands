@@ -11,6 +11,6 @@ public class TabItems extends CreativeTabBetweenlands {
 
 	@Override
 	public Item getTabIconItem() {
-		return /*BLItemRegistry.swampTalisman*/Item.getItemFromBlock(Blocks.STONE);
+		return /*BLItemRegistry.SWAMP_TALISMAN*/Item.getItemFromBlock(Blocks.STONE);
 	}
 }

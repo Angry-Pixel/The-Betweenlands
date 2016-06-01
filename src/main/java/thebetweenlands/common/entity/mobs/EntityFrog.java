@@ -217,9 +217,9 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
         if (isBurning())
-            entityDropItem(new ItemStack(ItemRegistry.frogLegsCooked, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.FROG_LEGS_COOKED, 1, 0), 0.0F);
         else {
-            entityDropItem(new ItemStack(ItemRegistry.frogLegsRaw, 1, 0), 0.0F);
+            entityDropItem(new ItemStack(ItemRegistry.FROG_LEGS_RAW, 1, 0), 0.0F);
             if (getSkin() == 4)
                 entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND), 0.0F);
         }

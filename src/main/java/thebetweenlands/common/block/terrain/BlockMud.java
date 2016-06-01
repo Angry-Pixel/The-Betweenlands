@@ -1,8 +1,5 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.List;
-
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -16,8 +13,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.BLMaterial;
@@ -25,6 +20,7 @@ import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 
 public class BlockMud extends Block {
@@ -42,7 +38,7 @@ public class BlockMud extends Block {
         //TODO: REIMPLEMENT WHEN POTIONS ARE READDED
         //if(entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
         boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
-        boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() == ItemRegistry.lurkerSkinBoots;
+        boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && ((EntityPlayer) entity).inventory.armorInventory[0] != null && ((EntityPlayer) entity).inventory.armorInventory[0].getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
         return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && ((EntityPlayer)entity).capabilities.isFlying);
     }
 
@@ -71,7 +67,7 @@ public class BlockMud extends Block {
             }
             entity.onGround = true;
             if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterial.MUD)) {
-                ((EntityLivingBase) entity).attackEntityFrom(DamageSource.inWall, 2.0F);
+                entity.attackEntityFrom(DamageSource.inWall, 2.0F);
             }
         }
     }

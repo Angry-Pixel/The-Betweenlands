@@ -29,7 +29,7 @@ public class ItemGeneric extends Item implements ItemRegistry.ISubItemsItem {
     }
 
     public static ItemStack createStack(EnumItemGeneric enumItemGeneric, int size) {
-        return new ItemStack(ItemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
+        return new ItemStack(ItemRegistry.ITEMS_GENERIC, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemGeneric getEnumFromID(int id) {
@@ -235,13 +235,13 @@ public class ItemGeneric extends Item implements ItemRegistry.ISubItemsItem {
                 ItemBlock itemBlock = (ItemBlock) stack.getItem();
                 return this.isTinder(itemBlock.field_150939_a, null);
             }
-            return (stack.getItem() == BLItemRegistry.itemsGenericPlantDrop &&
+            return (stack.getItem() == BLItemRegistry.ITEMS_GENERIC_PLANT_DROP &&
                     (stack.getItemDamage() == EnumItemPlantDrop.CAVE_MOSS.id ||
                             stack.getItemDamage() == EnumItemPlantDrop.MOSS.id ||
                             stack.getItemDamage() == EnumItemPlantDrop.LICHEN.id ||
                             stack.getItemDamage() == EnumItemPlantDrop.THORNS.id)) ||
 
-                    (stack.getItem() == BLItemRegistry.itemsGenericCrushed &&
+                    (stack.getItem() == BLItemRegistry.ITEMS_GENERIC_CRUSHED &&
                             (stack.getItemDamage() == EnumItemGenericCrushed.GROUND_CAVE_MOSS.id ||
                                     stack.getItemDamage() == EnumItemGenericCrushed.GROUND_MOSS.id ||
                                     stack.getItemDamage() == EnumItemGenericCrushed.GROUND_LICHEN.id ||

@@ -11,6 +11,6 @@ public class TabGears extends CreativeTabBetweenlands {
 
 	@Override
 	public Item getTabIconItem() {
-		return /*BLItemRegistry.valonitePickaxe*/Item.getItemFromBlock(Blocks.STONE);
+		return /*BLItemRegistry.VALONITE_PICKAXE*/Item.getItemFromBlock(Blocks.STONE);
 	}
 }

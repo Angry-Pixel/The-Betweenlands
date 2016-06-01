@@ -27,7 +27,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
     }
 
     public static ItemStack createStack(EnumTalisman swampTalisman, int size) {
-        return new ItemStack(ItemRegistry.swampTalisman, size, swampTalisman.ordinal());
+        return new ItemStack(ItemRegistry.SWAMP_TALISMAN, size, swampTalisman.ordinal());
     }
 
     @Override

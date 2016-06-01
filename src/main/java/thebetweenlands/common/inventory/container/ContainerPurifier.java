@@ -38,7 +38,7 @@ public class ContainerPurifier extends Container {
 			ItemStack slotStack = slot.getStack();
 			newStack = slotStack.copy();
 			if (slotIndex > 2) {
-				if (slotStack.getItem() == ItemRegistry.itemsGeneric && slotStack.getItemDamage() == ItemGeneric.EnumItemGeneric.SULFUR.ordinal()) {
+				if (slotStack.getItem() == ItemRegistry.ITEMS_GENERIC && slotStack.getItemDamage() == ItemGeneric.EnumItemGeneric.SULFUR.ordinal()) {
 					if (!mergeItemStack(slotStack, 0, 1, false)) {
 						return null;
 					}

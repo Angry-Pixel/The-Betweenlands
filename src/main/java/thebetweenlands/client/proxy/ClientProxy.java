@@ -1,8 +1,5 @@
 package thebetweenlands.client.proxy;
 
-import java.io.File;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -12,46 +9,29 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryChiromaw;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryDragonFly;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryFrog;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryGiantToad;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryLurker;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnail;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnailEgg;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySporeling;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySwampHag;
+import thebetweenlands.client.render.render.entity.renderfactory.*;
+import thebetweenlands.client.render.render.item.RenderBLShield;
+import thebetweenlands.client.render.render.item.TileEntityShield;
 import thebetweenlands.client.render.tile.TilePurifierRenderer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
-import thebetweenlands.common.entity.mobs.EntityBloodSnail;
-import thebetweenlands.common.entity.mobs.EntityChiromaw;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
-import thebetweenlands.common.entity.mobs.EntityFrog;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
-import thebetweenlands.common.entity.mobs.EntityLurker;
-import thebetweenlands.common.entity.mobs.EntityMireSnail;
-import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
-import thebetweenlands.common.entity.mobs.EntitySporeling;
-import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
-import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tileentity.TileEntityPurifier;
 import thebetweenlands.util.config.ConfigHandler;
+
+import java.io.File;
+import java.util.List;
 
 public class ClientProxy extends CommonProxy {
 
@@ -177,6 +157,9 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFactoryFrog());
         RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityShield.class, new RenderBLShield());
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityShield.class);
     }
 
     @Override

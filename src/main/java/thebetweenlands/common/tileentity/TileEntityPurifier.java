@@ -15,9 +15,9 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler, ITickable {
+    private static final int MAX_TIME = 432;
     public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
     public int time = 0;
-    private static final int MAX_TIME = 432;
     public boolean lightOn = false;
     private int prevStackSize = 0;
     private Item prevItem;
@@ -167,7 +167,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     }
 
     public boolean hasFuel() {
-        return getStackInSlot(0) != null && getStackInSlot(0).getItem() == ItemRegistry.itemsGeneric && getStackInSlot(0).getItemDamage() == ItemGeneric.EnumItemGeneric.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
+        return getStackInSlot(0) != null && getStackInSlot(0).getItem() == ItemRegistry.ITEMS_GENERIC && getStackInSlot(0).getItemDamage() == ItemGeneric.EnumItemGeneric.SULFUR.ordinal() && getStackInSlot(0).stackSize >= 1;
     }
 
     private boolean outputIsFull() {

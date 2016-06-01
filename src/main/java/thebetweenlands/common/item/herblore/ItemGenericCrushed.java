@@ -32,7 +32,7 @@ public class ItemGenericCrushed extends Item implements ICustomJsonGenerationIte
     }
 
     public static ItemStack createStack(EnumItemGenericCrushed enumItemGeneric, int size) {
-        return new ItemStack(ItemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
+        return new ItemStack(ItemRegistry.ITEMS_GENERIC, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemGenericCrushed getEnumFromID(int id) {

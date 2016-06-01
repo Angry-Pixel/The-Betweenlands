@@ -1,0 +1,70 @@
+package thebetweenlands.common.item.tools;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemShield;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.BLMaterial;
+import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+public class ItemBLShield extends ItemShield {
+    private ToolMaterial material;
+    //TODO add good way for rendering multiple shields, also add some stuff that is done for the shield item
+
+    public ItemBLShield(ToolMaterial material) {
+        this.material = material;
+        this.addPropertyOverride(new ResourceLocation("blocking"), new IItemPropertyGetter() {
+            @SideOnly(Side.CLIENT)
+            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+                return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+            }
+        });
+    }
+
+    public String getItemStackDisplayName(ItemStack stack) {
+        return ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+        return BLCreativeTabs.GEARS;
+    }
+
+
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return material.getMaxUses() * 2;
+    }
+
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        /*if (material == BLMaterial.TOOL_WEEDWOOD) {
+            return repair.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD);
+        } else */
+        if (material == BLMaterial.TOOL_BETWEENSTONE) {
+            return repair.getItem() == Item.getItemFromBlock(BlockRegistry.BETWEENSTONE);
+        } else if (material == BLMaterial.TOOL_OCTINE) {
+            return repair.getItem() == ItemRegistry.ITEMS_GENERIC && repair.getItemDamage() == ItemGeneric.EnumItemGeneric.OCTINE_INGOT.ordinal();
+        } else if (material == BLMaterial.TOOL_VALONITE) {
+            return repair.getItem() == ItemRegistry.ITEMS_GENERIC && repair.getItemDamage() == ItemGeneric.EnumItemGeneric.VALONITE_SHARD.ordinal();
+        }
+        return false;
+    }
+}

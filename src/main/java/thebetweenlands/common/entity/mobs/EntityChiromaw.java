@@ -175,7 +175,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
-        entityDropItem(new ItemStack(ItemRegistry.chiromawWing, 1, 0), 0.0F);
+        entityDropItem(new ItemStack(ItemRegistry.CHIROMAW_WING, 1, 0), 0.0F);
     }
 
     //TODO add flyingFiendLiving sound

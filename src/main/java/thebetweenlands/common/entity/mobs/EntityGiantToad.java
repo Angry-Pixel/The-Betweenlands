@@ -297,7 +297,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
             boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
             if (holdsEquipment)
                 return false;
-            boolean holdsWings = player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == ItemRegistry.itemsGeneric && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.ordinal();
+            boolean holdsWings = player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == ItemRegistry.ITEMS_GENERIC && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.ordinal();
             if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
                 this.startRiding(this);
             } else if (holdsWings) {

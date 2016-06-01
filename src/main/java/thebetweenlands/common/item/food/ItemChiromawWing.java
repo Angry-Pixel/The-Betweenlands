@@ -29,11 +29,11 @@ public class ItemChiromawWing extends ItemBLFood {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-        list.add(TranslationHelper.translateToLocal("chiromawWing.taste"));
+        list.add(TranslationHelper.translateToLocal("CHIROMAW_WING.taste"));
         EntityPropertiesFood prop = BLEntityPropertiesRegistry.HANDLER.getProperties(player, EntityPropertiesFood.class);
         if(prop != null) {
             if(prop.getSickness(this) == Sickness.SICK) {
-                list.add(TranslationHelper.translateToLocal("chiromawWing.dontEat"));
+                list.add(TranslationHelper.translateToLocal("CHIROMAW_WING.dontEat"));
             }
         }
     }*/

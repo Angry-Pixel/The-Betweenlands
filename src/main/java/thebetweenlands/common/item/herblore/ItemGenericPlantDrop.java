@@ -24,7 +24,7 @@ public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationI
     }
 
     public static ItemStack createStack(ItemGenericCrushed.EnumItemGenericCrushed enumItemGeneric, int size) {
-        return new ItemStack(ItemRegistry.itemsGeneric, size, enumItemGeneric.ordinal());
+        return new ItemStack(ItemRegistry.ITEMS_GENERIC, size, enumItemGeneric.ordinal());
     }
 
     public static EnumItemPlantDrop getEnumFromID(int id) {

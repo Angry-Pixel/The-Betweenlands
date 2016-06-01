@@ -1,12 +1,6 @@
 package thebetweenlands.common.item.armor;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.MaterialLiquid;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.item.BLMaterial;
 import thebetweenlands.common.item.misc.ItemGeneric;
@@ -17,17 +11,17 @@ public class ItemRubberBoots extends ItemBLArmor /*implements IManualEntryItem*/
     private static final int MAX_WALK_TICKS = 40;
 
     public ItemRubberBoots() {
-        super(BLMaterial.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "rubberBoots");
+        super(BLMaterial.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "RUBBER_BOOTS");
     }
 
     @Override
     public boolean getIsRepairable(ItemStack armour, ItemStack material) {
-        return material.getItem() == ItemRegistry.itemsGeneric && material.getItemDamage() == ItemGeneric.EnumItemGeneric.RUBBER_BALL.ordinal();
+        return material.getItem() == ItemRegistry.ITEMS_GENERIC && material.getItemDamage() == ItemGeneric.EnumItemGeneric.RUBBER_BALL.ordinal();
     }
 
     /*@Override
     public String manualName(int meta) {
-        return "rubberBoots";
+        return "RUBBER_BOOTS";
     }
 
     @Override
