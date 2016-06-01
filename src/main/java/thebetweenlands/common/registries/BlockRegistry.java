@@ -20,10 +20,7 @@ import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.common.block.terrain.BlockGenericOre;
-import thebetweenlands.common.block.terrain.BlockGenericStone;
-import thebetweenlands.common.block.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.terrain.*;
 import thebetweenlands.common.lib.ModInfo;
 
 import java.lang.reflect.Field;
@@ -52,6 +49,7 @@ public class BlockRegistry {
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
 	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block GENERICSTONE = new BlockGenericStone();
+	public static final Block MUD = new BlockMud();
 
 
 	public static final Block TREE_PORTAL = new BlockTreePortal();

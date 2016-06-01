@@ -1,5 +1,7 @@
 package thebetweenlands.common.item;
 
+import net.minecraft.block.material.MapColor;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -21,5 +23,13 @@ public class BLMaterial {
     public static final ArmorMaterial ARMOR_VALONITE = EnumHelper.addArmorMaterial("valonite", "valonite", 35, new int[]{3, 8, 6, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0f);
     public static final ArmorMaterial ARMOR_RUBBER = EnumHelper.addArmorMaterial("rubber", "rubber", 10, new int[]{0, 0, 0, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 1.0f);
     public static final ArmorMaterial ARMOR_LEGEND = EnumHelper.addArmorMaterial("legend", "legend", 66, new int[]{6, 16, 12, 6}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0f);
+
+    public static final Material MUD = new Material(MapColor.DIRT) {
+        @Override
+        public boolean isOpaque() {
+            return false;
+        }
+    };
+
 
 }

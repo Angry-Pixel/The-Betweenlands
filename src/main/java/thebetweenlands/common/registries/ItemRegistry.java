@@ -8,6 +8,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.BLMaterial;
 import thebetweenlands.common.item.armor.ItemBLArmor;
+import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.food.*;
 import thebetweenlands.common.item.herblore.ItemGenericCrushed;
 import thebetweenlands.common.item.herblore.ItemGenericPlantDrop;
@@ -86,6 +87,7 @@ public class ItemRegistry {
     public static final Item valoniteChestplate = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 1, EntityEquipmentSlot.CHEST, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item valoniteLeggings = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item valoniteBoots = new ItemBLArmor(BLMaterial.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item rubberBoots = new ItemRubberBoots().setCreativeTab(BLCreativeTabs.GEARS);
     //tools
     public static final Item weedwoodSword = new ItemBLSword(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item weedwoodShovel = new ItemBLShovel(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
