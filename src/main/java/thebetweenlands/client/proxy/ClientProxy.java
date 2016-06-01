@@ -17,8 +17,7 @@ import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.*;
-import thebetweenlands.client.render.render.item.RenderBLShield;
-import thebetweenlands.client.render.render.item.TileEntityShield;
+import thebetweenlands.client.render.render.item.*;
 import thebetweenlands.client.render.tile.TilePurifierRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.*;
@@ -158,9 +157,14 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityShield.class, new RenderBLShield());
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityShield.class);
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityShield.class);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield("octine"));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield("symorite"));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValoniteShield.class, new RenderBLShield("valonite"));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodShield.class, new RenderBLShield("weedwood"));
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityOctineShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityValoniteShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.SYMORITE_SHIELD, 0, TileEntitySymoriteShield.class);
     }
 
     @Override
