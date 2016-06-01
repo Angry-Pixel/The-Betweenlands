@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "isspoopy=false,variant=mossycragrock_1": {"model": "thebetweenlands:mossycragrock_1"},
+    "isspoopy=false,variant=cragrock": {"model": "thebetweenlands:cragrock"},
+    "isspoopy=false,variant=mossycragrock_2": {"model": "thebetweenlands:mossycragrock_2"},
+    "isspoopy=false,variant=corruptbetweenstone": {"model": "thebetweenlands:corruptBetweenstone"},
+    "isspoopy=true,variant=mossycragrock_1": {"model": "thebetweenlands:INVALID"},
+    "isspoopy=true,variant=cragrock": {"model": "thebetweenlands:INVALID"},
+    "isspoopy=true,variant=mossycragrock_2": {"model": "thebetweenlands:INVALID"},
+    "isspoopy=true,variant=corruptbetweenstone": {"model": "thebetweenlands:INVALID"}
+
+  }
+}

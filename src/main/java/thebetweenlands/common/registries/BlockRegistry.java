@@ -22,6 +22,7 @@ import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
+import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -33,10 +34,7 @@ import java.util.Random;
 
 public class BlockRegistry {
 	public static final Block SWAMP_WATER = new Block(Material.WATER);
-	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK)
-			.setSoundType2(SoundType.STONE)
-			.setHardness(1.5F)
-			.setResistance(10.0F);
+
 	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
 	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");
 	public static final Block DRUID_STONE_3 = new BlockDruidStone(Material.ROCK, "druid_stone_3");
@@ -49,7 +47,13 @@ public class BlockRegistry {
 			return new ItemStack(Item.getItemFromBlock(this));
 		}
 	};
+
+	//TERRAIN BLOCKS
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
+	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block GENERICSTONE = new BlockGenericStone();
+
+
 	public static final Block TREE_PORTAL = new BlockTreePortal();
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
 	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
@@ -100,7 +104,7 @@ public class BlockRegistry {
 		else
 			item = new ItemBlock(block);
 
-		GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX  + name));
+		GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 	}
 
 	public interface IHasCustomItem {
