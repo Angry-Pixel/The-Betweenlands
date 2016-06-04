@@ -7,6 +7,8 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -33,6 +35,15 @@ public class ItemBLShield extends ItemShield {
                 return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
             }
         });
+
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("damage")) {
+            return (double) 1 - ((double) stack.getTagCompound().getInteger("damage") / ((double) material.getMaxUses() * (double) 2));
+        } else
+            return 1;
     }
 
     public String getItemStackDisplayName(ItemStack stack) {
@@ -50,10 +61,6 @@ public class ItemBLShield extends ItemShield {
     }
 
 
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return material.getMaxUses() * 2;
-    }
-
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         /*if (material == BLMaterial.TOOL_WEEDWOOD) {
             return repair.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD);
@@ -67,4 +74,41 @@ public class ItemBLShield extends ItemShield {
         }
         return false;
     }
+
+    @Override
+    public boolean updateItemStackNBT(NBTTagCompound nbt) {
+        return super.updateItemStackNBT(nbt);
+    }
+
+
+    public boolean damageShield(int i, ItemStack stack, EntityLivingBase entityIn) {
+        if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("damage")) {
+            NBTTagCompound tagCompound = new NBTTagCompound();
+            tagCompound.setInteger("damage", material.getMaxUses() * 2);
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        int damage = stack.getTagCompound().getInteger("damage") + i;
+        System.out.println(damage);
+        if (damage <= 0) {
+            entityIn.renderBrokenItemStack(stack);
+            --stack.stackSize;
+
+            if (entityIn instanceof EntityPlayer) {
+                EntityPlayer entityplayer = (EntityPlayer) entityIn;
+                entityplayer.addStat(StatList.getObjectBreakStats(stack.getItem()));
+            }
+
+            if (stack.stackSize < 0) {
+                stack.stackSize = 0;
+            }
+
+            stack.getTagCompound().setInteger("damage", 0);
+        } else {
+            stack.getTagCompound().setInteger("damage", damage);
+        }
+
+        return true;
+    }
+
+
 }
