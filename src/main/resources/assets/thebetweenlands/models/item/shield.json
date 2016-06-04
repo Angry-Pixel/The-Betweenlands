@@ -120,13 +120,5 @@
         0.25
       ]
     }
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "blocking": 1
-      },
-      "model": "thebetweenlands:item/shield_blocking"
-    }
-  ]
+  }
 }

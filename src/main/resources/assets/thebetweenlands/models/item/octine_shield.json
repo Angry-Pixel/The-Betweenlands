@@ -1,3 +1,11 @@
 {
-  "parent": "thebetweenlands:item/shield"
+  "parent": "thebetweenlands:item/shield",
+  "overrides": [
+    {
+      "predicate": {
+        "blocking": 1
+      },
+      "model": "thebetweenlands:item/shield_blocking"
+    }
+  ]
 }
