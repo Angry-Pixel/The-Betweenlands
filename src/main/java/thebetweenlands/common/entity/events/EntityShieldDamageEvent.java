@@ -17,7 +17,6 @@ public class EntityShieldDamageEvent {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			if (event.getAmount() >= 3.0F && player.getActiveItemStack() != null && player.getActiveItemStack().getItem() instanceof ItemBLShield) {
 				int i = 1 + MathHelper.floor_float(event.getAmount());
-				System.out.println("uhm ");
 				((ItemBLShield) player.getActiveItemStack().getItem()).damageShield(i, player.getActiveItemStack(), player);
 				if (player.getActiveItemStack().stackSize <= 0) {
 					EnumHand enumhand = player.getActiveHand();

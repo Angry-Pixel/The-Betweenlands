@@ -40,10 +40,15 @@ public class ItemBLShield extends ItemShield {
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("damage")) {
-            return (double) 1 - ((double) stack.getTagCompound().getInteger("damage") / ((double) material.getMaxUses() * (double) 2));
+        if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage")) {
+            return ((double) stack.getTagCompound().getInteger("damage") / ((double) material.getMaxUses() * (double) 2));
         } else
             return 1;
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage") && stack.getTagCompound().getInteger("damage") < material.getMaxUses() * 2;
     }
 
     public String getItemStackDisplayName(ItemStack stack) {
@@ -87,6 +92,7 @@ public class ItemBLShield extends ItemShield {
             tagCompound.setInteger("damage", material.getMaxUses() * 2);
             stack.setTagCompound(new NBTTagCompound());
         }
+
         int damage = stack.getTagCompound().getInteger("damage") + i;
         System.out.println(damage);
         if (damage <= 0) {
