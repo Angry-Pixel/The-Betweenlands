@@ -157,10 +157,10 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield("octine"));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield("symorite"));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValoniteShield.class, new RenderBLShield("valonite"));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodShield.class, new RenderBLShield("weedwood"));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield(RenderBLShield.Shieldtype.OCTINE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.SYMORITE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValoniteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.VALONITE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodShield.class, new RenderBLShield(RenderBLShield.Shieldtype.WEEDWOOD));
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityOctineShield.class);
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityValoniteShield.class);
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
