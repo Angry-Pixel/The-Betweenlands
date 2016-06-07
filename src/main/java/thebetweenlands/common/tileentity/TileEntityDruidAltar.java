@@ -2,18 +2,26 @@ package thebetweenlands.common.tileentity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.recipe.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
     @SideOnly(Side.CLIENT)
@@ -38,10 +46,21 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         super(5, "druidAltar");
     }
 
+    @SubscribePacket
+    public static void onProgressPacket(PacketDruidAltarProgress pkt) {
+        TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(new BlockPos(pkt.x, pkt.y, pkt.z));
+        if (te instanceof TileEntityDruidAltar) {
+            TileEntityDruidAltar tile = (TileEntityDruidAltar) te;
+            if (pkt.progress >= 0) {
+                tile.craftingProgress = pkt.progress;
+            }
+        }
+    }
+
     @Override
     public void update() {
         if (!worldObj.isRemote && circleShouldRevert) {
-            //checkDruidCircleMeta(worldObj);
+            checkDruidCircleMeta(worldObj);
             circleShouldRevert = false;
         }
 
@@ -62,14 +81,14 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                 DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(inventory[1], inventory[2], inventory[3], inventory[4]);
                 //Sync clients every second
                 if (this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
-                    //sendCraftingProgressPacket();
+                    sendCraftingProgressPacket();
                 }
                 ++craftingProgress;
 
                 //updateDamageValues();
                 if (recipe == null || inventory[0] != null) {
                     if (this.craftingProgress != 0) {
-                        //this.stopCraftingProcess();
+                        this.stopCraftingProcess();
                     }
                 }
 
@@ -80,9 +99,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                     setInventorySlotContents(3, null);
                     setInventorySlotContents(4, null);
                     setInventorySlotContents(0, stack);
-                    //this.stopCraftingProcess();
-                    //TODO enable when druid spawner is added
-                    //this.removeSpawner();
+                    this.stopCraftingProcess();
+
+                    this.removeSpawner();
                 }
             }
         }
@@ -93,13 +112,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         return 1;
     }
 
-    /*TODO enable when druid spawner is added
     private void removeSpawner() {
-        if (worldObj.getBlockState(pos.down()) == BlockRegistry.druidSpawner)
-            worldObj.setBlockState(pos.down(), Blocks.grass.getDefaultState());
-    }*/
+        if (worldObj.getBlockState(pos.down()) == BlockRegistry.DRUID_SPAWNER)
+            worldObj.setBlockState(pos.down(), Blocks.GRASS.getDefaultState());
+    }
 
-    /*
     @Override
     public void setInventorySlotContents(int slot, ItemStack is) {
         inventory[slot] = is;
@@ -117,33 +134,32 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
                 }
             }
         }
-    }*/
+    }
 
-/*TODO enable when packets are added
     private void startCraftingProcess() {
         World world = worldObj;
         int dim = 0;
         if (world instanceof WorldServer) {
-            dim = ((WorldServer)world).provider.getDimension();
+            dim = ((WorldServer) world).provider.getDimension();
         }
         craftingProgress = 1;
-        worldObj.setBlockState(pos, worldObj.getBlockState(pos).getBlock().getStateFromMeta(1), 2);
+        worldObj.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getStateFromMeta(0), world.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
         //Packet to start sound
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -1)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 1
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, 1)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Does the metadata stuff for the circle animated textures
         checkDruidCircleMeta(world);
-    }*/
-/*
+    }
+
     private void stopCraftingProcess() {
         World world = worldObj;
         int dim = 0;
         if (world instanceof WorldServer) {
-            dim = ((WorldServer)world).provider.getDimension();
+            dim = ((WorldServer) world).provider.getDimension();
         }
         craftingProgress = 0;
-        worldObj.setBlockState(pos, world.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
+        worldObj.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getStateFromMeta(0), world.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
         //Packet to cancel sound
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -2)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 0
@@ -156,22 +172,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         World world = worldObj;
         int dim = 0;
         if (world instanceof WorldServer) {
-            dim = ((WorldServer)world).provider.getDimension();
+            dim = ((WorldServer) world).provider.getDimension();
         }
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
-    }*/
-
-    /*
-    @SubscribePacket
-    public static void onProgressPacket(PacketDruidAltarProgress pkt) {
-        TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(pkt.x, pkt.y, pkt.z);
-        if (te instanceof TileEntityDruidAltar) {
-            TileEntityDruidAltar tile = (TileEntityDruidAltar) te;
-            if (pkt.progress >= 0) {
-                tile.craftingProgress = pkt.progress;
-            }
-        }
-    }*/
+    }
 
     private void checkDruidCircleMeta(World world) {
         int baseRadius = 6;
@@ -206,6 +210,19 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return new AxisAlignedBB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 3, pos.getZ() + 2);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setInteger("craftingProgress", craftingProgress);
+        return nbt;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        craftingProgress = nbt.getInteger("craftingProgress");
     }
 
     @Override

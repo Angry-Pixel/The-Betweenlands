@@ -115,6 +115,4 @@ public class ItemBLShield extends ItemShield {
 
         return true;
     }
-
-
 }

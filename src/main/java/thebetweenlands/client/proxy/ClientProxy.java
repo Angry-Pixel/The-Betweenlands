@@ -13,12 +13,14 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.*;
 import thebetweenlands.client.render.render.item.*;
-import thebetweenlands.client.render.tile.TilePurifierRenderer;
+import thebetweenlands.client.render.render.tile.RendererTileEntityDruidAltar;
+import thebetweenlands.client.render.render.tile.TilePurifierRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -26,6 +28,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tileentity.TileEntityDruidAltar;
 import thebetweenlands.common.tileentity.TileEntityPurifier;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -43,6 +46,11 @@ public class ClientProxy extends CommonProxy {
     public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         switch (id) {
+            case GUI_DRUID_ALTAR: {
+                if (tile instanceof TileEntityDruidAltar)
+                    return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tile);
+                break;
+            }
             case GUI_PURIFIER: {
                 if (tile instanceof TileEntityPurifier) {
                     return new GuiPurifier(player.inventory, (TileEntityPurifier) tile);
@@ -170,5 +178,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new TilePurifierRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RendererTileEntityDruidAltar());
     }
 }

@@ -3,14 +3,14 @@ package thebetweenlands.common.proxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.tileentity.TileEntityDruidAltar;
 import thebetweenlands.common.tileentity.TileEntityPurifier;
 
 public class CommonProxy implements IGuiHandler {
@@ -33,6 +33,11 @@ public class CommonProxy implements IGuiHandler {
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         switch (id) {
+            case GUI_DRUID_ALTAR: {
+                if (tile instanceof TileEntityDruidAltar)
+                    return new ContainerDruidAltar(player.inventory, (TileEntityDruidAltar) tile);
+                break;
+            }
             case GUI_PURIFIER: {
                 if (tile instanceof TileEntityPurifier) {
                     return new ContainerPurifier(player.inventory, (TileEntityPurifier) tile);

@@ -24,10 +24,14 @@ import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.BLMessage;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.PacketRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.network.base.SidedPacketHandler;
+import thebetweenlands.network.base.impl.CommonPacketProxy;
+import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.util.ModelConverter;
 import thebetweenlands.util.ModelConverter.AlignedQuad;
 import thebetweenlands.util.ModelConverter.Box;
@@ -41,12 +45,17 @@ import java.util.ArrayList;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
+	public static final SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
+	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer();
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands instance;
 	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
+	public static CommonPacketProxy packetProxy;
+
 	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 	public static boolean isShadersModInstalled = false;
 	public static DimensionType dimensionType;
@@ -72,6 +81,9 @@ public class TheBetweenlands {
 
 		/// Network ///
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
+		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
+
+		PacketRegistry.preInit();
 
 		//Renderers
 		proxy.registerItemAndBlockRenderers();

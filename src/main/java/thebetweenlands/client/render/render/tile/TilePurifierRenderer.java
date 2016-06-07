@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.tile;
+package thebetweenlands.client.render.render.tile;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,9 +18,9 @@ import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class TilePurifierRenderer extends TileEntitySpecialRenderer<TileEntityPurifier> {
+    public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
     private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
     private final ModelPurifier model = new ModelPurifier();
-    public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
 
     @Override
     public void renderTileEntityAt(TileEntityPurifier tile, double x, double y, double z, float partialTickTime, int destroyStage) {
