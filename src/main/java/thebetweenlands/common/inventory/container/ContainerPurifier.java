@@ -8,7 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.item.misc.ItemGeneric;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
 	protected TileEntityPurifier purifier;

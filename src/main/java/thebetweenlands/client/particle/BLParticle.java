@@ -4,15 +4,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.*;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.client.particle.entity.EntityBugFX;
 
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
@@ -31,7 +30,15 @@ public enum BLParticle {
 	GREEN_FLAME(ParticleFlame.class, 0.176f, 0.259f, 0.192f),
 	SULFUR_TORCH(ParticleSmokeNormal.class, 1, 0.9294F, 0, ParticleArgs.V0_V0_V0),
 	STEAM_PURIFIER(ParticleSmokeNormal.class, 1, 1, 1, ParticleArgs.V0_V0_V0),
-	PORTAL(ParticlePortal.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
+	FLY(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
+		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/fly.png");
+
+		@Override
+		protected Object[] getAdditionalArgs(World world, Object... data) {
+			return new Object[]{400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2};
+		}
+	},
+		PORTAL(ParticlePortal.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/portal.png");
 
 		@Override
@@ -109,6 +116,8 @@ public enum BLParticle {
 	public final void spawn(World world, double x, double y, double z) {
 		spawn(world, x, y, z, 0, 0, 0, 1);
 	}
+
+	public final void spawn(World world, BlockPos pos){ spawn(world, pos.getX(), pos.getY(), pos.getZ());}
 
 	public final void spawn(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale, Object... data) {
 		Object[] arguments = getArguments(world, x, y, z, motionX, motionY, motionZ, scale, data);

@@ -17,14 +17,14 @@ import org.lwjgl.opengl.GL11;
 import paulscode.sound.Vector3D;
 import thebetweenlands.client.render.models.tile.ModelDruidAltar;
 import thebetweenlands.client.render.models.tile.ModelStone;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.util.LightingUtil;
 
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
-public class RendererTileEntityDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidAltar> {
-    public static RendererTileEntityDruidAltar instance;
+public class DruidAltarRenderer extends TileEntitySpecialRenderer<TileEntityDruidAltar> {
+    public static DruidAltarRenderer instance;
     private final ModelDruidAltar model = new ModelDruidAltar();
     private final ModelStone stone = new ModelStone();
     private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarActive.png");
@@ -32,7 +32,7 @@ public class RendererTileEntityDruidAltar extends TileEntitySpecialRenderer<Tile
     private final ResourceLocation NORMAL = new ResourceLocation("thebetweenlands:textures/tiles/druidAltar.png");
     private final ResourceLocation NORMALGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarGlow.png");
 
-    public RendererTileEntityDruidAltar() {
+    public DruidAltarRenderer() {
     }
 
     @Override

@@ -4,7 +4,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 import javax.vecmath.Vector3d;
 

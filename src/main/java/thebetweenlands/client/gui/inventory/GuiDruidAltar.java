@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 @SideOnly(Side.CLIENT)
 public class GuiDruidAltar extends GuiContainer {

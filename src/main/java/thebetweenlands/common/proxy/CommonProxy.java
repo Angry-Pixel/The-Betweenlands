@@ -10,8 +10,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
     public static final int GUI_DRUID_ALTAR = 1;
@@ -41,6 +43,12 @@ public class CommonProxy implements IGuiHandler {
             case GUI_PURIFIER: {
                 if (tile instanceof TileEntityPurifier) {
                     return new ContainerPurifier(player.inventory, (TileEntityPurifier) tile);
+                }
+                break;
+            }
+            case GUI_WEEDWOOD_CRAFT: {
+                if (tile instanceof TileEntityWeedwoodWorkbench) {
+                    return new ContainerWeedwoodWorkbench(player.inventory, (TileEntityWeedwoodWorkbench) tile);
                 }
                 break;
             }

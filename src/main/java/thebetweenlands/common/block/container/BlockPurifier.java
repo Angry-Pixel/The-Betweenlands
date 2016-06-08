@@ -23,7 +23,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityPurifier;
 
 import java.util.Random;
 
@@ -72,7 +72,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
                 }
             }
             if (tile != null) {
-                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PURIFIER, world, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_PURIFIER, world, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;

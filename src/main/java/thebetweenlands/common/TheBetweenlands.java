@@ -50,7 +50,7 @@ public class TheBetweenlands {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
 	@Instance(ModInfo.ID)
-	public static TheBetweenlands instance;
+	public static TheBetweenlands INSTANCE;
 	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
@@ -74,7 +74,7 @@ public class TheBetweenlands {
 
 		REGISTRIES.preInit();
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
+		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, proxy);
 
 		//DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
 		//DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);*/

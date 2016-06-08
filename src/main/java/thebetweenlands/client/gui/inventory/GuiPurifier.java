@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityPurifier;
 
 @SideOnly(Side.CLIENT)
 public class GuiPurifier extends GuiContainer {

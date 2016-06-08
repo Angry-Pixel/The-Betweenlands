@@ -1,11 +1,5 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,16 +17,19 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.common.block.terrain.BlockGenericOre;
-import thebetweenlands.common.block.terrain.BlockGenericStone;
-import thebetweenlands.common.block.terrain.BlockMud;
-import thebetweenlands.common.block.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.terrain.*;
 import thebetweenlands.common.lib.ModInfo;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class BlockRegistry {
 	public static final Block SWAMP_WATER = new Block(Material.WATER);
@@ -52,10 +49,13 @@ public class BlockRegistry {
 
 	//TERRAIN BLOCKS
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
-	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setDefaultCreativeTab().setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block GENERICSTONE = new BlockGenericStone();
 	public static final Block MUD = new BlockMud();
-	
+	public static final Block PEAT = new BlockPeat();
+	public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
+	public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND).setDefaultCreativeTab().setHarvestLevel2("shovel", 0).setSoundType2(SoundType.SAND).setHardness(0.5F);
+	public static final Block SLIMY_GRASS = new BlockSlimyGrass();
 	
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
@@ -67,8 +67,11 @@ public class BlockRegistry {
 	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
 	public static final Block DRUID_ALTAR = new BlockDruidAltar();
 	public static final Block PURIFIER = new BlockPurifier();
+	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
+
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
-	
+
+
 	public static void preInit() {
 		try {
 			for (Field field : BlockRegistry.class.getDeclaredFields()) {

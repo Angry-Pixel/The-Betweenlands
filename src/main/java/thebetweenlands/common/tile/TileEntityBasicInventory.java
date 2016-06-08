@@ -1,4 +1,4 @@
-package thebetweenlands.common.tileentity;
+package thebetweenlands.common.tile;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
