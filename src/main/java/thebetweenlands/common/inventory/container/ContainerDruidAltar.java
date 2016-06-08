@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.slot.SlotDruidAltar;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.recipe.DruidAltarRecipe;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
 

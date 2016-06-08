@@ -12,12 +12,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.models.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityPurifier;
 
 import java.util.Random;
 
 @SideOnly(Side.CLIENT)
-public class TilePurifierRenderer extends TileEntitySpecialRenderer<TileEntityPurifier> {
+public class PurifierRenderer extends TileEntitySpecialRenderer<TileEntityPurifier> {
     public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
     private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
     private final ModelPurifier model = new ModelPurifier();

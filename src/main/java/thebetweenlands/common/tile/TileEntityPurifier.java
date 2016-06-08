@@ -1,4 +1,4 @@
-package thebetweenlands.common.tileentity;
+package thebetweenlands.common.tile;
 
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.Item;

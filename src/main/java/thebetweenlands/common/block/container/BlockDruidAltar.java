@@ -16,9 +16,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
-
-import javax.annotation.Nullable;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
     public BlockDruidAltar() {
@@ -34,21 +32,21 @@ public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
         return new TileEntityDruidAltar();
     }
 
-
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (world.isRemote)
             return false;
 
-        if (worldIn.getTileEntity(pos) instanceof TileEntityDruidAltar) {
-            TileEntityDruidAltar altar = (TileEntityDruidAltar) worldIn.getTileEntity(pos);
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof TileEntityDruidAltar) {
+            TileEntityDruidAltar altar = (TileEntityDruidAltar) tile;
             if (altar.craftingProgress == 0) {
-                playerIn.openGui(TheBetweenlands.instance, CommonProxy.GUI_DRUID_ALTAR, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_DRUID_ALTAR, world, pos.getX(), pos.getY(), pos.getZ());
                 return true;
             }
         }

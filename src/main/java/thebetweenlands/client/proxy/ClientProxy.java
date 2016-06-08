@@ -15,12 +15,14 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.*;
 import thebetweenlands.client.render.render.item.*;
-import thebetweenlands.client.render.render.tile.RendererTileEntityDruidAltar;
-import thebetweenlands.client.render.render.tile.TilePurifierRenderer;
+import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
+import thebetweenlands.client.render.render.tile.PurifierRenderer;
+import thebetweenlands.client.render.render.tile.WeedwoodWorkbenchRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -28,8 +30,9 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
-import thebetweenlands.common.tileentity.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.util.config.ConfigHandler;
 
 import java.io.File;
@@ -54,6 +57,12 @@ public class ClientProxy extends CommonProxy {
             case GUI_PURIFIER: {
                 if (tile instanceof TileEntityPurifier) {
                     return new GuiPurifier(player.inventory, (TileEntityPurifier) tile);
+                }
+                break;
+            }
+            case GUI_WEEDWOOD_CRAFT: {
+                if (tile instanceof TileEntityWeedwoodWorkbench) {
+                    return new GuiWeedwoodWorkbench(player.inventory, (TileEntityWeedwoodWorkbench) tile);
                 }
                 break;
             }
@@ -177,7 +186,8 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void postInit() {
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new TilePurifierRenderer());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RendererTileEntityDruidAltar());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new PurifierRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new DruidAltarRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new WeedwoodWorkbenchRenderer());
     }
 }

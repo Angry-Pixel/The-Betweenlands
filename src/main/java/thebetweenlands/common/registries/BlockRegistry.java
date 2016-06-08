@@ -23,6 +23,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -56,7 +57,6 @@ public class BlockRegistry {
 	public static final Block GENERICSTONE = new BlockGenericStone();
 	public static final Block MUD = new BlockMud();
 	
-	
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
@@ -67,6 +67,8 @@ public class BlockRegistry {
 	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
 	public static final Block DRUID_ALTAR = new BlockDruidAltar();
 	public static final Block PURIFIER = new BlockPurifier();
+	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
+
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	public static void preInit() {

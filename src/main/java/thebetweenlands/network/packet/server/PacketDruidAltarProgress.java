@@ -1,7 +1,7 @@
 package thebetweenlands.network.packet.server;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.common.tileentity.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.network.base.Packet;
 
 public class PacketDruidAltarProgress extends Packet {

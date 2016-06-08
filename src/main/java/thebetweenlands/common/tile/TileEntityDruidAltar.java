@@ -1,4 +1,4 @@
-package thebetweenlands.common.tileentity;
+package thebetweenlands.common.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
