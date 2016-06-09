@@ -3,7 +3,10 @@ package thebetweenlands.client.particle.entity;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +48,7 @@ public class EntityBugFX  extends Particle {
         float ipx = (float)((this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks) - this.interpPosX);
         float ipy = (float)((this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks) - this.interpPosY);
         float ipz = (float)((this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks) - this.interpPosZ);
-
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         int prevTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         Minecraft.getMinecraft().getTextureManager().bindTexture(this.particleTexture);
 
@@ -57,16 +60,21 @@ public class EntityBugFX  extends Particle {
         float b = (float)(this.color1 & 0xff) / 255F;
 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        Tessellator tessellator = Tessellator.getInstance();
+        //tessellator.draw();
+        tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
         //buff.startDrawingQuads();
-        buff.color(r, g, b, a);
+        //buff.color(r, g, b, a);
+        //buff.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         this.draw(buff, ipx - rx * this.scale - ryz * this.scale, ipy - rxz * this.scale, ipz - rz * this.scale - rxy * this.scale, 1.0f, (float) ((this.currentTexture + 1) * this.relativeTextureHeight));
         this.draw(buff, ipx - rx * this.scale + ryz * this.scale, ipy + rxz * this.scale, ipz - rz * this.scale + rxy * this.scale, 1.0f, (float) (this.currentTexture * this.relativeTextureHeight));
         this.draw(buff, ipx + rx * this.scale + ryz * this.scale, ipy + rxz * this.scale, ipz + rz * this.scale + rxy * this.scale, 0.0f, (float) (this.currentTexture * this.relativeTextureHeight));
         this.draw(buff, ipx + rx * this.scale - ryz * this.scale, ipy - rxz * this.scale, ipz + rz * this.scale - rxy * this.scale, 0.0f, (float) ((this.currentTexture + 1) * this.relativeTextureHeight));
-        //buff.draw();
+        tessellator.draw();
 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, prevTex);
+        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
     }
 
     @Override

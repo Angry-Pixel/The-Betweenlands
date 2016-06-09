@@ -11,7 +11,7 @@ public class ItemRubberBoots extends ItemBLArmor /*implements IManualEntryItem*/
     private static final int MAX_WALK_TICKS = 40;
 
     public ItemRubberBoots() {
-        super(BLMaterial.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "RUBBER_BOOTS");
+        super(BLMaterial.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "rubber_boots");
     }
 
     @Override

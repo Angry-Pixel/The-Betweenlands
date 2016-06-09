@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.particle.entity.EntityPortalFX;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.client.particle.entity.EntityBugFX;
 
@@ -38,7 +39,7 @@ public enum BLParticle {
 			return new Object[]{400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2};
 		}
 	},
-		PORTAL(ParticlePortal.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
+		PORTAL(EntityPortalFX.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/portal.png");
 
 		@Override
@@ -83,7 +84,8 @@ public enum BLParticle {
 			this.b = b;
 		}
 		try {
-			constructor = particleClass.getConstructor(getArgumentTypes(args, additionalArgTypes));
+			particleClass.getDeclaredConstructor(getArgumentTypes(args, additionalArgTypes)).setAccessible(true);
+			constructor = particleClass.getDeclaredConstructor(getArgumentTypes(args, additionalArgTypes));
 		} catch (Exception e) {
 			CrashReport crash = CrashReport.makeCrashReport(e, "Constructing BLParticle");
 			CrashReportCategory categoryArguments = crash.makeCategory("Arguments");
@@ -117,7 +119,7 @@ public enum BLParticle {
 		spawn(world, x, y, z, 0, 0, 0, 1);
 	}
 
-	public final void spawn(World world, BlockPos pos){ spawn(world, pos.getX(), pos.getY(), pos.getZ());}
+	public final void spawn(World world, BlockPos pos){ spawn(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ());}
 
 	public final void spawn(World world, double x, double y, double z, double motionX, double motionY, double motionZ, float scale, Object... data) {
 		Object[] arguments = getArguments(world, x, y, z, motionX, motionY, motionZ, scale, data);
