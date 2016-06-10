@@ -1,10 +1,7 @@
 package thebetweenlands.client.render.render.tile;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -14,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import paulscode.sound.Vector3D;
 import thebetweenlands.client.render.models.tile.ModelDruidAltar;
 import thebetweenlands.client.render.models.tile.ModelStone;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
@@ -100,7 +96,6 @@ public class DruidAltarRenderer extends TileEntitySpecialRenderer<TileEntityDrui
 
         //Animate the 4 talisman pieces
         if (tile.getBlockMetadata() == 1 && tile.craftingProgress != 0) {
-            System.out.println("rip");
             double yOff = tile.renderYOffset + (tile.renderYOffset - tile.prevRenderYOffset) * partialTicks;
             if (yOff > TileEntityDruidAltar.FINAL_HEIGHT + 1.0D) {
                 yOff = TileEntityDruidAltar.FINAL_HEIGHT + 1.0D;
@@ -126,13 +121,17 @@ public class DruidAltarRenderer extends TileEntitySpecialRenderer<TileEntityDrui
                     GlStateManager.translate(x + xOff, y + 1, z + zOff);
                     this.renderCone(5);
                     GlStateManager.popMatrix();
-                    Vector3D midVec = new Vector3D((float) x + 0.5f, 0, (float) z + 0.5f);
-                    Vector3D diffVec = new Vector3D((float) x + xOff, 0, (float) z + zOff);
-                    diffVec.subtract(midVec);
+                    Vector3d midVec = new Vector3d();
+                    midVec.x = (float) x + 0.5f;
+                    midVec.z = (float) z + 0.5f;
+                    Vector3d diffVec = new Vector3d();
+                    diffVec.x = (float) x + xOff - midVec.x;
+                    diffVec.z = (float) z + zOff - midVec.z;
                     double rProgress = 1.0D - Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 6);
                     diffVec.x *= rProgress;
                     diffVec.z *= rProgress;
-                    midVec.add(diffVec);
+                    midVec.x += diffVec.x;
+                    midVec.z += diffVec.z;
                     GlStateManager.pushMatrix();
                     GlStateManager.translate(midVec.x, y + yOff, midVec.z);
                     GlStateManager.scale(0.3f, 0.3f, 0.3f);

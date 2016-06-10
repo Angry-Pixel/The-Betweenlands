@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -93,8 +94,8 @@ public class GuiDruidAltar extends GuiContainer {
                 this.iconCountTool = 1;
             }
         }
-
-        if (this.tile.craftingProgress == 1) {
+        TileEntity tile2 = tile.getWorld().getTileEntity(tile.getPos());
+        if (tile2.getBlockMetadata() == 1) {
             this.mc.thePlayer.closeScreen();
         }
     }

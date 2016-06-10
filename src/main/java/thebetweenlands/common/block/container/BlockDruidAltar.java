@@ -3,6 +3,8 @@ package thebetweenlands.common.block.container;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,12 +21,30 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
+
     public BlockDruidAltar() {
         super(Material.ROCK);
         setBlockUnbreakable();
         setResistance(100.0F);
         setSoundType(SoundType.STONE);
         setCreativeTab(BLCreativeTabs.BLOCKS);
+        setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, false));
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, ACTIVE);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(ACTIVE, meta != 0);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(ACTIVE) ? 1 : 0;
     }
 
     @Override

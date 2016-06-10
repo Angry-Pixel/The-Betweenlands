@@ -40,7 +40,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
     public float prevRenderYOffset;
     public int craftingProgress = 0;
     private boolean circleShouldRevert = true;
-    private int[] damageValues = {0, 0, 0, 0};
 
     public TileEntityDruidAltar() {
         super(5, "druidAltar");
@@ -94,6 +93,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
                 if (craftingProgress >= CRAFTING_TIME && recipe != null) {
                     ItemStack stack = recipe.output;
+                    stack.stackSize = 1;
                     setInventorySlotContents(1, null);
                     setInventorySlotContents(2, null);
                     setInventorySlotContents(3, null);
@@ -142,8 +142,12 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         if (world instanceof WorldServer) {
             dim = ((WorldServer) world).provider.getDimension();
         }
-        craftingProgress = 1;
-        worldObj.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getStateFromMeta(0), world.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
+
+
+        worldObj.setBlockState(pos, worldObj.getBlockState(pos).getBlock().getStateFromMeta(1), 2);
+        ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).inventory = inventory;
+        ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).craftingProgress = 1;
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), world.getBlockState(pos), 2);
         //Packet to start sound
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -1)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 1
@@ -158,8 +162,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         if (world instanceof WorldServer) {
             dim = ((WorldServer) world).provider.getDimension();
         }
-        craftingProgress = 0;
-        worldObj.notifyBlockUpdate(pos, world.getBlockState(pos).getBlock().getStateFromMeta(0), world.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
+        worldObj.setBlockState(pos, worldObj.getBlockState(pos).getBlock().getStateFromMeta(0), 2);
+        ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).inventory = inventory;
+        ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).craftingProgress = 0;
+        worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), world.getBlockState(pos), 2);
         //Packet to cancel sound
         TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -2)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 0
