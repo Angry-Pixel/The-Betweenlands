@@ -173,21 +173,24 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFactoryFrog());
         RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield(RenderBLShield.Shieldtype.OCTINE));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.SYMORITE));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValoniteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.VALONITE));
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodShield.class, new RenderBLShield(RenderBLShield.Shieldtype.WEEDWOOD));
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityOctineShield.class);
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityValoniteShield.class);
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
-        ForgeHooksClient.registerTESRItemStack(ItemRegistry.SYMORITE_SHIELD, 0, TileEntitySymoriteShield.class);
     }
 
     @Override
     public void postInit() {
+        //Tile entities
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new PurifierRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new DruidAltarRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new WeedwoodWorkbenchRenderer());
+        //shield rendering
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield(RenderBLShield.Shieldtype.OCTINE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.SYMORITE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityValoniteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.VALONITE));
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodShield.class, new RenderBLShield(RenderBLShield.Shieldtype.WEEDWOOD));
+
+        //item models
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.OCTINE_SHIELD, 0, TileEntityOctineShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityValoniteShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
+        ForgeHooksClient.registerTESRItemStack(ItemRegistry.SYMORITE_SHIELD, 0, TileEntitySymoriteShield.class);
     }
 }
