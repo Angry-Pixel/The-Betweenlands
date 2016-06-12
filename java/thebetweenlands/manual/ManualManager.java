@@ -213,11 +213,11 @@ public class ManualManager {
     public static ManualCategory getCategoryFromString(String categoryName, Item itemManual) {
         if (itemManual == BLItemRegistry.manualGuideBook && categoryName != null)
             for (ManualCategory category : GuideBookEntryRegistry.CATEGORIES)
-                if (category.name.equals(categoryName))
+                if (category.getName().equals(categoryName))
                     return category;
         if (itemManual == BLItemRegistry.manualHL && categoryName != null)
             for (ManualCategory category : HLEntryRegistry.CATEGORIES)
-                if (category.name.equals(categoryName))
+                if (category.getName().equals(categoryName))
                     return category;
         return null;
     }

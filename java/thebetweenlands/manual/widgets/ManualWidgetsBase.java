@@ -223,7 +223,7 @@ public class ManualWidgetsBase {
         if (mouseButton == 0) {
             for (PageLink link : pageLinks)
                 if (x >= link.x && y >= link.y && x <= link.x + link.width && y <= link.y + link.height)
-                    manual.changeCategory(link.category, link.pageNumber + link.category.indexPages);
+                    manual.changeCategory(link.category, link.pageNumber + link.category.getIndexPages());
         }
     }
 
@@ -324,7 +324,7 @@ public class ManualWidgetsBase {
             if (item != null) {
                 if (book == BLItemRegistry.manualHL) {
                     for (ManualCategory category : HLEntryRegistry.CATEGORIES) {
-                        for (Page page : category.visiblePages) {
+                        for (Page page : category.getVisiblePages()) {
                             if (page.pageItems.size() > 0) {
                                 for (ItemStack stack : page.pageItems) {
                                     if (stack != null && stack.getItem() == item.getItem() && (stack.getItemDamage() == item.getItemDamage() || stack.getItemDamage() == item.getItemDamage() - 1)) {
@@ -337,7 +337,7 @@ public class ManualWidgetsBase {
                         }
                     }
                 } else {
-                    for (Page page : GuideBookEntryRegistry.itemsCategory.visiblePages) {
+                    for (Page page : GuideBookEntryRegistry.itemsCategory.getVisiblePages()) {
                         if (page.pageItems.size() > 0) {
                             for (ItemStack stack : page.pageItems) {
                                 if (stack != null && stack.getItem() == item.getItem() && stack.getItemDamage() == item.getItemDamage()) {
@@ -359,7 +359,7 @@ public class ManualWidgetsBase {
             this.width = width;
             this.height = height;
             if (aspectType != null) {
-                for (Page page : HLEntryRegistry.aspectCategory.visiblePages) {
+                for (Page page : HLEntryRegistry.aspectCategory.getVisiblePages()) {
                     if (page.pageAspects.size() > 0) {
                         if (page.pageAspects.contains(aspectType)) {
                             this.pageNumber = page.pageNumber;
@@ -373,7 +373,7 @@ public class ManualWidgetsBase {
 
         @Override
         public String toString() {
-            return "page number: " + pageNumber + ", category name: " + category.name + ", xStart: " + x + ", yStart: " + y + ", width: " + width + ", height: " + height;
+            return "page number: " + pageNumber + ", category name: " + category.getName() + ", xStart: " + x + ", yStart: " + y + ", width: " + width + ", height: " + height;
         }
 
     }
