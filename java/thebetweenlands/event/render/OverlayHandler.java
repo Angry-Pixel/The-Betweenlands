@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -30,10 +29,10 @@ import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
-import net.minecraftforge.client.event.RenderHandEvent;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.EntityTarBeast;
+import thebetweenlands.forgeevent.client.PostRenderHandEvent;
 import thebetweenlands.items.BLMaterial;
 
 public class OverlayHandler {
@@ -63,11 +62,20 @@ public class OverlayHandler {
 			float g = (float)(colorMultiplier >> 8 & 255) / 255.0F / 2.0F;
 			float b = (float)(colorMultiplier & 255) / 255.0F / 2.0F;
 			GL11.glColor4f(r, g, b, 1.0F);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glDepthMask(false);
 			this.renderWarpedTextureOverlay(event.renderPartialTicks);
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_BLEND);
 		}
 	}
 
+	private boolean ignoreRenderHandEvent = false;
+	
 	public void renderHand(float partialTicks, int renderPass, boolean overlay) {
+		if(this.ignoreRenderHandEvent) return;
+		
+		this.ignoreRenderHandEvent = true;
 		if(this.mERrenderHand == null) {
 			try {
 				this.mERrenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, float.class, int.class);
@@ -85,31 +93,66 @@ public class OverlayHandler {
 				e.getCause().printStackTrace();
 		}
 		this.cancelOverlay = false;
+		this.ignoreRenderHandEvent = false;
 	}
 
+	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent(priority = EventPriority.LOW) //Makes sure that this is executed after ShaderHandler#onRenderHand
-	public void onRenderHand(RenderHandEvent event) {
+	public void onRenderHand(PostRenderHandEvent event) {
 		EntityLivingBase view = Minecraft.getMinecraft().renderViewEntity;
 		World world = Minecraft.getMinecraft().theWorld;
 
-		event.setCanceled(true);
+		if (view != null && world != null) {
+			//Get the view block
+			Vec3 vec = Vec3.createVectorHelper(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ);
+			ChunkPosition chunkposition = new ChunkPosition(vec);
+			Block viewBlock = world.getBlock(chunkposition.chunkPosX, chunkposition.chunkPosY, chunkposition.chunkPosZ);
+			if (viewBlock.getMaterial().isLiquid()) {
+				float f1 = BlockLiquid.getLiquidHeightPercent(world.getBlockMetadata(chunkposition.chunkPosX, chunkposition.chunkPosY, chunkposition.chunkPosZ)) - 0.11111111F;
+				float f2 = (float)(chunkposition.chunkPosY + 1) - f1;
+				if (vec.yCoord >= (double)f2) {
+					viewBlock = world.getBlock(chunkposition.chunkPosX, chunkposition.chunkPosY + 1, chunkposition.chunkPosZ);
+				}
+			}
 
-		GL11.glPushMatrix();
+			List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
+			boolean inTar = (viewBlock.getMaterial() == BLMaterial.tar || (entitiesInside != null && entitiesInside.size() > 0));
+			boolean inStagnantWater = viewBlock == BLBlockRegistry.stagnantWaterFluid;
+			int bx = MathHelper.floor_double(view.posX);
+			int by = MathHelper.floor_double(view.posY);
+			int bz = MathHelper.floor_double(view.posZ);
+			Block block = world.getBlock(bx, by, bz);
+			boolean inMud = block.getMaterial() == BLMaterial.mud;
+			boolean inBlock = inTar || inMud || inStagnantWater;
+			if (inBlock && !this.cancelOverlay) {
+				Minecraft mc = Minecraft.getMinecraft();
 
-		//Offset hand so that it doesn't clip with the world
-		//This is used over clearing the depth for compatibility with other shader mods
-		GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
-		GL11.glPolygonOffset(0.0F, -2000000.0F);
+				GL11.glEnable(GL11.GL_BLEND);
+				GL11.glDepthMask(false);
 
-		//Render normal hand with overlays
-		//Rendered twice with a forward and then backwards offset, a bit hacky but works
-		this.renderHand(event.partialTicks, event.renderPass, true);
-		GL11.glPolygonOffset(0.0F, 7000000.0F);
-		this.renderHand(event.partialTicks, event.renderPass, true);
-		GL11.glPolygonOffset(0.0F, -7000000.0F);
-		this.renderHand(event.partialTicks, event.renderPass, true);
-		
+				if (inTar) {
+					mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
+					GL11.glColor4f(1, 1, 1, 0.985F);
+				} else if (inMud) {
+					GL11.glColor4f(0.25F, 0.25F, 0.25F, 1);
+					//Make solid to prevent shader light bleeding
+					GL11.glDisable(GL11.GL_BLEND);
+					GL11.glDepthMask(true);
+					mc.getTextureManager().bindTexture(RES_MUD_OVERLAY);
+				} else if (inStagnantWater) {
+					mc.getTextureManager().bindTexture(RES_STAGNANT_OVERLAY);
+					GL11.glColor4f(1, 1, 1, 0.8F);
+				}
+
+				this.renderWarpedTextureOverlay(event.partialTicks);
+
+				GL11.glDepthMask(true);
+				GL11.glDisable(GL11.GL_BLEND);
+			}
+		}
+
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+
 		//Render decay overlay
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
 		//Should fix compatibility issues with mods that replace the player renderer or parts of it (e.g. More Player Models)
@@ -124,56 +167,6 @@ public class OverlayHandler {
 			this.renderHand(event.partialTicks, event.renderPass, false);
 			playerRenderer.modelBipedMain.bipedRightArm = previousModel;
 		}
-
-		//Render other overlays
-		if (view == null || world == null) {
-			GL11.glPopMatrix();
-			GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-			return;
-		}
-
-		//Offset overlays so that it doesn't clip with the world
-		GL11.glPolygonOffset(0.0F, -9000000.0F);
-		
-		//Get the view block
-		Vec3 vec = Vec3.createVectorHelper(RenderManager.renderPosX, RenderManager.renderPosY, RenderManager.renderPosZ);
-		ChunkPosition chunkposition = new ChunkPosition(vec);
-		Block viewBlock = world.getBlock(chunkposition.chunkPosX, chunkposition.chunkPosY, chunkposition.chunkPosZ);
-		if (viewBlock.getMaterial().isLiquid()) {
-			float f1 = BlockLiquid.getLiquidHeightPercent(world.getBlockMetadata(chunkposition.chunkPosX, chunkposition.chunkPosY, chunkposition.chunkPosZ)) - 0.11111111F;
-			float f2 = (float)(chunkposition.chunkPosY + 1) - f1;
-			if (vec.yCoord >= (double)f2) {
-				viewBlock = world.getBlock(chunkposition.chunkPosX, chunkposition.chunkPosY + 1, chunkposition.chunkPosZ);
-			}
-		}
-
-		List<EntityTarBeast> entitiesInside = world.getEntitiesWithinAABB(EntityTarBeast.class, view.boundingBox.expand(-0.25F, -0.25F, -0.25F));
-		boolean inTar = (viewBlock.getMaterial() == BLMaterial.tar || (entitiesInside != null && entitiesInside.size() > 0));
-		boolean inStagnantWater = viewBlock == BLBlockRegistry.stagnantWaterFluid;
-		int bx = MathHelper.floor_double(view.posX);
-		int by = MathHelper.floor_double(view.posY);
-		int bz = MathHelper.floor_double(view.posZ);
-		Block block = world.getBlock(bx, by, bz);
-		boolean inMud = block.getMaterial() == BLMaterial.mud;
-		boolean inBlock = inTar || inMud || inStagnantWater;
-		if (inBlock && !this.cancelOverlay) {
-			Minecraft mc = Minecraft.getMinecraft();
-			if (inTar) {
-				mc.getTextureManager().bindTexture(RES_TAR_OVERLAY);
-				GL11.glColor4f(1, 1, 1, 0.985F);
-			} else if (inMud) {
-				GL11.glColor4f(0.25F, 0.25F, 0.25F, 1);
-				mc.getTextureManager().bindTexture(RES_MUD_OVERLAY);
-			} else if (inStagnantWater) {
-				mc.getTextureManager().bindTexture(RES_STAGNANT_OVERLAY);
-				GL11.glColor4f(1, 1, 1, 0.8F);
-			}
-
-			this.renderWarpedTextureOverlay(event.partialTicks);
-		}
-
-		GL11.glDisable(GL11.GL_POLYGON_OFFSET_FILL);
-		GL11.glPopMatrix();
 	}
 
 	/**
@@ -184,7 +177,6 @@ public class OverlayHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		Tessellator tessellator = Tessellator.instance;
 		float brightness = mc.thePlayer.getBrightness(partialTicks);
-		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 		GL11.glPushMatrix();
 		float tu = 4.0F;
@@ -205,7 +197,6 @@ public class OverlayHandler {
 		tessellator.draw();
 		GL11.glPopMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	static class ModelArmOverride extends ModelRenderer {

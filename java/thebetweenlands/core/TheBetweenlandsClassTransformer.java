@@ -1,11 +1,33 @@
 package thebetweenlands.core;
 
-import static org.objectweb.asm.Opcodes.*;
-import static org.objectweb.asm.tree.AbstractInsnNode.*;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASTORE;
+import static org.objectweb.asm.Opcodes.DADD;
+import static org.objectweb.asm.Opcodes.DLOAD;
+import static org.objectweb.asm.Opcodes.DSTORE;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.F2D;
+import static org.objectweb.asm.Opcodes.FLOAD;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GETSTATIC;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.SWAP;
+import static org.objectweb.asm.tree.AbstractInsnNode.LABEL;
+import static org.objectweb.asm.tree.AbstractInsnNode.LDC_INSN;
+import static org.objectweb.asm.tree.AbstractInsnNode.METHOD_INSN;
 
 import java.util.Iterator;
-
-import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -22,6 +44,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+
+import net.minecraft.launchwrapper.IClassTransformer;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static boolean constructed;
@@ -345,6 +369,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		String entityRenderer = obf ? "blt" : "net/minecraft/client/renderer/EntityRenderer";
 		String cloudFog = obf ? "ab" : "cloudFog";
 		String pointedEntity = obf ? "x" : "pointedEntity";
+		String renderHand = obf ? "b" : "renderHand";
 		// Bait vars
 		String worldClient = obf ? "bjf" : "net/minecraft/client/multiplayer/WorldClient";
 		String rayTraceBlocks = obf ? "a" : "rayTraceBlocks";
@@ -353,6 +378,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		boolean needsOrientCamera = true;
 		boolean needsRenderWorld = true;
 		boolean needsGetMouseOver = true;
+		boolean needsPostRenderHandEvent = true;
 		for (MethodNode method : classNode.methods) {
 			if (needsOrientCamera && orientCamera.equals(method.name) && "(F)V".equals(method.desc)) {
 				method.localVariables.clear();
@@ -448,7 +474,23 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 				}
 				needsGetMouseOver = false;
 			}
-			if (!needsOrientCamera && !needsRenderWorld && !needsGetMouseOver) {
+			if(needsPostRenderHandEvent && renderHand.equals(method.name) && "(FI)V".equals(method.desc)) {
+				AbstractInsnNode lastReturn = null;
+				for(int i = method.instructions.size() - 1; i > 0; i--) {
+					AbstractInsnNode node = method.instructions.get(i);
+					if(node instanceof InsnNode && ((InsnNode)node).getOpcode() == RETURN)
+						lastReturn = node;
+				}
+				if(lastReturn != null) {
+					InsnList hook = new InsnList();
+					hook.add(new VarInsnNode(FLOAD, 1));
+					hook.add(new VarInsnNode(ILOAD, 2));
+					hook.add(new MethodInsnNode(INVOKESTATIC, BL_FORGE_HOOKS_CLIENT, "postRenderHandEvent", "(FI)V", false));
+					method.instructions.insertBefore(lastReturn, hook);
+				}
+				needsPostRenderHandEvent = true;
+			}
+			if (!needsOrientCamera && !needsRenderWorld && !needsGetMouseOver && !needsPostRenderHandEvent) {
 				break;
 			}
 		}

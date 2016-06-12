@@ -35,7 +35,7 @@ public class ShaderHandler {
 		//Also makes the overlays render to the depth buffer, preventing the world glowing through the overlays
 		GL11.glColorMask(false, false, false, false);
 		boolean prevCancel = event.isCanceled();
-		OverlayHandler.INSTANCE.onRenderHand(event);
+		OverlayHandler.INSTANCE.renderHand(event.partialTicks, event.renderPass, true);
 		event.setCanceled(prevCancel);
 		GL11.glColorMask(true, true, true, true);
 		GL11.glPopMatrix();

@@ -1,20 +1,15 @@
 package thebetweenlands.forgeevent;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.client.input.WeedwoodRowboatHandler;
 import thebetweenlands.forgeevent.client.ClientAttackEvent;
 import thebetweenlands.forgeevent.client.ClientBlockDamageEvent;
+import thebetweenlands.forgeevent.client.PostRenderHandEvent;
 import thebetweenlands.forgeevent.client.RenderEntitiesEvent;
 
 public class BLForgeHooksClient {
@@ -112,5 +107,9 @@ public class BLForgeHooksClient {
 
 	public static void postPostRenderEntitiesEvent() {
 		MinecraftForge.EVENT_BUS.post(new RenderEntitiesEvent.Post());
+	}
+
+	public static void postRenderHandEvent(float partialTicks, int renderPass) {
+		MinecraftForge.EVENT_BUS.post(new PostRenderHandEvent(Minecraft.getMinecraft().renderGlobal, partialTicks, renderPass));
 	}
 }
