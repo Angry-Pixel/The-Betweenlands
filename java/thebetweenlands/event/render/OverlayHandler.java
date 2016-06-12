@@ -108,6 +108,7 @@ public class OverlayHandler {
 		GL11.glPolygonOffset(0.0F, 7000000.0F);
 		this.renderHand(event.partialTicks, event.renderPass, true);
 		GL11.glPolygonOffset(0.0F, -7000000.0F);
+		this.renderHand(event.partialTicks, event.renderPass, true);
 		
 		//Render decay overlay
 		RenderPlayer playerRenderer = (RenderPlayer) RenderManager.instance.getEntityRenderObject(Minecraft.getMinecraft().thePlayer);
