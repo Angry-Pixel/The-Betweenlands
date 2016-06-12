@@ -25,7 +25,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.render.shader.MainShader;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.effect.DeferredEffect;
+import thebetweenlands.client.render.shader.effect.PostProcessingEffect;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.decay.DecayManager;
 import thebetweenlands.entities.mobs.boss.IBossBL;
@@ -49,7 +49,7 @@ public class GuiOverlay extends Gui {
 
 	private int updateCounter;
 
-	private DeferredEffect de = null;
+	private PostProcessingEffect de = null;
 	private Framebuffer tb1 = null;
 
 	@SubscribeEvent

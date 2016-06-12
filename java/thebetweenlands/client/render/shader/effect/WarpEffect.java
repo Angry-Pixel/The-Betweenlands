@@ -3,7 +3,7 @@ package thebetweenlands.client.render.shader.effect;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class WarpEffect extends DeferredEffect {
+public class WarpEffect extends PostProcessingEffect {
 	private float scale = 1.0F;
 	private float timeScale = 1.0F;
 	private float multipier = 1.0F;

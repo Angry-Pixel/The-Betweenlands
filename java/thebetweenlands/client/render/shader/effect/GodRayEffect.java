@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
-public class GodRayEffect extends DeferredEffect {
+public class GodRayEffect extends PostProcessingEffect {
 	private Framebuffer occlusionMap = null;
 
 	private int occlusionMapUniformID = -1;

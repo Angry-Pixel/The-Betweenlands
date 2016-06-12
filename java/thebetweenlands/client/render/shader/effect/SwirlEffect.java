@@ -3,7 +3,7 @@ package thebetweenlands.client.render.shader.effect;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class SwirlEffect extends DeferredEffect {
+public class SwirlEffect extends PostProcessingEffect {
 	private float angle = 0.0F;
 	private int angleUniformID = -1;
 

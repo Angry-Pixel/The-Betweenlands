@@ -18,12 +18,12 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class DeferredEffect {
+public abstract class PostProcessingEffect {
 	//Clear colors
 	private float cr, cg, cb, ca;
 
 	//Additional stages
-	private DeferredEffect[] stages;
+	private PostProcessingEffect[] stages;
 
 	//Buffers
 	private static final FloatBuffer TEXEL_SIZE_BUFFER = BufferUtils.createFloatBuffer(2);
@@ -35,16 +35,16 @@ public abstract class DeferredEffect {
 	/**
 	 * Initializes the effect. Requires an OpenGL context to work
 	 */
-	public final DeferredEffect init() {
+	public final PostProcessingEffect init() {
 		this.initShaders();
 		this.stages = this.getStages();
 		if(this.stages != null && this.stages.length > 0) {
-			for(DeferredEffect stage : this.stages) {
+			for(PostProcessingEffect stage : this.stages) {
 				stage.init();
 			}
 		}
 		if(!this.initEffect()) {
-			throw new RuntimeException("Couldn't initialize shaders for deferred effect: " + this.toString());
+			throw new RuntimeException("Couldn't initialize shaders for post processing effect: " + this.toString());
 		}
 		return this;
 	}
@@ -57,7 +57,7 @@ public abstract class DeferredEffect {
 	 * @param a Alpha
 	 * @return
 	 */
-	public final DeferredEffect setBackgroundColor(float r, float g, float b, float a) {
+	public final PostProcessingEffect setBackgroundColor(float r, float g, float b, float a) {
 		this.cr = r;
 		this.cg = g;
 		this.cb = b;
@@ -78,7 +78,7 @@ public abstract class DeferredEffect {
 	public final void delete() {
 		OpenGlHelper.func_153187_e(this.shaderProgramID);
 		if(this.stages != null && this.stages.length > 0) {
-			for(DeferredEffect stage : this.stages) {
+			for(PostProcessingEffect stage : this.stages) {
 				stage.delete();
 			}
 		}
@@ -95,7 +95,7 @@ public abstract class DeferredEffect {
 	}
 
 	public static final class EffectBuilder {
-		private final DeferredEffect effect;
+		private final PostProcessingEffect effect;
 		private final Framebuffer dst;
 
 		private int src = -1;
@@ -105,7 +105,7 @@ public abstract class DeferredEffect {
 		private double renderHeight = -1.0D;
 		private boolean restore = true;
 
-		protected EffectBuilder(DeferredEffect effect, Framebuffer dst) {
+		protected EffectBuilder(PostProcessingEffect effect, Framebuffer dst) {
 			this.effect = effect;
 			this.dst = dst;
 		}
@@ -253,7 +253,7 @@ public abstract class DeferredEffect {
 
 		//Apply additional stages
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
-			for(DeferredEffect stage : this.stages) {
+			for(PostProcessingEffect stage : this.stages) {
 				//Render to blit buffer
 				stage.render(dst.framebufferTexture, blitBuffer, dst, null, renderWidth, renderHeight, false);
 
@@ -411,7 +411,7 @@ public abstract class DeferredEffect {
 	 * Returns additional stages
 	 * @return
 	 */
-	protected DeferredEffect[] getStages() { return null; }
+	protected PostProcessingEffect[] getStages() { return null; }
 
 	/**
 	 * Used to delete additional things and free memory

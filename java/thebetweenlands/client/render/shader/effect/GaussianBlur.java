@@ -2,13 +2,13 @@ package thebetweenlands.client.render.shader.effect;
 
 import net.minecraft.util.ResourceLocation;
 
-public class GaussianBlur extends DeferredEffect {
+public class GaussianBlur extends PostProcessingEffect {
 	@Override
-	protected DeferredEffect[] getStages() {
-		DeferredEffect stages[] = new DeferredEffect[]{
+	protected PostProcessingEffect[] getStages() {
+		PostProcessingEffect stages[] = new PostProcessingEffect[]{
 				new GaussianBlur() {
 					@Override
-					protected DeferredEffect[] getStages() {
+					protected PostProcessingEffect[] getStages() {
 						return null;
 					}
 

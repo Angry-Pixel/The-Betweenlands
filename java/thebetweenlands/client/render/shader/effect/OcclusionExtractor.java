@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL13;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class OcclusionExtractor extends DeferredEffect {
+public class OcclusionExtractor extends PostProcessingEffect {
 	private int worldDepth = -1;
 	private int clipPlaneDepth = -1;
 

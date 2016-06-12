@@ -31,6 +31,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import thebetweenlands.TheBetweenlands;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.entities.mobs.boss.fortress.EntityFortressBoss;
 import thebetweenlands.entities.projectiles.EntityVolatileSoul;
@@ -701,7 +702,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	public double getYOffset() {
 		if(this.ridingEntity != null && this.ridingEntity instanceof EntityPlayer && this.worldObj.isRemote) {
-			return -1.7D;
+			if(this.ridingEntity == TheBetweenlands.proxy.getClientPlayer()) {
+				return -1.6D;
+			} else {
+				return 0.05D;
+			}
 		}
 		return this.yOffset;
 	}

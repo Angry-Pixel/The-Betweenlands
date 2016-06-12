@@ -3,7 +3,7 @@ package thebetweenlands.client.render.shader.effect;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class StarfieldEffect extends DeferredEffect {
+public class StarfieldEffect extends PostProcessingEffect {
 	private final boolean faded;
 
 	private float timeScale = 1.0F;
