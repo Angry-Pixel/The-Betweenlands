@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.common.IFuelHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemReed;
 import net.minecraft.item.ItemStack;
@@ -55,6 +57,7 @@ import thebetweenlands.items.food.ItemNettleSoup;
 import thebetweenlands.items.food.ItemRottenFood;
 import thebetweenlands.items.food.ItemSapBall;
 import thebetweenlands.items.food.ItemSapJello;
+import thebetweenlands.items.food.ItemTaintedPotion;
 import thebetweenlands.items.food.ItemWeepingBluePetal;
 import thebetweenlands.items.food.ItemWightHeart;
 import thebetweenlands.items.herblore.ItemAspectVial;
@@ -103,8 +106,6 @@ import thebetweenlands.items.tools.ItemWeedwoodBucket;
 import thebetweenlands.items.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.items.tools.ItemWeedwoodBucketRubber;
 import thebetweenlands.utils.confighandler.ConfigHandler;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 public class BLItemRegistry {
@@ -238,6 +239,7 @@ public class BLItemRegistry {
 	public static final Item scroll = new Item().setUnlocalizedName("thebetweenlands.itemScroll").setTextureName("thebetweenlands:itemScroll").setMaxStackSize(16);
 	public static final Item weedwoodBucketRubber = new ItemWeedwoodBucketRubber();
 	public static final Item summonMummy = new ItemSummonMummy();
+	public static final ItemTaintedPotion taintedPotion = (ItemTaintedPotion) new ItemTaintedPotion().setUnlocalizedName("thebetweenlands.taintedPotion").setTextureName("thebetweenlands:taintedPotion");
 	//public static final Item itemFrame = new ItemBLHangingEntity(EntityBLItemFrame.class).setUnlocalizedName("thebetweenlands.weedwoodItemFrame").setTextureName("thebetweenlands:weedwoodItemFrame").setCreativeTab(BLCreativeTabs.blocks);
 	public static final Item mudFlowerPot = new ItemReed(BLBlockRegistry.mudFlowerPot).setUnlocalizedName("thebetweenlands.mudFlowerPotItem").setCreativeTab(BLCreativeTabs.blocks).setTextureName("thebetweenlands:mudBrickFlowerPot");
 	public static final Item pestle = new ItemPestle().setUnlocalizedName("thebetweenlands.pestle");
@@ -307,7 +309,7 @@ public class BLItemRegistry {
 	}
 
 	private static void initCreativeTabs() {
-		BLCreativeTabs.items.setTab(lore, net, rope, weedwoodRowboat, volarkite, swampTalisman, itemsGeneric, sapBall, rottenFood, flatheadMushroomItem,
+		BLCreativeTabs.items.setTab(lore, net, rope, weedwoodRowboat, volarkite, swampTalisman, itemsGeneric, sapBall, taintedPotion, rottenFood, flatheadMushroomItem,
 				blackHatMushroomItem, bulbCappedMushroomItem, anglerMeatRaw, anglerMeatCooked, frogLegsRaw, frogLegsCooked, snailFleshRaw,
 				snailFleshCooked, friedSwampKelp, reedDonut, jamDonut, /*krakenTentacle, krakenCalamari,*/ middleFruit, /*mincePie,*/ weepingBluePetal,
 				wightsHeart, yellowDottedFungus, siltCrabClaw, crabstick, nettleSoup, sludgeJello, middleFruitJello, sapJello, marshmallow, 

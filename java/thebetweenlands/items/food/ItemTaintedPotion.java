@@ -1,34 +1,36 @@
 package thebetweenlands.items.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
 import thebetweenlands.manual.IManualEntryItem;
 
-public class ItemRottenFood extends ItemFood implements IManualEntryItem {
-	public ItemRottenFood() {
-		super(-1, -1.0F, false);
+public class ItemTaintedPotion extends Item implements IManualEntryItem {
+	public ItemTaintedPotion() {
+		this.setMaxStackSize(1);
+		this.setMaxDamage(0);
 	}
 
 	@Override
-	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
-		super.onFoodEaten(stack, world, player);
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 32;
+	}
 
-		if(player != null) {
-			player.addPotionEffect(new PotionEffect(Potion.hunger.getId(), 200, 1));
-			player.addPotionEffect(new PotionEffect(Potion.poison.getId(), 200, 1));
-		}
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.drink;
 	}
 
 	@Override
 	public String manualName(int meta) {
-		return "rottenFood";
+		return "taintedPotion";
 	}
 
 	@Override
@@ -53,6 +55,34 @@ public class ItemRottenFood extends ItemFood implements IManualEntryItem {
 			return super.getItemStackDisplayName(stack) + " (" + originalStack.getDisplayName() + ")";
 		}
 		return super.getItemStackDisplayName(stack);
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
+		return stack;
+	}
+
+	@Override
+	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player) {
+		if (!player.capabilities.isCreativeMode) {
+			--stack.stackSize;
+		}
+
+		if (!world.isRemote) {
+			player.addPotionEffect(new PotionEffect(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect().getId(), 180, 3));
+			player.addPotionEffect(new PotionEffect(Potion.poison.id, 120, 2));
+		}
+
+		if (!player.capabilities.isCreativeMode) {
+			if (stack.stackSize <= 0) {
+				return new ItemStack(Items.glass_bottle);
+			}
+
+			player.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle));
+		}
+
+		return stack;
 	}
 
 	public void setOriginalStack(ItemStack stack, ItemStack originalStack) {

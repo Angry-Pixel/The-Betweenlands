@@ -193,7 +193,7 @@ public class ElixirEffect {
 		}
 	}
 
-	private static class ElixirPotionEffect extends Potion {
+	public static class ElixirPotionEffect extends Potion {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
 		private final String elixirName;

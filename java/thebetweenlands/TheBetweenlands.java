@@ -47,12 +47,11 @@ import thebetweenlands.event.item.ItemEquipmentHandler;
 import thebetweenlands.event.player.ArmorHandler;
 import thebetweenlands.event.player.BonemealEventHandler;
 import thebetweenlands.event.player.DecayEventHandler;
-import thebetweenlands.event.player.OverworldItemEventHandler;
 import thebetweenlands.event.player.FoodSicknessEventHandler;
+import thebetweenlands.event.player.OverworldItemEventHandler;
 import thebetweenlands.event.player.PlayerLanternEventHandler;
 import thebetweenlands.event.player.PlayerLocationHandler;
 import thebetweenlands.event.player.PlayerPortalHandler;
-import thebetweenlands.event.player.RottenFoodHandler;
 import thebetweenlands.event.player.SiltCrabClipHandler;
 import thebetweenlands.event.world.EnvironmentEventHandler;
 import thebetweenlands.herblore.elixirs.ElixirEffectRegistry;
@@ -129,7 +128,7 @@ public class TheBetweenlands {
 		BLBiomeRegistry.init();
 		BLItemRegistry.init();
 		BLEntityRegistry.init();
-		
+
 		PotionHelper.initPotionArray();
 		ElixirEffectRegistry.registerElixirs();
 
@@ -196,6 +195,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(BLFluidRegistry.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new ArmorHandler());
 		MinecraftForge.EVENT_BUS.register(new OverworldItemEventHandler());
+		FMLCommonHandler.instance().bus().register(new OverworldItemEventHandler());
 		MinecraftForge.EVENT_BUS.register(new PlayerLanternEventHandler());
 		MinecraftForge.EVENT_BUS.register(DecayEventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(new PlayerPortalHandler());
