@@ -79,39 +79,40 @@ public class ClientProxy extends CommonProxy {
     public World getClientWorld() {
         return Minecraft.getMinecraft().theWorld;
     }
-    
-	@Override
-	public void registerItemAndBlockRenderers() {
-		//TODO ItemRegistry.registerRenderers();
-		BlockRegistry.registerRenderers();
-	}
 
-	@Override
-	public void setCustomStateMap(Block block, StateMap stateMap) {
-		ModelLoader.setCustomStateMapper(block, stateMap);
-	}
-/*
     @Override
-    public void registerDefaultBlockItemRenderer(Block block) {
-        if (block instanceof BlockRegistry.ISubBlocksBlock) {
-            List<String> models = ((BlockRegistry.ISubBlocksBlock) block).getModels();
-            if (block instanceof BlockDruidStone) {
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(0), "inventory"));
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 4, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(1), "inventory"));
-            } else
-                for (int i = 0; i < models.size(); i++) {
-                    if (ConfigHandler.debug && createJSONFile)
-                        JsonRenderGenerator.createJSONForBlock(block, models.get(i));
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
-                }
-        } else {
-            String name = block.getRegistryName().toString().replace("thebetweenlands:", "");
-            if (ConfigHandler.debug && createJSONFile)
-                JsonRenderGenerator.createJSONForBlock(block, name);
-            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
-        }
+    public void registerItemAndBlockRenderers() {
+        //TODO ItemRegistry.registerRenderers();
+        BlockRegistry.registerRenderers();
     }
-*/
+
+    @Override
+    public void setCustomStateMap(Block block, StateMap stateMap) {
+        ModelLoader.setCustomStateMapper(block, stateMap);
+    }
+
+    /*
+        @Override
+        public void registerDefaultBlockItemRenderer(Block block) {
+            if (block instanceof BlockRegistry.ISubBlocksBlock) {
+                List<String> models = ((BlockRegistry.ISubBlocksBlock) block).getModels();
+                if (block instanceof BlockDruidStone) {
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(0), "inventory"));
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 4, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(1), "inventory"));
+                } else
+                    for (int i = 0; i < models.size(); i++) {
+                        if (ConfigHandler.debug && createJSONFile)
+                            JsonRenderGenerator.createJSONForBlock(block, models.get(i));
+                        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
+                    }
+            } else {
+                String name = block.getRegistryName().toString().replace("thebetweenlands:", "");
+                if (ConfigHandler.debug && createJSONFile)
+                    JsonRenderGenerator.createJSONForBlock(block, name);
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
+            }
+        }
+    */
     @Override
     public void registerDefaultItemRenderer(Item item) {
         if (item instanceof ItemRegistry.ISubItemsItem) {
@@ -121,14 +122,14 @@ public class ClientProxy extends CommonProxy {
                     JsonRenderGenerator.createJSONForItem(item, models.get(i));
                 ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
             }
-        } else if(item instanceof ItemRegistry.ISingleJsonSubItems){
+        } else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
             List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
             for (int i = 0; i < types.size(); i++) {
                 //if (ConfigHandler.debug && createJSONFile)
-                    //JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
-                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX+item.getRegistryName().getResourcePath(), types.get(i)));
+                //JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
+                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
             }
-        } else{
+        } else {
             String itemName = item.getRegistryName().toString().replace("thebetweenlands:", "");
             if (ConfigHandler.debug && createJSONFile)
                 JsonRenderGenerator.createJSONForItem(item, itemName);
@@ -140,21 +141,31 @@ public class ClientProxy extends CommonProxy {
     //Probably will only be used while updating
     @Override
     public void changeFileNames() {
-        File textures = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands/textures/items/strictlyHerblore");
+        File textures = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands/sounds");
         if (textures.listFiles() != null)
             for (File file : textures.listFiles()) {
-                for (File file2 : file.listFiles()) {
-                    if (file2.getName().contains(".png")) {
-                        CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+                if (file.getName().contains(".ogg")) {
+                    CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
-                        String text = file2.getName();
-                        for (int i = 0; i < sequence.length(); i++) {
-                            text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
-                        }
-                        File newFile = new File(file2.getPath().replace(file2.getName(), "") + text);
-                        System.out.println(file2.renameTo(newFile));
+                    String text = file.getName();
+                    for (int i = 0; i < sequence.length(); i++) {
+                        text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
                     }
-                }
+                    File newFile = new File(file.getPath().replace(file.getName(), "") + text);
+                    System.out.println(file.renameTo(newFile));
+                } else
+                    for (File file2 : file.listFiles()) {
+                        if (file2.getName().contains(".ogg")) {
+                            CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+
+                            String text = file2.getName();
+                            for (int i = 0; i < sequence.length(); i++) {
+                                text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
+                            }
+                            File newFile = new File(file2.getPath().replace(file2.getName(), "") + text);
+                            System.out.println(file2.renameTo(newFile));
+                        }
+                    }
             }
     }
 

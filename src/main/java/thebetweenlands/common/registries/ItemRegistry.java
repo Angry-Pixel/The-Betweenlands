@@ -12,6 +12,7 @@ import thebetweenlands.common.item.food.*;
 import thebetweenlands.common.item.herblore.ItemGenericCrushed;
 import thebetweenlands.common.item.herblore.ItemGenericPlantDrop;
 import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.item.misc.ItemRandomSound;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
@@ -112,6 +113,7 @@ public class ItemRegistry {
     public static final Item SYMORITE_SHIELD = new ItemBLShield(BLMaterial.TOOL_SYMORITE);
 
     public static final Item TEST_ITEM = new TestItem();
+    public static final Item RANDOM_SOUND = new ItemRandomSound();
 
     public final List<Item> ITEMS = new ArrayList<Item>();
 

@@ -10,7 +10,7 @@ public class Registries {
 	public final EntityRegistry entityRegistry = new EntityRegistry();
 	public final FluidRegistry fluidRegistry = new FluidRegistry();
 	public final BiomeRegistry biomeRegistry = new BiomeRegistry();
-
+	public final SoundRegistry soundRegistry = new SoundRegistry();
 	public void preInit() {
 		this.fluidRegistry.preInit();
 		BlockRegistry.preInit();
@@ -26,5 +26,6 @@ public class Registries {
 		//this.itemRegistry.init();
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
+		this.soundRegistry.init();
 	}
 }

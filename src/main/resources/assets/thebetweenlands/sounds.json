@@ -1,0 +1,982 @@
+{
+  "blood_sky_roar": {
+    "category": "ambient",
+    "sounds": [
+      "thebetweenlands:blood_sky_roar"
+    ]
+  },
+  "ambient_blood_sky": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_blood_sky",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_spoopy": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_spoopy",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_wight_fortress": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/wight_fortress_ambience",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_water": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/water_ambience",
+        "stream": true
+      }
+    ]
+  },
+  "druid_chant": {
+    "category": "block",
+    "sounds": [
+      "dthebetweenlands:druid_chant"
+    ]
+  },
+  "dark_druid_hit": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dark_druid_hit"
+    ]
+  },
+  "dark_druid_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dark_druid_death"
+    ]
+  },
+  "dark_druid_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dark_druid_living_1",
+      "thebetweenlands:dark_druid_living_2"
+    ]
+  },
+  "druid_teleport": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:druid_teleport"
+    ]
+  },
+  "angler_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:angler_death"
+    ]
+  },
+  "angler_attack": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:angler_attack_1",
+      "thebetweenlands:angler_attack_2"
+    ]
+  },
+  "swamp_hag_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_living_1",
+      "thebetweenlands:swamp_hag_living_2",
+      "thebetweenlands:swamp_hag_living_3",
+      "thebetweenlands:swamp_hag_living_4"
+    ]
+  },
+  "swamp_hag_living_1": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_living_1"
+    ]
+  },
+  "swamp_hag_living_2": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_living_2"
+    ]
+  },
+  "swamp_hag_living_3": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_living_3"
+    ]
+  },
+  "swamp_hag_living_4": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_living_4"
+    ]
+  },
+  "swamp_hag_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_hurt_1",
+      "thebetweenlands:swamp_hag_hurt_2",
+      "thebetweenlands:swamp_hag_hurt_3"
+    ]
+  },
+  "swamp_hag_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:swamp_hag_death"
+    ]
+  },
+  "tar_beast_suck": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:tar_beast_suck"
+    ]
+  },
+  "tar_beast_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:tar_beast_living_1",
+      "thebetweenlands:tar_beast_living_2",
+      "thebetweenlands:tar_beast_living_3"
+    ]
+  },
+  "tar_beast_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:tar_beast_hurt_1",
+      "thebetweenlands:tar_beast_hurt_2"
+    ]
+  },
+  "tar_beast_step": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:tar_beast_step_1",
+      "thebetweenlands:tar_beast_step_2",
+      "thebetweenlands:tar_beast_step_3"
+    ]
+  },
+  "tar_beast_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:tar_beast_death"
+    ]
+  },
+  "wight_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:wight_hurt_1",
+      "thebetweenlands:wight_hurt_2"
+    ]
+  },
+  "wight_moan": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:wight_moan_1",
+      "thebetweenlands:wight_moan_2",
+      "thebetweenlands:wight_moan_3",
+      "thebetweenlands:wight_moan_4"
+    ]
+  },
+  "wight_attack": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:wight_attack_1",
+      "thebetweenlands:wight_attack_2",
+      "thebetweenlands:wight_attack_3",
+      "thebetweenlands:wight_attack_4"
+    ]
+  },
+  "wight_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:wight_death"
+    ]
+  },
+  "sporeling_death": {
+    "category": "neutral",
+    "sounds": [
+      "thebetweenlands:sporeling_death"
+    ]
+  },
+  "sporeling_hurt": {
+    "category": "neutral",
+    "sounds": [
+      "thebetweenlands:sporeling_hurt"
+    ]
+  },
+  "sporeling_living": {
+    "category": "neutral",
+    "sounds": [
+      "thebetweenlands:sporeling_living"
+    ]
+  },
+  "snail_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ]
+  },
+  "snail_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ]
+  },
+  "snail_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:snail_living_1",
+      "thebetweenlands:snail_living_1"
+    ]
+  },
+  "dragonfly": {
+    "category": "neutral",
+    "sounds": [
+      "thebetweenlands:dragonfly"
+    ]
+  },
+  "squish": {
+    "category": "neutral",
+    "sounds": [
+      "thebetweenlands:squish"
+    ]
+  },
+  "lurker_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:lurker_living_1",
+      "thebetweenlands:lurker_living_2",
+      "thebetweenlands:lurker_living_3",
+      "thebetweenlands:lurker_living_4",
+      "thebetweenlands:lurker_living_5"
+    ]
+  },
+  "lurker_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:lurker_hurt_1",
+      "thebetweenlands:lurker_hurt_2",
+      "thebetweenlands:lurker_hurt_3",
+      "thebetweenlands:lurker_hurt_4"
+    ]
+  },
+  "lurker_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:lurker_death"
+    ]
+  },
+  "crab_snip": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:crab_snip"
+    ]
+  },
+  "gecko_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gecko_living_1",
+      "thebetweenlands:gecko_living_2",
+      "thebetweenlands:gecko_living_3",
+      "thebetweenlands:gecko_living_4"
+    ]
+  },
+  "gecko_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gecko_hurt"
+    ]
+  },
+  "gecko_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gecko_death"
+    ]
+  },
+  "gecko_hide": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gecko_hide"
+    ]
+  },
+  "peat_mummy_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:peat_mummy_living_1",
+      "thebetweenlands:peat_mummy_living_2",
+      "thebetweenlands:peat_mummy_living_3",
+      "thebetweenlands:peat_mummy_living_4",
+      "thebetweenlands:peat_mummy_living_5"
+    ]
+  },
+  "peat_mummy_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:peat_mummy_hurt_1",
+      "thebetweenlands:peat_mummy_hurt_2",
+      "thebetweenlands:peat_mummy_hurt_3",
+      "thebetweenlands:peat_mummy_hurt_4",
+      "thebetweenlands:peat_mummy_hurt_5"
+    ]
+  },
+  "peat_mummy_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:peat_mummy_death"
+    ]
+  },
+  "peat_mummy_charge": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:peat_mummy_charge"
+    ]
+  },
+  "peat_mummy_emerge": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:peat_mummy_emerge"
+    ]
+  },
+  "dreadful_peat_mummy_emerge": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_emerge"
+    ]
+  },
+  "dreadful_peat_mummy_bite": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_bite"
+    ]
+  },
+  "dreadful_peat_mummy_retch": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_retch"
+    ]
+  },
+  "dreadful_peat_mummy_swipe": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_swipe"
+    ]
+  },
+  "dreadful_peat_mummy_scream": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_scream"
+    ]
+  },
+  "dreadful_peat_mummy_lick": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_emerge"
+    ]
+  },
+  "dreadful_peat_mummy_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_death"
+    ]
+  },
+  "dreadful_peat_mummy_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_living_1",
+      "thebetweenlands:dreadful_peat_mummy_living_2",
+      "thebetweenlands:dreadful_peat_mummy_living_3",
+      "thebetweenlands:dreadful_peat_mummy_living_4",
+      "thebetweenlands:dreadful_peat_mummy_living_5"
+    ]
+  },
+  "dreadful_peat_mummy_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:dreadful_peat_mummy_hurt_1",
+      "thebetweenlands:dreadful_peat_mummy_hurt_2",
+      "thebetweenlands:dreadful_peat_mummy_hurt_3",
+      "thebetweenlands:dreadful_peat_mummy_hurt_4",
+      "thebetweenlands:dreadful_peat_mummy_hurt_5"
+    ]
+  },
+  "temple_guardian_melee_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_melee_living_1",
+      "thebetweenlands:temple_guardian_melee_living_2",
+      "thebetweenlands:temple_guardian_melee_living_3",
+      "thebetweenlands:temple_guardian_melee_living_4"
+    ]
+  },
+  "temple_guardian_berserker_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_berserker_living_1",
+      "thebetweenlands:temple_guardian_berserker_living_2",
+      "thebetweenlands:temple_guardian_berserker_living_3",
+      "thebetweenlands:temple_guardian_berserker_living_4"
+    ]
+  },
+  "temple_guardian_berserker_charge": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_berserker_charge"
+    ]
+  },
+  "temple_guardian_berserker_impact": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_berserker_impact"
+    ]
+  },
+  "temple_guardian_step": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_step_1",
+      "thebetweenlands:temple_guardian_step_2",
+      "thebetweenlands:temple_guardian_step_3"
+    ]
+  },
+  "temple_guardian_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_hurt_1",
+      "thebetweenlands:temple_guardian_hurt_2",
+      "thebetweenlands:temple_guardian_hurt_3"
+    ]
+  },
+  "temple_guardian_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:temple_guardian_death"
+    ]
+  },
+  "fortress_boss_living": {
+    "category": "hostile",
+    "sounds": [
+      {
+        "name": "thebetweenlands:fortress_boss_living_1",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:fortress_boss_living_2",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:fortress_boss_living_3",
+        "stream": true
+      }
+    ]
+  },
+  "fortress_boss_teleport": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_teleport"
+    ]
+  },
+  "fortress_boss_summon_projectiles": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_summon_projectiles"
+    ]
+  },
+  "fortress_boss_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_hurt_1",
+      "thebetweenlands:fortress_boss_hurt_2",
+      "thebetweenlands:fortress_boss_hurt_3",
+      "thebetweenlands:fortress_boss_hurt_4"
+    ]
+  },
+  "fortress_boss_nope": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_nope"
+    ]
+  },
+  "fortress_boss_shield_down": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_shield_down"
+    ]
+  },
+  "fortress_boss_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:fortress_boss_death"
+    ]
+  },
+  "flying_fiend_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:flying_fiend_living_1",
+      "thebetweenlands:flying_fiend_living_2",
+      "thebetweenlands:flying_fiend_living_3",
+      "thebetweenlands:flying_fiend_living_4"
+    ]
+  },
+  "flying_fiend_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:flying_fiend_hurt_1",
+      "thebetweenlands:flying_fiend_hurt_2"
+    ]
+  },
+  "flying_fiend_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:flying_fiend_death"
+    ]
+  },
+  "giant_toad_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:giant_toad_living_1",
+      "thebetweenlands:giant_toad_living_2",
+      "thebetweenlands:giant_toad_living_3",
+      "thebetweenlands:giant_toad_living_4"
+    ]
+  },
+  "giant_toad_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:giant_toad_hurt_1",
+      "thebetweenlands:giant_toad_hurt_2",
+      "thebetweenlands:giant_toad_hurt_3"
+    ]
+  },
+  "giant_toad_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:giant_toad_death"
+    ]
+  },
+  "frog_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:frog_living_1",
+      "thebetweenlands:frog_living_2",
+      "thebetweenlands:frog_living_3",
+      "thebetweenlands:frog_living_4"
+    ]
+  },
+  "frog_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:frog_hurt_1",
+      "thebetweenlands:frog_hurt_2",
+      "thebetweenlands:frog_hurt_3"
+    ]
+  },
+  "frog_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:frog_death"
+    ]
+  },
+  "termite_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:termite_living_1",
+      "thebetweenlands:termite_living_2"
+    ]
+  },
+  "pyrad_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:pyrad_living_1",
+      "thebetweenlands:pyrad_living_2",
+      "thebetweenlands:pyrad_living_3"
+    ]
+  },
+  "pyrad_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:pyrad_hurt_1",
+      "thebetweenlands:pyrad_hurt_2",
+      "thebetweenlands:pyrad_hurt_3"
+    ]
+  },
+  "pyrad_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:pyrad_death"
+    ]
+  },
+  "sorry": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:sorry"
+    ]
+  },
+  "ambient_swamp": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_swamp",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_cave": {
+    "category": "ambient",
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_cave",
+        "stream": true
+      }
+    ]
+  },
+  "portal": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:portal"
+    ]
+  },
+  "portal_activate": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:portal_activate"
+    ]
+  },
+  "portal_travel": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:portal_travel"
+    ]
+  },
+  "portal_trigger": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:portal_trigger"
+    ]
+  },
+  "purifier": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:purifier"
+    ]
+  },
+  "grind": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:grind"
+    ]
+  },
+  "spike": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:spike"
+    ]
+  },
+  "crumble": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:crumble"
+    ]
+  },
+  "fortress_puzzle_cage_break": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:fortress_puzzle_cage_break"
+    ]
+  },
+  "fortress_puzzle_orb": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:fortress_puzzle_orb"
+    ]
+  },
+  "fortress_puzzle_sword": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:fortress_puzzle_sword"
+    ]
+  },
+  "infuser_finished": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:infuser_finished"
+    ]
+  },
+  "fig": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:fig"
+    ]
+  },
+  "voodoo_doll": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:voodoo_doll"
+    ]
+  },
+  "rejected": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:rejected"
+    ]
+  },
+  "fortress_teleport": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:fortress_teleport"
+    ]
+  },
+  "shockwave_sword": {
+    "category": "player",
+    "sounds": [
+      "thebetweenlands:shockwave_sword"
+    ]
+  },
+  "fortress_boss_loop": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/fortress_boss_loop",
+        "stream": true
+      }
+    ]
+  },
+  "dreadful_peat_mummy_loop": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/dreadful_peat_mummy_loop",
+        "stream": true
+      }
+    ]
+  },
+  "bl_menu": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "thebetweenlands:menu/the_adventure_begins",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:menu/a_foreboding_welcome",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:menu/leeches_and_fireflies",
+        "stream": true
+      }
+    ]
+  },
+  "bl_dimension": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "thebetweenlands:music/emerald_embers",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/barrow_mounds",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/dont_follow_the_whisps",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/ghostfaces",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/incantation",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/murk_beneath_a_twinkling_void",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/darkness",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/crocodile_tears",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/in_between",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/leech_love_part_1",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/leech_love_part_2",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/rip_in_the_fold",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/spore_ballad",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/the_other_world",
+        "stream": true
+      }
+    ]
+  },
+  "astatos": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/astatos",
+        "stream": true
+      }
+    ]
+  },
+  "between_you_and_me": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/between_you_and_me",
+        "stream": true
+      }
+    ]
+  },
+  "christmas_on_the_marsh": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/christmas_on_the_marsh",
+        "stream": true
+      }
+    ]
+  },
+  "hag_dance": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/hag_dance",
+        "stream": true
+      }
+    ]
+  },
+  "the_explorer": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/the_explorer",
+        "stream": true
+      }
+    ]
+  },
+  "beneath_a_green_sky": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/beneath_a_green_sky",
+        "stream": true
+      }
+    ]
+  },
+  "dj_wights_mixtape": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/dj_wights_mixtape",
+        "stream": true
+      }
+    ]
+  },
+  "lonely_fire": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/lonely_fire",
+        "stream": true
+      }
+    ]
+  },
+  "onwards": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/onwards",
+        "stream": true
+      }
+    ]
+  },
+  "stuck_in_the_mud": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/stuck_in_the_mud",
+        "stream": true
+      }
+    ]
+  },
+  "wandering_wisps": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/wandering_wisps",
+        "stream": true
+      }
+    ]
+  },
+  "waterlogged": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/waterlogged",
+        "stream": true
+      }
+    ]
+  },
+  "ancient": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/ancient",
+        "stream": true
+      }
+    ]
+  },
+  "16612": {
+    "catagory": "record",
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/16612",
+        "stream": true
+      }
+    ]
+  },
+  "rowboat_row": {
+    "catagory": "neutral",
+    "sounds": [
+      "thebetweenlands:boat_row_1",
+      "thebetweenlands:boat_row_2",
+      "thebetweenlands:boat_row_3"
+    ]
+  },
+  "rowboat_row_start": {
+    "catagory": "neutral",
+    "sounds": [
+      "thebetweenlands:boat_row_start_1",
+      "thebetweenlands:boat_row_start_2"
+    ]
+  },
+  "possessed_scream": {
+    "catagory": "block",
+    "sounds": [
+      "thebetweenlands:possessed_scream"
+    ]
+  }
+}
