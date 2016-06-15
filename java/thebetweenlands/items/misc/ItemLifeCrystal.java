@@ -2,13 +2,14 @@ package thebetweenlands.items.misc;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.StatCollector;
 import thebetweenlands.manual.IManualEntryItem;
 
 public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place Holder Code
@@ -17,7 +18,7 @@ public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place 
 	private IIcon[] icons;
 
 	public ItemLifeCrystal() {
-        setMaxDamage(128);
+		setMaxDamage(128);
 		maxStackSize = 1;
 	}
 
@@ -25,7 +26,7 @@ public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		list.add(Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "% Remaining");
+		list.add(String.format(StatCollector.translateToLocal("lifeCrystal.remaining"), Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class ItemLifeCrystal extends Item implements IManualEntryItem { //Place 
 		icons = new IIcon[iconPaths.length];
 		int i = 0;
 		for (String path : iconPaths)
-            this.icons[i++] = reg.registerIcon("thebetweenlands:" + path);
+			this.icons[i++] = reg.registerIcon("thebetweenlands:" + path);
 	}
 
 	@SideOnly(Side.CLIENT)

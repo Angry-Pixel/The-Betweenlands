@@ -882,6 +882,9 @@ chiromawWing.taste=Anything will taste better after eating this...
 chiromawWing.dontEat=I probably shouldn't eat this anymore...
 lurkerSkinPouch.size=Inventory slots
 lurkerSkinPouch.info=Craft surrounded with Lurker Skin to upgrade
+shockwaveSword.usage=Shift, right-click on the ground to create a shockwave
+tarminion.usage=Can be thrown
+lifeCrystal.remaining=%s remaining
 
 # Commands
 command.generic.noplayer=You must be a player

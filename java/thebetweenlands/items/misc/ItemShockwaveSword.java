@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import thebetweenlands.entities.EntityShockwaveBlock;
@@ -40,7 +41,7 @@ public class ItemShockwaveSword extends ItemSwordBL {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
 		ItemShockwaveSword item = (ItemShockwaveSword) stack.getItem();
 		if (item == BLItemRegistry.shockwaveSword)
-			list.add("Shift, right-click on the ground to create a shockwave");
+			list.add(StatCollector.translateToLocal("shockwaveSword.usage"));
 	}
 
 	@Override
