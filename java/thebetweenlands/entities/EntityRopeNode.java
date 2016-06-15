@@ -88,9 +88,12 @@ public class EntityRopeNode extends Entity {
 				}
 				if(this.pickUp && nextNode.getDistanceToEntity(this) < 1.4D) {
 					this.removeNode(nextNode);
-					EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(BLItemRegistry.cavingRope, 1));
-					itemEntity.delayBeforeCanPickup = 0;
-					this.worldObj.spawnEntityInWorld(itemEntity);
+					EntityPlayer player = (EntityPlayer) nextNode;
+					if(!player.inventory.addItemStackToInventory(new ItemStack(BLItemRegistry.cavingRope, 1))) {
+						EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(BLItemRegistry.cavingRope, 1));
+						itemEntity.delayBeforeCanPickup = 0;
+						this.worldObj.spawnEntityInWorld(itemEntity);
+					}
 				}
 				if(nextNode.getDistanceToEntity(this) < ROPE_LENGTH - 1) {
 					this.canExtend = true;
