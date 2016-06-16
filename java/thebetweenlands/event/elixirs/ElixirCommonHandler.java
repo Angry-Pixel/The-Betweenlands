@@ -153,6 +153,7 @@ public class ElixirCommonHandler {
 				entityLivingBase.motionZ *= 0.1F + relStrength * 0.9F;
 				if(entityLivingBase.motionY < 0.0D) entityLivingBase.motionY = 0.0D;
 				entityLivingBase.onGround = true;
+				entityLivingBase.fallDistance = 0.0F;
 			}
 		}
 
