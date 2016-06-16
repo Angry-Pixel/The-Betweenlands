@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
 import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.event.render.AspectItemOverlayHandler;
 import thebetweenlands.herblore.aspects.Aspect;
@@ -48,7 +47,7 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(stack, null);
+		List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
 		if(itemAspects.size() >= 1) {
 			Aspect aspect = itemAspects.get(0);
 			return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + AspectItemOverlayHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getAmount()) + ")";
@@ -110,7 +109,7 @@ public class ItemAspectVial extends Item {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(ItemStack stack, int pass) {
 		if(pass == 2) {
-			List<Aspect> itemAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(stack, null);
+			List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
 			if(itemAspects.size() >= 1) {
 				Aspect aspect = itemAspects.get(0);
 				return this.aspectIcons[aspect.type.getIconIndex()];
@@ -129,10 +128,10 @@ public class ItemAspectVial extends Item {
 		for(IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
 			Aspect itemAspect = new Aspect(aspect, 4.0F);
 			ItemStack stackGreen = new ItemStack(item, 1, 0);
-			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addDynamicAspects(stackGreen, itemAspect);
+			AspectManager.addDynamicAspects(stackGreen, itemAspect);
 			list.add(stackGreen);
 			ItemStack stackOrange = new ItemStack(item, 1, 1);
-			AspectManager.get(TheBetweenlands.proxy.getClientWorld()).addDynamicAspects(stackOrange, itemAspect);
+			AspectManager.addDynamicAspects(stackOrange, itemAspect);
 			list.add(stackOrange);
 		}
 	}
