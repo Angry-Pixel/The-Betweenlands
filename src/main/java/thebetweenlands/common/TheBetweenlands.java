@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.render.models.ModelSundew;
 import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
+import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.BLMessage;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -47,19 +48,18 @@ public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
 	public static final SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
 	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer();
-	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
-	public static CommonProxy proxy;
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
+	public static DimensionType dimensionType;
+	public static boolean isShadersModInstalled = false;
 	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
 	public static CommonPacketProxy packetProxy;
-
-	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
-	public static boolean isShadersModInstalled = false;
-	public static DimensionType dimensionType;
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
+	public static CommonProxy proxy;
 	public static File sourceFile;
+	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 	private static File configDir;
 	private static int nextMessageId;
 
@@ -108,6 +108,7 @@ public class TheBetweenlands {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
+		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 
 		proxy.init();
 

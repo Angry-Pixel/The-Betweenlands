@@ -41,14 +41,19 @@ public class ItemBLShield extends ItemShield {
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage")) {
-            return ((double) stack.getTagCompound().getInteger("damage") / ((double) material.getMaxUses() * (double) 2));
+            return ((double) stack.getTagCompound().getInteger("damage") / (double) getMaxMetaDamage());
         } else
             return 1;
     }
 
+
+    public int getMaxMetaDamage() {
+        return material.getMaxUses() * 2;
+    }
+
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
-        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage") && stack.getTagCompound().getInteger("damage") < material.getMaxUses() * 2;
+        return stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage") && stack.getTagCompound().getInteger("damage") > 0;
     }
 
     public String getItemStackDisplayName(ItemStack stack) {
@@ -57,7 +62,6 @@ public class ItemBLShield extends ItemShield {
 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-
     }
 
     @Override

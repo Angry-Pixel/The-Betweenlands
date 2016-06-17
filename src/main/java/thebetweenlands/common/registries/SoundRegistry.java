@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundRegistry {
-    public static List<SoundEvent> SOUNDS = new ArrayList<>();
     public static SoundEvent ACIENT = new BLSoundEvent("ancient");
     public static SoundEvent AMBIENT_BLOOD_SKY = new BLSoundEvent("ambient_blood_sky");
     public static SoundEvent AMBIENT_CAVE = new BLSoundEvent("ambient_cave");
@@ -99,8 +98,8 @@ public class SoundRegistry {
     public static SoundEvent SNAIL_DEATH = new BLSoundEvent("snail_death");
     public static SoundEvent SNAIL_HURT = new BLSoundEvent("snail_hurt");
     public static SoundEvent SNAIL_LIVING = new BLSoundEvent("snail_living");
-    public static List<SoundEvent> SOUNDS = new ArrayList<>();
     public static SoundEvent SORRY = new BLSoundEvent("sorry");
+    public static List<SoundEvent> SOUNDS = new ArrayList<>();
     public static SoundEvent SPIKE = new BLSoundEvent("spike");
     public static SoundEvent SPORELING_DEATH = new BLSoundEvent("sporeling_death");
     public static SoundEvent SPORELING_HURT = new BLSoundEvent("sporeling_hurt");
