@@ -43,6 +43,7 @@ public class BLSkyRenderer extends IRenderHandler {
 	private int skyDispList1;
 	private int skyDispList2;
 	private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/skyTexture.png");
+	private static final ResourceLocation FOG_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/fogTexture.png");
 	private static final ResourceLocation SKY_SPOOPY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
 	private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 	public final GeometryBuffer clipPlaneBuffer = new GeometryBuffer(true);
@@ -532,6 +533,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0.1F, 0.8F, 0.55F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
+
 		if(useShaderSky) {
 			//Render shader sky dome
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getStarfieldTextureID());
@@ -580,6 +582,48 @@ public class BLSkyRenderer extends IRenderHandler {
 			}
 		}
 
+		//Render sky dome with fog texture for fog noise illusion
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			GL11.glPushMatrix();
+
+			float renderRadius = 80.0F;
+
+			GL11.glEnable(GL11.GL_FOG);
+			GL11.glFogf(GL11.GL_FOG_START, renderRadius / 2F);
+			GL11.glFogf(GL11.GL_FOG_END, renderRadius * 2F);
+
+			GL11.glScaled(
+					1.0F / 50.0F * renderRadius, 
+					1.0F / 50.0F * renderRadius, 
+					1.0F / 50.0F * renderRadius
+					);
+
+			GL11.glTranslated(0, 10, 0);
+
+			mc.renderEngine.bindTexture(FOG_TEXTURE_RES);
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_TEXTURE_2D);
+			GL11.glColor4f(0, 0, 0, 0.35F);
+			RenderHelper.disableStandardItemLighting();
+			GL11.glDepthMask(false);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+			GL11.glCallList(this.skyDispListStart);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+			GL11.glDepthMask(true);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GL11.glPopMatrix();
+
+			GL11.glFogf(GL11.GL_FOG_START, FogHandler.INSTANCE.getCurrentFogStart());
+			GL11.glFogf(GL11.GL_FOG_END, FogHandler.INSTANCE.getCurrentFogEnd());
+		}
+
 		GL11.glDepthMask(true);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -609,6 +653,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
 			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
+				GL11.glDisable(GL11.GL_FOG);
 				this.renderAuroras(mc);
 			}
 		}
