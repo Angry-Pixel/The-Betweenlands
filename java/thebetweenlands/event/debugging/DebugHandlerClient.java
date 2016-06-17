@@ -82,7 +82,7 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 
 	public boolean worldLocations = false;
 
-	public boolean debugDeferredEffect = false;
+	public boolean debugPostProcessingEffect = false;
 
 	private float lightTable[];
 
@@ -131,7 +131,7 @@ public class DebugHandlerClient extends DebugHandlerCommon {
 				ignoreStart = !ignoreStart;
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-				debugDeferredEffect = !debugDeferredEffect;
+				debugPostProcessingEffect = !debugPostProcessingEffect;
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_U) && mc.isIntegratedServerRunning() && isInDebugWorld && !shouldRecreateBetweenlands) {
 				shouldRecreateBetweenlands = true;

@@ -103,7 +103,7 @@ public class GuiOverlay extends Gui {
 		}*/
 
 		//Just some shader debugging stuff. Applies gaussian blur to the top half of the screen
-		if(DebugHandlerClient.INSTANCE.debugDeferredEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
+		if(DebugHandlerClient.INSTANCE.debugPostProcessingEffect && event.type == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
 			if(ShaderHelper.INSTANCE.canUseShaders()) {
 				MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 				if(shader != null) {

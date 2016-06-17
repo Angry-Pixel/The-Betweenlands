@@ -14,7 +14,7 @@ public class SwirlEffect extends PostProcessingEffect {
 
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/swirl/swirl.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/swirl/swirl.fsh")};
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/swirl/swirl.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/swirl/swirl.fsh")};
 	}
 
 	@Override

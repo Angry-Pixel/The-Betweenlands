@@ -85,6 +85,7 @@ import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderEntityVolarkite;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderFrog;
+import thebetweenlands.client.render.entity.RenderGasCloud;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderLeech;
@@ -184,6 +185,7 @@ import thebetweenlands.entities.mobs.EntityDragonFly;
 import thebetweenlands.entities.mobs.EntityDreadfulMummy;
 import thebetweenlands.entities.mobs.EntityFirefly;
 import thebetweenlands.entities.mobs.EntityFrog;
+import thebetweenlands.entities.mobs.EntityGasCloud;
 import thebetweenlands.entities.mobs.EntityGecko;
 import thebetweenlands.entities.mobs.EntityGiantToad;
 import thebetweenlands.entities.mobs.EntityLeech;
@@ -407,7 +409,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, new RenderShockwaveBlock());
 		RenderingRegistry.registerEntityRenderingHandler(EntityVolarkite.class, new RenderEntityVolarkite());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFrog());
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, new RenderGasCloud());
+		
 		// Tile Entity Renderer
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new TileEntityDruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedWoodChest.class, new TileEntityWeedWoodChestRenderer());

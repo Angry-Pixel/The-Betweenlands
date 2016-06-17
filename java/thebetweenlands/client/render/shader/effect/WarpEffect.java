@@ -63,7 +63,7 @@ public class WarpEffect extends PostProcessingEffect {
 
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/warp/warp.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/warp/warp.fsh")};
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/warp/warp.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/warp/warp.fsh")};
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class OcclusionExtractor extends PostProcessingEffect {
 
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/occlusionextractor/occlusionextractor.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/occlusionextractor/occlusionextractor.fsh")};
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/occlusionextractor/occlusionextractor.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/occlusionextractor/occlusionextractor.fsh")};
 	}
 
 	@Override

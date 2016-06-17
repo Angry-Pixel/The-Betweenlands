@@ -152,8 +152,14 @@ float pattern2( in vec2 p, out vec2 q, out vec2 r , in float time) {
 void main(){
 	vec2 qq;
 	vec2 r;
-	vec2 texCoord = gl_TexCoord[0].st*vec2(0.5,-0.5)+vec2(0.5001,0.5001);
+	vec2 uv = gl_TexCoord[0].st;
+	vec2 texCoord = uv*vec2(0.5,-0.5)+vec2(0.5001,0.5001);
 	float noise = pattern2((texCoord + vec2(u_xOffset, u_yOffset)) * u_scale, qq, r, u_msTime * u_timeScale) * u_multiplier;
-	//float noise = pattern((texCoord + vec2(u_xOffset, u_yOffset)) * u_scale) * u_multiplier;
-	gl_FragColor = texture2D(s_diffuse, texCoord) * noise;
+	vec4 color = texture2D(s_diffuse, texCoord) * noise;
+	float alpha = 1.0F;
+	float centerDistance = length(vec2(uv.x, 1.0F - uv.y) * 20.0F - vec2(0.5F, 0.5F));
+	float fadeStart = 0.0F;
+	float fadeEnd = 0.6F;
+	alpha *= 1.0F - (clamp(centerDistance, fadeStart, fadeEnd) - fadeStart) / (fadeEnd - fadeStart);
+	gl_FragColor = color * alpha;
 }

@@ -621,7 +621,7 @@ public class MainShader extends CShader {
 	}
 
 	private void updateTextures(float partialTicks) {
-		if(DebugHandlerClient.INSTANCE.debugDeferredEffect) {
+		if(DebugHandlerClient.INSTANCE.debugPostProcessingEffect) {
 			//Update gas texture
 			if(this.gasTextureFBO == null) {
 				this.gasTextureFBO = new Framebuffer(128, 128, false);
@@ -632,8 +632,8 @@ public class MainShader extends CShader {
 			} else {
 				float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
 				float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
-				this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 80.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 70.0F)
-				.setWarpDir(warpX, warpY);
+				this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 1000.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 1100.0F)
+				.setWarpDir(warpX / 5.0F, warpY / 5.0F);
 
 				this.gasTextureFBO.bindFramebuffer(false);
 				GL11.glClearColor(1, 1, 1, 1);

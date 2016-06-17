@@ -14,7 +14,7 @@ public class GaussianBlur extends PostProcessingEffect {
 
 					@Override
 					protected ResourceLocation[] getShaders() {
-						return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/gauss/gauss.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/gauss/gaussh.fsh")};
+						return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/gauss/gauss.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/gauss/gaussh.fsh")};
 					}
 				}
 		};
@@ -23,6 +23,6 @@ public class GaussianBlur extends PostProcessingEffect {
 	
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/gauss/gauss.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/gauss/gaussv.fsh")};
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/gauss/gauss.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/gauss/gaussv.fsh")};
 	}
 }

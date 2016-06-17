@@ -51,7 +51,7 @@ public class GodRayEffect extends PostProcessingEffect {
 
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/deferred/godray/godray.vsh"), new ResourceLocation("thebetweenlands:shaders/deferred/godray/godray.fsh")};
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/godray/godray.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/godray/godray.fsh")};
 	}
 
 	@Override

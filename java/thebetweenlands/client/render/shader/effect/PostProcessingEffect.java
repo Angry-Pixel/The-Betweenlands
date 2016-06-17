@@ -226,8 +226,8 @@ public abstract class PostProcessingEffect {
 		//Upload texel size uniform
 		if(this.texelSizeUniformID >= 0) {
 			TEXEL_SIZE_BUFFER.position(0);
-			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayWidth);
-			TEXEL_SIZE_BUFFER.put(1.0F / (float)Minecraft.getMinecraft().displayHeight);
+			TEXEL_SIZE_BUFFER.put(1.0F / (float)dst.framebufferWidth);
+			TEXEL_SIZE_BUFFER.put(1.0F / (float)dst.framebufferHeight);
 			TEXEL_SIZE_BUFFER.flip();
 			OpenGlHelper.func_153177_b(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
 		}
@@ -237,17 +237,17 @@ public abstract class PostProcessingEffect {
 
 		//Render texture
 		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glTexCoord2f(0.0F, 1.0F);
 		GL11.glVertex2d(0, 0);
-		GL11.glTexCoord2d(0.0D, 0.0D);
+		GL11.glTexCoord2f(0.0F, 0.0F);
 		GL11.glVertex2d(0, renderHeight);
-		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glTexCoord2f(1.0F, 0.0F);
 		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1.0D, 0.0D);
+		GL11.glTexCoord2f(1.0F, 0.0F);
 		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1.0D, 1.0D);
+		GL11.glTexCoord2f(1.0F, 1.0F);
 		GL11.glVertex2d(renderWidth, 0);
-		GL11.glTexCoord2d(0.0D, 1.0D);
+		GL11.glTexCoord2f(0.0F, 1.0F);
 		GL11.glVertex2d(0, 0);
 		GL11.glEnd();
 

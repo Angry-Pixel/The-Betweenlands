@@ -1,44 +1,43 @@
 package thebetweenlands.entities.mobs;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.utils.confighandler.ConfigHandler;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
+public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 	public int courseChangeCooldown;
 	public double waypointX;
 	public double waypointY;
 	public double waypointZ;
-	public int lastLightX;
-	public int lastLightY;
-	public int lastLightZ;
 
 	public double aboveLayer = 6.0D;
 
-	public EntityFirefly(World world) {
+	public EntityGasCloud(World world) {
 		super(world);
-		this.setSize(0.6F, 0.6F);
-		this.ignoreFrustumCheck = true;
+		this.setSize(1F, 1F);
+		this.noClip = true;
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(4.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
 	}
 
 	@Override
 	protected void updateEntityActionState() {
+		if (!this.worldObj.isRemote && this.worldObj.difficultySetting == EnumDifficulty.PEACEFUL) {
+			this.setDead();
+		}
+
 		super.updateEntityActionState();
 
 		if (this.worldObj.isRemote) {
@@ -111,45 +110,28 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	}
 
 	@Override
+	public boolean getCanSpawnHere() {
+		return super.getCanSpawnHere() && this.worldObj.difficultySetting != EnumDifficulty.PEACEFUL;
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void lightUp(World world, int x, int y, int z) {
-		world.setLightValue(EnumSkyBlock.Block, x, y, z, 15);
-		for (int i = -1; i < 2; i++) {
-			for (int j = -1; j < 2; j++) {
-				for (int k = -1; k < 2; k++) {
-					if (x + i != this.lastLightX || y + j != this.lastLightY || z + k != this.lastLightZ || this.isDead) {
-						world.updateLightByType(EnumSkyBlock.Block, this.lastLightX + i, this.lastLightY + j, this.lastLightZ + k);
-						this.lastLightX = x;
-						this.lastLightY = y;
-						this.lastLightZ = z;
-					}
-				}
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void switchOff() {
-		this.worldObj.updateLightByType(EnumSkyBlock.Block, this.lastLightX, this.lastLightY, this.lastLightZ);
-		this.worldObj.updateLightByType(EnumSkyBlock.Block, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (this.worldObj.isRemote) {
-			if(this.lastLightX != MathHelper.floor_double(this.posX) || 
-					this.lastLightY != MathHelper.floor_double(this.posY) ||
-					this.lastLightZ != MathHelper.floor_double(this.posZ)) {
-				if(ConfigHandler.FIREFLY_BLOCK_LIGHTING && !ShaderHelper.INSTANCE.canUseShaders()) {
-					this.switchOff();
-					this.lightUp(this.worldObj, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ));
-				}
-			}
+			BLParticle.GAS_CLOUD.spawn(this.worldObj, 
+					this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
+					this.posY + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
+					this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
+					this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
+					this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
+					this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
+					//0, 0, 0,
+					0, 0xAA107510);
 		} else {
 			if(this.isInWater()) {
 				this.motionY += 0.01D;
@@ -163,20 +145,23 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public void setDead() {
 		super.setDead();
-		if (this.worldObj.isRemote) {
-			if(ConfigHandler.FIREFLY_BLOCK_LIGHTING && !ShaderHelper.INSTANCE.canUseShaders()) {
-				switchOff();
-			}
-		}
 	}
 
 	@Override
 	public String pageName() {
-		return "firefly";
+		return "gasCloud";
 	}
 
 	@Override
 	protected boolean canDespawn() {
 		return false;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source == DamageSource.inWall) {
+			return false;
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 }
