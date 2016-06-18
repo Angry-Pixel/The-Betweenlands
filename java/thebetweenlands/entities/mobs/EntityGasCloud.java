@@ -1,35 +1,64 @@
 package thebetweenlands.entities.mobs;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.particles.EntityGasCloudFX;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
+	@SideOnly(Side.CLIENT)
+	public List<EntityGasCloudFX> gasParticles = new ArrayList<EntityGasCloudFX>();
 
-	public int courseChangeCooldown;
-	public double waypointX;
-	public double waypointY;
-	public double waypointZ;
+	private int courseChangeCooldown;
+	private double waypointX;
+	private double waypointY;
+	private double waypointZ;
 
-	public double aboveLayer = 6.0D;
+	private double aboveLayer = 6.0D;
+
+	public static final int GAS_CLOUD_COLOR_DW = 20;
 
 	public EntityGasCloud(World world) {
 		super(world);
-		this.setSize(1F, 1F);
+		this.setSize(1.75F, 1.75F);
 		this.noClip = true;
+		this.ignoreFrustumCheck = true;
+	}
+
+	public void setGasColor(int color) {
+		this.dataWatcher.updateObject(GAS_CLOUD_COLOR_DW, color);
+	}
+
+	public int getGasColor() {
+		return this.dataWatcher.getWatchableObjectInt(GAS_CLOUD_COLOR_DW);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0D);
+		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(1.0D);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataWatcher.addObject(GAS_CLOUD_COLOR_DW, (int) 0xAA68C4B3);
 	}
 
 	@Override
@@ -66,17 +95,27 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			this.waypointZ = this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 		}
 
+		float speed = 0.03F;
+
+		EntityPlayer closestTarget = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
+		if(closestTarget != null) {
+			this.waypointX = closestTarget.posX;
+			this.waypointY = closestTarget.posY;
+			this.waypointZ = closestTarget.posZ;
+			speed = 0.05F;
+		}
+
 		if (this.courseChangeCooldown-- <= 0) {
 			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
 			dist = MathHelper.sqrt_double(dist);
 
 			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist)) {
-				this.motionX += dx / dist * 0.03D;
-				this.motionY += dy / dist * 0.03D;
+				this.motionX += dx / dist * speed;
+				this.motionY += dy / dist * speed;
 				if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
 					this.motionY -= ((1.0D - (WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer - this.posY) / this.aboveLayer) + 1.0D) / 100.0D;
 				}
-				this.motionZ += dz / dist * 0.03D;
+				this.motionZ += dz / dist * speed;
 				if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
 					this.waypointX = this.posX;
 					this.waypointY = this.posY;
@@ -91,17 +130,12 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	}
 
 	private boolean isCourseTraversable(double x, double y, double z, double step) {
-		double d4 = (this.waypointX - this.posX) / step;
-		double d5 = (this.waypointY - this.posY) / step;
-		double d6 = (this.waypointZ - this.posZ) / step;
-		AxisAlignedBB axisalignedbb = this.boundingBox.copy();
+		double dx = (this.waypointX - this.posX) / step;
+		double dy = (this.waypointY - this.posY) / step;
+		double dz = (this.waypointZ - this.posZ) / step;
 
-		for (int i = 1; i < step; ++i)
-		{
-			axisalignedbb.offset(d4, d5, d6);
-
-			if (!this.worldObj.getCollidingBoundingBoxes(this, axisalignedbb).isEmpty())
-			{
+		for (int i = 1; i < step; ++i) {
+			if (this.worldObj.getBlock(MathHelper.floor_double(this.posX + dx * step), MathHelper.floor_double(this.posY + dy * step), MathHelper.floor_double(this.posZ + dz * step)).getMaterial().isLiquid()) {
 				return false;
 			}
 		}
@@ -122,16 +156,26 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
 		if (this.worldObj.isRemote) {
-			BLParticle.GAS_CLOUD.spawn(this.worldObj, 
+			EntityGasCloudFX newGasCloud = new EntityGasCloudFX(
+					this.worldObj, 
 					this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
-					this.posY + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
-					this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
-					this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
-					this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
-					this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 10.0F, 
-					//0, 0, 0,
-					0, 0xAA107510);
+					this.posY + this.height / 2.0D + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F, 
+					this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F,
+					this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F,
+					this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F,
+					this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F, 
+					this.getGasColor());
+			this.gasParticles.add(newGasCloud);
+
+			for(int i = 0; i < this.gasParticles.size(); i++) {
+				EntityGasCloudFX gasCloud = this.gasParticles.get(i);
+				gasCloud.onUpdate();
+				if(gasCloud.isDead) {
+					this.gasParticles.remove(i);
+				}
+			}
 		} else {
 			if(this.isInWater()) {
 				this.motionY += 0.01D;
@@ -140,21 +184,39 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				this.waypointZ = this.posZ;
 			}
 		}
+
+		if(!this.worldObj.isRemote && this.isEntityAlive()) {
+			List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(0.5D, 0.5D, 0.5D));
+			for(EntityLivingBase target : targets) {
+				if(target instanceof EntityGasCloud == false && target instanceof IEntityBL == false) {
+					target.addPotionEffect(new PotionEffect(Potion.poison.getId(), 60, 0));
+					if(target.ticksExisted % 10 == 0)
+						target.attackEntityFrom(DamageSource.drown, 2.0F);
+				}
+			}
+		}
 	}
 
 	@Override
-	public void setDead() {
-		super.setDead();
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setInteger("gasColor", this.getGasColor());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.setGasColor(nbt.getInteger("gasColor"));
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
 	}
 
 	@Override
 	public String pageName() {
 		return "gasCloud";
-	}
-
-	@Override
-	protected boolean canDespawn() {
-		return false;
 	}
 
 	@Override

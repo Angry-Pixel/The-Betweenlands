@@ -43,6 +43,8 @@ public class RenderWight extends RenderLiving {
 	protected int shouldRenderPass(EntityLivingBase entityliving, int pass, float partialTickTime) {
 		EntityWight wight = (EntityWight) entityliving;
 
+		GL11.glDepthMask(true);
+		
 		if(wight.isVolatile()) {
 			this.setRenderPassModel(this.modelHeadOnly);
 			if(pass == 0) {

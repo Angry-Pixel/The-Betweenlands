@@ -146,12 +146,12 @@ public enum BLParticle {
 	},
 	CAVE_WATER_DRIP(EntityCaveWaterDripFX.class, ParticleArgs.NONE),
 	RUSTLE_LEAF(EntityWeedWoodRustleFX.class, ParticleArgs.NONE),
-	GAS_CLOUD(EntityGasCloudFX.class, ParticleArgs.VX_VY_VZ, int.class) {
+	/*GAS_CLOUD(EntityGasCloudFX.class, ParticleArgs.VX_VY_VZ, int.class) {
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { data.length == 0 || !(data[0] instanceof Integer) ? 0xFFFFFFFF : (int) data[0] };
 		}
-	};
+	}*/;
 
 	private static final int REGULAR_ARG_NUM = 4;
 

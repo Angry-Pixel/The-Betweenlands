@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
@@ -19,11 +20,13 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import thebetweenlands.blocks.BLFluidRegistry;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.entities.mobs.EntityGasCloud;
 import thebetweenlands.herblore.aspects.AspectManager;
 import thebetweenlands.herblore.aspects.IAspectType;
 import thebetweenlands.herblore.elixirs.ElixirRecipe;
 import thebetweenlands.herblore.elixirs.ElixirRecipes;
 import thebetweenlands.items.BLItemRegistry;
+import thebetweenlands.utils.ColorUtils;
 
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler {
 
@@ -308,13 +311,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					}
 					setInventorySlotContents(i, null);
 				}
-				this.infusingRecipe = null;
 				if (evaporation == 600) {
-					// TODO Make this a toxic cloud entity - a job for Sam's expert render skills :P
-					//EntityPig piggy = new EntityPig(worldObj);
-					//piggy.setLocationAndAngles(xCoord + 0.5D, yCoord + 1D, zCoord + 0.5D, MathHelper.wrapAngleTo180_float(worldObj.rand.nextFloat() * 360.0F), 0.0F);
-					//worldObj.spawnEntityInWorld(piggy);
+					EntityGasCloud gasCloud = new EntityGasCloud(this.worldObj);
+					if(this.infusingRecipe != null) {
+						float[] color = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+						gasCloud.setGasColor(ColorUtils.toHex(color[0], color[1], color[2], 0.66F));
+					}
+					gasCloud.setLocationAndAngles(this.xCoord + 0.5D, this.yCoord + 1D, this.zCoord + 0.5D, MathHelper.wrapAngleTo180_float(this.worldObj.rand.nextFloat() * 360.0F), 0.0F);
+					this.worldObj.spawnEntityInWorld(gasCloud);
 				}
+				this.infusingRecipe = null;
 			}
 			hasInfusion = false;
 			temp = 0;

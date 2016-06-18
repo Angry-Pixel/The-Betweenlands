@@ -4,10 +4,13 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.shader.ShaderHelper;
 
 public class EntityGasCloudFX extends EntityFX {
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/staticGas.png");
+	
 	private int color;
 	private float scale = 1.0F;
 	private int rotation = 0;
@@ -36,11 +39,6 @@ public class EntityGasCloudFX extends EntityFX {
 		float ipy = (float)((this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks) - this.interpPosY);
 		float ipz = (float)((this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks) - this.interpPosZ);
 
-		int prevTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getGasTextureID());
-
-		par1Tessellator.setBrightness(0);
-
 		int fadeInDuration = 15;
 		int fadeOutStart = 45;
 		int fadeOutDuration = this.particleMaxAge - fadeOutStart;
@@ -55,13 +53,7 @@ public class EntityGasCloudFX extends EntityFX {
 		float g = (float)(this.color >> 8 & 0xff) / 255F;
 		float b = (float)(this.color & 0xff) / 255F;
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-
-		GL11.glDepthMask(false);
-		
-		par1Tessellator.startDrawingQuads();
+		//par1Tessellator.startDrawingQuads();
 		par1Tessellator.setColorRGBA_F(r, g, b, a);
 		//par1Tessellator.setColorRGBA_F(1, 1, 1, 1);
 		switch(this.rotation) {
@@ -90,12 +82,7 @@ public class EntityGasCloudFX extends EntityFX {
 			par1Tessellator.addVertexWithUV(ipx + rx * this.scale - ryz * this.scale, ipy - rxz * this.scale, ipz + rz * this.scale - rxy * this.scale, 0, 0);
 			break;
 		}
-		par1Tessellator.draw();
-
-		
-		GL11.glDepthMask(true);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, prevTex);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		//par1Tessellator.draw();
 	}
 
 	@Override

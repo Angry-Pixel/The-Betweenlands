@@ -11,6 +11,7 @@ import thebetweenlands.entities.mobs.EntityAngler;
 import thebetweenlands.entities.mobs.EntityBlindCaveFish;
 import thebetweenlands.entities.mobs.EntityChiromaw;
 import thebetweenlands.entities.mobs.EntityFirefly;
+import thebetweenlands.entities.mobs.EntityGasCloud;
 import thebetweenlands.entities.mobs.EntityPeatMummy;
 import thebetweenlands.entities.mobs.EntitySporeling;
 import thebetweenlands.entities.mobs.EntitySwampHag;
@@ -60,7 +61,8 @@ extends BiomeGenBaseBetweenlands
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setHostile(true).setGroupSize(1, 3));
-		
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
+
 		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET);
 	}
 

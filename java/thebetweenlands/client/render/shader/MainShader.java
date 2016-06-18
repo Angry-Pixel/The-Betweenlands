@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.ShaderUniform;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -33,7 +34,7 @@ import thebetweenlands.client.render.shader.effect.StarfieldEffect;
 import thebetweenlands.client.render.shader.effect.SwirlEffect;
 import thebetweenlands.client.render.shader.effect.WarpEffect;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
-import thebetweenlands.event.debugging.DebugHandlerClient;
+import thebetweenlands.entities.mobs.EntityGasCloud;
 import thebetweenlands.utils.GLUProjection;
 import thebetweenlands.utils.GLUProjection.ClampMode;
 import thebetweenlands.utils.GLUProjection.Projection;
@@ -621,29 +622,39 @@ public class MainShader extends CShader {
 	}
 
 	private void updateTextures(float partialTicks) {
-		if(DebugHandlerClient.INSTANCE.debugPostProcessingEffect) {
-			//Update gas texture
-			if(this.gasTextureFBO == null) {
-				this.gasTextureFBO = new Framebuffer(128, 128, false);
-				this.gasTextureBaseFBO = new Framebuffer(128, 128, false);
+		World world = Minecraft.getMinecraft().theWorld;
+		if(world != null) {
+			boolean hasCloud = false;
+			for(Entity e : (List<Entity>) Minecraft.getMinecraft().theWorld.loadedEntityList) {
+				if(e instanceof EntityGasCloud) {
+					hasCloud = true;
+					break;
+				}
+			}
+			if(hasCloud) {
+				//Update gas texture
+				if(this.gasTextureFBO == null) {
+					this.gasTextureFBO = new Framebuffer(128, 128, false);
+					this.gasTextureBaseFBO = new Framebuffer(128, 128, false);
 
-				this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
-				this.gasWarpEffect.init();
-			} else {
-				float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
-				float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
-				this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 1000.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 1100.0F)
-				.setWarpDir(warpX / 5.0F, warpY / 5.0F);
+					this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
+					this.gasWarpEffect.init();
+				} else {
+					float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
+					float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
+					this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 1000.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 1100.0F)
+					.setWarpDir(warpX / 20.0F, warpY / 20.0F);
 
-				this.gasTextureFBO.bindFramebuffer(false);
-				GL11.glClearColor(1, 1, 1, 1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+					this.gasTextureFBO.bindFramebuffer(false);
+					GL11.glClearColor(1, 1, 1, 1);
+					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-				this.gasTextureBaseFBO.bindFramebuffer(false);
-				GL11.glClearColor(1, 1, 1, 1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+					this.gasTextureBaseFBO.bindFramebuffer(false);
+					GL11.glClearColor(1, 1, 1, 1);
+					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-				this.gasWarpEffect.create(this.gasTextureFBO).setSource(this.gasTextureBaseFBO.framebufferTexture).setPreviousFBO(Minecraft.getMinecraft().getFramebuffer()).setRenderDimensions(128.0F * 20.0F, 128.0F * 20.0F).render();
+					this.gasWarpEffect.create(this.gasTextureFBO).setSource(this.gasTextureBaseFBO.framebufferTexture).setPreviousFBO(Minecraft.getMinecraft().getFramebuffer()).setRenderDimensions(128.0F * 20.0F, 128.0F * 20.0F).render();
+				}
 			}
 		}
 
