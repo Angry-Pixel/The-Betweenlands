@@ -1,16 +1,13 @@
 package thebetweenlands.entities.particles;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.client.render.shader.ShaderHelper;
 
 public class EntityGasCloudFX extends EntityFX {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/staticGas.png");
-	
+
 	private int color;
 	private float scale = 1.0F;
 	private int rotation = 0;

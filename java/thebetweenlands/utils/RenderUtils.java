@@ -9,7 +9,9 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.MathHelper;
 
@@ -336,7 +338,17 @@ public class RenderUtils {
 		GL11.glPopMatrix();
 	}
 
+	/**
+	 * Saves the texture of an FBO to the specified PNG file.
+	 * 
+	 * @param file
+	 * @param fbo
+	 */
 	public static void saveFboToFile(File file, Framebuffer fbo) {
+		int prevFBO = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
+
+		fbo.bindFramebuffer(false);
+
 		GL11.glReadBuffer(GL11.GL_FRONT);
 		int width = fbo.framebufferWidth;
 		int height= fbo.framebufferHeight;
@@ -363,5 +375,8 @@ public class RenderUtils {
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		}
+
+		//Bind previous fbo
+		OpenGlHelper.func_153171_g(OpenGlHelper.field_153198_e, prevFBO);
 	}
 }

@@ -21,8 +21,7 @@ import thebetweenlands.entities.particles.EntityGasCloudFX;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
-	@SideOnly(Side.CLIENT)
-	public List<EntityGasCloudFX> gasParticles = new ArrayList<EntityGasCloudFX>();
+	public List<Object> gasParticles = new ArrayList<Object>();
 
 	private int courseChangeCooldown;
 	private double waypointX;
@@ -95,7 +94,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			this.waypointZ = this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 		}
 
-		float speed = 0.03F;
+		float speed = 0.02F;
 
 		EntityPlayer closestTarget = this.worldObj.getClosestVulnerablePlayerToEntity(this, 16.0D);
 		if(closestTarget != null) {
@@ -165,12 +164,12 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 					this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F,
 					this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F,
 					this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F,
-					this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F, 
+					this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F,
 					this.getGasColor());
 			this.gasParticles.add(newGasCloud);
 
 			for(int i = 0; i < this.gasParticles.size(); i++) {
-				EntityGasCloudFX gasCloud = this.gasParticles.get(i);
+				EntityGasCloudFX gasCloud = (EntityGasCloudFX) this.gasParticles.get(i);
 				gasCloud.onUpdate();
 				if(gasCloud.isDead) {
 					this.gasParticles.remove(i);

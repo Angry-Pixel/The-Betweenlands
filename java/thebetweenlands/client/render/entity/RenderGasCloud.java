@@ -44,8 +44,8 @@ public class RenderGasCloud extends Render {
 		Tessellator tessellator = Tessellator.instance;
 		//Render without depth masking to ignore depth test
 		tessellator.startDrawingQuads();
-		for(EntityGasCloudFX gasCloudParticle : gasCloud.gasParticles) {
-			gasCloudParticle.renderParticle(tessellator, partialTicks, 
+		for(Object o : gasCloud.gasParticles) {
+			((EntityGasCloudFX)o).renderParticle(tessellator, partialTicks, 
 					ActiveRenderInfo.rotationX,
 					ActiveRenderInfo.rotationXZ,
 					ActiveRenderInfo.rotationZ,

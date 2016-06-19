@@ -634,16 +634,17 @@ public class MainShader extends CShader {
 			if(hasCloud) {
 				//Update gas texture
 				if(this.gasTextureFBO == null) {
-					this.gasTextureFBO = new Framebuffer(128, 128, false);
-					this.gasTextureBaseFBO = new Framebuffer(128, 128, false);
+					this.gasTextureFBO = new Framebuffer(64, 64, false);
+					this.gasTextureBaseFBO = new Framebuffer(64, 64, false);
 
 					this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
 					this.gasWarpEffect.init();
 				} else {
-					float warpX = (float)(Math.sin(System.nanoTime() / 20000000000.0D) / 80.0F) + (float)(Math.sin(System.nanoTime() / 5600000000.0D) / 15000.0F) - (float)(Math.cos(System.nanoTime() / 6800000000.0D) / 500.0F);
-					float warpY = (float)(Math.sin(System.nanoTime() / 10000000000.0D) / 60.0F) - (float)(Math.cos(System.nanoTime() / 800000000.0D) / 6000.0F) + (float)(Math.cos(System.nanoTime() / 2000000000.0D) / 1000.0F);
-					this.gasWarpEffect.setOffset((float)Math.sin(System.nanoTime() / 10000000000.0D) / 1000.0F, (float)Math.sin(System.nanoTime() / 10000000000.0D) / 1100.0F)
-					.setWarpDir(warpX / 20.0F, warpY / 20.0F);
+					float worldTimeInterp = world.getWorldTime() + partialTicks;
+					float warpX = ((float)Math.sin((worldTimeInterp / 10000.0F) % (Math.PI * 2.0D)) + 1.0F) / 10.0F;
+					float warpY = ((float)Math.cos((worldTimeInterp / 10000.0F) % (Math.PI * 2.0D)) + 1.0F) / 10.0F;
+					this.gasWarpEffect.setOffset(0.0F, 0.0F)
+					.setWarpDir(0.75F + warpX, 0.75F + warpY);
 
 					this.gasTextureFBO.bindFramebuffer(false);
 					GL11.glClearColor(1, 1, 1, 1);
@@ -653,7 +654,10 @@ public class MainShader extends CShader {
 					GL11.glClearColor(1, 1, 1, 1);
 					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
-					this.gasWarpEffect.create(this.gasTextureFBO).setSource(this.gasTextureBaseFBO.framebufferTexture).setPreviousFBO(Minecraft.getMinecraft().getFramebuffer()).setRenderDimensions(128.0F * 20.0F, 128.0F * 20.0F).render();
+					this.gasWarpEffect.create(this.gasTextureFBO)
+					.setSource(this.gasTextureBaseFBO.framebufferTexture)
+					.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
+					.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F).render();
 				}
 			}
 		}
