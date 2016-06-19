@@ -3,8 +3,7 @@ package thebetweenlands.entities.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,7 +17,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.entities.particles.EntityGasCloudFX;
-import thebetweenlands.world.WorldProviderBetweenlands;
 
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public List<Object> gasParticles = new ArrayList<Object>();
@@ -79,18 +77,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 		if (dist < 1.0D || dist > 3600.0D) {
 			this.waypointX = this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
-			if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
-				this.waypointY = this.posY + (-this.rand.nextFloat() * 2.0F) * 16.0F;
-			} else {
-				float rndFloat = this.rand.nextFloat() * 2.0F - 1.0F;
-				if(rndFloat > 0.0D) {
-					rndFloat -= 0.5D;
-					double maxRange = WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer - this.posY;
-					this.waypointY = this.posY + (-this.rand.nextFloat() * 2.0F) * maxRange;
-				} else {
-					this.waypointY = this.posY + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
-				}
-			}
+			this.waypointY = this.posY + (this.rand.nextFloat() * 2.0F - 1.5F) * 6.0F;
 			this.waypointZ = this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
 		}
 
@@ -108,18 +95,10 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
 			dist = MathHelper.sqrt_double(dist);
 
-			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist)) {
+			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist, closestTarget != null)) {
 				this.motionX += dx / dist * speed;
 				this.motionY += dy / dist * speed;
-				if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
-					this.motionY -= ((1.0D - (WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer - this.posY) / this.aboveLayer) + 1.0D) / 100.0D;
-				}
 				this.motionZ += dz / dist * speed;
-				if(this.posY > WorldProviderBetweenlands.LAYER_HEIGHT + this.aboveLayer) {
-					this.waypointX = this.posX;
-					this.waypointY = this.posY;
-					this.waypointZ = this.posZ;
-				}
 			} else {
 				this.waypointX = this.posX;
 				this.waypointY = this.posY;
@@ -128,13 +107,14 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 		}
 	}
 
-	private boolean isCourseTraversable(double x, double y, double z, double step) {
+	private boolean isCourseTraversable(double x, double y, double z, double step, boolean canPassSolidBlocks) {
 		double dx = (this.waypointX - this.posX) / step;
 		double dy = (this.waypointY - this.posY) / step;
 		double dz = (this.waypointZ - this.posZ) / step;
 
 		for (int i = 1; i < step; ++i) {
-			if (this.worldObj.getBlock(MathHelper.floor_double(this.posX + dx * step), MathHelper.floor_double(this.posY + dy * step), MathHelper.floor_double(this.posZ + dz * step)).getMaterial().isLiquid()) {
+			Block block = this.worldObj.getBlock(MathHelper.floor_double(this.posX + dx * step), MathHelper.floor_double(this.posY + dy * step), MathHelper.floor_double(this.posZ + dz * step));
+			if ((!canPassSolidBlocks && block.isOpaqueCube()) || block.getMaterial().isLiquid()) {
 				return false;
 			}
 		}
