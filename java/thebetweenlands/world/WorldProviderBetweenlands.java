@@ -54,7 +54,7 @@ extends WorldProvider
 	public WorldProviderBetweenlands() {
 		this.hasNoSky = true;
 	}
-	
+
 	@Override
 	public boolean canRespawnHere() {
 		return true;
@@ -210,7 +210,7 @@ extends WorldProvider
 			targetFogColor = new int[]{(int) 255, (int) 255, (int) 255};
 		}
 
-		if(!ShaderHelper.INSTANCE.canUseShaders()) {
+		if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()) {
 				targetFogColor = new int[] {(int) (0.74F * 255), (int) (0.18F * 255), (int) (0.08F * 255)};
 			} else if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
@@ -269,7 +269,7 @@ extends WorldProvider
 			m = ambience.getFogBrightness();
 		}
 
-		if(!ShaderHelper.INSTANCE.canUseShaders()) {
+		if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()
 					|| WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
 				m = 0;

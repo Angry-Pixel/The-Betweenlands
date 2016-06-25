@@ -1,5 +1,9 @@
 package thebetweenlands.client.render.shader.base;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
@@ -9,11 +13,7 @@ import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-public class CShader {
+public class WorldShader {
 	private ShaderGroup shaderGroup = null;
 	private final ResourceLocation shaderDescription;
 	private final ResourceLocation shaderPath;
@@ -23,7 +23,7 @@ public class CShader {
 	private final TextureManager textureManager;
 	private final HashMap<String, Object> samplers = new HashMap<String, Object>();
 	private final HashMap<String, CShaderInt> shaderMap = new HashMap<String, CShaderInt>();
-	
+
 	/**
 	 * Creates a new shader wrapper. The wrapper will handle all the shader locations.
 	 * @param textureManager		TextureManager that is used to handle the textures
@@ -33,7 +33,7 @@ public class CShader {
 	 * @param shaderPath			Path to the folder/package that contains the vertex/fragment shaders and the shader config
 	 * @param assetsPath			Path to the folder/package that contains the assets that are used for auxiliary targets
 	 */
-	public CShader(TextureManager textureManager,
+	public WorldShader(TextureManager textureManager,
 			IResourceManager resourceManager, Framebuffer frameBuffer,
 			ResourceLocation shaderDescription, ResourceLocation shaderPath,
 			ResourceLocation assetsPath) {
@@ -44,33 +44,62 @@ public class CShader {
 		this.textureManager = textureManager;
 		this.assetsPath = assetsPath;
 	}
-	
+
+	/**
+	 * Returns the shader description file
+	 * @return
+	 */
 	public final ResourceLocation getShaderDescription() {
 		return this.shaderDescription;
 	}
-	
+
+	/**
+	 * Returns the path of the folder that contains the shader files
+	 * @return
+	 */
 	public final ResourceLocation getShaderPath() {
 		return this.shaderPath;
 	}
-	
+
+	/**
+	 * Returns the path of the folder that contains the shader assets
+	 * @return
+	 */
 	public final ResourceLocation getAssetsPath() {
 		return this.assetsPath;
 	}
-	
+
+	/**
+	 * Returns a map of samplers
+	 * @return
+	 */
 	public final HashMap<String, Object> getSamplers() {
 		return this.samplers;
 	}
-	
+
+	/**
+	 * Adds a shader
+	 * @param shader
+	 */
 	protected final void addShader(CShaderInt shader) {
 		this.shaderMap.put(shader.getName(), shader);
 	}
-	
+
 	/**
-	 * Returns the shader group. Creates a new one if it hasn't been created yet.
+	 * Returns the current shader group
 	 * @return
 	 * @throws JsonException
 	 */
-	public final ShaderGroup getShaderGroup() throws JsonException {
+	public final ShaderGroup getShaderGroup() {
+		return this.shaderGroup;
+	}
+
+	/**
+	 * Creates a new one if it hasn't been created yet and returns the new shader group
+	 * @return
+	 * @throws JsonException
+	 */
+	public final ShaderGroup createShaderGroup() throws JsonException {
 		if(this.shaderGroup == null) {
 			this.shaderGroup = new CShaderGroup(this.textureManager, 
 					new ResourceManagerWrapper(this.resourceManager, this), 
@@ -78,40 +107,40 @@ public class CShader {
 		}
 		return this.shaderGroup;
 	}
-	
+
 	/**
 	 * Updates the given sampler. Adds a new entry if no sampler can be found.
 	 * @param name				Name of the sampler, used in the shaders (uniform sampler2D <name>)
 	 * @param frameBuffer		Framebuffer of the texture that is used for the sampler
 	 * @return
 	 */
-	public final CShader updateSampler(String name, Framebuffer frameBuffer) {
+	public final WorldShader updateSampler(String name, Framebuffer frameBuffer) {
 		this.samplers.put(name, frameBuffer);
 		return this;
 	}
-	
+
 	/**
 	 * Updates the given sampler. Adds a new entry if no sampler can be found.
 	 * @param name				Name of the sampler, used in the shaders (uniform sampler2D <name>)
 	 * @param texture			The texture object that is used for the sampler
 	 * @return
 	 */
-	public final CShader updateSampler(String name, ITextureObject texture) {
+	public final WorldShader updateSampler(String name, ITextureObject texture) {
 		this.samplers.put(name, texture);
 		return this;
 	}
-	
+
 	/**
 	 * Updates the given sampler. Adds a new entry if no sampler can be found.
 	 * @param name				Name of the sampler, used in the shaders (uniform sampler2D <name>)
 	 * @param texture			The texture that is used for the sampler
 	 * @return
 	 */
-	public final CShader updateSampler(String name, int texture) {
+	public final WorldShader updateSampler(String name, int texture) {
 		this.samplers.put(name, texture);
 		return this;
 	}
-	
+
 	/**
 	 * Returns a map of shaders and found shader uniforms.
 	 * @param name		Name of the uniform
@@ -124,7 +153,7 @@ public class CShader {
 		}
 		return uniformMap;
 	}
-	
+
 	/**
 	 * Returns the uniform of the given shader.
 	 * @param shaderName		Name of the shader
@@ -138,13 +167,13 @@ public class CShader {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method is called when a shader is being update before it's bound to the framebuffer.
 	 * @param shader		The shader that is being updated
 	 */
 	public void updateShader(CShaderInt shader) { }
-	
+
 	/**
 	 * This method is called after the shader has been applied.
 	 * @param shadershaderGroup		The shader group that has been applied

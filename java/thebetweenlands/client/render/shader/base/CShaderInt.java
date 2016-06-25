@@ -20,16 +20,14 @@ import net.minecraft.client.util.JsonException;
 import thebetweenlands.event.render.FogHandler;
 
 public class CShaderInt extends Shader {
-	private CShaderManager pShaderManager;
 	private Matrix4f pProjectionMatrix;
 	private List pListAuxFramebuffers;
 	private List pListAuxNames;
 	private List pListAuxWidths;
 	private List pListAuxHeights;
-	private final CShader wrapper;
+	private final WorldShader wrapper;
 	private final String shaderName;
 
-	private static final Field f_manager;
 	private static final Field f_listAuxFramebuffers;
 	private static final Field f_listAuxNames;
 	private static final Field f_listAuxWidths;
@@ -37,8 +35,6 @@ public class CShaderInt extends Shader {
 	private static final Field f_projectionMatrix;
 
 	static {
-		f_manager = ReflectionHelper.findField(Shader.class, "manager", "field_148051_c", "c");
-		f_manager.setAccessible(true);
 		f_listAuxFramebuffers = ReflectionHelper.findField(Shader.class, "listAuxFramebuffers", "field_148048_d", "d");
 		f_listAuxFramebuffers.setAccessible(true);
 		f_listAuxNames = ReflectionHelper.findField(Shader.class, "listAuxNames", "field_148049_e", "e");
@@ -52,15 +48,13 @@ public class CShaderInt extends Shader {
 	}
 
 	public CShaderInt(IResourceManager resourceLocation, String shaderName,
-			Framebuffer frameBufferIn, Framebuffer frameBufferOut, CShader wrapper)
+			Framebuffer frameBufferIn, Framebuffer frameBufferOut, WorldShader wrapper)
 					throws JsonException {
 		super(resourceLocation, shaderName, frameBufferIn, frameBufferOut);
 		this.shaderName = shaderName;
 		this.wrapper = wrapper;
 		this.wrapper.addShader(this);
 		try {
-			this.pShaderManager = new CShaderManager(resourceLocation, shaderName);
-			f_manager.set(this, this.pShaderManager);
 			this.pListAuxFramebuffers = (List) f_listAuxFramebuffers.get(this);
 			this.pListAuxNames = (List) f_listAuxNames.get(this);
 			this.pListAuxWidths = (List) f_listAuxWidths.get(this);
@@ -75,7 +69,7 @@ public class CShaderInt extends Shader {
 	}
 
 	public ShaderUniform getUniform(String name) {
-		return this.pShaderManager.func_147991_a(name);
+		return this.getShaderManager().func_147991_a(name);
 	}
 
 	@Override
@@ -102,32 +96,32 @@ public class CShaderInt extends Shader {
 		GL11.glViewport(0, 0, (int)framebufferTextureWidth, (int)framebufferTextureHeight);
 
 		//Add samplers
-		this.pShaderManager.func_147992_a("s_diffuse", this.framebufferIn);
+		this.getShaderManager().func_147992_a("s_diffuse", this.framebufferIn);
 		for(Entry<String, Object> samplerEntry : this.wrapper.getSamplers().entrySet()) {
-			this.pShaderManager.func_147992_a("s_" + samplerEntry.getKey(), samplerEntry.getValue());
+			this.getShaderManager().func_147992_a("s_" + samplerEntry.getKey(), samplerEntry.getValue());
 		}
 
 		//Add auxiliary targets
 		for (int i = 0; i < this.pListAuxFramebuffers.size(); ++i) {
-			this.pShaderManager.func_147992_a((String)this.pListAuxNames.get(i), this.pListAuxFramebuffers.get(i));
-			this.pShaderManager.func_147984_b("u_auxSize" + i).func_148087_a((float)((Integer)this.pListAuxWidths.get(i)).intValue(), (float)((Integer)this.pListAuxHeights.get(i)).intValue());
+			this.getShaderManager().func_147992_a((String)this.pListAuxNames.get(i), this.pListAuxFramebuffers.get(i));
+			this.getShaderManager().func_147984_b("u_auxSize" + i).func_148087_a((float)((Integer)this.pListAuxWidths.get(i)).intValue(), (float)((Integer)this.pListAuxHeights.get(i)).intValue());
 		}
 
 		//Add other uniforms
-		this.pShaderManager.func_147984_b("u_projMat").func_148088_a(this.pProjectionMatrix);
-		this.pShaderManager.func_147984_b("u_inSize").func_148087_a((float)this.framebufferIn.framebufferTextureWidth, (float)this.framebufferIn.framebufferTextureHeight);
-		this.pShaderManager.func_147984_b("u_outSize").func_148087_a(framebufferTextureWidth, framebufferTextureHeight);
-		this.pShaderManager.func_147984_b("u_time").func_148090_a(partialTicks);
+		this.getShaderManager().func_147984_b("u_projMat").func_148088_a(this.pProjectionMatrix);
+		this.getShaderManager().func_147984_b("u_inSize").func_148087_a((float)this.framebufferIn.framebufferTextureWidth, (float)this.framebufferIn.framebufferTextureHeight);
+		this.getShaderManager().func_147984_b("u_outSize").func_148087_a(framebufferTextureWidth, framebufferTextureHeight);
+		this.getShaderManager().func_147984_b("u_time").func_148090_a(partialTicks);
 		Minecraft minecraft = Minecraft.getMinecraft();
-		this.pShaderManager.func_147984_b("u_screenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
+		this.getShaderManager().func_147984_b("u_screenSize").func_148087_a((float)minecraft.displayWidth, (float)minecraft.displayHeight);
 		//Just to make sure the correct fog mode is used in case another mod changes the fog mode after rendering the world
-		this.pShaderManager.func_147984_b("u_fogMode").func_148090_a(FogHandler.INSTANCE.getCurrentFogMode());
+		this.getShaderManager().func_147984_b("u_fogMode").func_148090_a(FogHandler.INSTANCE.getCurrentFogMode());
 
 		//Update shader
 		this.wrapper.updateShader(this);
 
 		//Upload samplers
-		this.pShaderManager.func_147995_c();
+		this.getShaderManager().func_147995_c();
 
 		//Clear FBO
 		this.framebufferOut.framebufferClear();
@@ -148,7 +142,7 @@ public class CShaderInt extends Shader {
 		tessellator.draw();
 
 		//Unbind textures and FBO
-		this.pShaderManager.func_147993_b();
+		this.getShaderManager().func_147993_b();
 		this.framebufferOut.unbindFramebuffer();
 		this.framebufferIn.unbindFramebufferTexture();
 

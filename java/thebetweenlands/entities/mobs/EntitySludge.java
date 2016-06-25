@@ -216,9 +216,4 @@ public class EntitySludge extends EntityMob implements IEntityBL {
 	public String pageName() {
 		return "sludge";
 	}
-	
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
 }

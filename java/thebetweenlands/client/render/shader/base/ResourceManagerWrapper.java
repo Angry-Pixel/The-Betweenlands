@@ -5,27 +5,27 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class ResourceManagerWrapper implements IResourceManager {
 	private static final Field RESOURCE_DOMAIN_FIELD = ReflectionHelper.findField(ResourceLocation.class, "resourceDomain", "field_110626_a", "a");
 	private static final Field RESOURCE_PATH_FIELD = ReflectionHelper.findField(ResourceLocation.class, "resourcePath", "field_110625_b", "b");
 
 	private final IResourceManager parent;
-	private final CShader wrapper;
-	
-	public ResourceManagerWrapper(IResourceManager parent, CShader wrapper) {
+	private final WorldShader wrapper;
+
+	public ResourceManagerWrapper(IResourceManager parent, WorldShader wrapper) {
 		this.parent = parent;
 		this.wrapper = wrapper;
 	}
 
-	public CShader getWrapper() {
+	public WorldShader getWrapper() {
 		return this.wrapper;
 	}
-	
+
 	@Override
 	public Set getResourceDomains() {
 		return this.parent.getResourceDomains();

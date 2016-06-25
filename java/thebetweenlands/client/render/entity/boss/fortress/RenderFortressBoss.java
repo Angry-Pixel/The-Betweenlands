@@ -32,7 +32,7 @@ public class RenderFortressBoss extends Render {
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
 		EntityFortressBoss boss = (EntityFortressBoss) entity;
 
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			if(boss.hurtResistantTime == 0) {
 				float lightIntensity = 0.0F;
 				for(int i = 0; i <= 19; i++) {

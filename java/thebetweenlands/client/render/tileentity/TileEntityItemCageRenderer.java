@@ -26,7 +26,7 @@ public class TileEntityItemCageRenderer extends TileEntitySpecialRenderer {
 		int type = swordStone.type;
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(tile.xCoord + 0.5D, tile.yCoord + 0.5D, tile.zCoord + 0.5D, 
 					2f,
 					5.0f / 255.0f * 13.0F, 

@@ -710,11 +710,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		}
 		return this.yOffset;
 	}
-
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
 	
 	public int getVolatileCooldown() {
 		return (int) this.getEntityAttribute(VOLATILE_COOLDOWN_ATTRIB).getAttributeValue();

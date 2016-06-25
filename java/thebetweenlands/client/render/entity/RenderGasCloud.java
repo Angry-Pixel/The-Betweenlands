@@ -18,7 +18,7 @@ import thebetweenlands.entities.particles.EntityGasCloudFX;
 public class RenderGasCloud extends Render {
 	@Override
 	public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTicks) {
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
 					2.5f, 
 					-1, 
@@ -35,7 +35,7 @@ public class RenderGasCloud extends Render {
 		GL11.glDepthMask(false);
 		GL11.glColor4f(1, 1, 1, 1);
 
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getCurrentShader().getGasTextureID());
 		} else {
 			this.bindTexture(EntityGasCloudFX.TEXTURE);

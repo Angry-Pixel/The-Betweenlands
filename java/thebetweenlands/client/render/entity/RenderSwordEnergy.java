@@ -45,7 +45,7 @@ public class RenderSwordEnergy extends Render {
 	}
 
 	public void renderSwordEnergy(EntitySwordEnergy energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(energyBall.posX, energyBall.posY + 0.5D, energyBall.posZ, 
 					2f,
 					5.0f / 255.0f * 13.0F, 

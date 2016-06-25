@@ -27,10 +27,27 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	private boolean shadersSupported = false;
 	private boolean needsReload = false;
 
+	/**
+	 * Returns whether the world shader is supported and active
+	 * @return
+	 */
+	public boolean isWorldShaderActive() {
+		return this.canUseShaders() && this.currentShader != null && Minecraft.getMinecraft().entityRenderer.theShaderGroup != null
+				&& Minecraft.getMinecraft().entityRenderer.theShaderGroup == this.currentShader.getShaderGroup();
+	}
+
+	/**
+	 * Returns whether shaders are supported and enabled
+	 * @return
+	 */
 	public boolean canUseShaders() {
 		return OpenGlHelper.isFramebufferEnabled() && this.isShaderSupported() && ConfigHandler.USE_SHADER;
 	}
 
+	/**
+	 * Returns whether shaders are supported
+	 * @return
+	 */
 	public boolean isShaderSupported() {
 		if(!this.checked){
 			this.checked = true;
@@ -42,12 +59,13 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		return this.shadersSupported;
 	}
 
-	public void enableShader() {
-		if(!this.isShaderSupported() || this.failedLoading || !ConfigHandler.USE_SHADER) {
-			if(!this.isShaderSupported()) {
-				this.failedLoading = true;
-				System.err.println("Your system does not support shaders. Please disable shaders in the betweenlands config file.");
-			}
+	/**
+	 * Loads and enables the world shader
+	 */
+	public void enableWorldShader() {
+		if(!this.failedLoading && !this.isShaderSupported() && ConfigHandler.USE_SHADER) {
+			this.failedLoading = true;
+			System.err.println("Your system does not support shaders. Please disable shaders in the betweenlands config file.");
 			return;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
@@ -55,29 +73,21 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			if(this.isRequired()) {
 				if(this.currentShader == null || mc.entityRenderer.theShaderGroup == null || mc.entityRenderer.theShaderGroup != this.currentShaderGroup || this.needsShaderReload()) {
 					MainShader shaderWrapper = this.currentShader;
-					if(shaderWrapper != null && this.needsShaderReload()) {
-						try {
-							shaderWrapper.getShaderGroup().deleteShaderGroup();
-							shaderWrapper.deleteBuffers();
-						} catch(Exception ex) {
-							System.err.println("Failed deleting shader group!");
-							ex.printStackTrace();
-						}
+					if(shaderWrapper != null) {
+						shaderWrapper.delete();
 					}
-					if(shaderWrapper == null || this.needsShaderReload()) {
-						shaderWrapper = new MainShader(
-								mc.getTextureManager(),
-								mc.getResourceManager(), mc.getFramebuffer(),
-								new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
-								new ResourceLocation("thebetweenlands:shaders/mc/program/"),
-								new ResourceLocation("thebetweenlands:textures/shader/")
-								);
-					}
+					shaderWrapper = new MainShader(
+							mc.getTextureManager(),
+							mc.getResourceManager(), mc.getFramebuffer(),
+							new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
+							new ResourceLocation("thebetweenlands:shaders/mc/program/"),
+							new ResourceLocation("thebetweenlands:textures/shader/")
+							);
 					try {
 						if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
 							ShaderLinkHelper.setNewStaticShaderLinkHelper();
 						}
-						mc.entityRenderer.theShaderGroup = shaderWrapper.getShaderGroup();
+						mc.entityRenderer.theShaderGroup = shaderWrapper.createShaderGroup();
 						this.currentShaderGroup = mc.entityRenderer.theShaderGroup;
 						this.currentShader = shaderWrapper;
 						mc.entityRenderer.theShaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
@@ -86,8 +96,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 						}
 					} catch (JsonException e) {
 						this.failedLoading = true;
-						System.err.println("Failed loading shader files!");
-						e.printStackTrace();
+						throw new RuntimeException("Failed loading shader files!", e);
 					}
 				}
 			} else if(mc.entityRenderer.theShaderGroup instanceof CShaderGroup) {

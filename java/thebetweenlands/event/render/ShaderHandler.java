@@ -52,14 +52,14 @@ public class ShaderHandler {
 			mc.gameSettings.fboEnable = true;
 			mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
 		}
-		ShaderHelper.INSTANCE.enableShader();
+		ShaderHelper.INSTANCE.enableWorldShader();
 		ShaderHelper.INSTANCE.updateShader();
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onPostRender(TickEvent.RenderTickEvent event) {
-		if(ShaderHelper.INSTANCE.canUseShaders() && event.phase == Phase.END) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive() && event.phase == Phase.END) {
 			ShaderHelper.INSTANCE.clearDynLights();
 		}
 	}

@@ -158,9 +158,19 @@ public class ItemAspectVial extends Item {
 
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
+		ItemStack containerDefault;
+		switch(itemStack.getItemDamage()) {
+		default:
+		case 0:
+			containerDefault = BLItemRegistry.dentrothystVial.createStack(0);
+			break;
+		case 1:
+			containerDefault = BLItemRegistry.dentrothystVial.createStack(2);
+			break;
+		}
 		ItemStack containerRubberBoots = AdvancedRecipeHelper.getContainerItem(itemStack, null, "rubberBoots");
 		ItemStack containerBait = AdvancedRecipeHelper.getContainerItem(itemStack, null, "bait");
-		return containerRubberBoots != null ? containerRubberBoots : (containerBait != null ? containerBait : null);
+		return containerRubberBoots != null ? containerRubberBoots : (containerBait != null ? containerBait : containerDefault);
 	}
 
 	@Override

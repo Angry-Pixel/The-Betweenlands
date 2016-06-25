@@ -63,7 +63,7 @@ public class WorldRenderHandler {
 				float r = (color >> 16 & 0xFF) / 255F;
 				float g = (color >> 8 & 0xFF) / 255F;
 				float b = (color & 0xFF) / 255F;
-				if(ShaderHelper.INSTANCE.canUseShaders()) {
+				if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 					ShaderHelper.INSTANCE.addDynLight(new LightSource(rx, ry, rz, 
 							i == 0 ? size : size * 0.5F,
 									r * (i == 0 ? 3.5F : 1.0F),
@@ -83,7 +83,7 @@ public class WorldRenderHandler {
 			EntityFirefly entity = e.getKey().getValue();
 			renderer.doRenderCallback(entity, pos.x, pos.y, pos.z, event.partialTicks);
 
-			if(ShaderHelper.INSTANCE.canUseShaders()) {
+			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
 						entity.worldObj.rand.nextFloat() * 0.1f + 7.0f, 
 						16.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.4f, 
@@ -95,7 +95,7 @@ public class WorldRenderHandler {
 		this.fireflyList.clear();
 
 		//// Shader stuff ////
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			MainShader shader = ShaderHelper.INSTANCE.getCurrentShader();
 			if(shader != null) {
 				GeometryBuffer repellerShieldBuffer = shader.getGeometryBuffer("repellerShield");
@@ -115,7 +115,7 @@ public class WorldRenderHandler {
 			new Sphere().draw(1.0F, 30, 30);
 			GL11.glEndList();
 		}
-		if(ShaderHelper.INSTANCE.canUseShaders() && this.sphereDispList >= 0) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive() && this.sphereDispList >= 0) {
 			GL11.glDepthMask(true);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glDisable(GL11.GL_BLEND);
@@ -149,6 +149,7 @@ public class WorldRenderHandler {
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		} else if(this.sphereDispList >= 0) {
 			GL11.glDepthMask(false);
+			GL11.glDisable(GL11.GL_CULL_FACE);
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -167,6 +168,7 @@ public class WorldRenderHandler {
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
 			GL11.glDepthMask(true);
 			GL11.glColor4f(1, 1, 1, 1);
+			GL11.glEnable(GL11.GL_CULL_FACE);
 		}
 		this.repellerShields.clear();
 	}

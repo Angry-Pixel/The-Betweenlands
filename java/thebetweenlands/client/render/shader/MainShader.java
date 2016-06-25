@@ -25,9 +25,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import thebetweenlands.client.render.shader.base.CShader;
 import thebetweenlands.client.render.shader.base.CShaderGroup;
 import thebetweenlands.client.render.shader.base.CShaderInt;
+import thebetweenlands.client.render.shader.base.WorldShader;
 import thebetweenlands.client.render.shader.effect.GodRayEffect;
 import thebetweenlands.client.render.shader.effect.OcclusionExtractor;
 import thebetweenlands.client.render.shader.effect.StarfieldEffect;
@@ -41,7 +41,7 @@ import thebetweenlands.utils.GLUProjection.Projection;
 import thebetweenlands.utils.confighandler.ConfigHandler;
 import thebetweenlands.world.WorldProviderBetweenlands;
 
-public class MainShader extends CShader {
+public class MainShader extends WorldShader {
 	private Framebuffer depthBuffer;
 	private List<LightSource> lightSources = new ArrayList<LightSource>();
 	private Matrix4f INVMVP;
@@ -61,6 +61,11 @@ public class MainShader extends CShader {
 				shaderPath, assetsPath);
 	}
 
+	/**
+	 * Returns a geometry buffer for the specified sampler name
+	 * @param samplerName
+	 * @return
+	 */
 	public GeometryBuffer getGeometryBuffer(String samplerName) {
 		GeometryBuffer geomBuffer = this.geometryBuffers.get(samplerName);
 		if(geomBuffer == null) {
@@ -83,14 +88,25 @@ public class MainShader extends CShader {
 		return fbo;
 	}
 
+	/**
+	 * Adds a dynamic light source for this frame
+	 * @param light
+	 */
 	public void addLight(LightSource light) {
 		this.lightSources.add(light);
 	}
 
+	/**
+	 * Clears all dynamic light sources
+	 */
 	public void clearLights() {
 		this.lightSources.clear();
 	}
 
+	/**
+	 * Returns the depth buffer
+	 * @return
+	 */
 	public Framebuffer getDepthBuffer() {
 		if(this.depthBuffer == null) {
 			this.depthBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
@@ -98,7 +114,16 @@ public class MainShader extends CShader {
 		return this.depthBuffer;
 	}
 
-	public void deleteBuffers() {
+	/**
+	 * Deletes the shader group and all buffers to free memory
+	 */
+	public void delete() {
+		if(this.getShaderGroup() != null)
+			this.getShaderGroup().deleteShaderGroup();
+		this.deleteBuffers();
+	}
+
+	private void deleteBuffers() {
 		this.depthBuffer.deleteFramebuffer();
 		for(GeometryBuffer gBuffer : this.geometryBuffers.values()) {
 			gBuffer.deleteBuffers();
@@ -110,6 +135,10 @@ public class MainShader extends CShader {
 		this.blitBuffers.clear();
 	}
 
+	/**
+	 * Updates all buffers
+	 * @param input
+	 */
 	public void updateBuffers(Framebuffer input) {
 		if(this.depthBuffer == null) {
 			this.depthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
@@ -331,6 +360,9 @@ public class MainShader extends CShader {
 		}
 	}
 
+	/**
+	 * Updates following matrices: MV (Modelview), PM (Projection), MVP (Modelview x Projection), INVMVP (Inverted MVP)
+	 */
 	public void updateMatrices() {
 		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, mvBuffer);
 		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, pmBuffer);
@@ -639,26 +671,26 @@ public class MainShader extends CShader {
 
 					this.gasWarpEffect = new WarpEffect().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F);
 					this.gasWarpEffect.init();
-				} else {
-					float worldTimeInterp = world.getWorldTime() + partialTicks;
-					float warpX = ((float)Math.sin((worldTimeInterp / 10000.0F) % (Math.PI * 2.0D)) + 1.0F) / 10.0F;
-					float warpY = ((float)Math.cos((worldTimeInterp / 10000.0F) % (Math.PI * 2.0D)) + 1.0F) / 10.0F;
-					this.gasWarpEffect.setOffset(0.0F, 0.0F)
-					.setWarpDir(0.75F + warpX, 0.75F + warpY);
-
-					this.gasTextureFBO.bindFramebuffer(false);
-					GL11.glClearColor(1, 1, 1, 1);
-					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-					this.gasTextureBaseFBO.bindFramebuffer(false);
-					GL11.glClearColor(1, 1, 1, 1);
-					GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-					this.gasWarpEffect.create(this.gasTextureFBO)
-					.setSource(this.gasTextureBaseFBO.framebufferTexture)
-					.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
-					.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F).render();
 				}
+
+				float worldTimeInterp = world.getWorldTime() + partialTicks;
+				float offsetX = ((float)Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
+				float offsetY = ((float)Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
+				this.gasWarpEffect.setOffset(offsetX, offsetY)
+				.setWarpDir(0.75F, 0.75F);
+
+				this.gasTextureFBO.bindFramebuffer(false);
+				GL11.glClearColor(1, 1, 1, 1);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+				this.gasTextureBaseFBO.bindFramebuffer(false);
+				GL11.glClearColor(1, 1, 1, 1);
+				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+
+				this.gasWarpEffect.create(this.gasTextureFBO)
+				.setSource(this.gasTextureBaseFBO.framebufferTexture)
+				.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
+				.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F).render();
 			}
 		}
 
@@ -666,14 +698,14 @@ public class MainShader extends CShader {
 		if(this.starfieldTextureFBO == null) {
 			this.starfieldTextureFBO = new Framebuffer(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION, false);
 			this.starfieldEffect = (StarfieldEffect) new StarfieldEffect(true).init();
-		} else {
-			float offX = (float)(RenderManager.renderPosX / 8000.0D);
-			float offY = (float)(-RenderManager.renderPosZ / 8000.0D);
-			float offZ = (float)(-RenderManager.renderPosY / 10000.0D);
-			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
-			this.starfieldEffect.create(this.starfieldTextureFBO)
-			.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
-			.setRenderDimensions(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION).render();
 		}
+
+		float offX = (float)(RenderManager.renderPosX / 8000.0D);
+		float offY = (float)(-RenderManager.renderPosZ / 8000.0D);
+		float offZ = (float)(-RenderManager.renderPosY / 10000.0D);
+		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
+		this.starfieldEffect.create(this.starfieldTextureFBO)
+		.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())
+		.setRenderDimensions(ConfigHandler.SKY_RESOLUTION, ConfigHandler.SKY_RESOLUTION).render();
 	}
 }

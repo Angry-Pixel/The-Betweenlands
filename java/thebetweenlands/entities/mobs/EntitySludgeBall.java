@@ -182,9 +182,4 @@ public class EntitySludgeBall extends EntityThrowable {
 		this.bounces = nbt.getInteger("bounces");
 		this.ownerUUID = nbt.getString("ownerUUID");
 	}
-	
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
 }

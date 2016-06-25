@@ -78,15 +78,28 @@ public class BlockRepeller extends BlockContainer {
 						List<Aspect> aspects = AspectManager.getDynamicAspects(player.getHeldItem());
 						if(!aspects.isEmpty() && aspects.get(0).type == AspectRegistry.BYARIIS) {
 							Aspect aspect = aspects.get(0);
-							if(!world.isRemote && tile.addFuel(aspect.getAmount())) {
-								if(!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, player.getHeldItem().getItem().getContainerItem(player.getHeldItem()));
+							if(!world.isRemote) {
+								float added = tile.addFuel(aspect.getAmount());
+								if(!player.capabilities.isCreativeMode) {
+									ItemStack newItem = player.getHeldItem();
+									AspectManager.removeDynamicAspects(newItem);
+									float leftAmount = aspect.amount - added;
+									if(leftAmount > 0.0F) {
+										AspectManager.addDynamicAspects(newItem, new Aspect(AspectRegistry.BYARIIS, leftAmount));
+									} else {
+										newItem = newItem.getItem().getContainerItem(newItem);
+									}
+									player.setCurrentItemOrArmor(0, newItem);
+								}
 							}
+							player.swingItem();
 							return true;
 						}
-					} else if(world.isRemote) {
-						player.addChatMessage(new ChatComponentTranslation("chat.repeller.shimmerstone.missing"));
+					} else {
+						if(!world.isRemote)
+							player.addChatMessage(new ChatComponentTranslation("chat.repeller.shimmerstone.missing"));
 					}
-				} else if(player.getHeldItem().getItem() == BLItemRegistry.dentrothystVial) {
+				} else if(player.getHeldItem().getItem() == BLItemRegistry.dentrothystVial && tile.getFuel() > 0.0F) {
 					if(player.getHeldItem().getItemDamage() == 0 || player.getHeldItem().getItemDamage() == 2) {
 						ItemStack newStack = new ItemStack(BLItemRegistry.aspectVial, 1, player.getHeldItem().getItemDamage() == 0 ? 0 : 1);
 						if(!world.isRemote) {
@@ -107,6 +120,10 @@ public class BlockRepeller extends BlockContainer {
 				if(!player.inventory.addItemStackToInventory(stack))
 					player.dropPlayerItemWithRandomChoice(stack, false);
 				return true;
+			} else if(!player.isSneaking() && player.getHeldItem() == null) {
+				if(!world.isRemote)
+					tile.cycleRadiusState();
+				player.swingItem();
 			}
 		}
 		return false;
