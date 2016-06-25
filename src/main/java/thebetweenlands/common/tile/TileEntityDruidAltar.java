@@ -5,8 +5,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,7 +16,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.recipe.DruidAltarRecipe;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.network.base.SubscribePacket;
 import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
@@ -42,7 +40,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
     private boolean circleShouldRevert = true;
 
     public TileEntityDruidAltar() {
-        super(5, "druidAltar");
+        super(5, "druid_altar");
     }
 
     @SubscribePacket
@@ -231,17 +229,5 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         craftingProgress = nbt.getInteger("craftingProgress");
     }
 
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
-        writeToNBT(tag);
-        return new SPacketUpdateTileEntity(pos, 0, tag);
-    }
 
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        if (packet.getTileEntityType() == 0)
-            readFromNBT(packet.getNbtCompound());
-    }
 }

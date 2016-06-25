@@ -19,11 +19,11 @@ public class ItemGenericPlantDrop extends Item implements ICustomJsonGenerationI
         setHasSubtypes(true);
     }
 
-    public static ItemStack createStack(ItemGenericCrushed.EnumItemGenericCrushed enumItemGeneric) {
+    public static ItemStack createStack(EnumItemPlantDrop enumItemGeneric) {
         return createStack(enumItemGeneric, 1);
     }
 
-    public static ItemStack createStack(ItemGenericCrushed.EnumItemGenericCrushed enumItemGeneric, int size) {
+    public static ItemStack createStack(EnumItemPlantDrop enumItemGeneric, int size) {
         return new ItemStack(ItemRegistry.ITEMS_GENERIC, size, enumItemGeneric.ordinal());
     }
 

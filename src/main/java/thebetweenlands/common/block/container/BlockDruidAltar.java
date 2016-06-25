@@ -76,6 +76,6 @@ public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
 
     @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.INVISIBLE;
+        return EnumBlockRenderType.MODEL;
     }
 }

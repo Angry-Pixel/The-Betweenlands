@@ -4,7 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
-import thebetweenlands.common.recipe.DruidAltarRecipe;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 
 public class SlotDruidAltar extends Slot {
 

@@ -15,6 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLogBetweenlands;
+import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
@@ -68,6 +69,7 @@ public class BlockRegistry {
 	public static final Block DRUID_ALTAR = new BlockDruidAltar();
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
+	public static final Block COMPOST_BIN = new BlockCompostBin();
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
