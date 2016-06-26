@@ -1,5 +1,8 @@
 package thebetweenlands.client.proxy;
 
+import java.io.File;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -11,19 +14,48 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
-import thebetweenlands.client.render.render.entity.renderfactory.*;
-import thebetweenlands.client.render.render.item.*;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryChiromaw;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryDragonFly;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryFrog;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryGiantToad;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryLurker;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnail;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnailEgg;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySnailPoisonJet;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySporeling;
+import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySwampHag;
+import thebetweenlands.client.render.render.item.RenderBLShield;
+import thebetweenlands.client.render.render.item.TileEntityOctineShield;
+import thebetweenlands.client.render.render.item.TileEntitySymoriteShield;
+import thebetweenlands.client.render.render.item.TileEntityValoniteShield;
+import thebetweenlands.client.render.render.item.TileEntityWeedwoodShield;
 import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
 import thebetweenlands.client.render.render.tile.PurifierRenderer;
 import thebetweenlands.client.render.render.tile.WeedwoodWorkbenchRenderer;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -33,9 +65,6 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.io.File;
-import java.util.List;
 
 public class ClientProxy extends CommonProxy {
 
@@ -202,5 +231,10 @@ public class ClientProxy extends CommonProxy {
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.VALONITE_SHIELD, 0, TileEntityValoniteShield.class);
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
         ForgeHooksClient.registerTESRItemStack(ItemRegistry.SYMORITE_SHIELD, 0, TileEntitySymoriteShield.class);
+    }
+    
+    @Override
+    public void registerEventHandlers() {
+    	MinecraftForge.EVENT_BUS.register(new CorrosionTextureStitchHandler());
     }
 }

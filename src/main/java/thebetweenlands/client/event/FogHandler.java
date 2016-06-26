@@ -1,4 +1,4 @@
-package thebetweenlands.client.event.render;
+package thebetweenlands.client.event;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
