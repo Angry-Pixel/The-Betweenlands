@@ -1,5 +1,19 @@
 package thebetweenlands.util;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 public final class CorrodibleItemHelper {
 	public static final int MAX_CORROSION = 255;
 	public static final String TOOLTIP_PART = "/" + MAX_CORROSION + ")";
@@ -8,7 +22,17 @@ public final class CorrodibleItemHelper {
 	private CorrodibleItemHelper() {
 	}
 
-	/*public static int getCoating(ItemStack itemStack) {
+	public static void addCorrosionPropertyOverrides(Item item) {
+		item.addPropertyOverride(new ResourceLocation("corrosion"), new IItemPropertyGetter() {
+			@Override
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				return getCorrosionStage(stack);
+			}
+		});
+	}
+
+	public static int getCoating(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
 			if (tagCompound.hasKey("CorrosionCoating", 3)) {
@@ -44,13 +68,13 @@ public final class CorrodibleItemHelper {
 		return normalDigSpeed * getModifier(itemStack);
 	}
 
-	public static Multimap getAttributeModifiers(ItemStack stack, UUID uuid, float damageVsEntity) {
+	/*public static Multimap getAttributeModifiers(ItemStack stack, UUID uuid, float damageVsEntity) {
 		Multimap multimap = HashMultimap.create();
 		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
 		return multimap;
-	}
+	}*/
 
-	public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
+	/*public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
 		if (world.isRemote || !BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) {
 			return;
 		}
@@ -73,9 +97,9 @@ public final class CorrodibleItemHelper {
 				}
 			}
 		}
-	}
+	}*/
 
-	public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+	/*public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
 		int corrosion = getCorrosion(itemStack);
 		int coating = getCoating(itemStack);
 		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
@@ -90,7 +114,7 @@ public final class CorrodibleItemHelper {
 		if(coating > 0) {
 			lines.add(StatCollector.translateToLocal("tooltip.coated"));
 		}
-	}
+	}*/
 
 	public static int getCorrosionStage(ItemStack itemStack) {
 		return getCorrosionStage(getCorrosion(itemStack));
@@ -98,5 +122,5 @@ public final class CorrodibleItemHelper {
 
 	public static int getCorrosionStage(int corrosion) {
 		return (10 * corrosion + 630) / 635;
-	}*/
+	}
 }
