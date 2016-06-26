@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "variant=cragrock": {"model": "thebetweenlands:cragrock"},
+    "variant=cragrock_mossy_1": {"model": "thebetweenlands:cragrock_mossy_1"},
+    "variant=cragrock_mossy_2": {"model": "thebetweenlands:cragrock_mossy_2"}
+  }
+}

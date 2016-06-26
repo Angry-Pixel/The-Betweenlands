@@ -40,27 +40,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.IHasCustom
         setHarvestLevel("pickaxe", 0);
         setCreativeTab(BLCreativeTabs.BLOCKS);
         //setBlockName("thebetweenlands.genericStone");
-        setTickRandomly(true);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumStoneType.CRAGROCK).withProperty(IS_SPOOPY, false));
-    }
-
-
-    @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random random){
-        if (!world.isRemote) {
-            if (state.getValue(VARIANT) == EnumStoneType.MOSSYCRAGROCK_1) {
-                BlockPos newPos = pos.add(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
-
-                Block block = world.getBlockState(newPos).getBlock();
-                int meta = world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos));
-                if (block instanceof BlockGenericStone && meta == EnumStoneType.CRAGROCK.ordinal()) {
-                    if (world.getBlockState(newPos.up()).getBlock() instanceof BlockGenericStone && world.getBlockState(newPos.up(2)).getBlock() == Blocks.AIR &&(world.getBlockState(newPos.up()).getBlock().getMetaFromState(world.getBlockState(newPos.up())) == EnumStoneType.MOSSYCRAGROCK_1.ordinal() || world.getBlockState(newPos.up()).getBlock().getMetaFromState(world.getBlockState(newPos.up())) == EnumStoneType.CRAGROCK.ordinal()))
-                        world.setBlockState(newPos, state.withProperty(VARIANT, EnumStoneType.MOSSYCRAGROCK_2), 2);
-                    else if (world.getBlockState(newPos).getBlock() instanceof BlockGenericStone && world.getBlockState(newPos.up()).getBlock() == Blocks.AIR)
-                        world.setBlockState(newPos, state.withProperty(VARIANT, EnumStoneType.MOSSYCRAGROCK_1), 2);
-                }
-            }
-        }
+        this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumStoneType.CORRUPTBETWEENSTONE).withProperty(IS_SPOOPY, false));
     }
 
     @Override
@@ -105,10 +85,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.IHasCustom
     }
 
     public static enum EnumStoneType implements IStringSerializable{
-        CORRUPTBETWEENSTONE,
-        CRAGROCK,
-        MOSSYCRAGROCK_1,
-        MOSSYCRAGROCK_2;
+        CORRUPTBETWEENSTONE;
 
         @Override
         public String getName() {
