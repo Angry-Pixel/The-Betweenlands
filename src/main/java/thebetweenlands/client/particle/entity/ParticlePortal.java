@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-public class EntityPortalFX extends Particle {
+public class ParticlePortal extends Particle {
     private ResourceLocation particleTexture;
     private float scale;
     private int color;
@@ -18,7 +18,7 @@ public class EntityPortalFX extends Particle {
     private int currentTexture = 0;
     private int textureCounter = 0;
 
-    public EntityPortalFX(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, int color, ResourceLocation texture, int textures) {
+    public ParticlePortal(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, int color, ResourceLocation texture, int textures) {
         super(world, x, y, z, 0, 0, 0);
         this.posX = this.prevPosX = x;
         this.posY = this.prevPosY = y;

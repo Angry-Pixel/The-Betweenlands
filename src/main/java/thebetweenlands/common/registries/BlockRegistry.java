@@ -14,10 +14,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLogBetweenlands;
@@ -39,6 +42,8 @@ import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
+import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.item.misc.ItemGeneric.EnumItemGeneric;
 import thebetweenlands.common.lib.ModInfo;
 
 public class BlockRegistry {
@@ -56,19 +61,50 @@ public class BlockRegistry {
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return new ItemStack(Item.getItemFromBlock(this));
 		}
-	};
+	}.setLightLevel(0.875F);
+	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 1 + rand.nextInt(fortune + 1));
+		}
+	}.setXP(5, 12);
+	public static final Block SULFUR_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return ItemGeneric.createStack(EnumItemGeneric.SULFUR, 1 + rand.nextInt(fortune + 2));
+		}
+		@SideOnly(Side.CLIENT)
+		@Override
+		public void spawnParticle(World world, double x, double y, double z) {
+			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
+		}
+	}.setXP(2, 5);
 
 	//TERRAIN BLOCKS
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
-	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK).setDefaultCreativeTab().setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK)
+			.setDefaultCreativeTab()
+			.setSoundType2(SoundType.STONE)
+			.setHardness(1.5F)
+			.setResistance(10.0F);
 	public static final Block GENERICSTONE = new BlockGenericStone();
 	public static final Block MUD = new BlockMud();
 	public static final Block PEAT = new BlockPeat();
 	public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
-	public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND).setDefaultCreativeTab().setHarvestLevel2("shovel", 0).setSoundType2(SoundType.SAND).setHardness(0.5F);
+	public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)
+			.setDefaultCreativeTab()
+			.setHarvestLevel2("shovel", 0)
+			.setSoundType2(SoundType.SAND)
+			.setHardness(0.5F);
 	public static final Block SLIMY_GRASS = new BlockSlimyGrass();
 	public static final Block CRAGROCK = new BlockCragrock(Material.ROCK);
-	
+	public static final Block PITSTONE = new BasicBlock(Material.ROCK).setDefaultCreativeTab().setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block LIMESTONE = new BasicBlock(Material.ROCK)
+			.setDefaultCreativeTab()
+			.setSoundType2(SoundType.STONE)
+			.setHardness(1.2F)
+			.setResistance(8.0F);
+
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
@@ -93,7 +129,7 @@ public class BlockRegistry {
 					Block block = (Block) obj;
 					String name = field.getName().toLowerCase(Locale.ENGLISH);
 					registerBlock(name, block);
-					
+
 					if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 						if(block.getCreativeTabToDisplayOn() == null)
 							block.setCreativeTab(BLCreativeTabs.BLOCKS);
@@ -104,7 +140,7 @@ public class BlockRegistry {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static void registerRenderers() {
 		for (Block block : BLOCKS)
 			if (block instanceof ISubBlocksBlock) {
@@ -115,8 +151,8 @@ public class BlockRegistry {
 				ResourceLocation name = block.getRegistryName();
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
-    }
-	
+	}
+
 	public static void registerBlock(String name, Block block) {
 		BLOCKS.add(block);
 

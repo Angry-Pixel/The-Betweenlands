@@ -1,7 +1,13 @@
 package thebetweenlands.client.particle;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleSmokeNormal;
+import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.util.ReportedException;
@@ -10,12 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.particle.entity.EntityPortalFX;
+import thebetweenlands.client.particle.entity.ParticleBug;
+import thebetweenlands.client.particle.entity.ParticlePortal;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
-import thebetweenlands.client.particle.entity.EntityBugFX;
-
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public enum BLParticle {
@@ -31,7 +34,7 @@ public enum BLParticle {
 	GREEN_FLAME(ParticleFlame.class, 0.176f, 0.259f, 0.192f),
 	SULFUR_TORCH(ParticleSmokeNormal.class, 1, 0.9294F, 0, ParticleArgs.V0_V0_V0),
 	STEAM_PURIFIER(ParticleSmokeNormal.class, 1, 1, 1, ParticleArgs.V0_V0_V0),
-	FLY(EntityBugFX.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
+	FLY(ParticleBug.class, ParticleArgs.NONE, int.class, float.class, float.class, float.class, int.class, boolean.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/fly.png");
 
 		@Override
@@ -39,14 +42,15 @@ public enum BLParticle {
 			return new Object[]{400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2};
 		}
 	},
-		PORTAL(EntityPortalFX.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
+	PORTAL(ParticlePortal.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/portal.png");
 
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, texture, 6 };
 		}
-	};
+	},
+	SULFUR_ORE(ParticleSpell.class, 1, 0.9294F, 0);
 
 	private static final int REGULAR_ARG_NUM = 4;
 
@@ -86,6 +90,7 @@ public enum BLParticle {
 		try {
 			particleClass.getDeclaredConstructor(getArgumentTypes(args, additionalArgTypes)).setAccessible(true);
 			constructor = particleClass.getDeclaredConstructor(getArgumentTypes(args, additionalArgTypes));
+			constructor.setAccessible(true);
 		} catch (Exception e) {
 			CrashReport crash = CrashReport.makeCrashReport(e, "Constructing BLParticle");
 			CrashReportCategory categoryArguments = crash.makeCategory("Arguments");

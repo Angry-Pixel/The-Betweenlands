@@ -1,5 +1,8 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -7,9 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
-
-import java.util.Random;
 
 public class BlockGenericOre extends BasicBlock {
 	private Random rand = new Random();
@@ -17,6 +19,10 @@ public class BlockGenericOre extends BasicBlock {
 
 	public BlockGenericOre(Material materialIn) {
 		super(materialIn);
+		this.setDefaultCreativeTab()
+		.setSoundType2(SoundType.STONE)
+		.setHardness(1.5F)
+		.setResistance(10.0F);
 	}
 
 	public BlockGenericOre setXP(int min, int max) {
@@ -57,4 +63,40 @@ public class BlockGenericOre extends BasicBlock {
 		ItemStack oreDrop = this.getOreDrop(this.rand, 0);
 		return oreDrop != null ? oreDrop.getItemDamage() : 0;
 	}
+
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		double pixel = 0.0625D;
+		if(rand.nextInt(3) == 0) {
+			for (int l = 0; l < 5; l++) {
+				double particleX = pos.getX() + rand.nextFloat();
+				double particleY = pos.getY() + rand.nextFloat();
+				double particleZ = pos.getZ() + rand.nextFloat();
+
+				if (l == 0 && !worldIn.getBlockState(pos.up()).isOpaqueCube())
+					particleY = pos.getY() + 1 + pixel;
+
+				if (l == 1 && !worldIn.getBlockState(pos.down()).isOpaqueCube())
+					particleY = pos.getY() - pixel;
+
+				if (l == 2 && !worldIn.getBlockState(pos.add(0, 0, 1)).isOpaqueCube())
+					particleZ = pos.getZ() + 1 + pixel;
+
+				if (l == 3 && !worldIn.getBlockState(pos.add(0, 0, -1)).isOpaqueCube())
+					particleZ = pos.getZ() - pixel;
+
+				if (l == 4 && !worldIn.getBlockState(pos.add(1, 0, 0)).isOpaqueCube())
+					particleX = pos.getX() + 1 + pixel;
+
+				if (l == 5 && !worldIn.getBlockState(pos.add(-1, 0, 0)).isOpaqueCube())
+					particleX = pos.getX() - pixel;
+
+				if (particleX < pos.getX() || particleX > pos.getX() + 1 || particleY < pos.getY() || particleY > pos.getY() + 1 || particleZ < pos.getZ() || particleZ > pos.getZ() + 1) {
+					this.spawnParticle(worldIn, particleX, particleY, particleZ);
+				}
+			}
+		}
+	}
+
+	public void spawnParticle(World world, double x, double y, double z) { }
 }

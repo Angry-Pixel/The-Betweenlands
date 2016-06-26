@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 
-public class EntityBugFX  extends Particle {
+public class ParticleBug  extends Particle {
     private ResourceLocation particleTexture;
     private float scale;
     private int color1;
@@ -26,7 +26,7 @@ public class EntityBugFX  extends Particle {
     private boolean underwater;
     private double tx, ty, tz;
 
-    public EntityBugFX(World world, double x, double y, double z, int maxAge, float speed, float jitter, float scale, int color, boolean underwater, ResourceLocation texture, int textures) {
+    public ParticleBug(World world, double x, double y, double z, int maxAge, float speed, float jitter, float scale, int color, boolean underwater, ResourceLocation texture, int textures) {
         super(world, x, y, z, 0, 0, 0);
         this.posX = this.prevPosX = this.tx = x;
         this.posY = this.prevPosY = this.ty = y;
