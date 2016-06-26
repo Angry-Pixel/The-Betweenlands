@@ -27,7 +27,7 @@ public class BlockMud extends Block {
     public BlockMud() {
         super(BLMaterial.MUD);
         setHardness(0.5F);
-        setSoundType(SoundType.SAND);
+        setSoundType(SoundType.GROUND);
         setHarvestLevel("shovel", 0);
         setCreativeTab(BLCreativeTabs.BLOCKS);
         //setBlockName("thebetweenlands.mud");

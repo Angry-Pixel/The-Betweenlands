@@ -38,6 +38,7 @@ import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -54,31 +55,6 @@ public class BlockRegistry {
 	public static final Block DRUID_STONE_3 = new BlockDruidStone(Material.ROCK, "druid_stone_3");
 	public static final Block DRUID_STONE_4 = new BlockDruidStone(Material.ROCK, "druid_stone_4");
 	public static final Block DRUID_STONE_5 = new BlockDruidStone(Material.ROCK, "druid_stone_5");
-	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
-	public static final Block SWAMP_GRASS = new BlockSwampGrass();
-	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK) {
-		@Override
-		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return new ItemStack(Item.getItemFromBlock(this));
-		}
-	}.setLightLevel(0.875F);
-	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
-		@Override
-		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 1 + rand.nextInt(fortune + 1));
-		}
-	}.setXP(5, 12);
-	public static final Block SULFUR_ORE = new BlockGenericOre(Material.ROCK) {
-		@Override
-		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return ItemGeneric.createStack(EnumItemGeneric.SULFUR, 1 + rand.nextInt(fortune + 2));
-		}
-		@SideOnly(Side.CLIENT)
-		@Override
-		public void spawnParticle(World world, double x, double y, double z) {
-			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
-		}
-	}.setXP(2, 5);
 
 	//TERRAIN BLOCKS
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
@@ -104,6 +80,32 @@ public class BlockRegistry {
 			.setSoundType2(SoundType.STONE)
 			.setHardness(1.2F)
 			.setResistance(8.0F);
+	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
+	public static final Block SWAMP_GRASS = new BlockSwampGrass();
+	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return new ItemStack(Item.getItemFromBlock(this));
+		}
+	}.setLightLevel(0.875F);
+	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 1 + rand.nextInt(fortune + 1));
+		}
+	}.setXP(5, 12);
+	public static final Block SULFUR_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return ItemGeneric.createStack(EnumItemGeneric.SULFUR, 1 + rand.nextInt(fortune + 2));
+		}
+		@SideOnly(Side.CLIENT)
+		@Override
+		public void spawnParticle(World world, double x, double y, double z) {
+			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
+		}
+	}.setXP(2, 5);
+	public static final Block SILT = new BlockSilt();
 
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
