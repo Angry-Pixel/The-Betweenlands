@@ -10,7 +10,7 @@ import thebetweenlands.common.entity.mobs.EntityGiantToad;
 
 @SideOnly(Side.CLIENT)
 public class RenderGiantToad extends RenderLiving<EntityGiantToad> {
-    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/giant_toad.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/giant_toad.png");
 
     public RenderGiantToad(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelGiantToad(), 0.5F);
@@ -18,6 +18,6 @@ public class RenderGiantToad extends RenderLiving<EntityGiantToad> {
 
     @Override
     protected ResourceLocation getEntityTexture(EntityGiantToad entity) {
-        return texture;
+        return TEXTURE;
     }
 }

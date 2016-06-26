@@ -74,7 +74,7 @@ public class ItemBLShield extends ItemShield {
         /*if (material == BLMaterial.TOOL_WEEDWOOD) {
             return repair.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD);
         } else */
-        if (material == BLMaterial.TOOL_BETWEENSTONE) {
+        if (material == BLMaterial.TOOL_BONE) {
             return repair.getItem() == Item.getItemFromBlock(BlockRegistry.BETWEENSTONE);
         } else if (material == BLMaterial.TOOL_OCTINE) {
             return repair.getItem() == ItemRegistry.ITEMS_GENERIC && repair.getItemDamage() == ItemGeneric.EnumItemGeneric.OCTINE_INGOT.ordinal();

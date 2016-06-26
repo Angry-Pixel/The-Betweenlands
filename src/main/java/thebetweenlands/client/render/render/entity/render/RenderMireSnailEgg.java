@@ -8,7 +8,7 @@ import thebetweenlands.client.render.models.entity.ModelMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 
 public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {
-    private static final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/mire_snail_egg.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/mire_snail_egg.png");
 
     public RenderMireSnailEgg(RenderManager manager) {
         super(manager, new ModelMireSnailEgg(), 0.1F);
@@ -19,9 +19,8 @@ public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {
         GlStateManager.scale(2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat);
     }
 
-
     @Override
     protected ResourceLocation getEntityTexture(EntityMireSnailEgg entity) {
-        return texture;
+        return TEXTURE;
     }
 }

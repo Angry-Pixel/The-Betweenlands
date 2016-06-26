@@ -11,7 +11,7 @@ import thebetweenlands.common.entity.mobs.EntityDragonFly;
 
 @SideOnly(Side.CLIENT)
 public class RenderDragonFly extends RenderLiving<EntityDragonFly> {
-    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/dragon_fly.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/dragon_fly.png");
 
     public RenderDragonFly(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelDragonFly(), 0.5F);
@@ -28,6 +28,6 @@ public class RenderDragonFly extends RenderLiving<EntityDragonFly> {
 
     @Override
     protected ResourceLocation getEntityTexture(EntityDragonFly entity) {
-        return texture;
+        return TEXTURE;
     }
 }

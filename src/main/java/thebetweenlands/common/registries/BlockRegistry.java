@@ -1,5 +1,11 @@
 package thebetweenlands.common.registries;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,14 +29,16 @@ import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.terrain.*;
+import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.common.block.terrain.BlockGenericOre;
+import thebetweenlands.common.block.terrain.BlockGenericStone;
+import thebetweenlands.common.block.terrain.BlockMud;
+import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockSlimyGrass;
+import thebetweenlands.common.block.terrain.BlockSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.lib.ModInfo;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 public class BlockRegistry {
 	public static final Block SWAMP_WATER = new Block(Material.WATER);
@@ -41,6 +49,7 @@ public class BlockRegistry {
 	public static final Block DRUID_STONE_4 = new BlockDruidStone(Material.ROCK, "druid_stone_4");
 	public static final Block DRUID_STONE_5 = new BlockDruidStone(Material.ROCK, "druid_stone_5");
 	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
+	public static final Block SWAMP_GRASS = new BlockSwampGrass();
 	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {

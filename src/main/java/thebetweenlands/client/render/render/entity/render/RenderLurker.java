@@ -8,7 +8,7 @@ import thebetweenlands.client.render.models.entity.ModelLurker;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 
 public class RenderLurker extends RenderLiving<EntityLurker> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/lurker.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/lurker.png");
 
     public RenderLurker(RenderManager rendermanagerIn) {
         super(rendermanagerIn, new ModelLurker(), 0.5F);

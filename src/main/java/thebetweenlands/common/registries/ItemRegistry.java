@@ -95,10 +95,10 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     //public static final Item weedwoodAxe = new ItemBLAxe(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_PICKAXE = new ItemBLPickaxe(BLMaterial.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item BETWEENSTONE_SWORD = new ItemBLSword(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item BETWEENSTONE_SHOVEL = new ItemBLShovel(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item BONE_SWORD = new ItemBLSword(BLMaterial.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item BONE_SHOVEL = new ItemBLShovel(BLMaterial.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
     //public static final Item betweenstoneAxe = new ItemBLAxe(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item BETWEENSTONE_PICKAXE = new ItemBLPickaxe(BLMaterial.TOOL_BETWEENSTONE).setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item BONE_PICKAXE = new ItemBLPickaxe(BLMaterial.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item OCTINE_SWORD = new ItemBLSword(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item OCTINE_SHOVEL = new ItemBLShovel(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
     //public static final Item octineAxe = new ItemBLAxe(BLMaterial.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);

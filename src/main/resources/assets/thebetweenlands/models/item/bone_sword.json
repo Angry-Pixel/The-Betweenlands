@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "thebetweenlands:items/valonite_sword"
+    "layer0": "thebetweenlands:items/bone_sword"
   }
 }

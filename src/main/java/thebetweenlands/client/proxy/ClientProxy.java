@@ -17,7 +17,6 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
-import thebetweenlands.client.render.render.entity.projectile.RenderFactorySnailPoisonJet;
 import thebetweenlands.client.render.render.entity.renderfactory.*;
 import thebetweenlands.client.render.render.item.*;
 import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
