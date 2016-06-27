@@ -46,7 +46,6 @@ public class CorrosionTextureStitchHandler {
 										//Forcibly sets the texture entry because TextureMap#setTextureEntry doesn't allow 
 										//overwriting a previously added sprite (usually set in ModelLoader#setupModelRegistry).
 										//Maybe find a better way to do this, if at all possible anyways
-										f_mapRegisteredSprites.setAccessible(true);
 										Map<String, TextureAtlasSprite> mapRegisteredSprites = (Map<String, TextureAtlasSprite>) f_mapRegisteredSprites.get(e.getMap());
 										mapRegisteredSprites.put(corrosionSpriteName, corrosionTexture);
 									}

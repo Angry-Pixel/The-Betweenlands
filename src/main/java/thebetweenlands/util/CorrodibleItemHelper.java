@@ -27,7 +27,7 @@ public final class CorrodibleItemHelper {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return getCorrosionStage(stack);
+				return getCorrosionStage(stack) + 5;
 			}
 		});
 	}

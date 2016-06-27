@@ -20,7 +20,10 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ResourceLocation[] getCorrodibleVariants() {
 		//Add all corrodible pickaxe variants
 		return new ResourceLocation[] {
-				new ResourceLocation("thebetweenlands", "octine_pickaxe")
+				new ResourceLocation("thebetweenlands", "weedwood_pickaxe"),
+				new ResourceLocation("thebetweenlands", "bone_pickaxe"),
+				new ResourceLocation("thebetweenlands", "octine_pickaxe"),
+				new ResourceLocation("thebetweenlands", "valonite_pickaxe")
 		};
 	}
 }
