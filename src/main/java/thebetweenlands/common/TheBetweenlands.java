@@ -1,6 +1,8 @@
 package thebetweenlands.common;
 
-import com.google.gson.stream.JsonWriter;
+import java.io.File;
+import java.util.ArrayList;
+
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -19,7 +21,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.client.render.models.ModelSundew;
 import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.lib.ModInfo;
@@ -33,15 +34,7 @@ import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.network.base.SidedPacketHandler;
 import thebetweenlands.network.base.impl.CommonPacketProxy;
 import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
-import thebetweenlands.util.ModelConverter;
-import thebetweenlands.util.ModelConverter.AlignedQuad;
-import thebetweenlands.util.ModelConverter.Box;
-import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.io.File;
-import java.io.StringWriter;
-import java.util.ArrayList;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
@@ -118,7 +111,7 @@ public class TheBetweenlands {
 
 
 		//TODO: Test
-		StringWriter strWriter = new StringWriter();
+		/*StringWriter strWriter = new StringWriter();
 		JsonWriter jsonWriter = new JsonWriter(strWriter);
 		ModelConverter converter = new ModelConverter(new ModelSundew(), 0.065D, false);
 		Model model = converter.getModel();
@@ -126,7 +119,7 @@ public class TheBetweenlands {
 			for(AlignedQuad quad : box.getAlignedQuads()) {
 				System.out.println("C: " + quad.x + " " + quad.y + " " + quad.z + " D: " + quad.width + " " + quad.height + " R: " + quad.rx + " " + quad.ry + " " + quad.rz);
 			}
-		}
+		}*/
 	}
 
 	@EventHandler

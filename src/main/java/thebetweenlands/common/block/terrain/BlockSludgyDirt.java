@@ -1,11 +1,14 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -16,53 +19,59 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.events.EventSpoopy;
 
-import java.util.Random;
+public class BlockSludgyDirt extends Block {
+	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125F, 1);
 
-public class BlockSludgyDirt extends Block
-{
+	public BlockSludgyDirt() {
+		super(Material.GRASS);
+		setHardness(0.5F);
+		setSoundType(SoundType.GROUND);
+		setHarvestLevel("shovel", 0);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setTickRandomly(true);
+	}
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if (!worldIn.isRemote) {
+			IBlockState blockStateAbove = worldIn.getBlockState(pos.up());
+			if(blockStateAbove.getLightOpacity(worldIn, pos.up()) > 2 || blockStateAbove.getBlock() == this) {
+				worldIn.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
+			}
+		}
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return BlockRegistry.SWAMP_DIRT.getItemDropped(state, rand, fortune);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World world, BlockPos pos) {
+		return BOUNDING_BOX;
+	}
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+		if(entity instanceof IEntityBL == false) entity.setInWeb();
+	}
 
 
-    public BlockSludgyDirt() {
-        super(Material.GRASS);
-        setHardness(0.5F);
-        setSoundType(SoundType.SAND);
-        setHarvestLevel("shovel", 0);
-        setCreativeTab(BLCreativeTabs.BLOCKS);
-        //setBlockName("thebetweenlands.sludgyDirt");
-        setTickRandomly(true);
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState s) {
+		return false;
+	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
+	}
 
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return BlockRegistry.SWAMP_DIRT.getItemDropped(state, rand, fortune);
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World world, BlockPos pos) {
-        float f = 0.125F;
-        return new AxisAlignedBB((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), (double)(pos.getX() + 1), (double)((float)(pos.getY() + 1) - f), (double)(pos.getZ() + 1));
-    }
-
-    @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
-        if(entity instanceof IEntityBL == false) entity.setInWeb();
-    }
-
-
-    @Override
-    public boolean isOpaqueCube(IBlockState s) {
-        return false;
-    }
-
-    //@Override
-    //public int getRenderBlockPass (){return 1;}
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
-        Block block = iblockaccess.getBlockState(pos).getBlock();
-        return block != BlockRegistry.SLUDGY_DIRT;
-    }
+	@Override
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
+		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
+		return block != BlockRegistry.SLUDGY_DIRT;
+	}
 }

@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:dead_grass" },
+            { "model": "thebetweenlands:dead_grass", "y": 90 },
+            { "model": "thebetweenlands:dead_grass", "y": 180 },
+            { "model": "thebetweenlands:dead_grass", "y": 270 }
+        ]
+    }
+}

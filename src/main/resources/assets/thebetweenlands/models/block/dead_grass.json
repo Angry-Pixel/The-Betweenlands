@@ -1,0 +1,10 @@
+{
+    "parent": "block/grass",
+    "textures": {
+        "particle": "thebetweenlands:blocks/swamp_dirt",
+        "bottom": "thebetweenlands:blocks/swamp_dirt",
+        "top": "thebetweenlands:blocks/dead_grass_top",
+        "side": "thebetweenlands:blocks/dead_grass_side",
+        "overlay": "thebetweenlands:blocks/dead_grass_side"
+    }
+}

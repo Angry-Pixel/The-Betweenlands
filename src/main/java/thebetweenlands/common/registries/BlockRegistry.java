@@ -34,6 +34,7 @@ import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockCragrock;
+import thebetweenlands.common.block.terrain.BlockDeadGrass;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockMud;
@@ -70,7 +71,7 @@ public class BlockRegistry {
 	public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)
 			.setDefaultCreativeTab()
 			.setHarvestLevel2("shovel", 0)
-			.setSoundType2(SoundType.SAND)
+			.setSoundType2(SoundType.GROUND)
 			.setHardness(0.5F);
 	public static final Block SLIMY_GRASS = new BlockSlimyGrass();
 	public static final Block CRAGROCK = new BlockCragrock(Material.ROCK);
@@ -106,6 +107,7 @@ public class BlockRegistry {
 		}
 	}.setXP(2, 5);
 	public static final Block SILT = new BlockSilt();
+	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();

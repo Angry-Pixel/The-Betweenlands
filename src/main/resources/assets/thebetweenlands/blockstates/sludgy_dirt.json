@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:sludgy_dirt" },
+            { "model": "thebetweenlands:sludgy_dirt", "y": 90 },
+            { "model": "thebetweenlands:sludgy_dirt", "y": 180 },
+            { "model": "thebetweenlands:sludgy_dirt", "y": 270 }
+        ]
+    }
+}

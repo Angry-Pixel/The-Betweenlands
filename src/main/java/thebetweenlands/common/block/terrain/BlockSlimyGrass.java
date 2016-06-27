@@ -19,7 +19,7 @@ public class BlockSlimyGrass extends Block
     public BlockSlimyGrass() {
         super(Material.GRASS);
         setHardness(0.5F);
-        setSoundType(SoundType.GROUND);
+        setSoundType(SoundType.PLANT);
         setHarvestLevel("shovel", 0);
         setCreativeTab(BLCreativeTabs.BLOCKS);
         //setBlockName("thebetweenlands.slimyGrass");

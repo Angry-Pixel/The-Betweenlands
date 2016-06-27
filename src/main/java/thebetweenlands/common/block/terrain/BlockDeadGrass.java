@@ -14,9 +14,8 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockSwampGrass extends BasicBlock implements IGrowable {
-
-	public BlockSwampGrass() {
+public class BlockDeadGrass extends BasicBlock implements IGrowable {
+	public BlockDeadGrass() {
 		super(Material.GRASS);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
@@ -29,21 +28,6 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable {
 		if (!worldIn.isRemote) {
 			if(worldIn.getBlockState(pos.up()).getLightOpacity(worldIn, pos.up()) > 2) {
 				worldIn.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
-			} else {
-				for (int i = 0; i < 4; ++i) {
-					BlockPos blockPos = pos.add(rand.nextInt(3) - 1, rand.nextInt(5) - 3, rand.nextInt(3) - 1);
-
-					if (blockPos.getY() >= 0 && blockPos.getY() < 256 && !worldIn.isBlockLoaded(blockPos)) {
-						return;
-					}
-
-					IBlockState blockStateAbove = worldIn.getBlockState(blockPos.up());
-					IBlockState blockState = worldIn.getBlockState(blockPos);
-
-					if (blockState.getBlock() == BlockRegistry.SWAMP_DIRT && blockStateAbove.getLightOpacity(worldIn, pos.up()) <= 2) {
-						worldIn.setBlockState(blockPos, BlockRegistry.SWAMP_GRASS.getDefaultState());
-					}
-				}
 			}
 		}
 	}
