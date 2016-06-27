@@ -4,16 +4,18 @@ import java.util.Random;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 
 	private IBlockState bark;
 	private IBlockState wood;
-//	private BlockBLLeaves leaves;
+	private IBlockState leaves;
 	private IBlockState portal;
 
     @Override
@@ -24,7 +26,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 
 		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.LOG_WEEDWOOD.getDefaultState();
-		//this.leaves = (BlockBLLeaves) BlockRegistry.weedwoodLeaves;
+		this.leaves = Blocks.LEAVES.getDefaultState();
 		this.portal = BlockRegistry.TREE_PORTAL.getDefaultState();
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
@@ -36,10 +38,10 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 						return false;
 					}
 
-	//	createMainCanopy(world, rand, x, y + height/2 + 4, z, maxRadius);
+		createMainCanopy(world, rand, pos.add(0, height/2 + 4, 0), maxRadius);
 
 		for (int yy = 0; yy < height; ++yy) {
-			if (yy % 5 == 0 && radius > 1 && yy > 7)
+			if (yy % 3 == 0 && radius > 1 && yy > 5)
 				--radius;
 
 			for (int i = radius * -1; i <= radius; ++i)
@@ -53,10 +55,10 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 
 			if(yy == 4) {
 				System.out.println("make the portal and frame here");
-			//	portal.makePortalX(world, pos.add(radius, yy - 2, 0));
-			//	portal.makePortalX(world, pos.add(- radius, yy - 2, 0));
-			//	portal.makePortalZ(world, pos.add(0, yy - 2, radius));
-			//	portal.makePortalZ(world, pos.add(0, yy - 2, - radius));
+				BlockTreePortal.makePortalX(world, pos.add(radius, yy - 2, 0));
+				BlockTreePortal.makePortalX(world, pos.add(- radius, yy - 2, 0));
+				BlockTreePortal.makePortalZ(world, pos.add(0, yy - 2, radius));
+				BlockTreePortal.makePortalZ(world, pos.add(0, yy - 2, - radius));
 			}
 
 			if (yy == height/2 + 2) {
@@ -95,7 +97,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createSmallBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, 2);
 			}
 
-			if (yy == 1) {
+			if (yy == 0) {
 				createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), 0), 1, true, rand.nextInt(2) + 3);
 				createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), 0), 2, true, rand.nextInt(2) + 3);
 				createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), radius + 1), 3, true, rand.nextInt(2) + 3);
@@ -143,25 +145,25 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				world.setBlockState(pos.east(i - 1).up(y).north(i - 1), bark);
 		}
 	}
-/*
-	private void createMainCanopy(World world, Random rand, int x, int y, int z, int maxRadius) {
-		for (int x1 = x - maxRadius; x1 <= x + maxRadius; x1++)
-			for (int z1 = z - maxRadius; z1 <= z + maxRadius; z1++)
-				for (int y1 = y; y1 < y + maxRadius; y1++) {
-					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.5D);
+
+	private void createMainCanopy(World world, Random rand, BlockPos pos, int maxRadius) {
+		for (int x1 = - maxRadius; x1 <= maxRadius; x1++)
+			for (int z1 = - maxRadius; z1 <= maxRadius; z1++)
+				for (int y1 = 0; y1 < maxRadius; y1++) {
+					double dSq = Math.pow(x1, 2.0D) + Math.pow(z1, 2.0D) + Math.pow(y1, 2.5D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
-						if (world.getBlockState(x1, y1, z1) != bark && rand.nextInt(5) != 0)
-							world.setBlockState(x1, y1, z1, leaves);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > y)
-						if (world.getBlock(x1, y1, z1) != bark)
-							world.setBlockState(x1, y1, z1, bark);
-					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == y)
-						if (world.getBlock(x1, y1, z1) != bark)
+						if (world.getBlockState(pos.add(x1, y1, z1)) != bark && rand.nextInt(5) != 0)
+							world.setBlockState(pos.add(x1, y1, z1), leaves);
+					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > 0)
+						if (world.getBlockState(pos.add(x1, y1, z1)) != bark)
+							world.setBlockState(pos.add(x1, y1, z1), bark);
+					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == 0)
+						if (world.getBlockState(pos.add(x1, y1, z1)) != bark)
 							for (int i = 1; i < 1 + rand.nextInt(3); i++)
-								world.setBlockState(x1, y1 - i, z1, leaves);
+								world.setBlockState(pos.add(x1, y1 - i, z1), leaves);
 				}
 	}
-*/
+
 	private void createBranch(World world, Random rand, BlockPos pos, int dir, boolean root, int branchLength) {
 		int meta = dir;
 		int y = 0;

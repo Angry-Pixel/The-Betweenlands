@@ -2,6 +2,7 @@ package thebetweenlands.common.block.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockTreePortal extends BasicBlock {
     public BlockTreePortal() {
@@ -20,102 +22,112 @@ public class BlockTreePortal extends BasicBlock {
         setBlockUnbreakable();
         setSoundType2(SoundType.GLASS);
     }
+/*
+ * PORTAL_CORNER_TOP_LEFT,
+        PORTAL_TOP,
+        PORTAL_CORNER_TOP_RIGHT,
+        PORTAL_SIDE_RIGHT,
+        PORTAL_SIDE_LEFT,
+        PORTAL_CORNER_BOTTOM_LEFT,
+        PORTAL_BOTTOM,
+        PORTAL_CORNER_BOTTOM_RIGHT;getStateFromMeta(8), 2);
+ */
+    public static boolean makePortalX(World world, BlockPos pos) {
+        world.setBlockState(pos.add(0, 2, - 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_TOP_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_TOP).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 2, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_TOP_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 1, - 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 0, - 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, 0, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, - 1, - 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_BOTTOM_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, - 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_BOTTOM).withProperty(BlockPortalFrame.X_AXIS, true));
+        world.setBlockState(pos.add(0, - 1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
 
-    /*public static boolean makePortalX(World world, int x, int y, int z) {
-        world.setBlock(x, y + 2, z - 1, BLBlockRegistry.portalBarkFrame, 8, 2);
-        world.setBlock(x, y + 2, z, BLBlockRegistry.portalBarkFrame, 9, 2);
-        world.setBlock(x, y + 2, z + 1, BLBlockRegistry.portalBarkFrame, 10, 2);
-        world.setBlock(x, y + 1, z - 1, BLBlockRegistry.portalBarkFrame, 11, 2);
-        world.setBlock(x, y + 1, z + 1, BLBlockRegistry.portalBarkFrame, 12, 2);
-        world.setBlock(x, y, z - 1, BLBlockRegistry.portalBarkFrame, 11, 2);
-        world.setBlock(x, y, z + 1, BLBlockRegistry.portalBarkFrame, 12, 2);
-        world.setBlock(x, y - 1, z - 1, BLBlockRegistry.portalBarkFrame, 13, 2);
-        world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 14, 2);
-        world.setBlock(x, y - 1, z + 1, BLBlockRegistry.portalBarkFrame, 15, 2);
-
-        if (isPatternValidX(world, x, y, z)) {
-            world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 0, 2);
-            world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 0, 2);
+        if (isPatternValidX(world, pos)) {
+            world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getStateFromMeta(0), 2);//TODO Add variants to THIS Block
+            world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getStateFromMeta(0), 2);//TODO Add variants to THIS Block
             return true;
         }
         return false;
     }
 
-    public static boolean makePortalZ(World world, int x, int y, int z) {
-        world.setBlock(x - 1, y + 2, z, BLBlockRegistry.portalBarkFrame, 0, 2);
-        world.setBlock(x, y + 2, z, BLBlockRegistry.portalBarkFrame, 1, 2);
-        world.setBlock(x + 1, y + 2, z, BLBlockRegistry.portalBarkFrame, 2, 2);
-        world.setBlock(x - 1, y + 1, z, BLBlockRegistry.portalBarkFrame, 3, 2);
-        world.setBlock(x + 1, y + 1, z, BLBlockRegistry.portalBarkFrame, 4, 2);
-        world.setBlock(x - 1, y, z, BLBlockRegistry.portalBarkFrame, 3, 2);
-        world.setBlock(x + 1, y, z, BLBlockRegistry.portalBarkFrame, 4, 2);
-        world.setBlock(x - 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 5, 2);
-        world.setBlock(x, y - 1, z, BLBlockRegistry.portalBarkFrame, 6, 2);
-        world.setBlock(x + 1, y - 1, z, BLBlockRegistry.portalBarkFrame, 7, 2);
+    public static boolean makePortalZ(World world, BlockPos pos) {
+        world.setBlockState(pos.add(- 1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_TOP_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_TOP).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_TOP_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(- 1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(- 1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(- 1, - 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_BOTTOM_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(0, - 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_BOTTOM).withProperty(BlockPortalFrame.X_AXIS, false));
+        world.setBlockState(pos.add(1, - 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.PORTAL_CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
 
-        if (isPatternValidZ(world, x, y, z)) {
-            world.setBlock(x, y, z, BLBlockRegistry.treePortalBlock, 1, 2);
-            world.setBlock(x, y + 1, z, BLBlockRegistry.treePortalBlock, 1, 2);
+        if (isPatternValidZ(world, pos)) {
+        	world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getStateFromMeta(1), 2);//TODO Add variants to THIS Block
+            world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getStateFromMeta(1), 2);//TODO Add variants to THIS Block
             return true;
         }
         return false;
-    }*/
-    /*
-    public static boolean isPatternValidX(World world, int x, int y, int z) {
+    }
+    
+    public static boolean isPatternValidX(World world, BlockPos pos) {
         // Layer 0
-        if (!check(world, x, y - 1, z, BLBlockRegistry.portalBarkFrame) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0))
+        if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, 0))
             return false;
 
         // Layer 1
-        if (!check(world, x, y, z - 1, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.north(), BlockRegistry.PORTAL_FRAME))
             return false;
-        if (!check(world, x, y, z + 1, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.south(), BlockRegistry.PORTAL_FRAME))
             return false;
 
         // Layer 2
-        if (!check(world, x, y + 1, z - 1, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.up().north(), BlockRegistry.PORTAL_FRAME))
             return false;
-        if (!check(world, x, y + 1, z + 1, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.up().south(), BlockRegistry.PORTAL_FRAME))
             return false;
 
         // Layer 3
-        if (!check(world, x, y + 2, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME))
             return false;
 
         return true;
     }
 
-    public static boolean isPatternValidZ(World world, int x, int y, int z) {
+    public static boolean isPatternValidZ(World world, BlockPos pos) {
         // Layer 0
-        if (!check(world, x, y - 1, z, BLBlockRegistry.portalBarkFrame) && !checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1))
+        if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, 1))
             return false;
 
         // Layer 1
-        if (!check(world, x - 1, y, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME))
             return false;
-        if (!check(world, x + 1, y, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.east(), BlockRegistry.PORTAL_FRAME))
             return false;
 
         // Layer 2
-        if (!check(world, x - 1, y + 1, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.west().up(), BlockRegistry.PORTAL_FRAME))
             return false;
-        if (!check(world, x + 1, y + 1, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.east().up(), BlockRegistry.PORTAL_FRAME))
             return false;
 
         // Layer 3
-        if (!check(world, x, y + 2, z, BLBlockRegistry.portalBarkFrame))
+        if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME))
             return false;
 
         return true;
     }
 
-    private static boolean check(World world, int x, int y, int z, Block target) {
-        return world.getBlock(x, y, z) == target;
+    private static boolean check(World world, BlockPos pos, Block target) {
+        return world.getBlockState(pos).getBlock() == target;
     }
 
-    private static boolean checkPortal(World world, int x, int y, int z, Block target, int meta) {
-        return world.getBlock(x, y, z) == target && world.getBlockMetadata(x, y, z) == meta;
-    }*/
+    private static boolean checkPortal(World world, BlockPos pos, Block target, int meta) {
+    	IBlockState state = world.getBlockState(pos);
+        return state.getBlock() == target && state.getBlock().getMetaFromState(state) == meta;
+    }
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
@@ -123,13 +135,13 @@ public class BlockTreePortal extends BasicBlock {
     }
 
     public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
-        /*if(checkPortal(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
+        /*if(checkPortal(world, x, y + 1, z, BlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
             return true;
-        if(checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
+        if(checkPortal(world, x, y - 1, z, BlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
             return true;
-        if(checkPortal(world, x, y + 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y, z))
+        if(checkPortal(world, x, y + 1, z, BlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y, z))
             return true;
-        if(checkPortal(world, x, y - 1, z, BLBlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y - 1, z))
+        if(checkPortal(world, x, y - 1, z, BlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y - 1, z))
             return true;
         else {
             world.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
