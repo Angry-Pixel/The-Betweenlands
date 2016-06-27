@@ -24,9 +24,13 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.CorrodibleItemHelper;
 
+/**
+ * Generates a corrosion overlay for the specified item.
+ * Sprite naming goes as follows: some_item_corrodible -> some_item_corrosion_[0,5]
+ */
 public class TextureCorrosion extends TextureAtlasSprite {
 	public static final ResourceLocation CORROSION_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/items/tool_corrosion.png");
-	
+
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Random RANDOM = new Random(0);
 
@@ -49,13 +53,20 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		this.seed = seed;
 	}
 
+	/**
+	 * Resets the sprite
+	 */
 	private void resetSprite() {
-		animationMetadata = null;
+		this.animationMetadata = null;
 		this.setFramesTextureData(new ArrayList<int[][]>());
-		frameCounter = 0;
-		tickCounter = 0;
+		this.frameCounter = 0;
+		this.tickCounter = 0;
 	}
 
+	/**
+	 * Loads the corrosion texture
+	 * @param manager
+	 */
 	private void loadCorrosionPixels(IResourceManager manager) {
 		BufferedImage corrosionImg;
 		try {
@@ -76,93 +87,74 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	@Override
 	public void loadSprite(PngSizeInfo sizeInfo, boolean p_188538_2_) throws IOException {
-        throw new RuntimeException("Not supported!");
-    }
-	
+		//This shouldn't happen because it uses a custom loader
+		throw new RuntimeException("Not supported!");
+	}
+
 	@Override
 	public boolean load(IResourceManager manager, ResourceLocation location) {
 		if (corrosionPixels == null) {
-			loadCorrosionPixels(manager);
+			this.loadCorrosionPixels(manager);
 		}
 		try {
 			IResource resource = manager.getResource(this.baseTexture);
-			/*BufferedImage[] bufferedImage = new BufferedImage[1];
-			bufferedImage[0] = ImageIO.read(resource.getInputStream());
-			loadSprite(bufferedImage, (AnimationMetadataSection) resource.getMetadata("animation"), false);*/
 			this.loadSpriteFrames(resource, 1);
 		} catch (RuntimeException runtimeexception) {
 			LOGGER.error("Unable to parse metadata from " + this.baseTexture, runtimeexception);
-		} catch (IOException ioexception1) {
-			ioexception1.printStackTrace();
+		} catch (IOException ioexception) {
+			ioexception.printStackTrace();
 		}
 		return false;
 	}
 
-	private ResourceLocation completeResourceLocation(ResourceLocation location, int level) {
-		return level == 0 ? new ResourceLocation(location.getResourceDomain(), String.format("textures/items/%s.png", location.getResourcePath())) : new ResourceLocation(location.getResourceDomain(), String.format("textures/items/mipmaps/%s.%d.png", location.getResourcePath(), Integer.valueOf(level)));
-	}
-
 	@Override
 	public void loadSpriteFrames(IResource resource, int mipmaplevels) throws IOException {
-		BufferedImage bufferedimage = TextureUtil.readBufferedImage(resource.getInputStream());
-		AnimationMetadataSection metadata = (AnimationMetadataSection)resource.getMetadata("animation");
+		BufferedImage spriteTexture = TextureUtil.readBufferedImage(resource.getInputStream());
+		AnimationMetadataSection spriteMetadata = (AnimationMetadataSection)resource.getMetadata("animation");
 		int[][] mipmapLevels = new int[mipmaplevels][];
-		mipmapLevels[0] = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-		bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), mipmapLevels[0], 0, bufferedimage.getWidth());
+		mipmapLevels[0] = new int[spriteTexture.getWidth() * spriteTexture.getHeight()];
+		spriteTexture.getRGB(0, 0, spriteTexture.getWidth(), spriteTexture.getHeight(), mipmapLevels[0], 0, spriteTexture.getWidth());
 
 		resetSprite();
 
-		int width = /*mipmapImages[0].getWidth()*/bufferedimage.getWidth();
-		int height = /*mipmapImages[0].getHeight()*/bufferedimage.getHeight();
+		int width = spriteTexture.getWidth();
+		int height = spriteTexture.getHeight();
 		this.width = width;
 		this.height = height;
 
-		//int[][] mipmapLevels = new int[mipmapImages.length][];
-		//BufferedImage bufferedimage = mipmapImages[0];
-
-		mipmapLevels[0] = new int[bufferedimage.getWidth() * bufferedimage.getHeight()];
-		bufferedimage.getRGB(0, 0, bufferedimage.getWidth(), bufferedimage.getHeight(), mipmapLevels[0], 0, bufferedimage.getWidth());
+		mipmapLevels[0] = new int[spriteTexture.getWidth() * spriteTexture.getHeight()];
+		spriteTexture.getRGB(0, 0, spriteTexture.getWidth(), spriteTexture.getHeight(), mipmapLevels[0], 0, spriteTexture.getWidth());
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if(y % width == 0) {
 					//Reset seed for every frame
-					RANDOM.setSeed(seed);
+					RANDOM.setSeed(this.seed);
 				}
 				int pixel = mipmapLevels[0][x + y * width];
 				int corrosion = 0;
-				if (pixel >>> 24 != 0 && RANDOM.nextInt(3) != 0) {
+				if (pixel >>> 24 != 0 && RANDOM.nextFloat() > 0.2F) {
 					corrosion = corrosionPixels[(x % width % corrosionWidth) + (y % width % corrosionWidth) * corrosionWidth];
 				}
-				int r1 = pixel >> 16 & 0xFF;
-				int g1 = pixel >> 8 & 0xFF;
-				int b1 = pixel & 0xFF;
-				float alpha = (corrosionAmount / (float) (CorrodibleItemHelper.CORROSION_STAGE_COUNT - 1) * ((corrosion >>> 24 & 0xFF) / 255F)) * (0.25F + RANDOM.nextFloat() * 0.75F);
-				int r2 = corrosion >> 16 & 0xFF;
-				int g2 = corrosion >> 8 & 0xFF;
-				int b2 = corrosion & 0xFF;
-				pixel &= 0xFF000000;
-				pixel |= (int) (alpha * r2 + (1 - alpha) * r1 + 0.5F) << 16;
-				pixel |= (int) (alpha * g2 + (1 - alpha) * g1 + 0.5F) << 8;
-				pixel |= (int) (alpha * b2 + (1 - alpha) * b1 + 0.5F);
-				mipmapLevels[0][x + y * width] = pixel;
+				float alpha = (this.corrosionAmount / (float) (CorrodibleItemHelper.CORROSION_STAGE_COUNT - 1) * ((corrosion >>> 24 & 0xFF) / 255.0F)) * (0.5F + RANDOM.nextFloat() * 0.5F);
+				mipmapLevels[0][x + y * width] = (((int)(alpha * 255.0F) & 0xFF) << 24) | ((corrosion >> 16 & 0xFF) << 16) | ((corrosion >> 8 & 0xFF) << 8) | (corrosion & 0xFF);
 			}
 		}
 
-		if (metadata == null) {
+		if (spriteMetadata == null) {
 			if (height != width) {
 				throw new RuntimeException("broken aspect ratio and not an animation");
 			}
 
-			framesTextureData.add(mipmapLevels);
+			this.framesTextureData.add(mipmapLevels);
 		} else {
 			int frameCount = height / width;
 			int frameWidth = width;
 			int frameHeight = width;
 			this.height = width;
 
-			if (metadata.getFrameCount() > 0) {
-				Iterator frameIndexIterator = metadata.getFrameIndexSet().iterator();
+			if (spriteMetadata.getFrameCount() > 0) {
+				Iterator frameIndexIterator = spriteMetadata.getFrameIndexSet().iterator();
 
 				int frameIndex = 0;
 				while (frameIndexIterator.hasNext()) {
@@ -172,32 +164,44 @@ public class TextureCorrosion extends TextureAtlasSprite {
 						throw new RuntimeException("invalid frameindex " + frameIndex);
 					}
 
-					allocateFrameTextureData(frameIndex);
-					framesTextureData.set(frameIndex, getFrameTextureData(mipmapLevels, frameWidth, frameHeight, frameIndex));
+					this.allocateFrameTextureData(frameIndex);
+					this.framesTextureData.set(frameIndex, getFrameTextureData(mipmapLevels, frameWidth, frameHeight, frameIndex));
 				}
 
-				animationMetadata = metadata;
+				this.animationMetadata = spriteMetadata;
 			} else {
-				ArrayList arraylist = Lists.newArrayList();
+				ArrayList animationFrames = Lists.newArrayList();
 
 				for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
 					framesTextureData.add(getFrameTextureData(mipmapLevels, frameWidth, frameHeight, frameIndex));
-					arraylist.add(new AnimationFrame(frameIndex, -1));
+					animationFrames.add(new AnimationFrame(frameIndex, -1));
 				}
 
-				animationMetadata = new AnimationMetadataSection(arraylist, width, height, metadata.getFrameTime(), metadata.isInterpolate());
+				this.animationMetadata = new AnimationMetadataSection(animationFrames, width, height, spriteMetadata.getFrameTime(), spriteMetadata.isInterpolate());
 			}
 		}
 	}
 
+	/**
+	 * Allocates memory for the specified amount of frames
+	 * @param frameCount
+	 */
 	private void allocateFrameTextureData(int frameCount) {
-		if (framesTextureData.size() <= frameCount) {
-			for (int i = framesTextureData.size(); i <= frameCount; i++) {
-				framesTextureData.add((int[][]) null);
+		if (this.framesTextureData.size() <= frameCount) {
+			for (int i = this.framesTextureData.size(); i <= frameCount; i++) {
+				this.framesTextureData.add((int[][]) null);
 			}
 		}
 	}
 
+	/**
+	 * Returns the frame data at the specified offset
+	 * @param framesData
+	 * @param width
+	 * @param height
+	 * @param offset
+	 * @return
+	 */
 	private static int[][] getFrameTextureData(int[][] framesData, int width, int height, int offset) {
 		int[][] newFrameData = new int[framesData.length][];
 
@@ -218,16 +222,67 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		++this.tickCounter;
 
 		if (this.tickCounter >= this.animationMetadata.getFrameTimeSingle(this.frameCounter)) {
-			int i = this.animationMetadata.getFrameIndex(this.frameCounter);
-			int j = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
-			this.frameCounter = (this.frameCounter + 1) % j;
+			int frameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
+			int frameCount = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
+			this.frameCounter = (this.frameCounter + 1) % frameCount;
 			this.tickCounter = 0;
-			int k = this.animationMetadata.getFrameIndex(this.frameCounter);
+			int nextFrameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
 
-			if (i != k && k >= 0 && k < this.framesTextureData.size()) {
-				TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(k), this.width, this.height, this.originX, this.originY, false, false);
+			if (frameIndex != nextFrameIndex && nextFrameIndex >= 0 && nextFrameIndex < this.framesTextureData.size()) {
+				TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(nextFrameIndex), this.width, this.height, this.originX, this.originY, false, false);
 			}
+		} else if (this.animationMetadata.isInterpolate()) {
+			this.updateAnimationInterpolated();
 		}
+	}
+
+	/**
+	 * Uploads the interpolated frames
+	 */
+	private void updateAnimationInterpolated() {
+		double interpolatedFrameIndex = 1.0D - (double)this.tickCounter / (double)this.animationMetadata.getFrameTimeSingle(this.frameCounter);
+		int frameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
+		int frameCount = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
+		int nextFrameIndex = this.animationMetadata.getFrameIndex((this.frameCounter + 1) % frameCount);
+
+		if (frameIndex != nextFrameIndex && nextFrameIndex >= 0 && nextFrameIndex < this.framesTextureData.size()) {
+			int[][] frame = (int[][])this.framesTextureData.get(frameIndex);
+			int[][] nextFrame = (int[][])this.framesTextureData.get(nextFrameIndex);
+
+			if (this.interpolatedFrameData == null || this.interpolatedFrameData.length != frame.length) {
+				this.interpolatedFrameData = new int[frame.length][];
+			}
+
+			for (int mipmapLevel = 0; mipmapLevel < frame.length; ++mipmapLevel) {
+				if (this.interpolatedFrameData[mipmapLevel] == null) {
+					this.interpolatedFrameData[mipmapLevel] = new int[frame[mipmapLevel].length];
+				}
+
+				if (mipmapLevel < nextFrame.length && nextFrame[mipmapLevel].length == frame[mipmapLevel].length) {
+					for (int framePixelIndex = 0; framePixelIndex < frame[mipmapLevel].length; ++framePixelIndex) {
+						int pixel = frame[mipmapLevel][framePixelIndex];
+						int nextPixel = nextFrame[mipmapLevel][framePixelIndex];
+						int interpR = this.interpolateColor(interpolatedFrameIndex, pixel >> 16 & 255, nextPixel >> 16 & 255);
+						int interpG = this.interpolateColor(interpolatedFrameIndex, pixel >> 8 & 255, nextPixel >> 8 & 255);
+						int interpB = this.interpolateColor(interpolatedFrameIndex, pixel & 255, nextPixel & 255);
+						this.interpolatedFrameData[mipmapLevel][framePixelIndex] = pixel & -16777216 | interpR << 16 | interpG << 8 | interpB;
+					}
+				}
+			}
+
+			TextureUtil.uploadTextureMipmap(this.interpolatedFrameData, this.width, this.height, this.originX, this.originY, false, false);
+		}
+	}
+
+	/**
+	 * Linearly interpolates between two integers
+	 * @param lerp
+	 * @param val1
+	 * @param val2
+	 * @return
+	 */
+	private int interpolateColor(double lerp, int val1, int val2) {
+		return (int)(lerp * (double)val1 + (1.0D - lerp) * (double)val2);
 	}
 
 	@Override

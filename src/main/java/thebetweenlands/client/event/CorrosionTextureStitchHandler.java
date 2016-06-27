@@ -1,10 +1,13 @@
 package thebetweenlands.client.event;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
+import com.google.common.collect.Lists;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
@@ -12,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
@@ -30,9 +34,18 @@ public class CorrosionTextureStitchHandler {
 				ResourceLocation[] variants = ((ICorrodible)item).getCorrodibleVariants();
 				for(ResourceLocation variant : variants) {
 					try {
-						IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(variant.getResourceDomain(), "item/" + variant.getResourcePath()));
-						ModelLoaderRegistry.clearModelCache(Minecraft.getMinecraft().getResourceManager());
-						Collection<ResourceLocation> textures = model.getTextures();
+						ResourceLocation modelLocation = new ResourceLocation(variant.getResourceDomain(), "item/" + variant.getResourcePath());
+						IModel model = ModelLoaderRegistry.getModel(modelLocation);
+						List<ResourceLocation> textures = Lists.newArrayList();
+						textures.addAll(model.getTextures());
+						List<IModel> dependencies = this.gatherDependencies(model, new ArrayList<IModel>());
+						for(IModel dependencyModel : dependencies) {
+							Collection<ResourceLocation> dependencyTextures = dependencyModel.getTextures();
+							for(ResourceLocation dependencyTexture : dependencyTextures) {
+								if(!textures.contains(dependencyTexture))
+									textures.add(dependencyTexture);
+							}
+						}
 						for(ResourceLocation texture : textures) {
 							String path = texture.getResourcePath();
 							if(path.contains("/")) {
@@ -58,5 +71,30 @@ public class CorrosionTextureStitchHandler {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Recursively gathers all dependencies of the specified model
+	 * @param model
+	 * @param foundDependencies
+	 * @return
+	 */
+	private List<IModel> gatherDependencies(IModel model, List<IModel> foundDependencies) {
+		Collection<ResourceLocation> dependencies = model.getDependencies();
+		for(ResourceLocation dependency : dependencies) {
+			try {
+				IModel dependencyModel = ModelLoaderRegistry.getModel(dependency);
+				if(!foundDependencies.contains(dependencyModel)) {
+					foundDependencies.add(dependencyModel);
+					this.gatherDependencies(dependencyModel, foundDependencies);
+				}
+			} catch(LoaderException ex) {
+				//Failed to load dependency, ignore
+			} catch(Exception ex) {
+				//Something else went wrong
+				throw new RuntimeException(ex);
+			}
+		}
+		return foundDependencies;
 	}
 }
