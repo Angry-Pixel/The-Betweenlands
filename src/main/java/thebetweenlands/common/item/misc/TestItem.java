@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.feature.structure.WorldGenWeedWoodPortalTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -18,8 +18,10 @@ public class TestItem extends Item {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
-        worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());
+     /*   WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
+        worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());*/
+    	WorldGenWeedWoodPortalTree portalTree = new WorldGenWeedWoodPortalTree();
+    	portalTree.generate(worldIn, itemRand, pos.up());
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 }
