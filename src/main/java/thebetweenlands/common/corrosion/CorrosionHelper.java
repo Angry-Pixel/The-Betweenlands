@@ -22,6 +22,23 @@ public final class CorrosionHelper {
 	private CorrosionHelper() {
 	}
 
+	/**
+	 * Returns the normal variant for the specified unlocalized name
+	 * @param unlocalizedName
+	 * @return
+	 */
+	public static ResourceLocation[] getVariantFromUnlocalizedName(String unlocalizedName) {
+		String actualName = unlocalizedName.substring("item.".length());
+		int domainSplit = actualName.indexOf(".");
+		String domain = actualName.substring(0, domainSplit);
+		String file = actualName.substring(domainSplit + 1);
+		return new ResourceLocation[] { new ResourceLocation(domain, file) };
+	}
+
+	/**
+	 * Adds the corrosion property overrides to the specified item
+	 * @param item
+	 */
 	public static void addCorrosionPropertyOverrides(Item item) {
 		item.addPropertyOverride(new ResourceLocation("corrosion"), new IItemPropertyGetter() {
 			@Override
@@ -32,6 +49,11 @@ public final class CorrosionHelper {
 		});
 	}
 
+	/**
+	 * Returns the amount of coating on the specified item
+	 * @param itemStack
+	 * @return
+	 */
 	public static int getCoating(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
@@ -42,6 +64,11 @@ public final class CorrosionHelper {
 		return 0;
 	}
 
+	/**
+	 * Returns the amount of corrosion on the specified item
+	 * @param itemStack
+	 * @return
+	 */
 	public static int getCorrosion(ItemStack itemStack) {
 		if (itemStack.hasTagCompound()) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
@@ -52,18 +79,41 @@ public final class CorrosionHelper {
 		return 0;
 	}
 
+	/**
+	 * Sets the amount of coating of the specified item
+	 * @param itemStack
+	 * @param coating
+	 */
 	public static void setCoating(ItemStack itemStack, int coating) {
 		itemStack.setTagInfo("CorrosionCoating", new NBTTagInt(coating));
 	}
 
+	/**
+	 * Sets the amount of corrosion of the specified item
+	 * @param itemStack
+	 * @param corrosion
+	 */
 	public static void setCorrosion(ItemStack itemStack, int corrosion) {
 		itemStack.setTagInfo("Corrosion", new NBTTagInt(corrosion));
 	}
 
+	/**
+	 * Returns a general modifier at the amount corrosion of the specified item
+	 * @param itemStack
+	 * @return
+	 */
 	public static float getModifier(ItemStack itemStack) {
 		return (-0.7F * (getCorrosion(itemStack) / (float) MAX_CORROSION) + 1);
 	}
 
+	/**
+	 * Returns the dig speed of an item at the amount of corrosion of the specified item
+	 * @param normalDigSpeed
+	 * @param itemStack
+	 * @param block
+	 * @param meta
+	 * @return
+	 */
 	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, Block block, int meta) {
 		return normalDigSpeed * getModifier(itemStack);
 	}
@@ -116,10 +166,20 @@ public final class CorrosionHelper {
 		}
 	}*/
 
+	/**
+	 * Returns the corrosion stage of the specified item. Ranges from [0, 5]
+	 * @param itemStack
+	 * @return
+	 */
 	public static int getCorrosionStage(ItemStack itemStack) {
 		return getCorrosionStage(getCorrosion(itemStack));
 	}
 
+	/**
+	 * Returns the corrosion stage for the specified amount of corrosion
+	 * @param corrosion
+	 * @return
+	 */
 	public static int getCorrosionStage(int corrosion) {
 		return (10 * corrosion + 630) / 635;
 	}

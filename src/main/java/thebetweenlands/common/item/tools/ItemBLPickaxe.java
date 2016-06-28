@@ -11,19 +11,12 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ItemBLPickaxe(ToolMaterial material) {
 		super(material);
 
-		//Adds the corrosion property overrides for model selection
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ResourceLocation[] getCorrodibleVariants() {
-		//Add all corrodible pickaxe variants
-		return new ResourceLocation[] {
-				new ResourceLocation("thebetweenlands", "weedwood_pickaxe"),
-				new ResourceLocation("thebetweenlands", "bone_pickaxe"),
-				new ResourceLocation("thebetweenlands", "octine_pickaxe"),
-				new ResourceLocation("thebetweenlands", "valonite_pickaxe")
-		};
+		return CorrosionHelper.getVariantFromUnlocalizedName(this.getUnlocalizedName());
 	}
 }

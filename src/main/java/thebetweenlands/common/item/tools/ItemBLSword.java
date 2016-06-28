@@ -19,12 +19,6 @@ public class ItemBLSword extends ItemSword implements ICorrodible {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public ResourceLocation[] getCorrodibleVariants() {
-		//Add all corrodible sword variants
-		return new ResourceLocation[] {
-				new ResourceLocation("thebetweenlands", "weedwood_sword"),
-				new ResourceLocation("thebetweenlands", "bone_sword"),
-				new ResourceLocation("thebetweenlands", "octine_sword"),
-				new ResourceLocation("thebetweenlands", "valonite_sword")
-		};
+		return CorrosionHelper.getVariantFromUnlocalizedName(this.getUnlocalizedName());
 	}
 }
