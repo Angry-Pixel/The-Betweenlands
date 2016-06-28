@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/bone_sword_aqua_corrodible",
+    "layer1": "thebetweenlands:items/bone_sword_aqua_corrosion_5"
+  }
+}

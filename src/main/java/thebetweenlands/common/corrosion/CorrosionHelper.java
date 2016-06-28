@@ -1,4 +1,4 @@
-package thebetweenlands.util;
+package thebetweenlands.common.corrosion;
 
 import javax.annotation.Nullable;
 
@@ -14,12 +14,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public final class CorrodibleItemHelper {
+public final class CorrosionHelper {
 	public static final int MAX_CORROSION = 255;
 	public static final String TOOLTIP_PART = "/" + MAX_CORROSION + ")";
 	public static final int CORROSION_STAGE_COUNT = 6;
 
-	private CorrodibleItemHelper() {
+	private CorrosionHelper() {
 	}
 
 	public static void addCorrosionPropertyOverrides(Item item) {

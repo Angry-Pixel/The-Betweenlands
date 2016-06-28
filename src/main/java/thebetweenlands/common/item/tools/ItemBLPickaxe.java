@@ -4,15 +4,15 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.ICorrodible;
-import thebetweenlands.util.CorrodibleItemHelper;
 
 public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ItemBLPickaxe(ToolMaterial material) {
 		super(material);
 
 		//Adds the corrosion property overrides for model selection
-		CorrodibleItemHelper.addCorrosionPropertyOverrides(this);
+		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
 
 	@SideOnly(Side.CLIENT)

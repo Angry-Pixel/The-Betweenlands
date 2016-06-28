@@ -20,8 +20,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.ICorrodible;
-import thebetweenlands.util.CorrodibleItemHelper;
 
 public class CorrosionTextureStitchHandler {
 	//TODO: Mappings!
@@ -53,7 +53,7 @@ public class CorrosionTextureStitchHandler {
 								String fileName = texture.getResourcePath().substring(texture.getResourcePath().lastIndexOf("/") + 1);
 								if(fileName.endsWith(corrodibleSuffix)) {
 									ResourceLocation completeBaseTextureLocation = new ResourceLocation(texture.getResourceDomain(), String.format("textures/%s.png", texture.getResourcePath()));
-									for (int n = 0; n < CorrodibleItemHelper.CORROSION_STAGE_COUNT; n++) {
+									for (int n = 0; n < CorrosionHelper.CORROSION_STAGE_COUNT; n++) {
 										String corrosionSpriteName = "thebetweenlands:items/" + fileName.substring(0, fileName.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
 										TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionSpriteName, completeBaseTextureLocation, n, item.getUnlocalizedName().hashCode());
 										//Forcibly sets the texture entry because TextureMap#setTextureEntry doesn't allow 
