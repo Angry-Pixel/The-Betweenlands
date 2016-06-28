@@ -9,7 +9,9 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
@@ -118,6 +121,25 @@ public class BlockRegistry {
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
+	public static final Block LEAVES_WEEDWOOD = new BlockLeavesBetweenlands() {
+		
+		/*	@Override
+			public Item getItemDropped(int meta, Random rand, int fortune) {
+				return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
+			}*/
+		};
+		public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
+		/*	@Override
+			public Item getItemDropped(int meta, Random rand, int fortune) {
+				return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP_TREE);
+			}*/
+		};
+		public static final Block LEAVES_RUBBER_TREE = new BlockLeavesBetweenlands() {
+		/*	@Override
+			public Item getItemDropped(int meta, Random rand, int fortune) {
+				return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER_TREE);
+			}*/
+		};
 
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
@@ -160,6 +182,9 @@ public class BlockRegistry {
 				ResourceLocation name = block.getRegistryName();
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
+		ModelLoader.setCustomStateMapper(LEAVES_SAP_TREE, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
+		ModelLoader.setCustomStateMapper(LEAVES_RUBBER_TREE, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
+		ModelLoader.setCustomStateMapper(LEAVES_WEEDWOOD, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
 	}
 
 	public static void registerBlock(String name, Block block) {

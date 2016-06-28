@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -26,7 +25,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 
 		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.LOG_WEEDWOOD.getDefaultState();
-		this.leaves = Blocks.LEAVES.getDefaultState();
+		this.leaves = BlockRegistry.LEAVES_WEEDWOOD.getDefaultState();
 		this.portal = BlockRegistry.TREE_PORTAL.getDefaultState();
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)

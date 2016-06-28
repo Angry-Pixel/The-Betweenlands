@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.creativetab.CreativeTabs;
@@ -14,10 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import thebetweenlands.common.world.feature.structure.WorldGenWeedWoodPortalTree;
 
 public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
     public ItemSwampTalisman() {
@@ -53,10 +54,10 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
                 if (stack.getItem().getDamage(stack) == 0) {
                     Block block = worldIn.getBlockState(pos).getBlock();
                     if (block instanceof BlockSapling) {
-                        /*if(new WorldGenWeedWoodPortalTree().generate(world, itemRand, x, y, z)) {
-                            world.playSoundEffect(x + 0.5D, y + 0.5D, z + 0.5D, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
-                            player.setLocationAndAngles(x + 0.5D, y + 2D, z + 0.5D, player.rotationYaw, player.rotationPitch);
-                        }*/
+                        if(new WorldGenWeedWoodPortalTree().generate(worldIn, itemRand, pos)) {
+                          //  worldIn.playSound(playerIn, pos, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
+                            playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+                        }
                     }
                     stack.damageItem(1, playerIn);
                     return EnumActionResult.SUCCESS;
