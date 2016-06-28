@@ -53,7 +53,6 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				}
 
 			if(yy == 4) {
-				System.out.println("make the portal and frame here");
 				BlockTreePortal.makePortalX(world, pos.add(radius, yy - 2, 0));
 				BlockTreePortal.makePortalX(world, pos.add(- radius, yy - 2, 0));
 				BlockTreePortal.makePortalZ(world, pos.add(0, yy - 2, radius));
@@ -67,7 +66,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 				createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - radius - 1), 4, false, rand.nextInt(2) + 4);
 
 				createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), radius + 1), 5, false, rand.nextInt(2) + 3);
-				createBranch(world, rand, pos.add(- radius - 2, yy - rand.nextInt(2), - radius - 2), 6, false, rand.nextInt(2) + 3);
+				createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), - radius - 1), 6, false, rand.nextInt(2) + 3);
 				createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), radius + 1), 7, false, rand.nextInt(2) + 3);
 				createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, false, rand.nextInt(2) + 3);
 			}
@@ -112,36 +111,45 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 	}
 
 	private void createSmallBranch(World world, Random rand, BlockPos pos, int dir, int branchLength) {
-		int meta = dir;
 		int y = 0;
 		for (int i = 0; i <= branchLength; ++i) {
 
 			if (i >= 2)
 				y++;
 
-			if (dir == 1)
+			switch (dir) {
+			case 1:
 				world.setBlockState(pos.east(i).up(y), bark);
+				break;
 
-			if (dir == 2)
+			case 2:
 				world.setBlockState(pos.west(i).up(y), bark);
+				break;
 
-			if (dir == 3)
+			case 3:
 				world.setBlockState(pos.south(i).up(y), bark);
+				break;
 
-			if (dir == 4)
+			case 4:
 				world.setBlockState(pos.north(i).up(y), bark);
+				break;
 
-			if (dir == 5)
-				world.setBlockState(pos.east(i - 1).up(y).south(i - 1), bark);
+			case 5:
+				world.setBlockState(pos.east(i).up(y).south(i), bark);
+				break;
 
-			if (dir == 6)
-				world.setBlockState(pos.west(i - 1).up(y).north(i - 1), bark);
+			case 6:
+				world.setBlockState(pos.west(i).up(y).north(i), bark);
+				break;
 
-			if (dir == 7)
-				world.setBlockState(pos.west(i - 1).up(y).south(i - 1), bark);
+			case 7:
+				world.setBlockState(pos.west(i).up(y).south(i), bark);
+				break;
 
-			if (dir == 8)
-				world.setBlockState(pos.east(i - 1).up(y).north(i - 1), bark);
+			case 8:
+				world.setBlockState(pos.east(i).up(y).north(i), bark);
+				break;
+			}
 		}
 	}
 
@@ -164,78 +172,86 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 	}
 
 	private void createBranch(World world, Random rand, BlockPos pos, int dir, boolean root, int branchLength) {
-		int meta = dir;
 		int y = 0;
 		for (int i = 0; i <= branchLength; ++i) {
 
-			if (i >= 3) {
-					y++;
-				meta = 0;
-			}
+			if (i >= 3)
+				y++;
 
-			if (dir == 1)
-				if (!root) {
+			switch (dir) {
+			case 1:
+				if (!root)
 					world.setBlockState(pos.east(i).up(y), bark);
-				} else {
+				else {
 					world.setBlockState(pos.east(i).down(y), bark);
 					world.setBlockState(pos.east(i).down(y - 1), bark);
 				}
+				break;
 
-			if (dir == 2)
-				if (!root) {
+			case 2:
+				if (!root)
 					world.setBlockState(pos.west(i).up(y), bark);
-				} else {
+				else {
 					world.setBlockState(pos.west(i).down(y), bark);
 					world.setBlockState(pos.west(i).down(y - 1), bark);
 				}
+				break;
 
-			if (dir == 3)
-				if (!root) {
+			case 3:
+				if (!root)
 					world.setBlockState(pos.south(i).up(y), bark);
-				} else {
+				else {
 					world.setBlockState(pos.south(i).down(y), bark);
 					world.setBlockState(pos.south(i).down(y - 1), bark);
 				}
+				break;
 
-			if (dir == 4)
-				if (!root) {
+			case 4:
+				if (!root)
 					world.setBlockState(pos.north(i).up(y), bark);
-				} else {
+				else {
 					world.setBlockState(pos.north(i).down(y), bark);
 					world.setBlockState(pos.north(i).down(y - 1), bark);
 				}
+				break;
 
-			if (dir == 5)
-				if (!root) {
-					world.setBlockState(pos.east(i - 1).up(y).south(i - 1), bark);
-				} else {
+			case 5:
+				if (!root)
+					world.setBlockState(pos.east(i - 1).up(y).south(i - 1),
+							bark);
+				else {
 					world.setBlockState(pos.east(i - 1).down(y).south(i - 1), bark);
 					world.setBlockState(pos.east(i - 1).down(y - 1).south(i - 1), bark);
 				}
+				break;
 
-			if (dir == 6)
-				if (!root) {
+			case 6:
+				if (!root)
 					world.setBlockState(pos.west(i - 1).up(y).north(i - 1), bark);
-				} else {
+				else {
 					world.setBlockState(pos.west(i - 1).down(y).north(i - 1), bark);
 					world.setBlockState(pos.west(i - 1).down(y - 1).north(i - 1), bark);
 				}
+				break;
 
-			if (dir == 7)
-				if (!root) {
+			case 7:
+				if (!root)
 					world.setBlockState(pos.west(i - 1).up(y).south(i - 1), bark);
-				} else {
+				else {
 					world.setBlockState(pos.west(i - 1).down(y).south(i - 1), bark);
 					world.setBlockState(pos.west(i - 1).down(y - 1).south(i - 1), bark);
 				}
+				break;
 
-			if (dir == 8)
-				if (!root) {
+			case 8:
+				if (!root)
 					world.setBlockState(pos.east(i - 1).up(y).north(i - 1), bark);
-				} else {
+				else {
 					world.setBlockState(pos.east(i - 1).down(y).north(i - 1), bark);
 					world.setBlockState(pos.east(i - 1).down(y - 1).north(i - 1), bark);
 				}
+				break;
+			}
 		}
 	}
 
