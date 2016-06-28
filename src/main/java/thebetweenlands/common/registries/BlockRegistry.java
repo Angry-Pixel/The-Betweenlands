@@ -106,6 +106,12 @@ public class BlockRegistry {
 			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
 		}
 	}.setXP(2, 5);
+	public static final Block SLIMY_BONE_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE);
+		}
+	}.setXP(5, 12);
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
@@ -123,7 +129,6 @@ public class BlockRegistry {
 	public static final Block COMPOST_BIN = new BlockCompostBin();
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
-
 
 	public static void preInit() {
 		try {
