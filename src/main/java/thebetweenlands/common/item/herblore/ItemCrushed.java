@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
-import thebetweenlands.common.item.misc.IGenericItem;
+import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemCrushed extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {

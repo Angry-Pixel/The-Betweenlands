@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {

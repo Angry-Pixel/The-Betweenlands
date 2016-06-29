@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.misc;
+package thebetweenlands.common.item;
 
 import java.util.ArrayList;
 import java.util.HashMap;
