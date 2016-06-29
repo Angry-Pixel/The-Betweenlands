@@ -24,7 +24,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
@@ -221,7 +221,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		else {
 			entityDropItem(new ItemStack(ItemRegistry.FROG_LEGS_RAW, 1, 0), 0.0F);
 			if (getSkin() == 4)
-				entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.POISON_GLAND), 0.0F);
+				entityDropItem(EnumItemMisc.POISON_GLAND.create(1), 0.0F);
 		}
 	}
 

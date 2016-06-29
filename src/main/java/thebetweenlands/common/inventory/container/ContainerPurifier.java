@@ -6,8 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.item.misc.ItemGeneric;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
@@ -19,15 +18,15 @@ public class ContainerPurifier extends Container {
 		addSlotToContainer(new Slot(tileentity, 0, 61, 54));
 		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
 		addSlotToContainer(new Slot(tileentity, 2, 121, 34));
-		
+
 		for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
+			for (int j = 0; j < 9; ++j) {
+				addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+			}
+		}
 		for (int i = 0; i < 9; ++i) {
-            addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
-        }
+			addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
+		}
 	}
 
 	@Override
@@ -38,7 +37,7 @@ public class ContainerPurifier extends Container {
 			ItemStack slotStack = slot.getStack();
 			newStack = slotStack.copy();
 			if (slotIndex > 2) {
-				if (slotStack.getItem() == ItemRegistry.ITEMS_GENERIC && slotStack.getItemDamage() == ItemGeneric.EnumItemGeneric.SULFUR.ordinal()) {
+				if (EnumItemMisc.SULFUR.isItemOf(slotStack)) {
 					if (!mergeItemStack(slotStack, 0, 1, false)) {
 						return null;
 					}
@@ -69,8 +68,8 @@ public class ContainerPurifier extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		for (IContainerListener listener : listeners) {
-            purifier.sendGUIData(this, listener);
-        }
+			purifier.sendGUIData(this, listener);
+		}
 	}
 
 	@Override

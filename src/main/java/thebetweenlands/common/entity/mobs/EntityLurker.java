@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.MathUtils;
 
@@ -464,7 +464,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     protected void dropFewItems(boolean recentlyHit, int looting) {
-        entityDropItem(ItemGeneric.createStack(ItemGeneric.EnumItemGeneric.LURKER_SKIN, 3), 0F);
+        entityDropItem(EnumItemMisc.LURKER_SKIN.create(3), 0F);
     }
 
     @Override

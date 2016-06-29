@@ -47,8 +47,7 @@ import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
-import thebetweenlands.common.item.misc.ItemGeneric;
-import thebetweenlands.common.item.misc.ItemGeneric.EnumItemGeneric;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 
 public class BlockRegistry {
@@ -95,13 +94,13 @@ public class BlockRegistry {
 	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD, 1 + rand.nextInt(fortune + 1));
+			return EnumItemMisc.VALONITE_SHARD.create(1 + rand.nextInt(fortune + 1));
 		}
 	}.setXP(5, 12);
 	public static final Block SULFUR_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return ItemGeneric.createStack(EnumItemGeneric.SULFUR, 1 + rand.nextInt(fortune + 2));
+			return EnumItemMisc.SULFUR.create(1 + rand.nextInt(fortune + 1));
 		}
 		@SideOnly(Side.CLIENT)
 		@Override
@@ -112,7 +111,7 @@ public class BlockRegistry {
 	public static final Block SLIMY_BONE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return ItemGeneric.createStack(EnumItemGeneric.SLIMY_BONE);
+			return EnumItemMisc.SLIMY_BONE.create(1 + rand.nextInt(fortune + 1));
 		}
 	}.setXP(5, 12);
 	public static final Block SILT = new BlockSilt();
@@ -122,24 +121,24 @@ public class BlockRegistry {
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
 	public static final Block LEAVES_WEEDWOOD = new BlockLeavesBetweenlands() {
-		
+
 		/*	@Override
 			public Item getItemDropped(int meta, Random rand, int fortune) {
 				return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
 			}*/
-		};
-		public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
+	};
+	public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
 		/*	@Override
 			public Item getItemDropped(int meta, Random rand, int fortune) {
 				return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP_TREE);
 			}*/
-		};
-		public static final Block LEAVES_RUBBER_TREE = new BlockLeavesBetweenlands() {
+	};
+	public static final Block LEAVES_RUBBER_TREE = new BlockLeavesBetweenlands() {
 		/*	@Override
 			public Item getItemDropped(int meta, Random rand, int fortune) {
 				return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER_TREE);
 			}*/
-		};
+	};
 
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();

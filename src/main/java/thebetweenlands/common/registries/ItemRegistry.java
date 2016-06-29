@@ -28,9 +28,9 @@ import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
-import thebetweenlands.common.item.herblore.ItemGenericCrushed;
-import thebetweenlands.common.item.herblore.ItemGenericPlantDrop;
-import thebetweenlands.common.item.misc.ItemGeneric;
+import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemRandomSound;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.TestItem;
@@ -44,9 +44,9 @@ import thebetweenlands.util.TranslationHelper;
 
 public class ItemRegistry {
 	//generic
-	public static final Item ITEMS_GENERIC = new ItemGeneric().setCreativeTab(BLCreativeTabs.ITEMS);
-	public static final Item ITEMS_GENERIC_CRUSHED = new ItemGenericCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
-	public static final Item ITEMS_GENERIC_PLANT_DROP = new ItemGenericPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
+	public static final Item ITEMS_MISC = new ItemMisc().setCreativeTab(BLCreativeTabs.ITEMS);
+	public static final Item ITEMS_CRUSHED = new ItemCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
+	public static final Item ITEMS_PLANT_DROP = new ItemPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
 	public static final Item SWAMP_TALISMAN = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.ITEMS);
 	//food
 	public static final Item SAP_BALL = new ItemSapBall();
