@@ -85,12 +85,7 @@ public class BlockRegistry {
 			.setResistance(8.0F);
 	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
 	public static final Block SWAMP_GRASS = new BlockSwampGrass();
-	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK) {
-		@Override
-		protected ItemStack getOreDrop(Random rand, int fortune) {
-			return new ItemStack(Item.getItemFromBlock(this));
-		}
-	}.setLightLevel(0.875F);
+	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.875F);
 	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
@@ -113,7 +108,17 @@ public class BlockRegistry {
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return EnumItemMisc.SLIMY_BONE.create(1 + rand.nextInt(fortune + 1));
 		}
-	}.setXP(5, 12);
+	}.setXP(1, 4);
+	public static final Block SCABYST_ORE = new BlockGenericOre(Material.ROCK) {
+		@Override
+		protected ItemStack getOreDrop(Random rand, int fortune) {
+			return EnumItemMisc.SCABYST.create(1 + rand.nextInt(fortune + 3));
+		}
+	}.setXP(4, 10);
+	public static final Block SYRMORITE_ORE = new BlockGenericOre(Material.ROCK);
+	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
+	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
+	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 

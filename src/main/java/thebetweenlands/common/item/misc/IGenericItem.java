@@ -45,6 +45,15 @@ public interface IGenericItem {
 		return stack != null && stack.getItem() == this.getItem() && stack.getItemDamage() == this.getID();
 	}
 
+	/**
+	 * Returns whether the specified item is the same as this item
+	 * @param item
+	 * @return
+	 */
+	default boolean isItemEqual(IGenericItem item) {
+		return item != null && item.getItem() == this.getItem() && item.getID() == this.getID();
+	}
+
 	static Map<Class<? extends Enum>, List<IGenericItem>> TYPE_TO_ITEMS = new HashMap<Class<? extends Enum>, List<IGenericItem>>();
 
 	/**

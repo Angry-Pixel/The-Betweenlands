@@ -32,7 +32,7 @@ public class BlockGenericOre extends BasicBlock {
 	}
 
 	protected ItemStack getOreDrop(Random rand, int fortune) {
-		return null;
+		return new ItemStack(Item.getItemFromBlock(this));
 	}
 
 	@Override

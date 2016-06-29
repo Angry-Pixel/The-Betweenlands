@@ -20,7 +20,7 @@ if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BU
 version = /*getVersionFromJava() + */project.buildnumber
 group = "net.angrypixel"
 archivesBaseName = "TheBetweenlands"
-sourceCompatibility = targetCompatibility = "1.7"
+sourceCompatibility = targetCompatibility = "1.8"
 
 /*
 // for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
