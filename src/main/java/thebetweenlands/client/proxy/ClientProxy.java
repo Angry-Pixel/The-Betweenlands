@@ -22,6 +22,7 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
+import thebetweenlands.client.render.models.block.registry.BlockModelRegistry;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;
@@ -110,6 +111,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerItemAndBlockRenderers() {
+    	BlockModelRegistry.INSTANCE.registerLoader();
         //TODO ItemRegistry.registerRenderers();
         BlockRegistry.registerRenderers();
     }

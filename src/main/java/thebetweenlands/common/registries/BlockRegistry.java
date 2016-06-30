@@ -9,20 +9,20 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticle;
+import thebetweenlands.client.render.models.block.registry.BlockModelRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
@@ -40,6 +40,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalOre;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockSilt;
@@ -119,6 +120,7 @@ public class BlockRegistry {
 	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
+	public static final Block LIFE_CRYSTAL_ORE = new BlockLifeCrystalOre(Material.ROCK);
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
@@ -177,8 +179,11 @@ public class BlockRegistry {
 	}
 
 	public static void registerRenderers() {
-		for (Block block : BLOCKS)
-			if (block instanceof ISubBlocksBlock) {
+		for (Block block : BLOCKS) {
+			if(block instanceof IStateMapped) {
+				((IStateMapped)block).setStateMapper();
+			}
+			if(block instanceof ISubBlocksBlock) {
 				List<String> models = ((ISubBlocksBlock) block).getModels();
 				for (int i = 0; i < models.size(); i++)
 					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
@@ -186,9 +191,10 @@ public class BlockRegistry {
 				ResourceLocation name = block.getRegistryName();
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
-		ModelLoader.setCustomStateMapper(LEAVES_SAP_TREE, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
-		ModelLoader.setCustomStateMapper(LEAVES_RUBBER_TREE, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
-		ModelLoader.setCustomStateMapper(LEAVES_WEEDWOOD, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());//temp
+			if(block instanceof ICustomModelSupplier) {
+				BlockModelRegistry.INSTANCE.registerModel(new ResourceLocation(ModInfo.ASSETS_PREFIX + block.getRegistryName().getResourcePath()), () -> ((ICustomModelSupplier)block).getCustomModel());
+			}
+		}
 	}
 
 	public static void registerBlock(String name, Block block) {
@@ -211,6 +217,16 @@ public class BlockRegistry {
 
 	public interface ISubBlocksBlock {
 		List<String> getModels();
+	}
+
+	public interface IStateMapped {
+		@SideOnly(Side.CLIENT)
+		void setStateMapper();
+	}
+
+	public interface ICustomModelSupplier {
+		@SideOnly(Side.CLIENT)
+		IModel getCustomModel();
 	}
 }
 

@@ -20,8 +20,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.ICorrodible;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.ICorrodible;
 
 public class CorrosionTextureStitchHandler {
 	//TODO: Mappings!

@@ -1,10 +1,9 @@
-package thebetweenlands.common.item;
+package thebetweenlands.common.item.corrosion;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.corrosion.CorrosionHelper;
 
 public interface ICorrodible {
 	/**

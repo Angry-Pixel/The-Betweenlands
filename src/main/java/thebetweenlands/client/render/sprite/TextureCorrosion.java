@@ -23,7 +23,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.AnimationFrame;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.common.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.lib.ModInfo;
 
 /**

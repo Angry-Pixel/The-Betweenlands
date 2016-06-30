@@ -61,7 +61,7 @@ public interface IGenericItem {
 	 * @param type
 	 * @return
 	 */
-	public static List<IGenericItem> getGenericItemsFromType(Class<? extends Enum> type) {
+	public static List<IGenericItem> getGenericItems(Class<? extends Enum> type) {
 		List<IGenericItem> genericItems = TYPE_TO_ITEMS.get(type);
 		if(genericItems == null) {
 			if(!IGenericItem.class.isAssignableFrom(type))
@@ -80,7 +80,7 @@ public interface IGenericItem {
 	 * @return
 	 */
 	public static IGenericItem getFromID(Class<? extends Enum> type, int id) {
-		for(IGenericItem item : getGenericItemsFromType(type)) {
+		for(IGenericItem item : getGenericItems(type)) {
 			if(item.getID() == id)
 				return item;
 		}

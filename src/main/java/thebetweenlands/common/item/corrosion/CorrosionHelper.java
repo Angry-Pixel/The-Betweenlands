@@ -1,4 +1,4 @@
-package thebetweenlands.common.corrosion;
+package thebetweenlands.common.item.corrosion;
 
 import javax.annotation.Nullable;
 

@@ -11,6 +11,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -20,11 +21,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry.IStateMapped;
 
-public class BlockLeavesBetweenlands extends BlockLeaves {
+public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped {
 
 	public BlockLeavesBetweenlands() {
 		setHardness(0.2F);
@@ -100,5 +103,10 @@ public class BlockLeavesBetweenlands extends BlockLeaves {
 			//	BLParticle.LEAF.spawn(world, pos.add(rand.nextFloat(), 0, rand.nextFloat()));
 			}
 		}
+	}
+
+	@Override
+	public void setStateMapper() {
+		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());		
 	}
 }

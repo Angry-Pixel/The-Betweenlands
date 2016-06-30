@@ -1,8 +1,8 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.item.ItemPickaxe;
-import thebetweenlands.common.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.ICorrodible;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.ICorrodible;
 
 public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ItemBLPickaxe(ToolMaterial material) {

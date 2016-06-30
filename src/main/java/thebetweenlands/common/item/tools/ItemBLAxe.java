@@ -7,8 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import thebetweenlands.common.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.ICorrodible;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.ICorrodible;
 
 
 public class ItemBLAxe extends ItemTool implements ICorrodible {
