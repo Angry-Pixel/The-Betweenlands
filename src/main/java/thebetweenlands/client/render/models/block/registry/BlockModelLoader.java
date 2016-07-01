@@ -1,7 +1,7 @@
 package thebetweenlands.client.render.models.block.registry;
 
 import java.util.Map.Entry;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -22,8 +22,8 @@ public class BlockModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		for(Entry<ResourceLocation, Supplier<IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(modelLocation.toString().startsWith(entry.getKey().toString()))
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
+			if(this.isMatching(entry.getKey(), modelLocation))
 				return true;
 		}
 		return false;
@@ -31,10 +31,14 @@ public class BlockModelLoader implements ICustomModelLoader {
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		for(Entry<ResourceLocation, Supplier<IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(modelLocation.toString().startsWith(entry.getKey().toString()))
-				return entry.getValue().get();
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
+			if(this.isMatching(entry.getKey(), modelLocation))
+				return entry.getValue().apply(modelLocation);
 		}
 		return null;
+	}
+
+	private boolean isMatching(ResourceLocation registeredModel, ResourceLocation modelLocation) {
+		return registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath());
 	}
 }

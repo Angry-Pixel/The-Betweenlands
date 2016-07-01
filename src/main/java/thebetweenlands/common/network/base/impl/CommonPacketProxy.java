@@ -1,10 +1,10 @@
-package thebetweenlands.network.base.impl;
+package thebetweenlands.common.network.base.impl;
 
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.network.base.IPacket;
-import thebetweenlands.network.base.IPacketProxy;
-import thebetweenlands.network.base.ListenerEntry;
-import thebetweenlands.network.base.SubscribePacket;
+import thebetweenlands.common.network.base.IPacket;
+import thebetweenlands.common.network.base.IPacketProxy;
+import thebetweenlands.common.network.base.ListenerEntry;
+import thebetweenlands.common.network.base.SubscribePacket;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

@@ -1,4 +1,4 @@
-package thebetweenlands.network.base;
+package thebetweenlands.common.network.base;
 
 
 import java.lang.annotation.ElementType;

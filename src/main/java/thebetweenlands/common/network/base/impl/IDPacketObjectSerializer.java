@@ -1,8 +1,8 @@
-package thebetweenlands.network.base.impl;
+package thebetweenlands.common.network.base.impl;
 
 import io.netty.buffer.ByteBuf;
-import thebetweenlands.network.base.IPacket;
-import thebetweenlands.network.base.IPacketObjectSerializer;
+import thebetweenlands.common.network.base.IPacket;
+import thebetweenlands.common.network.base.IPacketObjectSerializer;
 
 import java.util.HashMap;
 

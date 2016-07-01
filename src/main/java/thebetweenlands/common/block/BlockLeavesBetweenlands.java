@@ -106,6 +106,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());		
 	}

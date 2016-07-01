@@ -192,7 +192,8 @@ public class BlockRegistry {
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
 			if(block instanceof ICustomModelSupplier) {
-				BlockModelRegistry.INSTANCE.registerModel(new ResourceLocation(ModInfo.ASSETS_PREFIX + block.getRegistryName().getResourcePath()), () -> ((ICustomModelSupplier)block).getCustomModel());
+				BlockModelRegistry.INSTANCE.registerModel(new ResourceLocation(ModInfo.ASSETS_PREFIX + block.getRegistryName().getResourcePath()), 
+						(modelLocation) -> ((ICustomModelSupplier)block).getCustomModel(modelLocation));
 			}
 		}
 	}
@@ -226,7 +227,7 @@ public class BlockRegistry {
 
 	public interface ICustomModelSupplier {
 		@SideOnly(Side.CLIENT)
-		IModel getCustomModel();
+		IModel getCustomModel(ResourceLocation modelLocation);
 	}
 }
 

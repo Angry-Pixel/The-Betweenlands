@@ -25,15 +25,16 @@ import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.BLMessage;
+import thebetweenlands.common.network.base.SidedPacketHandler;
+import thebetweenlands.common.network.base.impl.CommonPacketProxy;
+import thebetweenlands.common.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.PacketRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
-import thebetweenlands.network.base.SidedPacketHandler;
-import thebetweenlands.network.base.impl.CommonPacketProxy;
-import thebetweenlands.network.base.impl.IDPacketObjectSerializer;
+import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
@@ -94,7 +95,7 @@ public class TheBetweenlands {
 
 	@InstanceFactory
 	public static TheBetweenlands createInstance() {
-		//TheBetweenlandsPreconditions.check();
+		TheBetweenlandsPreconditions.check();
 		return new TheBetweenlands();
 	}
 

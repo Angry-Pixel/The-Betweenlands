@@ -16,10 +16,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.base.SubscribePacket;
+import thebetweenlands.common.network.packet.server.PacketDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.network.base.SubscribePacket;
-import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
     @SideOnly(Side.CLIENT)

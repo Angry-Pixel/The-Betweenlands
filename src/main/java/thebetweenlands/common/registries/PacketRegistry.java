@@ -1,8 +1,8 @@
 package thebetweenlands.common.registries;
 
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.network.base.IPacket;
-import thebetweenlands.network.packet.server.PacketDruidAltarProgress;
+import thebetweenlands.common.network.base.IPacket;
+import thebetweenlands.common.network.packet.server.PacketDruidAltarProgress;
 
 
 public class PacketRegistry {
