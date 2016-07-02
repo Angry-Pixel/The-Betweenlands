@@ -27,7 +27,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.block.LifeCrystalOreModel;
+import thebetweenlands.client.render.models.block.ModelLifeCrystalOre;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
@@ -132,7 +132,7 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IModel getCustomModel(ResourceLocation modelLocation) {
-		return new LifeCrystalOreModel();
+		return new ModelLifeCrystalOre();
 	}
 
 	@Override

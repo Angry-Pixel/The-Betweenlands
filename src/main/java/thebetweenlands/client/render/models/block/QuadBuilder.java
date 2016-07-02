@@ -232,10 +232,10 @@ public class QuadBuilder {
 
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
 		builder.setTexture(sprite1);
-		putVertex(format, builder, normal, vert1.xCoord, vert1.yCoord, vert1.zCoord, 0, 0, sprite1, switchUV1);
-		putVertex(format, builder, normal, vert2.xCoord, vert2.yCoord, vert2.zCoord, 0, 16, sprite2, switchUV2);
-		putVertex(format, builder, normal, vert3.xCoord, vert3.yCoord, vert3.zCoord, 16, 16, sprite3, switchUV3);
-		putVertex(format, builder, normal, vert4.xCoord, vert4.yCoord, vert4.zCoord, 16, 0, sprite4, switchUV4);
+		putVertex(format, builder, normal, vert1.xCoord, vert1.yCoord, vert1.zCoord, u1, v1, sprite1, switchUV1);
+		putVertex(format, builder, normal, vert2.xCoord, vert2.yCoord, vert2.zCoord, u2, v2, sprite2, switchUV2);
+		putVertex(format, builder, normal, vert3.xCoord, vert3.yCoord, vert3.zCoord, u3, v3, sprite3, switchUV3);
+		putVertex(format, builder, normal, vert4.xCoord, vert4.yCoord, vert4.zCoord, u4, v4, sprite4, switchUV4);
 		if(quadConsumer != null)
 			quadConsumer.accept(builder);
 		return builder.build();

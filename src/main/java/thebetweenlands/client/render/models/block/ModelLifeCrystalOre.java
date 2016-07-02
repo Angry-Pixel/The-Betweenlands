@@ -22,11 +22,13 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalOre;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalOre.EnumLifeCrystalType;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.StalactiteHelper;
 
-public class LifeCrystalOreModel implements IModel {
-	public static final ResourceLocation TEXTURE_BACKGROUND = new ResourceLocation(ModInfo.ID, "blocks/life_crystal_ore_background");
+public class ModelLifeCrystalOre implements IModel {
+	public static final ResourceLocation TEXTURE_DEFAULT = new ResourceLocation(ModInfo.ID, "blocks/pitstone");
+	public static final ResourceLocation TEXTURE_ORE_BACKGROUND = new ResourceLocation(ModInfo.ID, "blocks/life_crystal_ore_background");
 	public static final ResourceLocation TEXTURE_ORE = new ResourceLocation(ModInfo.ID, "blocks/life_crystal_ore");
 
 	@Override
@@ -36,12 +38,12 @@ public class LifeCrystalOreModel implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{TEXTURE_BACKGROUND, TEXTURE_ORE}));
+		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{TEXTURE_DEFAULT, TEXTURE_ORE_BACKGROUND, TEXTURE_ORE}));
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new LifeCrystalOreBakedModel(format, bakedTextureGetter.apply(TEXTURE_BACKGROUND), bakedTextureGetter.apply(TEXTURE_ORE));
+		return new ModelBakedLifeCrystalOre(format, bakedTextureGetter.apply(TEXTURE_DEFAULT), bakedTextureGetter.apply(TEXTURE_ORE_BACKGROUND), bakedTextureGetter.apply(TEXTURE_ORE));
 	}
 
 	@Override
@@ -49,14 +51,16 @@ public class LifeCrystalOreModel implements IModel {
 		return TRSRTransformation.identity();
 	}
 
-	public static class LifeCrystalOreBakedModel implements IBakedModel {
+	public static class ModelBakedLifeCrystalOre implements IBakedModel {
 		private final VertexFormat format;
-		private final TextureAtlasSprite textureBackground;
+		private final TextureAtlasSprite textureDefault;
+		private final TextureAtlasSprite textureOreBackground;
 		private final TextureAtlasSprite textureOre;
 
-		private LifeCrystalOreBakedModel(VertexFormat format, TextureAtlasSprite textureBackground, TextureAtlasSprite textureOre) {
+		private ModelBakedLifeCrystalOre(VertexFormat format, TextureAtlasSprite textureDefault, TextureAtlasSprite textureOreBackground, TextureAtlasSprite textureOre) {
 			this.format = format;
-			this.textureBackground = textureBackground;
+			this.textureDefault = textureDefault;
+			this.textureOreBackground = textureOreBackground;
 			this.textureOre = textureOre;
 		}
 
@@ -67,6 +71,7 @@ public class LifeCrystalOreModel implements IModel {
 
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
 
+			EnumLifeCrystalType type = state.getValue(BlockLifeCrystalOre.VARIANT);
 			int distUp = state.getValue(BlockLifeCrystalOre.DIST_UP);
 			int distDown = state.getValue(BlockLifeCrystalOre.DIST_DOWN);
 			boolean noTop = state.getValue(BlockLifeCrystalOre.NO_TOP);
@@ -76,7 +81,6 @@ public class LifeCrystalOreModel implements IModel {
 			int randZ = state.getValue(BlockLifeCrystalOre.POS_Z);
 
 			List<BakedQuad> quads = new ArrayList<>();
-
 
 			int totalHeight = 1 + distDown + distUp;
 			float distToMidBottom, distToMidTop;
@@ -116,14 +120,17 @@ public class LifeCrystalOreModel implements IModel {
 
 			StalactiteHelper core = StalactiteHelper.getValsFor(randX, height, randZ);
 
+			QuadBuilder builder = new QuadBuilder(this.format);
 
-			QuadBuilder builder = new QuadBuilder(this.format).setSwitchUV(true);
-
-			for(int i = 0; i < 2; i++) {
-				if(i == 0) 
-					builder.setSprite(this.textureBackground);
-				else if(i == 1)
-					builder.setSprite(this.textureOre);
+			for(int i = 0; i < (type == EnumLifeCrystalType.DEFAULT ? 1 : 2); i++) {
+				if(type == EnumLifeCrystalType.DEFAULT) {
+					builder.setSprite(this.textureDefault);
+				} else {
+					if(i == 0) 
+						builder.setSprite(this.textureOreBackground);
+					else if(i == 1)
+						builder.setSprite(this.textureOre);
+				}
 
 				// front
 				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
@@ -185,7 +192,7 @@ public class LifeCrystalOreModel implements IModel {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return this.textureBackground;
+			return this.textureOreBackground;
 		}
 
 		@Override
