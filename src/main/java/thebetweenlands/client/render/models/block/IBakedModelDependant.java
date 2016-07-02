@@ -18,8 +18,6 @@ import net.minecraftforge.common.model.IModelState;
 public interface IBakedModelDependant {
 	/**
 	 * Returns a list of model dependencies.
-	 * ResourceLocation argument will be passed directly to the custom model loaders,
-	 * ModelResourceLocation argument will be loaded through the blockstate system.
 	 * If the model wasn't registered previously it will be loaded and baked with the arguments returned
 	 * by {@link IBakedModelDependant#getModelState(IModel)}, {@link IBakedModelDependant#getVertexFormat(IModel)}
 	 * and {@link IBakedModelDependant#getTextureGetter(IModel)}.
