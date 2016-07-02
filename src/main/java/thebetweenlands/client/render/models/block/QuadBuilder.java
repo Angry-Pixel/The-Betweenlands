@@ -46,8 +46,6 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder setSprite(TextureAtlasSprite sprite) {
-		if(this.vertices.size() % 4 != 0)
-			throw new RuntimeException("Can't change sprite in quad");
 		this.sprite = sprite;
 		return this;
 	}
@@ -168,11 +166,13 @@ public class QuadBuilder {
 			Vertex vert3 = this.vertices.get(i + 2);
 			Vertex vert4 = this.vertices.get(i + 3);
 			quads.add(this.createQuad(this.format, 
-					vert1.pos, vert1.u, vert1.v, 
-					vert2.pos, vert2.u, vert2.v, 
-					vert3.pos, vert3.u, vert3.v, 
-					vert4.pos, vert4.u, vert4.v, 
-					vert1.sprite, quadConsumer, vert1.switchUV));
+					vert1.pos, vert1.u, vert1.v,
+					vert2.pos, vert2.u, vert2.v,
+					vert3.pos, vert3.u, vert3.v,
+					vert4.pos, vert4.u, vert4.v,
+					vert1.sprite, vert2.sprite, vert3.sprite, vert4.sprite,
+					quadConsumer,
+					vert1.switchUV, vert2.switchUV, vert3.switchUV, vert4.switchUV));
 		}
 		this.vertices.clear();
 		return quads;
@@ -222,17 +222,20 @@ public class QuadBuilder {
 			Vec3d vert2, float u2, float v2,
 			Vec3d vert3, float u3, float v3,
 			Vec3d vert4, float u4, float v4,
-			@Nullable TextureAtlasSprite sprite,
+			@Nullable TextureAtlasSprite sprite1,
+			@Nullable TextureAtlasSprite sprite2,
+			@Nullable TextureAtlasSprite sprite3,
+			@Nullable TextureAtlasSprite sprite4,
 			@Nullable Consumer<UnpackedBakedQuad.Builder> quadConsumer,
-			boolean switchUV) {
+			boolean switchUV1, boolean switchUV2, boolean switchUV3, boolean switchUV4) {
 		Vec3d normal = vert1.subtract(vert2).crossProduct(vert3.subtract(vert2));
 
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
-		builder.setTexture(sprite);
-		putVertex(format, builder, normal, vert1.xCoord, vert1.yCoord, vert1.zCoord, 0, 0, sprite, switchUV);
-		putVertex(format, builder, normal, vert2.xCoord, vert2.yCoord, vert2.zCoord, 0, 16, sprite, switchUV);
-		putVertex(format, builder, normal, vert3.xCoord, vert3.yCoord, vert3.zCoord, 16, 16, sprite, switchUV);
-		putVertex(format, builder, normal, vert4.xCoord, vert4.yCoord, vert4.zCoord, 16, 0, sprite, switchUV);
+		builder.setTexture(sprite1);
+		putVertex(format, builder, normal, vert1.xCoord, vert1.yCoord, vert1.zCoord, 0, 0, sprite1, switchUV1);
+		putVertex(format, builder, normal, vert2.xCoord, vert2.yCoord, vert2.zCoord, 0, 16, sprite2, switchUV2);
+		putVertex(format, builder, normal, vert3.xCoord, vert3.yCoord, vert3.zCoord, 16, 16, sprite3, switchUV3);
+		putVertex(format, builder, normal, vert4.xCoord, vert4.yCoord, vert4.zCoord, 16, 0, sprite4, switchUV4);
 		if(quadConsumer != null)
 			quadConsumer.accept(builder);
 		return builder.build();
