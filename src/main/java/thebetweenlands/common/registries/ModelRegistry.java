@@ -8,13 +8,17 @@ import java.util.Locale;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.render.models.block.ModelCombined;
+import thebetweenlands.client.render.models.block.ModelFromModelBase;
 import thebetweenlands.client.render.models.block.ModelLifeCrystalStalactite;
+import thebetweenlands.client.render.models.block.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.models.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ModelRegistry {
 	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
+	public static final IModel PITCHER_PLANT = new ModelFromModelBase(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128);
+
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

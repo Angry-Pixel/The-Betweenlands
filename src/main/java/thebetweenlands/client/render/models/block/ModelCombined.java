@@ -131,19 +131,19 @@ public class ModelCombined implements IModelCustomData {
 		if(baseModel instanceof IModelCustomData) {
 			if(!customData.containsKey("model_base_data"))
 				return this;
-			baseModel = ((IModelCustomData)baseModel).process(this.getCustomDataFor(customData.get("model_base_data")));
+			baseModel = ((IModelCustomData)baseModel).process(getCustomDataFor(customData.get("model_base_data")));
 		}
 		IModel additionalModel = ModelLoaderRegistry.getModelOrLogError(additionalModelLocation, "Could not find additional model for combined model");
 		if(additionalModel instanceof IModelCustomData) {
 			if(!customData.containsKey("model_additional_data"))
 				return this;
-			additionalModel = ((IModelCustomData)additionalModel).process(this.getCustomDataFor(customData.get("model_additional_data")));
+			additionalModel = ((IModelCustomData)additionalModel).process(getCustomDataFor(customData.get("model_additional_data")));
 		}
 
 		return new ModelCombined(baseModel, additionalModel);
 	}
 
-	private ImmutableMap<String, String> getCustomDataFor(String customData) {
+	public static ImmutableMap<String, String> getCustomDataFor(String customData) {
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(customData);
 		JsonObject jsonObj = element.getAsJsonObject();

@@ -72,4 +72,12 @@ public class Vec3UV {
 	public Vec3UV normalized() {
 		return this.div(this.len());
 	}
+	public float getU(float umax, int width) {
+		double umin = 0;
+		return (float) (umin + (umax - umin) * this.uw / (double)width * this.u);
+	}
+	public float getV(float vmax, int height) {
+		double vmin = 0;
+		return (float) (vmin + (vmax - vmin) * this.vw / (double)height * this.v);
+	}
 }

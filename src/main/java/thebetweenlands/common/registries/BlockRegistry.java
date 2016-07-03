@@ -30,6 +30,7 @@ import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.plant.BlockPitcherPlant;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -155,7 +156,8 @@ public class BlockRegistry {
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
 	public static final Block COMPOST_BIN = new BlockCompostBin();
-
+	public static final Block PITCHER_PLANT = new BlockPitcherPlant();
+	
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public void preInit() {

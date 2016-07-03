@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:internal/pitcher_plant" },
+            { "model": "thebetweenlands:internal/pitcher_plant", "y": 90 },
+            { "model": "thebetweenlands:internal/pitcher_plant", "y": 180 },
+            { "model": "thebetweenlands:internal/pitcher_plant", "y": 270 }
+        ]
+    }
+}
