@@ -66,19 +66,20 @@ public class ModelLifeCrystalOre implements IModel {
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			if(side != null)
-				return new ArrayList<BakedQuad>();
-
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
+
+			if(state == null || side != null)
+				return new ArrayList<BakedQuad>();
 
 			EnumLifeCrystalType type = state.getValue(BlockLifeCrystalOre.VARIANT);
 			int distUp = state.getValue(BlockLifeCrystalOre.DIST_UP);
 			int distDown = state.getValue(BlockLifeCrystalOre.DIST_DOWN);
 			boolean noTop = state.getValue(BlockLifeCrystalOre.NO_TOP);
 			boolean noBottom = state.getValue(BlockLifeCrystalOre.NO_BOTTOM);
-			int randX = state.getValue(BlockLifeCrystalOre.POS_X);
-			int height = state.getValue(BlockLifeCrystalOre.POS_Y);
-			int randZ = state.getValue(BlockLifeCrystalOre.POS_Z);
+			int posX = state.getValue(BlockLifeCrystalOre.POS_X);
+			int posY = state.getValue(BlockLifeCrystalOre.POS_Y);
+			int posZ = state.getValue(BlockLifeCrystalOre.POS_Z);
+			float height = distUp == 0 ? 0.75F : 1.0F;
 
 			List<BakedQuad> quads = new ArrayList<>();
 
@@ -118,7 +119,7 @@ public class ModelLifeCrystalOre implements IModel {
 			float halfSize1 = (float) (scaledValTop) / 16;
 			float halfSizeTex1 = halfSize1 * (umax - umin);
 
-			StalactiteHelper core = StalactiteHelper.getValsFor(randX, height, randZ);
+			StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
 
 			QuadBuilder builder = new QuadBuilder(this.format);
 
@@ -135,30 +136,30 @@ public class ModelLifeCrystalOre implements IModel {
 				// front
 				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, 1, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, 1, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// back
 				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
 				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, 1, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, 1, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// left
 				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, 1, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, 1, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// right
 				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
 				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, 1, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, 1, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 
 				// top
 				if(distUp == 0) {
-					builder.addVertex(core.tX - halfSize1, 1, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, 1, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					builder.addVertex(core.tX + halfSize1, 1, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-					builder.addVertex(core.tX + halfSize1, 1, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
 				}
 
 				// bottom
@@ -192,7 +193,7 @@ public class ModelLifeCrystalOre implements IModel {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return this.textureOreBackground;
+			return this.textureDefault;
 		}
 
 		@Override
@@ -202,7 +203,7 @@ public class ModelLifeCrystalOre implements IModel {
 
 		@Override
 		public ItemOverrideList getOverrides() {
-			return null;
+			return ItemOverrideList.NONE;
 		}
 	}
 }

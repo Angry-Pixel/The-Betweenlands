@@ -2,9 +2,13 @@ package thebetweenlands.common.registries;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -48,11 +52,12 @@ import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 
 public class BlockRegistry {
-	public static final Block SWAMP_WATER = new Block(Material.WATER);
+	public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
 
 	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
 	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");
@@ -120,7 +125,7 @@ public class BlockRegistry {
 	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
-	public static final Block LIFE_CRYSTAL_ORE = new BlockLifeCrystalOre(Material.ROCK);
+	public static final Block LIFE_CRYSTAL_ORE = new BlockLifeCrystalOre(FluidRegistry.SWAMP_WATER, Material.WATER);
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
@@ -158,7 +163,7 @@ public class BlockRegistry {
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
-	public static void preInit() {
+	public void preInit() {
 		try {
 			for (Field field : BlockRegistry.class.getDeclaredFields()) {
 				Object obj = field.get(null);
@@ -192,8 +197,14 @@ public class BlockRegistry {
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
 			if(block instanceof ICustomModelSupplier) {
+				ICustomModelSupplier modelSupplier = (ICustomModelSupplier) block;
+				for(Pair<ResourceLocation, IModel> additionalModel : modelSupplier.getAdditionalModelsToRegister()) {
+					ResourceLocation additionalModelLocation = additionalModel.getKey();
+					ResourceLocation completedLocation = new ResourceLocation(additionalModelLocation.getResourceDomain(), "models/" + additionalModelLocation.getResourcePath());
+					BlockModelRegistry.INSTANCE.registerModel(completedLocation, (modelLocation) -> additionalModel.getValue());
+				}
 				BlockModelRegistry.INSTANCE.registerModel(new ResourceLocation(ModInfo.ASSETS_PREFIX + block.getRegistryName().getResourcePath()), 
-						(modelLocation) -> ((ICustomModelSupplier)block).getCustomModel(modelLocation));
+						(modelLocation) -> modelSupplier.getCustomModel(modelLocation));
 			}
 		}
 	}
@@ -226,8 +237,22 @@ public class BlockRegistry {
 	}
 
 	public interface ICustomModelSupplier {
+		/**
+		 * Returns a custom model for the specified block state (as resource location)
+		 * @param modelLocation
+		 * @return
+		 */
 		@SideOnly(Side.CLIENT)
 		IModel getCustomModel(ResourceLocation modelLocation);
+
+		/**
+		 * Return a list of additional models to register and load
+		 * @return
+		 */
+		@SideOnly(Side.CLIENT)
+		default Collection<Pair<ResourceLocation, IModel>> getAdditionalModelsToRegister() {
+			return Collections.emptyList();
+		}
 	}
 }
 

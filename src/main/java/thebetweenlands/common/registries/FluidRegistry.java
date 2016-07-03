@@ -1,13 +1,28 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+
 public class FluidRegistry {
-	public static final Fluid SWAMP_WATER = new Fluid("swampWater", new ResourceLocation("thebetweenlands:textures/fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:textures/fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
+	/**
+	 * A fluid that can be used by multiple blocks
+	 */
+	static class FluidMultipleBlocks extends Fluid {
+		public FluidMultipleBlocks(String fluidName, ResourceLocation still, ResourceLocation flowing) {
+			super(fluidName, still, flowing);
+		}
+
+		@Override
+		public Fluid setBlock(Block block) {
+			return this;
+		}
+	}
+
+	public static final Fluid SWAMP_WATER = new FluidMultipleBlocks("swampWater", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
 
 	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 

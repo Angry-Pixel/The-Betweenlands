@@ -130,7 +130,7 @@ public class ItemRegistry {
 	public static final Item TEST_ITEM = new TestItem();
 	public static final Item RANDOM_SOUND = new ItemRandomSound();
 
-	public final List<Item> ITEMS = new ArrayList<Item>();
+	public final static List<Item> ITEMS = new ArrayList<Item>();
 
 	public void preInit() {
 		try {
@@ -143,14 +143,11 @@ public class ItemRegistry {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	public void init() {
+		
 		for (Item item : this.ITEMS) {
 			TheBetweenlands.proxy.registerDefaultItemRenderer(item);
 		}
 	}
-
 
 	private void registerItem(Item item, String fieldName) {
 		String itemName = fieldName.toLowerCase(Locale.ENGLISH);

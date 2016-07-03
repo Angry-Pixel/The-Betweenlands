@@ -1,10 +1,14 @@
 package thebetweenlands.client.render.models.block.registry;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -42,10 +46,8 @@ public class BlockModelLoader implements ICustomModelLoader {
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(this.isMatching(entry.getKey(), modelLocation)) {
-				IModel model = entry.getValue().apply(modelLocation);
-				return model;
-			}
+			if(this.isMatching(entry.getKey(), modelLocation))
+				return entry.getValue().apply(modelLocation);
 		}
 		return null;
 	}
@@ -57,6 +59,7 @@ public class BlockModelLoader implements ICustomModelLoader {
 	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
+		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
 			if(model instanceof IBakedModelDependant) {
@@ -70,6 +73,7 @@ public class BlockModelLoader implements ICustomModelLoader {
 						try {
 							IModel externalModel = ModelLoaderRegistry.getModel(dependencyLocationNoVariants);
 							bakedModel = externalModel.bake(dependant.getModelState(externalModel), dependant.getVertexFormat(externalModel), dependant.getTextureGetter(externalModel));
+							loadedModels.add(Pair.of(dependencyLocation, bakedModel));
 						} catch (Exception ex) {
 							throw new RuntimeException("Failed to load model dependency " + dependencyLocationNoVariants + " for model " + modelLocation, ex);
 						}
@@ -78,6 +82,9 @@ public class BlockModelLoader implements ICustomModelLoader {
 				}
 				dependant.setDependencies(modelLocation, loadedDependencies);
 			}
+		}
+		for(Pair<ModelResourceLocation, IBakedModel> loadedModel : loadedModels) {
+			modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
 		}
 	}
 }

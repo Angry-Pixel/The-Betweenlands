@@ -19,9 +19,9 @@ import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.corrosion.ICorrodible;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class CorrosionTextureStitchHandler {
 	//TODO: Mappings!
@@ -29,7 +29,7 @@ public class CorrosionTextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
-		for (Item item : TheBetweenlands.REGISTRIES.itemRegistry.ITEMS) {
+		for (Item item : ItemRegistry.ITEMS) {
 			if (item instanceof ICorrodible) {
 				ResourceLocation[] variants = ((ICorrodible)item).getCorrodibleVariants();
 				for(ResourceLocation variant : variants) {

@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
@@ -21,22 +23,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelFluid;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.models.block.ModelCombined;
 import thebetweenlands.client.render.models.block.ModelLifeCrystalOre;
-import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomModelSupplier;
 import thebetweenlands.common.registries.BlockRegistry.IStateMapped;
+import thebetweenlands.common.registries.FluidRegistry;
 
-public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHasCustomItem, ICustomModelSupplier, IStateMapped {
+public class BlockLifeCrystalOre extends BlockSwampWater implements BlockRegistry.IHasCustomItem, ICustomModelSupplier, IStateMapped {
 	public static final PropertyEnum<EnumLifeCrystalType> VARIANT = PropertyEnum.<EnumLifeCrystalType>create("variant", EnumLifeCrystalType.class);
 	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
 	public static final PropertyBoolUnlisted NO_TOP = new PropertyBoolUnlisted("no_top");
@@ -46,11 +51,12 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 	public static final PropertyIntegerUnlisted POS_Y = new PropertyIntegerUnlisted("pos_x");
 	public static final PropertyIntegerUnlisted POS_Z = new PropertyIntegerUnlisted("pos_z");
 
-	public BlockLifeCrystalOre(Material materialIn) {
-		super(materialIn);
+	public BlockLifeCrystalOre(Fluid fluid, Material materialIn) {
+		super(fluid, materialIn);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumLifeCrystalType.DEFAULT));
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
+		this.setUnderwaterBlock(true);
 	}
 
 	@Override
@@ -77,7 +83,20 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[] { VARIANT }, new IUnlistedProperty[]{ POS_X, POS_Y, POS_Z, NO_BOTTOM, NO_TOP, DIST_UP, DIST_DOWN });
+		ExtendedBlockState state = (ExtendedBlockState) super.createBlockState();
+		Collection<IProperty> properties = new ArrayList<IProperty>();
+		properties.addAll(state.getProperties());
+		properties.add(VARIANT);
+		Collection<IUnlistedProperty> unlistedProperties = new ArrayList<IUnlistedProperty>();
+		unlistedProperties.addAll(state.getUnlistedProperties());
+		unlistedProperties.add(POS_X);
+		unlistedProperties.add(POS_Y);
+		unlistedProperties.add(POS_Z);
+		unlistedProperties.add(NO_BOTTOM);
+		unlistedProperties.add(NO_TOP);
+		unlistedProperties.add(DIST_UP);
+		unlistedProperties.add(DIST_DOWN);
+		return new ExtendedBlockState(this, properties.toArray(new IProperty[0]), unlistedProperties.toArray(new IUnlistedProperty[0]));
 	}
 
 	@Override
@@ -132,7 +151,7 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IModel getCustomModel(ResourceLocation modelLocation) {
-		return new ModelLifeCrystalOre();
+		return new ModelCombined(new ModelLifeCrystalOre(), new ModelFluid(FluidRegistry.SWAMP_WATER));
 	}
 
 	@Override
@@ -144,7 +163,7 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return false;
+		return super.shouldSideBeRendered(blockState, worldIn, pos, side);
 	}
 
 	@Override
@@ -160,12 +179,12 @@ public class BlockLifeCrystalOre extends BasicBlock implements BlockRegistry.IHa
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.CUTOUT;
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
-		IExtendedBlockState state = (IExtendedBlockState)oldState;
+		IExtendedBlockState state = (IExtendedBlockState) super.getExtendedState(oldState, worldIn, pos);
 
 		final int maxLength = 32;
 		int distUp = 0;

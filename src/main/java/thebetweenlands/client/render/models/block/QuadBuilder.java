@@ -203,7 +203,7 @@ public class QuadBuilder {
 						u = sprite.getInterpolatedU(switchUV ? pv : pu);
 						v = sprite.getInterpolatedV(switchUV ? pu : pv);
 					}
-					builder.put(e, u, v, 0f, 1f);
+					builder.put(e, u, v, switchUV ? 1f : 0f, switchUV ? 0f : 1f);
 					break;
 				}
 			case NORMAL:

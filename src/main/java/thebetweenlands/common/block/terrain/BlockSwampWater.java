@@ -1,476 +1,431 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelFluid;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.particle.BLParticle;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.registries.BlockRegistry.ICustomModelSupplier;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
+public class BlockSwampWater extends BlockFluidClassic implements ICustomModelSupplier {
+	private boolean isUnderwaterBlock = false;
 
-public class BlockSwampWater extends BlockFluidClassic/* implements IBlockColor*/{
-    private static final int DEEP_COLOR_R = 19;
-    private static final int DEEP_COLOR_G = 24;
-    private static final int DEEP_COLOR_B = 68;
+	public BlockSwampWater(Fluid fluid, Material material) {
+		super(fluid, material);
+	}
 
+	public BlockSwampWater setUnderwaterBlock(boolean underwaterBlock) {
+		this.isUnderwaterBlock = underwaterBlock;
+		return this;
+	}
 
-    protected boolean canSpread = true;
-    protected boolean hasBoundingBox = false;
-    protected boolean canCollide = false;
-    protected boolean canReplenish = true;
+	@Override
+	public IModel getCustomModel(ResourceLocation modelLocation) {
+		return new ModelFluid(this.getFluid());
+	}
 
-   // private static final HashMap<Block, IWaterRenderer> SPECIAL_RENDERERS = new HashMap<Block, IWaterRenderer>();
+	@Override
+	public boolean canDisplace(IBlockAccess world, BlockPos pos)
+	{
+		if (world.isAirBlock(pos)) return true;
 
-    public BlockSwampWater(Fluid fluid, Material material) {
-        super(fluid, material);
-        //setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-        //setBlockName("thebetweenlands.swampWater");
-        this.setMaxScaledLight(0);
-    }
+		IBlockState state = world.getBlockState(pos);
 
-   /* public BlockSwampWater() {
-        this(FluidRegistry.swampWater, Material.WATER);
-    }
+		if (state.getBlock() instanceof BlockSwampWater)
+		{
+			return false;
+		}
 
+		if (displacements.containsKey(state.getBlock()))
+		{
+			return displacements.get(state.getBlock());
+		}
 
-    @Override
-    public boolean canDisplace(IBlockAccess world, BlockPos pos) {
-        if (world.isAirBlock(pos) || !this.canSpread) return true;
+		Material material = state.getMaterial();
+		if (material.blocksMovement() || material == Material.PORTAL)
+		{
+			return false;
+		}
 
-        Block block = world.getBlockState(pos).getBlock();
+		int density = getDensity(world, pos);
+		if (density == Integer.MAX_VALUE)
+		{
+			return true;
+		}
 
-        if (this.canConnectTo(block))
-        {
-            return false;
-        }
+		if (this.density > density)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-        if (displacements.containsKey(block))
-        {
-            return displacements.get(block);
-        }
+	@Override
+	public boolean displaceIfPossible(World world, BlockPos pos)
+	{
+		if (world.isAirBlock(pos))
+		{
+			return true;
+		}
 
-        Material material = block.getMaterial(world.getBlockState(pos));
-        if (material.blocksMovement() || material == Material.PORTAL)
-        {
-            return false;
-        }
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block instanceof BlockSwampWater)
+		{
+			return false;
+		}
 
-        int density = getDensity(world,pos);
-        if (density == Integer.MAX_VALUE)
-        {
-            return true;
-        }
+		if (displacements.containsKey(block))
+		{
+			if (displacements.get(block))
+			{
+				block.dropBlockAsItem(world, pos, state, 0);
+				return true;
+			}
+			return false;
+		}
 
-        if (this.density > density)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+		Material material = state.getMaterial();
+		if (material.blocksMovement() || material == Material.PORTAL)
+		{
+			return false;
+		}
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public int colorMultiplier(IBlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
-        int r = 0;
-        int g = 0;
-        int b = 0;
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                int colorMultiplier = world.getBiomeGenForCoords(pos.add(dx, 0, dz)).getWaterColorMultiplier();
-                r += (colorMultiplier & 0xFF0000) >> 16;
-                g += (colorMultiplier & 0x00FF00) >> 8;
-                b += colorMultiplier & 0x0000FF;
-            }
-        }
-        r /= 9;
-        g /= 9;
-        b /= 9;
-        float depth = 0;
-        if (pos.getY() > WorldProviderBetweenlands.CAVE_START) {
-            depth = 1;
-        } else {
-            if (pos.getY() < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
-                depth = 0;
-            } else {
-                depth = (pos.getY() - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
-            }
-        }
-        r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);
-        g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
-        b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-        return r << 16 | g << 8 | b;
-    }
+		int density = getDensity(world, pos);
+		if (density == Integer.MAX_VALUE)
+		{
+			block.dropBlockAsItem(world, pos, state, 0);
+			return true;
+		}
 
-    @Override
-    public boolean isFlowingVertically(IBlockAccess world, int x, int y, int z) {
-        return this.canConnectTo(world.getBlock(x, y + densityDir, z)) ||
-                (this.canConnectTo(world.getBlock(x, y, z)) && canFlowInto(world, x, y + densityDir, z));
-    }
+		if (this.density > density)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-    @Override
-    public boolean isSourceBlock(IBlockAccess world, BlockPos pos) {
-        return this.canConnectTo(world.getBlock(x, y, z)) && world.getBlockMetadata(x, y, z) == 0;
-    }
+	@Override
+	public float getFluidHeightForRender(IBlockAccess world, BlockPos pos)
+	{
+		IBlockState here = world.getBlockState(pos);
+		IBlockState up = world.getBlockState(pos.down(densityDir));
+		if (here.getBlock() instanceof BlockSwampWater)
+		{
+			if (up.getMaterial().isLiquid() || up.getBlock() instanceof IFluidBlock)
+			{
+				return 1;
+			}
 
-    @Override
-    protected boolean canFlowInto(IBlockAccess world, int x, int y, int z) {
-        if (world.getBlock(x, y, z).isAir(world, x, y, z)) return true;
+			if (here.getValue(LEVEL) == getMaxRenderHeightMeta())
+			{
+				return 0.875F;
+			}
+		}
+		return !here.getMaterial().isSolid() && up.getBlock() instanceof BlockSwampWater ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
+	}
 
-        Block block = world.getBlock(x, y, z);
-        if (this.canConnectTo(block)) {
-            return true;
-        }
+	@Override
+	public Vec3d getFlowVector(IBlockAccess world, BlockPos pos)
+	{
+		Vec3d vec = new Vec3d(0.0D, 0.0D, 0.0D);
+		int decay = quantaPerBlock - getQuantaValue(world, pos);
 
-        if (displacements.containsKey(block))
-        {
-            return displacements.get(block);
-        }
+		for (int side = 0; side < 4; ++side)
+		{
+			int x2 = pos.getX();
+			int z2 = pos.getZ();
 
-        Material material = block.getMaterial();
-        if (material.blocksMovement()  ||
-                material == Material.water ||
-                material == Material.lava  ||
-                material == Material.portal)
-        {
-            return false;
-        }
+			switch (side)
+			{
+			case 0: --x2; break;
+			case 1: --z2; break;
+			case 2: ++x2; break;
+			case 3: ++z2; break;
+			}
 
-        int density = getDensity(world, x, y, z);
-        if (density == Integer.MAX_VALUE)
-        {
-            return true;
-        }
+			BlockPos pos2 = new BlockPos(x2, pos.getY(), z2);
+			int otherDecay = quantaPerBlock - getQuantaValue(world, pos2);
+			if (otherDecay >= quantaPerBlock)
+			{
+				if (!world.getBlockState(pos2).getMaterial().blocksMovement())
+				{
+					otherDecay = quantaPerBlock - getQuantaValue(world, pos2.down());
+					if (otherDecay >= 0)
+					{
+						int power = otherDecay - (decay - quantaPerBlock);
+						vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+					}
+				}
+			}
+			else if (otherDecay >= 0)
+			{
+				int power = otherDecay - decay;
+				vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+			}
+		}
 
-        if (this.density > density)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+		if (world.getBlockState(pos.up()).getBlock() instanceof BlockSwampWater)
+		{
+			boolean flag =
+					isBlockSolid(world, pos.add( 0,  0, -1), EnumFacing.NORTH) ||
+					isBlockSolid(world, pos.add( 0,  0,  1), EnumFacing.SOUTH) ||
+					isBlockSolid(world, pos.add(-1,  0,  0), EnumFacing.WEST) ||
+					isBlockSolid(world, pos.add( 1,  0,  0), EnumFacing.EAST) ||
+					isBlockSolid(world, pos.add( 0,  1, -1), EnumFacing.NORTH) ||
+					isBlockSolid(world, pos.add( 0,  1,  1), EnumFacing.SOUTH) ||
+					isBlockSolid(world, pos.add(-1,  1,  0), EnumFacing.WEST) ||
+					isBlockSolid(world, pos.add( 1,  1,  0), EnumFacing.EAST);
 
-    @Override
-    protected void flowIntoBlock(World world, int x, int y, int z, int meta) {
-        if(!this.canSpread) {
-            return;
-        }
-        if (meta < 0) return;
-        if (displaceIfPossible(world, x, y, z) && this.canSpread) {
-            world.setBlock(x, y, z, this, meta, 3);
-        }
-    }
+			if (flag)
+			{
+				vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
+			}
+		}
+		vec = vec.normalize();
+		return vec;
+	}
 
-    @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        if(!this.canSpread) {
-            return;
-        }
+	@Override
+	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos)
+	{
+		IExtendedBlockState state = (IExtendedBlockState)oldState;
+		state = state.withProperty(FLOW_DIRECTION, (float)getFlowDirection(worldIn, pos));
+		float[][] height = new float[3][3];
+		float[][] corner = new float[2][2];
+		height[1][1] = getFluidHeightForRender(worldIn, pos);
+		if(height[1][1] == 1)
+		{
+			for(int i = 0; i < 2; i++)
+			{
+				for(int j = 0; j < 2; j++)
+				{
+					corner[i][j] = 1;
+				}
+			}
+		}
+		else
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				for(int j = 0; j < 3; j++)
+				{
+					if(i != 1 || j != 1)
+					{
+						height[i][j] = getFluidHeightForRender(worldIn, pos.add(i - 1, 0, j - 1));
+					}
+				}
+			}
+			for(int i = 0; i < 2; i++)
+			{
+				for(int j = 0; j < 2; j++)
+				{
+					corner[i][j] = getFluidHeightAverage(height[i][j], height[i][j + 1], height[i + 1][j], height[i + 1][j + 1]);
+				}
+			}
+		}
+		state = state.withProperty(LEVEL_CORNERS[0], corner[0][0]);
+		state = state.withProperty(LEVEL_CORNERS[1], corner[0][1]);
+		state = state.withProperty(LEVEL_CORNERS[2], corner[1][1]);
+		state = state.withProperty(LEVEL_CORNERS[3], corner[1][0]);
+		return state;
+	}
 
-        if(this.canReplenish && !world.isAirBlock(x, y-1, z)) {
-            int adjacentSources = 0;
-            if(this.isSourceBlock(world, x+1, y, z)) adjacentSources++;
-            if(this.isSourceBlock(world, x-1, y, z)) adjacentSources++;
-            if(this.isSourceBlock(world, x, y, z+1)) adjacentSources++;
-            if(this.isSourceBlock(world, x, y, z-1)) adjacentSources++;
-            if(adjacentSources >= 2) {
-                world.setBlockMetadataWithNotify(x, y, z, 0, 2);
-            }
-        }
+	@Override
+	public int getQuantaValue(IBlockAccess world, BlockPos pos) {
+		IBlockState blockState = world.getBlockState(pos);
+		Block blockHere = blockState.getBlock();
+		if(blockHere instanceof BlockSwampWater == false || !((BlockSwampWater)blockHere).isUnderwaterBlock)
+			return super.getQuantaValue(world, pos);
+		return this.quantaPerBlock;
+	}
 
-        int quantaRemaining = quantaPerBlock - world.getBlockMetadata(x, y, z);
-        int expQuanta = -101;
+	@Override
+	public boolean isSourceBlock(IBlockAccess world, BlockPos pos) {
+		return super.isSourceBlock(world, pos);
+	}
 
-        // check adjacent block levels if non-source
-        if (quantaRemaining < quantaPerBlock)
-        {
-            int y2 = y - densityDir;
+	@Override
+	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
+	{
+		if (world.isAirBlock(pos)) return true;
 
-            if (this.canConnectTo(world.getBlock(x,     y2, z    )) ||
-                    this.canConnectTo(world.getBlock(x - 1, y2, z    )) ||
-                    this.canConnectTo(world.getBlock(x + 1, y2, z    )) ||
-                    this.canConnectTo(world.getBlock(x,     y2, z - 1)) ||
-                    this.canConnectTo(world.getBlock(x,     y2, z + 1)))
-            {
-                expQuanta = quantaPerBlock - 1;
-            }
-            else
-            {
-                int maxQuanta = -100;
-                maxQuanta = getLargerQuanta(world, x - 1, y, z,     maxQuanta);
-                maxQuanta = getLargerQuanta(world, x + 1, y, z,     maxQuanta);
-                maxQuanta = getLargerQuanta(world, x,     y, z - 1, maxQuanta);
-                maxQuanta = getLargerQuanta(world, x,     y, z + 1, maxQuanta);
+		IBlockState state = world.getBlockState(pos);
+		if (state.getBlock() instanceof BlockSwampWater)
+		{
+			return true;
+		}
 
-                expQuanta = maxQuanta - 1;
-            }
+		if (displacements.containsKey(state.getBlock()))
+		{
+			return displacements.get(state.getBlock());
+		}
 
-            // decay calculation
-            if (expQuanta != quantaRemaining)
-            {
-                quantaRemaining = expQuanta;
+		Material material = state.getMaterial();
+		if (material.blocksMovement()  ||
+				material == Material.WATER ||
+				material == Material.LAVA  ||
+				material == Material.PORTAL)
+		{
+			return false;
+		}
 
-                if (expQuanta <= 0)
-                {
-                    world.setBlock(x, y, z, Blocks.air);
-                }
-                else
-                {
-                    world.setBlockMetadataWithNotify(x, y, z, quantaPerBlock - expQuanta, 3);
-                    world.scheduleBlockUpdate(x, y, z, this, tickRate);
-                    world.notifyBlocksOfNeighborChange(x, y, z, this);
-                }
-            }
-        }
-        // This is a "source" block, set meta to zero, and send a server only update
-        else if (quantaRemaining >= quantaPerBlock)
-        {
-            world.setBlockMetadataWithNotify(x, y, z, 0, 2);
-        }
+		int density = getDensity(world, pos);
+		if (density == Integer.MAX_VALUE)
+		{
+			return true;
+		}
 
-        // Flow vertically if possible
-        if (canDisplace(world, x, y + densityDir, z))
-        {
-            flowIntoBlock(world, x, y + densityDir, z, 1);
-            return;
-        }
+		if (this.density > density)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-        // Flow outward if possible
-        int flowMeta = quantaPerBlock - quantaRemaining + 1;
-        if (flowMeta >= quantaPerBlock)
-        {
-            return;
-        }
+	@Override
+	protected void flowIntoBlock(World world, BlockPos pos, int meta) {
+		if (meta < 0) return;
+		if (displaceIfPossible(world, pos))
+		{
+			world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getBlockState().getBaseState().withProperty(LEVEL, meta), 3);
+		}
+	}
 
-        if (isSourceBlock(world, x, y, z) || !isFlowingVertically(world, x, y, z))
-        {
-            if (this.canConnectTo(world.getBlock(x, y - densityDir, z)))
-            {
-                flowMeta = 1;
-            }
-            boolean flowTo[] = getOptimalFlowDirections(world, x, y, z);
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
+	{
+		int quantaRemaining = quantaPerBlock - state.getValue(LEVEL);
+		int expQuanta = -101;
 
-            if (flowTo[0]) flowIntoBlock(world, x - 1, y, z,     flowMeta);
-            if (flowTo[1]) flowIntoBlock(world, x + 1, y, z,     flowMeta);
-            if (flowTo[2]) flowIntoBlock(world, x,     y, z - 1, flowMeta);
-            if (flowTo[3]) flowIntoBlock(world, x,     y, z + 1, flowMeta);
-        }
-    }
+		if(!(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)) {
+			// check adjacent block levels if non-source
+			if (quantaRemaining < quantaPerBlock)
+			{
+				if (world.getBlockState(pos.add( 0, -densityDir,  0)).getBlock() == this ||
+						world.getBlockState(pos.add(-1, -densityDir,  0)).getBlock() == this ||
+						world.getBlockState(pos.add( 1, -densityDir,  0)).getBlock() == this ||
+						world.getBlockState(pos.add( 0, -densityDir, -1)).getBlock() == this ||
+						world.getBlockState(pos.add( 0, -densityDir,  1)).getBlock() == this)
+				{
+					expQuanta = quantaPerBlock - 1;
+				}
+				else
+				{
+					int maxQuanta = -100;
+					maxQuanta = getLargerQuanta(world, pos.add(-1, 0,  0), maxQuanta);
+					maxQuanta = getLargerQuanta(world, pos.add( 1, 0,  0), maxQuanta);
+					maxQuanta = getLargerQuanta(world, pos.add( 0, 0, -1), maxQuanta);
+					maxQuanta = getLargerQuanta(world, pos.add( 0, 0,  1), maxQuanta);
 
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int side) {
-        Block block = world.getBlock(x, y, z);
-        if(side == 0 && block != BLBlockRegistry.swampWater) {
-            return true;
-        }
-        if (!this.canConnectTo(block))
-        {
-            if(side == 1) {
-                return true;
-            } else {
-                return !block.isOpaqueCube() && !block.isSideSolid(world, x, y, z, ForgeDirection.getOrientation(side));
-            }
-        }
-        return (block.getMaterial() == this.getMaterial() || this.canConnectTo(block)) ? false : super.shouldSideBeRendered(world, x, y, z, side);
-    }
+					expQuanta = maxQuanta - 1;
+				}
 
-    @Override
-    public boolean displaceIfPossible(World world, int x, int y, int z)
-    {
-        if(!this.canSpread) {
-            return false;
-        }
-        if (world.getBlock(x, y, z).isAir(world, x, y, z))
-        {
-            return true;
-        }
+				// decay calculation
+				if (expQuanta != quantaRemaining)
+				{
+					quantaRemaining = expQuanta;
 
-        Block block = world.getBlock(x, y, z);
-        if (this.canConnectTo(block))
-        {
-            return false;
-        }
+					if (expQuanta <= 0)
+					{
+						world.setBlockToAir(pos);
+					}
+					else
+					{
+						world.setBlockState(pos, state.withProperty(LEVEL, quantaPerBlock - expQuanta), 2);
+						world.scheduleUpdate(pos, this, tickRate);
+						world.notifyNeighborsOfStateChange(pos, this);
+					}
+				}
+			}
+			// This is a "source" block, set meta to zero, and send a server only update
+			else if (quantaRemaining >= quantaPerBlock)
+			{
+				world.setBlockState(pos, this.getDefaultState(), 2);
+			}
+		}
 
-        if (displacements.containsKey(block))
-        {
-            if (displacements.get(block))
-            {
-                block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-                return true;
-            }
-            return false;
-        }
+		// Flow vertically if possible
+		if (canDisplace(world, pos.up(densityDir)))
+		{
+			flowIntoBlock(world, pos.up(densityDir), 1);
+			return;
+		}
 
-        Material material = block.getMaterial();
-        if (material.blocksMovement() || material == Material.portal)
-        {
-            return false;
-        }
+		// Flow outward if possible
+		int flowMeta = quantaPerBlock - quantaRemaining + 1;
+		if (flowMeta >= quantaPerBlock)
+		{
+			return;
+		}
 
-        int density = getDensity(world, x, y, z);
-        if (density == Integer.MAX_VALUE)
-        {
-            block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
-            return true;
-        }
+		if (isSourceBlock(world, pos) || !isFlowingVertically(world, pos))
+		{
+			if (world.getBlockState(pos.down(densityDir)).getBlock() == this)
+			{
+				flowMeta = 1;
+			}
+			boolean flowTo[] = getOptimalFlowDirections(world, pos);
 
-        if (this.density > density)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+			if (flowTo[0]) flowIntoBlock(world, pos.add(-1, 0,  0), flowMeta);
+			if (flowTo[1]) flowIntoBlock(world, pos.add( 1, 0,  0), flowMeta);
+			if (flowTo[2]) flowIntoBlock(world, pos.add( 0, 0, -1), flowMeta);
+			if (flowTo[3]) flowIntoBlock(world, pos.add( 0, 0,  1), flowMeta);
+		}
+	}
 
-    @Override
-    public Vec3d getFlowVector(IBlockAccess world, BlockPos pos)
-    {
-        if(!this.canSpread) {
-            return new Vec3d(0.0D, 0.0D, 0.0D);
-        }
-        Vec3d vec = new Vec3d(0.0D, 0.0D, 0.0D);
-        int decay = quantaPerBlock - getQuantaValue(world, x, y, z);
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		if(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)
+			return state.getBoundingBox(worldIn, pos).offset(pos);
+		return null;
+	}
 
-        for (int side = 0; side < 4; ++side)
-        {
-            int x2 = x;
-            int z2 = z;
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+		if(blockState.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)blockState.getBlock()).isUnderwaterBlock)
+			return blockState.getBoundingBox(worldIn, pos);
+		return null;
+	}
 
-            switch (side)
-            {
-                case 0: --x2; break;
-                case 1: --z2; break;
-                case 2: ++x2; break;
-                case 3: ++z2; break;
-            }
+	@Override
+	public boolean canCollideCheck(IBlockState state, boolean fullHit) {
+		if(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)
+			return true;
+		return super.canCollideCheck(state, fullHit);
+	}
 
-            Block otherBlock = world.getBlock(x2, y, z2);
-            if(otherBlock instanceof BlockSwampWater && ((BlockSwampWater)otherBlock).canSpread) {
-                int otherDecay = quantaPerBlock - getQuantaValue(world, x2, y, z2);
-                if (otherDecay >= quantaPerBlock)
-                {
-                    if (!world.getBlock(x2, y, z2).getMaterial().blocksMovement() && !this.canConnectTo(world.getBlock(x2, y, z2)))
-                    {
-                        otherDecay = quantaPerBlock - getQuantaValue(world, x2, y - 1, z2);
-                        if (otherDecay >= 0)
-                        {
-                            int power = otherDecay - (decay - quantaPerBlock);
-                            vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
-                        }
-                    }
-                }
-                else if (otherDecay >= 0)
-                {
-                    int power = otherDecay - decay;
-                    vec = vec.addVector((x2 - x) * power, (y - y) * power, (z2 - z) * power);
-                }
-            }
-        }
-
-        if (this.canConnectTo(world.getBlock(x, y + 1, z)))
-        {
-            boolean flag =
-                    isBlockSolid(world, x,     y,     z - 1, 2) ||
-                            isBlockSolid(world, x,     y,     z + 1, 3) ||
-                            isBlockSolid(world, x - 1, y,     z,     4) ||
-                            isBlockSolid(world, x + 1, y,     z,     5) ||
-                            isBlockSolid(world, x,     y + 1, z - 1, 2) ||
-                            isBlockSolid(world, x,     y + 1, z + 1, 3) ||
-                            isBlockSolid(world, x - 1, y + 1, z,     4) ||
-                            isBlockSolid(world, x + 1, y + 1, z,     5);
-
-            if (flag)
-            {
-                vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
-            }
-        }
-        vec = vec.normalize();
-        return vec;
-    }
-
-    @Override
-    public int getQuantaValue(IBlockAccess world, int x, int y, int z) {
-        if(this.canSpread) {
-            return super.getQuantaValue(world, x, y, z);
-        } else {
-            return this.quantaPerBlock;
-        }
-    }
-
-    @Override
-    public boolean canCollideCheck(int meta, boolean fullHit) {
-        return this.hasBoundingBox || fullHit && (!this.canSpread || meta == 0);
-    }
-
-    @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bb, List bbList, Entity entity) {
-        if(this.canCollide) {
-            AxisAlignedBB blockBB = this.getCollisionBoundingBoxFromPool(world, x, y, z);
-            if (blockBB != null && bb.intersectsWith(blockBB)) {
-                bbList.add(blockBB);
-            }
-        } else {
-            if(entity instanceof EntityPlayer && ItemImprovedRubberBoots.checkPlayerEffect((EntityPlayer)entity)) {
-                AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+((float)this.getQuantaValue(world, x, y, z)/(float)this.quantaPerBlock)*0.8F, z+1);
-                if (blockBB != null && bb.intersectsWith(blockBB)) {
-                    bbList.add(blockBB);
-                }
-            }
-        }
-    }
-
-    @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        if(this.canCollide) {
-            return AxisAlignedBB.getBoundingBox((double) x + this.minX, (double) y + this.minY, (double) z + this.minZ, (double) x + this.maxX, (double) y + this.maxY, (double) z + this.maxZ);
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isCollidable() {
-        return this.canCollide;
-    }
-
-    public boolean canConnectTo(Block block) {
-        return block == this || block == BlockRegistry.SWAMP_WATER || block instanceof BlockSwampWater || SPECIAL_RENDERERS.containsKey(block);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-        if(rand.nextInt(2500) == 0) {
-            if(world.getBlockState(pos.up(2)).getBlock() == BlockRegistry.SWAMP_WATER) {
-                BLParticle.FISH.spawn(world, x, y, z);
-            } else if(world.getBlock(x, y - 1, z) == BlockRegistry.MUD) {
-                if(rand.nextInt(2) == 0) {
-                    BLParticle.MOSQUITO.spawn(world, x, y + 1.5, z);
-                } else {
-                    BLParticle.FLY.spawn(world, x, y + 1.5, z);
-                }
-            }
-        }
-    }*/
+	@Override
+	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+		IBlockState state = worldIn.getBlockState(pos);
+		if(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)
+			return false;
+		return super.isReplaceable(worldIn, pos);
+	}
 }

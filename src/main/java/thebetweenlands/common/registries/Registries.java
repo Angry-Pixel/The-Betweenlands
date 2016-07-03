@@ -3,22 +3,24 @@ package thebetweenlands.common.registries;
 public class Registries {
 	public static final Registries INSTANCE = new Registries();
 
-	public final BlockRegistry blockRegistry = new BlockRegistry();
-	public final TileEntityRegistry tileEntityRegistry = new TileEntityRegistry();
-	public final ItemRegistry itemRegistry = new ItemRegistry();
-	public final RecipeRegistry recipeRegistry = new RecipeRegistry();
-	public final EntityRegistry entityRegistry = new EntityRegistry();
-	public final FluidRegistry fluidRegistry = new FluidRegistry();
-	public final BiomeRegistry biomeRegistry = new BiomeRegistry();
-	public final SoundRegistry soundRegistry = new SoundRegistry();
-	public void preInit() {
-		this.fluidRegistry.preInit();
-		BlockRegistry.preInit();
-		this.itemRegistry.preInit();
-		this.entityRegistry.preInit();
-		this.biomeRegistry.preInit();
+	private FluidRegistry fluidRegistry;
+	private BlockRegistry blockRegistry;
+	private ItemRegistry itemRegistry;
+	private EntityRegistry entityRegistry;
+	private BiomeRegistry biomeRegistry;
+	private TileEntityRegistry tileEntityRegistry;
+	private RecipeRegistry recipeRegistry;
+	private SoundRegistry soundRegistry;
 
-		this.itemRegistry.init();
+	public void preInit() {
+		(this.fluidRegistry = new FluidRegistry()).preInit();
+		(this.blockRegistry = new BlockRegistry()).preInit();
+		(this.itemRegistry = new ItemRegistry()).preInit();
+		(this.entityRegistry = new EntityRegistry()).preInit();
+		(this.biomeRegistry = new BiomeRegistry()).preInit();
+		this.tileEntityRegistry = new TileEntityRegistry();
+		this.recipeRegistry = new RecipeRegistry();
+		this.soundRegistry = new SoundRegistry();
 	}
 
 	public void init() {
