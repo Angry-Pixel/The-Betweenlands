@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.models.block;
+package thebetweenlands.client.render.models.loader;
 
 import java.util.Collection;
 import java.util.Map;

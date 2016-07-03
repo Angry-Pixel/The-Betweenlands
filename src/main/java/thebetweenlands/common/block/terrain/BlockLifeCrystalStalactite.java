@@ -18,30 +18,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelFluid;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.block.ModelCombined;
-import thebetweenlands.client.render.models.block.ModelLifeCrystalOre;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomModelSupplier;
-import thebetweenlands.common.registries.BlockRegistry.IStateMapped;
-import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
-public class BlockLifeCrystalOre extends BlockSwampWater implements BlockRegistry.IHasCustomItem, ICustomModelSupplier, IStateMapped {
+public class BlockLifeCrystalStalactite extends BlockSwampWater implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlock, IStateMappedBlock {
 	public static final PropertyEnum<EnumLifeCrystalType> VARIANT = PropertyEnum.<EnumLifeCrystalType>create("variant", EnumLifeCrystalType.class);
 	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
 	public static final PropertyBoolUnlisted NO_TOP = new PropertyBoolUnlisted("no_top");
@@ -51,7 +43,7 @@ public class BlockLifeCrystalOre extends BlockSwampWater implements BlockRegistr
 	public static final PropertyIntegerUnlisted POS_Y = new PropertyIntegerUnlisted("pos_x");
 	public static final PropertyIntegerUnlisted POS_Z = new PropertyIntegerUnlisted("pos_z");
 
-	public BlockLifeCrystalOre(Fluid fluid, Material materialIn) {
+	public BlockLifeCrystalStalactite(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumLifeCrystalType.DEFAULT));
 		this.setHardness(1.5F);
@@ -150,18 +142,6 @@ public class BlockLifeCrystalOre extends BlockSwampWater implements BlockRegistr
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IModel getCustomModel(ResourceLocation modelLocation) {
-		return new ModelCombined(new ModelLifeCrystalOre(), new ModelFluid(FluidRegistry.SWAMP_WATER));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void setStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(new IProperty[] { VARIANT }).build());		
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return super.shouldSideBeRendered(blockState, worldIn, pos, side);
 	}
@@ -213,5 +193,22 @@ public class BlockLifeCrystalOre extends BlockSwampWater implements BlockRegistr
 		}
 
 		return state.withProperty(POS_X, pos.getX()).withProperty(POS_Y, pos.getY()).withProperty(POS_Z, pos.getZ()).withProperty(DIST_UP, distUp).withProperty(DIST_DOWN, distDown).withProperty(NO_TOP, noTop).withProperty(NO_BOTTOM, noBottom);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void setStateMapper(StateMap.Builder builder) {
+		super.setStateMapper(builder);
+		builder.ignore(VARIANT);
+	}
+
+	@Override
+	public int getSubtypeNumber() {
+		return EnumLifeCrystalType.values().length;
+	}
+
+	@Override
+	public String getSubtypeName(int meta) {
+		return "%s_" + EnumLifeCrystalType.values()[meta].getName();
 	}
 }

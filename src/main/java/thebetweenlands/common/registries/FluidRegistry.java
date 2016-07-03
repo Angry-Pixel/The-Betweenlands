@@ -22,7 +22,7 @@ public class FluidRegistry {
 		}
 	}
 
-	public static final Fluid SWAMP_WATER = new FluidMultipleBlocks("swampWater", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
+	public static final Fluid SWAMP_WATER = new FluidMultipleBlocks("swamp_water", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
 
 	private static final ArrayList<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 

@@ -21,13 +21,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.registries.BlockRegistry.IStateMapped;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
-public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped {
+public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMappedBlock {
 
 	public BlockLeavesBetweenlands() {
 		setHardness(0.2F);
@@ -100,14 +99,14 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if(world.rand.nextInt(200) == 0) {
 			if(world.isAirBlock(pos.down())) {
-			//	BLParticle.LEAF.spawn(world, pos.add(rand.nextFloat(), 0, rand.nextFloat()));
+				//	BLParticle.LEAF.spawn(world, pos.add(rand.nextFloat(), 0, rand.nextFloat()));
 			}
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper() {
-		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(new IProperty[] { BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE }).build());		
+	public void setStateMapper(StateMap.Builder builder) {
+		builder.ignore(BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE);		
 	}
 }

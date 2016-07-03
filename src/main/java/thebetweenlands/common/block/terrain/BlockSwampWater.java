@@ -4,16 +4,16 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelFluid;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
@@ -21,9 +21,9 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomModelSupplier;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
-public class BlockSwampWater extends BlockFluidClassic implements ICustomModelSupplier {
+public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock {
 	private boolean isUnderwaterBlock = false;
 
 	public BlockSwampWater(Fluid fluid, Material material) {
@@ -33,11 +33,6 @@ public class BlockSwampWater extends BlockFluidClassic implements ICustomModelSu
 	public BlockSwampWater setUnderwaterBlock(boolean underwaterBlock) {
 		this.isUnderwaterBlock = underwaterBlock;
 		return this;
-	}
-
-	@Override
-	public IModel getCustomModel(ResourceLocation modelLocation) {
-		return new ModelFluid(this.getFluid());
 	}
 
 	@Override
@@ -427,5 +422,11 @@ public class BlockSwampWater extends BlockFluidClassic implements ICustomModelSu
 		if(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)
 			return false;
 		return super.isReplaceable(worldIn, pos);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void setStateMapper(StateMap.Builder builder) {
+		builder.ignore(BlockSwampWater.LEVEL);
 	}
 }

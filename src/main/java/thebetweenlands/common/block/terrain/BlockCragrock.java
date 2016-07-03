@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +23,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockCragrock extends BasicBlock implements BlockRegistry.IHasCustomItem, BlockRegistry.ISubBlocksBlock {
+public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlock {
 	public static final PropertyEnum<EnumCragrockType> VARIANT = PropertyEnum.<EnumCragrockType>create("variant", EnumCragrockType.class);
 
 	public BlockCragrock(Material materialIn) {
@@ -88,9 +87,9 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.IHasCusto
 	}
 
 	public static enum EnumCragrockType implements IStringSerializable {
-		DEFAULT(0, "cragrock"),
-		MOSSY_1(1, "cragrock_mossy_1"),
-		MOSSY_2(2, "cragrock_mossy_2");
+		DEFAULT(0, "default"),
+		MOSSY_1(1, "mossy_1"),
+		MOSSY_2(2, "mossy_2");
 
 		private static final EnumCragrockType[] METADATA_LOOKUP = new EnumCragrockType[values().length];
 		private final int metadata;
@@ -128,15 +127,17 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.IHasCusto
 	}
 
 	@Override
-	public List<String> getModels() {
-		List<String> models = new ArrayList<String>();
-		for (EnumCragrockType type : EnumCragrockType.values())
-			models.add(type.getName());
-		return models;
+	public ItemBlock getItemBlock() {
+		return ItemBlockEnum.create(this, EnumCragrockType.class);
 	}
 
 	@Override
-	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, EnumCragrockType.class);
+	public int getSubtypeNumber() {
+		return EnumCragrockType.values().length;
+	}
+
+	@Override
+	public String getSubtypeName(int meta) {
+		return "%s_" + EnumCragrockType.values()[meta].getName();
 	}
 }

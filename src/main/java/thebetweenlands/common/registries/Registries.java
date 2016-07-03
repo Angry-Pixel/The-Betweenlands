@@ -11,6 +11,7 @@ public class Registries {
 	private TileEntityRegistry tileEntityRegistry;
 	private RecipeRegistry recipeRegistry;
 	private SoundRegistry soundRegistry;
+	private ModelRegistry modelRegistry;
 
 	public void preInit() {
 		(this.fluidRegistry = new FluidRegistry()).preInit();
@@ -21,6 +22,7 @@ public class Registries {
 		this.tileEntityRegistry = new TileEntityRegistry();
 		this.recipeRegistry = new RecipeRegistry();
 		this.soundRegistry = new SoundRegistry();
+		(this.modelRegistry = new ModelRegistry()).preInit();
 	}
 
 	public void init() {

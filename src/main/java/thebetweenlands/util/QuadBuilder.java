@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.models.block;
+package thebetweenlands.util;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,10 +5,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -23,13 +21,13 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalOre;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalOre.EnumLifeCrystalType;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
-public class ModelLifeCrystalOre implements IModel {
+public class ModelLifeCrystalStalactite implements IModel {
 	public static final ResourceLocation TEXTURE_DEFAULT = new ResourceLocation(ModInfo.ID, "blocks/pitstone");
 	public static final ResourceLocation TEXTURE_ORE_BACKGROUND = new ResourceLocation(ModInfo.ID, "blocks/life_crystal_ore_background");
 	public static final ResourceLocation TEXTURE_ORE = new ResourceLocation(ModInfo.ID, "blocks/life_crystal_ore");
@@ -77,14 +75,14 @@ public class ModelLifeCrystalOre implements IModel {
 			List<BakedQuad> quads = new ArrayList<>();
 
 			try {
-				EnumLifeCrystalType type = state.getValue(BlockLifeCrystalOre.VARIANT);
-				int distUp = state.getValue(BlockLifeCrystalOre.DIST_UP);
-				int distDown = state.getValue(BlockLifeCrystalOre.DIST_DOWN);
-				boolean noTop = state.getValue(BlockLifeCrystalOre.NO_TOP);
-				boolean noBottom = state.getValue(BlockLifeCrystalOre.NO_BOTTOM);
-				int posX = state.getValue(BlockLifeCrystalOre.POS_X);
-				int posY = state.getValue(BlockLifeCrystalOre.POS_Y);
-				int posZ = state.getValue(BlockLifeCrystalOre.POS_Z);
+				EnumLifeCrystalType type = state.getValue(BlockLifeCrystalStalactite.VARIANT);
+				int distUp = state.getValue(BlockLifeCrystalStalactite.DIST_UP);
+				int distDown = state.getValue(BlockLifeCrystalStalactite.DIST_DOWN);
+				boolean noTop = state.getValue(BlockLifeCrystalStalactite.NO_TOP);
+				boolean noBottom = state.getValue(BlockLifeCrystalStalactite.NO_BOTTOM);
+				int posX = state.getValue(BlockLifeCrystalStalactite.POS_X);
+				int posY = state.getValue(BlockLifeCrystalStalactite.POS_Y);
+				int posZ = state.getValue(BlockLifeCrystalStalactite.POS_Z);
 				float height = distUp == 0 ? 0.75F : 1.0F;
 
 				int totalHeight = 1 + distDown + distUp;

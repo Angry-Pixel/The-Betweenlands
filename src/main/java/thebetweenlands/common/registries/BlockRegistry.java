@@ -2,31 +2,26 @@ package thebetweenlands.common.registries;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.client.render.models.block.registry.BlockModelRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
@@ -44,7 +39,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalOre;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockSilt;
@@ -125,7 +120,7 @@ public class BlockRegistry {
 	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
-	public static final Block LIFE_CRYSTAL_ORE = new BlockLifeCrystalOre(FluidRegistry.SWAMP_WATER, Material.WATER);
+	public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
@@ -185,26 +180,19 @@ public class BlockRegistry {
 
 	public static void registerRenderers() {
 		for (Block block : BLOCKS) {
-			if(block instanceof IStateMapped) {
-				((IStateMapped)block).setStateMapper();
+			if(block instanceof IStateMappedBlock) {
+				StateMap.Builder builder = new StateMap.Builder();
+				((IStateMappedBlock)block).setStateMapper(builder);
+				ModelLoader.setCustomStateMapper(block, builder.build());
 			}
-			if(block instanceof ISubBlocksBlock) {
-				List<String> models = ((ISubBlocksBlock) block).getModels();
-				for (int i = 0; i < models.size(); i++)
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
-			} else {
-				ResourceLocation name = block.getRegistryName();
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
-			}
-			if(block instanceof ICustomModelSupplier) {
-				ICustomModelSupplier modelSupplier = (ICustomModelSupplier) block;
-				for(Pair<ResourceLocation, IModel> additionalModel : modelSupplier.getAdditionalModelsToRegister()) {
-					ResourceLocation additionalModelLocation = additionalModel.getKey();
-					ResourceLocation completedLocation = new ResourceLocation(additionalModelLocation.getResourceDomain(), "models/" + additionalModelLocation.getResourcePath());
-					BlockModelRegistry.INSTANCE.registerModel(completedLocation, (modelLocation) -> additionalModel.getValue());
+			ResourceLocation name = block.getRegistryName();
+			if(block instanceof ISubtypeBlock) {
+				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
+				for(int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(i), name.getResourcePath()), "inventory"));
 				}
-				BlockModelRegistry.INSTANCE.registerModel(new ResourceLocation(ModInfo.ASSETS_PREFIX + block.getRegistryName().getResourcePath()), 
-						(modelLocation) -> modelSupplier.getCustomModel(modelLocation));
+			} else {
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
 			}
 		}
 	}
@@ -215,44 +203,45 @@ public class BlockRegistry {
 		GameRegistry.register(block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 
 		ItemBlock item;
-		if (block instanceof IHasCustomItem)
-			item = ((IHasCustomItem) block).getItemBlock();
+		if (block instanceof ICustomItemBlock)
+			item = ((ICustomItemBlock) block).getItemBlock();
 		else
 			item = new ItemBlock(block);
 
 		GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 	}
 
-	public interface IHasCustomItem {
+	public interface ICustomItemBlock {
+		/**
+		 * Returns a custom item for this block
+		 * @return
+		 */
 		ItemBlock getItemBlock();
 	}
 
-	public interface ISubBlocksBlock {
-		List<String> getModels();
-	}
-
-	public interface IStateMapped {
-		@SideOnly(Side.CLIENT)
-		void setStateMapper();
-	}
-
-	public interface ICustomModelSupplier {
+	public interface ISubtypeBlock {
 		/**
-		 * Returns a custom model for the specified block state (as resource location)
-		 * @param modelLocation
+		 * Returns the amount of subtypes
 		 * @return
 		 */
-		@SideOnly(Side.CLIENT)
-		IModel getCustomModel(ResourceLocation modelLocation);
+		int getSubtypeNumber();
 
 		/**
-		 * Return a list of additional models to register and load
+		 * Returns the name of this subtype.
+		 * String is formatted, use %s for the normal registry name.
+		 * @param meta
 		 * @return
 		 */
+		String getSubtypeName(int meta);
+	}
+
+	public interface IStateMappedBlock {
+		/**
+		 * Sets the statemap
+		 * @param builder
+		 */
 		@SideOnly(Side.CLIENT)
-		default Collection<Pair<ResourceLocation, IModel>> getAdditionalModelsToRegister() {
-			return Collections.emptyList();
-		}
+		void setStateMapper(StateMap.Builder builder);
 	}
 }
 

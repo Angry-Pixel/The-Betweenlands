@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.models.block.registry;
+package thebetweenlands.client.render.models.loader;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,12 +20,11 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.client.render.models.block.IBakedModelDependant;
 
-public class BlockModelLoader implements ICustomModelLoader {
-	public final BlockModelRegistry registry;
+public class CustomModelLoader implements ICustomModelLoader {
+	public final CustomModelManager registry;
 
-	BlockModelLoader(BlockModelRegistry registry) {
+	CustomModelLoader(CustomModelManager registry) {
 		this.registry = registry;
 	}
 
