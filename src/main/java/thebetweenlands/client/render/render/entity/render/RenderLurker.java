@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.models.entity.ModelLurker;
+import thebetweenlands.client.render.model.entity.ModelLurker;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 
 public class RenderLurker extends RenderLiving<EntityLurker> {

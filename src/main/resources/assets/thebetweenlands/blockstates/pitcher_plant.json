@@ -1,10 +1,17 @@
 {
+    "forge_marker": 1,
     "variants": {
-        "normal": [
+        "half=lower": [
             { "model": "thebetweenlands:internal/pitcher_plant" },
             { "model": "thebetweenlands:internal/pitcher_plant", "y": 90 },
             { "model": "thebetweenlands:internal/pitcher_plant", "y": 180 },
             { "model": "thebetweenlands:internal/pitcher_plant", "y": 270 }
-        ]
+        ],
+        "half=upper": { 
+            "model": "thebetweenlands:internal/blank",
+            "custom": { 
+                "particle_texture": "thebetweenlands:blocks/pitcher_plant" 
+            } 
+        }
     }
 }

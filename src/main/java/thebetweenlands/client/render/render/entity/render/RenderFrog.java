@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.entity.ModelFrog;
+import thebetweenlands.client.render.model.entity.ModelFrog;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 
 @SideOnly(Side.CLIENT)

@@ -43,7 +43,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(Item id, CreativeTabs tab, List list) {
 		for (EnumStoneType type : EnumStoneType.values())
-			list.add(new ItemStack(id, 1, type.ordinal()));
+			list.add(new ItemStack(id, 1, type.getMetadata()));
 	}
 
 	protected BlockStateContainer createBlockState() {
@@ -51,19 +51,19 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	}
 
 	protected ItemStack createStackedBlock(IBlockState state) {
-		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumStoneType)state.getValue(VARIANT)).ordinal());
+		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumStoneType)state.getValue(VARIANT)).getMetadata());
 	}
 
 	public int damageDropped(IBlockState state) {
-		return ((EnumStoneType)state.getValue(VARIANT)).ordinal();
+		return ((EnumStoneType)state.getValue(VARIANT)).getMetadata();
 	}
 
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(VARIANT).ordinal();
+		return state.getValue(VARIANT).getMetadata();
 	}
 
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(IS_SPOOPY, false).withProperty(VARIANT, EnumStoneType.values()[meta]);
+		return this.getDefaultState().withProperty(IS_SPOOPY, false).withProperty(VARIANT, EnumStoneType.byMetadata(meta));
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 		return ItemBlockEnum.create(this, EnumStoneType.class);
 	}
 
-	public static enum EnumStoneType implements IStringSerializable{
+	/*public static enum EnumStoneType implements IStringSerializable{
 		CORRUPT_BETWEENSTONE;
 
 		@Override
@@ -79,6 +79,41 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 			return name().toLowerCase(Locale.ENGLISH);
 		}
 
+	}*/
+
+	public static enum EnumStoneType implements IStringSerializable {
+		CORRUPT_BETWEENSTONE(0);
+
+		private static final EnumStoneType[] METADATA_LOOKUP = new EnumStoneType[values().length];
+		private final int metadata;
+		private final String name;
+
+		private EnumStoneType(int metadataIn) {
+			this.metadata = metadataIn;
+			this.name = this.name().toLowerCase(Locale.ENGLISH);
+		}
+
+		public int getMetadata() {
+			return this.metadata;
+		}
+
+		public static EnumStoneType byMetadata(int metadata) {
+			if (metadata < 0 || metadata >= METADATA_LOOKUP.length) {
+				metadata = 0;
+			}
+			return METADATA_LOOKUP[metadata];
+		}
+
+		@Override
+		public String getName() {
+			return this.name;
+		}
+
+		static {
+			for (EnumStoneType type : values()) {
+				METADATA_LOOKUP[type.getMetadata()] = type;
+			}
+		}
 	}
 
 	@Override
@@ -88,6 +123,6 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 
 	@Override
 	public String getSubtypeName(int meta) {
-		return EnumStoneType.values()[meta].getName();
+		return EnumStoneType.byMetadata(meta).getName();
 	}
 }

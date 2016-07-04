@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/strictlyHerblore/ground/ground_mire_snail_shell"
+    "layer0": "thebetweenlands:items/strictly_herblore/ground/ground_mire_snail_shell"
   }
 }

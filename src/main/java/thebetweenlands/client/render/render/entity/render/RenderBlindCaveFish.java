@@ -6,7 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.client.render.models.entity.ModelBlindCaveFish;
+
+import thebetweenlands.client.render.model.entity.ModelBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 
 @SideOnly(Side.CLIENT)

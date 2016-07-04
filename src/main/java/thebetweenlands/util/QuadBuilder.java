@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
+import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector4f;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -277,7 +278,10 @@ public class QuadBuilder {
 				}
 				if(transformation != null && transformation != TRSRTransformation.identity()) {
 					Vector4f vec = new Vector4f(normalData);
-					transformation.getMatrix().transform(vec);
+					Matrix4f matrix = transformation.getMatrix();
+					matrix.invert();
+					matrix.transpose();
+					matrix.transform(vec);
 					vec.get(normalData);
 					float dx = normalData[0];
 					float dy = normalData[1];
@@ -286,6 +290,7 @@ public class QuadBuilder {
 					normalData[0] = dx / len;
 					normalData[1] = dy / len;
 					normalData[2] = dz / len;
+					normalData[3] = 0f;
 				}
 				builder.put(e, normalData);
 				break;

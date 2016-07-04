@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:internal/black_hat_mushroom_1" },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_1", "y": 90 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_1", "y": 180 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_1", "y": 270 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_2" },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_2", "y": 90 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_2", "y": 180 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_2", "y": 270 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_3" },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_3", "y": 90 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_3", "y": 180 },
+            { "model": "thebetweenlands:internal/black_hat_mushroom_3", "y": 270 }
+        ]
+    }
+}

@@ -10,7 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.client.render.models.tile.ModelPurifier;
+
+import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.tile.TileEntityPurifier;
 

@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.models.entity.ModelMireSnailEgg;
+import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 
 public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {

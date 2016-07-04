@@ -3,7 +3,7 @@ package thebetweenlands.client.render.render.entity.render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.models.entity.ModelBloodSnail;
+import thebetweenlands.client.render.model.entity.ModelBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 
 public class RenderBloodSnail extends RenderLiving<EntityBloodSnail> {

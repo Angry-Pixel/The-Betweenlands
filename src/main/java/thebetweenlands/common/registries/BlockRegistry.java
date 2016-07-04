@@ -30,7 +30,8 @@ import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
-import thebetweenlands.common.block.plant.BlockPitcherPlant;
+import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
+import thebetweenlands.common.block.plant.BlockGenericPlant;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -148,6 +149,17 @@ public class BlockRegistry {
 			}*/
 	};
 
+	//Plants
+	public static final Block PITCHER_PLANT = new BlockGenericDoublePlant();
+	public static final Block WEEPING_BLUE = new BlockGenericDoublePlant();
+	public static final Block SUNDEW = new BlockGenericDoublePlant();
+	public static final Block BLACK_HAT_MUSHROOM = new BlockGenericPlant();
+	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant();
+	public static final Block FLAT_HEAD_MUSHROOM = new BlockGenericPlant();
+	//public static final Block VENUS_FLY_TRAP = new BlockGenericPlant();
+	public static final Block VOLARPAD = new BlockGenericDoublePlant();
+
+	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
@@ -156,8 +168,7 @@ public class BlockRegistry {
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
 	public static final Block COMPOST_BIN = new BlockCompostBin();
-	public static final Block PITCHER_PLANT = new BlockPitcherPlant();
-	
+
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public void preInit() {
@@ -210,7 +221,9 @@ public class BlockRegistry {
 		else
 			item = new ItemBlock(block);
 
-		GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
+		//Allows ICustomItemBlock to return null if no item block is required
+		if(item != null)
+			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 	}
 
 	public interface ICustomItemBlock {

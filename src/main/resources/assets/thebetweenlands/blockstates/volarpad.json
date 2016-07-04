@@ -1,0 +1,25 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "half=lower": [
+            { "model": "thebetweenlands:internal/volarpad_1" },
+            { "model": "thebetweenlands:internal/volarpad_1", "y": 90 },
+            { "model": "thebetweenlands:internal/volarpad_1", "y": 180 },
+            { "model": "thebetweenlands:internal/volarpad_1", "y": 270 },
+            { "model": "thebetweenlands:internal/volarpad_2" },
+            { "model": "thebetweenlands:internal/volarpad_2", "y": 90 },
+            { "model": "thebetweenlands:internal/volarpad_2", "y": 180 },
+            { "model": "thebetweenlands:internal/volarpad_2", "y": 270 },
+            { "model": "thebetweenlands:internal/volarpad_3" },
+            { "model": "thebetweenlands:internal/volarpad_3", "y": 90 },
+            { "model": "thebetweenlands:internal/volarpad_3", "y": 180 },
+            { "model": "thebetweenlands:internal/volarpad_3", "y": 270 }
+        ],
+        "half=upper": { 
+            "model": "thebetweenlands:internal/blank",
+            "custom": { 
+                "particle_texture": "thebetweenlands:blocks/volarpad_1" 
+            } 
+        }
+    }
+}

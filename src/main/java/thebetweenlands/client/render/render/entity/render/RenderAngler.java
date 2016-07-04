@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.entity.ModelAngler;
+import thebetweenlands.client.render.model.entity.ModelAngler;
 import thebetweenlands.client.render.render.entity.layer.LayerGlow;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 

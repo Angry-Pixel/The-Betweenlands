@@ -32,7 +32,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.ControlledAnimation;
+import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 public class EntityGiantToad extends EntityCreature implements IEntityBL {

@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "half=lower": [
+            { "model": "thebetweenlands:internal/weeping_blue" },
+            { "model": "thebetweenlands:internal/weeping_blue", "y": 90 },
+            { "model": "thebetweenlands:internal/weeping_blue", "y": 180 },
+            { "model": "thebetweenlands:internal/weeping_blue", "y": 270 }
+        ],
+        "half=upper": { 
+            "model": "thebetweenlands:internal/blank",
+            "custom": { 
+                "particle_texture": "thebetweenlands:blocks/weeping_blue" 
+            } 
+        }
+    }
+}

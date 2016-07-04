@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.entity.ModelDragonFly;
+import thebetweenlands.client.render.model.entity.ModelDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 
 @SideOnly(Side.CLIENT)

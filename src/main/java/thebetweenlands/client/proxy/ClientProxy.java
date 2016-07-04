@@ -22,7 +22,7 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
-import thebetweenlands.client.render.models.loader.CustomModelManager;
+import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;

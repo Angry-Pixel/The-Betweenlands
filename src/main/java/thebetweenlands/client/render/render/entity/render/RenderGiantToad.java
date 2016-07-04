@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.entity.ModelGiantToad;
+import thebetweenlands.client.render.model.entity.ModelGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 
 @SideOnly(Side.CLIENT)

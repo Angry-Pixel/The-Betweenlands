@@ -3,7 +3,7 @@ package thebetweenlands.client.render.render.entity.render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.models.entity.ModelSporeling;
+import thebetweenlands.client.render.model.entity.ModelSporeling;
 import thebetweenlands.client.render.render.entity.layer.LayerGlow;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 

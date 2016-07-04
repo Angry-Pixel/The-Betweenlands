@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.models.entity.ModelChiromaw;
+import thebetweenlands.client.render.model.entity.ModelChiromaw;
 import thebetweenlands.client.render.render.entity.layer.LayerGlow;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 

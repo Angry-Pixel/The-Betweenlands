@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/strictlyHerblore/plantDrops/blue_eyed_grass_flowers"
+    "layer0": "thebetweenlands:items/strictly_herblore/plant_drops/blue_eyed_grass_flowers"
   }
 }
